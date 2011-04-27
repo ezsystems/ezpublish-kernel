@@ -1,7 +1,7 @@
 <?php
 namespace ezp\Content\Persistence\API;
 
-abstract class BaseContentRelation extends BaseContent
+abstract class BaseContentRelation
 {
     const RELATION_TYPE_COMMON = 1,
           RELATION_TYPE_XML_LINK = 2,
