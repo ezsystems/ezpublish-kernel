@@ -15,44 +15,112 @@
  * It is used for both input and output manipulation.
  *
  * @property-read integer $id
- *                The Content's ID, automaticaly assigned by the persistence layer
- * @property eZDateTime $creationDate
+ *                The Content's ID, automatically assigned by the persistence layer
+ * @property DateTime $creationDate
  *           The date the object was created
  * @property-read integer status
  *                The Content's status, as one of the ezp\Content::STATUS_* constants
  * @property string $remoteId
  *           A custom ID for the object. It receives a default value, but can be changed to anything
- * @property-read ezp\Content\VersionCollection versions
- * @property-read ezp\Content\TranslationCollection locations
+ * @property-read ezp\Content\VersionCollection $versions
+ * 				  Iterable collection of versions for content, indexed by version number. Array-accessible :
+ * 				  <code>
+ * 				  $myFirstVersion = $content->versions[1];
+ * 				  $myThirdVersion = $content->versions[3];
+ * 				  </code>
+ * @property-read ezp\Content\LocationCollection $locations
+ * 				  Locations for content. Iterable, countable and Array-accessible (with numeric indexes)
  * @property ezp\User $owner
+ * 					  User that first created the content
  * @property ezp\Content\RelationCollection $relations
+ * 											Collection of ezp\Content objects, related to the current one
  * @property ezp\Content\RelationCollection $reverseRelations
+ * 											Collection of ezp\Content objects, reverse-related to the current one
+ * @property ezp\Content\TranslationCollection $translations
+ * 											   Collection of content's translations
  *
  * @package API
  * @subpackage Content
  */
 namespace ezp\Content;
 
-class Content
+use ezp\User\UserRepository as UserRepository;
+use ezp\User\User as User;
+
+class Content extends Base implements \ezcBaseExportable
 {
-    public function __get( $property )
+    /**
+     * Publication status constants
+     * @var integer
+     */
+    const STATUS_DRAFT = 0,
+          STATUS_PUBLISHED = 1,
+          STATUS_ARCHIVED = 2;
+
+    public function __construct( ezp\Content\ContentType $contentType )
     {
-        throw new ezcBasePropertyNotFoundException( $property );
+        $this->properties = array(
+            "id"			    => null,
+            "remoteId"		    => null,
+            "status"		    => self::STATUS_DRAFT,
+            "versions"		    => new VersionCollection(),
+            "locations"		    => new LocationCollection(),
+            "creationDate"	    => new DateTime(),
+            "owner"			    => UserRepository::get()->currentUser(),
+            "relations"		    => new RelationCollection(),
+            "reversedRelations"	=> new RelationCollection(),
+            "translations"		=> new TranslationCollection()
+        );
+
+        $this->readOnlyProperties = array(
+            "id"            => true,
+            "status"        => true,
+            "versions"      => true,
+            "locations"		=> true
+        );
     }
 
-    public function __isset( $property )
+    /**
+     * Restores the state of a content object
+     * @param array $objectValue
+     */
+    public static function __set_state( $objectValue )
     {
-        throw new ezcBasePropertyNotFoundException( $property );
+        $obj = new self;
+        foreach ( $objectValue as $property => $value )
+        {
+            if ( isset( $obj->properties[$property] ) )
+            {
+                $obj->properties[$property] = $value;
+            }
+        }
     }
 
-    public function __set( $property, $value )
+    public function __clone()
     {
-        throw new ezcBasePropertyNotFoundException( $property );
+        $this->properties["id"] = null;
+        $this->properties["status"] = self::STATUS_DRAFT;
+
+        // Locations : get the current location's parent, so that new content will be the old one's sibling
+        $parentLocation = $this->properties["locations"]->current->parent;
+        $this->properties["locations"] = new LocationCollection();
+        $this->properties["locations"]->add( $parentLocation );
+
+        $this->properties["owner"] = UserRepository::get()->currentUser();
+
+        // Detach data from persistence
+        $this->properties["versions"]->detach();
+        $this->properties["relations"]->detach();
+        $this->properties["reversedRelations"]->detach();
+        $this->properties["translations"]->detach();
     }
 
-    public function __set_state( $array )
+    /**
+     * Destructor
+     */
+    public function __destruct()
     {
-
+        // Free some in-memory cache here
     }
 }
 ?>
