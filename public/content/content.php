@@ -38,6 +38,8 @@
  * 											Collection of ezp\Content objects, reverse-related to the current one
  * @property ezp\Content\TranslationCollection $translations
  * 											   Collection of content's translations
+ * @property ezp\Content\FieldsetCollection $fields
+ * 											Collection of content's fields, indexed by locale code (ie. fre-FR)
  *
  * @package API
  * @subpackage Content
@@ -47,7 +49,7 @@ namespace ezp\Content;
 use ezp\User\UserRepository as UserRepository;
 use ezp\User\User as User;
 
-class Content extends Base implements \ezcBaseExportable
+class Content extends Base implements DomainObject
 {
     /**
      * Publication status constants
@@ -69,7 +71,8 @@ class Content extends Base implements \ezcBaseExportable
             "owner"			    => UserRepository::get()->currentUser(),
             "relations"		    => new RelationCollection(),
             "reversedRelations"	=> new RelationCollection(),
-            "translations"		=> new TranslationCollection()
+            "translations"		=> new TranslationCollection(),
+            "fields"			=> new FieldsetCollection()
         );
 
         $this->readOnlyProperties = array(
@@ -84,16 +87,18 @@ class Content extends Base implements \ezcBaseExportable
      * Restores the state of a content object
      * @param array $objectValue
      */
-    public static function __set_state( $objectValue )
+    public static function __set_state( array $state )
     {
         $obj = new self;
-        foreach ( $objectValue as $property => $value )
+        foreach ( $state as $property => $value )
         {
             if ( isset( $obj->properties[$property] ) )
             {
                 $obj->properties[$property] = $value;
             }
         }
+
+        return $obj;
     }
 
     public function __clone()
