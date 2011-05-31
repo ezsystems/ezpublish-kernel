@@ -23,23 +23,37 @@
  * @property string $remoteId
  *           A custom ID for the object. It receives a default value, but can be changed to anything
  * @property-read ezp\Content\VersionCollection $versions
- * 				  Iterable collection of versions for content, indexed by version number. Array-accessible :
- * 				  <code>
- * 				  $myFirstVersion = $content->versions[1];
- * 				  $myThirdVersion = $content->versions[3];
- * 				  </code>
+ *                   Iterable collection of versions for content, indexed by version number. Array-accessible :
+ *                   <code>
+ *                   $myFirstVersion = $content->versions[1];
+ *                   $myThirdVersion = $content->versions[3];
+ *                   </code>
  * @property-read ezp\Content\LocationCollection $locations
- * 				  Locations for content. Iterable, countable and Array-accessible (with numeric indexes)
+ *                   Locations for content. Iterable, countable and Array-accessible (with numeric indexes)
+ *                   First location referenced in the collection represents the main location for content
+ *                   <code>
+ *                   $mainLocation = $content->locations[0];
+ *                   $anotherLocation = $content->locations[2];
+ *                   $locationById = $content->locations->byId( 60 );
+ *                   </code>
  * @property ezp\User $owner
- * 					  User that first created the content
+ *                       User that first created the content
  * @property ezp\Content\RelationCollection $relations
- * 											Collection of ezp\Content objects, related to the current one
+ *                                          Collection of ezp\Content objects, related to the current one
  * @property ezp\Content\RelationCollection $reverseRelations
- * 											Collection of ezp\Content objects, reverse-related to the current one
+ *                                          Collection of ezp\Content objects, reverse-related to the current one
  * @property ezp\Content\TranslationCollection $translations
- * 											   Collection of content's translations
- * @property ezp\Content\FieldsetCollection $fields
- * 											Collection of content's fields, indexed by locale code (ie. fre-FR)
+ *                                             Collection of content's translations, indexed by locale (ie. eng-GB)
+ *                                             <code>
+ *                                             $myEnglishTranslation = $content->translations["eng-GB"];
+ *                                             $myEnglishTitle = $content->translations["eng-GB"]->fields->title; // Where "title" is the field identifier
+ *                                             </code>
+ * @property ezp\Content\FieldCollection $fields
+ *                                       Collection of content's fields in default (current) language.
+ *                                       Shorthand property to directly access to the content's fields in current language
+ *                                       <code>
+ *                                       $myTitle = $content->fields->title; // Where "title" is the field identifier
+ *                                       </code>
  *
  * @package API
  * @subpackage Content
@@ -59,33 +73,33 @@ class Content extends Base implements DomainObject
           STATUS_PUBLISHED = 1,
           STATUS_ARCHIVED = 2;
 
-    public function __construct( ezp\Content\ContentType $contentType )
+    public function __construct( ContentType $contentType )
     {
         $this->properties = array(
-            "id"			    => null,
-            "remoteId"		    => null,
-            "status"		    => self::STATUS_DRAFT,
-            "versions"		    => new VersionCollection(),
-            "locations"		    => new LocationCollection(),
-            "creationDate"	    => new DateTime(),
-            "owner"			    => UserRepository::get()->currentUser(),
-            "relations"		    => new RelationCollection(),
-            "reversedRelations"	=> new RelationCollection(),
-            "translations"		=> new TranslationCollection(),
-            "fields"			=> new FieldsetCollection()
+            "id"                    => null,
+            "remoteId"              => null,
+            "status"                => self::STATUS_DRAFT,
+            "versions"              => new VersionCollection(),
+            "locations"             => new LocationCollection(),
+            "creationDate"          => new DateTime(),
+            "owner"                 => UserRepository::get()->currentUser(),
+            "relations"             => new RelationCollection(),
+            "reversedRelations"     => new RelationCollection(),
+            "translations"          => new TranslationCollection(),
+            "fields"                => new FieldsetCollection()
         );
 
         $this->readOnlyProperties = array(
             "id"            => true,
             "status"        => true,
             "versions"      => true,
-            "locations"		=> true
+            "locations"     => true
         );
     }
 
     /**
      * Restores the state of a content object
-     * @param array $objectValue
+     * @param array $state
      */
     public static function __set_state( array $state )
     {

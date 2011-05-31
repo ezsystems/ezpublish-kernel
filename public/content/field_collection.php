@@ -19,7 +19,7 @@
  */
 namespace ezp\Content;
 
-class FieldsetCollection extends Base implements ArrayAccess, IteratorAggregate, ezcBaseExportable, Countable
+class FieldCollection extends BaseCollection implements ArrayAccess, IteratorAggregate, DomainObject, Countable
 {
     /**
      * Fieldsets, indexed by locale (i.e. eng-GB)
@@ -41,9 +41,22 @@ class FieldsetCollection extends Base implements ArrayAccess, IteratorAggregate,
         return count( $this->fieldsets );
     }
 
-    public function __set_state( $array )
+    /**
+     * Restores the state of a content object
+     * @param array $objectValue
+     */
+    public static function __set_state( array $state )
     {
+        $obj = new self;
+        foreach ( $state as $property => $value )
+        {
+            if ( isset( $obj->properties[$property] ) )
+            {
+                $obj->properties[$property] = $value;
+            }
+        }
 
+        return $obj;
     }
 
     /**

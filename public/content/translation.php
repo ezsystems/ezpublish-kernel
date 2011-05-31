@@ -17,11 +17,24 @@
  */
 namespace ezp\Content;
 
-class Translation
+class Translation extends Base implements DomainObject
 {
-    public function __set_state( $array )
+    /**
+     * Restores the state of a content object
+     * @param array $objectValue
+     */
+    public static function __set_state( array $state )
     {
+        $obj = new self;
+        foreach ( $state as $property => $value )
+        {
+            if ( isset( $obj->properties[$property] ) )
+            {
+                $obj->properties[$property] = $value;
+            }
+        }
 
+        return $obj;
     }
 }
 ?>

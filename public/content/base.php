@@ -14,6 +14,8 @@
  * @access private
  */
 namespace ezp\Content;
+use ezcBasePropertyNotFoundException;
+use ezcBasePropertyPermissionException;
 
 abstract class Base
 {
