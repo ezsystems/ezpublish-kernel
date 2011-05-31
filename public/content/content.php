@@ -69,9 +69,9 @@ class Content extends Base implements DomainObject
      * Publication status constants
      * @var integer
      */
-    const STATUS_DRAFT = 0,
-          STATUS_PUBLISHED = 1,
-          STATUS_ARCHIVED = 2;
+    const STATUS_DRAFT = 0;
+    const STATUS_PUBLISHED = 1;
+    const STATUS_ARCHIVED = 2;
 
     public function __construct( ContentType $contentType )
     {
