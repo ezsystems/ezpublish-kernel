@@ -22,6 +22,11 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     private $_observers = array();
 
     /**
+     * List of readonly properties
+     */
+    private $_readonly = array();
+
+    /**
      * Attach a event listener to this subject
      *
      * @param SplObserver $observer
@@ -158,7 +163,7 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
         {
             return $this->$name;
         }
-        throw new \InvalidArgumentException( "{$name} is not a valid property on " . __CLASS__ );
+        throw new \InvalidArgumentException( "{$name} is not a valid property on " . get_class( $this ) );
     }
 
     /**
@@ -172,13 +177,14 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      */
     public function __set( $name, $value )
     {
-        switch ( $name )
+        if ( isset( $this->$name ) && $name[0] !== '_' )
         {
-            default:
-                if ( isset( $this->$name ) && $name[0] !== '_' )
-                    throw new \InvalidArgumentException( "{$name} is not a writable property on " . __CLASS__ );
-                else
-                    throw new \InvalidArgumentException( "{$name} is not a valid property on " . __CLASS__ );
+            if ( in_array( $name, $this->_readonly, true ) )
+                throw new \InvalidArgumentException( "{$name} is a readonly property on " . get_class( $this ) );
+
+            $this->$name = $value;
         }
+        else
+            throw new \InvalidArgumentException( "{$name} is not a valid property on " . get_class( $this ) );
     }
 }
