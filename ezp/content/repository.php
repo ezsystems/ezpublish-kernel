@@ -13,9 +13,8 @@
  * @package Content
  */
 namespace ezp\Content;
-use ezp\Repository as BaseRepository;
 
-class Repository extends BaseRepository
+class Repository extends ezp\Repository
 {
     /**
      * Loads a content from it's $id
@@ -26,7 +25,7 @@ class Repository extends BaseRepository
      */
     public function loadContent( $id )
     {
-
+        return parent::load( 'Content', $id );
     }
 
     /**
@@ -37,7 +36,18 @@ class Repository extends BaseRepository
      */
     public function loadLocation( $id )
     {
+        return parent::load( 'Location', $id );
+    }
 
+
+    public function getSubtreeService()
+    {
+        return new Services\Subtree;
+    }
+
+    public function getTrashService()
+    {
+        return new Services\Trash;
     }
 }
 ?>
