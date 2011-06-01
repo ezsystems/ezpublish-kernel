@@ -19,7 +19,7 @@
  */
 namespace ezp\Content;
 
-class FieldCollection extends BaseCollection implements ArrayAccess, IteratorAggregate, DomainObject, Countable
+class FieldCollection extends BaseCollection implements ArrayAccess, IteratorAggregate, DomainObjectInterface, Countable
 {
     /**
      * Fieldsets, indexed by locale (i.e. eng-GB)

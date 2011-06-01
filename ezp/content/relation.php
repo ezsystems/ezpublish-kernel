@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class Relation extends Base implements DomainObject
+class Relation extends Base implements DomainObjectInterface
 {
     /**
      * Restores the state of a content object

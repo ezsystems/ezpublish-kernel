@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class Version extends Base implements DomainObject
+class Version extends Base implements DomainObjectInterface
 {
     /**
      * Restores the state of a content object

@@ -63,7 +63,7 @@ namespace ezp\Content;
 use ezp\User\UserRepository as UserRepository;
 use ezp\User\User as User;
 
-class Content extends Base implements DomainObject
+class Content extends Base implements DomainObjectInterface
 {
     /**
      * Publication status constants

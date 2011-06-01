@@ -18,7 +18,7 @@
 namespace ezp\Content;
 use InvalidArgumentException;
 
-class LocationCollection extends BaseCollection implements DomainObject, IteratorAggregate, Countable, ArrayAccess
+class LocationCollection extends BaseCollection implements DomainObjectInterface, IteratorAggregate, Countable, ArrayAccess
 {
     /**
      * Locations contained in current collection
