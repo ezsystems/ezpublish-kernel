@@ -12,7 +12,7 @@
  * @Entity @Table(name="ezcontentobject_tree")
  */
 namespace ezx\doctrine\model;
-class Location
+class Location extends Abstract_Model
 {
     public function __construct()
     {
@@ -112,20 +112,6 @@ class Location
     public function getChildren()
     {
         return $this->children;
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     * @param string $name
-     * @return mixed
-     */
-    final public function __get( $name )
-    {
-        if ( isset( $this->$name ) )
-        {
-            return $this->$name;
-        }
-        throw new \InvalidArgumentException( "{$name} is not a valid property on " . get_class($this) );
     }
 
     /**

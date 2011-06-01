@@ -17,7 +17,7 @@ namespace ezx\doctrine\model;
 class SerializableCollection extends \Doctrine\Common\Collections\ArrayCollection implements Interface_Serializable
 {
     /**
-     * Used by var_export and other functions to init class with all values
+     * Static variant of setState
      *
      * @param array $properties
      * @return FieldMap
@@ -25,7 +25,7 @@ class SerializableCollection extends \Doctrine\Common\Collections\ArrayCollectio
     public static function __set_state( array $properties )
     {
         $class = new static( array() );
-        return $class->setState( $properties['_elements'] );
+        return $class->setState( $properties );
     }
     /**
      * Set properties with hash, name is same as used in ezc Persistent

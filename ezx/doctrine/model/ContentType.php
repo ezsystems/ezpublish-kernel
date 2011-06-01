@@ -12,7 +12,7 @@
  * @Entity @Table(name="ezcontentclass")
  */
 namespace ezx\doctrine\model;
-class ContentType
+class ContentType extends Abstract_Model
 {
     public function __construct()
     {

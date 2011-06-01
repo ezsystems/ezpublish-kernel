@@ -12,7 +12,7 @@
  * Abstract field class
  */
 namespace ezx\doctrine\model;
-abstract class Abstract_Field implements Interface_Serializable
+abstract class Abstract_Field extends Abstract_Model implements Interface_Observer
 {
     /**
      * Abstract __constructor
@@ -30,7 +30,7 @@ abstract class Abstract_Field implements Interface_Serializable
     public function __get( $name )
     {
         if ( $name === 'value' )
-            return $this->getValueObject()->value;
+            return $this->getValueObject()->getValue();
         elseif ( isset( $this->$name ) )
             return $this->$name;
         throw new \InvalidArgumentException( "{$name} is not a valid property on " . get_class($this) );
@@ -47,7 +47,7 @@ abstract class Abstract_Field implements Interface_Serializable
         switch ( $name )
         {
             case 'value':
-                $this->getValueObject()->value = $value;
+                $this->getValueObject()->setValue( $value );
                 break;
             default:
                 if ( isset( $this->$name ) )
@@ -58,80 +58,21 @@ abstract class Abstract_Field implements Interface_Serializable
     }
 
     /**
-     * Used by var_export and other functions to init class with all values
-     *
-     * @static
-     * @param array $properties
-     * @return Abstract_Field
-     */
-    public static function __set_state( array $properties )
-    {
-        $class = new static();
-        return $class->setState( $properties );
-    }
-
-    /**
-     * @throws \InvalidArgumentException
-     * @param array $properties
-     * @return Abstract_Field Return $this
-     */
-    public function setState( array $properties )
-    {
-        foreach ( $properties as $property => $value )
-        {
-            if ( $property === 'value' )
-            {
-                if ( $value instanceof Interface_Field_Value )
-                    $this->getValueObject()->value = $value->value;
-                else
-                    $this->getValueObject()->value = $value;
-            }
-            else if ( $property === 'valueObject' && $value instanceof Interface_Field_Value )
-            {
-                $this->assignValue( $value );
-            }
-            else if ( isset( $this->$property ) )
-            {
-                $this->$property = $value;
-            }
-            else
-                 throw new \InvalidArgumentException( "{$property} is not a valid property on " . __CLASS__ );
-        }
-        return $this;
-    }
-
-    /**
-     * @return array
-     */
-    public function getState()
-    {
-        $hash = array();
-        foreach( $this as $property => $value )
-        {
-            if ( $value instanceof Interface_Field_Value )
-                $hash[$property] = $value->value;
-            else
-                $hash[$property] = $value;
-        }
-        return $hash;
-    }
-
-    /**
      * @var Interface_Field_Value
      */
-    private $valueObject;
+    protected $value;
 
     /**
      * Initialize and return field value
      *
      * @todo generalize code and remove knowledge of Field / ContentTypeField classes
      * @throws \RuntimeException If definition of Interface_Field_Value is wrong
-     * @return Interface_Field_Value
+     * @return Abstract_Field_Value
      */
     protected function getValueObject()
     {
-        if ( $this->valueObject instanceof Interface_Field_Value )
-           return $this->valueObject;
+        if ( $this->value instanceof Interface_Field_Value )
+           return $this->value;
 
         $configuration = \ezp\system\Configuration::getInstance();
         $list = $configuration->get( 'doctrine-fields', ( $this instanceof Field ? 'content' : 'type' ) );
@@ -147,6 +88,49 @@ abstract class Abstract_Field implements Interface_Serializable
 
         $className = $list[ $this->fieldTypeString ];
         return $this->assignValue( new $className() );
+    }
+
+    /**
+     * Get properties with hash, name is same as used in ezc Persistent
+     *
+     * @return array
+     */
+    public function getState()
+    {
+        $hash = array();
+        foreach( $this as $property => $value )
+        {
+            if ( $property[0] === '_' )
+                continue;
+
+            if ( $value instanceof Interface_Field_Value )
+                $hash[$property] = $value->getValue();
+            else if ( $value instanceof Interface_Serializable )
+                $hash[$property] = $value->getState();
+            else
+                $hash[$property] = $value;
+        }
+        return $hash;
+    }
+
+    /**
+     * Set properties with hash, name is same as used in ezc Persistent
+     *
+     * @param array $properties
+     * @return Abstract_Model Content Return $this
+     */
+    public function setState( array $properties )
+    {
+        foreach ( $properties as $property => $value )
+        {
+            if ( $property === 'value' )
+                $this->getValueObject()->setValue( $value );
+            else if ( $this->$property instanceof Interface_Serializable && !$value instanceof Interface_Serializable )
+                $this->$property->setState( $value );
+            else
+                $this->$property = $value;
+        }
+        return $this;
     }
 
     /**
@@ -172,7 +156,32 @@ abstract class Abstract_Field implements Interface_Serializable
                 throw new \RuntimeException( "Definition from '$className' specifies non existing legacy_column: '$property'" );
         }
 
-        $value->assignValue( $this->$property );
-        return $this->valueObject = $value;
+        return $this->value = $value->setValue( $this->$property )->attach( $this );
+    }
+
+    /**
+     * Called when subject has been updated
+     *
+     * @param Abstract_Field_Value $subject
+     * @param string|null $event
+     * @return Abstract_Field
+     */
+    public function update( Interface_Observable $subject , $event  = null )
+    {
+        $definition = $subject::definition();
+        $property = $definition['legacy_column'];
+
+        if ( $this instanceof Field )
+        {
+            if ( $property !== 'data_int' && $property !== 'data_float' && $property !== 'data_text' )
+                throw new \RuntimeException( "Definition from '$className' specifies non existing legacy_column: '$property'" );
+        }
+        else
+        {
+            if ( $property !== 'data_int1' && $property !== 'data_text1' )
+                throw new \RuntimeException( "Definition from '$className' specifies non existing legacy_column: '$property'" );
+        }
+
+        $this->$property = $subject->getValue();
     }
 }

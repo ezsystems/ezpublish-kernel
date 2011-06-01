@@ -22,7 +22,7 @@
  * @property-read ContentType $contentType Content type object
  */
 namespace ezx\doctrine\model;
-class Content implements Interface_Serializable
+class Content extends Abstract_Model
 {
     /**
      * @Id @Column(type="integer") @GeneratedValue
@@ -89,20 +89,8 @@ class Content implements Interface_Serializable
     }
 
     /**
-     * @throws \InvalidArgumentException
-     * @param string $name
-     * @return mixed
-     */
-    public function __get( $name )
-    {
-        if ( isset( $this->$name ) )
-        {
-            return $this->$name;
-        }
-        throw new \InvalidArgumentException( "{$name} is not a valid property on " . __CLASS__ );
-    }
-
-    /**
+     * Set value
+     *
      * @throws \InvalidArgumentException
      * @param string $name
      * @param string $value
@@ -122,56 +110,6 @@ class Content implements Interface_Serializable
                 else
                     throw new \InvalidArgumentException( "{$name} is not a valid property on " . __CLASS__ );
         }
-    }
-
-    /**
-     * Used by var_export and other functions to init class with all values
-     *
-     * @static
-     * @param array $properties
-     * @return Content
-     */
-    final public static function __set_state( array $properties )
-    {
-        $class = new static();
-        return $class->setState( $properties );
-    }
-
-
-    /**
-     * Set properties with hash, name is same as used in ezc Persistent
-     *
-     * @param array $properties
-     * @return Content Return $this
-     */
-    final public function setState( array $properties )
-    {
-        foreach ( $properties as $property => $value )
-        {
-            if ( $this->$property instanceof Interface_Serializable && !$value instanceof Interface_Serializable )
-                $this->$property->setState( $value );
-            else
-                $this->$property = $value;
-        }
-        return $this;
-    }
-
-    /**
-     * Get properties with hash, name is same as used in ezc Persistent
-     *
-     * @return array
-     */
-    final public function getState()
-    {
-        $hash = array();
-        foreach( $this as $property => $value )
-        {
-            if ( $property instanceof Interface_Serializable )
-                $hash[$property] = $value->getState();
-            else
-                $hash[$property] = $value;
-        }
-        return $hash;
     }
 
     /**

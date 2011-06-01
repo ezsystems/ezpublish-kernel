@@ -33,14 +33,14 @@ interface Interface_Field_Value
     /**
      * Constant for array type in {@see definition()}
      * @var int
-     * @deprecated Do not use atm, use case not defined
+     * @deprecated Do not use atm, use case not defined, possible use case shown in {@see definition()}
      */
     const TYPE_ARRAY  = 4;
 
     /**
      * Constant for object type in {@see definition()}
      * @var int
-     * @deprecated Do not use atm, use case not defined
+     * @deprecated Do not use atm, use case not defined, could hint that type is another object.
      */
     const TYPE_OBJECT = 5;
 
@@ -56,11 +56,19 @@ interface Interface_Field_Value
     public function __construct();
 
     /**
-     * Assign $value by reference
+     * Set value
      *
      * @param mixed $value As defined by defintion()
+     * @return Interface_Field_Value
      */
-    public function assignValue( &$value );
+    public function setValue( $value );
+
+    /**
+     * Get value
+     *
+     * @return mixed As defined by defintion()
+     */
+    public function getValue();
 
     /**
      * Field definition, Field class will take care of mapping value before initiating field value
@@ -76,6 +84,7 @@ interface Interface_Field_Value
         );
         // in the case of several values, for instance for rating:
         return array(
+            'type' => self::TYPE_ARRAY,
             'values' => array(
                 'enable_rating' => array(
                     'type' => self::TYPE_BOOL,
@@ -89,6 +98,7 @@ interface Interface_Field_Value
         );
         // or for field types:
         return array(
+            'type' => self::TYPE_ARRAY,
             'values' => array(
                 'max_length' => array(
                     'type' => self::TYPE_INT,

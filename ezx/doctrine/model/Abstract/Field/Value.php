@@ -12,7 +12,7 @@
  *
  */
 namespace ezx\doctrine\model;
-abstract class Abstract_Field_Value implements Interface_Field_Value, Interface_Serializable
+abstract class Abstract_Field_Value extends Abstract_Model implements Interface_Field_Value
 {
     /**
      * Constant that Field types needs to defined
@@ -29,24 +29,21 @@ abstract class Abstract_Field_Value implements Interface_Field_Value, Interface_
     protected $types = array();
 
     /**
+     * List of field type identifiers for use by design overrides
+     * eg. ezstring
+     * @var array
+     */
+    protected $value;
+
+    /**
      * Constructor, appends $types and assign $value by reference
      *
      * @param mixed $value
      */
     public function __construct()
     {
-    }
-
-    /**
-     * Assign $value by reference
-     *
-     * @param mixed $value As defined by defintion()
-     */
-    final public function assignValue( &$value )
-    {
-        // @todo Find a more suitable way to make sure changes go back to parent object
-        // as this won't work with things like DateTime objects for instance.
-        $this->value =& $value;
+        //$this->types[] = self::FIELD_IDENTIFIER;
+        //parent::__construct();
     }
 
 
@@ -61,52 +58,25 @@ abstract class Abstract_Field_Value implements Interface_Field_Value, Interface_
     }
 
     /**
-     * Used by var_export and other functions to init class with all values
+     * Set value
      *
-     * @static
-     * @param array $properties
-     * @return Content
+     * @param mixed $value As defined by defintion()
+     * @return Abstract_Field_Value
      */
-    final public static function __set_state( array $properties )
+    public function setValue( $value )
     {
-        $class = new static();
-        return $class->setState( $properties );
-    }
-
-
-    /**
-     * Set properties with hash, name is same as used in ezc Persistent
-     *
-     * @param array $properties
-     * @return Content Return $this
-     */
-    final public function setState( array $properties )
-    {
-        foreach ( $properties as $property => $value )
-        {
-            if ( $this->$property instanceof Interface_Serializable && !$value instanceof Interface_Serializable )
-                $this->$property->setState( $value );
-            else
-                $this->$property = $value;
-        }
+        $this->value = $value;
+        $this->notify();
         return $this;
     }
 
     /**
-     * Get properties with hash, name is same as used in ezc Persistent
+     * Get value
      *
-     * @return array
+     * @return mixed As defined by defintion()
      */
-    final public function getState()
+    public function getValue()
     {
-        $hash = array();
-        foreach( $this as $property => $value )
-        {
-            if ( $property instanceof Interface_Serializable )
-                $hash[$property] = $value->getState();
-            else
-                $hash[$property] = $value;
-        }
-        return $hash;
+        return $this->value;
     }
 }

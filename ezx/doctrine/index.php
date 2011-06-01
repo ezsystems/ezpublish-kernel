@@ -76,21 +76,22 @@ if ( $_GET['fn'] === 'create' )
     }
 
     if ( isset( $_GET['title'] ) )
-        $content->setState( array( 'fields' => array( 'short_title' =>  array( 'value' => $_GET['title'] ) ) ) );
+        $content->setState( array( 'fields' => array( 'title' =>  array( 'value' => $_GET['title'] ) ) ) );
 
-    $out = var_export( $content, true );
+    $state = $content->getState();
+    $out = var_export( $state, true );
 
-    eval( '$test = ' . $out . ';' );
+    $newContent = $repository->createContent( $_GET['identifier'] )->setState( $state );
 
     // test that reference works on new object
-    if ( isset( $test->fields['tags'] ) )
+    if ( isset( $newContent->fields['tags'] ) )
     {
-        $test->fields['tags'] .= " object2";
+        $newContent->fields['tags'] .= " object2";
     }
 
-    $out2 = var_export( $test, true );
+    $out2 = var_export( $newContent->getState(), true );
 
-    echo "<h3>\$repository-&gt;createContent( \$_GET['identifier'] ) > -&gt;setState() > var_export() > eval() > __set_state() test</h3><table><tr><td><pre>{$out}</pre></td><td><pre>{$out2}</pre></td></tr></table>";
+    echo "<h3>\$repository-&gt;createContent( \$_GET['identifier'] ) > -&gt;setState() > var_export() > __set_state() test</h3><table><tr><td><pre>{$out}</pre></td><td><pre>{$out2}</pre></td></tr></table>";
 }
 else if ( $_GET['fn'] === 'get' )
 {
