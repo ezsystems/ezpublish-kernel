@@ -24,6 +24,17 @@
 namespace ezx\doctrine\model;
 class Content extends Abstract_Model
 {
+    protected $_aggregateMembers = array( 'fields', 'locations' );
+
+    /**
+     * Constructs a new instance of this class, protected, use factory on ContentRepository.
+     */
+    protected function __construct()
+    {
+        $this->locations = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
     /**
      * @Id @Column(type="integer") @GeneratedValue
      * @var int
@@ -62,30 +73,61 @@ class Content extends Abstract_Model
 
     /**
      * @OneToMany(targetEntity="Location", mappedBy="content", fetch="EAGER")
-     * @var SerializableCollection(Location)
+     * @var \Doctrine\Common\Collections\ArrayCollection(Location)
      */
-    protected $locations = array();
+    protected $locations;
 
     /**
      * @OneToMany(targetEntity="Field", mappedBy="content", fetch="EAGER")
      * @var FieldMap(Field)
      */
-    protected $fields = array();
+    protected $fields;
+
+    /**
+     * Return collection of all fields assigned to object (all versions and languages)
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection(ContenField)
+     */
+    public function getFields()
+    {
+        return $this->fields;
+    }
 
     /**
      * @ManyToOne(targetEntity="ContentType", inversedBy="contentObjects")
      * @JoinColumn(name="contentclass_id", referencedColumnName="id")
      * @var ContentType
      */
-    protected $contentType = 0;
+    protected $contentType;
 
     /**
-     * Constructs a new instance of this class, protected, use factory on ContentRepository.
+     * Magic object that steps in when fields are accessed
      */
-    protected function __construct()
+    protected $_fieldMap;
+
+    /**
+     * Create content based on content type object
+     *
+     * @param ContentType $contentType
+     * @return Content
+     */
+    static public function create( ContentType $contentType )
     {
-        $this->locations = new SerializableCollection();
-        $this->fields = new FieldMap();
+        $content = new self();
+        $content->typeId = $contentType->id;
+        $content->contentType = $contentType;
+        foreach ( $contentType->getFields() as $contentTypeField )
+        {
+            $field = new Field();
+            $field->setState( array(
+                'fieldTypeString' => $contentTypeField->fieldTypeString,
+                'contentTypeField' => $contentTypeField,
+                'content' => $content,
+            ));
+            $field->getValueObject()->init( $contentTypeField->getValueObject() );
+            $content->fields[] = $field;
+        }
+        return $content;
     }
 
     /**
@@ -110,6 +152,25 @@ class Content extends Abstract_Model
                 else
                     throw new \InvalidArgumentException( "{$name} is not a valid property on " . __CLASS__ );
         }
+    }
+
+    /**
+     * Get value
+     *
+     * @throws \InvalidArgumentException
+     * @param string $name
+     * @param string $value
+     * @return mixed Return $value
+     */
+    public function __get( $name )
+    {
+        if ( $name === 'fields' )
+        {
+            if ( $this->_fieldMap !== null )
+                return $this->_fieldMap;
+            return $this->_fieldMap = new FieldMap( $this );
+        }
+        return parent::__get( $name );
     }
 
     /**

@@ -12,7 +12,7 @@
  * @Entity @Table(name="ezcontentobject_attribute")
  */
 namespace ezx\doctrine\model;
-class Field extends Abstract_Field
+class Field extends Abstract_Field implements Interface_Observer
 {
     /**
      * @Id @Column(type="integer")
@@ -67,7 +67,7 @@ class Field extends Abstract_Field
      * @JoinColumn(name="contentobject_id", referencedColumnName="id")
      * @var Content
      */
-    protected $content = 0;
+    protected $content;
 
     /**
      * Return content object
@@ -80,11 +80,11 @@ class Field extends Abstract_Field
     }
 
     /**
-     * @ManyToOne(targetEntity="ContentTypeField", inversedBy="contentFields")
+     * @ManyToOne(targetEntity="ContentTypeField", inversedBy="contentFields", fetch="EAGER")
      * @JoinColumn(name="contentclassattribute_id", referencedColumnName="id")
      * @var ContentType
      */
-    protected $contentTypeField = 0;
+    protected $contentTypeField;
 
     /**
      * Return content type object
@@ -94,6 +94,21 @@ class Field extends Abstract_Field
     public function getContentTypeField()
     {
         return $this->contentTypeField;
+    }
+
+    /**
+     * Called when subject has been updated
+     *
+     * @param Interface_Observable $subject
+     * @param string|null $event
+     * @return Interface_Observer
+     */
+    public function update( Interface_Observable $subject , $event  = null )
+    {
+        if ( $subject instanceof Content )
+            $this->notify( $event );
+        else
+            parent::update( $subject, $event );
     }
 
     /**

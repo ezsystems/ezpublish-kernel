@@ -48,21 +48,6 @@ class ContentRepository extends Abstract_Repository implements Interface_Identif
         if ( !$type )
             throw new \RuntimeException( "Could not find content type by identifier: '{$typeIdentifier}'" );
 
-        $fieldMap = array();
-        foreach ( $type[0]->getFields() as $contentTypeField )
-        {
-            $fieldMap[$contentTypeField->identifier] = Field::__set_state( array(
-                'fieldTypeString' => $contentTypeField->fieldTypeString,
-                //  'contentTypeField' => $contentTypeField,
-            ));
-            $fieldMap[$contentTypeField->identifier]->getValueObject()->init( $contentTypeField->getValueObject() );
-        }
-
-        $properties = array(
-            'fields' => new FieldMap( $fieldMap ),
-            'typeId' => $type[0]->id,
-        );
-
-        return Content::__set_state( $properties );
+        return Content::create( $type[0] );
     }
 }

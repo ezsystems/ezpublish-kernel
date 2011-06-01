@@ -15,14 +15,6 @@ namespace ezx\doctrine\model;
 abstract class Abstract_Field extends Abstract_Model implements Interface_Observer
 {
     /**
-     * Abstract __constructor
-     * Setups field value
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * @throws \InvalidArgumentException
      * @param string $name
      * @return mixed
@@ -106,7 +98,12 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
             if ( $property === 'value' )
                 $hash[$property] = $this->getValueObject()->getValue();
             else if ( $value instanceof Interface_Serializable )
+            {
+                if ( !in_array( $property, $this->_aggregateMembers, true ) )
+                    continue;
+
                 $hash[$property] = $value->getState();
+            }
             else
                 $hash[$property] = $value;
         }
@@ -125,7 +122,7 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
         {
             if ( $property === 'value' )
                 $this->getValueObject()->setValue( $value );
-            else if ( $this->$property instanceof Interface_Serializable && !$value instanceof Interface_Serializable )
+            else if ( !$value instanceof Interface_Serializable && $this->$property instanceof Interface_Serializable )
                 $this->$property->setState( $value );
             else
                 $this->$property = $value;
@@ -168,6 +165,9 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
      */
     public function update( Interface_Observable $subject , $event  = null )
     {
+        if ( !$subject instanceof Abstract_Field_Value )
+            return $this;
+
         $definition = $subject::definition();
         $property = $definition['legacy_column'];
 

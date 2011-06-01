@@ -75,8 +75,8 @@ if ( $_GET['fn'] === 'create' )
         $content->fields['tags'] = "demo";
     }
 
-    if ( isset( $_GET['title'] ) )
-        $content->setState( array( 'fields' => array( 'title' =>  array( 'value' => $_GET['title'] ) ) ) );
+    if ( isset( $_GET['title'] ) && isset( $content->fields['title'] ) )
+        $content->fields['title'] = $_GET['title'];
 
     $state = $content->getState();
     $out = var_export( $state, true );
@@ -101,23 +101,11 @@ else if ( $_GET['fn'] === 'get' )
     $location = $repository->load( 'Location', (int) $_GET['id'] );
     $content = $location->content;
 
-    $query = $em->createQuery("SELECT a FROM ezx\doctrine\model\Field a WHERE a.contentId = :id AND a.version = :version AND a.languageCode = :languageCode");
-    $query->setParameters( array(
-        'id'       => $content->id,
-        'version'  => $content->currentVersion,
-        'languageCode' => 'eng-GB'
-    ));
     $fieldStr = '';
-    $fields = $query->getResult();
-    foreach ( $fields as $field )
-    {
-        $fieldStr .= '<br />&nbsp;' . $field  . ':<pre>' . htmlentities( $field->value ) . '</pre>';
-    }
-    /*$fieldStr .= '<br />->fields';
     foreach ( $content->fields as $field )
     {
         $fieldStr .= '<br />&nbsp;' . $field  . ':<pre>' . htmlentities( $field->value ) . '</pre>';
-    }*/
+    }
     echo 'Id: ' . $location->id
     . '<br />Children count: '. count( $location->children )
     . '<br />Parent: '.  $location->parent

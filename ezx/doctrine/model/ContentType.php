@@ -14,11 +14,13 @@
 namespace ezx\doctrine\model;
 class ContentType extends Abstract_Model
 {
+    protected $_aggregateMembers = array( 'fields' );
+
     public function __construct()
     {
-        $this->groups = new SerializableCollection();
-        $this->fields = new SerializableCollection();
-        $this->contentObjects = new SerializableCollection();
+        $this->groups = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->contentObjects = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -41,14 +43,14 @@ class ContentType extends Abstract_Model
 
     /**
      * @OneToMany(targetEntity="ContentTypeField", mappedBy="contentType")
-     * @var SerializableCollection(ContentTypeField)
+     * @var \Doctrine\Common\Collections\ArrayCollection(ContentTypeField)
      */
     protected $fields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return SerializableCollection(ContentTypeField)
+     * @return \Doctrine\Common\Collections\ArrayCollection(ContentTypeField)
      */
     public function getFields()
     {
@@ -57,14 +59,14 @@ class ContentType extends Abstract_Model
 
     /**
      * @OneToMany(targetEntity="Content", mappedBy="contentType")
-     * @var SerializableCollection(Content)
+     * @var \Doctrine\Common\Collections\ArrayCollection(Content)
      */
-    protected $contentObjects = array() ;
+    protected $contentObjects;
 
     /**
      * Return collection of all content objects of this content type
      *
-     * @return SerializableCollection(Content)
+     * @return \Doctrine\Common\Collections\ArrayCollection(Content)
      */
     public function getContentObjects()
     {
@@ -73,14 +75,14 @@ class ContentType extends Abstract_Model
 
     /**
      * @ManyToMany(targetEntity="ContentTypeGroup", mappedBy="contentTypes")
-     * @var SerializableCollection(ContentTypeGroup)
+     * @var \Doctrine\Common\Collections\ArrayCollection(ContentTypeGroup)
      */
-    //private $groups;
+    protected $groups;
 
     /**
      * Return collection of ContentTypeGroup
      *
-     * @return SerializableCollection(ContentTypeGroup)
+     * @return \Doctrine\Common\Collections\ArrayCollection(ContentTypeGroup)
      */
     public function getGroups()
     {

@@ -12,11 +12,11 @@
  * @Entity @Table(name="ezcontentobject_tree")
  */
 namespace ezx\doctrine\model;
-class Location extends Abstract_Model
+class Location extends Abstract_Model implements Interface_Observer
 {
     public function __construct()
     {
-        $this->children = new SerializableCollection();
+        $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -24,12 +24,6 @@ class Location extends Abstract_Model
      * @var int
      */
     protected $id;
-
-    /**
-     * @Column(type="integer", name="contentobject_id")
-     * @var int
-     */
-    protected $contentId;
 
     /**
      * @Column(type="integer")
@@ -100,18 +94,33 @@ class Location extends Abstract_Model
 
     /**
      * @OneToMany(targetEntity="Location", mappedBy="parent")
-     * @var SerializableCollection(Location)
+     * @var \Doctrine\Common\Collections\ArrayCollection(Location)
      */
     protected $children;
 
     /**
      * Return collection of children Location objects
      *
-     * @return SerializableCollection(Location)
+     * @return \Doctrine\Common\Collections\ArrayCollection(Location)
      */
     public function getChildren()
     {
         return $this->children;
+    }
+
+    /**
+     * Called when subject has been updated
+     *
+     * @param Interface_Observable $subject
+     * @param string|null $event
+     * @return Interface_Observer
+     */
+    public function update( Interface_Observable $subject , $event  = null )
+    {
+        if ( $subject instanceof Content )
+            $this->notify( $event );
+        else
+            parent::update( $subject, $event );
     }
 
     /**

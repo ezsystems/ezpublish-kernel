@@ -23,8 +23,18 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
 
     /**
      * List of readonly properties
+     *
+     * @var array(string)
      */
     private $_readonly = array();
+
+    /**
+     * List of aggregate members, only applies to objects that implements Interface_Serializable
+     * Used for figuring out what to serialize as part of this object!
+     *
+     * @var array(string)
+     */
+    protected $_aggregateMembers = array();
 
     /**
      * Attach a event listener to this subject
@@ -121,8 +131,19 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     {
         foreach ( $properties as $property => $value )
         {
-            if ( $this->$property instanceof Interface_Serializable && !$value instanceof Interface_Serializable )
+            if ( !$value instanceof Interface_Serializable && $this->$property instanceof Interface_Serializable )
                 $this->$property->setState( $value );
+            elseif ( $this->$property instanceof \ArrayAccess )
+            {
+                $arrayAccess = $this->$property;
+                foreach ( $value as $key => $item )
+                {
+                    if ( $arrayAccess[$key] instanceof Interface_Serializable )
+                        $arrayAccess[$key]->setState( $item );
+                    else
+                        $arrayAccess[$key] = $item;
+                }
+            }
             else
                 $this->$property = $value;
         }
@@ -142,12 +163,36 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
             if ( $property[0] === '_' )
                 continue;
 
-            if ( $value instanceof Interface_Serializable )
-                $hash[$property] = $value->getState();
+            if ( $value instanceof Interface_Serializable  || $value instanceof \ArrayAccess )
+            {
+                if ( !in_array( $property, $this->_aggregateMembers, true ) )
+                    continue;
+
+                if ( $value instanceof Interface_Serializable )
+                {
+                    $hash[$property] = $value->getState();
+                    continue;
+                }
+
+                $hash[$property] = array();
+                foreach ( $value as $key => $item )
+                {
+                    if ( $item instanceof Interface_Serializable )
+                        $hash[$property][$key] = $item->getState();
+                    else
+                        $hash[$property][$key] = $item;
+                }
+
+            }
             else
                 $hash[$property] = $value;
         }
         return $hash;
+    }
+
+    static protected function recursiveGetState( $item )
+    {
+
     }
 
     /**

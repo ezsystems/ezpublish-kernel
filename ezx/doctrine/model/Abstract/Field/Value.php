@@ -76,4 +76,12 @@ abstract class Abstract_Field_Value extends Abstract_Model implements Interface_
     {
         return $this->value;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->value;
+    }
 }

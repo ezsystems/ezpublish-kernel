@@ -12,11 +12,11 @@
  * @Entity @Table(name=" ezcontentclass_attribute")
  */
 namespace ezx\doctrine\model;
-class ContentTypeField extends Abstract_Field
+class ContentTypeField extends Abstract_Field implements Interface_Observer
 {
     public function __construct()
     {
-        $this->contentFields = new SerializableCollection();
+        $this->contentFields = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -153,18 +153,33 @@ class ContentTypeField extends Abstract_Field
 
     /**
      * @OneToMany(targetEntity="Field", mappedBy="contentTypeField")
-     * @var SerializableCollection(Field)
+     * @var \Doctrine\Common\Collections\ArrayCollection(Field)
      */
     protected $contentFields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return SerializableCollection(Field)
+     * @return \Doctrine\Common\Collections\ArrayCollection(Field)
      */
     public function getContentFields()
     {
         return $this->contentFields;
+    }
+
+    /**
+     * Called when subject has been updated
+     *
+     * @param Interface_Observable $subject
+     * @param string|null $event
+     * @return Interface_Observer
+     */
+    public function update( Interface_Observable $subject , $event  = null )
+    {
+        if ( $subject instanceof ContentType )
+            $this->notify( $event );
+        else
+            parent::update( $subject, $event );
     }
 
     /**
