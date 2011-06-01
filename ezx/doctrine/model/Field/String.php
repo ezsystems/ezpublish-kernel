@@ -39,6 +39,17 @@ class Field_String extends Abstract_Field_Value
     }
 
     /**
+     * Called when content object is created the first time
+     *
+     * @param Field_Type_String $contentTypeFieldValue
+     * @return Field_String
+     */
+    public function init( Interface_Value $contentTypeFieldValue )
+    {
+        $this->setValue( $contentTypeFieldValue->getValue() );
+    }
+
+    /**
      * @var string
      */
     public $value = '';

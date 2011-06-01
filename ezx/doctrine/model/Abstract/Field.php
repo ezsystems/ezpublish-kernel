@@ -69,7 +69,7 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
      * @throws \RuntimeException If definition of Interface_Value is wrong
      * @return Abstract_Field_Value
      */
-    protected function getValueObject()
+    public function getValueObject()
     {
         if ( $this->value instanceof Interface_Value )
            return $this->value;
@@ -103,8 +103,8 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
             if ( $property[0] === '_' )
                 continue;
 
-            if ( $value instanceof Interface_Value )
-                $hash[$property] = $value->getValue();
+            if ( $property === 'value' )
+                $hash[$property] = $this->getValueObject()->getValue();
             else if ( $value instanceof Interface_Serializable )
                 $hash[$property] = $value->getState();
             else

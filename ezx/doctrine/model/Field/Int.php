@@ -12,7 +12,7 @@
  * Int Field value object class
  */
 namespace ezx\doctrine\model;
-class Field_Int extends Abstract_Field_Value
+class Field_Int extends Abstract_Field_Value implements Interface_Field_Init
 {
     /**
      * Field type identifier
@@ -35,6 +35,17 @@ class Field_Int extends Abstract_Field_Value
             'type' => self::TYPE_INT,
             'legacy_column' => 'data_int'
         );
+    }
+
+    /**
+     * Called when content object is created the first time
+     *
+     * @param Field_Type_Int $contentTypeFieldValue
+     * @return Field_Int
+     */
+    public function init( Interface_Value $contentTypeFieldValue )
+    {
+
     }
 
     /**

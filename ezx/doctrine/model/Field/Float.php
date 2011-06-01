@@ -38,6 +38,17 @@ class Field_Float extends Abstract_Field_Value
     }
 
     /**
+     * Called when content object is created the first time
+     *
+     * @param Field_Type_Float $contentTypeFieldValue
+     * @return Field_Float
+     */
+    public function init( Interface_Value $contentTypeFieldValue )
+    {
+
+    }
+
+    /**
      * @var float
      */
     public $value = 0.0;
