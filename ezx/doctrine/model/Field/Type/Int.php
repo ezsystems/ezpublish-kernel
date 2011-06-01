@@ -40,5 +40,5 @@ class Field_Type_Int extends Abstract_Field_Value
     /**
      * @var int
      */
-    public $value = 0;
+    protected $value = 0;
 }

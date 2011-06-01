@@ -27,19 +27,19 @@ class ContentType extends Abstract_Model
      * @Id @Column(type="integer") @GeneratedValue
      * @var int
      */
-    public $id;
+    protected $id;
 
     /**
      * @Column(type="integer")
      * @var int
      */
-    public $version;
+    protected $version;
 
     /**
      * @Column(length=50)
      * @var string
      */
-    public $identifier;
+    protected $identifier;
 
     /**
      * @OneToMany(targetEntity="ContentTypeField", mappedBy="contentType")

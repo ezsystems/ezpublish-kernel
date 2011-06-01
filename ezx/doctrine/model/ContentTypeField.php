@@ -41,7 +41,7 @@ class ContentTypeField extends Abstract_Field implements Interface_Observer
      * @Column(length=50)
      * @var string
      */
-    public $identifier;
+    protected $identifier;
 
     /**
      * @Column(length=50)
@@ -132,7 +132,7 @@ class ContentTypeField extends Abstract_Field implements Interface_Observer
      * @Column(type="integer")
      * @var int
      */
-    public $placement;
+    protected $placement;
 
     /**
      * @ManyToOne(targetEntity="ContentType", inversedBy="fields")
@@ -146,7 +146,7 @@ class ContentTypeField extends Abstract_Field implements Interface_Observer
      *
      * @return ContentType
      */
-    final public function getContentType()
+    public function getContentType()
     {
         return $this->contentType;
     }

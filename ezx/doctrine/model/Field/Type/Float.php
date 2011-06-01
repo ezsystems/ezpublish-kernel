@@ -40,5 +40,5 @@ class Field_Type_Float extends Abstract_Field_Value
     /**
      * @var float
      */
-    public $value = 0.0;
+    protected $value = 0.0;
 }

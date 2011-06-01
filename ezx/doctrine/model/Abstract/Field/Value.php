@@ -49,7 +49,7 @@ abstract class Abstract_Field_Value extends Abstract_Model implements Interface_
      *
      * @return array
      */
-    final public function typeInheritance()
+    public function typeInheritance()
     {
         return $this->types;
     }

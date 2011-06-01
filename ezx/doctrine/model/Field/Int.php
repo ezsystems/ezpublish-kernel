@@ -51,5 +51,5 @@ class Field_Int extends Abstract_Field_Value implements Interface_Field_Init
     /**
      * @var int
      */
-    public $value = 0;
+    protected $value = 0;
 }

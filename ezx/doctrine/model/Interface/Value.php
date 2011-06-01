@@ -12,7 +12,7 @@
 namespace ezx\doctrine\model;
 interface Interface_Value
 {
-    //public $value;
+    //protected $value;
 
     /**
      * Constant for string type in {@see definition()}

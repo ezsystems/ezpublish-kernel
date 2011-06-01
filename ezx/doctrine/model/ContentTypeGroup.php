@@ -23,13 +23,13 @@ class ContentTypeGroup extends Abstract_Model
      * @Id @Column(type="integer") @GeneratedValue
      * @var int
      */
-    public $id;
+    protected $id;
 
     /**
      * @Column(length=50)
      * @var string
      */
-    public $name;
+    protected $name;
 
     /**
      * @ManyToMany(targetEntity="ContentType", mappedBy="groups")

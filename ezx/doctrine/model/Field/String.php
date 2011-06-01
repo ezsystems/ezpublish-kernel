@@ -52,5 +52,5 @@ class Field_String extends Abstract_Field_Value
     /**
      * @var string
      */
-    public $value = '';
+    protected $value = '';
 }
