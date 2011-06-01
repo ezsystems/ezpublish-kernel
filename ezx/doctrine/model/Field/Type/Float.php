@@ -33,7 +33,7 @@ class Field_Type_Float extends Abstract_Field_Value
     {
         return array(
             'type' => self::TYPE_FLOAT,
-            'legacy_column' => 'data_text1'
+            'legacy_column' => 'data_float1'
         );
     }
 

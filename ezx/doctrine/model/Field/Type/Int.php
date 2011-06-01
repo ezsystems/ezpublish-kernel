@@ -33,7 +33,7 @@ class Field_Type_Int extends Abstract_Field_Value
     {
         return array(
             'type' => self::TYPE_INT,
-            'legacy_column' => 'data_text1'
+            'legacy_column' => 'data_int1'
         );
     }
 

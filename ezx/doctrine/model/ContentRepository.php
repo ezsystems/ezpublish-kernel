@@ -54,6 +54,8 @@ class ContentRepository extends Abstract_Repository implements Interface_Identif
             $fieldMap[$contentTypeField->identifier] = Field::__set_state( array(
                 'fieldTypeString' => $contentTypeField->fieldTypeString,
                 //'contentTypeField' => $contentTypeField,
+                // @todo This is plain wrong and only valid for string type
+                // should pass content type field value object to content field value somehow so it can handle it
                 'value' => $contentTypeField->value,
             ));
         }

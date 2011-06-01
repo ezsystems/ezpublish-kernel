@@ -74,6 +74,54 @@ class ContentTypeField extends Abstract_Field
     protected $data_text5;
 
     /**
+     * @Column(type="integer")
+     * @var int
+     */
+    protected $data_int1;
+
+    /**
+     * @Column(type="integer")
+     * @var int
+     */
+    protected $data_int2;
+
+    /**
+     * @Column(type="integer")
+     * @var int
+     */
+    protected $data_int3;
+
+    /**
+     * @Column(type="integer")
+     * @var int
+     */
+    protected $data_int4;
+
+    /**
+     * @Column(type="float")
+     * @var float
+     */
+    protected $data_float1;
+
+    /**
+     * @Column(type="float")
+     * @var float
+     */
+    protected $data_float2;
+
+    /**
+     * @Column(type="float")
+     * @var float
+     */
+    protected $data_float3;
+
+    /**
+     * @Column(type="float")
+     * @var float
+     */
+    protected $data_float4;
+
+    /**
      * @Column(length=50, name="data_type_string")
      * @var string
      */
