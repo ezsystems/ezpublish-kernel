@@ -14,8 +14,13 @@
  */
 namespace ezp;
 
-class Repository
+abstract class Repository
 {
+    /**
+     * @var Repository
+     */
+    private static $repositoryInstance;
+
     /**
      * Loads the object of type $type with id $id
      *
@@ -48,6 +53,16 @@ class Repository
     public function store( DomainObject $object )
     {
 
+    }
+
+    public static function get()
+    {
+        if ( !self::$repositoryInstance instanceof static )
+        {
+            self::$repositoryInstance = new static;
+        }
+
+        return self::$repositoryInstance;
     }
 }
 ?>
