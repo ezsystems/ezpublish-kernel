@@ -190,11 +190,6 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
         return $hash;
     }
 
-    static protected function recursiveGetState( $item )
-    {
-
-    }
-
     /**
      * Get value
      *

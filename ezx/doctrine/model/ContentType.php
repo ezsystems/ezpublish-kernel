@@ -10,6 +10,12 @@
 
 /**
  * @Entity @Table(name="ezcontentclass")
+ *
+ * @property-read int $id
+ * @property-read int $version
+ * @property-read string $identifier
+ * @property-read array(ContentTypeField) $fields
+ * @property-read array(ContentTypeGroup) $groups
  */
 namespace ezx\doctrine\model;
 class ContentType extends Abstract_Model

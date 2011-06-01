@@ -10,6 +10,7 @@
 
 /**
  * @Entity @Table(name="ezcontentobject")
+ * @HasLifecycleCallbacks
  *
  * @property-read int $id
  * @property-read int $currentVersion
@@ -18,7 +19,7 @@
  * @property int $sectionId
  * @property-read string $typeid Content Type Identifier
  * @property-read array(Location) $locations An hash like structure of fields
- * @property FieldMap(Field) $fields An hash structure of fields
+ * @property-read array(string => Field) $fields An hash structure of fields
  * @property-read ContentType $contentType Content type object
  */
 namespace ezx\doctrine\model;
@@ -33,6 +34,26 @@ class Content extends Abstract_Model
     {
         $this->locations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Setup locations and fields as observers of content object
+     *
+     * @PostLoad
+     * @internal Only for use by create function
+     * @return Content
+     */
+    public function _postLoad()
+    {
+        foreach( $this->__get( 'locations' ) as $location )
+        {
+            $this->attach( $location );
+        }
+        foreach( $this->__get( 'fields' ) as $field )
+        {
+            $this->attach( $field );
+        }
+        return $this;
     }
 
     /**
@@ -127,7 +148,7 @@ class Content extends Abstract_Model
             $field->getValueObject()->init( $contentTypeField->getValueObject() );
             $content->fields[] = $field;
         }
-        return $content;
+        return $content->_postLoad();
     }
 
     /**
