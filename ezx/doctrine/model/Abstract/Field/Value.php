@@ -12,7 +12,7 @@
  *
  */
 namespace ezx\doctrine\model;
-abstract class Abstract_Field_Value extends Abstract_Model implements Interface_Field_Value
+abstract class Abstract_Field_Value extends Abstract_Model implements Interface_Value
 {
     /**
      * Constant that Field types needs to defined
@@ -29,16 +29,13 @@ abstract class Abstract_Field_Value extends Abstract_Model implements Interface_
     protected $types = array();
 
     /**
-     * List of field type identifiers for use by design overrides
-     * eg. ezstring
-     * @var array
+     * The value of this value object
+     * @var mixed
      */
     protected $value;
 
     /**
-     * Constructor, appends $types and assign $value by reference
-     *
-     * @param mixed $value
+     * Constructor, appends $types
      */
     public function __construct()
     {

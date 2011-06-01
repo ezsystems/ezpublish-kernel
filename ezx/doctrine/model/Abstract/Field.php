@@ -58,7 +58,7 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
     }
 
     /**
-     * @var Interface_Field_Value
+     * @var Interface_Value
      */
     protected $value;
 
@@ -66,12 +66,12 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
      * Initialize and return field value
      *
      * @todo generalize code and remove knowledge of Field / ContentTypeField classes
-     * @throws \RuntimeException If definition of Interface_Field_Value is wrong
+     * @throws \RuntimeException If definition of Interface_Value is wrong
      * @return Abstract_Field_Value
      */
     protected function getValueObject()
     {
-        if ( $this->value instanceof Interface_Field_Value )
+        if ( $this->value instanceof Interface_Value )
            return $this->value;
 
         $configuration = \ezp\system\Configuration::getInstance();
@@ -83,8 +83,8 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
         if ( !class_exists( $list[ $this->fieldTypeString ] ) )
             throw new \RuntimeException( "Field type value class '{$list[$this->fieldTypeString]}' does not exist" );
 
-        if ( !is_subclass_of( $list[ $this->fieldTypeString ], '\ezx\doctrine\model\Interface_Field_Value' ) )
-            throw new \RuntimeException( "Field type value '{$list[$this->fieldTypeString]}' does not implement Interface_Field_Value" );
+        if ( !is_subclass_of( $list[ $this->fieldTypeString ], '\ezx\doctrine\model\Interface_Value' ) )
+            throw new \RuntimeException( "Field type value '{$list[$this->fieldTypeString]}' does not implement Interface_Value" );
 
         $className = $list[ $this->fieldTypeString ];
         return $this->assignValue( new $className() );
@@ -103,7 +103,7 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
             if ( $property[0] === '_' )
                 continue;
 
-            if ( $value instanceof Interface_Field_Value )
+            if ( $value instanceof Interface_Value )
                 $hash[$property] = $value->getValue();
             else if ( $value instanceof Interface_Serializable )
                 $hash[$property] = $value->getState();
@@ -136,11 +136,11 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
     /**
      * Assign value by reference to native property
      *
-     * @throws \RuntimeException If definition of Interface_Field_Value is wrong
-     * @param Interface_Field_Value $value
-     * @return Interface_Field_Value
+     * @throws \RuntimeException If definition of Interface_Value is wrong
+     * @param Interface_Value $value
+     * @return Interface_Value
      */
-    protected function assignValue( Interface_Field_Value $value )
+    protected function assignValue( Interface_Value $value )
     {
         $definition = $value::definition();
         $property = $definition['legacy_column'];

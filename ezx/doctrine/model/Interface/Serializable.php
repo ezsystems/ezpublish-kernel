@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface for models, content and field objects to mark them as multi Serializable
+ * Interface for Serializable objects
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0

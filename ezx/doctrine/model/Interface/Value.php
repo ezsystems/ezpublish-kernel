@@ -1,6 +1,8 @@
 <?php
 /**
- * Data Field model object interface
+ * Value object interface
+ *
+ * @todo Maybe move defintion stuff into it's own Interface_Defintion for re use by Interface_Renderable and others
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -8,7 +10,7 @@
  * @subpackage doctrine
  */
 namespace ezx\doctrine\model;
-interface Interface_Field_Value
+interface Interface_Value
 {
     //public $value;
 
@@ -51,15 +53,10 @@ interface Interface_Field_Value
     const TYPE_BOOL   = 6;
 
     /**
-     * Constructor, appends $types
-     */
-    public function __construct();
-
-    /**
      * Set value
      *
      * @param mixed $value As defined by defintion()
-     * @return Interface_Field_Value
+     * @return Interface_Value
      */
     public function setValue( $value );
 
