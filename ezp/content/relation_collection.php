@@ -17,31 +17,13 @@
  */
 namespace ezp\Content;
 
-class RelationCollection extends BaseCollection implements ContentDomainInterface, IteratorAggregate, Countable
+class RelationCollection extends BaseCollection implements ContentDomainInterface, \IteratorAggregate, \Countable
 {
     protected $relations = array();
 
-    /**
-     * Restores the state of a content object
-     * @param array $objectValue
-     */
-    public static function __set_state( array $state )
-    {
-        $obj = new self;
-        foreach ( $state as $property => $value )
-        {
-            if ( isset( $obj->properties[$property] ) )
-            {
-                $obj->properties[$property] = $value;
-            }
-        }
-
-        return $obj;
-    }
-
     public function getIterator()
     {
-        return new ArrayIterator( $this );
+        return new \ArrayIterator( $this );
     }
 
     public function count()

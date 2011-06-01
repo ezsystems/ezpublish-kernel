@@ -19,7 +19,7 @@
  */
 namespace ezp\Content;
 
-class FieldCollection extends BaseCollection implements ArrayAccess, IteratorAggregate, ContentDomainInterface, Countable
+class FieldCollection extends BaseCollection implements ContentDomainInterface, \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * Fieldsets, indexed by locale (i.e. eng-GB)
@@ -42,31 +42,13 @@ class FieldCollection extends BaseCollection implements ArrayAccess, IteratorAgg
     }
 
     /**
-     * Restores the state of a content object
-     * @param array $objectValue
-     */
-    public static function __set_state( array $state )
-    {
-        $obj = new self;
-        foreach ( $state as $property => $value )
-        {
-            if ( isset( $obj->properties[$property] ) )
-            {
-                $obj->properties[$property] = $value;
-            }
-        }
-
-        return $obj;
-    }
-
-    /**
      * Returns the iterator for this object
      * @return Iterator
      */
     public function getIterator()
     {
         // TODO : Use a dedicated iterator
-        return new ArrayIterator( $this );
+        return new \ArrayIterator( $this );
     }
 
     public function offsetExists( $offset )
@@ -87,7 +69,7 @@ class FieldCollection extends BaseCollection implements ArrayAccess, IteratorAgg
      */
     public function offsetSet( $offset, $value )
     {
-        throw new ezcBasePropertyPermissionException( "fieldsets", ezcBasePropertyPermissionException::READ );
+        throw new \ezcBasePropertyPermissionException( "fieldsets", \ezcBasePropertyPermissionException::READ );
     }
 
     /**
@@ -98,7 +80,7 @@ class FieldCollection extends BaseCollection implements ArrayAccess, IteratorAgg
      */
     public function offsetUnset( $offset )
     {
-        throw new ezcBasePropertyPermissionException( "fieldsets", ezcBasePropertyPermissionException::READ );
+        throw new \ezcBasePropertyPermissionException( "fieldsets", \ezcBasePropertyPermissionException::READ );
     }
 }
 ?>

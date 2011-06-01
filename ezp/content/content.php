@@ -60,7 +60,9 @@
  */
 namespace ezp\Content;
 
-use ezp\User\UserRepository;
+use ezx\doctrine\model\ContentType;
+
+use ezp\User\Repository as UserRepository;
 use ezp\User\User;
 
 class Content extends Base implements ContentDomainInterface
@@ -73,7 +75,7 @@ class Content extends Base implements ContentDomainInterface
     const STATUS_PUBLISHED = 1;
     const STATUS_ARCHIVED = 2;
 
-    public function __construct()
+    public function __construct( ContentType $contentType = null )
     {
         $this->properties = array(
             "id"                    => null,
@@ -81,12 +83,12 @@ class Content extends Base implements ContentDomainInterface
             "status"                => self::STATUS_DRAFT,
             "versions"              => new VersionCollection(),
             "locations"             => new LocationCollection(),
-            "creationDate"          => new DateTime(),
+            "creationDate"          => new \DateTime(),
             "owner"                 => UserRepository::get()->currentUser(),
             "relations"             => new RelationCollection(),
             "reversedRelations"     => new RelationCollection(),
             "translations"          => new TranslationCollection(),
-            "fields"                => new FieldsetCollection()
+            "fields"                => new FieldCollection()
         );
 
         $this->readOnlyProperties = array(
@@ -95,24 +97,6 @@ class Content extends Base implements ContentDomainInterface
             "versions"      => true,
             "locations"     => true
         );
-    }
-
-    /**
-     * Restores the state of a content object
-     * @param array $state
-     */
-    public static function __set_state( array $state )
-    {
-        $obj = new self;
-        foreach ( $state as $property => $value )
-        {
-            if ( isset( $obj->properties[$property] ) )
-            {
-                $obj->properties[$property] = $value;
-            }
-        }
-
-        return $obj;
     }
 
     public function __clone()

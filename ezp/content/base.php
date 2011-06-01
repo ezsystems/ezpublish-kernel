@@ -123,6 +123,24 @@ abstract class Base
     {
         return isset( $this->properties[$property] ) || isset( $this->dynamicProperties[$property] );
     }
+
+    /**
+     * Restores the state of a content object
+     * @param array $state
+     */
+    public static function __set_state( array $state )
+    {
+        $obj = new static;
+        foreach ( $state as $property => $value )
+        {
+            if ( isset( $obj->properties[$property] ) )
+            {
+                $obj->properties[$property] = $value;
+            }
+        }
+
+        return $obj;
+    }
 }
 
 ?>

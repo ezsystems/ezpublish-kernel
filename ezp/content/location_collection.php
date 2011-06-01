@@ -16,9 +16,8 @@
  * @subpackage Content
  */
 namespace ezp\Content;
-use InvalidArgumentException;
 
-class LocationCollection extends BaseCollection implements ContentDomainInterface, IteratorAggregate, Countable, ArrayAccess
+class LocationCollection extends BaseCollection implements ContentDomainInterface, \IteratorAggregate, \Countable, \ArrayAccess
 {
     /**
      * Locations contained in current collection
@@ -42,25 +41,7 @@ class LocationCollection extends BaseCollection implements ContentDomainInterfac
             }
         }
 
-        throw new InvalidArgumentException( "Invalid location id #{$locationId} for content #{$this->content->id}" );
-    }
-
-    /**
-     * Restores the state of a content object
-     * @param array $objectValue
-     */
-    public static function __set_state( array $state )
-    {
-        $obj = new self;
-        foreach ( $state as $property => $value )
-        {
-            if ( isset( $obj->properties[$property] ) )
-            {
-                $obj->properties[$property] = $value;
-            }
-        }
-
-        return $obj;
+        throw new \InvalidArgumentException( "Invalid location id #{$locationId} for content #{$this->content->id}" );
     }
 
     /**
@@ -70,7 +51,7 @@ class LocationCollection extends BaseCollection implements ContentDomainInterfac
     public function getIterator()
     {
         // TODO : Use a dedicated iterator
-        return new ArrayIterator( $this );
+        return new \ArrayIterator( $this );
     }
 
     public function offsetExists( $offset )
@@ -91,7 +72,7 @@ class LocationCollection extends BaseCollection implements ContentDomainInterfac
      */
     public function offsetSet( $offset, $value )
     {
-        throw new ezcBasePropertyPermissionException( "fieldsets", ezcBasePropertyPermissionException::READ );
+        throw new \ezcBasePropertyPermissionException( "fieldsets", ezcBasePropertyPermissionException::READ );
     }
 
     /**
@@ -102,6 +83,11 @@ class LocationCollection extends BaseCollection implements ContentDomainInterfac
     {
         unset( $this->locations[$offset] );
         // TODO : Do further operations to be inspected by repository later on in order to perform removal
+    }
+
+    public function count()
+    {
+        return count( $this->locations );
     }
 }
 ?>

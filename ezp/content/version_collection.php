@@ -17,24 +17,67 @@
  */
 namespace ezp\Content;
 
-class VersionCollection extends Base implements ContentDomainInterface
+class VersionCollection extends BaseCollection implements ContentDomainInterface, \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
-     * Restores the state of a content object
-     * @param array $objectValue
+     * @var array(Version)
      */
-    public static function __set_state( array $state )
-    {
-        $obj = new self;
-        foreach ( $state as $property => $value )
-        {
-            if ( isset( $obj->properties[$property] ) )
-            {
-                $obj->properties[$property] = $value;
-            }
-        }
+    protected $versions = array();
 
-        return $obj;
+    public function __construct()
+    {
+
+    }
+
+    /**
+     * Returns the number of fieldsets available
+     * @return int
+     */
+    public function count()
+    {
+        return count( $this->versions );
+    }
+
+    /**
+     * Returns the iterator for this object
+     * @return Iterator
+     */
+    public function getIterator()
+    {
+        // TODO : Use a dedicated iterator
+        return new \ArrayIterator( $this );
+    }
+
+    public function offsetExists( $offset )
+    {
+        return isset( $this->versions[$offset] );
+    }
+
+    public function offsetGet( $offset )
+    {
+        return $this->versions[$offset];
+    }
+
+    /**
+     * Will throw an exception as fieldsets are not directly writeable
+     * @param mixed $offset
+     * @param mixed $value
+     * @throws ezcBasePropertyPermissionException
+     */
+    public function offsetSet( $offset, $value )
+    {
+        throw new \ezcBasePropertyPermissionException( "versions", \ezcBasePropertyPermissionException::READ );
+    }
+
+    /**
+     * Will throw an exception as fieldsets are not directly writeable
+     * @param mixed $offset
+     * @param mixed $value
+     * @throws ezcBasePropertyPermissionException
+     */
+    public function offsetUnset( $offset )
+    {
+        throw new \ezcBasePropertyPermissionException( "versions", \ezcBasePropertyPermissionException::READ );
     }
 }
 ?>
