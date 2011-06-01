@@ -60,8 +60,8 @@
  */
 namespace ezp\Content;
 
-use ezp\User\UserRepository as UserRepository;
-use ezp\User\User as User;
+use ezp\User\UserRepository;
+use ezp\User\User;
 
 class Content extends Base implements DomainObjectInterface
 {
