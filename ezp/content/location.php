@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class Location extends Base implements DomainObjectInterface
+class Location extends Base implements ContentDomainInterface
 {
     /**
      * Restores the state of a content object

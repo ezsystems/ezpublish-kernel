@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class RelationCollection extends BaseCollection implements DomainObjectInterface, IteratorAggregate, Countable
+class RelationCollection extends BaseCollection implements ContentDomainInterface, IteratorAggregate, Countable
 {
     protected $relations = array();
 

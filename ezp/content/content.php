@@ -63,7 +63,7 @@ namespace ezp\Content;
 use ezp\User\UserRepository;
 use ezp\User\User;
 
-class Content extends Base implements DomainObjectInterface
+class Content extends Base implements ContentDomainInterface
 {
     /**
      * Publication status constants
@@ -73,7 +73,7 @@ class Content extends Base implements DomainObjectInterface
     const STATUS_PUBLISHED = 1;
     const STATUS_ARCHIVED = 2;
 
-    public function __construct( ContentType $contentType )
+    public function __construct()
     {
         $this->properties = array(
             "id"                    => null,

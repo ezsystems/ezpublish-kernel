@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class TranslationCollection extends Base implements DomainObjectInterface
+class TranslationCollection extends Base implements ContentDomainInterface
 {
     /**
      * Restores the state of a content object
