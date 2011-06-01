@@ -12,6 +12,8 @@
 /**
  * Interface for content domain objects
  */
+namespace ezp\Content;
+
 interface DomainObjectInterface
 {
     /**
