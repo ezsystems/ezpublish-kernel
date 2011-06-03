@@ -29,6 +29,8 @@ class Subtree implements ezp\Service
      */
     public function copy( \ezp\Content\Location $subtree, \ezp\Content\Location $targetLocation )
     {
+        // is there any point in having a service at all, as the copy is to be performed directly by the storage
+        // engine in order to be as optimized as possible ?
         return ContentRepository::get()->copySubtree( $subtree, $targetLocation );
     }
 }
