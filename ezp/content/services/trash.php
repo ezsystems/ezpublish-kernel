@@ -11,6 +11,13 @@
 
 /**
  * Trash service, used for content trash handling
+ *
+ * Notes:
+ * Moving to trash is currently the same as moving to a custom subtree, not directly visible from the outside.
+ * When a Content is moved to the trash, it should remember its previous locations, so that it can be moved there
+ * again if restored. We therefore most likely need extra informations in order to be able to do that.
+ * Is it possible to achieve this in the business layer only, or do we need extra storage ?
+ *
  * @package Content
  * @subpackage Services
  */
