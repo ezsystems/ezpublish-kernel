@@ -15,18 +15,21 @@
  * @subpackage Services
  */
 namespace ezp\Content\Services;
+use ezp\Content\Repository as ContentRepository;
 
 class Subtree implements ezp\Service
 {
     /**
-     * Copies the subtree starting from $subtree to $targetLocation
+     * Copies the subtree starting from $subtree as a new subtree of $targetLocation
      *
      * @param \ezp\Content\Location $subtree
      * @param \ezp\Content\Location $targetLocation
+     *
+     * @return \ezp\Content\Location The newly created subtree
      */
     public function copy( \ezp\Content\Location $subtree, \ezp\Content\Location $targetLocation )
     {
-
+        return ContentRepository::get()->copySubtree( $subtree, $targetLocation );
     }
 }
 ?>
