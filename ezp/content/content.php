@@ -78,8 +78,8 @@ class Content extends Base implements ContentDomainInterface
     public function __construct( ContentType $contentType = null )
     {
         $this->properties = array(
-            "id"                    => null,
-            "remoteId"              => null,
+            "id"                    => false,
+            "remoteId"              => false,
             "status"                => self::STATUS_DRAFT,
             "versions"              => new VersionCollection(),
             "locations"             => new LocationCollection(),
@@ -88,20 +88,22 @@ class Content extends Base implements ContentDomainInterface
             "relations"             => new RelationCollection(),
             "reversedRelations"     => new RelationCollection(),
             "translations"          => new TranslationCollection(),
-            "fields"                => new FieldCollection()
+            "fields"                => new FieldCollection(),
+            "name"					=> false
         );
 
         $this->readOnlyProperties = array(
             "id"            => true,
             "status"        => true,
             "versions"      => true,
-            "locations"     => true
+            "locations"     => true,
+            "name"			=> true
         );
     }
 
     public function __clone()
     {
-        $this->properties["id"] = null;
+        $this->properties["id"] = false;
         $this->properties["status"] = self::STATUS_DRAFT;
 
         // Locations : get the current location's parent, so that new content will be the old one's sibling
@@ -124,6 +126,11 @@ class Content extends Base implements ContentDomainInterface
     public function __destruct()
     {
         // Free some in-memory cache here
+    }
+
+    public function __toString()
+    {
+        return $this->properties["name"];
     }
 }
 ?>
