@@ -101,6 +101,15 @@ class Content extends Base implements ContentDomainInterface
         );
     }
 
+    /**
+     * Adds a new translation for content, referenced by $localeCode
+     * @param string $localeCode
+     */
+    public function addTranslation( $localeCode )
+    {
+        $this->properties["translations"]->add( new Translation( $localeCode ) );
+    }
+
     public function __clone()
     {
         $this->properties["id"] = false;

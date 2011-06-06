@@ -19,5 +19,16 @@ namespace ezp\Content;
 
 class Translation extends Base implements ContentDomainInterface
 {
+    public function __construct( $localeCode = null )
+    {
+        $this->properties = array(
+            "localeCode"		=> $localeCode,
+            "revision"			=> 1
+        );
+
+        $this->readOnlyProperties = array(
+        	"revision"			=> true
+        );
+    }
 }
 ?>

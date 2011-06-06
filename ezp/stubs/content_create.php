@@ -9,12 +9,13 @@ use ezp\Content\Content;
 use ezp\Content\Repository as ContentRepository;
 
 // Here $contentType represent a "Folder"
-// Current locale is eng-GB and fre-FR has been set in the system
+// Current default locale is eng-GB and fre-FR has been set in the system
 $content = new Content( $contentType );
 $content->fields['name'] = new ezp\Content\Fields\String( "My folder name" );
 $content->fields['description'] = new ezp\Content\Fields\XMLText( "<p>This is the <strong>HTML description</strong></p>" );
 
 // Now set an fre-FR translation
+$content->addTranslation( "fre-FR" );
 $content->translations["fre-FR"]->fields["name"] = new ezp\Content\Fields\String( "Nom du dossier" );
 $content->translations["fre-FR"]->fields["description"] = new ezp\Content\Fields\XMLText( "<p>Ceci est la <strong>description HTML</strong></p>" );
 
@@ -22,7 +23,7 @@ $content->translations["fre-FR"]->fields["description"] = new ezp\Content\Fields
 try
 {
     $publishedContent = ContentRepository::get()->getContentService()->insert( $content, $parentLocation );
-    echo $publishedContent; // Displays content "name"
+    echo $publishedContent; // Displays content "name" via __toString()
 }
 catch ( ezp\Content\ValidationException $e )
 {
