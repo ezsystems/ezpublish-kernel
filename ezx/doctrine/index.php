@@ -6,10 +6,10 @@
  * @Install: Change db settings bellow to point to a ez Publish install and you should be good to go!
  */
 
-namespace ezp\system;// Needed for fake Configuration class in the bottom of this file
+namespace ezp\system;
 use \ezx\doctrine\model\Repository;
 
-
+// Change these db settings to test the 'get' demo
 $settings = array(
     'driver'    => 'pdo_mysql',
     'user'      => 'root',
@@ -21,14 +21,16 @@ $settings = array(
 
 
 if ( !isset( $_GET['fn'] ) )
-    die( "Missing fn GET parameter, valid options are '?fn=get' and '?fn=create'!" );
-
+{
+    header( "Location: {$_SERVER['REQUEST_URI']}?fn=create&identifier=article&title=Catch22" );
+    exit;
+}
 
 chdir( '../../' );
 require 'autoload.php';
 
 
-// API demos
+// API 'create' demo code
 if ( $_GET['fn'] === 'create' )
 {
     if ( !isset( $_GET['identifier'] ) )
@@ -37,37 +39,43 @@ if ( $_GET['fn'] === 'create' )
     $repository = new Repository( getDoctrineEm( $settings ) );
     $contentService = $repository->ContentService();
 
-    // Create model object
+    // Create Content object
     $content = $contentService->create( $_GET['identifier'] );
+    /** Alternative example:
+    $contentTypeService = $repository->ContentTypeService();
+    $contentType = $contentTypeService->loadByIdentifier( $_GET['identifier'] );
+    $content = new Content( $contentType );
+    */
 
     $content->ownerId = 10;
     $content->sectionId = 3;
 
     if ( isset( $content->fields['tags'] ) )
     {
-        $content->fields['tags'] = "demo";
+        $content->fields['tags']->value = "demo";
     }
 
     if ( isset( $_GET['title'] ) && isset( $content->fields['title'] ) )
-        $content->fields['title'] = $_GET['title'];
+        $content->fields['title']->value = $_GET['title'];
 
     $content->notify();
 
-    $state = $content->getState();
+    $state = $content->toHash();
     $out = var_export( $state, true );
 
-    $newContent = $contentService->create( $_GET['identifier'] )->setState( $state );
+    $newContent = $contentService->create( $_GET['identifier'] )->fromHash( $state );
 
     // test that reference works on new object
     if ( isset( $newContent->fields['tags'] ) )
     {
-        $newContent->fields['tags'] .= " object2";
+        $newContent->fields['tags']->value .= " object2";
     }
 
-    $out2 = var_export( $newContent->getState(), true );
+    $out2 = var_export( $newContent->toHash(), true );
 
-    echo "<h3>\$repository-&gt;createContent( \$_GET['identifier'] ) > -&gt;setState() > var_export() > __set_state() test</h3><table><tr><td><pre>{$out}</pre></td><td><pre>{$out2}</pre></td></tr></table>";
+    echo "<h3>\$hash1 = new Content( \$contentType )-&gt;toHash();<br />\$hash2 = new Content( \$contentType )-&gt;fromHash( \$hash1 )-&gt;toHash();</h3><table><tr><td><pre>{$out}</pre></td><td><pre>{$out2}</pre></td></tr></table>";
 }
+// API 'get' demo code
 else if ( $_GET['fn'] === 'get' )
 {
     if ( !isset( $_GET['id'] ) )
@@ -96,10 +104,18 @@ else if ( $_GET['fn'] === 'get' )
    ;
 }
 else
+{
     die("GET parameter 'fn' has invalid value, should be 'create' or 'get'");
+}
+
+
+
+
 
 
 /**
+ * Setup Doctrine and return EntityManager
+ *
  * @return \Doctrine\ORM\EntityManager
  */
 function getDoctrineEm( array $settings )

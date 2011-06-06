@@ -95,6 +95,8 @@ class Repository implements Interface_Repository
             throw new \InvalidArgumentException( "Could not find '{$type}' with id: {$id}" );
         if ( !$object instanceof Abstract_Model )
             throw new \InvalidArgumentException( "'{$type}' is does not extend Abstract_Model" );
+        if ( $object instanceof Abstract_ContentModel )
+            throw new \InvalidArgumentException( "'{$type}' is a ContentModel class and is only available true Services" );
         return $object;
     }
 

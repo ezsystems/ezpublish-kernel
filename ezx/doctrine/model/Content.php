@@ -25,7 +25,15 @@
 namespace ezx\doctrine\model;
 class Content extends Abstract_ContentModel
 {
-    protected $_aggregateMembers = array( 'fields', 'locations' );
+    protected static $definition = array(
+        'id' => array( 'type' => self::TYPE_INT, 'readonly' => true, 'internal' => true ),
+        'currentVersion' => array( 'type' => self::TYPE_INT, 'readonly' => true, 'internal' => true ),
+        'ownerId' => array( 'type' => self::TYPE_INT ),
+        'sectionId' => array( 'type' => self::TYPE_INT ),
+        'fields' => array( 'type' => self::TYPE_ARRAY ),
+        'locations' => array( 'type' => self::TYPE_ARRAY ),
+        'contentType' => array( 'type' => self::TYPE_OBJECT, 'internal' => true ),
+    );
 
     /**
      * Create content based on content type object
@@ -41,16 +49,18 @@ class Content extends Abstract_ContentModel
         $this->contentType = $contentType;
         foreach ( $contentType->getFields() as $contentTypeField )
         {
-            $field = new Field();
-            $field->setState( array(
+            $field = new Field( $this, $contentTypeField );
+            $field->fromHash( array(
                 'fieldTypeString' => $contentTypeField->fieldTypeString,
-                'contentTypeField' => $contentTypeField,
-                'content' => $this,
             ));
-            $field->getValueObject()->init( $contentTypeField->getValueObject() );
+            $fieldValue = $field->getValueObject();
+            if ( $fieldValue instanceof Interface_Field_Init )
+            {
+                $fieldValue->init( $contentTypeField->getValueObject() );
+            }
             $this->fields[] = $field;
         }
-        return $this->_postLoad();
+        return $this->postLoad();
     }
 
     /**
@@ -60,7 +70,7 @@ class Content extends Abstract_ContentModel
      * @internal Only for use by create function
      * @return Content
      */
-    public function _postLoad()
+    protected function postLoad()
     {
         foreach( $this->__get( 'locations' ) as $location )
         {
@@ -119,7 +129,7 @@ class Content extends Abstract_ContentModel
      * @OneToMany(targetEntity="Field", mappedBy="content", fetch="EAGER")
      * @var FieldMap(Field)
      */
-    protected $fields;
+    private $fields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
@@ -141,30 +151,7 @@ class Content extends Abstract_ContentModel
     /**
      * Magic object that steps in when fields are accessed
      */
-    protected $_fieldMap;
-
-    /**
-     * Set value
-     *
-     * @throws \InvalidArgumentException
-     * @param string $name
-     * @param string $value
-     * @return mixed Return $value
-     */
-    public function __set( $name, $value )
-    {
-        switch ( $name )
-        {
-            case 'ownerId':
-            case 'sectionId':
-                return $this->$name = $value;
-            default:
-                if ( isset( $this->$name ) )
-                    throw new \InvalidArgumentException( "{$name} is not a writable property on " . __CLASS__ );
-                else
-                    throw new \InvalidArgumentException( "{$name} is not a valid property on " . __CLASS__ );
-        }
-    }
+    protected $fieldMap;
 
     /**
      * Get value
@@ -178,9 +165,9 @@ class Content extends Abstract_ContentModel
     {
         if ( $name === 'fields' )
         {
-            if ( $this->_fieldMap !== null )
-                return $this->_fieldMap;
-            return $this->_fieldMap = new FieldMap( $this );
+            if ( $this->fieldMap !== null )
+                return $this->fieldMap;
+            return $this->fieldMap = new FieldMap( $this );
         }
         return parent::__get( $name );
     }

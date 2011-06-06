@@ -12,8 +12,15 @@
  * @Entity @Table(name="ezcontentobject_attribute")
  */
 namespace ezx\doctrine\model;
-class Field extends Abstract_Field implements Interface_Observer
+class Field extends Abstract_Field
 {
+    protected static $definition = array(
+        'version' => array( 'type' => self::TYPE_INT, 'internal' => true ),
+        'fieldTypeString' => array( 'type' => self::TYPE_STRING ),
+        'value' => array( 'type' => self::TYPE_OBJECT ),
+        'content' => array( 'type' => self::TYPE_OBJECT, 'internal' => true ),
+    );
+
     /**
      * @Id @Column(type="integer")
      * @var int
@@ -96,6 +103,16 @@ class Field extends Abstract_Field implements Interface_Observer
         return $this->contentTypeField;
     }
 
+    /**
+     * Constructor, sets up relation properties
+     *
+     * @param ContentTypeField $contentTypeField
+     */
+    public function __construct( Content $content, ContentTypeField $contentTypeField )
+    {
+        $this->content = $content;
+        $this->contentTypeField = $contentTypeField;
+    }
     /**
      * Called when subject has been updated
      *

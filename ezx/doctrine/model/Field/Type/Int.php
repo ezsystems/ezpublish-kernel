@@ -29,13 +29,12 @@ class Field_Type_Int extends Abstract_Field_Value
         parent::__construct();
     }
 
-    static public function definition()
-    {
-        return array(
+    protected static $definition = array(
+        'value' => array(
             'type' => self::TYPE_INT,
             'legacy_column' => 'data_int1'
-        );
-    }
+        ),
+    );
 
     /**
      * @var int

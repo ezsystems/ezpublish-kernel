@@ -14,6 +14,16 @@
 namespace ezx\doctrine\model;
 class Location extends Abstract_ContentModel implements Interface_Observer
 {
+    protected static $definition = array(
+        'id' => array( 'type' => self::TYPE_INT, 'readonly' => true, 'internal' => true ),
+        'depth' => array( 'type' => self::TYPE_INT, 'readonly' => true, 'internal' => true ),
+        'isHidden' => array( 'type' => self::TYPE_INT ),
+        'isInvisible' => array( 'type' => self::TYPE_INT ),
+        'content' => array( 'type' => self::TYPE_OBJECT, 'internal' => true ),
+        'parent' => array( 'type' => self::TYPE_OBJECT, 'internal' => true ),
+        'children' => array( 'type' => self::TYPE_ARRAY, 'internal' => true ),
+    );
+
     public function __construct()
     {
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();

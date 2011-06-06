@@ -29,20 +29,20 @@ class FieldMap implements \Countable, \IteratorAggregate, \ArrayAccess
             if ( $content->currentVersion !== $field->version )
                 continue;
 
-            $this->_elements[ $field->getContentTypeField()->identifier ] = $field;
-            $this->_count++;
+            $this->elements[ $field->getContentTypeField()->identifier ] = $field;
+            $this->count++;
         }
     }
 
     /**
      * @var array Internal array of fields
      */
-    private $_elements = array();
+    private $elements = array();
 
     /**
      * @var int Pre generated count of elements (these never change so makes sense to store it)
      */
-    private $_count = 0;
+    private $count = 0;
 
     /**
      * Get Iterator.
@@ -51,7 +51,7 @@ class FieldMap implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function getIterator()
     {
-        return new \ArrayIterator( $this->_elements );
+        return new \ArrayIterator( $this->elements );
     }
 
     /**
@@ -63,10 +63,7 @@ class FieldMap implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function offsetSet( $offset, $value )
     {
-        if ( $offset !== null && isset( $this->_elements[$offset] ) )
-            $this->_elements[$offset]->value = $value;
-        else
-            throw new \InvalidArgumentException( "{$offset} is not a valid property on " . __CLASS__ );
+        throw new \InvalidArgumentException( "{$offset} is not a valid property on " . __CLASS__ );
     }
 
     /**
@@ -76,8 +73,8 @@ class FieldMap implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function offsetGet( $offset )
     {
-        if ( isset($this->_elements[$offset]) )
-            return $this->_elements[$offset]->value;
+        if ( isset($this->elements[$offset]) )
+            return $this->elements[$offset];
         return null;
     }
 
@@ -100,11 +97,11 @@ class FieldMap implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function offsetExists ( $offset )
     {
-        return isset( $this->_elements[$offset] );
+        return isset( $this->elements[$offset] );
     }
 
     public function count()
     {
-        return $this->_count;
+        return $this->count;
     }
 }

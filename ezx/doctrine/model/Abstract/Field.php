@@ -15,44 +15,33 @@ namespace ezx\doctrine\model;
 abstract class Abstract_Field extends Abstract_ContentModel implements Interface_Observer
 {
     /**
-     * @throws \InvalidArgumentException
+     * @uses Abstract_Model::__get() If $name is something else then 'value'
      * @param string $name
      * @return mixed
      */
     public function __get( $name )
     {
         if ( $name === 'value' )
-            return $this->getValueObject()->getValue();
-        elseif ( isset( $this->$name ) )
-            return $this->$name;
-        throw new \InvalidArgumentException( "{$name} is not a valid property on " . get_class($this) );
+            return $this->getValueObject();
+        return parent::__get( $name );
     }
 
-
     /**
-     * @throws \InvalidArgumentException
+     * @uses Abstract_Model::__set() If $name is something else then 'value'
      * @param string $name
-     * @param mixed $value
+     * @return mixed
      */
     public function __set( $name, $value )
     {
-        switch ( $name )
-        {
-            case 'value':
-                $this->getValueObject()->setValue( $value );
-                return $value;
-            default:
-                if ( isset( $this->$name ) )
-                    throw new \InvalidArgumentException( "{$name} is not a writable property on " . get_class($this) );
-                else
-                    throw new \InvalidArgumentException( "{$name} is not a valid property on " . get_class($this) );
-        }
+        if ( $name === 'value' )
+            return $this->getValueObject()->setValue( $value );
+        return parent::__set( $name, $value );
     }
 
     /**
-     * @var Interface_Value
+     * @var Abstract_Field_Value
      */
-    protected $value;
+    private $value;
 
     /**
      * Initialize and return field value
@@ -83,54 +72,6 @@ abstract class Abstract_Field extends Abstract_ContentModel implements Interface
     }
 
     /**
-     * Get properties with hash, name is same as used in ezc Persistent
-     *
-     * @return array
-     */
-    public function getState()
-    {
-        $hash = array();
-        foreach( $this as $property => $value )
-        {
-            if ( $property[0] === '_' )
-                continue;
-
-            if ( $property === 'value' )
-                $hash[$property] = $this->getValueObject()->getValue();
-            else if ( $value instanceof Interface_Serializable )
-            {
-                if ( !in_array( $property, $this->_aggregateMembers, true ) )
-                    continue;
-
-                $hash[$property] = $value->getState();
-            }
-            else
-                $hash[$property] = $value;
-        }
-        return $hash;
-    }
-
-    /**
-     * Set properties with hash, name is same as used in ezc Persistent
-     *
-     * @param array $properties
-     * @return Abstract_Field Content Return $this
-     */
-    public function setState( array $properties )
-    {
-        foreach ( $properties as $property => $value )
-        {
-            if ( $property === 'value' )
-                $this->getValueObject()->setValue( $value );
-            else if ( !$value instanceof Interface_Serializable && $this->$property instanceof Interface_Serializable )
-                $this->$property->setState( $value );
-            else
-                $this->$property = $value;
-        }
-        return $this;
-    }
-
-    /**
      * Assign value by reference to native property
      *
      * @throws \RuntimeException If definition of Interface_Value is wrong
@@ -140,7 +81,7 @@ abstract class Abstract_Field extends Abstract_ContentModel implements Interface
     protected function assignValue( Interface_Value $value )
     {
         $definition = $value::definition();
-        $property = $definition['legacy_column'];
+        $property = $definition['value']['legacy_column'];
 
         if ( $this instanceof Field )
         {
@@ -169,7 +110,7 @@ abstract class Abstract_Field extends Abstract_ContentModel implements Interface
             return $this;
 
         $definition = $subject::definition();
-        $property = $definition['legacy_column'];
+        $property = $definition['value']['legacy_column'];
 
         if ( $this instanceof Field )
         {

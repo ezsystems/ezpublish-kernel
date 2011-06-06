@@ -14,6 +14,12 @@
 namespace ezx\doctrine\model;
 class ContentTypeGroup extends Abstract_ContentModel
 {
+    protected static $definition = array(
+        'id' => array( 'type' => self::TYPE_INT, 'internal' => true ),
+        'version' => array( 'type' => self::TYPE_INT, 'internal' => true ),
+        //'identifier' => array( 'type' => self::TYPE_STRING ),
+        'contentTypes' => array( 'type' => self::TYPE_ARRAY ),
+    );
     public function __construct()
     {
         $this->contentTypes = new \Doctrine\Common\Collections\ArrayCollection();

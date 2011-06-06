@@ -82,6 +82,6 @@ abstract class Abstract_Field_Value extends Abstract_ContentModel implements Int
      */
     public function __toString()
     {
-        return $this->value;
+        return '' . $this->value;
     }
 }

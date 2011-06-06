@@ -30,13 +30,12 @@ class Field_Type_String extends Abstract_Field_Value
     }
 
 
-    static public function definition()
-    {
-        return array(
+    protected static $definition = array(
+        'value' => array(
             'type' => self::TYPE_STRING,
             'legacy_column' => 'data_text1'
-        );
-    }
+        ),
+    );
 
     /**
      * @var string

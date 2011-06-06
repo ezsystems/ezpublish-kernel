@@ -12,21 +12,20 @@
  * Domain object
  */
 namespace ezx\doctrine\model;
-abstract class Abstract_Model implements Interface_Serializable, Interface_Observable
+abstract class Abstract_Model implements Interface_Serializable, Interface_Observable, Interface_Definition
 {
     /**
      * List of event listeners
      *
      * @var array(Interface_Observer)
      */
-    private $_observers = array();
+    private $observers = array();
 
     /**
-     * List of readonly properties
-     *
-     * @var array(string)
+     * The definition of the class properties
+     * @see Interface_definition::definition()
      */
-    private $_readonly = array();
+    protected static $definition = array();
 
     /**
      * Attach a event listener to this subject
@@ -38,11 +37,11 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     public function attach( Interface_Observer $observer, $event = null )
     {
         if ( $event === null )
-            $this->_observers[] = $observer;
+            $this->observers[] = $observer;
         else if ( isset( $this->observers[$event] ) )
-            $this->_observers[$event][] = $observer;
+            $this->observers[$event][] = $observer;
         else
-            $this->_observers[$event] = array( $observer );
+            $this->observers[$event] = array( $observer );
         return $this;
     }
 
@@ -57,18 +56,18 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     {
         if ( $event === null )
         {
-            foreach( $this->_observers as $key => $obj )
+            foreach( $this->observers as $key => $obj )
             {
                 if ( $obj === $observer )
-                    unset( $this->_observers[$key] );
+                    unset( $this->observers[$key] );
             }
         }
-        elseif ( !empty( $this->_observers[$event] ) )
+        elseif ( !empty( $this->observers[$event] ) )
         {
-            foreach( $this->_observers[$event] as $key => $obj )
+            foreach( $this->observers[$event] as $key => $obj )
             {
                 if ( $obj === $observer )
-                    unset( $this->_observers[$event][$key] );
+                    unset( $this->observers[$event][$key] );
             }
         }
         return $this;
@@ -84,14 +83,14 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     {
         if ( $event === null )
         {
-            foreach( $this->_observers as $obj )
+            foreach( $this->observers as $obj )
             {
                 $obj->update( $this );
             }
         }
-        elseif ( !empty( $this->_observers[$event] ) )
+        elseif ( !empty( $this->observers[$event] ) )
         {
-            foreach( $this->_observers[$event] as $obj )
+            foreach( $this->observers[$event] as $obj )
             {
                 $obj->update( $this, $event );
             }
@@ -109,7 +108,7 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     public static function __set_state( array $properties )
     {
         $class = new static();
-        return $class->setState( $properties );
+        return $class->fromHash( $properties );
     }
 
 
@@ -119,11 +118,42 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      * @param array $properties
      * @return Abstract_Model Content Return $this
      */
-    public function setState( array $properties )
+    public function fromHash( array $properties )
     {
         foreach ( $properties as $property => $value )
         {
-            $this->$property = $value;
+            if ( !isset( static::$definition[$property] ) )
+            {
+                throw new \InvalidArgumentException( "'{$property}' is not a valid property on class: " . get_class( $this ) );
+            }
+
+            switch( static::$definition[$property]['type'] )
+            {
+                case self::TYPE_ARRAY:
+                    $arrayAccess = $this->$property;
+                    foreach ( $value as $key => $item )
+                    {
+                        if ( $arrayAccess[$key] instanceof Interface_Serializable )
+                            $arrayAccess[$key]->fromHash( $item );
+                        else
+                            $arrayAccess[$key] = $item;
+                    }
+                    break;
+                case self::TYPE_OBJECT:
+                    if ( $this->$property instanceof Interface_Serializable )
+                        $this->$property->fromHash( $value );
+                    else
+                        throw new \RuntimeException( "Property '{$property}' is of TYPE_OBJECT but does not implement Interface_Serializable on class: " . get_class( $this ) );
+                    break;
+                case self::TYPE_BOOL:
+                case self::TYPE_INT:
+                case self::TYPE_STRING:
+                case self::TYPE_FLOAT:
+                    $this->$property = $value;
+                    break;
+                default:
+                    throw new \RuntimeException( "Property '{$property}' is of unknown type: '{$propertyDefinition['type']}' on class: " . get_class( $this ) );
+            }
         }
         return $this;
     }
@@ -131,17 +161,45 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     /**
      * Get properties with hash, name is same as used in ezc Persistent
      *
+     * @param bool $internals Include internal data like id and version in hash if true
      * @return array
      */
-    public function getState()
+    public function toHash( $internals = false )
     {
         $hash = array();
-        foreach( $this as $property => $value )
+        foreach( static::$definition as $property => $definition )
         {
-            if ( $property[0] === '_' )
+            if ( !$internals && isset( $definition['internal'] ) )
                 continue;
 
-                $hash[$property] = $value;
+            $value = $this->$property;
+            switch( $definition['type'] )
+            {
+                case self::TYPE_ARRAY:
+                    $hash[$property] = array();
+                    foreach ( $value as $key => $item )
+                    {
+                        if ( $item instanceof Interface_Serializable )
+                            $hash[$property][$key] = $item->toHash();
+                        else
+                            $hash[$property][$key] = $item;
+                    }
+                    break;
+                case self::TYPE_OBJECT:
+                    if ( $value instanceof Interface_Serializable )
+                        $hash[$property] = $value->toHash();
+                    else
+                        throw new \RuntimeException( "Property '{$property}' is of TYPE_OBJECT but does not implement Interface_Serializable on class: " . get_class( $this ) );
+                    break;
+                case self::TYPE_BOOL:
+                case self::TYPE_INT:
+                case self::TYPE_STRING:
+                case self::TYPE_FLOAT:
+                    $hash[$property] = $value;
+                    break;
+                default:
+                    throw new \RuntimeException( "Property '{$property}' is of unknown type: '{$definition['type']}' on class: " . get_class( $this ) );
+            }
         }
         return $hash;
     }
@@ -155,11 +213,11 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      */
     public function __get( $name )
     {
-        if ( isset( $this->$name ) && $name[0] !== '_' )
+        if ( isset( static::$definition[$name], $this->$name ) )
         {
             return $this->$name;
         }
-        throw new \InvalidArgumentException( "{$name} is not a valid property on " . get_class( $this ) );
+        throw new \InvalidArgumentException( "'{$name}' is not a valid property on " . get_class( $this ) );
     }
 
     /**
@@ -173,13 +231,24 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      */
     public function __set( $name, $value )
     {
-        if ( isset( $this->$name ) && $name[0] !== '_' )
+        if ( isset( static::$definition[$name], $this->$name ) )
         {
-            if ( in_array( $name, $this->_readonly, true ) )
-                throw new \InvalidArgumentException( "{$name} is a readonly property on " . get_class( $this ) );
+            if ( isset( static::$definition[$name]['readonly'] ) )
+                throw new \InvalidArgumentException( "'{$name}' is a readonly property on " . get_class( $this ) );
 
             return $this->$name = $value;
         }
-        throw new \InvalidArgumentException( "{$name} is not a valid property on " . get_class( $this ) );
+        throw new \InvalidArgumentException( "'{$name}' is not a valid property on " . get_class( $this ) );
+    }
+
+    /**
+     * Return definition of class
+     * Final since it's the static variable that needs to be overloaded when using this abstract.
+     *
+     * @return array
+     */
+    final public static function definition()
+    {
+        return static::$definition;
     }
 }

@@ -20,7 +20,12 @@
 namespace ezx\doctrine\model;
 class ContentType extends Abstract_ContentModel
 {
-    protected $_aggregateMembers = array( 'fields' );
+    protected static $definition = array(
+        'id' => array( 'type' => self::TYPE_INT, 'internal' => true ),
+        'version' => array( 'type' => self::TYPE_INT, 'internal' => true ),
+        'identifier' => array( 'type' => self::TYPE_STRING ),
+        'fields' => array( 'type' => self::TYPE_ARRAY ),
+    );
 
     public function __construct()
     {

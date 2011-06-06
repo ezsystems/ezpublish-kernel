@@ -29,13 +29,12 @@ class Field_Float extends Abstract_Field_Value
         parent::__construct();
     }
 
-    static public function definition()
-    {
-        return array(
+    protected static $definition = array(
+        'value' => array(
             'type' => self::TYPE_FLOAT,
             'legacy_column' => 'data_float'
-        );
-    }
+        ),
+    );
 
     /**
      * Called when content object is created the first time
