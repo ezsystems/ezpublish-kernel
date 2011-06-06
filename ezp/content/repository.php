@@ -40,16 +40,25 @@ class Repository extends ezp\Repository
     }
 
 
+    /**
+     * @return \ezp\Content\Services\Subtree
+     */
     public function getSubtreeService()
     {
         return new Services\Subtree();
     }
 
+    /**
+     * @return \ezp\Content\Services\Trash
+     */
     public function getTrashService()
     {
         return new Services\Trash();
     }
 
+    /**
+     * @return \ezp\Content\Services\Content
+     */
     public function getContentService()
     {
         return new Services\Content();
