@@ -12,7 +12,7 @@ try
 }
 catch ( ezp\Content\ContentNotFoundException $e )
 {
-    echo "Content could not be found in the repository !";
+    echo "Content could not be found in the repository !\n";
     exit;
 }
 
@@ -28,5 +28,8 @@ foreach ( $content->fields as $identifier => $value )
 // Now updating content
 $content->fields["name"] = new ezp\Content\Fields\String( "New content name" );
 $repository->getContentService()->update( $content );
+
+// Free some memory
+unset( $content );
 
 ?>
