@@ -28,12 +28,29 @@ class Content extends Abstract_ContentModel
     protected $_aggregateMembers = array( 'fields', 'locations' );
 
     /**
-     * Constructs a new instance of this class, protected, use factory on ContentRepository.
+     * Create content based on content type object
+     *
+     * @param ContentType $contentType
      */
-    protected function __construct()
+    public function __construct( ContentType $contentType )
     {
         $this->locations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $this->typeId = $contentType->id;
+        $this->contentType = $contentType;
+        foreach ( $contentType->getFields() as $contentTypeField )
+        {
+            $field = new Field();
+            $field->setState( array(
+                'fieldTypeString' => $contentTypeField->fieldTypeString,
+                'contentTypeField' => $contentTypeField,
+                'content' => $this,
+            ));
+            $field->getValueObject()->init( $contentTypeField->getValueObject() );
+            $this->fields[] = $field;
+        }
+        return $this->_postLoad();
     }
 
     /**
@@ -125,31 +142,6 @@ class Content extends Abstract_ContentModel
      * Magic object that steps in when fields are accessed
      */
     protected $_fieldMap;
-
-    /**
-     * Create content based on content type object
-     *
-     * @param ContentType $contentType
-     * @return Content
-     */
-    static public function create( ContentType $contentType )
-    {
-        $content = new self();
-        $content->typeId = $contentType->id;
-        $content->contentType = $contentType;
-        foreach ( $contentType->getFields() as $contentTypeField )
-        {
-            $field = new Field();
-            $field->setState( array(
-                'fieldTypeString' => $contentTypeField->fieldTypeString,
-                'contentTypeField' => $contentTypeField,
-                'content' => $content,
-            ));
-            $field->getValueObject()->init( $contentTypeField->getValueObject() );
-            $content->fields[] = $field;
-        }
-        return $content->_postLoad();
-    }
 
     /**
      * Set value

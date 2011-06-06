@@ -12,7 +12,7 @@
  * Content Service, extends repository with content specific operations
  */
 namespace ezx\doctrine\model;
-class ContentService implements Interface_Service
+class ContentTypeService implements Interface_Service
 {
     /**
      * @var Repository
@@ -30,33 +30,34 @@ class ContentService implements Interface_Service
     }
 
     /**
-     * Get an Content object by id
+     * Get an ContentType    object by id
      *
      * @param int $id
-     * @return Content
+     * @return ContentType
      * @throws \InvalidArgumentException
      */
     public function load( $id )
     {
-        $content = $this->repository->em->find( "ezx\doctrine\model\Content", (int) $id );
+        $content = $this->repository->em->find( "ezx\doctrine\model\ContentType", (int) $id );
         if ( !$content )
-            throw new \InvalidArgumentException( "Could not find 'Content' with id: {$id}" );
+            throw new \InvalidArgumentException( "Could not find 'ContentType' with id: {$id}" );
         return $content;
     }
 
     /**
-     * Create content object
+     * Get an ContentType by identifier
      *
-     * @uses ContentTypeService::loadByIdentifier()
-     * @param string $typeIdentifier
-     * @return Content
+     * @param string $identifier
+     * @return ContentType
+     * @throws \InvalidArgumentException
      */
-    public function create( $typeIdentifier )
+    public function loadByIdentifier( $identifier )
     {
-        $type = $this->repository->ContentTypeService()->loadByIdentifier( $typeIdentifier );
-        if ( !$type )
-            throw new \RuntimeException( "Could not find content type by identifier: '{$typeIdentifier}'" );
-
-        return new Content( $type );
+        $query = $this->repository->em->createQuery( "SELECT a FROM ezx\doctrine\model\ContentType a WHERE a.identifier = :identifier" );
+        $query->setParameter( 'identifier', $identifier );
+        $contentTypes = $query->getResult();
+        if ( !$contentTypes )
+            throw new \InvalidArgumentException( "Could not find 'ContentType' with identifier: {$identifier}" );
+        return $contentTypes[0];
     }
 }

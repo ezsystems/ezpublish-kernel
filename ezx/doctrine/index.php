@@ -28,14 +28,14 @@ chdir( '../../' );
 require 'autoload.php';
 
 
-$repository = Repository::set( new Repository( getDoctrineEm( $settings ) ) );
-$contentService = $repository->ContentService();
-
 // API demos
 if ( $_GET['fn'] === 'create' )
 {
     if ( !isset( $_GET['identifier'] ) )
         die("Missing content type 'identifier' GET parameter, eg: ?fn=create&identifier=article or ?fn=create&identifier=folder&title=Catch22");
+
+    $repository = new Repository( getDoctrineEm( $settings ) );
+    $contentService = $repository->ContentService();
 
     // Create model object
     $content = $contentService->create( $_GET['identifier'] );
@@ -73,6 +73,9 @@ else if ( $_GET['fn'] === 'get' )
     if ( !isset( $_GET['id'] ) )
         die("Missing content location 'id' GET parameter, eg: ?fn=get&id=2");
 
+    $repository = new Repository( getDoctrineEm( $settings ) );
+    $contentService = $repository->ContentService();
+
     $content = $contentService->load( (int) $_GET['id'] );
     $locations = $content->locations;
 
@@ -106,8 +109,6 @@ function getDoctrineEm( array $settings )
     $classLoader->register(); // register on SPL autoload stack
 
     $cwd = getcwd();
-
-
     if ( !is_dir( $cwd . '/var/cache/Proxies' ) )
         mkdir( "$cwd/var/cache/Proxies/", 0777 , true );// Seeing Protocol error? Try renaming ezp-next to next..
 
@@ -123,6 +124,7 @@ function getDoctrineEm( array $settings )
         $cache = new \Doctrine\Common\Cache\ArrayCache();
     else
         $cache = new \Doctrine\Common\Cache\ApcCache();
+
     $config->setMetadataCacheImpl( $cache );
     $config->setQueryCacheImpl( $cache );
 

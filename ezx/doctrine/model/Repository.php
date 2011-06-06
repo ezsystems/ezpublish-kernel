@@ -25,6 +25,7 @@ class Repository implements Interface_Repository
 
     /**
      * Instances of services
+     *
      * @var array(string => Interface_Service)
      */
     protected $services = array();
@@ -98,6 +99,47 @@ class Repository implements Interface_Repository
     }
 
     /**
+     * Handles class for service objects, services needs to be in same namespace atm.
+     *
+     * @param string $name
+     * @param array $arguments
+     * @return Interface_Service
+     * @throws RuntimeException
+     */
+    function __call ( $name, array $arguments )
+    {
+        if ( isset( $this->services[$name] ) )
+            return $this->services[$name];
+        $name = __NAMESPACE__ . '\\' . $name;
+        if ( class_exists( $name ) )
+            return $this->services[$name] = new $name( $this );
+
+        throw new \RuntimeException( "Could not load '$name' service!" );
+    }
+
+    /**
+     * Get Content Service
+     *
+     * @uses __call()
+     * @return ContentService
+     */
+    function ContentService()
+    {
+        return $this->__call( 'ContentService', array() );
+    }
+
+    /**
+     * Get Content Service
+     *
+     * @uses __call()
+     * @return ContentTypeService
+     */
+    function ContentTypeService()
+    {
+        return $this->__call( 'ContentTypeService', array() );
+    }
+
+    /**
      * Store a model or collection of models in the repository
      *
      * @param Abstract_Model $object
@@ -134,23 +176,4 @@ class Repository implements Interface_Repository
      * @throws \RuntimeException If no transaction has been started
      */
     public function rollback(){}
-
-
-    /**
-     * Handles class for service objects, services needs to be in same namespace atm.
-     *
-     * @param string $name
-     * @param array $arguments
-     * @return Interface_Service
-     */
-    function __call ( $name, array $arguments )
-    {
-        if ( isset( $this->services[$name] ) )
-            return $this->services[$name];
-        $name = __NAMESPACE__ . '\\' . $name;
-        if ( class_exists( $name ) )
-            return $this->services[$name] = new $name( $this );
-
-        throw new \RuntimeException( "Could not load '$name' service!" );
-    }
 }
