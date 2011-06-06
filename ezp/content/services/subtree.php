@@ -33,5 +33,16 @@ class Subtree implements ServiceInterface
         // engine in order to be as optimized as possible ?
         return ContentRepository::get()->copySubtree( $subtree, $targetLocation );
     }
+
+    /**
+     * Loads a location object from its $id
+     * @param integer $id
+     * @return \ezp\Content\Location
+     * @throws \ezp\Content\LocationNotFoundException if no location is available with $id
+     */
+    public function load( $id )
+    {
+
+    }
 }
 ?>

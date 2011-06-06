@@ -47,5 +47,16 @@ class Content implements ServiceInterface
         // @todo : Do any necessary actions to update $content in the content repository
         return $content;
     }
+
+    /**
+     * Loads a content from its id ($contentId)
+     * @param integer $contentId
+     * @return \ezp\Content\Content
+     * @throws \ezp\Content\ContentNotFoundException if content could not be found
+     */
+    public function loadContent( $contentId )
+    {
+
+    }
 }
 ?>
