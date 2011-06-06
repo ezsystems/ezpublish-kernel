@@ -17,7 +17,7 @@
 namespace ezp\Content\Services;
 use ezp\Content\Repository as ContentRepository;
 
-class Subtree implements ezp\Service
+class Subtree implements ServiceInterface
 {
     /**
      * Copies the subtree starting from $subtree as a new subtree of $targetLocation

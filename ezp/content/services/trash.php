@@ -23,7 +23,7 @@
  */
 namespace ezp\Content\Services;
 
-class Trash implements ezp\ServiceInterface
+class Trash implements ServiceInterface
 {
     /**
      * Sends $content to trash
