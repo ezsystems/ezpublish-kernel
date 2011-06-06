@@ -4,11 +4,14 @@
  * Assume that this content is a folder
  */
 use ezp\Content\Repository as ContentRepository;
+use ezp\Content\Fields;
 
 $repository = ContentRepository::get();
+$contentService = $repository->getContentService();
+$treeService = $repository->getSubtreeService();
 try
 {
-    $content = $repository->getContentService()->loadContent( 60 );
+    $content = $contentService->loadContent( 60 );
 }
 catch ( ezp\Content\ContentNotFoundException $e )
 {
@@ -26,8 +29,10 @@ foreach ( $content->fields as $identifier => $value )
 }
 
 // Now updating content
-$content->fields["name"] = new ezp\Content\Fields\String( "New content name" );
-$repository->getContentService()->update( $content );
+$newParentLocation = $treeService->load( 43 ); // Fetch location with ID #43
+$content->addLocation( $newParentLocation );
+$content->fields["name"] = new Fields\String( "New content name" );
+$contentService->update( $content );
 
 // Free some memory
 unset( $content );
