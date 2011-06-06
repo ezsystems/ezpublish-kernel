@@ -110,6 +110,16 @@ class Content extends Base implements ContentDomainInterface
         $this->properties["translations"]->add( new Translation( $localeCode ) );
     }
 
+    /**
+     * Adds a new location to content
+     * Therefore content will be available under $parentLocation
+     * @param Location $parentLocation
+     */
+    public function addLocation( Location $parentLocation )
+    {
+        $this->properties["locations"]->addParent( $parentLocation );
+    }
+
     public function __clone()
     {
         $this->properties["id"] = false;
