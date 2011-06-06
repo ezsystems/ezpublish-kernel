@@ -45,7 +45,7 @@ class Field_Float extends Abstract_Field_Value
      */
     public function init( Interface_Value $contentTypeFieldValue )
     {
-
+        return $this;
     }
 
     /**

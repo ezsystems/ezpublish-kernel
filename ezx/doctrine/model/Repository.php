@@ -1,6 +1,6 @@
 <?php
 /**
- * A mock Abstract Repository
+ * Repository class
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,21 +9,28 @@
  */
 
 /**
- * Mock Abstract Repository
+ * Repository class
  */
 namespace ezx\doctrine\model;
-abstract class Abstract_Repository implements Interface_Repository
+class Repository implements Interface_Repository
 {
     /**
      * This class uses doctrine directly as backend, in BL it should talk to a
      * persistent interface
      *
+     * @internal
      * @var \Doctrine\ORM\EntityManager
      */
-    protected $em = null;
+    public $em = null;
 
     /**
-     * @var ContentRepository
+     * Instances of services
+     * @var array(string => Interface_Service)
+     */
+    protected $services = array();
+
+    /**
+     * @var Repository
      */
     protected static $instance = null;
 
@@ -40,7 +47,7 @@ abstract class Abstract_Repository implements Interface_Repository
     /**
      * Get instance
      *
-     * @return ContentRepository
+     * @return Repository
      * @throw \RuntimeException
      */
     public static function get()
@@ -53,11 +60,12 @@ abstract class Abstract_Repository implements Interface_Repository
     /**
      * Set instance
      *
-     * @param ContentRepository $instance
+     * @param Repository $instance
+     * return Repository
      */
-    public static function set( ContentRepository $instance )
+    public static function set( Repository $instance )
     {
-        self::$instance = $instance;
+        return self::$instance = $instance;
     }
 
     /**
@@ -76,52 +84,36 @@ abstract class Abstract_Repository implements Interface_Repository
      *
      * @param string $type
      * @param int $id
-     * @return object
+     * @return Abstract_Model
      * @throws \InvalidArgumentException
      */
     public function load( $type, $id )
     {
-        $contentType = $this->em->find( "ezx\doctrine\model\\{$type}", (int) $id );
-        if ( !$contentType )
+        $object = $this->em->find( "ezx\doctrine\model\\{$type}", (int) $id );
+        if ( !$object )
             throw new \InvalidArgumentException( "Could not find '{$type}' with id: {$id}" );
-        return $contentType;
-    }
-
-    /**
-     * Get an object by identifier
-     *
-     * @param string $type
-     * @param string $identifier
-     * @return object
-     * @throws \InvalidArgumentException
-     */
-    public function loadByIdentifier( $type, $identifier )
-    {
-        $query = $this->em->createQuery( "SELECT a FROM ezx\doctrine\model\\{$type} a WHERE a.identifier = :identifier" );
-        $query->setParameter( 'identifier', $identifier );
-        $contentType = $query->getResult();
-        if ( !$contentType )
-            throw new \InvalidArgumentException( "Could not find '{$type}' with identifier: {$identifier}" );
-        return $contentType;
+        if ( !$object instanceof Abstract_Model )
+            throw new \InvalidArgumentException( "'{$type}' is does not extend Abstract_Model" );
+        return $object;
     }
 
     /**
      * Store a model or collection of models in the repository
      *
-     * @param ModelCollectionInterface|ModelInterface $object
+     * @param Abstract_Model $object
      * @throws \DomainException If object is of wrong type
      * @throws \RuntimeException If errors occurred in storage engine
      */
-    public function store( object $object ){}
+    public function store( Abstract_Model $object ){}
 
     /**
      * Delete a model or collection of models in the repository
      *
-     * @param ModelCollectionInterface|ModelInterface $object
+     * @param Abstract_Model $object
      * @throws \DomainException If object is of wrong type
      * @throws \RuntimeException If errors occurred in storage engine
      */
-    public function delete( object $object ){}
+    public function delete( Abstract_Model $object ){}
 
     /**
      * Begins an transaction, make sure you'll call commit or rollback when done,
@@ -142,4 +134,23 @@ abstract class Abstract_Repository implements Interface_Repository
      * @throws \RuntimeException If no transaction has been started
      */
     public function rollback(){}
+
+
+    /**
+     * Handles class for service objects, services needs to be in same namespace atm.
+     *
+     * @param string $name
+     * @param array $arguments
+     * @return Interface_Service
+     */
+    function __call ( $name, array $arguments )
+    {
+        if ( isset( $this->services[$name] ) )
+            return $this->services[$name];
+        $name = __NAMESPACE__ . '\\' . $name;
+        if ( class_exists( $name ) )
+            return $this->services[$name] = new $name( $this );
+
+        throw new \RuntimeException( "Could not load '$name' service!" );
+    }
 }

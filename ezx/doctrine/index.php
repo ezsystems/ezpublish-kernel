@@ -7,6 +7,8 @@
  */
 
 namespace ezp\system;// Needed for fake Configuration class in the bottom of this file
+use \ezx\doctrine\model\Repository;
+
 
 $settings = array(
     'driver'    => 'pdo_mysql',
@@ -21,42 +23,13 @@ $settings = array(
 if ( !isset( $_GET['fn'] ) )
     die( "Missing fn GET parameter, valid options are '?fn=get' and '?fn=create'!" );
 
+
 chdir( '../../' );
-
-
 require 'autoload.php';
 
-// First setup repository instance @todo This should be done transparently
-require 'Doctrine/Common/ClassLoader.php';
-$classLoader = new \Doctrine\Common\ClassLoader('Doctrine');
-$classLoader->register(); // register on SPL autoload stack
 
-$cwd = getcwd();
-
-
-if ( !is_dir( $cwd . '/var/cache/Proxies' ) )
-    mkdir( "$cwd/var/cache/Proxies/", 0777 , true );// Seeing Protocol error? Try renaming ezp-next to next..
-
-$config = new \Doctrine\ORM\Configuration();
-$config->setProxyDir( $cwd . '/var/cache/Proxies' );
-$config->setProxyNamespace('ezx\doctrine\model');
-$config->setAutoGenerateProxyClasses( $settings['dev_mode']  );
-
-$driverImpl = $config->newDefaultAnnotationDriver( $cwd . '/ezx/doctrine/model' );
-$config->setMetadataDriverImpl( $driverImpl );
-
-if ( $settings['dev_mode'] )
-    $cache = new \Doctrine\Common\Cache\ArrayCache();
-else
-    $cache = new \Doctrine\Common\Cache\ApcCache();
-$config->setMetadataCacheImpl( $cache );
-$config->setQueryCacheImpl( $cache );
-
-$evm = new \Doctrine\Common\EventManager();
-$em = \Doctrine\ORM\EntityManager::create( $settings, $config, $evm );
-
-$repository = new \ezx\doctrine\model\ContentRepository( $em );
-\ezx\doctrine\model\ContentRepository::set( $repository );
+$repository = Repository::set( new Repository( getDoctrineEm( $settings ) ) );
+$contentService = $repository->ContentService();
 
 // API demos
 if ( $_GET['fn'] === 'create' )
@@ -65,7 +38,7 @@ if ( $_GET['fn'] === 'create' )
         die("Missing content type 'identifier' GET parameter, eg: ?fn=create&identifier=article or ?fn=create&identifier=folder&title=Catch22");
 
     // Create model object
-    $content = $repository->createContent( $_GET['identifier'] );
+    $content = $contentService->create( $_GET['identifier'] );
 
     $content->ownerId = 10;
     $content->sectionId = 3;
@@ -83,7 +56,7 @@ if ( $_GET['fn'] === 'create' )
     $state = $content->getState();
     $out = var_export( $state, true );
 
-    $newContent = $repository->createContent( $_GET['identifier'] )->setState( $state );
+    $newContent = $contentService->create( $_GET['identifier'] )->setState( $state );
 
     // test that reference works on new object
     if ( isset( $newContent->fields['tags'] ) )
@@ -100,8 +73,8 @@ else if ( $_GET['fn'] === 'get' )
     if ( !isset( $_GET['id'] ) )
         die("Missing content location 'id' GET parameter, eg: ?fn=get&id=2");
 
-    $location = $repository->load( 'Location', (int) $_GET['id'] );
-    $content = $location->content;
+    $content = $contentService->load( (int) $_GET['id'] );
+    $locations = $content->locations;
 
     $content->notify();
     $fieldStr = '';
@@ -109,18 +82,54 @@ else if ( $_GET['fn'] === 'get' )
     {
         $fieldStr .= '<br />&nbsp;' . $field  . ':<pre>' . htmlentities( $field->value ) . '</pre>';
     }
-    echo 'Id: ' . $location->id
-    . '<br />Children count: '. count( $location->children )
-    . '<br />Parent: '.  $location->parent
+    echo 'Main Node ID: ' . $locations[0]->id
+    . '<br />Children count: '. count( $locations[0]->children )
+    . '<br />Parent: '.  $locations[0]->parent
     . '<br />Type: '.  $content->contentType
     . '<br />Content: ' . $content
-    . ', Location count: '.   count( $content->locations )
+    . ', Location count: '.   count( $locations )
     . '<br />Fields: ' . $fieldStr
     //. '<br />SQL: ' . $query->getSQL()
    ;
 }
 else
     die("GET parameter 'fn' has invalid value, should be 'create' or 'get'");
+
+
+/**
+ * @return \Doctrine\ORM\EntityManager
+ */
+function getDoctrineEm( array $settings )
+{
+    require 'Doctrine/Common/ClassLoader.php';
+    $classLoader = new \Doctrine\Common\ClassLoader('Doctrine');
+    $classLoader->register(); // register on SPL autoload stack
+
+    $cwd = getcwd();
+
+
+    if ( !is_dir( $cwd . '/var/cache/Proxies' ) )
+        mkdir( "$cwd/var/cache/Proxies/", 0777 , true );// Seeing Protocol error? Try renaming ezp-next to next..
+
+    $config = new \Doctrine\ORM\Configuration();
+    $config->setProxyDir( $cwd . '/var/cache/Proxies' );
+    $config->setProxyNamespace('ezx\doctrine\model');
+    $config->setAutoGenerateProxyClasses( $settings['dev_mode']  );
+
+    $driverImpl = $config->newDefaultAnnotationDriver( $cwd . '/ezx/doctrine/model' );
+    $config->setMetadataDriverImpl( $driverImpl );
+
+    if ( $settings['dev_mode'] )
+        $cache = new \Doctrine\Common\Cache\ArrayCache();
+    else
+        $cache = new \Doctrine\Common\Cache\ApcCache();
+    $config->setMetadataCacheImpl( $cache );
+    $config->setQueryCacheImpl( $cache );
+
+    $evm = new \Doctrine\Common\EventManager();
+    return  \Doctrine\ORM\EntityManager::create( $settings, $config, $evm );
+}
+
 
 // fake config class
 class Configuration

@@ -12,7 +12,7 @@
  * Domain object
  */
 namespace ezx\doctrine\model;
-abstract class Abstract_Model implements Interface_Serializable, Interface_Observable
+abstract class Abstract_ContentModel implements Interface_Serializable, Interface_Observable
 {
     /**
      * List of event listeners
@@ -29,11 +29,19 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     private $_readonly = array();
 
     /**
+     * List of aggregate members, only applies to objects that implements Interface_Serializable
+     * Used for figuring out what to serialize as part of this object!
+     *
+     * @var array(string)
+     */
+    protected $_aggregateMembers = array();
+
+    /**
      * Attach a event listener to this subject
      *
      * @param SplObserver $observer
      * @param string|null $event
-     * @return Abstract_Model
+     * @return Abstract_ContentModel
      */
     public function attach( Interface_Observer $observer, $event = null )
     {
@@ -51,7 +59,7 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      *
      * @param SplObserver $observer
      * @param string|null $event
-     * @return Abstract_Model
+     * @return Abstract_ContentModel
      */
     public function detach( Interface_Observer $observer, $event = null )
     {
@@ -78,7 +86,7 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      * Notify listeners about certain events, if $event is null then it's plain 'update'
      *
      * @param string|null $event
-     * @return Abstract_Model
+     * @return Abstract_ContentModel
      */
     public function notify( $event = null )
     {
@@ -104,7 +112,7 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      *
      * @static
      * @param array $properties
-     * @return Abstract_Model
+     * @return Abstract_ContentModel
      */
     public static function __set_state( array $properties )
     {
@@ -117,13 +125,31 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      * Set properties with hash, name is same as used in ezc Persistent
      *
      * @param array $properties
-     * @return Abstract_Model Content Return $this
+     * @return Abstract_ContentModel Content Return $this
      */
     public function setState( array $properties )
     {
         foreach ( $properties as $property => $value )
         {
-            $this->$property = $value;
+            if ( !$value instanceof Interface_Serializable && $this->$property instanceof Interface_Serializable )
+            {
+                $this->$property->setState( $value );
+            }
+            elseif ( $this->$property instanceof \ArrayAccess )
+            {
+                $arrayAccess = $this->$property;
+                foreach ( $value as $key => $item )
+                {
+                    if ( $arrayAccess[$key] instanceof Interface_Serializable )
+                        $arrayAccess[$key]->setState( $item );
+                    else
+                        $arrayAccess[$key] = $item;
+                }
+            }
+            else
+            {
+                $this->$property = $value;
+            }
         }
         return $this;
     }
@@ -141,7 +167,31 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
             if ( $property[0] === '_' )
                 continue;
 
+            if ( $value instanceof Interface_Serializable  || $value instanceof \ArrayAccess )
+            {
+                if ( !in_array( $property, $this->_aggregateMembers, true ) )
+                    continue;
+
+                if ( $value instanceof Interface_Serializable )
+                {
+                    $hash[$property] = $value->getState();
+                    continue;
+                }
+
+                $hash[$property] = array();
+                foreach ( $value as $key => $item )
+                {
+                    if ( $item instanceof Interface_Serializable )
+                        $hash[$property][$key] = $item->getState();
+                    else
+                        $hash[$property][$key] = $item;
+                }
+
+            }
+            else
+            {
                 $hash[$property] = $value;
+            }
         }
         return $hash;
     }

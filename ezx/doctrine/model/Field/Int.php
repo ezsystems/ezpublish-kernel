@@ -45,7 +45,7 @@ class Field_Int extends Abstract_Field_Value implements Interface_Field_Init
      */
     public function init( Interface_Value $contentTypeFieldValue )
     {
-
+        return $this;
     }
 
     /**

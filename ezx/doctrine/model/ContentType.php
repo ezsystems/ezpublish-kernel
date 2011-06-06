@@ -18,7 +18,7 @@
  * @property-read array(ContentTypeGroup) $groups
  */
 namespace ezx\doctrine\model;
-class ContentType extends Abstract_Model
+class ContentType extends Abstract_ContentModel
 {
     protected $_aggregateMembers = array( 'fields' );
 

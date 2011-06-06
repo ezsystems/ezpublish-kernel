@@ -47,6 +47,7 @@ class Field_String extends Abstract_Field_Value
     public function init( Interface_Value $contentTypeFieldValue )
     {
         $this->setValue( $contentTypeFieldValue->getValue() );
+        return $this;
     }
 
     /**

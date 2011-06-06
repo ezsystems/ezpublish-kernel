@@ -40,7 +40,7 @@ interface Interface_Repository
      * @throws \DomainException If object is of wrong type
      * @throws \RuntimeException If errors occurred in storage engine
      */
-    public function store( object $object );
+    public function store( Abstract_Model $object );
 
     /**
      * Delete a model or collection of models in the repository
@@ -49,7 +49,7 @@ interface Interface_Repository
      * @throws \DomainException If object is of wrong type
      * @throws \RuntimeException If errors occurred in storage engine
      */
-    public function delete( object $object );
+    public function delete( Abstract_Model $object );
 
     /**
      * Begins an transaction, make sure you'll call commit or rollback when done,

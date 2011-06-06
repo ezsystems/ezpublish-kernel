@@ -20,10 +20,10 @@
  * @property-read string $typeid Content Type Identifier
  * @property-read array(Location) $locations An hash like structure of fields
  * @property-read array(string => Field) $fields An hash structure of fields
- * @property-read ContentType $contentType Content type object
+ * @property-read ContentType $type Content type object
  */
 namespace ezx\doctrine\model;
-class Content extends Abstract_Model
+class Content extends Abstract_ContentModel
 {
     protected $_aggregateMembers = array( 'fields', 'locations' );
 
@@ -165,8 +165,7 @@ class Content extends Abstract_Model
         {
             case 'ownerId':
             case 'sectionId':
-                $this->$name = $value;
-                break;
+                return $this->$name = $value;
             default:
                 if ( isset( $this->$name ) )
                     throw new \InvalidArgumentException( "{$name} is not a writable property on " . __CLASS__ );

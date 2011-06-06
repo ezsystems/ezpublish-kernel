@@ -12,7 +12,7 @@
  *
  */
 namespace ezx\doctrine\model;
-abstract class Abstract_Field_Value extends Abstract_Model implements Interface_Value
+abstract class Abstract_Field_Value extends Abstract_ContentModel implements Interface_Value
 {
     /**
      * Constant that Field types needs to defined

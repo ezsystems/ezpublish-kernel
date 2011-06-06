@@ -12,7 +12,7 @@
  * Abstract field class
  */
 namespace ezx\doctrine\model;
-abstract class Abstract_Field extends Abstract_Model implements Interface_Observer
+abstract class Abstract_Field extends Abstract_ContentModel implements Interface_Observer
 {
     /**
      * @throws \InvalidArgumentException
@@ -40,7 +40,7 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
         {
             case 'value':
                 $this->getValueObject()->setValue( $value );
-                break;
+                return $value;
             default:
                 if ( isset( $this->$name ) )
                     throw new \InvalidArgumentException( "{$name} is not a writable property on " . get_class($this) );
@@ -114,7 +114,7 @@ abstract class Abstract_Field extends Abstract_Model implements Interface_Observ
      * Set properties with hash, name is same as used in ezc Persistent
      *
      * @param array $properties
-     * @return Abstract_Model Content Return $this
+     * @return Abstract_Field Content Return $this
      */
     public function setState( array $properties )
     {

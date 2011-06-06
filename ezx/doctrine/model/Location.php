@@ -12,7 +12,7 @@
  * @Entity @Table(name="ezcontentobject_tree")
  */
 namespace ezx\doctrine\model;
-class Location extends Abstract_Model implements Interface_Observer
+class Location extends Abstract_ContentModel implements Interface_Observer
 {
     public function __construct()
     {
