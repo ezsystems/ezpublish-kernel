@@ -25,7 +25,8 @@ class ContentType extends Base implements ContentDomainInterface
      */
     public static function byIdentifier( $identifier )
     {
-        $contentRepo = Repository::get()->getContentService()->loadContentTypeByIdentifier( $identifier );
+        $contentType = Repository::get()->getContentService()->loadContentTypeByIdentifier( $identifier );
+        return $contentType;
     }
 }
 ?>
