@@ -25,6 +25,10 @@ try
 {
     $publishedContent = ContentRepository::get()->getContentService()->insert( $content, $parentLocation );
     echo "{$publishedContent}\n"; // Displays content "name" via __toString()
+    echo "Content ID is: {$publishedContent->id}\n";
+    echo "Content version number is: {$publishedContent->versionNumber}\n";
+    // creation date is a DateTime object
+    echo "Publication date is: {$publishedContent->creationDate->format( "Y-m-d H:i:s" )}\n";
 }
 catch ( ezp\Content\ValidationException $e )
 {
