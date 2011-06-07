@@ -34,6 +34,9 @@ $content->addLocation( $newParentLocation );
 $content->fields["name"] = new Fields\String( "New content name" );
 $contentService->update( $content );
 
+// Countable interface for content version collection
+echo "There are now " . count( $content->versions ) . " versions for content";
+
 // Free some memory
 unset( $content );
 
