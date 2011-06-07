@@ -7,7 +7,7 @@
  */
 
 namespace ezp\system;
-use \ezx\doctrine\model\Repository;
+use \ezx\doctrine\Repository;
 
 // Change these db settings to test the 'get' demo
 $settings = array(
@@ -130,10 +130,10 @@ function getDoctrineEm( array $settings )
 
     $config = new \Doctrine\ORM\Configuration();
     $config->setProxyDir( $cwd . '/var/cache/Proxies' );
-    $config->setProxyNamespace('ezx\doctrine\model');
+    $config->setProxyNamespace('ezx\doctrine\content');
     $config->setAutoGenerateProxyClasses( $settings['dev_mode']  );
 
-    $driverImpl = $config->newDefaultAnnotationDriver( $cwd . '/ezx/doctrine/model' );
+    $driverImpl = $config->newDefaultAnnotationDriver( $cwd . '/ezx/doctrine/content' );
     $config->setMetadataDriverImpl( $driverImpl );
 
     if ( $settings['dev_mode'] )
@@ -161,32 +161,32 @@ class Configuration
     {
         If ( $var === 'type' )
             return array(
-                'ezstring' => 'ezx\doctrine\model\Field_Type_String',
-                'ezinteger' => 'ezx\doctrine\model\Field_Type_Int',
-                'ezfloat' => 'ezx\doctrine\model\Field_Type_Float',
-                'ezxmltext' => 'ezx\doctrine\model\Field_Type_Xml',
-                'ezimage' => 'ezx\doctrine\model\Field_Type_Image',
-                'ezkeyword' => 'ezx\doctrine\model\Field_Type_Keyword',
-                'ezobjectrelation' => 'ezx\doctrine\model\Field_Type_Relation',
-                'ezauthor' => 'ezx\doctrine\model\Field_Type_Author',
-                'ezboolean' => 'ezx\doctrine\model\Field_Type_Boolean',
-                'ezdatetime' => 'ezx\doctrine\model\Field_Type_Datetime',
-                'ezsrrating' => 'ezx\doctrine\model\Field_Type_Rating',
-                'eztext' => 'ezx\doctrine\model\Field_Type_Text',
+                'ezstring' => 'ezx\doctrine\content\Field_Type_String',
+                'ezinteger' => 'ezx\doctrine\content\Field_Type_Int',
+                'ezfloat' => 'ezx\doctrine\content\Field_Type_Float',
+                'ezxmltext' => 'ezx\doctrine\content\Field_Type_Xml',
+                'ezimage' => 'ezx\doctrine\content\Field_Type_Image',
+                'ezkeyword' => 'ezx\doctrine\content\Field_Type_Keyword',
+                'ezobjectrelation' => 'ezx\doctrine\content\Field_Type_Relation',
+                'ezauthor' => 'ezx\doctrine\content\Field_Type_Author',
+                'ezboolean' => 'ezx\doctrine\content\Field_Type_Boolean',
+                'ezdatetime' => 'ezx\doctrine\content\Field_Type_Datetime',
+                'ezsrrating' => 'ezx\doctrine\content\Field_Type_Rating',
+                'eztext' => 'ezx\doctrine\content\Field_Type_Text',
             );
         return array(
-            'ezstring' => 'ezx\doctrine\model\Field_String',
-            'ezinteger' => 'ezx\doctrine\model\Field_Int',
-            'ezfloat' => 'ezx\doctrine\model\Field_Float',
-            'ezxmltext' => 'ezx\doctrine\model\Field_Xml',
-            'ezimage' => 'ezx\doctrine\model\Field_Image',
-            'ezkeyword' => 'ezx\doctrine\model\Field_Keyword',
-            'ezobjectrelation' => 'ezx\doctrine\model\Field_Relation',
-            'ezauthor' => 'ezx\doctrine\model\Field_Author',
-            'ezboolean' => 'ezx\doctrine\model\Field_Boolean',
-            'ezdatetime' => 'ezx\doctrine\model\Field_Datetime',
-            'ezsrrating' => 'ezx\doctrine\model\Field_Rating',
-            'eztext' => 'ezx\doctrine\model\Field_Text',
+            'ezstring' => 'ezx\doctrine\content\Field_String',
+            'ezinteger' => 'ezx\doctrine\content\Field_Int',
+            'ezfloat' => 'ezx\doctrine\content\Field_Float',
+            'ezxmltext' => 'ezx\doctrine\content\Field_Xml',
+            'ezimage' => 'ezx\doctrine\content\Field_Image',
+            'ezkeyword' => 'ezx\doctrine\content\Field_Keyword',
+            'ezobjectrelation' => 'ezx\doctrine\content\Field_Relation',
+            'ezauthor' => 'ezx\doctrine\content\Field_Author',
+            'ezboolean' => 'ezx\doctrine\content\Field_Boolean',
+            'ezdatetime' => 'ezx\doctrine\content\Field_Datetime',
+            'ezsrrating' => 'ezx\doctrine\content\Field_Rating',
+            'eztext' => 'ezx\doctrine\content\Field_Text',
         );
     }
 }
