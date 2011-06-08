@@ -19,9 +19,9 @@ class Location extends Abstract_ContentModel implements \ezx\doctrine\Interface_
         'depth' => array( 'type' => self::TYPE_INT, 'readonly' => true, 'internal' => true ),
         'isHidden' => array( 'type' => self::TYPE_INT ),
         'isInvisible' => array( 'type' => self::TYPE_INT ),
-        'content' => array( 'type' => self::TYPE_OBJECT, 'internal' => true ),
-        'parent' => array( 'type' => self::TYPE_OBJECT, 'internal' => true ),
-        'children' => array( 'type' => self::TYPE_ARRAY, 'internal' => true ),
+        'content' => array( 'type' => self::TYPE_OBJECT ),
+        'parent' => array( 'type' => self::TYPE_OBJECT ),
+        'children' => array( 'type' => self::TYPE_ARRAY ),
     );
 
     public function __construct()

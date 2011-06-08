@@ -172,6 +172,10 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
             if ( !$internals && isset( $definition['internal'] ) )
                 continue;
 
+            if ( !isset( $definition['member'] ) &&
+               ( $definition['type'] === self::TYPE_OBJECT || $definition['type'] === self::TYPE_ARRAY ) )
+                continue;
+
             $value = $this->$property;
             switch( $definition['type'] )
             {
@@ -180,14 +184,14 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
                     foreach ( $value as $key => $item )
                     {
                         if ( $item instanceof Interface_Serializable )
-                            $hash[$property][$key] = $item->toHash();
+                            $hash[$property][$key] = $item->toHash( $internals );
                         else
                             $hash[$property][$key] = $item;
                     }
                     break;
                 case self::TYPE_OBJECT:
                     if ( $value instanceof Interface_Serializable )
-                        $hash[$property] = $value->toHash();
+                        $hash[$property] = $value->toHash( $internals );
                     else
                         throw new \RuntimeException( "Property '{$property}' is of TYPE_OBJECT but does not implement Interface_Serializable on class: " . get_class( $this ) );
                     break;

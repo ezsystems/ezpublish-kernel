@@ -30,9 +30,9 @@ class Content extends Abstract_ContentModel
         'currentVersion' => array( 'type' => self::TYPE_INT, 'readonly' => true, 'internal' => true ),
         'ownerId' => array( 'type' => self::TYPE_INT ),
         'sectionId' => array( 'type' => self::TYPE_INT ),
-        'fields' => array( 'type' => self::TYPE_ARRAY ),
-        'locations' => array( 'type' => self::TYPE_ARRAY ),
-        'contentType' => array( 'type' => self::TYPE_OBJECT, 'internal' => true ),
+        'fields' => array( 'type' => self::TYPE_ARRAY, 'member' => true ),
+        'locations' => array( 'type' => self::TYPE_ARRAY, 'member' => true ),
+        'contentType' => array( 'type' => self::TYPE_OBJECT ),
     );
 
     /**

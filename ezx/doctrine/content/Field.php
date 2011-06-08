@@ -17,8 +17,8 @@ class Field extends Abstract_Field
     protected static $definition = array(
         'version' => array( 'type' => self::TYPE_INT, 'internal' => true ),
         'fieldTypeString' => array( 'type' => self::TYPE_STRING ),
-        'value' => array( 'type' => self::TYPE_OBJECT ),
-        'content' => array( 'type' => self::TYPE_OBJECT, 'internal' => true ),
+        'value' => array( 'type' => self::TYPE_OBJECT, 'member' => true ),
+        'content' => array( 'type' => self::TYPE_OBJECT ),
     );
 
     /**

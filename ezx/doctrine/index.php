@@ -71,9 +71,9 @@ if ( $_GET['fn'] === 'create' )
         $newContent->fields['tags']->value .= " object2";
     }
 
-    $out2 = var_export( $newContent->toHash(), true );
+    $out2 = var_export( $newContent->toHash( true ), true );
 
-    echo "<h3>\$hash1 = new Content( \$contentType )-&gt;toHash();<br />\$hash2 = new Content( \$contentType )-&gt;fromHash( \$hash1 )-&gt;toHash();</h3><table><tr><td><pre>{$out}</pre></td><td><pre>{$out2}</pre></td></tr></table>";
+    echo "<h3>\$hash1 = new Content( \$contentType )-&gt;toHash();<br />\$hash2 = new Content( \$contentType )-&gt;fromHash( \$hash1 )-&gt;toHash( \$internal = true );</h3><table><tr><td><pre>{$out}</pre></td><td><pre>{$out2}</pre></td></tr></table>";
 }
 // API 'get' demo code
 else if ( $_GET['fn'] === 'get' )
