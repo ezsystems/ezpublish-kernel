@@ -70,14 +70,7 @@ namespace
             return false;
 
         $fileName = './' . str_replace( array('\\', '_'), DIRECTORY_SEPARATOR, $className ) . '.php';
-        if ( file_exists( $fileName ) )
-        {
-            return require( $fileName );
-        }
-        else
-        {
-            return false;
-        }
+        return require( $fileName );
     }
 
     // Autoload for zeta components
