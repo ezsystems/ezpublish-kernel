@@ -21,6 +21,26 @@ class Field_Type_Boolean extends Field_Type_Int
     const FIELD_IDENTIFIER = 'ezboolean';
 
     /**
+     * @var int
+     */
+    protected $default = 0;
+
+    /**
+     * Definition of properties on this class
+     *
+     * {@inheritdoc}
+     *
+     * @see \ezx\doctrine\Abstract_Model::$definition
+     * @var array
+     */
+    protected static $definition = array(
+        'default' => array(
+            'type' => self::TYPE_INT,
+            'legacy_column' => 'data_int1',
+        ),
+    );
+
+    /**
      * Sets identifier on design override and calls parent __construct.
      */
     public function __construct()

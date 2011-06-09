@@ -21,13 +21,16 @@ class Field_Type_String extends Abstract_FieldType
     const FIELD_IDENTIFIER = 'ezstring';
 
     /**
-     * Sets identifier on design override and calls parent __construct.
+     * @public
+     * @var string
      */
-    public function __construct()
-    {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
-    }
+    protected $default = '';
+
+    /**
+     * @public
+     * @var int
+     */
+    protected $max_length = 255;
 
     /**
      * Definition of properties on this class
@@ -38,14 +41,24 @@ class Field_Type_String extends Abstract_FieldType
      * @var array
      */
     protected static $definition = array(
-        'value' => array(
+        'default' => array(
             'type' => self::TYPE_STRING,
             'legacy_column' => 'data_text1',
+        ),
+        'max_length' => array(
+            'type' => self::TYPE_INT,
+            'legacy_column' => 'data_int1',
+            'min' => 1,
+            'max' => 255,
         ),
     );
 
     /**
-     * @var string
+     * Sets identifier on design override and calls parent __construct.
      */
-    protected $value = '';
+    public function __construct()
+    {
+        $this->types[] = self::FIELD_IDENTIFIER;
+        parent::__construct();
+    }
 }

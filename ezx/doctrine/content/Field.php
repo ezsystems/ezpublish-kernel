@@ -125,14 +125,14 @@ class Field extends Abstract_Field
     /**
      * @ManyToOne(targetEntity="ContentTypeField", inversedBy="contentFields", fetch="EAGER")
      * @JoinColumn(name="contentclassattribute_id", referencedColumnName="id")
-     * @var ContentType
+     * @var ContentTypeField
      */
     protected $contentTypeField;
 
     /**
      * Return content type object
      *
-     * @return ContentType
+     * @return ContentTypeField
      */
     public function getContentTypeField()
     {
@@ -148,6 +148,26 @@ class Field extends Abstract_Field
     {
         $this->content = $content;
         $this->contentTypeField = $contentTypeField;
+        $this->fieldTypeString = $contentTypeField->fieldTypeString;
+    }
+
+    /**
+     * Initialize field type class
+     *
+     * @throws \RuntimeException If $className is not instanceof Abstract_FieldType
+     * @param string $className
+     * @return Abstract_FieldType
+     */
+    protected function initType( $className )
+    {
+        $type = new $className( $this->getContentTypeField()->getType() );
+        if ( !$type instanceof Abstract_FieldType )
+            throw new \RuntimeException( "Field type value '{$className}' does not implement Abstract_FieldType" );
+        if ( $this->version )
+            $this->toType( $type );
+        else
+            $this->fromType( $type );
+        return $type;
     }
 
     /**

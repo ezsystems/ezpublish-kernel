@@ -21,6 +21,37 @@ class Field_Type_Text extends Field_Type_String
     const FIELD_IDENTIFIER = 'eztext';
 
     /**
+     * @var string
+     */
+    protected $default = '';
+
+    /**
+     * @var int
+     */
+    protected $columns = 10;
+
+    /**
+     * Definition of properties on this class
+     *
+     * {@inheritdoc}
+     *
+     * @see \ezx\doctrine\Abstract_Model::$definition
+     * @var array
+     */
+    protected static $definition = array(
+        'default' => array(
+            'type' => self::TYPE_STRING,
+            'legacy_column' => 'data_text1',
+        ),
+        'columns' => array(
+            'type' => self::TYPE_INT,
+            'legacy_column' => 'data_int1',
+            'min' => 1,
+            'max' => 50,
+        ),
+    );
+
+    /**
      * Sets identifier on design override and calls parent __construct.
      */
     public function __construct()

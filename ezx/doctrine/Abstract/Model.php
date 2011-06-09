@@ -284,6 +284,23 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     }
 
     /**
+     * Check if property is set
+     *
+     * @param string $name
+     * @return bool
+     */
+    public function __isset( $name )
+    {
+        if ( !isset( static::$definition[$name] ) )
+            return false;
+
+        if ( isset( static::$definition[$name]['dynamic'] ) )
+            return true;
+
+        return isset( $this->$name );
+    }
+
+    /**
      * Return definition of class
      * Final since it's the static variable that needs to be overloaded when using this abstract.
      *

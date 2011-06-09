@@ -21,11 +21,11 @@ class Field_Keyword extends Field_String
     const FIELD_IDENTIFIER = 'ezkeyword';
 
     /**
-     * Sets identifier on design override and calls parent __construct.
+     * @see Interface_ContentField
      */
-    public function __construct()
+    public function __construct( Abstract_FieldType $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
+        parent::__construct( $contentTypeFieldType );
     }
 }

@@ -40,19 +40,7 @@ abstract class Abstract_Field extends Abstract_ContentModel implements \ezx\doct
             throw new \RuntimeException( "Field type value class '{$list[$this->fieldTypeString]}' does not exist" );
 
         $className = $list[ $this->fieldTypeString ];
-        $this->type = new $className();
-
-        if ( !$this->type instanceof Abstract_FieldType )
-            throw new \RuntimeException( "Field type value '{$list[$this->fieldTypeString]}' does not implement Abstract_FieldType" );
-
-        foreach ( $this->type->definition() as $property => $propertyDefinition )
-        {
-            $legacyProperty = $propertyDefinition['legacy_column'];
-            if ( isset( $this->$legacyProperty ) )
-                $this->type->$property = $this->$legacyProperty;
-            else
-                throw new \RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
-        }
+        $this->type = $this->initType( $className );
 
         return $this->type->attach( $this );
     }
@@ -60,7 +48,7 @@ abstract class Abstract_Field extends Abstract_ContentModel implements \ezx\doct
     /**
      * Called when subject has been updated
      *
-     * @param Abstract_FieldType $subject
+     * @param \ezx\doctrine\Interface_Observable $subject
      * @param string|null $event
      * @return Abstract_Field
      */
@@ -73,6 +61,33 @@ abstract class Abstract_Field extends Abstract_ContentModel implements \ezx\doct
         if ( $type !== $subject )
             throw new \RuntimeException( "Field should only listen to it's own attached field value, not others! type: '{$this->fieldTypeString}' " );
 
+        return $this->fromType( $type );
+    }
+
+    /**
+     * Initialize field type class
+     *
+     * @throws \RuntimeException If $className is not instanceof Abstract_FieldType
+     * @param string $className
+     * @return Abstract_FieldType
+     */
+    protected function initType( $className )
+    {
+        $type = new $className();
+        if ( !$type instanceof Abstract_FieldType )
+            throw new \RuntimeException( "Field type value '{$className}' does not implement Abstract_FieldType" );
+        $this->toType( $type );
+        return $type;
+    }
+
+    /**
+     * Set values from field type to field
+     *
+     * @param Abstract_FieldType $type
+     * @return Abstract_Field
+     */
+    protected function fromType( Abstract_FieldType $type )
+    {
         foreach ( $type->definition() as $property => $propertyDefinition )
         {
             $legacyProperty = $propertyDefinition['legacy_column'];
@@ -81,7 +96,25 @@ abstract class Abstract_Field extends Abstract_ContentModel implements \ezx\doct
             else
                 throw new \RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
         }
+        return $this;
+    }
 
+    /**
+     * Set values from field type to field
+     *
+     * @param Abstract_FieldType $type
+     * @return Abstract_Field
+     */
+    protected function toType( Abstract_FieldType $type )
+    {
+        foreach ( $type->definition() as $property => $propertyDefinition )
+        {
+            $legacyProperty = $propertyDefinition['legacy_column'];
+            if ( isset( $this->$legacyProperty ) )
+                $type->$property = $this->$legacyProperty;
+            else
+                throw new \RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
+        }
         return $this;
     }
 }

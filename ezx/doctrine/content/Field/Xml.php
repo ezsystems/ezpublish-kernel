@@ -12,20 +12,20 @@
  * XML Field value object class
  */
 namespace ezx\doctrine\content;
-class Field_Xml extends Field_String
+class Field_Xml extends Field_Text
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezxmlstring';
+    const FIELD_IDENTIFIER = 'ezxmltext';
 
     /**
-     * Sets identifier on design override and calls parent __construct.
+     * @see Interface_ContentField
      */
-    public function __construct()
+    public function __construct( Abstract_FieldType $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
+        parent::__construct( $contentTypeFieldType );
     }
 }

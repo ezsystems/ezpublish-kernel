@@ -12,7 +12,7 @@
  * Float Field value object class
  */
 namespace ezx\doctrine\content;
-class Field_Float extends Abstract_FieldType implements Interface_Field_Init
+class Field_Float extends Abstract_FieldType implements Interface_ContentField
 {
     /**
      * Field type identifier
@@ -21,13 +21,10 @@ class Field_Float extends Abstract_FieldType implements Interface_Field_Init
     const FIELD_IDENTIFIER = 'ezfloat';
 
     /**
-     * Sets identifier on design override and calls parent __construct.
+     * @public
+     * @var float
      */
-    public function __construct()
-    {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
-    }
+    protected $value = 0.0;
 
     /**
      * Definition of properties on this class
@@ -45,18 +42,23 @@ class Field_Float extends Abstract_FieldType implements Interface_Field_Init
     );
 
     /**
-     * Called when content object is created the first time
-     *
-     * @param Field_Type_Float $contentTypeFieldValue
-     * @return Field_Float
+     * @var Abstract_FieldType
      */
-    public function init( Abstract_FieldType $contentTypeFieldValue )
-    {
-        return $this;
-    }
+    protected $contentTypeFieldType;
 
     /**
-     * @var float
+     * Constructor
+     *
+     * @see Interface_ContentField
+     * @param Abstract_FieldType $contentTypeFieldType
      */
-    protected $value = 0.0;
+    public function __construct( Abstract_FieldType $contentTypeFieldType )
+    {
+        if ( isset( $contentTypeFieldType->default ) )
+            $this->value = $contentTypeFieldType->default;
+
+        $this->contentTypeFieldType = $contentTypeFieldType;
+        $this->types[] = self::FIELD_IDENTIFIER;
+        parent::__construct( $contentTypeFieldType );
+    }
 }

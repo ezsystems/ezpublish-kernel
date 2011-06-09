@@ -21,6 +21,27 @@ class Field_Type_Keyword extends Field_Type_String
     const FIELD_IDENTIFIER = 'ezkeyword';
 
     /**
+     * @public
+     * @var string
+     */
+    protected $default = '';
+
+    /**
+     * Definition of properties on this class
+     *
+     * {@inheritdoc}
+     *
+     * @see \ezx\doctrine\Abstract_Model::$definition
+     * @var array
+     */
+    protected static $definition = array(
+        'default' => array(
+            'type' => self::TYPE_STRING,
+            'legacy_column' => 'data_text1',
+        ),
+    );
+
+    /**
      * Sets identifier on design override and calls parent __construct.
      */
     public function __construct()

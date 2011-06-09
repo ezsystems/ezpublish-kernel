@@ -21,13 +21,24 @@ class Field_Type_Int extends Abstract_FieldType
     const FIELD_IDENTIFIER = 'ezinteger';
 
     /**
-     * Sets identifier on design override and calls parent __construct.
+     * @var int
      */
-    public function __construct()
-    {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
-    }
+    protected $default = 0;
+
+    /**
+     * @var int
+     */
+    protected $min = 0;
+
+    /**
+     * @var int
+     */
+    protected $max = 0;
+
+    /**
+     * @var int
+     */
+    protected $state = 0;
 
     /**
      * Definition of properties on this class
@@ -38,14 +49,30 @@ class Field_Type_Int extends Abstract_FieldType
      * @var array
      */
     protected static $definition = array(
-        'value' => array(
+        'default' => array(
+            'type' => self::TYPE_INT,
+            'legacy_column' => 'data_int3',
+        ),
+        'min' => array(
             'type' => self::TYPE_INT,
             'legacy_column' => 'data_int1',
+        ),
+        'max' => array(
+            'type' => self::TYPE_INT,
+            'legacy_column' => 'data_int2',
+        ),
+        'state' => array(
+            'type' => self::TYPE_INT,
+            'legacy_column' => 'data_int4',
         ),
     );
 
     /**
-     * @var int
+     * Sets identifier on design override and calls parent __construct.
      */
-    protected $value = 0;
+    public function __construct()
+    {
+        $this->types[] = self::FIELD_IDENTIFIER;
+        parent::__construct();
+    }
 }

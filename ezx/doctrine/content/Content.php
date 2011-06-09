@@ -80,16 +80,7 @@ class Content extends Abstract_ContentModel
         $this->contentType = $contentType;
         foreach ( $contentType->getFields() as $contentTypeField )
         {
-            $field = new Field( $this, $contentTypeField );
-            $field->fromHash( array(
-                'fieldTypeString' => $contentTypeField->fieldTypeString,
-            ));
-            $fieldValue = $field->getType();
-            if ( $fieldValue instanceof Interface_Field_Init )
-            {
-                $fieldValue->init( $contentTypeField->getType() );
-            }
-            $this->fields[] = $field;
+            $this->fields[] = new Field( $this, $contentTypeField );
         }
         return $this->postLoad();
     }
@@ -103,11 +94,11 @@ class Content extends Abstract_ContentModel
      */
     protected function postLoad()
     {
-        foreach( $this->__get( 'locations' ) as $location )
+        foreach( $this->getLocations() as $location )
         {
             $this->attach( $location );
         }
-        foreach( $this->__get( 'fields' ) as $field )
+        foreach( $this->getFields() as $field )
         {
             $this->attach( $field );
         }

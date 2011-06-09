@@ -21,6 +21,26 @@ class Field_Type_Image extends Field_Type_String
     const FIELD_IDENTIFIER = 'ezimage';
 
     /**
+     * @var int
+     */
+    protected $max_size = 0;
+
+    /**
+     * Definition of properties on this class
+     *
+     * {@inheritdoc}
+     *
+     * @see \ezx\doctrine\Abstract_Model::$definition
+     * @var array
+     */
+    protected static $definition = array(
+        'max_size' => array(
+            'type' => self::TYPE_INT,
+            'legacy_column' => 'data_int1',
+        ),
+    );
+
+    /**
      * Sets identifier on design override and calls parent __construct.
      */
     public function __construct()
