@@ -21,7 +21,7 @@ class Field_Datetime extends Field_Int
     const FIELD_IDENTIFIER = 'ezdatetime';
 
     /**
-     * @see Interface_ContentField
+     * @see Interface_ContentFieldType
      */
     public function __construct( Abstract_FieldType $contentTypeFieldType )
     {

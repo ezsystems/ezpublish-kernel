@@ -21,7 +21,7 @@ class Field_Relation extends Field_Int
     const FIELD_IDENTIFIER = 'ezobjectrelation';
 
     /**
-     * @see Interface_ContentField
+     * @see Interface_ContentFieldType
      */
     public function __construct( Abstract_FieldType $contentTypeFieldType )
     {

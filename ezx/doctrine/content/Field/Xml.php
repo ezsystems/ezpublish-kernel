@@ -21,7 +21,7 @@ class Field_Xml extends Field_Text
     const FIELD_IDENTIFIER = 'ezxmltext';
 
     /**
-     * @see Interface_ContentField
+     * @see Interface_ContentFieldType
      */
     public function __construct( Abstract_FieldType $contentTypeFieldType )
     {

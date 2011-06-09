@@ -21,7 +21,7 @@ class Field_Rating extends Field_Int
     const FIELD_IDENTIFIER = 'ezsrrating';
 
     /**
-     * @see Interface_ContentField
+     * @see Interface_ContentFieldType
      */
     public function __construct( Abstract_FieldType $contentTypeFieldType )
     {

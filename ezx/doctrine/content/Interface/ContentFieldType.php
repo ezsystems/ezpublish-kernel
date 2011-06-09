@@ -1,6 +1,6 @@
 <?php
 /**
- * Interface for content field
+ * Interface for content field types
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -8,7 +8,7 @@
  * @subpackage doctrine
  */
 namespace ezx\doctrine\content;
-interface Interface_ContentField
+interface Interface_ContentFieldType
 {
     /**
      * Called when content object is constructed

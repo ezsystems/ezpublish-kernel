@@ -21,7 +21,7 @@ class Field_Keyword extends Field_String
     const FIELD_IDENTIFIER = 'ezkeyword';
 
     /**
-     * @see Interface_ContentField
+     * @see Interface_ContentFieldType
      */
     public function __construct( Abstract_FieldType $contentTypeFieldType )
     {

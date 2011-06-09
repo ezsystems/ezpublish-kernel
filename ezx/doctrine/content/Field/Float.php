@@ -12,7 +12,7 @@
  * Float Field value object class
  */
 namespace ezx\doctrine\content;
-class Field_Float extends Abstract_FieldType implements Interface_ContentField
+class Field_Float extends Abstract_FieldType implements Interface_ContentFieldType
 {
     /**
      * Field type identifier
@@ -49,7 +49,7 @@ class Field_Float extends Abstract_FieldType implements Interface_ContentField
     /**
      * Constructor
      *
-     * @see Interface_ContentField
+     * @see Interface_ContentFieldType
      * @param Abstract_FieldType $contentTypeFieldType
      */
     public function __construct( Abstract_FieldType $contentTypeFieldType )
