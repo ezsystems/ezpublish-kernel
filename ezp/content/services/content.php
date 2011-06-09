@@ -22,7 +22,7 @@ use ezp\Content\Repository as ContentRepository;
 class Content implements ServiceInterface
 {
     /**
-     * Inserts the new $content in the content repository under $parentLocation
+     * Creates the new $content in the content repository under $parentLocation
      *
      * @param \ezp\Content\Content $content
      * @param \ezp\Content\Location $parentLocation
@@ -30,7 +30,7 @@ class Content implements ServiceInterface
      * @return \ezp\Content\Content The newly created content
      * @throws \ezp\Content\ValidationException If a validation problem has been found for $content
      */
-    public function insert( \ezp\Content\Content $content, \ezp\Content\Location $parentLocation )
+    public function create( \ezp\Content\Content $content, \ezp\Content\Location $parentLocation )
     {
         // @todo : Do any necessary actions to insert $content in the content repository
         return $content;
