@@ -63,7 +63,7 @@ class FieldMap implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function offsetSet( $offset, $value )
     {
-        throw new \InvalidArgumentException( "{$offset} is not a valid property on " . __CLASS__ );
+        throw new \InvalidArgumentException( "Setting fields is not supported on " . __CLASS__ );
     }
 
     /**

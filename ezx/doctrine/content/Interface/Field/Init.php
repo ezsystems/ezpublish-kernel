@@ -13,8 +13,8 @@ interface Interface_Field_Init
     /**
      * Called when content object is created the first time
      *
-     * @param \ezx\doctrine\Interface_Value $contentTypeFieldValue
+     * @param Abstract_FieldType $contentTypeFieldValue
      * @return Interface_Field_Init
      */
-    public function init( \ezx\doctrine\Interface_Value $contentTypeFieldValue );
+    public function init( Abstract_FieldType $contentTypeFieldValue );
 }

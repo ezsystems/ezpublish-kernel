@@ -14,14 +14,43 @@
 namespace ezx\doctrine\content;
 class Location extends Abstract_ContentModel implements \ezx\doctrine\Interface_Observer
 {
+    /**
+     * Definition of properties on this class
+     *
+     * {@inheritdoc}
+     *
+     * @see \ezx\doctrine\Abstract_Model::$definition
+     * @var array
+     */
     protected static $definition = array(
-        'id' => array( 'type' => self::TYPE_INT, 'readonly' => true, 'internal' => true ),
-        'depth' => array( 'type' => self::TYPE_INT, 'readonly' => true, 'internal' => true ),
-        'isHidden' => array( 'type' => self::TYPE_INT ),
-        'isInvisible' => array( 'type' => self::TYPE_INT ),
-        'content' => array( 'type' => self::TYPE_OBJECT ),
-        'parent' => array( 'type' => self::TYPE_OBJECT ),
-        'children' => array( 'type' => self::TYPE_ARRAY ),
+        'id' => array(
+            'type' => self::TYPE_INT,
+            'readonly' => true,
+            'internal' => true,
+        ),
+        'depth' => array(
+            'type' => self::TYPE_INT,
+            'readonly' => true,
+            'internal' => true,
+        ),
+        'isHidden' => array(
+            'type' => self::TYPE_INT,
+        ),
+        'isInvisible' => array(
+            'type' => self::TYPE_INT,
+        ),
+        'content' => array(
+            'type' => self::TYPE_OBJECT,
+            'dynamic' => true,
+        ),
+        'parent' => array(
+            'type' => self::TYPE_OBJECT,
+            'dynamic' => true,
+        ),
+        'children' => array(
+            'type' => self::TYPE_ARRAY,
+            'dynamic' => true,
+        ),
     );
 
     public function __construct()
@@ -96,7 +125,7 @@ class Location extends Abstract_ContentModel implements \ezx\doctrine\Interface_
      */
     public function getParent()
     {
-        if ( $this->parent_location_id > 1 )
+        if ( $this->parentLocationId > 1 )
         {
             return $this->parent;
         }

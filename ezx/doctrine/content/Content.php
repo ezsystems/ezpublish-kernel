@@ -25,14 +25,45 @@
 namespace ezx\doctrine\content;
 class Content extends Abstract_ContentModel
 {
+    /**
+     * Definition of properties on this class
+     *
+     * {@inheritdoc}
+     *
+     * @see \ezx\doctrine\Abstract_Model::$definition
+     * @var array
+     */
     protected static $definition = array(
-        'id' => array( 'type' => self::TYPE_INT, 'readonly' => true, 'internal' => true ),
-        'currentVersion' => array( 'type' => self::TYPE_INT, 'readonly' => true, 'internal' => true ),
-        'ownerId' => array( 'type' => self::TYPE_INT ),
-        'sectionId' => array( 'type' => self::TYPE_INT ),
-        'fields' => array( 'type' => self::TYPE_ARRAY, 'member' => true ),
-        'locations' => array( 'type' => self::TYPE_ARRAY, 'member' => true ),
-        'contentType' => array( 'type' => self::TYPE_OBJECT ),
+        'id' => array(
+            'type' => self::TYPE_INT,
+            'readonly' => true,
+            'internal' => true,
+        ),
+        'currentVersion' => array(
+            'type' => self::TYPE_INT,
+            'readonly' => true,
+            'internal' => true,
+        ),
+        'ownerId' => array(
+            'type' => self::TYPE_INT,
+        ),
+        'sectionId' => array(
+            'type' => self::TYPE_INT,
+        ),
+        'fields' => array(
+            'type' => self::TYPE_ARRAY,
+            'member' => true,
+            'dynamic' => true,
+        ),
+        'locations' => array(
+            'type' => self::TYPE_ARRAY,
+            'member' => true,
+            'dynamic' => true,
+        ),
+        'contentType' => array(
+            'type' => self::TYPE_OBJECT,
+            'dynamic' => true,
+        ),
     );
 
     /**
@@ -53,10 +84,10 @@ class Content extends Abstract_ContentModel
             $field->fromHash( array(
                 'fieldTypeString' => $contentTypeField->fieldTypeString,
             ));
-            $fieldValue = $field->getValueObject();
+            $fieldValue = $field->getType();
             if ( $fieldValue instanceof Interface_Field_Init )
             {
-                $fieldValue->init( $contentTypeField->getValueObject() );
+                $fieldValue->init( $contentTypeField->getType() );
             }
             $this->fields[] = $field;
         }
@@ -126,6 +157,17 @@ class Content extends Abstract_ContentModel
     protected $locations;
 
     /**
+     * Return collection of all locations attached to this object
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection(Location)
+     */
+    public function getLocations()
+    {
+        return $this->locations;
+    }
+
+
+    /**
      * @OneToMany(targetEntity="Field", mappedBy="content", fetch="EAGER")
      * @var FieldMap(Field)
      */
@@ -134,7 +176,7 @@ class Content extends Abstract_ContentModel
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(ContenField)
+     * @return \Doctrine\Common\Collections\ArrayCollection(Field)
      */
     public function getFields()
     {
@@ -147,6 +189,16 @@ class Content extends Abstract_ContentModel
      * @var ContentType
      */
     protected $contentType;
+
+    /**
+     * Return ContentType object
+     *
+     * @return \Doctrine\Common\Collections\ArrayCollection(ContentType)
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
+    }
 
     /**
      * Magic object that steps in when fields are accessed

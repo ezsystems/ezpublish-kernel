@@ -12,7 +12,7 @@
  * Int Field value object class
  */
 namespace ezx\doctrine\content;
-class Field_Type_Int extends Abstract_FieldValue
+class Field_Type_Int extends Abstract_FieldType
 {
     /**
      * Field type identifier
@@ -29,10 +29,18 @@ class Field_Type_Int extends Abstract_FieldValue
         parent::__construct();
     }
 
+    /**
+     * Definition of properties on this class
+     *
+     * {@inheritdoc}
+     *
+     * @see \ezx\doctrine\Abstract_Model::$definition
+     * @var array
+     */
     protected static $definition = array(
         'value' => array(
             'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int1'
+            'legacy_column' => 'data_int1',
         ),
     );
 

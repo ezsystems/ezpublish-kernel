@@ -14,13 +14,37 @@
 namespace ezx\doctrine\content;
 class ContentTypeField extends Abstract_Field
 {
+    /**
+     * Definition of properties on this class
+     *
+     * {@inheritdoc}
+     *
+     * @see \ezx\doctrine\Abstract_Model::$definition
+     * @var array
+     */
     protected static $definition = array(
-        'id' => array( 'type' => self::TYPE_INT, 'internal' => true ),
-        'version' => array( 'type' => self::TYPE_INT, 'internal' => true ),
-        'contentTypeID' => array( 'type' => self::TYPE_INT, 'internal' => true ),
-        'identifier' => array( 'type' => self::TYPE_STRING ),
-        'fieldTypeString' => array( 'type' => self::TYPE_STRING ),
-        'value' => array( 'type' => self::TYPE_OBJECT ),
+        'id' => array(
+            'type' => self::TYPE_INT,
+            'internal' => true,
+        ),
+        'version' => array(
+            'type' => self::TYPE_INT,
+            'internal' => true,
+        ),
+        'contentTypeID' => array(
+            'type' => self::TYPE_INT,
+            'internal' => true,
+        ),
+        'identifier' => array(
+            'type' => self::TYPE_STRING,
+        ),
+        'fieldTypeString' => array(
+            'type' => self::TYPE_STRING,
+        ),
+        'type' => array(
+            'type' => self::TYPE_OBJECT,
+            'dynamic' => true,
+        ),
     );
 
     /**

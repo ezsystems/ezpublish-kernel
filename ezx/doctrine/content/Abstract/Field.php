@@ -15,45 +15,20 @@ namespace ezx\doctrine\content;
 abstract class Abstract_Field extends Abstract_ContentModel implements \ezx\doctrine\Interface_Observer
 {
     /**
-     * @uses Abstract_Model::__get() If $name is something else then 'value'
-     * @param string $name
-     * @return mixed
+     * @var Abstract_FieldType
      */
-    public function __get( $name )
-    {
-        if ( $name === 'value' )
-            return $this->getValueObject();
-        return parent::__get( $name );
-    }
+    protected $type;
 
     /**
-     * @uses Abstract_Model::__set() If $name is something else then 'value'
-     * @param string $name
-     * @return mixed
-     */
-    public function __set( $name, $value )
-    {
-        if ( $name === 'value' )
-            return $this->getValueObject()->setValue( $value );
-        return parent::__set( $name, $value );
-    }
-
-    /**
-     * @var Abstract_FieldValue
-     */
-    private $value;
-
-    /**
-     * Initialize and return field value
+     * Initialize and return field type
      *
-     * @todo generalize code and remove knowledge of Field / ContentTypeField classes
-     * @throws \RuntimeException If definition of Interface_Value is wrong
-     * @return Abstract_FieldValue
+     * @throws \RuntimeException If definition of Abstract_FieldType is wrong
+     * @return Abstract_FieldType
      */
-    public function getValueObject()
+    public function getType()
     {
-        if ( $this->value instanceof \ezx\doctrine\Interface_Value )
-           return $this->value;
+        if ( $this->type instanceof Abstract_FieldType )
+           return $this->type;
 
         $configuration = \ezp\system\Configuration::getInstance();
         $list = $configuration->get( 'doctrine-fields', ( $this instanceof Field ? 'content' : 'type' ) );
@@ -64,66 +39,49 @@ abstract class Abstract_Field extends Abstract_ContentModel implements \ezx\doct
         if ( !class_exists( $list[ $this->fieldTypeString ] ) )
             throw new \RuntimeException( "Field type value class '{$list[$this->fieldTypeString]}' does not exist" );
 
-        if ( !is_subclass_of( $list[ $this->fieldTypeString ], '\ezx\doctrine\Interface_Value' ) )
-            throw new \RuntimeException( "Field type value '{$list[$this->fieldTypeString]}' does not implement Interface_Value" );
-
         $className = $list[ $this->fieldTypeString ];
-        return $this->assignValue( new $className() );
-    }
+        $this->type = new $className();
 
-    /**
-     * Assign value by reference to native property
-     *
-     * @throws \RuntimeException If definition of Interface_Value is wrong
-     * @param \ezx\doctrine\Interface_Value $value
-     * @return \ezx\doctrine\Interface_Value
-     */
-    protected function assignValue( \ezx\doctrine\Interface_Value $value )
-    {
-        $definition = $value::definition();
-        $property = $definition['value']['legacy_column'];
+        if ( !$this->type instanceof Abstract_FieldType )
+            throw new \RuntimeException( "Field type value '{$list[$this->fieldTypeString]}' does not implement Abstract_FieldType" );
 
-        if ( $this instanceof Field )
+        foreach ( $this->type->definition() as $property => $propertyDefinition )
         {
-            if ( $property !== 'data_int' && $property !== 'data_float' && $property !== 'data_text' )
-                throw new \RuntimeException( "Definition from '$className' specifies non existing legacy_column: '$property'" );
-        }
-        else
-        {
-            if ( $property !== 'data_int1' && $property !== 'data_text1' )
-                throw new \RuntimeException( "Definition from '$className' specifies non existing legacy_column: '$property'" );
+            $legacyProperty = $propertyDefinition['legacy_column'];
+            if ( isset( $this->$legacyProperty ) )
+                $this->type->$property = $this->$legacyProperty;
+            else
+                throw new \RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
         }
 
-        return $this->value = $value->setValue( $this->$property )->attach( $this );
+        return $this->type->attach( $this );
     }
 
     /**
      * Called when subject has been updated
      *
-     * @param Abstract_FieldValue $subject
+     * @param Abstract_FieldType $subject
      * @param string|null $event
      * @return Abstract_Field
      */
     public function update( \ezx\doctrine\Interface_Observable $subject , $event  = null )
     {
-        if ( !$subject instanceof Abstract_FieldValue )
+        if ( !$subject instanceof Abstract_FieldType )
             return $this;
 
-        $definition = $subject::definition();
-        $property = $definition['value']['legacy_column'];
+        $type = $this->getType();
+        if ( $type !== $subject )
+            throw new \RuntimeException( "Field should only listen to it's own attached field value, not others! type: '{$this->fieldTypeString}' " );
 
-        if ( $this instanceof Field )
+        foreach ( $type->definition() as $property => $propertyDefinition )
         {
-            if ( $property !== 'data_int' && $property !== 'data_float' && $property !== 'data_text' )
-                throw new \RuntimeException( "Definition from '$className' specifies non existing legacy_column: '$property'" );
-        }
-        else
-        {
-            if ( $property !== 'data_int1' && $property !== 'data_text1' )
-                throw new \RuntimeException( "Definition from '$className' specifies non existing legacy_column: '$property'" );
+            $legacyProperty = $propertyDefinition['legacy_column'];
+            if ( isset( $this->$legacyProperty ) )
+                $this->$legacyProperty = $type->$property;
+            else
+                throw new \RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
         }
 
-        $this->$property = $subject->getValue();
         return $this;
     }
 }

@@ -52,11 +52,11 @@ if ( $_GET['fn'] === 'create' )
 
     if ( isset( $content->fields['tags'] ) )
     {
-        $content->fields['tags']->value = "demo";
+        $content->fields['tags']->type->value = "instance1";
     }
 
     if ( isset( $_GET['title'] ) && isset( $content->fields['title'] ) )
-        $content->fields['title']->value = $_GET['title'];
+        $content->fields['title']->type->value = $_GET['title'];
 
     $content->notify();
 
@@ -68,7 +68,7 @@ if ( $_GET['fn'] === 'create' )
     // test that reference works on new object
     if ( isset( $newContent->fields['tags'] ) )
     {
-        $newContent->fields['tags']->value .= " object2";
+        $newContent->fields['tags']->type->value .= " instance2";
     }
 
     $out2 = var_export( $newContent->toHash( true ), true );
@@ -91,7 +91,7 @@ else if ( $_GET['fn'] === 'get' )
     $fieldStr = '';
     foreach ( $content->fields as $field )
     {
-        $fieldStr .= '<br />&nbsp;' . $field  . ':<pre>' . htmlentities( $field->value ) . '</pre>';
+        $fieldStr .= '<br />&nbsp;' . $field  . ':<pre>' . htmlentities( $field->type->value ) . '</pre>';
     }
     echo 'Main Node ID: ' . $locations[0]->id
     . '<br />Children count: '. count( $locations[0]->children )

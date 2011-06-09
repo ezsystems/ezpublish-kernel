@@ -20,11 +20,30 @@
 namespace ezx\doctrine\content;
 class ContentType extends Abstract_ContentModel
 {
+    /**
+     * Definition of properties on this class
+     *
+     * {@inheritdoc}
+     *
+     * @see \ezx\doctrine\Abstract_Model::$definition
+     * @var array
+     */
     protected static $definition = array(
-        'id' => array( 'type' => self::TYPE_INT, 'internal' => true ),
-        'version' => array( 'type' => self::TYPE_INT, 'internal' => true ),
-        'identifier' => array( 'type' => self::TYPE_STRING ),
-        'fields' => array( 'type' => self::TYPE_ARRAY ),
+        'id' => array(
+            'type' => self::TYPE_INT,
+            'internal' => true,
+        ),
+        'version' => array(
+            'type' => self::TYPE_INT,
+            'internal' => true,
+        ),
+        'identifier' => array(
+            'type' => self::TYPE_STRING,
+        ),
+        'fields' => array(
+            'type' => self::TYPE_ARRAY,
+            'dynamic' => true,
+        ),
     );
 
     public function __construct()

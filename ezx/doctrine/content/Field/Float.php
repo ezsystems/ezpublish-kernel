@@ -12,7 +12,7 @@
  * Float Field value object class
  */
 namespace ezx\doctrine\content;
-class Field_Float extends Abstract_FieldValue
+class Field_Float extends Abstract_FieldType implements Interface_Field_Init
 {
     /**
      * Field type identifier
@@ -29,10 +29,18 @@ class Field_Float extends Abstract_FieldValue
         parent::__construct();
     }
 
+    /**
+     * Definition of properties on this class
+     *
+     * {@inheritdoc}
+     *
+     * @see \ezx\doctrine\Abstract_Model::$definition
+     * @var array
+     */
     protected static $definition = array(
         'value' => array(
             'type' => self::TYPE_FLOAT,
-            'legacy_column' => 'data_float'
+            'legacy_column' => 'data_float',
         ),
     );
 
@@ -42,7 +50,7 @@ class Field_Float extends Abstract_FieldValue
      * @param Field_Type_Float $contentTypeFieldValue
      * @return Field_Float
      */
-    public function init( \ezx\doctrine\Interface_Value $contentTypeFieldValue )
+    public function init( Abstract_FieldType $contentTypeFieldValue )
     {
         return $this;
     }

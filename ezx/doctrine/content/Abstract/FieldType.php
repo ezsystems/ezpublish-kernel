@@ -12,7 +12,7 @@
  *
  */
 namespace ezx\doctrine\content;
-abstract class Abstract_FieldValue extends Abstract_ContentModel implements \ezx\doctrine\Interface_Value
+abstract class Abstract_FieldType extends Abstract_ContentModel
 {
     /**
      * Constant that Field types needs to defined
@@ -29,12 +29,6 @@ abstract class Abstract_FieldValue extends Abstract_ContentModel implements \ezx
     protected $types = array();
 
     /**
-     * The value of this value object
-     * @var mixed
-     */
-    protected $value;
-
-    /**
      * Constructor, appends $types
      */
     public function __construct()
@@ -42,7 +36,6 @@ abstract class Abstract_FieldValue extends Abstract_ContentModel implements \ezx
         //$this->types[] = self::FIELD_IDENTIFIER;
         //parent::__construct();
     }
-
 
     /**
      * Return list of identifiers for field type for design override use
@@ -52,29 +45,6 @@ abstract class Abstract_FieldValue extends Abstract_ContentModel implements \ezx
     public function typeInheritance()
     {
         return $this->types;
-    }
-
-    /**
-     * Set value
-     *
-     * @param mixed $value As defined by defintion()
-     * @return Abstract_FieldValue
-     */
-    public function setValue( $value )
-    {
-        $this->value = $value;
-        $this->notify();
-        return $this;
-    }
-
-    /**
-     * Get value
-     *
-     * @return mixed As defined by defintion()
-     */
-    public function getValue()
-    {
-        return $this->value;
     }
 
     /**
