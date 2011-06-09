@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class Location extends Base implements ContentDomainInterface
+class Location extends Base implements \ezp\DomainObjectInterface
 {
 }
 ?>

@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class Field extends Base implements ContentDomainInterface
+class Field extends Base implements \ezp\DomainObjectInterface
 {
     protected $fieldIdentifier;
 

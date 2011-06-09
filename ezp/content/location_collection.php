@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class LocationCollection extends BaseCollection implements ContentDomainInterface, \IteratorAggregate, \Countable, \ArrayAccess
+class LocationCollection extends BaseCollection implements \ezp\DomainObjectInterface, \IteratorAggregate, \Countable, \ArrayAccess
 {
     /**
      * Locations contained in current collection

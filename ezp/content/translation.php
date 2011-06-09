@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class Translation extends Base implements ContentDomainInterface
+class Translation extends Base implements \ezp\DomainObjectInterface
 {
     public function __construct( $localeCode = null )
     {

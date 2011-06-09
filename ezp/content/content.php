@@ -65,7 +65,7 @@ use ezx\doctrine\model\ContentType;
 use ezp\User\Repository as UserRepository;
 use ezp\User\User;
 
-class Content extends Base implements ContentDomainInterface
+class Content extends Base implements \ezp\DomainObjectInterface
 {
     /**
      * Publication status constants

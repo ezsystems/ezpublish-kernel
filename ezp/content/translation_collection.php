@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class TranslationCollection extends BaseCollection implements ContentDomainInterface, \ArrayAccess, \IteratorAggregate, \Countable
+class TranslationCollection extends BaseCollection implements \ezp\DomainObjectInterface, \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * @var array(Translation)

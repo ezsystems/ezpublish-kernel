@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class Version extends Base implements ContentDomainInterface
+class Version extends Base implements \ezp\DomainObjectInterface
 {
 }
 ?>

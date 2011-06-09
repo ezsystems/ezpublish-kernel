@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class Relation extends Base implements ContentDomainInterface
+class Relation extends Base implements \ezp\DomainObjectInterface
 {
 }
 ?>

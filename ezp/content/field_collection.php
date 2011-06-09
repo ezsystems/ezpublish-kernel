@@ -19,7 +19,7 @@
  */
 namespace ezp\Content;
 
-class FieldCollection extends BaseCollection implements ContentDomainInterface, \ArrayAccess, \IteratorAggregate, \Countable
+class FieldCollection extends BaseCollection implements \ezp\DomainObjectInterface, \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * Fieldsets, indexed by locale (i.e. eng-GB)

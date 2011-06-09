@@ -9,7 +9,7 @@
  * @subpackage content
  */
 namespace ezp\Content;
-class ContentType extends Base implements ContentDomainInterface
+class ContentType extends Base implements \ezp\DomainObjectInterface
 {
     /**
      * Returns an instance of ContentType by its $identifier (e.g. "folder")

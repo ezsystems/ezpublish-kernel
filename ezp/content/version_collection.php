@@ -17,7 +17,7 @@
  */
 namespace ezp\Content;
 
-class VersionCollection extends BaseCollection implements ContentDomainInterface, \ArrayAccess, \IteratorAggregate, \Countable
+class VersionCollection extends BaseCollection implements \ezp\DomainObjectInterface, \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * @var array(Version)
