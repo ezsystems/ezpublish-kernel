@@ -17,7 +17,7 @@ try
      */
     $newContent = clone $content;
     $parentLocation = $treeService->load( $parentLocationId );
-    $contentService->insert( $newContent, $parentLocation );
+    $contentService->create( $newContent, $parentLocation );
 }
 catch ( ezp\Content\PermissionException $e )
 {

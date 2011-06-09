@@ -17,18 +17,24 @@ $content = new Content( ContentType::byIdentifier( "folder" ) );
  * Setting a new value object to a field will unset the previous one (and avoid potential memory leaks)
  * Value object manipulation is totally up to the field type
  */
-$content->fields['name'] = new Fields\String( "My folder name" );
-$content->fields['description'] = new Fields\XMLText( "<p>This is the <strong>HTML description</strong></p>" );
+$content->fields["name"] = new Fields\String( "My folder name" );
+$content->fields["description"] = new Fields\XMLText( "<p>This is the <strong>HTML description</strong></p>" );
+// Another syntax could be valid, from post data.
+// $postedData is a collection object containing simple structs that hold posted data
+$postedData = ContentRepository::get()->getContentService()->getPostData();
+$content->fields["name"] = Fields\String::fromPostData( $postedData["name"] );
+$content->fields["description"] = Fields\String::fromPostData( $postedData["description"] );
 
 // Now set an fre-FR translation
 $content->addTranslation( "fre-FR" );
 $content->translations["fre-FR"]->fields["name"] = new Fields\String( "Nom du dossier" );
 $content->translations["fre-FR"]->fields["description"] = new Fields\XMLText( "<p>Ceci est la <strong>description HTML</strong></p>" );
 
+
 // Get the content service from the repository and insert the new content
 try
 {
-    $publishedContent = ContentRepository::get()->getContentService()->insert( $content, $parentLocation );
+    $publishedContent = ContentRepository::get()->getContentService()->create( $content, $parentLocation );
     echo "{$publishedContent}\n"; // Displays content "name" via __toString()
     echo "Content ID is: {$publishedContent->id}\n";
     echo "Content version number is: {$publishedContent->versionNumber}\n";
