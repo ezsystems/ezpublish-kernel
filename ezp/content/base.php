@@ -105,6 +105,10 @@ abstract class Base
             {
                 $this->$method( $value );
             }
+            else
+            {
+                throw new ezcBasePropertyPermissionException( $property, ezcBasePropertyPermissionException::READ );
+            }
         }
         else
         {
