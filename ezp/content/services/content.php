@@ -59,5 +59,16 @@ class Content implements ServiceInterface
     {
 
     }
+
+
+    /**
+     * Deletes a content from the repository
+     * 
+     * @param \ezp\Content\Content $content 
+     */
+    public function delete( \ezp\Content\Content $content )
+    {
+
+    }
 }
 ?>

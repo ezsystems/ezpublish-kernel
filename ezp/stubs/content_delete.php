@@ -7,7 +7,7 @@ use ezp\Content\Repository as ContentRepository;
 $contentService = ContentRepository::get()->getContentService();
 try
 {
-    $content = $contentService->loadContent( 60 );
+    $content = $contentService->load( 60 );
     $contentService->delete( $content );
 }
 catch ( ezp\Content\ContentNotFoundException $e )

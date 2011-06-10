@@ -11,7 +11,7 @@ $contentService = $repository->getContentService();
 $treeService = $repository->getSubtreeService();
 try
 {
-    $content = $contentService->loadContent( 60 );
+    $content = $contentService->load( 60 );
 }
 catch ( ezp\Content\ContentNotFoundException $e )
 {
@@ -30,7 +30,7 @@ foreach ( $content->fields as $identifier => $value )
 
 // Now updating content
 $newParentLocation = $treeService->load( 43 ); // Fetch location with ID #43
-$content->addLocation( $newParentLocation );
+$content->addLocationUnder( $newParentLocation );
 $content->fields["name"] = new Fields\String( "New content name" );
 $contentService->update( $content );
 
