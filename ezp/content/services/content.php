@@ -25,14 +25,14 @@ class Content implements ServiceInterface
      * Creates the new $content in the content repository under $parentLocation
      *
      * @param \ezp\Content\Content $content
-     * @param \ezp\Content\Location $parentLocation
      *
      * @return \ezp\Content\Content The newly created content
      * @throws \ezp\Content\ValidationException If a validation problem has been found for $content
      */
-    public function create( \ezp\Content\Content $content, \ezp\Content\Location $parentLocation )
+    public function create( \ezp\Content\Content $content )
     {
         // @todo : Do any necessary actions to insert $content in the content repository
+        // go through all locations to create or update them
         return $content;
     }
 
@@ -45,6 +45,7 @@ class Content implements ServiceInterface
     public function update( \ezp\Content\Content $content )
     {
         // @todo : Do any necessary actions to update $content in the content repository
+        // go through all locations to create or update them
         return $content;
     }
 

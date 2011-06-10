@@ -107,17 +107,21 @@ class Content extends Base implements \ezp\DomainObjectInterface
      */
     public function addTranslation( $localeCode )
     {
-        $this->properties["translations"]->add( new Translation( $localeCode ) );
+        $this->properties["translations"][] = new Translation( $localeCode );
     }
 
     /**
-     * Adds a new location to content
-     * Therefore content will be available under $parentLocation
+     * Adds a new location to content under an existing one.
+     *
      * @param Location $parentLocation
+     * @return Location
      */
-    public function addLocation( Location $parentLocation )
+    public function addLocationUnder( Location $parentLocation )
     {
-        $this->properties["locations"]->addParent( $parentLocation );
+        $location = new Location();
+        $location->parent = $parentLocation;
+        $this->properties["locations"][] = $location;
+        return $location;
     }
 
     public function __clone()
@@ -125,10 +129,11 @@ class Content extends Base implements \ezp\DomainObjectInterface
         $this->properties["id"] = false;
         $this->properties["status"] = self::STATUS_DRAFT;
 
-        // Locations : get the current location's parent, so that new content will be the old one's sibling
-        $parentLocation = $this->properties["locations"]->current->parent;
+        // Locations : get the main location's parent, so that new content will 
+        // be the old one's sibling
+        $parentLocation = $this->properties["locations"][0]->parent;
         $this->properties["locations"] = new LocationCollection();
-        $this->properties["locations"]->add( $parentLocation );
+        $this->addLocationUnder( $parentLocation );
 
         $this->properties["owner"] = UserRepository::get()->currentUser();
 

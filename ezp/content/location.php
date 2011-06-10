@@ -49,6 +49,11 @@ class Location extends Base implements \ezp\DomainObjectInterface
         return Repository::get()->getSubtreeService()->loadLocation( $this->parentId );
     }
 
+    protected function setParent( Location $parent )
+    {
+        $this->properties['parentId'] = $parent->id;
+    }
+
     protected function getContent()
     {
         return Repository::get()->getContentService()->loadContent( $this->contentId );

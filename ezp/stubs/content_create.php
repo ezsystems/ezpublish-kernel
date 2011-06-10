@@ -34,7 +34,8 @@ $content->translations["fre-FR"]->fields["description"] = new Fields\XMLText( "<
 // Get the content service from the repository and insert the new content
 try
 {
-    $publishedContent = ContentRepository::get()->getContentService()->create( $content, $parentLocation );
+    $content->addLocationUnder( $parentLocation );
+    $publishedContent = ContentRepository::get()->getContentService()->create( $content );
     echo "{$publishedContent}\n"; // Displays content "name" via __toString()
     echo "Content ID is: {$publishedContent->id}\n";
     echo "Content version number is: {$publishedContent->versionNumber}\n";
