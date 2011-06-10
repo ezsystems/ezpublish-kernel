@@ -29,9 +29,6 @@ class Subtree implements ServiceInterface
      */
     public function copy( \ezp\Content\Location $subtree, \ezp\Content\Location $targetLocation )
     {
-        // is there any point in having a service at all, as the copy is to be performed directly by the storage
-        // engine in order to be as optimized as possible ?
-        return ContentRepository::get()->copySubtree( $subtree, $targetLocation );
     }
 
     /**
@@ -91,7 +88,7 @@ class Subtree implements ServiceInterface
     }
 
 
-    public function remove( \ezp\Content\Location $location )
+    public function delete( \ezp\Content\Location $location )
     {
         // take care of:
         // 1. removing the current location
@@ -99,6 +96,7 @@ class Subtree implements ServiceInterface
         // location
         // 3. do the same operations on the subtree (recursive calls through
         // children ?)
+        // note: this is different from Content::delete()
     }
 }
 ?>

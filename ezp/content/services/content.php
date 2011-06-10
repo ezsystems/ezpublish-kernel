@@ -68,7 +68,11 @@ class Content implements ServiceInterface
      */
     public function delete( \ezp\Content\Content $content )
     {
-
+        // take care of:
+        // 1. removing the subtree of all content's locations
+        // 2. removing the content it self (with version, translations, fields
+        // and so on...)
+        // note: this is different from Subtree::delete()
     }
 }
 ?>
