@@ -17,47 +17,8 @@
  */
 namespace ezp\Content;
 
-class VersionCollection extends BaseCollection implements \ezp\DomainObjectInterface, \ArrayAccess, \IteratorAggregate, \Countable
+class VersionCollection extends BaseCollection
 {
-    /**
-     * @var array(Version)
-     */
-    protected $versions = array();
-
-    public function __construct()
-    {
-
-    }
-
-    /**
-     * Returns the number of fieldsets available
-     * @return int
-     */
-    public function count()
-    {
-        return count( $this->versions );
-    }
-
-    /**
-     * Returns the iterator for this object
-     * @return Iterator
-     */
-    public function getIterator()
-    {
-        // TODO : Use a dedicated iterator
-        return new \ArrayIterator( $this );
-    }
-
-    public function offsetExists( $offset )
-    {
-        return isset( $this->versions[$offset] );
-    }
-
-    public function offsetGet( $offset )
-    {
-        return $this->versions[$offset];
-    }
-
     /**
      * Will throw an exception as fieldsets are not directly writeable
      * @param mixed $offset

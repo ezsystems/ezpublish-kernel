@@ -17,18 +17,8 @@
  */
 namespace ezp\Content;
 
-class RelationCollection extends BaseCollection implements \ezp\DomainObjectInterface, \IteratorAggregate, \Countable
+class RelationCollection extends BaseCollection
 {
-    protected $relations = array();
 
-    public function getIterator()
-    {
-        return new \ArrayIterator( $this );
-    }
-
-    public function count()
-    {
-        return count( $this->relations );
-    }
 }
 ?>

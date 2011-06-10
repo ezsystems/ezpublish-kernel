@@ -17,46 +17,8 @@
  */
 namespace ezp\Content;
 
-class TranslationCollection extends BaseCollection implements \ezp\DomainObjectInterface, \ArrayAccess, \IteratorAggregate, \Countable
+class TranslationCollection extends BaseCollection
 {
-    /**
-     * @var array(Translation)
-     */
-    protected $translations = array();
-
-    public function __construct()
-    {
-
-    }
-
-    /**
-     * Returns the number of fieldsets available
-     * @return int
-     */
-    public function count()
-    {
-        return count( $this->translations );
-    }
-
-    /**
-     * Returns the iterator for this object
-     * @return Iterator
-     */
-    public function getIterator()
-    {
-        // TODO : Use a dedicated iterator
-        return new \ArrayIterator( $this );
-    }
-
-    public function offsetExists( $offset )
-    {
-        return isset( $this->translations[$offset] );
-    }
-
-    public function offsetGet( $offset )
-    {
-        return $this->translations[$offset];
-    }
 
     /**
      * Will throw an exception as fieldsets are not directly writeable

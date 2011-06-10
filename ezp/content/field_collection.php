@@ -19,47 +19,8 @@
  */
 namespace ezp\Content;
 
-class FieldCollection extends BaseCollection implements \ezp\DomainObjectInterface, \ArrayAccess, \IteratorAggregate, \Countable
+class FieldCollection extends BaseCollection
 {
-    /**
-     * Fieldsets, indexed by locale (i.e. eng-GB)
-     * @var array( Fieldset )
-     */
-    protected $fieldsets = array();
-
-    public function __construct()
-    {
-
-    }
-
-    /**
-     * Returns the number of fieldsets available
-     * @return int
-     */
-    public function count()
-    {
-        return count( $this->fieldsets );
-    }
-
-    /**
-     * Returns the iterator for this object
-     * @return Iterator
-     */
-    public function getIterator()
-    {
-        // TODO : Use a dedicated iterator
-        return new \ArrayIterator( $this );
-    }
-
-    public function offsetExists( $offset )
-    {
-        return isset( $this->fieldsets[$offset] );
-    }
-
-    public function offsetGet( $offset )
-    {
-        return $this->fieldsets[$offset];
-    }
 
     /**
      * Will throw an exception as fieldsets are not directly writeable
