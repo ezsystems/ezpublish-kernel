@@ -11,7 +11,7 @@
 
 namespace ezp\Content;
 
-abstract class BaseCollection extends Base implements \ezp\DomainObjectInterface, \ArrayAccess, \IteratorAggregate, \Countable
+abstract class BaseCollection extends Base implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     protected $properties = array( 'objects' => array() );
 
