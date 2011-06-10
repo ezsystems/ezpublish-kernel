@@ -17,24 +17,6 @@ namespace ezx\doctrine\content;
 class FieldMap implements \Countable, \IteratorAggregate, \ArrayAccess
 {
     /**
-     * Constructor, sets up Fieldmap based on current fields
-     *
-     * @todo Handle language
-     * @param Content $content
-     */
-    public function __construct( Content $content )
-    {
-        foreach ( $content->getFields() as $field )
-        {
-            if ( $content->currentVersion !== $field->version )
-                continue;
-
-            $this->elements[ $field->getContentTypeField()->identifier ] = $field;
-            $this->count++;
-        }
-    }
-
-    /**
      * @var array Internal array of fields
      */
     private $elements = array();
@@ -43,6 +25,21 @@ class FieldMap implements \Countable, \IteratorAggregate, \ArrayAccess
      * @var int Pre generated count of elements (these never change so makes sense to store it)
      */
     private $count = 0;
+
+    /**
+     * Constructor, sets up Fieldmap based on current fields
+     *
+     * @todo Handle language
+     * @param Content $content
+     */
+    public function __construct( ContentVersion $content )
+    {
+        foreach ( $content->getFields() as $field )
+        {
+            $this->elements[ $field->getContentTypeField()->identifier ] = $field;
+            $this->count++;
+        }
+    }
 
     /**
      * Get Iterator.
@@ -100,6 +97,11 @@ class FieldMap implements \Countable, \IteratorAggregate, \ArrayAccess
         return isset( $this->elements[$offset] );
     }
 
+    /**
+     * Return count of elements
+     *
+     * @return int
+     */
     public function count()
     {
         return $this->count;

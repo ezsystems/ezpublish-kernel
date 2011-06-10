@@ -44,21 +44,26 @@ class Content extends Abstract_ContentModel
             'readonly' => true,
             'internal' => true,
         ),
+        'name' => array(
+            'type' => self::TYPE_STRING,
+        ),
         'ownerId' => array(
             'type' => self::TYPE_INT,
         ),
         'sectionId' => array(
             'type' => self::TYPE_INT,
         ),
-        'fields' => array(
+        'versions' => array(
             'type' => self::TYPE_ARRAY,
             'member' => true,
             'dynamic' => true,
+            'readonly' => true,
         ),
         'locations' => array(
             'type' => self::TYPE_ARRAY,
             'member' => true,
             'dynamic' => true,
+            'readonly' => true,
         ),
         'contentType' => array(
             'type' => self::TYPE_OBJECT,
@@ -74,15 +79,12 @@ class Content extends Abstract_ContentModel
     public function __construct( ContentType $contentType )
     {
         $this->locations = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->versions  = new \Doctrine\Common\Collections\ArrayCollection();
 
         $this->typeId = $contentType->id;
         $this->contentType = $contentType;
-        foreach ( $contentType->getFields() as $contentTypeField )
-        {
-            $this->fields[] = new Field( $this, $contentTypeField );
-        }
-        return $this->postLoad();
+        $this->versions[] = new ContentVersion( $this, $contentType );
+        $this->postLoad();
     }
 
     /**
@@ -98,9 +100,9 @@ class Content extends Abstract_ContentModel
         {
             $this->attach( $location );
         }
-        foreach( $this->getFields() as $field )
+        foreach( $this->getVersions() as $version )
         {
-            $this->attach( $field );
+            $this->attach( $version );
         }
         return $this;
     }
@@ -157,21 +159,35 @@ class Content extends Abstract_ContentModel
         return $this->locations;
     }
 
-
     /**
-     * @OneToMany(targetEntity="Field", mappedBy="content", fetch="EAGER")
-     * @var FieldMap(Field)
+     * @OneToMany(targetEntity="ContentVersion", mappedBy="content", fetch="EAGER")
+     * @var \Doctrine\Common\Collections\ArrayCollection(ContentVersion)
      */
-    private $fields;
+    private $versions;
 
     /**
-     * Return collection of all fields assigned to object (all versions and languages)
+     * Return collection of all content versions
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(Field)
+     * @return \Doctrine\Common\Collections\ArrayCollection(ContentVersion)
      */
-    public function getFields()
+    public function getVersions()
     {
-        return $this->fields;
+        return $this->versions;
+    }
+
+    /**
+     * Find current version amongst version objects
+     *
+     * @return ContentVersion|null
+     */
+    public function getCurrentVersion()
+    {
+        foreach( $this->getVersions() as $contentVersion )
+        {
+            if ( $this->currentVersion == $contentVersion->version )
+                return $contentVersion;
+        }
+        return null;
     }
 
     /**
@@ -192,25 +208,24 @@ class Content extends Abstract_ContentModel
     }
 
     /**
-     * Magic object that steps in when fields are accessed
+     * Shortcut to ->currentVersion()->fields
+     *
+     * @var FieldMap(Field)
      */
-    protected $fieldMap;
+    private $fields;
 
     /**
      * Get value
      *
      * @throws \InvalidArgumentException
      * @param string $name
-     * @param string $value
-     * @return mixed Return $value
+     * @return mixed
      */
     public function __get( $name )
     {
         if ( $name === 'fields' )
         {
-            if ( $this->fieldMap !== null )
-                return $this->fieldMap;
-            return $this->fieldMap = new FieldMap( $this );
+            return $this->getCurrentVersion()->fields;
         }
         return parent::__get( $name );
     }

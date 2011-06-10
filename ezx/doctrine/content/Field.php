@@ -46,12 +46,15 @@ class Field extends Abstract_Field
         'fieldTypeString' => array(
             'type' => self::TYPE_STRING,
         ),
+        /*'contentobject_id' => array(
+            'type' => self::TYPE_INT,
+        ),*/
         'type' => array(
             'type' => self::TYPE_OBJECT,
             'member' => true,
             'dynamic' => true,
         ),
-        'content' => array(
+        'contentVersion' => array(
             'type' => self::TYPE_OBJECT,
             'dynamic' => true,
         ),
@@ -106,20 +109,26 @@ class Field extends Abstract_Field
     protected $fieldTypeString = '';
 
     /**
-     * @ManyToOne(targetEntity="Content", inversedBy="fields")
-     * @JoinColumn(name="contentobject_id", referencedColumnName="id")
-     * @var Content
+     * @Column(type="integer")
+     * @var int
      */
-    protected $content;
+    //protected $contentobject_id = 0;
 
     /**
-     * Return content object
-     *
-     * @return Content
+     * @ManyToOne(targetEntity="ContentVersion", inversedBy="fields")
+     * @joinColumns(@JoinColumn(name="contentobject_id", referencedColumnName="contentobject_id"),@JoinColumn(name="version", referencedColumnName="version"))
+     * @var ContentVersion
      */
-    public function getContent()
+    protected $contentVersion;
+
+    /**
+     * Return content version object
+     *
+     * @return ContentVersion
+     */
+    public function getContentVersion()
     {
-        return $this->content;
+        return $this->contentVersion;
     }
 
     /**
@@ -144,9 +153,9 @@ class Field extends Abstract_Field
      *
      * @param ContentTypeField $contentTypeField
      */
-    public function __construct( Content $content, ContentTypeField $contentTypeField )
+    public function __construct( ContentVersion $contentVersion, ContentTypeField $contentTypeField )
     {
-        $this->content = $content;
+        $this->contentVersion = $contentVersion;
         $this->contentTypeField = $contentTypeField;
         $this->fieldTypeString = $contentTypeField->fieldTypeString;
     }
@@ -179,7 +188,7 @@ class Field extends Abstract_Field
      */
     public function update( \ezx\doctrine\Interface_Observable $subject , $event  = null )
     {
-        if ( $subject instanceof Content )
+        if ( $subject instanceof ContentVersion )
         {
             $this->notify( $event );
             return $this;
