@@ -44,17 +44,17 @@ class Location extends Base implements \ezp\DomainObjectInterface
         );
     }
 
-    protected function doGetParent()
+    protected function getParent()
     {
         return Repository::get()->getSubtreeService()->loadLocation( $this->parentId );
     }
 
-    protected function doGetContent()
+    protected function getContent()
     {
         return Repository::get()->getContentService()->loadContent( $this->contentId );
     }
 
-    protected function doGetChildren()
+    protected function getChildren()
     {
         return Repository::get()->getSubtreeService()->children( $this );
     }

@@ -36,14 +36,14 @@ abstract class Base
      * Array container for virtual properties, handled dynamically by methods
      * Key is property name, value is a bool (always true).
      *
-     * Corresponding get method name must follow pattern doGet<propertyName>().
+     * Corresponding get method name must follow pattern get<propertyName>().
      * The method will be called without any parameter
-     * e.g. : for a dynamic property named "myProperty", method should be "doGetMyProperty()".
+     * e.g. : for a dynamic property named "myProperty", method should be "getMyProperty()".
      *
      * If the dynamic property is writeable, a set method should be defined.
-     * Corresponding set method name must follow pattern doSet<propertyName>( $value ).
+     * Corresponding set method name must follow pattern set<propertyName>( $value ).
      * The method will be called with only one $value parameter.
-     * e.g. : for a dynamic property named "myProperty", method should be "doSetMyProperty( $value )"
+     * e.g. : for a dynamic property named "myProperty", method should be "setMyProperty( $value )"
      *
      * @var array
      */
@@ -65,7 +65,7 @@ abstract class Base
         if ( isset( $this->dynamicProperties[$property] ) )
         {
             $property = ucfirst( $property );
-            $method = "doGet{$property}";
+            $method = "get{$property}";
             if ( method_exists( $this, $method ) )
             {
                 return $this->$method();
@@ -98,7 +98,7 @@ abstract class Base
         else if ( isset( $this->dynamicProperties[$property] ) )
         {
             $property = ucfirst( $property );
-            $method = "doSet{$property}";
+            $method = "set{$property}";
             if ( method_exists( $this, $method ) )
             {
                 $this->$method( $value );
