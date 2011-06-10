@@ -15,6 +15,7 @@
  * @subpackage Services
  */
 namespace ezp\Content\Services;
+
 use ezp\Content\Content;
 
 use ezp\Content\Repository as ContentRepository;
@@ -63,8 +64,8 @@ class Content implements ServiceInterface
 
     /**
      * Deletes a content from the repository
-     * 
-     * @param \ezp\Content\Content $content 
+     *
+     * @param \ezp\Content\Content $content
      */
     public function delete( \ezp\Content\Content $content )
     {
@@ -73,6 +74,15 @@ class Content implements ServiceInterface
         // 2. removing the content it self (with version, translations, fields
         // and so on...)
         // note: this is different from Subtree::delete()
+    }
+
+    /**
+     * Creates a new criteria collection object in order to query the content repository
+     * @return \ezp\Content\Criteria\CriteriaCollection
+     */
+    public function createCriteria()
+    {
+        return new \ezp\Content\Criteria\CriteriaCollection();
     }
 }
 ?>
