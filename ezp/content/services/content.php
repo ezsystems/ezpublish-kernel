@@ -54,7 +54,7 @@ class Content implements ServiceInterface
      * @return \ezp\Content\Content
      * @throws \ezp\Content\ContentNotFoundException if content could not be found
      */
-    public function loadContent( $contentId )
+    public function load( $contentId )
     {
 
     }

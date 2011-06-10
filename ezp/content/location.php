@@ -19,5 +19,44 @@ namespace ezp\Content;
 
 class Location extends Base implements \ezp\DomainObjectInterface
 {
+
+    public function __construct()
+    {
+        $this->properties = array(
+            "id" => false,
+            "path" => "",
+            "remoteId" => false,
+            "parentId" => false,
+            "contentId" => false,
+            "hidden" => false,
+            "visible" => true,
+            "priority" => 0,
+        );
+
+        $this->readOnlyProperties = array(
+            "id" => true,
+        );
+
+        $this->dynamicProperties = array(
+            "children" => true,
+            "parent" => true,
+            "content" => true,
+        );
+    }
+
+    protected function doGetParent()
+    {
+        return Repository::get()->getSubtreeService()->loadLocation( $this->parentId );
+    }
+
+    protected function doGetContent()
+    {
+        return Repository::get()->getContentService()->loadContent( $this->contentId );
+    }
+
+    protected function doGetChildren()
+    {
+        return Repository::get()->getSubtreeService()->children( $this );
+    }
 }
 ?>
