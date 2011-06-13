@@ -99,6 +99,15 @@ class Content extends Base implements \ezp\DomainObjectInterface
             "locations"     => true,
             "name"			=> true
         );
+
+        $this->dynamicProperties = array(
+            "mainLocation" => true
+        );
+    }
+
+    protected function getMainLocation()
+    {
+        return $this->properties['locations'][0];
     }
 
     /**
