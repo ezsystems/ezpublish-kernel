@@ -20,7 +20,7 @@ namespace ezp\Content;
 class ContainerProperty extends Base implements \ezp\DomainObjectInterface
 {
     // TODO const from eZ Publish 4.5
-    // needs to update to reflect concept changes
+    // needs update to reflect concept changes
     const SORT_FIELD_PATH = 1;
     const SORT_FIELD_PUBLISHED = 2;
     const SORT_FIELD_MODIFIED = 3;
