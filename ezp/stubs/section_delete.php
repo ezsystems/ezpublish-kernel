@@ -1,19 +1,25 @@
 <?php
 use ezp\Content\Repository as ContentRepository;
-use ezp\Content\Section;
+use ezp\Content;
 
 $sectionIdentifier = 'content';
 $sectionService = ContentRepository::get()->getSectionService();
 
-$section = $sectionService->loadByIdentifier( $sectionIdentifier );
 
 try
 {
+    $section = $sectionService->loadByIdentifier( $sectionIdentifier );
     $sectionService->delete( $section );
 }
-catch( ezp\Content\ValidationException $e )
+catch( SectionNotFoundException $e )
+{
+    echo "Section ({$sectionIdentifier}) not found !";
+    exit;
+}
+catch( ValidationException $e )
 {
     echo "Can not remove section ({$sectionIdentifier}) because {$e->getMessage()}";
+    exit;
 }
 
 

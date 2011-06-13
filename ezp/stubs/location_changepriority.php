@@ -10,9 +10,9 @@ try
     $location->priority = 20;
     $treeService->update( $location );
 }
-catch ( ezp\Content\PermissionException $e )
+catch ( ezp\Content\ValidationException $e )
 {
-    echo "Permission issue occurred: {$e->getMessage()}\n";
+    echo "An error occured while updating the location: {$e->getMessage()}";
     exit;
 }
 ?>

@@ -4,9 +4,22 @@ use ezp\Content\Section;
 
 $sectionId = 1;
 $sectionService = ContentRepository::get()->getSectionService();
-$section = $sectionService->load( $sectionId );
-$section->name = "New section name";
-$sectionService->update( $section );
+try
+{
+    $section = $sectionService->load( $sectionId );
+    $section->name = "New section name";
+    $sectionService->update( $section );
+}
+catch( SectionNotFoundException $e )
+{
+    echo "Section #{$sectionId} not found !"
+    exit;
+}
+catch( ValidationException $e )
+{
+    echo "An error occured during section update: {$e->getMessage()}";
+    exit;
+}
 
 
 ?>
