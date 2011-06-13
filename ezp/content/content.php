@@ -89,7 +89,8 @@ class Content extends Base implements \ezp\DomainObjectInterface
             "reversedRelations"     => new RelationCollection(),
             "translations"          => new TranslationCollection(),
             "fields"                => new FieldCollection(),
-            "name"					=> false
+            "name"					=> false,
+            "sectionId"             => false,
         );
 
         $this->readOnlyProperties = array(
@@ -108,6 +109,16 @@ class Content extends Base implements \ezp\DomainObjectInterface
     protected function getMainLocation()
     {
         return $this->properties['locations'][0];
+    }
+
+    protected function setSection( Section $section )
+    {
+        $this->properties['sectionId'] = $section->id;
+    }
+
+    protected function getSection()
+    {
+        return Repository::get()->getSectionService()->load( $this->properties['sectionId'] );
     }
 
     /**

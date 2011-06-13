@@ -63,5 +63,13 @@ class Repository extends ezp\Repository
     {
         return new Services\Content();
     }
+
+    /**
+     * @return \ezp\Content\Services\Section
+     */
+    public function getSectionService()
+    {
+        return new Services\Section();
+    }
 }
 ?>

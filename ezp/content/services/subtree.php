@@ -98,5 +98,10 @@ class Subtree implements ServiceInterface
         // children ?)
         // note: this is different from Content::delete()
     }
+
+
+    public function assignSection( \ezp\Content\Location $startingPoint, \ezp\Content\Section $section )
+    {
+    }
 }
 ?>
