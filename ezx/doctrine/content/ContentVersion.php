@@ -76,15 +76,15 @@ class ContentVersion extends Abstract_ContentModel implements \ezx\doctrine\Inte
     );
 
     /**
-     * Create content based on content type object
+     * Create content version based on content and content type fields objects
      *
-     * @param ContentType $contentType
+     * @param Content $content
      */
-    public function __construct( Content $content, ContentType $contentType )
+    public function __construct( Content $content )
     {
         $this->content = $content;
         $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
-        foreach ( $contentType->getFields() as $contentTypeField )
+        foreach ( $content->getContentType()->getFields() as $contentTypeField )
         {
             $this->fields[] = new Field( $this, $contentTypeField );
         }

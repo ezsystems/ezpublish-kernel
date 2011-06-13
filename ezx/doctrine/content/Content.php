@@ -83,7 +83,7 @@ class Content extends Abstract_ContentModel
 
         $this->typeId = $contentType->id;
         $this->contentType = $contentType;
-        $this->versions[] = new ContentVersion( $this, $contentType );
+        $this->versions[] = new ContentVersion( $this );
         $this->postLoad();
     }
 

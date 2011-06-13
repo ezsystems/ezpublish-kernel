@@ -149,8 +149,9 @@ class Field extends Abstract_Field
     }
 
     /**
-     * Constructor, sets up relation properties
+     * Constructor, sets up properties
      *
+     * @param ContentVersion $contentVersion
      * @param ContentTypeField $contentTypeField
      */
     public function __construct( ContentVersion $contentVersion, ContentTypeField $contentTypeField )

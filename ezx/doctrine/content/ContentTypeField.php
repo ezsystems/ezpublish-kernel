@@ -48,10 +48,13 @@ class ContentTypeField extends Abstract_Field
     );
 
     /**
-     * Constructor, sets up empty contentFields collection
+     * Constructor, sets up empty contentFields collection and attach $contentType
+     *
+     * @param ContentType $contentType
      */
-    public function __construct()
+    public function __construct( ContentType $contentType )
     {
+        $this->contentType = $contentType;
         $this->contentFields = new \Doctrine\Common\Collections\ArrayCollection();
     }
 

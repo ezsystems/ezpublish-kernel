@@ -53,8 +53,14 @@ class Location extends Abstract_ContentModel implements \ezx\doctrine\Interface_
         ),
     );
 
-    public function __construct()
+    /**
+     * Setups empty children collection and attaches $content
+     *
+     * @param Content $content
+     */
+    public function __construct( Content $content )
     {
+        $this->content = $content;
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
