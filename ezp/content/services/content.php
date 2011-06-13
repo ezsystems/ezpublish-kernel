@@ -23,7 +23,7 @@ use ezp\Content\Repository as ContentRepository;
 class Content implements ServiceInterface
 {
     /**
-     * Creates the new $content in the content repository under $parentLocation
+     * Creates the new $content in the content repository
      *
      * @param \ezp\Content\Content $content
      *
