@@ -31,10 +31,12 @@ class Location extends Base implements \ezp\DomainObjectInterface
             "hidden" => false,
             "visible" => true,
             "priority" => 0,
+            "containerProperties" => new ContainerPropertyCollection(),
         );
 
         $this->readOnlyProperties = array(
             "id" => true,
+            "containerProperties" => true,
         );
 
         $this->dynamicProperties = array(
@@ -46,7 +48,7 @@ class Location extends Base implements \ezp\DomainObjectInterface
 
     protected function getParent()
     {
-        return Repository::get()->getSubtreeService()->loadLocation( $this->parentId );
+        return Repository::get()->getSubtreeService()->load( $this->parentId );
     }
 
     protected function setParent( Location $parent )
@@ -56,7 +58,7 @@ class Location extends Base implements \ezp\DomainObjectInterface
 
     protected function getContent()
     {
-        return Repository::get()->getContentService()->loadContent( $this->contentId );
+        return Repository::get()->getContentService()->load( $this->contentId );
     }
 
     protected function getChildren()
