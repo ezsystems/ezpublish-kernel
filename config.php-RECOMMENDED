@@ -1,0 +1,63 @@
+<?php
+/**
+ * ezpNext prototype
+ *
+ * @copyright Copyright (c) 2011, eZ Systems AS
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
+ * @package ezp
+ *
+ * @doc Copy this file to config.php to get started, for more info see doc/readme.txt
+ */
+
+// Optional: Sanity check
+if ( version_compare( PHP_VERSION, '5.3' ) < 0 )
+{
+    print( '<h1>ezpNext does not like your PHP version: ' . PHP_VERSION . '</h1>' );
+    print( '<p>ezpNext requires PHP 5.3 and higher!</p>' );
+    exit;
+}
+elseif ( ini_get('request_order') !== 'GP' )
+{
+    print( '<h1>ezpNext does not like your <a href="http://no2.php.net/manual/en/ini.core.php#ini.request-order">request_order</a> value: ' . ini_get('request_order'). '</h1>' );
+    print( '<p>Only \'GP\' is supported due to security concerns!</p>' );
+    exit;
+}
+
+// Optional: only for development, remove in production
+error_reporting ( E_ALL | E_STRICT );
+
+// Optional: increases accuracy of timers and accumulators @todo If not set, then don't capture timers/accumulators?
+//$_SERVER['REQUEST_MICRO_TIME'] = microtime( true );
+
+// Required: Settings bellow are runtime settings that needs to be set here, you can
+// optionally also override any other setting here.
+$settings = array(
+    'base' => array(
+        'autoload' => array(
+            // eZ Components paths on your system:
+            //'ezc-path' => '',         // svn/download in include path
+            //'ezc-path' => 'lib/ezc/', // bundle
+            'ezc-path' => 'ezc/',     // pear
+
+            // eZ Components src paths on your system:
+            //'ezc-src-path' => '/src/', // svn/download/bundle
+            'ezc-src-path' => '/',     // pear
+
+            // Hash with class name prefix and folder name, needed for autoload system as well as router
+            'repositories' => array( 'ezp' => 'ezp',
+                                     'ezx' => 'ezx' ),
+
+            // Bool value for global development mode setting
+            'development-mode' => true,
+        ),
+        'configuration' => array(
+            // Default value for Configuration cache $useCache param
+            'use-cache' => true,
+            // List of parser classes where key is file suffix
+            'parsers' => array(
+                '.ini'            => 'ezp\base\Configuration_Parser_Ini',
+                '.ini.append.php' => 'ezp\base\Configuration_Parser_Ini',
+            ),
+        ),
+    )
+);

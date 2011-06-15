@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
  * @package ext
- * @subpackage doctrine
+ * @subpackage content
  */
 
 /**
@@ -16,7 +16,7 @@
  * @property-read int $version
  * @property int $userId
  * @property int $creatorId
- * @property-read array(string => Field) $fields An hash structure of fields
+ * @property-read array(string => ContentField) $fields An hash structure of fields
  */
 namespace ezx\content;
 class ContentVersion extends Abstract_ContentModel implements \ezx\base\Interface_Observer
@@ -86,7 +86,7 @@ class ContentVersion extends Abstract_ContentModel implements \ezx\base\Interfac
         $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
         foreach ( $content->getContentType()->getFields() as $contentTypeField )
         {
-            $this->fields[] = new Field( $this, $contentTypeField );
+            $this->fields[] = new ContentField( $this, $contentTypeField );
         }
         $this->postLoad();
     }
@@ -167,15 +167,15 @@ class ContentVersion extends Abstract_ContentModel implements \ezx\base\Interfac
     protected $contentobject_id = 0;
 
     /**
-     * @OneToMany(targetEntity="Field", mappedBy="contentVersion", fetch="EAGER")
-     * @var FieldMap(Field)
+     * @OneToMany(targetEntity="ContentField", mappedBy="contentVersion", fetch="EAGER")
+     * @var FieldMap(ContentField)
      */
     private $fields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(Field)
+     * @return \Doctrine\Common\Collections\ArrayCollection(ContentField)
      */
     public function getFields()
     {
@@ -228,7 +228,7 @@ class ContentVersion extends Abstract_ContentModel implements \ezx\base\Interfac
      *
      * @param \ezx\base\Interface_Observable $subject
      * @param string|null $event
-     * @return Field
+     * @return ContentField
      */
     public function update( \ezx\base\Interface_Observable $subject , $event  = null )
     {

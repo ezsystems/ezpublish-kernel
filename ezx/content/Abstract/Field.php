@@ -1,11 +1,11 @@
 <?php
 /**
- * Abstract Content Field (content attribute) model object, used for content field and content type field
+ * Abstract Field (content [class] attribute) model object, used for content field and content type field
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
  * @package ext
- * @subpackage doctrine
+ * @subpackage content
  */
 
 /**
@@ -30,8 +30,8 @@ abstract class Abstract_Field extends Abstract_ContentModel implements \ezx\base
         if ( $this->type instanceof Abstract_FieldType )
            return $this->type;
 
-        $configuration = \ezp\system\Configuration::getInstance();
-        $list = $configuration->get( 'doctrine-fields', ( $this instanceof Field ? 'content' : 'type' ) );
+        $configuration = \ezp\base\Configuration::getInstance('content');
+        $list = $configuration->get( 'field-types', ( $this instanceof ContentField ? 'content' : 'contentType' ) );
 
         if ( !isset( $list[ $this->fieldTypeString ] ) )
             throw new \RuntimeException( "Field type value '{$this->fieldTypeString}' is not configured in system.ini" );

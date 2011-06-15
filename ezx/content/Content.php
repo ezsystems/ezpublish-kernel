@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
  * @package ext
- * @subpackage doctrine
+ * @subpackage content
  */
 
 /**
@@ -19,7 +19,7 @@
  * @property int $sectionId
  * @property-read string $typeid Content Type Identifier
  * @property-read array(Location) $locations An hash like structure of fields
- * @property-read array(string => Field) $fields An hash structure of fields
+ * @property-read array(string => ContentField) $fields An hash structure of fields
  * @property-read ContentType $type Content type object
  */
 namespace ezx\content;
@@ -210,7 +210,7 @@ class Content extends Abstract_ContentModel
     /**
      * Shortcut to ->currentVersion()->fields
      *
-     * @var FieldMap(Field)
+     * @var FieldMap(ContentField)
      */
     private $fields;
 

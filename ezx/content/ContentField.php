@@ -5,14 +5,14 @@
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
  * @package ext
- * @subpackage doctrine
+ * @subpackage content
  */
 
 /**
  * @Entity @Table(name="ezcontentobject_attribute")
  */
 namespace ezx\content;
-class Field extends Abstract_Field
+class ContentField extends Abstract_Field
 {
     /**
      * Definition of properties on this class
@@ -185,7 +185,7 @@ class Field extends Abstract_Field
      *
      * @param \ezx\base\Interface_Observable $subject
      * @param string|null $event
-     * @return Field
+     * @return ContentField
      */
     public function update( \ezx\base\Interface_Observable $subject , $event  = null )
     {

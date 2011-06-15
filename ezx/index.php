@@ -6,18 +6,7 @@
  * @Install: Change db settings bellow to point to a ez Publish install and you should be good to go!
  */
 
-namespace ezp\system;
-use \ezx\base\Repository;
-
-// Change these db settings to test the 'get' demo
-$settings = array(
-    'driver'    => 'pdo_mysql',
-    'user'      => 'root',
-    'password'  => 'publish44',
-    'host'      => 'localhost',
-    'dbname'    => 'ezpublish',
-    'dev_mode'  => true,
-);
+use \ezx\base\Repository, \ezp\base\Configuration;
 
 
 if ( !isset( $_GET['fn'] ) )
@@ -27,7 +16,16 @@ if ( !isset( $_GET['fn'] ) )
 }
 
 chdir( '../' );
+require 'config.php';
 require 'autoload.php';
+
+$paths = array();
+foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )
+{
+    $paths[] = "{$path}/settings/";
+}
+Configuration::setGlobalConfigurationData( $settings );
+Configuration::setGlobalDirs( $paths, 'modules' );
 
 
 // API 'create' demo code
@@ -36,7 +34,7 @@ if ( $_GET['fn'] === 'create' )
     if ( !isset( $_GET['identifier'] ) )
         die("Missing content type 'identifier' GET parameter, eg: ?fn=create&identifier=article or ?fn=create&identifier=folder&title=Catch22");
 
-    $repository = new Repository( getDoctrineEm( $settings ) );
+    $repository = new Repository( getDoctrineEm() );
     $contentService = $repository->ContentService();
 
     // Create Content object
@@ -81,7 +79,7 @@ else if ( $_GET['fn'] === 'get' )
     if ( !isset( $_GET['id'] ) )
         die("Missing content location 'id' GET parameter, eg: ?fn=get&id=2");
 
-    $repository = new Repository( getDoctrineEm( $settings ) );
+    $repository = new Repository( getDoctrineEm() );
     $contentService = $repository->ContentService();
 
     $content = $contentService->load( (int) $_GET['id'] );
@@ -118,7 +116,7 @@ else
  *
  * @return \Doctrine\ORM\EntityManager
  */
-function getDoctrineEm( array $settings )
+function getDoctrineEm()
 {
     require 'Doctrine/Common/ClassLoader.php';
     $classLoader = new \Doctrine\Common\ClassLoader('Doctrine');
@@ -128,15 +126,16 @@ function getDoctrineEm( array $settings )
     if ( !is_dir( $cwd . '/var/cache/Proxies' ) )
         mkdir( "$cwd/var/cache/Proxies/", 0777 , true );// Seeing Protocol error? Try renaming ezp-next to next..
 
+    $devMode = \ezp\base\Configuration::developmentMode();
     $config = new \Doctrine\ORM\Configuration();
     $config->setProxyDir( $cwd . '/var/cache/Proxies' );
     $config->setProxyNamespace('ezx\doctrine');
-    $config->setAutoGenerateProxyClasses( $settings['dev_mode']  );
+    $config->setAutoGenerateProxyClasses( $devMode );
 
     $driverImpl = $config->newDefaultAnnotationDriver( $cwd . '/ezx/' );
     $config->setMetadataDriverImpl( $driverImpl );
 
-    if ( $settings['dev_mode'] )
+    if ( $devMode )
         $cache = new \Doctrine\Common\Cache\ArrayCache();
     else
         $cache = new \Doctrine\Common\Cache\ApcCache();
@@ -145,48 +144,6 @@ function getDoctrineEm( array $settings )
     $config->setQueryCacheImpl( $cache );
 
     $evm = new \Doctrine\Common\EventManager();
+    $settings = \ezp\base\Configuration::getInstance()->getSection( 'doctrine' );
     return  \Doctrine\ORM\EntityManager::create( $settings, $config, $evm );
-}
-
-
-// fake config class
-class Configuration
-{
-    static function getInstance()
-    {
-        return new self();
-    }
-
-    public function get( $section, $var )
-    {
-        If ( $var === 'type' )
-            return array(
-                'ezstring' => 'ezx\content\Field_Type_String',
-                'ezinteger' => 'ezx\content\Field_Type_Int',
-                'ezfloat' => 'ezx\content\Field_Type_Float',
-                'ezxmltext' => 'ezx\content\Field_Type_Xml',
-                'ezimage' => 'ezx\content\Field_Type_Image',
-                'ezkeyword' => 'ezx\content\Field_Type_Keyword',
-                'ezobjectrelation' => 'ezx\content\Field_Type_Relation',
-                'ezauthor' => 'ezx\content\Field_Type_Author',
-                'ezboolean' => 'ezx\content\Field_Type_Boolean',
-                'ezdatetime' => 'ezx\content\Field_Type_Datetime',
-                'ezsrrating' => 'ezx\content\Field_Type_Rating',
-                'eztext' => 'ezx\content\Field_Type_Text',
-            );
-        return array(
-            'ezstring' => 'ezx\content\Field_String',
-            'ezinteger' => 'ezx\content\Field_Int',
-            'ezfloat' => 'ezx\content\Field_Float',
-            'ezxmltext' => 'ezx\content\Field_Xml',
-            'ezimage' => 'ezx\content\Field_Image',
-            'ezkeyword' => 'ezx\content\Field_Keyword',
-            'ezobjectrelation' => 'ezx\content\Field_Relation',
-            'ezauthor' => 'ezx\content\Field_Author',
-            'ezboolean' => 'ezx\content\Field_Boolean',
-            'ezdatetime' => 'ezx\content\Field_Datetime',
-            'ezsrrating' => 'ezx\content\Field_Rating',
-            'eztext' => 'ezx\content\Field_Text',
-        );
-    }
 }

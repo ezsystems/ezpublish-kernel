@@ -5,7 +5,7 @@
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
  * @package ext
- * @subpackage doctrine
+ * @subpackage content
  */
 
 /**
@@ -191,15 +191,15 @@ class ContentTypeField extends Abstract_Field
     }
 
     /**
-     * @OneToMany(targetEntity="Field", mappedBy="contentTypeField")
-     * @var \Doctrine\Common\Collections\ArrayCollection(Field)
+     * @OneToMany(targetEntity="ContentField", mappedBy="contentTypeField")
+     * @var \Doctrine\Common\Collections\ArrayCollection(ContentField)
      */
     protected $contentFields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(Field)
+     * @return \Doctrine\Common\Collections\ArrayCollection(ContentField)
      */
     public function getContentFields()
     {
