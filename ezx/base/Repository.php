@@ -113,53 +113,52 @@ class Repository implements Interface_Repository
     /**
      * Handles class for service objects, services needs to be in same namespace atm.
      *
-     * @param string $name
-     * @param array $arguments
+     * @param string $className
      * @return Interface_Service
      * @throws RuntimeException
      */
-    function __call ( $name, array $arguments )
+    protected function service( $className )
     {
-        if ( isset( $this->services[$name] ) )
-            return $this->services[$name];
+        if ( isset( $this->services[$className] ) )
+            return $this->services[$className];
 
-        if ( class_exists( $name ) )
-            return $this->services[$name] = new $name( $this );
+        if ( class_exists( $className ) )
+            return $this->services[$className] = new $className( $this );
 
-        throw new \RuntimeException( "Could not load '$name' service!" );
+        throw new \RuntimeException( "Could not load '$className' service!" );
     }
 
     /**
      * Get Content Service
      *
-     * @uses __call()
+     * @uses service()
      * @return \ezx\content\ContentService
      */
     function ContentService()
     {
-        return $this->__call( '\ezx\content\ContentService', array() );
+        return $this->service( '\ezx\content\ContentService' );
     }
 
     /**
      * Get Content Service
      *
-     * @uses __call()
+     * @uses service()
      * @return \ezx\content\ContentTypeService
      */
     function ContentTypeService()
     {
-        return $this->__call( '\ezx\content\ContentTypeService', array() );
+        return $this->service( '\ezx\content\ContentTypeService' );
     }
 
     /**
      * Get User Service
      *
-     * @uses __call()
+     * @uses service()
      * @return \ezx\user\UserService
      */
     function UserService()
     {
-        return $this->__call( '\ezx\user\UserService', array() );
+        return $this->service( '\ezx\user\UserService' );
     }
 
 
