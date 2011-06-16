@@ -11,7 +11,7 @@
  */
 
 namespace ezp\base;
-class Configuration extends Abstract_Override
+class Configuration extends Abstracts\Override
 {
     /**
      * Constant path to directory for configuration cache

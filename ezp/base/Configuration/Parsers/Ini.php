@@ -10,8 +10,8 @@
  * @uses \ezcConfiguration As fallback if parse_ini_string() fails
  */
 
-namespace ezp\base;
-class Configuration_Parser_Ini implements Interface_Configuration_Parser, Interface_Configuration_Writer
+namespace ezp\base\Configuration\Parsers;
+class Ini implements \ezp\base\Interfaces\Configuration\Parser, \ezp\base\Interfaces\Configuration\Writer
 {
     /**
      * Constant string used as a temporary true variable during ini parsing to avoid
@@ -242,7 +242,7 @@ class Configuration_Parser_Ini implements Interface_Configuration_Parser, Interf
     /**
      * Store raw configuration data to file
      *
-     * @see Interface_Configuration_Parser::parse() For $configurationData definition
+     * @see \ezp\base\Interfaces\Configuration\Parser::parse() For $configurationData definition
      * @todo Test..
      * @param array $configurationData
      */

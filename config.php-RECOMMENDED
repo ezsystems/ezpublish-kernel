@@ -55,8 +55,8 @@ $settings = array(
             'use-cache' => true,
             // List of parser classes where key is file suffix
             'parsers' => array(
-                '.ini'            => 'ezp\base\Configuration_Parser_Ini',
-                '.ini.append.php' => 'ezp\base\Configuration_Parser_Ini',
+                '.ini'            => 'ezp\base\Configuration\Parsers\Ini',
+                '.ini.append.php' => 'ezp\base\Configuration\Parsers\Ini',
             ),
         ),
     )
