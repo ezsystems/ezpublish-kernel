@@ -16,7 +16,7 @@ namespace ezp
 
         public function autoload( $className )
         {
-            if ( strpos( $className, "ezp\\" ) !== 0 )
+            if ( strncmp( $className, 'ezp\\', 4 ) )
             {
                 return false;
             }
@@ -64,12 +64,14 @@ namespace
      * Note: Avoid underscode in namespaces, this code threats them as DIRECTORY_SEPARATOR
      */
 
-    function psrAutoload( $className )
+    function psrAutoload( $class )
     {
-        if ( strpos( $className, 'ezx\\' ) !== 0 && strpos( $className, 'ezp\\' ) !== 0 )
+        if ( strncmp( $class, 'ezx\\', 4 ) && strncmp( $class, 'ezp\\base\\', 9 ) )
+        {
             return false;
+        }
 
-        $fileName = './' . str_replace( array('\\', '_'), DIRECTORY_SEPARATOR, $className ) . '.php';
+        $fileName = './' . str_replace( array('\\', '_'), DIRECTORY_SEPARATOR, $class ) . '.php';
         return require( $fileName );
     }
 
@@ -98,8 +100,8 @@ namespace
     define( 'EZCBASE_ENABLED', $baseEnabled );
 
     // Register autoloads
-    ezp\Autoloader::register();
     spl_autoload_register( 'psrAutoload' );
+    ezp\Autoloader::register();
     if ( EZCBASE_ENABLED )
     {
         spl_autoload_register( array( 'ezcBase', 'autoload' ) );
