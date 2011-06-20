@@ -150,7 +150,8 @@ abstract class DomainObject implements \ezx\base\Interfaces\Serializable, \ezx\b
                         $this->__set( $property, $value );
                     break;
                 default:
-                    throw new \RuntimeException( "Property '{$property}' is of unknown type: '{$propertyDefinition['type']}' on class: " . get_class( $this ) );
+                    $type = static::$definition[$property]['type'];
+                    throw new \RuntimeException( "Property '{$property}' is of unknown type: '{$type}' on class: " . get_class( $this ) );
             }
         }
         return $this;
