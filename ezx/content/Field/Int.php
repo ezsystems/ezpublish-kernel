@@ -24,7 +24,7 @@ class Field_Int extends Abstracts\FieldType implements Interfaces\ContentFieldTy
      * @public
      * @var int
      */
-    protected $value = 0;
+    public $value = 0;
 
     /**
      * Definition of properties on this class

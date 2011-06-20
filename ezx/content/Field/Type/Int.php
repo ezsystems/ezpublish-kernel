@@ -23,22 +23,22 @@ class Field_Type_Int extends Abstracts\FieldType
     /**
      * @var int
      */
-    protected $default = 0;
+    public $default = 0;
 
     /**
      * @var int
      */
-    protected $min = 0;
+    public $min = 0;
 
     /**
      * @var int
      */
-    protected $max = 0;
+    public $max = 0;
 
     /**
      * @var int
      */
-    protected $state = 0;
+    public $state = 0;
 
     /**
      * Definition of properties on this class

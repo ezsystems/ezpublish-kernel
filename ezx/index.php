@@ -56,7 +56,7 @@ if ( $_GET['fn'] === 'create' )
     if ( isset( $_GET['title'] ) && isset( $content->fields['title'] ) )
         $content->fields['title']->type->value = $_GET['title'];
 
-    $content->notify();
+    $content->notify( 'store' );// Needed to make sure changes in fieldtypes tricle down to field
 
     $state = $content->toHash();
     $out = var_export( $state, true );
@@ -68,6 +68,8 @@ if ( $_GET['fn'] === 'create' )
     {
         $newContent->fields['tags']->type->value .= " instance2";
     }
+
+    $newContent->notify( 'store' );// Needed to make sure changes in fieldtypes tricle down to field
 
     $out2 = var_export( $newContent->toHash( true ), true );
 
@@ -85,7 +87,6 @@ else if ( $_GET['fn'] === 'get' )
     $content = $contentService->load( (int) $_GET['id'] );
     $locations = $content->locations;
 
-    $content->notify();
     $fieldStr = '';
     foreach ( $content->fields as $field )
     {

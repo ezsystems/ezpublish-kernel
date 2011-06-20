@@ -25,12 +25,10 @@ class Location extends Abstracts\ContentModel implements \ezx\base\Interfaces\Ob
     protected static $definition = array(
         'id' => array(
             'type' => self::TYPE_INT,
-            'readonly' => true,
             'internal' => true,
         ),
         'depth' => array(
             'type' => self::TYPE_INT,
-            'readonly' => true,
             'internal' => true,
         ),
         'isHidden' => array(
@@ -157,17 +155,16 @@ class Location extends Abstracts\ContentModel implements \ezx\base\Interfaces\Ob
      * Called when subject has been updated
      *
      * @param \ezx\base\Interfaces\Observable $subject
-     * @param string|null $event
+     * @param string $event
      * @return Location
      */
-    public function update( \ezx\base\Interfaces\Observable $subject , $event  = null )
+    public function update( \ezx\base\Interfaces\Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof Content )
         {
-            $this->notify( $event );
-            return $this;
+            return $this->notify( $event );
         }
-        return parent::update( $subject, $event );
+        return $this;
     }
 
     /**

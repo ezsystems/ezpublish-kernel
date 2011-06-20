@@ -24,7 +24,7 @@ class Field_String extends Abstracts\FieldType implements Interfaces\ContentFiel
      * @public
      * @var string
      */
-    protected $value = '';
+    public $value = '';
 
     /**
      * Definition of properties on this class

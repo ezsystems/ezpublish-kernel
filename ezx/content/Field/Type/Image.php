@@ -23,7 +23,7 @@ class Field_Type_Image extends Field_Type_String
     /**
      * @var int
      */
-    protected $max_size = 0;
+    public $max_size = 0;
 
     /**
      * Definition of properties on this class

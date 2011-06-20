@@ -23,7 +23,7 @@ class Field_Type_Boolean extends Field_Type_Int
     /**
      * @var int
      */
-    protected $default = 0;
+    public $default = 0;
 
     /**
      * Definition of properties on this class

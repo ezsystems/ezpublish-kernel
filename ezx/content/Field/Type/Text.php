@@ -23,12 +23,12 @@ class Field_Type_Text extends Field_Type_String
     /**
      * @var string
      */
-    protected $default = '';
+    public $default = '';
 
     /**
      * @var int
      */
-    protected $columns = 10;
+    public $columns = 10;
 
     /**
      * Definition of properties on this class

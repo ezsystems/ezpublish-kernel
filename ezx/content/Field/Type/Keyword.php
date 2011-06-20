@@ -24,7 +24,7 @@ class Field_Type_Keyword extends Field_Type_String
      * @public
      * @var string
      */
-    protected $default = '';
+    public $default = '';
 
     /**
      * Definition of properties on this class

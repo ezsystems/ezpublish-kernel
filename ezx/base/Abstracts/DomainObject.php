@@ -36,16 +36,12 @@ abstract class DomainObject implements \ezx\base\Interfaces\Serializable, \ezx\b
      * Attach a event listener to this subject
      *
      * @param \ezx\base\Interfaces\Observer $observer
-     * @param string|null $event
+     * @param string $event
      * @return DomainObject
      */
-    public function attach( \ezx\base\Interfaces\Observer $observer, $event = null )
+    public function attach( \ezx\base\Interfaces\Observer $observer, $event = 'update' )
     {
-        if ( $event === null )
-        {
-            $this->observers[] = $observer;
-        }
-        else if ( isset( $this->observers[$event] ) )
+        if ( isset( $this->observers[$event] ) )
         {
             $this->observers[$event][] = $observer;
         }
@@ -60,20 +56,12 @@ abstract class DomainObject implements \ezx\base\Interfaces\Serializable, \ezx\b
      * Detach a event listener to this subject
      *
      * @param \ezx\base\Interfaces\Observer $observer
-     * @param string|null $event
+     * @param string $event
      * @return DomainObject
      */
-    public function detach( \ezx\base\Interfaces\Observer $observer, $event = null )
+    public function detach( \ezx\base\Interfaces\Observer $observer, $event = 'update' )
     {
-        if ( $event === null )
-        {
-            foreach( $this->observers as $key => $obj )
-            {
-                if ( $obj === $observer )
-                    unset( $this->observers[$key] );
-            }
-        }
-        elseif ( !empty( $this->observers[$event] ) )
+        if ( !empty( $this->observers[$event] ) )
         {
             foreach( $this->observers[$event] as $key => $obj )
             {
@@ -85,21 +73,14 @@ abstract class DomainObject implements \ezx\base\Interfaces\Serializable, \ezx\b
     }
 
     /**
-     * Notify listeners about certain events, if $event is null then it's plain 'update'
+     * Notify listeners about certain events, by default $event is a plain 'update'
      *
-     * @param string|null $event
+     * @param string $event
      * @return DomainObject
      */
-    public function notify( $event = null )
+    public function notify( $event = 'update' )
     {
-        if ( $event === null )
-        {
-            foreach( $this->observers as $obj )
-            {
-                $obj->update( $this );
-            }
-        }
-        elseif ( !empty( $this->observers[$event] ) )
+        if ( !empty( $this->observers[$event] ) )
         {
             foreach( $this->observers[$event] as $obj )
             {
@@ -162,7 +143,11 @@ abstract class DomainObject implements \ezx\base\Interfaces\Serializable, \ezx\b
                 case self::TYPE_INT:
                 case self::TYPE_STRING:
                 case self::TYPE_FLOAT:
-                    $this->__set( $property, $value );
+                    // set directly if possible to be able to set readonly properties as well
+                    if ( isset( static::$definition[$property] ) && isset( $this->$property ) )
+                        $this->$property = $value;
+                    else
+                        $this->__set( $property, $value );
                     break;
                 default:
                     throw new \RuntimeException( "Property '{$property}' is of unknown type: '{$propertyDefinition['type']}' on class: " . get_class( $this ) );
@@ -262,23 +247,19 @@ abstract class DomainObject implements \ezx\base\Interfaces\Serializable, \ezx\b
     {
         if ( isset( static::$definition[$name] ) )
         {
-            if ( isset( static::$definition[$name]['readonly'] ) )
-            {
-                throw new \InvalidArgumentException( "'{$name}' is a readonly property on " . get_class( $this ) );
-            }
-
             if ( isset( static::$definition[$name]['dynamic'] ) )
             {
                 $method = 'set' . ucfirst( $name );
+                if ( !method_exists( $this, $method ) )
+                {
+                    throw new \InvalidArgumentException( "'{$name}' is a readonly dynamic property on " . get_class( $this ) );
+                }
                 $this->$method( $value );
-                $this->notify();
                 return $value;
             }
             else if ( isset( $this->$name ) )
             {
-                $this->$name = $value;
-                $this->notify();
-                return $value;
+                throw new \InvalidArgumentException( "'{$name}' is a readonly property on " . get_class( $this ) );
             }
         }
         throw new \InvalidArgumentException( "'{$name}' is not a valid property on " . get_class( $this ) );

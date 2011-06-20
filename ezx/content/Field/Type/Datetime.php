@@ -23,17 +23,17 @@ class Field_Type_Datetime extends Field_Type_Int
     /**
      * @var int
      */
-    protected $default = 0;
+    public $default = 0;
 
     /**
      * @var int
      */
-    protected $use_seconds = 0;
+    public $use_seconds = 0;
 
     /**
      * @var string
      */
-    protected $adjustment = 0;
+    public $adjustment = 0;
 
     /**
      * Definition of properties on this class

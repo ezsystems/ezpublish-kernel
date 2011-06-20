@@ -24,7 +24,7 @@ class Field_Float extends Abstracts\FieldType implements Interfaces\ContentField
      * @public
      * @var float
      */
-    protected $value = 0.0;
+    public $value = 0.0;
 
     /**
      * Definition of properties on this class

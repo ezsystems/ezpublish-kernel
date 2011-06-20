@@ -36,12 +36,10 @@ class Content extends Abstracts\ContentModel
     protected static $definition = array(
         'id' => array(
             'type' => self::TYPE_INT,
-            'readonly' => true,
             'internal' => true,
         ),
         'currentVersion' => array(
             'type' => self::TYPE_INT,
-            'readonly' => true,
             'internal' => true,
         ),
         'name' => array(
@@ -57,13 +55,11 @@ class Content extends Abstracts\ContentModel
             'type' => self::TYPE_ARRAY,
             'member' => true,
             'dynamic' => true,
-            'readonly' => true,
         ),
         'locations' => array(
             'type' => self::TYPE_ARRAY,
             'member' => true,
             'dynamic' => true,
-            'readonly' => true,
         ),
         'contentType' => array(
             'type' => self::TYPE_OBJECT,
@@ -98,11 +94,11 @@ class Content extends Abstracts\ContentModel
     {
         foreach( $this->getLocations() as $location )
         {
-            $this->attach( $location );
+            $this->attach( $location, 'store' );
         }
         foreach( $this->getVersions() as $version )
         {
-            $this->attach( $version );
+            $this->attach( $version, 'store' );
         }
         return $this;
     }
@@ -129,13 +125,13 @@ class Content extends Abstracts\ContentModel
      * @Column(type="integer", name="owner_id")
      * @var int
      */
-    protected $ownerId = 0;
+    public $ownerId = 0;
 
     /**
      * @Column(type="integer", name="section_id")
      * @var int
      */
-    protected $sectionId = 0;
+    public $sectionId = 0;
 
     /**
      * @Column(type="integer", name="contentclass_id")

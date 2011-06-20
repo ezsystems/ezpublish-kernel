@@ -43,17 +43,17 @@ abstract class Field extends ContentModel implements \ezx\base\Interfaces\Observ
         $className = $list[ $this->fieldTypeString ];
         $this->type = $this->initType( $className );
 
-        return $this->type->attach( $this );
+        return $this->attach( $this->type, 'store' )->type->attach( $this, 'store' );// listen on each other and return type
     }
 
     /**
      * Called when subject has been updated
      *
      * @param \ezx\base\Interfaces\Observable $subject
-     * @param string|null $event
+     * @param string $event
      * @return Field
      */
-    public function update( \ezx\base\Interfaces\Observable $subject , $event  = null )
+    public function update( \ezx\base\Interfaces\Observable $subject, $event = 'update' )
     {
         if ( !$subject instanceof FieldType )
             return $this;

@@ -24,12 +24,12 @@ class Field_Type_Xml extends Field_Type_Text
      * @public
      * @var string
      */
-    protected $tag_preset = '';
+    public $tag_preset = '';
 
     /**
      * @var int
      */
-    protected $columns = 10;
+    public $columns = 10;
 
     /**
      * Definition of properties on this class

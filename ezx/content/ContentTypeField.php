@@ -210,15 +210,14 @@ class ContentTypeField extends Abstracts\Field
      * Called when subject has been updated
      *
      * @param \ezx\base\Interfaces\Observable $subject
-     * @param string|null $event
+     * @param string $event
      * @return ContentTypeField
      */
-    public function update( \ezx\base\Interfaces\Observable $subject , $event  = null )
+    public function update( \ezx\base\Interfaces\Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof ContentType )
         {
-            $this->notify( $event );
-            return $this;
+            return $this->notify( $event );
         }
         return parent::update( $subject, $event );
     }

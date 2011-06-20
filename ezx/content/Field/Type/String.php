@@ -24,13 +24,13 @@ class Field_Type_String extends Abstracts\FieldType
      * @public
      * @var string
      */
-    protected $default = '';
+    public $default = '';
 
     /**
      * @public
      * @var int
      */
-    protected $max_length = 255;
+    public $max_length = 255;
 
     /**
      * Definition of properties on this class

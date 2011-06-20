@@ -12,7 +12,7 @@
  *
  */
 namespace ezx\content\Abstracts;
-abstract class FieldType extends ContentModel
+abstract class FieldType extends ContentModel implements \ezx\base\Interfaces\Observer
 {
     /**
      * Constant that Field types needs to defined
@@ -53,5 +53,21 @@ abstract class FieldType extends ContentModel
     public function __toString()
     {
         return '' . $this->value;
+    }
+
+    /**
+     * Called when subject has been updated
+     *
+     * @param \ezx\base\Interfaces\Observable $subject
+     * @param string $event
+     * @return Field
+     */
+    public function update( \ezx\base\Interfaces\Observable $subject, $event = 'update' )
+    {
+        if ( $subject instanceof Field )
+        {
+            return $this->notify( $event );
+        }
+        return $this;
     }
 }

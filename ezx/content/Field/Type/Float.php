@@ -23,22 +23,22 @@ class Field_Type_Float extends Abstracts\FieldType
     /**
      * @var float
      */
-    protected $default = 0.0;
+    public $default = 0.0;
 
     /**
      * @var float
      */
-    protected $min = 0.0;
+    public $min = 0.0;
 
     /**
      * @var float
      */
-    protected $max = 0.0;
+    public $max = 0.0;
 
     /**
      * @var float
      */
-    protected $state = 0;
+    public $state = 0;
 
     /**
      * Definition of properties on this class
