@@ -20,22 +20,22 @@ class ServiceContainer
     /**
      * Holds service objects and variables
      *
-     * @var array(string=>object)
+     * @var object[]
      */
     private $dependencies;
 
     /**
      * Instance overrides for configuration
      *
-     * @var array(string=>array)
+     * @var array[]
      */
     private $configurationOverrides;
 
     /**
      * Construct object with optiona configuration overrides
      *
-     * @param array(string=>array) $configurationOverrides
-     * @param array(string=>object) $dependencies
+     * @param array[] $configurationOverrides
+     * @param array[]|object[] $dependencies
      */
     public function __construct( array $configurationOverrides = array(),
                                  array $dependencies = array() )

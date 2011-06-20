@@ -17,7 +17,7 @@ abstract class DomainObject implements \ezx\base\Interfaces\Serializable, \ezx\b
     /**
      * List of event listeners
      *
-     * @var array(\ezx\base\Interfaces\Observer)
+     * @var \ezx\base\Interfaces\Observer[]
      */
     private $observers = array();
 

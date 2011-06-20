@@ -14,7 +14,7 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
     /**
      * Instances of handlers
      *
-     * @var array(string => Interfaces\StorageEngine_Handler)
+     * @var \ezx\base\Interfaces\StorageEngine\Handler[]
      */
     protected $handlers = array();
 
@@ -64,7 +64,7 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
      * Get Content Handler
      *
      * @uses handler()
-     * @return \ezx\base\Interfaces\StorageEngine_ContentHandler
+     * @return \ezx\base\Interfaces\StorageEngine\ContentHandler
      */
     public function ContentHandler()
     {
@@ -75,7 +75,7 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
      * Get ContentType Handler
      *
      * @uses handler()
-     * @return \ezx\base\Interfaces\StorageEngine_ContentTypeHandler
+     * @return \ezx\base\Interfaces\StorageEngine\ContentTypeHandler
      */
     public function ContentTypeHandler()
     {
@@ -85,14 +85,14 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
     /**
      * Get Content Location Handler
      *
-     * @return \ezx\base\Interfaces\StorageEngine_ContentLocationHandler
+     * @return \ezx\base\Interfaces\StorageEngine\ContentLocationHandler
      */
     public function ContentLocationHandler(){}
 
     /**
      * Get User Handler
      *
-     * @return \ezx\base\Interfaces\StorageEngine_UserHandler
+     * @return \ezx\base\Interfaces\StorageEngine\UserHandler
      */
     public function UserHandler(){}
 
@@ -120,7 +120,7 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
      * Get/create instance of handler objects
      *
      * @param string $className
-     * @return Interfaces\StorageEngine_Handler
+     * @return \ezx\base\Interfaces\StorageEngine\Handler
      * @throws RuntimeException
      */
     protected function handler( $className )

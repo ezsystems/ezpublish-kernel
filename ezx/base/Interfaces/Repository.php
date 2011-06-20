@@ -26,7 +26,7 @@ interface Repository
      * Retrieve generic domain objects by criteria
      *
      * @param RepositoryCriteria $criteria
-     * @return array<\ezx\base\Abstracts\DomainObject>
+     * @return \ezx\base\Abstracts\DomainObject[]
      * @throws \InvalidArgumentException
      */
     public function find( RepositoryCriteria $criteria );

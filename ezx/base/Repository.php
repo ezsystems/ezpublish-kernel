@@ -32,7 +32,7 @@ class Repository implements Interfaces\Repository
     /**
      * Instances of services
      *
-     * @var array(string => Interfaces\Service)
+     * @var Interfaces\Service[]
      */
     protected $services = array();
 
@@ -55,7 +55,7 @@ class Repository implements Interfaces\Repository
      * {@inheritdoc}
      *
      * @param Interfaces\RepositoryCriteria $criteria
-     * @return array<object>
+     * @return Abstracts\DomainObject[]
      * @throws \InvalidArgumentException
      */
     public function find( Interfaces\RepositoryCriteria $criteria ){}
