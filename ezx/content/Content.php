@@ -18,8 +18,8 @@
  * @property int $ownerId
  * @property int $sectionId
  * @property-read string $typeid Content Type Identifier
- * @property-read array(Location) $locations An hash like structure of fields
- * @property-read array(string => ContentField) $fields An hash structure of fields
+ * @property-read Location[] $locations An hash like structure of fields
+ * @property-read ContentField[] $fields An hash structure of fields
  * @property-read ContentType $type Content type object
  */
 namespace ezx\content;

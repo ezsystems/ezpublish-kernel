@@ -16,7 +16,7 @@
  * @property-read int $version
  * @property int $userId
  * @property int $creatorId
- * @property-read array(string => ContentField) $fields An hash structure of fields
+ * @property-read ContentField[] $fields An hash structure of fields
  */
 namespace ezx\content;
 class ContentVersion extends Abstracts\ContentModel implements \ezx\base\Interfaces\Observer

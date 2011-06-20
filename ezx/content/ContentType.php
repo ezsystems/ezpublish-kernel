@@ -14,8 +14,8 @@
  * @property-read int $id
  * @property-read int $version
  * @property-read string $identifier
- * @property-read array(ContentTypeField) $fields
- * @property-read array(ContentTypeGroup) $groups
+ * @property-read ContentTypeField[] $fields
+ * @property-read ContentTypeGroup[] $groups
  */
 namespace ezx\content;
 class ContentType extends Abstracts\ContentModel

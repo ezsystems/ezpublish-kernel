@@ -10,6 +10,8 @@
 
 /**
  * @Entity @Table(name=" ezcontentclass_attribute")
+ *
+ * @property-read string $fieldTypeString
  */
 namespace ezx\content;
 class ContentTypeField extends Abstracts\Field
