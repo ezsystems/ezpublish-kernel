@@ -87,14 +87,20 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
      *
      * @return \ezx\base\Interfaces\StorageEngine\ContentLocationHandler
      */
-    public function ContentLocationHandler(){}
+    public function ContentLocationHandler()
+    {
+        return $this->handler( '\ezx\doctrine\ContentLocationHandler' );
+    }
 
     /**
      * Get User Handler
      *
      * @return \ezx\base\Interfaces\StorageEngine\UserHandler
      */
-    public function UserHandler(){}
+    public function UserHandler()
+    {
+        return $this->handler( '\ezx\doctrine\UserHandler' );
+    }
 
     /**
      * Begins an transaction, make sure you'll call commit or rollback when done,

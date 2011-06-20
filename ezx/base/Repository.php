@@ -86,16 +86,17 @@ class Repository implements Interfaces\Repository
      * Handles class for service objects, services needs to be in same namespace atm.
      *
      * @param string $className
+     * @param string $handler The handler name on storage engine that corresponds to service.
      * @return Interfaces\Service
      * @throws RuntimeException
      */
-    protected function service( $className )
+    protected function service( $className, $handler )
     {
         if ( isset( $this->services[$className] ) )
             return $this->services[$className];
 
         if ( class_exists( $className ) )
-            return $this->services[$className] = new $className( $this, $this->se );
+            return $this->services[$className] = new $className( $this, $this->se->$handler() );
 
         throw new \RuntimeException( "Could not load '$className' service!" );
     }
@@ -110,7 +111,7 @@ class Repository implements Interfaces\Repository
      */
     public function ContentService()
     {
-        return $this->service( '\ezx\content\ContentService' );
+        return $this->service( '\ezx\content\ContentService', 'ContentHandler' );
     }
 
     /**
@@ -123,7 +124,7 @@ class Repository implements Interfaces\Repository
      */
     public function ContentTypeService()
     {
-        return $this->service( '\ezx\content\ContentTypeService' );
+        return $this->service( '\ezx\content\ContentTypeService', 'ContentTypeHandler' );
     }
 
     /**
@@ -136,7 +137,7 @@ class Repository implements Interfaces\Repository
      */
     public function UserService()
     {
-        return $this->service( '\ezx\user\UserService' );
+        return $this->service( '\ezx\user\UserService', 'UserHandler' );
     }
 
 

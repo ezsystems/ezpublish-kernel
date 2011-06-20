@@ -20,20 +20,21 @@ class ContentTypeService implements \ezx\base\Interfaces\Service
     protected $repository;
 
     /**
-     * @var \ezx\base\Interfaces\StorageEngine
+     * @var \ezx\base\Interfaces\StorageEngine\Handler
      */
-    protected $se;
+    protected $handler;
 
     /**
-     * Setups current instance with reference to repository object that created it.
+     * Setups service with reference to repository object that created it & corresponding storage engine handler
      *
      * @param \ezx\base\Interfaces\Repository $repository
-     * @param \ezx\base\Interfaces\StorageEngine $se
+     * @param \ezx\base\Interfaces\StorageEngine\Handler $handler
      */
-    public function __construct( \ezx\base\Interfaces\Repository $repository, \ezx\base\Interfaces\StorageEngine $se )
+    public function __construct( \ezx\base\Interfaces\Repository $repository,
+                                 \ezx\base\Interfaces\StorageEngine\Handler $handler )
     {
         $this->repository = $repository;
-        $this->se = $se;
+        $this->handler = $handler;
     }
 
     /**
@@ -45,7 +46,7 @@ class ContentTypeService implements \ezx\base\Interfaces\Service
      */
     public function load( $id )
     {
-        $contentType = $this->se->ContentTypeHandler()->load( $id );
+        $contentType = $this->handler->load( $id );
         if ( !$contentType )
             throw new \InvalidArgumentException( "Could not find 'ContentType' with id: {$id}" );
         return $contentType;
@@ -60,7 +61,7 @@ class ContentTypeService implements \ezx\base\Interfaces\Service
      */
     public function loadByIdentifier( $identifier )
     {
-        $contentTypes = $this->se->ContentTypeHandler()->loadByIdentifier( $identifier );
+        $contentTypes = $this->handler->loadByIdentifier( $identifier );
         if ( !$contentTypes )
             throw new \InvalidArgumentException( "Could not find 'ContentType' with identifier: {$identifier}" );
         return $contentTypes[0];

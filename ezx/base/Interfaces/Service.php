@@ -12,10 +12,10 @@ namespace ezx\base\Interfaces;
 interface Service
 {
     /**
-     * Setups current instance with reference to repository object that created it.
+     * Setups service with reference to repository object that created it & corresponding storage engine handler
      *
      * @param Repository $repository
-     * @param StorageEngine $se
+     * @param StorageEngine\Handler $handler
      */
-    public function __construct( Repository $repository, StorageEngine $se );
+    public function __construct( Repository $repository, StorageEngine\Handler $handler );
 }
