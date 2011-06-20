@@ -1,6 +1,6 @@
 <?php
 /**
- * String Field model object
+ * String Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -12,7 +12,7 @@
  * Float Field value object class
  */
 namespace ezx\content;
-class Field_String extends Abstract_FieldType implements Interface_ContentFieldType
+class Field_String extends Abstracts\FieldType implements Interfaces\ContentFieldType
 {
     /**
      * Field type identifier
@@ -31,7 +31,7 @@ class Field_String extends Abstract_FieldType implements Interface_ContentFieldT
      *
      * {@inheritdoc}
      *
-     * @see \ezx\base\Abstract_Model::$definition
+     * @see \ezx\base\Abstracts\DomainObject::$definition
      * @var array
      */
     protected static $definition = array(
@@ -42,17 +42,17 @@ class Field_String extends Abstract_FieldType implements Interface_ContentFieldT
     );
 
     /**
-     * @var Abstract_FieldType
+     * @var Abstracts\FieldType
      */
     protected $contentTypeFieldType;
 
     /**
      * Constructor
      *
-     * @see Interface_ContentFieldType
-     * @param Abstract_FieldType $contentTypeFieldType
+     * @see Interfaces\ContentFieldType
+     * @param Abstracts\FieldType $contentTypeFieldType
      */
-    public function __construct( Abstract_FieldType $contentTypeFieldType )
+    public function __construct( Abstracts\FieldType $contentTypeFieldType )
     {
         if ( isset( $contentTypeFieldType->default ) )
             $this->value = $contentTypeFieldType->default;

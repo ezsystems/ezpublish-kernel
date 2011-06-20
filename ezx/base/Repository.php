@@ -12,7 +12,7 @@
  * Repository class
  */
 namespace ezx\base;
-class Repository implements Interface_Repository
+class Repository implements Interfaces\Repository
 {
     /**
      * This class uses doctrine directly as backend, in BL it should talk to a
@@ -35,7 +35,7 @@ class Repository implements Interface_Repository
     /**
      * Instances of services
      *
-     * @var array(string => Interface_Service)
+     * @var array(string => Interfaces\Service)
      */
     protected $services = array();
 
@@ -82,11 +82,11 @@ class Repository implements Interface_Repository
     /**
      * Retrive objects by criteria
      *
-     * @param Interface_RepositoryCriteria $criteria
+     * @param Interfaces\RepositoryCriteria $criteria
      * @return array<object>
      * @throws \InvalidArgumentException
      */
-    public function find( Interface_RepositoryCriteria $criteria ){}
+    public function find( Interfaces\RepositoryCriteria $criteria ){}
 
     /**
      * Get an object by id
@@ -95,7 +95,7 @@ class Repository implements Interface_Repository
      *
      * @param string $type
      * @param int $id
-     * @return Abstract_Model
+     * @return Abstracts\DomainObject
      * @throws \InvalidArgumentException
      */
     public function load( $type, $id )
@@ -103,9 +103,9 @@ class Repository implements Interface_Repository
         $object = $this->em->find( $type, (int) $id );
         if ( !$object )
             throw new \InvalidArgumentException( "Could not find '{$type}' with id: {$id}" );
-        if ( !$object instanceof Abstract_Model )
-            throw new \InvalidArgumentException( "'{$type}' is does not extend Abstract_Model" );
-        if ( $object instanceof \ezx\content\Abstract_ContentModel )
+        if ( !$object instanceof Abstracts\DomainObject )
+            throw new \InvalidArgumentException( "'{$type}' is does not extend Abstracts\DomainObject" );
+        if ( $object instanceof \ezx\content\Abstracts\ContentModel )
             throw new \InvalidArgumentException( "'{$type}' is a ContentModel class and is only available true Services" );
         return $object;
     }
@@ -114,7 +114,7 @@ class Repository implements Interface_Repository
      * Handles class for service objects, services needs to be in same namespace atm.
      *
      * @param string $className
-     * @return Interface_Service
+     * @return Interfaces\Service
      * @throws RuntimeException
      */
     protected function service( $className )
@@ -163,22 +163,22 @@ class Repository implements Interface_Repository
 
 
     /**
-     * Store a model or collection of models in the repository
+     * Store a domain object or collection of domain objects in the repository
      *
-     * @param Abstract_Model $object
+     * @param Abstracts\DomainObject $object
      * @throws \DomainException If object is of wrong type
      * @throws \RuntimeException If errors occurred in storage engine
      */
-    public function store( Abstract_Model $object ){}
+    public function store( Abstracts\DomainObject $object ){}
 
     /**
-     * Delete a model or collection of models in the repository
+     * Delete a domain object or collection of domain objects in the repository
      *
-     * @param Abstract_Model $object
+     * @param Abstracts\DomainObject $object
      * @throws \DomainException If object is of wrong type
      * @throws \RuntimeException If errors occurred in storage engine
      */
-    public function delete( Abstract_Model $object ){}
+    public function delete( Abstracts\DomainObject $object ){}
 
     /**
      * Begins an transaction, make sure you'll call commit or rollback when done,

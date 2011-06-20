@@ -1,6 +1,6 @@
 <?php
 /**
- * Content (content object) model object
+ * Content (content object) domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -23,14 +23,14 @@
  * @property-read ContentType $type Content type object
  */
 namespace ezx\content;
-class Content extends Abstract_ContentModel
+class Content extends Abstracts\ContentModel
 {
     /**
      * Definition of properties on this class
      *
      * {@inheritdoc}
      *
-     * @see \ezx\base\Abstract_Model::$definition
+     * @see \ezx\base\Abstracts\DomainObject::$definition
      * @var array
      */
     protected static $definition = array(

@@ -8,32 +8,32 @@
  * @package ext
  * @subpackage base
  */
-namespace ezx\base;
-interface Interface_Observable// extends \SplSubject
+namespace ezx\base\Interfaces;
+interface Observable// extends \SplSubject
 {
     /**
      * Attach a event listener to this subject
      *
-     * @param Interface_Observer $observer
+     * @param Observer $observer
      * @param string|null $event
-     * @return Interface_Observable
+     * @return Observable
      */
-    public function attach( Interface_Observer $observer, $event = null );
+    public function attach( Observer $observer, $event = null );
 
     /**
      * Detach a event listener to this subject
      *
-     * @param Interface_Observer $observer
+     * @param Observer $observer
      * @param string|null $event
-     * @return Interface_Observable
+     * @return Observable
      */
-    public function detach( Interface_Observer $observer, $event = null );
+    public function detach( Observer $observer, $event = null );
 
     /**
      * Notify listeners about certain events, if $event is null then it's plain 'update'
      *
      * @param string|null $event
-     * @return Interface_Observable
+     * @return Observable
      */
     public function notify( $event = null );
 }

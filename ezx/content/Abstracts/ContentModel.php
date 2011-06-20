@@ -11,7 +11,7 @@
 /**
  * Domain object
  */
-namespace ezx\content;
-abstract class Abstract_ContentModel extends \ezx\base\Abstract_Model
+namespace ezx\content\Abstracts;
+abstract class ContentModel extends \ezx\base\Abstracts\DomainObject
 {
 }

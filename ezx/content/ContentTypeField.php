@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract Content Type Field (content class attribute) model object
+ * Abstract Content Type Field (content class attribute) domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -12,14 +12,14 @@
  * @Entity @Table(name=" ezcontentclass_attribute")
  */
 namespace ezx\content;
-class ContentTypeField extends Abstract_Field
+class ContentTypeField extends Abstracts\Field
 {
     /**
      * Definition of properties on this class
      *
      * {@inheritdoc}
      *
-     * @see \ezx\base\Abstract_Model::$definition
+     * @see \ezx\base\Abstracts\DomainObject::$definition
      * @var array
      */
     protected static $definition = array(
@@ -209,11 +209,11 @@ class ContentTypeField extends Abstract_Field
     /**
      * Called when subject has been updated
      *
-     * @param \ezx\base\Interface_Observable $subject
+     * @param \ezx\base\Interfaces\Observable $subject
      * @param string|null $event
      * @return ContentTypeField
      */
-    public function update( \ezx\base\Interface_Observable $subject , $event  = null )
+    public function update( \ezx\base\Interfaces\Observable $subject , $event  = null )
     {
         if ( $subject instanceof ContentType )
         {

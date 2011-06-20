@@ -1,6 +1,6 @@
 <?php
 /**
- * Float Field model object
+ * Float Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -12,7 +12,7 @@
  * Float Field value object class
  */
 namespace ezx\content;
-class Field_Type_Float extends Abstract_FieldType
+class Field_Type_Float extends Abstracts\FieldType
 {
     /**
      * Field type identifier
@@ -45,7 +45,7 @@ class Field_Type_Float extends Abstract_FieldType
      *
      * {@inheritdoc}
      *
-     * @see \ezx\base\Abstract_Model::$definition
+     * @see \ezx\base\Abstracts\DomainObject::$definition
      * @var array
      */
     protected static $definition = array(

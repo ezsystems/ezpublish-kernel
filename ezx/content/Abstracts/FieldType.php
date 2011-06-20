@@ -11,8 +11,8 @@
 /**
  *
  */
-namespace ezx\content;
-abstract class Abstract_FieldType extends Abstract_ContentModel
+namespace ezx\content\Abstracts;
+abstract class FieldType extends ContentModel
 {
     /**
      * Constant that Field types needs to defined

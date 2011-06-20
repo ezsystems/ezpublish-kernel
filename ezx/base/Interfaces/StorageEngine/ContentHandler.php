@@ -8,13 +8,13 @@
  * @subpackage base
  */
 
-namespace ezx\base;
-interface Interface_StorageEngine_ContentHandler extends Interface_StorageEngine_Handler
+namespace ezx\base\Interfaces\StorageEngine;
+interface ContentHandler extends Handler
 {
     /**
      * Create Content object
      *
-     * @param \ezx\content\Content $content 
+     * @param \ezx\content\Content $content
      * @return \ezx\content\Content
      */
     public function create( \ezx\content\Content $content );

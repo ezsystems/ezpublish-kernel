@@ -8,48 +8,48 @@
  * @subpackage base
  */
 
-namespace ezx\base;
-interface Interface_Repository
+namespace ezx\base\Interfaces;
+interface Repository
 {
     /**
      * Retrive objects by criteria
      *
-     * @param Interface_RepositoryCriteria $criteria
-     * @return array<object>
+     * @param RepositoryCriteria $criteria
+     * @return array<\ezx\base\Abstracts\DomainObject>
      * @throws \InvalidArgumentException
      */
-    public function find( Interface_RepositoryCriteria $criteria );
+    public function find( RepositoryCriteria $criteria );
 
     /**
      * Get an object by id.
      *
      * This is an alias for find() where query object to filter on id is built for you.
-     * Hence it's assumed that all models will have an id column.
+     * Hence it's assumed that all domain objects will have an id column.
      *
      * @param string $type
      * @param int $id
-     * @return object
+     * @return \ezx\base\Abstracts\DomainObject
      * @throws \InvalidArgumentException
      */
     public function load( $type, $id );
 
     /**
-     * Store a model or collection of models in the repository
+     * Store a domain object or collection of domain objects in the repository
      *
-     * @param ModelCollectionInterface|ModelInterface $object
+     * @param \ezx\base\Abstracts\DomainObject $object
      * @throws \DomainException If object is of wrong type
      * @throws \RuntimeException If errors occurred in storage engine
      */
-    public function store( Abstract_Model $object );
+    public function store( \ezx\base\Abstracts\DomainObject $object );
 
     /**
-     * Delete a model or collection of models in the repository
+     * Delete a domain object or collection of domain objects in the repository
      *
-     * @param ModelCollectionInterface|ModelInterface $object
+     * @param \ezx\base\Abstracts\DomainObject $object
      * @throws \DomainException If object is of wrong type
      * @throws \RuntimeException If errors occurred in storage engine
      */
-    public function delete( Abstract_Model $object );
+    public function delete( \ezx\base\Abstracts\DomainObject $object );
 
     /**
      * Begins an transaction, make sure you'll call commit or rollback when done,

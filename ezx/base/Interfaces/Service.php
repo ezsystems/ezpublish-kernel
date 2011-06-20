@@ -8,13 +8,13 @@
  * @subpackage base
  */
 
-namespace ezx\base;
-interface Interface_Service
+namespace ezx\base\Interfaces;
+interface Service
 {
     /**
      * Setups current instance with reference to repository object that created it.
      *
-     * @param Interface_Repository $repository
+     * @param Repository $repository
      */
-    public function __construct( Interface_Repository $repository );
+    public function __construct( Repository $repository );
 }

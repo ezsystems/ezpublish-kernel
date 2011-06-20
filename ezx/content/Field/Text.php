@@ -1,6 +1,6 @@
 <?php
 /**
- * Image Field model object
+ * Image Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -21,9 +21,9 @@ class Field_Text extends Field_String
     const FIELD_IDENTIFIER = 'eztext';
 
     /**
-     * @see Interface_ContentFieldType
+     * @see Interfaces\ContentFieldType
      */
-    public function __construct( Abstract_FieldType $contentTypeFieldType )
+    public function __construct( Abstracts\FieldType $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
         parent::__construct( $contentTypeFieldType );

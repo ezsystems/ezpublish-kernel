@@ -7,15 +7,15 @@
  * @package ext
  * @subpackage content
  */
-namespace ezx\content;
-interface Interface_ContentFieldType
+namespace ezx\content\Interfaces;
+interface ContentFieldType
 {
     /**
      * Called when content object is constructed
      *
      * This function can safely set default values, as values from db will be set afterwards if this is not a new object
      *
-     * @param Abstract_FieldType $contentTypeFieldType
+     * @param \ezx\content\Abstracts\FieldType $contentTypeFieldType
      */
-    public function __construct( Abstract_FieldType $contentTypeFieldType );
+    public function __construct( \ezx\content\Abstracts\FieldType $contentTypeFieldType );
 }

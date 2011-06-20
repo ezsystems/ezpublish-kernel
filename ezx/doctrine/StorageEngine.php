@@ -9,12 +9,12 @@
  */
 
 namespace ezx\doctrine;
-class StorageEngine implements \ezx\base\Interface_StorageEngine
+class StorageEngine implements \ezx\base\Interfaces\StorageEngine
 {
     /**
      * Instances of handlers
      *
-     * @var array(string => Interface_StorageEngine_Handler)
+     * @var array(string => Interfaces\StorageEngine_Handler)
      */
     protected $handlers = array();
 
@@ -29,7 +29,7 @@ class StorageEngine implements \ezx\base\Interface_StorageEngine
     /**
      * Setups current instance and doctrine object
      *
-     * @param Interface_StorageEngine $engine
+     * @param Interfaces\StorageEngine $engine
      */
     public function __construct()
     {
@@ -67,7 +67,7 @@ class StorageEngine implements \ezx\base\Interface_StorageEngine
      * Get Content Handler
      *
      * @uses handler()
-     * @return \ezx\base\Interface_StorageEngine_ContentHandler
+     * @return \ezx\base\Interfaces\StorageEngine_ContentHandler
      */
     public function ContentHandler()
     {
@@ -78,7 +78,7 @@ class StorageEngine implements \ezx\base\Interface_StorageEngine
      * Get ContentType Handler
      *
      * @uses handler()
-     * @return \ezx\base\Interface_StorageEngine_ContentTypeHandler
+     * @return \ezx\base\Interfaces\StorageEngine_ContentTypeHandler
      */
     public function ContentTypeHandler()
     {
@@ -88,14 +88,14 @@ class StorageEngine implements \ezx\base\Interface_StorageEngine
     /**
      * Get Content Location Handler
      *
-     * @return \ezx\base\Interface_StorageEngine_ContentLocationHandler
+     * @return \ezx\base\Interfaces\StorageEngine_ContentLocationHandler
      */
     public function ContentLocationHandler(){}
 
     /**
      * Get User Handler
      *
-     * @return \ezx\base\Interface_StorageEngine_UserHandler
+     * @return \ezx\base\Interfaces\StorageEngine_UserHandler
      */
     public function UserHandler(){}
 
@@ -123,7 +123,7 @@ class StorageEngine implements \ezx\base\Interface_StorageEngine
      * Get/create instance of handler objects
      *
      * @param string $className
-     * @return Interface_StorageEngine_Handler
+     * @return Interfaces\StorageEngine_Handler
      * @throws RuntimeException
      */
     protected function handler( $className )

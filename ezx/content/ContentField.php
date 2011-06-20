@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract Content Field (content attribute) model object
+ * Abstract Content Field (content attribute) domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -12,14 +12,14 @@
  * @Entity @Table(name="ezcontentobject_attribute")
  */
 namespace ezx\content;
-class ContentField extends Abstract_Field
+class ContentField extends Abstracts\Field
 {
     /**
      * Definition of properties on this class
      *
      * {@inheritdoc}
      *
-     * @see \ezx\base\Abstract_Model::$definition
+     * @see \ezx\base\Abstracts\DomainObject::$definition
      * @var array
      */
     protected static $definition = array(
@@ -164,15 +164,15 @@ class ContentField extends Abstract_Field
     /**
      * Initialize field type class
      *
-     * @throws \RuntimeException If $className is not instanceof Abstract_FieldType
+     * @throws \RuntimeException If $className is not instanceof Abstracts\FieldType
      * @param string $className
-     * @return Abstract_FieldType
+     * @return Abstracts\FieldType
      */
     protected function initType( $className )
     {
         $type = new $className( $this->getContentTypeField()->getType() );
-        if ( !$type instanceof Abstract_FieldType )
-            throw new \RuntimeException( "Field type value '{$className}' does not implement Abstract_FieldType" );
+        if ( !$type instanceof Abstracts\FieldType )
+            throw new \RuntimeException( "Field type value '{$className}' does not implement ezx\\content\\Abstracts\\FieldType" );
         if ( $this->version )
             $this->toType( $type );
         else
@@ -183,11 +183,11 @@ class ContentField extends Abstract_Field
     /**
      * Called when subject has been updated
      *
-     * @param \ezx\base\Interface_Observable $subject
+     * @param \ezx\base\Interfaces\Observable $subject
      * @param string|null $event
      * @return ContentField
      */
-    public function update( \ezx\base\Interface_Observable $subject , $event  = null )
+    public function update( \ezx\base\Interfaces\Observable $subject , $event  = null )
     {
         if ( $subject instanceof ContentVersion )
         {

@@ -12,7 +12,7 @@
  * Content Service, extends repository with content specific operations
  */
 namespace ezx\content;
-class ContentService implements \ezx\base\Interface_Service
+class ContentService implements \ezx\base\Interfaces\Service
 {
     /**
      * @var Repository
@@ -22,9 +22,9 @@ class ContentService implements \ezx\base\Interface_Service
     /**
      * Setups current instance with reference to repository object that created it.
      *
-     * @param Repository $repository
+     * @param \ezx\base\Interfaces\Repository $repository
      */
-    public function __construct( \ezx\base\Interface_Repository $repository )
+    public function __construct( \ezx\base\Interfaces\Repository $repository )
     {
         $this->repository = $repository;
     }

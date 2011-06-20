@@ -1,6 +1,6 @@
 <?php
 /**
- * Content Type group (content class group) model object
+ * Content Type group (content class group) domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -12,14 +12,14 @@
  * @Entity @Table(name="ezcontentclassgroup")
  */
 namespace ezx\content;
-class ContentTypeGroup extends Abstract_ContentModel
+class ContentTypeGroup extends Abstracts\ContentModel
 {
     /**
      * Definition of properties on this class
      *
      * {@inheritdoc}
      *
-     * @see \ezx\base\Abstract_Model::$definition
+     * @see \ezx\base\Abstracts\DomainObject::$definition
      * @var array
      */
     protected static $definition = array(

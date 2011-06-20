@@ -11,13 +11,13 @@
 /**
  * Domain object
  */
-namespace ezx\base;
-abstract class Abstract_Model implements Interface_Serializable, Interface_Observable, Interface_Definition
+namespace ezx\base\Abstracts;
+abstract class DomainObject implements \ezx\base\Interfaces\Serializable, \ezx\base\Interfaces\Observable, \ezx\base\Interfaces\Definition
 {
     /**
      * List of event listeners
      *
-     * @var array(Interface_Observer)
+     * @var array(\ezx\base\Interfaces\Observer)
      */
     private $observers = array();
 
@@ -27,7 +27,7 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      * Used for serialization, __set / __get, validation (todo) and rendering (todo).
      * Could also potentially be used by storage engine to avoid a separate mapping format.
      *
-     * @see Interface_definition::definition() For format definition
+     * @see\ezx\base\Interfaces\Definition::definition() For format definition
      * @var array
      */
     protected static $definition = array();
@@ -35,11 +35,11 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     /**
      * Attach a event listener to this subject
      *
-     * @param SplObserver $observer
+     * @param \ezx\base\Interfaces\Observer $observer
      * @param string|null $event
-     * @return Abstract_Model
+     * @return DomainObject
      */
-    public function attach( Interface_Observer $observer, $event = null )
+    public function attach( \ezx\base\Interfaces\Observer $observer, $event = null )
     {
         if ( $event === null )
         {
@@ -59,11 +59,11 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     /**
      * Detach a event listener to this subject
      *
-     * @param SplObserver $observer
+     * @param \ezx\base\Interfaces\Observer $observer
      * @param string|null $event
-     * @return Abstract_Model
+     * @return DomainObject
      */
-    public function detach( Interface_Observer $observer, $event = null )
+    public function detach( \ezx\base\Interfaces\Observer $observer, $event = null )
     {
         if ( $event === null )
         {
@@ -88,7 +88,7 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      * Notify listeners about certain events, if $event is null then it's plain 'update'
      *
      * @param string|null $event
-     * @return Abstract_Model
+     * @return DomainObject
      */
     public function notify( $event = null )
     {
@@ -114,7 +114,7 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
      *
      * @static
      * @param array $properties
-     * @return Abstract_Model
+     * @return DomainObject
      */
     public static function __set_state( array $properties )
     {
@@ -126,8 +126,9 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
     /**
      * Set properties with hash, name is same as used in ezc Persistent
      *
+     * @throws \InvalidArgumentException When trying to set invalid properties on this object
      * @param array $properties
-     * @return Abstract_Model Content Return $this
+     * @return DomainObject Return $this
      */
     public function fromHash( array $properties )
     {
@@ -144,7 +145,7 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
                     $arrayAccess = $this->__get( $property );
                     foreach ( $value as $key => $item )
                     {
-                        if ( $arrayAccess[$key] instanceof Interface_Serializable )
+                        if ( $arrayAccess[$key] instanceof \ezx\base\Interfaces\Serializable )
                             $arrayAccess[$key]->fromHash( $item );
                         else
                             $arrayAccess[$key] = $item;
@@ -152,10 +153,10 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
                     break;
                 case self::TYPE_OBJECT:
                     $object = $this->__get( $property );
-                    if ( $object instanceof Interface_Serializable )
+                    if ( $object instanceof \ezx\base\Interfaces\Serializable )
                         $object->fromHash( $value );
                     else
-                        throw new \RuntimeException( "Property '{$property}' is of TYPE_OBJECT but does not implement Interface_Serializable on class: " . get_class( $this ) );
+                        throw new \RuntimeException( "Property '{$property}' is of TYPE_OBJECT but does not implement \ezx\base\Interfaces\Serializable on class: " . get_class( $this ) );
                     break;
                 case self::TYPE_BOOL:
                 case self::TYPE_INT:
@@ -199,17 +200,17 @@ abstract class Abstract_Model implements Interface_Serializable, Interface_Obser
                     $hash[$property] = array();
                     foreach ( $value as $key => $item )
                     {
-                        if ( $item instanceof Interface_Serializable )
+                        if ( $item instanceof \ezx\base\Interfaces\Serializable )
                             $hash[$property][$key] = $item->toHash( $internals );
                         else
                             $hash[$property][$key] = $item;
                     }
                     break;
                 case self::TYPE_OBJECT:
-                    if ( $value instanceof Interface_Serializable )
+                    if ( $value instanceof \ezx\base\Interfaces\Serializable )
                         $hash[$property] = $value->toHash( $internals );
                     else
-                        throw new \RuntimeException( "Property '{$property}' is of TYPE_OBJECT but does not implement Interface_Serializable on class: " . get_class( $this ) );
+                        throw new \RuntimeException( "Property '{$property}' is of TYPE_OBJECT but does not implement \ezx\base\Interfaces\Serializable on class: " . get_class( $this ) );
                     break;
                 case self::TYPE_BOOL:
                 case self::TYPE_INT:

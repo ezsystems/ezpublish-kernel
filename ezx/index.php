@@ -20,7 +20,7 @@ require 'config.php';
 require 'autoload.php';
 
 $paths = array();
-foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )
+foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )//@todo Take from configuration
 {
     $paths[] = "{$path}/settings/";
 }

@@ -8,34 +8,34 @@
  * @subpackage base
  */
 
-namespace ezx\base;
-interface Interface_StorageEngine
+namespace ezx\base\Interfaces;
+interface StorageEngine
 {
     /**
      * Get Content Handler
      *
-     * @return \ezx\base\Interface_StorageEngine_ContentHandler
+     * @return StorageEngine\ContentHandler
      */
     public function ContentHandler();
 
     /**
      * Get Content Handler
      *
-     * @return \ezx\base\Interface_StorageEngine_ContentTypeHandler
+     * @return StorageEngine\ContentTypeHandler
      */
     public function ContentTypeHandler();
 
     /**
      * Get Content Location Handler
      *
-     * @return \ezx\base\Interface_StorageEngine_ContentLocationHandler
+     * @return StorageEngine\ContentLocationHandler
      */
     public function ContentLocationHandler();
 
     /**
      * Get User Handler
      *
-     * @return \ezx\base\Interface_StorageEngine_UserHandler
+     * @return StorageEngine\UserHandler
      */
     public function UserHandler();
 

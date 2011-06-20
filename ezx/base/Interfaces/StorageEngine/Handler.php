@@ -8,13 +8,13 @@
  * @subpackage base
  */
 
-namespace ezx\base;
-interface Interface_StorageEngine_Handler
+namespace ezx\base\Interfaces\StorageEngine;
+interface Handler
 {
     /**
      * Setups current instance with reference to storage engine object that created it.
      *
-     * @param Interface_StorageEngine $engine
+     * @param StorageEngine $engine
      */
-    public function __construct( Interface_StorageEngine $engine );
+    public function __construct( StorageEngine $engine );
 }

@@ -7,8 +7,8 @@
  * @package ext
  * @subpackage base
  */
-namespace ezx\base;
-interface Interface_Serializable// extends \Serializable
+namespace ezx\base\Interfaces;
+interface Serializable// extends \Serializable
 {
     //public function typeHint();// constant for int, string or float maybe?
     public function toHash( $internals = false );// hash/primitive, uses same convention as POST variables

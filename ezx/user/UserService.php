@@ -12,7 +12,7 @@
  * User Service, extends repository with user specific operations
  */
 namespace ezx\user;
-class UserService implements \ezx\base\Interface_Service
+class UserService implements \ezx\base\Interfaces\Service
 {
     /**
      * @var Repository
@@ -24,7 +24,7 @@ class UserService implements \ezx\base\Interface_Service
      *
      * @param Repository $repository
      */
-    public function __construct( \ezx\base\Interface_Repository $repository )
+    public function __construct( \ezx\base\Interfaces\Repository $repository )
     {
         $this->repository = $repository;
     }

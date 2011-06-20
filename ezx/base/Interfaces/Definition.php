@@ -8,8 +8,8 @@
  * @package ext
  * @subpackage base
  */
-namespace ezx\base;
-interface Interface_Definition
+namespace ezx\base\Interfaces;
+interface Definition
 {
     //protected static $definition;
 

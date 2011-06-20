@@ -1,6 +1,6 @@
 <?php
 /**
- * Content (content object) model object
+ * Content (content object) domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -19,14 +19,14 @@
  * @property-read array(string => ContentField) $fields An hash structure of fields
  */
 namespace ezx\content;
-class ContentVersion extends Abstract_ContentModel implements \ezx\base\Interface_Observer
+class ContentVersion extends Abstracts\ContentModel implements \ezx\base\Interfaces\Observer
 {
     /**
      * Definition of properties on this class
      *
      * {@inheritdoc}
      *
-     * @see \ezx\base\Abstract_Model::$definition
+     * @see \ezx\base\Abstracts\DomainObject::$definition
      * @var array
      */
     protected static $definition = array(
@@ -226,11 +226,11 @@ class ContentVersion extends Abstract_ContentModel implements \ezx\base\Interfac
     /**
      * Called when subject has been updated
      *
-     * @param \ezx\base\Interface_Observable $subject
+     * @param \ezx\base\Interfaces\Observable $subject
      * @param string|null $event
      * @return ContentField
      */
-    public function update( \ezx\base\Interface_Observable $subject , $event  = null )
+    public function update( \ezx\base\Interfaces\Observable $subject , $event  = null )
     {
         if ( $subject instanceof Content )
         {

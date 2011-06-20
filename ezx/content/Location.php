@@ -1,6 +1,6 @@
 <?php
 /**
- * Content Location (Node) model object
+ * Content Location (Node) domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -12,14 +12,14 @@
  * @Entity @Table(name="ezcontentobject_tree")
  */
 namespace ezx\content;
-class Location extends Abstract_ContentModel implements \ezx\base\Interface_Observer
+class Location extends Abstracts\ContentModel implements \ezx\base\Interfaces\Observer
 {
     /**
      * Definition of properties on this class
      *
      * {@inheritdoc}
      *
-     * @see \ezx\base\Abstract_Model::$definition
+     * @see \ezx\base\Abstracts\DomainObject::$definition
      * @var array
      */
     protected static $definition = array(
@@ -156,11 +156,11 @@ class Location extends Abstract_ContentModel implements \ezx\base\Interface_Obse
     /**
      * Called when subject has been updated
      *
-     * @param \ezx\base\Interface_Observable $subject
+     * @param \ezx\base\Interfaces\Observable $subject
      * @param string|null $event
      * @return Location
      */
-    public function update( \ezx\base\Interface_Observable $subject , $event  = null )
+    public function update( \ezx\base\Interfaces\Observable $subject , $event  = null )
     {
         if ( $subject instanceof Content )
         {

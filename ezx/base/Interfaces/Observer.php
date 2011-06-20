@@ -8,15 +8,15 @@
  * @package ext
  * @subpackage base
  */
-namespace ezx\base;
-interface Interface_Observer// extends \SplObserver
+namespace ezx\base\Interfaces;
+interface Observer// extends \SplObserver
 {
     /**
      * Called when subject has been updated
      *
-     * @param Interface_Observable $subject
+     * @param Observable $subject
      * @param string|null $event
-     * @return Interface_Observer
+     * @return Observer
      */
-    public function update( Interface_Observable $subject , $event  = null );
+    public function update( Observable $subject , $event  = null );
 }
