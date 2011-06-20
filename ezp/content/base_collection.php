@@ -11,13 +11,13 @@
 
 namespace ezp\Content;
 
-abstract class BaseCollection extends Base implements \ArrayAccess, \IteratorAggregate, \Countable
+abstract class BaseCollection implements \ArrayAccess, \IteratorAggregate, \Countable
 {
-    protected $properties = array( 'objects' => array() );
+    protected $objects;
 
     public function byId( $id )
     {
-        foreach ( $this->properties['objects'] as $object )
+        foreach ( $this->objects as $object )
         {
             if ( $object->id == (int)$id )
             {
@@ -40,17 +40,17 @@ abstract class BaseCollection extends Base implements \ArrayAccess, \IteratorAgg
 
     public function offsetExists( $offset )
     {
-        return isset( $this->properties['objects'][$offset] );
+        return isset( $this->objects[$offset] );
     }
 
     public function offsetGet( $offset )
     {
-        return $this->properties['objects'][$offset];
+        return $this->objects[$offset];
     }
 
     public function offsetSet( $offset, $value )
     {
-        $this->properties['objects'][$offset] = $value;
+        $this->objects[$offset] = $value;
     }
 
     /**
@@ -59,12 +59,12 @@ abstract class BaseCollection extends Base implements \ArrayAccess, \IteratorAgg
      */
     public function offsetUnset( $offset )
     {
-        unset( $this->properties['objects'][$offset] );
+        unset( $this->objects[$offset] );
     }
 
     public function count()
     {
-        return count( $this->properties['objects'] );
+        return count( $this->objects );
     }
 }
 

@@ -21,18 +21,11 @@ abstract class Base
 {
     /**
      * Array container for virtual properties
-     * Key is property name, value its value
+     * Key is property name, value its value.
+     * Those properties are available through the magic getter and are read-only
      * @var array
      */
     protected $properties;
-
-    /**
-     * Array containing read-only property names
-     * Those properties should not be modified via a magic setter
-     * Key is the property name, value is a bool (always true)
-     * @var array
-     */
-    protected $readOnlyProperties;
 
     /**
      * Array container for virtual properties, handled dynamically by methods
@@ -68,10 +61,7 @@ abstract class Base
         {
             $property = ucfirst( $property );
             $method = "get{$property}";
-            if ( method_exists( $this, $method ) )
-            {
-                return $this->$method();
-            }
+            return $this->$method();
         }
 
         throw new ezcBasePropertyNotFoundException( $property );
@@ -89,17 +79,10 @@ abstract class Base
     {
         if ( isset( $this->properties[$property] ) )
         {
-            // First check if property has write access
-            if ( isset( $this->readOnlyProperties[$property] ) )
-            {
-                throw new ezcBasePropertyPermissionException( $property, ezcBasePropertyPermissionException::READ );
-            }
-
-            $this->properties[$property] = $value;
+            throw new ezcBasePropertyPermissionException( $property, ezcBasePropertyPermissionException::READ );
         }
         else if ( isset( $this->dynamicProperties[$property] ) )
         {
-            $property = ucfirst( $property );
             $method = "set{$property}";
             if ( method_exists( $this, $method ) )
             {
@@ -114,8 +97,6 @@ abstract class Base
         {
             throw new ezcBasePropertyNotFoundException( $property );
         }
-
-        return true;
     }
 
     /**
@@ -135,9 +116,14 @@ abstract class Base
     public static function __set_state( array $state )
     {
         $obj = new static;
+        $publicProperties = get_object_vars( $obj );
         foreach ( $state as $property => $value )
         {
-            if ( isset( $obj->properties[$property] ) )
+            if ( isset( $publicProperties[$property] ) )
+            {
+                $obj->$property = $value;
+            }
+            elseif ( isset( $obj->properties[$property] ) )
             {
                 $obj->properties[$property] = $value;
             }

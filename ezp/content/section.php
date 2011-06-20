@@ -20,16 +20,24 @@ namespace ezp\Content;
 class Section extends Base implements \ezp\DomainObjectInterface
 {
 
+    /**
+     * Identifier of the section
+     *
+     * @var string
+     */
+    public $identifier = "";
+
+    /**
+     * Name of the section
+     *
+     * @var string
+     */
+    public $name = "";
+
     public function __construct()
     {
         $this->properties = array(
             "id" => false,
-            "identifier" => false,
-            "name" => false
-        );
-
-        $this->readOnlyProperties = array(
-            "id" => true,
         );
 
     }

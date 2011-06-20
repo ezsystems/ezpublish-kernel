@@ -36,18 +36,34 @@ class ContainerProperty extends Base implements \ezp\DomainObjectInterface
 
     const SORT_ORDER_DESC = 0;
     const SORT_ORDER_ASC = 1;
+
+    /**
+     * Id the Location the ContainerProperty refers to
+     *
+     * @var int
+     */
+    public $locationId = 0;
+
+    /**
+     * Sort field
+     * One of the constants SORT_FIELD_*
+     *
+     * @var int
+     */
+    public $sortField = self::SORT_FIELD_NAME;
+
+    /**
+     * Sort order
+     * One of the constants SORT_ORDER_*
+     *
+     * @var int
+     */
+    public $sortOrder = self::SORT_ORDER_ASC;
     
     public function __construct()
     {
         $this->properties = array(
             "id" => false,
-            "locationId" => false,
-            "sortField" => false,
-            "sortOrder" => false,
-        );
-
-        $this->readOnlyProperties = array(
-            "id" => true,
         );
 
         $this->dynamicProperties = array(
@@ -57,7 +73,7 @@ class ContainerProperty extends Base implements \ezp\DomainObjectInterface
 
     protected function getLocation()
     {
-        return Repository::get()->getSubtreeService()->load( $this->properties['locationId'] );
+        return Repository::get()->getSubtreeService()->load( $this->locationId );
     }
 }
 

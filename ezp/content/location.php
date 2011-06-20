@@ -19,24 +19,60 @@ namespace ezp\Content;
 
 class Location extends Base implements \ezp\DomainObjectInterface
 {
+    /**
+     * A custom ID for the Location.
+     *
+     * @var string
+     */
+    public $remoteId = "";
+
+    /**
+     * The path of the Location in the tree
+     *
+     * @var string
+     */
+    public $path = "";
+
+    /**
+     * Id of the parent Location
+     *
+     * @var int
+     */
+    public $parentId = 0;
+
+    /**
+     * Id of the content
+     *
+     * @var int
+     */
+    public $contentId = 0;
+
+    /**
+     * Hidden flag
+     *
+     * @var bool
+     */
+    public $hidden = false;
+
+    /**
+     * Visible flag
+     *
+     * @var bool
+     */
+    public $visible = true;
+
+    /**
+     * Priority of the Location
+     *
+     * @var int
+     */
+    public $priority = 0;
 
     public function __construct()
     {
         $this->properties = array(
             "id" => false,
-            "path" => "",
-            "remoteId" => false,
-            "parentId" => false,
-            "contentId" => false,
-            "hidden" => false,
-            "visible" => true,
-            "priority" => 0,
             "containerProperties" => new ContainerPropertyCollection(),
-        );
-
-        $this->readOnlyProperties = array(
-            "id" => true,
-            "containerProperties" => true,
         );
 
         $this->dynamicProperties = array(
@@ -53,7 +89,7 @@ class Location extends Base implements \ezp\DomainObjectInterface
 
     protected function setParent( Location $parent )
     {
-        $this->properties['parentId'] = $parent->id;
+        $this->parentId = $parent->id;
     }
 
     protected function getContent()

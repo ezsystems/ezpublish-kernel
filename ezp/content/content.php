@@ -16,12 +16,8 @@
  *
  * @property-read integer $id
  *                The Content's ID, automatically assigned by the persistence layer
- * @property DateTime $creationDate
- *           The date the object was created
  * @property-read integer status
  *                The Content's status, as one of the ezp\Content::STATUS_* constants
- * @property string $remoteId
- *           A custom ID for the object. It receives a default value, but can be changed to anything
  * @property-read ezp\Content\VersionCollection $versions
  *                   Iterable collection of versions for content, indexed by version number. Array-accessible :
  *                   <code>
@@ -36,8 +32,6 @@
  *                   $anotherLocation = $content->locations[2];
  *                   $locationById = $content->locations->byId( 60 );
  *                   </code>
- * @property ezp\User $owner
- *                       User that first created the content
  * @property ezp\Content\RelationCollection $relations
  *                                          Collection of ezp\Content objects, related to the current one
  * @property ezp\Content\RelationCollection $reverseRelations
@@ -75,34 +69,53 @@ class Content extends Base implements \ezp\DomainObjectInterface
     const STATUS_PUBLISHED = 1;
     const STATUS_ARCHIVED = 2;
 
+    /**
+     * A custom ID for the object
+     *
+     * @var string
+     */
+    public $remoteId = "";
+
+    /**
+     * The date the object was created
+     *
+     * @var DateTime
+     */
+    public $creationDate;
+
+    /**
+     * The id of the user who first created the content
+     *
+     * @var int
+     */
+    public $ownerId = 0;
+
+    /**
+     * The id of the section the content belongs to
+     *
+     * @var int
+     */
+    public $sectionId = 0;
+
     public function __construct( ContentType $contentType = null )
     {
+        $this->creationDate = new \DateTime();
+
         $this->properties = array(
             "id"                    => false,
-            "remoteId"              => false,
             "status"                => self::STATUS_DRAFT,
             "versions"              => new VersionCollection(),
             "locations"             => new LocationCollection(),
-            "creationDate"          => new \DateTime(),
-            "owner"                 => UserRepository::get()->currentUser(),
             "relations"             => new RelationCollection(),
             "reversedRelations"     => new RelationCollection(),
             "translations"          => new TranslationCollection(),
             "fields"                => new FieldCollection(),
             "name"					=> false,
-            "sectionId"             => false,
-        );
-
-        $this->readOnlyProperties = array(
-            "id"            => true,
-            "status"        => true,
-            "versions"      => true,
-            "locations"     => true,
-            "name"			=> true
         );
 
         $this->dynamicProperties = array(
-            "mainLocation" => true
+            "mainLocation" => true,
+            "section" => true
         );
     }
 
@@ -113,12 +126,12 @@ class Content extends Base implements \ezp\DomainObjectInterface
 
     protected function setSection( Section $section )
     {
-        $this->properties['sectionId'] = $section->id;
+        $this->sectionId = $section->id;
     }
 
     protected function getSection()
     {
-        return Repository::get()->getSectionService()->load( $this->properties['sectionId'] );
+        return Repository::get()->getSectionService()->load( $this->sectionId );
     }
 
     /**
@@ -155,7 +168,7 @@ class Content extends Base implements \ezp\DomainObjectInterface
         $this->properties["locations"] = new LocationCollection();
         $this->addLocationUnder( $parentLocation );
 
-        $this->properties["owner"] = UserRepository::get()->currentUser();
+        $this->ownerId = UserRepository::get()->currentUser()->id;
 
         // Detach data from persistence
         $this->properties["versions"]->detach();
