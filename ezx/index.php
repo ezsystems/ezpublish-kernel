@@ -6,7 +6,7 @@
  * @Install: Change db settings bellow to point to a ez Publish install and you should be good to go!
  */
 
-use \ezx\base\Repository, \ezp\base\Configuration;
+use \ezp\base\ServiceContainer, \ezp\base\Configuration;
 
 
 if ( !isset( $_GET['fn'] ) )
@@ -34,7 +34,8 @@ if ( $_GET['fn'] === 'create' )
     if ( !isset( $_GET['identifier'] ) )
         die("Missing content type 'identifier' GET parameter, eg: ?fn=create&identifier=article or ?fn=create&identifier=folder&title=Catch22");
 
-    $repository = new Repository( getDoctrineEm() );
+    $sc = new ServiceContainer();
+    $repository = $sc->getRepository();
     $contentService = $repository->ContentService();
 
     // Create Content object
@@ -81,7 +82,8 @@ else if ( $_GET['fn'] === 'get' )
     if ( !isset( $_GET['id'] ) )
         die("Missing content location 'id' GET parameter, eg: ?fn=get&id=2");
 
-    $repository = new Repository( getDoctrineEm() );
+    $sc = new ServiceContainer();
+    $repository = $sc->getRepository();
     $contentService = $repository->ContentService();
 
     $content = $contentService->load( (int) $_GET['id'] );
@@ -105,46 +107,4 @@ else if ( $_GET['fn'] === 'get' )
 else
 {
     die("GET parameter 'fn' has invalid value, should be 'create' or 'get'");
-}
-
-
-
-
-
-
-/**
- * Setup Doctrine and return EntityManager
- *
- * @return \Doctrine\ORM\EntityManager
- */
-function getDoctrineEm()
-{
-    require 'Doctrine/Common/ClassLoader.php';
-    $classLoader = new \Doctrine\Common\ClassLoader('Doctrine');
-    $classLoader->register(); // register on SPL autoload stack
-
-    $cwd = getcwd();
-    if ( !is_dir( $cwd . '/var/cache/Proxies' ) )
-        mkdir( "$cwd/var/cache/Proxies/", 0777 , true );// Seeing Protocol error? Try renaming ezp-next to next..
-
-    $devMode = \ezp\base\Configuration::developmentMode();
-    $config = new \Doctrine\ORM\Configuration();
-    $config->setProxyDir( $cwd . '/var/cache/Proxies' );
-    $config->setProxyNamespace('ezx\doctrine');
-    $config->setAutoGenerateProxyClasses( $devMode );
-
-    $driverImpl = $config->newDefaultAnnotationDriver( $cwd . '/ezx/' );
-    $config->setMetadataDriverImpl( $driverImpl );
-
-    if ( $devMode )
-        $cache = new \Doctrine\Common\Cache\ArrayCache();
-    else
-        $cache = new \Doctrine\Common\Cache\ApcCache();
-
-    $config->setMetadataCacheImpl( $cache );
-    $config->setQueryCacheImpl( $cache );
-
-    $evm = new \Doctrine\Common\EventManager();
-    $settings = \ezp\base\Configuration::getInstance()->getSection( 'doctrine' );
-    return  \Doctrine\ORM\EntityManager::create( $settings, $config, $evm );
 }

@@ -21,15 +21,12 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
     /**
      * Object for doctrine backend
      *
-     * @internal
      * @var \Doctrine\ORM\EntityManager
      */
-    public $em = null;
+    protected $em;
 
     /**
      * Setups current instance and doctrine object
-     *
-     * @param Interfaces\StorageEngine $engine
      */
     public function __construct()
     {
@@ -132,7 +129,7 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
             return $this->handlers[$className];
 
         if ( class_exists( $className ) )
-            return $this->handlers[$className] = new $className( $this );
+            return $this->handlers[$className] = new $className( $this, $this->em );
 
         throw new \RuntimeException( "Could not load '$className' handler!" );
     }

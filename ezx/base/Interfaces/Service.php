@@ -15,6 +15,7 @@ interface Service
      * Setups current instance with reference to repository object that created it.
      *
      * @param Repository $repository
+     * @param StorageEngine $se
      */
-    public function __construct( Repository $repository );
+    public function __construct( Repository $repository, StorageEngine $se );
 }

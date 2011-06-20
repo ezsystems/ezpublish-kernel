@@ -12,9 +12,11 @@ namespace ezx\base\Interfaces\StorageEngine;
 interface Handler
 {
     /**
-     * Setups current instance with reference to storage engine object that created it.
+     * Setups current handler instance with reference to storage engine object that created it.
      *
-     * @param StorageEngine $engine
+     * @param \ezx\base\Interfaces\StorageEngine $engine
+     * @param object $backend Optional if storage engine needs to pass backend object to handlers
+     *                        to be able to handle operations, use this
      */
-    public function __construct( StorageEngine $engine );
+    public function __construct( \ezx\base\Interfaces\StorageEngine $engine, $backend = null );
 }

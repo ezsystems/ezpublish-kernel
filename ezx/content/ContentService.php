@@ -15,18 +15,25 @@ namespace ezx\content;
 class ContentService implements \ezx\base\Interfaces\Service
 {
     /**
-     * @var Repository
+     * @var \ezx\base\Interfaces\Repository
      */
     protected $repository;
+
+    /**
+     * @var \ezx\base\Interfaces\StorageEngine
+     */
+    protected $se;
 
     /**
      * Setups current instance with reference to repository object that created it.
      *
      * @param \ezx\base\Interfaces\Repository $repository
+     * @param \ezx\base\Interfaces\StorageEngine $se
      */
-    public function __construct( \ezx\base\Interfaces\Repository $repository )
+    public function __construct( \ezx\base\Interfaces\Repository $repository, \ezx\base\Interfaces\StorageEngine $se )
     {
         $this->repository = $repository;
+        $this->se = $se;
     }
 
     /**
@@ -38,7 +45,7 @@ class ContentService implements \ezx\base\Interfaces\Service
      */
     public function load( $id )
     {
-        $content = $this->repository->em->find( "ezx\content\Content", (int) $id );
+        $content = $this->se->ContentHandler()->load( $id );
         if ( !$content )
             throw new \InvalidArgumentException( "Could not find 'Content' with id: {$id}" );
         return $content;

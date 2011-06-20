@@ -15,22 +15,19 @@ namespace ezx\base;
 class Repository implements Interfaces\Repository
 {
     /**
-     * This class uses doctrine directly as backend, in BL it should talk to a
-     * persistent interface
+     * Storage Engine object
      *
-     * @internal
-     * @var \Doctrine\ORM\EntityManager
+     * @var Interfaces\StorageEngine
      */
-    public $em = null;
+    protected $se;
 
     /**
      * This class uses doctrine directly as backend, in BL it should talk to a
      * persistent interface
      *
-     * @internal
      * @var User
      */
-    public $user = null;
+    protected $user;
 
     /**
      * Instances of services
@@ -40,47 +37,22 @@ class Repository implements Interfaces\Repository
     protected $services = array();
 
     /**
-     * @var Repository
-     */
-    protected static $instance = null;
-
-    /**
      * Constructor
      *
-     * @param \Doctrine\ORM\EntityManager $em
+     * {@inheritdoc}
+     *
+     * @param Interfaces\StorageEngine $se
      */
-    public function __construct( /*User $user,*/ \Doctrine\ORM\EntityManager $em )
+    public function __construct( Interfaces\StorageEngine $se/*, \ezp\user\User $user*/ )
     {
-        $this->em = $em;
+        $this->se = $se;
         //$this->user = $user;
     }
 
     /**
-     * Get instance
+     * Find generic domain objects by criteria
      *
-     * @return Repository
-     * @throw \RuntimeException
-     */
-    public static function get()
-    {
-        if ( self::$instance === null )
-            throw new \RuntimeException( "Instance has not been set using set()" );
-        return self::$instance;
-    }
-
-    /**
-     * Set instance
-     *
-     * @param Repository $instance
-     * return Repository
-     */
-    public static function set( Repository $instance )
-    {
-        return self::$instance = $instance;
-    }
-
-    /**
-     * Retrive objects by criteria
+     * {@inheritdoc}
      *
      * @param Interfaces\RepositoryCriteria $criteria
      * @return array<object>
@@ -89,7 +61,7 @@ class Repository implements Interfaces\Repository
     public function find( Interfaces\RepositoryCriteria $criteria ){}
 
     /**
-     * Get an object by id
+     * Get an generic object by id
      *
      * {@inheritdoc}
      *
@@ -123,7 +95,7 @@ class Repository implements Interfaces\Repository
             return $this->services[$className];
 
         if ( class_exists( $className ) )
-            return $this->services[$className] = new $className( $this );
+            return $this->services[$className] = new $className( $this, $this->se );
 
         throw new \RuntimeException( "Could not load '$className' service!" );
     }
@@ -131,21 +103,25 @@ class Repository implements Interfaces\Repository
     /**
      * Get Content Service
      *
+     * {@inheritdoc}
+     *
      * @uses service()
      * @return \ezx\content\ContentService
      */
-    function ContentService()
+    public function ContentService()
     {
         return $this->service( '\ezx\content\ContentService' );
     }
 
     /**
-     * Get Content Service
+     * Get Content Type Service
+     *
+     * {@inheritdoc}
      *
      * @uses service()
      * @return \ezx\content\ContentTypeService
      */
-    function ContentTypeService()
+    public function ContentTypeService()
     {
         return $this->service( '\ezx\content\ContentTypeService' );
     }
@@ -153,17 +129,21 @@ class Repository implements Interfaces\Repository
     /**
      * Get User Service
      *
+     * {@inheritdoc}
+     *
      * @uses service()
      * @return \ezx\user\UserService
      */
-    function UserService()
+    public function UserService()
     {
         return $this->service( '\ezx\user\UserService' );
     }
 
 
     /**
-     * Store a domain object or collection of domain objects in the repository
+     * Store generic domain object
+     *
+     * {@inheritdoc}
      *
      * @param Abstracts\DomainObject $object
      * @throws \DomainException If object is of wrong type
@@ -172,7 +152,9 @@ class Repository implements Interfaces\Repository
     public function store( Abstracts\DomainObject $object ){}
 
     /**
-     * Delete a domain object or collection of domain objects in the repository
+     * Delete generic domain object
+     *
+     * {@inheritdoc}
      *
      * @param Abstracts\DomainObject $object
      * @throws \DomainException If object is of wrong type
@@ -181,20 +163,25 @@ class Repository implements Interfaces\Repository
     public function delete( Abstracts\DomainObject $object ){}
 
     /**
-     * Begins an transaction, make sure you'll call commit or rollback when done,
-     * otherwise work will be lost.
+     * Begins transaction
+     *
+     * {@inheritdoc}
      */
     public function beginTransaction(){}
 
     /**
-     * Commit transaction, or throw exceptions if no transactions has been started.
+     * Commit transaction
+     *
+     * {@inheritdoc}
      *
      * @throws \RuntimeException If no transaction has been started
      */
     public function commit(){}
 
     /**
-     * Rollback transaction, or throw exceptions if no transactions has been started.
+     * Rollback transaction
+     *
+     * {@inheritdoc}
      *
      * @throws \RuntimeException If no transaction has been started
      */

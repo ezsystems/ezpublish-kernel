@@ -26,4 +26,12 @@ interface ContentTypeHandler extends Handler
      * @return \ezx\content\ContentType
      */
     public function load( $id );
+
+    /**
+     * Get ContentType object by identifier
+     *
+     * @param string $identifier
+     * @return \ezx\content\ContentType
+     */
+    public function loadByIdentifier( $identifier );
 }

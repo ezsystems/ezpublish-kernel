@@ -22,43 +22,43 @@ class ServiceContainer
      *
      * @var array(string=>object)
      */
-    private $dependancies = array();
+    private $dependencies;
 
     /**
      * Instance overrides for configuration
      *
      * @var array(string=>array)
      */
-    private $configurationOverrides = array();
+    private $configurationOverrides;
 
     /**
      * Construct object with optiona configuration overrides
      *
      * @param array(string=>array) $configurationOverrides
-     * @param array(string=>object) $dependancies
+     * @param array(string=>object) $dependencies
      */
     public function __construct( array $configurationOverrides = array(),
-                                 array $dependancies = array(
+                                 array $dependencies = array() )
+    {
+        $this->configurationOverrides = $configurationOverrides;
+        $this->dependencies = array_merge( array(
                                     '$_SERVER' => $_SERVER,
                                     '$_REQUEST' => $_REQUEST,
                                     '$_COOKIE' => $_COOKIE,
                                     '$_FILES' => $_FILES
-                                 ) )
-    {
-        $this->configurationOverrides = $configurationOverrides;
-        $this->dependancies = $dependancies;
+                                 ), $dependencies );
     }
 
     /**
      * Service function to get Event instance.
      *
      * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
-     * @return ezp\base\interfaces\Event
+     * @return \ezp\base\Interfaces\Event
      */
     public function getEvent( array $callChainDependancieOverrides = array() )
     {
-        if ( isset( $this->dependancies['@event'] ) )
-            return $this->dependancies['@event'];
+        if ( isset( $this->dependencies['@event'] ) )
+            return $this->dependencies['@event'];
         return $this->get( 'event', $callChainDependancieOverrides );
     }
 
@@ -66,12 +66,12 @@ class ServiceContainer
      * Service function to get Response object
      *
      * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
-     * @return ezp\base\interfaces\Response
+     * @return \ezp\base\Interfaces\Response
      */
     public function getResponse( array $callChainDependancieOverrides = array() )
     {
-        if ( isset( $this->dependancies['@response'] ) )
-            return $this->dependancies['@response'];
+        if ( isset( $this->dependencies['@response'] ) )
+            return $this->dependencies['@response'];
         return $this->get( 'response', $callChainDependancieOverrides );
     }
 
@@ -79,12 +79,12 @@ class ServiceContainer
      * Service function to get Repository object
      *
      * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
-     * @return ezp\base\interfaces\Repository
+     * @return \ezx\base\Interfaces\Repository
      */
     public function getRepository( array $callChainDependancieOverrides = array() )
     {
-        if ( isset( $this->dependancies['@repository'] ) )
-            return $this->dependancies['@repository'];
+        if ( isset( $this->dependencies['@repository'] ) )
+            return $this->dependencies['@repository'];
         return $this->get( 'repository', $callChainDependancieOverrides );
     }
 
@@ -92,12 +92,12 @@ class ServiceContainer
      * Service function to get StorageEngine object
      *
      * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
-     * @return ezp\base\interfaces\StorageEngine
+     * @return \ezx\base\Interfaces\StorageEngine
      */
     public function getStorageEngine( array $callChainDependancieOverrides = array() )
     {
-        if ( isset( $this->dependancies['@storage_engine'] ) )
-            return $this->dependancies['@storage_engine'];
+        if ( isset( $this->dependencies['@storage_engine'] ) )
+            return $this->dependencies['@storage_engine'];
         return $this->get( 'storage_engine', $callChainDependancieOverrides );
     }
 
@@ -112,9 +112,9 @@ class ServiceContainer
     public function get( $serviceName, array $callChainDependancieOverrides = array() )
     {
         $serviceKey = "@{$serviceName}";
-        if ( isset( $this->dependancies[$serviceKey] ) )
+        if ( isset( $this->dependencies[$serviceKey] ) )
         {
-            return $this->dependancies[$serviceKey];
+            return $this->dependencies[$serviceKey];
         }
 
         if ( isset( $this->configurationOverrides[$serviceName] ) )
@@ -123,7 +123,7 @@ class ServiceContainer
         }
         else
         {
-            $settings = Configuration::getInstance('system')->getSection( "service_{$serviceName}", false );
+            $settings = Configuration::getInstance()->getSection( "service_{$serviceName}", false );
         }
 
         // validate settings
@@ -143,7 +143,7 @@ class ServiceContainer
         // Create service directly if it does not have any arguments
         if ( empty( $settings['arguments'] ) )
         {
-            return $this->dependancies[$serviceKey] = new $settings['class']();
+            return $this->dependencies[$serviceKey] = new $settings['class']();
         }
 
         // Expand arguments with other service objects on arguments that start with @ and predefined variables that start with $
@@ -156,8 +156,8 @@ class ServiceContainer
                     $arguments[] = $this;
                 else if ( isset( $callChainDependancieOverrides[ $argument ] ) )
                     $arguments[] = $callChainDependancieOverrides[ $argument ];
-                else if ( isset( $this->dependancies[ $argument ] ) )
-                    $arguments[] = $this->dependancies[ $argument ];
+                else if ( isset( $this->dependencies[ $argument ] ) )
+                    $arguments[] = $this->dependencies[ $argument ];
                 else if ( $argument[0] === '$' )
                     throw new \InvalidArgumentException( "$serviceName argument $key => $argument is not a valid variable, ". __CLASS__ );
                 else
@@ -185,12 +185,12 @@ class ServiceContainer
         if ( isset( $arguments[0] ) && !isset( $arguments[2] ) )
         {
             if ( !isset( $arguments[1] ) )
-                return $this->dependancies[$serviceKey] = new $settings['class']( $arguments[0] );
-            return $this->dependancies[$serviceKey] = new $settings['class']( $arguments[0], $arguments[1] );
+                return $this->dependencies[$serviceKey] = new $settings['class']( $arguments[0] );
+            return $this->dependencies[$serviceKey] = new $settings['class']( $arguments[0], $arguments[1] );
         }
 
         // use Reflection to create a new instance, using the $args
         $reflectionObj = new \ReflectionClass( $settings['class'] );
-        return $this->dependancies[$serviceKey] = $reflectionObj->newInstanceArgs( $arguments );
+        return $this->dependencies[$serviceKey] = $reflectionObj->newInstanceArgs( $arguments );
     }
 }
