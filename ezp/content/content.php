@@ -97,20 +97,84 @@ class Content extends Base implements \ezp\DomainObjectInterface
      */
     public $sectionId = 0;
 
+    /**
+     * The Content's status, as one of the ezp\Content::STATUS_* constants
+     *
+     * @var int
+     */
+    protected $status = self::STATUS_DRAFT;
+
+    /**
+     * Versions collection
+     *
+     * @var VersionCollection
+     */
+    protected $versions;
+
+    /**
+     * Locations collection
+     *
+     * @var LocationCollection
+     */
+    protected $locations;
+
+    /**
+     * Relations collection
+     *
+     * @var RelationCollection
+     */
+    protected $relations;
+
+    /**
+     * Reverse relation collection
+     *
+     * @var RelationCollection
+     */
+    protected $reversedRelations;
+
+    /**
+     * Translations collection
+     *
+     * @var TranslationCollection
+     */
+    protected $translations;
+
+    /**
+     * Fields collection
+     *
+     * @var FieldCollection
+     */
+    protected $fields;
+
+    /**
+     * Name of the content
+     *
+     * @var string
+     */
+    protected $name;
+
     public function __construct( ContentType $contentType = null )
     {
         $this->creationDate = new \DateTime();
 
-        $this->properties = array(
-            "id"                    => false,
-            "status"                => self::STATUS_DRAFT,
-            "versions"              => new VersionCollection(),
-            "locations"             => new LocationCollection(),
-            "relations"             => new RelationCollection(),
-            "reversedRelations"     => new RelationCollection(),
-            "translations"          => new TranslationCollection(),
-            "fields"                => new FieldCollection(),
-            "name"					=> false,
+        $this->versions = new VersionCollection();
+        $this->locations = new LocationCollection();
+        $this->relations = new RelationCollection();
+        $this->reversedRelations = new RelationCollection();
+        $this->translations = new TranslationCollection();
+        $this->fields = new FieldCollection();
+        $this->name = false;
+
+        $this->readableProperties = array(
+            "id"                    => true,
+            "status"                => true,
+            "versions"              => true,
+            "locations"             => true,
+            "relations"             => true,
+            "reversedRelations"     => true,
+            "translations"          => true,
+            "fields"                => true,
+            "name"					=> true,
         );
 
         $this->dynamicProperties = array(
@@ -121,7 +185,7 @@ class Content extends Base implements \ezp\DomainObjectInterface
 
     protected function getMainLocation()
     {
-        return $this->properties['locations'][0];
+        return $this->locations[0];
     }
 
     protected function setSection( Section $section )
@@ -140,7 +204,7 @@ class Content extends Base implements \ezp\DomainObjectInterface
      */
     public function addTranslation( $localeCode )
     {
-        $this->properties["translations"][] = new Translation( $localeCode );
+        $this->translations[] = new Translation( $localeCode );
     }
 
     /**
@@ -153,28 +217,28 @@ class Content extends Base implements \ezp\DomainObjectInterface
     {
         $location = new Location();
         $location->parent = $parentLocation;
-        $this->properties["locations"][] = $location;
+        $this->locations[] = $location;
         return $location;
     }
 
     public function __clone()
     {
-        $this->properties["id"] = false;
-        $this->properties["status"] = self::STATUS_DRAFT;
+        $this->id = false;
+        $this->status = self::STATUS_DRAFT;
 
         // Locations : get the main location's parent, so that new content will 
         // be the old one's sibling
-        $parentLocation = $this->properties["locations"][0]->parent;
-        $this->properties["locations"] = new LocationCollection();
+        $parentLocation = $this->locations[0]->parent;
+        $this->locations = new LocationCollection();
         $this->addLocationUnder( $parentLocation );
 
         $this->ownerId = UserRepository::get()->currentUser()->id;
 
         // Detach data from persistence
-        $this->properties["versions"]->detach();
-        $this->properties["relations"]->detach();
-        $this->properties["reversedRelations"]->detach();
-        $this->properties["translations"]->detach();
+        $this->versions->detach();
+        $this->relations->detach();
+        $this->reversedRelations->detach();
+        $this->translations->detach();
     }
 
     /**
@@ -187,7 +251,7 @@ class Content extends Base implements \ezp\DomainObjectInterface
 
     public function __toString()
     {
-        return $this->properties["name"];
+        return $this->name;
     }
 }
 ?>

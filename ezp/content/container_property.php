@@ -59,11 +59,18 @@ class ContainerProperty extends Base implements \ezp\DomainObjectInterface
      * @var int
      */
     public $sortOrder = self::SORT_ORDER_ASC;
+
+    /**
+     * Id of the container property
+     *
+     * @var int
+     */
+    protected $id = 0;
     
     public function __construct()
     {
-        $this->properties = array(
-            "id" => false,
+        $this->readableProperties = array(
+            "id" => true,
         );
 
         $this->dynamicProperties = array(

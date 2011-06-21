@@ -68,11 +68,27 @@ class Location extends Base implements \ezp\DomainObjectInterface
      */
     public $priority = 0;
 
+    /**
+     * Id of the location
+     *
+     * @var int
+     */
+    protected $id = 0;
+
+    /**
+     * Container properties
+     *
+     * @var ContainerPropertyCollection
+     */
+    protected $containerProperties;
+
     public function __construct()
     {
-        $this->properties = array(
-            "id" => false,
-            "containerProperties" => new ContainerPropertyCollection(),
+        $this->containerProperties = new ContainerPropertyCollection();
+
+        $this->readableProperties = array(
+            "id" => true,
+            "containerProperties" => true;
         );
 
         $this->dynamicProperties = array(

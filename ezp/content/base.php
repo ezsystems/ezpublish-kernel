@@ -20,12 +20,12 @@ use ezcBasePropertyPermissionException;
 abstract class Base
 {
     /**
-     * Array container for virtual properties
-     * Key is property name, value its value.
-     * Those properties are available through the magic getter and are read-only
+     * Array indicates which protected/private properties are readable through
+     * the magic getter (__get)
+     * Key is property name, value is true
      * @var array
      */
-    protected $properties;
+    protected $readableProperties;
 
     /**
      * Array container for virtual properties, handled dynamically by methods
@@ -52,14 +52,13 @@ abstract class Base
      */
     public function __get( $property )
     {
-        if ( isset( $this->properties[$property] ) )
+        if ( isset( $this->readableProperties[$property] ) )
         {
-            return $this->properties[$property];
+            return $this->$property;
         }
 
         if ( isset( $this->dynamicProperties[$property] ) )
         {
-            $property = ucfirst( $property );
             $method = "get{$property}";
             return $this->$method();
         }
@@ -77,11 +76,7 @@ abstract class Base
      */
     public function __set( $property, $value )
     {
-        if ( isset( $this->properties[$property] ) )
-        {
-            throw new ezcBasePropertyPermissionException( $property, ezcBasePropertyPermissionException::READ );
-        }
-        else if ( isset( $this->dynamicProperties[$property] ) )
+        if ( isset( $this->dynamicProperties[$property] ) )
         {
             $method = "set{$property}";
             if ( method_exists( $this, $method ) )
@@ -106,7 +101,7 @@ abstract class Base
      */
     public function __isset( $property )
     {
-        return isset( $this->properties[$property] ) || isset( $this->dynamicProperties[$property] );
+        return isset( $this->readableProperties[$property] ) || isset( $this->dynamicProperties[$property] );
     }
 
     /**
@@ -119,13 +114,10 @@ abstract class Base
         $publicProperties = get_object_vars( $obj );
         foreach ( $state as $property => $value )
         {
-            if ( isset( $publicProperties[$property] ) )
+            if ( isset( $publicProperties[$property] ) ||
+                    isset( $obj->readableProperties[$property] ) )
             {
                 $obj->$property = $value;
-            }
-            elseif ( isset( $obj->properties[$property] ) )
-            {
-                $obj->properties[$property] = $value;
             }
         }
 

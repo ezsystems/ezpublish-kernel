@@ -34,10 +34,17 @@ class Section extends Base implements \ezp\DomainObjectInterface
      */
     public $name = "";
 
+    /**
+     * Id of the section
+     *
+     * @var int
+     */
+    protected $id = 0;
+
     public function __construct()
     {
-        $this->properties = array(
-            "id" => false,
+        $this->readableProperties = array(
+            "id" => true,
         );
 
     }
