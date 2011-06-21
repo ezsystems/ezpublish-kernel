@@ -73,14 +73,14 @@ class ContentType extends Abstracts\ContentModel
 
     /**
      * @OneToMany(targetEntity="ContentTypeField", mappedBy="contentType")
-     * @var \Doctrine\Common\Collections\ArrayCollection(ContentTypeField)
+     * @var ContentTypeField[]
      */
     protected $fields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(ContentTypeField)
+     * @return ContentTypeField[]
      */
     public function getFields()
     {
@@ -89,14 +89,14 @@ class ContentType extends Abstracts\ContentModel
 
     /**
      * @OneToMany(targetEntity="Content", mappedBy="contentType")
-     * @var \Doctrine\Common\Collections\ArrayCollection(Content)
+     * @var Content[]
      */
     protected $contentObjects;
 
     /**
      * Return collection of all content objects of this content type
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(Content)
+     * @return Content[]
      */
     public function getContentObjects()
     {
@@ -105,14 +105,14 @@ class ContentType extends Abstracts\ContentModel
 
     /**
      * @ManyToMany(targetEntity="ContentTypeGroup", mappedBy="contentTypes")
-     * @var \Doctrine\Common\Collections\ArrayCollection(ContentTypeGroup)
+     * @var ContentTypeGroup[]
      */
     protected $groups;
 
     /**
      * Return collection of ContentTypeGroup
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(ContentTypeGroup)
+     * @return ContentTypeGroup[]
      */
     public function getGroups()
     {

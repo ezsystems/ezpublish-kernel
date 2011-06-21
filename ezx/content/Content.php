@@ -141,14 +141,14 @@ class Content extends Abstracts\ContentModel
 
     /**
      * @OneToMany(targetEntity="Location", mappedBy="content", fetch="EAGER")
-     * @var \Doctrine\Common\Collections\ArrayCollection(Location)
+     * @var Location[]
      */
     protected $locations;
 
     /**
      * Return collection of all locations attached to this object
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(Location)
+     * @return Location[]
      */
     public function getLocations()
     {
@@ -157,14 +157,14 @@ class Content extends Abstracts\ContentModel
 
     /**
      * @OneToMany(targetEntity="ContentVersion", mappedBy="content", fetch="EAGER")
-     * @var \Doctrine\Common\Collections\ArrayCollection(ContentVersion)
+     * @var ContentVersion[]
      */
     private $versions;
 
     /**
      * Return collection of all content versions
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(ContentVersion)
+     * @return ContentVersion[]
      */
     public function getVersions()
     {
@@ -196,7 +196,7 @@ class Content extends Abstracts\ContentModel
     /**
      * Return ContentType object
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(ContentType)
+     * @return ContentType
      */
     public function getContentType()
     {
@@ -206,7 +206,7 @@ class Content extends Abstracts\ContentModel
     /**
      * Shortcut to ->currentVersion()->fields
      *
-     * @var FieldMap(ContentField)
+     * @var ContentField[]
      */
     private $fields;
 

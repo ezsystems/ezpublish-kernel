@@ -56,14 +56,14 @@ class ContentTypeGroup extends Abstracts\ContentModel
 
     /**
      * @ManyToMany(targetEntity="ContentType", mappedBy="groups")
-     * @var \Doctrine\Common\Collections\ArrayCollection(ContentType)
+     * @var ContentType[]
      */
     protected $contentTypes;
 
     /**
      * Return collection of all content objects of this content type
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(ContentType)
+     * @return ContentType[]
      */
     public function getContentTypes()
     {

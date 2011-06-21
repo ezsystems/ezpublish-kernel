@@ -194,14 +194,14 @@ class ContentTypeField extends Abstracts\Field
 
     /**
      * @OneToMany(targetEntity="ContentField", mappedBy="contentTypeField")
-     * @var \Doctrine\Common\Collections\ArrayCollection(ContentField)
+     * @var ContentField[]
      */
     protected $contentFields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(ContentField)
+     * @return ContentField[]
      */
     public function getContentFields()
     {

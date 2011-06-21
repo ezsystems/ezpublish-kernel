@@ -137,14 +137,14 @@ class Location extends Abstracts\ContentModel implements \ezx\base\Interfaces\Ob
 
     /**
      * @OneToMany(targetEntity="Location", mappedBy="parent")
-     * @var \Doctrine\Common\Collections\ArrayCollection(Location)
+     * @var Location[]
      */
     protected $children;
 
     /**
      * Return collection of children Location objects
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(Location)
+     * @return Location[]
      */
     public function getChildren()
     {

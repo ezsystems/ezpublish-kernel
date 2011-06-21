@@ -166,14 +166,14 @@ class ContentVersion extends Abstracts\ContentModel implements \ezx\base\Interfa
 
     /**
      * @OneToMany(targetEntity="ContentField", mappedBy="contentVersion", fetch="EAGER")
-     * @var FieldMap(ContentField)
+     * @var ContentField[]
      */
     private $fields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return \Doctrine\Common\Collections\ArrayCollection(ContentField)
+     * @return ContentField[]
      */
     public function getFields()
     {
@@ -226,7 +226,7 @@ class ContentVersion extends Abstracts\ContentModel implements \ezx\base\Interfa
      *
      * @param \ezx\base\Interfaces\Observable $subject
      * @param string $event
-     * @return ContentField
+     * @return ContentVersion
      */
     public function update( \ezx\base\Interfaces\Observable $subject, $event = 'update' )
     {
