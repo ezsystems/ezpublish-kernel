@@ -53,13 +53,13 @@ class ContentVersion extends Abstracts\ContentModel implements \ezx\base\Interfa
         'status' => array(
             'type' => self::TYPE_INT,
         ),
-        'initial_language_id' => array(
+        'initialLanguageId' => array(
             'type' => self::TYPE_INT,
         ),
-        'language_mask' => array(
+        'languageMask' => array(
             'type' => self::TYPE_INT,
         ),
-        'contentobject_id' => array(
+        'contentObjectId' => array(
             'type' => self::TYPE_INT,
         ),
         'fields' => array(
@@ -147,22 +147,22 @@ class ContentVersion extends Abstracts\ContentModel implements \ezx\base\Interfa
     protected $status = 0;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="integer", name="initial_language_id")
      * @var int
      */
-    protected $initial_language_id = 0;
+    protected $initialLanguageId = 0;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="integer", name="language_mask")
      * @var int
      */
-    protected $language_mask = 0;
+    protected $languageMask = 0;
 
     /**
-     * @Column(type="integer")
+     * @Column(type="integer", name="contentobject_id")
      * @var int
      */
-    protected $contentobject_id = 0;
+    protected $contentObjectId = 0;
 
     /**
      * @OneToMany(targetEntity="ContentField", mappedBy="contentVersion", fetch="EAGER")
