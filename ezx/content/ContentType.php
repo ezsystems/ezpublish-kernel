@@ -72,7 +72,7 @@ class ContentType extends Abstracts\ContentModel
     protected $identifier;
 
     /**
-     * @OneToMany(targetEntity="ContentTypeField", mappedBy="contentType")
+     * @OneToMany(targetEntity="ContentTypeField", mappedBy="contentType", fetch="EAGER")
      * @var ContentTypeField[]
      */
     protected $fields;

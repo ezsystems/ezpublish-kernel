@@ -200,6 +200,10 @@ class Content extends Abstracts\ContentModel
      */
     public function getContentType()
     {
+        if ( $this->contentType instanceof Proxy )
+        {
+            return $this->contentType = $this->contentType->load();
+        }
         return $this->contentType;
     }
 

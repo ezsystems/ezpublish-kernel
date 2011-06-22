@@ -129,10 +129,15 @@ class Location extends Abstracts\ContentModel implements \ezx\base\Interfaces\Ob
      */
     public function getParent()
     {
-        if ( $this->parentLocationId > 1 )
+        if ( $this->parentLocationId <= 1 )
         {
-            return $this->parent;
+            return;
         }
+        else if ( $this->parent instanceof Proxy )
+        {
+            return $this->parent = $this->parent->load();
+        }
+        return $this->parent;
     }
 
     /**
