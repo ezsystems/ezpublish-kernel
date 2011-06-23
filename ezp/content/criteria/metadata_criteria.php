@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing FieldCriteria class
+ * File containing MetadataCriteria class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,7 +10,7 @@
  */
 namespace ezp\Content\Criteria;
 
-class FieldCriteria extends Criteria implements CriteriaInterface
+class MetadataCriteria extends Criteria implements CriteriaInterface
 {
     /**
      * Field name to filter on
@@ -21,7 +21,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
     /**
      * Field value for filtering
      * @var mixed
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     protected $fieldValue;
 
@@ -41,7 +40,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
      * Adds an equals condition (==)
      * @param string $fieldName Field name to filter from. Format is <content_type_identifier>/<field_identifier>
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function eq( $fieldName, $fieldValue )
     {
@@ -53,7 +51,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
     /**
      * Adds a not equals condition (!=)
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function neq( $fieldName, $fieldValue )
     {
@@ -65,7 +62,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
 	/**
      * Adds a like condition
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function like( $fieldName, $fieldValue )
     {
@@ -77,7 +73,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
 	/**
      * Adds a greater than condition (>)
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function gt( $fieldName, $fieldValue )
     {
@@ -89,7 +84,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
 	/**
      * Adds a greater than or equals condition (>=)
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function gte( $fieldName, $fieldValue )
     {
@@ -101,7 +95,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
 	/**
      * Adds a lower than condition (<)
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function lt( $fieldName, $fieldValue )
     {
@@ -113,7 +106,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
 	/**
      * Adds a lower than or equals condition (<=)
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function lte( $fieldName, $fieldValue )
     {
@@ -125,7 +117,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
 	/**
      * Adds a between condition
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function between( $fieldName, $fieldValue )
     {
@@ -137,7 +128,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
 	/**
      * Adds a not between condition
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function notBetween( $fieldName, $fieldValue )
     {
@@ -149,7 +139,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
 	/**
      * Adds a IN condition
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function in( $fieldName, $fieldValue )
     {
@@ -161,7 +150,6 @@ class FieldCriteria extends Criteria implements CriteriaInterface
 	/**
      * Adds a NOT IN condition
      * @param mixed $fieldValue Value to match
-     * @todo Should this accept any type ? The FieldType would be responsible to give a proper representation
      */
     public function notIn( $fieldName, $fieldValue )
     {

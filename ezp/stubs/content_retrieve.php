@@ -1,6 +1,7 @@
 <?php
 use ezp\Content\Repository as ContentRepository;
 
+$contentService = ContentRepository::get()->getContentService();
 $c = $contentService->createCriteria();
 $c->where( // andCondition() is implicit
     $c->location->isChildOf( $parentLocation ), // Direct children

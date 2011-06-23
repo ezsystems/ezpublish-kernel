@@ -19,13 +19,21 @@ use ezp\Content;
  *
  * $contentService = ContentRepository::get()->getContentService();
  * $c = $contentService->createCriteria();
- * $c->subtree( $parentLocation )
- *      ->where( $c->field->eq( "folder/name", "My folder name" ) )
- *      ->limit( 5 )
- *      ->offset( 0 );
- *
+ * $c->where( // andCondition() is implicit
+ *    $c->location->isChildOf( $parentLocation ), // Direct children
+ *    // $c->location->subTree( $parentLocation ), // Recursive
+ *    $c->type( "folder" ),
+ *    $c->field->eq( "name", "Another name" ),
+ *    $c->meta->gte( "published", new DateTime( "yesterday" ) ),
+ * )
+ * ->limit( 5 ),
+ * ->offset( 0 );
  * $result = $contentService->find( $c );
  * </code>
+ *
+ * @property FieldCriteria $field The field criteria
+ * @property MetadataCriteria $meta Metadata criteria (published date, section, path, owner...)
+ * @property LocationCriteria $location Location criteria for subtree filtering (most likely starting point)
  */
 class CriteriaCollection
 {
@@ -43,7 +51,7 @@ class CriteriaCollection
 
     /**
      * Criterias for content retrieval filtering
-     * @var array( Criteria|Criterion )
+     * @var Criteria[]|Criterion[] )
      */
     protected $criterias = array();
 
@@ -66,17 +74,16 @@ class CriteriaCollection
     protected $offset;
 
     /**
+     * Content type identifier
+     * @var string
+     */
+    protected $type;
+
+    /**
      * Logic expression object for this criteria collection for AND/OR association of criterias
      * @var LogicExpression
      */
     public $logic;
-
-    /**
-     * ArrayAccess object for FieldCriteriaCreation
-     * <code>$c->field["folder/name"]->eq( "My folder name" )</code>
-     * @var FieldForwarder
-     */
-    public $field;
 
     /**
      * Constructs a new CriteriaCollection
@@ -87,25 +94,33 @@ class CriteriaCollection
     }
 
     /**
-     * Prepares a subtree content retrieval starting from $parentLocation
-     * @param ezp\Content\Location $parentLocation
-     * @return CriteriaCollection
+     * Generic getter
+     * Returns a criteria from its name, if available
+     * @param string $criteriaName
+     * @return Criteria
      */
-    public function subtree( Content\Location $parentLocation )
+    public function __get( $criteriaName )
     {
-        $this->parentLocation = $parentLocation;
-        return $this;
-    }
+        $criteria = null;
+        switch ( $criteriaName )
+        {
+            case "field":
+                $criteria = new FieldCriteria();
+                break;
 
-    /**
-     * Prepares a subtree content retrieval starting from $parentLocationId
-     * @param integer $parentLocationId
-     * @return CriteriaCollection
-     */
-    public function subtreeById( $parentLocationId )
-    {
-        $this->parentLocationId = (int)$parentLocationId;
-        return $this;
+            case "meta":
+                $criteria = new MetadataCriteria();
+                break;
+
+            case "location":
+                $criteria = new LocationCriteria();
+                break;
+
+            default:
+                throw \InvalidArgumentException( "Criteria '{$criteriaName}' is not supported" );
+        }
+
+        return $criteria;
     }
 
     /**
@@ -120,7 +135,7 @@ class CriteriaCollection
 
         foreach ( $args as $c )
         {
-            if ( !$c instanceof Criteria || !$c instanceof Criterion )
+            if ( !$c instanceof Criteria && !$c instanceof Criterion )
             {
                 throw new \InvalidArgumentException( "Arguments must be valid Criteria or Criterion objects" );
             }
@@ -140,6 +155,12 @@ class CriteriaCollection
     public function offset( $offset = 0 )
     {
         $this->offset = (int)$offset;
+        return $this;
+    }
+
+    public function type( $contentTypeIdentifier )
+    {
+        $this->type = (string)$contentTypeIdentifier;
         return $this;
     }
 }
