@@ -34,18 +34,18 @@ class Location extends Base implements \ezp\DomainObjectInterface
     public $path = "";
 
     /**
-     * Id of the parent Location
+     * The parent Location
      *
-     * @var int
+     * @var Proxy|Location
      */
-    public $parentId = 0;
+    protected $parent;
 
     /**
-     * Id of the content
+     * The Content the Location holds
      *
-     * @var int
+     * @var Proxy|Content
      */
-    public $contentId = 0;
+    protected $content;
 
     /**
      * Hidden flag
@@ -94,27 +94,92 @@ class Location extends Base implements \ezp\DomainObjectInterface
         $this->dynamicProperties = array(
             "children" => true,
             "parent" => true,
+            "parentId" => true,
             "content" => true,
+            "contentId" => true,
         );
+
     }
 
+    /**
+     * Returns the parent Location
+     *
+     * @return Location
+     */
     protected function getParent()
     {
-        return Repository::get()->getSubtreeService()->load( $this->parentId );
+        if ( $this->parent instanceof Proxy )
+        {
+            $this->parent = $this->parent->load();
+        }
+        return $this->parent;
     }
 
-    protected function setParent( Location $parent )
+    /**
+     * Return the parent Location id
+     *
+     * @return int
+     */
+    protected function getParentId()
     {
-        $this->parentId = $parent->id;
+        if ( $this->parent instanceof Base )
+        {
+            return $this->parent->id;
+        }
+        return 0;
     }
 
+    /**
+     * Sets the parent Location
+     *
+     * @param Proxy|Location $parent
+     */
+    protected function setParent( $parent )
+    {
+        $this->parent = $parent;
+    }
+
+    /**
+     * Returns the Content the Location holds
+     *
+     * @return Content
+     */
     protected function getContent()
     {
-        return Repository::get()->getContentService()->load( $this->contentId );
+        if ( $this->content instanceof Proxy )
+        {
+            $this->content = $this->content->load();
+        }
+        return $this->content;
+    }
+
+    /**
+     * Returns the Content id
+     *
+     * @return int
+     */
+    protected function getContentId()
+    {
+        if ( $this->content instanceof Base )
+        {
+            return $this->content->id;
+        }
+        return 0;
+    }
+
+    /**
+     * Sets the content
+     *
+     * @param Proxy|Content $content
+     */
+    protected function setContent( $content )
+    {
+        $this->content = $content;
     }
 
     protected function getChildren()
     {
+        // TODO avoid Repository/Service use here with a Lazy Loaded Collection
         return Repository::get()->getSubtreeService()->children( $this );
     }
 }

@@ -91,11 +91,11 @@ class Content extends Base implements \ezp\DomainObjectInterface
     public $ownerId = 0;
 
     /**
-     * The id of the section the content belongs to
+     * The Section the content belongs to
      *
-     * @var int
+     * @var Proxy|Section
      */
-    public $sectionId = 0;
+    public $section = 0;
 
     /**
      * The Content's status, as one of the ezp\Content::STATUS_* constants
@@ -179,7 +179,8 @@ class Content extends Base implements \ezp\DomainObjectInterface
 
         $this->dynamicProperties = array(
             "mainLocation" => true,
-            "section" => true
+            "section" => true,
+            "sectionId" => true,
         );
     }
 
@@ -188,14 +189,42 @@ class Content extends Base implements \ezp\DomainObjectInterface
         return $this->locations[0];
     }
 
-    protected function setSection( Section $section )
+    /**
+     * Sets the Section the Content belongs to
+     *
+     * @param Proxy|Section $section
+     */
+    protected function setSection( $section )
     {
-        $this->sectionId = $section->id;
+        $this->section = $section;
     }
 
+    /**
+     * Returns the Section the Content belongs to
+     *
+     * @return Section
+     */
     protected function getSection()
     {
-        return Repository::get()->getSectionService()->load( $this->sectionId );
+        if ( $this->section instanceof Proxy )
+        {
+            $this->section = $this->section->load();
+        }
+        return $this->section;
+    }
+
+    /**
+     * Returns the section's id
+     *
+     * @return int
+     */
+    protected function getSectionId()
+    {
+        if  ( $this->section instanceof Base )
+        {
+            return $this->section->id;
+        }
+        return 0;
     }
 
     /**
