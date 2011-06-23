@@ -193,10 +193,19 @@ class Content extends Base implements \ezp\DomainObjectInterface
      * Sets the Section the Content belongs to
      *
      * @param Proxy|Section $section
+     * @throws \InvalidArgumentException if $content is not an instance of the
+     *                                   right class
      */
     protected function setSection( $section )
     {
-        $this->section = $section;
+        if ( !$section instanceof Section && !$section instanceof Proxy )
+        {
+            throw new \InvalidArgumentException( "Parameter needs to be an instance of Location or Section class" );
+        }
+        else
+        {
+            $this->section = $section;
+        }
     }
 
     /**

@@ -133,10 +133,19 @@ class Location extends Base implements \ezp\DomainObjectInterface
      * Sets the parent Location
      *
      * @param Proxy|Location $parent
+     * @throws \InvalidArgumentException if $content is not an instance of the
+     *                                   right class
      */
     protected function setParent( $parent )
     {
-        $this->parent = $parent;
+        if ( !$parent instanceof Location && !$parent instanceof Proxy )
+        {
+            throw new \InvalidArgumentException( "Parameter needs to be an instance of Content or Proxy class" );
+        }
+        else
+        {
+            $this->parent = $parent;
+        }
     }
 
     /**
@@ -171,10 +180,19 @@ class Location extends Base implements \ezp\DomainObjectInterface
      * Sets the content
      *
      * @param Proxy|Content $content
+     * @throws \InvalidArgumentException if $content is not an instance of the
+     *                                   right class
      */
     protected function setContent( $content )
     {
-        $this->content = $content;
+        if ( !$content instanceof Content && !$content instanceof Proxy )
+        {
+            throw new \InvalidArgumentException( "Parameter needs to be an instance of Content or Proxy class" );
+        }
+        else
+        {
+            $this->content = $content;
+        }
     }
 
     protected function getChildren()
