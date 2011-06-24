@@ -1,11 +1,11 @@
 <?php
 
-namespace ezp\Content
+namespace ezp\content
 
 /**
  * Proxy class for content model objects
  */
-class Proxy extends Base implements \ezp\ProxyInterface
+class Proxy extends \ezp\base\AbstractModel implements \ezp\ProxyInterface
 {
     /**
      * Service used to load the object the proxy represents

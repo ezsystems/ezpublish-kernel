@@ -1,5 +1,5 @@
 <?php
-namespace ezp\Content\Criteria;
+namespace ezp\content\Criteria;
 
 class SortCriteria extends Criteria
 {

@@ -8,7 +8,7 @@
  * @package API
  * @subpackage content/criteria
  */
-namespace ezp\Content\Criteria;
+namespace ezp\content\Criteria;
 
 /**
  * Base class for criterias

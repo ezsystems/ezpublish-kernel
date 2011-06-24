@@ -1,12 +1,12 @@
 <?php
 /**
- * File containing the ezp\Content\FieldCollection class.
+ * File containing the ezp\content\FieldCollection class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package API
- * @subpackage Content
+ * @package ezp
+ * @subpackage content
  */
 
 /**
@@ -14,12 +14,11 @@
  * Fieldsets held in a FieldsetCollection object are accessible via array access,
  * indexed by locale
  *
- * @package API
- * @subpackage Content
+ * @package ezp
+ * @subpackage content
  */
-namespace ezp\Content;
-
-class FieldCollection extends BaseCollection
+namespace ezp\content;
+class FieldCollection extends AbstractCollection
 {
 
     /**

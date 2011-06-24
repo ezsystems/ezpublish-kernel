@@ -1,12 +1,12 @@
 <?php
 /**
- * File containing the ezp\Content\Content class.
+ * File containing the ezp\content\Content class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package API
- * @subpackage Content
+ * @package ezp
+ * @subpackage content
  */
 
 /**
@@ -17,14 +17,14 @@
  * @property-read integer $id
  *                The Content's ID, automatically assigned by the persistence layer
  * @property-read integer status
- *                The Content's status, as one of the ezp\Content::STATUS_* constants
- * @property-read ezp\Content\VersionCollection $versions
+ *                The Content's status, as one of the ezp\content::STATUS_* constants
+ * @property-read ezp\content\VersionCollection $versions
  *                   Iterable collection of versions for content, indexed by version number. Array-accessible :
  *                   <code>
  *                   $myFirstVersion = $content->versions[1];
  *                   $myThirdVersion = $content->versions[3];
  *                   </code>
- * @property-read ezp\Content\LocationCollection $locations
+ * @property-read ezp\content\LocationCollection $locations
  *                   Locations for content. Iterable, countable and Array-accessible (with numeric indexes)
  *                   First location referenced in the collection represents the main location for content
  *                   <code>
@@ -32,34 +32,34 @@
  *                   $anotherLocation = $content->locations[2];
  *                   $locationById = $content->locations->byId( 60 );
  *                   </code>
- * @property ezp\Content\RelationCollection $relations
- *                                          Collection of ezp\Content objects, related to the current one
- * @property ezp\Content\RelationCollection $reverseRelations
- *                                          Collection of ezp\Content objects, reverse-related to the current one
- * @property ezp\Content\TranslationCollection $translations
+ * @property ezp\content\RelationCollection $relations
+ *                                          Collection of ezp\content objects, related to the current one
+ * @property ezp\content\RelationCollection $reverseRelations
+ *                                          Collection of ezp\content objects, reverse-related to the current one
+ * @property ezp\content\TranslationCollection $translations
  *                                             Collection of content's translations, indexed by locale (ie. eng-GB)
  *                                             <code>
  *                                             $myEnglishTranslation = $content->translations["eng-GB"];
  *                                             $myEnglishTitle = $content->translations["eng-GB"]->fields->title; // Where "title" is the field identifier
  *                                             </code>
- * @property ezp\Content\FieldCollection $fields
+ * @property ezp\content\FieldCollection $fields
  *                                       Collection of content's fields in default (current) language.
  *                                       Shorthand property to directly access to the content's fields in current language
  *                                       <code>
  *                                       $myTitle = $content->fields->title; // Where "title" is the field identifier
  *                                       </code>
  *
- * @package API
- * @subpackage Content
+ * @package ezp
+ * @subpackage content
  */
-namespace ezp\Content;
+namespace ezp\content;
 
-use ezx\doctrine\model\ContentType;
+use ezx\content\ContentType;
 
-use ezp\User\Repository as UserRepository;
-use ezp\User\User;
+use ezp\user\Repository as UserRepository;
+use ezp\user\User;
 
-class Content extends Base implements \ezp\DomainObjectInterface
+class Content extends \ezp\base\AbstractModel
 {
     /**
      * Publication status constants
@@ -98,7 +98,7 @@ class Content extends Base implements \ezp\DomainObjectInterface
     public $section = 0;
 
     /**
-     * The Content's status, as one of the ezp\Content::STATUS_* constants
+     * The Content's status, as one of the ezp\content::STATUS_* constants
      *
      * @var int
      */

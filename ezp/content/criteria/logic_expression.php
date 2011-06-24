@@ -8,7 +8,7 @@
  * @package API
  * @subpackage content/criteria
  */
-namespace ezp\Content\Criteria;
+namespace ezp\content\Criteria;
 
 /**
  * Logic dispatcher for AND/OR association of criterias

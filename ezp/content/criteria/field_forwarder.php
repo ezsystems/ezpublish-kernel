@@ -8,7 +8,7 @@
  * @package API
  * @subpackage content/criteria
  */
-namespace ezp\Content\Criteria;
+namespace ezp\content\Criteria;
 
 /**
  * Forwards access to a new FieldCriteria

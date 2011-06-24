@@ -1,15 +1,14 @@
 <?php
 /**
- * File containing ezp\Content\SectionNotFoundException class
+ * File containing ezp\content\SectionNotFoundException class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package API
- * @subpackage Content
+ * @package ezp
+ * @subpackage content
  */
-namespace ezp\Content;
-
+namespace ezp\content;
 class SectionNotFoundException extends ezp\BaseException
 {
 

@@ -8,8 +8,8 @@
  * @package API
  * @subpackage content/criteria
  */
-namespace ezp\Content\Criteria;
-use ezp\Content;
+namespace ezp\content\Criteria;
+use ezp\content;
 
 class LocationCriteria extends Criteria implements CriteriaInterface
 {

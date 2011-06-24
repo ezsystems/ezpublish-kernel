@@ -1,23 +1,22 @@
 <?php
 /**
- * File containing the ezp\Content\TranslationCollection class.
+ * File containing the ezp\content\TranslationCollection class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package API
- * @subpackage Content
+ * @package ezp
+ * @subpackage content
  */
 
 /**
  * This class represents a Content translations collection
  *
- * @package API
- * @subpackage Content
+ * @package ezp
+ * @subpackage content
  */
-namespace ezp\Content;
-
-class TranslationCollection extends BaseCollection
+namespace ezp\content;
+class TranslationCollection extends AbstractCollection
 {
 
     /**

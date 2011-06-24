@@ -8,7 +8,7 @@
  * @package API
  * @subpackage content/criteria
  */
-namespace ezp\Content\Criteria;
+namespace ezp\content\Criteria;
 
 class MetadataCriteria extends Criteria implements CriteriaInterface
 {

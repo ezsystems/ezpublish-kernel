@@ -8,20 +8,20 @@
  * @package API
  * @subpackage content
  */
-namespace ezp\Content;
-class ContentType extends Base implements \ezp\DomainObjectInterface
+namespace ezp\content;
+class ContentType extends \ezp\base\AbstractModel
 {
     /**
      * Returns an instance of ContentType by its $identifier (e.g. "folder")
      * <code>
-     * use \ezp\Content\ContentType;
-     * use \ezp\Content\Content;
+     * use \ezp\content\ContentType;
+     * use \ezp\content\Content;
      *
      * $contentType = ContentType::byIdentifier( "folder" );
      * $content = new Content( $contentType );
      * </code>
      * @param string $identifier The content type identifier
-     * @return ezp\Content\ContentType
+     * @return ezp\content\ContentType
      */
     public static function byIdentifier( $identifier )
     {

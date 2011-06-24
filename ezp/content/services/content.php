@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\Content\Services\Content class.
+ * File containing the ezp\content\Services\Content class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://ez.no/licenses/gnu_gpl GNU GPL v2
@@ -14,23 +14,23 @@
  * @package Content
  * @subpackage Services
  */
-namespace ezp\Content\Services;
+namespace ezp\content\Services;
 
-use ezp\Content\Content;
+use ezp\content\Content;
 
-use ezp\Content\Repository as ContentRepository;
+use ezp\content\Repository as ContentRepository;
 
 class Content implements ServiceInterface
 {
     /**
      * Creates the new $content in the content repository
      *
-     * @param \ezp\Content\Content $content
+     * @param \ezp\content\Content $content
      *
-     * @return \ezp\Content\Content The newly created content
-     * @throws \ezp\Content\ValidationException If a validation problem has been found for $content
+     * @return \ezp\content\Content The newly created content
+     * @throws \ezp\content\ValidationException If a validation problem has been found for $content
      */
-    public function create( \ezp\Content\Content $content )
+    public function create( \ezp\content\Content $content )
     {
         // @todo : Do any necessary actions to insert $content in the content repository
         // go through all locations to create or update them
@@ -39,11 +39,11 @@ class Content implements ServiceInterface
 
     /**
      * Updates $content in the content repository
-     * @param \ezp\Content\Content $content
+     * @param \ezp\content\Content $content
      * @return $content
-     * @throws \ezp\Content\ValidationException If a validation problem has been found for $content
+     * @throws \ezp\content\ValidationException If a validation problem has been found for $content
      */
-    public function update( \ezp\Content\Content $content )
+    public function update( \ezp\content\Content $content )
     {
         // @todo : Do any necessary actions to update $content in the content repository
         // go through all locations to create or update them
@@ -53,8 +53,8 @@ class Content implements ServiceInterface
     /**
      * Loads a content from its id ($contentId)
      * @param integer $contentId
-     * @return \ezp\Content\Content
-     * @throws \ezp\Content\ContentNotFoundException if content could not be found
+     * @return \ezp\content\Content
+     * @throws \ezp\content\ContentNotFoundException if content could not be found
      */
     public function load( $contentId )
     {
@@ -65,9 +65,9 @@ class Content implements ServiceInterface
     /**
      * Deletes a content from the repository
      *
-     * @param \ezp\Content\Content $content
+     * @param \ezp\content\Content $content
      */
-    public function delete( \ezp\Content\Content $content )
+    public function delete( \ezp\content\Content $content )
     {
         // take care of:
         // 1. removing the subtree of all content's locations
@@ -78,11 +78,11 @@ class Content implements ServiceInterface
 
     /**
      * Creates a new criteria collection object in order to query the content repository
-     * @return \ezp\Content\Criteria\CriteriaCollection
+     * @return \ezp\content\Criteria\CriteriaCollection
      */
     public function createCriteria()
     {
-        return new \ezp\Content\Criteria\CriteriaCollection();
+        return new \ezp\content\Criteria\CriteriaCollection();
     }
 }
 ?>

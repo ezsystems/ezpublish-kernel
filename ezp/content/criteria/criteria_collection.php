@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing ezp\Content\Criteria\CriteriaCollection class
+ * File containing ezp\content\Criteria\CriteriaCollection class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,14 +8,14 @@
  * @package API
  * @subpackage content/criteria
  */
-namespace ezp\Content\Criteria;
-use ezp\Content;
+namespace ezp\content\Criteria;
+use ezp\content;
 
 /**
  * Criteria collection to be used to "find" a content in a subtree
  * Example :
  * <code>
- * use ezp\Content\Repository as ContentRepository;
+ * use ezp\content\Repository as ContentRepository;
  *
  * $contentService = ContentRepository::get()->getContentService();
  * $c = $contentService->createCriteria();
@@ -39,7 +39,7 @@ class CriteriaCollection
 {
     /**
      * Parent location to retrieve content from
-     * @var ezp\Content\Location
+     * @var ezp\content\Location
      */
     protected $parentLocation;
 

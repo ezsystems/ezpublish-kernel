@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\Content\Services\Subtree class.
+ * File containing the ezp\content\Services\Subtree class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://ez.no/licenses/gnu_gpl GNU GPL v2
@@ -14,28 +14,28 @@
  * @package Content
  * @subpackage Services
  */
-namespace ezp\Content\Services;
-use ezp\Content\Repository as ContentRepository;
+namespace ezp\content\Services;
+use ezp\content\Repository as ContentRepository;
 
 class Subtree implements ServiceInterface
 {
     /**
      * Copies the subtree starting from $subtree as a new subtree of $targetLocation
      *
-     * @param \ezp\Content\Location $subtree
-     * @param \ezp\Content\Location $targetLocation
+     * @param \ezp\content\Location $subtree
+     * @param \ezp\content\Location $targetLocation
      *
-     * @return \ezp\Content\Location The newly created subtree
+     * @return \ezp\content\Location The newly created subtree
      */
-    public function copy( \ezp\Content\Location $subtree, \ezp\Content\Location $targetLocation )
+    public function copy( \ezp\content\Location $subtree, \ezp\content\Location $targetLocation )
     {
     }
 
     /**
      * Loads a location object from its $locationId
      * @param integer $locationId
-     * @return \ezp\Content\Location
-     * @throws \ezp\Content\LocationNotFoundException if no location is available with $locationId
+     * @return \ezp\content\Location
+     * @throws \ezp\content\LocationNotFoundException if no location is available with $locationId
      */
     public function load( $locationId )
     {
@@ -43,7 +43,7 @@ class Subtree implements ServiceInterface
     }
 
 
-    public function children( \ezp\Content\Location $location )
+    public function children( \ezp\content\Location $location )
     {
 
     }
@@ -51,11 +51,11 @@ class Subtree implements ServiceInterface
     /**
      * Creates the new $location in the content repository
      * 
-     * @param \ezp\Content\Location $location
-     * @return \ezp\Content\Location the newly created Location
-     * @throws \ezp\Content\ValidationException If a validation problem has been found for $content
+     * @param \ezp\content\Location $location
+     * @return \ezp\content\Location the newly created Location
+     * @throws \ezp\content\ValidationException If a validation problem has been found for $content
      */
-    public function create( \ezp\Content\Location $location )
+    public function create( \ezp\content\Location $location )
     {
         // repo/storage stuff
         return $location;
@@ -64,11 +64,11 @@ class Subtree implements ServiceInterface
     /**
      * Updates $location in the content repository
      * 
-     * @param \ezp\Content\Location $location
-     * @return \ezp\Content\Location the updated Location
-     * @throws \ezp\Content\ValidationException If a validation problem has been found for $content
+     * @param \ezp\content\Location $location
+     * @return \ezp\content\Location the updated Location
+     * @throws \ezp\content\ValidationException If a validation problem has been found for $content
      */
-    public function update( \ezp\Content\Location $location )
+    public function update( \ezp\content\Location $location )
     {
         // repo/storage stuff
         return $location;
@@ -77,12 +77,12 @@ class Subtree implements ServiceInterface
     /**
      * Swaps the contents hold by the $location1 and $location2
      * 
-     * @param \ezp\Content\Location $location1 
-     * @param \ezp\Content\Location $location2 
+     * @param \ezp\content\Location $location1
+     * @param \ezp\content\Location $location2
      * @return void
-     * @throws \ezp\Content\ValidationException If a validation problem has been found
+     * @throws \ezp\content\ValidationException If a validation problem has been found
      */
-    public function swap( \ezp\Content\Location $location1, \ezp\Content\Location $location2 )
+    public function swap( \ezp\content\Location $location1, \ezp\content\Location $location2 )
     {
 
     }
@@ -90,11 +90,11 @@ class Subtree implements ServiceInterface
     /**
      * Hides the $location and marks invisible all descendants of $location.
      * 
-     * @param \ezp\Content\Location $location 
+     * @param \ezp\content\Location $location
      * @return void
-     * @throws \ezp\Content\ValidationException If a validation problem has been found
+     * @throws \ezp\content\ValidationException If a validation problem has been found
      */
-    public function hide( \ezp\Content\Location $location )
+    public function hide( \ezp\content\Location $location )
     {
         // take care of :
         // 1. hidding $location
@@ -105,11 +105,11 @@ class Subtree implements ServiceInterface
      * Unhides the $location and marks visible all descendants of $locations
      * until a hidden location is found. 
      * 
-     * @param \ezp\Content\Location $location 
+     * @param \ezp\content\Location $location
      * @return void
-     * @throws \ezp\Content\ValidationException If a validation problem has been found;
+     * @throws \ezp\content\ValidationException If a validation problem has been found;
      */
-    public function unhide( \ezp\Content\Location $location )
+    public function unhide( \ezp\content\Location $location )
     {
         // take care of :
         // 1. unhidding $location
@@ -121,12 +121,12 @@ class Subtree implements ServiceInterface
      * Moves $location under $newParent and updates all descendants of
      * $location accordingly. 
      * 
-     * @param \ezp\Content\Location $location 
-     * @param \ezp\Content\Location $newParent 
+     * @param \ezp\content\Location $location
+     * @param \ezp\content\Location $newParent
      * @return void
-     * @throws \ezp\Content\ValidationException If a validation problem has been found;
+     * @throws \ezp\content\ValidationException If a validation problem has been found;
      */
-    public function move( \ezp\Content\Location $location, \ezp\Content\Location $newParent )
+    public function move( \ezp\content\Location $location, \ezp\content\Location $newParent )
     {
         // take care of :
         // 1. set parentId and path for $location
@@ -137,11 +137,11 @@ class Subtree implements ServiceInterface
     /**
      * Deletes the $locations and all descendants of $location. 
      * 
-     * @param \ezp\Content\Location $location 
+     * @param \ezp\content\Location $location
      * @return void
-     * @throws \ezp\Content\ValidationException If a validation problem has been found;
+     * @throws \ezp\content\ValidationException If a validation problem has been found;
      */
-    public function delete( \ezp\Content\Location $location )
+    public function delete( \ezp\content\Location $location )
     {
         // take care of:
         // 1. removing the current location
@@ -157,12 +157,12 @@ class Subtree implements ServiceInterface
      * Assigns $section to the contents hold by $startingPoint location and
      * all contents hold by descendants location of $startingPoint
      * 
-     * @param \ezp\Content\Location $startingPoint 
-     * @param \ezp\Content\Section $section 
+     * @param \ezp\content\Location $startingPoint
+     * @param \ezp\content\Section $section
      * @return void
-     * @throws \ezp\Content\ValidationException If a validation problem has been found;
+     * @throws \ezp\content\ValidationException If a validation problem has been found;
      */
-    public function assignSection( \ezp\Content\Location $startingPoint, \ezp\Content\Section $section )
+    public function assignSection( \ezp\content\Location $startingPoint, \ezp\content\Section $section )
     {
     }
 }
