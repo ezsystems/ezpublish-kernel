@@ -50,17 +50,17 @@ if ( $_GET['fn'] === 'create' )
     $content->ownerId = 10;
     $content->sectionId = 3;
 
-    if ( isset( $content->fields['tags'] ) )
+    if ( isset( $content->fieldMap['tags'] ) )
     {
-        $content->fields['tags']->type->value = "instance1";
+        $content->fieldMap['tags']->type->value = "instance1";
         // should be:
-        // $content->fields['tags'] = "instance1";
+        // $content->fieldMap['tags'] = "instance1";
         // shortcut for:
-        //$content->fields['tags']->value = "instance1";
+        //$content->fieldMap['tags']->value = "instance1";
     }
 
-    if ( isset( $_GET['title'] ) && isset( $content->fields['title'] ) )
-        $content->fields['title']->type->value = $_GET['title'];
+    if ( isset( $_GET['title'] ) && isset( $content->fieldMap['title'] ) )
+        $content->fieldMap['title']->type->value = $_GET['title'];
 
     $content->notify( 'store' );// Needed to make sure changes in fieldtypes tricle down to field
 
@@ -70,9 +70,9 @@ if ( $_GET['fn'] === 'create' )
     $newContent = $contentService->create( $_GET['identifier'] )->fromHash( $state );
 
     // test that reference works on new object
-    if ( isset( $newContent->fields['tags'] ) )
+    if ( isset( $newContent->fieldMap['tags'] ) )
     {
-        $newContent->fields['tags']->type->value .= " instance2";
+        $newContent->fieldMap['tags']->type->value .= " instance2";
     }
 
     $newContent->notify( 'store' );// Needed to make sure changes in fieldtypes tricle down to field
@@ -95,7 +95,7 @@ else if ( $_GET['fn'] === 'get' )
     $locations = $content->locations;
 
     $fieldStr = '';
-    foreach ( $content->fields as $field )
+    foreach ( $content->fieldMap as $field )
     {
         $fieldStr .= '<br />&nbsp;' . $field  . ':<pre>' . htmlentities( $field->type->value ) . '</pre>';
     }

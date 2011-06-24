@@ -74,7 +74,7 @@ class ContentType extends Abstracts\ContentModel
      *
      * @return ContentTypeField[]
      */
-    public function getFields()
+    protected function getFields()
     {
         return $this->fields;
     }
@@ -90,7 +90,7 @@ class ContentType extends Abstracts\ContentModel
      *
      * @return Content[]
      */
-    public function getContentObjects()
+    protected function getContentObjects()
     {
         return $this->contentObjects;
     }
@@ -106,7 +106,7 @@ class ContentType extends Abstracts\ContentModel
      *
      * @return ContentTypeGroup[]
      */
-    public function getGroups()
+    protected function getGroups()
     {
         return $this->groups;
     }

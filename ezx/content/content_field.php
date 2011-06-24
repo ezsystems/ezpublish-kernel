@@ -32,6 +32,7 @@ class ContentField extends Abstracts\Field
     protected $dynamicProperties = array(
         'type' => true,
         'contentVersion' => false,
+        'contentTypeField' => false,
     );
 
     /**
@@ -100,7 +101,7 @@ class ContentField extends Abstracts\Field
      *
      * @return ContentVersion
      */
-    public function getContentVersion()
+    protected function getContentVersion()
     {
         return $this->contentVersion;
     }
@@ -117,7 +118,7 @@ class ContentField extends Abstracts\Field
      *
      * @return ContentTypeField
      */
-    public function getContentTypeField()
+    protected function getContentTypeField()
     {
         return $this->contentTypeField;
     }

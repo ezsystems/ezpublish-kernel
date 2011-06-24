@@ -34,9 +34,9 @@ class FieldMap implements \Countable, \IteratorAggregate, \ArrayAccess
      */
     public function __construct( ContentVersion $content )
     {
-        foreach ( $content->getFields() as $field )
+        foreach ( $content->fields as $field )
         {
-            $this->elements[ $field->getContentTypeField()->identifier ] = $field;
+            $this->elements[ $field->contentTypeField->identifier ] = $field;
             $this->count++;
         }
     }

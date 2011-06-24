@@ -40,7 +40,8 @@ class ContentVersion extends Abstracts\ContentModel implements \ezp\base\Observe
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'fields' => true,
+        'fields' => false,
+        'fieldMap' => true,
         'content' => false,
     );
 
@@ -53,7 +54,7 @@ class ContentVersion extends Abstracts\ContentModel implements \ezp\base\Observe
     {
         $this->content = $content;
         $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
-        foreach ( $content->getContentType()->getFields() as $contentTypeField )
+        foreach ( $content->contentType->fields as $contentTypeField )
         {
             $this->fields[] = new ContentField( $this, $contentTypeField );
         }
@@ -146,7 +147,7 @@ class ContentVersion extends Abstracts\ContentModel implements \ezp\base\Observe
      *
      * @return ContentField[]
      */
-    public function getFields()
+    protected function getFields()
     {
         return $this->fields;
     }
@@ -163,33 +164,26 @@ class ContentVersion extends Abstracts\ContentModel implements \ezp\base\Observe
      *
      * @return Content
      */
-    public function getContent()
+    protected function getContent()
     {
         return $this->content;
     }
 
     /**
-     * Magic object that steps in when fields are accessed
+     * @param ContentField[]
      */
     protected $fieldMap;
 
     /**
-     * Get value
+     * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @throws \InvalidArgumentException
-     * @param string $name
-     * @param string $value
-     * @return mixed Return $value
+     * @return ContentField[]
      */
-    public function __get( $name )
+    protected function getFieldMap()
     {
-        if ( $name === 'fields' )
-        {
-            if ( $this->fieldMap !== null )
-                return $this->fieldMap;
-            return $this->fieldMap = new FieldMap( $this );
-        }
-        return parent::__get( $name );
+        if ( $this->fieldMap !== null )
+            return $this->fieldMap;
+        return $this->fieldMap = new FieldMap( $this );
     }
 
     /**

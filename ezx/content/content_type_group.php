@@ -58,7 +58,7 @@ class ContentTypeGroup extends Abstracts\ContentModel
      *
      * @return ContentType[]
      */
-    public function getContentTypes()
+    protected function getContentTypes()
     {
         return $this->contentTypes;
     }

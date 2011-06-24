@@ -18,7 +18,7 @@
  * @property int $ownerId
  * @property int $sectionId
  * @property-read string $typeid Content Type Identifier
- * @property-read Location[] $locations An hash like structure of fields
+ * @property Location[] $locations An hash like structure of fields
  * @property-read ContentField[] $fields An hash structure of fields
  * @property-read ContentType $type Content type object
  */
@@ -39,6 +39,7 @@ class Content extends Abstracts\ContentModel
     protected $readableProperties = array(
         'id' => false,
         'currentVersion' => false,
+        'status' => false,
         'name' => false,
         'ownerId' => true,
         'sectionId' => true,
@@ -48,7 +49,7 @@ class Content extends Abstracts\ContentModel
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'fields' => true,
+        'fieldMap' => true,
         'locations' => true,
         'contentType' => false,
         'versions' => false,
@@ -103,6 +104,12 @@ class Content extends Abstracts\ContentModel
     protected $currentVersion = 0;
 
     /**
+     * @Column(type="integer")
+     * @var int
+     */
+    protected $status = self::STATUS_DRAFT;
+
+    /**
      * @Column(length=255)
      * @var string
      */
@@ -137,7 +144,7 @@ class Content extends Abstracts\ContentModel
      *
      * @return Location[]
      */
-    public function getLocations()
+    protected function getLocations()
     {
         return $this->locations;
     }
@@ -153,7 +160,7 @@ class Content extends Abstracts\ContentModel
      *
      * @return ContentVersion[]
      */
-    public function getVersions()
+    protected function getVersions()
     {
         return $this->versions;
     }
@@ -163,7 +170,7 @@ class Content extends Abstracts\ContentModel
      *
      * @return ContentVersion|null
      */
-    public function getCurrentVersion()
+    protected function getCurrentVersion()
     {
         foreach( $this->getVersions() as $contentVersion )
         {
@@ -185,7 +192,7 @@ class Content extends Abstracts\ContentModel
      *
      * @return ContentType
      */
-    public function getContentType()
+    protected function getContentType()
     {
         if ( $this->contentType instanceof Proxy )
         {
@@ -197,11 +204,46 @@ class Content extends Abstracts\ContentModel
     /**
      * Get fields of current version
      *
-     * @return mixed
+     * @return ContentField[]
      */
-    protected function getFields()
+    protected function getFieldMap()
     {
-        return $this->getCurrentVersion()->fields;
+        return $this->getCurrentVersion()->fieldMap;
+    }
+
+    /**
+     * Adds a new location to content under an existing one.
+     *
+     * @param Location $parentLocation
+     * @return Location
+     */
+    public function addParent( Location $parentLocation )
+    {
+        $newLocation = new Location( $this );
+        $newLocation->parent = $parentLocation;
+        return $newLocation;
+    }
+
+    /**
+     * Clone content object
+     */
+    public function __clone()
+    {
+        if ( !$this->id )
+            return;
+
+        $this->id = false;
+        $this->status = self::STATUS_DRAFT;
+
+        // Create new locations in same parents as original
+        $oldLocations = $this->locations;
+        $this->locations = new \Doctrine\Common\Collections\ArrayCollection();
+        foreach ( $oldLocations as $location )
+        {
+            $this->addParent( $location->parent );
+        }
+
+        $this->versions = clone $this->versions;// clone or only clone current version?
     }
 
     /**

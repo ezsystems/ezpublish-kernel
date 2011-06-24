@@ -22,10 +22,10 @@ abstract class Field extends ContentModel implements \ezp\base\ObserverInterface
     /**
      * Initialize and return field type
      *
-     * @throws \RuntimeException If definition of _FieldType is wrong
+     * @throws \RuntimeException If definition of FieldType is wrong
      * @return FieldType
      */
-    public function getType()
+    protected function getType()
     {
         if ( $this->type instanceof FieldType )
            return $this->type;

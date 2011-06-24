@@ -174,7 +174,7 @@ class ContentTypeField extends Abstracts\Field
      *
      * @return ContentType
      */
-    public function getContentType()
+    protected function getContentType()
     {
         return $this->contentType;
     }
@@ -190,7 +190,7 @@ class ContentTypeField extends Abstracts\Field
      *
      * @return ContentField[]
      */
-    public function getContentFields()
+    protected function getContentFields()
     {
         return $this->contentFields;
     }

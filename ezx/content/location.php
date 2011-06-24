@@ -10,6 +10,8 @@
 
 /**
  * @Entity @Table(name="ezcontentobject_tree")
+ *
+ * @property Location $parent
  */
 namespace ezx\content;
 class Location extends Abstracts\ContentModel implements \ezp\base\ObserverInterface
@@ -42,6 +44,7 @@ class Location extends Abstracts\ContentModel implements \ezp\base\ObserverInter
     {
         $this->content = $content;
         $this->children = new \Doctrine\Common\Collections\ArrayCollection();
+        $content->locations[] = $this;
     }
 
     /**
@@ -92,7 +95,7 @@ class Location extends Abstracts\ContentModel implements \ezp\base\ObserverInter
      *
      * @return Content
      */
-    public function getContent()
+    protected function getContent()
     {
         return $this->content;
     }
@@ -109,7 +112,7 @@ class Location extends Abstracts\ContentModel implements \ezp\base\ObserverInter
      *
      * @return Location
      */
-    public function getParent()
+    protected function getParent()
     {
         if ( $this->parentLocationId <= 1 )
         {
@@ -123,6 +126,16 @@ class Location extends Abstracts\ContentModel implements \ezp\base\ObserverInter
     }
 
     /**
+     * Set parent location
+     *
+     * @param Location $parent
+     */
+    protected function setParent( Location $parent )
+    {
+        $this->parent = $parent;
+    }
+
+    /**
      * @OneToMany(targetEntity="Location", mappedBy="parent")
      * @var Location[]
      */
@@ -133,7 +146,7 @@ class Location extends Abstracts\ContentModel implements \ezp\base\ObserverInter
      *
      * @return Location[]
      */
-    public function getChildren()
+    protected function getChildren()
     {
         return $this->children;
     }
