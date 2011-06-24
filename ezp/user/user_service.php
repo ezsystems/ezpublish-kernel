@@ -12,21 +12,29 @@
  * User Service, extends repository with user specific operations
  */
 namespace ezx\user;
-class UserService implements \ezx\base\Interfaces\Service
+class UserService implements \ezp\base\ServiceInterface
 {
     /**
-     * @var Repository
+     * @var \ezx\base\Interfaces\Repository
      */
     protected $repository;
 
     /**
-     * Setups current instance with reference to repository object that created it.
-     *
-     * @param Repository $repository
+     * @var \ezp\base\StorageEngineInterface
      */
-    public function __construct( \ezx\base\Interfaces\Repository $repository )
+    protected $se;
+
+    /**
+     * Setups service with reference to repository object that created it & corresponding storage engine handler
+     *
+     * @param \ezp\base\Repository $repository
+     * @param \ezp\base\StorageEngineInterface $se
+     */
+    public function __construct( \ezp\base\Repository $repository,
+                                 \ezp\base\StorageEngineInterface $se )
     {
         $this->repository = $repository;
+        $this->se = $se;
     }
 
     /**
@@ -38,9 +46,9 @@ class UserService implements \ezx\base\Interfaces\Service
      */
     public function load( $id )
     {
-        $content = $this->repository->em->find( "ezx\user\User", (int) $id );
-        if ( !$content )
+        $user = $this->se->getUserHandler()->load( (int) $id );
+        if ( !$user )
             throw new \InvalidArgumentException( "Could not find 'User' with id: {$id}" );
-        return $content;
+        return $user;
     }
 }
