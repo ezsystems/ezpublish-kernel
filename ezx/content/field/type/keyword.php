@@ -1,6 +1,6 @@
 <?php
 /**
- * XML Field domain object
+ * Keyword Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,34 +9,28 @@
  */
 
 /**
- * XML Field value object class
+ * Keyword Field value object class
  */
-namespace ezx\content;
-class Field_Type_Xml extends Field_Type_Text
+namespace ezx\content\Field\Type;
+class Keyword extends String
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezxmlstring';
+    const FIELD_IDENTIFIER = 'ezkeyword';
 
     /**
      * @public
      * @var string
      */
-    public $tagPreset = '';
-
-    /**
-     * @var int
-     */
-    public $columns = 10;
+    public $default = '';
 
     /**
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
-        'tagPreset' => 'data_text2',
-        'columns' => 'data_int1',
+        'default' => 'data_text1',
     );
 
     /**

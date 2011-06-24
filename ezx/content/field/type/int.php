@@ -1,6 +1,6 @@
 <?php
 /**
- * Keyword Field domain object
+ * Int Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,28 +9,45 @@
  */
 
 /**
- * Keyword Field value object class
+ * Int Field value object class
  */
-namespace ezx\content;
-class Field_Type_Keyword extends Field_Type_String
+namespace ezx\content\Field\Type;
+class Int extends \ezx\content\Abstracts\FieldType
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezkeyword';
+    const FIELD_IDENTIFIER = 'ezinteger';
 
     /**
-     * @public
-     * @var string
+     * @var int
      */
-    public $default = '';
+    public $default = 0;
+
+    /**
+     * @var int
+     */
+    public $min = 0;
+
+    /**
+     * @var int
+     */
+    public $max = 0;
+
+    /**
+     * @var int
+     */
+    public $state = 0;
 
     /**
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
-        'default' => 'data_text1',
+        'min' => 'data_int1',
+        'max' => 'data_int2',
+        'default' => 'data_int3',
+        'state' => 'data_int4',
     );
 
     /**

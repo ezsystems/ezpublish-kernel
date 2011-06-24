@@ -96,12 +96,8 @@ class Autoloader
             return require( $this->classes[$className] );
         }
 
-        // @todo Remove, temporary fallback for ezx\ namespace
-        if ( strncmp( $className, 'ezx\\', 4 ) === 0 )
-            return require( './' . str_replace( array('\\', '_'), DIRECTORY_SEPARATOR, $className ) . '.php' );
-
-        // Fallback to load by convention if class name starts with ezp\ namespace
-         if ( strncmp( $className, 'ezp\\', 4 ) !== 0 )
+        // Fallback to load by convention if class name starts with ezp\ or ezx\ namespace
+         if ( strncmp( $className, 'ezp\\', 4 ) !== 0 && strncmp( $className, 'ezx\\', 4 ) !== 0  )
              return false;
 
         // Transform camel case to underscore style for text

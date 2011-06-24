@@ -1,6 +1,6 @@
 <?php
 /**
- * Image Field domain object
+ * Keyword Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,21 +9,21 @@
  */
 
 /**
- * Image Field value object class
+ * Keyword Field value object class
  */
-namespace ezx\content;
-class Field_Image extends Field_String
+namespace ezx\content\Field;
+class Keyword extends String
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezimage';
+    const FIELD_IDENTIFIER = 'ezkeyword';
 
     /**
-     * @see Interfaces\ContentFieldType
+     * @see \ezx\content\ContentFieldTypeInterface
      */
-    public function __construct( Abstracts\FieldType $contentTypeFieldType )
+    public function __construct( \ezx\content\Abstracts\FieldType $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
         parent::__construct( $contentTypeFieldType );

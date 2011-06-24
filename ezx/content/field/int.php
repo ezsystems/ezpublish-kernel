@@ -1,6 +1,6 @@
 <?php
 /**
- * String Field domain object
+ * Int Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,42 +9,42 @@
  */
 
 /**
- * Float Field value object class
+ * Int Field value object class
  */
-namespace ezx\content;
-class Field_String extends Abstracts\FieldType implements Interfaces\ContentFieldType
+namespace ezx\content\Field;
+class Int extends \ezx\content\Abstracts\FieldType implements \ezx\content\ContentFieldTypeInterface
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezstring';
+    const FIELD_IDENTIFIER = 'ezinteger';
 
     /**
      * @public
-     * @var string
+     * @var int
      */
-    public $value = '';
+    public $value = 0;
 
     /**
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
-        'value' => 'data_text',
+        'value' => 'data_int',
     );
 
     /**
-     * @var Abstracts\FieldType
+     * @var \ezx\content\Abstracts\FieldType
      */
     protected $contentTypeFieldType;
 
     /**
      * Constructor
      *
-     * @see Interfaces\ContentFieldType
-     * @param Abstracts\FieldType $contentTypeFieldType
+     * @see \ezx\content\ContentFieldTypeInterface
+     * @param \ezx\content\Abstracts\FieldType $contentTypeFieldType
      */
-    public function __construct( Abstracts\FieldType $contentTypeFieldType )
+    public function __construct( \ezx\content\Abstracts\FieldType $contentTypeFieldType )
     {
         if ( isset( $contentTypeFieldType->default ) )
             $this->value = $contentTypeFieldType->default;

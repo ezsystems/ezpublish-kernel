@@ -11,38 +11,14 @@
 /**
  * Relation Field value object class
  */
-namespace ezx\content;
-class Field_Type_Datetime extends Field_Type_Int
+namespace ezx\content\Field\Type;
+class Rating extends Int
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezdatetime';
-
-    /**
-     * @var int
-     */
-    public $default = 0;
-
-    /**
-     * @var int
-     */
-    public $useSeconds = 0;
-
-    /**
-     * @var string
-     */
-    public $adjustment = 0;
-
-    /**
-     * @var array Readable of properties on this object
-     */
-    protected $readableProperties = array(
-        'default' => 'data_int1',
-        'useSeconds' => 'data_int2',
-        'adjustment' => 'data_text5',
-    );
+    const FIELD_IDENTIFIER = 'ezsrrating';
 
     /**
      * Sets identifier on design override and calls parent __construct.

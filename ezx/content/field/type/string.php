@@ -1,6 +1,6 @@
 <?php
 /**
- * Relation Field domain object
+ * String Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,27 +9,35 @@
  */
 
 /**
- * Relation Field value object class
+ * Float Field value object class
  */
-namespace ezx\content;
-class Field_Type_Boolean extends Field_Type_Int
+namespace ezx\content\Field\Type;
+class String extends \ezx\content\Abstracts\FieldType
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezboolean';
+    const FIELD_IDENTIFIER = 'ezstring';
 
     /**
+     * @public
+     * @var string
+     */
+    public $default = '';
+
+    /**
+     * @public
      * @var int
      */
-    public $default = 0;
+    public $maxLength = 255;
 
     /**
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
-        'default' => 'data_int1',
+        'default' => 'data_text1',
+        'maxLength' => 'data_int1',
     );
 
     /**

@@ -11,19 +11,19 @@
 /**
  * Relation Field value object class
  */
-namespace ezx\content;
-class Field_Relation extends Field_Int
+namespace ezx\content\Field;
+class Boolean extends Int
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezobjectrelation';
+    const FIELD_IDENTIFIER = 'ezboolean';
 
     /**
-     * @see Interfaces\ContentFieldType
+     * @see \ezx\content\ContentFieldTypeInterface
      */
-    public function __construct( Abstracts\FieldType $contentTypeFieldType )
+    public function __construct( \ezx\content\Abstracts\FieldType $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
         parent::__construct( $contentTypeFieldType );

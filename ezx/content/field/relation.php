@@ -1,6 +1,6 @@
 <?php
 /**
- * XML Field domain object
+ * Relation Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,21 +9,21 @@
  */
 
 /**
- * XML Field value object class
+ * Relation Field value object class
  */
-namespace ezx\content;
-class Field_Xml extends Field_Text
+namespace ezx\content\Field;
+class Relation extends Int
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezxmltext';
+    const FIELD_IDENTIFIER = 'ezobjectrelation';
 
     /**
-     * @see Interfaces\ContentFieldType
+     * @see \ezx\content\ContentFieldTypeInterface
      */
-    public function __construct( Abstracts\FieldType $contentTypeFieldType )
+    public function __construct( \ezx\content\Abstracts\FieldType $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
         parent::__construct( $contentTypeFieldType );

@@ -1,6 +1,6 @@
 <?php
 /**
- * Keyword Field domain object
+ * Relation Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,21 +9,21 @@
  */
 
 /**
- * Keyword Field value object class
+ * Relation Field value object class
  */
-namespace ezx\content;
-class Field_Author extends Field_String
+namespace ezx\content\Field;
+class Datetime extends Int
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezauthor';
+    const FIELD_IDENTIFIER = 'ezdatetime';
 
     /**
-     * @see Interfaces\ContentFieldType
+     * @see \ezx\content\ContentFieldTypeInterface
      */
-    public function __construct( Abstracts\FieldType $contentTypeFieldType )
+    public function __construct( \ezx\content\Abstracts\FieldType $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
         parent::__construct( $contentTypeFieldType );

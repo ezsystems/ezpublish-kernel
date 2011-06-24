@@ -11,8 +11,8 @@
 /**
  * Float Field value object class
  */
-namespace ezx\content;
-class Field_Float extends Abstracts\FieldType implements Interfaces\ContentFieldType
+namespace ezx\content\Field;
+class Float extends \ezx\content\Abstracts\FieldType implements \ezx\content\ContentFieldTypeInterface
 {
     /**
      * Field type identifier
@@ -34,17 +34,17 @@ class Field_Float extends Abstracts\FieldType implements Interfaces\ContentField
     );
 
     /**
-     * @var Abstracts\FieldType
+     * @var \ezx\content\Abstracts\FieldType
      */
     protected $contentTypeFieldType;
 
     /**
      * Constructor
      *
-     * @see Interfaces\ContentFieldType
-     * @param Abstracts\FieldType $contentTypeFieldType
+     * @see \ezx\content\ContentFieldTypeInterface
+     * @param \ezx\content\Abstracts\FieldType $contentTypeFieldType
      */
-    public function __construct( Abstracts\FieldType $contentTypeFieldType )
+    public function __construct( \ezx\content\Abstracts\FieldType $contentTypeFieldType )
     {
         if ( isset( $contentTypeFieldType->default ) )
             $this->value = $contentTypeFieldType->default;

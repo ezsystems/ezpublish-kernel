@@ -11,8 +11,8 @@
 /**
  * Relation Field value object class
  */
-namespace ezx\content;
-class Field_Type_Rating extends Field_Type_Int
+namespace ezx\content\Field;
+class Rating extends Int
 {
     /**
      * Field type identifier
@@ -21,11 +21,11 @@ class Field_Type_Rating extends Field_Type_Int
     const FIELD_IDENTIFIER = 'ezsrrating';
 
     /**
-     * Sets identifier on design override and calls parent __construct.
+     * @see \ezx\content\ContentFieldTypeInterface
      */
-    public function __construct()
+    public function __construct( \ezx\content\Abstracts\FieldType $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
+        parent::__construct( $contentTypeFieldType );
     }
 }

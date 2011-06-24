@@ -1,6 +1,6 @@
 <?php
 /**
- * Image Field domain object
+ * Relation Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,23 +9,23 @@
  */
 
 /**
- * Image Field value object class
+ * Relation Field value object class
  */
-namespace ezx\content;
-class Field_Text extends Field_String
+namespace ezx\content\Field\Type;
+class Relation extends Int
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'eztext';
+    const FIELD_IDENTIFIER = 'ezobjectrelation';
 
     /**
-     * @see Interfaces\ContentFieldType
+     * Sets identifier on design override and calls parent __construct.
      */
-    public function __construct( Abstracts\FieldType $contentTypeFieldType )
+    public function __construct()
     {
         $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct( $contentTypeFieldType );
+        parent::__construct();
     }
 }

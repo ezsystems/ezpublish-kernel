@@ -1,6 +1,6 @@
 <?php
 /**
- * Image Field domain object
+ * Relation Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,27 +9,27 @@
  */
 
 /**
- * Image Field value object class
+ * Relation Field value object class
  */
-namespace ezx\content;
-class Field_Type_Image extends Field_Type_String
+namespace ezx\content\Field\Type;
+class Boolean extends Int
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezimage';
+    const FIELD_IDENTIFIER = 'ezboolean';
 
     /**
      * @var int
      */
-    public $maxSize = 0;
+    public $default = 0;
 
     /**
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
-        'maxSize' => 'data_int1',
+        'default' => 'data_int1',
     );
 
     /**

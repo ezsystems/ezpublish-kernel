@@ -11,8 +11,8 @@
 /**
  * Keyword Field value object class
  */
-namespace ezx\content;
-class Field_Type_Author extends Field_Type_String
+namespace ezx\content\Field;
+class Author extends String
 {
     /**
      * Field type identifier
@@ -21,11 +21,11 @@ class Field_Type_Author extends Field_Type_String
     const FIELD_IDENTIFIER = 'ezauthor';
 
     /**
-     * Sets identifier on design override and calls parent __construct.
+     * @see \ezx\content\ContentFieldTypeInterface
      */
-    public function __construct()
+    public function __construct( \ezx\content\Abstracts\FieldType $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
+        parent::__construct( $contentTypeFieldType );
     }
 }

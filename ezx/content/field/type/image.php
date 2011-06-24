@@ -1,6 +1,6 @@
 <?php
 /**
- * String Field domain object
+ * Image Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,35 +9,27 @@
  */
 
 /**
- * Float Field value object class
+ * Image Field value object class
  */
-namespace ezx\content;
-class Field_Type_String extends Abstracts\FieldType
+namespace ezx\content\Field\Type;
+class Image extends String
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezstring';
+    const FIELD_IDENTIFIER = 'ezimage';
 
     /**
-     * @public
-     * @var string
-     */
-    public $default = '';
-
-    /**
-     * @public
      * @var int
      */
-    public $maxLength = 255;
+    public $maxSize = 0;
 
     /**
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
-        'default' => 'data_text1',
-        'maxLength' => 'data_int1',
+        'maxSize' => 'data_int1',
     );
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * Float Field domain object
+ * Relation Field domain object
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,45 +9,39 @@
  */
 
 /**
- * Float Field value object class
+ * Relation Field value object class
  */
-namespace ezx\content;
-class Field_Type_Float extends Abstracts\FieldType
+namespace ezx\content\Field\Type;
+class Datetime extends Int
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezfloat';
+    const FIELD_IDENTIFIER = 'ezdatetime';
 
     /**
-     * @var float
+     * @var int
      */
-    public $default = 0.0;
+    public $default = 0;
 
     /**
-     * @var float
+     * @var int
      */
-    public $min = 0.0;
+    public $useSeconds = 0;
 
     /**
-     * @var float
+     * @var string
      */
-    public $max = 0.0;
-
-    /**
-     * @var float
-     */
-    public $state = 0;
+    public $adjustment = 0;
 
     /**
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
-        'min' => 'data_float1',
-        'max' => 'data_float2',
-        'default' => 'data_float3',
-        'state' => 'data_float4',
+        'default' => 'data_int1',
+        'useSeconds' => 'data_int2',
+        'adjustment' => 'data_text5',
     );
 
     /**

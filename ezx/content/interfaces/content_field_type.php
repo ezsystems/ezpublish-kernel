@@ -7,8 +7,8 @@
  * @package ext
  * @subpackage content
  */
-namespace ezx\content\Interfaces;
-interface ContentFieldType
+namespace ezx\content;
+interface ContentFieldTypeInterface
 {
     /**
      * Called when content object is constructed
