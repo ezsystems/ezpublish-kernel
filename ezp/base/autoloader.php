@@ -185,7 +185,7 @@ class Autoloader
     {
         try
         {
-            $generator = new ezcPhpGenerator( self::CACHE_FILE );
+            $generator = new \ezcPhpGenerator( self::CACHE_FILE );
             $generator->appendComment( "This is auto generated hash of autoload override classes!" );
             $generator->appendValueAssignment( 'classes', $classes );
             $generator->appendCustomCode( 'return $classes;' );
