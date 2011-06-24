@@ -11,7 +11,10 @@
 
 set_time_limit( 0 );
 
-require_once 'autoload.php';
+require 'config.php';
+require 'ezp/base/autoloader.php';
+spl_autoload_register( array( new ezp\base\Autoloader( $settings['base']['autoload'] ), 'load' ) );
+
 require_once 'PHPUnit/Autoload.php';
 
 
@@ -29,9 +32,10 @@ class ezpNextTestSuite extends PHPUnit_Framework_TestSuite
         $this->setName( 'ezp next Test Suite' );
         foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )
         {
-            if ( file_exists( "$path/tests/Suite.php" ) )
-                $this->addTestSuite( str_replace( DIRECTORY_SEPARATOR, '\\', "$path\\tests\\Suite" )  );
-
+            if ( file_exists( "$path/tests/suite.php" ) )
+            {
+                $this->addTestSuite( str_replace( '/', '\\', "$path\\tests\\Suite" )  );
+            }
         }
     }
 }

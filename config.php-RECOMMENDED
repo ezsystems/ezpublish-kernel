@@ -16,7 +16,7 @@ if ( version_compare( PHP_VERSION, '5.3' ) < 0 )
     print( '<p>ezpNext requires PHP 5.3 and higher!</p>' );
     exit;
 }
-elseif ( ini_get('request_order') !== 'GP' )
+elseif ( PHP_SAPI !== 'cli' && ini_get('request_order') !== 'GP' )
 {
     print( '<h1>ezpNext does not like your <a href="http://no2.php.net/manual/en/ini.core.php#ini.request-order">request_order</a> value: ' . ini_get('request_order'). '</h1>' );
     print( '<p>Only \'GP\' is supported due to security concerns!</p>' );
