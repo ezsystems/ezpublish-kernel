@@ -5,11 +5,11 @@
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
- * @package ext
+ * @package ezp
  * @subpackage base
  */
-namespace ezx\base\Interfaces;
-interface Observer// extends \SplObserver
+namespace ezp\base;
+interface ObserverInterface// extends \SplObserver
 {
     /**
      * Called when subject has been updated
@@ -18,5 +18,5 @@ interface Observer// extends \SplObserver
      * @param string $event
      * @return Observer
      */
-    public function update( Observable $subject, $event = 'update' );
+    public function update( ObservableInterface $subject, $event = 'update' );
 }

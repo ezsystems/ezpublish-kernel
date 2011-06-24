@@ -183,11 +183,11 @@ class ContentField extends Abstracts\Field
     /**
      * Called when subject has been updated
      *
-     * @param \ezx\base\Interfaces\Observable $subject
+     * @param \ezp\base\ObservableInterface $subject
      * @param string $event
      * @return ContentField
      */
-    public function update( \ezx\base\Interfaces\Observable $subject, $event = 'update' )
+    public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
     {
         if ( $subject instanceof ContentVersion )
         {

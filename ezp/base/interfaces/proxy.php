@@ -8,13 +8,13 @@
  * @subpackage base
  */
 
-namespace ezx\base\Interfaces;
-interface Proxy
+namespace ezp\base;
+interface ProxyInterface
 {
     /**
      * Load the object this proxy object represent
      *
-     * @return \ezx\base\Abstracts\DomainObject
+     * @return \ezp\base\AbstractModel
      */
     public function load();
 }

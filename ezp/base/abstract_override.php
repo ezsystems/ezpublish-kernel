@@ -13,8 +13,8 @@
  *
  */
 
-namespace ezp\base\Abstracts;
-abstract class Override
+namespace ezp\base;
+abstract class AbstractOverride
 {
     /**
      * The global path array, scoped in the order they should be parsed

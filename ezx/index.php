@@ -17,7 +17,8 @@ if ( !isset( $_GET['fn'] ) )
 
 chdir( '../' );
 require 'config.php';
-require 'autoload.php';
+require 'ezp/base/autoloader.php';
+spl_autoload_register( array( new ezp\base\Autoloader( $settings['base']['autoload'] ), 'load' ) );
 
 $paths = array();
 foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )//@todo Take from configuration
@@ -36,7 +37,7 @@ if ( $_GET['fn'] === 'create' )
 
     $sc = new ServiceContainer();
     $repository = $sc->getRepository();
-    $contentService = $repository->ContentService();
+    $contentService = $repository->getContentService();
 
     // Create Content object
     $content = $contentService->create( $_GET['identifier'] );
@@ -52,6 +53,10 @@ if ( $_GET['fn'] === 'create' )
     if ( isset( $content->fields['tags'] ) )
     {
         $content->fields['tags']->type->value = "instance1";
+        // should be:
+        // $content->fields['tags'] = "instance1";
+        // shortcut for:
+        //$content->fields['tags']->value = "instance1";
     }
 
     if ( isset( $_GET['title'] ) && isset( $content->fields['title'] ) )
@@ -84,7 +89,7 @@ else if ( $_GET['fn'] === 'get' )
 
     $sc = new ServiceContainer();
     $repository = $sc->getRepository();
-    $contentService = $repository->ContentService();
+    $contentService = $repository->getContentService();
 
     $content = $contentService->load( (int) $_GET['id'] );
     $locations = $content->locations;

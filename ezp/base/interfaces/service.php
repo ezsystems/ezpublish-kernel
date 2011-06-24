@@ -8,14 +8,14 @@
  * @subpackage base
  */
 
-namespace ezx\base\Interfaces;
-interface Service
+namespace ezp\base;
+interface ServiceInterface
 {
     /**
      * Setups service with reference to repository object that created it & corresponding storage engine handler
      *
      * @param Repository $repository
-     * @param StorageEngine\Handler $handler
+     * @param StorageEngineInterface $handler
      */
-    public function __construct( Repository $repository, StorageEngine\Handler $handler );
+    public function __construct( Repository $repository, StorageEngineInterface $se );
 }

@@ -26,6 +26,14 @@ namespace ezx\content;
 class Content extends Abstracts\ContentModel
 {
     /**
+     * Publication status constants
+     * @var integer
+     */
+    const STATUS_DRAFT = 0;
+    const STATUS_PUBLISHED = 1;
+    const STATUS_ARCHIVED = 2;
+
+    /**
      * Definition of properties on this class
      *
      * {@inheritdoc}
@@ -59,6 +67,11 @@ class Content extends Abstracts\ContentModel
         'locations' => array(
             'type' => self::TYPE_ARRAY,
             'member' => true,
+            'dynamic' => true,
+        ),
+        'fields' => array(
+            'type' => self::TYPE_ARRAY,
+            'member' => false,
             'dynamic' => true,
         ),
         'contentType' => array(
@@ -215,19 +228,13 @@ class Content extends Abstracts\ContentModel
     private $fields;
 
     /**
-     * Get value
+     * Get fields of current version
      *
-     * @throws \InvalidArgumentException
-     * @param string $name
      * @return mixed
      */
-    public function __get( $name )
+    protected function getFields()
     {
-        if ( $name === 'fields' )
-        {
             return $this->getCurrentVersion()->fields;
-        }
-        return parent::__get( $name );
     }
 
     /**

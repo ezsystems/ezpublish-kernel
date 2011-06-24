@@ -12,7 +12,7 @@
  * Content Service, extends repository with content specific operations
  */
 namespace ezx\content;
-class ContentService implements \ezx\base\Interfaces\Service
+class ContentService implements \ezp\base\ServiceInterface
 {
     /**
      * @var \ezx\base\Interfaces\Repository
@@ -20,21 +20,21 @@ class ContentService implements \ezx\base\Interfaces\Service
     protected $repository;
 
     /**
-     * @var \ezx\base\Interfaces\StorageEngine\Handler
+     * @var \ezp\base\StorageEngineInterface
      */
-    protected $handler;
+    protected $se;
 
     /**
      * Setups service with reference to repository object that created it & corresponding storage engine handler
      *
-     * @param \ezx\base\Interfaces\Repository $repository
-     * @param \ezx\base\Interfaces\StorageEngine\Handler $handler
+     * @param \ezp\base\Repository $repository
+     * @param \ezp\base\StorageEngineInterface $se
      */
-    public function __construct( \ezx\base\Interfaces\Repository $repository,
-                                 \ezx\base\Interfaces\StorageEngine\Handler $handler )
+    public function __construct( \ezp\base\Repository $repository,
+                                 \ezp\base\StorageEngineInterface $se )
     {
         $this->repository = $repository;
-        $this->handler = $handler;
+        $this->se = $se;
     }
 
     /**
@@ -46,7 +46,7 @@ class ContentService implements \ezx\base\Interfaces\Service
      */
     public function load( $id )
     {
-        $content = $this->handler->load( $id );
+        $content = $this->se->getContentHandler()->load( $id );
         if ( !$content )
             throw new \InvalidArgumentException( "Could not find 'Content' with id: {$id}" );
         return $content;
@@ -61,7 +61,7 @@ class ContentService implements \ezx\base\Interfaces\Service
      */
     public function create( $typeIdentifier )
     {
-        $type = $this->repository->ContentTypeService()->loadByIdentifier( $typeIdentifier );
+        $type = $this->repository->getContentTypeService()->loadByIdentifier( $typeIdentifier );
         return new Content( $type );
     }
 }

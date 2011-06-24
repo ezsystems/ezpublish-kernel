@@ -8,8 +8,8 @@
  * @subpackage base
  */
 
-namespace ezx\base\Interfaces\StorageEngine;
-interface ContentTypeHandler extends Handler
+namespace ezp\base\StorageEngine;
+interface ContentTypeHandlerInterface extends HandlerInterface
 {
     /**
      * Create ContentType object

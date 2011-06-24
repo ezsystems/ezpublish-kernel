@@ -8,13 +8,13 @@
  * @subpackage base
  */
 
-namespace ezp\base\Interfaces\Configuration;
-interface Writer extends Parser
+namespace ezp\base;
+interface ConfigurationWriterInterface extends ConfigurationParserInterface
 {
     /**
      * Store raw configuration data to file
      *
-     * @see \ezp\base\Interfaces\Configuration\Parser::parse() For $configurationData definition
+     * @see ConfigurationParserInterface::parse() For $configurationData definition
      * @param array $configurationData
      */
     public function write( array $configurationData );

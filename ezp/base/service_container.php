@@ -66,7 +66,7 @@ class ServiceContainer
      * Service function to get Response object
      *
      * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
-     * @return \ezp\base\Interfaces\Response
+     * @return \ezp\base\ResponseInterface
      */
     public function getResponse( array $callChainDependancieOverrides = array() )
     {
@@ -79,7 +79,7 @@ class ServiceContainer
      * Service function to get Repository object
      *
      * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
-     * @return \ezx\base\Interfaces\Repository
+     * @return \ezp\base\Repository
      */
     public function getRepository( array $callChainDependancieOverrides = array() )
     {
@@ -92,7 +92,7 @@ class ServiceContainer
      * Service function to get StorageEngine object
      *
      * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
-     * @return \ezx\base\Interfaces\StorageEngine
+     * @return \ezp\base\StorageEngineInterface
      */
     public function getStorageEngine( array $callChainDependancieOverrides = array() )
     {

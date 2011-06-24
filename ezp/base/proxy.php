@@ -8,8 +8,8 @@
  * @subpackage content
  */
 
-namespace ezx\base;
-class Proxy implements Interfaces\Proxy
+namespace ezp\base;
+class Proxy implements ProxyInterface
 {
     /**
      * @var Interfaces\Repository
@@ -32,7 +32,7 @@ class Proxy implements Interfaces\Proxy
      * @param Interfaces\Repository $repository
      * @param string $type The type of object this Proxy object represent
      * @param int $id Primary id
-     * @throws InvalidArgumentException If $id is not a int value above zero.
+     * @throws \InvalidArgumentException If $id is not a int value above zero.
      */
     public function __construct( Interfaces\Repository $repository, $type, $id )
     {

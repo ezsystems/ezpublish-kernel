@@ -35,7 +35,7 @@ $settings = array(
     'base' => array(
         'autoload' => array(
             // eZ Components paths on your system:
-            //'ezc-path' => '',         // svn/download in include path
+            //'ezc-path' => '',         // svn/download (in include path)
             //'ezc-path' => 'lib/ezc/', // bundle
             'ezc-path' => 'ezc/',     // pear
 
@@ -55,8 +55,8 @@ $settings = array(
             'use-cache' => true,
             // List of parser classes where key is file suffix
             'parsers' => array(
-                '.ini'            => 'ezp\base\Configuration\Parsers\Ini',
-                '.ini.append.php' => 'ezp\base\Configuration\Parsers\Ini',
+                '.ini'            => 'ezp\base\Configuration\IniParser',
+                '.ini.append.php' => 'ezp\base\Configuration\IniParser',
             ),
         ),
     )

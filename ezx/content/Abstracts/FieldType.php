@@ -12,7 +12,7 @@
  *
  */
 namespace ezx\content\Abstracts;
-abstract class FieldType extends ContentModel implements \ezx\base\Interfaces\Observer
+abstract class FieldType extends ContentModel implements \ezp\base\ObserverInterface
 {
     /**
      * Constant that Field types needs to defined
@@ -58,11 +58,11 @@ abstract class FieldType extends ContentModel implements \ezx\base\Interfaces\Ob
     /**
      * Called when subject has been updated
      *
-     * @param \ezx\base\Interfaces\Observable $subject
+     * @param \ezp\base\ObservableInterface $subject
      * @param string $event
      * @return Field
      */
-    public function update( \ezx\base\Interfaces\Observable $subject, $event = 'update' )
+    public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
     {
         if ( $subject instanceof Field )
         {

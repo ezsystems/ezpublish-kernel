@@ -8,14 +8,14 @@
  * @subpackage base
  */
 
-namespace ezp\base\Interfaces\Configuration;
-interface Parser
+namespace ezp\base;
+interface ConfigurationParserInterface
 {
     /**
      * Construct an instance for a specific file
      *
      * @param string $file A valid file name, file must exist by the time you call parse()!
-     *        For writer {@see \ezp\base\Interfaces\Configuration\Writer}, file will be overwritten if it exists!
+     *        For writer {@see ConfigurationWriterInterface}, file will be overwritten if it exists!
      */
     public function __construct( $file );
 

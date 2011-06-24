@@ -8,8 +8,8 @@
  * @subpackage content
  */
 
-namespace ezx\content;
-class Proxy implements \ezx\base\Interfaces\Proxy
+namespace ezp\content;
+class Proxy implements \ezp\base\ProxyInterface
 {
     /**
      * @var \ezx\base\Interfaces\Service
@@ -32,7 +32,7 @@ class Proxy implements \ezx\base\Interfaces\Proxy
      * @param \ezx\base\Interfaces\Service $service
      * @param int $id Primary id
      * @param string $loadFunctionName Optional, defines which function on handler to call, 'load' by default.
-     * @throws InvalidArgumentException If $id is not a int value above zero.
+     * @throws \InvalidArgumentException If $id is not a int value above zero.
      */
     public function __construct( \ezx\base\Interfaces\Service $service, $id, $loadFunctionName = 'load' )
     {

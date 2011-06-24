@@ -12,7 +12,7 @@
  * @Entity @Table(name="ezcontentobject_tree")
  */
 namespace ezx\content;
-class Location extends Abstracts\ContentModel implements \ezx\base\Interfaces\Observer
+class Location extends Abstracts\ContentModel implements \ezp\base\ObserverInterface
 {
     /**
      * Definition of properties on this class
@@ -159,11 +159,11 @@ class Location extends Abstracts\ContentModel implements \ezx\base\Interfaces\Ob
     /**
      * Called when subject has been updated
      *
-     * @param \ezx\base\Interfaces\Observable $subject
+     * @param \ezp\base\ObservableInterface $subject
      * @param string $event
      * @return Location
      */
-    public function update( \ezx\base\Interfaces\Observable $subject, $event = 'update' )
+    public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
     {
         if ( $subject instanceof Content )
         {

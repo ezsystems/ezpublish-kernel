@@ -12,9 +12,8 @@
 /**
  * Interface for content domain objects
  */
-namespace ezp;
-
-interface DomainObjectInterface
+namespace ezp\base;
+interface ModelInterface
 {
     /**
      * Returns an instance of the desired object, initialized from $state.
@@ -23,7 +22,7 @@ interface DomainObjectInterface
      * in, which has its properties set from the given $state array.
      *
      * @param array $state
-     * @return object
+     * @return ModelInterface
      */
     public static function __set_state( array $state );
 }

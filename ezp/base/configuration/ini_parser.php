@@ -1,6 +1,6 @@
 <?php
 /**
- * Configuration Ini Parser
+ * Configuration Ini Parser / writer
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -10,8 +10,8 @@
  * @uses \ezcConfiguration As fallback if parse_ini_string() fails
  */
 
-namespace ezp\base\Configuration\Parsers;
-class Ini implements \ezp\base\Interfaces\Configuration\Parser, \ezp\base\Interfaces\Configuration\Writer
+namespace ezp\base\Configuration;
+class IniParser implements \ezp\base\ConfigurationParserInterface, \ezp\base\ConfigurationWriterInterface
 {
     /**
      * Constant string used as a temporary true variable during ini parsing to avoid

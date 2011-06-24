@@ -9,12 +9,12 @@
  */
 
 namespace ezx\doctrine;
-class ContentTypeHandler implements \ezx\base\Interfaces\StorageEngine\ContentTypeHandler
+class ContentTypeHandler implements \ezp\base\StorageEngine\ContentTypeHandlerInterface
 {
     /**
      * Object for storage engine
      *
-     * @var \ezx\base\Interfaces\StorageEngine
+     * @var \ezp\base\StorageEngineInterface
      */
     protected $se;
 
@@ -28,10 +28,10 @@ class ContentTypeHandler implements \ezx\base\Interfaces\StorageEngine\ContentTy
     /**
      * Setups current instance with storage engine and doctrine object
      *
-     * @param \ezx\base\Interfaces\StorageEngine $engine
+     * @param \ezp\base\StorageEngineInterface $engine
      * @param object $backend
      */
-    public function __construct( \ezx\base\Interfaces\StorageEngine $engine, $backend = null )
+    public function __construct( \ezp\base\StorageEngineInterface $engine, $backend = null )
     {
         $this->se = $engine;
         $this->em = $backend;

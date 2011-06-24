@@ -4,11 +4,11 @@
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
- * @package ext
+ * @package ezp
  * @subpackage base
  */
-namespace ezx\base\Interfaces;
-interface Observable// extends \SplSubject
+namespace ezp\base;
+interface ObservableInterface// extends \SplSubject
 {
     /**
      * Attach a event listener to this subject
@@ -17,7 +17,7 @@ interface Observable// extends \SplSubject
      * @param string $event
      * @return Observable
      */
-    public function attach( Observer $observer, $event = 'update' );
+    public function attach( ObserverInterface $observer, $event = 'update' );
 
     /**
      * Detach a event listener to this subject
@@ -26,7 +26,7 @@ interface Observable// extends \SplSubject
      * @param string $event
      * @return Observable
      */
-    public function detach( Observer $observer, $event = 'update' );
+    public function detach( ObserverInterface $observer, $event = 'update' );
 
     /**
      * Notify listeners about certain events, if $event is null then it's plain 'update'

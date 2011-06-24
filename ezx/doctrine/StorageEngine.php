@@ -9,7 +9,7 @@
  */
 
 namespace ezx\doctrine;
-class StorageEngine implements \ezx\base\Interfaces\StorageEngine
+class StorageEngine implements \ezp\base\StorageEngineInterface
 {
     /**
      * Instances of handlers
@@ -64,9 +64,9 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
      * Get Content Handler
      *
      * @uses handler()
-     * @return \ezx\base\Interfaces\StorageEngine\ContentHandler
+     * @return \ezp\base\StorageEngine\ContentHandlerInterface
      */
-    public function ContentHandler()
+    public function getContentHandler()
     {
         return $this->handler( '\ezx\doctrine\ContentHandler' );
     }
@@ -75,9 +75,9 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
      * Get ContentType Handler
      *
      * @uses handler()
-     * @return \ezx\base\Interfaces\StorageEngine\ContentTypeHandler
+     * @return \ezp\base\StorageEngine\ContentTypeHandlerInterface
      */
-    public function ContentTypeHandler()
+    public function getContentTypeHandler()
     {
         return $this->handler( '\ezx\doctrine\ContentTypeHandler' );
     }
@@ -85,9 +85,9 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
     /**
      * Get Content Location Handler
      *
-     * @return \ezx\base\Interfaces\StorageEngine\ContentLocationHandler
+     * @return \ezp\base\StorageEngine\ContentLocationHandlerInterface
      */
-    public function ContentLocationHandler()
+    public function getContentLocationHandler()
     {
         return $this->handler( '\ezx\doctrine\ContentLocationHandler' );
     }
@@ -95,9 +95,9 @@ class StorageEngine implements \ezx\base\Interfaces\StorageEngine
     /**
      * Get User Handler
      *
-     * @return \ezx\base\Interfaces\StorageEngine\UserHandler
+     * @return \ezp\base\StorageEngine\UserHandlerInterface
      */
-    public function UserHandler()
+    public function getUserHandler()
     {
         return $this->handler( '\ezx\doctrine\UserHandler' );
     }

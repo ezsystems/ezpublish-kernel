@@ -13,14 +13,14 @@
  * Abstract base class for Content namespace
  * @access private
  */
-namespace ezp\Content;
+namespace ezp\base;
 use ezcBasePropertyNotFoundException;
 use ezcBasePropertyPermissionException;
 
-abstract class Base
+abstract class AbstractModel implements ObservableInterface, ModelInterface
 {
     /**
-     * Array indicates which protected/private properties are readable through
+     * Array indicates which public/protected properties are readable through
      * the magic getter (__get)
      * Key is property name, value is true
      * @var array
@@ -29,7 +29,7 @@ abstract class Base
 
     /**
      * Array container for virtual properties, handled dynamically by methods
-     * Key is property name, value is a bool (always true).
+     * Key is property name, value is a bool, true if member of aggregate, false if not.
      *
      * Corresponding get method name must follow pattern get<propertyName>().
      * The method will be called without any parameter
@@ -43,6 +43,72 @@ abstract class Base
      * @var array
      */
     protected $dynamicProperties;
+
+    /**
+     * List of event listeners
+     *
+     * @var ObserverInterface[]
+     */
+    private $observers = array();
+
+
+    /**
+     * Attach a event listener to this subject
+     *
+     * @param ObserverInterface $observer
+     * @param string $event
+     * @return AbstractModel
+     */
+    public function attach( ObserverInterface $observer, $event = 'update' )
+    {
+        if ( isset( $this->observers[$event] ) )
+        {
+            $this->observers[$event][] = $observer;
+        }
+        else
+        {
+            $this->observers[$event] = array( $observer );
+        }
+        return $this;
+    }
+
+    /**
+     * Detach a event listener to this subject
+     *
+     * @param ObserverInterface $observer
+     * @param string $event
+     * @return AbstractModel
+     */
+    public function detach( ObserverInterface $observer, $event = 'update' )
+    {
+        if ( !empty( $this->observers[$event] ) )
+        {
+            foreach( $this->observers[$event] as $key => $obj )
+            {
+                if ( $obj === $observer )
+                    unset( $this->observers[$event][$key] );
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Notify listeners about certain events, by default $event is a plain 'update'
+     *
+     * @param string $event
+     * @return AbstractModel
+     */
+    public function notify( $event = 'update' )
+    {
+        if ( !empty( $this->observers[$event] ) )
+        {
+            foreach( $this->observers[$event] as $obj )
+            {
+                $obj->update( $this, $event );
+            }
+        }
+        return $this;
+    }
 
     /**
      * Magic getter
@@ -63,6 +129,7 @@ abstract class Base
             return $this->$method();
         }
 
+        throw new \InvalidArgumentException( "'{$property}' is not a valid property on class: " . get_class( $this ) );
         throw new ezcBasePropertyNotFoundException( $property );
     }
 
@@ -90,6 +157,7 @@ abstract class Base
         }
         else
         {
+            throw new \InvalidArgumentException( "'{$property}' is not a valid property on class: " . get_class( $this ) );
             throw new ezcBasePropertyNotFoundException( $property );
         }
     }

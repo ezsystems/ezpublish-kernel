@@ -8,36 +8,36 @@
  * @subpackage base
  */
 
-namespace ezx\base\Interfaces;
-interface StorageEngine
+namespace ezp\base;
+interface StorageEngineInterface
 {
     /**
      * Get Content Handler
      *
-     * @return StorageEngine\ContentHandler
+     * @return StorageEngine\ContentHandlerInterface
      */
-    public function ContentHandler();
+    public function getContentHandler();
 
     /**
      * Get Content Handler
      *
-     * @return StorageEngine\ContentTypeHandler
+     * @return StorageEngine\ContentTypeHandlerInterface
      */
-    public function ContentTypeHandler();
+    public function getContentTypeHandler();
 
     /**
      * Get Content Location Handler
      *
-     * @return StorageEngine\ContentLocationHandler
+     * @return StorageEngine\ContentLocationHandlerInterface
      */
-    public function ContentLocationHandler();
+    public function getContentLocationHandler();
 
     /**
      * Get User Handler
      *
-     * @return StorageEngine\UserHandler
+     * @return StorageEngine\UserHandlerInterface
      */
-    public function UserHandler();
+    public function getUserHandler();
 
     /**
      * Begins an transaction, make sure you'll call commit or rollback when done,
