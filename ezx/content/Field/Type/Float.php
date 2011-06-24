@@ -41,30 +41,13 @@ class Field_Type_Float extends Abstracts\FieldType
     public $state = 0;
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'default' => array(
-            'type' => self::TYPE_FLOAT,
-            'legacy_column' => 'data_float3',
-        ),
-        'min' => array(
-            'type' => self::TYPE_FLOAT,
-            'legacy_column' => 'data_float1',
-        ),
-        'max' => array(
-            'type' => self::TYPE_FLOAT,
-            'legacy_column' => 'data_float2',
-        ),
-        'state' => array(
-            'type' => self::TYPE_FLOAT,
-            'legacy_column' => 'data_float4',
-        ),
+    protected $readableProperties = array(
+        'min' => 'data_float1',
+        'max' => 'data_float2',
+        'default' => 'data_float3',
+        'state' => 'data_float4',
     );
 
     /**

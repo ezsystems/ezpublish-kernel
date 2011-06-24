@@ -15,49 +15,23 @@ namespace ezx\content;
 class ContentField extends Abstracts\Field
 {
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'id' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'version' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'data_text' => array(
-            'type' => self::TYPE_STRING,
-            'internal' => true,
-        ),
-        'data_int' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'data_float' => array(
-            'type' => self::TYPE_FLOAT,
-            'internal' => true,
-        ),
-        'fieldTypeString' => array(
-            'type' => self::TYPE_STRING,
-        ),
-        /*'contentobject_id' => array(
-            'type' => self::TYPE_INT,
-        ),*/
-        'type' => array(
-            'type' => self::TYPE_OBJECT,
-            'member' => true,
-            'dynamic' => true,
-        ),
-        'contentVersion' => array(
-            'type' => self::TYPE_OBJECT,
-            'dynamic' => true,
-        ),
+    protected $readableProperties = array(
+        'id' => false,
+        'version' => false,
+        'data_text' => false,
+        'data_int' => false,
+        'data_float' => false,
+        'fieldTypeString' => true,
+    );
+
+    /**
+     * @var array Dynamic properties on this object
+     */
+    protected $dynamicProperties = array(
+        'type' => true,
+        'contentVersion' => false,
     );
 
     /**

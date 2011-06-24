@@ -27,18 +27,10 @@ class Field_Type_Keyword extends Field_Type_String
     public $default = '';
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'default' => array(
-            'type' => self::TYPE_STRING,
-            'legacy_column' => 'data_text1',
-        ),
+    protected $readableProperties = array(
+        'default' => 'data_text1',
     );
 
     /**

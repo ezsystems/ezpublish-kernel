@@ -27,18 +27,10 @@ class Field_String extends Abstracts\FieldType implements Interfaces\ContentFiel
     public $value = '';
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'value' => array(
-            'type' => self::TYPE_STRING,
-            'legacy_column' => 'data_text',
-        ),
+    protected $readableProperties = array(
+        'value' => 'data_text',
     );
 
     /**

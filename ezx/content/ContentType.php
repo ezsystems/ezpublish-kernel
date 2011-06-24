@@ -21,29 +21,21 @@ namespace ezx\content;
 class ContentType extends Abstracts\ContentModel
 {
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'id' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'version' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'identifier' => array(
-            'type' => self::TYPE_STRING,
-        ),
-        'fields' => array(
-            'type' => self::TYPE_ARRAY,
-            'dynamic' => true,
-        ),
+    protected $readableProperties = array(
+        'id' => false,
+        'version' => false,
+        'identifier' => true,
+    );
+
+    /**
+     * @var array Dynamic properties on this object
+     */
+    protected $dynamicProperties = array(
+        'contentObjects' => false,
+        'groups' => true,
+        'fields' => true,
     );
 
     public function __construct()

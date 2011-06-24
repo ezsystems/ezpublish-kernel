@@ -30,27 +30,14 @@ class Field_Type_String extends Abstracts\FieldType
      * @public
      * @var int
      */
-    public $max_length = 255;
+    public $maxLength = 255;
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'default' => array(
-            'type' => self::TYPE_STRING,
-            'legacy_column' => 'data_text1',
-        ),
-        'max_length' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int1',
-            'min' => 1,
-            'max' => 255,
-        ),
+    protected $readableProperties = array(
+        'default' => 'data_text1',
+        'maxLength' => 'data_int1',
     );
 
     /**

@@ -22,7 +22,9 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
     /**
      * Array indicates which public/protected properties are readable through
      * the magic getter (__get)
-     * Key is property name, value is true
+     * Key is property name, value is bool or a string to indicate mapping in case of FieldTypes
+     * If value is !!true that indicates that property is included in serialization.
+     *
      * @var array
      */
     protected $readableProperties;
@@ -35,14 +37,14 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
      * The method will be called without any parameter
      * e.g. : for a dynamic property named "myProperty", method should be "getMyProperty()".
      *
-     * If the dynamic property is writeable, a set method should be defined.
+     * If the dynamic property is writable, a set method should be defined.
      * Corresponding set method name must follow pattern set<propertyName>( $value ).
      * The method will be called with only one $value parameter.
      * e.g. : for a dynamic property named "myProperty", method should be "setMyProperty( $value )"
      *
      * @var array
      */
-    protected $dynamicProperties;
+    protected $dynamicProperties = array();
 
     /**
      * List of event listeners
@@ -51,6 +53,15 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
      */
     private $observers = array();
 
+    /**
+     * Return list of properties, where key is properties and value definition.
+     *
+     * @return array
+     */
+    public function properties()
+    {
+        return $this->dynamicProperties + $this->readableProperties;
+    }
 
     /**
      * Attach a event listener to this subject
@@ -130,7 +141,7 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
         }
 
         throw new \InvalidArgumentException( "'{$property}' is not a valid property on class: " . get_class( $this ) );
-        throw new ezcBasePropertyNotFoundException( $property );
+        //throw new ezcBasePropertyNotFoundException( $property );
     }
 
     /**
@@ -158,7 +169,7 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
         else
         {
             throw new \InvalidArgumentException( "'{$property}' is not a valid property on class: " . get_class( $this ) );
-            throw new ezcBasePropertyNotFoundException( $property );
+            //throw new ezcBasePropertyNotFoundException( $property );
         }
     }
 
@@ -169,7 +180,7 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
      */
     public function __isset( $property )
     {
-        return isset( $this->readableProperties[$property] ) || isset( $this->dynamicProperties[$property] );
+        return isset( $this->readableProperties[$property] ) || isset( $this->dynamicProperties[$property] );
     }
 
     /**

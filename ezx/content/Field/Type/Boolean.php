@@ -26,18 +26,10 @@ class Field_Type_Boolean extends Field_Type_Int
     public $default = 0;
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'default' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int1',
-        ),
+    protected $readableProperties = array(
+        'default' => 'data_int1',
     );
 
     /**

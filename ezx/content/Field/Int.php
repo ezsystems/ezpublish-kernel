@@ -27,18 +27,10 @@ class Field_Int extends Abstracts\FieldType implements Interfaces\ContentFieldTy
     public $value = 0;
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'value' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int',
-        ),
+    protected $readableProperties = array(
+        'value' => 'data_int',
     );
 
     /**

@@ -41,30 +41,13 @@ class Field_Type_Int extends Abstracts\FieldType
     public $state = 0;
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'default' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int3',
-        ),
-        'min' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int1',
-        ),
-        'max' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int2',
-        ),
-        'state' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int4',
-        ),
+    protected $readableProperties = array(
+        'min' => 'data_int1',
+        'max' => 'data_int2',
+        'default' => 'data_int3',
+        'state' => 'data_int4',
     );
 
     /**

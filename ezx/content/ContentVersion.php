@@ -22,55 +22,26 @@ namespace ezx\content;
 class ContentVersion extends Abstracts\ContentModel implements \ezp\base\ObserverInterface
 {
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'id' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'version' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'userId' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'creatorId' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'created' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'modified' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'status' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'initialLanguageId' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'languageMask' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'contentObjectId' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'fields' => array(
-            'type' => self::TYPE_ARRAY,
-            'member' => true,
-            'dynamic' => true,
-        ),
-        'content' => array(
-            'type' => self::TYPE_OBJECT,
-            'dynamic' => true,
-        ),
+    protected $readableProperties = array(
+        'id' => false,
+        'version' => false,
+        'userId' => true,
+        'creatorId' => true,
+        'created' => true,
+        'modified' => true,
+        'initialLanguageId' => true,
+        'languageMask' => true,
+        'contentObjectId' => false,
+    );
+
+    /**
+     * @var array Dynamic properties on this object
+     */
+    protected $dynamicProperties = array(
+        'fields' => true,
+        'content' => false,
     );
 
     /**
@@ -168,7 +139,7 @@ class ContentVersion extends Abstracts\ContentModel implements \ezp\base\Observe
      * @OneToMany(targetEntity="ContentField", mappedBy="contentVersion", fetch="EAGER")
      * @var ContentField[]
      */
-    private $fields;
+    protected $fields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)

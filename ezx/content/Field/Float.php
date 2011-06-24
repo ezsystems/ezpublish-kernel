@@ -27,18 +27,10 @@ class Field_Float extends Abstracts\FieldType implements Interfaces\ContentField
     public $value = 0.0;
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'value' => array(
-            'type' => self::TYPE_FLOAT,
-            'legacy_column' => 'data_float',
-        ),
+    protected $readableProperties = array(
+        'value' => 'data_float',
     );
 
     /**

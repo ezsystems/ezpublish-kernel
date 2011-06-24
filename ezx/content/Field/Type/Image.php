@@ -23,21 +23,13 @@ class Field_Type_Image extends Field_Type_String
     /**
      * @var int
      */
-    public $max_size = 0;
+    public $maxSize = 0;
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'max_size' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int1',
-        ),
+    protected $readableProperties = array(
+        'maxSize' => 'data_int1',
     );
 
     /**

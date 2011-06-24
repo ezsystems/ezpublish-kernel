@@ -31,24 +31,11 @@ class Field_Type_Text extends Field_Type_String
     public $columns = 10;
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'default' => array(
-            'type' => self::TYPE_STRING,
-            'legacy_column' => 'data_text1',
-        ),
-        'columns' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int1',
-            'min' => 1,
-            'max' => 50,
-        ),
+    protected $readableProperties = array(
+        'default' => 'data_text1',
+        'columns' => 'data_int1',
     );
 
     /**

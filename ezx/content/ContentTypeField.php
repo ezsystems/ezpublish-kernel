@@ -17,36 +17,23 @@ namespace ezx\content;
 class ContentTypeField extends Abstracts\Field
 {
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'id' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'version' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'contentTypeID' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'identifier' => array(
-            'type' => self::TYPE_STRING,
-        ),
-        'fieldTypeString' => array(
-            'type' => self::TYPE_STRING,
-        ),
-        'type' => array(
-            'type' => self::TYPE_OBJECT,
-            'dynamic' => true,
-        ),
+    protected $readableProperties = array(
+        'id' => false,
+        'version' => false,
+        'contentTypeId' => false,
+        'identifier' => true,
+        'fieldTypeString' => true,
+    );
+
+    /**
+     * @var array Dynamic properties on this object
+     */
+    protected $dynamicProperties = array(
+        'type' => true,
+        'contentType' => false,
+        'contentFields' => false,
     );
 
     /**
@@ -76,7 +63,7 @@ class ContentTypeField extends Abstracts\Field
      * @Column(type="integer", name="contentclass_id")
      * @var int
      */
-    protected $contentTypeID;
+    protected $contentTypeId;
 
     /**
      * @Column(length=50)

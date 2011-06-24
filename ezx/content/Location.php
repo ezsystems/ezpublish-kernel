@@ -15,40 +15,22 @@ namespace ezx\content;
 class Location extends Abstracts\ContentModel implements \ezp\base\ObserverInterface
 {
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'id' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'depth' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'isHidden' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'isInvisible' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'content' => array(
-            'type' => self::TYPE_OBJECT,
-            'dynamic' => true,
-        ),
-        'parent' => array(
-            'type' => self::TYPE_OBJECT,
-            'dynamic' => true,
-        ),
-        'children' => array(
-            'type' => self::TYPE_ARRAY,
-            'dynamic' => true,
-        ),
+    protected $readableProperties = array(
+        'id' => false,
+        'depth' => false,
+        'isHidden' => true,
+        'isInvisible' => true,
+    );
+
+    /**
+     * @var array Dynamic properties on this object
+     */
+    protected $dynamicProperties = array(
+        'content' => false,
+        'parent' => false,
+        'children' => false,
     );
 
     /**

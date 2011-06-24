@@ -28,7 +28,7 @@ class Field_Type_Datetime extends Field_Type_Int
     /**
      * @var int
      */
-    public $use_seconds = 0;
+    public $useSeconds = 0;
 
     /**
      * @var string
@@ -36,26 +36,12 @@ class Field_Type_Datetime extends Field_Type_Int
     public $adjustment = 0;
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'default' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int1',
-        ),
-        'use_seconds' => array(
-            'type' => self::TYPE_INT,
-            'legacy_column' => 'data_int2',
-        ),
-        'adjustment' => array(
-            'type' => self::TYPE_STRING,
-            'legacy_column' => 'data_text5',
-        ),
+    protected $readableProperties = array(
+        'default' => 'data_int1',
+        'useSeconds' => 'data_int2',
+        'adjustment' => 'data_text5',
     );
 
     /**

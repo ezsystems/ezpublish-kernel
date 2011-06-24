@@ -89,9 +89,8 @@ abstract class Field extends ContentModel implements \ezp\base\ObserverInterface
      */
     protected function fromType( FieldType $type )
     {
-        foreach ( $type->definition() as $property => $propertyDefinition )
+        foreach ( $type->properties() as $property => $legacyProperty )
         {
-            $legacyProperty = $propertyDefinition['legacy_column'];
             if ( isset( $this->$legacyProperty ) )
                 $this->$legacyProperty = $type->$property;
             else
@@ -108,9 +107,8 @@ abstract class Field extends ContentModel implements \ezp\base\ObserverInterface
      */
     protected function toType( FieldType $type )
     {
-        foreach ( $type->definition() as $property => $propertyDefinition )
+        foreach ( $type->properties() as $property => $legacyProperty )
         {
-            $legacyProperty = $propertyDefinition['legacy_column'];
             if ( isset( $this->$legacyProperty ) )
                 $type->$property = $this->$legacyProperty;
             else

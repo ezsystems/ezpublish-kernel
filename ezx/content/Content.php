@@ -34,50 +34,24 @@ class Content extends Abstracts\ContentModel
     const STATUS_ARCHIVED = 2;
 
     /**
-     * Definition of properties on this class
-     *
-     * {@inheritdoc}
-     *
-     * @see \ezx\base\Abstracts\DomainObject::$definition
-     * @var array
+     * @var array Readable of properties on this object
      */
-    protected static $definition = array(
-        'id' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'currentVersion' => array(
-            'type' => self::TYPE_INT,
-            'internal' => true,
-        ),
-        'name' => array(
-            'type' => self::TYPE_STRING,
-        ),
-        'ownerId' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'sectionId' => array(
-            'type' => self::TYPE_INT,
-        ),
-        'versions' => array(
-            'type' => self::TYPE_ARRAY,
-            'member' => true,
-            'dynamic' => true,
-        ),
-        'locations' => array(
-            'type' => self::TYPE_ARRAY,
-            'member' => true,
-            'dynamic' => true,
-        ),
-        'fields' => array(
-            'type' => self::TYPE_ARRAY,
-            'member' => false,
-            'dynamic' => true,
-        ),
-        'contentType' => array(
-            'type' => self::TYPE_OBJECT,
-            'dynamic' => true,
-        ),
+    protected $readableProperties = array(
+        'id' => false,
+        'currentVersion' => false,
+        'name' => false,
+        'ownerId' => true,
+        'sectionId' => true,
+    );
+
+    /**
+     * @var array Dynamic properties on this object
+     */
+    protected $dynamicProperties = array(
+        'fields' => true,
+        'locations' => true,
+        'contentType' => false,
+        'versions' => false,
     );
 
     /**
@@ -172,7 +146,7 @@ class Content extends Abstracts\ContentModel
      * @OneToMany(targetEntity="ContentVersion", mappedBy="content", fetch="EAGER")
      * @var ContentVersion[]
      */
-    private $versions;
+    protected $versions;
 
     /**
      * Return collection of all content versions
@@ -221,20 +195,13 @@ class Content extends Abstracts\ContentModel
     }
 
     /**
-     * Shortcut to ->currentVersion()->fields
-     *
-     * @var ContentField[]
-     */
-    private $fields;
-
-    /**
      * Get fields of current version
      *
      * @return mixed
      */
     protected function getFields()
     {
-            return $this->getCurrentVersion()->fields;
+        return $this->getCurrentVersion()->fields;
     }
 
     /**
