@@ -9,7 +9,7 @@
  * @subpackage content
  */
 namespace ezp\content;
-class PermissionException extends ezp\BaseException
+class PermissionException extends ezp\base\Exception
 {
 
 }

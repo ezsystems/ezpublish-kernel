@@ -9,7 +9,7 @@
  * @subpackage content
  */
 namespace ezp\content;
-class ContentNotFoundException extends ezp\BaseException
+class ContentNotFoundException extends ezp\base\Exception
 {
 
 }

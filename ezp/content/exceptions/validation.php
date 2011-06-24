@@ -9,7 +9,7 @@
  * @subpackage content
  */
 namespace ezp\content;
-class ValidationException extends ezp\BaseException
+class ValidationException extends ezp\base\Exception
 {
 
 }
