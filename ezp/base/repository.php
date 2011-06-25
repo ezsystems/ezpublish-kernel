@@ -73,7 +73,7 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggreagate memebers.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return \ezp\content\ContentService
+     * @return \ezx\content\ContentService
      */
     public function getContentService()
     {
@@ -103,7 +103,7 @@ class Repository
      */
     public function getLocationService()
     {
-        return $this->service( '\ezx\content\LocationService' );
+        return $this->service( '\ezp\content\LocationService' );
     }
 
     /**
@@ -116,7 +116,7 @@ class Repository
      */
     public function getUserService()
     {
-        return $this->service( '\ezx\user\UserService' );
+        return $this->service( '\ezp\user\UserService' );
     }
 
     /**
