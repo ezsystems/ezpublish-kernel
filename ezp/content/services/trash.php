@@ -5,8 +5,8 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://ez.no/licenses/gnu_gpl GNU GPL v2
  * @version //autogentag//
- * @package Content
- * @subpackages Services
+ * @package ezp
+ * @subpackage content
  */
 
 /**
@@ -18,13 +18,37 @@
  * again if restored. We therefore most likely need extra informations in order to be able to do that.
  * Is it possible to achieve this in the business layer only, or do we need extra storage ?
  *
- * @package Content
- * @subpackage Services
+ * @package ezp
+ * @subpackage content
  */
 namespace ezp\content\Services;
+use ezp\content\Content, ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
 
 class Trash implements ServiceInterface
 {
+    /**
+     * @var \ezx\base\Interfaces\Repository
+     */
+    protected $repository;
+
+    /**
+     * @var \ezp\base\StorageEngineInterface
+     */
+    protected $se;
+
+    /**
+     * Setups service with reference to repository object that created it & corresponding storage engine handler
+     *
+     * @param \ezp\base\Repository $repository
+     * @param \ezp\base\StorageEngineInterface $se
+     */
+    public function __construct( Repository $repository,
+                                 StorageEngineInterface $se )
+    {
+        $this->repository = $repository;
+        $this->se = $se;
+    }
+
     /**
      * Sends $content to trash
      *
