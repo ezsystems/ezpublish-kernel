@@ -58,6 +58,7 @@ class Autoloader
             'repositories' => array( 'ezp' => 'ezp',
                                      'ezx' => 'ezx' ),
             'development-mode' => false,
+            'allow-kernel-override' => false,
         );
     }
 
@@ -100,20 +101,15 @@ class Autoloader
          if ( strncmp( $className, 'ezp\\', 4 ) !== 0 && strncmp( $className, 'ezx\\', 4 ) !== 0  )
              return false;
 
-        // Transform camel case to underscore style for text
-        // e.g. CamelCase => camel_case.php
-        static $upperToLowerCaseWithUnderscore = array(
-                'A' => '_a',                    'B' => '_b',                    'C' => '_c',
-                'D' => '_d',                    'E' => '_e',                    'F' => '_f',
-                'G' => '_g',                    'H' => '_h',                    'I' => '_i',
-                'J' => '_j',                    'K' => '_k',                    'L' => '_l',
-                'M' => '_m',                    'N' => '_n',                    'O' => '_o',
-                'P' => '_p',                    'Q' => '_q',                    'R' => '_r',
-                'S' => '_s',                    'T' => '_t',                    'U' => '_u',
-                'V' => '_v',                    'W' => '_w',                    'X' => '_x',
-                'Y' => '_y',                    'Z' => '_z'
+        // Transform camel case to underscore style for text, e.g. CamelCase => camel_case.php
+        static $toLowerCaseWithUnderscore = array(
+                'A' => '_a',    'B' => '_b',    'C' => '_c',    'D' => '_d',    'E' => '_e',    'F' => '_f',
+                'G' => '_g',    'H' => '_h',    'I' => '_i',    'J' => '_j',    'K' => '_k',    'L' => '_l',
+                'M' => '_m',    'N' => '_n',    'O' => '_o',    'P' => '_p',    'Q' => '_q',    'R' => '_r',
+                'S' => '_s',    'T' => '_t',    'U' => '_u',    'V' => '_v',    'W' => '_w',    'X' => '_x',
+                'Y' => '_y',    'Z' => '_z'
                 );
-        $fileName = str_replace( array( '\\', '/_' ), '/', strtr( $className, $upperToLowerCaseWithUnderscore ) ) . '.php';
+        $fileName = str_replace( array( '\\', '/_' ), '/', strtr( $className, $toLowerCaseWithUnderscore ) ) . '.php';
 
         /**
          * Particular cases : Interfaces and Exceptions
@@ -139,7 +135,6 @@ class Autoloader
      */
     public function generateClassesList()
     {
-
         $ezpClasses = array();
         $ezpTestClasses = array();
         $ezpExtensionClasses = array();
@@ -160,12 +155,9 @@ class Autoloader
             $ezpTestClasses = require 'var/autoload/ezp_tests.php';
         }
 
-        if ( defined( 'EZP_AUTOLOAD_ALLOW_KERNEL_OVERRIDE' ) && EZP_AUTOLOAD_ALLOW_KERNEL_OVERRIDE )
+        if ( $this->settings['allow-kernel-override'] && file_exists( 'var/autoload/ezp_override.php' ) )
         {
-            if ( file_exists( 'var/autoload/ezp_override.php' ) )
-            {
-                $ezpKernelOverrideClasses = require 'var/autoload/ezp_override.php';
-            }
+            $ezpKernelOverrideClasses = require 'var/autoload/ezp_override.php';
         }
 
         return $ezpKernelOverrideClasses + $ezpTestClasses + $ezpExtensionClasses + $ezpClasses;
