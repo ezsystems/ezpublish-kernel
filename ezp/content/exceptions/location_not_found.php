@@ -9,7 +9,7 @@
  * @subpackage content
  */
 namespace ezp\content;
-class LocationNotFoundException extends ezp\base\Exception
+class LocationNotFoundException extends \ezp\base\Exception
 {
 
 }

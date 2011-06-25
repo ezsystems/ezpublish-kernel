@@ -49,7 +49,7 @@ class Content implements ServiceInterface
      * @return \ezp\content\Content The newly created content
      * @throws \ezp\content\ValidationException If a validation problem has been found for $content
      */
-    public function create( \ezp\content\Content $content )
+    public function create( Content $content )
     {
         // @todo : Do any necessary actions to insert $content in the content repository
         // go through all locations to create or update them
@@ -62,7 +62,7 @@ class Content implements ServiceInterface
      * @return $content
      * @throws \ezp\content\ValidationException If a validation problem has been found for $content
      */
-    public function update( \ezp\content\Content $content )
+    public function update( Content $content )
     {
         // @todo : Do any necessary actions to update $content in the content repository
         // go through all locations to create or update them
@@ -71,13 +71,16 @@ class Content implements ServiceInterface
 
     /**
      * Loads a content from its id ($contentId)
-     * @param integer $contentId
+     * @param int $contentId
      * @return \ezp\content\Content
      * @throws \ezp\content\ContentNotFoundException if content could not be found
      */
     public function load( $contentId )
     {
-
+        $content = $this->se->getContentHandler()->load( $contentId );
+        if ( !$content )
+            throw new \ezp\content\ContentNotFoundException( $contentId );
+        return $content;
     }
 
 
@@ -86,7 +89,7 @@ class Content implements ServiceInterface
      *
      * @param \ezp\content\Content $content
      */
-    public function delete( \ezp\content\Content $content )
+    public function delete( Content $content )
     {
         // take care of:
         // 1. removing the subtree of all content's locations

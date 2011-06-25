@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\content\Services\Subtree class.
+ * File containing the ezp\content\Services\Location class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://ez.no/licenses/gnu_gpl GNU GPL v2
@@ -10,14 +10,14 @@
  */
 
 /**
- * Subtree service, used for complex subtree operations
+ * Location service, used for complex subtree operations
  * @package ezp
  * @subpackage content
  */
 namespace ezp\content\Services;
 use ezp\content\Content, ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
 
-class Subtree implements ServiceInterface
+class Location implements ServiceInterface
 {
     /**
      * @var \ezx\base\Interfaces\Repository
@@ -50,7 +50,7 @@ class Subtree implements ServiceInterface
      *
      * @return \ezp\content\Location The newly created subtree
      */
-    public function copy( \ezp\content\Location $subtree, \ezp\content\Location $targetLocation )
+    public function copy( Location $subtree, Location $targetLocation )
     {
     }
 
@@ -66,7 +66,7 @@ class Subtree implements ServiceInterface
     }
 
 
-    public function children( \ezp\content\Location $location )
+    public function children( Location $location )
     {
 
     }
@@ -78,7 +78,7 @@ class Subtree implements ServiceInterface
      * @return \ezp\content\Location the newly created Location
      * @throws \ezp\content\ValidationException If a validation problem has been found for $content
      */
-    public function create( \ezp\content\Location $location )
+    public function create( Location $location )
     {
         // repo/storage stuff
         return $location;
@@ -91,7 +91,7 @@ class Subtree implements ServiceInterface
      * @return \ezp\content\Location the updated Location
      * @throws \ezp\content\ValidationException If a validation problem has been found for $content
      */
-    public function update( \ezp\content\Location $location )
+    public function update( Location $location )
     {
         // repo/storage stuff
         return $location;
@@ -105,7 +105,7 @@ class Subtree implements ServiceInterface
      * @return void
      * @throws \ezp\content\ValidationException If a validation problem has been found
      */
-    public function swap( \ezp\content\Location $location1, \ezp\content\Location $location2 )
+    public function swap( Location $location1, Location $location2 )
     {
 
     }
@@ -117,7 +117,7 @@ class Subtree implements ServiceInterface
      * @return void
      * @throws \ezp\content\ValidationException If a validation problem has been found
      */
-    public function hide( \ezp\content\Location $location )
+    public function hide( Location $location )
     {
         // take care of :
         // 1. hidding $location
@@ -132,7 +132,7 @@ class Subtree implements ServiceInterface
      * @return void
      * @throws \ezp\content\ValidationException If a validation problem has been found;
      */
-    public function unhide( \ezp\content\Location $location )
+    public function unhide( Location $location )
     {
         // take care of :
         // 1. unhidding $location
@@ -149,7 +149,7 @@ class Subtree implements ServiceInterface
      * @return void
      * @throws \ezp\content\ValidationException If a validation problem has been found;
      */
-    public function move( \ezp\content\Location $location, \ezp\content\Location $newParent )
+    public function move( Location $location, Location $newParent )
     {
         // take care of :
         // 1. set parentId and path for $location
@@ -164,7 +164,7 @@ class Subtree implements ServiceInterface
      * @return void
      * @throws \ezp\content\ValidationException If a validation problem has been found;
      */
-    public function delete( \ezp\content\Location $location )
+    public function delete( Location $location )
     {
         // take care of:
         // 1. removing the current location
@@ -185,7 +185,7 @@ class Subtree implements ServiceInterface
      * @return void
      * @throws \ezp\content\ValidationException If a validation problem has been found;
      */
-    public function assignSection( \ezp\content\Location $startingPoint, \ezp\content\Section $section )
+    public function assignSection( Location $startingPoint, \ezp\content\Section $section )
     {
     }
 }

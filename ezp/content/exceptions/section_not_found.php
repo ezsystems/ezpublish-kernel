@@ -9,7 +9,7 @@
  * @subpackage content
  */
 namespace ezp\content;
-class SectionNotFoundException extends ezp\base\Exception
+class SectionNotFoundException extends \ezp\base\Exception
 {
 
 }

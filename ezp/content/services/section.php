@@ -15,7 +15,7 @@
  * @subpackage content
  */
 namespace ezp\content\Services;
-use ezp\content\Content, ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
+use ezp\content\Section, ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
 
 class Section implements ServiceInterface
 {
@@ -49,7 +49,7 @@ class Section implements ServiceInterface
      * @return \ezp\content\Section The newly create section
      * @throws \ezp\content\ValidationException If a validation problem has been found for $section
      */
-    public function create( \ezp\content\Section $section )
+    public function create( Section $section )
     {
     }
 
@@ -60,7 +60,7 @@ class Section implements ServiceInterface
      * @return $section
      * @throws \ezp\content\ValidationException If a validation problem has been found for $section
      */
-    public function update( \ezp\content\Section $section )
+    public function update( Section $section )
     {
     }
 
@@ -92,7 +92,7 @@ class Section implements ServiceInterface
      * @param \ezp\content\Section $section
      * @return int
      */
-    public function countAssignedContents( \ezp\content\Section $section )
+    public function countAssignedContents( Section $section )
     {
     }
 
@@ -105,7 +105,7 @@ class Section implements ServiceInterface
      *         if section can be deleted
      *         because it is still assigned to some contents.
      */
-    public function delete( \ezp\content\Section $section )
+    public function delete( Section $section )
     {
         if ( $this->countAssignedContents( $section ) > 0 )
         {

@@ -54,7 +54,7 @@ class Trash implements ServiceInterface
      *
      * @param \ezp\content\Content $content
      */
-    public function trash( \ezp\content\Content $content )
+    public function trash( Content $content )
     {
 
     }
@@ -64,7 +64,7 @@ class Trash implements ServiceInterface
      *
      * @param \ezp\content\Content $content
      */
-    public function untrash( \ezp\content\Content $content )
+    public function unTrash( Content $content )
     {
 
     }
