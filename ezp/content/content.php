@@ -53,11 +53,7 @@
  * @subpackage content
  */
 namespace ezp\content;
-
-use ezx\content\ContentType;
-
-use ezp\user\Repository as UserRepository;
-use ezp\user\User;
+use ezx\content\ContentType, ezp\user\User;
 
 class Content extends \ezp\base\AbstractModel
 {
@@ -70,11 +66,71 @@ class Content extends \ezp\base\AbstractModel
     const STATUS_ARCHIVED = 2;
 
     /**
+     * @var array Readable of properties on this object
+     */
+    protected $readableProperties = array(
+        'id' => false,
+        'currentVersion' => false,
+        'status' => false,
+        'name' => false,
+        'ownerId' => true,
+        'relations' => false,
+        'reversedRelations' => false,
+        'translations' => true,
+        'locations' => true,
+        'contentType' => false,
+        'versions' => false,
+    );
+
+    /**
+     * @var array Dynamic properties on this object
+     */
+    protected $dynamicProperties = array(
+        'mainLocation' => false,
+        'section' => false,
+        'sectionId' => false,
+        'fields' => true,
+        'contentType' => false,
+    );
+
+    /**
+     * Create content based on content type object
+     *
+     * @param ContentType $contentType
+     */
+    public function __construct( ContentType $contentType )
+    {
+        $this->creationDate = new \DateTime();
+        $this->versions = new VersionCollection();
+        $this->locations = new LocationCollection();
+        $this->relations = new RelationCollection();
+        $this->reversedRelations = new RelationCollection();
+        $this->translations = new TranslationCollection();
+        $this->name = false;
+        $this->typeId = $contentType->id;
+        $this->contentType = $contentType;
+    }
+
+    /**
+     * Content object id.
+     *
+     * @var int
+     */
+    protected $id = 0;
+
+    /**
+     * Content object current version.
+     *
+     * @var int
+     */
+    protected $currentVersion = 0;
+
+    /**
      * A custom ID for the object
      *
      * @var string
      */
-    public $remoteId = "";
+    public $remoteId = '';
 
     /**
      * The date the object was created
@@ -93,9 +149,9 @@ class Content extends \ezp\base\AbstractModel
     /**
      * The Section the content belongs to
      *
-     * @var Proxy|Section
+     * @var Section
      */
-    public $section = 0;
+    public $section;
 
     /**
      * The Content's status, as one of the ezp\content::STATUS_* constants
@@ -105,46 +161,46 @@ class Content extends \ezp\base\AbstractModel
     protected $status = self::STATUS_DRAFT;
 
     /**
-     * Versions collection
+     * Collection of content versions.
      *
-     * @var VersionCollection
+     * @var Version[]
      */
     protected $versions;
 
     /**
      * Locations collection
      *
-     * @var LocationCollection
+     * @var Location[]
      */
     protected $locations;
 
     /**
+     * Content type object that this Content object is an instance of
+     *
+     * @var ContentType
+     */
+    protected $contentType;
+
+    /**
      * Relations collection
      *
-     * @var RelationCollection
+     * @var Content[]
      */
     protected $relations;
 
     /**
      * Reverse relation collection
      *
-     * @var RelationCollection
+     * @var Content[]
      */
     protected $reversedRelations;
 
     /**
      * Translations collection
      *
-     * @var TranslationCollection
+     * @var Translation[]
      */
     protected $translations;
-
-    /**
-     * Fields collection
-     *
-     * @var FieldCollection
-     */
-    protected $fields;
 
     /**
      * Name of the content
@@ -153,59 +209,63 @@ class Content extends \ezp\base\AbstractModel
      */
     protected $name;
 
-    public function __construct( ContentType $contentType = null )
-    {
-        $this->creationDate = new \DateTime();
-
-        $this->versions = new VersionCollection();
-        $this->locations = new LocationCollection();
-        $this->relations = new RelationCollection();
-        $this->reversedRelations = new RelationCollection();
-        $this->translations = new TranslationCollection();
-        $this->fields = new FieldCollection();
-        $this->name = false;
-
-        $this->readableProperties = array(
-            "id"                    => true,
-            "status"                => true,
-            "versions"              => true,
-            "locations"             => true,
-            "relations"             => true,
-            "reversedRelations"     => true,
-            "translations"          => true,
-            "fields"                => true,
-            "name"					=> true,
-        );
-
-        $this->dynamicProperties = array(
-            "mainLocation" => true,
-            "section" => true,
-            "sectionId" => true,
-        );
-    }
-
+    /**
+     * Return Main location object on this Content object
+     *
+     * @return Location
+     */
     protected function getMainLocation()
     {
         return $this->locations[0];
     }
 
     /**
+     * Find current version amongst version objects
+     *
+     * @return Version|null
+     */
+    protected function getCurrentVersion()
+    {
+        foreach( $this->getVersions() as $contentVersion )
+        {
+            if ( $this->currentVersion == $contentVersion->version )
+                return $contentVersion;
+        }
+        return null;
+    }
+
+    /**
+     * Return ContentType object
+     *
+     * @return ContentType
+     */
+    protected function getContentType()
+    {
+        if ( $this->contentType instanceof Proxy )
+        {
+            return $this->contentType = $this->contentType->load();
+        }
+        return $this->contentType;
+    }
+
+    /**
+     * Get fields of current version
+     *
+     * @return Field[]
+     */
+    protected function getFields()
+    {
+        return $this->getCurrentVersion()->fields;
+    }
+
+    /**
      * Sets the Section the Content belongs to
      *
-     * @param Proxy|Section $section
-     * @throws \InvalidArgumentException if $content is not an instance of the
-     *                                   right class
+     * @param Section $section
      */
-    protected function setSection( $section )
+    protected function setSection( Section $section )
     {
-        if ( !$section instanceof Section && !$section instanceof Proxy )
-        {
-            throw new \InvalidArgumentException( "Parameter needs to be an instance of Location or Section class" );
-        }
-        else
-        {
-            $this->section = $section;
-        }
+        $this->section = $section;
     }
 
     /**
@@ -229,7 +289,7 @@ class Content extends \ezp\base\AbstractModel
      */
     protected function getSectionId()
     {
-        if  ( $this->section instanceof Base )
+        if  ( $this->section instanceof Proxy || $this->section instanceof Section )
         {
             return $this->section->id;
         }
@@ -251,26 +311,28 @@ class Content extends \ezp\base\AbstractModel
      * @param Location $parentLocation
      * @return Location
      */
-    public function addLocationUnder( Location $parentLocation )
+    public function addParent( Location $parentLocation )
     {
-        $location = new Location();
-        $location->parent = $parentLocation;
-        $this->locations[] = $location;
-        return $location;
+        $newLocation = new Location( $this );
+        $newLocation->parent = $parentLocation;
+        return $newLocation;
     }
 
+    /**
+     * Clone content object
+     */
     public function __clone()
     {
         $this->id = false;
         $this->status = self::STATUS_DRAFT;
 
-        // Locations : get the main location's parent, so that new content will 
-        // be the old one's sibling
-        $parentLocation = $this->locations[0]->parent;
+        // Get the location's, so that new content will be the old one's sibling
+        $oldLocations = $this->locations;
         $this->locations = new LocationCollection();
-        $this->addLocationUnder( $parentLocation );
-
-        $this->ownerId = UserRepository::get()->currentUser()->id;
+        foreach ( $oldLocations as $location )
+        {
+            $this->addParent( $location->parent );
+        }
 
         // Detach data from persistence
         $this->versions->detach();
@@ -280,13 +342,8 @@ class Content extends \ezp\base\AbstractModel
     }
 
     /**
-     * Destructor
+     * @return string
      */
-    public function __destruct()
-    {
-        // Free some in-memory cache here
-    }
-
     public function __toString()
     {
         return $this->name;

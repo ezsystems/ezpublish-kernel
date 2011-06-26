@@ -19,18 +19,58 @@ namespace ezp\content;
 class Location extends \ezp\base\AbstractModel
 {
     /**
+     * @var array Readable of properties on this object
+     */
+    protected $readableProperties = array(
+        'id' => false,
+        'depth' => false,
+        'isHidden' => true,
+        'isInvisible' => true,
+        'containerProperties' => true,
+        'children' => false,
+    );
+
+    /**
+     * @var array Dynamic properties on this object
+     */
+    protected $dynamicProperties = array(
+        'content' => false,
+        'parent' => false,
+        //"parentId" => true,
+        //"contentId" => true,
+    );
+
+    /**
+     * Setups empty children collection and attaches $content
+     *
+     * @param Content $content
+     */
+    public function __construct( Content $content )
+    {
+        $this->containerProperties = new ContainerPropertyCollection();
+        $this->content = $content;
+        $this->children = new LocationCollection();
+        $content->locations[] = $this;
+    }
+
+    /**
+     * @var int
+     */
+    protected $depth;
+
+    /**
      * A custom ID for the Location.
      *
      * @var string
      */
-    public $remoteId = "";
+    public $remoteId = '';
 
     /**
      * The path of the Location in the tree
      *
      * @var string
      */
-    public $path = "";
+    public $path = '';
 
     /**
      * The parent Location
@@ -81,25 +121,6 @@ class Location extends \ezp\base\AbstractModel
      */
     protected $containerProperties;
 
-    public function __construct()
-    {
-        $this->containerProperties = new ContainerPropertyCollection();
-
-        $this->readableProperties = array(
-            "id" => true,
-            "containerProperties" => true;
-        );
-
-        $this->dynamicProperties = array(
-            "children" => true,
-            "parent" => true,
-            "parentId" => true,
-            "content" => true,
-            "contentId" => true,
-        );
-
-    }
-
     /**
      * Returns the parent Location
      *
@@ -121,7 +142,7 @@ class Location extends \ezp\base\AbstractModel
      */
     protected function getParentId()
     {
-        if ( $this->parent instanceof Base )
+        if ( $this->parent instanceof Proxy || $this->parent instanceof Location )
         {
             return $this->parent->id;
         }
@@ -131,20 +152,11 @@ class Location extends \ezp\base\AbstractModel
     /**
      * Sets the parent Location
      *
-     * @param Proxy|Location $parent
-     * @throws \InvalidArgumentException if $content is not an instance of the
-     *                                   right class
+     * @param Location $parent
      */
-    protected function setParent( $parent )
+    protected function setParent( Location $parent )
     {
-        if ( !$parent instanceof Location && !$parent instanceof Proxy )
-        {
-            throw new \InvalidArgumentException( "Parameter needs to be an instance of Content or Proxy class" );
-        }
-        else
-        {
-            $this->parent = $parent;
-        }
+        $this->parent = $parent;
     }
 
     /**
@@ -168,7 +180,7 @@ class Location extends \ezp\base\AbstractModel
      */
     protected function getContentId()
     {
-        if ( $this->content instanceof Base )
+        if ( $this->content instanceof Proxy || $this->content instanceof Content )
         {
             return $this->content->id;
         }
@@ -178,26 +190,11 @@ class Location extends \ezp\base\AbstractModel
     /**
      * Sets the content
      *
-     * @param Proxy|Content $content
-     * @throws \InvalidArgumentException if $content is not an instance of the
-     *                                   right class
+     * @param Content $content
      */
-    protected function setContent( $content )
+    protected function setContent( Content $content )
     {
-        if ( !$content instanceof Content && !$content instanceof Proxy )
-        {
-            throw new \InvalidArgumentException( "Parameter needs to be an instance of Content or Proxy class" );
-        }
-        else
-        {
-            $this->content = $content;
-        }
-    }
-
-    protected function getChildren()
-    {
-        // TODO avoid Repository/Service use here with a Lazy Loaded Collection
-        return Repository::get()->getSubtreeService()->children( $this );
+        $this->content = $content;
     }
 }
 ?>

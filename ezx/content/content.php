@@ -104,6 +104,12 @@ class Content extends Abstracts\ContentModel
     protected $currentVersion = 0;
 
     /**
+     * @Column(type="integer", name="remote_id")
+     * @var string
+     */
+    public $remoteId = '';
+
+    /**
      * @Column(type="integer")
      * @var int
      */
@@ -140,6 +146,19 @@ class Content extends Abstracts\ContentModel
     protected $locations;
 
     /**
+     * @OneToMany(targetEntity="ContentVersion", mappedBy="content", fetch="EAGER")
+     * @var ContentVersion[]
+     */
+    protected $versions;
+
+    /**
+     * @ManyToOne(targetEntity="ContentType", inversedBy="contentObjects")
+     * @JoinColumn(name="contentclass_id", referencedColumnName="id")
+     * @var ContentType
+     */
+    protected $contentType;
+
+    /**
      * Return collection of all locations attached to this object
      *
      * @return Location[]
@@ -150,10 +169,14 @@ class Content extends Abstracts\ContentModel
     }
 
     /**
-     * @OneToMany(targetEntity="ContentVersion", mappedBy="content", fetch="EAGER")
-     * @var ContentVersion[]
+     * Return Main location object on this Content object
+     *
+     * @return Location
      */
-    protected $versions;
+    protected function getMainLocation()
+    {
+        return $this->locations[0];
+    }
 
     /**
      * Return collection of all content versions
@@ -179,13 +202,6 @@ class Content extends Abstracts\ContentModel
         }
         return null;
     }
-
-    /**
-     * @ManyToOne(targetEntity="ContentType", inversedBy="contentObjects")
-     * @JoinColumn(name="contentclass_id", referencedColumnName="id")
-     * @var ContentType
-     */
-    protected $contentType;
 
     /**
      * Return ContentType object

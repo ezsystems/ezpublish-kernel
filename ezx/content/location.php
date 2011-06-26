@@ -60,6 +60,18 @@ class Location extends Abstracts\ContentModel implements \ezp\base\ObserverInter
     protected $depth;
 
     /**
+     * @Column(type="string", name="remote_id")
+     * @var string
+     */
+    public $remoteId = '';
+
+    /**
+     * @Column(type="string", name="path_identification_string")
+     * @var string
+     */
+    public $path = '';
+
+    /**
      * @Column(type="integer", name="is_hidden")
      * @var int
      */
