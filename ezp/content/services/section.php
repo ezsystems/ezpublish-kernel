@@ -45,8 +45,8 @@ class Section implements ServiceInterface
     /**
      * Creates the a new Section in the content repository
      * 
-     * @param \ezp\content\Section $section
-     * @return \ezp\content\Section The newly create section
+     * @param Section $section
+     * @return Section The newly create section
      * @throws \ezp\content\ValidationException If a validation problem has been found for $section
      */
     public function create( Section $section )
@@ -56,7 +56,7 @@ class Section implements ServiceInterface
     /**
      * Updates $section in the content repository
      *
-     * @param \ezp\content\Section $section
+     * @param Section $section
      * @return $section
      * @throws \ezp\content\ValidationException If a validation problem has been found for $section
      */
@@ -68,7 +68,7 @@ class Section implements ServiceInterface
      * Loads a Section from its id ($sectionId)
      * 
      * @param int $sectionId 
-     * @return \ezp\content\Section
+     * @return Section
      * @throws \ezp\content\SectionNotFoundException if section could not be found
      */
     public function load( $sectionId )
@@ -79,7 +79,7 @@ class Section implements ServiceInterface
      * Loads a Section from its identifier ($sectionIdentifier)
      * 
      * @param string $sectionIdentifier 
-     * @return \ezp\content\Section
+     * @return Section
      * @throws \ezp\content\SectionNotFoundException if section could not be found
      */
     public function loadByIdentifier( $sectionIdentifier )
@@ -89,7 +89,7 @@ class Section implements ServiceInterface
     /**
      * Counts the contents which $section is assigned to 
      * 
-     * @param \ezp\content\Section $section
+     * @param Section $section
      * @return int
      */
     public function countAssignedContents( Section $section )
@@ -97,9 +97,23 @@ class Section implements ServiceInterface
     }
 
     /**
+     * Counts the contents which $section is assigned to
+     *
+     * @param Section $section
+     * @param \ezp\content\Content $content
+     * @uses \ezp\base\StorageEngine\SectionHandler::assign()
+     */
+    public function assign( Section $section, \ezp\content\Content $content )
+    {
+        if ( $section->id === $content->section->id )
+            return;
+        $this->se->getSectionHandler()->assign( $section->id, $content->id );
+    }
+
+    /**
      * Deletes $section from content repository 
      * 
-     * @param \ezp\content\Section $section
+     * @param Section $section
      * @return void
      * @throws \ezp\content\ValidationException
      *         if section can be deleted
