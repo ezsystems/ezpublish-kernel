@@ -34,13 +34,13 @@ class ContentVersion extends Abstracts\ContentModel implements \ezp\base\Observe
         'initialLanguageId' => true,
         'languageMask' => true,
         'contentObjectId' => false,
+        'fields' => false,
     );
 
     /**
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'fields' => false,
         'fieldMap' => true,
         'content' => false,
     );
@@ -60,6 +60,7 @@ class ContentVersion extends Abstracts\ContentModel implements \ezp\base\Observe
         }
         $this->postLoad();
     }
+
     /**
      * Setup locations and fields as observers of content object
      *
