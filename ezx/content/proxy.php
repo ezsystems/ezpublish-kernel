@@ -8,37 +8,50 @@
  * @subpackage content
  */
 
+/**
+ * Proxy class for content model objects
+ *
+ * @package ezx
+ * @subpackage content
+ */
 namespace ezp\content;
 class Proxy implements \ezp\base\ProxyInterface
 {
     /**
-     * @var \ezx\base\Interfaces\Service
+     * Service used to load the object the proxy represents.
+     *
+     * @var \ezp\base\ServiceInterface
      */
     protected $service;
 
     /**
+     * Id of the object
+     *
+     * @access public
      * @var int
      */
     protected $id;
 
     /**
+     * Method to use on the service to load the object
+     *
      * @var string
      */
-    protected $loadFunctionName;
+    protected $method;
 
     /**
      * Setup proxy object with enough info to be able to perform a load operation on the object it proxies.
      *
-     * @param \ezx\base\Interfaces\Service $service
+     * @param \ezp\base\ServiceInterface $service
      * @param int $id Primary id
-     * @param string $loadFunctionName Optional, defines which function on handler to call, 'load' by default.
+     * @param string $method Optional, defines which function on handler to call, 'load' by default.
      * @throws \InvalidArgumentException If $id is not a int value above zero.
      */
-    public function __construct( \ezx\base\Interfaces\Service $service, $id, $loadFunctionName = 'load' )
+    public function __construct( \ezp\base\ServiceInterface $service, $id, $method = 'load' )
     {
         $this->service = $service;
         $this->id = (int) $id;
-        $this->loadFunctionName = $loadFunctionName;
+        $this->method = $method;
         if ( $this->id === 0 )
             throw new \InvalidArgumentException( "Id parameter needs to be a valid integer above 0!" );
     }
@@ -50,7 +63,21 @@ class Proxy implements \ezp\base\ProxyInterface
      */
     public function load()
     {
-        $fn = $this->loadFunctionName;
+        $fn = $this->method;
         return $this->service->$fn( $this->id );
+    }
+
+    /**
+     * Provides access to id property
+     *
+     * @throws \InvalidArgumentException
+     * @param  string $name
+     * @return int
+     */
+    public function __get( $name )
+    {
+        if ( $name === 'id' )
+            return $this->id;
+        throw new \InvalidArgumentException( "{$name} is not a valid property on Proxy class" );
     }
 }
