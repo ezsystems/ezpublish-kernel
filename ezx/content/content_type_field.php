@@ -14,7 +14,7 @@
  * @property-read string $fieldTypeString
  */
 namespace ezx\content;
-class ContentTypeField extends Abstracts\Field
+class ContentTypeField extends \ezp\content\AbstractField
 {
     /**
      * @var array Readable of properties on this object
@@ -22,7 +22,19 @@ class ContentTypeField extends Abstracts\Field
     protected $readableProperties = array(
         'id' => false,
         'version' => false,
-        'contentTypeId' => false,
+        'data_text1' => false,
+        'data_text2' => false,
+        'data_text3' => false,
+        'data_text4' => false,
+        'data_text5' => false,
+        'data_int1' => false,
+        'data_int2' => false,
+        'data_int3' => false,
+        'data_int4' => false,
+        'data_float1' => false,
+        'data_float2' => false,
+        'data_float3' => false,
+        'data_float4' => false,
         'identifier' => true,
         'fieldTypeString' => true,
     );
@@ -180,19 +192,29 @@ class ContentTypeField extends Abstracts\Field
     }
 
     /**
-     * @OneToMany(targetEntity="ContentField", mappedBy="contentTypeField")
-     * @var ContentField[]
+     * @OneToMany(targetEntity="Field", mappedBy="contentTypeField")
+     * @var Field[]
      */
     protected $contentFields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return ContentField[]
+     * @return Field[]
      */
     protected function getContentFields()
     {
         return $this->contentFields;
+    }
+
+    /**
+     * Get mapping of type/definition identifier to class
+     *
+     * @return array
+     */
+    protected function getTypeList()
+    {
+        return \ezp\base\Configuration::getInstance('content')->get( 'fields', 'Definition' );
     }
 
     /**

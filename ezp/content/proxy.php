@@ -59,7 +59,7 @@ class Proxy implements \ezp\base\ProxyInterface
     /**
      * Load the object this proxy object represent
      *
-     * @return AbstractContentModel
+     * @return AbstractModel
      */
     public function load()
     {

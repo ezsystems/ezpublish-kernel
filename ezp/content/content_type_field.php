@@ -190,6 +190,16 @@ class ContentTypeField extends AbstractField
     }
 
     /**
+     * Get mapping of type/definition identifier to class
+     *
+     * @return array
+     */
+    protected function getTypeList()
+    {
+        return \ezp\base\Configuration::getInstance('content')->get( 'fields', 'Definition' );
+    }
+
+    /**
      * Called when subject has been updated
      *
      * @param \ezp\base\ObservableInterface $subject

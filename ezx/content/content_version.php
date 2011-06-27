@@ -16,10 +16,10 @@
  * @property-read int $version
  * @property int $userId
  * @property int $creatorId
- * @property-read ContentField[] $fields An hash structure of fields
+ * @property-read Field[] $fields An hash structure of fields
  */
 namespace ezx\content;
-class ContentVersion extends Abstracts\ContentModel implements \ezp\base\ObserverInterface
+class ContentVersion extends \ezp\base\AbstractModel implements \ezp\base\ObserverInterface
 {
     /**
      * @var array Readable of properties on this object
@@ -56,7 +56,7 @@ class ContentVersion extends Abstracts\ContentModel implements \ezp\base\Observe
         $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
         foreach ( $content->contentType->fields as $contentTypeField )
         {
-            $this->fields[] = new ContentField( $this, $contentTypeField );
+            $this->fields[] = new Field( $this, $contentTypeField );
         }
         $this->postLoad();
     }
@@ -138,15 +138,15 @@ class ContentVersion extends Abstracts\ContentModel implements \ezp\base\Observe
     protected $contentObjectId = 0;
 
     /**
-     * @OneToMany(targetEntity="ContentField", mappedBy="contentVersion", fetch="EAGER")
-     * @var ContentField[]
+     * @OneToMany(targetEntity="Field", mappedBy="contentVersion", fetch="EAGER")
+     * @var Field[]
      */
     protected $fields;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return ContentField[]
+     * @return Field[]
      */
     protected function getFields()
     {
@@ -171,14 +171,14 @@ class ContentVersion extends Abstracts\ContentModel implements \ezp\base\Observe
     }
 
     /**
-     * @param ContentField[]
+     * @param Field[]
      */
     protected $fieldMap;
 
     /**
      * Return collection of all fields assigned to object (all versions and languages)
      *
-     * @return ContentField[]
+     * @return Field[]
      */
     protected function getFieldMap()
     {

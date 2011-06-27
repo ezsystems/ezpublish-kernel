@@ -209,6 +209,89 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
 
         return $obj;
     }
+
+    /**
+     * Set properties with hash, name is same as used in ezc Persistent
+     *
+     * @throws \InvalidArgumentException When trying to set invalid properties on this object
+     * @param array $properties
+     * @return AbstractModel Return $this
+     */
+    public function fromHash( array $properties )
+    {
+        foreach ( $this->readableProperties as $property => $member )
+        {
+            if ( !$member || !isset( $properties[$property] ) )
+                continue;
+
+            $this->$property = $properties[$property];
+        }
+
+        foreach ( $this->dynamicProperties as $property => $member )
+        {
+            if ( !$member || !isset( $properties[$property] ) )
+                continue;
+
+            $value = $this->__get( $property );
+            if ( $value instanceof self )
+            {
+                $value->fromHash( $properties[$property] );
+                continue;
+            }
+
+            if ( !is_array( $value ) )
+                continue;
+
+            foreach ( $value as $key => $item )
+            {
+                if ( isset( $properties[$property][$key] ) && $item instanceof self )
+                    $item->fromHash( $properties[$property][$key] );
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Get properties with hash, name is same as used in ezc Persistent
+     *
+     * @param bool $internals Include internal data like id and version in hash if true
+     * @return array
+     */
+    public function toHash( $internals = false )
+    {
+        $hash = array();
+        foreach ( $this->readableProperties as $property => $member )
+        {
+            if ( !$member && !$internals )
+                continue;
+
+            $hash[$property] = $this->$property;
+        }
+
+        foreach ( $this->dynamicProperties as $property => $member )
+        {
+            if ( !$member )
+                continue;
+
+            $value = $this->__get( $property );
+            if ( $value instanceof self )
+            {
+                $hash[$property] = $value->toHash( $internals );
+                continue;
+            }
+
+            if ( !$value instanceof \ArrayAccess && !is_array( $value ) )
+                continue;
+
+            $hash[$property] = array();
+            foreach ( $value as $key => $item )
+            {
+                if ( $item instanceof self )
+                    $hash[$property][$key] = $item->toHash( $internals );
+            }
+        }
+        return $hash;
+    }
 }
 
 ?>

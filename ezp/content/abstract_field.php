@@ -30,10 +30,7 @@ abstract class AbstractField extends \ezp\base\AbstractModel implements \ezp\bas
         if ( $this->type instanceof AbstractFieldType )
            return $this->type;
 
-        $configuration = \ezp\base\Configuration::getInstance('content');
-        //@todo Remove hardcoded knowledge of sub class
-        $list = $configuration->get( 'fields', ( $this instanceof \ezp\content\Field ? 'Type' : 'Definition' ) );
-
+        $list = $this->getTypeList();
         if ( !isset( $list[ $this->fieldTypeString ] ) )
             throw new \RuntimeException( "Field type value '{$this->fieldTypeString}' is not configured in system.ini" );
 
@@ -44,6 +41,16 @@ abstract class AbstractField extends \ezp\base\AbstractModel implements \ezp\bas
         $this->type = $this->initType( $className );
 
         return $this->attach( $this->type, 'store' )->type->attach( $this, 'store' );// listen on each other and return type
+    }
+
+    /**
+     * Get mapping of type/definition identifier to class
+     *
+     * @return array
+     */
+    protected function getTypeList()
+    {
+        return \ezp\base\Configuration::getInstance('content')->get( 'fields', 'Type' );
     }
 
     /**

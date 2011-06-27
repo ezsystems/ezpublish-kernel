@@ -14,7 +14,7 @@
  * @property Location $parent
  */
 namespace ezx\content;
-class Location extends Abstracts\ContentModel implements \ezp\base\ObserverInterface
+class Location extends \ezp\base\AbstractModel implements \ezp\base\ObserverInterface
 {
     /**
      * @var array Readable of properties on this object

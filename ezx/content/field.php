@@ -12,7 +12,7 @@
  * @Entity @Table(name="ezcontentobject_attribute")
  */
 namespace ezx\content;
-class ContentField extends Abstracts\Field
+class Field extends \ezp\content\AbstractField
 {
     /**
      * @var array Readable of properties on this object
@@ -146,7 +146,7 @@ class ContentField extends Abstracts\Field
     protected function initType( $className )
     {
         $type = new $className( $this->getContentTypeField()->getType() );
-        if ( !$type instanceof Abstracts\FieldType )
+        if ( !$type instanceof \ezp\content\AbstractFieldType )
             throw new \RuntimeException( "Field type value '{$className}' does not implement ezx\\content\\Abstracts\\FieldType" );
         if ( $this->version )
             $this->toType( $type );
@@ -160,7 +160,7 @@ class ContentField extends Abstracts\Field
      *
      * @param \ezp\base\ObservableInterface $subject
      * @param string $event
-     * @return ContentField
+     * @return Field
      */
     public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
     {

@@ -19,11 +19,11 @@
  * @property int $sectionId
  * @property-read string $typeid Content Type Identifier
  * @property Location[] $locations An hash like structure of fields
- * @property-read ContentField[] $fields An hash structure of fields
+ * @property-read Field[] $fields An hash structure of fields
  * @property-read ContentType $type Content type object
  */
 namespace ezx\content;
-class Content extends Abstracts\ContentModel
+class Content extends \ezp\base\AbstractModel
 {
     /**
      * Publication status constants
@@ -220,7 +220,7 @@ class Content extends Abstracts\ContentModel
     /**
      * Get fields of current version
      *
-     * @return ContentField[]
+     * @return Field[]
      */
     protected function getFieldMap()
     {

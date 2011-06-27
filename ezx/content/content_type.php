@@ -18,7 +18,7 @@
  * @property-read ContentTypeGroup[] $groups
  */
 namespace ezx\content;
-class ContentType extends Abstracts\ContentModel
+class ContentType extends \ezp\base\AbstractModel
 {
     /**
      * @var array Readable of properties on this object

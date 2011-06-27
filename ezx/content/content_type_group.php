@@ -12,7 +12,7 @@
  * @Entity @Table(name="ezcontentclassgroup")
  */
 namespace ezx\content;
-class ContentTypeGroup extends Abstracts\ContentModel
+class ContentTypeGroup extends \ezp\base\AbstractModel
 {
     /**
      * @var array Readable of properties on this object
