@@ -2,7 +2,6 @@
 namespace ezp\persistence\io;
 /**
  * @access public
- * @author root
  * @package ezp.persistence.io
  */
 interface BinaryFileStorageInterface 

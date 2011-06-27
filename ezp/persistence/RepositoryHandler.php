@@ -2,7 +2,6 @@
 namespace ezp\persistence;
 /**
  * @access public
- * @author root
  * @package ezp.persistence
  */
 interface RepositoryHandler 

@@ -2,7 +2,6 @@
 namespace ezp\persistence\user;
 /**
  * @access public
- * @author root
  * @package ezp.persistence.user
  */
 interface UserHandler 

@@ -2,7 +2,6 @@
 namespace ezp\persistence\content\values;
 /**
  * @access public
- * @author root
  * @package ezp.persistence.content.values
  */
 class ContentVersion 

@@ -2,7 +2,6 @@
 namespace ezp\persistence\fields;
 /**
  * @access public
- * @author root
  * @package ezp.persistence.fields
  */
 interface StorageInterfacel 

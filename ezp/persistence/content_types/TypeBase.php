@@ -2,7 +2,6 @@
 namespace ezp\persistence\content_types;
 /**
  * @access public
- * @author root
  * @package ezp.persistence.content_types
  */
 class TypeBase 

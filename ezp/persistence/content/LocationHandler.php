@@ -2,7 +2,6 @@
 namespace ezp\persistence\content;
 /**
  * @access public
- * @author root
  * @package ezp.persistence.content
  */
 interface LocationHandler 
