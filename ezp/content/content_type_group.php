@@ -46,7 +46,7 @@ class ContentTypeGroup extends\ezp\base\AbstractModel
     /**
      * @var string
      */
-    protected $name;
+    public $name;
 
     /**
      * @var ContentType[]

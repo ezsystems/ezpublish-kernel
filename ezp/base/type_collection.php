@@ -34,7 +34,7 @@ class TypeCollection extends ReadOnlyCollection
         foreach ( $elements as $item )
         {
             if ( !$item instanceof $type )
-                throw new \InvalidArgumentException( "This collection is only accept '{$type}', " . get_class( $item ) . ' given.' );
+                throw new \InvalidArgumentException( "This collection is only accept '{$type}', '" . get_class( $item ) . '\' given.' );
         }
         $this->type = $type;
         parent::__construct( $elements );
@@ -50,8 +50,12 @@ class TypeCollection extends ReadOnlyCollection
     public function offsetSet( $offset, $value )
     {
         if ( !$value instanceof $this->type )
-            throw new \InvalidArgumentException( "This collection is only accept '{$type}', " . get_class( $item ) . ' given.' );
-        $this->elements[$offset] = $value;
+            throw new \InvalidArgumentException( "This collection is only accept '{$this->type}', '" . get_class( $value ) . '\' given.' );
+
+        if ( $offset === null )
+            $this->elements[] = $value;
+        else
+            $this->elements[$offset] = $value;
     }
 
     /**

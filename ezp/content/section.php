@@ -18,6 +18,18 @@
 namespace ezp\content;
 class Section extends \ezp\base\AbstractModel
 {
+    protected $readableProperties = array(
+        'id' => false,
+        'identifier' => true,
+        'name' => true,
+    );
+
+    /**
+     * Id of the section
+     *
+     * @var int
+     */
+    protected $id = 0;
 
     /**
      * Identifier of the section
@@ -33,19 +45,8 @@ class Section extends \ezp\base\AbstractModel
      */
     public $name = "";
 
-    /**
-     * Id of the section
-     *
-     * @var int
-     */
-    protected $id = 0;
-
     public function __construct()
     {
-        $this->readableProperties = array(
-            "id" => true,
-        );
-
     }
 
 }

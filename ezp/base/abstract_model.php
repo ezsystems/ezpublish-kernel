@@ -184,17 +184,24 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
     }
 
     /**
-     * Restores the state of a content object
+     * Restores the state of a content object, gives access to initialize an object on properties that are not public.
+     *
+     * This function furthermore does not perform any type checking so is purely for internal use.
+     *
+     * @internal
      * @param array $state
+     * @return AbstractModel
      */
     public static function __set_state( array $state )
     {
-        $obj = new static;
-        $publicProperties = get_object_vars( $obj );
+        $obj = new static();
         foreach ( $state as $property => $value )
         {
-            if ( isset( $publicProperties[$property] ) ||
-                    isset( $obj->readableProperties[$property] ) )
+            if ( isset( $obj->readableProperties[$property] ) )
+            {
+                $obj->$property = $value;
+            }
+            elseif ( isset( $obj->dynamicProperties[$property] ) && property_exists( $obj, $property ) )
             {
                 $obj->$property = $value;
             }

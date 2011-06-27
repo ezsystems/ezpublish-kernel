@@ -57,7 +57,7 @@ class ContentType extends \ezp\base\AbstractModel
     /**
      * @var string
      */
-    protected $identifier;
+    public $identifier;
 
     /**
      * @var ContentTypeField[]

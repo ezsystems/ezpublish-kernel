@@ -22,7 +22,19 @@ class ContentTypeField extends AbstractField
     protected $readableProperties = array(
         'id' => false,
         'version' => false,
-        'contentTypeId' => false,
+        'data_text1' => false,
+        'data_text2' => false,
+        'data_text3' => false,
+        'data_text4' => false,
+        'data_text5' => false,
+        'data_int1' => false,
+        'data_int2' => false,
+        'data_int3' => false,
+        'data_int4' => false,
+        'data_float1' => false,
+        'data_float2' => false,
+        'data_float3' => false,
+        'data_float4' => false,
         'identifier' => true,
         'fieldTypeString' => true,
         'contentFields' => false,
@@ -34,6 +46,7 @@ class ContentTypeField extends AbstractField
     protected $dynamicProperties = array(
         'type' => true,
         'contentType' => false,
+        'contentTypeId' => false,
     );
 
     /**
@@ -58,14 +71,9 @@ class ContentTypeField extends AbstractField
     protected $version;
 
     /**
-     * @var int
-     */
-    protected $contentTypeId;
-
-    /**
      * @var string
      */
-    protected $identifier;
+    public $identifier;
 
     /**
      * @var string
@@ -135,13 +143,13 @@ class ContentTypeField extends AbstractField
     /**
      * @var string
      */
-    protected $fieldTypeString;
+    public $fieldTypeString;
 
 
     /**
      * @var int
      */
-    protected $placement;
+    public $placement;
 
     /**
      * @var ContentField[]
@@ -165,6 +173,20 @@ class ContentTypeField extends AbstractField
             $this->contentType = $this->contentType->load();
         }
         return $this->contentType;
+    }
+
+    /**
+     * Return content type id
+     *
+     * @return int
+     */
+    protected function getContentTypeId()
+    {
+        if ( $this->contentType instanceof Proxy || $this->contentType instanceof ContentType )
+        {
+            return $this->contentType->id;
+        }
+        return 0;
     }
 
     /**

@@ -105,8 +105,8 @@ class Content extends \ezp\base\AbstractModel
         $this->reversedRelations = new \ezp\base\TypeCollection( '\ezp\content\Content' );
         $this->translations = new \ezp\base\TypeCollection( '\ezp\content\Translation' );
         $this->name = false;
-        $this->typeId = $contentType->id;
         $this->contentType = $contentType;
+        $this->versions[] = new Version( $this );
     }
 
     /**
@@ -224,7 +224,7 @@ class Content extends \ezp\base\AbstractModel
      */
     protected function getCurrentVersion()
     {
-        foreach( $this->getVersions() as $contentVersion )
+        foreach( $this->versions as $contentVersion )
         {
             if ( $this->currentVersion == $contentVersion->version )
                 return $contentVersion;

@@ -23,7 +23,6 @@ class Field extends AbstractField
      */
     protected $readableProperties = array(
         'id' => false,
-        'version' => false,
         'data_text' => false,
         'data_int' => false,
         'data_float' => false,
@@ -43,11 +42,6 @@ class Field extends AbstractField
      * @var int
      */
     protected $id = 0;
-
-    /**
-     * @var int
-     */
-    protected $version = 0;
 
     /**
      * @var int
@@ -122,7 +116,7 @@ class Field extends AbstractField
      */
     public function __construct( Version $contentVersion, ContentTypeField $contentTypeField )
     {
-        $this->contentVersion = $contentVersion;
+        $this->version = $contentVersion;
         $this->contentTypeField = $contentTypeField;
         $this->fieldTypeString = $contentTypeField->fieldTypeString;
     }
