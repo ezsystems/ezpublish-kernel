@@ -41,7 +41,6 @@ class ContentVersion extends \ezp\base\AbstractModel implements \ezp\base\Observ
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'fieldMap' => true,
         'content' => false,
     );
 
@@ -53,11 +52,7 @@ class ContentVersion extends \ezp\base\AbstractModel implements \ezp\base\Observ
     public function __construct( Content $content )
     {
         $this->content = $content;
-        $this->fields = new \Doctrine\Common\Collections\ArrayCollection();
-        foreach ( $content->contentType->fields as $contentTypeField )
-        {
-            $this->fields[] = new Field( $this, $contentTypeField );
-        }
+        $this->fields = new FieldCollection( $this );
         $this->postLoad();
     }
 
@@ -70,7 +65,7 @@ class ContentVersion extends \ezp\base\AbstractModel implements \ezp\base\Observ
      */
     protected function postLoad()
     {
-        foreach( $this->getFields() as $field )
+        foreach( $this->fields as $field )
         {
             $this->attach( $field, 'store' );
         }
@@ -144,16 +139,6 @@ class ContentVersion extends \ezp\base\AbstractModel implements \ezp\base\Observ
     protected $fields;
 
     /**
-     * Return collection of all fields assigned to object (all versions and languages)
-     *
-     * @return Field[]
-     */
-    protected function getFields()
-    {
-        return $this->fields;
-    }
-
-    /**
      * @ManyToOne(targetEntity="Content", inversedBy="contentVersions")
      * @JoinColumn(name="contentobject_id", referencedColumnName="id")
      * @var Content
@@ -168,23 +153,6 @@ class ContentVersion extends \ezp\base\AbstractModel implements \ezp\base\Observ
     protected function getContent()
     {
         return $this->content;
-    }
-
-    /**
-     * @param Field[]
-     */
-    protected $fieldMap;
-
-    /**
-     * Return collection of all fields assigned to object (all versions and languages)
-     *
-     * @return Field[]
-     */
-    protected function getFieldMap()
-    {
-        if ( $this->fieldMap !== null )
-            return $this->fieldMap;
-        return $this->fieldMap = new FieldMap( $this );
     }
 
     /**

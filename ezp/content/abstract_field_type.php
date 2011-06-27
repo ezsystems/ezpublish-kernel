@@ -64,7 +64,7 @@ abstract class AbstractFieldType extends \ezp\base\AbstractModel implements \ezp
      */
     public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
     {
-        if ( $subject instanceof Field )
+        if ( $subject instanceof AbstractField )
         {
             return $this->notify( $event );
         }

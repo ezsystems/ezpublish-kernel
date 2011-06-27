@@ -49,7 +49,7 @@ class Content extends \ezp\base\AbstractModel
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'fieldMap' => true,
+        'fields' => true,
         'locations' => true,
         'contentType' => false,
         'versions' => false,
@@ -222,9 +222,9 @@ class Content extends \ezp\base\AbstractModel
      *
      * @return Field[]
      */
-    protected function getFieldMap()
+    protected function getFields()
     {
-        return $this->getCurrentVersion()->fieldMap;
+        return $this->getCurrentVersion()->fields;
     }
 
     /**

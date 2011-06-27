@@ -46,17 +46,17 @@ if ( $_GET['fn'] === 'create' )
     $content->ownerId = 10;
     $content->sectionId = 3;
 
-    if ( isset( $content->fieldMap['tags'] ) )
+    if ( isset( $content->fields['tags'] ) )
     {
-        $content->fieldMap['tags']->type->value = "instance1";
+        $content->fields['tags']->type->value = "demo";
         // should be:
-        // $content->fieldMap['tags'] = "instance1";
+        // $content->fields['tags'] = "instance1";
         // shortcut for:
-        //$content->fieldMap['tags']->value = "instance1";
+        //$content->fields['tags']->value = "instance1";
     }
 
-    if ( isset( $_GET['title'] ) && isset( $content->fieldMap['title'] ) )
-        $content->fieldMap['title']->type->value = $_GET['title'];
+    if ( isset( $_GET['title'] ) && isset( $content->fields['title'] ) )
+        $content->fields['title']->type->value = $_GET['title'];
 
     $content->notify( 'store' );// Needed to make sure changes in fieldtypes tricle down to field
 
@@ -67,9 +67,9 @@ if ( $_GET['fn'] === 'create' )
     $newContent->fromHash( $state );
 
     // test that reference works on new object
-    if ( isset( $newContent->fieldMap['tags'] ) )
+    if ( isset( $newContent->fields['tags'] ) )
     {
-        $newContent->fieldMap['tags']->type->value .= " instance2";
+        $newContent->fields['tags']->type->value .= ", api, public";
     }
 
     $newContent->notify( 'store' );// Needed to make sure changes in fieldtypes tricle down to field
