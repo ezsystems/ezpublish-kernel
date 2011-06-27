@@ -12,19 +12,15 @@ namespace ezp\content;
 class ContentNotFoundException extends \ezp\base\Exception
 {
     /**
-     * @var int
-     */
-    protected $id;
-
-    /**
      * Constructs a new ezp\base\Exception with $message
      *
-     * @param int $contentId
+     * @param mixed $id
+     * @param string $class ezp\content class that where not found
+     * @param string $property The property that where matched against
      */
-    public function __construct( $contentId )
+    public function __construct( $id, $class = 'Content', $property = 'id' )
     {
-        $this->id = $contentId;
-        parent::__construct( "Could not find content with id: {$contentId}" );
+        parent::__construct( "Could not find $class with $property: {$id}" );
     }
 }
 ?>

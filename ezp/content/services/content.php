@@ -10,7 +10,8 @@
  */
 
 /**
- * Subtree service, used for complex subtree operations
+ * Content service, used for Content operations
+ *
  * @package ezp
  * @subpackage content
  */
@@ -41,6 +42,7 @@ class Content implements ServiceInterface
         $this->repository = $repository;
         $this->se = $se;
     }
+
     /**
      * Creates the new $content in the content repository
      *

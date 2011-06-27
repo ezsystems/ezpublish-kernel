@@ -15,7 +15,7 @@ namespace ezx\content;
 class ContentService implements \ezp\base\ServiceInterface
 {
     /**
-     * @var \ezx\base\Interfaces\Repository
+     * @var \ezp\base\Repository
      */
     protected $repository;
 
