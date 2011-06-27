@@ -5,28 +5,81 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package API
+ * @package ezp
  * @subpackage content
+ */
+
+/**
+ * ContentType class ( Content Class )
+ *
+ * @package ezp
+ * @subpackage content
+ *
+ * @property-read int $id
+ * @property-read int $version
+ * @property-read string $identifier
+ * @property-read Content[] $contentObjects
+ * @property-read ContentTypeField[] $fields
+ * @property-read ContentTypeGroup[] $groups
  */
 namespace ezp\content;
 class ContentType extends \ezp\base\AbstractModel
 {
     /**
-     * Returns an instance of ContentType by its $identifier (e.g. "folder")
-     * <code>
-     * use \ezp\content\ContentType;
-     * use \ezp\content\Content;
-     *
-     * $contentType = ContentType::byIdentifier( "folder" );
-     * $content = new Content( $contentType );
-     * </code>
-     * @param string $identifier The content type identifier
-     * @return ezp\content\ContentType
+     * @var array Readable of properties on this object
      */
-    public static function byIdentifier( $identifier )
+    protected $readableProperties = array(
+        'id' => false,
+        'version' => false,
+        'identifier' => true,
+        'contentObjects' => false,
+        'groups' => true,
+        'fields' => true,
+    );
+
+    public function __construct()
     {
-        $contentType = Repository::get()->getContentService()->loadContentTypeByIdentifier( $identifier );
-        return $contentType;
+        $this->groups = new GroupCollection();
+        $this->fields = new FieldCollection();
+        $this->contentObjects = new ContentCollection();
+    }
+
+    /**
+     * @var int
+     */
+    protected $id;
+
+    /**
+     * @var int
+     */
+    protected $version;
+
+    /**
+     * @var string
+     */
+    protected $identifier;
+
+    /**
+     * @var ContentTypeField[]
+     */
+    protected $fields;
+
+    /**
+     * @var Content[]
+     */
+    protected $contentObjects;
+
+    /**
+     * @var ContentTypeGroup[]
+     */
+    protected $groups;
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->identifier;
     }
 }
 ?>

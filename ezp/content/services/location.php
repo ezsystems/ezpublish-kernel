@@ -20,7 +20,7 @@ use ezp\content\Content, ezp\base\ServiceInterface, ezp\base\Repository, ezp\bas
 class Location implements ServiceInterface
 {
     /**
-     * @var \ezx\base\Interfaces\Repository
+     * @var \ezp\base\Repository
      */
     protected $repository;
 

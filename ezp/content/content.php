@@ -53,8 +53,6 @@
  * @subpackage content
  */
 namespace ezp\content;
-use ezx\content\ContentType, ezp\user\User;
-
 class Content extends \ezp\base\AbstractModel
 {
     /**

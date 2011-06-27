@@ -16,7 +16,7 @@
  * @subpackage content
  */
 namespace ezp\content;
-class Location extends \ezp\base\AbstractModel
+class Location extends \ezp\base\AbstractModel implements \ezp\base\ObserverInterface
 {
     /**
      * @var array Readable of properties on this object
@@ -195,6 +195,22 @@ class Location extends \ezp\base\AbstractModel
     protected function setContent( Content $content )
     {
         $this->content = $content;
+    }
+
+    /**
+     * Called when subject has been updated
+     *
+     * @param \ezp\base\ObservableInterface $subject
+     * @param string $event
+     * @return Location
+     */
+    public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
+    {
+        if ( $subject instanceof Content )
+        {
+            return $this->notify( $event );
+        }
+        return $this;
     }
 }
 ?>
