@@ -14,7 +14,7 @@
  * @package ezp
  * @subpackage base
  */
-namespace ezx\base;
+namespace ezp\base;
 class TypeCollection extends ReadOnlyCollection
 {
     /**

@@ -14,11 +14,11 @@
  * @package ezp
  * @subpackage user
  */
-namespace ezx\user;
+namespace ezp\user;
 class UserService implements \ezp\base\ServiceInterface
 {
     /**
-     * @var \ezx\base\Interfaces\Repository
+     * @var \ezp\base\Repository
      */
     protected $repository;
 

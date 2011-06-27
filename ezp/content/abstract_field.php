@@ -32,7 +32,7 @@ abstract class AbstractField extends \ezp\base\AbstractModel implements \ezp\bas
 
         $configuration = \ezp\base\Configuration::getInstance('content');
         //@todo Remove hardcoded knowledge of sub class
-        $list = $configuration->get( 'field-types', ( $this instanceof \ezx\content\ContentField ? 'content' : 'contentType' ) );
+        $list = $configuration->get( 'fields', ( $this instanceof \ezp\content\Field ? 'Type' : 'Definition' ) );
 
         if ( !isset( $list[ $this->fieldTypeString ] ) )
             throw new \RuntimeException( "Field type value '{$this->fieldTypeString}' is not configured in system.ini" );

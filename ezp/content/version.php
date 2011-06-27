@@ -135,7 +135,7 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
      *
      * @param \ezp\base\ObservableInterface $subject
      * @param string $event
-     * @return ContentVersion
+     * @return Version
      */
     public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
     {

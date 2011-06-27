@@ -11,21 +11,21 @@
 /**
  * Field Collection class
  *
- * Readonly class that takes ContentVersion as input.
+ * Readonly class that takes (Content) Version as input.
  *
  * @package ezp
  * @subpackage content
  */
 namespace ezp\content;
-class FieldCollection implements \ezp\base\ReadOnlyCollection
+class FieldCollection extends \ezp\base\ReadOnlyCollection
 {
     /**
      * Constructor, sets up FieldCollection based on contentType fields
      *
      * @todo Handle translations
-     * @param ContentVersion $contentVersion
+     * @param Version $contentVersion
      */
-    public function __construct( ContentVersion $contentVersion )
+    public function __construct( Version $contentVersion )
     {
         $elements = array();
         $this->count = 0;
