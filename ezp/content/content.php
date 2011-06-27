@@ -296,11 +296,13 @@ class Content extends \ezp\base\AbstractModel
 
     /**
      * Adds a new translation for content, referenced by $localeCode
-     * @param string $localeCode
+     * @param Locale $locale
+     * @return Translation
      */
-    public function addTranslation( $localeCode )
+    public function addTranslation( Locale $locale )
     {
-        $this->translations[] = new Translation( $localeCode );
+        $this->translations[$locale->code] = new Translation( $locale, $this );
+        return $this->translations[$locale->code];
     }
 
     /**
