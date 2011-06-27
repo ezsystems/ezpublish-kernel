@@ -30,7 +30,7 @@ foreach ( $content->fields as $identifier => $value )
 
 // Now updating content
 $newParentLocation = $locationService->load( 43 ); // Fetch location with ID #43
-$content->addLocationUnder( $newParentLocation );
+$content->addParent( $newParentLocation );
 $content->fields["name"] = new Fields\String( "New content name" );
 $contentService->update( $content );
 
