@@ -35,7 +35,7 @@ class ContentTypeGroup extends\ezp\base\AbstractModel
 
     public function __construct()
     {
-        $this->contentTypes = new ContentTypeCollection();
+        $this->contentTypes = new \ezp\base\TypeCollection( '\ezp\content\ContentType' );
     }
 
     /**

@@ -1,46 +1,42 @@
 <?php
 /**
- * File containing the ezp\content\FieldCollection class.
+ * File contains Field Collection class
  *
- * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
- * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
- * @version //autogentag//
+ * @copyright Copyright (c) 2011, eZ Systems AS
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
  * @package ezp
  * @subpackage content
  */
 
 /**
- * This class represents a Content fieldset collection
- * Fieldsets held in a FieldsetCollection object are accessible via array access,
- * indexed by locale
+ * Field Collection class
+ *
+ * Readonly class that takes ContentVersion as input.
  *
  * @package ezp
  * @subpackage content
  */
 namespace ezp\content;
-class FieldCollection extends AbstractCollection
+class FieldCollection implements \ezp\base\ReadOnlyCollection
 {
-
     /**
-     * Will throw an exception as fieldsets are not directly writeable
-     * @param mixed $offset
-     * @param mixed $value
-     * @throws ezcBasePropertyPermissionException
+     * Constructor, sets up FieldCollection based on contentType fields
+     *
+     * @todo Handle translations
+     * @param ContentVersion $contentVersion
      */
-    public function offsetSet( $offset, $value )
+    public function __construct( ContentVersion $contentVersion )
     {
-        throw new \ezcBasePropertyPermissionException( "fieldsets", \ezcBasePropertyPermissionException::READ );
-    }
-
-    /**
-     * Will throw an exception as fieldsets are not directly writeable
-     * @param mixed $offset
-     * @param mixed $value
-     * @throws ezcBasePropertyPermissionException
-     */
-    public function offsetUnset( $offset )
-    {
-        throw new \ezcBasePropertyPermissionException( "fieldsets", \ezcBasePropertyPermissionException::READ );
+        $elements = array();
+        $this->count = 0;
+        foreach ( $contentVersion->content->contentType->fields as $contentTypeField )
+        {
+            $elements[ $contentTypeField->identifier ] = $field = new Field( $contentVersion, $contentTypeField );
+            $contentVersion->attach( $field, 'store' );
+            $this->count++;
+        }
+        parent::__construct( $elements );
     }
 }
+
 ?>

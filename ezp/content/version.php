@@ -55,12 +55,7 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
     public function __construct( Content $content )
     {
         $this->content = $content;
-        $this->fields = new FieldCollection();
-        foreach ( $content->contentType->fields as $contentTypeField )
-        {
-            $this->fields[] = new ContentField( $this, $contentTypeField );
-            $this->attach( $field, 'store' );
-        }
+        $this->fields = new FieldCollection( $this );
     }
 
     /**

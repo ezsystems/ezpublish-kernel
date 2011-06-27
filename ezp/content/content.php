@@ -18,13 +18,13 @@
  *                The Content's ID, automatically assigned by the persistence layer
  * @property-read integer status
  *                The Content's status, as one of the ezp\content::STATUS_* constants
- * @property-read ezp\content\VersionCollection $versions
+ * @property-read Version[] $versions
  *                   Iterable collection of versions for content, indexed by version number. Array-accessible :
  *                   <code>
  *                   $myFirstVersion = $content->versions[1];
  *                   $myThirdVersion = $content->versions[3];
  *                   </code>
- * @property-read ezp\content\LocationCollection $locations
+ * @property-read Location[] $locations
  *                   Locations for content. Iterable, countable and Array-accessible (with numeric indexes)
  *                   First location referenced in the collection represents the main location for content
  *                   <code>
@@ -32,17 +32,17 @@
  *                   $anotherLocation = $content->locations[2];
  *                   $locationById = $content->locations->byId( 60 );
  *                   </code>
- * @property ezp\content\RelationCollection $relations
+ * @property Content[] $relations
  *                                          Collection of ezp\content objects, related to the current one
- * @property ezp\content\RelationCollection $reverseRelations
+ * @property Content[] $reverseRelations
  *                                          Collection of ezp\content objects, reverse-related to the current one
- * @property ezp\content\TranslationCollection $translations
+ * @property Translation[] $translations
  *                                             Collection of content's translations, indexed by locale (ie. eng-GB)
  *                                             <code>
  *                                             $myEnglishTranslation = $content->translations["eng-GB"];
  *                                             $myEnglishTitle = $content->translations["eng-GB"]->fields->title; // Where "title" is the field identifier
  *                                             </code>
- * @property ezp\content\FieldCollection $fields
+ * @property Field[] $fields
  *                                       Collection of content's fields in default (current) language.
  *                                       Shorthand property to directly access to the content's fields in current language
  *                                       <code>
@@ -99,11 +99,11 @@ class Content extends \ezp\base\AbstractModel
     public function __construct( ContentType $contentType )
     {
         $this->creationDate = new \DateTime();
-        $this->versions = new VersionCollection();
-        $this->locations = new LocationCollection();
-        $this->relations = new RelationCollection();
-        $this->reversedRelations = new RelationCollection();
-        $this->translations = new TranslationCollection();
+        $this->versions = new \ezp\base\TypeCollection( '\ezp\content\Version' );
+        $this->locations = new \ezp\base\TypeCollection( '\ezp\content\Location' );
+        $this->relations = new \ezp\base\TypeCollection( '\ezp\content\Content' );
+        $this->reversedRelations = new \ezp\base\TypeCollection( '\ezp\content\Content' );
+        $this->translations = new \ezp\base\TypeCollection( '\ezp\content\Translation' );
         $this->name = false;
         $this->typeId = $contentType->id;
         $this->contentType = $contentType;
@@ -326,7 +326,7 @@ class Content extends \ezp\base\AbstractModel
 
         // Get the location's, so that new content will be the old one's sibling
         $oldLocations = $this->locations;
-        $this->locations = new LocationCollection();
+        $this->locations = new \ezp\base\TypeCollection( '\ezp\content\Location' );
         foreach ( $oldLocations as $location )
         {
             $this->addParent( $location->parent );

@@ -44,7 +44,7 @@ class ContentTypeField extends AbstractField
     public function __construct( ContentType $contentType )
     {
         $this->contentType = $contentType;
-        $this->contentFields = new FieldCollection();
+        $this->contentFields = new \ezp\base\TypeCollection( '\ezp\content\Field' );
     }
 
     /**

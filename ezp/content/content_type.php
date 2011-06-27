@@ -39,9 +39,9 @@ class ContentType extends \ezp\base\AbstractModel
 
     public function __construct()
     {
-        $this->groups = new GroupCollection();
-        $this->fields = new FieldCollection();
-        $this->contentObjects = new ContentCollection();
+        $this->groups = new \ezp\base\TypeCollection( '\ezp\content\ContentTypeGroup' );
+        $this->fields = new \ezp\base\TypeCollection( '\ezp\content\ContentTypeField' );
+        $this->contentObjects = new \ezp\base\TypeCollection( '\ezp\content\Content' );
     }
 
     /**
