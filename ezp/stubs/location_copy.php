@@ -4,13 +4,13 @@ use ezp\Content\Repository as ContentRepository;
 
 $locationId = 60;
 $targetLocationId = 40;
-$treeService = ContentRepository::get()->getSubtreeService();
+$locationService = ContentRepository::get()->getLocationService();
 
 try
 {
-    $location = $treeService->load( $locationId );
-    $target = $treeService->load( $targetLocationId );
-    $treeService->copy( $location, $target );
+    $location = $locationService->load( $locationId );
+    $target = $locationService->load( $targetLocationId );
+    $locationService->copy( $location, $target );
 }
 catch ( ezp\Content\PermissionException $e )
 {

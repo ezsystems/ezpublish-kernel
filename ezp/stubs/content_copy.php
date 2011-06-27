@@ -4,7 +4,7 @@ use ezp\Content\Repository as ContentRepository;
 $contentId = 60;
 $parentLocationId = 2;
 $contentService = ContentRepository::get()->getContentService();
-$treeService = ContentRepository::get()->getSubtreeService();
+$locationService = ContentRepository::get()->getLocationService();
 
 try
 {
@@ -16,7 +16,7 @@ try
      * like ID, creationDate, owner, ...
      */
     $newContent = clone $content;
-    $parentLocation = $treeService->load( $parentLocationId );
+    $parentLocation = $locationService->load( $parentLocationId );
     $content->addLocationUnder( $parentLocation );
     $contentService->create( $newContent );
 }

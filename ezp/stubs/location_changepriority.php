@@ -2,13 +2,13 @@
 use ezp\Content\Repository as ContentRepository;
 
 $locationId = 60;
-$treeService = ContentRepository::get()->getSubtreeService();
+$locationService = ContentRepository::get()->getLocationService();
 
 try
 {
-    $location = $treeService->load( $locationId );
+    $location = $locationService->load( $locationId );
     $location->priority = 20;
-    $treeService->update( $location );
+    $locationService->update( $location );
 }
 catch ( ezp\Content\ValidationException $e )
 {

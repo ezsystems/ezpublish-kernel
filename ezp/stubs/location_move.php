@@ -3,13 +3,13 @@ use ezp\Content\Repository as ContentRepository;
 
 $newParentLocationId = 40;
 $locationId = 60;
-$treeService = ContentRepository::get()->getSubtreeService();
+$locationService = ContentRepository::get()->getLocationService();
 
 try
 {
-    $newParentLocation = $treeService->load( $newParentLocationId );
-    $location = $treeService->load( $locationId );
-    $treeService->move( $location, $newParentLocation );
+    $newParentLocation = $locationService->load( $newParentLocationId );
+    $location = $locationService->load( $locationId );
+    $locationService->move( $location, $newParentLocation );
 }
 catch ( ezp\Content\PermissionException $e )
 {

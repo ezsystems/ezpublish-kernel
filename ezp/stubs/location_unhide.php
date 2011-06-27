@@ -3,12 +3,12 @@
 use ezp\Content\Repository as ContentRepository;
 
 $locationId = 60;
-$treeService = ContentRepository::get()->getSubtreeService();
+$locationService = ContentRepository::get()->getLocationService();
 
 try
 {
-    $location = $treeService->load( $locationId );
-    $treeService->unhide( $location );
+    $location = $locationService->load( $locationId );
+    $locationService->unhide( $location );
 }
 catch ( ezp\Content\PermissionException $e )
 {

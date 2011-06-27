@@ -4,14 +4,14 @@ use ezp\Content\Repository as ContentRepository;
 $location1Id = 60;
 $location2Id = 40;
 
-$treeService = ContentRepository::get()->getSubtreeService();
+$locationService = ContentRepository::get()->getLocationService();
 try
 {
-    $location1 = $treeService->load( $location1Id );
-    $location2 = $treeService->load( $location2Id );
+    $location1 = $locationService->load( $location1Id );
+    $location2 = $locationService->load( $location2Id );
 
     ContentRepository::get()->begin();
-    $treeService->swap( $location1, $location2 );
+    $locationService->swap( $location1, $location2 );
     ContentRepository::get()->commit();
 }
 catch ( ezp\Content\PermissionException $e )

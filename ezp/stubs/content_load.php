@@ -8,7 +8,7 @@ use ezp\Content\Fields;
 
 $repository = ContentRepository::get();
 $contentService = $repository->getContentService();
-$treeService = $repository->getSubtreeService();
+$locationService = $repository->getLocationService();
 try
 {
     $content = $contentService->load( 60 );
@@ -29,7 +29,7 @@ foreach ( $content->fields as $identifier => $value )
 }
 
 // Now updating content
-$newParentLocation = $treeService->load( 43 ); // Fetch location with ID #43
+$newParentLocation = $locationService->load( 43 ); // Fetch location with ID #43
 $content->addLocationUnder( $newParentLocation );
 $content->fields["name"] = new Fields\String( "New content name" );
 $contentService->update( $content );

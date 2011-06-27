@@ -5,11 +5,11 @@ use ezp\Content\Section;
 $sectionId = 2;
 $locationId = 60;
 $sectionService = ContentRepository::get()->getSectionService();
-$subtreeService = ContentRepository::get()->getSubtreeService();
+$locationService = ContentRepository::get()->getLocationService();
 
-$location = $subtreeService->load( $locationId );
+$location = $locationService->load( $locationId );
 $section = $sectionService->load( $sectionId );
 
-$subtreeService->assignSection( $location, $section );
+$locationService->assignSection( $location, $section );
 
 ?>
