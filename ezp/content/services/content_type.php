@@ -17,7 +17,7 @@ namespace ezp\content\Services;
  * @package ezp
  * @subpackage content
  */
-use ezp\content\ContentType, ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
+use ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
 class ContentType implements ServiceInterface
 {
     /**

@@ -9,15 +9,15 @@
  * @subpackage content
  */
 
+namespace ezp\content\Services;
+
 /**
  * Content service, used for Content operations
  *
  * @package ezp
  * @subpackage content
  */
-namespace ezp\content\Services;
-use ezp\content\Content, ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
-
+use ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
 class Content implements ServiceInterface
 {
     /**
@@ -51,7 +51,7 @@ class Content implements ServiceInterface
      * @return \ezp\content\Content The newly created content
      * @throws \ezp\content\ValidationException If a validation problem has been found for $content
      */
-    public function create( Content $content )
+    public function create( \ezp\content\Content $content )
     {
         // @todo : Do any necessary actions to insert $content in the content repository
         // go through all locations to create or update them
@@ -64,7 +64,7 @@ class Content implements ServiceInterface
      * @return $content
      * @throws \ezp\content\ValidationException If a validation problem has been found for $content
      */
-    public function update( Content $content )
+    public function update( \ezp\content\Content $content )
     {
         // @todo : Do any necessary actions to update $content in the content repository
         // go through all locations to create or update them
@@ -91,7 +91,7 @@ class Content implements ServiceInterface
      *
      * @param \ezp\content\Content $content
      */
-    public function delete( Content $content )
+    public function delete( \ezp\content\Content $content )
     {
         // take care of:
         // 1. removing the subtree of all content's locations

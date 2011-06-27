@@ -37,15 +37,11 @@ if ( $_GET['fn'] === 'create' )
 
     $sc = new ServiceContainer();
     $repository = $sc->getRepository();
-    $contentService = $repository->getContentService();
+    $contentTypeService = $repository->getContentTypeService();
 
     // Create Content object
-    $content = $contentService->create( $_GET['identifier'] );
-    /** Alternative example:
-    $contentTypeService = $repository->ContentTypeService();
     $contentType = $contentTypeService->loadByIdentifier( $_GET['identifier'] );
-    $content = new Content( $contentType );
-    */
+    $content = new \ezx\content\Content( $contentType );
 
     $content->ownerId = 10;
     $content->sectionId = 3;
@@ -67,7 +63,8 @@ if ( $_GET['fn'] === 'create' )
     $state = $content->toHash();
     $out = var_export( $state, true );
 
-    $newContent = $contentService->create( $_GET['identifier'] )->fromHash( $state );
+    $newContent = new \ezx\content\Content( $contentType );
+    $newContent->fromHash( $state );
 
     // test that reference works on new object
     if ( isset( $newContent->fieldMap['tags'] ) )

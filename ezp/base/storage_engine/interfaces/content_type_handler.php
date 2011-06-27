@@ -23,7 +23,7 @@ interface ContentTypeHandlerInterface extends HandlerInterface
      * @param \ezp\content\ContentType $contentType
      * @return \ezp\content\ContentType
      */
-    public function create( \ezx\content\ContentType $contentType );
+    public function create( \ezp\content\ContentType $contentType );
 
     /**
      * Get ContentType object by id

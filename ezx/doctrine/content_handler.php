@@ -43,7 +43,7 @@ class ContentHandler implements \ezp\base\StorageEngine\ContentHandlerInterface
      * @param \ezx\content\Content $content
      * @return \ezx\content\Content
      */
-    public function create( \ezx\content\Content $content )
+    public function create( \ezp\content\Content $content )
     {
         // @todo Store in backend
         return $content;

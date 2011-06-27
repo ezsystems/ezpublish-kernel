@@ -9,6 +9,8 @@
  * @subpackage content
  */
 
+namespace ezp\content\Services;
+
 /**
  * Trash service, used for content trash handling
  *
@@ -21,9 +23,7 @@
  * @package ezp
  * @subpackage content
  */
-namespace ezp\content\Services;
 use ezp\content\Content, ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
-
 class Trash implements ServiceInterface
 {
     /**

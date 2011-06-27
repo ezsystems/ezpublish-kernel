@@ -10,6 +10,9 @@
 
 /**
  * Repository class
+ *
+ * @package ezp
+ * @subpackage base
  */
 namespace ezp\base;
 class Repository
@@ -50,11 +53,11 @@ class Repository
     }
 
     /**
-     * Handles class for service objects, services needs to be in same namespace atm.
+     * Handles class loading for service objects
      *
      * @param string $className
      * @return ServiceInterface
-     * @throws RuntimeException
+     * @throws \RuntimeException
      */
     protected function service( $className )
     {
@@ -73,11 +76,11 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggreagate memebers.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return \ezx\content\ContentService
+     * @return \ezp\content\Services\Content
      */
     public function getContentService()
     {
-        return $this->service( '\ezx\content\ContentService' );
+        return $this->service( '\ezp\content\Services\Content' );
     }
 
     /**
@@ -86,11 +89,11 @@ class Repository
      * Get service object to perform several operations on ContentType objects and it's aggragate memebers.
      * ( ContentTypeGroup, ContentTypeField & ContentTypeFieldCategory )
      *
-     * @return \ezx\content\ContentTypeService
+     * @return \ezp\content\Services\ContentType
      */
     public function getContentTypeService()
     {
-        return $this->service( '\ezx\content\ContentTypeService' );
+        return $this->service( '\ezp\content\Services\ContentType' );
     }
 
     /**
@@ -99,22 +102,22 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggreagate memebers.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return \ezp\content\LocationService
+     * @return \ezp\content\Services\Location
      */
     public function getLocationService()
     {
-        return $this->service( '\ezp\content\LocationService' );
+        return $this->service( '\ezp\content\Services\Location' );
     }
 
     /**
      * Get User Service
      *
      *
-     * @return \ezp\section\SectionService
+     * @return \ezp\content\Services\Section
      */
     public function getSectionService()
     {
-        return $this->service( '\ezp\section\SectionService' );
+        return $this->service( '\ezp\content\Services\Section' );
     }
 
     /**

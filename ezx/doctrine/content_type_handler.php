@@ -43,7 +43,7 @@ class ContentTypeHandler implements \ezp\base\StorageEngine\ContentTypeHandlerIn
      * @param \ezx\content\ContentType $contentType
      * @return \ezx\content\ContentType
      */
-    public function create( \ezx\content\ContentType $contentType )
+    public function create( \ezp\content\ContentType $contentType )
     {
         // @todo Store in backend
         return $contentType;

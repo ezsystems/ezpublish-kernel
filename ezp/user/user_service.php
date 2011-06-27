@@ -8,13 +8,14 @@
  * @subpackage user
  */
 
+namespace ezp\user;
+
 /**
  * User Service, extends repository with user specific operations
  *
  * @package ezp
  * @subpackage user
  */
-namespace ezp\user;
 class UserService implements \ezp\base\ServiceInterface
 {
     /**
