@@ -1,21 +1,27 @@
 <?php
 /**
- * ContentType Handler Storage Engine Interface
+ * File contains ContentType Handler Storage Engine Interface
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
- * @package ext
+ * @package ezp
  * @subpackage base
  */
 
+/**
+ * ContentType Handler Storage Engine Interface
+ *
+ * @package ezp
+ * @subpackage base
+ */
 namespace ezp\base\StorageEngine;
 interface ContentTypeHandlerInterface extends HandlerInterface
 {
     /**
      * Create ContentType object
      *
-     * @param \ezx\content\ContentType $contentType
-     * @return \ezx\content\ContentType
+     * @param \ezp\content\ContentType $contentType
+     * @return \ezp\content\ContentType
      */
     public function create( \ezx\content\ContentType $contentType );
 
@@ -23,7 +29,7 @@ interface ContentTypeHandlerInterface extends HandlerInterface
      * Get ContentType object by id
      *
      * @param int $id
-     * @return \ezx\content\ContentType
+     * @return \ezp\content\ContentType
      */
     public function load( $id );
 
@@ -31,7 +37,7 @@ interface ContentTypeHandlerInterface extends HandlerInterface
      * Get ContentType object by identifier
      *
      * @param string $identifier
-     * @return \ezx\content\ContentType
+     * @return \ezp\content\ContentType
      */
     public function loadByIdentifier( $identifier );
 }

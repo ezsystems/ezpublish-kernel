@@ -1,13 +1,19 @@
 <?php
 /**
- * Storage Engine Interface
+ * File contains Storage Engine Interface
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
- * @package ext
+ * @package ezp
  * @subpackage base
  */
 
+/**
+ * Storage Engine Interface aka Repository Handler
+ *
+ * @package ezp
+ * @subpackage base
+ */
 namespace ezp\base;
 interface StorageEngineInterface
 {
@@ -38,6 +44,13 @@ interface StorageEngineInterface
      * @return StorageEngine\UserHandlerInterface
      */
     public function getUserHandler();
+
+    /**
+     * Get User Handler
+     *
+     * @return StorageEngine\SectionHandlerInterface
+     */
+    public function getSectionHandler();
 
     /**
      * Begins an transaction, make sure you'll call commit or rollback when done,

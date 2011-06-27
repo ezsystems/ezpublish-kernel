@@ -95,6 +95,16 @@ class StorageEngine implements \ezp\base\StorageEngineInterface
     /**
      * Get User Handler
      *
+     * @return \ezp\base\StorageEngine\SectionHandlerInterface
+     */
+    public function getSectionHandler()
+    {
+        return $this->handler( '\ezx\doctrine\SectionHandler' );
+    }
+
+    /**
+     * Get User Handler
+     *
      * @return \ezp\base\StorageEngine\UserHandlerInterface
      */
     public function getUserHandler()

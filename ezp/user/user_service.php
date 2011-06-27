@@ -1,15 +1,18 @@
 <?php
 /**
- * User Service
+ * File contains User Service
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
- * @package ext
+ * @package ezp
  * @subpackage user
  */
 
 /**
  * User Service, extends repository with user specific operations
+ *
+ * @package ezp
+ * @subpackage user
  */
 namespace ezx\user;
 class UserService implements \ezp\base\ServiceInterface

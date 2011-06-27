@@ -109,6 +109,17 @@ class Repository
     /**
      * Get User Service
      *
+     *
+     * @return \ezp\section\SectionService
+     */
+    public function getSectionService()
+    {
+        return $this->service( '\ezp\section\SectionService' );
+    }
+
+    /**
+     * Get User Service
+     *
      * Get service object to performe several operations on User objects and it's aggragate memebers.
      * ( UserGroups, UserRole, UserRolePolicy & UserRolePolicyLimitation )
      *

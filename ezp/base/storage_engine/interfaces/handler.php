@@ -1,13 +1,19 @@
 <?php
 /**
- * Storage Engine Handler Interface
+ * File contains Storage Engine - Handler Interface
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
- * @package ext
+ * @package ezp
  * @subpackage base
  */
 
+/**
+ * Storage Engine - Handler Interface
+ *
+ * @package ezp
+ * @subpackage base
+ */
 namespace ezp\base\StorageEngine;
 interface HandlerInterface
 {

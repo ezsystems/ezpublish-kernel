@@ -1,13 +1,19 @@
 <?php
 /**
- * Repository Interface
+ * File contains Service Interface, for services attached to repository
  *
  * @copyright Copyright (c) 2011, eZ Systems AS
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
- * @package ext
+ * @package ezp
  * @subpackage base
  */
 
+/**
+ * Service Interface
+ *
+ * @package ezp
+ * @subpackage base
+ */
 namespace ezp\base;
 interface ServiceInterface
 {
