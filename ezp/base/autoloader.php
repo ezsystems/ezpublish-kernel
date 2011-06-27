@@ -70,12 +70,6 @@ class Autoloader
      */
     public function load( $className )
     {
-        // Lazy load ezcBase if a ezc class is requested (needs to be first to avoid recursion)
-        if ( !self::$ezcLoaded && strncmp( $className, 'ezc', 3 ) === 0 )
-        {
-            return self::$ezcLoaded = self::registerEzc();
-        }
-
         // Load class list array from cache or generate + save if it is not loaded
         if ( $this->classes === null )
         {
@@ -95,6 +89,12 @@ class Autoloader
         if ( isset( $this->classes[$className] ) )
         {
             return require( $this->classes[$className] );
+        }
+
+        // Lazy load ezcBase if a ezc class is requested
+        if ( !self::$ezcLoaded && strncmp( $className, 'ezc', 3 ) === 0 )
+        {
+            return self::registerEzc();
         }
 
         // Fallback to load by convention if class name starts with ezp\ or ezx\ namespace
@@ -140,7 +140,7 @@ class Autoloader
         $ezpExtensionClasses = array();
         $ezpKernelOverrideClasses = array();
 
-        // Load eZ Publish autload files
+        // Load eZ Publish autoload files
         if ( file_exists( 'autoload/ezp_kernel.php' ) )// @todo Temporary, should be forced as the file should be there
         {
             $ezpClasses = require 'autoload/ezp_kernel.php';
@@ -162,6 +162,18 @@ class Autoloader
         }
 
         $ezpClasses = $ezpKernelOverrideClasses + $ezpTestClasses + $ezpExtensionClasses + $ezpClasses;
+
+        // Load eZ Component autoload files that are used often
+        foreach( array( 'base', 'persistent', 'configuration', 'php_generator' ) as $prefix )
+        {
+            $tempOverrideClasses = include "{$this->settings['ezc-path']}autoload/{$prefix}_autoload.php";
+            if ( $tempOverrideClasses )
+            {
+                $ezpClasses = self::expandClassList( $tempOverrideClasses,
+                                                     $this->settings['ezc-path'],
+                                                     $this->settings['ezc-src-path'] ) + $ezpClasses;
+            }
+        }
 
         // Load API module autoload files
         foreach ( $this->settings['repositories'] as $ns => $ns2 )
@@ -234,13 +246,13 @@ class Autoloader
      */
     protected function registerEzc()
     {
-
         if ( self::$ezcLoaded !== null )
             return self::$ezcLoaded;
 
         if ( class_exists( 'ezcBase', false ) )
             return true;
 
+        self::$ezcLoaded = true;
         require $this->settings['ezc-path'] . 'Base' . $this->settings['ezc-src-path'] . 'base.php';
         spl_autoload_register( array( 'ezcBase', 'autoload' ) );
         return true;
