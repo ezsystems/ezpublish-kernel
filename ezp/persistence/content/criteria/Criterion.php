@@ -23,7 +23,7 @@ class Criterion extends Criteria
 	 * @AssociationMultiplicity 1..*
 	 * @AssociationKind Composition
 	 */
-	public $childs = array();
+	public $children = array();
 	/**
 	 * @AssociationType ezp.persistence.content.criteria.Criterion
 	 * @AssociationMultiplicity 1

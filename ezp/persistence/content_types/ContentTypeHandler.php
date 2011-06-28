@@ -30,10 +30,10 @@ interface ContentTypeHandler
 	public function updateGroup(ContentTypeGroup $group);
 
 	/**
-	 * @param int grouId
-	 * @ParamType grouId int
+	 * @param int groupId
+	 * @ParamType groupId int
 	 */
-	public function deleteGroup($grouId);
+	public function deleteGroup($groupId);
 
 	/**
 	 * @return array
@@ -58,18 +58,18 @@ interface ContentTypeHandler
 	public function load($contentTypeId, $version = 1);
 
 	/**
-	 * @param ezp.persistence.content_types.ContentType contentTyoe
+	 * @param ezp.persistence.content_types.ContentType contentType
 	 * @return ezp.persistence.content_types.ContentType
-	 * @ParamType contentTyoe ezp.persistence.content_types.ContentType
+	 * @ParamType contentType ezp.persistence.content_types.ContentType
 	 * @ReturnType ezp.persistence.content_types.ContentType
 	 */
-	public function create(ContentType $contentTyoe);
+	public function create(ContentType $contentType);
 
 	/**
-	 * @param ezp.persistence.content_types.ContentType contentTyoe
-	 * @ParamType contentTyoe ezp.persistence.content_types.ContentType
+	 * @param ezp.persistence.content_types.ContentType contentType
+	 * @ParamType contentType ezp.persistence.content_types.ContentType
 	 */
-	public function update(ContentType $contentTyoe);
+	public function update(ContentType $contentType);
 
 	/**
 	 * @param int contentTypeId

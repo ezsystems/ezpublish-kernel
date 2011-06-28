@@ -17,7 +17,7 @@ class ContentFieldCriteria extends Criteria
 	/**
 	 * @AttributeType ezp.persistence.content.criteria.Operator
 	 */
-	public $opaerator;
+	public $operator;
 	/**
 	 * @AttributeType string
 	 */

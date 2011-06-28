@@ -25,6 +25,6 @@ class Section
 	/**
 	 * @AttributeType string
 	 */
-	public $identfier;
+	public $identifier;
 }
 ?>

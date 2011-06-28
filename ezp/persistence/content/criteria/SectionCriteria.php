@@ -17,6 +17,6 @@ class SectionCriteria extends Criteria
 	/**
 	 * @AttributeType array
 	 */
-	public $sectioIdList;
+	public $sectionIdList;
 }
 ?>

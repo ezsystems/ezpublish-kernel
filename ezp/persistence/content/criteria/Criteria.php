@@ -17,6 +17,6 @@ class Criteria
 	/**
 	 * @AttributeType bool
 	 */
-	public $negiative;
+	public $negative;
 }
 ?>
