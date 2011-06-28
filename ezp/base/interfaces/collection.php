@@ -12,6 +12,7 @@
  * Collection interface
  *
  * @todo Make sure interface is usable for both normal collections as well as lazy loaded collections
+ * @todo Change into an abstract? So that it can potentially change from IteratorAggregate to Iterator later?
  */
 namespace ezp\base;
 interface CollectionInterface extends \Countable, \IteratorAggregate, \ArrayAccess

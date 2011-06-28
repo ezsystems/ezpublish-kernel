@@ -80,6 +80,13 @@ class Location extends \ezp\base\AbstractModel implements \ezp\base\ObserverInte
     protected $parent;
 
     /**
+     * The children Location
+     *
+     * @var Location[]
+     */
+    protected $children;
+
+    /**
      * The Content the Location holds
      *
      * @var Proxy|Content

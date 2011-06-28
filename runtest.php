@@ -11,12 +11,22 @@
 
 set_time_limit( 0 );
 
+// setup autoloaders
 require 'config.php';
 require 'ezp/base/autoloader.php';
 spl_autoload_register( array( new ezp\base\Autoloader( $settings['base']['autoload'] ), 'load' ) );
 
 require_once 'PHPUnit/Autoload.php';
 
+
+// setup configuration
+$paths = array();
+foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )//@todo Take from configuration
+{
+    $paths[] = "{$path}/settings/";
+}
+\ezp\base\Configuration::setGlobalConfigurationData( $settings );
+\ezp\base\Configuration::setGlobalDirs( $paths, 'modules' );
 
 /**
  * Simple test suite that maps all other tests suits by convention
