@@ -27,7 +27,7 @@ interface StorageInterface
 	 * @ParamType data array
 	 * @ParamType field ezp.persistence.content.values.ContentField
 	 */
-	public function setValue(array_112 $data, ContentField $field);
+	public function setValue(array $data, \ezp\persistence\content\values\ContentField $field);
 
 	/**
 	 * @param int filedId
@@ -51,7 +51,7 @@ interface StorageInterface
 	 * @ParamType fieldId array
 	 * @ReturnType boolean
 	 */
-	public function deleteFieldData(array_113 $fieldId);
+	public function deleteFieldData(array $fieldId);
 
 	/**
 	 * @return bool

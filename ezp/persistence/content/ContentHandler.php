@@ -21,7 +21,7 @@ interface ContentHandler
 	 * @ParamType content ezp.persistence.content.values.ContentCreateStruct
 	 * @ReturnType ezp.persistence.content.values.Content
 	 */
-	public function create(ContentCreateStruct $content);
+	public function create(\ezp\persistence\content\values\ContentCreateStruct $content);
 
 	/**
 	 * @param int contentId
@@ -47,7 +47,7 @@ interface ContentHandler
 	 * @param sort
 	 * @ParamType criteria Criteria
 	 */
-	public function query(Criteria $criteria, $limit, $sort);
+	public function query(\ezp\content\Criteria\Criteria $criteria, $limit, $sort);
 
 	/**
 	 * @param int contentId
@@ -63,7 +63,7 @@ interface ContentHandler
 	 * @param ezp.persistence.content.values.ContentUpdateStruct content
 	 * @ParamType content ezp.persistence.content.values.ContentUpdateStruct
 	 */
-	public function update(ContentUpdateStruct $content);
+	public function update(\ezp\persistence\content\values\ContentUpdateStruct $content);
 
 	/**
 	 * Deletes all versions and fields, all locations (subtree), all relations

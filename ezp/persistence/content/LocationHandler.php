@@ -24,10 +24,10 @@ interface LocationHandler
 	public function load($ref);
 
 	/**
-	 * @param id int
+	 * @param int
 	 * @ParamType int id
 	 */
-	public function delete(id $int);
+	public function delete($int);
 
 	/**
 	 * @param int srcId
@@ -69,7 +69,7 @@ interface LocationHandler
 	 * @param ezp.persistence.content.values.Location location
 	 * @ParamType location ezp.persistence.content.values.Location
 	 */
-	public function update(Location $location);
+	public function update(\ezp\content\Services\Location $location);
 
 	/**
 	 * @param int contentId
@@ -115,6 +115,6 @@ interface LocationHandler
 	 * @ParamType actionName string
 	 * @ParamType actionValues array
 	 */
-	public function getPathByActionList($actionName, array_51 $actionValues);
+	public function getPathByActionList($actionName, array $actionValues);
 }
 ?>
