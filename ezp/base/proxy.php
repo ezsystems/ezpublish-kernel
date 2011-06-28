@@ -27,7 +27,6 @@ class Proxy implements ProxyInterface
     /**
      * Id of the object
      *
-     * @access public
      * @var int
      */
     protected $id;

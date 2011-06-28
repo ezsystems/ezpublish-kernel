@@ -1,7 +1,6 @@
 <?php
 namespace ezp\persistence\user;
 /**
- * @access public
  * @package ezp.persistence.user
  */
 class Policy 

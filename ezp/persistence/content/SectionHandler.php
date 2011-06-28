@@ -1,14 +1,12 @@
 <?php
 namespace ezp\persistence\content;
 /**
- * @access public
  * @package ezp.persistence.content
  */
 class SectionHandler 
 {
 
 	/**
-	 * @access public
 	 * @param string name
 	 * @param string identifier
 	 * @return ezp.persistence.content.values.Section
@@ -21,7 +19,6 @@ class SectionHandler
 	}
 
 	/**
-	 * @access public
 	 * @param string name
 	 * @param string identifier
 	 * @ParamType name string
@@ -32,7 +29,6 @@ class SectionHandler
 	}
 
 	/**
-	 * @access public
 	 * @param int id
 	 * @ParamType id int
 	 */
@@ -41,7 +37,6 @@ class SectionHandler
 	}
 
 	/**
-	 * @access public
 	 * @param int sectionId
 	 * @param int contentId
 	 * @ParamType sectionId int

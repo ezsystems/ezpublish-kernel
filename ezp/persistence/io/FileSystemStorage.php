@@ -1,7 +1,6 @@
 <?php
 namespace ezp\persistence\io;
 /**
- * @access public
  * @package ezp.persistence.io
  */
 class FileSystemStorage implements BinaryFileStorageInterface 
@@ -13,7 +12,6 @@ class FileSystemStorage implements BinaryFileStorageInterface
 	public $contains;
 
 	/**
-	 * @access public
 	 * @param string fileIdentifier
 	 * @return boolean
 	 * @ParamType fileIdentifier string
@@ -24,7 +22,6 @@ class FileSystemStorage implements BinaryFileStorageInterface
 	}
 
 	/**
-	 * @access public
 	 * @param string fileIdentifier
 	 * @return FileReference
 	 * @ParamType fileIdentifier string
@@ -35,7 +32,6 @@ class FileSystemStorage implements BinaryFileStorageInterface
 	}
 
 	/**
-	 * @access public
 	 * @param string fileIdentifier
 	 * @return FileChunk
 	 * @ParamType fileIdentifier string
@@ -46,7 +42,6 @@ class FileSystemStorage implements BinaryFileStorageInterface
 	}
 
 	/**
-	 * @access public
 	 * @param string fileIdentifier
 	 * @return boolean
 	 * @ParamType fileIdentifier string
@@ -57,7 +52,6 @@ class FileSystemStorage implements BinaryFileStorageInterface
 	}
 
 	/**
-	 * @access public
 	 */
 	public function authenticate() {
 		// Not yet implemented

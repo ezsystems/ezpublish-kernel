@@ -1,7 +1,6 @@
 <?php
 namespace ezp\persistence\content\values;
 /**
- * @access public
  * @package ezp.persistence.content.values
  */
 class ContentCreateStruct 

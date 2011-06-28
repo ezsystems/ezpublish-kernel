@@ -1,14 +1,12 @@
 <?php
 namespace ezp\persistence\content;
 /**
- * @access public
  * @package ezp.persistence.content
  */
 interface ContentHandler 
 {
 
 	/**
-	 * @access public
 	 * @param ezp.persistence.content.values.ContentCreateStruct content
 	 * @return ezp.persistence.content.values.Content
 	 * @ParamType content ezp.persistence.content.values.ContentCreateStruct
@@ -17,7 +15,6 @@ interface ContentHandler
 	public function create(ContentCreateStruct $content);
 
 	/**
-	 * @access public
 	 * @param int contentId
 	 * @param int srcVersion
 	 * @return ezp.persistence.content.values.Content
@@ -28,7 +25,6 @@ interface ContentHandler
 	public function createDraftFromVersion($contentId, $srcVersion = false);
 
 	/**
-	 * @access public
 	 * @param int id
 	 * @return ezp.persistence.content.values.Content
 	 * @ParamType id int
@@ -37,7 +33,6 @@ interface ContentHandler
 	public function load($id);
 
 	/**
-	 * @access public
 	 * @param Criteria criteria
 	 * @param limit
 	 * @param sort
@@ -46,7 +41,6 @@ interface ContentHandler
 	public function query(Criteria $criteria, $limit, $sort);
 
 	/**
-	 * @access public
 	 * @param int contentId
 	 * @param int state
 	 * @param int version
@@ -57,7 +51,6 @@ interface ContentHandler
 	public function setState($contentId, $state, $version);
 
 	/**
-	 * @access public
 	 * @param ezp.persistence.content.values.ContentUpdateStruct content
 	 * @ParamType content ezp.persistence.content.values.ContentUpdateStruct
 	 */
@@ -65,28 +58,24 @@ interface ContentHandler
 
 	/**
 	 * Deletes all versions and fields, all locations (subtree), all relations
-	 * @access public
 	 * @param int contentId
 	 * @ParamType contentId int
 	 */
 	public function delete($contentId);
 
 	/**
-	 * @access public
 	 * @param int contentId
 	 * @ParamType contentId int
 	 */
 	public function trash($contentId);
 
 	/**
-	 * @access public
 	 * @param int contentId
 	 * @ParamType contentId int
 	 */
 	public function untrash($contentId);
 
 	/**
-	 * @access public
 	 * @param int contentId
 	 * @return array
 	 * @ParamType contentId int
@@ -95,7 +84,6 @@ interface ContentHandler
 	public function listVersions($contentId);
 
 	/**
-	 * @access public
 	 * @param int contentId
 	 * @param string languageCode
 	 * @return Content

@@ -1,7 +1,6 @@
 <?php
 namespace ezp\persistence\content_types;
 /**
- * @access public
  * @package ezp.persistence.content_types
  */
 class TypeBase 

@@ -1,7 +1,6 @@
 <?php
 namespace ezp\persistence\io;
 /**
- * @access public
  * @package ezp.persistence.io
  */
 class BinaryFile 
