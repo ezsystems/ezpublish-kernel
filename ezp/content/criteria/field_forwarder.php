@@ -40,7 +40,7 @@ class FieldForwarder implements \ArrayAccess
      */
     public function offsetSet( $offset, $value )
     {
-        throw new InvalidArgumentException( "Write access is not allowed" );
+        throw new \InvalidArgumentException( "Write access is not allowed" );
     }
 
     /**

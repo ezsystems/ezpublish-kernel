@@ -14,9 +14,6 @@
  * @access private
  */
 namespace ezp\base;
-use ezcBasePropertyNotFoundException;
-use ezcBasePropertyPermissionException;
-
 abstract class AbstractModel implements ObservableInterface, ModelInterface
 {
     /**
@@ -125,7 +122,7 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
      * Magic getter
      * @param string $property Property name
      * @access private
-     * @throws ezcBasePropertyNotFoundException If $property cannot be found
+     * @throws \ezcBasePropertyNotFoundException If $property cannot be found
      */
     public function __get( $property )
     {
@@ -141,7 +138,7 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
         }
 
         throw new \InvalidArgumentException( "'{$property}' is not a valid property on class: " . get_class( $this ) );
-        //throw new ezcBasePropertyNotFoundException( $property );
+        //throw new \ezcBasePropertyNotFoundException( $property );
     }
 
     /**
@@ -149,8 +146,8 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
      * Avoids to modify read-only properties
      * @param string $property
      * @param mixed $value
-     * @throws ezcBasePropertyNotFoundException If $property cannot be found
-     * @throws ezcBasePropertyPermissionException When trying to set a value to a read-only property
+     * @throws \ezcBasePropertyNotFoundException If $property cannot be found
+     * @throws \ezcBasePropertyPermissionException When trying to set a value to a read-only property
      */
     public function __set( $property, $value )
     {
@@ -163,13 +160,13 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
             }
             else
             {
-                throw new ezcBasePropertyPermissionException( $property, ezcBasePropertyPermissionException::READ );
+                throw new \ezcBasePropertyPermissionException( $property, \ezcBasePropertyPermissionException::READ );
             }
         }
         else
         {
             throw new \InvalidArgumentException( "'{$property}' is not a valid property on class: " . get_class( $this ) );
-            //throw new ezcBasePropertyNotFoundException( $property );
+            //throw new \ezcBasePropertyNotFoundException( $property );
         }
     }
 
