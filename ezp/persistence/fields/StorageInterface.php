@@ -3,7 +3,7 @@ namespace ezp\persistence\fields;
 /**
  * @package ezp.persistence.fields
  */
-interface StorageInterfacel 
+interface StorageInterface
 {
 
 	/**
