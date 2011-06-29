@@ -15,7 +15,6 @@ namespace ezp\persistence\content\criteria;
 class SectionCriteria extends Criteria 
 {
 	/**
-	 * @AttributeType array
 	 */
 	public $sectionIdList;
 }

@@ -15,7 +15,6 @@ namespace ezp\persistence\content\criteria;
 class Criteria 
 {
 	/**
-	 * @AttributeType bool
 	 */
 	public $negative;
 }

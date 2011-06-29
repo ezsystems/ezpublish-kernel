@@ -15,7 +15,6 @@ namespace ezp\persistence\content\criteria;
 class MetaDataCriteria extends Criteria
 {
 	/**
-	 * @AttributeType ezp.persistence.content.criteria.MetaData
 	 */
 	public $metaData;
 	public $value;

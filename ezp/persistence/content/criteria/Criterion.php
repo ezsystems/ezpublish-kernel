@@ -15,18 +15,12 @@ namespace ezp\persistence\content\criteria;
 class Criterion extends Criteria
 {
 	/**
-	 * @AttributeType ezp.persistence.content.criteria.LogicOperator
 	 */
 	public $operator;
 	/**
-	 * @AssociationType ezp.persistence.content.criteria.Criterion
-	 * @AssociationMultiplicity 1..*
-	 * @AssociationKind Composition
 	 */
 	public $children = array();
 	/**
-	 * @AssociationType ezp.persistence.content.criteria.Criterion
-	 * @AssociationMultiplicity 1
 	 */
 	public $parent_17;
 }

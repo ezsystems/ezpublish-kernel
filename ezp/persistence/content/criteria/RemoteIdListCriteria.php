@@ -15,7 +15,6 @@ namespace ezp\persistence\content\criteria;
 class RemoteIdListCriteria extends Criteria
 {
 	/**
-	 * @AttributeType array
 	 */
 	public $remoteIdList;
 }

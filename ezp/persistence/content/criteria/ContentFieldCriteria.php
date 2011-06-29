@@ -15,11 +15,9 @@ namespace ezp\persistence\content\criteria;
 class ContentFieldCriteria extends Criteria 
 {
 	/**
-	 * @AttributeType ezp.persistence.content.criteria.Operator
 	 */
 	public $operator;
 	/**
-	 * @AttributeType string
 	 */
 	public $fieldIdentifier;
 	public $value;
