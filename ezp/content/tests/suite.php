@@ -23,12 +23,14 @@ class Suite extends \PHPUnit_Framework_TestSuite
     {
         parent::__construct();
         $this->setName( 'ezp-next content module Test Suite' );
-        $this->addTestSuite( __NAMESPACE__ . '\\LocationTest'  );
+
+        $this->addTestSuite( __NAMESPACE__ . '\\LocationTest' );
         $this->addTestSuite( __NAMESPACE__ . '\\ContentTest'  );
+        $this->addTestSuite( __NAMESPACE__ . '\\CriteriaCollectionTest'  );
     }
 
     /**
-     * @return ezpTestSuite
+     * @return \ezp\content\tests\TestSuite
      */
     public static function suite()
     {

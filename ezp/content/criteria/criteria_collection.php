@@ -150,12 +150,37 @@ class CriteriaCollection
         return $this;
     }
 
+    /**
+     * Sets the maximum number of returned items to limit
+     *
+     * The offset is set with {@link offset()}
+     *
+     * @param integer $limit
+     *
+     * @return CriteriaCollection
+     *
+     * @throws \InvalidArgumentException if the provided $limit isn't an integer > 0
+     */
     public function limit( $limit )
     {
+        $limit = (int)$limit;
+
+        if ( $limit <= 0 )
+        {
+            throw new \InvalidArgumentException( "Limit must be > 0" );
+        }
         $this->limit = (int)$limit;
+
         return $this;
     }
 
+    /**
+     * Sets the offset from which items are to be returned to $offset
+     *
+     * @param integer $offset
+     *
+     * @return CriteriaCollection
+     */
     public function offset( $offset = 0 )
     {
         $this->offset = (int)$offset;
