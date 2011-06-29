@@ -17,7 +17,7 @@ namespace ezp\content\tests;
  * @package ezp
  * @subpackage content_tests
  */
-use \ezp\content\Location;
+use \ezp\content\Location, \ezp\content\Content;
 class LocationTest extends \PHPUnit_Framework_TestCase
 {
     protected $content;
@@ -31,7 +31,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $contentType = new \ezp\content\ContentType();
         $contentType->identifier = 'article';
 
-        $this->content = new \ezp\content\Content( $contentType );
+        $this->content = new Content( $contentType );
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: ezp\content\tests\LocationTest class
+ * File contains: ezp\content\tests\ContentTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,43 +12,44 @@
 namespace ezp\content\tests;
 
 /**
- * Test case for Location class
+ * Test case for Content class
  *
  * @package ezp
  * @subpackage content_tests
  */
-use \ezp\content\Location;
-class LocationTest extends \PHPUnit_Framework_TestCase
+use \ezp\content\Content, \ezp\content\Location;
+class ContentTest extends \PHPUnit_Framework_TestCase
 {
-    protected $content;
+    protected $contentType;
 
     public function __construct()
     {
         parent::__construct();
-        $this->setName( "Location class tests" );
+        $this->setName( "Content class tests" );
 
-        // setup a content type & content object of use by tests, fields are not needed for location
-        $contentType = new \ezp\content\ContentType();
-        $contentType->identifier = 'article';
-
-        $this->content = new \ezp\content\Content( $contentType );
+        // setup a content type & content object of use by tests
+        $this->contentType = new \ezp\content\ContentType();
+        $this->contentType->identifier = 'article';
     }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testChildrenWrongClass()
+    public function testLocationWrongClass()
     {
-        $location = new Location( $this->content );
-        $location->children[] = \ezp\content\Section::__set_state( array( 'id' => 1 ) );
+        $content = new Content( $this->contentType );
+        $content->locations[] = \ezp\content\Section::__set_state( array( 'id' => 1 ) );
     }
 
     /**
-     * @expectedException PHPUnit_Framework_Error
+     * Test that foreign side of relation is updated for Location -> Content when Location is created
      */
-    public function testParentWrongClass()
+    public function testContentLocationWhenLocationIsCreated()
     {
-        $location = new Location( $this->content );
-        $location->parent = \ezp\content\Section::__set_state( array( 'id' => 1 ) );
+        $content = new Content( $this->contentType );
+        $location = new Location( $content );
+        $this->assertEquals( $location, $content->locations[0], 'Location on Content is not correctly updated when Location is created with content in constructor!' );
+        $content->locations[] = $location;
+        $this->assertEquals( 1, count( $content->locations ), 'Collection allows several instances of same object!' );
     }
 }
