@@ -51,16 +51,4 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $location = new Location( $this->content );
         $location->parent = \ezp\content\Section::__set_state( array( 'id' => 1 ) );
     }
-
-    /**
-     * Test that parent on child is updated when you assign a Location to children
-     */
-    public function testParentWhenSetWithChildren()
-    {
-        $location = new Location( $this->content );
-        $location2 = new Location( $this->content );
-        $location->children[] = $location2;
-        $this->assertEquals( $location2->parent, $location, 'Parent was not correctly updated when assigned as children!' );
-        $this->assertNotEquals( $location2->parent, new Location( $this->content ), 'Equal function miss behaves, this should not be equal!' );
-    }
 }

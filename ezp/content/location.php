@@ -49,7 +49,7 @@ class Location extends \ezp\base\AbstractModel implements \ezp\base\ObserverInte
     {
         $this->containerProperties = new \ezp\base\TypeCollection( '\ezp\content\ContainerProperty' );
         $this->content = $content;
-        $this->children = new \ezp\base\TypeCollection( '\ezp\content\Location' );
+        $this->children = new \ezp\base\TypeCollection( '\ezp\content\Location', $this, 'parent' );
         $content->locations[] = $this;
     }
 

@@ -11,6 +11,9 @@
 /**
  * Read Only Collection class
  *
+ * Lets you create a collection based on an array, all possible relations* needs to be taken care of by user code.
+ * * The 'owning side' usually in case of one-to-many, in case of many-to-many the 'opposite side'.
+ *
  * @package ezp
  * @subpackage base
  */

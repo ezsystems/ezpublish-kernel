@@ -6,7 +6,7 @@
  * @license http://ez.no/licenses/gnu_gpl GNU GPL v2
  * @version //autogentag//
  * @package ezp
- * @subpackage content
+ * @subpackage content_Services
  */
 
 namespace ezp\content\Services;
@@ -15,7 +15,7 @@ namespace ezp\content\Services;
  * Content service, used for Content operations
  *
  * @package ezp
- * @subpackage content
+ * @subpackage content_Services
  */
 use ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
 class Content implements ServiceInterface
