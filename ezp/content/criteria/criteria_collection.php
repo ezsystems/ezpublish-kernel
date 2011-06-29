@@ -124,12 +124,16 @@ class CriteriaCollection
     }
 
     /**
-     * Adds filter criterias
-     * Arguments must be valid Criteria or Criterion objects
+     * Adds all the given criterias to the query
+     *
+     * All arguments must be valid Criteria or Criterion objects
+     *
+     * @param Criteria|Criterion $criteriaOne
+     *
      * @return CriteriaCollection
      * @throws \InvalidArgumentException If at least one of the arguments is not a valid Criteria/Criterion object
      */
-    public function where()
+    public function where( $criteriaOne )
     {
         $args = func_get_args();
 
