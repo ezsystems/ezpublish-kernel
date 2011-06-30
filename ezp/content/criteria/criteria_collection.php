@@ -187,9 +187,31 @@ class CriteriaCollection
         return $this;
     }
 
-    public function type( $contentTypeIdentifier )
+    /**
+     * Sets the type criteria to $contentTypeIdentifiers
+     *
+     * @param string|array(string) $contentTypeIdentifiers Either a content type identifier, or an array of content type identifiers
+     *
+     * @return CriteriaCollection
+     *
+     * @throws \InvalidArgumentException if one of the provided identifiers is not a string
+     */
+    public function type( $contentTypeIdentifiers )
     {
-        $this->type = (string)$contentTypeIdentifier;
+        if ( !is_array( $contentTypeIdentifiers ) )
+        {
+            $contentTypeIdentifiers = (array)$contentTypeIdentifiers;
+        }
+
+        foreach( $contentTypeIdentifiers as $contentTypeIdentifier )
+        {
+            if ( !is_string( $contentTypeIdentifier ) )
+            {
+                throw new \InvalidArgumentException( "identifiers must be strings" );
+            }
+        }
+
+        $this->type = $contentTypeIdentifiers;
         return $this;
     }
 }
