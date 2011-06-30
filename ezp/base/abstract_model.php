@@ -121,6 +121,7 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
     /**
      * Magic getter
      * @param string $property Property name
+     * @return mixed
      * @access private
      * @throws \ezcBasePropertyNotFoundException If $property cannot be found
      */
