@@ -120,9 +120,9 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
 
     /**
      * Magic getter
+     *
      * @param string $property Property name
      * @return mixed
-     * @access private
      * @throws \ezcBasePropertyNotFoundException If $property cannot be found
      */
     public function __get( $property )
@@ -144,7 +144,9 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
 
     /**
      * Magic setter
+     *
      * Avoids to modify read-only properties
+     *
      * @param string $property
      * @param mixed $value
      * @throws \ezcBasePropertyNotFoundException If $property cannot be found
@@ -173,8 +175,9 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
 
     /**
      * Checks if a public virtual property is set
+     *
      * @param string $property Property name
-     * @access private
+     * @return bool
      */
     public function __isset( $property )
     {
