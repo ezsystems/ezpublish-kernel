@@ -70,7 +70,7 @@ class TypeCollection extends ReadOnlyCollection
     {
         // throw if wrong type
         if ( !$value instanceof $this->type )
-            throw new \InvalidArgumentException( "This collection is only accept '{$this->type}', '" . get_class( $value ) . '\' given.' );
+            throw new \InvalidArgumentException( "This collection only accepts '{$this->type}', '" . get_class( $value ) . '\' given.' );
 
         // stop if value is already in array
         if ( in_array( $value, $this->elements, true ) )
