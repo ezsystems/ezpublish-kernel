@@ -112,6 +112,14 @@ class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testTypeWrongArgument()
+    {
+        $result = $this->criteria->type( array() );
+    }
+
+    /**
      * Test for the {@link ezp\content\Criteria\CriteriaCollection::field} property
      */
     public function testField()
