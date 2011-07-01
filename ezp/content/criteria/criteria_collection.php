@@ -31,9 +31,10 @@ use ezp\content;
  * $result = $contentService->find( $c );
  * </code>
  *
- * @property FieldCriteria $field The field criteria
- * @property MetadataCriteria $meta Metadata criteria (published date, section, path, owner...)
- * @property LocationCriteria $location Location criteria for subtree filtering (most likely starting point)
+ * @property-read FieldCriteria $field The field criteria
+ * @property-read MetadataCriteria $meta Metadata criteria (published date, section, path, owner...)
+ * @property-read LocationCriteria $location Location criteria for subtree filtering (most likely starting point)
+ * @property-read SortBymetaClause $sortByMeta
  */
 class CriteriaCollection
 {
@@ -56,10 +57,10 @@ class CriteriaCollection
     protected $criterias = array();
 
     /**
-     * Criterias for content sorting
-     * @var SortCriteriaCollection
+     * Clauses for content sorting
+     * @var array(SortByClause)
      */
-    protected $sortCriterias = array();
+    protected $sortItems = array();
 
     /**
      * Maximum number of results that need to be returned by the query
@@ -94,9 +95,10 @@ class CriteriaCollection
     }
 
     /**
-     * Generic getter
-     * Returns a criteria from its name, if available
-     * @param string $criteriaName
+     * Generic getter, that instanciates a type of criteria
+     *
+     * @param string $criteriaName field, meta, location, sortByMeta, sortByField
+     *
      * @return Criteria
      */
     public function __get( $criteriaName )
@@ -222,6 +224,28 @@ class CriteriaCollection
             $this->type = array_unique( array_merge( $this->type, $contentTypeIdentifiers ) );
         }
 
+        return $this;
+    }
+
+    /**
+     * Adds one to many sort parameters.
+     *
+     * Several parameters can be provided at once, or the method can be called several times.
+     *
+     * @param SortByClause $sortBy$...
+     *
+     * @return CriteriaCollection
+     */
+    public function sortBy( SortByClause $sortBy )
+    {
+        foreach( func_get_args() as $item )
+        {
+            if ( !$item instanceof SortByClause )
+            {
+                throw new \InvalidArgumentException( "Argument must be an instance of SortByClause" );
+            }
+            $this->sortItems[] = $item;
+        }
         return $this;
     }
 }

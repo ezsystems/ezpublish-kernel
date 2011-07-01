@@ -1,7 +1,7 @@
 <?php
-use ezp\Content\Repository as ContentRepository;
+use ezp\base\Repository;
 
-$contentService = ContentRepository::get()->getContentService();
+$contentService = Repository::get()->getContentService();
 $c = $contentService->createCriteria();
 $c->where( // andCondition() is implicit
     $c->location->isChildOf( $parentLocation ), // Direct children
@@ -15,7 +15,11 @@ $c->where( // andCondition() is implicit
     )
 )
 ->limit( 5 )
-->offset( 0 );
+->offset( 0 )
+->sortBy(
+    new SortByMetaClause( 'published' ),
+    new SortByFieldClause( 'title' )
+);
 
 $collection = $contentService->find( $c );
 ?>
