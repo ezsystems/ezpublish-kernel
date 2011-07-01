@@ -188,20 +188,20 @@ class CriteriaCollection
     }
 
     /**
-     * Sets the type criteria to $contentTypeIdentifiers
+     * Adds the given content type identifiers to the query
      *
-     * @param string|array(string) $contentTypeIdentifiers Either a content type identifier, or an array of content type identifiers
+     * Only elements of these class identifiers will be matched.
+     * The method can be called multiple times to add more of them.
+     *
+     * @param string $contentTypeIdentifier$... One to many content type identifier strings
      *
      * @return CriteriaCollection
      *
      * @throws \InvalidArgumentException if one of the provided identifiers is not a string
      */
-    public function type( $contentTypeIdentifiers )
+    public function type( $contentTypeIdentifier )
     {
-        if ( !is_array( $contentTypeIdentifiers ) )
-        {
-            $contentTypeIdentifiers = (array)$contentTypeIdentifiers;
-        }
+        $contentTypeIdentifiers = func_get_args();
 
         foreach( $contentTypeIdentifiers as $contentTypeIdentifier )
         {
@@ -211,7 +211,15 @@ class CriteriaCollection
             }
         }
 
-        $this->type = $contentTypeIdentifiers;
+        if ( $this->type === null )
+        {
+            $this->type = $contentTypeIdentifiers;
+        }
+        else
+        {
+            $this->type = array_unique( array_merge( $this->type, $contentTypeIdentifiers ) );
+        }
+
         return $this;
     }
 }

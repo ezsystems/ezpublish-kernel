@@ -98,12 +98,17 @@ class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
 
     public function testType()
     {
-        $typeValue = array( 'class_one', 'class_two' );
-        $result = $this->criteria->type( $typeValue );
+        $result = $this->criteria->type( 'class_one', 'class_two' );
 
         // @todo Improve the test when the in-memory storage engine is available
         self::assertEquals( $this->criteria, $result );
-        self::assertEquals( $typeValue, $this->getCriteriaPropertyValue( 'type' ) );
+        self::assertEquals( array( 'class_one', 'class_two' ), $this->getCriteriaPropertyValue( 'type' ) );
+
+        $result = $this->criteria->type( 'class_three' );
+
+        // @todo Improve the test when the in-memory storage engine is available
+        self::assertEquals( $this->criteria, $result );
+        self::assertEquals( array( 'class_one', 'class_two', 'class_three' ), $this->getCriteriaPropertyValue( 'type' ) );
     }
 
     /**
