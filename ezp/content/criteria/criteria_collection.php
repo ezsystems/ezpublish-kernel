@@ -177,11 +177,13 @@ class CriteriaCollection
     /**
      * Sets the offset from which items are to be returned to $offset
      *
+     * Calling the method again will change the offset. The default offset value is 0.
+     *
      * @param integer $offset
      *
      * @return CriteriaCollection
      */
-    public function offset( $offset = 0 )
+    public function offset( $offset )
     {
         $this->offset = (int)$offset;
         return $this;
