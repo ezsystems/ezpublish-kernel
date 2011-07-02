@@ -9,8 +9,15 @@
  */
 
 namespace ezp\base;
-interface ConfigurationWriterInterface extends ConfigurationParserInterface
+interface ConfigurationWriterInterface
 {
+    /**
+     * Construct an instance for a specific file
+     *
+     * @param string $file A valid file name, will be overwritten if it exists by {@link write()}
+     */
+    public function __construct( $file );
+
     /**
      * Store raw configuration data to file
      *
