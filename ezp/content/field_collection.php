@@ -37,6 +37,21 @@ class FieldCollection extends \ezp\base\ReadOnlyCollection
         }
         parent::__construct( $elements );
     }
+
+    /**
+     * Set value on a offset in collection, only allowed on existing items where value is forwarded to ->type->value
+     *
+     * @internal
+     * @throws \InvalidArgumentException When trying to set new values / append
+     * @param string|int $offset
+     * @param mixed $value
+     */
+    public function offsetSet( $offset, $value )
+    {
+        if ( $offset === null || !isset( $this->elements[$offset] ) )
+            throw new \InvalidArgumentException( "FieldCollection is locked and offset:{$offset} can not be appended!" );
+        $this->elements[$offset]->type->value = $value;
+    }
 }
 
 ?>

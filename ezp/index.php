@@ -43,19 +43,9 @@ $content = new Content( $contentType );
 $content->ownerId = 10;
 $content->section = $section;
 
-
-//$content->locations[] = $section;
-
-if ( isset( $content->fields['tags'] ) )
-{
-    $content->fields['tags']->type->value = 'ezpublish, demo, public, api';
-    // should be:
-    // $content->fields['tags'] = 'instance1';
-    // shortcut for:
-    //$content->fields['tags']->value = 'instance1';
-}
-
-$content->fields['title']->type->value = 'My new Article';
+$content->fields['tags'] = 'ezpublish, demo, public, api';
+$content->fields['title'] = 'My new Article';
+// shortcut for: $content->fields['title']->value = 'My new Article';
 
 $content->notify( 'store' );// Needed to make sure changes in fieldtypes tricle down to field
 

@@ -46,6 +46,7 @@ class TypeCollection extends ReadOnlyCollection
     /**
      * Overrides offsetSet to check type and allow if correct
      *
+     * @internal
      * @throws \InvalidArgumentException On wrong type
      * @param string|int $offset
      * @param mixed $value
@@ -70,6 +71,7 @@ class TypeCollection extends ReadOnlyCollection
     /**
      * Unset a offset in collection
      *
+     * @internal
      * @param string|int $offset
      */
     public function offsetUnset( $offset )
@@ -80,6 +82,7 @@ class TypeCollection extends ReadOnlyCollection
     /**
      * Return count of elements
      *
+     * @internal
      * @return int
      */
     public function count()

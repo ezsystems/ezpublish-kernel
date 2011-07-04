@@ -43,6 +43,7 @@ class ReadOnlyCollection implements CollectionInterface
     /**
      * Get Iterator.
      *
+     * @internal
      * @return \ArrayIterator
      */
     public function getIterator()
@@ -51,8 +52,9 @@ class ReadOnlyCollection implements CollectionInterface
     }
 
     /**
-     * Set value on a offset in collection.
+     * Set value on a offset in collection, read only collection so throws exception.
      *
+     * @internal
      * @throws \InvalidArgumentException This collection is readonly
      * @param string|int $offset
      * @param mixed $value
@@ -65,6 +67,7 @@ class ReadOnlyCollection implements CollectionInterface
     /**
      * Get value in collection by offset, return null if not set.
      *
+     * @internal
      * @param string|int $offset
      * @return mixed
      */
@@ -78,6 +81,7 @@ class ReadOnlyCollection implements CollectionInterface
     /**
      * Unset value on a offset in collection
      *
+     * @internal
      * @throws \InvalidArgumentException This collection is readonly
      * @param string|int $offset
      */
@@ -89,6 +93,7 @@ class ReadOnlyCollection implements CollectionInterface
     /**
      * Checks if value exists on a offset in collection
      *
+     * @internal
      * @param string|int $offset
      * @return bool
      */
@@ -98,8 +103,9 @@ class ReadOnlyCollection implements CollectionInterface
     }
 
     /**
-     * Return count of elements
+     * Return count of elements, used by count() php function
      *
+     * @internal
      * @return int
      */
     public function count()
