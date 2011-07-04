@@ -24,8 +24,6 @@ class Translation extends \ezp\base\AbstractModel
      */
     protected $readableProperties = array(
         'versions' => false,
-        'content' => false,
-        'locale' => false,
     );
 
     /**
@@ -34,7 +32,8 @@ class Translation extends \ezp\base\AbstractModel
     protected $dynamicProperties = array(
         'localeCode' => false,
         'contentId' => false,
-        'currentVersion' => false,
+        'fields' => false,
+        'last' => false,
     );
 
 
@@ -43,14 +42,14 @@ class Translation extends \ezp\base\AbstractModel
      *
      * @var Content
      */
-    protected $content;
+    public $content;
 
     /**
      * Locale object
      *
      * @var \ezp\base\Locale
      */
-    protected $locale;
+    public $locale;
 
     /**
      * Existing Version in the Translation
@@ -62,7 +61,8 @@ class Translation extends \ezp\base\AbstractModel
     public function __construct( \ezp\base\Locale $locale, Content $content )
     {
         $this->locale = $locale;
-        $this->versions = new VersionCollection();
+        $this->versions = new \ezp\base\TypeCollection( '\ezp\content\Version' );
+        $this->content = $content;
     }
 
     /**
@@ -86,14 +86,24 @@ class Translation extends \ezp\base\AbstractModel
     }
 
     /**
-     * Returns the current version in the translation
+     * Returns the last version added to the translation
      *
      * @return Version
      */
-    protected function getCurrentVersion()
+    protected function getLast()
     {
-        // TODO get the current version from $this->versions
-        // the one with status == STATUS_PUBLISHED ?
+        return $this->versions[count( $this->versions ) - 1];
+    }
+
+    /**
+     * Returns the field collection in the last version added to the
+     * translation
+     *
+     * @return FieldCollection
+     */
+    protected function getFields()
+    {
+        return $this->getLast()->fields;
     }
 }
 ?>

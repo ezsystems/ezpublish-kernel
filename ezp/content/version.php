@@ -34,17 +34,17 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
         'creatorId' => true,
         'created' => true,
         'modified' => true,
-        'initialLanguageId' => true,
-        'languageMask' => true,
-        'contentObjectId' => false,
+        'locale' => true,
         'fields' => false,
+        'content' => false,
     );
 
     /**
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'content' => false,
+        'locale' => false,
+        'baseVersion' => false,
     );
 
     /**
@@ -94,21 +94,6 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
     protected $status = 0;
 
     /**
-     * @var int
-     */
-    protected $initialLanguageId = 0;
-
-    /**
-     * @var int
-     */
-    protected $languageMask = 0;
-
-    /**
-     * @var int
-     */
-    protected $contentObjectId = 0;
-
-    /**
      * @var Field[]
      */
     protected $fields;
@@ -121,14 +106,18 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
     protected $content;
 
     /**
-     * Return content object
+     * Locale
      *
-     * @return Content
+     * @var \ezp\base\Locale
      */
-    protected function getContent()
-    {
-        return $this->content;
-    }
+    protected $locale;
+
+    /**
+     * Version on which was the base to create the current one
+     *
+     * @var Version
+     */
+    protected $baseVersion;
 
     /**
      * Called when subject has been updated
@@ -146,12 +135,50 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
         return $this;
     }
 
+
+    /**
+     * Sets the locale of the version
+     *
+     * @param Locale $locale
+     */
+    protected function setLocale( Locale $locale )
+    {
+        $this->locale = $locale;
+    }
+
+    /**
+     * Returns the Version used as a base of the current one
+     *
+     * @return Version|false
+     */
+    protected function getBaseVersion()
+    {
+        if ( $this->base instanceof Proxy )
+        {
+            $this->base = $this->base->load();
+        }
+        return $this->base;
+    }
+
     /**
      * @return string
      */
     public function __toString()
     {
         return $this->id . ' ('  . $this->version . ')';
+    }
+
+
+    /**
+     * Clones the version and set the base of the new version object with the
+     * old one.
+     *
+     * @return void
+     */
+    public function __clone()
+    {
+        $this->base = $this;
+        $this->id = false;
     }
 }
 ?>
