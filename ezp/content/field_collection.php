@@ -17,23 +17,20 @@
  * @subpackage content
  */
 namespace ezp\content;
-class FieldCollection extends \ezp\base\ReadOnlyCollection
+class FieldCollection extends \ArrayObject implements \ezp\base\CollectionInterface
 {
     /**
      * Constructor, sets up FieldCollection based on contentType fields
      *
-     * @todo Handle translations
      * @param Version $contentVersion
      */
     public function __construct( Version $contentVersion )
     {
         $elements = array();
-        $this->count = 0;
         foreach ( $contentVersion->content->contentType->fields as $contentTypeField )
         {
             $elements[ $contentTypeField->identifier ] = $field = new Field( $contentVersion, $contentTypeField );
             $contentVersion->attach( $field, 'store' );
-            $this->count++;
         }
         parent::__construct( $elements );
     }
@@ -48,9 +45,21 @@ class FieldCollection extends \ezp\base\ReadOnlyCollection
      */
     public function offsetSet( $offset, $value )
     {
-        if ( $offset === null || !isset( $this->elements[$offset] ) )
+        if ( $offset === null || !$this->offsetExists( $offset ) )
             throw new \InvalidArgumentException( "FieldCollection is locked and offset:{$offset} can not be appended!" );
-        $this->elements[$offset]->type->value = $value;
+        $this->offsetGet( $offset )->type->value = $value;
+    }
+
+    /**
+     * Unset value on a offset in collection
+     *
+     * @internal
+     * @throws \InvalidArgumentException This collection is readonly
+     * @param string|int $offset
+     */
+    public function offsetUnset( $offset )
+    {
+        throw new \InvalidArgumentException( "This collection is readonly and offset:{$offset} can not be Unset " );
     }
 }
 

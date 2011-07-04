@@ -16,7 +16,7 @@ namespace ezp\base;
  * @package ezp
  * @subpackage base
  */
-class TypeCollection extends ReadOnlyCollection
+class TypeCollection extends \ArrayObject implements CollectionInterface
 {
     /**
      * @var string The class name (including namespace) to accept as input
@@ -38,7 +38,8 @@ class TypeCollection extends ReadOnlyCollection
         foreach ( $elements as $item )
         {
             if ( !$item instanceof $type )
-                throw new \InvalidArgumentException( "This collection is only accept '{$type}', '" . get_class( $item ) . '\' given.' );
+                throw new \InvalidArgumentException( "This collection is only accept '{$type}', '" .
+                                                     ( is_object( $item ) ? get_class( $item ): gettype( $item ) ) . '\' given.' );
         }
         parent::__construct( $elements );
     }
@@ -55,39 +56,32 @@ class TypeCollection extends ReadOnlyCollection
     {
         // throw if wrong type
         if ( !$value instanceof $this->type )
-            throw new \InvalidArgumentException( "This collection only accepts '{$this->type}', '" . get_class( $value ) . '\' given.' );
+            throw new \InvalidArgumentException( "This collection only accepts '{$this->type}', '" .
+                                                     ( is_object( $value ) ? get_class( $value ): gettype( $value ) ) . '\' given.' );
 
         // stop if value is already in array
-        if ( in_array( $value, $this->elements, true ) )
+        if ( in_array( $value, $this->getArrayCopy(), true ) )
             return;
 
-        // append or set depending on $offset
-        if ( $offset === null )
-            $this->elements[] = $value;
-        else
-            $this->elements[$offset] = $value;
+        parent::offsetSet( $offset, $value );
     }
 
     /**
-     * Unset a offset in collection
+     * Overloads exchangeArray() to do type checks on input.
      *
-     * @internal
-     * @param string|int $offset
+     * @throws \InvalidArgumentException
+     * @param array $input
+     * @return array
      */
-    public function offsetUnset( $offset )
+    public function exchangeArray( $input )
     {
-        unset( $this->elements[$offset] );
-    }
-
-    /**
-     * Return count of elements
-     *
-     * @internal
-     * @return int
-     */
-    public function count()
-    {
-        return count( $this->elements );
+        foreach ( $input as $item )
+        {
+            if ( !$item instanceof $this->type )
+                throw new \InvalidArgumentException( "This collection is only accept '{$this->type}', '" .
+                                                     ( is_object( $item ) ? get_class( $item ): gettype( $item ) ) . '\' given.' );
+        }
+        return parent::exchangeArray( $input );
     }
 }
 

@@ -11,46 +11,15 @@
 /**
  * Read Only Collection class
  *
- * Lets you create a collection based on an array, all possible relations* needs to be taken care of by user code.
- * * The 'owning side' usually in case of one-to-many, in case of many-to-many the 'opposite side'.
+ * Lets you create a collection based on an array, keys must be integers as this extends SplFixedArray
+ * to preserve memory consumption.
  *
  * @package ezp
  * @subpackage base
  */
 namespace ezp\base;
-class ReadOnlyCollection implements CollectionInterface
+class ReadOnlyCollection extends \SplFixedArray implements CollectionInterface
 {
-    /**
-     * @var array Internal native array.
-     */
-    protected $elements = array();
-
-    /**
-     * @var int For storing count value as it never changes.
-     */
-    protected $count;
-
-    /**
-     * Construct object and assign internal array values
-     *
-     * @param array $elements
-     */
-    public function __construct( array $elements = array() )
-    {
-        $this->elements = $elements;
-    }
-
-    /**
-     * Get Iterator.
-     *
-     * @internal
-     * @return \ArrayIterator
-     */
-    public function getIterator()
-    {
-        return new \ArrayIterator( $this->elements );
-    }
-
     /**
      * Set value on a offset in collection, read only collection so throws exception.
      *
@@ -62,20 +31,6 @@ class ReadOnlyCollection implements CollectionInterface
     public function offsetSet( $offset, $value )
     {
         throw new \InvalidArgumentException( "This collection is readonly and offset:{$offset} can not be Set " );
-    }
-
-    /**
-     * Get value in collection by offset, return null if not set.
-     *
-     * @internal
-     * @param string|int $offset
-     * @return mixed
-     */
-    public function offsetGet( $offset )
-    {
-        if ( isset($this->elements[$offset]) )
-            return $this->elements[$offset];
-        return null;
     }
 
     /**
@@ -91,30 +46,35 @@ class ReadOnlyCollection implements CollectionInterface
     }
 
     /**
-     * Checks if value exists on a offset in collection
+     * Return an instance of ReadOnlyCollection from array values
      *
-     * @internal
-     * @param string|int $offset
-     * @return bool
+     * Note: Indexes are not maintained!
+     *
+     * @param array $array
+     * @param bool $save_indexes Not used, indexes is not maintained by this function!
+     * @return ReadOnlyCollection
      */
-    public function offsetExists( $offset )
+    public static function fromArray( $array, $save_indexes = false )
     {
-        return isset( $this->elements[$offset] );
+        $obj = new static( count( $array ) );
+        return $obj->setArray( $array );
     }
 
     /**
-     * Return count of elements, used by count() php function
+     * Set array values on instance, for internal use, make sure size is set first!
      *
      * @internal
-     * @return int
+     * @param array $array
+     * @return ReadOnlyCollection
      */
-    public function count()
+    protected function setArray( array $array )
     {
-        if ( $this->count === null )
+        $i = 0;
+        foreach ( $array as $item )
         {
-            $this->count = count( $this->elements );
+            parent::offsetSet( $i++, $item );
         }
-        return $this->count;
+        return $this;
     }
 }
 

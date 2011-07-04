@@ -26,6 +26,8 @@ class Suite extends \PHPUnit_Framework_TestSuite
 
         $this->addTestSuite( __NAMESPACE__ . '\\AutoloadTest' );
         $this->addTestSuite( __NAMESPACE__ . '\\IniParserTest' );
+        $this->addTestSuite( __NAMESPACE__ . '\\ReadOnlyCollectionTest' );
+        $this->addTestSuite( __NAMESPACE__ . '\\TypeCollectionTest' );
     }
 
     /**
