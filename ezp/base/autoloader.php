@@ -34,11 +34,6 @@ class Autoloader
     protected $settings;
 
     /**
-     * @var bool|null Null if not loaded, true if loaded and false if tried to load but failed
-     */
-    protected static $ezcLoaded = null;
-
-    /**
      * @var string
      */
     const CACHE_FILE = 'var/cache/autoload.php';
@@ -55,6 +50,8 @@ class Autoloader
         $this->settings = $settings + array(
             'ezc-path' => 'ezc/',
             'ezc-src-path' => '/',
+            'ezc-loaded' => false,
+            'ezc-prefixes' => array( 'base', 'persistent', 'configuration', 'php_generator' ),
             'repositories' => array( 'ezp' => 'ezp',
                                      'ezx' => 'ezx' ),
             'development-mode' => false,
@@ -92,9 +89,9 @@ class Autoloader
         }
 
         // Lazy load ezcBase if a ezc class is requested
-        if ( !self::$ezcLoaded && strncmp( $className, 'ezc', 3 ) === 0 )
+        if ( !$this->settings['ezc-loaded'] && strncmp( $className, 'ezc', 3 ) === 0 )
         {
-            return self::registerEzc();
+            return $this->registerEzc();
         }
 
         // Fallback to load by convention if class name starts with ezp\ or ezx\ namespace
@@ -164,14 +161,12 @@ class Autoloader
         $ezpClasses = $ezpKernelOverrideClasses + $ezpTestClasses + $ezpExtensionClasses + $ezpClasses;
 
         // Load eZ Component autoload files that are used often
-        foreach( array( 'base', 'persistent', 'configuration', 'php_generator' ) as $prefix )
+        foreach( $this->settings['ezc-list'] as $prefix )
         {
             $tempOverrideClasses = include "{$this->settings['ezc-path']}autoload/{$prefix}_autoload.php";
             if ( $tempOverrideClasses )
             {
-                $ezpClasses = self::expandClassList( $tempOverrideClasses,
-                                                     $this->settings['ezc-path'],
-                                                     $this->settings['ezc-src-path'] ) + $ezpClasses;
+                $ezpClasses = $this->expandEzcClassList( $tempOverrideClasses ) + $ezpClasses;
             }
         }
 
@@ -179,37 +174,33 @@ class Autoloader
         foreach ( $this->settings['repositories'] as $ns => $ns2 )
         {
             // @todo: Use configuration so class list only include activated extensions.
-            // But then this loading will have to happen after configuration and siteaccess is loaded.
+            // But then this loading will have to happen after configuration and siteaccess is loaded!
             foreach( glob( "$ns/*", GLOB_ONLYDIR ) as $path )
             {
-                if ( file_exists( "$path/autoload.php" ) )
-                    $ezpClasses = self::expandClassList( include "$path/autoload.php", "$path/" ) + $ezpClasses;
+                if ( !file_exists( "$path/autoload.php" ) )
+                    continue;
+
+                foreach( include "$path/autoload.php" as $class => $relativePath )
+                {
+                    $ezpClasses[$class] = "$path/" . $relativePath;
+                }
             }
         }
         return $ezpClasses;
     }
 
     /**
-     * Expand an array of paths with provided root path
+     * Expand an array of ezc class paths using $settings
      *
      * @param array $classes
-     * @param string $basePath Base path ending with /, like 'ezc/' or ''
-     * @param string $srcPath Optional string starting and stopping with /, like '/src/' or '/'
      * @return array
      */
-    protected static function expandClassList( array $classes, $basePath, $srcPath = '/' )
+    protected function expandEzcClassList( array $classes )
     {
         foreach( $classes as $class => $path )
         {
-            if ( $srcPath !== '/' )
-            {
-                list( $first, $second ) = explode( '/', $path, 2 );
-                $classes[$class] = $basePath . $first . $srcPath . $second;
-            }
-            else
-            {
-                $classes[$class] = $basePath . $path;
-            }
+            list( $first, $second ) = explode( '/', $path, 2 );
+            $classes[$class] = $this->settings['ezc-path'] . $first . $this->settings['ezc-src-path'] . $second;
         }
         return $classes;
     }
@@ -246,13 +237,14 @@ class Autoloader
      */
     protected function registerEzc()
     {
-        if ( self::$ezcLoaded !== null )
-            return self::$ezcLoaded;
-
+        $this->settings['ezc-loaded'] = true;
         if ( class_exists( 'ezcBase', false ) )
+        {
+            if ( !in_array( array( 'ezcBase', 'autoload' ), spl_autoload_functions(), true ) )
+                spl_autoload_register( array( 'ezcBase', 'autoload' ) );
             return true;
+        }
 
-        self::$ezcLoaded = true;
         require $this->settings['ezc-path'] . 'Base' . $this->settings['ezc-src-path'] . 'base.php';
         spl_autoload_register( array( 'ezcBase', 'autoload' ) );
         return true;
