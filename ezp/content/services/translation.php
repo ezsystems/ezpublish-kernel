@@ -66,7 +66,7 @@ class Translation implements ServiceInterface
         $tr = new Translation( $locale, $content );
         if ( $base !== null )
         {
-            $newVersion = clone $base->currentVersion;
+            $newVersion = clone $content->translations[$base->code]->last;
         }
         else
         {
