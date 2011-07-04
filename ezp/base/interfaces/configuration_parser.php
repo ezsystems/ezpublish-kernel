@@ -12,9 +12,16 @@ namespace ezp\base;
 interface ConfigurationParserInterface
 {
     /**
+     * Construct an instance for a specific file
+     *
+     * @param string $file A valid file name, file must exist by the time you call parse()!
+     *        For writer {@see ConfigurationWriterInterface}, file will be overwritten if it exists!
+     */
+    public function __construct( $file );
+
+    /**
      * Parse file and return raw configuration data
      *
-     * @param string $fileContent
      * @return array A plain array structure of configuration data where array clearing
      *         is marked with {@link Configuration::TEMP_INI_UNSET_VAR} and php variables are plain
      *         php values(numbers, floats, true and false). In addition strings are rtrimmed to
@@ -45,7 +52,7 @@ interface ConfigurationParserInterface
      *                 )
      *             )
      */
-    public function parse( $fileContent );
+    public function parse();
 }
 
 ?>

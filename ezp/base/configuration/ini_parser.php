@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains Configuration Ini Parser / writer
+ * Configuration Ini Parser / writer
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -11,14 +11,6 @@
  */
 
 namespace ezp\base\Configuration;
-
-/**
- * Configuration Ini Parser / writer
- *
- * @package ezp
- * @subpackage base
- */
-use \ezp\base\Configuration;
 class IniParser implements \ezp\base\ConfigurationParserInterface, \ezp\base\ConfigurationWriterInterface
 {
     /**
@@ -38,10 +30,13 @@ class IniParser implements \ezp\base\ConfigurationParserInterface, \ezp\base\Con
     const TEMP_INI_FALSE_VAR = '__FALSE__';
 
     /**
-     * File name as needed by writer
+     * Makes it possible to force ecz parser for testing
      *
-     * @var string
+     * @internal
+     * @var bool
      */
+    public static $forceEzc = false;
+
     protected $file;
 
     /**
@@ -57,16 +52,15 @@ class IniParser implements \ezp\base\ConfigurationParserInterface, \ezp\base\Con
     /**
      * Parse file and return raw configuration data
      *
-     * @param string $fileContent
      * @return array
      */
-    public function parse( $fileContent )
+    public function parse()
     {
-        $configurationData = $this->parseFilePhp( $fileContent );
+        $configurationData = self::$forceEzc ? false : $this->parseFilePhp();
         // if it failed, fallback to ezc ini parser for compatibility
         if ( $configurationData === false )
         {
-            $configurationData = $this->parseFileEzc( $fileContent );
+            $configurationData = $this->parseFileEzc();
         }
         return $configurationData;
     }
@@ -78,15 +72,14 @@ class IniParser implements \ezp\base\ConfigurationParserInterface, \ezp\base\Con
      * the ini files eZ Publish use because things like regex as ini variable and so on.
      *
      * @access internal
-     * @param string $fileContent
      * @return array|false Data structure for parsed ini file or false if it fails
      */
-    public function parseFilePhp( $fileContent )
+    public function parseFilePhp()
     {
         // First some pre processing to normalize result with ezc result (avoid 'true' becoming '1')
         $fileContent = str_replace( array( '#', "\r\n", "\r", "=true\n", "=false\n" ),
                                     array( ';', "\n", "\n", "=" . self::TEMP_INI_TRUE_VAR . "\n", "=" . self::TEMP_INI_FALSE_VAR . "\n" ),
-                                    $fileContent . "\n" );
+                                    file_get_contents( $this->file ) . "\n" );
         $fileContent = self::parserClearArraySupport( $fileContent );
 
         // Parse string
@@ -122,13 +115,12 @@ class IniParser implements \ezp\base\ConfigurationParserInterface, \ezp\base\Con
      * Parse configuration file using ezcConfigurationIniReader
      *
      * @access internal
-     * @param string $fileContent
      * @return array Data structure for parsed ini file
      */
-    public function parseFileEzc( $fileContent )
+    public function parseFileEzc()
     {
         // First some pre processing to normalize result with parse_ini_string result
-        $fileContent = str_replace( array( "\r\n", "\r" ), array( "\n", "\n" ), $fileContent . "\n" );
+        $fileContent = str_replace( array( "\r\n", "\r" ), array( "\n", "\n" ), file_get_contents( $this->file ) . "\n" );
         $fileContent = preg_replace( array( '/^<\?php[^\/]\/\*\s*/', '/\*\/[^\?]\?>/' ), '', $fileContent );
         $fileContent = self::parserClearArraySupport( $fileContent );
 

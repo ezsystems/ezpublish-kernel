@@ -401,7 +401,7 @@ class Configuration extends AbstractOverride
         {
             $parserClass = $parsers[$suffix];
             $parser = new $parserClass( $fileName );
-            $configurationFileData[$fileName] = $parser->parse( file_get_contents( $fileName ) );
+            $configurationFileData[$fileName] = $parser->parse();
         }
 
         // Post processing to unset array self::TEMP_INI_UNSET_VAR values as set by parser to indicate array clearing
