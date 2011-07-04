@@ -43,40 +43,44 @@ class Translation implements ServiceInterface
     }
 
     /**
-     * Adds a Translation to $content in $locale optionnally based on existing 
+     * Adds a Translation to $content in $locale optionnally based on existing
      * translation in $base.
      *
      * @param Content $content
      * @param Locale $locale
      * @param Locale $base
      * @return Translation
-     * @throw \InvalidArgumentException if translation in $locale already exists
-     *        or if translation in $base does not exist.
+     * @throw \InvalidArgumentException if translation in $base does not exist.
      */
     public function add( Content $content, Locale $locale, Locale $base = null )
     {
-        if ( isset( $content->translations[$locale->code] ) )
-        {
-            throw new \InvalidArgumentException( "Translation {$locale->code} already exists" );
-        }
         if ( $base !== null && !isset( $content->translations[$base->code] ) )
         {
             throw new \InvalidArgumentException( "Translation {$base->code} does not exist" );
         }
-        $tr = new Translation( $locale, $content );
-        if ( $base !== null )
+        if ( isset( $content->translations[$locale->code] ) )
         {
-            $newVersion = clone $content->translations[$base->code]->last;
+            $tr = $content->translations[$locale->code];
         }
         else
+        {
+            $tr = new Translation( $locale, $content );
+            $content->translations[$locale->code] = $tr;
+        }
+
+        $newVersion = null;
+        if ( $base !== null )
+        {
+            $newVersion = clone $content->translations[$base->code]->current;
+        }
+        if ( $newVersion === null )
         {
             $newVersion = new Version( $content );
         }
         $newVersion->locale = $locale;
         $tr->versions[] = $newVersion;
         $content->versions[] = $newVersion;
-        $content->translations[$locale->code] = $tr;
-        return $content->translations[$locale->code];
+        return $tr;
     }
 
 }

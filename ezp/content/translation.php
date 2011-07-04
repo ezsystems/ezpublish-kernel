@@ -34,6 +34,7 @@ class Translation extends \ezp\base\AbstractModel
         'contentId' => false,
         'fields' => false,
         'last' => false,
+        'current' => false,
     );
 
 
@@ -93,6 +94,23 @@ class Translation extends \ezp\base\AbstractModel
     protected function getLast()
     {
         return $this->versions[count( $this->versions ) - 1];
+    }
+
+    /**
+     * Returns the published version in the translation
+     *
+     * @return Version|null
+     */
+    protected function getCurrent()
+    {
+        foreach( $this->versions as $version )
+        {
+            if ( $version->status === Version::STATUS_PUBLISHED )
+            {
+                return $version;
+            }
+        }
+        return null;
     }
 
     /**

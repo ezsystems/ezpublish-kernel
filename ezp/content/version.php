@@ -25,6 +25,18 @@ namespace ezp\content;
 class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInterface
 {
     /**
+     * @todo taken from eZContentObjectVersion, to be redefined
+     */
+    const STATUS_DRAFT = 0;
+    const STATUS_PUBLISHED = 1;
+    const STATUS_PENDING = 2;
+    const STATUS_ARCHIVED = 3;
+    const STATUS_REJECTED = 4;
+    const STATUS_INTERNAL_DRAFT = 5;
+    const STATUS_REPEAT = 6;
+    const STATUS_QUEUED = 7;
+
+    /**
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
