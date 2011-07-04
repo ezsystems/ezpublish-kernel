@@ -25,6 +25,7 @@ class Suite extends \PHPUnit_Framework_TestSuite
         $this->setName( 'ezp-next base module Test Suite' );
 
         $this->addTestSuite( __NAMESPACE__ . '\\AutoloadTest' );
+        $this->addTestSuite( __NAMESPACE__ . '\\IniParserTest' );
     }
 
     /**
