@@ -24,33 +24,17 @@ class TypeCollection extends ReadOnlyCollection
     private $type;
 
     /**
-     * @var AbstractModel|null The object that holds this collection
-     */
-    private $attachedObject;
-
-    /**
-     * @var string|null Property on the other/owning side of the relation.
-     */
-    private $oppositeProperty;
-
-    /**
      * Construct object and assign internal array values
      *
-     * A type strict collection that throws exception if type is wrong when appended to,
-     * also optionally supports making sure opposite side of relation is set when $object & $oppositeProperty
-     * is defined.
+     * A type strict collection that throws exception if type is wrong when appended to.
      *
      * @throws \InvalidArgumentException If elements contains item of wrong type
      * @param string $type
-     * @param AbstractModel|null $attachedObject The object that holds this collection
-     * @param string|null $oppositeProperty Property on the other/owning side of the relation.
      * @param array $elements
      */
-    public function __construct( $type, AbstractModel $attachedObject = null, $oppositeProperty = null, array $elements = array() )
+    public function __construct( $type, array $elements = array() )
     {
         $this->type = $type;
-        $this->attachedObject = $attachedObject;
-        $this->oppositeProperty = $oppositeProperty;
         foreach ( $elements as $item )
         {
             if ( !$item instanceof $type )
@@ -81,21 +65,6 @@ class TypeCollection extends ReadOnlyCollection
             $this->elements[] = $value;
         else
             $this->elements[$offset] = $value;
-
-        // optionally: make sure owning/opposite side of relation is assigned as well.
-        if ( $this->attachedObject !== null && $this->oppositeProperty !== null )
-        {
-            $property = $this->oppositeProperty;
-            if ( $value->$property instanceof CollectionInterface )
-            {
-                $collection = $value->$property;
-                $collection[] = $this->attachedObject;
-            }
-            else
-            {
-                $value->$property = $this->attachedObject;
-            }
-        }
     }
 
     /**

@@ -100,7 +100,7 @@ class Content extends \ezp\base\AbstractModel
     {
         $this->creationDate = new \DateTime();
         $this->versions = new \ezp\base\TypeCollection( '\ezp\content\Version' );
-        $this->locations = new \ezp\base\TypeCollection( '\ezp\content\Location', $this, 'content' );
+        $this->locations = new \ezp\base\TypeCollection( '\ezp\content\Location' );
         $this->relations = new \ezp\base\TypeCollection( '\ezp\content\Content' );
         $this->reversedRelations = new \ezp\base\TypeCollection( '\ezp\content\Content' );
         $this->translations = new \ezp\base\TypeCollection( '\ezp\content\Translation' );

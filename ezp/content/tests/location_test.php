@@ -53,14 +53,14 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test that parent on child is updated when you assign a Location to children
+     * Test that children on parent is updated when you assign a Location to children
      */
-    public function testParentWhenSetWithChildren()
+    public function testChildrenWhenSetWithParent()
     {
         $location = new Location( $this->content );
         $location2 = new Location( $this->content );
-        $location->children[] = $location2;
-        $this->assertEquals( $location2->parent, $location, 'Parent was not correctly updated when assigned as children!' );
-        $this->assertNotEquals( $location2->parent, new Location( $this->content ), 'Equal function miss behaves, this should not be equal!' );
+        $location2->parent = $location;
+        $this->assertEquals( $location->children[0], $location2, 'Children on inverse side was not correctly updated when assigned as parent!' );
+        $this->assertNotEquals( $location->children[0], new Location( $this->content ), 'Equal function miss-behaves, this should not be equal!' );
     }
 }
