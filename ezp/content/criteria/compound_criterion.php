@@ -11,23 +11,33 @@
 namespace ezp\content\Criteria;
 
 /**
- * Criterion base class
+ * Compound criterion class. A compound criterion binds together multiple criteria with a logical (OR/AND) operator
  * A criterion is a logical association between 2 or more criterias
  */
-abstract class Criterion
+abstract class CompoundCriterion
 {
     /**
      * Criterias contained in current criterion
      * @var array( Criteria )
      */
+    protected $operator = Operator::L_AND;
+
+    /**
+     * Criteria in the compound
+     * @var array(Criterion)
+     */
     protected $criteria = array();
 
     /**
      * Constructor
-     * @param array( Criteria ) $criterias
+     *
+     * @param Operator $operator
+     * @param Criteria $criteriaOne
+     * @param Criteria $criteriaTwo$..
+     *
      * @throws \InvalidArgumentException If at least one of passed criterias is not a valid Criteria object
      */
-    public function __construct( array $criteria )
+    public function __construct( $operator, Criteria $criterionOne, Criteria $criteriaTwo )
     {
         foreach ( $criterias as $c )
         {
