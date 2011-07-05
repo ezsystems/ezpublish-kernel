@@ -63,9 +63,10 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
      *
      * @param Content $content
      */
-    public function __construct( Content $content )
+    public function __construct( Content $content, Locale $locale )
     {
         $this->content = $content;
+        $this->locale = $locale;
         $this->fields = new FieldCollection( $this );
     }
 

@@ -4,7 +4,6 @@ use ezp\content;
 
 
 $contentService = \ezp\base\Repository::get()->getContentService();
-$translationService = \ezp\base\Repository::get()->getTranslationService();
 $content = $contentService->load( 2 );
 
 $localeFR = \ezp\base\Locale::get( 'fre-FR' );
@@ -12,7 +11,7 @@ $localeEN = \ezp\base\Locale::get( 'eng-GB' );
 
 try
 {
-    $translationFR = $translationService->add( $content, $localeFR, $localeEN );
+    $translationFR = $content->addTranslation( $content, $localeFR, $localeEN );
 }
 catch( \InvalidArgumentException $e )
 {

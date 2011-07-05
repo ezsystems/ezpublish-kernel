@@ -95,10 +95,13 @@ class Content extends \ezp\base\AbstractModel
      * Create content based on content type object
      *
      * @param ContentType $contentType
+     * @param Locale $mainLocale
      */
-    public function __construct( ContentType $contentType )
+    public function __construct( ContentType $contentType, Locale $mainLocale )
     {
         $this->creationDate = new \DateTime();
+        $this->mainLocale = $mainLocale;
+        $this->alwaysAvailable = false;
         $this->versions = new \ezp\base\TypeCollection( '\ezp\content\Version' );
         $this->locations = new \ezp\base\TypeCollection( '\ezp\content\Location' );
         $this->relations = new \ezp\base\TypeCollection( '\ezp\content\Content' );
@@ -106,7 +109,7 @@ class Content extends \ezp\base\AbstractModel
         $this->translations = new \ezp\base\TypeCollection( '\ezp\content\Translation' );
         $this->name = false;
         $this->contentType = $contentType;
-        $this->versions[] = new Version( $this );
+        $this->addTranslation( $mainLocale );
     }
 
     /**
@@ -208,6 +211,20 @@ class Content extends \ezp\base\AbstractModel
     protected $name;
 
     /**
+     * Always available flag
+     *
+     * @var boolean
+     */
+    public $alwaysAvailable;
+
+    /**
+     * Locale
+     *
+     * @var Locale
+     */
+    protected $mainLocale;
+
+    /**
      * Return Main location object on this Content object
      *
      * @return Location
@@ -292,6 +309,46 @@ class Content extends \ezp\base\AbstractModel
             return $this->section->id;
         }
         return 0;
+    }
+
+    /**
+     * Adds a Translation in $locale optionnally based on existing
+     * translation in $base.
+     *
+     * @param Locale $locale
+     * @param Locale $base
+     * @return Translation
+     * @throw \InvalidArgumentException if translation in $base does not exist.
+     */
+    public function addTranslation( \ezp\base\Locale $locale, Locale $base = null )
+    {
+        if ( $base !== null && !isset( $this->translations[$base->code] ) )
+        {
+            throw new \InvalidArgumentException( "Translation {$base->code} does not exist" );
+        }
+        if ( isset( $this->translations[$locale->code] ) )
+        {
+            $tr = $this->translations[$locale->code];
+        }
+        else
+        {
+            $tr = new Translation( $locale, $this );
+            $this->translations[$locale->code] = $tr;
+        }
+
+        $newVersion = null;
+        if ( $base !== null )
+        {
+            $newVersion = clone $this->translations[$base->code]->current;
+            $newVersion->locale = $locale;
+        }
+        if ( $newVersion === null )
+        {
+            $newVersion = new Version( $this, $locale );
+        }
+        $tr->versions[] = $newVersion;
+        $this->versions[] = $newVersion;
+        return $tr;
     }
 
     /**
