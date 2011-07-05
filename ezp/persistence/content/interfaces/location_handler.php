@@ -11,6 +11,8 @@
 namespace ezp\persistence\content;
 
 /**
+ * The LocationHandler interface defines operations on Location elements in the storage engine.
+ *
  * @package ezp
  * @subpackage persistence_content
  */
