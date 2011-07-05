@@ -31,7 +31,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $contentType = new \ezp\content\ContentType();
         $contentType->identifier = 'article';
 
-        $this->content = new Content( $contentType );
+        $this->content = new Content( $contentType, new \ezp\base\Locale( 'eng-GB' ) );
     }
 
     /**

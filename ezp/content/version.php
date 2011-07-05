@@ -63,7 +63,7 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
      *
      * @param Content $content
      */
-    public function __construct( Content $content, Locale $locale )
+    public function __construct( Content $content, \ezp\base\Locale $locale )
     {
         $this->content = $content;
         $this->locale = $locale;

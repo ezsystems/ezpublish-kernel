@@ -37,7 +37,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testLocationWrongClass()
     {
-        $content = new Content( $this->contentType );
+        $content = new Content( $this->contentType, new \ezp\base\Locale( 'eng-GB' ) );
         $content->locations[] = \ezp\content\Section::__set_state( array( 'id' => 1 ) );
     }
 
@@ -46,7 +46,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testContentLocationWhenLocationIsCreated()
     {
-        $content = new Content( $this->contentType );
+        $content = new Content( $this->contentType, new \ezp\base\Locale( 'eng-GB' ) );
         $location = new Location( $content );
         $this->assertEquals( $location, $content->locations[0], 'Location on Content is not correctly updated when Location is created with content in constructor!' );
         $content->locations[] = $location;

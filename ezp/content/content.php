@@ -97,7 +97,7 @@ class Content extends \ezp\base\AbstractModel
      * @param ContentType $contentType
      * @param Locale $mainLocale
      */
-    public function __construct( ContentType $contentType, Locale $mainLocale )
+    public function __construct( ContentType $contentType, \ezp\base\Locale $mainLocale )
     {
         $this->creationDate = new \DateTime();
         $this->mainLocale = $mainLocale;
