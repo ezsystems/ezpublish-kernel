@@ -281,7 +281,7 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
                 continue;
             }
 
-            if ( !$value instanceof \ArrayAccess && !is_array( $value ) )
+            if ( !$value instanceof \Traversable && !is_array( $value ) )
                 continue;
 
             $hash[$property] = array();
