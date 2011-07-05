@@ -41,12 +41,12 @@ class ServiceContainer
                                  array $dependencies = array() )
     {
         $this->configurationOverrides = $configurationOverrides;
-        $this->dependencies = array_merge( array(
+        $this->dependencies = $dependencies + array(
                                     '$_SERVER' => $_SERVER,
                                     '$_REQUEST' => $_REQUEST,
                                     '$_COOKIE' => $_COOKIE,
                                     '$_FILES' => $_FILES
-                                 ), $dependencies );
+                                 );
     }
 
     /**

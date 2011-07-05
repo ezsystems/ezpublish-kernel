@@ -16,7 +16,7 @@ namespace ezp\persistence\content;
  * @package ezp
  * @subpackage persistence_content
  */
-interface LocationHandlerInterface
+interface LocationHandlerInterface extends \ezp\persistence\ServiceHandlerInterface
 {
 
 	/**

@@ -18,7 +18,6 @@ namespace ezp\persistence;
  */
 interface RepositoryHandlerInterface
 {
-
 	/**
 	 * @return \ezp\persistence\content\ContentHandlerInterface
 	 */
@@ -38,6 +37,11 @@ interface RepositoryHandlerInterface
 	 * @return \ezp\persistence\user\UserHandlerInterface
 	 */
 	public function userHandler();
+
+	/**
+	 * @return \ezp\persistence\content\SectionHandlerInterface
+	 */
+	public function sectionHandler();
 
 	/**
 	 */

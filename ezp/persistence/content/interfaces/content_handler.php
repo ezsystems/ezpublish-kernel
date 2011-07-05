@@ -23,7 +23,7 @@ namespace ezp\persistence\content;
  * @subpackage persistence_content
  * @version //autogentag//
  */
-interface ContentHandlerInterface
+interface ContentHandlerInterface extends \ezp\persistence\ServiceHandlerInterface
 {
     /**
      * Creates a new Content entity in the storage engine.

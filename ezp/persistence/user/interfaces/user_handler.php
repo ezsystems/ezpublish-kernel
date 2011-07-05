@@ -16,7 +16,7 @@ namespace ezp\persistence\user;
  * @package ezp
  * @subpackage persistence_user
  */
-interface UserHandlerInterface
+interface UserHandlerInterface extends \ezp\persistence\ServiceHandlerInterface
 {
 
 	/**

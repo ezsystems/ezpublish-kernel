@@ -14,9 +14,8 @@ namespace ezp\persistence\content_types;
  * @package ezp
  * @subpackage persistence_content_types
  */
-interface ContentTypeHandlerInterface
+interface ContentTypeHandlerInterface extends \ezp\persistence\ServiceHandlerInterface
 {
-
 	/**
 	 * @param ContentTypeGroup $group
 	 * @return ContentTypeGroup
