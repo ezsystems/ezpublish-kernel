@@ -12,7 +12,7 @@ namespace ezp\content\Criteria;
 use ezp\content;
 
 /**
- * Criteria collection to be used to "find" a content in a subtree
+ * Criteria set to be used to find a content in a subtree
  * Example :
  * <code>
  * use ezp\content\Repository as ContentRepository;
@@ -34,9 +34,8 @@ use ezp\content;
  * @property-read FieldCriteria $field The field criteria
  * @property-read MetadataCriteria $meta Metadata criteria (published date, section, path, owner...)
  * @property-read LocationCriteria $location Location criteria for subtree filtering (most likely starting point)
- * @property-read SortBymetaClause $sortByMeta
  */
-class CriteriaCollection
+class CriteriaSet
 {
     /**
      * Parent location to retrieve content from
