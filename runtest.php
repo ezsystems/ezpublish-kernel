@@ -30,7 +30,7 @@ foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )//@todo Tak
 
 /**
  * Simple test suite that maps all other tests suits by convention
- * Suite needs to be in [ezp|ezx]/<module>/tests/Suite.php
+ * Suite needs to be in [ezp|ezx]/<module>/tests/suite.php
  *
  * @internal
  */
