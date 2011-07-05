@@ -56,7 +56,6 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
      */
     protected $dynamicProperties = array(
         'locale' => false,
-        'baseVersion' => false,
     );
 
     /**
@@ -125,13 +124,6 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
     protected $locale;
 
     /**
-     * Version on which was the base to create the current one
-     *
-     * @var Version
-     */
-    protected $baseVersion;
-
-    /**
      * Called when subject has been updated
      *
      * @param \ezp\base\ObservableInterface $subject
@@ -159,20 +151,6 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
     }
 
     /**
-     * Returns the Version used as a base of the current one
-     *
-     * @return Version|false
-     */
-    protected function getBaseVersion()
-    {
-        if ( $this->base instanceof Proxy )
-        {
-            $this->base = $this->base->load();
-        }
-        return $this->base;
-    }
-
-    /**
      * @return string
      */
     public function __toString()
@@ -182,14 +160,12 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
 
 
     /**
-     * Clones the version and set the base of the new version object with the
-     * old one.
+     * Clones the version
      *
      * @return void
      */
     public function __clone()
     {
-        $this->base = $this;
         $this->id = false;
     }
 }
