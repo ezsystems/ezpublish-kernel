@@ -24,6 +24,8 @@ class Translation extends \ezp\base\AbstractModel
      */
     protected $readableProperties = array(
         'versions' => false,
+        'locale' => false,
+        'content' => false,
     );
 
     /**
@@ -43,14 +45,14 @@ class Translation extends \ezp\base\AbstractModel
      *
      * @var Content
      */
-    public $content;
+    protected $content;
 
     /**
      * Locale object
      *
      * @var \ezp\base\Locale
      */
-    public $locale;
+    protected $locale;
 
     /**
      * Existing Version in the Translation
