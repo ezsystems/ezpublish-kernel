@@ -61,6 +61,18 @@ class FieldCollection extends \ArrayObject implements \ezp\base\CollectionInterf
     {
         throw new \InvalidArgumentException( "This collection is readonly and offset:{$offset} can not be Unset " );
     }
+
+    /**
+     * Overloads exchangeArray() to throw exception about being readonly collection.
+     *
+     * @throws \InvalidArgumentException
+     * @param array $input
+     * @return array
+     */
+    public function exchangeArray( $input )
+    {
+        throw new \InvalidArgumentException( "This collection is readonly, and fields can not be exchanged." );
+    }
 }
 
 ?>
