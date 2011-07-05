@@ -4,34 +4,38 @@
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
- *
+ * @package ezp
+ * @subpackage persistence
  */
 
 namespace ezp\persistence;
 
 /**
- * @package ezp.persistence
+ * The main handler for Storage Engine
+ *
+ * @package ezp
+ * @subpackage persistence
  */
-interface RepositoryHandler 
+interface RepositoryHandlerInterface
 {
 
 	/**
-	 * @return ezp.persistence.content.ContentHandler
+	 * @return \ezp\persistence\content\ContentHandlerInterface
 	 */
 	public function contentHandler();
 
 	/**
-	 * @return ContentTypeHandler
+	 * @return \ezp\persistence\content_types\ContentTypeHandlerInterface
 	 */
 	public function contentTypeHandler();
 
 	/**
-	 * @return ezp.persistence.content.LocationHandler
+	 * @return \ezp\persistence\content\LocationHandlerInterface
 	 */
 	public function locationHandler();
 
 	/**
-	 * @return ezp.persistence.user.UserHandler
+	 * @return \ezp\persistence\user\UserHandlerInterface
 	 */
 	public function userHandler();
 
