@@ -90,14 +90,14 @@ interface ContentHandler
      *
      * The $state is the id of the state within one group.
      *
-	 * @param int $contentId
+     * @param int $contentId
      * @param int $stateGroup
-	 * @param int $state
-	 * @param int $version
-     * @see \ezp\content\Content
+     * @param int $state
+     * @param int $version
      * @return boolean
-	 */
-	public function setState($contentId, $stateGroup, $state, $version);
+     * @see \ezp\content\Content
+     */
+    public function setObjectState($contentId, $stateGroup, $state, $version);
 
 	/**
      * Updates a content object entity with data and identifier $content
@@ -110,7 +110,7 @@ interface ContentHandler
 	/**
 	 * Deletes all versions and fields, all locations (subtree), and all relations.
      *
-	 * @param int contentId
+	 * @param int $contentId
      * @return boolean
 	 */
 	public function delete($contentId);
@@ -122,7 +122,7 @@ interface ContentHandler
      * knowledge of locations, but they are not returned in regular content
      * queries anymore.
      *
-	 * @param int contentId
+	 * @param int $contentId
      * @return boolean
 	 */
 	public function trash($contentId);
@@ -131,7 +131,8 @@ interface ContentHandler
      * Returns a trashed object to normal state.
      *
      * The affected content object is now again part of matching content queries.
-	 * @param int contentId
+     *
+	 * @param int $contentId
      * @return boolean
 	 */
 	public function untrash($contentId);
@@ -139,7 +140,7 @@ interface ContentHandler
 	/**
      * Return the versions for $contentId
      *
-	 * @param int contentId
+	 * @param int $contentId
 	 * @return array
 	 */
 	public function listVersions($contentId);
@@ -147,8 +148,8 @@ interface ContentHandler
 	/**
      * Fetch a content value object containing the values of the translation for $languageCode.
      *
-	 * @param int contentId
-	 * @param string languageCode
+	 * @param int $contentId
+	 * @param string $languageCode
 	 * @return \ezp\persistence\content\values\Content
 	 */
 	public function fetchTranslation($contentId, $languageCode);
