@@ -17,5 +17,22 @@ namespace ezp\content\Criteria;
  */
 class SortByFieldClause extends SortByClause
 {
+    /**
+     * Creates a new sort clause on $field in $order order
+     *
+     * @param string $field A field identifier to sort on
+     * @param int $order either self::ASC or self::DESC
+     */
+    public function __construct( $field, $order = self::ASC )
+    {
+        $this->field = $field;
+        parent::__construct( $order );
+    }
+
+    /**
+     * Sort field
+     * @var string
+     */
+    public $field;
 }
 ?>

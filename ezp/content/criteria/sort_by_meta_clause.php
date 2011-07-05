@@ -17,5 +17,22 @@ namespace ezp\content\Criteria;
  */
 class SortByMetaClause extends SortByClause
 {
+    /**
+     * Creates a new sort clause on $meta in $order order
+     *
+     * @param string $item A meta identifier to sort on
+     * @param int $item
+     */
+    public function __construct( $meta, $order = self::ASC )
+    {
+        $this->meta = $meta;
+        parent::__construct( $order );
+    }
+
+    /**
+     * Sort meta field
+     * @var string
+     */
+    public $meta;
 }
 ?>

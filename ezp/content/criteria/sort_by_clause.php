@@ -19,32 +19,38 @@ namespace ezp\content\Criteria;
 abstract class SortByClause
 {
     /**
-     * Creates a new sort clause on $item in $order order
+     * Creates a new sort clause in $order order
      *
-     * @param string $item
-     * @param int $item
+     * Can be called by the children constructor as a helper in order to handle the $order parameter
+     *
+     * @param int $order
      */
-    public function __construct( $item, $order = self::ASC )
+    protected function __construct( $order = self::ASC )
     {
         if ( $order != self::ASC && $order != self::DESC )
         {
             throw new \InvalidArgumentException( "\$order must be one of SortByClause::ASC or SortByClause::DESC" );
         }
 
-        $this->item = $item;
         $this->order = $order;
     }
 
-    const ASC = 1;
-    const DESC = 2;
-
     /**
-     * @var string
+     * Returns the sorting parameters this object stores
+     *
+     * @return @todo analyze
      */
-    public $item;
+    abstract public function getSortBy();
 
     /**
-     * @var int
+     * Sort order constants
+     */
+    const ASC = true;
+    const DESC = false;
+
+    /**
+     * Sort order, one of self::ASC / self::DESC
+     * @var bool
      */
     public $order;
 }
