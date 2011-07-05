@@ -2,16 +2,17 @@
 /*
  * Assume that :
  * - $parentLocation is a valid Location (formerly "parent node") => \ezp\Content\Location
- * - Current default locale is eng-GB.
  * - Locale fre-FR has also been set in the system
  */
 
 use ezp\content\Content;
 use ezp\content\ContentType;
 
+$localeFR = \ezp\base\Locale::get( 'fre-FR' );
+$localeEN = \ezp\base\Locale::get( 'eng-GB' );
 
 $contentType = $repository->getContentTypeService()->loadByIdentifier( 'folder' );
-$content = new Content( $contentType );
+$content = new Content( $contentType, $localeEN );
 /*
  * $content->fields have been set to default values from ContentType fields (depends on fieldType)
  * Value manipulation is totally up to the field type
@@ -28,7 +29,7 @@ $content->fromHash( $_POST['content'] );
 // Or in case of unique id on existing content: $content->fromHash( $_POST['content']['id'] );
 
 // Now set an fre-FR translation (api has not been defined yet)
-$content->addTranslation( "fre-FR" );
+$content->addTranslation( $localeFR, $localeEN );
 $content->translations["fre-FR"]->fields["name"] = "Nom du dossier";
 $content->translations["fre-FR"]->fields["description"] = "<p>Ceci est la <strong>description HTML</strong></p>";
 

@@ -315,12 +315,12 @@ class Content extends \ezp\base\AbstractModel
      * Adds a Translation in $locale optionnally based on existing
      * translation in $base.
      *
-     * @param Locale $locale
-     * @param Locale $base
+     * @param \ezp\base\Locale $locale
+     * @param \ezp\base\Locale $base
      * @return Translation
      * @throw \InvalidArgumentException if translation in $base does not exist.
      */
-    public function addTranslation( \ezp\base\Locale $locale, Locale $base = null )
+    public function addTranslation( \ezp\base\Locale $locale, \ezp\base\Locale $base = null )
     {
         if ( $base !== null && !isset( $this->translations[$base->code] ) )
         {
