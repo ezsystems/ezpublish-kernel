@@ -38,7 +38,7 @@ class TypeCollection extends \ArrayObject implements CollectionInterface
         foreach ( $elements as $item )
         {
             if ( !$item instanceof $type )
-                throw new \InvalidArgumentException( "This collection is only accept '{$type}', '" .
+                throw new \InvalidArgumentException( "This collection only accepts '{$type}', '" .
                                                      ( is_object( $item ) ? get_class( $item ): gettype( $item ) ) . '\' given.' );
         }
         parent::__construct( $elements );
@@ -78,7 +78,7 @@ class TypeCollection extends \ArrayObject implements CollectionInterface
         foreach ( $input as $item )
         {
             if ( !$item instanceof $this->type )
-                throw new \InvalidArgumentException( "This collection is only accept '{$this->type}', '" .
+                throw new \InvalidArgumentException( "This collection only accepts '{$this->type}', '" .
                                                      ( is_object( $item ) ? get_class( $item ): gettype( $item ) ) . '\' given.' );
         }
         return parent::exchangeArray( $input );
