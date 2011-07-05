@@ -24,7 +24,7 @@ interface StorageInterface
 	 * @param array data
 	 * @param ezp.persistence.content.values.ContentField field
 	 */
-	public function setValue(array $data, \ezp\persistence\content\values\ContentField $field);
+	public function setValue(array $data, \ezp\persistence\content\ContentField $field);
 
 	/**
 	 * @param int filedId

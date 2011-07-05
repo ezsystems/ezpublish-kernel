@@ -21,9 +21,9 @@ interface ServiceHandlerInterface
     /**
      * Setups current handler instance with reference to storage engine object that created it.
      *
-     * @param \ezp\persistence\RepositoryHandlerInterface $engine
+     * @param \ezp\persistence\RepositoryHandlerInterface $handler
      * @param object $backend Optional, use this argument if storage engine needs to pass backend object to handlers
      *                        to be able to handle operations.
      */
-    public function __construct( RepositoryHandlerInterface $engine, $backend = null );
+    public function __construct( RepositoryHandlerInterface $handler, $backend = null );
 }

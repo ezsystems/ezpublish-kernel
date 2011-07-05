@@ -7,12 +7,13 @@
  *
  */
 
-namespace ezp\persistence\content\values;
+namespace ezp\persistence\content;
 
 /**
- * @package ezp.persistence.content.values
+ * @package ezp
+ * @subpackage persistence_content
  */
-class ContentVersion 
+class ContentVersion
 {
 	/**
 	 */

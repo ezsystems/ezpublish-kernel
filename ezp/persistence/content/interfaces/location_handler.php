@@ -21,7 +21,7 @@ interface LocationHandlerInterface extends \ezp\persistence\ServiceHandlerInterf
 
 	/**
 	 * @param int $locationId
-	 * @return \ezp\persistence\content\values\Location
+	 * @return \ezp\persistence\content\Location
 	 */
 	public function load( $locationId );
 
@@ -59,14 +59,14 @@ interface LocationHandlerInterface extends \ezp\persistence\ServiceHandlerInterf
 	public function swap( $locationId1, $locationId2 );
 
 	/**
-	 * @param \ezp\persistence\content\values\Location $location
+	 * @param \ezp\persistence\content\Location $location
 	 */
-	public function update( \ezp\persistence\content\values\Location $location );
+	public function update( \ezp\persistence\content\Location $location );
 
 	/**
 	 * @param int $contentId
 	 * @param int $parentId
-	 * @return \ezp\persistence\content\values\Location
+	 * @return \ezp\persistence\content\Location
 	 */
 	public function createLocation( $contentId, $parentId );
 

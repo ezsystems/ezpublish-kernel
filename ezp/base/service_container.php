@@ -89,19 +89,6 @@ class ServiceContainer
     }
 
     /**
-     * Service function to get StorageEngine object
-     *
-     * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
-     * @return \ezp\base\StorageEngineInterface
-     */
-    public function getStorageEngine( array $callChainDependancieOverrides = array() )
-    {
-        if ( isset( $this->dependencies['@storage_engine'] ) )
-            return $this->dependencies['@storage_engine'];
-        return $this->get( 'storage_engine', $callChainDependancieOverrides );
-    }
-
-    /**
      * Get service by name
      *
      * @throws \InvalidArgumentException

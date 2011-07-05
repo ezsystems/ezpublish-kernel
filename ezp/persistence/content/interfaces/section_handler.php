@@ -16,19 +16,25 @@ namespace ezp\persistence\content;
  */
 interface SectionHandlerInterface extends \ezp\persistence\ServiceHandlerInterface
 {
-
 	/**
 	 * @param string $name
 	 * @param string $identifier
-	 * @return \ezp\persistence\content\values\Section
+	 * @return \ezp\persistence\content\Section
 	 */
 	public function create( $name, $identifier );
 
 	/**
+     * @param int $id
 	 * @param string $name
 	 * @param string $identifier
 	 */
-	public function update( $name, $identifier );
+	public function update( $id, $name, $identifier );
+
+	/**
+	 * @param int $id
+	 * @return \ezp\persistence\content\Section|null
+	 */
+	public function load( $id );
 
 	/**
 	 * @param int $id

@@ -20,22 +20,80 @@ namespace ezp\persistence\tests;
 use \ezp\persistence\tests\in_memory_engine\RepositoryHandler, \ezp\base\ServiceContainer;
 class RepositoryHandlerTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \ezp\persistence\RepositoryHandlerInterface
+     */
+    protected $handler;
+
     public function __construct()
     {
         parent::__construct();
         $this->setName( "RepositoryHandler class tests" );
+
+        // Get in memory RepositoryHandler instance
+        $se = new ServiceContainer(array(
+            'storage_engine' => array( 'class' => '\ezp\persistence\tests\in_memory_engine\RepositoryHandler' )
+        ));
+        $this->handler = $se->get('storage_engine');
     }
 
     /**
+     * Test that instance is of correct type
      */
     public function testInstanceType()
     {
-        $se = new ServiceContainer(array(
-            'storage_engine' => array(
-                'class' => '\ezp\persistence\tests\in_memory_engine\RepositoryHandler'
-            )
-        ));
-        $handler = $se->getStorageEngine();
-        $this->assertTrue( $handler instanceof \ezp\persistence\tests\in_memory_engine\RepositoryHandler );
+        $this->assertInstanceOf( '\ezp\persistence\RepositoryHandlerInterface', $this->handler );
+        $this->assertInstanceOf( '\ezp\persistence\tests\in_memory_engine\RepositoryHandler', $this->handler );
+    }
+
+    /**
+     * Test that instance is of correct type
+     */
+    public function testContentHandlerInstanceType()
+    {
+        $contentHandler = $this->handler->contentHandler();
+        $this->assertInstanceOf( '\ezp\persistence\content\ContentHandlerInterface', $contentHandler );
+        $this->assertInstanceOf( '\ezp\persistence\tests\in_memory_engine\ContentHandler', $contentHandler );
+    }
+
+     /**
+     * Test that instance is of correct type
+     */
+    public function testSectionHandlerInstanceType()
+    {
+        $sectionHandler = $this->handler->sectionHandler();
+        $this->assertInstanceOf( '\ezp\persistence\content\SectionHandlerInterface', $sectionHandler );
+        $this->assertInstanceOf( '\ezp\persistence\tests\in_memory_engine\SectionHandler', $sectionHandler );
+    }
+
+     /**
+     * Test Section load function
+     */
+    public function testSectionHandlerLoad()
+    {
+        $sectionHandler = $this->handler->sectionHandler();
+        $this->assertInstanceOf( '\ezp\persistence\content\Section', $sectionHandler->load( 0 ) );// id's starts on zero
+    }
+
+     /**
+     * Test Section create / update / delete functions
+     */
+    public function testSectionHandlerCreateUpdateDelete()
+    {
+        $sectionHandler = $this->handler->sectionHandler();
+
+        $section = $sectionHandler->create( 'Test', 'test' );
+        $this->assertInstanceOf( '\ezp\persistence\content\Section', $section );
+        $this->assertEquals( 1, $section->id );
+        $this->assertEquals( 'Test', $section->name );
+        $this->assertEquals( 'test', $section->identifier );
+
+        $this->assertTrue( $sectionHandler->update( $section->id, 'Change', 'change' ) );
+
+        $section = $sectionHandler->load( $section->id );
+        $this->assertEquals( 1, $section->id );
+        $this->assertEquals( 'Change', $section->name );
+        $this->assertEquals( 'change', $section->identifier );
+        $this->assertTrue( $sectionHandler->delete( $section->id ) );
     }
 }

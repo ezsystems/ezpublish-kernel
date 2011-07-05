@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the RepositoryHandler interface
+ * File containing the RepositoryHandler in memory implementation
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -11,7 +11,7 @@
 namespace ezp\persistence\tests\in_memory_engine;
 
 /**
- * The main handler for Storage Engine
+ * The main handler for in memory Storage Engine
  *
  * @package ezp
  * @subpackage persistence
@@ -28,10 +28,17 @@ class RepositoryHandler implements \ezp\persistence\RepositoryHandlerInterface
     /**
      * Instance of in-memory backend that reads data from js files into memory and writes to memory
      *
-     * @var object
+     * @var \ezp\persistence\tests\in_memory_engine\Backend
      */
     protected $backend;
 
+    /**
+     * Setup instance with an instance of Backend class
+     */
+    public function __construct()
+    {
+        $this->backend = new Backend();
+    }
 	/**
 	 * @return \ezp\persistence\content\ContentHandlerInterface
 	 */
