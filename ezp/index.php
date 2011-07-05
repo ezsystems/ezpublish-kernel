@@ -39,7 +39,7 @@ $section->identifier = 'standard';
 $section->name = "Standard";
 
 // Create Content object
-$content = new Content( $contentType );
+$content = new Content( $contentType, new \ezp\base\Locale( 'eng-GB' ) );
 $content->ownerId = 10;
 $content->section = $section;
 
