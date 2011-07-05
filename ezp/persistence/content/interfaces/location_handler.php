@@ -20,11 +20,10 @@ interface LocationHandlerInterface
 {
 
 	/**
-	 * @param $ref
+	 * @param int $locationId
 	 * @return \ezp\persistence\content\values\Location
-     * @todo: Either define $ref type or switch to 'int $id'
 	 */
-	public function load( $ref );
+	public function load( $locationId );
 
 	/**
 	 * @param int $id
