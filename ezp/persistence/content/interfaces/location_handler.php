@@ -108,7 +108,8 @@ interface LocationHandlerInterface extends \ezp\persistence\ServiceHandlerInterf
 	/**
      * Create a (nice) url alias, $path pointing to $locationId, in $languageName.
      *
-     * $alwaysAvailable controls whether the url alias is accessible in all languages.
+     * $alwaysAvailable controls whether the url alias is accessible in all
+     * languages.
      *
 	 * @param string $path
 	 * @param string $locationId
@@ -117,16 +118,59 @@ interface LocationHandlerInterface extends \ezp\persistence\ServiceHandlerInterf
 	 */
 	public function storeUrlAliasPath( $path, $locationId, $languageName = null, $alwaysAvailable = false );
 
-	/**
-	 * @param string $languageCode
-     * @todo Missing path or id?
-	 */
-	public function getPath( $languageCode );
+    /**
+     * Create a user chosen $alias pointing to $locationId in $languageName.
+     *
+     * If $languageName is null the $alias is created in the system's default
+     * language. $alwaysAvailable makes the alias available in all languages.
+     *
+     * @param string $alias
+     * @param int $locationId
+     * @param boolean $forwarding
+     * @param string $languageName
+     * @param bool $alwaysAvailable
+     * @return boolean
+     */
+    public function createCustomUrlAlias( $alias, $locationId, $forwarding = false, $languageName = null, $alwaysAvailable = false );
 
-	/**
-	 * @param string $actionName
-	 * @param array $actionValues
-	 */
-	public function getPathByActionList( $actionName, array $actionValues );
+    /**
+     * Create a history url entry.
+     *
+     * History url entries constitutes a log of earlier url aliases to a location,
+     * and allows old urls to hit the location, even if the current url is a
+     * different one.
+     *
+     * @param $historicUrl
+     * @param $locationId
+     * @return boolean
+     */
+    public function createUrlHistoryEntry( $historicUrl, $locationId );
+
+    /**
+     * List of url entries of $urlType, pointing to $locationId.
+     *
+     * @param $locationId
+     * @param $urlType
+     * @return mixed
+     */
+    public function listUrlsForLocation( $locationId, $urlType );
+
+    /**
+     * Removes urls pointing to $locationId, identified by the element in $urlIdentifier.
+     *
+     * @param $locationId
+     * @param array $urlIdentifier
+     * @return boolean
+     */
+    public function removeUrlsForLocation( $locationId, array $urlIdentifier );
+
+    /**
+     * Returns the full url alias to $locationId from /.
+     *
+     * @param $locationId
+     * @param $languageCode
+     * @return string
+     */
+    public function getPath( $locationId, $languageCode );
 }
 ?>
