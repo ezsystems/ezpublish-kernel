@@ -161,7 +161,7 @@ class Autoloader
         $ezpClasses = $ezpKernelOverrideClasses + $ezpTestClasses + $ezpExtensionClasses + $ezpClasses;
 
         // Load eZ Component autoload files that are used often
-        foreach( $this->settings['ezc-list'] as $prefix )
+        foreach( $this->settings['ezc-prefixes'] as $prefix )
         {
             $tempOverrideClasses = include "{$this->settings['ezc-path']}autoload/{$prefix}_autoload.php";
             if ( $tempOverrideClasses )
