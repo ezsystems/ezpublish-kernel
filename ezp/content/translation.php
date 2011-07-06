@@ -130,5 +130,19 @@ class Translation extends \ezp\base\AbstractModel
         }
         return $version->fields;
     }
+
+
+    /**
+     * Create a new Version in the locale referenced by the translation
+     *
+     * @return Version
+     */
+    public function createNewVersion()
+    {
+        $version = new Version( $this->content, $this->locale );
+        $this->versions[] = $version;
+        $this->content->versions[] = $version;
+        return $version;
+    }
 }
 ?>
