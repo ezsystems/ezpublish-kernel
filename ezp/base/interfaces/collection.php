@@ -16,6 +16,6 @@
  * @todo Make sure interface is usable for both normal collections as well as lazy loaded collections
  */
 namespace ezp\base;
-interface CollectionInterface extends \Countable, \ArrayAccess
+interface CollectionInterface extends \Countable, \ArrayAccess, \Serializable
 {
 }

@@ -28,7 +28,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     {
         parent::__construct();
         $this->setName( "ReadOnlyCollectionTest class tests" );
-        $this->collection = \ezp\base\ReadOnlyCollection::fromArray( array( 1, 55, 'collection', 'test' ) );
+        $this->collection = new \ezp\base\ReadOnlyCollection( array( 1, 55, 'collection', 'test' ) );
     }
 
     /**
@@ -57,7 +57,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException RuntimeException
+     * @expectedException PHPUnit_Framework_Error
      */
     public function testGetInvalid()
     {

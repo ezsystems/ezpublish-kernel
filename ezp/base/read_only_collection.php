@@ -11,14 +11,11 @@
 /**
  * Read Only Collection class
  *
- * Lets you create a collection based on an array, keys must be integers as this extends SplFixedArray
- * to preserve memory consumption.
- *
  * @package ezp
  * @subpackage base
  */
 namespace ezp\base;
-class ReadOnlyCollection extends \SplFixedArray implements CollectionInterface
+class ReadOnlyCollection extends \ArrayObject implements CollectionInterface
 {
     /**
      * Set value on a offset in collection, read only collection so throws exception.
@@ -30,7 +27,7 @@ class ReadOnlyCollection extends \SplFixedArray implements CollectionInterface
      */
     public function offsetSet( $offset, $value )
     {
-        throw new \InvalidArgumentException( "This collection is readonly and offset:{$offset} can not be Set " );
+        throw new \InvalidArgumentException( "This collection is readonly and offset:{$offset} can not be Set" );
     }
 
     /**
@@ -42,39 +39,19 @@ class ReadOnlyCollection extends \SplFixedArray implements CollectionInterface
      */
     public function offsetUnset( $offset )
     {
-        throw new \InvalidArgumentException( "This collection is readonly and offset:{$offset} can not be Unset " );
+        throw new \InvalidArgumentException( "This collection is readonly and offset:{$offset} can not be Unset" );
     }
 
     /**
-     * Return an instance of ReadOnlyCollection from array values
+     * Overloads exchangeArray() to do exception about being read only.
      *
-     * Note: Indexes are not maintained!
-     *
-     * @param array $array
-     * @param bool $save_indexes Not used, indexes is not maintained by this function!
-     * @return ReadOnlyCollection
+     * @throws \InvalidArgumentException
+     * @param array $input
+     * @return array
      */
-    public static function fromArray( $array, $save_indexes = false )
+    public function exchangeArray( $input )
     {
-        $obj = new static( count( $array ) );
-        return $obj->setArray( $array );
-    }
-
-    /**
-     * Set array values on instance, for internal use, make sure size is set first!
-     *
-     * @internal
-     * @param array $array
-     * @return ReadOnlyCollection
-     */
-    protected function setArray( array $array )
-    {
-        $i = 0;
-        foreach ( $array as $item )
-        {
-            parent::offsetSet( $i++, $item );
-        }
-        return $this;
+        throw new \InvalidArgumentException( "This collection is readonly and array can not be exchanged" );
     }
 }
 

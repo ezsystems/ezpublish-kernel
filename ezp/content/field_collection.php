@@ -17,7 +17,7 @@
  * @subpackage content
  */
 namespace ezp\content;
-class FieldCollection extends \ArrayObject implements \ezp\base\CollectionInterface
+class FieldCollection extends \ezp\base\ReadOnlyCollection
 {
     /**
      * Constructor, sets up FieldCollection based on contentType fields
@@ -33,45 +33,6 @@ class FieldCollection extends \ArrayObject implements \ezp\base\CollectionInterf
             $contentVersion->attach( $field, 'store' );
         }
         parent::__construct( $elements );
-    }
-
-    /**
-     * Set value on a offset in collection, only allowed on existing items where value is forwarded to ->type->value
-     *
-     * @internal
-     * @throws \InvalidArgumentException When trying to set new values / append
-     * @param string|int $offset
-     * @param mixed $value
-     */
-    public function offsetSet( $offset, $value )
-    {
-        if ( $offset === null || !$this->offsetExists( $offset ) )
-            throw new \InvalidArgumentException( "FieldCollection is locked and offset:{$offset} can not be appended!" );
-        $this->offsetGet( $offset )->type->value = $value;
-    }
-
-    /**
-     * Unset value on a offset in collection
-     *
-     * @internal
-     * @throws \InvalidArgumentException This collection is readonly
-     * @param string|int $offset
-     */
-    public function offsetUnset( $offset )
-    {
-        throw new \InvalidArgumentException( "This collection is readonly and offset:{$offset} can not be Unset " );
-    }
-
-    /**
-     * Overloads exchangeArray() to throw exception about being readonly collection.
-     *
-     * @throws \InvalidArgumentException
-     * @param array $input
-     * @return array
-     */
-    public function exchangeArray( $input )
-    {
-        throw new \InvalidArgumentException( "This collection is readonly, and fields can not be exchanged." );
     }
 }
 
