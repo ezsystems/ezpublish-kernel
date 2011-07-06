@@ -39,7 +39,14 @@ class Configuration extends AbstractOverride
      *
      * @var int
      */
-    public static $filePermission = 0666;
+    public static $filePermission = 0644;
+
+    /**
+     * Directory permissions for ini cache files
+     *
+     * @var int
+     */
+    public static $dirPermission = 0755;
 
     /**
      * The global configuration path array, scoped in the order they should be parsed
@@ -448,7 +455,7 @@ class Configuration extends AbstractOverride
         {
             // Create ini dir if it does not exist
             if ( !file_exists( self::CONFIG_CACHE_DIR ) )
-                mkdir( self::CONFIG_CACHE_DIR, self::$filePermission, true );
+                mkdir( self::CONFIG_CACHE_DIR, self::$dirPermission, true );
 
             // Create cache hash
             $cachedFile = self::CONFIG_CACHE_DIR . $cacheName . '.php';
