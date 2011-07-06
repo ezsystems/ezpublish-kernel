@@ -20,70 +20,102 @@ interface LocationHandlerInterface extends \ezp\persistence\ServiceHandlerInterf
 {
 
 	/**
+     * Returns the raw data for a location object, identified by $locationId, in a struct.
+     *
 	 * @param int $locationId
 	 * @return \ezp\persistence\content\Location
 	 */
 	public function load( $locationId );
 
 	/**
-	 * @param int $id
+     * Copy location object identified by $sourceId, into destination location identified by $destinationId.
+     *
+	 * @param int $sourceId
+	 * @param int $destinationId
+     * @return boolean
+     * @todo Decide whether a deep copy should have a dedicated method or have a $recursive param
 	 */
-	public function delete( $id );
+	public function copy( $sourceId, $destinationId );
 
 	/**
-	 * @param int $srcId
-	 * @param int $destId
+     * Moves location identified by $sourceId into new parent identified by $destinationId.
+     *
+	 * @param int $sourceId
+	 * @param int $destinationId
+     * @return boolean
 	 */
-	public function copy( $srcId, $destId );
+	public function move( $sourceId, $destinationId );
 
 	/**
-	 * @param int $srcId
-	 * @param int $destId
-	 */
-	public function move( $srcId, $destId );
-
-	/**
+     * Sets a location to be invisible.
+     *
 	 * @param int $id
 	 */
 	public function hide( $id );
 
 	/**
+     * Sets a location to be visible.
+     *
 	 * @param int $id
 	 */
 	public function unHide( $id );
 
 	/**
+     * Swaps the content object being pointed to by a location object.
+     *
+     * Make $locationId1 point to the content object in $locationId2, and vice
+     * versa.
+     *
 	 * @param int $locationId1
 	 * @param int $locationId2
+     * @return boolean
 	 */
 	public function swap( $locationId1, $locationId2 );
 
 	/**
+     * Updates an existing location with data from $location.
+     *
 	 * @param \ezp\persistence\content\Location $location
+     * @return boolean
 	 */
 	public function update( \ezp\persistence\content\Location $location );
 
-	/**
-	 * @param int $contentId
-	 * @param int $parentId
-	 * @return \ezp\persistence\content\Location
-	 */
+    /**
+     * Creates a new location for $contentId rooted at $parentId.
+     *
+     * @param int $contentId
+     * @param int $parentId
+     * @return \ezp\persistence\content\Location
+     */
 	public function createLocation( $contentId, $parentId );
 
-	/**
-	 * @param int $contentId
-	 * @param int $locationId
-	 */
-	public function removeLocation( $contentId, $locationId );
+    /**
+     * Deletes a single location object, identified by $id.
+     *
+     * @param int $id
+     * @return boolean
+     */
+    public function delete( $id );
 
 	/**
+     * Removes all content location under $locationId.
+     *
+	 * @param int $locationId
+     * @return boolean
+	 */
+	public function removeSubtree( $locationId );
+
+	/**
+     * Create a (nice) url alias, $path pointing to $locationId, in $languageName.
+     *
+     * $alwaysAvailable controls whether the url alias is accessible in all languages.
+     *
 	 * @param string $path
-	 * @param string $action
+	 * @param string $locationId
 	 * @param string $languageName
-	 * @param null|int $linkId
 	 * @param bool $alwaysAvailable
 	 */
-	public function storeUrlAliasPath( $path, $action, $languageName, $linkId = null, $alwaysAvailable = false );
+	public function storeUrlAliasPath( $path, $locationId, $languageName = null, $alwaysAvailable = false );
 
 	/**
 	 * @param string $languageCode
