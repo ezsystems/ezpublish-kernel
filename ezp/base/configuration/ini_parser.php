@@ -134,7 +134,7 @@ class IniParser implements \ezp\base\ConfigurationParserInterface
 
         // Create ini dir if it does not exist
         if ( !file_exists( Configuration::CONFIG_CACHE_DIR ) )
-            mkdir( Configuration::CONFIG_CACHE_DIR, Configuration::$filePermission, true );
+            mkdir( Configuration::CONFIG_CACHE_DIR, Configuration::$dirPermission, true );
 
         // Create temp file
         $tempFileName = Configuration::CONFIG_CACHE_DIR . 'temp-' . mt_rand() . '.tmp.ini';
