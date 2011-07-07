@@ -21,29 +21,29 @@ interface StorageInterface
 	public function typeHint();
 
 	/**
-	 * @param array data
-	 * @param ezp.persistence.content.values.ContentField field
+	 * @param array $data
+	 * @param \ezp\persistence\content\Field $field
 	 */
-	public function setValue(array $data, \ezp\persistence\content\ContentField $field);
+	public function setValue( array $data, \ezp\persistence\content\Field $field );
 
 	/**
-	 * @param int filedId
-	 * @param value
-	 * @return boolean
+	 * @param int $filedId
+	 * @param $value
+	 * @return bool
 	 * 
 	 */
-	public function storeFieldData($filedId, $value);
+	public function storeFieldData( $filedId, $value );
 
 	/**
-	 * @param int fieldId
+	 * @param int $fieldId
 	 */
-	public function getFieldData($fieldId);
+	public function getFieldData( $fieldId );
 
 	/**
-	 * @param array fieldId
-	 * @return boolean
+	 * @param array $fieldId
+	 * @return bool
 	 */
-	public function deleteFieldData(array $fieldId);
+	public function deleteFieldData( array $fieldId );
 
 	/**
 	 * @return bool
@@ -51,13 +51,13 @@ interface StorageInterface
 	public function hasFieldData();
 
 	/**
-	 * @param int fieldId
+	 * @param int $fieldId
 	 */
-	public function copyFieldData($fieldId);
+	public function copyFieldData( $fieldId );
 
 	/**
-	 * @param int fieldId
+	 * @param int $fieldId
 	 */
-	public function getIndexData($fieldId);
+	public function getIndexData( $fieldId );
 }
 ?>
