@@ -86,8 +86,8 @@ class Repository
     /**
      * Get Content Type Service
      *
-     * Get service object to perform several operations on ContentType objects and it's aggragate memebers.
-     * ( ContentTypeGroup, ContentTypeField & ContentTypeFieldCategory )
+     * Get service object to perform several operations on Content Type objects and it's aggragate memebers.
+     * ( Group, Field & FieldCategory )
      *
      * @return \ezp\content\Services\ContentType
      */

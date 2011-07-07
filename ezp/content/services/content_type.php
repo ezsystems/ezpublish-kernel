@@ -44,32 +44,32 @@ class ContentType implements ServiceInterface
     }
 
     /**
-     * Get an ContentType object by id
+     * Get an Content Type object by id
      *
      * @param int $contentTypeId
-     * @return \ezp\content\ContentType
+     * @return \ezp\content\type\Type
      * @throws \ezp\content\ContentNotFoundException
      */
     public function load( $contentTypeId )
     {
         $contentType = $this->se->getContentTypeHandler()->load( $contentTypeId );
         if ( !$contentType )
-            throw new \ezp\content\ContentNotFoundException( $contentTypeId, 'ContentType' );
+            throw new \ezp\content\ContentNotFoundException( $contentTypeId, 'type\Type' );
         return $contentType;
     }
 
     /**
-     * Get an ContentType by identifier
+     * Get an Content Type by identifier
      *
      * @param string $identifier
-     * @return \ezp\content\ContentType
+     * @return \ezp\content\type\Type
      * @throws \ezp\content\ContentNotFoundException
      */
     public function loadByIdentifier( $identifier )
     {
         $contentTypes = $this->se->getContentTypeHandler()->loadByIdentifier( $identifier );
         if ( !$contentTypes )
-            throw new \ezp\content\ContentNotFoundException( $identifier, 'ContentType', 'identifier' );
+            throw new \ezp\content\ContentNotFoundException( $identifier, 'type\Type', 'identifier' );
         return $contentTypes[0];
     }
 }

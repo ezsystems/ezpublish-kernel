@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing ContentType class
+ * File containing Type class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,7 +10,7 @@
  */
 
 /**
- * ContentType class ( Content Class )
+ * Type class ( Content Class )
  *
  * @package ezp
  * @subpackage content
@@ -19,11 +19,11 @@
  * @property-read int $version
  * @property-read string $identifier
  * @property-read Content[] $contentObjects
- * @property-read ContentTypeField[] $fields
- * @property-read ContentTypeGroup[] $groups
+ * @property-read Field[] $fields
+ * @property-read Group[] $groups
  */
-namespace ezp\content;
-class ContentType extends \ezp\base\AbstractModel
+namespace ezp\content\type;
+class Type extends \ezp\base\AbstractModel
 {
     /**
      * @var array Readable of properties on this object
@@ -39,8 +39,8 @@ class ContentType extends \ezp\base\AbstractModel
 
     public function __construct()
     {
-        $this->groups = new \ezp\base\TypeCollection( '\ezp\content\ContentTypeGroup' );
-        $this->fields = new \ezp\base\TypeCollection( '\ezp\content\ContentTypeField' );
+        $this->groups = new \ezp\base\TypeCollection( '\ezp\content\type\Group' );
+        $this->fields = new \ezp\base\TypeCollection( '\ezp\content\type\Field' );
         $this->contentObjects = new \ezp\base\TypeCollection( '\ezp\content\Content' );
     }
 
@@ -60,17 +60,17 @@ class ContentType extends \ezp\base\AbstractModel
     public $identifier;
 
     /**
-     * @var ContentTypeField[]
+     * @var Field[]
      */
     protected $fields;
 
     /**
-     * @var Content[]
+     * @var \ezp\content\Content[]
      */
     protected $contentObjects;
 
     /**
-     * @var ContentTypeGroup[]
+     * @var Group[]
      */
     protected $groups;
 

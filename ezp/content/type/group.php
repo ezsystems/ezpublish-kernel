@@ -9,7 +9,7 @@
  */
 
 /**
- * ContentTypeGroup class ( Content Class Group )
+ * Group class ( Content Class Group )
  *
  * @package ezp
  * @subpackage content
@@ -17,10 +17,10 @@
  * @property-read int $id
  * @property-read int $version
  * @property-read string $name
- * @property-read ContentType[] $contentTypes
+ * @property-read Type[] $contentTypes
  */
-namespace ezp\content;
-class ContentTypeGroup extends\ezp\base\AbstractModel
+namespace ezp\content\type;
+class Group extends\ezp\base\AbstractModel
 {
     /**
      * @var array Readable of properties on this object
@@ -35,7 +35,7 @@ class ContentTypeGroup extends\ezp\base\AbstractModel
 
     public function __construct()
     {
-        $this->contentTypes = new \ezp\base\TypeCollection( '\ezp\content\ContentType' );
+        $this->contentTypes = new \ezp\base\TypeCollection( '\ezp\content\type\Type' );
     }
 
     /**
@@ -49,7 +49,7 @@ class ContentTypeGroup extends\ezp\base\AbstractModel
     public $name;
 
     /**
-     * @var ContentType[]
+     * @var Type[]
      */
     protected $contentTypes;
 

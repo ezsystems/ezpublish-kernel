@@ -19,15 +19,15 @@ Configuration::setGlobalConfigurationData( $settings );
 Configuration::setGlobalDirs( $paths, 'modules' );
 
 
-// Create ContentType manually for test
-$contentType = new ContentType();
+// Create Type manually for test
+$contentType = new type\Type();
 $contentType->identifier = 'article';
 
 // Add some fields
 $fields = array( 'title' => 'ezstring', 'tags' => 'ezkeyword' );
 foreach ( $fields as $identifier => $fieldTypeString )
 {
-    $field = new ContentTypeField( $contentType );
+    $field = new type\Field( $contentType );
     $field->identifier = $identifier;
     $field->fieldTypeString = $fieldTypeString;
     $contentType->fields[] = $field;

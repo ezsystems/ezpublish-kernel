@@ -13,8 +13,8 @@
  *
  * @property-read string $fieldTypeString
  */
-namespace ezp\content;
-class ContentTypeField extends AbstractField
+namespace ezp\content\type;
+class Field extends \ezp\content\AbstractField
 {
     /**
      * @var array Readable of properties on this object
@@ -52,9 +52,9 @@ class ContentTypeField extends AbstractField
     /**
      * Constructor, sets up empty contentFields collection and attach $contentType
      *
-     * @param ContentType $contentType
+     * @param Type $contentType
      */
-    public function __construct( ContentType $contentType )
+    public function __construct( Type $contentType )
     {
         $this->contentType = $contentType;
         $this->contentFields = new \ezp\base\TypeCollection( '\ezp\content\Field' );
@@ -152,19 +152,19 @@ class ContentTypeField extends AbstractField
     public $placement;
 
     /**
-     * @var ContentField[]
+     * @var \ezp\content\Field[]
      */
     protected $contentFields;
 
     /**
-     * @var ContentType
+     * @var Type
      */
     protected $contentType;
 
     /**
      * Return content type object
      *
-     * @return ContentType
+     * @return Type
      */
     protected function getContentType()
     {
@@ -182,7 +182,7 @@ class ContentTypeField extends AbstractField
      */
     protected function getContentTypeId()
     {
-        if ( $this->contentType instanceof Proxy || $this->contentType instanceof ContentType )
+        if ( $this->contentType instanceof Proxy || $this->contentType instanceof Type )
         {
             return $this->contentType->id;
         }
@@ -204,11 +204,11 @@ class ContentTypeField extends AbstractField
      *
      * @param \ezp\base\ObservableInterface $subject
      * @param string $event
-     * @return ContentTypeField
+     * @return Field
      */
     public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
     {
-        if ( $subject instanceof ContentType )
+        if ( $subject instanceof Type )
         {
             return $this->notify( $event );
         }

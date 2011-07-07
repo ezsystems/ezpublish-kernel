@@ -28,8 +28,18 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $this->setName( "Content class tests" );
 
         // setup a content type & content object of use by tests
-        $this->contentType = new \ezp\content\ContentType();
+        $this->contentType = new \ezp\content\type\Type();
         $this->contentType->identifier = 'article';
+
+        // Add some fields
+        $fields = array( 'title' => 'ezstring', 'tags' => 'ezkeyword' );
+        foreach ( $fields as $identifier => $fieldTypeString )
+        {
+            $field = new \ezp\content\type\Field( $this->contentType );
+            $field->identifier = $identifier;
+            $field->fieldTypeString = $fieldTypeString;
+            $this->contentType->fields[] = $field;
+        }
     }
 
     /**

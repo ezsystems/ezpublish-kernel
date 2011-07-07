@@ -28,7 +28,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $this->setName( "Location class tests" );
 
         // setup a content type & content object of use by tests, fields are not needed for location
-        $contentType = new \ezp\content\ContentType();
+        $contentType = new \ezp\content\type\Type();
         $contentType->identifier = 'article';
 
         $this->content = new Content( $contentType, new \ezp\base\Locale( 'eng-GB' ) );

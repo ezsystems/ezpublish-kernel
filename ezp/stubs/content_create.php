@@ -6,7 +6,6 @@
  */
 
 use ezp\content\Content;
-use ezp\content\ContentType;
 
 $localeFR = \ezp\base\Locale::get( 'fre-FR' );
 $localeEN = \ezp\base\Locale::get( 'eng-GB' );
