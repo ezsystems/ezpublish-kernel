@@ -171,11 +171,11 @@ class Autoloader
         }
 
         // Load API module autoload files
-        foreach ( $this->settings['repositories'] as $ns => $ns2 )
+        foreach ( $this->settings['repositories'] as $ns => $subPath )
         {
             // @todo: Use configuration so class list only include activated extensions.
             // But then this loading will have to happen after configuration and siteaccess is loaded!
-            foreach( glob( "$ns/*", GLOB_ONLYDIR ) as $path )
+            foreach( glob( "$subPath/*", GLOB_ONLYDIR ) as $path )
             {
                 if ( !file_exists( "$path/autoload.php" ) )
                     continue;
