@@ -316,19 +316,15 @@ class Content extends \ezp\base\AbstractModel
      * translation in $base.
      *
      * @param \ezp\base\Locale $locale
-     * @param \ezp\base\Locale $base
+     * @param \ezp\content\Version $base
      * @return Translation
      * @throw \InvalidArgumentException if translation in $base does not exist.
      */
-    public function addTranslation( \ezp\base\Locale $locale, \ezp\base\Locale $base = null )
+    public function addTranslation( \ezp\base\Locale $locale, \ezp\base\Version $base = null )
     {
-        if ( $base !== null && !isset( $this->translations[$base->code] ) )
-        {
-            throw new \InvalidArgumentException( "Translation {$base->code} does not exist" );
-        }
         if ( isset( $this->translations[$locale->code] ) )
         {
-            $tr = $this->translations[$locale->code];
+            throw new \InvalidArgumentException( "Translation {$locale->code} already exists" );
         }
         else
         {
@@ -339,7 +335,7 @@ class Content extends \ezp\base\AbstractModel
         $newVersion = null;
         if ( $base !== null )
         {
-            $newVersion = clone $this->translations[$base->code]->current;
+            $newVersion = clone $base;
             $newVersion->locale = $locale;
         }
         if ( $newVersion === null )

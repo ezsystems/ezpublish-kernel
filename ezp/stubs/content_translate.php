@@ -11,7 +11,9 @@ $localeEN = \ezp\base\Locale::get( 'eng-GB' );
 
 try
 {
-    $translationFR = $content->addTranslation( $localeFR, $localeEN );
+    // create the translation FR and the first version in FR is based on the 
+    // last one in eng-GB
+    $translationFR = $content->addTranslation( $localeFR, $content->translations['eng-GB']->last );
 }
 catch( \InvalidArgumentException $e )
 {
