@@ -1,6 +1,6 @@
 <?php
 /**
- * XML Field domain object
+ * Image Field domain object
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,22 +9,21 @@
  */
 
 /**
- * XML Field value object class
+ * Image Field value object class
  */
-namespace ezp\content\Field\Definition;
-class Xml extends Text
+namespace ezp\content\type\field;
+class Text extends String
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezxmlstring';
+    const FIELD_IDENTIFIER = 'eztext';
 
     /**
-     * @public
      * @var string
      */
-    public $tagPreset = '';
+    public $default = '';
 
     /**
      * @var int
@@ -35,7 +34,7 @@ class Xml extends Text
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
-        'tagPreset' => 'data_text2',
+        'default' => 'data_text1',
         'columns' => 'data_int1',
     );
 

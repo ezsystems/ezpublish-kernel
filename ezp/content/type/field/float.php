@@ -1,6 +1,6 @@
 <?php
 /**
- * Int Field domain object
+ * Float Field domain object
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2.0
@@ -9,34 +9,34 @@
  */
 
 /**
- * Int Field value object class
+ * Float Field value object class
  */
-namespace ezp\content\Field\Definition;
-class Int extends \ezp\content\AbstractFieldType implements \ezp\content\ContentFieldDefinitionInterface
+namespace ezp\content\type\field;
+class Float extends \ezp\content\AbstractFieldType implements \ezp\content\ContentFieldDefinitionInterface
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezinteger';
+    const FIELD_IDENTIFIER = 'ezfloat';
 
     /**
-     * @var int
+     * @var float
      */
-    public $default = 0;
+    public $default = 0.0;
 
     /**
-     * @var int
+     * @var float
      */
-    public $min = 0;
+    public $min = 0.0;
 
     /**
-     * @var int
+     * @var float
      */
-    public $max = 0;
+    public $max = 0.0;
 
     /**
-     * @var int
+     * @var float
      */
     public $state = 0;
 
@@ -44,10 +44,10 @@ class Int extends \ezp\content\AbstractFieldType implements \ezp\content\Content
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
-        'min' => 'data_int1',
-        'max' => 'data_int2',
-        'default' => 'data_int3',
-        'state' => 'data_int4',
+        'min' => 'data_float1',
+        'max' => 'data_float2',
+        'default' => 'data_float3',
+        'state' => 'data_float4',
     );
 
     /**
