@@ -52,7 +52,7 @@ $settings = array(
         ),
         'configuration' => array(
             // Default value for Configuration cache $useCache param
-            'use-cache' => true,
+            'use-cache' => false,
             // List of parser classes where key is file suffix
             'parsers' => array(
                 '.ini'            => 'ezp\base\Configuration\IniParser',
