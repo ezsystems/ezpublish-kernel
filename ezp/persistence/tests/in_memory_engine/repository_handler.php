@@ -48,7 +48,7 @@ class RepositoryHandler implements \ezp\persistence\RepositoryHandlerInterface
     }
 
 	/**
-	 * @return \ezp\persistence\content_types\ContentTypeHandlerInterface
+	 * @return \ezp\persistence\content\type\HandlerInterface
 	 */
 	public function contentTypeHandler()
     {

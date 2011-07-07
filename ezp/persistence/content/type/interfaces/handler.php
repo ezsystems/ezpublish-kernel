@@ -5,27 +5,27 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @package ezp
- * @subpackage persistence_content_types
+ * @subpackage persistence_content_type
  */
 
-namespace ezp\persistence\content_types;
+namespace ezp\persistence\content\type;
 
 /**
  * @package ezp
- * @subpackage persistence_content_types
+ * @subpackage persistence_content_type
  */
-interface ContentTypeHandlerInterface extends \ezp\persistence\ServiceHandlerInterface
+interface HandlerInterface extends \ezp\persistence\ServiceHandlerInterface
 {
 	/**
-	 * @param ContentTypeGroup $group
-	 * @return ContentTypeGroup
+	 * @param Group $group
+	 * @return Group
 	 */
-	public function createGroup( ContentTypeGroup $group );
+	public function createGroup( Group $group );
 
 	/**
-	 * @param ContentTypeGroup $group
+	 * @param Group $group
 	 */
-	public function updateGroup( ContentTypeGroup $group );
+	public function updateGroup( Group $group );
 
 	/**
 	 * @param int $groupId
@@ -51,15 +51,15 @@ interface ContentTypeHandlerInterface extends \ezp\persistence\ServiceHandlerInt
 	public function load( $contentTypeId, $version = 1 );
 
 	/**
-	 * @param ContentType $contentType
-	 * @return ContentType
+	 * @param Type $contentType
+	 * @return Type
 	 */
-	public function create( ContentType $contentType );
+	public function create( Type $contentType );
 
 	/**
-	 * @param ContentType $contentType
+	 * @param Type $contentType
 	 */
-	public function update( ContentType $contentType );
+	public function update( Type $contentType );
 
 	/**
 	 * @param int $contentTypeId
@@ -76,7 +76,7 @@ interface ContentTypeHandlerInterface extends \ezp\persistence\ServiceHandlerInt
 	/**
 	 * @param int $userId
 	 * @param int $contentTypeId
-	 * @return ContentType
+	 * @return Type
 	 */
 	public function copy( $userId, $contentTypeId );
 
