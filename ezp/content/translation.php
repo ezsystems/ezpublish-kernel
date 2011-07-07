@@ -116,14 +116,19 @@ class Translation extends \ezp\base\AbstractModel
     }
 
     /**
-     * Returns the field collection in the last version added to the
-     * translation
+     * Returns the field collection in the currently published version added to
+     * the translation
      *
      * @return FieldCollection
      */
     protected function getFields()
     {
-        return $this->getLast()->fields;
+        $version = $this->getCurrent();
+        if ( $version === null )
+        {
+            throw \DomainException( "No published version in the translation '{$this->locale->code}'" );
+        }
+        return $version->fields;
     }
 }
 ?>

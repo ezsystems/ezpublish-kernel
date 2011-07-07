@@ -19,9 +19,9 @@ catch( \InvalidArgumentException $e )
     exit;
 }
 
-$translationFR->fields['name'] = "Mon dossier";
+$translationFR->last->fields['name'] = "Mon dossier";
 // short cut for $translationFR->last->fields['name']->value = "Mon dossier";
-// $translationFR->last is the last version in the translation
+// $translationFR->last is the last version added in a Translation
 // others fields remain untouched, they still contain what was in the eng-GB 
 // version when addTranslation() was called.
 

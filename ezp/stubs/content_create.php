@@ -29,8 +29,8 @@ $content->fromHash( $_POST['content'] );
 
 // Now set an fre-FR translation (api has not been defined yet)
 $content->addTranslation( $localeFR, $localeEN );
-$content->translations["fre-FR"]->fields["name"] = "Nom du dossier";
-$content->translations["fre-FR"]->fields["description"] = "<p>Ceci est la <strong>description HTML</strong></p>";
+$content->translations["fre-FR"]->last->fields["name"] = "Nom du dossier";
+$content->translations["fre-FR"]->last->fields["description"] = "<p>Ceci est la <strong>description HTML</strong></p>";
 
 
 // Get the content service from the repository and insert the new content
