@@ -95,7 +95,12 @@ class Translation extends \ezp\base\AbstractModel
      */
     protected function getLast()
     {
-        return $this->versions[count( $this->versions ) - 1];
+        $c = count( $this->versions );
+        if ( $c === 0 )
+        {
+            throw new \DomainException( "Translation {$this->locale->code} does not contain any version" );
+        }
+        return $this->versions[$c - 1];
     }
 
     /**
@@ -126,7 +131,7 @@ class Translation extends \ezp\base\AbstractModel
         $version = $this->getCurrent();
         if ( $version === null )
         {
-            throw \DomainException( "No published version in the translation '{$this->locale->code}'" );
+            throw new \DomainException( "No published version in the translation '{$this->locale->code}'" );
         }
         return $version->fields;
     }
@@ -147,6 +152,7 @@ class Translation extends \ezp\base\AbstractModel
         else
         {
             $version = clone $base;
+            $version->locale = $this->locale;
         }
         $this->versions[] = $version;
         $this->content->versions[] = $version;
