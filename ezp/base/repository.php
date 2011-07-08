@@ -35,7 +35,7 @@ class Repository
     /**
      * Instances of services
      *
-     * @var Interfaces\Service[]
+     * @var AbstractService[]
      */
     protected $services = array();
 
@@ -56,7 +56,7 @@ class Repository
      * Handles class loading for service objects
      *
      * @param string $className
-     * @return Interfaces\Service
+     * @return AbstractService
      * @throws \RuntimeException
      */
     protected function service( $className )

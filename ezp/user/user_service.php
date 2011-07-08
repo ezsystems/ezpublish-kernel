@@ -16,30 +16,8 @@ namespace ezp\user;
  * @package ezp
  * @subpackage user
  */
-class UserService implements \ezp\base\Interfaces\Service
+class UserService extends \ezp\base\AbstractService
 {
-    /**
-     * @var \ezp\base\Repository
-     */
-    protected $repository;
-
-    /**
-     * @var \ezp\persistence\Interfaces\RepositoryHandler
-     */
-    protected $handler;
-
-    /**
-     * Setups service with reference to repository object that created it & corresponding handler
-     *
-     * @param \ezp\base\Repository $repository
-     * @param \ezp\persistence\Interfaces\RepositoryHandler $handler
-     */
-    public function __construct( \ezp\base\Repository $repository, \ezp\persistence\Interfaces\RepositoryHandler $handler )
-    {
-        $this->repository = $repository;
-        $this->handler = $handler;
-    }
-
     /**
      * Get an User object by id
      *

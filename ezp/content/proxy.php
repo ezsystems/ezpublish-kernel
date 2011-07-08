@@ -20,7 +20,7 @@ class Proxy implements \ezp\base\Interfaces\Proxy
     /**
      * Service used to load the object the proxy represents.
      *
-     * @var \ezp\base\Interfaces\Service
+     * @var \ezp\base\AbstractService
      */
     protected $service;
 
@@ -41,12 +41,12 @@ class Proxy implements \ezp\base\Interfaces\Proxy
     /**
      * Setup proxy object with enough info to be able to perform a load operation on the object it proxies.
      *
-     * @param \ezp\base\ServiceInterface $service
+     * @param \ezp\base\AbstractService $service
      * @param int $id Primary id
      * @param string $method Optional, defines which function on handler to call, 'load' by default.
      * @throws \InvalidArgumentException If $id is not a int value above zero.
      */
-    public function __construct( \ezp\base\Interfaces\Service $service, $id, $method = 'load' )
+    public function __construct( \ezp\base\AbstractService $service, $id, $method = 'load' )
     {
         $this->service = $service;
         $this->id = (int) $id;

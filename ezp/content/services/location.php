@@ -16,30 +16,8 @@ namespace ezp\content\Services;
  * @package ezp
  * @subpackage content
  */
-use ezp\base\Interfaces\Service, ezp\base\Repository;
-class Location implements Service
+class Location extends \ezp\base\AbstractService
 {
-    /**
-     * @var \ezp\base\Repository
-     */
-    protected $repository;
-
-    /**
-     * @var \ezp\persistence\Interfaces\RepositoryHandler
-     */
-    protected $handler;
-
-    /**
-     * Setups service with reference to repository object that created it & corresponding handler
-     *
-     * @param \ezp\base\Repository $repository
-     * @param \ezp\persistence\Interfaces\RepositoryHandler $handler
-     */
-    public function __construct( Repository $repository, \ezp\persistence\Interfaces\RepositoryHandler $handler )
-    {
-        $this->repository = $repository;
-        $this->handler = $handler;
-    }
 
     /**
      * Copies the subtree starting from $subtree as a new subtree of $targetLocation
