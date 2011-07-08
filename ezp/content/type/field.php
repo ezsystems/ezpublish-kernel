@@ -202,11 +202,11 @@ class Field extends \ezp\content\AbstractField
     /**
      * Called when subject has been updated
      *
-     * @param \ezp\base\ObservableInterface $subject
+     * @param \ezp\base\Interfaces\Observable $subject
      * @param string $event
      * @return Field
      */
-    public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
+    public function update( \ezp\base\Interfaces\Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof Type )
         {

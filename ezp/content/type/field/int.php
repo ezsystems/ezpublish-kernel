@@ -12,7 +12,7 @@
  * Int Field value object class
  */
 namespace ezp\content\type\field;
-class Int extends \ezp\content\AbstractFieldType implements \ezp\content\ContentFieldDefinitionInterface
+class Int extends \ezp\content\AbstractFieldType implements \ezp\content\Interfaces\ContentFieldDefinition
 {
     /**
      * Field type identifier

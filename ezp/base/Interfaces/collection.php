@@ -8,14 +8,16 @@
  * @subpackage base
  */
 
+namespace ezp\base\Interfaces;
+
 /**
  * Collection interface
  *
  * Note: Does not extend IteratorAggregate / Iterator to let implementers extend ArrayObject or splFixedArray
  *
- * @todo Make sure interface is usable for both normal collections as well as lazy loaded collections
+ * @package ezp
+ * @subpackage base
  */
-namespace ezp\base;
-interface CollectionInterface extends \Countable, \ArrayAccess, \Serializable
+interface Collection extends \Countable, \ArrayAccess, \Serializable
 {
 }

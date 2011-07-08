@@ -12,7 +12,7 @@
  * Float Field value object class
  */
 namespace ezp\content\Field;
-class String extends \ezp\content\AbstractFieldType implements \ezp\content\ContentFieldTypeInterface
+class String extends \ezp\content\AbstractFieldType implements \ezp\content\Interfaces\ContentFieldType
 {
     /**
      * Field type identifier
@@ -34,14 +34,14 @@ class String extends \ezp\content\AbstractFieldType implements \ezp\content\Cont
     );
 
     /**
-     * @var \ezp\content\ContentFieldDefinitionInterface
+     * @var \ezp\content\Interfaces\ContentFieldDefinition
      */
     protected $contentTypeFieldType;
 
     /**
-     * @see \ezp\content\ContentFieldTypeInterface
+     * @see \ezp\content\Interfaces\ContentFieldType
      */
-    public function __construct( \ezp\content\ContentFieldDefinitionInterface $contentTypeFieldType )
+    public function __construct( \ezp\content\Interfaces\ContentFieldDefinition $contentTypeFieldType )
     {
         if ( isset( $contentTypeFieldType->default ) )
             $this->value = $contentTypeFieldType->default;

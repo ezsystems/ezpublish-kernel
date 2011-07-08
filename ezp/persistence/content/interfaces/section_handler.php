@@ -8,13 +8,13 @@
  * @subpackage persistence_content
  */
 
-namespace ezp\persistence\content;
+namespace ezp\persistence\content\Interfaces;
 
 /**
  * @package ezp
  * @subpackage persistence_content
  */
-interface SectionHandlerInterface
+interface SectionHandler
 {
 	/**
 	 * @param string $name

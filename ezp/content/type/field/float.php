@@ -12,7 +12,7 @@
  * Float Field value object class
  */
 namespace ezp\content\type\field;
-class Float extends \ezp\content\AbstractFieldType implements \ezp\content\ContentFieldDefinitionInterface
+class Float extends \ezp\content\AbstractFieldType implements \ezp\content\Interfaces\ContentFieldDefinition
 {
     /**
      * Field type identifier

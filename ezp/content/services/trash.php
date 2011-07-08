@@ -23,8 +23,8 @@ namespace ezp\content\Services;
  * @package ezp
  * @subpackage content
  */
-use ezp\content\Content, ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
-class Trash implements ServiceInterface
+use ezp\content\Content, ezp\base\Interfaces\Service, ezp\base\Repository;
+class Trash implements Service
 {
     /**
      * @var \ezp\base\Repository
@@ -32,21 +32,20 @@ class Trash implements ServiceInterface
     protected $repository;
 
     /**
-     * @var \ezp\base\StorageEngineInterface
+     * @var \ezp\persistence\Interfaces\RepositoryHandler
      */
-    protected $se;
+    protected $handler;
 
     /**
-     * Setups service with reference to repository object that created it & corresponding storage engine handler
+     * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \ezp\base\Repository $repository
-     * @param \ezp\base\StorageEngineInterface $se
+     * @param \ezp\persistence\Interfaces\RepositoryHandler $handler
      */
-    public function __construct( Repository $repository,
-                                 StorageEngineInterface $se )
+    public function __construct( Repository $repository, \ezp\persistence\Interfaces\RepositoryHandler $handler )
     {
         $this->repository = $repository;
-        $this->se = $se;
+        $this->handler = $handler;
     }
 
     /**

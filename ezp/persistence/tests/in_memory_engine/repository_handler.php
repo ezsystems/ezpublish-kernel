@@ -16,7 +16,7 @@ namespace ezp\persistence\tests\in_memory_engine;
  * @package ezp
  * @subpackage persistence
  */
-class RepositoryHandler implements \ezp\persistence\RepositoryHandlerInterface
+class RepositoryHandler implements \ezp\persistence\Interfaces\RepositoryHandler
 {
     /**
      * Instances of handlers
@@ -40,7 +40,7 @@ class RepositoryHandler implements \ezp\persistence\RepositoryHandlerInterface
         $this->backend = new Backend();
     }
 	/**
-	 * @return \ezp\persistence\content\ContentHandlerInterface
+	 * @return \ezp\persistence\content\Interfaces\ContentHandler
 	 */
 	public function contentHandler()
     {
@@ -48,7 +48,7 @@ class RepositoryHandler implements \ezp\persistence\RepositoryHandlerInterface
     }
 
 	/**
-	 * @return \ezp\persistence\content\type\HandlerInterface
+	 * @return \ezp\persistence\content\type\Interfaces\Handler
 	 */
 	public function contentTypeHandler()
     {
@@ -56,7 +56,7 @@ class RepositoryHandler implements \ezp\persistence\RepositoryHandlerInterface
     }
 
 	/**
-	 * @return \ezp\persistence\content\LocationHandlerInterface
+	 * @return \ezp\persistence\content\Interfaces\LocationHandler
 	 */
 	public function locationHandler()
     {
@@ -64,7 +64,7 @@ class RepositoryHandler implements \ezp\persistence\RepositoryHandlerInterface
     }
 
 	/**
-	 * @return \ezp\persistence\user\UserHandlerInterface
+	 * @return \ezp\persistence\user\Interfaces\UserHandler
 	 */
 	public function userHandler()
     {
@@ -72,7 +72,7 @@ class RepositoryHandler implements \ezp\persistence\RepositoryHandlerInterface
     }
 
 	/**
-	 * @return \ezp\persistence\content\SectionHandlerInterface
+	 * @return \ezp\persistence\content\Interfaces\SectionHandler
 	 */
 	public function sectionHandler()
     {

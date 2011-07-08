@@ -12,7 +12,7 @@
  *
  */
 namespace ezp\content;
-abstract class AbstractFieldType extends \ezp\base\AbstractModel implements \ezp\base\ObserverInterface
+abstract class AbstractFieldType extends \ezp\base\AbstractModel implements \ezp\base\Interfaces\Observer
 {
     /**
      * Constant that Field types needs to defined
@@ -58,11 +58,11 @@ abstract class AbstractFieldType extends \ezp\base\AbstractModel implements \ezp
     /**
      * Called when subject has been updated
      *
-     * @param \ezp\base\ObservableInterface $subject
+     * @param \ezp\base\Interfaces\Observable $subject
      * @param string $event
      * @return Field
      */
-    public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
+    public function update( \ezp\base\Interfaces\Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof AbstractField )
         {

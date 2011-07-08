@@ -14,8 +14,8 @@
  * @package ezp
  * @subpackage content
  */
-namespace ezp\content;
-interface ContentFieldTypeInterface
+namespace ezp\content\Interfaces;
+interface ContentFieldType
 {
     /**
      * Called when content object field type is constructed
@@ -24,5 +24,5 @@ interface ContentFieldTypeInterface
      *
      * @param ContentFieldDefinitionInterface $contentTypeFieldType
      */
-    public function __construct( ContentFieldDefinitionInterface $contentTypeFieldType );
+    public function __construct( ContentFieldDefinition $contentTypeFieldType );
 }

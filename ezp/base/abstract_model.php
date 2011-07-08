@@ -14,7 +14,7 @@
  * @access private
  */
 namespace ezp\base;
-abstract class AbstractModel implements ObservableInterface, ModelInterface
+abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
 {
     /**
      * Array indicates which public/protected properties are readable through
@@ -46,7 +46,7 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
     /**
      * List of event listeners
      *
-     * @var ObserverInterface[]
+     * @var Interfaces\Observer[]
      */
     private $observers = array();
 
@@ -63,11 +63,11 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
     /**
      * Attach a event listener to this subject
      *
-     * @param ObserverInterface $observer
+     * @param Interfaces\Observer $observer
      * @param string $event
      * @return AbstractModel
      */
-    public function attach( ObserverInterface $observer, $event = 'update' )
+    public function attach( Interfaces\Observer $observer, $event = 'update' )
     {
         if ( isset( $this->observers[$event] ) )
         {
@@ -83,11 +83,11 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
     /**
      * Detach a event listener to this subject
      *
-     * @param ObserverInterface $observer
+     * @param Interfaces\Observer $observer
      * @param string $event
      * @return AbstractModel
      */
-    public function detach( ObserverInterface $observer, $event = 'update' )
+    public function detach( Interfaces\Observer $observer, $event = 'update' )
     {
         if ( !empty( $this->observers[$event] ) )
         {
@@ -240,7 +240,7 @@ abstract class AbstractModel implements ObservableInterface, ModelInterface
                 continue;
             }
 
-            if ( !is_array( $value ) )
+            if ( !$value instanceof \Traversable && !is_array( $value ) )
                 continue;
 
             foreach ( $value as $key => $item )

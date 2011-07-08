@@ -14,7 +14,7 @@ namespace ezp\persistence\io;
  * @package ezp
  * @subpackage persistence_io
  */
-class FileSystemStorage implements BinaryFileStorageInterface
+class FileSystemStorage implements Interfaces\BinaryFileStorage
 {
 	/**
 	 */

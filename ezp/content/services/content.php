@@ -17,8 +17,8 @@ namespace ezp\content\Services;
  * @package ezp
  * @subpackage content_Services
  */
-use ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
-class Content implements ServiceInterface
+use ezp\base\Interfaces\Service, ezp\base\Repository;
+class Content implements Service
 {
     /**
      * @var \ezp\base\Repository
@@ -26,21 +26,20 @@ class Content implements ServiceInterface
     protected $repository;
 
     /**
-     * @var \ezp\base\StorageEngineInterface
+     * @var \ezp\persistence\Interfaces\RepositoryHandler
      */
-    protected $se;
+    protected $handler;
 
     /**
-     * Setups service with reference to repository object that created it & corresponding storage engine handler
+     * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \ezp\base\Repository $repository
-     * @param \ezp\base\StorageEngineInterface $se
+     * @param \ezp\persistence\Interfaces\RepositoryHandler $handler
      */
-    public function __construct( Repository $repository,
-                                 StorageEngineInterface $se )
+    public function __construct( Repository $repository, \ezp\persistence\Interfaces\RepositoryHandler $handler )
     {
         $this->repository = $repository;
-        $this->se = $se;
+        $this->handler = $handler;
     }
 
     /**
@@ -79,7 +78,7 @@ class Content implements ServiceInterface
      */
     public function load( $contentId )
     {
-        $content = $this->se->getContentHandler()->load( $contentId );
+        $content = $this->handler->contentHandler()->load( $contentId );
         if ( !$content )
             throw new \ezp\content\ContentNotFoundException( $contentId );
         return $content;

@@ -15,7 +15,7 @@
  * @subpackage base
  */
 namespace ezp\base;
-class ReadOnlyCollection extends \ArrayObject implements CollectionInterface
+class ReadOnlyCollection extends \ArrayObject implements Interfaces\Collection
 {
     /**
      * Set value on a offset in collection, read only collection so throws exception.

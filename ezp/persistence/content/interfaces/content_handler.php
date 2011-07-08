@@ -10,7 +10,7 @@
  *
  */
 
-namespace ezp\persistence\content;
+namespace ezp\persistence\content\Interfaces;
 
 /**
  * The ContentHandler interface defines content operations on the storage engine.
@@ -23,7 +23,7 @@ namespace ezp\persistence\content;
  * @subpackage persistence_content
  * @version //autogentag//
  */
-interface ContentHandlerInterface
+interface ContentHandler
 {
     /**
      * Creates a new Content entity in the storage engine.

@@ -13,13 +13,13 @@
 namespace ezp\persistence\tests\in_memory_engine;
 
 /**
- * @see \ezp\persistence\content\ContentHandlerInterface
+ * @see \ezp\persistence\content\Interfaces\ContentHandler
  *
  * @package ezp
  * @subpackage persistence_tests
  * @version //autogentag//
  */
-class ContentHandler implements  \ezp\persistence\content\ContentHandlerInterface
+class ContentHandler implements  \ezp\persistence\content\Interfaces\ContentHandler
 {
     /**
      * @var RepositoryHandler

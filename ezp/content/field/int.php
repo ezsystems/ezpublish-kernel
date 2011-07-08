@@ -12,7 +12,7 @@
  * Int Field value object class
  */
 namespace ezp\content\Field;
-class Int extends \ezp\content\AbstractFieldType implements \ezp\content\ContentFieldTypeInterface
+class Int extends \ezp\content\AbstractFieldType implements \ezp\content\Interfaces\ContentFieldType
 {
     /**
      * Field type identifier
@@ -34,14 +34,14 @@ class Int extends \ezp\content\AbstractFieldType implements \ezp\content\Content
     );
 
     /**
-     * @var \ezp\content\ContentFieldDefinitionInterface
+     * @var \ezp\content\Interfaces\ContentFieldDefinition
      */
     protected $contentTypeFieldType;
 
     /**
-     * @see \ezp\content\ContentFieldTypeInterface
+     * @see \ezp\content\Interfaces\ContentFieldType
      */
-    public function __construct( \ezp\content\ContentFieldDefinitionInterface $contentTypeFieldType )
+    public function __construct( \ezp\content\Interfaces\ContentFieldDefinition $contentTypeFieldType )
     {
         if ( isset( $contentTypeFieldType->default ) )
             $this->value = $contentTypeFieldType->default;

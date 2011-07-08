@@ -19,7 +19,7 @@ namespace ezp\base\Configuration;
  * @subpackage base
  */
 use \ezp\base\Configuration;
-class IniParser implements \ezp\base\ConfigurationParserInterface
+class IniParser implements \ezp\base\Interfaces\ConfigurationParser
 {
     /**
      * Constant string used as a temporary true variable during ini parsing to avoid

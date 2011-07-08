@@ -17,8 +17,8 @@ namespace ezp\content\Services;
  * @package ezp
  * @subpackage content
  */
-use ezp\base\ServiceInterface, ezp\base\Repository, ezp\base\StorageEngineInterface;
-class ContentType implements ServiceInterface
+use ezp\base\Interfaces\Service, ezp\base\Repository;
+class ContentType implements Service
 {
     /**
      * @var \ezp\base\Repository
@@ -26,21 +26,20 @@ class ContentType implements ServiceInterface
     protected $repository;
 
     /**
-     * @var \ezp\base\StorageEngineInterface
+     * @var \ezp\persistence\Interfaces\RepositoryHandler
      */
-    protected $se;
+    protected $handler;
 
     /**
-     * Setups service with reference to repository object that created it & corresponding storage engine handler
+     * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \ezp\base\Repository $repository
-     * @param \ezp\base\StorageEngineInterface $se
+     * @param \ezp\persistence\Interfaces\RepositoryHandler $handler
      */
-    public function __construct( Repository $repository,
-                                 StorageEngineInterface $se )
+    public function __construct( Repository $repository, \ezp\persistence\Interfaces\RepositoryHandler $handler )
     {
         $this->repository = $repository;
-        $this->se = $se;
+        $this->handler = $handler;
     }
 
     /**
@@ -52,7 +51,7 @@ class ContentType implements ServiceInterface
      */
     public function load( $contentTypeId )
     {
-        $contentType = $this->se->getContentTypeHandler()->load( $contentTypeId );
+        $contentType = $this->handler->contentTypeHandler()->load( $contentTypeId );
         if ( !$contentType )
             throw new \ezp\content\ContentNotFoundException( $contentTypeId, 'type\Type' );
         return $contentType;
@@ -67,7 +66,7 @@ class ContentType implements ServiceInterface
      */
     public function loadByIdentifier( $identifier )
     {
-        $contentTypes = $this->se->getContentTypeHandler()->loadByIdentifier( $identifier );
+        $contentTypes = $this->handler->contentTypeHandler()->loadByIdentifier( $identifier );
         if ( !$contentTypes )
             throw new \ezp\content\ContentNotFoundException( $identifier, 'type\Type', 'identifier' );
         return $contentTypes[0];

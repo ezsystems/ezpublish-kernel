@@ -13,13 +13,13 @@
 namespace ezp\persistence\tests\in_memory_engine;
 
 /**
- * @see \ezp\persistence\content\SectionHandlerInterface
+ * @see \ezp\persistence\content\Interfaces\SectionHandler
  *
  * @package ezp
  * @subpackage persistence_tests
  * @version //autogentag//
  */
-class SectionHandler implements \ezp\persistence\content\SectionHandlerInterface
+class SectionHandler implements \ezp\persistence\content\Interfaces\SectionHandler
 {
     /**
      * @var RepositoryHandler

@@ -63,19 +63,6 @@ class ServiceContainer
     }
 
     /**
-     * Service function to get Response object
-     *
-     * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
-     * @return \ezp\base\ResponseInterface
-     */
-    public function getResponse( array $callChainDependancieOverrides = array() )
-    {
-        if ( isset( $this->dependencies['@response'] ) )
-            return $this->dependencies['@response'];
-        return $this->get( 'response', $callChainDependancieOverrides );
-    }
-
-    /**
      * Service function to get Repository object
      *
      * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain

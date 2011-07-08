@@ -21,9 +21,9 @@ class Boolean extends Int
     const FIELD_IDENTIFIER = 'ezboolean';
 
     /**
-     * @see \ezp\content\ContentFieldTypeInterface
+     * @see \ezp\content\Interfaces\ContentFieldType
      */
-    public function __construct( \ezp\content\ContentFieldDefinitionInterface $contentTypeFieldType )
+    public function __construct( \ezp\content\Interfaces\ContentFieldDefinition $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
         parent::__construct( $contentTypeFieldType );

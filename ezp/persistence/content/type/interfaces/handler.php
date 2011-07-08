@@ -8,24 +8,24 @@
  * @subpackage persistence_content_type
  */
 
-namespace ezp\persistence\content\type;
+namespace ezp\persistence\content\type\Interfaces;
 
 /**
  * @package ezp
  * @subpackage persistence_content_type
  */
-interface HandlerInterface
+interface Handler
 {
 	/**
 	 * @param Group $group
 	 * @return Group
 	 */
-	public function createGroup( Group $group );
+	public function createGroup( \ezp\persistence\content\type\Group $group );
 
 	/**
 	 * @param Group $group
 	 */
-	public function updateGroup( Group $group );
+	public function updateGroup( \ezp\persistence\content\type\Group $group );
 
 	/**
 	 * @param int $groupId
@@ -54,12 +54,12 @@ interface HandlerInterface
 	 * @param Type $contentType
 	 * @return Type
 	 */
-	public function create( Type $contentType );
+	public function create( \ezp\persistence\content\type\Type $contentType );
 
 	/**
 	 * @param Type $contentType
 	 */
-	public function update( Type $contentType );
+	public function update( \ezp\persistence\content\type\Type $contentType );
 
 	/**
 	 * @param int $contentTypeId

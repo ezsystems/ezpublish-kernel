@@ -8,14 +8,15 @@
  * @subpackage base
  */
 
+namespace ezp\base\Interfaces;
+
 /**
  * Interface for Proxy object
  *
  * @package ezp
  * @subpackage base
  */
-namespace ezp\base;
-interface ProxyInterface
+interface Proxy
 {
     /**
      * Load the object this proxy object represent

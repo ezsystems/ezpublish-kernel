@@ -16,7 +16,7 @@ namespace ezp\base;
  * @package ezp
  * @subpackage base
  */
-class TypeCollection extends \ArrayObject implements CollectionInterface
+class TypeCollection extends \ArrayObject implements Interfaces\Collection
 {
     /**
      * @var string The class name (including namespace) to accept as input

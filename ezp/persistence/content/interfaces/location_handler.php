@@ -8,7 +8,7 @@
  * @subpackage persistence_content
  */
 
-namespace ezp\persistence\content;
+namespace ezp\persistence\content\Interfaces;
 
 /**
  * The LocationHandler interface defines operations on Location elements in the storage engine.
@@ -16,7 +16,7 @@ namespace ezp\persistence\content;
  * @package ezp
  * @subpackage persistence_content
  */
-interface LocationHandlerInterface
+interface LocationHandler
 {
 
 	/**

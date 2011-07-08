@@ -21,7 +21,7 @@ use \ezp\persistence\tests\in_memory_engine\RepositoryHandler, \ezp\base\Service
 class RepositoryHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\persistence\RepositoryHandlerInterface
+     * @var \ezp\persistence\Interfaces\RepositoryHandler
      */
     protected $handler;
 
@@ -42,7 +42,7 @@ class RepositoryHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testInstanceType()
     {
-        $this->assertInstanceOf( '\ezp\persistence\RepositoryHandlerInterface', $this->handler );
+        $this->assertInstanceOf( '\ezp\persistence\Interfaces\RepositoryHandler', $this->handler );
         $this->assertInstanceOf( '\ezp\persistence\tests\in_memory_engine\RepositoryHandler', $this->handler );
     }
 
@@ -52,7 +52,7 @@ class RepositoryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testContentHandlerInstanceType()
     {
         $contentHandler = $this->handler->contentHandler();
-        $this->assertInstanceOf( '\ezp\persistence\content\ContentHandlerInterface', $contentHandler );
+        $this->assertInstanceOf( '\ezp\persistence\content\Interfaces\ContentHandler', $contentHandler );
         $this->assertInstanceOf( '\ezp\persistence\tests\in_memory_engine\ContentHandler', $contentHandler );
     }
 
@@ -62,7 +62,7 @@ class RepositoryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testSectionHandlerInstanceType()
     {
         $sectionHandler = $this->handler->sectionHandler();
-        $this->assertInstanceOf( '\ezp\persistence\content\SectionHandlerInterface', $sectionHandler );
+        $this->assertInstanceOf( '\ezp\persistence\content\Interfaces\SectionHandler', $sectionHandler );
         $this->assertInstanceOf( '\ezp\persistence\tests\in_memory_engine\SectionHandler', $sectionHandler );
     }
 

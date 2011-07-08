@@ -94,35 +94,30 @@ class Autoloader
             return $this->registerEzc();
         }
 
-        // Fallback to load by convention if class name starts with ezp\ or ezx\ namespace
-         if ( strncmp( $className, 'ezp\\', 4 ) !== 0 && strncmp( $className, 'ezx\\', 4 ) !== 0  )
-             return false;
+        // PSR-0 like autloading of repositories namespaces if defined
+        if ( empty( $this->settings['repositories'] ) )
+            return false;
 
         // Transform camel case to underscore style for text, e.g. CamelCase => camel_case.php
-        static $toLowerCaseWithUnderscore = array(
+        static $lowerCaseMap = array(
                 'A' => '_a',    'B' => '_b',    'C' => '_c',    'D' => '_d',    'E' => '_e',    'F' => '_f',
                 'G' => '_g',    'H' => '_h',    'I' => '_i',    'J' => '_j',    'K' => '_k',    'L' => '_l',
                 'M' => '_m',    'N' => '_n',    'O' => '_o',    'P' => '_p',    'Q' => '_q',    'R' => '_r',
                 'S' => '_s',    'T' => '_t',    'U' => '_u',    'V' => '_v',    'W' => '_w',    'X' => '_x',
-                'Y' => '_y',    'Z' => '_z'
-                );
-        $fileName = str_replace( array( '\\', '/_' ), '/', strtr( $className, $toLowerCaseWithUnderscore ) ) . '.php';
+                'Y' => '_y',    'Z' => '_z' );
 
-        /**
-         * Particular cases : Interfaces and Exceptions
-         * If class name ends with 'Interface' or 'Exception' file must be placed in interfaces/ or exceptions/
-         * directory for current namespace and file name must not contain "interface" or "exception".
-         * e.g. ezp\Content\DomainObjectInterface => ezp/content/interfaces/domain_object.php
-         */
-        if ( strrpos( $className, 'Interface' ) === strlen( $className ) - 9 )
+        foreach( $this->settings['repositories'] as $ns => $subPath )
         {
-            $fileName = dirname( $fileName ) . '/interfaces/' . str_replace( '_interface', '', basename( $fileName ));
+            if ( strpos( $className, $ns . '\\' ) === 0 )
+            {
+                $fileName = './' . str_replace( array( '\\', '/_' ), '/', strtr( $className, $lowerCaseMap ) ) . '.php';
+                if ( $ns !== $subPath )
+                    require str_replace( './' . $ns, './' . $subPath, $fileName );
+                else
+                    require $fileName;
+                return true;
+            }
         }
-        else if ( strrpos( $className, 'Exception' ) === strlen( $className ) - 9 )
-        {
-            $fileName = dirname( $fileName ) . '/exceptions/' . str_replace( '_exception', '', basename( $fileName ));
-        }
-        require $fileName;
     }
 
     /**

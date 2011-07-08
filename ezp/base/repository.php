@@ -18,11 +18,11 @@ namespace ezp\base;
 class Repository
 {
     /**
-     * Storage Engine object
+     * Repository Handler object
      *
-     * @var Interfaces\StorageEngine
+     * @var \ezp\persistence\Interfaces\RepositoryHandler
      */
-    protected $se;
+    protected $handler;
 
     /**
      * This class uses doctrine directly as backend, in BL it should talk to a
@@ -35,7 +35,7 @@ class Repository
     /**
      * Instances of services
      *
-     * @var ServiceInterface[]
+     * @var Interfaces\Service[]
      */
     protected $services = array();
 
@@ -44,11 +44,11 @@ class Repository
      *
      * Construct repository object with provided storage engine
      *
-     * @param StorageEngineInterface $se
+     * @param \ezp\persistence\Interfaces\RepositoryHandler $handler
      */
-    public function __construct( StorageEngineInterface $se/*, \ezp\user\User $user*/ )
+    public function __construct( \ezp\persistence\Interfaces\RepositoryHandler $handler/*, \ezp\user\User $user*/ )
     {
-        $this->se = $se;
+        $this->handler = $handler;
         //$this->user = $user;
     }
 
@@ -56,7 +56,7 @@ class Repository
      * Handles class loading for service objects
      *
      * @param string $className
-     * @return ServiceInterface
+     * @return Interfaces\Service
      * @throws \RuntimeException
      */
     protected function service( $className )
@@ -65,7 +65,7 @@ class Repository
             return $this->services[$className];
 
         if ( class_exists( $className ) )
-            return $this->services[$className] = new $className( $this, $this->se );
+            return $this->services[$className] = new $className( $this, $this->handler );
 
         throw new \RuntimeException( "Could not load '$className' service!" );
     }
@@ -141,7 +141,7 @@ class Repository
      */
     public function beginTransaction()
     {
-        $this->se->beginTransaction();
+        $this->handler->beginTransaction();
     }
 
     /**
@@ -153,7 +153,7 @@ class Repository
      */
     public function commit()
     {
-        $this->se->commit();
+        $this->handler->commit();
     }
 
     /**
@@ -165,7 +165,7 @@ class Repository
      */
     public function rollback()
     {
-        $this->se->rollback();
+        $this->handler->rollback();
     }
 
     /**

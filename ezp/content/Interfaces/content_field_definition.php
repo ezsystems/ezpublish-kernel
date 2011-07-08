@@ -14,7 +14,7 @@
  * @package ezp
  * @subpackage content
  */
-namespace ezp\content;
-interface ContentFieldDefinitionInterface
+namespace ezp\content\Interfaces;
+interface ContentFieldDefinition
 {
 }

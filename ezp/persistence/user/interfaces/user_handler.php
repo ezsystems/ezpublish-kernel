@@ -8,7 +8,7 @@
  * @subpackage persistence_user
  */
 
-namespace ezp\persistence\user;
+namespace ezp\persistence\user\Interfaces;
 
 /**
  * Storage Engine handler for user module
@@ -16,13 +16,13 @@ namespace ezp\persistence\user;
  * @package ezp
  * @subpackage persistence_user
  */
-interface UserHandlerInterface
+interface UserHandler
 {
 
 	/**
 	 * @param User $user
 	 */
-	public function createUser( User $user );
+	public function createUser( \ezp\persistence\user\User $user );
 
 	/**
 	 * @param int $userId
@@ -32,18 +32,18 @@ interface UserHandlerInterface
 	/**
 	 * @param User $user
 	 */
-	public function updateUser( User $user );
+	public function updateUser( \ezp\persistence\user\User $user );
 
 	/**
 	 * @param Role $role
 	 * @return Role
 	 */
-	public function createRole( Role $role );
+	public function createRole( \ezp\persistence\user\Role $role );
 
 	/**
 	 * @param Role $role
 	 */
-	public function updateRole( Role $role );
+	public function updateRole( \ezp\persistence\user\Role $role );
 
 	/**
 	 * @param int $roleId

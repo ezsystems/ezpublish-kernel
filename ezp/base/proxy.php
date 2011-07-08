@@ -15,7 +15,7 @@
  * @subpackage base
  */
 namespace ezp\base;
-class Proxy implements ProxyInterface
+class Proxy implements Interfaces\Proxy
 {
     /**
      * Instance of repository for fetching the object

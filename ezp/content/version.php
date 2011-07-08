@@ -22,7 +22,7 @@
  * @property-read ContentField[] $fields An hash structure of fields
  */
 namespace ezp\content;
-class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInterface
+class Version extends \ezp\base\AbstractModel implements \ezp\base\Interfaces\Observer
 {
     /**
      * @todo taken from eZContentObjectVersion, to be redefined
@@ -127,11 +127,11 @@ class Version extends \ezp\base\AbstractModel implements \ezp\base\ObserverInter
     /**
      * Called when subject has been updated
      *
-     * @param \ezp\base\ObservableInterface $subject
+     * @param \ezp\base\Interfaces\Observable $subject
      * @param string $event
      * @return Version
      */
-    public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
+    public function update( \ezp\base\Interfaces\Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof Content )
         {

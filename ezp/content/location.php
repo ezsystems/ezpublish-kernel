@@ -16,7 +16,7 @@
  * @subpackage content
  */
 namespace ezp\content;
-class Location extends \ezp\base\AbstractModel implements \ezp\base\ObserverInterface
+class Location extends \ezp\base\AbstractModel implements \ezp\base\Interfaces\Observer
 {
     /**
      * @var array Readable of properties on this object
@@ -209,11 +209,11 @@ class Location extends \ezp\base\AbstractModel implements \ezp\base\ObserverInte
     /**
      * Called when subject has been updated
      *
-     * @param \ezp\base\ObservableInterface $subject
+     * @param \ezp\base\Interfaces\Observable $subject
      * @param string $event
      * @return Location
      */
-    public function update( \ezp\base\ObservableInterface $subject, $event = 'update' )
+    public function update( \ezp\base\Interfaces\Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof Content )
         {

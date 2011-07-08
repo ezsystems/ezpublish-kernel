@@ -8,7 +8,7 @@
  * @subpackage base
  */
 
-namespace ezp\base;
+namespace ezp\base\Interfaces;
 
 /**
  * Configuration Interfaces for configuration parser & writer
@@ -16,7 +16,7 @@ namespace ezp\base;
  * @package ezp
  * @subpackage base
  */
-interface ConfigurationParserInterface
+interface ConfigurationParser
 {
     /**
      * Construct an instance for a specific file

@@ -8,8 +8,16 @@
  * @package ezp
  * @subpackage base
  */
-namespace ezp\base;
-interface ObserverInterface// extends \SplObserver
+
+namespace ezp\base\Interfaces;
+
+/**
+ * Interface for Observers
+ *
+ * @package ezp
+ * @subpackage base
+ */
+interface Observer// extends \SplObserver
 {
     /**
      * Called when subject has been updated
@@ -18,5 +26,5 @@ interface ObserverInterface// extends \SplObserver
      * @param string $event
      * @return Observer
      */
-    public function update( ObservableInterface $subject, $event = 'update' );
+    public function update( Observable $subject, $event = 'update' );
 }
