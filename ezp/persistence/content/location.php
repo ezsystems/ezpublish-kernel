@@ -15,29 +15,29 @@ namespace ezp\persistence\content;
  */
 class Location
 {
-	/**
-	 */
-	public $id;
-	/**
-	 */
-	public $position;
-	/**
-	 */
-	public $hidden;
-	/**
-	 */
-	public $invisible;
-	/**
-	 */
-	public $remoteId;
-	/**
-	 */
-	public $content;
-	/**
-	 */
-	public $child = array();
-	/**
-	 */
-	public $parent_10;
+    /**
+     */
+    public $id;
+    /**
+     */
+    public $position;
+    /**
+     */
+    public $hidden;
+    /**
+     */
+    public $invisible;
+    /**
+     */
+    public $remoteId;
+    /**
+     */
+    public $content;
+    /**
+     */
+    public $child = array();
+    /**
+     */
+    public $parent_10;
 }
 ?>

@@ -16,23 +16,23 @@ namespace ezp\persistence\user;
  */
 class User
 {
-	/**
-	 */
-	public $id;
-	/**
-	 */
-	public $login;
-	/**
-	 */
-	public $pwd;
-	/**
-	 */
-	public $hashAlg;
-	/**
-	 */
-	public $unnamed_ContentTypeBase_;
-	/**
-	 */
-	public $unnamed_ContentTypeBase_2;
+    /**
+     */
+    public $id;
+    /**
+     */
+    public $login;
+    /**
+     */
+    public $pwd;
+    /**
+     */
+    public $hashAlg;
+    /**
+     */
+    public $unnamed_ContentTypeBase_;
+    /**
+     */
+    public $unnamed_ContentTypeBase_2;
 }
 ?>

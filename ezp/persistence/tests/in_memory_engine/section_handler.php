@@ -43,12 +43,12 @@ class SectionHandler implements \ezp\persistence\content\Interfaces\SectionHandl
         $this->backend = $backend;
     }
 
-	/**
-	 * @param string $name
-	 * @param string $identifier
-	 * @return \ezp\persistence\content\Section
-	 */
-	public function create( $name, $identifier )
+    /**
+     * @param string $name
+     * @param string $identifier
+     * @return \ezp\persistence\content\Section
+     */
+    public function create( $name, $identifier )
     {
         return $this->backend->create( 'content', 'Section', array( 'name' => $name,
                                                                     'identifier' => $identifier ) );
@@ -60,7 +60,7 @@ class SectionHandler implements \ezp\persistence\content\Interfaces\SectionHandl
      * @param string $identifier
      * @return bool
      */
-	public function update( $id, $name, $identifier )
+    public function update( $id, $name, $identifier )
     {
         return $this->backend->update( 'content', 'Section', $id, array( 'id' => $id,
                                                                          'name' => $name,
@@ -68,26 +68,26 @@ class SectionHandler implements \ezp\persistence\content\Interfaces\SectionHandl
     }
 
     /**
-	 * @param int $id
+     * @param int $id
      * @return \ezp\persistence\content\Section|null
-	 */
-	public function load( $id )
+     */
+    public function load( $id )
     {
         return $this->backend->read( 'content', 'Section', $id );
     }
 
-	/**
-	 * @param int $id
-	 */
-	public function delete( $id )
+    /**
+     * @param int $id
+     */
+    public function delete( $id )
     {
         return $this->backend->delete( 'content', 'Section', $id );
     }
 
-	/**
-	 * @param int $sectionId
-	 * @param int $contentId
-	 */
-	public function assign( $sectionId, $contentId ){}
+    /**
+     * @param int $sectionId
+     * @param int $contentId
+     */
+    public function assign( $sectionId, $contentId ){}
 }
 ?>

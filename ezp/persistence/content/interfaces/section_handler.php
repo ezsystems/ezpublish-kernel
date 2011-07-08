@@ -16,35 +16,35 @@ namespace ezp\persistence\content\Interfaces;
  */
 interface SectionHandler
 {
-	/**
-	 * @param string $name
-	 * @param string $identifier
-	 * @return \ezp\persistence\content\Section
-	 */
-	public function create( $name, $identifier );
+    /**
+     * @param string $name
+     * @param string $identifier
+     * @return \ezp\persistence\content\Section
+     */
+    public function create( $name, $identifier );
 
-	/**
+    /**
      * @param int $id
-	 * @param string $name
-	 * @param string $identifier
-	 */
-	public function update( $id, $name, $identifier );
+     * @param string $name
+     * @param string $identifier
+     */
+    public function update( $id, $name, $identifier );
 
-	/**
-	 * @param int $id
-	 * @return \ezp\persistence\content\Section|null
-	 */
-	public function load( $id );
+    /**
+     * @param int $id
+     * @return \ezp\persistence\content\Section|null
+     */
+    public function load( $id );
 
-	/**
-	 * @param int $id
-	 */
-	public function delete( $id );
+    /**
+     * @param int $id
+     */
+    public function delete( $id );
 
-	/**
-	 * @param int $sectionId
-	 * @param int $contentId
-	 */
-	public function assign( $sectionId, $contentId );
+    /**
+     * @param int $sectionId
+     * @param int $contentId
+     */
+    public function assign( $sectionId, $contentId );
 }
 ?>

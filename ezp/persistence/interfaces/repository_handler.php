@@ -18,41 +18,41 @@ namespace ezp\persistence\Interfaces;
  */
 interface RepositoryHandler
 {
-	/**
-	 * @return \ezp\persistence\content\Interfaces\ContentHandler
-	 */
-	public function contentHandler();
+    /**
+     * @return \ezp\persistence\content\Interfaces\ContentHandler
+     */
+    public function contentHandler();
 
-	/**
-	 * @return \ezp\persistence\content\type\Interfaces\Handler
-	 */
-	public function contentTypeHandler();
+    /**
+     * @return \ezp\persistence\content\type\Interfaces\Handler
+     */
+    public function contentTypeHandler();
 
-	/**
-	 * @return \ezp\persistence\content\Interfaces\LocationHandler
-	 */
-	public function locationHandler();
+    /**
+     * @return \ezp\persistence\content\Interfaces\LocationHandler
+     */
+    public function locationHandler();
 
-	/**
-	 * @return \ezp\persistence\user\Interfaces\UserHandler
-	 */
-	public function userHandler();
+    /**
+     * @return \ezp\persistence\user\Interfaces\UserHandler
+     */
+    public function userHandler();
 
-	/**
-	 * @return \ezp\persistence\content\Interfaces\SectionHandler
-	 */
-	public function sectionHandler();
+    /**
+     * @return \ezp\persistence\content\Interfaces\SectionHandler
+     */
+    public function sectionHandler();
 
-	/**
-	 */
-	public function beginTransaction();
+    /**
+     */
+    public function beginTransaction();
 
-	/**
-	 */
-	public function commit();
+    /**
+     */
+    public function commit();
 
-	/**
-	 */
-	public function rollback();
+    /**
+     */
+    public function rollback();
 }
 ?>

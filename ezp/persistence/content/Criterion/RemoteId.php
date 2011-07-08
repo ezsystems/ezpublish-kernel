@@ -14,8 +14,8 @@ namespace ezp\persistence\content\criteria;
  */
 class RemoteIdListCriteria extends Criteria
 {
-	/**
-	 */
-	public $remoteIdList;
+    /**
+     */
+    public $remoteIdList;
 }
 ?>

@@ -16,14 +16,14 @@ namespace ezp\persistence\user;
  */
 class Role
 {
-	/**
-	 */
-	public $name;
-	/**
-	 */
-	public $id;
-	/**
-	 */
-	public $unnamed_Policy_ = array();
+    /**
+     */
+    public $name;
+    /**
+     */
+    public $id;
+    /**
+     */
+    public $unnamed_Policy_ = array();
 }
 ?>

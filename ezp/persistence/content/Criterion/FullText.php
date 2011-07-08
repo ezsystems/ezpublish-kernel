@@ -14,8 +14,8 @@ namespace ezp\persistence\content\criteria;
  */
 class FullTextCriteria extends Criteria 
 {
-	/**
-	 */
-	public $text;
+    /**
+     */
+    public $text;
 }
 ?>

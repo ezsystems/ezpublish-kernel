@@ -14,12 +14,12 @@ namespace ezp\persistence\content\criteria;
  */
 class ContentFieldCriteria extends Criteria 
 {
-	/**
-	 */
-	public $operator;
-	/**
-	 */
-	public $fieldIdentifier;
-	public $value;
+    /**
+     */
+    public $operator;
+    /**
+     */
+    public $fieldIdentifier;
+    public $value;
 }
 ?>

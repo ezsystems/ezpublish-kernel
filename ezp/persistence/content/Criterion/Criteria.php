@@ -14,8 +14,8 @@ namespace ezp\persistence\content\criteria;
  */
 class Criteria 
 {
-	/**
-	 */
-	public $negative;
+    /**
+     */
+    public $negative;
 }
 ?>

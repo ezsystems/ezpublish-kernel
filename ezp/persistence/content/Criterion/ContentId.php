@@ -14,8 +14,8 @@ namespace ezp\persistence\content\criteria;
  */
 class ContentIdListCriteria extends Criteria 
 {
-	/**
-	 */
-	public $idList;
+    /**
+     */
+    public $idList;
 }
 ?>

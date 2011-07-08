@@ -19,55 +19,55 @@ namespace ezp\persistence\user\Interfaces;
 interface UserHandler
 {
 
-	/**
-	 * @param User $user
-	 */
-	public function createUser( \ezp\persistence\user\User $user );
+    /**
+     * @param User $user
+     */
+    public function createUser( \ezp\persistence\user\User $user );
 
-	/**
-	 * @param int $userId
-	 */
-	public function deleteUser( $userId );
+    /**
+     * @param int $userId
+     */
+    public function deleteUser( $userId );
 
-	/**
-	 * @param User $user
-	 */
-	public function updateUser( \ezp\persistence\user\User $user );
+    /**
+     * @param User $user
+     */
+    public function updateUser( \ezp\persistence\user\User $user );
 
-	/**
-	 * @param Role $role
-	 * @return Role
-	 */
-	public function createRole( \ezp\persistence\user\Role $role );
+    /**
+     * @param Role $role
+     * @return Role
+     */
+    public function createRole( \ezp\persistence\user\Role $role );
 
-	/**
-	 * @param Role $role
-	 */
-	public function updateRole( \ezp\persistence\user\Role $role );
+    /**
+     * @param Role $role
+     */
+    public function updateRole( \ezp\persistence\user\Role $role );
 
-	/**
-	 * @param int $roleId
-	 */
-	public function deleteRole( $roleId );
+    /**
+     * @param int $roleId
+     */
+    public function deleteRole( $roleId );
 
-	/**
-	 * @param int $userId
-	 * @return array
-	 */
-	public function getPermissions( $userId );
+    /**
+     * @param int $userId
+     * @return array
+     */
+    public function getPermissions( $userId );
 
-	/**
-	 * @param int $contentId
-	 * @param int $roleId
-	 * @param $limitation
+    /**
+     * @param int $contentId
+     * @param int $roleId
+     * @param $limitation
      * @todo Figure out which type $limitation has
-	 */
-	public function assignRole( $contentId, $roleId, $limitation );
+     */
+    public function assignRole( $contentId, $roleId, $limitation );
 
-	/**
-	 * @param int $contentId
-	 * @param int $roleId
-	 */
-	public function removeRole(  $contentId, $roleId );
+    /**
+     * @param int $contentId
+     * @param int $roleId
+     */
+    public function removeRole(  $contentId, $roleId );
 }
 ?>

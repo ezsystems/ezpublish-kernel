@@ -15,23 +15,23 @@ namespace ezp\persistence\content;
  */
 class ContentCreateStruct
 {
-	/**
-	 */
-	public $name;
-	/**
-	 */
-	public $type;
-	/**
-	 */
-	public $sectionId;
-	/**
-	 */
-	public $ownerId;
-	/**
-	 */
-	public $parentLocation;
-	/**
-	 */
-	public $field = array();
+    /**
+     */
+    public $name;
+    /**
+     */
+    public $type;
+    /**
+     */
+    public $sectionId;
+    /**
+     */
+    public $ownerId;
+    /**
+     */
+    public $parentLocation;
+    /**
+     */
+    public $field = array();
 }
 ?>

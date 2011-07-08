@@ -14,17 +14,17 @@ namespace ezp\persistence\content\criteria;
  */
 class MetaData 
 {
-	/**
-	 */
-	const STATE = 0;
-	/**
-	 */
-	const OWNER = 1;
-	/**
-	 */
-	const MODIFIED = 2;
-	/**
-	 */
-	const CREATED = 3;
+    /**
+     */
+    const STATE = 0;
+    /**
+     */
+    const OWNER = 1;
+    /**
+     */
+    const MODIFIED = 2;
+    /**
+     */
+    const CREATED = 3;
 }
 ?>

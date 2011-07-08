@@ -15,26 +15,26 @@ namespace ezp\persistence\content;
  */
 class Version
 {
-	/**
-	 */
-	public $versionNr;
-	/**
-	 */
-	public $modified;
-	/**
-	 */
-	public $creator;
-	/**
-	 */
-	public $created;
-	/**
-	 */
-	public $state;
-	/**
-	 */
-	public $unnamed_Content_;
-	/**
-	 */
-	public $field = array();
+    /**
+     */
+    public $versionNr;
+    /**
+     */
+    public $modified;
+    /**
+     */
+    public $creator;
+    /**
+     */
+    public $created;
+    /**
+     */
+    public $state;
+    /**
+     */
+    public $unnamed_Content_;
+    /**
+     */
+    public $field = array();
 }
 ?>

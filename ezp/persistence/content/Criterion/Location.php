@@ -14,8 +14,8 @@ namespace ezp\persistence\content\criteria;
  */
 class LocationListCriteria extends Criteria 
 {
-	/**
-	 */
-	public $nodeIdList;
+    /**
+     */
+    public $nodeIdList;
 }
 ?>

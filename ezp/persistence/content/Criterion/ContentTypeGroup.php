@@ -14,9 +14,9 @@ namespace ezp\persistence\content\criteria;
  */
 class ContentTypeGroupCriteria extends Criteria 
 {
-	/**
-	 */
-	public $groupId;
+    /**
+     */
+    public $groupId;
 }
 ?>
 

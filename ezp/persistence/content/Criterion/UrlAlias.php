@@ -14,8 +14,8 @@ namespace ezp\persistence\content\criteria;
  */
 class URLAliasCriteria extends Criteria 
 {
-	/**
-	 */
-	public $aliasList;
+    /**
+     */
+    public $aliasList;
 }
 ?>

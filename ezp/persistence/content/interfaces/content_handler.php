@@ -34,9 +34,9 @@ interface ContentHandler
      * @param values\ContentCreateStruct $content Content creation struct.
      * @return \ezp\persistence\content\Content Content value object
      */
-	public function create(\ezp\persistence\content\ContentCreateStruct $content);
+    public function create(\ezp\persistence\content\ContentCreateStruct $content);
 
-	/**
+    /**
      * @param int $contentId
      * @param int|bool $srcVersion
      * @return \ezp\persistence\content\Content
@@ -51,41 +51,41 @@ interface ContentHandler
      */
     public function load($id);
 
-	/**
+    /**
      * Returns one object satisfying the $criteria.
      *
-	 * @param Criteria $criteria
-	 * @param $limit
-	 * @param $sort
+     * @param Criteria $criteria
+     * @param $limit
+     * @param $sort
      * @return \ezp\persistence\content\Content Content value object.
-	 */
-	public function find(\ezp\content\Criteria\Criteria $criteria, $limit, $sort);
+     */
+    public function find(\ezp\content\Criteria\Criteria $criteria, $limit, $sort);
 
-	/**
+    /**
      * Returns an iterator containing all objects satisfying $criteria
      *
      * 
-	 * @param Criteria $criteria
-	 * @param $limit
-	 * @param $sort
+     * @param Criteria $criteria
+     * @param $limit
+     * @param $sort
      * @return mixed Collection of Content value objects
-	 */
-	public function findIterator(\ezp\content\Criteria\Criteria $criteria, $limit, $sort);
+     */
+    public function findIterator(\ezp\content\Criteria\Criteria $criteria, $limit, $sort);
 
-	/**
+    /**
      * Sets the state of object identified by $contentId and $version to $state.
      *
      * The $state can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED.
      *
-	 * @param int $contentId
-	 * @param int $state
-	 * @param int $version
+     * @param int $contentId
+     * @param int $state
+     * @param int $version
      * @see \ezp\content\Content
      * @return boolean
-	 */
-	public function setState($contentId, $state, $version);
+     */
+    public function setState($contentId, $state, $version);
 
-	/**
+    /**
      * Sets the object-state of object identified by $contentId, $stateGroup and $version to $state.
      *
      * The $state is the id of the state within one group.
@@ -99,7 +99,7 @@ interface ContentHandler
      */
     public function setObjectState($contentId, $stateGroup, $state, $version);
 
-	/**
+    /**
      * Updates a content object entity with data and identifier $content
      *
      * @param values\ContentUpdateStruct $content
@@ -107,51 +107,51 @@ interface ContentHandler
      */
     public function update(\ezp\persistence\content\ContentUpdateStruct $content);
 
-	/**
-	 * Deletes all versions and fields, all locations (subtree), and all relations.
+    /**
+     * Deletes all versions and fields, all locations (subtree), and all relations.
      *
-	 * @param int $contentId
+     * @param int $contentId
      * @return boolean
-	 */
-	public function delete($contentId);
+     */
+    public function delete($contentId);
 
-	/**
+    /**
      * Sends a content object to trash.
      *
      * This is a suspended state, trashed objects retain all of their data and
      * knowledge of locations, but they are not returned in regular content
      * queries anymore.
      *
-	 * @param int $contentId
+     * @param int $contentId
      * @return boolean
-	 */
-	public function trash($contentId);
+     */
+    public function trash($contentId);
 
-	/**
+    /**
      * Returns a trashed object to normal state.
      *
      * The affected content object is now again part of matching content queries.
      *
-	 * @param int $contentId
+     * @param int $contentId
      * @return boolean
-	 */
-	public function untrash($contentId);
+     */
+    public function untrash($contentId);
 
-	/**
+    /**
      * Return the versions for $contentId
      *
-	 * @param int $contentId
-	 * @return array
-	 */
-	public function listVersions($contentId);
+     * @param int $contentId
+     * @return array
+     */
+    public function listVersions($contentId);
 
-	/**
+    /**
      * Fetch a content value object containing the values of the translation for $languageCode.
      *
-	 * @param int $contentId
-	 * @param string $languageCode
-	 * @return \ezp\persistence\content\Content
-	 */
-	public function fetchTranslation($contentId, $languageCode);
+     * @param int $contentId
+     * @param string $languageCode
+     * @return \ezp\persistence\content\Content
+     */
+    public function fetchTranslation($contentId, $languageCode);
 }
 ?>

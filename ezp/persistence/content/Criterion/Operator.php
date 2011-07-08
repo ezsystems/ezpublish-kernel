@@ -14,17 +14,17 @@ namespace ezp\persistence\content\criteria;
  */
 class Operator 
 {
-	/**
-	 */
-	const EQUALS = 0;
-	/**
-	 */
-	const gT = 1;
-	/**
-	 */
-	const lT = 2;
-	/**
-	 */
-	const LIKE = 3;
+    /**
+     */
+    const EQUALS = 0;
+    /**
+     */
+    const gT = 1;
+    /**
+     */
+    const lT = 2;
+    /**
+     */
+    const LIKE = 3;
 }
 ?>

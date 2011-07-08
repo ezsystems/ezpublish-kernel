@@ -16,17 +16,17 @@ namespace ezp\persistence\content\type;
  */
 class TypeBase 
 {
-	/**
-	 */
-	public $identifier;
-	/**
-	 */
-	public $name;
-	/**
-	 */
-	public $description;
-	/**
-	 */
-	public $id;
+    /**
+     */
+    public $identifier;
+    /**
+     */
+    public $name;
+    /**
+     */
+    public $description;
+    /**
+     */
+    public $id;
 }
 ?>

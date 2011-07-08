@@ -16,80 +16,80 @@ namespace ezp\persistence\content\type\Interfaces;
  */
 interface Handler
 {
-	/**
-	 * @param Group $group
-	 * @return Group
-	 */
-	public function createGroup( \ezp\persistence\content\type\Group $group );
+    /**
+     * @param Group $group
+     * @return Group
+     */
+    public function createGroup( \ezp\persistence\content\type\Group $group );
 
-	/**
-	 * @param Group $group
-	 */
-	public function updateGroup( \ezp\persistence\content\type\Group $group );
+    /**
+     * @param Group $group
+     */
+    public function updateGroup( \ezp\persistence\content\type\Group $group );
 
-	/**
-	 * @param int $groupId
-	 */
-	public function deleteGroup( $groupId );
+    /**
+     * @param int $groupId
+     */
+    public function deleteGroup( $groupId );
 
-	/**
-	 * @return array
-	 */
-	public function loadAllGroups();
+    /**
+     * @return array
+     */
+    public function loadAllGroups();
 
-	/**
-	 * @param int $groupId
-	 * @return array
-	 */
-	public function loadContentTypes( $groupId );
+    /**
+     * @param int $groupId
+     * @return array
+     */
+    public function loadContentTypes( $groupId );
 
-	/**
-	 * @param int $contentTypeId
-	 * @param int $version
+    /**
+     * @param int $contentTypeId
+     * @param int $version
      * @todo Use constant for $version?
-	 */
-	public function load( $contentTypeId, $version = 1 );
+     */
+    public function load( $contentTypeId, $version = 1 );
 
-	/**
-	 * @param Type $contentType
-	 * @return Type
-	 */
-	public function create( \ezp\persistence\content\type\Type $contentType );
+    /**
+     * @param Type $contentType
+     * @return Type
+     */
+    public function create( \ezp\persistence\content\type\Type $contentType );
 
-	/**
-	 * @param Type $contentType
-	 */
-	public function update( \ezp\persistence\content\type\Type $contentType );
+    /**
+     * @param Type $contentType
+     */
+    public function update( \ezp\persistence\content\type\Type $contentType );
 
-	/**
-	 * @param int $contentTypeId
-	 */
-	public function delete( $contentTypeId );
+    /**
+     * @param int $contentTypeId
+     */
+    public function delete( $contentTypeId );
 
-	/**
-	 * @param int $userId
-	 * @param int $contentTypeId
-	 * @param int $version
-	 */
-	public function createVersion( $userId, $contentTypeId, $version );
+    /**
+     * @param int $userId
+     * @param int $contentTypeId
+     * @param int $version
+     */
+    public function createVersion( $userId, $contentTypeId, $version );
 
-	/**
-	 * @param int $userId
-	 * @param int $contentTypeId
-	 * @return Type
-	 */
-	public function copy( $userId, $contentTypeId );
+    /**
+     * @param int $userId
+     * @param int $contentTypeId
+     * @return Type
+     */
+    public function copy( $userId, $contentTypeId );
 
-	/**
-	 * @param int $groupId
-	 * @param int $contentTypeId
-	 */
-	public function unlink( $groupId, $contentTypeId );
+    /**
+     * @param int $groupId
+     * @param int $contentTypeId
+     */
+    public function unlink( $groupId, $contentTypeId );
 
-	/**
-	 * @param int $contentTypeId
-	 * @param int $groupId
-	 */
-	public function addGroup($contentTypeId, $groupId);
+    /**
+     * @param int $contentTypeId
+     * @param int $groupId
+     */
+    public function addGroup($contentTypeId, $groupId);
 }
 ?>

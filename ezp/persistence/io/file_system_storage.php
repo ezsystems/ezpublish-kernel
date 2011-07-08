@@ -16,51 +16,51 @@ namespace ezp\persistence\io;
  */
 class FileSystemStorage implements Interfaces\BinaryFileStorage
 {
-	/**
-	 */
-	public $contains;
+    /**
+     */
+    public $contains;
 
-	/**
-	 * @param string $fileIdentifier
-	 * @return boolean
-	 */
-	public function storeFile( $fileIdentifier )
+    /**
+     * @param string $fileIdentifier
+     * @return boolean
+     */
+    public function storeFile( $fileIdentifier )
     {
-		// Not yet implemented
-	}
+        // Not yet implemented
+    }
 
-	/**
-	 * @param string $fileIdentifier
-	 * @return FileReference
-	 */
-	public function getFile( $fileIdentifier )
+    /**
+     * @param string $fileIdentifier
+     * @return FileReference
+     */
+    public function getFile( $fileIdentifier )
     {
-		// Not yet implemented
-	}
+        // Not yet implemented
+    }
 
-	/**
-	 * @param string $fileIdentifier
-	 * @return FileChunk
-	 */
-	public function streamFile( $fileIdentifier )
+    /**
+     * @param string $fileIdentifier
+     * @return FileChunk
+     */
+    public function streamFile( $fileIdentifier )
     {
-		// Not yet implemented
-	}
+        // Not yet implemented
+    }
 
-	/**
-	 * @param string $fileIdentifier
-	 * @return boolean
-	 */
-	public function exists( $fileIdentifier )
+    /**
+     * @param string $fileIdentifier
+     * @return boolean
+     */
+    public function exists( $fileIdentifier )
     {
-		// Not yet implemented
-	}
+        // Not yet implemented
+    }
 
-	/**
-	 */
-	public function authenticate()
+    /**
+     */
+    public function authenticate()
     {
-		// Not yet implemented
-	}
+        // Not yet implemented
+    }
 }
 ?>

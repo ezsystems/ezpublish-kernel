@@ -14,11 +14,11 @@ namespace ezp\persistence\content\criteria;
  */
 class Criterion
 {
-	/**
-	 */
-	public $operator;
-	/**
-	 */
-	public $children = array();
+    /**
+     */
+    public $operator;
+    /**
+     */
+    public $children = array();
 }
 ?>

@@ -14,11 +14,11 @@ namespace ezp\persistence\content\criteria;
  */
 class PermissionCriteria extends Criteria 
 {
-	/**
-	 */
-	public $userId;
-	/**
-	 */
-	public $operation;
+    /**
+     */
+    public $userId;
+    /**
+     */
+    public $operation;
 }
 ?>

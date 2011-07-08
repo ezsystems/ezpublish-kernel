@@ -14,8 +14,8 @@ namespace ezp\persistence\content\criteria;
  */
 class SectionCriteria extends Criteria 
 {
-	/**
-	 */
-	public $sectionIdList;
+    /**
+     */
+    public $sectionIdList;
 }
 ?>

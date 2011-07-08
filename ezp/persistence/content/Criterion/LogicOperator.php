@@ -14,11 +14,11 @@ namespace ezp\persistence\content\criteria;
  */
 class LogicOperator 
 {
-	/**
-	 */
-	const l_AND = 0;
-	/**
-	 */
-	const l_OR = 1;
+    /**
+     */
+    const l_AND = 0;
+    /**
+     */
+    const l_OR = 1;
 }
 ?>

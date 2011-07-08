@@ -16,26 +16,26 @@ namespace ezp\persistence\content\type;
  */
 class Type extends ContentTypeBase
 {
-	/**
-	 */
-	public $remoteId;
-	/**
-	 */
-	public $urlAliasSchema;
-	/**
-	 */
-	public $nameSchema;
-	/**
-	 */
-	public $container;
-	/**
-	 */
-	public $initialLanguage;
-	/**
-	 */
-	public $unnamed_ContentTypeGroup_ = array();
-	/**
-	 */
-	public $fieldDefinition = array();
+    /**
+     */
+    public $remoteId;
+    /**
+     */
+    public $urlAliasSchema;
+    /**
+     */
+    public $nameSchema;
+    /**
+     */
+    public $container;
+    /**
+     */
+    public $initialLanguage;
+    /**
+     */
+    public $unnamed_ContentTypeGroup_ = array();
+    /**
+     */
+    public $fieldDefinition = array();
 }
 ?>

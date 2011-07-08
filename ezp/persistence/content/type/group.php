@@ -16,8 +16,8 @@ namespace ezp\persistence\content\type;
  */
 class Group extends ContentTypeBase
 {
-	/**
-	 */
-	public $unnamed_ContentType_ = array();
+    /**
+     */
+    public $unnamed_ContentType_ = array();
 }
 ?>

@@ -39,57 +39,57 @@ class RepositoryHandler implements \ezp\persistence\Interfaces\RepositoryHandler
     {
         $this->backend = new Backend();
     }
-	/**
-	 * @return \ezp\persistence\content\Interfaces\ContentHandler
-	 */
-	public function contentHandler()
+    /**
+     * @return \ezp\persistence\content\Interfaces\ContentHandler
+     */
+    public function contentHandler()
     {
         return $this->serviceHandler( '\ezp\persistence\tests\in_memory_engine\ContentHandler' );
     }
 
-	/**
-	 * @return \ezp\persistence\content\type\Interfaces\Handler
-	 */
-	public function contentTypeHandler()
+    /**
+     * @return \ezp\persistence\content\type\Interfaces\Handler
+     */
+    public function contentTypeHandler()
     {
         return $this->serviceHandler( '\ezp\persistence\tests\in_memory_engine\ContentTypeHandler' );
     }
 
-	/**
-	 * @return \ezp\persistence\content\Interfaces\LocationHandler
-	 */
-	public function locationHandler()
+    /**
+     * @return \ezp\persistence\content\Interfaces\LocationHandler
+     */
+    public function locationHandler()
     {
         return $this->serviceHandler( '\ezp\persistence\tests\in_memory_engine\LocationHandler' );
     }
 
-	/**
-	 * @return \ezp\persistence\user\Interfaces\UserHandler
-	 */
-	public function userHandler()
+    /**
+     * @return \ezp\persistence\user\Interfaces\UserHandler
+     */
+    public function userHandler()
     {
         return $this->serviceHandler( '\ezp\persistence\tests\in_memory_engine\UserHandler' );
     }
 
-	/**
-	 * @return \ezp\persistence\content\Interfaces\SectionHandler
-	 */
-	public function sectionHandler()
+    /**
+     * @return \ezp\persistence\content\Interfaces\SectionHandler
+     */
+    public function sectionHandler()
     {
         return $this->serviceHandler( '\ezp\persistence\tests\in_memory_engine\SectionHandler' );
     }
 
-	/**
-	 */
-	public function beginTransaction(){}
+    /**
+     */
+    public function beginTransaction(){}
 
-	/**
-	 */
-	public function commit(){}
+    /**
+     */
+    public function commit(){}
 
-	/**
-	 */
-	public function rollback(){}
+    /**
+     */
+    public function rollback(){}
 
      /**
      * Get/create instance of service handler objects

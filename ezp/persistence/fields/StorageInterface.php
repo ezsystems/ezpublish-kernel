@@ -15,49 +15,49 @@ namespace ezp\persistence\fields;
 interface StorageInterface
 {
 
-	/**
-	 * @return int
-	 */
-	public function typeHint();
+    /**
+     * @return int
+     */
+    public function typeHint();
 
-	/**
-	 * @param array $data
-	 * @param \ezp\persistence\content\Field $field
-	 */
-	public function setValue( array $data, \ezp\persistence\content\Field $field );
+    /**
+     * @param array $data
+     * @param \ezp\persistence\content\Field $field
+     */
+    public function setValue( array $data, \ezp\persistence\content\Field $field );
 
-	/**
-	 * @param int $filedId
-	 * @param $value
-	 * @return bool
-	 * 
-	 */
-	public function storeFieldData( $filedId, $value );
+    /**
+     * @param int $filedId
+     * @param $value
+     * @return bool
+     * 
+     */
+    public function storeFieldData( $filedId, $value );
 
-	/**
-	 * @param int $fieldId
-	 */
-	public function getFieldData( $fieldId );
+    /**
+     * @param int $fieldId
+     */
+    public function getFieldData( $fieldId );
 
-	/**
-	 * @param array $fieldId
-	 * @return bool
-	 */
-	public function deleteFieldData( array $fieldId );
+    /**
+     * @param array $fieldId
+     * @return bool
+     */
+    public function deleteFieldData( array $fieldId );
 
-	/**
-	 * @return bool
-	 */
-	public function hasFieldData();
+    /**
+     * @return bool
+     */
+    public function hasFieldData();
 
-	/**
-	 * @param int $fieldId
-	 */
-	public function copyFieldData( $fieldId );
+    /**
+     * @param int $fieldId
+     */
+    public function copyFieldData( $fieldId );
 
-	/**
-	 * @param int $fieldId
-	 */
-	public function getIndexData( $fieldId );
+    /**
+     * @param int $fieldId
+     */
+    public function getIndexData( $fieldId );
 }
 ?>

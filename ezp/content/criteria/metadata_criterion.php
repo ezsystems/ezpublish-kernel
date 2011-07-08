@@ -59,7 +59,7 @@ class MetadataCriteria extends Criteria implements CriteriaInterface
         $this->operator = self::OP_NOT_EQUALS;
     }
 
-	/**
+    /**
      * Adds a like condition
      * @param mixed $fieldValue Value to match
      */
@@ -70,7 +70,7 @@ class MetadataCriteria extends Criteria implements CriteriaInterface
         $this->operator = self::OP_LIKE;
     }
 
-	/**
+    /**
      * Adds a greater than condition (>)
      * @param mixed $fieldValue Value to match
      */
@@ -81,7 +81,7 @@ class MetadataCriteria extends Criteria implements CriteriaInterface
         $this->operator = self::OP_GREATER_THAN;
     }
 
-	/**
+    /**
      * Adds a greater than or equals condition (>=)
      * @param mixed $fieldValue Value to match
      */
@@ -92,7 +92,7 @@ class MetadataCriteria extends Criteria implements CriteriaInterface
         $this->operator = self::OP_GREATER_THAN_EQUALS;
     }
 
-	/**
+    /**
      * Adds a lower than condition (<)
      * @param mixed $fieldValue Value to match
      */
@@ -103,7 +103,7 @@ class MetadataCriteria extends Criteria implements CriteriaInterface
         $this->operator = self::OP_LOWER_THAN;
     }
 
-	/**
+    /**
      * Adds a lower than or equals condition (<=)
      * @param mixed $fieldValue Value to match
      */
@@ -114,7 +114,7 @@ class MetadataCriteria extends Criteria implements CriteriaInterface
         $this->operator = self::OP_LOWER_THAN_EQUALS;
     }
 
-	/**
+    /**
      * Adds a between condition
      * @param mixed $fieldValue Value to match
      */
@@ -125,7 +125,7 @@ class MetadataCriteria extends Criteria implements CriteriaInterface
         $this->operator = self::OP_BETWEEN;
     }
 
-	/**
+    /**
      * Adds a not between condition
      * @param mixed $fieldValue Value to match
      */
@@ -136,7 +136,7 @@ class MetadataCriteria extends Criteria implements CriteriaInterface
         $this->operator = self::OP_NOT_BETWEEN;
     }
 
-	/**
+    /**
      * Adds a IN condition
      * @param mixed $fieldValue Value to match
      */
@@ -147,7 +147,7 @@ class MetadataCriteria extends Criteria implements CriteriaInterface
         $this->operator = self::OP_IN;
     }
 
-	/**
+    /**
      * Adds a NOT IN condition
      * @param mixed $fieldValue Value to match
      */

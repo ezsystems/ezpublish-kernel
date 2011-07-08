@@ -14,8 +14,8 @@ namespace ezp\persistence\content\criteria;
  */
 class SubTreeCriteria extends Criteria 
 {
-	/**
-	 */
-	public $paths;
+    /**
+     */
+    public $paths;
 }
 ?>

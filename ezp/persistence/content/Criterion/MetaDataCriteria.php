@@ -14,9 +14,9 @@ namespace ezp\persistence\content\criteria;
  */
 class MetaDataCriteria extends Criteria
 {
-	/**
-	 */
-	public $metaData;
-	public $value;
+    /**
+     */
+    public $metaData;
+    public $value;
 }
 ?>

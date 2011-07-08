@@ -16,20 +16,20 @@ namespace ezp\persistence\io;
  */
 class BinaryFile
 {
-	/**
-	 */
-	private $fileName;
-	/**
-	 */
-	private $originalFilename;
-	/**
-	 */
-	private $contentType;
-	/**
-	 */
-	private $version;
-	/**
-	 */
-	public $contains;
+    /**
+     */
+    private $fileName;
+    /**
+     */
+    private $originalFilename;
+    /**
+     */
+    private $contentType;
+    /**
+     */
+    private $version;
+    /**
+     */
+    public $contains;
 }
 ?>

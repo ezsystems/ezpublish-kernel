@@ -15,24 +15,24 @@ namespace ezp\persistence\content;
  */
 class Field
 {
-	/**
-	 */
-	public $id;
-	/**
-	 */
-	public $type;
-	public $value;
-	/**
-	 */
-	public $language;
-	/**
-	 */
-	public $unnamed_ContentVersion_;
-	/**
-	 */
-	public $unnamed_ContentCreateStruct_;
-	/**
-	 */
-	public $unnamed_ContentUpdateStruct_;
+    /**
+     */
+    public $id;
+    /**
+     */
+    public $type;
+    public $value;
+    /**
+     */
+    public $language;
+    /**
+     */
+    public $unnamed_ContentVersion_;
+    /**
+     */
+    public $unnamed_ContentCreateStruct_;
+    /**
+     */
+    public $unnamed_ContentUpdateStruct_;
 }
 ?>

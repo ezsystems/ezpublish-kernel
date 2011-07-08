@@ -16,30 +16,30 @@ namespace ezp\persistence\content\type;
  */
 class Field extends TypeBase
 {
-	/**
-	 */
-	public $fieldGroup;
-	/**
-	 */
-	public $position;
-	/**
-	 */
-	public $fieldType;
-	/**
-	 */
-	public $translatable;
-	/**
-	 */
-	public $required;
-	/**
-	 */
-	public $infoCollector;
-	/**
-	 */
-	public $fieldTypeConstraints;
-	public $defaultValue;
-	/**
-	 */
-	public $unnamed_ContentType_;
+    /**
+     */
+    public $fieldGroup;
+    /**
+     */
+    public $position;
+    /**
+     */
+    public $fieldType;
+    /**
+     */
+    public $translatable;
+    /**
+     */
+    public $required;
+    /**
+     */
+    public $infoCollector;
+    /**
+     */
+    public $fieldTypeConstraints;
+    public $defaultValue;
+    /**
+     */
+    public $unnamed_ContentType_;
 }
 ?>

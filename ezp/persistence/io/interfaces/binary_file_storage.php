@@ -17,32 +17,32 @@ namespace ezp\persistence\io\Interfaces;
 interface BinaryFileStorage
 {
 
-	/**
-	 * @param string $fileIdentifier
-	 * @return boolean
-	 */
-	public function storeFile( $fileIdentifier );
+    /**
+     * @param string $fileIdentifier
+     * @return boolean
+     */
+    public function storeFile( $fileIdentifier );
 
-	/**
-	 * @param string $fileIdentifier
-	 * @return FileReference
-	 */
-	public function getFile( $fileIdentifier );
+    /**
+     * @param string $fileIdentifier
+     * @return FileReference
+     */
+    public function getFile( $fileIdentifier );
 
-	/**
-	 * @param string $fileIdentifier
-	 * @return FileChunk
-	 */
-	public function streamFile( $fileIdentifier );
+    /**
+     * @param string $fileIdentifier
+     * @return FileChunk
+     */
+    public function streamFile( $fileIdentifier );
 
-	/**
-	 * @param string $fileIdentifier
-	 * @return boolean
-	 */
-	public function exists( $fileIdentifier );
+    /**
+     * @param string $fileIdentifier
+     * @return boolean
+     */
+    public function exists( $fileIdentifier );
 
-	/**
-	 */
-	public function authenticate();
+    /**
+     */
+    public function authenticate();
 }
 ?>

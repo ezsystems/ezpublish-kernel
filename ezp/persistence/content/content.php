@@ -15,26 +15,26 @@ namespace ezp\persistence\content;
  */
 class Content
 {
-	/**
-	 */
-	public $name;
-	/**
-	 */
-	public $type;
-	/**
-	 */
-	public $sectionId;
-	/**
-	 */
-	public $ownerId;
-	/**
-	 */
-	public $id;
-	/**
-	 */
-	public $versionInfo = array();
-	/**
-	 */
-	public $location = array();
+    /**
+     */
+    public $name;
+    /**
+     */
+    public $type;
+    /**
+     */
+    public $sectionId;
+    /**
+     */
+    public $ownerId;
+    /**
+     */
+    public $id;
+    /**
+     */
+    public $versionInfo = array();
+    /**
+     */
+    public $location = array();
 }
 ?>

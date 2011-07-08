@@ -16,17 +16,17 @@ namespace ezp\persistence\content\type;
  */
 class ContentTypeBase extends TypeBase
 {
-	/**
-	 */
-	public $created;
-	/**
-	 */
-	public $modified;
-	/**
-	 */
-	public $creator;
-	/**
-	 */
-	public $modifier;
+    /**
+     */
+    public $created;
+    /**
+     */
+    public $modified;
+    /**
+     */
+    public $creator;
+    /**
+     */
+    public $modifier;
 }
 ?>

@@ -16,17 +16,17 @@ namespace ezp\persistence\user;
  */
 class Policy
 {
-	/**
-	 */
-	public $module;
-	/**
-	 */
-	public $moduleFunction;
-	/**
-	 */
-	public $limitations;
-	/**
-	 */
-	public $unnamed_Role_;
+    /**
+     */
+    public $module;
+    /**
+     */
+    public $moduleFunction;
+    /**
+     */
+    public $limitations;
+    /**
+     */
+    public $unnamed_Role_;
 }
 ?>

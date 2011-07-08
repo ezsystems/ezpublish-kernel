@@ -15,20 +15,20 @@ namespace ezp\persistence\content;
  */
 class ContentUpdateStruct
 {
-	/**
-	 */
-	public $sectionId;
-	/**
-	 */
-	public $userId;
-	/**
-	 */
-	public $newParents;
-	/**
-	 */
-	public $removeLocations;
-	/**
-	 */
-	public $fields = array();
+    /**
+     */
+    public $sectionId;
+    /**
+     */
+    public $userId;
+    /**
+     */
+    public $newParents;
+    /**
+     */
+    public $removeLocations;
+    /**
+     */
+    public $fields = array();
 }
 ?>

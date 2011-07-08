@@ -15,14 +15,14 @@ namespace ezp\persistence\content;
  */
 class Section
 {
-	/**
-	 */
-	public $id;
-	/**
-	 */
-	public $name;
-	/**
-	 */
-	public $identifier;
+    /**
+     */
+    public $id;
+    /**
+     */
+    public $name;
+    /**
+     */
+    public $identifier;
 }
 ?>
