@@ -155,7 +155,6 @@ class Translation extends \ezp\base\AbstractModel
             $version->locale = $this->locale;
         }
         $this->versions[] = $version;
-        $this->content->versions[] = $version;
         return $version;
     }
 }

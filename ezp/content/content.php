@@ -19,7 +19,7 @@
  * @property-read integer status
  *                The Content's status, as one of the ezp\content::STATUS_* constants
  * @property-read Version[] $versions
- *                   Iterable collection of versions for content, indexed by version number. Array-accessible :
+ *                   Iterable collection of versions for content. Array-accessible :;
  *                   <code>
  *                   $myFirstVersion = $content->versions[1];
  *                   $myThirdVersion = $content->versions[3];
@@ -77,7 +77,6 @@ class Content extends \ezp\base\AbstractModel
         'translations' => true,
         'locations' => true,
         'contentType' => false,
-        'versions' => false,
     );
 
     /**
@@ -89,6 +88,7 @@ class Content extends \ezp\base\AbstractModel
         'sectionId' => false,
         'fields' => true,
         'contentType' => false,
+        'versions' => false,
     );
 
     /**
@@ -102,7 +102,6 @@ class Content extends \ezp\base\AbstractModel
         $this->creationDate = new \DateTime();
         $this->mainLocale = $mainLocale;
         $this->alwaysAvailable = false;
-        $this->versions = new \ezp\base\TypeCollection( '\ezp\content\Version' );
         $this->locations = new \ezp\base\TypeCollection( '\ezp\content\Location' );
         $this->relations = new \ezp\base\TypeCollection( '\ezp\content\Content' );
         $this->reversedRelations = new \ezp\base\TypeCollection( '\ezp\content\Content' );
@@ -160,13 +159,6 @@ class Content extends \ezp\base\AbstractModel
      * @var int
      */
     protected $status = self::STATUS_DRAFT;
-
-    /**
-     * Collection of content versions.
-     *
-     * @var Version[]
-     */
-    protected $versions;
 
     /**
      * Locations collection
@@ -232,6 +224,22 @@ class Content extends \ezp\base\AbstractModel
     protected function getMainLocation()
     {
         return $this->locations[0];
+    }
+
+    /**
+     * Return a collection containing all available versions of the Content
+     * 
+     * @return Version[]
+     */
+    protected function getVersions()
+    {
+        $resultArray = array();
+        foreach( $this->translations as $tr )
+        {
+            $versionsArray = $tr->versions->getArrayCopy();
+            $resultArray = array_merge( $resultArray, $versionsArray );
+        }
+        return new \ezp\base\TypeCollection( '\ezp\content\Version', $resultArray );
     }
 
     /**
@@ -343,7 +351,6 @@ class Content extends \ezp\base\AbstractModel
             $newVersion = new Version( $this, $locale );
         }
         $tr->versions[] = $newVersion;
-        $this->versions[] = $newVersion;
         return $tr;
     }
 
