@@ -71,6 +71,36 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testContentRemoveUnexistingTranslation()
+    {
+        $content = new Content( $this->contentType, $this->localeEN );
+        $content->removeTranslation( $this->localeFR );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testContentRemoveMainLocaleTranslation()
+    {
+        $content = new Content( $this->contentType, $this->localeEN );
+        $content->removeTranslation( $this->localeEN );
+    }
+
+    /**
+     * Test that Content::removeTranslation() really removes the Translation
+     * object
+     */
+    public function testContentRemoveTranslation()
+    {
+        $content = new Content( $this->contentType, $this->localeEN );
+        $content->addTranslation( $this->localeFR );
+        $content->removeTranslation( $this->localeFR );
+        self::assertEquals( count( $content->translations ), 1 );
+    }
+
+    /**
      * Test Content::addTranslation() behaviour:
      * - new Translation has the right locale
      * - new Translation has one version

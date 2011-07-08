@@ -353,6 +353,30 @@ class Content extends \ezp\Base\AbstractModel
         return $tr;
     }
 
+
+    /**
+     * Remove the translation in $locale
+     *
+     * @param \ezp\Base\Locale $locale
+     * @throw \InvalidArgumentException if the main locale is the one in
+     *          argument or if there's not translation
+     *          in this locale
+     */
+    public function removeTranslation( \ezp\Base\Locale $locale )
+    {
+        if ( $locale->code === $this->mainLocale->code )
+        {
+            throw new \InvalidArgumentException( "Transation {$locale->code} is the main locale of this Content so it cannot be removed" );
+        }
+        if ( !isset( $this->translations[$locale->code] ) )
+        {
+            throw new \InvalidArgumentException( "Transation {$locale->code} does not exist so it cannot be removed" );
+        }
+        unset( $this->translations[$locale->code] );
+        // @todo ? remove on each versions in $this->translations[$locale->code] 
+        //foreach( $this->translations[$locale->code]->versions as $version )
+    }
+
     /**
      * Adds a new location to content under an existing one.
      *
