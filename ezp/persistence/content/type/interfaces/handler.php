@@ -14,7 +14,7 @@ namespace ezp\persistence\content\type;
  * @package ezp
  * @subpackage persistence_content_type
  */
-interface HandlerInterface extends \ezp\persistence\ServiceHandlerInterface
+interface HandlerInterface
 {
 	/**
 	 * @param Group $group

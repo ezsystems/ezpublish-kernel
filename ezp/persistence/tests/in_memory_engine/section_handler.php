@@ -22,23 +22,22 @@ namespace ezp\persistence\tests\in_memory_engine;
 class SectionHandler implements \ezp\persistence\content\SectionHandlerInterface
 {
     /**
-     * @var \ezp\persistence\tests\in_memory_engine\RepositoryHandler
+     * @var RepositoryHandler
      */
     protected $handler;
 
     /**
-     * @var \ezp\persistence\tests\in_memory_engine\Backend
+     * @var Backend
      */
     protected $backend;
 
     /**
-     * Setups current handler instance with reference to storage engine object that created it.
+     * Setups current handler instance with reference to RepositoryHandler object that created it.
      *
-     * @param \ezp\persistence\RepositoryHandlerInterface $handler
-     * @param \ezp\persistence\tests\in_memory_engine\Backend $backend Optional, use this argument if storage engine needs to pass backend object to handlers
-     *                        to be able to handle operations.
+     * @param RepositoryHandler $handler
+     * @param Backend $backend The storage engine backend
      */
-    public function __construct( \ezp\persistence\RepositoryHandlerInterface $handler, $backend = null )
+    public function __construct( RepositoryHandler $handler, Backend $backend )
     {
         $this->handler = $handler;
         $this->backend = $backend;

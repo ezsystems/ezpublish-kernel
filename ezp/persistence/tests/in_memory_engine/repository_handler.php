@@ -21,7 +21,7 @@ class RepositoryHandler implements \ezp\persistence\RepositoryHandlerInterface
     /**
      * Instances of handlers
      *
-     * @var \ezp\persistence\ServiceHandlerInterface[]
+     * @var object[]
      */
     protected $serviceHandlers = array();
 
@@ -95,7 +95,7 @@ class RepositoryHandler implements \ezp\persistence\RepositoryHandlerInterface
      * Get/create instance of service handler objects
      *
      * @param string $className
-     * @return \ezp\persistence\ServiceHandlerInterface
+     * @return object
      * @throws RuntimeException
      */
     protected function serviceHandler( $className )

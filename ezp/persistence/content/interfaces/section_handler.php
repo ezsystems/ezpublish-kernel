@@ -14,7 +14,7 @@ namespace ezp\persistence\content;
  * @package ezp
  * @subpackage persistence_content
  */
-interface SectionHandlerInterface extends \ezp\persistence\ServiceHandlerInterface
+interface SectionHandlerInterface
 {
 	/**
 	 * @param string $name
