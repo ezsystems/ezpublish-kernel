@@ -12,7 +12,7 @@ namespace ezp\persistence\content\criteria;
 /**
  * @package ezp.persistence.content.criteria
  */
-class Criterion extends Criteria
+class Criterion
 {
 	/**
 	 */
@@ -20,8 +20,5 @@ class Criterion extends Criteria
 	/**
 	 */
 	public $children = array();
-	/**
-	 */
-	public $parent_17;
 }
 ?>
