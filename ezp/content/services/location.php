@@ -16,6 +16,7 @@ namespace ezp\content\Services;
  * @package ezp
  * @subpackage content
  */
+use \ezp\base\Exception;
 class Location extends \ezp\base\AbstractService
 {
 
@@ -35,7 +36,7 @@ class Location extends \ezp\base\AbstractService
      * Loads a location object from its $locationId
      * @param integer $locationId
      * @return \ezp\content\Location
-     * @throws \ezp\content\LocationNotFoundException if no location is available with $locationId
+     * @throws Exception\NotFound if no location is available with $locationId
      */
     public function load( $locationId )
     {
@@ -53,7 +54,7 @@ class Location extends \ezp\base\AbstractService
      * 
      * @param \ezp\content\Location $location
      * @return \ezp\content\Location the newly created Location
-     * @throws \ezp\content\ValidationException If a validation problem has been found for $content
+     * @throws Exception\Validation If a validation problem has been found for $content
      */
     public function create( \ezp\content\Location $location )
     {
@@ -66,7 +67,7 @@ class Location extends \ezp\base\AbstractService
      * 
      * @param \ezp\content\Location $location
      * @return \ezp\content\Location the updated Location
-     * @throws \ezp\content\ValidationException If a validation problem has been found for $content
+     * @throws Exception\Validation If a validation problem has been found for $content
      */
     public function update( \ezp\content\Location $location )
     {
@@ -80,7 +81,7 @@ class Location extends \ezp\base\AbstractService
      * @param \ezp\content\Location $location1
      * @param \ezp\content\Location $location2
      * @return void
-     * @throws \ezp\content\ValidationException If a validation problem has been found
+     * @throws Exception\Validation If a validation problem has been found
      */
     public function swap( \ezp\content\Location $location1, \ezp\content\Location $location2 )
     {
@@ -92,7 +93,7 @@ class Location extends \ezp\base\AbstractService
      * 
      * @param \ezp\content\Location $location
      * @return void
-     * @throws \ezp\content\ValidationException If a validation problem has been found
+     * @throws Exception\Validation If a validation problem has been found
      */
     public function hide( \ezp\content\Location $location )
     {
@@ -107,7 +108,7 @@ class Location extends \ezp\base\AbstractService
      * 
      * @param \ezp\content\Location $location
      * @return void
-     * @throws \ezp\content\ValidationException If a validation problem has been found;
+     * @throws Exception\Validation If a validation problem has been found;
      */
     public function unhide( \ezp\content\Location $location )
     {
@@ -124,7 +125,7 @@ class Location extends \ezp\base\AbstractService
      * @param \ezp\content\Location $location
      * @param \ezp\content\Location $newParent
      * @return void
-     * @throws \ezp\content\ValidationException If a validation problem has been found;
+     * @throws Exception\Validation If a validation problem has been found;
      */
     public function move( \ezp\content\Location $location, \ezp\content\Location $newParent )
     {
@@ -139,7 +140,7 @@ class Location extends \ezp\base\AbstractService
      * 
      * @param \ezp\content\Location $location
      * @return void
-     * @throws \ezp\content\ValidationException If a validation problem has been found;
+     * @throws Exception\Validation If a validation problem has been found;
      */
     public function delete( \ezp\content\Location $location )
     {
@@ -160,7 +161,7 @@ class Location extends \ezp\base\AbstractService
      * @param \ezp\content\Location $startingPoint
      * @param \ezp\content\Section $section
      * @return void
-     * @throws \ezp\content\ValidationException If a validation problem has been found;
+     * @throws Exception\Validation If a validation problem has been found;
      */
     public function assignSection( \ezp\content\Location $startingPoint, \ezp\content\Section $section )
     {

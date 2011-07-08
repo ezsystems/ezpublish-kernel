@@ -44,7 +44,7 @@ class Proxy implements Interfaces\Proxy
      * @param Repository $repository
      * @param string $type The type of object this Proxy object represent
      * @param int $id Primary id
-     * @throws \InvalidArgumentException If $id is not a int value above zero.
+     * @throws Exception\InvalidArgumentType If $id is not a int value above zero.
      */
     public function __construct( Repository $repository, $type, $id )
     {
@@ -52,7 +52,7 @@ class Proxy implements Interfaces\Proxy
         $this->type = $type;
         $this->id = (int) $id;
         if ( $this->id === 0 )
-            throw new \InvalidArgumentException( "Id parameter needs to be a valid integer above 0!" );
+            throw new Exception\InvalidArgumentType( 'id', 'int' );
     }
 
     /**
@@ -68,7 +68,7 @@ class Proxy implements Interfaces\Proxy
     /**
      * Provides access to id property
      *
-     * @throws \InvalidArgumentException
+     * @throws Exception\PropertyNotFound
      * @param  string $name
      * @return int
      */
@@ -76,6 +76,6 @@ class Proxy implements Interfaces\Proxy
     {
         if ( $name === 'id' )
             return $this->id;
-        throw new \InvalidArgumentException( "{$name} is not a valid property on Proxy class" );
+        throw new Exception\PropertyNotFound( $name );
     }
 }

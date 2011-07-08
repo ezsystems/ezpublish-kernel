@@ -18,40 +18,40 @@ namespace ezp\base;
 class ReadOnlyCollection extends \ArrayObject implements Interfaces\Collection
 {
     /**
-     * Set value on a offset in collection, read only collection so throws exception.
+     * Overloads offsetSet() to do exception about being read only.
      *
      * @internal
-     * @throws \InvalidArgumentException This collection is readonly
+     * @throws Exception\ReadOnly
      * @param string|int $offset
      * @param mixed $value
      */
     public function offsetSet( $offset, $value )
     {
-        throw new \InvalidArgumentException( "This collection is readonly and offset:{$offset} can not be Set" );
+        throw new Exception\ReadOnly( 'Collection' );
     }
 
     /**
-     * Unset value on a offset in collection
+     * Overloads offsetUnset() to do exception about being read only.
      *
      * @internal
-     * @throws \InvalidArgumentException This collection is readonly
+     * @throws Exception\ReadOnly
      * @param string|int $offset
      */
     public function offsetUnset( $offset )
     {
-        throw new \InvalidArgumentException( "This collection is readonly and offset:{$offset} can not be Unset" );
+        throw new Exception\ReadOnly( 'Collection' );
     }
 
     /**
      * Overloads exchangeArray() to do exception about being read only.
      *
-     * @throws \InvalidArgumentException
+     * @throws Exception\ReadOnly
      * @param array $input
      * @return array
      */
     public function exchangeArray( $input )
     {
-        throw new \InvalidArgumentException( "This collection is readonly and array can not be exchanged" );
+        throw new Exception\ReadOnly( 'Collection' );
     }
 }
 

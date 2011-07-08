@@ -70,7 +70,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals( 5, count( $this->collection ) );
     }
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \ezp\base\Exception\InvalidArgumentType
      */
     public function testSetInvalid()
     {
@@ -78,7 +78,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \ezp\base\Exception\InvalidArgumentType
      */
     public function testSetAppendInvalid()
     {
@@ -86,7 +86,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \ezp\base\Exception\InvalidArgumentType
      */
     public function testAppendInvalid()
     {
@@ -94,7 +94,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \ezp\base\Exception\InvalidArgumentType
      */
     public function testExchangeArray()
     {

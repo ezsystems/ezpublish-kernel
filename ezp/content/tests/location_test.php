@@ -35,7 +35,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \ezp\base\Exception\InvalidArgumentType
      */
     public function testChildrenWrongClass()
     {

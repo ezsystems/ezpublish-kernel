@@ -17,15 +17,15 @@ namespace ezp\content\Services;
  * @package ezp
  * @subpackage content_Services
  */
+use \ezp\base\Exception;
 class Content extends \ezp\base\AbstractService
 {
     /**
      * Creates the new $content in the content repository
      *
      * @param \ezp\content\Content $content
-     *
      * @return \ezp\content\Content The newly created content
-     * @throws \ezp\content\ValidationException If a validation problem has been found for $content
+     * @throws Exception\Validation If a validation problem has been found for $content
      */
     public function create( \ezp\content\Content $content )
     {
@@ -36,9 +36,10 @@ class Content extends \ezp\base\AbstractService
 
     /**
      * Updates $content in the content repository
+     *
      * @param \ezp\content\Content $content
-     * @return $content
-     * @throws \ezp\content\ValidationException If a validation problem has been found for $content
+     * @return \ezp\content\Content
+     * @throws Exception\Validation If a validation problem has been found for $content
      */
     public function update( \ezp\content\Content $content )
     {
@@ -51,13 +52,13 @@ class Content extends \ezp\base\AbstractService
      * Loads a content from its id ($contentId)
      * @param int $contentId
      * @return \ezp\content\Content
-     * @throws \ezp\content\ContentNotFoundException if content could not be found
+     * @throws Exception\NotFound if content could not be found
      */
     public function load( $contentId )
     {
         $content = $this->handler->contentHandler()->load( $contentId );
         if ( !$content )
-            throw new \ezp\content\ContentNotFoundException( $contentId );
+            throw new Exception\NotFound( 'Content', $contentId );
         return $content;
     }
 

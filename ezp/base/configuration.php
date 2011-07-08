@@ -372,13 +372,13 @@ class Configuration extends AbstractOverride
      * @param array $sourceFiles ByRef value or source files that has been/is going to be parsed
      *                           files you pass in will not be checked if they exists.
      * @return array Data structure for parsed ini files
-     * @throws \LogicException If no parser have been defined
+     * @throws Exception\BadConfiguration If no parser have been defined
      */
     public static function parse( $moduleName, array $configurationPaths, array &$sourceFiles )
     {
         if ( empty( self::$globalConfigurationData['base']['configuration']['parsers'] ) )
         {
-            throw new \LogicException( 'Could not parse configuration files, not parsers defined in base\[configuration]\parsers' );
+            throw new Exception\BadConfiguration( 'base\[configuration]\parsers', 'Could not parse configuration files' );
         }
         $parsers = self::$globalConfigurationData['base']['configuration']['parsers'];
         foreach( $configurationPaths as $scopeArray )

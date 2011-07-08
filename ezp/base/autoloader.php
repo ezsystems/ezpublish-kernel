@@ -9,6 +9,8 @@
  * @subpackage base
  */
 
+namespace ezp\base;
+
 /**
  * Provides the native autoload functionality for eZ Publish
  *
@@ -20,7 +22,6 @@
  * @subpackage base
  * @uses \ezcPhpGenerator To generate cache files.
  */
-namespace ezp\base;
 class Autoloader
 {
     /**

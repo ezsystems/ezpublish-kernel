@@ -9,11 +9,14 @@
  * @subpackage base
  */
 
-/**
- * Abstract base class for Content namespace
- * @access private
- */
 namespace ezp\base;
+
+/**
+ * Abstract model class for Domain objects
+ *
+ * @package ezp
+ * @subpackage base
+ */
 abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
 {
     /**
@@ -123,7 +126,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
      *
      * @param string $property Property name
      * @return mixed
-     * @throws \ezcBasePropertyNotFoundException If $property cannot be found
+     * @throws Exception\PropertyNotFound If $property cannot be found
      */
     public function __get( $property )
     {
@@ -138,8 +141,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
             return $this->$method();
         }
 
-        throw new \InvalidArgumentException( "'{$property}' is not a valid property on class: " . get_class( $this ) );
-        //throw new \ezcBasePropertyNotFoundException( $property );
+        throw new Exception\PropertyNotFound( $property, get_class( $this ) );
     }
 
     /**
@@ -149,8 +151,8 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
      *
      * @param string $property
      * @param mixed $value
-     * @throws \ezcBasePropertyNotFoundException If $property cannot be found
-     * @throws \ezcBasePropertyPermissionException When trying to set a value to a read-only property
+     * @throws Exception\PropertyNotFound If $property cannot be found
+     * @throws Exception\PropertyPermission When trying to set a value to a read-only property
      */
     public function __set( $property, $value )
     {
@@ -159,18 +161,14 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
             $method = "set{$property}";
             if ( method_exists( $this, $method ) )
             {
-                $this->$method( $value );
-            }
-            else
-            {
-                throw new \ezcBasePropertyPermissionException( $property, \ezcBasePropertyPermissionException::READ );
+                return $this->$method( $value );
             }
         }
-        else
+        else if ( !isset( $this->readableProperties[$property] ) )
         {
-            throw new \InvalidArgumentException( "'{$property}' is not a valid property on class: " . get_class( $this ) );
-            //throw new \ezcBasePropertyNotFoundException( $property );
+            throw new Exception\PropertyNotFound( $property, get_class( $this ) );
         }
+        throw new Exception\PropertyPermission( $property, Exception\PropertyPermission::READ, get_class( $this ) );
     }
 
     /**
@@ -214,7 +212,6 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
     /**
      * Set properties with hash, name is same as used in ezc Persistent
      *
-     * @throws \InvalidArgumentException When trying to set invalid properties on this object
      * @param array $properties
      * @return AbstractModel Return $this
      */

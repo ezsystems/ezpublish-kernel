@@ -17,6 +17,7 @@ namespace ezp\content\Services;
  * @package ezp
  * @subpackage content
  */
+use \ezp\base\Exception;
 class ContentType extends \ezp\base\AbstractService
 {
     /**
@@ -24,13 +25,13 @@ class ContentType extends \ezp\base\AbstractService
      *
      * @param int $contentTypeId
      * @return \ezp\content\type\Type
-     * @throws \ezp\content\ContentNotFoundException
+     * @throws Exception\NotFound
      */
     public function load( $contentTypeId )
     {
         $contentType = $this->handler->contentTypeHandler()->load( $contentTypeId );
         if ( !$contentType )
-            throw new \ezp\content\ContentNotFoundException( $contentTypeId, 'type\Type' );
+            throw new Exception\NotFound( 'Content\Type', $contentTypeId );
         return $contentType;
     }
 
@@ -39,13 +40,13 @@ class ContentType extends \ezp\base\AbstractService
      *
      * @param string $identifier
      * @return \ezp\content\type\Type
-     * @throws \ezp\content\ContentNotFoundException
+     * @throws Exception\NotFound
      */
     public function loadByIdentifier( $identifier )
     {
         $contentTypes = $this->handler->contentTypeHandler()->loadByIdentifier( $identifier );
         if ( !$contentTypes )
-            throw new \ezp\content\ContentNotFoundException( $identifier, 'type\Type', 'identifier' );
+            throw new Exception\NotFound( 'Content\Type', $identifier );
         return $contentTypes[0];
     }
 }

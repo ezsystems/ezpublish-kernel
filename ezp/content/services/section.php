@@ -17,6 +17,7 @@ namespace ezp\content\Services;
  * @package ezp
  * @subpackage content
  */
+use \ezp\base\Exception;
 class Section extends \ezp\base\AbstractService
 {
     /**
@@ -24,7 +25,7 @@ class Section extends \ezp\base\AbstractService
      * 
      * @param \ezp\content\Section $section
      * @return \ezp\content\Section The newly create section
-     * @throws \ezp\content\ValidationException If a validation problem has been found for $section
+     * @throws Exception\Validation If a validation problem has been found for $section
      */
     public function create( \ezp\content\Section $section )
     {
@@ -35,7 +36,7 @@ class Section extends \ezp\base\AbstractService
      *
      * @param \ezp\content\Section $section
      * @return \ezp\content\Section
-     * @throws \ezp\content\ValidationException If a validation problem has been found for $section
+     * @throws Exception\Validation If a validation problem has been found for $section
      */
     public function update( \ezp\content\Section $section )
     {
@@ -46,7 +47,7 @@ class Section extends \ezp\base\AbstractService
      * 
      * @param int $sectionId 
      * @return \ezp\content\Section
-     * @throws \ezp\content\SectionNotFoundException if section could not be found
+     * @throws Exception\NotFound if section could not be found
      */
     public function load( $sectionId )
     {
@@ -57,7 +58,7 @@ class Section extends \ezp\base\AbstractService
      * 
      * @param string $sectionIdentifier 
      * @return \ezp\content\Section
-     * @throws \ezp\content\SectionNotFoundException if section could not be found
+     * @throws Exception\NotFound if section could not be found
      */
     public function loadByIdentifier( $sectionIdentifier )
     {
@@ -92,7 +93,7 @@ class Section extends \ezp\base\AbstractService
      * 
      * @param \ezp\content\Section $section
      * @return void
-     * @throws \ezp\content\ValidationException
+     * @throws Exception\Validation
      *         if section can not be deleted
      *         because it is still assigned to some contents.
      */
@@ -100,7 +101,7 @@ class Section extends \ezp\base\AbstractService
     {
         if ( $this->countAssignedContents( $section ) > 0 )
         {
-            throw new \ezp\content\ValidationException( 'This section is assigned to some contents' );
+            throw new Exception\Validation( 'This section is assigned to some contents' );
         }
         // do the removal
     }

@@ -28,7 +28,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
      *
      * A type strict collection that throws exception if type is wrong when appended to.
      *
-     * @throws \InvalidArgumentException If elements contains item of wrong type
+     * @throws Exception\InvalidArgumentType If elements contains item of wrong type
      * @param string $type
      * @param array $elements
      */
@@ -38,8 +38,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
         foreach ( $elements as $item )
         {
             if ( !$item instanceof $type )
-                throw new \InvalidArgumentException( "This collection only accepts '{$type}', '" .
-                                                     ( is_object( $item ) ? get_class( $item ): gettype( $item ) ) . '\' given.' );
+                throw new Exception\InvalidArgumentType( 'elements', $type, $item );
         }
         parent::__construct( $elements );
     }
@@ -48,7 +47,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
      * Overrides offsetSet to check type and allow if correct
      *
      * @internal
-     * @throws \InvalidArgumentException On wrong type
+     * @throws Exception\InvalidArgumentType On wrong type
      * @param string|int $offset
      * @param mixed $value
      */
@@ -56,8 +55,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
     {
         // throw if wrong type
         if ( !$value instanceof $this->type )
-            throw new \InvalidArgumentException( "This collection only accepts '{$this->type}', '" .
-                                                     ( is_object( $value ) ? get_class( $value ): gettype( $value ) ) . '\' given.' );
+            throw new Exception\InvalidArgumentType( 'value', $this->type, $value );
 
         // stop if value is already in array
         if ( in_array( $value, $this->getArrayCopy(), true ) )
@@ -78,8 +76,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
         foreach ( $input as $item )
         {
             if ( !$item instanceof $this->type )
-                throw new \InvalidArgumentException( "This collection only accepts '{$this->type}', '" .
-                                                     ( is_object( $item ) ? get_class( $item ): gettype( $item ) ) . '\' given.' );
+                throw new Exception\InvalidArgumentType( 'input', $this->type, $item );
         }
         return parent::exchangeArray( $input );
     }

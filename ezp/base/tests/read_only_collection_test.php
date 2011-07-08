@@ -65,7 +65,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \ezp\base\Exception\ReadOnly
      */
     public function testSetInvalid()
     {
@@ -73,7 +73,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \ezp\base\Exception\ReadOnly
      */
     public function testSetAppendInvalid()
     {
@@ -81,7 +81,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException InvalidArgumentException
+     * @expectedException \ezp\base\Exception\ReadOnly
      */
     public function testUnSet()
     {

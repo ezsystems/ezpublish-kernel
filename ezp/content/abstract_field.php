@@ -8,10 +8,12 @@
  * @subpackage content
  */
 
+namespace ezp\content;
+
 /**
  * Abstract field class, used for content field and content type field
  */
-namespace ezp\content;
+use \ezp\base\Exception;
 abstract class AbstractField extends \ezp\base\AbstractModel implements \ezp\base\Interfaces\Observer
 {
     /**
@@ -22,7 +24,8 @@ abstract class AbstractField extends \ezp\base\AbstractModel implements \ezp\bas
     /**
      * Initialize and return field type
      *
-     * @throws \RuntimeException If definition of AbstractFieldType is wrong
+     * @throws Exception\BadConfiguration If configuration for field type is missing.
+     * @throws Exception\MissingClass If field class is missing.
      * @return AbstractFieldType
      */
     protected function getType()
@@ -31,11 +34,11 @@ abstract class AbstractField extends \ezp\base\AbstractModel implements \ezp\bas
            return $this->type;
 
         $list = $this->getTypeList();
-        if ( !isset( $list[ $this->fieldTypeString ] ) )
-            throw new \RuntimeException( "Field type value '{$this->fieldTypeString}' is not configured in system.ini" );
+        if ( !isset( $list[$this->fieldTypeString] ) )
+            throw new Exception\BadConfiguration( 'content.ini[fields]', "could not load {$this->fieldTypeString}");
 
-        if ( !class_exists( $list[ $this->fieldTypeString ] ) )
-            throw new \RuntimeException( "Field type value class '{$list[$this->fieldTypeString]}' does not exist" );
+        if ( !class_exists( $list[$this->fieldTypeString] ) )
+            throw new Exception\MissingClass(  $list[$this->fieldTypeString], 'field type' );
 
         $className = $list[ $this->fieldTypeString ];
         $this->type = $this->initType( $className );
