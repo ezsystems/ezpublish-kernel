@@ -134,12 +134,20 @@ class Translation extends \ezp\base\AbstractModel
 
     /**
      * Create a new Version in the locale referenced by the translation
-     *
+     * 
+     * @param Version $base
      * @return Version
      */
-    public function createNewVersion()
+    public function createNewVersion( Version $base = null )
     {
-        $version = new Version( $this->content, $this->locale );
+        if ( $base === null )
+        {
+            $version = new Version( $this->content, $this->locale );
+        }
+        else
+        {
+            $version = clone $base;
+        }
         $this->versions[] = $version;
         $this->content->versions[] = $version;
         return $version;
