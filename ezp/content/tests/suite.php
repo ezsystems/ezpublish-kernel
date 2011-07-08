@@ -27,6 +27,7 @@ class Suite extends \PHPUnit_Framework_TestSuite
         $this->addTestSuite( __NAMESPACE__ . '\\LocationTest' );
         $this->addTestSuite( __NAMESPACE__ . '\\ContentTest'  );
         // $this->addTestSuite( __NAMESPACE__ . '\\CriteriaCollectionTest'  );
+        $this->addTestSuite( __NAMESPACE__ . '\\TranslationTest'  );
     }
 
     /**

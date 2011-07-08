@@ -17,10 +17,13 @@ namespace ezp\content\tests;
  * @package ezp
  * @subpackage content_tests
  */
-use \ezp\content\Content, \ezp\content\Location;
+use \ezp\content\Content, \ezp\content\Location, \ezp\content\Translation;
 class ContentTest extends \PHPUnit_Framework_TestCase
 {
     protected $contentType;
+
+    protected $localeFR;
+    protected $localeEN;
 
     public function __construct()
     {
@@ -40,6 +43,46 @@ class ContentTest extends \PHPUnit_Framework_TestCase
             $field->fieldTypeString = $fieldTypeString;
             $this->contentType->fields[] = $field;
         }
+
+        $this->localeFR = new \ezp\base\Locale( 'fre-FR' );
+        $this->localeEN = new \ezp\base\Locale( 'eng-GB' );
+    }
+
+    /**
+     * Test the default Translation internally created with a Content is created
+     */
+    public function testDefaultContentTranslation()
+    {
+        $content = new Content( $this->contentType, $this->localeEN );
+        $tr = $content->translations['eng-GB'];
+        self::assertEquals( count( $content->translations ), 1 );
+        self::assertEquals( count( $content->versions ), 1 );
+        self::assertEquals( count( $tr->versions ), 1 );
+        self::assertEquals( $tr->locale->code, $this->localeEN->code );
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testContentAddExistingTranslation()
+    {
+        $content = new Content( $this->contentType, $this->localeEN );
+        $content->addTranslation( $this->localeEN );
+    }
+
+    /**
+     * Test Content::addTranslation() behaviour:
+     * - new Translation has the right locale
+     * - new Translation has one version
+     * - a new version is also added to the Content
+     */
+    public function testContentAddTranslation()
+    {
+        $content = new Content( $this->contentType, $this->localeEN );
+        $tr = $content->addTranslation( $this->localeFR );
+        self::assertEquals( $tr->locale->code, $this->localeFR->code );
+        self::assertEquals( count( $tr->versions ), 1 );
+        self::assertEquals( count( $content->versions ), 2 );
     }
 
     /**
