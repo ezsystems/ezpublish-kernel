@@ -14,7 +14,7 @@ namespace ezp\Content\Criteria;
  * Compound criterion class. A compound criterion binds together multiple criteria with a logical (OR/AND) operator
  * A criterion is a logical association between 2 or more criterias
  */
-abstract class CompoundCriterion
+class CompoundCriterion extends Criterion implements CriterionInterface
 {
     /**
      * Criterias contained in current criterion

@@ -22,4 +22,17 @@ $c->where( // andCondition() is implicit
 );
 
 $collection = $contentService->find( $c );
+
+$c = new CompoundCriterion(
+    LogicOperator::L_AND,
+    new LocationListCriterion( $parentLocation ),
+    new ContentTypeCriterion( 'folder' ),
+    new FieldCriterion( Operator::EQ, 'show_children', true ),
+    new MetaDataCriterion( Operator::GT, 'published', new DateTime( 'yesterday' ) ),
+    new CompoundCriterion(
+        LogicOperator::L_OR,
+        new FieldCriterion( LogicOperator::EQ, 'name', 'My folder name' ),
+        new FieldCriterion( LogicOperator::EQ, 'name', 'Another name' )
+    )
+);
 ?>
