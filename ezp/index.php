@@ -2,12 +2,12 @@
 /**
  * ez Publish - Public API Prototype
  */
-namespace ezp\content;
-use \ezp\base\ServiceContainer, \ezp\base\Configuration, ezp\base\Autoloader;
+namespace ezp\Content;
+use \ezp\Base\ServiceContainer, \ezp\Base\Configuration, ezp\Base\Autoloader;
 
 chdir( '../' );
 require 'config.php';
-require 'ezp/base/autoloader.php';
+require 'ezp/Base/Autoloader.php';
 spl_autoload_register( array( new Autoloader( $settings['base']['autoload'] ), 'load' ) );
 
 $paths = array();
@@ -20,14 +20,14 @@ Configuration::setGlobalDirs( $paths, 'modules' );
 
 
 // Create Type manually for test
-$contentType = new type\Type();
+$contentType = new Type\Type();
 $contentType->identifier = 'article';
 
 // Add some fields
 $fields = array( 'title' => 'ezstring', 'tags' => 'ezkeyword' );
 foreach ( $fields as $identifier => $fieldTypeString )
 {
-    $field = new type\Field( $contentType );
+    $field = new Type\Field( $contentType );
     $field->identifier = $identifier;
     $field->fieldTypeString = $fieldTypeString;
     $contentType->fields[] = $field;
@@ -39,7 +39,7 @@ $section->identifier = 'standard';
 $section->name = "Standard";
 
 // Create Content object
-$content = new Content( $contentType, new \ezp\base\Locale( 'eng-GB' ) );
+$content = new Content( $contentType, new \ezp\Base\Locale( 'eng-GB' ) );
 $content->ownerId = 10;
 $content->section = $section;
 

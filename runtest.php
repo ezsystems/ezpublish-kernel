@@ -13,8 +13,8 @@ set_time_limit( 0 );
 
 // setup autoloaders
 require 'config.php';
-require 'ezp/base/autoloader.php';
-spl_autoload_register( array( new ezp\base\Autoloader( $settings['base']['autoload'] ), 'load' ) );
+require 'ezp/Base/Autoloader.php';
+spl_autoload_register( array( new ezp\Base\Autoloader( $settings['base']['autoload'] ), 'load' ) );
 
 require_once 'PHPUnit/Autoload.php';
 
@@ -25,12 +25,12 @@ foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )//@todo Tak
 {
     $paths[] = "{$path}/settings/";
 }
-\ezp\base\Configuration::setGlobalConfigurationData( $settings );
-\ezp\base\Configuration::setGlobalDirs( $paths, 'modules' );
+\ezp\Base\Configuration::setGlobalConfigurationData( $settings );
+\ezp\Base\Configuration::setGlobalDirs( $paths, 'modules' );
 
 /**
  * Simple test suite that maps all other tests suits by convention
- * Suite needs to be in [ezp|ezx]/<module>/tests/suite.php
+ * Suite needs to be in [ezp|ezx]/<module>/Tests/Suite.php
  *
  * @internal
  */
@@ -42,9 +42,9 @@ class ezpNextTestSuite extends PHPUnit_Framework_TestSuite
         $this->setName( 'ezp next Test Suite' );
         foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )
         {
-            if ( file_exists( "$path/tests/suite.php" ) )
+            if ( file_exists( "$path/Tests/Suite.php" ) )
             {
-                $this->addTestSuite( str_replace( '/', '\\', "$path\\tests\\Suite" )  );
+                $this->addTestSuite( str_replace( '/', '\\', "$path\\Tests\\Suite" )  );
             }
         }
     }
