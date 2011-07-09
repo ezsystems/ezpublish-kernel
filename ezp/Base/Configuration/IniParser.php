@@ -138,8 +138,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
 
         // Create temp file
         $tempFileName = Configuration::CONFIG_CACHE_DIR . 'temp-' . mt_rand() . '.tmp.ini';
-        $res = file_put_contents( $tempFileName, $fileContent );
-        if ( $res === false )
+        if ( file_put_contents( $tempFileName, $fileContent ) === false )
         {
             trigger_error( __METHOD__ . ": temporary ini file ($tempFileName) needed for ini parsing not writable!", E_USER_WARNING );
             return array();

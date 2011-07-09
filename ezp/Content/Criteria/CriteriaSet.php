@@ -130,9 +130,7 @@ class CriteriaSet
      */
     public function where( $criteriaOne )
     {
-        $args = func_get_args();
-
-        foreach ( $args as $c )
+        foreach ( func_get_args() as $c )
         {
             if ( !$c instanceof Criteria && !$c instanceof Criterion )
             {

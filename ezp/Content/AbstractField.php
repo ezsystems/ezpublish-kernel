@@ -40,8 +40,7 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
         if ( !class_exists( $list[$this->fieldTypeString] ) )
             throw new Exception\MissingClass(  $list[$this->fieldTypeString], 'field type' );
 
-        $className = $list[ $this->fieldTypeString ];
-        $this->type = $this->initType( $className );
+        $this->type = $this->initType( $list[ $this->fieldTypeString ] );
 
         return $this->attach( $this->type, 'store' )->type->attach( $this, 'store' );// listen on each other and return type
     }
