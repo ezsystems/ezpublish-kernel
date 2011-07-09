@@ -14,33 +14,66 @@ namespace ezp\Persistence\Content\Criterion;
 /**
  * @package ezp.Persistence.Content.Criterion
  */
-class Field extends Criterion
+class Field extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {
     /**
      * Creates a new Field Criterion.
-     * Matches $fieldIdentifier against $matchValue using $operator
      *
-     * @param string $fieldIdentifer
-     * @param string $operator
-     * @param string $matchValue
+     * Matches $fieldIdentifier against $value using $operator
+     *
+     * @param string $target The target field
+     * @param string $operato The match operator
+     * @param mixed $matchValue The value to match against
      */
-    public function __construct( $fieldIdentifier, $operator, $matchValue )
+    public function __construct( $fieldIdentifier, $operator, $value )
     {
-        $this->fieldIdentifier = $fieldIdentifier;
-        $this->opera = $operator;
-        $this->matchValue = $matchValue;
+        switch ( $operator )
+        {
+            case Operator::IN:
+                if ( !is_array( $value ) )
+                {
+                    throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
+                }
+                break;
+
+            case Operator::EQ:
+            case Operator::GT:
+            case Operator::GTE:
+            case Operator::LT:
+            case Operator::LTE:
+            case Operator::LIKE :
+                if ( is_array( $value ) )
+                {
+                    throw new \InvalidArgumentException( "Operator::EQ requires a single value" );
+                }
+                break;
+
+            case Operator::BETWEEN:
+                if ( !is_array( $value ) || count( $value ) != 2 )
+                {
+                    throw new \InvalidArgumentException( "Operator::EQ requires an array of two values" );
+                }
+                break;
+
+            default:
+                throw new \InvalidArgumentException( "Unknown operator $operator" );
+        }
+
+        $this->target = $target;
+        $this->operator = $operator;
+        $this->value = $value;
     }
 
     /**
      * The ContentField identifier
      * @var string
      */
-    public $fieldIdentifier;
+    public $target;
 
     /**
      * The value $fieldIdentifier should be matched against
      * @var mixed
      */
-    public $matchValue;
+    public $value;
 }
 ?>
