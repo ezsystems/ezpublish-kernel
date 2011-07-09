@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\Persistence\Content\Criterion\LogicOr class.
+ * File containing the ezp\Persistence\Content\Criterion\LogicalOr class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://ez.no/licenses/gnu_gpl GNU GPL v2
@@ -11,7 +11,7 @@
  * This class does...
  * @package ezp.persistence.content.criterion
  */
-class LogicOr extends Logic
+class LogicalOr extends LogicalalOperator
 {
     /**
      * Creates a new OR logic criterion.

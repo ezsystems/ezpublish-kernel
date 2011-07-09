@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\Persistence\Content\Criterion\LogicOperator class
+ * File containing the ezp\Persistence\Content\Criterion\LogicalOperator class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,7 +16,7 @@ namespace ezp\Persistence\Content\Criterion;
  * Note that the class should ideally have been in a Logical namespace, but it would have then be named 'And',
  * and 'And' is a PHP reserved word.
  */
-abstract class Logic extends Criterion
+abstract class LogicalOperator extends Criterion
 {
     /**
      * Creates a Logic operation with the given criteria
