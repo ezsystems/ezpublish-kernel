@@ -13,7 +13,7 @@ namespace ezp\Persistence\Content\Criterion;
 /**
  * @package ezp.persistence.content.criteria
  */
-class MetaData extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class MetaData extends \ezp\Persistence\Content\Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {
     /**
      * Creates a new metadata criterion on $metadata
@@ -25,7 +25,7 @@ class MetaData extends Criterion implements \ezp\Persistence\Content\Interfaces\
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $metadata, $operator, $value )
+    public function __construct( $target, $operator, $value )
     {
         if ( !in_array( $target, array( self::STATE, self::OWNER, self::MODIFIED, self::CREATED ) ) )
         {
