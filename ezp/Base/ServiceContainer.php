@@ -37,16 +37,16 @@ class ServiceContainer
      * @param array[] $configurationOverrides
      * @param array[]|object[] $dependencies
      */
-    public function __construct( array $configurationOverrides = array(),
-                                 array $dependencies = array() )
+    public function __construct( array $configurationOverrides = array(), array $dependencies = array() )
     {
         $this->configurationOverrides = $configurationOverrides;
-        $this->dependencies = $dependencies + array(
-                                    '$_SERVER' => $_SERVER,
-                                    '$_REQUEST' => $_REQUEST,
-                                    '$_COOKIE' => $_COOKIE,
-                                    '$_FILES' => $_FILES
-                                 );
+        $this->dependencies = $dependencies +
+            array(
+                '$_SERVER' => $_SERVER,
+                '$_REQUEST' => $_REQUEST,
+                '$_COOKIE' => $_COOKIE,
+                '$_FILES' => $_FILES
+            );
     }
 
     /**

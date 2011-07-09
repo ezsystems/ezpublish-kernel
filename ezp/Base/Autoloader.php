@@ -53,8 +53,7 @@ class Autoloader
             'ezc-src-path' => '/',
             'ezc-loaded' => false,
             'ezc-prefixes' => array( 'base', 'persistent', 'configuration', 'php_generator' ),
-            'repositories' => array( 'ezp' => 'ezp',
-                                     'ezx' => 'ezx' ),
+            'repositories' => array( 'ezp' => 'ezp', 'ezx' => 'ezx' ),
             'development-mode' => false,
             'allow-kernel-override' => false,
         );
@@ -213,8 +212,10 @@ class Autoloader
         {
             // constructor     : ezcBaseFileNotFoundException or ezcBaseFilePermissionException
             // all other calls : ezcPhpGeneratorException
-            trigger_error( 'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine(),
-                           E_USER_WARNING );
+            trigger_error(
+                'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine(),
+                E_USER_WARNING
+            );
             return false;
         }
         return true;
@@ -283,8 +284,10 @@ class Autoloader
         }
         catch ( Exception $e )
         {
-            trigger_error( 'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine(),
-                           E_USER_WARNING );
+            trigger_error(
+                'Exception: ' . $e->getMessage() . ' in ' . $e->getFile() . ' on line ' . $e->getLine(),
+                E_USER_WARNING
+            );
         }
     }
 }

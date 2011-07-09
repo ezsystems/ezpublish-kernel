@@ -50,6 +50,11 @@ class ezpNextTestSuite extends PHPUnit_Framework_TestSuite
     }
 }
 
-PHPUnit_TextUI_TestRunner::run( new ezpNextTestSuite(), array( 'backupGlobals' => false,
-                                                               'backupStaticAttributes' => false ) );
+PHPUnit_TextUI_TestRunner::run(
+    new ezpNextTestSuite(),
+    array(
+        'backupGlobals' => false,
+        'backupStaticAttributes' => false
+    )
+);
 

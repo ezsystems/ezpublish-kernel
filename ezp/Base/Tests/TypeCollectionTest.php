@@ -28,12 +28,15 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
     {
         parent::__construct();
         $this->setName( "ReadOnlyCollectionTest class tests" );
-        $this->collection = new \ezp\Base\TypeCollection( 'ezp\Base\Tests\TypeCollectionTestTypeClass', array(
-            new TypeCollectionTestTypeClass( 1 ),
-            new TypeCollectionTestTypeClass( 42 ),
-            new TypeCollectionTestTypeClass( 22 ),
-            'key' => new TypeCollectionTestTypeClass( 0 ),
-        ) );
+        $this->collection = new \ezp\Base\TypeCollection(
+            'ezp\Base\Tests\TypeCollectionTestTypeClass',
+            array(
+                new TypeCollectionTestTypeClass( 1 ),
+                new TypeCollectionTestTypeClass( 42 ),
+                new TypeCollectionTestTypeClass( 22 ),
+                'key' => new TypeCollectionTestTypeClass( 0 ),
+            )
+        );
     }
     /**
      * Test offsetExists

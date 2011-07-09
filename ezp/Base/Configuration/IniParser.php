@@ -84,9 +84,11 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
     public function parseFilePhp( $fileContent )
     {
         // First some pre processing to normalize result with ezc result (avoid 'true' becoming '1')
-        $fileContent = str_replace( array( '#', "\r\n", "\r", "=true\n", "=false\n" ),
-                                    array( ';', "\n", "\n", "=" . self::TEMP_INI_TRUE_VAR . "\n", "=" . self::TEMP_INI_FALSE_VAR . "\n" ),
-                                    $fileContent . "\n" );
+        $fileContent = str_replace(
+            array( '#', "\r\n", "\r", "=true\n", "=false\n" ),
+            array( ';', "\n", "\n", "=" . self::TEMP_INI_TRUE_VAR . "\n", "=" . self::TEMP_INI_FALSE_VAR . "\n" ),
+            $fileContent . "\n"
+        );
         $fileContent = self::parserClearArraySupport( $fileContent );
 
         // Parse string

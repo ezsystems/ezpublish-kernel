@@ -50,8 +50,14 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
      */
     public function create( $name, $identifier )
     {
-        return $this->backend->create( 'Content', 'Section', array( 'name' => $name,
-                                                                    'identifier' => $identifier ) );
+        return $this->backend->create(
+            'Content',
+            'Section',
+            array(
+                'name' => $name,
+                'identifier' => $identifier
+            )
+        );
     }
 
     /**
@@ -62,9 +68,16 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
      */
     public function update( $id, $name, $identifier )
     {
-        return $this->backend->update( 'Content', 'Section', $id, array( 'id' => $id,
-                                                                         'name' => $name,
-                                                                         'identifier' => $identifier ) );
+        return $this->backend->update(
+            'Content',
+            'Section',
+            $id,
+            array(
+                'id' => $id,
+                'name' => $name,
+                'identifier' => $identifier
+            )
+        );
     }
 
     /**

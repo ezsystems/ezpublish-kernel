@@ -230,9 +230,10 @@ class Configuration extends AbstractOverride
         $cacheName = self::createCacheName( $this->moduleName, $this->pathsHash() );
         if ( $useCache === null )
         {
-            $useCache = isset( self::$globalConfigurationData['base']['configuration']['use-cache'] )
-                        ? self::$globalConfigurationData['base']['configuration']['use-cache']
-                        : true;
+            $useCache =
+                isset( self::$globalConfigurationData['base']['configuration']['use-cache'] )
+                ? self::$globalConfigurationData['base']['configuration']['use-cache']
+                : true;
         }
 
         if ( $hasCache === null && $useCache )
@@ -351,13 +352,13 @@ class Configuration extends AbstractOverride
     protected static function generateRawData( $configurationPathsHash, array $configurationData, array $sourceFiles = array(), array $sourcePaths = array() )
     {
         return array(
-                'hash'    => $configurationPathsHash,
-                'paths'   => $sourcePaths,
-                'files'   => $sourceFiles,
-                'data'    => $configurationData,
-                'created' => time(),
-                'rev'     => self::CONFIG_CACHE_REV,
-            );
+            'hash'    => $configurationPathsHash,
+            'paths'   => $sourcePaths,
+            'files'   => $sourceFiles,
+            'data'    => $configurationData,
+            'created' => time(),
+            'rev'     => self::CONFIG_CACHE_REV,
+        );
     }
 
     /**
