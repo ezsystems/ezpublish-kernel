@@ -31,38 +31,56 @@ class CriterionFactory
         $this->criterionClass = $criterionClass;
     }
 
+    /**
+     * Equal operator
+     */
     public function eq( $target, $value )
     {
         return $this->handleCriterion( $target, Criterion\Operator::EQ, $value );
     }
 
+    /**
+     * Greater than operator
+     */
     public function gt( $target, $value )
     {
         return $this->handleCriterion( $target, Criterion\Operator::GT, $value );
     }
 
+    /**
+     * Greater than or equals operator
+     */
     public function gte( $target, $value )
     {
         return $this->handleCriterion( $target, Criterion\Operator::GTE, $value );
     }
 
+    /**
+     * Lower than operator
+     */
     public function lt( $target, $value )
     {
         return $this->handleCriterion( $target, Criterion\Operator::LT, $value );
     }
 
+    /**
+     * Lower than or equals operator
+     */
     public function lte( $target, $value )
     {
         return $this->handleCriterion( $target, Criterion\Operator::LTE, $value );
     }
 
+    /**
+     * In operator
+     */
     public function in( $target, $value )
     {
         return $this->handleCriterion( $target, Criterion\Operator::IN, $value );
     }
 
     /**
-     * Like criterion
+     * Like operator
      * @param mixed
      * @param string $target
      */
@@ -72,7 +90,7 @@ class CriterionFactory
     }
 
     /**
-     * Adds the Criterion that checks if the value is between $valueOne and $valueTwo
+     * Between range operator
      *
      * @param string $target
      * @param mixed $valueOne range start value
@@ -95,12 +113,6 @@ class CriterionFactory
     {
         return new $this->criterionClass( $target, $operator, $value );
     }
-
-    /**
-     * The QueryBuilder object
-     * @var QueryBuilder
-     */
-    private $queryBuilder;
 
     /**
      * The Criterion class we are building.
