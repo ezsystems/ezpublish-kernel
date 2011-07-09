@@ -92,26 +92,6 @@ class Content extends \ezp\Base\AbstractModel
     );
 
     /**
-     * Create content based on content type object
-     *
-     * @param type\Type $contentType
-     * @param Locale $mainLocale
-     */
-    public function __construct( type\Type $contentType, \ezp\Base\Locale $mainLocale )
-    {
-        $this->creationDate = new \DateTime();
-        $this->mainLocale = $mainLocale;
-        $this->alwaysAvailable = false;
-        $this->locations = new \ezp\Base\TypeCollection( '\ezp\Content\Location' );
-        $this->relations = new \ezp\Base\TypeCollection( '\ezp\Content\Content' );
-        $this->reversedRelations = new \ezp\Base\TypeCollection( '\ezp\Content\Content' );
-        $this->translations = new \ezp\Base\TypeCollection( '\ezp\Content\Translation' );
-        $this->name = false;
-        $this->contentType = $contentType;
-        $this->addTranslation( $mainLocale );
-    }
-
-    /**
      * Content object id.
      *
      * @var int
@@ -215,6 +195,27 @@ class Content extends \ezp\Base\AbstractModel
      * @var Locale
      */
     protected $mainLocale;
+
+    /**
+     * Create content based on content type object
+     *
+     * @param type\Type $contentType
+     * @param Locale $mainLocale
+     */
+    public function __construct( type\Type $contentType, \ezp\Base\Locale $mainLocale )
+    {
+        $this->creationDate = new \DateTime();
+        $this->mainLocale = $mainLocale;
+        $this->alwaysAvailable = false;
+        $this->versions = new \ezp\Base\TypeCollection( '\ezp\Content\Version' );
+        $this->locations = new \ezp\Base\TypeCollection( '\ezp\Content\Location' );
+        $this->relations = new \ezp\Base\TypeCollection( '\ezp\Content\Content' );
+        $this->reversedRelations = new \ezp\Base\TypeCollection( '\ezp\Content\Content' );
+        $this->translations = new \ezp\Base\TypeCollection( '\ezp\Content\Translation' );
+        $this->name = false;
+        $this->contentType = $contentType;
+        $this->addTranslation( $mainLocale );
+    }
 
     /**
      * Return Main location object on this Content object

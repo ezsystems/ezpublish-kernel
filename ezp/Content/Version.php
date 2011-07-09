@@ -59,18 +59,6 @@ class Version extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\Ob
     );
 
     /**
-     * Create content version based on content and content type fields objects
-     *
-     * @param Content $content
-     */
-    public function __construct( Content $content, \ezp\Base\Locale $locale )
-    {
-        $this->content = $content;
-        $this->locale = $locale;
-        $this->fields = new FieldCollection( $this );
-    }
-
-    /**
      * @var int
      */
     protected $id = 0;
@@ -123,6 +111,18 @@ class Version extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\Ob
      * @var \ezp\Base\Locale
      */
     protected $locale;
+
+    /**
+     * Create content version based on content and content type fields objects
+     *
+     * @param Content $content
+     */
+    public function __construct( Content $content, \ezp\Base\Locale $locale )
+    {
+        $this->content = $content;
+        $this->locale = $locale;
+        $this->fields = new FieldCollection( $this );
+    }
 
     /**
      * Called when subject has been updated

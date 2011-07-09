@@ -33,11 +33,6 @@ class Group extends\ezp\Base\AbstractModel
         'contentTypes' => false,
     );
 
-    public function __construct()
-    {
-        $this->contentTypes = new \ezp\Base\TypeCollection( '\ezp\Content\Type\Type' );
-    }
-
     /**
      * @var int
      */
@@ -52,6 +47,11 @@ class Group extends\ezp\Base\AbstractModel
      * @var Type[]
      */
     protected $contentTypes;
+
+    public function __construct()
+    {
+        $this->contentTypes = new \ezp\Base\TypeCollection( '\ezp\Content\Type\Type' );
+    }
 
     /**
      * @return string

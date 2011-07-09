@@ -37,6 +37,22 @@ abstract class AbstractOverride
     protected static $globalPathsHash = '';
 
     /**
+     * The instance path array, scoped in the order they should be parsed
+     * Set by {@link Override::initPaths()}
+     *
+     * @var array
+     */
+    protected $paths = null;
+
+    /**
+     * The instance configuration path array md5 hash, for use in cache names.
+     * Empty if it needs to be regenerated
+     *
+     * @var string
+     */
+    protected $pathsHash = '';
+
+    /**
      * Init paths by ref or copy
      *
      * @param bool $byRef Tells function to assign global paths by reference or not, if true then changes to global paths will affect
@@ -209,22 +225,6 @@ abstract class AbstractOverride
         }
         return $this->pathsHash;
     }
-
-    /**
-     * The instance path array, scoped in the order they should be parsed
-     * Set by {@link Override::initPaths()}
-     *
-     * @var array
-     */
-    protected $paths = null;
-
-    /**
-     * The instance configuration path array md5 hash, for use in cache names.
-     * Empty if it needs to be regenerated
-     *
-     * @var string
-     */
-    protected $pathsHash = '';
 }
 
 ?>

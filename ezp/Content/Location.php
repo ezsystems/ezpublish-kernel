@@ -41,18 +41,6 @@ class Location extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\O
     );
 
     /**
-     * Setups empty children collection and attaches $content
-     *
-     * @param Content $content
-     */
-    public function __construct( Content $content )
-    {
-        $this->containerProperties = new \ezp\Base\TypeCollection( '\ezp\Content\ContainerProperty' );
-        $this->children = new \ezp\Base\TypeCollection( '\ezp\Content\Location' );
-        $this->setContent( $content );
-    }
-
-    /**
      * @var int
      */
     protected $depth;
@@ -126,6 +114,18 @@ class Location extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\O
      * @var ContainerProperty[]
      */
     protected $containerProperties;
+
+    /**
+     * Setups empty children collection and attaches $content
+     *
+     * @param Content $content
+     */
+    public function __construct( Content $content )
+    {
+        $this->containerProperties = new \ezp\Base\TypeCollection( '\ezp\Content\ContainerProperty' );
+        $this->children = new \ezp\Base\TypeCollection( '\ezp\Content\Location' );
+        $this->setContent( $content );
+    }
 
     /**
      * Returns the parent Location

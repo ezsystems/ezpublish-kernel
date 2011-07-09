@@ -19,6 +19,18 @@ namespace ezp\Content\Criteria;
 abstract class SortByClause
 {
     /**
+     * Sort order constants
+     */
+    const ASC = true;
+    const DESC = false;
+
+    /**
+     * Sort order, one of self::ASC / self::DESC
+     * @var bool
+     */
+    public $order;
+
+    /**
      * Creates a new sort clause in $order order
      *
      * Can be called by the children constructor as a helper in order to handle the $order parameter
@@ -41,17 +53,5 @@ abstract class SortByClause
      * @return @todo analyze
      */
     abstract public function getSortBy();
-
-    /**
-     * Sort order constants
-     */
-    const ASC = true;
-    const DESC = false;
-
-    /**
-     * Sort order, one of self::ASC / self::DESC
-     * @var bool
-     */
-    public $order;
 }
 ?>

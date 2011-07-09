@@ -37,13 +37,6 @@ class Type extends \ezp\Base\AbstractModel
         'fields' => true,
     );
 
-    public function __construct()
-    {
-        $this->groups = new \ezp\Base\TypeCollection( '\ezp\Content\Type\Group' );
-        $this->fields = new \ezp\Base\TypeCollection( '\ezp\Content\Type\Field' );
-        $this->contentObjects = new \ezp\Base\TypeCollection( '\ezp\Content\Content' );
-    }
-
     /**
      * @var int
      */
@@ -73,6 +66,13 @@ class Type extends \ezp\Base\AbstractModel
      * @var Group[]
      */
     protected $groups;
+
+    public function __construct()
+    {
+        $this->groups = new \ezp\Base\TypeCollection( '\ezp\Content\Type\Group' );
+        $this->fields = new \ezp\Base\TypeCollection( '\ezp\Content\Type\Field' );
+        $this->contentObjects = new \ezp\Base\TypeCollection( '\ezp\Content\Content' );
+    }
 
     /**
      * @return string

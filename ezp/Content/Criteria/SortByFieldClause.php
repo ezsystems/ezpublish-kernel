@@ -18,6 +18,12 @@ namespace ezp\Content\Criteria;
 class SortByFieldClause extends SortByClause
 {
     /**
+     * Sort field
+     * @var string
+     */
+    public $field;
+
+    /**
      * Creates a new sort clause on $field in $order order
      *
      * @param string $field A field identifier to sort on
@@ -28,11 +34,5 @@ class SortByFieldClause extends SortByClause
         $this->field = $field;
         parent::__construct( $order );
     }
-
-    /**
-     * Sort field
-     * @var string
-     */
-    public $field;
 }
 ?>

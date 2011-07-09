@@ -50,17 +50,6 @@ class Field extends \ezp\Content\AbstractField
     );
 
     /**
-     * Constructor, sets up empty contentFields collection and attach $contentType
-     *
-     * @param Type $contentType
-     */
-    public function __construct( Type $contentType )
-    {
-        $this->contentType = $contentType;
-        $this->contentFields = new \ezp\Base\TypeCollection( '\ezp\Content\Field' );
-    }
-
-    /**
      * @var int
      */
     protected $id;
@@ -160,6 +149,17 @@ class Field extends \ezp\Content\AbstractField
      * @var Type
      */
     protected $contentType;
+
+    /**
+     * Constructor, sets up empty contentFields collection and attach $contentType
+     *
+     * @param Type $contentType
+     */
+    public function __construct( Type $contentType )
+    {
+        $this->contentType = $contentType;
+        $this->contentFields = new \ezp\Base\TypeCollection( '\ezp\Content\Field' );
+    }
 
     /**
      * Return content type object
