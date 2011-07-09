@@ -334,11 +334,9 @@ class Content extends \ezp\Base\AbstractModel
         {
             throw new \InvalidArgumentException( "Translation {$locale->code} already exists" );
         }
-        else
-        {
-            $tr = new Translation( $locale, $this );
-            $this->translations[$locale->code] = $tr;
-        }
+
+        $tr = new Translation( $locale, $this );
+        $this->translations[$locale->code] = $tr;
 
         $newVersion = null;
         if ( $base !== null )

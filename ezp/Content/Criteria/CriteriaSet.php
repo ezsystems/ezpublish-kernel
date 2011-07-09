@@ -102,26 +102,20 @@ class CriteriaSet
      */
     public function __get( $criteriaName )
     {
-        $criteria = null;
         switch ( $criteriaName )
         {
             case "field":
-                $criteria = new FieldCriteria();
-                break;
+                return new FieldCriteria();
 
             case "meta":
-                $criteria = new MetadataCriteria();
-                break;
+                return new MetadataCriteria();
 
             case "location":
-                $criteria = new LocationCriteria();
-                break;
+                return new LocationCriteria();
 
             default:
                 throw \InvalidArgumentException( "Criteria '{$criteriaName}' is not supported" );
         }
-
-        return $criteria;
     }
 
     /**

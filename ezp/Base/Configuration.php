@@ -331,7 +331,7 @@ class Configuration extends AbstractOverride
                 {
                     return null;
                 }
-                else if ( $fileTime > $currentTime )
+                if ( $fileTime > $currentTime )
                 {
                     trigger_error( __METHOD__ . ': Input file "' . $inputFile . '" has a timestamp higher then current time, ignoring to avoid infinite recursion!', E_USER_WARNING );
                 }
@@ -496,7 +496,7 @@ class Configuration extends AbstractOverride
         {
             return $this->raw['data'][$section][$key];
         }
-        else if ( $fallBackValue === null )
+        if ( $fallBackValue === null )
         {
             trigger_error( __METHOD__ . " could not find {$this->moduleName}.ini\[{$section}]$key setting",  E_USER_WARNING );
         }
@@ -517,7 +517,7 @@ class Configuration extends AbstractOverride
         {
             return $this->raw['data'][$section];
         }
-        else if ( $fallBackValue === null )
+        if ( $fallBackValue === null )
         {
             trigger_error( __METHOD__ . " could not find {$this->moduleName}.ini\[{$section}]setting",  E_USER_WARNING );
         }
@@ -539,11 +539,9 @@ class Configuration extends AbstractOverride
             $this->raw['data'][$section][$key] = $value;
             return true;
         }
-        else
-        {
-            $this->raw['data'][$section] = array( $key => $value );
-            return false;
-        }
+
+        $this->raw['data'][$section] = array( $key => $value );
+        return false;
     }
 
     /**
@@ -557,8 +555,8 @@ class Configuration extends AbstractOverride
     {
         if ( $key === null )
             return isset( $this->raw['data'][$section] );
-        else
-            return isset( $this->raw['data'][$section][$key] );
+
+        return isset( $this->raw['data'][$section][$key] );
     }
 
     /**

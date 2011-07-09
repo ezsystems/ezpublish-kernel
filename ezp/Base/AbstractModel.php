@@ -156,19 +156,21 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
      */
     public function __set( $property, $value )
     {
-        if ( isset( $this->dynamicProperties[$property] ) )
+        if ( !isset( $this->dynamicProperties[$property] ) )
         {
-            $method = "set{$property}";
-            if ( method_exists( $this, $method ) )
+            if ( !isset( $this->readableProperties[$property] ) )
             {
-                return $this->$method( $value );
+                throw new Exception\PropertyNotFound( $property, get_class( $this ) );
             }
+
+            throw new Exception\PropertyPermission( $property, Exception\PropertyPermission::WRITE, get_class( $this ) );
         }
-        else if ( !isset( $this->readableProperties[$property] ) )
+
+        $method = "set{$property}";
+        if ( method_exists( $this, $method ) )
         {
-            throw new Exception\PropertyNotFound( $property, get_class( $this ) );
+            return $this->$method( $value );
         }
-        throw new Exception\PropertyPermission( $property, Exception\PropertyPermission::WRITE, get_class( $this ) );
     }
 
     /**

@@ -113,7 +113,7 @@ abstract class AbstractOverride
     {
         if ( $scope === null )
             return static::$globalPaths;
-        else if ( !isset( static::$globalPaths[$scope] ) )
+        if ( !isset( static::$globalPaths[$scope] ) )
             throw new Exception\InvalidArgumentValue( 'scope', $scope, get_called_class() );
 
         return static::$globalPaths[$scope];
@@ -154,7 +154,7 @@ abstract class AbstractOverride
     {
         if ( $scope === null )
             return $this->paths;
-        else if ( !isset( $this->paths[$scope] ) )
+        if ( !isset( $this->paths[$scope] ) )
             throw new Exception\InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
 
         return $this->paths[$scope];
@@ -181,14 +181,12 @@ abstract class AbstractOverride
         {
             throw new Exception\InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
         }
-        else if ( $this->paths[$scope] === $paths )
+        if ( $this->paths[$scope] === $paths )
         {
             return false;
         }
-        else
-        {
-            $this->paths[$scope] = $paths;
-        }
+
+        $this->paths[$scope] = $paths;
 
         if ( $this->pathsHash !== '' )
         {

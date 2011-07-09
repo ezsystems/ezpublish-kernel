@@ -82,10 +82,10 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
     {
         foreach ( $type->properties() as $property => $legacyProperty )
         {
-            if ( isset( $this->readableProperties[$legacyProperty] ) )
-                $this->$legacyProperty = $type->$property;
-            else
+            if ( !isset( $this->readableProperties[$legacyProperty] ) )
                 throw new \RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
+
+            $this->$legacyProperty = $type->$property;
         }
         return $this;
     }
@@ -100,10 +100,10 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
     {
         foreach ( $type->properties() as $property => $legacyProperty )
         {
-            if ( isset( $this->readableProperties[$legacyProperty] ) )
-                $type->$property = $this->$legacyProperty;
-            else
+            if ( !isset( $this->readableProperties[$legacyProperty] ) )
                 throw new \RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
+
+            $type->$property = $this->$legacyProperty;
         }
         return $this;
     }
