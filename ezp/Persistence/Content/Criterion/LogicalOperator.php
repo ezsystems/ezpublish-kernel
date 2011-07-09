@@ -9,6 +9,7 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion;
 
 /**
  * @package ezp.persistence.content.criteria
@@ -27,11 +28,11 @@ abstract class LogicalOperator extends Criterion
     {
         foreach( $criteria as $criterion )
         {
-            if ( !$arg instanceof Criterion )
+            if ( !$criterion instanceof Criterion )
             {
                 throw new \InvalidArgumentException( "Only Criterion objects are accepted" );
             }
-            $this->criteria[] = $arg;
+            $this->criteria[] = $criterion;
         }
     }
 

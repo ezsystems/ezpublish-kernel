@@ -7,11 +7,14 @@
  * @version //autogentag//
  */
 
+namespace ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion;
+
 /**
  * This class does...
  * @package ezp.persistence.content.criterion
  */
-class LogicalOr extends LogicalalOperator
+class LogicalOr extends LogicalOperator
 {
     /**
      * Creates a new OR logic criterion.

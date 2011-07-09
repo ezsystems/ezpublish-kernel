@@ -102,6 +102,38 @@ class CriterionFactory
     }
 
     /**
+     * Logical or between 2...n criteria
+     *
+     * @param Criterion $criterionOne
+     * @param Criterion $criterionTwo$...
+     */
+    public function logicalOr( Criterion $criterionOne, Criterion $criterionTwo )
+    {
+        return new Criterion\LogicalOr( func_get_args() );
+    }
+
+    /**
+     * Logical and between 2...n criteria
+     *
+     * @param Criterion $criterionOne
+     * @param Criterion $criterionTwo$...
+     */
+    public function logicalAnd( Criterion $criterionOne, Criterion $criterionTwo )
+    {
+        return new Criterion\LogicalAnd( func_get_args() );
+    }
+
+    /**
+     * Logical not on one Criterion
+     *
+     * @param Criterion $criterion
+     */
+    public function logicalNot( Criterion $criterion )
+    {
+        return new Criterion\LogicalNot( array( $criterion ) );
+    }
+
+    /**
      * Handles factory of the current criterion with a given operator & value
      *
      * @param string $operator

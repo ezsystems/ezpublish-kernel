@@ -52,6 +52,36 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    // public function
+    public function testFieldEq()
+    {
+        $c = $this->qb->field->eq( 'title', 'Article A' );
+        self::assertInstanceOf( 'ezp\Persistence\Content\Criterion\Field', $c );
+    }
+
+    /**
+     * @dataProvider providerForTestLogical
+     */
+    public function testLogical( $method, $criteriaCount, $expectedClass )
+    {
+        $criteria = array();
+        for( $i = 0; $i < $criteriaCount; $i++ )
+        {
+            $criteria[] = $this->qb->field->eq( 'title', md5( time() ) );
+        }
+
+        $criterion = call_user_func_array( array( $this->qb, $method ), $criteria );
+
+        self::assertInstanceOf( $expectedClass, $criterion );
+        self::assertEquals( $criteriaCount, count( $criterion->criteria) );
+    }
+
+    public static function providerForTestLogical()
+    {
+        return array(
+            array( 'or',  2, 'ezp\Persistence\Content\Criterion\LogicalOr', 2 ),
+            array( 'and', 2, 'ezp\Persistence\Content\Criterion\LogicalAnd', 2 ),
+            array( 'not', 1, 'ezp\Persistence\Content\Criterion\LogicalNot', 1 ),
+        );
+    }
 }
 ?>
