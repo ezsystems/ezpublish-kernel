@@ -159,7 +159,7 @@ class Autoloader
         }
 
         // Load API module autoload files
-        foreach ( $this->settings['repositories'] as $ns => $subPath )
+        foreach ( $this->settings['repositories'] as $subPath )
         {
             // @todo: Use configuration so class list only include activated extensions.
             // But then this loading will have to happen after configuration and siteaccess is loaded!
