@@ -9,6 +9,7 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion;
 
 /**
  * Criterion that matches content against a subtree.

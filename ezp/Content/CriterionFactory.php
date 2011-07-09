@@ -34,32 +34,32 @@ class CriterionFactory
 
     public function eq( $target, $value )
     {
-        return $this->handleCriterion( $target, 'in', $value );
+        return $this->handleCriterion( $target, Criterion\Operator::EQ, $value );
     }
 
     public function gt( $target, $value )
     {
-        return $this->handleCriterion( $target, 'gt', $value );
+        return $this->handleCriterion( $target, Criterion\Operator::GT, $value );
     }
 
     public function gte( $target, $value )
     {
-        return $this->handleCriterion( $target, 'gte', $value );
+        return $this->handleCriterion( $target, Criterion\Operator::GTE, $value );
     }
 
     public function lt( $target, $value )
     {
-        return $this->handleCriterion( $target, 'lt', $value );
+        return $this->handleCriterion( $target, Criterion\Operator::LT, $value );
     }
 
     public function lte( $target, $value )
     {
-        return $this->handleCriterion( $target, 'lte', $value );
+        return $this->handleCriterion( $target, Criterion\Operator::LTE, $value );
     }
 
     public function in( $target, $value )
     {
-        return $this->handleCriterion( $target, 'in', $value );
+        return $this->handleCriterion( $target, Criterion\Operator::IN, $value );
     }
 
     /**
@@ -69,7 +69,7 @@ class CriterionFactory
      */
     public function like( $target, $value )
     {
-        return $this->handleCriterion( $target, 'like', $value );
+        return $this->handleCriterion( $target, Criterion\Operator::LIKE, $value );
     }
 
     /**
@@ -81,7 +81,7 @@ class CriterionFactory
      */
     public function between( $target, $valueOne, $valueTwo )
     {
-        return $this->handleCriterion( $target, 'between', array( $valueOne, $valueTwo) );
+        return $this->handleCriterion( $target, Criterion\Operator::IN, array( $valueOne, $valueTwo) );
     }
 
     /**

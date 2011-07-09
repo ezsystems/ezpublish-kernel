@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion;
 
 /**
  * @package ezp.persistence.content.criteria

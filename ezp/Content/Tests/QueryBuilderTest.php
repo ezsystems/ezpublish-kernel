@@ -10,6 +10,8 @@
  */
 
 namespace ezp\Content\Tests;
+use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\CriterionFactory;
 
 class QueryBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,25 +20,48 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
      */
     private $qb;
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setName( "QueryBuilder tests" );
-    }
-
     public function setUp()
     {
         $this->qb = new \ezp\Content\QueryBuilder();
     }
 
-    public function testMetaData()
+    /**
+     * Global test for criterion factory getters
+     * @dataProvider providerForTestCriterionGetter
+     */
+    public function testCriterionGetter( $accessor )
     {
-        $ret = $this->qb->metaData->between(
-            'created',
-            new \DateTime( 'first day of last month' ), new \DateTime( 'last day of last month' )
-        );
-
-        self::assertEquals( $ret, $this->qb );
+        self::assertInstanceOf( 'ezp\Content\CriterionFactory', $this->qb->$accessor );
     }
+
+    public static function providerForTestCriterionGetter()
+    {
+        return array(
+            array( 'contentId' ),
+            array( 'contentType' ),
+            array( 'contentTypeGroup' ),
+            array( 'field' ),
+            array( 'fullText' ),
+            array( 'LocationId' ),
+            array( 'metaData' ),
+            array( 'permission' ),
+            array( 'remoteId' ),
+            array( 'section' ),
+            array( 'subTree' ),
+            array( 'urlAlias' )
+        );
+    }
+
+    /*public function testMetaData()
+    {
+        $cf = $this->qb->metaData;
+        self::assertInstanceOf( 'ezp\Content\CriterionFactory', $cf );
+    }
+
+    public function testField()
+    {
+        $ret = $this->qb->field->eq( 'title', 'My shiny title' );
+        self::assertEquals( $ret, $this->qb );
+    }*/
 }
 ?>

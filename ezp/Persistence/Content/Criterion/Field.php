@@ -8,8 +8,8 @@
  *
  */
 
-
 namespace ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion;
 
 /**
  * @package ezp.Persistence.Content.Criterion
@@ -25,7 +25,7 @@ class Field extends Criterion implements \ezp\Persistence\Content\Interfaces\Cri
      * @param string $operato The match operator
      * @param mixed $matchValue The value to match against
      */
-    public function __construct( $fieldIdentifier, $operator, $value )
+    public function __construct( $field, $operator, $value )
     {
         switch ( $operator )
         {
@@ -59,7 +59,7 @@ class Field extends Criterion implements \ezp\Persistence\Content\Interfaces\Cri
                 throw new \InvalidArgumentException( "Unknown operator $operator" );
         }
 
-        $this->target = $target;
+        $this->target = $field;
         $this->operator = $operator;
         $this->value = $value;
     }

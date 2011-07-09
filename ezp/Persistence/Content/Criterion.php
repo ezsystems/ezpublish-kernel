@@ -8,17 +8,17 @@
  *
  */
 
-namespace ezp\Persistence\Content\Criteria;
+namespace ezp\Persistence\Content;
 
 /**
  * @package ezp.persistence.content.criteria
  */
-class Criterion
+abstract class Criterion
 {
     /**
      */
     public $children = array();
-     
+
     /**
      * The operator used by the Criterion
      * @var string

@@ -9,11 +9,12 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion;
 
 /**
  * @package ezp.persistence.content.criteria
  */
-class SectionId extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class Section extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {
     /**
      * Creates a new Section criterion

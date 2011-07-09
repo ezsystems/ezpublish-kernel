@@ -9,11 +9,12 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion;
 
 /**
  * @package ezp.persistence.content.criteria
  */
-class MetaData extends \ezp\Persistence\Content\Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class MetaData extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {
     /**
      * Creates a new metadata criterion on $metadata

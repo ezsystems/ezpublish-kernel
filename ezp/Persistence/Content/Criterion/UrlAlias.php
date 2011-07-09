@@ -8,12 +8,13 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion;
 
 /**
  * A criterion that matches Content based on Url aliases
  * @package ezp.persistence.content.criteria
  */
-class UrlAliasCriterion extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class UrlAlias extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {
     /**
      * Creates a new UrlAlias Criterion

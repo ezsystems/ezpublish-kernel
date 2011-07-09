@@ -9,11 +9,12 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion;
 
 /**
  * @package ezp.persistence.content.criteria
  */
-class Permission extends Criterion
+class Permission extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {
     /**
      * Creates a new Permission criterion
@@ -25,7 +26,7 @@ class Permission extends Criterion
      *
      * @throws InvalidArgumentException if $userId isn't numeric
      */
-    public function __construct()
+    public function __construct( $metadata, $operator, $value )
     {
         if ( !is_numeric( $userId ) )
         {
