@@ -16,33 +16,59 @@ namespace ezp\Persistence\Content\Criterion;
  *
  * @package ezp.persistence.content.criteria
  */
-class SubTree extends Criterion
+class SubTree extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {
     /**
      * Creates a new SubTree criterion
      *
-     * @param integer|array(integer) $subtreeId
+     * @param string $target Not used
+     * @param string $operator
+     *        Possible values:
+     *        - Operator::IN, requires an array of subtree id as the $value
+     *        - Operator::EQ, requires a single subtree id as the $value
+     * @param array(integer) $subtreeId an array of subtree ids
+     *
      * @throws InvalidArgumentException if a non numeric id is given
      */
-    public function __construct( $subtreeId )
+    public function __construct( $target = null, $operator, $subtreeId )
     {
-        if ( !is_array( $subtreeId ) )
+        if ( is_array( $subtreeId ) )
         {
-            $subtreeId = array( $subtreeId );
-        }
-        foreach( $subtreeId as $id )
-        {
-            if ( !is_numeric( $id ) )
+            if ( $operator != Operator::IN )
             {
-                throw new \InvalidArgumentException( "Only numeric section ids are accepted" );
+                throw new \InvalidArgumentException( "An array of subtree ids requires the IN operator" );
+            }
+            foreach( $subtreeId as $id )
+            {
+                if ( !is_numeric( $id ) )
+                {
+                    throw new \InvalidArgumentException( "Only numeric subtree ids are accepted" );
+                }
             }
         }
-        $this->operator = Operator::IN;
+        // single value, EQ operator
+        else
+        {
+            if ( $operator != Operator::EQ )
+            {
+                throw new \InvalidArgumentException( "A single subtree id requires the EQ operator" );
+            }
+            if ( !is_numeric( $value ) )
+            {
+                throw new \InvalidArgumentException( "Only numeric subtree ids are accepted" );
+            }
+        }
+        $this->operator = $operator;
+        $this->subtreeList = $subtreeId;
     }
 
     /**
-     * List of subtree id to match against
-     * @var array(integer)
+     * The subtree value used by the criterion.
+     *
+     * A single value if $operator is Operator::EQ
+     * An array of values if $operator is Operator::IN
+     *
+     * @var integer|array(integer)
      */
     public $subtreeList;
 }
