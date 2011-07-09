@@ -52,16 +52,6 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-    /*public function testMetaData()
-    {
-        $cf = $this->qb->metaData;
-        self::assertInstanceOf( 'ezp\Content\CriterionFactory', $cf );
-    }
-
-    public function testField()
-    {
-        $ret = $this->qb->field->eq( 'title', 'My shiny title' );
-        self::assertEquals( $ret, $this->qb );
-    }*/
+    // public function
 }
 ?>
