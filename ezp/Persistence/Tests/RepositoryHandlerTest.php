@@ -31,10 +31,10 @@ class RepositoryHandlerTest extends \PHPUnit_Framework_TestCase
         $this->setName( "RepositoryHandler class tests" );
 
         // Get in memory RepositoryHandler instance
-        $sc = new ServiceContainer(array(
+        $serviceContainer = new ServiceContainer(array(
             'repository_handler' => array( 'class' => '\ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler' )
         ));
-        $this->handler = $sc->get('repository_handler');
+        $this->handler = $serviceContainer->get('repository_handler');
     }
 
     /**

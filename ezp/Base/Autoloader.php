@@ -99,13 +99,13 @@ class Autoloader
         if ( empty( $this->settings['repositories'] ) )
             return false;
 
-        foreach( $this->settings['repositories'] as $ns => $subPath )
+        foreach( $this->settings['repositories'] as $namespace => $subPath )
         {
-            if ( strpos( $className, $ns . '\\' ) === 0 )
+            if ( strpos( $className, $namespace . '\\' ) === 0 )
             {
                 $fileName = './' . str_replace( array( '\\', '/_' ), '/', $className ) . '.php';
-                if ( $ns !== $subPath )
-                    require str_replace( './' . $ns, './' . $subPath, $fileName );
+                if ( $namespace !== $subPath )
+                    require str_replace( './' . $namespace, './' . $subPath, $fileName );
                 else
                     require $fileName;
                 return true;

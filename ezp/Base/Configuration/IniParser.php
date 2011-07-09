@@ -149,7 +149,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
         try
         {
             $reader = new \ezcConfigurationIniReader( $tempFileName );
-            $cfg = $reader->load();
+            $configuration = $reader->load();
         }
         catch ( Exception $e)
         {
@@ -166,9 +166,9 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
             }
 
         }
-        else if ( $cfg instanceof \ezcConfiguration )
+        else if ( $configuration instanceof \ezcConfiguration )
         {
-            $configurationData = $cfg->getAllSettings();
+            $configurationData = $configuration->getAllSettings();
             foreach( $configurationData as $section => $sectionArray )
             {
                 foreach( $sectionArray as $setting => $value )
@@ -184,7 +184,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
         }
         else
         {
-            trigger_error( __METHOD__ . ': $cfg not instanceof ezcConfiguration', E_USER_WARNING );
+            trigger_error( __METHOD__ . ': $configuration not instanceof ezcConfiguration', E_USER_WARNING );
         }
         // Remove temp file
         unlink( $tempFileName );
