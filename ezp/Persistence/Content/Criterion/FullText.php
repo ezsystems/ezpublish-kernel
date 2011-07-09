@@ -13,22 +13,26 @@ namespace ezp\Persistence\Content\Criterion;
 /**
  * @package ezp.Persistence.Content.Criterion
  */
-class FullText extends Criterion
+class FullText extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {
     /**
      * Creates a FullText criterion on $text
      *
      * @param string $text
      */
-    public function __construct( $text )
+    public function __construct( $target, $operator, $text )
     {
-        $this->text = $text;
+        $this->value = $value;
+        $this->operator = Operator::LIKE;
+
+        // @todo Not required ?
+        $this->target = null;
     }
 
     /**
      * The text to match against
      * @var string
      */
-    public $text;
+    public $value;
 }
 ?>
