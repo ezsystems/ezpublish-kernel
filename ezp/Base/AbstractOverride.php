@@ -198,12 +198,14 @@ abstract class AbstractOverride
         {
             throw new Exception\InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
         }
-        if ( $this->paths[$scope] === $paths )
+        else if ( $this->paths[$scope] === $paths )
         {
             return false;
         }
-
-        $this->paths[$scope] = $paths;
+        else
+        {
+            $this->paths[$scope] = $paths;
+        }
 
         if ( $this->pathsHash !== '' )
         {
