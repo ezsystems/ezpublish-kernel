@@ -162,7 +162,7 @@ class CriteriaSet
         {
             throw new \InvalidArgumentException( "Limit must be > 0" );
         }
-        $this->limit = (int)$limit;
+        $this->limit = $limit;
 
         return $this;
     }
