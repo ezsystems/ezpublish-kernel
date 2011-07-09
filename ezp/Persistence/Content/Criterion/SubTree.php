@@ -29,37 +29,38 @@ class SubTree extends Criterion implements \ezp\Persistence\Content\Interfaces\C
      * @param array(integer) $subtreeId an array of subtree ids
      *
      * @throws InvalidArgumentException if a non numeric id is given
+     * @throw InvalidArgumentException if the value type doesn't match the operator
      */
     public function __construct( $target = null, $operator, $subtreeId )
     {
-        if ( is_array( $subtreeId ) )
+        if ( $operator != Operator::IN )
         {
-            if ( $operator != Operator::IN )
+            if ( !is_array( $value ) )
             {
-                throw new \InvalidArgumentException( "An array of subtree ids requires the IN operator" );
+                throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
             }
             foreach( $subtreeId as $id )
             {
                 if ( !is_numeric( $id ) )
                 {
-                    throw new \InvalidArgumentException( "Only numeric subtree ids are accepted" );
+                    throw new \InvalidArgumentException( "Only numeric ids are accepted" );
                 }
             }
         }
         // single value, EQ operator
-        else
+        elseif ( $operator == Operator::EQ )
         {
-            if ( $operator != Operator::EQ )
+            if ( is_array( $value ) )
             {
-                throw new \InvalidArgumentException( "A single subtree id requires the EQ operator" );
+                throw new \InvalidArgumentException( "Operator::EQ requires a single value" );
             }
             if ( !is_numeric( $value ) )
             {
-                throw new \InvalidArgumentException( "Only numeric subtree ids are accepted" );
+                throw new \InvalidArgumentException( "Only numeric ids are accepted" );
             }
         }
         $this->operator = $operator;
-        $this->subtreeList = $subtreeId;
+        $this->value = $value;
     }
 
     /**
@@ -70,6 +71,6 @@ class SubTree extends Criterion implements \ezp\Persistence\Content\Interfaces\C
      *
      * @var integer|array(integer)
      */
-    public $subtreeList;
+    public $value;
 }
 ?>

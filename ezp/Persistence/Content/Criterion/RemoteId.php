@@ -13,22 +13,57 @@ namespace ezp\Persistence\Content\Criterion;
 /**
  * @package ezp.persistence.content.criteria
  */
-class RemoteId extends Criterion
+class RemoteId extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {
     /**
      * Creates a new remoteId criterion
-     * @param string|array(string) $remoteId One or more (as an array) remoteId
+     *
+     * @param null $target Not used
+     * @param string $operator
+     *        Possible values:
+     *        - Operator::IN: match against a list of remoteId. $value must be an array of remoteId
+     *        - Operator::EQ: match against a single remoteId. $value must be a single remoteId
+     * @param integer|array(integer) One or more remoteId that must be matched
+     *
+     * @throw InvalidArgumentException if a non numeric id is given
+     * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $remoteId )
+    public function __construct(  $metadata, $operator, $value  )
     {
-        $this->remoteIdList = $remoteId;
-        $this->operator = Operator::IN;
+        if ( $operator != Operator::IN )
+        {
+            if ( !is_array( $value ) )
+            {
+                throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
+            }
+            foreach( $subtreeId as $id )
+            {
+                if ( !is_numeric( $id ) )
+                {
+                    throw new \InvalidArgumentException( "Only numeric ids are accepted" );
+                }
+            }
+        }
+        // single value, EQ operator
+        elseif ( $operator == Operator::EQ )
+        {
+            if ( is_array( $value ) )
+            {
+                throw new \InvalidArgumentException( "Operator::EQ requires a single value" );
+            }
+            if ( !is_numeric( $value ) )
+            {
+                throw new \InvalidArgumentException( "Only numeric ids are accepted" );
+            }
+        }
+        $this->operator = $operator;
+        $this->value = $value;
     }
 
     /**
      * The list of remote ids to be matched against
      * @var array(string)
      */
-    public $remoteIdList;
+    public $value;
 }
 ?>
