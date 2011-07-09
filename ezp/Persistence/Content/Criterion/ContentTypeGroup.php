@@ -12,38 +12,60 @@ namespace ezp\Persistence\Content\Criterion;
 /**
  * @package ezp.persistence.content.criteria
  */
-class ContentTypeGroup extends Criterion
+class ContentTypeGroup extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {
     /**
      * Creates a new ContentTypeGroup criterion
      *
-     * Content will be matched if it matches one of the $contentTypeGroupId
+     * Content will be matched if it matches one of the contentTypeGroupId in $value
      *
-     * @param integer|array(integer) one or more (as an array) ContentTypeGroup id
+     * @param null $target Not used
+     * @param string $operator
+     *        Possible values:
+     *        - Operator::IN: match against a list of contentTypeGroupId. $value must be an array of contentTypeGroupId
+     *        - Operator::EQ: match against a single contentTypeGroupId. $value must be a single contentTypeGroupId
+     * @param integer|array(integer) One or more contentTypeGroupId that must be matched
      *
-     * @throws InvalidArgumentException if a non numeric id is given
+     * @throw InvalidArgumentException if a non numeric id is given
+     * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $contentTypeGroupId )
+    public function __construct( $target = null, $operator, $value )
     {
-        if ( !is_array( $contentTypeGroupId ) )
+        if ( $operator != Operator::IN )
         {
-            $contentTypeGroupId = array( $contentTypeGroupId );
-        }
-        foreach( $contentTypeGroupId as $id )
-        {
-            if ( !is_numeric( $contentTypeGroupId ) )
+            if ( !is_array( $value ) )
             {
-                throw new \InvalidArgumentException( "Only numeric content type group ids are accepted" );
+                throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
+            }
+            foreach( $subtreeId as $id )
+            {
+                if ( !is_numeric( $id ) )
+                {
+                    throw new \InvalidArgumentException( "Only numeric ids are accepted" );
+                }
             }
         }
-        $this->contentTypeGroupIdList = $contentTypeGroupId;
+        // single value, EQ operator
+        elseif ( $operator == Operator::EQ )
+        {
+            if ( is_array( $value ) )
+            {
+                throw new \InvalidArgumentException( "Operator::EQ requires a single value" );
+            }
+            if ( !is_numeric( $value ) )
+            {
+                throw new \InvalidArgumentException( "Only numeric ids are accepted" );
+            }
+        }
+        $this->operator = $operator;
+        $this->value = $value;
     }
 
     /**
      * List of ContentTypeGroup ids that must be matched
-     * @var array(integer)
+     * @var integer|array(integer)
      */
-    public $contentTypeGroupIdList;
+    public $value;
 }
 ?>
 
