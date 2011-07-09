@@ -249,7 +249,7 @@ class Content extends \ezp\Base\AbstractModel
      */
     protected function getCurrentVersion()
     {
-        foreach( $this->versions as $contentVersion )
+        foreach ( $this->versions as $contentVersion )
         {
             if ( $this->currentVersion == $contentVersion->version )
                 return $contentVersion;

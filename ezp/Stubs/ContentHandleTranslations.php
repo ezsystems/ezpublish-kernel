@@ -23,7 +23,7 @@ try
 {
     $fieldsNO = $content->translations['nor-NO']->fields;
 }
-catch( \DomainException $e )
+catch ( \DomainException $e )
 {
     echo "No published translation in nor-NO, but we can deal with the last version in this translation\n";
     $fieldsNO = $content->translations['nor-NO']->last->fields;

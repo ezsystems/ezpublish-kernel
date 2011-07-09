@@ -122,7 +122,7 @@ class ServiceContainer
 
         // Expand arguments with other service objects on arguments that start with @ and predefined variables that start with $
         $arguments = array();
-        foreach( $settings['arguments'] as $key => $argument )
+        foreach ( $settings['arguments'] as $key => $argument )
         {
             if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' ) )// service name / variable
             {
@@ -148,7 +148,7 @@ class ServiceContainer
                 {
                     $arguments[] = $this->get( ltrim( $argument, '@' ), $callChainDependancieOverrides );
                 }
-                catch( \InvalidArgumentException $e )
+                catch ( \InvalidArgumentException $e )
                 {
                     throw new \InvalidArgumentException( "$serviceName argument {$settings['arguments'][$key]} => $argument threw an exception, ". __CLASS__, 0, $e );
                 }

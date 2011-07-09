@@ -13,7 +13,7 @@ try
 {
     $sectionService->create( $section );
 }
-catch( ValidationException $e )
+catch ( ValidationException $e )
 {
     echo "An error occurred while updating the section: {$e->getMessage()}";
     exit;

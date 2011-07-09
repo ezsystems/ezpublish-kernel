@@ -15,7 +15,7 @@ catch ( ezp\Content\ContentNotFoundException $e )
     echo "Content could not be found in the repository !\n";
     exit;
 }
-catch( ezp\Content\PermissionException $e )
+catch ( ezp\Content\PermissionException $e )
 {
     echo "A permission issue occurred while deleting content: {$e->getMessage()}\n";
     exit;

@@ -99,7 +99,7 @@ class Autoloader
         if ( empty( $this->settings['repositories'] ) )
             return false;
 
-        foreach( $this->settings['repositories'] as $namespace => $subPath )
+        foreach ( $this->settings['repositories'] as $namespace => $subPath )
         {
             if ( strpos( $className, $namespace . '\\' ) === 0 )
             {
@@ -149,7 +149,7 @@ class Autoloader
         $ezpClasses = $ezpKernelOverrideClasses + $ezpTestClasses + $ezpExtensionClasses + $ezpClasses;
 
         // Load eZ Component autoload files that are used often
-        foreach( $this->settings['ezc-prefixes'] as $prefix )
+        foreach ( $this->settings['ezc-prefixes'] as $prefix )
         {
             $tempOverrideClasses = include "{$this->settings['ezc-path']}autoload/{$prefix}_autoload.php";
             if ( $tempOverrideClasses )
@@ -163,12 +163,12 @@ class Autoloader
         {
             // @todo: Use configuration so class list only include activated extensions.
             // But then this loading will have to happen after configuration and siteaccess is loaded!
-            foreach( glob( "$subPath/*", GLOB_ONLYDIR ) as $path )
+            foreach ( glob( "$subPath/*", GLOB_ONLYDIR ) as $path )
             {
                 if ( !file_exists( "$path/autoload.php" ) )
                     continue;
 
-                foreach( include "$path/autoload.php" as $class => $relativePath )
+                foreach ( include "$path/autoload.php" as $class => $relativePath )
                 {
                     $ezpClasses[$class] = "$path/" . $relativePath;
                 }
@@ -185,7 +185,7 @@ class Autoloader
      */
     protected function expandEzcClassList( array $classes )
     {
-        foreach( $classes as $class => $path )
+        foreach ( $classes as $class => $path )
         {
             list( $first, $second ) = explode( '/', $path, 2 );
             $classes[$class] = $this->settings['ezc-path'] . $first . $this->settings['ezc-src-path'] . $second;

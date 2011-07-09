@@ -11,12 +11,12 @@ try
     $section = $sectionService->loadByIdentifier( $sectionIdentifier );
     $sectionService->delete( $section );
 }
-catch( SectionNotFoundException $e )
+catch ( SectionNotFoundException $e )
 {
     echo "Section ({$sectionIdentifier}) not found !";
     exit;
 }
-catch( ValidationException $e )
+catch ( ValidationException $e )
 {
     echo "Can not remove section ({$sectionIdentifier}) because {$e->getMessage()}";
     exit;

@@ -96,14 +96,14 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
         // cast numeric values and unset array self::TEMP_INI_UNSET_VAR values as set in {@link self::parserClearArraySupport()}
         if ( $configurationData !== false )
         {
-            foreach( $configurationData as $section => $sectionArray )
+            foreach ( $configurationData as $section => $sectionArray )
             {
-                foreach( $sectionArray as $setting => $settingValue )
+                foreach ( $sectionArray as $setting => $settingValue )
                 {
 
                     if ( is_array( $settingValue ) )
                     {
-                        foreach( $settingValue as $key => $keyValue )
+                        foreach ( $settingValue as $key => $keyValue )
                         {
                             $configurationData[$section][$setting][$key] = self::parseFilePhpPostFilter( $keyValue );
                         }
@@ -169,9 +169,9 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
         else if ( $configuration instanceof \ezcConfiguration )
         {
             $configurationData = $configuration->getAllSettings();
-            foreach( $configurationData as $section => $sectionArray )
+            foreach ( $configurationData as $section => $sectionArray )
             {
-                foreach( $sectionArray as $setting => $value )
+                foreach ( $sectionArray as $setting => $value )
                 {
                     // fix appending ##! and such lines
                     if ( isset( $value[0] ) && is_string( $value ) && strpos( $value, '#') !== false )
@@ -227,7 +227,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
     {
         if ( preg_match_all("/\n([\w_-]+)\[\]\n/", $fileContent, $valueArray ) )
         {
-            foreach( $valueArray[1] as $variableArrayClearing )
+            foreach ( $valueArray[1] as $variableArrayClearing )
             {
                 $variableArrayClearing .= '[]';
                 $fileContent = str_replace( "\n$variableArrayClearing\n", "\n$variableArrayClearing=" . Configuration::TEMP_INI_UNSET_VAR . "\n" , $fileContent );
@@ -238,7 +238,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
         if ( preg_match_all("#\n([\w_-]+)\[\]\n#", $fileContent, $valueArray ) )
         {
             trigger_error( __METHOD__ . ": regex second round!", E_USER_NOTICE );
-            foreach( $valueArray[1] as $variableArrayClearing )
+            foreach ( $valueArray[1] as $variableArrayClearing )
             {
                 $variableArrayClearing .= '[]';
                 $fileContent = str_replace( "\n$variableArrayClearing\n", "\n$variableArrayClearing=" . Configuration::TEMP_INI_UNSET_VAR . "\n" , $fileContent );
@@ -270,10 +270,10 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
             $iniStr = "#?ini charset=\"utf-8\"?\n";
         }
 
-        foreach( $configurationData as $section => $sectionData )
+        foreach ( $configurationData as $section => $sectionData )
         {
             $iniStr .= "\n\n[{$section}]";
-            foreach( $sectionData as $var => $value )
+            foreach ( $sectionData as $var => $value )
             {
                 if ( $value === true )
                 {
@@ -290,7 +290,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
                         $iniStr .= "\n{$var}[]";
                         continue;
                     }
-                    foreach( $value as $arrayKey => $arrayValue )
+                    foreach ( $value as $arrayKey => $arrayValue )
                     {
                         if ( $arrayValue === Configuration::TEMP_INI_UNSET_VAR )
                         {

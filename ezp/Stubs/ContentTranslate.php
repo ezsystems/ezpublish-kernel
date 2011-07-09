@@ -15,7 +15,7 @@ try
     // last one in eng-GB
     $translationFR = $content->addTranslation( $localeFR, $content->translations['eng-GB']->last );
 }
-catch( \InvalidArgumentException $e )
+catch ( \InvalidArgumentException $e )
 {
     echo "Impossible to translate from '{$localeEN->code}', this translation does not exist\n";
     exit;

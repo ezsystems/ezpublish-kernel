@@ -110,7 +110,7 @@ class Translation extends \ezp\Base\AbstractModel
      */
     protected function getCurrent()
     {
-        foreach( $this->versions as $version )
+        foreach ( $this->versions as $version )
         {
             if ( $version->status === Version::STATUS_PUBLISHED )
             {

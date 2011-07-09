@@ -134,7 +134,7 @@ class Backend
     {
         $className = "\\ezp\\Persistence\\$module\\$type";
         $obj = new $className;
-        foreach( $obj as $prop => $value )
+        foreach ( $obj as $prop => $value )
         {
             if ( isset( $data[$prop] ) )
                 $obj->$prop = $data[$prop];

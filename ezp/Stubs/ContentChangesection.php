@@ -14,17 +14,17 @@ try
     $content->section = $section;
     $contentService->update( $content );
 }
-catch( ContentNotFoundException $e )
+catch ( ContentNotFoundException $e )
 {
     echo "Content ($contentId) does not exist";
     exit;
 }
-catch( SectionNotFoundException $e )
+catch ( SectionNotFoundException $e )
 {
     echo "Section ($sectionId) does not exist";
     exit;
 }
-catch( ValidationException $e )
+catch ( ValidationException $e )
 {
     echo "An error occurred while updating the content: {$e->getMessage()}";
     exit;

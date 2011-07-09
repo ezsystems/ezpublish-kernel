@@ -94,7 +94,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
     {
         if ( !empty( $this->observers[$event] ) )
         {
-            foreach( $this->observers[$event] as $key => $obj )
+            foreach ( $this->observers[$event] as $key => $obj )
             {
                 if ( $obj === $observer )
                     unset( $this->observers[$event][$key] );
@@ -113,7 +113,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
     {
         if ( !empty( $this->observers[$event] ) )
         {
-            foreach( $this->observers[$event] as $obj )
+            foreach ( $this->observers[$event] as $obj )
             {
                 $obj->update( $this, $event );
             }
@@ -200,7 +200,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
             {
                 $obj->$property = $value;
             }
-            elseif ( isset( $obj->dynamicProperties[$property] ) && property_exists( $obj, $property ) )
+            else if ( isset( $obj->dynamicProperties[$property] ) && property_exists( $obj, $property ) )
             {
                 $obj->$property = $value;
             }

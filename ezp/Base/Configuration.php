@@ -265,7 +265,7 @@ class Configuration extends AbstractOverride
         // Merge global settings (not cached as they are runtime settings)
         if ( isset( self::$globalConfigurationData[ $this->moduleName ] ) )
         {
-            foreach( self::$globalConfigurationData[ $this->moduleName ] as $section => $settings )
+            foreach ( self::$globalConfigurationData[ $this->moduleName ] as $section => $settings )
             {
                 if ( !isset( $this->raw['data'][$section] ) )
                 {
@@ -273,7 +273,7 @@ class Configuration extends AbstractOverride
                     continue;
                 }
 
-                foreach( $settings as $setting => $value )
+                foreach ( $settings as $setting => $value )
                 {
                     $this->raw['data'][$section][$setting] = $value;
                 }
@@ -381,11 +381,11 @@ class Configuration extends AbstractOverride
             throw new Exception\BadConfiguration( 'base\[configuration]\parsers', 'Could not parse configuration files' );
         }
         $parsers = self::$globalConfigurationData['base']['configuration']['parsers'];
-        foreach( $configurationPaths as $scopeArray )
+        foreach ( $configurationPaths as $scopeArray )
         {
-            foreach( $scopeArray as $settingsDir )
+            foreach ( $scopeArray as $settingsDir )
             {
-                foreach( $parsers as $suffix => $parser )
+                foreach ( $parsers as $suffix => $parser )
                 {
                     $fileName = $settingsDir . $moduleName . $suffix;
                     if ( !isset( $sourceFiles[$fileName] ) && file_exists( $fileName ) )
@@ -404,7 +404,7 @@ class Configuration extends AbstractOverride
 
         $configurationData     = array();
         $configurationFileData = array();
-        foreach( $sourceFiles as $fileName => $suffix )
+        foreach ( $sourceFiles as $fileName => $suffix )
         {
             $parser = new $parsers[$suffix]( $fileName );
             $configurationFileData[$fileName] = $parser->parse( file_get_contents( $fileName ) );
@@ -412,21 +412,21 @@ class Configuration extends AbstractOverride
 
         // Post processing to unset array self::TEMP_INI_UNSET_VAR values as set by parser to indicate array clearing
         // and to merge configuration data from all configuration files
-        foreach( $configurationFileData as $file => $data )
+        foreach ( $configurationFileData as $file => $data )
         {
-            foreach( $data as $section => $sectionArray )
+            foreach ( $data as $section => $sectionArray )
             {
                 if ( !isset( $configurationData[$section] ) )
                     $configurationData[$section] = array();
 
-                foreach( $sectionArray as $setting => $settingValue )
+                foreach ( $sectionArray as $setting => $settingValue )
                 {
                     if ( isset( $settingValue[0] ) && $settingValue[0] === self::TEMP_INI_UNSET_VAR )
                     {
                         array_shift( $settingValue );
                         $configurationData[$section][$setting] = $settingValue;
                     }
-                    elseif ( isset( $configurationData[$section][$setting] ) && is_array( $settingValue ) )
+                    else if ( isset( $configurationData[$section][$setting] ) && is_array( $settingValue ) )
                     {
                         $configurationData[$section][$setting] = array_merge( $configurationData[$section][$setting], $settingValue );
                     }
@@ -496,7 +496,7 @@ class Configuration extends AbstractOverride
         {
             return $this->raw['data'][$section][$key];
         }
-        elseif ( $fallBackValue === null )
+        else if ( $fallBackValue === null )
         {
             trigger_error( __METHOD__ . " could not find {$this->moduleName}.ini\[{$section}]$key setting",  E_USER_WARNING );
         }
@@ -517,7 +517,7 @@ class Configuration extends AbstractOverride
         {
             return $this->raw['data'][$section];
         }
-        elseif ( $fallBackValue === null )
+        else if ( $fallBackValue === null )
         {
             trigger_error( __METHOD__ . " could not find {$this->moduleName}.ini\[{$section}]setting",  E_USER_WARNING );
         }

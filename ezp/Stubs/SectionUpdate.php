@@ -10,12 +10,12 @@ try
     $section->name = "New section name";
     $sectionService->update( $section );
 }
-catch( SectionNotFoundException $e )
+catch ( SectionNotFoundException $e )
 {
     echo "Section #{$sectionId} not found !"
     exit;
 }
-catch( ValidationException $e )
+catch ( ValidationException $e )
 {
     echo "An error occurred during section update: {$e->getMessage()}";
     exit;

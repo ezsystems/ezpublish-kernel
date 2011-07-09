@@ -206,7 +206,7 @@ class CriteriaSet
     {
         $contentTypeIdentifiers = func_get_args();
 
-        foreach( $contentTypeIdentifiers as $contentTypeIdentifier )
+        foreach ( $contentTypeIdentifiers as $contentTypeIdentifier )
         {
             if ( !is_string( $contentTypeIdentifier ) )
             {
@@ -237,7 +237,7 @@ class CriteriaSet
      */
     public function sortBy( SortByClause $sortBy )
     {
-        foreach( func_get_args() as $item )
+        foreach ( func_get_args() as $item )
         {
             if ( !$item instanceof SortByClause )
             {
