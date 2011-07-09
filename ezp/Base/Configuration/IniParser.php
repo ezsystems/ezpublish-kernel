@@ -226,7 +226,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
      */
     protected static function parserClearArraySupport( $fileContent )
     {
-        if ( preg_match_all("/\n([\w_-]+)\[\]\n/", $fileContent, $valueArray ) )
+        if ( preg_match_all( "/\n([\w_-]+)\[\]\n/", $fileContent, $valueArray ) )
         {
             foreach ( $valueArray[1] as $variableArrayClearing )
             {
@@ -236,7 +236,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
         }
 
         // For some reason this needs to be done twice to get them all
-        if ( preg_match_all("#\n([\w_-]+)\[\]\n#", $fileContent, $valueArray ) )
+        if ( preg_match_all( "#\n([\w_-]+)\[\]\n#", $fileContent, $valueArray ) )
         {
             trigger_error( __METHOD__ . ": regex second round!", E_USER_NOTICE );
             foreach ( $valueArray[1] as $variableArrayClearing )

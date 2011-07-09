@@ -52,7 +52,7 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
      */
     protected function getTypeList()
     {
-        return \ezp\Base\Configuration::getInstance('content')->get( 'fields', 'Type' );
+        return \ezp\Base\Configuration::getInstance( 'content' )->get( 'fields', 'Type' );
     }
 
     /**

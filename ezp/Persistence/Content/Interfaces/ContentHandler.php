@@ -34,14 +34,14 @@ interface ContentHandler
      * @param values\ContentCreateStruct $content Content creation struct.
      * @return \ezp\Persistence\Content\Content Content value object
      */
-    public function create(\ezp\Persistence\Content\ContentCreateStruct $content);
+    public function create( \ezp\Persistence\Content\ContentCreateStruct $content );
 
     /**
      * @param int $contentId
      * @param int|bool $srcVersion
      * @return \ezp\Persistence\Content\Content
      */
-    public function createDraftFromVersion($contentId, $srcVersion = false);
+    public function createDraftFromVersion( $contentId, $srcVersion = false );
 
     /**
      * Returns the raw data of a content object identified by $id, in a struct.
@@ -49,7 +49,7 @@ interface ContentHandler
      * @param int $id
      * @return \ezp\Persistence\Content\Content Content value object
      */
-    public function load($id);
+    public function load( $id );
 
     /**
      * Returns one object satisfying the $criteria.
@@ -59,7 +59,7 @@ interface ContentHandler
      * @param $sort
      * @return \ezp\Persistence\Content\Content Content value object.
      */
-    public function find(\ezp\Content\Criteria\Criteria $criteria, $limit, $sort);
+    public function find( \ezp\Content\Criteria\Criteria $criteria, $limit, $sort );
 
     /**
      * Returns an iterator containing all objects satisfying $criteria
@@ -70,7 +70,7 @@ interface ContentHandler
      * @param $sort
      * @return mixed Collection of Content value objects
      */
-    public function findIterator(\ezp\Content\Criteria\Criteria $criteria, $limit, $sort);
+    public function findIterator( \ezp\Content\Criteria\Criteria $criteria, $limit, $sort );
 
     /**
      * Sets the state of object identified by $contentId and $version to $state.
@@ -83,7 +83,7 @@ interface ContentHandler
      * @see \ezp\Content\Content
      * @return boolean
      */
-    public function setState($contentId, $state, $version);
+    public function setState( $contentId, $state, $version );
 
     /**
      * Sets the object-state of object identified by $contentId, $stateGroup and $version to $state.
@@ -97,7 +97,7 @@ interface ContentHandler
      * @return boolean
      * @see \ezp\Content\Content
      */
-    public function setObjectState($contentId, $stateGroup, $state, $version);
+    public function setObjectState( $contentId, $stateGroup, $state, $version );
 
     /**
      * Updates a content object entity with data and identifier $content
@@ -105,7 +105,7 @@ interface ContentHandler
      * @param values\ContentUpdateStruct $content
      * @return boolean
      */
-    public function update(\ezp\Persistence\Content\ContentUpdateStruct $content);
+    public function update( \ezp\Persistence\Content\ContentUpdateStruct $content );
 
     /**
      * Deletes all versions and fields, all locations (subtree), and all relations.
@@ -113,7 +113,7 @@ interface ContentHandler
      * @param int $contentId
      * @return boolean
      */
-    public function delete($contentId);
+    public function delete( $contentId );
 
     /**
      * Sends a content object to trash.
@@ -125,7 +125,7 @@ interface ContentHandler
      * @param int $contentId
      * @return boolean
      */
-    public function trash($contentId);
+    public function trash( $contentId );
 
     /**
      * Returns a trashed object to normal state.
@@ -135,7 +135,7 @@ interface ContentHandler
      * @param int $contentId
      * @return boolean
      */
-    public function untrash($contentId);
+    public function untrash( $contentId );
 
     /**
      * Return the versions for $contentId
@@ -143,7 +143,7 @@ interface ContentHandler
      * @param int $contentId
      * @return array
      */
-    public function listVersions($contentId);
+    public function listVersions( $contentId );
 
     /**
      * Fetch a content value object containing the values of the translation for $languageCode.
@@ -152,6 +152,6 @@ interface ContentHandler
      * @param string $languageCode
      * @return \ezp\Persistence\Content\Content
      */
-    public function fetchTranslation($contentId, $languageCode);
+    public function fetchTranslation( $contentId, $languageCode );
 }
 ?>

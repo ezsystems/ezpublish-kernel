@@ -196,7 +196,7 @@ class Field extends \ezp\Content\AbstractField
      */
     protected function getTypeList()
     {
-        return \ezp\Base\Configuration::getInstance('content')->get( 'fields', 'Definition' );
+        return \ezp\Base\Configuration::getInstance( 'content' )->get( 'fields', 'Definition' );
     }
 
     /**
