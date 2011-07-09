@@ -204,16 +204,16 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
     {
         if ( $iniValue === self::TEMP_INI_TRUE_VAR )
             return true;
-        else if ( $iniValue === self::TEMP_INI_FALSE_VAR )
+        if ( $iniValue === self::TEMP_INI_FALSE_VAR )
             return false;
-        else if ( is_numeric( $iniValue ) )
+        if ( is_numeric( $iniValue ) )
         {
             if ( strpos( $iniValue, '.' ) !== false )
                 return (float) $iniValue;
-            else
-                return (int) $iniValue;
+
+            return (int) $iniValue;
         }
-        else if ( isset( $iniValue[1] ) && is_string( $iniValue ) )
+        if ( isset( $iniValue[1] ) && is_string( $iniValue ) )
             return rtrim( $iniValue, ' ' );
         return $iniValue;
     }

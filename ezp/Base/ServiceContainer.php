@@ -106,11 +106,11 @@ class ServiceContainer
         {
             throw new \InvalidArgumentException( "{$serviceName} is not a valid Service(Configuration section service_{$serviceName} does not exist), ". __CLASS__ );
         }
-        else if ( empty( $settings['class'] ) )
+        if ( empty( $settings['class'] ) )
         {
             throw new \InvalidArgumentException( "{$serviceName} does not have a Service class(value empty/ not defined), " . __CLASS__ );
         }
-        else if ( !class_exists( $settings['class'] ) )
+        if ( !class_exists( $settings['class'] ) )
         {
             throw new \InvalidArgumentException( "{$serviceName} does not have a valid Service class({$settings['class']} is not a valid class), " . __CLASS__ );
         }
