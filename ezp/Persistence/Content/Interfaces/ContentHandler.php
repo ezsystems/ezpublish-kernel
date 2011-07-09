@@ -64,7 +64,7 @@ interface ContentHandler
     /**
      * Returns an iterator containing all objects satisfying $criteria
      *
-     * 
+     *
      * @param Criteria $criteria
      * @param $limit
      * @param $sort

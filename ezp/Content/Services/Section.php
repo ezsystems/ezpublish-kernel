@@ -22,7 +22,7 @@ class Section extends \ezp\Base\AbstractService
 {
     /**
      * Creates the a new Section in the content repository
-     * 
+     *
      * @param \ezp\Content\Section $section
      * @return \ezp\Content\Section The newly create section
      * @throws Exception\Validation If a validation problem has been found for $section
@@ -44,8 +44,8 @@ class Section extends \ezp\Base\AbstractService
 
     /**
      * Loads a Section from its id ($sectionId)
-     * 
-     * @param int $sectionId 
+     *
+     * @param int $sectionId
      * @return \ezp\Content\Section
      * @throws Exception\NotFound if section could not be found
      */
@@ -55,8 +55,8 @@ class Section extends \ezp\Base\AbstractService
 
     /**
      * Loads a Section from its identifier ($sectionIdentifier)
-     * 
-     * @param string $sectionIdentifier 
+     *
+     * @param string $sectionIdentifier
      * @return \ezp\Content\Section
      * @throws Exception\NotFound if section could not be found
      */
@@ -65,8 +65,8 @@ class Section extends \ezp\Base\AbstractService
     }
 
     /**
-     * Counts the contents which $section is assigned to 
-     * 
+     * Counts the contents which $section is assigned to
+     *
      * @param \ezp\Content\Section $section
      * @return int
      */
@@ -89,8 +89,8 @@ class Section extends \ezp\Base\AbstractService
     }
 
     /**
-     * Deletes $section from content repository 
-     * 
+     * Deletes $section from content repository
+     *
      * @param \ezp\Content\Section $section
      * @return void
      * @throws Exception\Validation

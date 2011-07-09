@@ -42,7 +42,7 @@ interface ConfigurationParser
      *             var=true
      *             num=2
      *             float=1.2
-     *             string=1,5 
+     *             string=1,5
      *
      *         Result:
      *             array(

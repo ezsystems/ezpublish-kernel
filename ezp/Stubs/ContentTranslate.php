@@ -11,7 +11,7 @@ $localeEN = \ezp\Base\Locale::get( 'eng-GB' );
 
 try
 {
-    // create the translation FR and the first version in FR is based on the 
+    // create the translation FR and the first version in FR is based on the
     // last one in eng-GB
     $translationFR = $content->addTranslation( $localeFR, $content->translations['eng-GB']->last );
 }
@@ -24,7 +24,7 @@ catch ( \InvalidArgumentException $e )
 $translationFR->last->fields['name'] = "Mon dossier";
 // short cut for $translationFR->last->fields['name']->value = "Mon dossier";
 // $translationFR->last is the last version added in a Translation
-// others fields remain untouched, they still contain what was in the eng-GB 
+// others fields remain untouched, they still contain what was in the eng-GB
 // version when addTranslation() was called.
 
 $contentService->update( $content );

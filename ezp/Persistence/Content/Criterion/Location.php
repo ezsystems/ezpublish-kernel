@@ -12,7 +12,7 @@ namespace ezp\Persistence\Content\Criteria;
 /**
  * @package ezp.persistence.content.criteria
  */
-class LocationListCriteria extends Criteria 
+class LocationListCriteria extends Criteria
 {
     /**
      */

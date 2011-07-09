@@ -139,7 +139,7 @@ class Translation extends \ezp\Base\AbstractModel
 
     /**
      * Create a new Version in the locale referenced by the translation
-     * 
+     *
      * @param Version $base
      * @return Version
      */

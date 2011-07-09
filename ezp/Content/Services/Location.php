@@ -51,7 +51,7 @@ class Location extends \ezp\Base\AbstractService
 
     /**
      * Creates the new $location in the content repository
-     * 
+     *
      * @param \ezp\Content\Location $location
      * @return \ezp\Content\Location the newly created Location
      * @throws Exception\Validation If a validation problem has been found for $content
@@ -64,7 +64,7 @@ class Location extends \ezp\Base\AbstractService
 
     /**
      * Updates $location in the content repository
-     * 
+     *
      * @param \ezp\Content\Location $location
      * @return \ezp\Content\Location the updated Location
      * @throws Exception\Validation If a validation problem has been found for $content
@@ -77,7 +77,7 @@ class Location extends \ezp\Base\AbstractService
 
     /**
      * Swaps the contents hold by the $location1 and $location2
-     * 
+     *
      * @param \ezp\Content\Location $location1
      * @param \ezp\Content\Location $location2
      * @return void
@@ -90,7 +90,7 @@ class Location extends \ezp\Base\AbstractService
 
     /**
      * Hides the $location and marks invisible all descendants of $location.
-     * 
+     *
      * @param \ezp\Content\Location $location
      * @return void
      * @throws Exception\Validation If a validation problem has been found
@@ -104,8 +104,8 @@ class Location extends \ezp\Base\AbstractService
 
     /**
      * Unhides the $location and marks visible all descendants of $locations
-     * until a hidden location is found. 
-     * 
+     * until a hidden location is found.
+     *
      * @param \ezp\Content\Location $location
      * @return void
      * @throws Exception\Validation If a validation problem has been found;
@@ -120,8 +120,8 @@ class Location extends \ezp\Base\AbstractService
 
     /**
      * Moves $location under $newParent and updates all descendants of
-     * $location accordingly. 
-     * 
+     * $location accordingly.
+     *
      * @param \ezp\Content\Location $location
      * @param \ezp\Content\Location $newParent
      * @return void
@@ -136,8 +136,8 @@ class Location extends \ezp\Base\AbstractService
 
 
     /**
-     * Deletes the $locations and all descendants of $location. 
-     * 
+     * Deletes the $locations and all descendants of $location.
+     *
      * @param \ezp\Content\Location $location
      * @return void
      * @throws Exception\Validation If a validation problem has been found;
@@ -157,7 +157,7 @@ class Location extends \ezp\Base\AbstractService
     /**
      * Assigns $section to the contents hold by $startingPoint location and
      * all contents hold by descendants location of $startingPoint
-     * 
+     *
      * @param \ezp\Content\Location $startingPoint
      * @param \ezp\Content\Section $section
      * @return void

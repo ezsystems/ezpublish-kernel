@@ -1,7 +1,7 @@
 <?php
 /**
  * Assume that:
- * $content has been translated in eng-GB, fre-FR and nor-NO but no published 
+ * $content has been translated in eng-GB, fre-FR and nor-NO but no published
  * version exists in nor-NO
  */
 

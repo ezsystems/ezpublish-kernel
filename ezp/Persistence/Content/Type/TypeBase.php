@@ -14,7 +14,7 @@ namespace ezp\Persistence\Content\Type;
  * @package ezp
  * @subpackage persistence_content_type
  */
-class TypeBase 
+class TypeBase
 {
     /**
      */

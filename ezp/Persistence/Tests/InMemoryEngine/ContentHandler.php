@@ -90,7 +90,7 @@ class ContentHandler implements  \ezp\Persistence\Content\Interfaces\ContentHand
     /**
      * Returns an iterator containing all objects satisfying $criteria
      *
-     * 
+     *
      * @param Criteria $criteria
      * @param $limit
      * @param $sort

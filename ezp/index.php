@@ -56,6 +56,6 @@ echo "Content id: {$content->id}<br />";
 echo "Fields:<br />";
 foreach ( $content->fields as $identifier => $field )
 {
-    echo "$identifier: {$field->type->value}<br />";    
+    echo "$identifier: {$field->type->value}<br />";
 }
 

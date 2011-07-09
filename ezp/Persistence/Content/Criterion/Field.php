@@ -12,7 +12,7 @@ namespace ezp\Persistence\Content\Criteria;
 /**
  * @package ezp.persistence.content.criteria
  */
-class ContentFieldCriteria extends Criteria 
+class ContentFieldCriteria extends Criteria
 {
     /**
      */

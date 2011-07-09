@@ -12,7 +12,7 @@ namespace ezp\Persistence\Content\Criteria;
 /**
  * @package ezp.persistence.content.criteria
  */
-class FullTextCriteria extends Criteria 
+class FullTextCriteria extends Criteria
 {
     /**
      */

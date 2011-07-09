@@ -229,7 +229,7 @@ class Content extends \ezp\Base\AbstractModel
 
     /**
      * Return a collection containing all available versions of the Content
-     * 
+     *
      * @return Version[]
      */
     protected function getVersions()

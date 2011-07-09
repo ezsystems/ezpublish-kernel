@@ -30,7 +30,7 @@ interface StorageInterface
      * @param int $fieldId
      * @param $value
      * @return bool
-     * 
+     *
      */
     public function storeFieldData( $fieldId, $value );
 

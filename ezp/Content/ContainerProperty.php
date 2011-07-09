@@ -65,7 +65,7 @@ class ContainerProperty extends \ezp\Base\AbstractModel
      * @var int
      */
     protected $id = 0;
-    
+
     public function __construct()
     {
         $this->readableProperties = array(
