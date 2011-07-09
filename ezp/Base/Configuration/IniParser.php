@@ -128,7 +128,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
     public function parseFileEzc( $fileContent )
     {
         // First some pre processing to normalize result with parse_ini_string result
-        $fileContent = str_replace( array( "\r\n", "\r" ), array( "\n", "\n" ), $fileContent . "\n" );
+        $fileContent = str_replace( array( "\r\n", "\r" ), "\n", $fileContent . "\n" );
         $fileContent = preg_replace( array( '/^<\?php[^\/]\/\*\s*/', '/\*\/[^\?]\?>/' ), '', $fileContent );
         $fileContent = self::parserClearArraySupport( $fileContent );
 

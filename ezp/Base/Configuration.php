@@ -163,11 +163,7 @@ class Configuration extends AbstractOverride
      */
     protected function needsReload()
     {
-        if ( !isset( $this->raw['hash'] ) || $this->raw['hash'] !== $this->pathsHash() )
-        {
-            return true;
-        }
-        return false;
+        return !isset( $this->raw['hash'] ) || $this->raw['hash'] !== $this->pathsHash();
     }
 
     /**

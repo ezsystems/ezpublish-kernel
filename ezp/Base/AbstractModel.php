@@ -198,11 +198,10 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
         $obj = new static();
         foreach ( $state as $property => $value )
         {
-            if ( isset( $obj->readableProperties[$property] ) )
-            {
-                $obj->$property = $value;
-            }
-            else if ( isset( $obj->dynamicProperties[$property] ) && property_exists( $obj, $property ) )
+            if (
+                isset( $obj->readableProperties[$property] ) ||
+                isset( $obj->dynamicProperties[$property] ) && property_exists( $obj, $property )
+            )
             {
                 $obj->$property = $value;
             }
