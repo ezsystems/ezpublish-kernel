@@ -88,6 +88,8 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
      * @param int $sectionId
      * @param int $contentId
      */
-    public function assign( $sectionId, $contentId ){}
+    public function assign( $sectionId, $contentId )
+    {
+    }
 }
 ?>

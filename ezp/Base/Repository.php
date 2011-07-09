@@ -178,7 +178,9 @@ class Repository
      * @throws \DomainException If object is of wrong type
      * @throws \RuntimeException If errors occurred in storage engine
      */
-    public function store( AbstractModel $object ){}
+    public function store( AbstractModel $object )
+    {
+    }
 
     /**
      * Delete a generic domain object or collection of domain objects in the repository
@@ -188,7 +190,9 @@ class Repository
      * @throws \DomainException If object is of wrong type
      * @throws \RuntimeException If errors occurred in storage engine
      */
-    public function delete( AbstractModel $object ){}
+    public function delete( AbstractModel $object )
+    {
+    }
 
     /**
      * Find generic domain objects by criteria
@@ -200,7 +204,9 @@ class Repository
      * @return AbstractModel[]
      * @throws \InvalidArgumentException
      */
-    public function find( RepositoryCriteriaInterface $criteria ){}
+    public function find( RepositoryCriteriaInterface $criteria )
+    {
+    }
 
     /**
      * Get an generic object by id
@@ -214,5 +220,7 @@ class Repository
      * @return AbstractModel
      * @throws \InvalidArgumentException
      */
-    public function load( $type, $id ){}
+    public function load( $type, $id )
+    {
+    }
 }

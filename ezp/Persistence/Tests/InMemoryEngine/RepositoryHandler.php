@@ -81,15 +81,21 @@ class RepositoryHandler implements \ezp\Persistence\Interfaces\RepositoryHandler
 
     /**
      */
-    public function beginTransaction(){}
+    public function beginTransaction()
+    {
+    }
 
     /**
      */
-    public function commit(){}
+    public function commit()
+    {
+    }
 
     /**
      */
-    public function rollback(){}
+    public function rollback()
+    {
+    }
 
      /**
      * Get/create instance of service handler objects
