@@ -406,8 +406,7 @@ class Configuration extends AbstractOverride
         $configurationFileData = array();
         foreach( $sourceFiles as $fileName => $suffix )
         {
-            $parserClass = $parsers[$suffix];
-            $parser = new $parserClass( $fileName );
+            $parser = new $parsers[$suffix]( $fileName );
             $configurationFileData[$fileName] = $parser->parse( file_get_contents( $fileName ) );
         }
 
