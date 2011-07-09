@@ -32,7 +32,7 @@ class ServiceContainer
     private $configurationOverrides;
 
     /**
-     * Construct object with optiona configuration overrides
+     * Construct object with optional configuration overrides
      *
      * @param array[] $configurationOverrides
      * @param array[]|object[] $dependencies
@@ -52,7 +52,7 @@ class ServiceContainer
     /**
      * Service function to get Event instance.
      *
-     * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
+     * @param array $callChainDependancieOverrides Overrides dependencies throughout the call (dependency) chain
      * @return \ezp\Base\Interfaces\Event
      */
     public function getEvent( array $callChainDependancieOverrides = array() )
@@ -65,7 +65,7 @@ class ServiceContainer
     /**
      * Service function to get Repository object
      *
-     * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancie) chain
+     * @param array $callChainDependancieOverrides Overrides dependencies throughout the call (dependency) chain
      * @return \ezp\Base\Repository
      */
     public function getRepository( array $callChainDependancieOverrides = array() )
@@ -80,7 +80,7 @@ class ServiceContainer
      *
      * @throws \InvalidArgumentException
      * @param string $serviceName
-     * @param array $callChainDependancieOverrides Overrides dependacies troughout the call (dependancy) chain
+     * @param array $callChainDependancieOverrides Overrides dependencies throughout the call (dependency) chain
      * @return object
      */
     public function get( $serviceName, array $callChainDependancieOverrides = array() )
@@ -135,7 +135,7 @@ class ServiceContainer
                 else if ( $argument[0] === '$' )
                     throw new \InvalidArgumentException( "$serviceName argument $key => $argument is not a valid variable, ". __CLASS__ );
                 else
-                    goto loadDependancy;
+                    goto loadDependency;
             }
             else // primitive type / object argument
             {
@@ -143,7 +143,7 @@ class ServiceContainer
             }
             continue;
 
-            loadDependancy: { // load service dependancy
+            loadDependency: { // load service dependency
                 try
                 {
                     $arguments[] = $this->get( ltrim( $argument, '@' ), $callChainDependancieOverrides );

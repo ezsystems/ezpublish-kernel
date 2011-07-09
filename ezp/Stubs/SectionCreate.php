@@ -15,7 +15,7 @@ try
 }
 catch( ValidationException $e )
 {
-    echo "An error occured while updating the section: {$e->getMessage()}";
+    echo "An error occurred while updating the section: {$e->getMessage()}";
     exit;
 }
 

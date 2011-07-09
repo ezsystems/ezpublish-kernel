@@ -2,7 +2,7 @@
 /**
  * Override, a reusable abstract class providing baseline override functionality:
  * - api to append and prepend directories
- * - cache awarenes when directories have changed
+ * - cache awareness when directories have changed
  * -
  *
  *
@@ -122,7 +122,7 @@ abstract class AbstractOverride
     /**
      * Set raw global override path list data.
      *
-     * Wraning: Does not invalidate path hash on instances!
+     * Warning: Does not invalidate path hash on instances!
      *
      * @throws Exception\InvalidArgumentValue If scope has wrong value
      * @param array $paths

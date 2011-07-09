@@ -17,7 +17,7 @@ catch( SectionNotFoundException $e )
 }
 catch( ValidationException $e )
 {
-    echo "An error occured during section update: {$e->getMessage()}";
+    echo "An error occurred during section update: {$e->getMessage()}";
     exit;
 }
 

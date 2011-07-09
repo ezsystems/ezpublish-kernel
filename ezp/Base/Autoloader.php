@@ -95,7 +95,7 @@ class Autoloader
             return $this->registerEzc();
         }
 
-        // PSR-0 like autloading of repositories namespaces if defined
+        // PSR-0 like autoloading of repositories namespaces if defined
         if ( empty( $this->settings['repositories'] ) )
             return false;
 

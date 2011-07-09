@@ -47,7 +47,7 @@ $content->fields['tags'] = 'ezpublish, demo, public, api';
 $content->fields['title'] = 'My new Article';
 // shortcut for: $content->fields['title']->value = 'My new Article';
 
-$content->notify( 'store' );// Needed to make sure changes in fieldtypes tricle down to field
+$content->notify( 'store' );// Needed to make sure changes in fieldtypes trickle down to field
 
 
 

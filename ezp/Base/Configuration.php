@@ -121,7 +121,7 @@ class Configuration extends AbstractOverride
     }
 
     /**
-     * Tells if (global) development is turned on, using [autload]\development-mode if set
+     * Tells if (global) development is turned on, using [autoload]\development-mode if set
      *
      * @return bool
      */
@@ -133,7 +133,7 @@ class Configuration extends AbstractOverride
     }
 
     /**
-     * Sets [autload]\development-mode
+     * Sets [autoload]\development-mode
      *
      * @param bool $mode
      */
@@ -320,7 +320,7 @@ class Configuration extends AbstractOverride
             return null;
         }
 
-        // Check modifed time if dev mode
+        // Check modified time if dev mode
         if ( self::developmentMode() )
         {
             $currentTime = time();

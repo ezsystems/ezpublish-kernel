@@ -73,7 +73,7 @@ class Repository
     /**
      * Get Content Service
      *
-     * Get service object to perform several operations on Content objects and it's aggreagate memebers.
+     * Get service object to perform several operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
      * @return \ezp\Content\Services\Content
@@ -86,7 +86,7 @@ class Repository
     /**
      * Get Content Type Service
      *
-     * Get service object to perform several operations on Content Type objects and it's aggragate memebers.
+     * Get service object to perform several operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
      * @return \ezp\Content\Services\ContentType
@@ -99,7 +99,7 @@ class Repository
     /**
      * Get Content Service
      *
-     * Get service object to perform several operations on Content objects and it's aggreagate memebers.
+     * Get service object to perform several operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
      * @return \ezp\Content\Services\Location
@@ -123,7 +123,7 @@ class Repository
     /**
      * Get User Service
      *
-     * Get service object to performe several operations on User objects and it's aggragate memebers.
+     * Get service object to perform several operations on User objects and it's aggregate members.
      * ( UserGroups, UserRole, UserRolePolicy & UserRolePolicyLimitation )
      *
      * @return \ezp\User\UserService

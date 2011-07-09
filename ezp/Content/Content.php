@@ -320,7 +320,7 @@ class Content extends \ezp\Base\AbstractModel
     }
 
     /**
-     * Adds a Translation in $locale optionnally based on existing
+     * Adds a Translation in $locale optionally based on existing
      * translation in $base.
      *
      * @param \ezp\Base\Locale $locale

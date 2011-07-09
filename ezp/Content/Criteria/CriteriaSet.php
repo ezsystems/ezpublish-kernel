@@ -94,7 +94,7 @@ class CriteriaSet
     }
 
     /**
-     * Generic getter, that instanciates a type of criteria
+     * Generic getter, that instantiates a type of criteria
      *
      * @param string $criteriaName field, meta, location, sortByMeta, sortByField
      *

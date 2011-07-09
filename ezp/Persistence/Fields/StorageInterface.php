@@ -27,12 +27,12 @@ interface StorageInterface
     public function setValue( array $data, \ezp\Persistence\Content\Field $field );
 
     /**
-     * @param int $filedId
+     * @param int $fieldId
      * @param $value
      * @return bool
      * 
      */
-    public function storeFieldData( $filedId, $value );
+    public function storeFieldData( $fieldId, $value );
 
     /**
      * @param int $fieldId

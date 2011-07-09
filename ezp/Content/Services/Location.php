@@ -98,7 +98,7 @@ class Location extends \ezp\Base\AbstractService
     public function hide( \ezp\Content\Location $location )
     {
         // take care of :
-        // 1. hidding $location
+        // 1. hiding $location
         // 2. making the whole subtree invisible
     }
 
@@ -113,7 +113,7 @@ class Location extends \ezp\Base\AbstractService
     public function unhide( \ezp\Content\Location $location )
     {
         // take care of :
-        // 1. unhidding $location
+        // 1. unhiding $location
         // 2. making the whole subtree visible (unless we found a hidden
         // location)
     }

@@ -26,7 +26,7 @@ catch( SectionNotFoundException $e )
 }
 catch( ValidationException $e )
 {
-    echo "An error occured while updating the content: {$e->getMessage()}";
+    echo "An error occurred while updating the content: {$e->getMessage()}";
     exit;
 }
 ?>

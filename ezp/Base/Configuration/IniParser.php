@@ -23,7 +23,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
 {
     /**
      * Constant string used as a temporary true variable during ini parsing to avoid
-     * parese_ini_file from casting it to 1
+     * parse_ini_file from casting it to 1
      *
      * @var string
      */
@@ -31,7 +31,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
 
     /**
      * Constant string used as a temporary false variable during ini parsing to avoid
-     * parese_ini_file from casting it to 0
+     * parse_ini_file from casting it to 0
      *
      * @var string
      */
