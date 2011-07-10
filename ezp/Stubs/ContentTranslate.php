@@ -17,7 +17,7 @@ try
 }
 catch ( \InvalidArgumentException $e )
 {
-    echo "Impossible to translate from '{$localeEN->code}', this translation does not exist\n";
+    echo "Impossible to translate in '{$localeFR->code}', this translation already exists\n";
     exit;
 }
 
