@@ -87,13 +87,15 @@ class Autoloader
         // Load class by autoload array
         if ( isset( $this->classes[$className] ) )
         {
-            return require( $this->classes[$className] );
+            require( $this->classes[$className] );
+            return true;
         }
 
         // Lazy load ezcBase if a ezc class is requested
         if ( !$this->settings['ezc-loaded'] && strncmp( $className, 'ezc', 3 ) === 0 )
         {
-            return $this->registerEzc();
+            $this->registerEzc();
+            return $className === 'ezcBase';
         }
 
         // PSR-0 like autoloading of repositories namespaces if defined
@@ -109,13 +111,8 @@ class Autoloader
                                               array( './' . $subPath, '/' ),
                                               './' . substr( $className, 0, $classNamePos ) );
                 $classNamePart = str_replace( '_', '/', substr( $className, $classNamePos + 1 ) );
-                $fileName = $namespacePart . '/' . $classNamePart . '.php';
-                if ( file_exists( $fileName ) )
-                {
-                    require $fileName;
-                }
-
-                return;
+                require $namespacePart . '/' . $classNamePart . '.php';
+                return true;
             }
         }
     }
