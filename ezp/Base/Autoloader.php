@@ -96,18 +96,23 @@ class Autoloader
 
         // PSR-0 like autoloading of repositories namespaces if defined
         if ( empty( $this->settings['repositories'] ) )
-            return false;
+            return;
 
         foreach ( $this->settings['repositories'] as $namespace => $subPath )
         {
             if ( strpos( $className, $namespace . '\\' ) === 0 )
             {
-                $fileName = './' . str_replace( array( '\\', '/_' ), '/', $className ) . '.php';
-                if ( $namespace !== $subPath )
-                    require str_replace( './' . $namespace, './' . $subPath, $fileName );
-                else
+                $classNamePos = strripos( $className, '\\' );
+                $namespacePart = str_replace( array( './' . $namespace, '\\' ),
+                                              array( './' . $subPath, '/' ),
+                                              './' . substr( $className, 0, $classNamePos ) );
+                $classNamePart = str_replace( '_', '/', substr( $className, $classNamePos + 1 ) );
+                $fileName = $namespacePart . '/' . $classNamePart . '.php';
+                if ( file_exists( $fileName ) )
+                {
                     require $fileName;
-                return true;
+                }
+                return;
             }
         }
     }
