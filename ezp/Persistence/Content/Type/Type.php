@@ -33,8 +33,9 @@ class Type extends ContentTypeBase
      */
     public $initialLanguage;
     /**
+     * @var array(Group)
      */
-    public $unnamed_ContentTypeGroup_ = array();
+    public $contentTypeGroups = array();
     /**
      */
     public $fieldDefinition = array();
