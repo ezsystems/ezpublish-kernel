@@ -86,7 +86,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
      */
     public function load( $id )
     {
-        return $this->backend->read( 'Content', 'Section', $id );
+        return $this->backend->load( 'Content', 'Section', $id );
     }
 
     /**

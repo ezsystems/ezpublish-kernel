@@ -62,7 +62,7 @@ class Backend
      * @param int|string $id
      * @return object|null
      */
-    public function read( $module, $type, $id )
+    public function load( $module, $type, $id )
     {
         if ( isset( $this->data[$module][$type][$id] ) )
             return $this->toValue( $module, $type, $this->data[$module][$type][$id] );
@@ -76,7 +76,7 @@ class Backend
      * @param string $type
      * @return object[]
      */
-    public function find( $module, $type )
+    public function find( Criteria $criteria )
     {
         if ( isset( $this->data[$module][$type] ) )
         {

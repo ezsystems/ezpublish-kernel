@@ -23,13 +23,13 @@ namespace ezp\Base\Exception;
 class Expired extends AbstractHttp
 {
     /**
-     * Generates: '{$what}' has expired
+     * Generates: '{$expired}' has expired
      *
-     * @param string $what
+     * @param string $expired
      * @param \Exception|null $previous
      */
-    public function __construct( $what, \Exception $previous = null )
+    public function __construct( $expired, \Exception $previous = null )
     {
-        parent::__construct( "'{$what}' has expired", self::BAD_REQUEST, $previous );
+        parent::__construct( "'{$expired}' has expired", self::BAD_REQUEST, $previous );
     }
 }

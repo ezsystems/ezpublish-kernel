@@ -32,8 +32,8 @@ class BadConfiguration extends \LogicException implements \ezp\Base\Exception
     public function __construct( $setting, $consequence = null, \Exception $previous = null )
     {
         if ( $consequence === null )
-            parent::__construct( "'$setting' setting is invalid", 0, $previous );
+            parent::__construct( "'{$setting}' setting is invalid", 0, $previous );
         else
-            parent::__construct( "'$setting' setting is invalid, $consequence", 0, $previous );
+            parent::__construct( "'{$setting}' setting is invalid, {$consequence}", 0, $previous );
     }
 }
