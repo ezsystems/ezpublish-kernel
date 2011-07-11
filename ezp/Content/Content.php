@@ -235,7 +235,7 @@ class Content extends \ezp\Base\AbstractModel
     protected function getVersions()
     {
         $resultArray = array();
-        foreach( $this->translations as $tr )
+        foreach ( $this->translations as $tr )
         {
             $versionsArray = $tr->versions->getArrayCopy();
             $resultArray = array_merge( $resultArray, $versionsArray );
@@ -374,7 +374,7 @@ class Content extends \ezp\Base\AbstractModel
         }
         unset( $this->translations[$locale->code] );
         // @todo ? remove on each versions in $this->translations[$locale->code] 
-        //foreach( $this->translations[$locale->code]->versions as $version )
+        //foreach ( $this->translations[$locale->code]->versions as $version )
     }
 
     /**
