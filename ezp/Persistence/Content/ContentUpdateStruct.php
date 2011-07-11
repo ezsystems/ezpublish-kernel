@@ -18,17 +18,12 @@ class ContentUpdateStruct
 {
     /**
      */
-    public $sectionId;
-    /**
-     */
     public $userId;
+
     /**
-     */
-    public $newParents;
-    /**
-     */
-    public $removeLocations;
-    /**
+     * Contains fields to be updated.
+     *
+     * @var array(Field)
      */
     public $fields = array();
 }
