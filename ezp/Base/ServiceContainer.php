@@ -106,11 +106,11 @@ class ServiceContainer
         {
             throw new \InvalidArgumentException( "{$serviceName} is not a valid Service(Configuration section service_{$serviceName} does not exist), ". __CLASS__ );
         }
-        if ( empty( $settings['class'] ) )
+        else if ( empty( $settings['class'] ) )
         {
             throw new \InvalidArgumentException( "{$serviceName} does not have a Service class(value empty/ not defined), " . __CLASS__ );
         }
-        if ( !class_exists( $settings['class'] ) )
+        else if ( !class_exists( $settings['class'] ) )
         {
             throw new \InvalidArgumentException( "{$serviceName} does not have a valid Service class({$settings['class']} is not a valid class), " . __CLASS__ );
         }
@@ -128,15 +128,25 @@ class ServiceContainer
             if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' ) )// service name / variable
             {
                 if ( $argument === '$serviceContainer' )
+                {
                     $arguments[] = $this;
+                }
                 else if ( isset( $callChainDependancieOverrides[ $argument ] ) )
+                {
                     $arguments[] = $callChainDependancieOverrides[ $argument ];
+                }
                 else if ( isset( $this->dependencies[ $argument ] ) )
+                {
                     $arguments[] = $this->dependencies[ $argument ];
+                }
                 else if ( $argument[0] === '$' )
+                {
                     throw new \InvalidArgumentException( "$serviceName argument $key => $argument is not a valid variable, ". __CLASS__ );
+                }
                 else
+                {
                     goto loadDependency;
+                }
             }
             else // primitive type / object argument
             {

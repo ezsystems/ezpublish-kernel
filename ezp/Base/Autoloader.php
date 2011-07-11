@@ -87,7 +87,7 @@ class Autoloader
         // Load class by autoload array
         if ( isset( $this->classes[$className] ) )
         {
-            require( $this->classes[$className] );
+            require $this->classes[$className];
             return true;
         }
 
@@ -111,7 +111,7 @@ class Autoloader
                                               array( './' . $subPath, '/' ),
                                               './' . substr( $className, 0, $classNamePos ) );
                 $classNamePart = str_replace( '_', '/', substr( $className, $classNamePos + 1 ) );
-                require $namespacePart . '/' . $classNamePart . '.php';
+                require( $namespacePart . '/' . $classNamePart . '.php' );
                 return true;
             }
         }
