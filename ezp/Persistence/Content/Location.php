@@ -17,28 +17,50 @@ namespace ezp\Persistence\Content;
 class Location
 {
     /**
+     * Location ID.
+     *
+     * @var mixed Location ID.
      */
     public $id;
     /**
+     * Location position.
+     *
+     * Materialized path.
+     *
+     * @var string
      */
     public $position;
     /**
+     * @var bool
      */
     public $hidden;
     /**
+     * @var bool
      */
     public $invisible;
     /**
+     * Remote ID.
+     *
+     * @var mixed
      */
     public $remoteId;
     /**
+     * ID of the corresponding {@link Content}.
+     *
+     * @var mixed Content ID.
      */
-    public $content;
+    public $contentId;
     /**
+     * List of child IDs.
+     *
+     * @var array(mixed) Location IDs.
      */
-    public $child = array();
+    public $children = array();
     /**
+     * Parent ID.
+     *
+     * @var mixed Location ID.
      */
-    public $parent_10;
+    public $parentId;
 }
 ?>
