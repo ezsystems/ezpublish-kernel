@@ -55,6 +55,6 @@ class Content extends AbstractValueObject
     /**
      * @var array(Content\Location)
      */
-    public $location = array();
+    public $locations = array();
 }
 ?>

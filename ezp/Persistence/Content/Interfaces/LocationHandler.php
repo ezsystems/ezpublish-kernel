@@ -19,7 +19,6 @@ namespace ezp\Persistence\Content\Interfaces;
  */
 interface LocationHandler
 {
-
     /**
      * Returns the raw data for a location object, identified by $locationId, in a struct.
      *
@@ -92,6 +91,8 @@ interface LocationHandler
 
     /**
      * Deletes a single location object, identified by $id.
+     *
+     * @todo This removes Subtree + self right?
      *
      * @param int $id
      * @return boolean

@@ -48,7 +48,6 @@ class ContentHandler implements \ezp\Persistence\Content\Interfaces\ContentHandl
      */
     public function create( \ezp\Persistence\Content\ContentCreateStruct $content )
     {
-        // @todo Deal with Locations?
         $contentObj = $this->backend->create( 'Content', array(
             'name' => $content->name,
             'typeId' => $content->typeId,
@@ -70,6 +69,12 @@ class ContentHandler implements \ezp\Persistence\Content\Interfaces\ContentHandl
             );
         }
         $contentObj->versionInfos[] = $version;
+
+        $locationHandler = $this->handler->locationHandler();
+        foreach ( $content->parentLocation as $parentLocationId )
+        {
+            $contentObj->locations[] = $locationHandler->createLocation( $contentObj->id, $parentLocationId );
+        }
         return $contentObj;
     }
 
@@ -85,7 +90,6 @@ class ContentHandler implements \ezp\Persistence\Content\Interfaces\ContentHandl
      */
     public function load( $id )
     {
-         // @todo Deal with Locations?
         $content = $this->backend->load( 'Content', $id );
         if ( !$content )
             return null;
@@ -96,6 +100,8 @@ class ContentHandler implements \ezp\Persistence\Content\Interfaces\ContentHandl
             $version->fields = $this->backend->find( 'Content\\Field', array( 'versionId' => $version->id ) );
         }
         $content->versionInfos = $versions;
+        // @todo Loading locations by content object id should be possible using handler API.
+        $content->locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $content->id  ) );
         return $content;
     }
 
@@ -140,8 +146,10 @@ class ContentHandler implements \ezp\Persistence\Content\Interfaces\ContentHandl
      */
     public function delete( $contentId )
     {
-        // @todo Deal with locations and children..
         $return = $this->backend->delete( 'Content', $contentId );
+        if ( !$return )
+            return $return;
+
         $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $contentId ) );
         foreach ( $versions as $version )
         {
@@ -150,6 +158,14 @@ class ContentHandler implements \ezp\Persistence\Content\Interfaces\ContentHandl
                 $this->backend->delete( 'Content\\Field', $field->id );
 
             $this->backend->delete( 'Content\\Version', $version->id );
+        }
+
+        // @todo Deleting Locations by content object id should be possible using handler API.
+        $locationHandler = $this->handler->locationHandler();
+        $locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $contentId ) );
+        foreach ( $locations as $location )
+        {
+            $locationHandler->delete( $location->id );
         }
         return $return;
     }

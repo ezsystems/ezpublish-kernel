@@ -40,7 +40,7 @@ class ContentCreateStruct extends \ezp\Persistence\AbstractValueObject
     /**
      * @var Location[]
      */
-    public $parentLocation;
+    public $parentLocation = array();
 
     /**
      * Contains *all* fields of the object to be created.
