@@ -32,8 +32,15 @@ class Content
      */
     public $id;
     /**
+     * List containing the loaded version.
+     *
+     * List with only a single Version, containing version information and all 
+     * {@link Field}s in this version (in all languages). Non-translateable 
+     * fields will only occur once!
+     *
+     * @var array(Version)
      */
-    public $versionInfo = array();
+    public $versionInfos = array();
     /**
      */
     public $location = array();
