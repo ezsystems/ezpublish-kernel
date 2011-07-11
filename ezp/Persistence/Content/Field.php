@@ -20,8 +20,14 @@ class Field
      */
     public $id;
     /**
+     * Data type name.
+     *
+     * @var string
      */
     public $type;
+    /**
+     * @var FieldValue
+     */
     public $value;
     /**
      */
