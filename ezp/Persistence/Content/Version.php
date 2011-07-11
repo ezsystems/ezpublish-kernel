@@ -37,5 +37,9 @@ class Version
     /**
      */
     public $field = array();
+
+    public $language;
+
+    public $fromVersionNr;
 }
 ?>
