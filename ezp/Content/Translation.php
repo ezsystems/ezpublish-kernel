@@ -92,6 +92,7 @@ class Translation extends \ezp\Base\AbstractModel
      * Returns the last version added to the translation
      *
      * @return Version
+     * @throw DomainException if the translation does not contain any version.
      */
     protected function getLast()
     {
@@ -125,6 +126,7 @@ class Translation extends \ezp\Base\AbstractModel
      * the translation
      *
      * @return FieldCollection
+     * @throw DomainException if there's no currently published version
      */
     protected function getFields()
     {

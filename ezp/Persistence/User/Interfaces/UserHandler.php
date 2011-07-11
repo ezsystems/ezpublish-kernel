@@ -17,13 +17,15 @@ namespace ezp\Persistence\User\Interfaces;
  * @package ezp
  * @subpackage persistence_user
  */
+use \ezp\Persistence\User;
 interface UserHandler
 {
 
     /**
-     * @param User $user
+     * @param \ezp\Persistence\User $user
+     *
      */
-    public function createUser( \ezp\Persistence\User\User $user );
+    public function createUser( User $user );
 
     /**
      * @param int $userId
@@ -31,20 +33,20 @@ interface UserHandler
     public function deleteUser( $userId );
 
     /**
-     * @param User $user
+     * @param \ezp\Persistence\User $user
      */
-    public function updateUser( \ezp\Persistence\User\User $user );
+    public function updateUser( User $user );
 
     /**
-     * @param Role $role
-     * @return Role
+     * @param \ezp\Persistence\User\Role $role
+     * @return \ezp\Persistence\User\Role
      */
-    public function createRole( \ezp\Persistence\User\Role $role );
+    public function createRole( User\Role $role );
 
     /**
-     * @param Role $role
+     * @param \ezp\Persistence\User\Role $role
      */
-    public function updateRole( \ezp\Persistence\User\Role $role );
+    public function updateRole( User\Role $role );
 
     /**
      * @param int $roleId

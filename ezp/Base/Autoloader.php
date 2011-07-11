@@ -67,6 +67,8 @@ class Autoloader
      */
     public function load( $className )
     {
+        $className = ltrim( $className, '\\' );
+
         // Load class list array from cache or generate + save if it is not loaded
         if ( $this->classes === null )
         {
@@ -112,6 +114,7 @@ class Autoloader
                 {
                     require $fileName;
                 }
+
                 return;
             }
         }

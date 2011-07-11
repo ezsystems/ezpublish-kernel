@@ -51,8 +51,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     public function create( $name, $identifier )
     {
         return $this->backend->create(
-            'Content',
-            'Section',
+            'Content\Section',
             array(
                 'name' => $name,
                 'identifier' => $identifier
@@ -69,8 +68,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     public function update( $id, $name, $identifier )
     {
         return $this->backend->update(
-            'Content',
-            'Section',
+            'Content\Section',
             $id,
             array(
                 'id' => $id,
@@ -86,7 +84,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
      */
     public function load( $id )
     {
-        return $this->backend->load( 'Content', 'Section', $id );
+        return $this->backend->load( 'Content\Section', $id );
     }
 
     /**
@@ -94,7 +92,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
      */
     public function delete( $id )
     {
-        return $this->backend->delete( 'Content', 'Section', $id );
+        return $this->backend->delete( 'Content\Section', $id );
     }
 
     /**
@@ -103,6 +101,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
      */
     public function assign( $sectionId, $contentId )
     {
+        // @todo Depends on working SubTree Criterion implementation.
     }
 }
 ?>

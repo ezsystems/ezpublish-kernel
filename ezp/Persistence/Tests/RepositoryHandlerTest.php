@@ -72,7 +72,7 @@ class RepositoryHandlerTest extends \PHPUnit_Framework_TestCase
     public function testSectionHandlerLoad()
     {
         $sectionHandler = $this->handler->sectionHandler();
-        $this->assertInstanceOf( '\ezp\Persistence\Content\Section', $sectionHandler->load( 0 ) );// id's starts on zero
+        $this->assertInstanceOf( '\ezp\Persistence\Content\Section', $sectionHandler->load( 1 ) );// id's starts on zero
     }
 
      /**

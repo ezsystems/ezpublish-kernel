@@ -8,29 +8,34 @@
  *
  */
 
-namespace ezp\Persistence\Content;
+namespace ezp\Persistence;
 
 /**
  * @package ezp
- * @subpackage persistence_content
+ * @subpackage persistence
  */
 class Content
 {
     /**
      */
     public $name;
+
     /**
      */
     public $type;
+
     /**
      */
     public $sectionId;
+
     /**
      */
     public $ownerId;
+
     /**
      */
     public $id;
+
     /**
      * List containing the loaded version.
      *
@@ -41,7 +46,9 @@ class Content
      * @var array(Version)
      */
     public $versionInfos = array();
+
     /**
+     * @var Content\Location[]
      */
     public $location = array();
 }

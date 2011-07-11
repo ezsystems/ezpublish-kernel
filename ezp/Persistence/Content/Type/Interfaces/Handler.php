@@ -55,12 +55,12 @@ interface Handler
      * @param Type $contentType
      * @return Type
      */
-    public function create( \ezp\Persistence\Content\Type\Type $contentType );
+    public function create( \ezp\Persistence\Content\Type $contentType );
 
     /**
      * @param Type $contentType
      */
-    public function update( \ezp\Persistence\Content\Type\Type $contentType );
+    public function update( \ezp\Persistence\Content\Type $contentType );
 
     /**
      * @param int $contentTypeId

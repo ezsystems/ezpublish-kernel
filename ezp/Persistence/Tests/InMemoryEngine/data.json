@@ -1,0 +1,13 @@
+{
+    "Content": [],
+    "Content\\Field": [],
+    "Content\\Location" : [],
+    "Content\\Version" : [],
+    "Content\\Section" : [{"id": 1, "identifier": "standard", "name": "Standard"}],
+    "Content\\Type": [],
+    "Content\\Type\\FieldDefintion" : [],
+    "Content\\Type\\Group" : [],
+    "User": [],
+    "User\\Role" : [],
+    "Content\\Policy" : []
+}
