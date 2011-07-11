@@ -54,7 +54,7 @@ interface ContentHandler
     /**
      * Returns one object satisfying the $criteria.
      *
-     * @param Criteria $criteria
+     * @param  \ezp\Content\Criteria\Criteria $criteria
      * @param $limit
      * @param $sort
      * @return \ezp\Persistence\Content Content value object.
@@ -65,7 +65,7 @@ interface ContentHandler
      * Returns an iterator containing all objects satisfying $criteria
      *
      *
-     * @param Criteria $criteria
+     * @param  \ezp\Content\Criteria\Criteria $criteria
      * @param $limit
      * @param $sort
      * @return mixed Collection of Content value objects

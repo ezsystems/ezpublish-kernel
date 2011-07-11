@@ -17,18 +17,28 @@ namespace ezp\Persistence\Content;
 class ContentCreateStruct
 {
     /**
+     * @var string
+     * @todo Language?
      */
     public $name;
+
     /**
+     * @var int
      */
-    public $type;
+    public $typeId;
+
     /**
+     * @var int
      */
     public $sectionId;
+
     /**
+     * @var int
      */
     public $ownerId;
+
     /**
+     * @var Location[]
      */
     public $parentLocation;
 
@@ -40,7 +50,7 @@ class ContentCreateStruct
      * once. The storage layer will automatically take care, that such fields 
      * are assigned to each language version.
      *
-     * @var array(Field)
+     * @var Field[]
      */
     public $fields = array();
 }

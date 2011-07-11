@@ -17,18 +17,32 @@ namespace ezp\Persistence\Content;
 class ContentUpdateStruct
 {
     /**
+     * @var int
+     */
+    public $id;
+
+    /**
+     * @var int
      */
     public $sectionId;
+
     /**
+     * @var int
      */
     public $userId;
+
     /**
+     * @var Location[]
      */
     public $newParents;
+
     /**
+     * Location[]
      */
     public $removeLocations;
+
     /**
+     * Field[]
      */
     public $fields = array();
 }

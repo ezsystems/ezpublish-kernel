@@ -17,24 +17,29 @@ namespace ezp\Persistence;
 class Content
 {
     /**
+     * @var int
+     */
+    public $id;
+
+    /**
+     * @var string
      */
     public $name;
 
     /**
+     * @var int
      */
-    public $type;
+    public $typeId;
 
     /**
+     * @var int
      */
     public $sectionId;
 
     /**
+     * @var int
      */
     public $ownerId;
-
-    /**
-     */
-    public $id;
 
     /**
      * @var Content\Version[]

@@ -17,24 +17,34 @@ namespace ezp\Persistence\Content;
 class Version
 {
     /**
+     * @var int
      */
     public $versionNr;
+
     /**
      */
     public $modified;
+
     /**
+     * @var int
      */
-    public $creator;
+    public $creatorId;
+
     /**
      */
     public $created;
+
     /**
+     * @var int
      */
     public $state;
+
     /**
      */
     public $unnamed_Content_;
+
     /**
+     * @var Fields[]
      */
     public $field = array();
 

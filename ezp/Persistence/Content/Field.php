@@ -17,27 +17,34 @@ namespace ezp\Persistence\Content;
 class Field
 {
     /**
+     * @var int
      */
     public $id;
+
     /**
      * Data type name.
      *
      * @var string
      */
     public $type;
+
     /**
      * @var FieldValue
      */
     public $value;
+
     /**
      */
     public $language;
+
     /**
      */
     public $unnamed_ContentVersion_;
+
     /**
      */
     public $unnamed_ContentCreateStruct_;
+
     /**
      */
     public $unnamed_ContentUpdateStruct_;
