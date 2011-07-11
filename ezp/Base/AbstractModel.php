@@ -169,7 +169,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
         $method = "set{$property}";
         if ( method_exists( $this, $method ) )
         {
-            return $this->$method( $value );
+            $this->$method( $value );
         }
     }
 
