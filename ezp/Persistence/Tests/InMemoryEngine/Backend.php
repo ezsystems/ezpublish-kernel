@@ -28,112 +28,134 @@ class Backend
     protected $data = array();
 
     /**
-     * @param string $jsonDir
+     * Construct backend by reading data in data.json
      */
-    public function __construct( $jsonDir = 'ezp/Persistence/Tests/data' )
+    public function __construct()
     {
-        foreach ( glob( "$jsonDir/*.js" ) as $file )
-        {
-            $this->data[basename( $file, '.js' )] = json_decode( file_get_contents( $file ), true );
-        }
+        $this->data = json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) + $this->data;
     }
 
     /**
      * Creates data in in memory store
      *
-     * @param string $module
      * @param string $type
      * @param int|string $id
      * @param array $data
      * @return object
      */
-    public function create( $module, $type, array $data )
+    public function create( $type, array $data )
     {
-        $data['id'] = count( $this->data[$module][$type] );
-        $this->data[$module][$type][$data['id']] = $data;
-        return $this->toValue( $module, $type, $data );
+        $data['id'] = count( $this->data[$type] );
+        $this->data[$type][] = $data;
+        return $this->toValue( $type, $data );
     }
 
     /**
      * Reads data from in memory store
      *
-     * @param string $module
      * @param string $type
      * @param int|string $id
      * @return object|null
      */
-    public function load( $module, $type, $id )
+    public function load( $type, $id )
     {
-        if ( isset( $this->data[$module][$type][$id] ) )
-            return $this->toValue( $module, $type, $this->data[$module][$type][$id] );
+        $list = $this->find( $type, array( 'id' => $id ) );
+        if ( isset( $list[0] ) )
+            return $list[0];
         return null;
     }
 
     /**
-     * Find all data from in memory store for a specific type
+    /**
+     * Find data from in memory store for a specific type that matches criteria
      *
-     * @param string $module
      * @param string $type
+     * @param array $criteria A simple array criteria with property => value to match against.
      * @return object[]
      */
-    public function find( Criteria $criteria )
+    public function find( $type, array $criteria )
     {
-        if ( isset( $this->data[$module][$type] ) )
-        {
-            $items = array();
-            foreach ( $this->data[$module][$type] as $hash )
-                $items[] = $this->toValue( $module, $type, $hash );
-            return $items;
-        }
-        return array();
+        $items = $this->findKeys( $type, $criteria );
+        foreach ( $items as $key => $typeIndex )
+            $items[$key] = $this->toValue( $type, $this->data[$type][$typeIndex] );
+        return $items;
     }
 
     /**
      * Updates data in in memory store
      *
-     * @param string $module
      * @param string $type
      * @param int|string $id
      * @param array $data
      * @return bool False if data does not exist and can not be updated
      */
-    public function update( $module, $type, $id, array $data )
+    public function update( $type, $id, array $data )
     {
-        if ( !isset( $this->data[$module][$type][$id] ) )
+        $items = $this->findKeys( $type, array( 'id' => $id ) );
+        if ( empty( $items ) )
             return false;
 
-        $this->data[$module][$type][$id] = $data;
+        foreach ( $items as $typeIndex )
+            $this->data[$type][$typeIndex] = $data;
         return true;
     }
 
     /**
      * Deletes data in in memory store
      *
-     * @param string $module
      * @param string $type
      * @param int|string $id
      * @return bool False if data does not exist and can not be deleted
      */
-    public function delete( $module, $type, $id )
+    public function delete( $type, $id )
     {
-        if ( !isset( $this->data[$module][$type][$id] ) )
+        $items = $this->findKeys( $type, array( 'id' => $id ) );
+        if ( empty( $items ) )
             return false;
 
-        unset( $this->data[$module][$type][$id] );
+        foreach ( $items as $typeIndex )
+            unset( $this->data[$type][$typeIndex] );
         return true;
+    }
+
+    /**
+     * Find keys for data from in memory store for a specific type that matches criteria
+     *
+     * @internal
+     * @param string $type
+     * @param array $criteria A simple array criteria with property => value to match against.
+     * @return int[]
+     */
+    protected function findKeys( $type, array $criteria )
+    {
+        if ( !isset( $this->data[$type] ) )
+            return array();
+
+        $keys = array();
+        foreach ( $this->data[$type] as $key => $hash )
+        {
+            foreach ( $criteria as $property => $value )
+            {
+                if ( !isset( $hash[$property] ) || $hash[$property] != $value )
+                    continue 2;
+
+            }
+            $keys[] = $key;
+        }
+        return $keys;
     }
 
     /**
      * Creates Value object / struct based on array value from Backend.
      *
-     * @param string $module
+     * @internal
      * @param string $type
      * @param array $data
      * @return object
      */
-    protected function toValue( $module, $type, array $data )
+    protected function toValue( $type, array $data )
     {
-        $className = "\\ezp\\Persistence\\$module\\$type";
+        $className = "\\ezp\\Persistence\\$type";
         $obj = new $className;
         foreach ( $obj as $prop => $value )
         {

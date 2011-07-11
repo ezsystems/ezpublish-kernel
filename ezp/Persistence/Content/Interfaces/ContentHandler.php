@@ -31,8 +31,8 @@ interface ContentHandler
      * The values contained inside the $content will form the basis of stored
      * entity.
      *
-     * @param values\ContentCreateStruct $content Content creation struct.
-     * @return \ezp\Persistence\Content\Content Content value object
+     * @param \ezp\Persistence\Content\ContentCreateStruct $content Content creation struct.
+     * @return \ezp\Persistence\Content Content value object
      */
     public function create( \ezp\Persistence\Content\ContentCreateStruct $content );
 
@@ -47,7 +47,7 @@ interface ContentHandler
      * Returns the raw data of a content object identified by $id, in a struct.
      *
      * @param int $id
-     * @return \ezp\Persistence\Content\Content Content value object
+     * @return \ezp\Persistence\Content Content value object
      */
     public function load( $id );
 
@@ -57,7 +57,7 @@ interface ContentHandler
      * @param Criteria $criteria
      * @param $limit
      * @param $sort
-     * @return \ezp\Persistence\Content\Content Content value object.
+     * @return \ezp\Persistence\Content Content value object.
      */
     public function find( \ezp\Content\Criteria\Criteria $criteria, $limit, $sort );
 
@@ -102,7 +102,7 @@ interface ContentHandler
     /**
      * Updates a content object entity with data and identifier $content
      *
-     * @param values\ContentUpdateStruct $content
+     * @param \ezp\Persistence\Content\ContentUpdateStruct $content
      * @return boolean
      */
     public function update( \ezp\Persistence\Content\ContentUpdateStruct $content );

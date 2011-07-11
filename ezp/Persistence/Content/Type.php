@@ -9,34 +9,41 @@
  * @subpackage persistence_content_type
  */
 
-namespace ezp\Persistence\Content\Type;
+namespace ezp\Persistence\Content;
 
 /**
  * @package ezp
- * @subpackage persistence_content_type
+ * @subpackage persistence_content
  */
 class Type extends ContentTypeBase
 {
     /**
      */
     public $remoteId;
+
     /**
      */
     public $urlAliasSchema;
+
     /**
      */
     public $nameSchema;
+
     /**
      */
     public $container;
+
     /**
      */
     public $initialLanguage;
+
     /**
-     * @var array(Group)
+     * @var Type\Group[]
      */
     public $contentTypeGroups = array();
+
     /**
+     * @var Type\FieldDefinition[]
      */
     public $fieldDefinition = array();
 }

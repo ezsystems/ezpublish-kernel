@@ -9,31 +9,33 @@
  * @subpackage persistence_user
  */
 
-namespace ezp\Persistence\User;
+namespace ezp\Persistence;
 
 /**
  * @package ezp
- * @subpackage persistence_user
+ * @subpackage persistence
  */
 class User
 {
     /**
      */
     public $id;
+
     /**
      */
     public $login;
+
     /**
      */
     public $pwd;
+
     /**
      */
     public $hashAlg;
+
     /**
+     * @var Content
      */
-    public $unnamed_ContentTypeBase_;
-    /**
-     */
-    public $unnamed_ContentTypeBase_2;
+    public $profile;
 }
 ?>

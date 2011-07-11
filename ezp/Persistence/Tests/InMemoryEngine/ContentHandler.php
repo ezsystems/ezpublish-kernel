@@ -49,8 +49,8 @@ class ContentHandler implements  \ezp\Persistence\Content\Interfaces\ContentHand
      * The values contained inside the $content will form the basis of stored
      * entity.
      *
-     * @param values\ContentCreateStruct $content Content creation struct.
-     * @return \ezp\Persistence\Content\Content Content value object
+     * @param \ezp\Persistence\Content\ContentCreateStruct $content Content creation struct.
+     * @return \ezp\Persistence\Content Content value object
      */
     public function create( \ezp\Persistence\Content\ContentCreateStruct $content )
     {
@@ -69,7 +69,7 @@ class ContentHandler implements  \ezp\Persistence\Content\Interfaces\ContentHand
      * Returns the raw data of a content object identified by $id, in a struct.
      *
      * @param int $id
-     * @return \ezp\Persistence\Content\Content Content value object
+     * @return \ezp\Persistence\Content Content value object
      */
     public function load( $id )
     {
@@ -81,7 +81,7 @@ class ContentHandler implements  \ezp\Persistence\Content\Interfaces\ContentHand
      * @param Criteria $criteria
      * @param $limit
      * @param $sort
-     * @return \ezp\Persistence\Content\Content Content value object.
+     * @return \ezp\Persistence\Content Content value object.
      */
     public function find( \ezp\Content\Criteria\Criteria $criteria, $limit, $sort )
     {
@@ -134,7 +134,7 @@ class ContentHandler implements  \ezp\Persistence\Content\Interfaces\ContentHand
     /**
      * Updates a content object entity with data and identifier $content
      *
-     * @param values\ContentUpdateStruct $content
+     * @param \ezp\Persistence\Content\ContentUpdateStruct $content
      * @return boolean
      */
     public function update( \ezp\Persistence\Content\ContentUpdateStruct $content )
