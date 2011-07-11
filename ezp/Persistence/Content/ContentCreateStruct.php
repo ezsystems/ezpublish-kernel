@@ -31,8 +31,14 @@ class ContentCreateStruct
     /**
      */
     public $parentLocation;
+
     /**
      * Contains *all* fields of the object to be created.
+     * 
+     * This attribute should contain *all* fields (in all language) of the 
+     * object to be created. If a field is not translateable, it may only occur 
+     * once. The storage layer will automatically take care, that such fields 
+     * are assigned to each language version.
      *
      * @var array(Field)
      */
