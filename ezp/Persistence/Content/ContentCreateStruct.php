@@ -32,7 +32,10 @@ class ContentCreateStruct
      */
     public $parentLocation;
     /**
+     * Contains *all* fields of the object to be created.
+     *
+     * @var array(Field)
      */
-    public $field = array();
+    public $fields = array();
 }
 ?>
