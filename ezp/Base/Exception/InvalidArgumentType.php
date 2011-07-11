@@ -22,7 +22,7 @@ namespace ezp\Base\Exception;
 class InvalidArgumentType extends \InvalidArgumentException implements \ezp\Base\Exception
 {
     /**
-     * Generates: Argument '{$argumentName}' can only be of type '{$type}'
+     * Generates: Argument '{$argumentName}' can only be of type '{$accepts}'
      *
      * @param string $argumentName
      * @param string $accepts Type that are accepted
@@ -38,7 +38,7 @@ class InvalidArgumentType extends \InvalidArgumentException implements \ezp\Base
         else
         {
             $type = ( is_object( $value ) ? get_class( $value ): gettype( $value ) );
-            parent::__construct( "Argument '{$argumentName}' can only be of type '{$accepts}', got: '$type'", 0, $previous );
+            parent::__construct( "Argument '{$argumentName}' can only be of type '{$accepts}', got: '{$type}'", 0, $previous );
         }
     }
 }

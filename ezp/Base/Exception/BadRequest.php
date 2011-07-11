@@ -23,7 +23,7 @@ namespace ezp\Base\Exception;
 class BadRequest extends AbstractHttp
 {
     /**
-     * Generates: Bad request, missing {$missing} from {$from}
+     * Generates: Bad request, missing {$missing} in {$from}
      *
      * @param string $missing
      * @param string $from
@@ -31,6 +31,6 @@ class BadRequest extends AbstractHttp
      */
     public function __construct( $missing, $from, \Exception $previous = null )
     {
-        parent::__construct( "Bad request, missing {$missing} from {$from}", self::BAD_REQUEST, $previous );
+        parent::__construct( "Bad request, missing {$missing} in {$from}", self::BAD_REQUEST, $previous );
     }
 }
