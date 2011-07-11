@@ -24,25 +24,12 @@ class ContentUpdateStruct
     /**
      * @var int
      */
-    public $sectionId;
-
-    /**
-     * @var int
-     */
     public $userId;
 
     /**
-     * @var Location[]
-     */
-    public $newParents;
-
-    /**
-     * Location[]
-     */
-    public $removeLocations;
-
-    /**
-     * Field[]
+     * Contains fields to be updated.
+     *
+     * @var array(Field)
      */
     public $fields = array();
 }

@@ -13,43 +13,57 @@ namespace ezp\Persistence\Content;
 /**
  * @package ezp
  * @subpackage persistence_content
+ * @todo Add a restricted VersionInfo struct, which is returned by the {@link
+ *       ContentHandler->listVersions()} method.
  */
 class Version
 {
     /**
-     * @var int
+     * Version ID.
+     *
+     * @var mixed
      */
-    public $versionNr;
+    public $versionId;
 
     /**
+     * @var int
      */
     public $modified;
 
     /**
-     * @var int
+     * Creator user ID.
+     *
+     * @var mixed
      */
     public $creatorId;
 
     /**
+     * @var int
      */
     public $created;
 
     /**
-     * @var int
+     * DRAFT, PUBLISHED, ARCHIVED.
+     *
+     * @var int Constant.
      */
     public $state;
 
     /**
+     * Content ID.
+     *
+     * @var mixed
      */
-    public $unnamed_Content_;
+    public $contentId;
 
     /**
-     * @var Fields[]
+     * Loaded content fields in this version.
+     *
+     * Contains all fields for all languages of this version. Fields which are
+     * not translatable wil only be contained once.
+     *
+     * @var array(Field)
      */
-    public $field = array();
-
-    public $language;
-
-    public $fromVersionNr;
+    public $fields = array();
 }
 ?>

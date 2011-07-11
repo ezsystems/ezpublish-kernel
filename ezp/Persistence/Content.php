@@ -42,12 +42,18 @@ class Content
     public $ownerId;
 
     /**
-     * @var Content\Version[]
+     * List containing the loaded version.
+     *
+     * List with only a single Version, containing version information and all
+     * {@link Field}s in this version (in all languages). Non-translateable
+     * fields will only occur once!
+     *
+     * @var array(Content\Version)
      */
-    public $versionInfo = array();
+    public $versionInfos = array();
 
     /**
-     * @var Content\Location[]
+     * @var array(Content\Location)
      */
     public $location = array();
 }

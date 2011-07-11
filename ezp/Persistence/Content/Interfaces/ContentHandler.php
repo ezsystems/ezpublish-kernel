@@ -31,6 +31,8 @@ interface ContentHandler
      * The values contained inside the $content will form the basis of stored
      * entity.
      *
+     * Will contain always a complete list of fields.
+     *
      * @param \ezp\Persistence\Content\ContentCreateStruct $content Content creation struct.
      * @return \ezp\Persistence\Content Content value object
      */
@@ -52,25 +54,29 @@ interface ContentHandler
     public function load( $id );
 
     /**
-     * Returns one object satisfying the $criteria.
+     * Returns a list of object satisfying the $criteria.
      *
      * @param  \ezp\Content\Criteria\Criteria $criteria
+     * @param $offset
      * @param $limit
      * @param $sort
-     * @return \ezp\Persistence\Content Content value object.
+     * @return array(\ezp\Persistence\Content) Content value object.
      */
-    public function find( \ezp\Content\Criteria\Criteria $criteria, $limit, $sort );
+    public function find( \ezp\Content\Criteria\Criteria $criteria, $offset, $limit, $sort );
 
     /**
-     * Returns an iterator containing all objects satisfying $criteria
+     * Returns a single Content object found.
      *
+     * Performs a {@link find()} query to find a single object. You need to
+     * ensure, that your $criteria ensure that only a single object can be
+     * retrieved.
      *
-     * @param  \ezp\Content\Criteria\Criteria $criteria
-     * @param $limit
-     * @param $sort
-     * @return mixed Collection of Content value objects
+     * @param \ezp\Content\Criteria\Criteria $criteria
+     * @param mixed $offset
+     * @param mixed $sort
+     * @return \ezp\Persistence\Content
      */
-    public function findIterator( \ezp\Content\Criteria\Criteria $criteria, $limit, $sort );
+    public function findSingle( \ezp\Content\Criteria\Criteria $criteria, $offset, $sort );
 
     /**
      * Sets the state of object identified by $contentId and $version to $state.
@@ -141,7 +147,7 @@ interface ContentHandler
      * Return the versions for $contentId
      *
      * @param int $contentId
-     * @return array
+     * @return array(Version)
      */
     public function listVersions( $contentId );
 
