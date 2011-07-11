@@ -11,7 +11,7 @@
 namespace ezp\Content\Criteria;
 use ezp\Content;
 
-class LocationCriteria extends Criteria implements CriteriaInterface
+class LocationCriterion extends Criterion implements CriterionInterface
 {
     protected $parentLocation;
 

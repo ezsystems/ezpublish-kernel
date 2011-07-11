@@ -10,7 +10,7 @@
  */
 namespace ezp\Content\Criteria;
 
-class MetadataCriteria extends Criteria implements CriteriaInterface
+class MetadataCriterion extends Criterion implements CriterionInterface
 {
     /**
      * Field name to filter on

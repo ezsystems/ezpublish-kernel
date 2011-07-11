@@ -17,9 +17,12 @@ class Criterion
 {
     /**
      */
-    public $operator;
-    /**
-     */
     public $children = array();
+     
+    /**
+     * The operator used by the Criterion
+     * @var string
+     */
+    public $operator;
 }
 ?>
