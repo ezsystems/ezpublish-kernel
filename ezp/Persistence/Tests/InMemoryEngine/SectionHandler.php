@@ -44,9 +44,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @param string $name
-     * @param string $identifier
-     * @return \ezp\Persistence\Content\Section
+     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function create( $name, $identifier )
     {
@@ -60,10 +58,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @param $id
-     * @param string $name
-     * @param string $identifier
-     * @return bool
+     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function update( $id, $name, $identifier )
     {
@@ -79,8 +74,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @param int $id
-     * @return \ezp\Persistence\Content\Section|null
+     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function load( $id )
     {
@@ -88,7 +82,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @param int $id
+     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function delete( $id )
     {
@@ -96,8 +90,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @param int $sectionId
-     * @param int $contentId
+     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function assign( $sectionId, $contentId )
     {

@@ -14,7 +14,7 @@ namespace ezp\Persistence\Content;
  * @package ezp
  * @subpackage persistence_content
  */
-class ContentCreateStruct
+class ContentCreateStruct extends \ezp\Persistence\AbstractValueObject
 {
     /**
      * @var string

@@ -14,7 +14,7 @@ namespace ezp\Persistence\Content;
  * @package ezp
  * @subpackage persistence_content
  */
-class Section
+class Section extends \ezp\Persistence\AbstractValueObject
 {
     /**
      */

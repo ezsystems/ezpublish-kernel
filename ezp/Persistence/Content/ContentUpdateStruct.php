@@ -14,9 +14,10 @@ namespace ezp\Persistence\Content;
  * @package ezp
  * @subpackage persistence_content
  */
-class ContentUpdateStruct
+class ContentUpdateStruct extends \ezp\Persistence\AbstractValueObject
 {
     /**
+     * @todo Which version is this?
      * @var int
      */
     public $id;

@@ -16,14 +16,14 @@ namespace ezp\Persistence\Content;
  * @todo Add a restricted VersionInfo struct, which is returned by the {@link
  *       ContentHandler->listVersions()} method.
  */
-class Version
+class Version extends \ezp\Persistence\AbstractValueObject
 {
     /**
      * Version ID.
      *
      * @var mixed
      */
-    public $versionId;
+    public $id;
 
     /**
      * @var int

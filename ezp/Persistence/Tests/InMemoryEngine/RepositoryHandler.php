@@ -113,6 +113,6 @@ class RepositoryHandler implements \ezp\Persistence\Interfaces\RepositoryHandler
         if ( class_exists( $className ) )
             return $this->serviceHandlers[$className] = new $className( $this, $this->backend );
 
-        throw new \RuntimeException( "Could not load '$className' handler!" );
+        throw new \ezp\Base\Exception\MissingClass( $className, 'service handler' );
     }
 }

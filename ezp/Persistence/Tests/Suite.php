@@ -25,7 +25,8 @@ class Suite extends \PHPUnit_Framework_TestSuite
         $this->setName( 'ezp-next persistence module Test Suite' );
 
         $this->addTestSuite( __NAMESPACE__ . '\\RepositoryHandlerTest' );
-        //$this->addTestSuite( __NAMESPACE__ . '\\ContentHandlerTest'  );
+        $this->addTestSuite( __NAMESPACE__ . '\\ContentHandlerTest'  );
+        $this->addTestSuite( __NAMESPACE__ . '\\SectionHandlerTest'  );
     }
 
     /**

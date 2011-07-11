@@ -14,7 +14,7 @@ namespace ezp\Persistence\Content;
  * @package ezp
  * @subpackage persistence_content
  */
-class Field
+class Field extends \ezp\Persistence\AbstractValueObject
 {
     /**
      * @var int
@@ -38,15 +38,8 @@ class Field
     public $language;
 
     /**
+     * @var int|null Null if not created yet
      */
-    public $unnamed_ContentVersion_;
-
-    /**
-     */
-    public $unnamed_ContentCreateStruct_;
-
-    /**
-     */
-    public $unnamed_ContentUpdateStruct_;
+    public $versionId;
 }
 ?>

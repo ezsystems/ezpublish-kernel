@@ -19,7 +19,7 @@ namespace ezp\Persistence\Tests\InMemoryEngine;
  * @subpackage persistence_tests
  * @version //autogentag//
  */
-class ContentHandler implements  \ezp\Persistence\Content\Interfaces\ContentHandler
+class ContentHandler implements \ezp\Persistence\Content\Interfaces\ContentHandler
 {
     /**
      * @var RepositoryHandler
@@ -44,155 +44,140 @@ class ContentHandler implements  \ezp\Persistence\Content\Interfaces\ContentHand
     }
 
     /**
-     * Creates a new Content entity in the storage engine.
-     *
-     * The values contained inside the $content will form the basis of stored
-     * entity.
-     *
-     * @param \ezp\Persistence\Content\ContentCreateStruct $content Content creation struct.
-     * @return \ezp\Persistence\Content Content value object
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function create( \ezp\Persistence\Content\ContentCreateStruct $content )
     {
+        // @todo Deal with Locations?
+        $contentObj = $this->backend->create( 'Content', array(
+            'name' => $content->name,
+            'typeId' => $content->typeId,
+            'sectionId' => $content->sectionId,
+            'ownerId' => $content->ownerId,
+        ) );
+        $version = $this->backend->create( 'Content\\Version', array(
+            'modified' => time(),
+            'creatorId' => $content->ownerId,
+            'created' => time(),
+            'contentId' => $contentObj->id,
+            'state' => \ezp\Content\Version::STATUS_DRAFT,
+        ) );
+        foreach ( $content->fields as $field )
+        {
+            $version->fields[] = $this->backend->create(
+                'Content\\Field',
+                array( 'versionId' => $version->id ) + (array) $field
+            );
+        }
+        $contentObj->versionInfos[] = $version;
+        return $contentObj;
     }
 
     /**
-     * @param int $contentId
-     * @param int|bool $srcVersion
-     * @return \ezp\Persistence\Content\Content
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function createDraftFromVersion( $contentId, $srcVersion = false )
     {
     }
 
     /**
-     * Returns the raw data of a content object identified by $id, in a struct.
-     *
-     * @param int $id
-     * @return \ezp\Persistence\Content Content value object
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function load( $id )
     {
+         // @todo Deal with Locations?
+        $content = $this->backend->load( 'Content', $id );
+        if ( !$content )
+            return null;
+
+        $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id ) );
+        foreach ( $versions as $version )
+        {
+            $version->fields[] = $this->backend->find( 'Content\\Field', array( 'versionId' => $version->id ) );
+        }
+        $content->versionInfos = $versions;
+        return $content;
     }
 
     /**
-     * Returns one object satisfying the $criteria.
-     *
-     * @param Criteria $criteria
-     * @param $limit
-     * @param $sort
-     * @return \ezp\Persistence\Content Content value object.
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
-    public function find( \ezp\Content\Criteria\Criteria $criteria, $limit, $sort )
+    public function find( \ezp\Content\Criteria\Criteria $criteria, $offset, $limit, $sort )
     {
     }
 
     /**
-     * Returns an iterator containing all objects satisfying $criteria
-     *
-     *
-     * @param Criteria $criteria
-     * @param $limit
-     * @param $sort
-     * @return mixed Collection of Content value objects
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
-    public function findIterator( \ezp\Content\Criteria\Criteria $criteria, $limit, $sort )
+    public function findSingle( \ezp\Content\Criteria\Criteria $criteria, $offset, $sort )
     {
     }
 
     /**
-     * Sets the state of object identified by $contentId and $version to $state.
-     *
-     * The $state can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED.
-     *
-     * @param int $contentId
-     * @param int $state
-     * @param int $version
-     * @see \ezp\Content\Content
-     * @return boolean
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function setState( $contentId, $state, $version )
     {
     }
 
     /**
-     * Sets the object-state of object identified by $contentId, $stateGroup and $version to $state.
-     *
-     * The $state is the id of the state within one group.
-     *
-     * @param int $contentId
-     * @param int $stateGroup
-     * @param int $state
-     * @param int $version
-     * @return boolean
-     * @see \ezp\Content\Content
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function setObjectState( $contentId, $stateGroup, $state, $version )
     {
     }
 
     /**
-     * Updates a content object entity with data and identifier $content
-     *
-     * @param \ezp\Persistence\Content\ContentUpdateStruct $content
-     * @return boolean
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function update( \ezp\Persistence\Content\ContentUpdateStruct $content )
     {
+        // @todo Will need version number to be able to know which version to update.
     }
 
     /**
-     * Deletes all versions and fields, all locations (subtree), and all relations.
-     *
-     * @param int $contentId
-     * @return boolean
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function delete( $contentId )
     {
+        // @todo Deal with locations and children..
+        $return = $this->backend->delete( 'Content', $contentId );
+        $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $contentId ) );
+        foreach ( $versions as $version )
+        {
+            $fields = $this->backend->find( 'Content\\Field', array( 'versionId' => $version->id ) );
+            foreach ( $fields as $field )
+                $this->backend->delete( 'Content\\Field', $field->id );
+
+            $this->backend->delete( 'Content\\Version', $version->id );
+        }
+        return $return;
     }
 
     /**
-     * Sends a content object to trash.
-     *
-     * This is a suspended state, trashed objects retain all of their data and
-     * knowledge of locations, but they are not returned in regular content
-     * queries anymore.
-     *
-     * @param int $contentId
-     * @return boolean
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function trash( $contentId )
     {
     }
 
     /**
-     * Returns a trashed object to normal state.
-     *
-     * The affected content object is now again part of matching content queries.
-     *
-     * @param int $contentId
-     * @return boolean
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function untrash( $contentId )
     {
     }
 
     /**
-     * Return the versions for $contentId
-     *
-     * @param int $contentId
-     * @return array
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function listVersions( $contentId )
     {
+        return $this->backend->find( 'Content\\Version', array( 'contentId' => $contentId ) );
     }
 
     /**
-     * Fetch a content value object containing the values of the translation for $languageCode.
-     *
-     * @param int $contentId
-     * @param string $languageCode
-     * @return \ezp\Persistence\Content\Content
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function fetchTranslation( $contentId, $languageCode )
     {

@@ -14,7 +14,7 @@ namespace ezp\Persistence\Content;
  * @package ezp
  * @subpackage persistence_content
  */
-class Location
+class Location extends \ezp\Persistence\AbstractValueObject
 {
     /**
      * Location ID.

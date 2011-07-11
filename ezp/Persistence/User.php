@@ -15,7 +15,7 @@ namespace ezp\Persistence;
  * @package ezp
  * @subpackage persistence
  */
-class User
+class User extends AbstractValueObject
 {
     /**
      */

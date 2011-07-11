@@ -15,7 +15,7 @@ namespace ezp\Persistence\User;
  * @package ezp
  * @subpackage persistence_user
  */
-class Role
+class Role extends \ezp\Persistence\AbstractValueObject
 {
     /**
      */

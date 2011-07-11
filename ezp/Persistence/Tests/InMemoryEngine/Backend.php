@@ -14,7 +14,10 @@ namespace ezp\Persistence\Tests\InMemoryEngine;
 /**
  * The Storage Engine backend for in memory storage
  * Reads input from js files in provided directory and fills in memory db store.
+ *
  * The in memory db store and also json representation have a one to one mapping to defined value objects.
+ * But only their plain properties, associations are not handled and all data is stored in separate "buckets" similar
+ * to how it would be in a RDBMS servers.
  *
  * @package ezp
  * @subpackage persistence
@@ -45,7 +48,10 @@ class Backend
      */
     public function create( $type, array $data )
     {
-        $data['id'] = count( $this->data[$type] );
+        if ( !isset( $this->data[$type] ) )
+            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+
+        $data['id'] = count( $this->data[$type] ) +1;
         $this->data[$type][] = $data;
         return $this->toValue( $type, $data );
     }
@@ -59,6 +65,9 @@ class Backend
      */
     public function load( $type, $id )
     {
+        if ( !isset( $this->data[$type] ) )
+            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+
         $list = $this->find( $type, array( 'id' => $id ) );
         if ( isset( $list[0] ) )
             return $list[0];
@@ -66,15 +75,17 @@ class Backend
     }
 
     /**
-    /**
-     * Find data from in memory store for a specific type that matches criteria
+     * Find data from in memory store for a specific type that matches criteria (empty array will match all)
      *
      * @param string $type
      * @param array $criteria A simple array criteria with property => value to match against.
      * @return object[]
      */
-    public function find( $type, array $criteria )
+    public function find( $type, array $criteria = array() )
     {
+        if ( !isset( $this->data[$type] ) )
+            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+
         $items = $this->findKeys( $type, $criteria );
         foreach ( $items as $key => $typeIndex )
             $items[$key] = $this->toValue( $type, $this->data[$type][$typeIndex] );
@@ -91,12 +102,15 @@ class Backend
      */
     public function update( $type, $id, array $data )
     {
+        if ( !isset( $this->data[$type] ) )
+            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+
         $items = $this->findKeys( $type, array( 'id' => $id ) );
         if ( empty( $items ) )
             return false;
 
         foreach ( $items as $typeIndex )
-            $this->data[$type][$typeIndex] = $data;
+            $this->data[$type][$typeIndex] = $data + $this->data[$type][$typeIndex];
         return true;
     }
 
@@ -109,6 +123,9 @@ class Backend
      */
     public function delete( $type, $id )
     {
+        if ( !isset( $this->data[$type] ) )
+            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+
         $items = $this->findKeys( $type, array( 'id' => $id ) );
         if ( empty( $items ) )
             return false;
@@ -116,6 +133,21 @@ class Backend
         foreach ( $items as $typeIndex )
             unset( $this->data[$type][$typeIndex] );
         return true;
+    }
+
+    /**
+     * Find count of objects of a given type matching a simple criteria (empty array will match all)
+     *
+     * @param string $type
+     * @param array $criteria A simple array criteria with property => value to match against.
+     * @return int
+     */
+    public function count( $type, array $criteria = array() )
+    {
+        if ( !isset( $this->data[$type] ) )
+            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+
+        return count( $this->findKeys( $type, $criteria ) );
     }
 
     /**
