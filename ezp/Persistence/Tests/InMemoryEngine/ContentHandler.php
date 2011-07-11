@@ -93,7 +93,7 @@ class ContentHandler implements \ezp\Persistence\Content\Interfaces\ContentHandl
         $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id ) );
         foreach ( $versions as $version )
         {
-            $version->fields[] = $this->backend->find( 'Content\\Field', array( 'versionId' => $version->id ) );
+            $version->fields = $this->backend->find( 'Content\\Field', array( 'versionId' => $version->id ) );
         }
         $content->versionInfos = $versions;
         return $content;
