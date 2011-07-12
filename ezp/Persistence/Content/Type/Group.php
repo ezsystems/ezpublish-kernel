@@ -15,10 +15,68 @@ namespace ezp\Persistence\Content\Type;
  * @package ezp
  * @subpackage persistence_content_type
  */
-class Group extends ContentTypeBase
+class Group
 {
     /**
+     * Primary key
+     *
+     * @var mixed
      */
-    public $unnamed_ContentType_ = array();
+    public $id;
+
+    /**
+     * Name
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * Description
+     *
+     * @var string
+     */
+    public $description;
+
+    /**
+     * @TODO: Document!
+     *
+     *
+     */
+    public $identifier;
+
+    /**
+     * Created date (timestamp)
+     *
+     * @var int
+     */
+    public $created;
+
+    /**
+     * Modified date (timestamp)
+     *
+     * @var int
+     */
+    public $modified;
+
+    /**
+     * Creator user id
+     *
+     * @var mixed
+     */
+    public $creator;
+
+    /**
+     * Modifier user id
+     *
+     * @var mixed
+     *
+     */
+    public $modifier;
+
+    /**
+     * @var array(Content\Type)
+     */
+    public $contentTypes = array();
 }
 ?>

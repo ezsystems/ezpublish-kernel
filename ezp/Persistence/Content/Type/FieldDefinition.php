@@ -18,6 +18,34 @@ namespace ezp\Persistence\Content\Type;
 class FieldDefinition extends TypeBase
 {
     /**
+     * Primary key
+     *
+     * @var mixed
+     */
+    public $id;
+
+    /**
+     * Name
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * Description
+     *
+     * @var string
+     */
+    public $description;
+
+    /**
+     * @TODO: Document!
+     *
+     *
+     */
+    public $identifier;
+
+    /**
      */
     public $fieldGroup;
     /**
