@@ -18,16 +18,24 @@ namespace ezp\Persistence\User;
 class Policy extends \ezp\Persistence\AbstractValueObject
 {
     /**
+     * Name of module, associated with the Policy
+     *
+     * @var string
      */
     public $module;
+
     /**
+     * Name of the module function
+     *
+     * @var string
      */
     public $moduleFunction;
+
     /**
+     * Array of policy limitations, which is just a random hash map.
+     *
+     * @var array
      */
     public $limitations;
-    /**
-     */
-    public $unnamed_Role_;
 }
 ?>

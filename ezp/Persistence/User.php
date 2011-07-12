@@ -18,24 +18,31 @@ namespace ezp\Persistence;
 class User extends AbstractValueObject
 {
     /**
+     * User ID
+     * 
+     * @var mixed
      */
     public $id;
 
     /**
+     * User login
+     *
+     * @var string
      */
     public $login;
 
     /**
+     * User password 
+     *
+     * @var string
      */
     public $pwd;
 
     /**
+     * Hash algorithm used to has the password
+     *
+     * @var string
      */
     public $hashAlg;
-
-    /**
-     * @var Content
-     */
-    public $profile;
 }
 ?>

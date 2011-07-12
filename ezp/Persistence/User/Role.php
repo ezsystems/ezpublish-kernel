@@ -18,13 +18,24 @@ namespace ezp\Persistence\User;
 class Role extends \ezp\Persistence\AbstractValueObject
 {
     /**
+     * Name of the role
+     *
+     * @var string
      */
     public $name;
+
     /**
+     * ID of the user rule
+     *
+     * @var mixed
      */
     public $id;
+
     /**
+     * Policies associated with the role
+     *
+     * @var user\Policy[]
      */
-    public $unnamed_Policy_ = array();
+    public $policies = array();
 }
 ?>
