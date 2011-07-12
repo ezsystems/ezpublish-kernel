@@ -17,44 +17,32 @@ namespace ezp\Persistence\Content;
 class FieldValue extends \ezp\Persistence\AbstractValueObject
 {
     /**
-     * Integer data.
+     * Mixed data, which is contained in the field data
+     *
+     * @note: For the "old" storage engine we will need adaptors to map them to 
+     * the existing database fields, like data_int, data_float, data_text.
      * 
-     * @var int|null
+     * @var mixed
      */
-    public $intData;
-
-    /**
-     * Floating point data.
-     * 
-     * @var float|null
-     */
-    public $floatData;
-
-    /**
-     * Textual data.
-     * 
-     * @var string|null
-     */
-    public $textData;
+    public $data;
 
     /**
      * Arbitrary external data.
+     *
+     * This field is used to handle data of a field type, which will be stored 
+     * in its own database tables.
      * 
      * @var mixed|null
      */
     public $externalData;
 
     /**
-     * Integer key.
+     * Mixed sort key
+     *
+     * @note: For the "old" storage engine we will need adaptors to map them to 
+     * the existing database fields, like sort_key_int, sort_key_string
      * 
-     * @var int|null
+     * @var mixed
      */
-    public $intKey;
-
-    /**
-     * String key.
-     * 
-     * @var string|null
-     */
-    public $stringKey;
+    public $sortKey;
 }
