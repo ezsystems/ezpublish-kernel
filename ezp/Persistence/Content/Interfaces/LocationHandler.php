@@ -20,7 +20,7 @@ namespace ezp\Persistence\Content\Interfaces;
 interface LocationHandler
 {
     /**
-     * Returns the raw data for a location object, identified by $locationId, in a struct.
+     * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
      * @return \ezp\Persistence\Content\Location
@@ -28,46 +28,54 @@ interface LocationHandler
     public function load( $locationId );
 
     /**
-     * Copy location object identified by $sourceId, into destination location identified by $destinationId.
+     * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
      *
-     * @param int $sourceId
-     * @param int $destinationId
-     * @return boolean
-     * @todo Decide whether a deep copy should have a dedicated method or have a $recursive param
+     * Performs a deep copy of the location identified by $sourceId and all of 
+     * its child locations, copying the most recent published content object 
+     * for each location to a new content object without any additional version 
+     * information. Relations are not copied. URLs are not touched at all.
+     *
+     * @param mixed $sourceId
+     * @param mixed $destinationParentId
+     * @return Location the newly created Location.
      */
-    public function copy( $sourceId, $destinationId );
+    public function copySubtree( $sourceId, $destinationParentId );
 
     /**
-     * Moves location identified by $sourceId into new parent identified by $destinationId.
+     * Moves location identified by $sourceId into new parent identified by $destinationParentId.
      *
-     * @param int $sourceId
-     * @param int $destinationId
+     * Performs a full move of the location identified by $sourceId to a new
+     * destination, identified by $destinationParentId. Relations do not need 
+     * to be updated, since they refer to Content. URLs are not touched.
+     *
+     * @param mixed $sourceId
+     * @param mixed $destinationParentId
      * @return boolean
      */
-    public function move( $sourceId, $destinationId );
+    public function move( $sourceId, $destinationParentId );
 
     /**
      * Sets a location to be invisible.
      *
-     * @param int $id
+     * @param mixed $id Location ID
      */
     public function hide( $id );
 
     /**
      * Sets a location to be visible.
      *
-     * @param int $id
+     * @param mixed $id
      */
     public function unHide( $id );
 
     /**
      * Swaps the content object being pointed to by a location object.
      *
-     * Make $locationId1 point to the content object in $locationId2, and vice
-     * versa.
+     * Make the location identified by $locationId1 refer to the Content 
+     * referred to by $locationId2 and vice versa.
      *
-     * @param int $locationId1
-     * @param int $locationId2
+     * @param mixed $locationId1
+     * @param mixed $locationId2
      * @return boolean
      */
     public function swap( $locationId1, $locationId2 );
@@ -75,34 +83,32 @@ interface LocationHandler
     /**
      * Updates an existing location with data from $location.
      *
-     * @param \ezp\Persistence\Content\Location $location
+     * @param \ezp\Persistence\Content\Location\LocationUpdateStruct $location
      * @return boolean
+     * @todo Create LocationUpdateStruct, which allows only to change data of a 
+     *       location which can safely be changed (e.g. not the $parentId!).
      */
-    public function update( \ezp\Persistence\Content\Location $location );
+    public function update( \ezp\Persistence\Content\Location\LocationUpdateStruct $updateInfo );
 
     /**
      * Creates a new location for $contentId rooted at $parentId.
      *
-     * @param int $contentId
-     * @param int $parentId
+     * @param mixed $contentId
+     * @param mixed $parentId
      * @return \ezp\Persistence\Content\Location
      */
     public function createLocation( $contentId, $parentId );
 
     /**
-     * Deletes a single location object, identified by $id.
+     * Removes all Locations under and includin $locationId.
      *
-     * @todo This removes Subtree + self right?
+     * Performs a recursive delete on the location identified by $locationId, 
+     * including all of its child locations. Content which is not referred to 
+     * by any other location is automatically removed. Content which looses its 
+     * main Location will get the first of its other Locations assigned as the 
+     * new main Location.
      *
-     * @param int $id
-     * @return boolean
-     */
-    public function delete( $id );
-
-    /**
-     * Removes all content location under $locationId.
-     *
-     * @param int $locationId
+     * @param mixed $locationId
      * @return boolean
      */
     public function removeSubtree( $locationId );
@@ -117,6 +123,7 @@ interface LocationHandler
      * @param string $locationId
      * @param string $languageName
      * @param bool $alwaysAvailable
+     * @todo Create dedicated URL handler interface for this (OMS).
      */
     public function storeUrlAliasPath( $path, $locationId, $languageName = null, $alwaysAvailable = false );
 
@@ -132,6 +139,7 @@ interface LocationHandler
      * @param string $languageName
      * @param bool $alwaysAvailable
      * @return boolean
+     * @todo Create dedicated URL handler interface for this (OMS).
      */
     public function createCustomUrlAlias( $alias, $locationId, $forwarding = false, $languageName = null, $alwaysAvailable = false );
 
@@ -145,6 +153,7 @@ interface LocationHandler
      * @param $historicUrl
      * @param $locationId
      * @return boolean
+     * @todo Create dedicated URL handler interface for this (OMS).
      */
     public function createUrlHistoryEntry( $historicUrl, $locationId );
 
@@ -154,6 +163,7 @@ interface LocationHandler
      * @param $locationId
      * @param $urlType
      * @return mixed
+     * @todo Create dedicated URL handler interface for this (OMS).
      */
     public function listUrlsForLocation( $locationId, $urlType );
 
@@ -163,6 +173,7 @@ interface LocationHandler
      * @param $locationId
      * @param array $urlIdentifier
      * @return boolean
+     * @todo Create dedicated URL handler interface for this (OMS).
      */
     public function removeUrlsForLocation( $locationId, array $urlIdentifier );
 
@@ -172,6 +183,7 @@ interface LocationHandler
      * @param $locationId
      * @param $languageCode
      * @return string
+     * @todo Create dedicated URL handler interface for this (OMS).
      */
     public function getPath( $locationId, $languageCode );
 }
