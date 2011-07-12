@@ -109,7 +109,7 @@ interface ContentHandler
      * Updates a content object entity with data and identifier $content
      *
      * @param \ezp\Persistence\Content\ContentUpdateStruct $content
-     * @return boolean
+     * @return \ezp\Persistence\Content
      */
     public function update( \ezp\Persistence\Content\ContentUpdateStruct $content );
 

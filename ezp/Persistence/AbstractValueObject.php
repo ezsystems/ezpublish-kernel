@@ -28,6 +28,8 @@ abstract class AbstractValueObject
     }
 
     /**
+     * Throws exception on all writes to undefined properties so typos are not silently accepted.
+     *
      * @throws \ezp\Base\Exception\PropertyNotFound
      * @param string $name
      * @param string $value
@@ -39,6 +41,8 @@ abstract class AbstractValueObject
     }
 
     /**
+     * Throws exception on all reads to undefined properties so typos are not silently accepted.
+     *
      * @throws \ezp\Base\Exception\PropertyNotFound
      * @param string $name
      * @return void
