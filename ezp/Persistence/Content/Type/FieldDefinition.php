@@ -27,14 +27,14 @@ class FieldDefinition extends TypeBase
     /**
      * Name
      *
-     * @var string
+     * @var string[]
      */
     public $name;
 
     /**
      * Description
      *
-     * @var string
+     * @var string[]
      */
     public $description;
 
@@ -46,29 +46,59 @@ class FieldDefinition extends TypeBase
     public $identifier;
 
     /**
+     * Field group name
+     * 
+     * @var mixed
      */
     public $fieldGroup;
+
     /**
+     * Position
+     * 
+     * @var int
      */
     public $position;
+
     /**
+     * String identifier of the field type
+     * 
+     * @var string
      */
     public $fieldType;
+
     /**
+     * If the field type is translatable
+     * 
+     * @var boolean
      */
     public $translatable;
+
     /**
+     * Is the field required
+     * 
+     * @var boolean
      */
     public $required;
+
     /**
+     * Just a flag
+     * 
+     * @var boolean
      */
-    public $infoCollector;
+    public $isInfoCollector;
+
     /**
+     * A map (hash) of field type constraints
+     * 
+     * @var array
      */
     public $fieldTypeConstraints;
-    public $defaultValue;
+
     /**
+     * Default value of the field
+     * 
+     * @var mixed
      */
-    public $unnamed_ContentType_;
+    public $defaultValue;
 }
 ?>

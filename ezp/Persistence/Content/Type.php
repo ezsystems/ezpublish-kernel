@@ -27,14 +27,14 @@ class Type
     /**
      * Name
      *
-     * @var string
+     * @var string[]
      */
     public $name;
 
     /**
      * Description
      *
-     * @var string
+     * @var string[]
      */
     public $description;
 
