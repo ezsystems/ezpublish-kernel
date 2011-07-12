@@ -151,6 +151,9 @@ interface ContentHandler
     /**
      * Fetch a content value object containing the values of the translation for $languageCode.
      *
+     * This method might use field filters, if they are designed and available 
+     * at a later point in time.
+     *
      * @param int $contentId
      * @param string $languageCode
      * @return \ezp\Persistence\Content\Content
