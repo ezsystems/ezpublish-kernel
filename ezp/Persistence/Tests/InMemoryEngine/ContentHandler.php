@@ -129,7 +129,14 @@ class ContentHandler implements \ezp\Persistence\Content\Interfaces\ContentHandl
     /**
      * @see \ezp\Persistence\Content\Interfaces\ContentHandler
      */
-    public function setObjectState( $contentId, $stateGroup, $state, $version )
+    public function setObjectState( $contentId, $stateGroup, $state )
+    {
+    }
+
+    /**
+     * @see \ezp\Persistence\Content\Interfaces\ContentHandler
+     */
+    public function getObjectState( $contentId, $stateGroup )
     {
     }
 
