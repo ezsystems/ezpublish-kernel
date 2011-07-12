@@ -71,7 +71,7 @@ class ContentHandler implements \ezp\Persistence\Content\Interfaces\ContentHandl
         $contentObj->versionInfos[] = $version;
 
         $locationHandler = $this->handler->locationHandler();
-        foreach ( $content->parentLocation as $parentLocationId )
+        foreach ( $content->parentLocations as $parentLocationId )
         {
             $contentObj->locations[] = $locationHandler->createLocation( $contentObj->id, $parentLocationId );
         }

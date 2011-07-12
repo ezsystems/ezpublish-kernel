@@ -38,9 +38,9 @@ class ContentCreateStruct extends \ezp\Persistence\AbstractValueObject
     public $ownerId;
 
     /**
-     * @var Location[]
+     * @var int[]
      */
-    public $parentLocation = array();
+    public $parentLocations = array();
 
     /**
      * Contains *all* fields of the object to be created.
