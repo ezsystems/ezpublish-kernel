@@ -135,6 +135,15 @@ interface LocationHandler
     public function untrashSubtree( $locationId );
 
     /**
+     * Set section on all content objects in the subtree
+     * 
+     * @param mixed $locationId 
+     * @param mixed $sectionId 
+     * @return boolean
+     */
+    public function setSectionForSubtree( $locationId, $sectionId );
+
+    /**
      * Create a (nice) url alias, $path pointing to $locationId, in $languageName.
      *
      * $alwaysAvailable controls whether the url alias is accessible in all
