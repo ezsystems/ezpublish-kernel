@@ -39,10 +39,10 @@ class FieldDefinition extends TypeBase
     public $description;
 
     /**
-     * @TODO: Document!
+     * Readable string identifier of a field definition
      *
-     *
-     */
+     * @var string
+    */
     public $identifier;
 
     /**

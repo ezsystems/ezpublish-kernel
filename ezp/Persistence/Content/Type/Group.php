@@ -39,9 +39,9 @@ class Group
     public $description;
 
     /**
-     * @TODO: Document!
+     * Readable string identifier of a group
      *
-     *
+     * @var string
      */
     public $identifier;
 

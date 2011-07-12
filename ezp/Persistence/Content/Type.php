@@ -39,9 +39,9 @@ class Type
     public $description;
 
     /**
-     * @TODO: Document!
+     * Readable string identifier of a type
      *
-     *
+     * @var string
      */
     public $identifier;
 
