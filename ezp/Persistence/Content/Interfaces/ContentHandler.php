@@ -92,18 +92,29 @@ interface ContentHandler
     public function setState( $contentId, $state, $version );
 
     /**
-     * Sets the object-state of object identified by $contentId, $stateGroup and $version to $state.
+     * Sets the object-state of object identified by $contentId and $stateGroup to $state.
      *
      * The $state is the id of the state within one group.
      *
-     * @param int $contentId
-     * @param int $stateGroup
-     * @param int $state
-     * @param int $version
+     * @param mixed $contentId
+     * @param mixed $stateGroup
+     * @param mixed $state
      * @return boolean
      * @see \ezp\Content\Content
      */
-    public function setObjectState( $contentId, $stateGroup, $state, $version );
+    public function setObjectState( $contentId, $stateGroup, $state );
+
+    /**
+     * Gets the object-state of object identified by $contentId and $stateGroup to $state.
+     *
+     * The $state is the id of the state within one group.
+     *
+     * @param mixed $contentId
+     * @param mixed $stateGroup
+     * @return mixed
+     * @see \ezp\Content\Content
+     */
+    public function getObjectState( $contentId, $stateGroup );
 
     /**
      * Updates a content object entity with data and identifier $content
