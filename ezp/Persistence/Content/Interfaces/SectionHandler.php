@@ -18,6 +18,8 @@ namespace ezp\Persistence\Content\Interfaces;
 interface SectionHandler
 {
     /**
+     * Creat a new section
+     *
      * @param string $name
      * @param string $identifier
      * @return \ezp\Persistence\Content\Section
@@ -25,26 +27,38 @@ interface SectionHandler
     public function create( $name, $identifier );
 
     /**
-     * @param int $id
+     * Update name and identifier of a section
+     *
+     * @param mixed $id
      * @param string $name
      * @param string $identifier
      */
     public function update( $id, $name, $identifier );
 
     /**
-     * @param int $id
+     * Get section data
+     *
+     * @param mixed $id
      * @return \ezp\Persistence\Content\Section|null
      */
     public function load( $id );
 
     /**
-     * @param int $id
+     * Delete a section
+     *
+     * Might throw an exception if the section is still associated with some 
+     * content objects. Make sure that no content objects are associated with 
+     * the section any more *before* calling this method.
+     *
+     * @param mixed $id
      */
     public function delete( $id );
 
     /**
-     * @param int $sectionId
-     * @param int $contentId
+     * Assign section to single content object
+     *
+     * @param mixed $sectionId
+     * @param mixed $contentId
      */
     public function assign( $sectionId, $contentId );
 }
