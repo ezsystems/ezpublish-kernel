@@ -15,7 +15,7 @@ namespace ezp\Persistence\Content\Type;
  * @package ezp
  * @subpackage persistence_content_type
  */
-class Group
+class Group extends \ezp\Persistence\AbstractValueObject
 {
     /**
      * Primary key

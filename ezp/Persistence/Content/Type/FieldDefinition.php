@@ -15,7 +15,7 @@ namespace ezp\Persistence\Content\Type;
  * @package ezp
  * @subpackage persistence_content_type
  */
-class FieldDefinition extends TypeBase
+class FieldDefinition extends \ezp\Persistence\AbstractValueObject
 {
     /**
      * Primary key
