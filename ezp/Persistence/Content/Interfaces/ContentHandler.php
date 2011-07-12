@@ -39,11 +39,16 @@ interface ContentHandler
     public function create( \ezp\Persistence\Content\ContentCreateStruct $content );
 
     /**
+     * Creates a new draft version from $contentId in $version.
+     *
+     * Copies all fields from $contentId in $srcVersion and creates a new 
+     * version of the referred Content from it.
+     *
      * @param int $contentId
      * @param int|bool $srcVersion
      * @return \ezp\Persistence\Content\Content
      */
-    public function createDraftFromVersion( $contentId, $srcVersion = false );
+    public function createDraftFromVersion( $contentId, $srcVersion );
 
     /**
      * Returns the raw data of a content object identified by $id, in a struct.
