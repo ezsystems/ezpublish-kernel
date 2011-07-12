@@ -24,6 +24,7 @@ interface Handler
     public function createGroup( \ezp\Persistence\Content\Type\Group $group );
 
     /**
+     * @todo: Add an update struct, which excludes the contentTypes property from the Group struct
      * @param Group $group
      */
     public function updateGroup( \ezp\Persistence\Content\Type\Group $group );
@@ -58,6 +59,7 @@ interface Handler
     public function create( \ezp\Persistence\Content\Type $contentType );
 
     /**
+     * @todo: Add an update struct, which excludes the fieldDefinitions and contentTypeGroupIDs property from the Group struct
      * @param Type $contentType
      */
     public function update( \ezp\Persistence\Content\Type $contentType );
@@ -92,5 +94,53 @@ interface Handler
      * @param int $groupId
      */
     public function addGroup($contentTypeId, $groupId);
+
+    /**
+     * addFieldDefinition 
+     *
+     *
+     *
+     * This method does not update existing content objects depending on the 
+     * field (default) values.
+     * 
+     * @param mixed $contentTypeId 
+     * @param Type\FieldDefinition $fieldDefinition 
+     * @return void
+     */
+    public function addFieldDefinition( $contentTypeId, Type\FieldDefinition $fieldDefinition );
+
+    /**
+     * Removes a field definition
+     * 
+     * @param mixed $contentTypeId 
+     * @param mixed $fieldDefinitionId 
+     * @return boolean
+     */
+    public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId );
+
+    /**
+     * This method does not update existing content objects depending on the 
+     * field (default) values.
+     * 
+     * @param mixed $contentTypeId 
+     * @param Type\FieldDefinition $fieldDefinition 
+     * @return void
+     */
+    public function updateFieldDefinition( $contentTypeId, Type\FieldDefinition $fieldDefinition );
+
+    /**
+     * Update content objects
+     *
+     * Updates content objects, depending on the changed field definition.
+     *
+     * A content type has a state which tells if its content objects yet have 
+     * been adapted.
+     *
+     * Flags the content type as updated.
+     * 
+     * @param mixed $contentTypeId 
+     * @return void
+     */
+    public function updateContentObjects( $contentTypeId, $fieldDefinitionId );
 }
 ?>
