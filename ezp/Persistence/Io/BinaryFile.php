@@ -18,19 +18,32 @@ namespace ezp\Persistence\Io;
 class BinaryFile
 {
     /**
+     * Name of the file
+     *
+     * @note This might just be a hash
+     * @var string
      */
     private $fileName;
+
     /**
+     * Orginal name of the file during the upload
+     *
+     * @var string
      */
     private $originalFilename;
+
     /**
+     * Mime type of the file
+     *
+     * @var string
      */
     private $contentType;
+
     /**
+     * Version for the content object the file is associated with
+     *
+     * @var int
      */
     private $version;
-    /**
-     */
-    public $contains;
 }
 ?>
