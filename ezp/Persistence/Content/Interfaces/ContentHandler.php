@@ -132,32 +132,13 @@ interface ContentHandler
     /**
      * Deletes all versions and fields, all locations (subtree), and all relations.
      *
+     * Removes the relations, but not the related objects. Alle subtrees of the 
+     * assigned nodes of this content objects are removed (recursivley).
+     *
      * @param int $contentId
      * @return boolean
      */
     public function delete( $contentId );
-
-    /**
-     * Sends a content object to trash.
-     *
-     * This is a suspended state, trashed objects retain all of their data and
-     * knowledge of locations, but they are not returned in regular content
-     * queries anymore.
-     *
-     * @param int $contentId
-     * @return boolean
-     */
-    public function trash( $contentId );
-
-    /**
-     * Returns a trashed object to normal state.
-     *
-     * The affected content object is now again part of matching content queries.
-     *
-     * @param int $contentId
-     * @return boolean
-     */
-    public function untrash( $contentId );
 
     /**
      * Return the versions for $contentId

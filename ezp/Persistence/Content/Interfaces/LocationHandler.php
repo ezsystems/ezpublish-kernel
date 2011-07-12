@@ -114,6 +114,27 @@ interface LocationHandler
     public function removeSubtree( $locationId );
 
     /**
+     * Sends a subtree to the trash
+     *
+     * Moves all locations in the subtree to the Trash. The associated content 
+     * objects are left untouched.
+     *
+     * @param mixed $locationId
+     * @return boolean
+     */
+    public function trashSubtree( $locationId );
+
+    /**
+     * Returns a trashed subtree to normal state.
+     *
+     * The affected subtree is now again part of matching content queries.
+     *
+     * @param mixed $locationId
+     * @return boolean
+     */
+    public function untrashSubtree( $locationId );
+
+    /**
      * Create a (nice) url alias, $path pointing to $locationId, in $languageName.
      *
      * $alwaysAvailable controls whether the url alias is accessible in all
