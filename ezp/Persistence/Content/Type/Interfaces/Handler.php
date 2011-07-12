@@ -84,10 +84,20 @@ interface Handler
     public function copy( $userId, $contentTypeId );
 
     /**
-     * @param int $groupId
-     * @param int $contentTypeId
+     * Unlink a content type group from a content type
+     *
+     * @param mixed $groupId
+     * @param mixed $contentTypeId
      */
     public function unlink( $groupId, $contentTypeId );
+
+    /**
+     * Link a content type group with a content type
+     *
+     * @param mixed $groupId
+     * @param mixed $contentTypeId
+     */
+    public function link( $groupId, $contentTypeId );
 
     /**
      * @param int $contentTypeId
