@@ -244,8 +244,7 @@ class Content extends \ezp\Base\AbstractModel
         $resultArray = array();
         foreach ( $this->translations as $tr )
         {
-            $versionsArray = $tr->versions->getArrayCopy();
-            $resultArray = array_merge( $resultArray, $versionsArray );
+            $resultArray = array_merge( $resultArray, (array) $tr->versions );
         }
         return new \ezp\Base\TypeCollection( '\ezp\Content\Version', $resultArray );
     }
@@ -257,7 +256,7 @@ class Content extends \ezp\Base\AbstractModel
      */
     protected function getCurrentVersion()
     {
-        foreach ( $this->versions as $contentVersion )
+        foreach ( $this->translations[$this->mainLocale->code]->versions as $contentVersion )
         {
             if ( $this->currentVersion == $contentVersion->version )
                 return $contentVersion;
@@ -412,12 +411,6 @@ class Content extends \ezp\Base\AbstractModel
         {
             $this->addParent( $location->parent );
         }
-
-        // Detach data from persistence
-        $this->versions->detach();
-        $this->relations->detach();
-        $this->reversedRelations->detach();
-        $this->translations->detach();
     }
 
     /**
