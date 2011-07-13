@@ -7,14 +7,17 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content;
+use ezp\Base\ReadOnlyCollection,
+    InvalidArgumentException;
+
 /**
  * Field Collection class
  *
  * Readonly class that takes (Content) Version as input.
  *
  */
-namespace ezp\Content;
-class FieldCollection extends \ezp\Base\ReadOnlyCollection
+class FieldCollection extends ReadOnlyCollection
 {
     /**
      * Constructor, sets up FieldCollection based on contentType fields
@@ -36,14 +39,14 @@ class FieldCollection extends \ezp\Base\ReadOnlyCollection
      * Set value on a offset in collection, only allowed on existing items where value is forwarded to ->type->value
      *
      * @internal
-     * @throws \InvalidArgumentException When trying to set new values / append
+     * @throws InvalidArgumentException When trying to set new values / append
      * @param string|int $offset
      * @param mixed $value
      */
     public function offsetSet( $offset, $value )
     {
         if ( $offset === null || !$this->offsetExists( $offset ) )
-            throw new \InvalidArgumentException( "FieldCollection is locked and offset:{$offset} can not be appended!" );
+            throw new InvalidArgumentException( "FieldCollection is locked and offset:{$offset} can not be appended!" );
         $this->offsetGet( $offset )->type->value = $value;
     }
 }

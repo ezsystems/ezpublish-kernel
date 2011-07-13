@@ -9,7 +9,8 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion,
+    InvalidArgumentException;
 
 /**
  *
@@ -29,7 +30,7 @@ abstract class LogicalOperator extends Criterion
         {
             if ( !$criterion instanceof Criterion )
             {
-                throw new \InvalidArgumentException( "Only Criterion objects are accepted" );
+                throw new InvalidArgumentException( "Only Criterion objects are accepted" );
             }
             $this->criteria[] = $criterion;
         }

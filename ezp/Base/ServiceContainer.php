@@ -7,13 +7,16 @@
  * @version //autogentag//
  */
 
+namespace ezp\Base;
+use InvalidArgumentException,
+    ReflectionClass;
+
 /**
  * Service container class
  * A dependency injection container aka a variant of
  * Registry pattern that reads configuration from settings
  * instead of requiring code to set it up.
  */
-namespace ezp\Base;
 class ServiceContainer
 {
     /**
@@ -52,7 +55,7 @@ class ServiceContainer
      * Service function to get Event instance.
      *
      * @param array $callChainDependancieOverrides Overrides dependencies throughout the call (dependency) chain
-     * @return \ezp\Base\Interfaces\Event
+     * @return Interfaces\Event
      */
     public function getEvent( array $callChainDependancieOverrides = array() )
     {
@@ -65,7 +68,7 @@ class ServiceContainer
      * Service function to get Repository object
      *
      * @param array $callChainDependancieOverrides Overrides dependencies throughout the call (dependency) chain
-     * @return \ezp\Base\Repository
+     * @return Repository
      */
     public function getRepository( array $callChainDependancieOverrides = array() )
     {
@@ -77,7 +80,7 @@ class ServiceContainer
     /**
      * Get service by name
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @param string $serviceName
      * @param array $callChainDependancieOverrides Overrides dependencies throughout the call (dependency) chain
      * @return object
@@ -102,15 +105,15 @@ class ServiceContainer
         // validate settings
         if ( $settings === false )
         {
-            throw new \InvalidArgumentException( "{$serviceName} is not a valid Service(Configuration section service_{$serviceName} does not exist), ". __CLASS__ );
+            throw new InvalidArgumentException( "{$serviceName} is not a valid Service(Configuration section service_{$serviceName} does not exist), ". __CLASS__ );
         }
         else if ( empty( $settings['class'] ) )
         {
-            throw new \InvalidArgumentException( "{$serviceName} does not have a Service class(value empty/ not defined), " . __CLASS__ );
+            throw new InvalidArgumentException( "{$serviceName} does not have a Service class(value empty/ not defined), " . __CLASS__ );
         }
         else if ( !class_exists( $settings['class'] ) )
         {
-            throw new \InvalidArgumentException( "{$serviceName} does not have a valid Service class({$settings['class']} is not a valid class), " . __CLASS__ );
+            throw new InvalidArgumentException( "{$serviceName} does not have a valid Service class({$settings['class']} is not a valid class), " . __CLASS__ );
         }
 
         // Create service directly if it does not have any arguments
@@ -139,7 +142,7 @@ class ServiceContainer
                 }
                 else if ( $argument[0] === '$' )
                 {
-                    throw new \InvalidArgumentException( "$serviceName argument $key => $argument is not a valid variable, ". __CLASS__ );
+                    throw new InvalidArgumentException( "$serviceName argument $key => $argument is not a valid variable, ". __CLASS__ );
                 }
                 else
                 {
@@ -157,9 +160,9 @@ class ServiceContainer
                 {
                     $arguments[] = $this->get( ltrim( $argument, '@' ), $callChainDependancieOverrides );
                 }
-                catch ( \InvalidArgumentException $e )
+                catch ( InvalidArgumentException $e )
                 {
-                    throw new \InvalidArgumentException( "$serviceName argument {$settings['arguments'][$key]} => $argument threw an exception, ". __CLASS__, 0, $e );
+                    throw new InvalidArgumentException( "$serviceName argument {$settings['arguments'][$key]} => $argument threw an exception, ". __CLASS__, 0, $e );
                 }
             }
         }
@@ -173,7 +176,7 @@ class ServiceContainer
         }
 
         // use Reflection to create a new instance, using the $args
-        $reflectionObj = new \ReflectionClass( $settings['class'] );
+        $reflectionObj = new ReflectionClass( $settings['class'] );
         return $this->dependencies[$serviceKey] = $reflectionObj->newInstanceArgs( $arguments );
     }
 }

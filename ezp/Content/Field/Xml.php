@@ -7,10 +7,12 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content\Field;
+use ezp\Content\Interfaces\ContentFieldDefinition;
+
 /**
  * XML Field value object class
  */
-namespace ezp\Content\Field;
 class Xml extends Text
 {
     /**
@@ -20,9 +22,9 @@ class Xml extends Text
     const FIELD_IDENTIFIER = 'ezxmltext';
 
     /**
-     * @see \ezp\Content\Interfaces\ContentFieldType
+     * @see ezp\Content\Interfaces\ContentFieldType
      */
-    public function __construct( \ezp\Content\Interfaces\ContentFieldDefinition $contentTypeFieldType )
+    public function __construct( ContentFieldDefinition $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
         parent::__construct( $contentTypeFieldType );

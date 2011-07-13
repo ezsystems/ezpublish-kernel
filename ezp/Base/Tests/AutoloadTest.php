@@ -8,12 +8,12 @@
  */
 
 namespace ezp\Base\Tests;
+use ezp\Base\Autoloader;
 
 /**
  * Test case for Autoloader class
  *
  */
-use \ezp\Base\Autoloader;
 class AutoloadTest extends \PHPUnit_Framework_TestCase
 {
     public function __construct()

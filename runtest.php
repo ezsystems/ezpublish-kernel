@@ -8,12 +8,15 @@
  * @version //autogentag//
  */
 
+use ezp\Base\Autoloader,
+    ezp\Base\Configuration;
+
 set_time_limit( 0 );
 
 // setup autoloaders
 require 'config.php';
 require 'ezp/Base/Autoloader.php';
-spl_autoload_register( array( new ezp\Base\Autoloader( $settings['base']['autoload'] ), 'load' ) );
+spl_autoload_register( array( new Autoloader( $settings['base']['autoload'] ), 'load' ) );
 
 require_once 'PHPUnit/Autoload.php';
 
@@ -24,8 +27,8 @@ foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )//@todo Tak
 {
     $paths[] = "{$path}/settings/";
 }
-\ezp\Base\Configuration::setGlobalConfigurationData( $settings );
-\ezp\Base\Configuration::setGlobalDirs( $paths, 'modules' );
+Configuration::setGlobalConfigurationData( $settings );
+Configuration::setGlobalDirs( $paths, 'modules' );
 
 /**
  * Simple test suite that maps all other tests suits by convention

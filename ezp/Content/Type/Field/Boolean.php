@@ -7,10 +7,11 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content\Type\Field;
+
 /**
  * Relation Field value object class
  */
-namespace ezp\Content\Type\Field;
 class Boolean extends Int
 {
     /**

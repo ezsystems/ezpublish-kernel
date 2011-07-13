@@ -9,13 +9,14 @@
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
+use ezp\Persistence\Content\Interfaces\SectionHandler as SectionHandlerInterface;
 
 /**
- * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+ * @see ezp\Persistence\Content\Interfaces\SectionHandler
  *
  * @version //autogentag//
  */
-class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandler
+class SectionHandler implements SectionHandlerInterface
 {
     /**
      * @var RepositoryHandler
@@ -40,7 +41,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @see ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function create( $name, $identifier )
     {
@@ -54,7 +55,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @see ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function update( $id, $name, $identifier )
     {
@@ -70,7 +71,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @see ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function load( $id )
     {
@@ -78,7 +79,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @see ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function delete( $id )
     {
@@ -86,7 +87,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @see ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function assign( $sectionId, $contentId )
     {

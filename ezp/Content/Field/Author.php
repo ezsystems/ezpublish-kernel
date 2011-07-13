@@ -7,10 +7,12 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content\Field;
+use ezp\Content\Interfaces\ContentFieldDefinition;
+
 /**
  * Keyword Field value object class
  */
-namespace ezp\Content\Field;
 class Author extends String
 {
     /**
@@ -20,9 +22,9 @@ class Author extends String
     const FIELD_IDENTIFIER = 'ezauthor';
 
     /**
-     * @see \ezp\Content\Interfaces\ContentFieldType
+     * @see ezp\Content\Interfaces\ContentFieldType
      */
-    public function __construct( \ezp\Content\Interfaces\ContentFieldDefinition $contentTypeFieldType )
+    public function __construct( ContentFieldDefinition $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
         parent::__construct( $contentTypeFieldType );

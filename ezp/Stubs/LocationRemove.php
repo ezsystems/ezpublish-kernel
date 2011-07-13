@@ -12,7 +12,7 @@ try
     $location = $locationService->load( $locationId );
     $locationService->delete( $location );
 }
-catch ( \ezp\Base\Exception\Forbidden $e )
+catch ( ezp\Base\Exception\Forbidden $e )
 {
     echo "Permission issue occurred: {$e->getMessage()}\n";
     exit;

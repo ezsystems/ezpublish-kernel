@@ -8,12 +8,14 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
+    InvalidArgumentException;
 
 /**
  * A criterion that matches Content based on Url aliases
  */
-class UrlAlias extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class UrlAlias extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new UrlAlias Criterion
@@ -34,13 +36,13 @@ class UrlAlias extends Criterion implements \ezp\Persistence\Content\Interfaces\
         {
             if ( !is_array( $value ) )
             {
-                throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
+                throw new InvalidArgumentException( "Operator::IN requires an array of values" );
             }
             foreach ( $subtreeId as $id )
             {
                 if ( !is_numeric( $id ) )
                 {
-                    throw new \InvalidArgumentException( "Only numeric ids are accepted" );
+                    throw new InvalidArgumentException( "Only numeric ids are accepted" );
                 }
             }
         }
@@ -49,11 +51,11 @@ class UrlAlias extends Criterion implements \ezp\Persistence\Content\Interfaces\
         {
             if ( is_array( $value ) )
             {
-                throw new \InvalidArgumentException( "Operator::EQ and Operator::LIKE require a single value" );
+                throw new InvalidArgumentException( "Operator::EQ and Operator::LIKE require a single value" );
             }
             if ( !is_numeric( $value ) )
             {
-                throw new \InvalidArgumentException( "Only numeric ids are accepted" );
+                throw new InvalidArgumentException( "Only numeric ids are accepted" );
             }
         }
         $this->operator = $operator;

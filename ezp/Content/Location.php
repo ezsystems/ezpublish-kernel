@@ -7,12 +7,17 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content;
+use ezp\Base\AbstractModel,
+    ezp\Base\Interfaces\Observer,
+    ezp\Base\TypeCollection,
+    ezp\Base\Interfaces\Observable;
+
 /**
  * This class represents a Content Location
  *
  */
-namespace ezp\Content;
-class Location extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\Observer
+class Location extends AbstractModel implements Observer
 {
     /**
      * @var array Readable of properties on this object
@@ -118,8 +123,8 @@ class Location extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\O
      */
     public function __construct( Content $content )
     {
-        $this->containerProperties = new \ezp\Base\TypeCollection( '\ezp\Content\ContainerProperty' );
-        $this->children = new \ezp\Base\TypeCollection( '\ezp\Content\Location' );
+        $this->containerProperties = new TypeCollection( 'ezp\Content\ContainerProperty' );
+        $this->children = new TypeCollection( 'ezp\Content\Location' );
         $this->setContent( $content );
     }
 
@@ -205,11 +210,11 @@ class Location extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\O
     /**
      * Called when subject has been updated
      *
-     * @param \ezp\Base\Interfaces\Observable $subject
+     * @param ezp\Base\Interfaces\Observable $subject
      * @param string $event
      * @return Location
      */
-    public function update( \ezp\Base\Interfaces\Observable $subject, $event = 'update' )
+    public function update( Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof Content )
         {

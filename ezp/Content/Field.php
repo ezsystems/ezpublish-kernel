@@ -7,11 +7,15 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content;
+use ezp\Base\Interfaces\Observable,
+    ezp\Content\Type\Field as TypeField,
+    RuntimeException;
+
 /**
  * This class represents a Content's field
  *
  */
-namespace ezp\Content;
 class Field extends AbstractField
 {
     /**
@@ -90,14 +94,14 @@ class Field extends AbstractField
     }
 
     /**
-     * @var Type\Field
+     * @var TypeField
      */
     protected $contentTypeField;
 
     /**
      * Return content type object
      *
-     * @return Type\Field
+     * @return TypeField
      */
     protected function getContentTypeField()
     {
@@ -108,9 +112,9 @@ class Field extends AbstractField
      * Constructor, sets up properties
      *
      * @param Version $contentVersion
-     * @param Type\Field $contentTypeField
+     * @param TypeField $contentTypeField
      */
-    public function __construct( Version $contentVersion, Type\Field $contentTypeField )
+    public function __construct( Version $contentVersion, TypeField $contentTypeField )
     {
         $this->version = $contentVersion;
         $this->contentTypeField = $contentTypeField;
@@ -120,7 +124,7 @@ class Field extends AbstractField
     /**
      * Initialize field type class
      *
-     * @throws \RuntimeException If $className is not instanceof Abstracts\FieldType
+     * @throws RuntimeException If $className is not instanceof Abstracts\FieldType
      * @param string $className
      * @return Abstracts\FieldType
      */
@@ -128,7 +132,7 @@ class Field extends AbstractField
     {
         $type = new $className( $this->getContentTypeField()->getType() );
         if ( !$type instanceof AbstractFieldType )
-            throw new \RuntimeException( "Field type value '{$className}' does not implement ezp\\Content\\AbstractFieldType" );
+            throw new RuntimeException( "Field type value '{$className}' does not implement ezp\\Content\\AbstractFieldType" );
         if ( $this->version )
             $this->toType( $type );
         else
@@ -139,11 +143,11 @@ class Field extends AbstractField
     /**
      * Called when subject has been updated
      *
-     * @param \ezp\Base\Interfaces\Observable $subject
+     * @param Observable $subject
      * @param string $event
      * @return ContentField
      */
-    public function update( \ezp\Base\Interfaces\Observable $subject, $event = 'update' )
+    public function update( Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof Version )
         {

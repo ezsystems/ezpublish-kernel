@@ -9,10 +9,11 @@
  */
 
 namespace ezp\Persistence\Content;
+use ezp\Persistence\AbstractValueObject;
 
 /**
  */
-class Field extends \ezp\Persistence\AbstractValueObject
+class Field extends AbstractValueObject
 {
     /**
      * @var int

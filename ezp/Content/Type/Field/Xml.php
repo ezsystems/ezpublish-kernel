@@ -7,10 +7,11 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content\Type\Field;
+
 /**
  * XML Field value object class
  */
-namespace ezp\Content\Type\Field;
 class Xml extends Text
 {
     /**

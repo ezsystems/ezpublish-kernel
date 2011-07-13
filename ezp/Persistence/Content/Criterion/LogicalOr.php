@@ -8,7 +8,6 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
 
 /**
  * This class does...

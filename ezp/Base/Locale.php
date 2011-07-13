@@ -7,12 +7,13 @@
  * @version //autogentag//
  */
 
+namespace ezp\Base;
+
 /**
  * This class represents a Locale
  *
  */
-namespace ezp\Base;
-class Locale extends \ezp\Base\AbstractModel
+class Locale extends AbstractModel
 {
     public $code;
 

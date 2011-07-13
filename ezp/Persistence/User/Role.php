@@ -8,10 +8,11 @@
  */
 
 namespace ezp\Persistence\User;
+use ezp\Persistence\AbstractValueObject;
 
 /**
  */
-class Role extends \ezp\Persistence\AbstractValueObject
+class Role extends AbstractValueObject
 {
     /**
      * Name of the role

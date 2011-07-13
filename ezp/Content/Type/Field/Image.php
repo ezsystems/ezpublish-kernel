@@ -7,10 +7,11 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content\Type\Field;
+
 /**
  * Image Field value object class
  */
-namespace ezp\Content\Type\Field;
 class Image extends String
 {
     /**

@@ -8,6 +8,9 @@
  */
 
 namespace ezp\Base\Interfaces;
+use Countable,
+    ArrayAccess,
+    Serializable;
 
 /**
  * Collection interface
@@ -15,6 +18,6 @@ namespace ezp\Base\Interfaces;
  * Note: Does not extend IteratorAggregate / Iterator to let implementers extend ArrayObject or splFixedArray
  *
  */
-interface Collection extends \Countable, \ArrayAccess, \Serializable
+interface Collection extends Countable, ArrayAccess, Serializable
 {
 }

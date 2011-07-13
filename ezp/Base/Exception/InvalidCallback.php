@@ -8,6 +8,9 @@
  */
 
 namespace ezp\Base\Exception;
+use ezp\Base\Exception,
+    Exception as PHPException,
+    BadFunctionCallException;
 
 /**
  * Invalid Callback Exception implementation
@@ -16,15 +19,15 @@ namespace ezp\Base\Exception;
  *   throw new InvalidCallback( array( 'Class', 'nonExistingFunction' ) );
  *
  */
-class InvalidCallback extends \BadFunctionCallException implements \ezp\Base\Exception
+class InvalidCallback extends BadFunctionCallException implements Exception
 {
     /**
      * Generates: Invalid callback: $callback
      *
      * @param string|array $callback
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $callback, \Exception $previous = null )
+    public function __construct( $callback, PHPException $previous = null )
     {
         parent::__construct( "Invalid callback: " . var_export( $callback, true), 0, $previous );
     }

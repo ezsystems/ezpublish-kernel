@@ -7,11 +7,13 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content\Type\Field;
+use ezp\Content\AbstractFieldType,
+    ezp\Content\Interfaces\ContentFieldDefinition;
 /**
  * Int Field value object class
  */
-namespace ezp\Content\Type\Field;
-class Int extends \ezp\Content\AbstractFieldType implements \ezp\Content\Interfaces\ContentFieldDefinition
+class Int extends AbstractFieldType implements ContentFieldDefinition
 {
     /**
      * Field type identifier

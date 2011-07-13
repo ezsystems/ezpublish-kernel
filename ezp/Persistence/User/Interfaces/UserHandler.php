@@ -8,12 +8,13 @@
  */
 
 namespace ezp\Persistence\User\Interfaces;
+use ezp\Persistence\User,
+    ezp\Persistence\User\Role;
 
 /**
  * Storage Engine handler for user module
  *
  */
-use \ezp\Persistence\User;
 interface UserHandler
 {
 
@@ -23,7 +24,7 @@ interface UserHandler
      * The User struct used to create the user will contain an ID which is used
      * to reference the user.
      *
-     * @param \ezp\Persistence\User $user
+     * @param User $user
      */
     public function createUser( User $user );
 
@@ -37,25 +38,25 @@ interface UserHandler
     /**
      * Update the user information specified by the user struct
      *
-     * @param \ezp\Persistence\User $user
+     * @param User $user
      */
     public function updateUser( User $user );
 
     /**
      * Create new role
      *
-     * @param \ezp\Persistence\User\Role $role
-     * @return \ezp\Persistence\User\Role
+     * @param Role $role
+     * @return Role
      */
-    public function createRole( User\Role $role );
+    public function createRole( Role $role );
 
     /**
      * Update role
      *
      * @todo Create a RoleUpdateStruct, which omits the policies
-     * @param \ezp\Persistence\User\Role $role
+     * @param Role $role
      */
-    public function updateRole( User\Role $role );
+    public function updateRole( Role $role );
 
     /**
      * Delete the specified role

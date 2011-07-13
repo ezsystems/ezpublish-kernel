@@ -9,11 +9,13 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
+    InvalidArgumentException;
 
 /**
  */
-class Permission extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class Permission extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new Permission criterion
@@ -29,7 +31,7 @@ class Permission extends Criterion implements \ezp\Persistence\Content\Interface
     {
         if ( !is_numeric( $userId ) )
         {
-            throw new \InvalidArgumentException( '$userId must be numeric' );
+            throw new InvalidArgumentException( '$userId must be numeric' );
         }
         $this->userId = $userId;
         $this->operation = $operation;

@@ -7,6 +7,11 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content;
+use ezp\Persistence\Content\Criterion,
+    ezp\Base\Exception\PropertyNotFound,
+    InvalidArgumentException;
+
 /**
  * This class provides a fluent interface to create a content query
  *
@@ -35,9 +40,6 @@
  * @property-read ezp\Content\CriterionFactory $not New logical NOT criterion (alias for {@see $lNot})
  * @property-read ezp\Content\CriterionFactory $lNot
  */
-namespace ezp\Content;
-use ezp\Persistence\Content\Criterion;
-
 class QueryBuilder
 {
     /**
@@ -62,10 +64,10 @@ class QueryBuilder
      */
     public function __get( $property )
     {
-        $class = "\\ezp\\Persistence\\Content\\Criterion\\" . ucfirst( $property );
+        $class = "ezp\\Persistence\\Content\\Criterion\\" . ucfirst( $property );
         if ( !class_exists( $class ) )
         {
-            throw new \InvalidArgumentException( "Criterion $class not found" );
+            throw new InvalidArgumentException( "Criterion $class not found" );
         }
         return new CriterionFactory( $class );
     }
@@ -76,15 +78,15 @@ class QueryBuilder
      * The given criteria will be added with a logical AND, meaning that they must all match.
      * To handle OR criteria, the {@see or}/{@see lOr} methods must be used.
      *
-     * @param \ezp\content\Criteria\Criterion$... $c
+     * @param ezp\content\Criteria\Criterion$... $c
      */
-    public function addCriteria( \ezp\Persistence\Content\Criterion $c )
+    public function addCriteria( Criterion $c )
     {
         foreach ( func_get_args() as $arg )
         {
-            if ( !$arg instanceof \ezp\Persistence\Content\Criterion )
+            if ( !$arg instanceof Criterion )
             {
-                throw new \InvalidArgumentException( "All arguments must be instances of \ezp\Persistence\Content\Criterion" );
+                throw new InvalidArgumentException( "All arguments must be instances of ezp\Persistence\Content\Criterion" );
             }
             $this->query->criteria[] = $arg;
         }
@@ -97,7 +99,7 @@ class QueryBuilder
      * @param Criterion $elementOne
      * @param Criterion $elementTwo$...
      *
-     * @return \ezp\Persistence\Content\Criterion\LogicalOr
+     * @return ezp\Persistence\Content\Criterion\LogicalOr
      */
     public function lOr( Criterion $elementOne, Criterion $elementTwo )
     {
@@ -112,7 +114,7 @@ class QueryBuilder
      * @param Criterion $elementOne
      * @param Criterion $elementTwo$...
      *
-     * @return \ezp\Persistence\Content\Criterion\LogicalAnd
+     * @return ezp\Persistence\Content\Criterion\LogicalAnd
      */
     public function lAnd( Criterion $elementOne, Criterion $elementTwo )
     {
@@ -126,7 +128,7 @@ class QueryBuilder
      *
      * @param Criterion $criterion
      *
-     * @return \ezp\Persistence\Content\Criterion\LogicalNot
+     * @return ezp\Persistence\Content\Criterion\LogicalNot
      */
     public function not( Criterion $criterion )
     {
@@ -155,7 +157,7 @@ class QueryBuilder
                 break;
 
             default:
-                throw new \ezp\Base\Exception\PropertyNotFound( $method, __CLASS__ );
+                throw new PropertyNotFound( $method, __CLASS__ );
         }
     }
 }

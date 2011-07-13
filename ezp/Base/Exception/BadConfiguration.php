@@ -8,6 +8,9 @@
  */
 
 namespace ezp\Base\Exception;
+use ezp\Base\Exception,
+    Exception as PHPException,
+    LogicException;
 
 /**
  * BadConfiguration Exception implementation
@@ -16,16 +19,16 @@ namespace ezp\Base\Exception;
  *   throw new BadConfiguration( "base\[configuration]\parsers", "could not parse configuration files" );
  *
  */
-class BadConfiguration extends \LogicException implements \ezp\Base\Exception
+class BadConfiguration extends LogicException implements Exception
 {
     /**
      * Generates: '$setting' setting is invalid[, $consequence]
      *
      * @param string $setting
      * @param string|null $consequence Optional string to explain consequence of configuration mistake
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $setting, $consequence = null, \Exception $previous = null )
+    public function __construct( $setting, $consequence = null, PHPException $previous = null )
     {
         if ( $consequence === null )
             parent::__construct( "'{$setting}' setting is invalid", 0, $previous );

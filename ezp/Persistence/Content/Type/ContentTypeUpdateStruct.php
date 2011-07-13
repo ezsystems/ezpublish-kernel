@@ -8,11 +8,12 @@
  */
 
 namespace ezp\Persistence\Content\Type;
+use ezp\Persistence\AbstractValueObject;
 
 /**
  *
  */
-class ContentTypeUpdateStruct extends \ezp\Persistence\AbstractValueObject
+class ContentTypeUpdateStruct extends AbstractValueObject
 {
     /**
      * Human readable name of the content type

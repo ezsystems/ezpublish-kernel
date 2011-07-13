@@ -9,6 +9,7 @@
  */
 
 namespace ezp\Persistence;
+use ezp\Base\Exception\PropertyNotFound;
 
 /**
  */
@@ -28,26 +29,26 @@ abstract class AbstractValueObject
     /**
      * Throws exception on all writes to undefined properties so typos are not silently accepted.
      *
-     * @throws \ezp\Base\Exception\PropertyNotFound
+     * @throws PropertyNotFound
      * @param string $name
      * @param string $value
      * @return void
      */
     public function __set( $name, $value )
     {
-        throw new \ezp\Base\Exception\PropertyNotFound( $name, get_class( $this ) );
+        throw new PropertyNotFound( $name, get_class( $this ) );
     }
 
     /**
      * Throws exception on all reads to undefined properties so typos are not silently accepted.
      *
-     * @throws \ezp\Base\Exception\PropertyNotFound
+     * @throws PropertyNotFound
      * @param string $name
      * @return void
      */
     public function __get( $name )
     {
-        throw new \ezp\Base\Exception\PropertyNotFound( $name, get_class( $this ) );
+        throw new PropertyNotFound( $name, get_class( $this ) );
     }
 }
 ?>

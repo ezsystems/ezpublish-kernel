@@ -8,7 +8,11 @@
  */
 
 namespace ezp\Content;
-use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Criterion\Operator,
+    ezp\Persistence\Content\Criterion\LogicalOr,
+    ezp\Persistence\Content\Criterion\LogicalAnd,
+    ezp\Persistence\Content\Criterion\LogicalNot;
 
 /**
  * This class provides a factory interface to a criterion object.
@@ -36,7 +40,7 @@ class CriterionFactory
      */
     public function eq( $target, $value )
     {
-        return $this->handleCriterion( $target, Criterion\Operator::EQ, $value );
+        return $this->handleCriterion( $target, Operator::EQ, $value );
     }
 
     /**
@@ -44,7 +48,7 @@ class CriterionFactory
      */
     public function gt( $target, $value )
     {
-        return $this->handleCriterion( $target, Criterion\Operator::GT, $value );
+        return $this->handleCriterion( $target, Operator::GT, $value );
     }
 
     /**
@@ -52,7 +56,7 @@ class CriterionFactory
      */
     public function gte( $target, $value )
     {
-        return $this->handleCriterion( $target, Criterion\Operator::GTE, $value );
+        return $this->handleCriterion( $target, Operator::GTE, $value );
     }
 
     /**
@@ -60,7 +64,7 @@ class CriterionFactory
      */
     public function lt( $target, $value )
     {
-        return $this->handleCriterion( $target, Criterion\Operator::LT, $value );
+        return $this->handleCriterion( $target, Operator::LT, $value );
     }
 
     /**
@@ -68,7 +72,7 @@ class CriterionFactory
      */
     public function lte( $target, $value )
     {
-        return $this->handleCriterion( $target, Criterion\Operator::LTE, $value );
+        return $this->handleCriterion( $target, Operator::LTE, $value );
     }
 
     /**
@@ -76,7 +80,7 @@ class CriterionFactory
      */
     public function in( $target, $value )
     {
-        return $this->handleCriterion( $target, Criterion\Operator::IN, $value );
+        return $this->handleCriterion( $target, Operator::IN, $value );
     }
 
     /**
@@ -86,7 +90,7 @@ class CriterionFactory
      */
     public function like( $target, $value )
     {
-        return $this->handleCriterion( $target, Criterion\Operator::LIKE, $value );
+        return $this->handleCriterion( $target, Operator::LIKE, $value );
     }
 
     /**
@@ -98,7 +102,7 @@ class CriterionFactory
      */
     public function between( $target, $valueOne, $valueTwo )
     {
-        return $this->handleCriterion( $target, Criterion\Operator::IN, array( $valueOne, $valueTwo) );
+        return $this->handleCriterion( $target, Operator::IN, array( $valueOne, $valueTwo) );
     }
 
     /**
@@ -109,7 +113,7 @@ class CriterionFactory
      */
     public function logicalOr( Criterion $criterionOne, Criterion $criterionTwo )
     {
-        return new Criterion\LogicalOr( func_get_args() );
+        return new LogicalOr( func_get_args() );
     }
 
     /**
@@ -120,7 +124,7 @@ class CriterionFactory
      */
     public function logicalAnd( Criterion $criterionOne, Criterion $criterionTwo )
     {
-        return new Criterion\LogicalAnd( func_get_args() );
+        return new LogicalAnd( func_get_args() );
     }
 
     /**
@@ -130,7 +134,7 @@ class CriterionFactory
      */
     public function logicalNot( Criterion $criterion )
     {
-        return new Criterion\LogicalNot( array( $criterion ) );
+        return new LogicalNot( array( $criterion ) );
     }
 
     /**

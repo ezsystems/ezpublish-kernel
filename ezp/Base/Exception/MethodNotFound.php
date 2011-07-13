@@ -8,6 +8,9 @@
  */
 
 namespace ezp\Base\Exception;
+use ezp\Base\Exception,
+    Exception as PHPException,
+    BadMethodCallException;
 
 /**
  * Method Not Found Exception implementation
@@ -16,16 +19,16 @@ namespace ezp\Base\Exception;
  *   throw new MethodNotFound( 'getRelations', __CLASS__ );
  *
  */
-class MethodNotFound extends \BadMethodCallException implements \ezp\Base\Exception
+class MethodNotFound extends BadMethodCallException implements Exception
 {
     /**
      * Generates: Method '{$method}' not found
      *
      * @param string $method
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $method, $className = null, \Exception $previous = null )
+    public function __construct( $method, $className = null, PHPException $previous = null )
     {
          if ( $className === null )
             parent::__construct( "Method '{$method}' not found", 0, $previous );

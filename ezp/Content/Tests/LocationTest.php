@@ -8,12 +8,16 @@
  */
 
 namespace ezp\Content\Tests;
+use ezp\Content\Location,
+    ezp\Content\Content,
+    ezp\Content\Section,
+    ezp\Content\Type\Type,
+    ezp\Base\Locale;
 
 /**
  * Test case for Location class
  *
  */
-use \ezp\Content\Location, \ezp\Content\Content;
 class LocationTest extends \PHPUnit_Framework_TestCase
 {
     protected $content;
@@ -24,19 +28,19 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $this->setName( "Location class tests" );
 
         // setup a content type & content object of use by tests, fields are not needed for location
-        $contentType = new \ezp\Content\Type\Type();
+        $contentType = new Type();
         $contentType->identifier = 'article';
 
-        $this->content = new Content( $contentType, new \ezp\Base\Locale( 'eng-GB' ) );
+        $this->content = new Content( $contentType, new Locale( 'eng-GB' ) );
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\InvalidArgumentType
+     * @expectedException ezp\Base\Exception\InvalidArgumentType
      */
     public function testChildrenWrongClass()
     {
         $location = new Location( $this->content );
-        $location->children[] = \ezp\Content\Section::__set_state( array( 'id' => 1 ) );
+        $location->children[] = Section::__set_state( array( 'id' => 1 ) );
     }
 
     /**
@@ -45,7 +49,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     public function testParentWrongClass()
     {
         $location = new Location( $this->content );
-        $location->parent = \ezp\Content\Section::__set_state( array( 'id' => 1 ) );
+        $location->parent = Section::__set_state( array( 'id' => 1 ) );
     }
 
     /**

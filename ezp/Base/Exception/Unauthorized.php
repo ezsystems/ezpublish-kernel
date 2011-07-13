@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Base\Exception;
+use Exception as PHPException;
 
 /**
  * Unauthorized Exception implementation
@@ -22,9 +23,9 @@ class Unauthorized extends AbstractHttp
      * Generates: Login required to get access to '{$what}'
      *
      * @param string $what
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $what, \Exception $previous = null )
+    public function __construct( $what, PHPException $previous = null )
     {
         parent::__construct( "Login required to get access to '{$what}'", self::UNAUTHORIZED, $previous );
     }

@@ -9,10 +9,11 @@
  */
 
 namespace ezp\Persistence\Content;
+use ezp\Persistence\AbstractValueObject;
 
 /**
  */
-class FieldValue extends \ezp\Persistence\AbstractValueObject
+class FieldValue extends AbstractValueObject
 {
     /**
      * Mixed data, which is contained in the field data

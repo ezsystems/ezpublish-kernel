@@ -7,11 +7,12 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content\Interfaces;
+
 /**
  * Interface for Content Field Type (Content Attribute Datatype class)
  *
  */
-namespace ezp\Content\Interfaces;
 interface ContentFieldType
 {
     /**

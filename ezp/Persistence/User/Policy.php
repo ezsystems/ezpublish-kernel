@@ -8,10 +8,11 @@
  */
 
 namespace ezp\Persistence\User;
+use ezp\Persistence\AbstractValueObject;
 
 /**
  */
-class Policy extends \ezp\Persistence\AbstractValueObject
+class Policy extends AbstractValueObject
 {
     /**
      * Name of module, associated with the Policy

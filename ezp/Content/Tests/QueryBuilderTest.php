@@ -8,19 +8,20 @@
  */
 
 namespace ezp\Content\Tests;
-use ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\CriterionFactory;
+use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\CriterionFactory,
+    ezp\Content\QueryBuilder;
 
 class QueryBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Content\QueryBuilder
+     * @var QueryBuilder
      */
     private $qb;
 
     public function setUp()
     {
-        $this->qb = new \ezp\Content\QueryBuilder();
+        $this->qb = new QueryBuilder();
     }
 
     /**

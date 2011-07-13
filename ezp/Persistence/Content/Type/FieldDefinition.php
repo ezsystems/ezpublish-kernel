@@ -8,10 +8,11 @@
  */
 
 namespace ezp\Persistence\Content\Type;
+use ezp\Persistence\AbstractValueObject;
 
 /**
  */
-class FieldDefinition extends \ezp\Persistence\AbstractValueObject
+class FieldDefinition extends AbstractValueObject
 {
     /**
      * Primary key

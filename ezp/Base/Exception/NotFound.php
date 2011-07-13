@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Base\Exception;
+use Exception as PHPException;
 
 /**
  * Not Found Exception implementation
@@ -23,9 +24,9 @@ class NotFound extends AbstractHttp
      *
      * @param string $what
      * @param string|int $identifier
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $what, $identifier, \Exception $previous = null )
+    public function __construct( $what, $identifier, PHPException $previous = null )
     {
         parent::__construct( "Could not find '{$what}' with identifier '{$identifier}'", self::NOT_FOUND, $previous );
     }

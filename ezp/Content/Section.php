@@ -7,12 +7,14 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content;
+use ezp\Base\AbstractModel;
+
 /**
  * This class represents a Section
  *
  */
-namespace ezp\Content;
-class Section extends \ezp\Base\AbstractModel
+class Section extends AbstractModel
 {
     protected $readableProperties = array(
         'id' => false,

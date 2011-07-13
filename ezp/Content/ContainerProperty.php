@@ -7,12 +7,14 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content;
+use ezp\Base\AbstractModel;
+
 /**
  * This class represents a container property
  *
  */
-namespace ezp\Content;
-class ContainerProperty extends \ezp\Base\AbstractModel
+class ContainerProperty extends AbstractModel
 {
     // TODO const from eZ Publish 4.5
     // needs update to reflect concept changes

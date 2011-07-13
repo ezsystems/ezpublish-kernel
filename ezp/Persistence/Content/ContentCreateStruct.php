@@ -9,10 +9,11 @@
  */
 
 namespace ezp\Persistence\Content;
+use ezp\Persistence\AbstractValueObject;
 
 /**
  */
-class ContentCreateStruct extends \ezp\Persistence\AbstractValueObject
+class ContentCreateStruct extends AbstractValueObject
 {
     /**
      * @var string

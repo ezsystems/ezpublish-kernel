@@ -28,7 +28,7 @@ class Suite extends \PHPUnit_Framework_TestSuite
     }
 
     /**
-     * @return \ezp\Content\Tests\TestSuite
+     * @return ezp\Content\Tests\TestSuite
      */
     public static function suite()
     {

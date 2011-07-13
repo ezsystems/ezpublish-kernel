@@ -9,6 +9,8 @@
  */
 
 namespace ezp\Persistence\Fields;
+use ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\FieldValue;
 
 /**
  */
@@ -21,9 +23,9 @@ interface StorageInterface
      * $data.
      *
      * @param array $data
-     * @param \ezp\Persistence\Content\Field $field
+     * @param Field $field
      */
-    public function setValue( array $data, \ezp\Persistence\Content\Field $field );
+    public function setValue( array $data, Field $field );
 
     /**
      * Stores $value for $fieldId in an external data source.
@@ -35,11 +37,11 @@ interface StorageInterface
      * called from storing).
      *
      * @param int $fieldId
-     * @param \ezp\Persistence\Content\FieldValue $value
+     * @param FieldValue $value
      * @return bool
      *
      */
-    public function storeFieldData( $fieldId, \ezp\Persistence\Content\FieldValue $value );
+    public function storeFieldData( $fieldId, FieldValue $value );
 
     /**
      * @param int $fieldId

@@ -8,12 +8,13 @@
  */
 
 namespace ezp\Base\Tests;
+use ezp\Base\Configuration\IniParser,
+    ezp\Base\Configuration;
 
 /**
  * Test case for IniParser class
  *
  */
-use \ezp\Base\Configuration\IniParser, \ezp\Base\Configuration;
 class IniParserTest extends \PHPUnit_Framework_TestCase
 {
     protected $parser;

@@ -8,12 +8,18 @@
  */
 
 namespace ezp\Content;
+use ezp\Base\AbstractModel,
+    ezp\Base\Interfaces\Observer,
+    ezp\Base\Interfaces\Observable,
+    ezp\Base\Exception\BadConfiguration,
+    ezp\Base\Exception\MissingClass,
+    ezp\Base\Configuration,
+    RuntimeException;
 
 /**
  * Abstract field class, used for content field and content type field
  */
-use \ezp\Base\Exception;
-abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\Observer
+abstract class AbstractField extends AbstractModel implements Observer
 {
     /**
      * @var AbstractFieldType
@@ -23,8 +29,8 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
     /**
      * Initialize and return field type
      *
-     * @throws Exception\BadConfiguration If configuration for field type is missing.
-     * @throws Exception\MissingClass If field class is missing.
+     * @throws BadConfiguration If configuration for field type is missing.
+     * @throws MissingClass If field class is missing.
      * @return AbstractFieldType
      */
     protected function getType()
@@ -34,10 +40,10 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
 
         $list = $this->getTypeList();
         if ( !isset( $list[$this->fieldTypeString] ) )
-            throw new Exception\BadConfiguration( 'content.ini[fields]', "could not load {$this->fieldTypeString}");
+            throw new BadConfiguration( 'content.ini[fields]', "could not load {$this->fieldTypeString}");
 
         if ( !class_exists( $list[$this->fieldTypeString] ) )
-            throw new Exception\MissingClass(  $list[$this->fieldTypeString], 'field type' );
+            throw new MissingClass(  $list[$this->fieldTypeString], 'field type' );
 
         $this->type = $this->initType( $list[ $this->fieldTypeString ] );
 
@@ -51,13 +57,13 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
      */
     protected function getTypeList()
     {
-        return \ezp\Base\Configuration::getInstance( 'content' )->get( 'fields', 'Type' );
+        return Configuration::getInstance( 'content' )->get( 'fields', 'Type' );
     }
 
     /**
      * Initialize field type class
      *
-     * @throws \RuntimeException If $className is not instanceof AbstractFieldType
+     * @throws RuntimeException If $className is not instanceof AbstractFieldType
      * @param string $className
      * @return AbstractFieldType
      */
@@ -65,7 +71,7 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
     {
         $type = new $className();
         if ( !$type instanceof AbstractFieldType )
-            throw new \RuntimeException( "Field type value '{$className}' does not implement ezp\\content\\AbstractFieldType" );
+            throw new RuntimeException( "Field type value '{$className}' does not implement ezp\\content\\AbstractFieldType" );
         $this->toType( $type );
         return $type;
     }
@@ -81,7 +87,7 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
         foreach ( $type->properties() as $property => $legacyProperty )
         {
             if ( !isset( $this->readableProperties[$legacyProperty] ) )
-                throw new \RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
+                throw new RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
 
             $this->$legacyProperty = $type->$property;
         }
@@ -99,7 +105,7 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
         foreach ( $type->properties() as $property => $legacyProperty )
         {
             if ( !isset( $this->readableProperties[$legacyProperty] ) )
-                throw new \RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
+                throw new RuntimeException( "'{$legacyProperty}' is not a valid property on " . get_class( $this ) );
 
             $type->$property = $this->$legacyProperty;
         }
@@ -109,18 +115,18 @@ abstract class AbstractField extends \ezp\Base\AbstractModel implements \ezp\Bas
     /**
      * Called when subject has been updated
      *
-     * @param \ezp\Base\Interfaces\Observable $subject
+     * @param Observable $subject
      * @param string $event
      * @return Field
      */
-    public function update( \ezp\Base\Interfaces\Observable $subject, $event = 'update' )
+    public function update( Observable $subject, $event = 'update' )
     {
         if ( !$subject instanceof AbstractFieldType )
             return $this;
 
         $type = $this->getType();
         if ( $type !== $subject )
-            throw new \RuntimeException( "Field should only listen to it's own attached field value, not others! type: '{$this->fieldTypeString}' " );
+            throw new RuntimeException( "Field should only listen to it's own attached field value, not others! type: '{$this->fieldTypeString}' " );
 
         return $this->fromType( $type );
     }

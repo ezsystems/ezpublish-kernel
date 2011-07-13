@@ -8,11 +8,12 @@
  */
 
 namespace ezp\Persistence\Content;
+use ezp\Persistence\AbstractValueObject;
 
 /**
  *
  */
-class Type extends \ezp\Persistence\AbstractValueObject
+class Type extends AbstractValueObject
 {
     /**
      * Content type ID

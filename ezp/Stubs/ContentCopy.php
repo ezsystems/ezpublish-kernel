@@ -23,7 +23,7 @@ try
     $newContent->addParent( $parentLocation );
     $contentService->create( $newContent );
 }
-catch ( \ezp\Base\Exception\Forbidden $e )
+catch ( ezp\Base\Exception\Forbidden $e )
 {
     echo "Permission issue occurred: {$e->getMessage()}\n";
     exit;

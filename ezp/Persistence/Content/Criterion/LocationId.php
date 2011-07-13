@@ -8,11 +8,13 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
+    InvalidArgumentException;
 
 /**
  */
-class LocationId extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class LocationId extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new LocationId criterion
@@ -33,13 +35,13 @@ class LocationId extends Criterion implements \ezp\Persistence\Content\Interface
         {
             if ( !is_array( $value ) )
             {
-                throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
+                throw new InvalidArgumentException( "Operator::IN requires an array of values" );
             }
             foreach ( $subtreeId as $id )
             {
                 if ( !is_numeric( $id ) )
                 {
-                    throw new \InvalidArgumentException( "Only numeric ids are accepted" );
+                    throw new InvalidArgumentException( "Only numeric ids are accepted" );
                 }
             }
         }
@@ -48,11 +50,11 @@ class LocationId extends Criterion implements \ezp\Persistence\Content\Interface
         {
             if ( is_array( $value ) )
             {
-                throw new \InvalidArgumentException( "Operator::EQ requires a single value" );
+                throw new InvalidArgumentException( "Operator::EQ requires a single value" );
             }
             if ( !is_numeric( $value ) )
             {
-                throw new \InvalidArgumentException( "Only numeric ids are accepted" );
+                throw new InvalidArgumentException( "Only numeric ids are accepted" );
             }
         }
         $this->operator = $operator;

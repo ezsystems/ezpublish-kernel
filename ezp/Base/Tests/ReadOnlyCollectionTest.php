@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Base\Tests;
+use ezp\Base\ReadOnlyCollection;
 
 /**
  * Test case for ReadOnlyCollection class
@@ -16,7 +17,7 @@ namespace ezp\Base\Tests;
 class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Base\ReadOnlyCollection
+     * @var ReadOnlyCollection
      */
     private $collection;
 
@@ -24,7 +25,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     {
         parent::__construct();
         $this->setName( "ReadOnlyCollectionTest class tests" );
-        $this->collection = new \ezp\Base\ReadOnlyCollection( array( 1, 55, 'collection', 'test' ) );
+        $this->collection = new ReadOnlyCollection( array( 1, 55, 'collection', 'test' ) );
     }
 
     /**
@@ -61,7 +62,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\ReadOnly
+     * @expectedException ezp\Base\Exception\ReadOnly
      */
     public function testSetInvalid()
     {
@@ -69,7 +70,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\ReadOnly
+     * @expectedException ezp\Base\Exception\ReadOnly
      */
     public function testSetAppendInvalid()
     {
@@ -77,7 +78,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\ReadOnly
+     * @expectedException ezp\Base\Exception\ReadOnly
      */
     public function testUnSet()
     {

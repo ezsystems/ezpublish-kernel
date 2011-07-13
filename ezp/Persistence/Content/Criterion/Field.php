@@ -9,11 +9,13 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
+    InvalidArgumentException;
 
 /**
  */
-class Field extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class Field extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new Field Criterion.
@@ -31,7 +33,7 @@ class Field extends Criterion implements \ezp\Persistence\Content\Interfaces\Cri
             case Operator::IN:
                 if ( !is_array( $value ) )
                 {
-                    throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
+                    throw new InvalidArgumentException( "Operator::IN requires an array of values" );
                 }
                 break;
 
@@ -43,19 +45,19 @@ class Field extends Criterion implements \ezp\Persistence\Content\Interfaces\Cri
             case Operator::LIKE :
                 if ( is_array( $value ) )
                 {
-                    throw new \InvalidArgumentException( "Operator::EQ requires a single value" );
+                    throw new InvalidArgumentException( "Operator::EQ requires a single value" );
                 }
                 break;
 
             case Operator::BETWEEN:
                 if ( !is_array( $value ) || count( $value ) != 2 )
                 {
-                    throw new \InvalidArgumentException( "Operator::EQ requires an array of two values" );
+                    throw new InvalidArgumentException( "Operator::EQ requires an array of two values" );
                 }
                 break;
 
             default:
-                throw new \InvalidArgumentException( "Unknown operator $operator" );
+                throw new InvalidArgumentException( "Unknown operator $operator" );
         }
 
         $this->target = $field;

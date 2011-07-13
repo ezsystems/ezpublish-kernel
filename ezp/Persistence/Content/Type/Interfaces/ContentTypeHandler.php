@@ -8,7 +8,10 @@
  */
 
 namespace ezp\Persistence\Content\Type\Interfaces;
-use \ezp\Persistence\Content\Type;
+use ezp\Persistence\Content\Type,
+    ezp\Persistence\Content\Type\ContentTypeCreateStruct,
+    ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Content\Type\Group;
 
 /**
  */
@@ -18,13 +21,13 @@ interface ContentTypeHandler
      * @param Group $group
      * @return Group
      */
-    public function createGroup( Type\Group $group );
+    public function createGroup( Group $group );
 
     /**
      * @todo: Add an update struct, which excludes the contentTypes property from the Group struct
      * @param Group $group
      */
-    public function updateGroup( Type\Group $group );
+    public function updateGroup( Group $group );
 
     /**
      * @param mixed $groupId
@@ -32,7 +35,7 @@ interface ContentTypeHandler
     public function deleteGroup( $groupId );
 
     /**
-     * @return Type\Group[]
+     * @return Group[]
      */
     public function loadAllGroups();
 
@@ -50,15 +53,15 @@ interface ContentTypeHandler
     public function load( $contentTypeId, $version = 1 );
 
     /**
-     * @param Type\ContentTypeCreateStruct $contentType
+     * @param ContentTypeCreateStruct $contentType
      * @return Type
      */
-    public function create( Type\ContentTypeCreateStruct $contentType );
+    public function create( ContentTypeCreateStruct $contentType );
 
     /**
      * @param Type\ContentTypeUpdateStruct $contentType
      */
-    public function update( Type\ContentTypeUpdateStruct $contentType );
+    public function update( ContentTypeUpdateStruct $contentType );
 
     /**
      * @param mixed $contentTypeId
@@ -114,10 +117,10 @@ interface ContentTypeHandler
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param Type\FieldDefinition $fieldDefinition
+     * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function addFieldDefinition( $contentTypeId, Type\FieldDefinition $fieldDefinition );
+    public function addFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition );
 
     /**
      * Removes a field definition from an existing Type.
@@ -141,10 +144,10 @@ interface ContentTypeHandler
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param Type\FieldDefinition $fieldDefinition
+     * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function updateFieldDefinition( $contentTypeId, Type\FieldDefinition $fieldDefinition );
+    public function updateFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition );
 
     /**
      * Update content objects

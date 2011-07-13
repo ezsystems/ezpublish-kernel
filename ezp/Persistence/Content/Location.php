@@ -9,11 +9,12 @@
  */
 
 namespace ezp\Persistence\Content;
+use ezp\Persistence\AbstractValueObject;
 
 /**
  * @todo Add missing attributes (OMS), eg sort info
  */
-class Location extends \ezp\Persistence\AbstractValueObject
+class Location extends AbstractValueObject
 {
     /**
      * Location ID.

@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
+use InvalidArgumentException;
 
 /**
  * A NOT logical criterion
@@ -29,7 +29,7 @@ class LogicalNot extends LogicalOperator
     {
         if ( count( $criterion ) > 1 )
         {
-            throw new \InvalidArgumentException( "This operator only accepts one Criterion" );
+            throw new InvalidArgumentException( "This operator only accepts one Criterion" );
         }
 
         parent::__construct( $criterion );

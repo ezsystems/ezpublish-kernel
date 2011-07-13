@@ -8,12 +8,15 @@
  */
 
 namespace ezp\Content\Tests;
+use ezp\Content\Content,
+    ezp\Content\Translation,
+    ezp\Content\Type\Type,
+    ezp\Base\Locale;
 
 /**
  * Test case for Translation class
  *
  */
-use \ezp\Content\Content, \ezp\Content\Translation;
 class TranslationTest extends \PHPUnit_Framework_TestCase
 {
     protected $contentType;
@@ -27,11 +30,11 @@ class TranslationTest extends \PHPUnit_Framework_TestCase
         parent::__construct();
         $this->setName( "Translation class tests" );
 
-        $this->contentType = new \ezp\Content\Type\Type();
+        $this->contentType = new Type();
         $this->contentType->identifier = 'article';
 
-        $this->localeEN = new \ezp\Base\Locale( 'eng-GB' );
-        $this->localeFR = new \ezp\Base\Locale( 'fre-FR' );
+        $this->localeEN = new Locale( 'eng-GB' );
+        $this->localeFR = new Locale( 'fre-FR' );
     }
 
     /**

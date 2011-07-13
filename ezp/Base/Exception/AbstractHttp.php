@@ -8,6 +8,9 @@
  */
 
 namespace ezp\Base\Exception;
+use ezp\Base\Exception,
+    Exception as PHPException,
+    RuntimeException;
 
 /**
  * Abstract Http Exception implementation
@@ -15,7 +18,7 @@ namespace ezp\Base\Exception;
  * Exceptions that map to any of the http errors should extend this class.
  *
  */
-abstract class AbstractHttp extends \RuntimeException implements \ezp\Base\Exception
+abstract class AbstractHttp extends RuntimeException implements Exception
 {
     const BAD_REQUEST        = 400;
     const UNAUTHORIZED       = 401;
@@ -36,9 +39,9 @@ abstract class AbstractHttp extends \RuntimeException implements \ezp\Base\Excep
     /**
      * @param string $message
      * @param int $code Must be one of the available constants on this class
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $message, $code, \Exception $previous = null )
+    public function __construct( $message, $code, PHPException $previous = null )
     {
         switch ( $code )
         {

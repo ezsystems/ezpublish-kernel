@@ -8,30 +8,33 @@
  */
 
 namespace ezp\Content\Services;
+use ezp\Base\Exception,
+    ezp\Base\AbstractService,
+    ezp\Content\Location,
+    ezp\Content\Section;
 
 /**
  * Location service, used for complex subtree operations
  */
-use \ezp\Base\Exception;
-class Location extends \ezp\Base\AbstractService
+class Location extends AbstractService
 {
 
     /**
      * Copies the subtree starting from $subtree as a new subtree of $targetLocation
      *
-     * @param \ezp\Content\Location $subtree
-     * @param \ezp\Content\Location $targetLocation
+     * @param Location $subtree
+     * @param Location $targetLocation
      *
-     * @return \ezp\Content\Location The newly created subtree
+     * @return Location The newly created subtree
      */
-    public function copy( \ezp\Content\Location $subtree, \ezp\Content\Location $targetLocation )
+    public function copy( Location $subtree, Location $targetLocation )
     {
     }
 
     /**
      * Loads a location object from its $locationId
      * @param integer $locationId
-     * @return \ezp\Content\Location
+     * @return Location
      * @throws Exception\NotFound if no location is available with $locationId
      */
     public function load( $locationId )
@@ -40,7 +43,7 @@ class Location extends \ezp\Base\AbstractService
     }
 
 
-    public function children( \ezp\Content\Location $location )
+    public function children( Location $location )
     {
 
     }
@@ -48,11 +51,11 @@ class Location extends \ezp\Base\AbstractService
     /**
      * Creates the new $location in the content repository
      *
-     * @param \ezp\Content\Location $location
-     * @return \ezp\Content\Location the newly created Location
+     * @param Location $location
+     * @return Location the newly created Location
      * @throws Exception\Validation If a validation problem has been found for $content
      */
-    public function create( \ezp\Content\Location $location )
+    public function create( Location $location )
     {
         // repo/storage stuff
         return $location;
@@ -61,11 +64,11 @@ class Location extends \ezp\Base\AbstractService
     /**
      * Updates $location in the content repository
      *
-     * @param \ezp\Content\Location $location
-     * @return \ezp\Content\Location the updated Location
+     * @param Location $location
+     * @return Location the updated Location
      * @throws Exception\Validation If a validation problem has been found for $content
      */
-    public function update( \ezp\Content\Location $location )
+    public function update( Location $location )
     {
         // repo/storage stuff
         return $location;
@@ -74,12 +77,12 @@ class Location extends \ezp\Base\AbstractService
     /**
      * Swaps the contents hold by the $location1 and $location2
      *
-     * @param \ezp\Content\Location $location1
-     * @param \ezp\Content\Location $location2
+     * @param Location $location1
+     * @param Location $location2
      * @return void
      * @throws Exception\Validation If a validation problem has been found
      */
-    public function swap( \ezp\Content\Location $location1, \ezp\Content\Location $location2 )
+    public function swap( Location $location1, Location $location2 )
     {
 
     }
@@ -87,11 +90,11 @@ class Location extends \ezp\Base\AbstractService
     /**
      * Hides the $location and marks invisible all descendants of $location.
      *
-     * @param \ezp\Content\Location $location
+     * @param Location $location
      * @return void
      * @throws Exception\Validation If a validation problem has been found
      */
-    public function hide( \ezp\Content\Location $location )
+    public function hide( Location $location )
     {
         // take care of :
         // 1. hiding $location
@@ -102,11 +105,11 @@ class Location extends \ezp\Base\AbstractService
      * Unhides the $location and marks visible all descendants of $locations
      * until a hidden location is found.
      *
-     * @param \ezp\Content\Location $location
+     * @param Location $location
      * @return void
      * @throws Exception\Validation If a validation problem has been found;
      */
-    public function unhide( \ezp\Content\Location $location )
+    public function unhide( Location $location )
     {
         // take care of :
         // 1. unhiding $location
@@ -118,12 +121,12 @@ class Location extends \ezp\Base\AbstractService
      * Moves $location under $newParent and updates all descendants of
      * $location accordingly.
      *
-     * @param \ezp\Content\Location $location
-     * @param \ezp\Content\Location $newParent
+     * @param Location $location
+     * @param Location $newParent
      * @return void
      * @throws Exception\Validation If a validation problem has been found;
      */
-    public function move( \ezp\Content\Location $location, \ezp\Content\Location $newParent )
+    public function move( Location $location, Location $newParent )
     {
         // take care of :
         // 1. set parentId and path for $location
@@ -134,11 +137,11 @@ class Location extends \ezp\Base\AbstractService
     /**
      * Deletes the $locations and all descendants of $location.
      *
-     * @param \ezp\Content\Location $location
+     * @param Location $location
      * @return void
      * @throws Exception\Validation If a validation problem has been found;
      */
-    public function delete( \ezp\Content\Location $location )
+    public function delete( Location $location )
     {
         // take care of:
         // 1. removing the current location
@@ -154,12 +157,12 @@ class Location extends \ezp\Base\AbstractService
      * Assigns $section to the contents hold by $startingPoint location and
      * all contents hold by descendants location of $startingPoint
      *
-     * @param \ezp\Content\Location $startingPoint
-     * @param \ezp\Content\Section $section
+     * @param Location $startingPoint
+     * @param Section $section
      * @return void
      * @throws Exception\Validation If a validation problem has been found;
      */
-    public function assignSection( \ezp\Content\Location $startingPoint, \ezp\Content\Section $section )
+    public function assignSection( Location $startingPoint, Section $section )
     {
     }
 }

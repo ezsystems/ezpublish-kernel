@@ -14,7 +14,7 @@ try
 
     $locationService->swap( $location1, $location2 );
 }
-catch (\ezp\Base\Exception\Forbidden $e )
+catch (ezp\Base\Exception\Forbidden $e )
 {
     echo "Permission issue occurred: {$e->getMessage()}\n";
     exit;

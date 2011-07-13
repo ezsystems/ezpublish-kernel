@@ -7,12 +7,17 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content;
+use ezp\Base\AbstractModel,
+    ezp\Base\Locale,
+    ezp\Base\TypeCollection,
+    DomainException;
+
 /**
  * This class represents a Content Translation
  *
  */
-namespace ezp\Content;
-class Translation extends \ezp\Base\AbstractModel
+class Translation extends AbstractModel
 {
 
     /**
@@ -46,7 +51,7 @@ class Translation extends \ezp\Base\AbstractModel
     /**
      * Locale object
      *
-     * @var \ezp\Base\Locale
+     * @var Locale
      */
     protected $locale;
 
@@ -57,10 +62,10 @@ class Translation extends \ezp\Base\AbstractModel
      */
     protected $versions;
 
-    public function __construct( \ezp\Base\Locale $locale, Content $content )
+    public function __construct( Locale $locale, Content $content )
     {
         $this->locale = $locale;
-        $this->versions = new \ezp\Base\TypeCollection( '\ezp\Content\Version' );
+        $this->versions = new TypeCollection( 'ezp\Content\Version' );
         $this->content = $content;
     }
 
@@ -95,7 +100,7 @@ class Translation extends \ezp\Base\AbstractModel
         $c = count( $this->versions );
         if ( $c === 0 )
         {
-            throw new \DomainException( "Translation {$this->locale->code} does not contain any version" );
+            throw new DomainException( "Translation {$this->locale->code} does not contain any version" );
         }
         return $this->versions[$c - 1];
     }
@@ -129,7 +134,7 @@ class Translation extends \ezp\Base\AbstractModel
         $version = $this->getCurrent();
         if ( $version === null )
         {
-            throw new \DomainException( "No published version in the translation '{$this->locale->code}'" );
+            throw new DomainException( "No published version in the translation '{$this->locale->code}'" );
         }
         return $version->fields;
     }

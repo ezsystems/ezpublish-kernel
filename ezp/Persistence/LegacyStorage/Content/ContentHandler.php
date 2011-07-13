@@ -9,15 +9,17 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content;
-
-use \ezp\Persistence\Content;
+use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface,
+    ezp\Persistence\Content\ContentCreateStruct,
+    ezp\Persistence\Content\ContentUpdateStruct,
+    ezp\Content\Criteria\Criteria;
 
 /**
  * The ContentHandler stores Content and ContentType objects.
  *
  * @version //autogentag//
  */
-class ContentHandler implements Content\Interfaces\ContentHandler
+class ContentHandler implements ContentHandlerInterface
 {
     /**
      * Creates a new Content entity in the storage engine.
@@ -27,10 +29,10 @@ class ContentHandler implements Content\Interfaces\ContentHandler
      *
      * Will contain always a complete list of fields.
      *
-     * @param \ezp\Persistence\Content\ContentCreateStruct $content Content creation struct.
-     * @return \ezp\Persistence\Content Content value object
+     * @param ContentCreateStruct $content Content creation struct.
+     * @return ezp\Persistence\Content Content value object
      */
-    public function create( \ezp\Persistence\Content\ContentCreateStruct $content )
+    public function create( ContentCreateStruct $content )
     {
         throw new Exception( "Not implemented yet." );
     }
@@ -43,7 +45,7 @@ class ContentHandler implements Content\Interfaces\ContentHandler
      *
      * @param int $contentId
      * @param int|bool $srcVersion
-     * @return \ezp\Persistence\Content\Content
+     * @return ezp\Persistence\Content\Content
      */
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
@@ -54,7 +56,7 @@ class ContentHandler implements Content\Interfaces\ContentHandler
      * Returns the raw data of a content object identified by $id, in a struct.
      *
      * @param int $id
-     * @return \ezp\Persistence\Content Content value object
+     * @return ezp\Persistence\Content Content value object
      */
     public function load( $id )
     {
@@ -64,13 +66,13 @@ class ContentHandler implements Content\Interfaces\ContentHandler
     /**
      * Returns a list of object satisfying the $criteria.
      *
-     * @param  \ezp\Content\Criteria\Criteria $criteria
+     * @param  Criteria $criteria
      * @param $offset
      * @param $limit
      * @param $sort
-     * @return array(\ezp\Persistence\Content) Content value object.
+     * @return array(ezp\Persistence\Content) Content value object.
      */
-    public function find( \ezp\Content\Criteria\Criteria $criteria, $offset, $limit, $sort )
+    public function find( Criteria $criteria, $offset, $limit, $sort )
     {
         throw new Exception( "Not implemented yet." );
     }
@@ -82,12 +84,12 @@ class ContentHandler implements Content\Interfaces\ContentHandler
      * ensure, that your $criteria ensure that only a single object can be
      * retrieved.
      *
-     * @param \ezp\Content\Criteria\Criteria $criteria
+     * @param Criteria $criteria
      * @param mixed $offset
      * @param mixed $sort
-     * @return \ezp\Persistence\Content
+     * @return ezp\Persistence\Content
      */
-    public function findSingle( \ezp\Content\Criteria\Criteria $criteria, $offset, $sort )
+    public function findSingle( Criteria $criteria, $offset, $sort )
     {
         throw new Exception( "Not implemented yet." );
     }
@@ -100,7 +102,7 @@ class ContentHandler implements Content\Interfaces\ContentHandler
      * @param int $contentId
      * @param int $state
      * @param int $version
-     * @see \ezp\Content\Content
+     * @see ezp\Content\Content
      * @return boolean
      */
     public function setState( $contentId, $state, $version )
@@ -117,7 +119,7 @@ class ContentHandler implements Content\Interfaces\ContentHandler
      * @param mixed $stateGroup
      * @param mixed $state
      * @return boolean
-     * @see \ezp\Content\Content
+     * @see ezp\Content\Content
      */
     public function setObjectState( $contentId, $stateGroup, $state )
     {
@@ -132,7 +134,7 @@ class ContentHandler implements Content\Interfaces\ContentHandler
      * @param mixed $contentId
      * @param mixed $stateGroup
      * @return mixed
-     * @see \ezp\Content\Content
+     * @see ezp\Content\Content
      */
     public function getObjectState( $contentId, $stateGroup )
     {
@@ -142,10 +144,10 @@ class ContentHandler implements Content\Interfaces\ContentHandler
     /**
      * Updates a content object entity with data and identifier $content
      *
-     * @param \ezp\Persistence\Content\ContentUpdateStruct $content
-     * @return \ezp\Persistence\Content
+     * @param ContentUpdateStruct $content
+     * @return ezp\Persistence\Content
      */
-    public function update( \ezp\Persistence\Content\ContentUpdateStruct $content )
+    public function update( ContentUpdateStruct $content )
     {
         throw new Exception( "Not implemented yet." );
     }
@@ -183,7 +185,7 @@ class ContentHandler implements Content\Interfaces\ContentHandler
      *
      * @param int $contentId
      * @param string $languageCode
-     * @return \ezp\Persistence\Content\Content
+     * @return ezp\Persistence\Content\Content
      */
     public function fetchTranslation( $contentId, $languageCode )
     {

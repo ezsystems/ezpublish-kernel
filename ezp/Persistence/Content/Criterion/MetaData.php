@@ -9,11 +9,13 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
+    InvalidArgumentException;
 
 /**
  */
-class MetaData extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class MetaData extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new metadata criterion on $metadata
@@ -29,7 +31,7 @@ class MetaData extends Criterion implements \ezp\Persistence\Content\Interfaces\
     {
         if ( !in_array( $target, array( self::STATE, self::OWNER, self::MODIFIED, self::CREATED ) ) )
         {
-            throw new \InvalidArgumentException( "target must be one of MetaData::STATE, MetaData::OWNER, MetaData::MODIFIED or MetaData::CREATED" );
+            throw new InvalidArgumentException( "target must be one of MetaData::STATE, MetaData::OWNER, MetaData::MODIFIED or MetaData::CREATED" );
         }
 
         switch ( $operator )
@@ -37,7 +39,7 @@ class MetaData extends Criterion implements \ezp\Persistence\Content\Interfaces\
             case Operator::IN:
                 if ( !is_array( $value ) )
                 {
-                    throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
+                    throw new InvalidArgumentException( "Operator::IN requires an array of values" );
                 }
                 break;
 
@@ -48,19 +50,19 @@ class MetaData extends Criterion implements \ezp\Persistence\Content\Interfaces\
             case Operator::LTE:
                 if ( is_array( $value ) )
                 {
-                    throw new \InvalidArgumentException( "Operator::EQ requires a single value" );
+                    throw new InvalidArgumentException( "Operator::EQ requires a single value" );
                 }
                 break;
 
             case Operator::BETWEEN:
                 if ( !is_array( $value ) || count( $value ) != 2 )
                 {
-                    throw new \InvalidArgumentException( "Operator::EQ requires an array of two values" );
+                    throw new InvalidArgumentException( "Operator::EQ requires an array of two values" );
                 }
                 break;
 
             default:
-                throw new \InvalidArgumentException( "Unknown operator $operator" );
+                throw new InvalidArgumentException( "Unknown operator $operator" );
         }
         $this->operator = $operator;
         $this->value = $value;

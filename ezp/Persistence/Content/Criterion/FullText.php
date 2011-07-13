@@ -9,11 +9,12 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
  */
-class FullText extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class FullText extends Criterion implements CriterionInterface
 {
     /**
      * Creates a FullText criterion on $text

@@ -8,26 +8,27 @@
  */
 
 namespace ezp\Content\Services;
+use ezp\Base\AbstractService,
+    ezp\Base\Exception\NotFound;
 
 /**
  * Content Service, extends repository with content specific operations
  *
  */
-use \ezp\Base\Exception;
-class ContentType extends \ezp\Base\AbstractService
+class ContentType extends AbstractService
 {
     /**
      * Get an Content Type object by id
      *
      * @param int $contentTypeId
-     * @return \ezp\Content\Type\Type
-     * @throws Exception\NotFound
+     * @return ezp\Content\Type\Type
+     * @throws NotFound
      */
     public function load( $contentTypeId )
     {
         $contentType = $this->handler->contentTypeHandler()->load( $contentTypeId );
         if ( !$contentType )
-            throw new Exception\NotFound( 'Content\Type', $contentTypeId );
+            throw new NotFound( 'Content\Type', $contentTypeId );
         return $contentType;
     }
 
@@ -35,14 +36,14 @@ class ContentType extends \ezp\Base\AbstractService
      * Get an Content Type by identifier
      *
      * @param string $identifier
-     * @return \ezp\Content\Type\Type
-     * @throws Exception\NotFound
+     * @return ezp\Content\Type\Type
+     * @throws NotFound
      */
     public function loadByIdentifier( $identifier )
     {
         $contentTypes = $this->handler->contentTypeHandler()->loadByIdentifier( $identifier );
         if ( !$contentTypes )
-            throw new Exception\NotFound( 'Content\Type', $identifier );
+            throw new NotFound( 'Content\Type', $identifier );
         return $contentTypes[0];
     }
 }

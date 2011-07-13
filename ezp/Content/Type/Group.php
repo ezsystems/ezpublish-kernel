@@ -7,6 +7,10 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content\Type;
+use ezp\Base\AbstractModel,
+    ezp\Base\TypeCollection;
+
 /**
  * Group class ( Content Class Group )
  *
@@ -16,8 +20,7 @@
  * @property-read string $name
  * @property-read Type[] $contentTypes
  */
-namespace ezp\Content\Type;
-class Group extends\ezp\Base\AbstractModel
+class Group extends AbstractModel
 {
     /**
      * @var array Readable of properties on this object
@@ -47,7 +50,7 @@ class Group extends\ezp\Base\AbstractModel
 
     public function __construct()
     {
-        $this->contentTypes = new \ezp\Base\TypeCollection( '\ezp\Content\Type\Type' );
+        $this->contentTypes = new TypeCollection( 'ezp\Content\Type\Type' );
     }
 
     /**

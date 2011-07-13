@@ -6,8 +6,8 @@ $sc = new ServiceContainer();
 $contentService = $sc->getRepository()->getContentService();
 $content = $contentService->load( 2 );
 
-$localeFR = \ezp\Base\Locale::get( 'fre-FR' );
-$localeEN = \ezp\Base\Locale::get( 'eng-GB' );
+$localeFR = ezp\Base\Locale::get( 'fre-FR' );
+$localeEN = ezp\Base\Locale::get( 'eng-GB' );
 
 try
 {
@@ -15,7 +15,7 @@ try
     // last one in eng-GB
     $translationFR = $content->addTranslation( $localeFR, $content->translations['eng-GB']->last );
 }
-catch ( \ezp\Base\Exception\InvalidArgumentValue $e )
+catch ( ezp\Base\Exception\InvalidArgumentValue $e )
 {
     echo "Impossible to translate in '{$localeFR->code}', this translation already exists\n";
     exit;

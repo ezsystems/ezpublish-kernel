@@ -7,11 +7,15 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content;
+use ezp\Base\AbstractModel,
+    ezp\Base\Interfaces\Observer,
+    ezp\Base\Interfaces\Observable;
+
 /**
  *
  */
-namespace ezp\Content;
-abstract class AbstractFieldType extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\Observer
+abstract class AbstractFieldType extends AbstractModel implements Observer
 {
     /**
      * Constant that Field types needs to defined
@@ -57,11 +61,11 @@ abstract class AbstractFieldType extends \ezp\Base\AbstractModel implements \ezp
     /**
      * Called when subject has been updated
      *
-     * @param \ezp\Base\Interfaces\Observable $subject
+     * @param Observable $subject
      * @param string $event
      * @return Field
      */
-    public function update( \ezp\Base\Interfaces\Observable $subject, $event = 'update' )
+    public function update( Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof AbstractField )
         {

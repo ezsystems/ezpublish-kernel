@@ -14,7 +14,7 @@ namespace ezp\Base;
  *
  * Makes it possible to catch eZ Publish exceptions.
  *
- * @use: class MyException extends SomeSplException implements \ezp\Base\Exception
+ * @use: class MyException extends SomeSplException implements ezp\Base\Exception
  *
  */
 interface Exception

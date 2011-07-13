@@ -7,12 +7,16 @@
  * @version //autogentag//
  */
 
+namespace ezp\Base;
+use ezp\Base\Interfaces\Proxy as ProxyInterface,
+    ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Exception\PropertyNotFound;
+
 /**
  * Proxy class for content model objects
  *
  */
-namespace ezp\Base;
-class Proxy implements Interfaces\Proxy
+class Proxy implements ProxyInterface
 {
     /**
      * Instance of repository for fetching the object
@@ -41,7 +45,7 @@ class Proxy implements Interfaces\Proxy
      * @param Repository $repository
      * @param string $type The type of object this Proxy object represent
      * @param int $id Primary id
-     * @throws Exception\InvalidArgumentType If $id is not a int value above zero.
+     * @throws InvalidArgumentType If $id is not a int value above zero.
      */
     public function __construct( Repository $repository, $type, $id )
     {
@@ -49,7 +53,7 @@ class Proxy implements Interfaces\Proxy
         $this->type = $type;
         $this->id = (int) $id;
         if ( $this->id === 0 )
-            throw new Exception\InvalidArgumentType( 'id', 'int' );
+            throw new InvalidArgumentType( 'id', 'int' );
     }
 
     /**
@@ -65,7 +69,7 @@ class Proxy implements Interfaces\Proxy
     /**
      * Provides access to id property
      *
-     * @throws Exception\PropertyNotFound
+     * @throws PropertyNotFound
      * @param  string $name
      * @return int
      */
@@ -73,6 +77,6 @@ class Proxy implements Interfaces\Proxy
     {
         if ( $name === 'id' )
             return $this->id;
-        throw new Exception\PropertyNotFound( $name );
+        throw new PropertyNotFound( $name );
     }
 }

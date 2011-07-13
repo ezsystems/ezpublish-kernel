@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Base\Exception;
+use Exception as PHPException;
 
 /**
  * Bad Request Exception implementation
@@ -23,9 +24,9 @@ class BadRequest extends AbstractHttp
      *
      * @param string $missing
      * @param string $from
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $missing, $from, \Exception $previous = null )
+    public function __construct( $missing, $from, PHPException $previous = null )
     {
         parent::__construct( "Bad request, missing {$missing} in {$from}", self::BAD_REQUEST, $previous );
     }

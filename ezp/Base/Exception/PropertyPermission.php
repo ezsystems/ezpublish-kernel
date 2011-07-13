@@ -8,6 +8,9 @@
  */
 
 namespace ezp\Base\Exception;
+use ezp\Base\Exception,
+    Exception as PHPException,
+    InvalidArgumentException;
 
 /**
  * Property Permission Exception implementation
@@ -16,7 +19,7 @@ namespace ezp\Base\Exception;
  *   throw new PropertyPermission( 'nodeId', PropertyPermission::READ, __CLASS__ );
  *
  */
-class PropertyPermission extends \InvalidArgumentException implements \ezp\Base\Exception
+class PropertyPermission extends InvalidArgumentException implements Exception
 {
     /**
      * Used when the property is not readable
@@ -34,9 +37,9 @@ class PropertyPermission extends \InvalidArgumentException implements \ezp\Base\
      * @param string $propertyName
      * @param string $mode
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $propertyName, $mode = self::READ, $className = null, \Exception $previous = null )
+    public function __construct( $propertyName, $mode = self::READ, $className = null, PHPException $previous = null )
     {
         if ( $className === null )
             parent::__construct( "Property '{$propertyName}' is not {$mode}", 0, $previous );

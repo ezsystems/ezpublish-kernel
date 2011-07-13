@@ -1,7 +1,7 @@
 <?php
 /*
  * Assume that :
- * - $parentLocation is a valid Location (formerly "parent node") => \ezp\Content\Location
+ * - $parentLocation is a valid Location (formerly "parent node") => ezp\Content\Location
  * - Locale fre-FR has also been set in the system
  */
 
@@ -10,8 +10,8 @@ use ezp\Content\Content, ezp\Base\ServiceContainer;
 $sc = new ServiceContainer();
 $repository = $sc->getRepository();
 
-$localeFR = \ezp\Base\Locale::get( 'fre-FR' );
-$localeEN = \ezp\Base\Locale::get( 'eng-GB' );
+$localeFR = ezp\Base\Locale::get( 'fre-FR' );
+$localeEN = ezp\Base\Locale::get( 'eng-GB' );
 
 $contentType = $repository->getContentTypeService()->loadByIdentifier( 'folder' );
 $content = new Content( $contentType, $localeEN );

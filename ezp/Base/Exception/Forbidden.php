@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Base\Exception;
+use Exception as PHPException;
 
 /**
  * Forbidden Exception implementation
@@ -23,9 +24,9 @@ class Forbidden extends AbstractHttp
      *
      * @param string $type
      * @param string $action
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $type, $action, \Exception $previous = null )
+    public function __construct( $type, $action, PHPException $previous = null )
     {
         parent::__construct( "User did not have access to {$action} '{$type}'", self::FORBIDDEN, $previous );
     }

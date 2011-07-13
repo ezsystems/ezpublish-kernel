@@ -7,12 +7,14 @@
  * @version //autogentag//
  */
 
+namespace ezp\Content;
+use ezp\Base\AbstractModel;
+
 /**
  * This class represents a Relationship between Contents
  *
  */
-namespace ezp\Content;
-class Relation extends \ezp\Base\AbstractModel
+class Relation extends AbstractModel
 {
 }
 ?>
