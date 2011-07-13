@@ -171,6 +171,10 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
         {
             $this->$method( $value );
         }
+        else
+        {
+            throw new Exception\PropertyPermission( $property, Exception\PropertyPermission::WRITE, get_class( $this ) );
+        }
     }
 
     /**
