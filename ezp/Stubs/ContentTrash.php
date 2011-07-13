@@ -2,17 +2,17 @@
 /**
  * Move a content to trash
  */
-use ezp\Content\Repository as ContentRepository;
+use ezp\Base\ServiceContainer;
 
-$contentService = ContentRepository::getContentService();
+$sc = new ServiceContainer();
+$contentService = $sc->getRepository()->getContentService();
 $content = $contentService->load( 60 );
 
 echo "Now Trashing content\n";
-$trashService = ContentRepository::getTrashService();
-$trashService->trash( $content );
+$contentService->trash( $content );
 echo "Now Content is no longer publicly available\n";
 
 echo "Restoring content from trash\n";
-$trashService->untrash( $content );
+$contentService->untrash( $content );
 
 ?>

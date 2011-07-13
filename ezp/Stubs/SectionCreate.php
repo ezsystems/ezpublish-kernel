@@ -1,10 +1,13 @@
 <?php
-use ezp\Content\Repository as ContentRepository;
-use ezp\Content;
+use ezp\Content\Section;
+
+use ezp\Base\ServiceContainer;
+
+$sc = new ServiceContainer();
+$sectionService = $sc->getRepository()->getSectionService();
 
 $sectionIdentifier = 'content';
 $sectionName = "Content section";
-$sectionService = ContentRepository::get()->getSectionService();
 
 $section = new Section();
 $section->identifier = $sectionIdentifier;

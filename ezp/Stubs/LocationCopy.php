@@ -1,10 +1,12 @@
 <?php
 
-use ezp\Content\Repository as ContentRepository;
+use ezp\Base\ServiceContainer;
+
+$sc = new ServiceContainer();
+$locationService = $sc->getRepository()->getLocationService();
 
 $locationId = 60;
 $targetLocationId = 40;
-$locationService = ContentRepository::get()->getLocationService();
 
 try
 {
@@ -12,7 +14,7 @@ try
     $target = $locationService->load( $targetLocationId );
     $locationService->copy( $location, $target );
 }
-catch ( ezp\Content\PermissionException $e )
+catch ( \ezp\Base\Exception\Forbidden $e )
 {
     echo "Permission issue occurred: {$e->getMessage()}\n";
     exit;

@@ -3,17 +3,17 @@
  * Load a Content based on its Id (60)
  * Assume that this content is a folder
  */
-use ezp\Content\Repository as ContentRepository;
-use ezp\Content\Fields;
+use ezp\Base\ServiceContainer;
 
-$repository = ContentRepository::get();
+$sc = new ServiceContainer();
+$repository = $sc->getRepository();
 $contentService = $repository->getContentService();
 $locationService = $repository->getLocationService();
 try
 {
     $content = $contentService->load( 60 );
 }
-catch ( ezp\Content\ContentNotFoundException $e )
+catch ( ezp\Base\Exception\NotFound $e )
 {
     echo "Content could not be found in the repository !\n";
     exit;

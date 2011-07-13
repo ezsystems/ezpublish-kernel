@@ -1,8 +1,10 @@
 <?php
-use ezp\Content\Repository as ContentRepository;
+use ezp\Base\ServiceContainer;
+
+$sc = new ServiceContainer();
+$locationService = $sc->getRepository()->getLocationService();
 
 $locationId = 60;
-$locationService = ContentRepository::get()->getLocationService();
 
 try
 {

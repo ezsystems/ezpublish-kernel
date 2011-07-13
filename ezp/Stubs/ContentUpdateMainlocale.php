@@ -5,10 +5,10 @@
  * $content's mainLocale is eng-GB
  */
 
-use ezp\Content;
+use ezp\Base\ServiceContainer;
 
-
-$contentService = \ezp\Base\Repository::get()->getContentService();
+$sc = new ServiceContainer();
+$contentService = $sc->getRepository()->getContentService();
 $content = $contentService->load( 2 );
 
 $content->mainLocale = \ezp\Base\Locale::get( 'fre-FR' );

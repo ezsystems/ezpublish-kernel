@@ -1,9 +1,10 @@
 <?php
-use ezp\Content\Repository as ContentRepository;
-use ezp\Content;
+use ezp\Base\ServiceContainer;
+
+$sc = new ServiceContainer();
+$sectionService = $sc->getRepository()->getSectionService();
 
 $sectionIdentifier = 'content';
-$sectionService = ContentRepository::get()->getSectionService();
 
 
 try
@@ -11,7 +12,7 @@ try
     $section = $sectionService->loadByIdentifier( $sectionIdentifier );
     $sectionService->delete( $section );
 }
-catch ( SectionNotFoundException $e )
+catch ( ezp\Base\Exception\NotFound $e )
 {
     echo "Section ({$sectionIdentifier}) not found !";
     exit;

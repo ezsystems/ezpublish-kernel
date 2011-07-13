@@ -5,10 +5,10 @@
  * version exists in nor-NO
  */
 
-use ezp\Content;
+use ezp\Content, ezp\Base\ServiceContainer;
 
-
-$contentService = \ezp\Base\Repository::get()->getContentService();
+$sc = new ServiceContainer();
+$contentService = $sc->getRepository()->getContentService();
 $content = $contentService->load( 2 );
 
 // fields of each published version in the given locale
@@ -23,7 +23,7 @@ try
 {
     $fieldsNO = $content->translations['nor-NO']->fields;
 }
-catch ( \DomainException $e )
+catch ( ezp\Base\Exception\NotFound $e )
 {
     echo "No published translation in nor-NO, but we can deal with the last version in this translation\n";
     $fieldsNO = $content->translations['nor-NO']->last->fields;

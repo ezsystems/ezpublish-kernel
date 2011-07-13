@@ -1,9 +1,9 @@
 <?php
 
-use ezp\Content;
+use ezp\Base\ServiceContainer;
 
-
-$contentService = \ezp\Base\Repository::get()->getContentService();
+$sc = new ServiceContainer();
+$contentService = $sc->getRepository()->getContentService();
 $content = $contentService->load( 2 );
 
 /**
@@ -17,7 +17,7 @@ try
 {
     $content->removeTranslation( $localeFR );
 }
-catch ( \InvalidArgumentException $e )
+catch ( ezp\Base\Exception\InvalidArgumentValue $e )
 {
     echo "Impossible to remove translationg '{$localeFR->code}': {$e->getMessage()}\n";
     exit;

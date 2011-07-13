@@ -2,20 +2,21 @@
 /**
  * Delete a Content
  */
-use ezp\Content\Repository as ContentRepository;
+use ezp\Base\ServiceContainer;
 
-$contentService = ContentRepository::get()->getContentService();
+$sc = new ServiceContainer();
+$contentService = $sc->getRepository()->getContentService();
 try
 {
     $content = $contentService->load( 60 );
     $contentService->delete( $content );
 }
-catch ( ezp\Content\ContentNotFoundException $e )
+catch ( ezp\Base\Exception\NotFound $e )
 {
     echo "Content could not be found in the repository !\n";
     exit;
 }
-catch ( ezp\Content\PermissionException $e )
+catch ( ezp\Base\Exception\Forbidden $e )
 {
     echo "A permission issue occurred while deleting content: {$e->getMessage()}\n";
     exit;

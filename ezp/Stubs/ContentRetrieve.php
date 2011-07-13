@@ -1,7 +1,9 @@
 <?php
-use ezp\Base\Repository;
+use ezp\Base\ServiceContainer;
 
-$contentService = Repository::get()->getContentService();
+$sc = new ServiceContainer();
+$contentService = $sc->getRepository()->getContentService();
+
 $c = $contentService->createCriteria();
 $c->where( // andCondition() is implicit
     $c->location->isChildOf( $parentLocation ), // Direct children

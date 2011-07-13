@@ -1,16 +1,18 @@
 <?php
-use ezp\Content\Repository as ContentRepository;
-use ezp\Content\Section;
+use ezp\Base\ServiceContainer;
+
+$sc = new ServiceContainer();
+$sectionService = $sc->getRepository()->getSectionService();
 
 $sectionId = 1;
-$sectionService = ContentRepository::get()->getSectionService();
+
 try
 {
     $section = $sectionService->load( $sectionId );
     $section->name = "New section name";
     $sectionService->update( $section );
 }
-catch ( SectionNotFoundException $e )
+catch ( ezp\Base\Exception\NotFound $e )
 {
     echo "Section #{$sectionId} not found !"
     exit;

@@ -78,6 +78,26 @@ class Content extends \ezp\Base\AbstractService
     }
 
     /**
+     * Sends $content to trash
+     *
+     * @param \ezp\Content\Content $content
+     */
+    public function trash( \ezp\Content\Content $content )
+    {
+
+    }
+
+    /**
+     * Restores $content from trash
+     *
+     * @param \ezp\Content\Content $content
+     */
+    public function unTrash( \ezp\Content\Content $content )
+    {
+
+    }
+
+    /**
      * Creates a new criteria collection object in order to query the content repository
      * @return \ezp\Content\Criteria\CriteriaCollection
      */
