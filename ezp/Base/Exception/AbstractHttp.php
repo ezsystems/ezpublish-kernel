@@ -21,14 +21,21 @@ namespace ezp\Base\Exception;
  */
 abstract class AbstractHttp extends \RuntimeException implements \ezp\Base\Exception
 {
-    const BAD_REQUEST       = 400;
-    const UNAUTHORIZED      = 401;
-    const PAYMENT_REQUIRED  = 402;
-    const FORBIDDEN         = 403;
-    const NOT_FOUND         = 404;
-    const GONE              = 410;
-    const INTERNAL_ERROR    = 500;
-    const NOT_IMPLEMENTED   = 501;
+    const BAD_REQUEST        = 400;
+    const UNAUTHORIZED       = 401;
+    const PAYMENT_REQUIRED   = 402;
+    const FORBIDDEN          = 403;
+    const NOT_FOUND          = 404;
+    const METHOD_NOT_ALLOWED = 405;
+    const NOT_ACCEPTABLE     = 406;
+    const CONFLICT           = 409;
+    const GONE               = 410;
+
+    const UNSUPPORTED_MEDIA_TYPE = 415;
+
+    const INTERNAL_ERROR      = 500;
+    const NOT_IMPLEMENTED     = 501;
+    const SERVICE_UNAVAILABLE = 503;
 
     /**
      * @param string $message
@@ -44,13 +51,18 @@ abstract class AbstractHttp extends \RuntimeException implements \ezp\Base\Excep
             case self::PAYMENT_REQUIRED:
             case self::FORBIDDEN:
             case self::NOT_FOUND:
+            case self::METHOD_NOT_ALLOWED:
+            case self::NOT_ACCEPTABLE:
+            case self::CONFLICT:
             case self::GONE:
+            case self::UNSUPPORTED_MEDIA_TYPE:
             case self::INTERNAL_ERROR:
             case self::NOT_IMPLEMENTED:
+            case self::SERVICE_UNAVAILABLE:
                 parent::__construct( $message, $code, $previous );
                 break;
             default:
-                parent::__construct( "Non existing error code: '{$code}', message: '{$message}'", self::INTERNAL_ERROR, $previous );
+                parent::__construct( "Non existing error code: '{$code}', with message: '{$message}'", self::INTERNAL_ERROR, $previous );
         }
     }
 }
