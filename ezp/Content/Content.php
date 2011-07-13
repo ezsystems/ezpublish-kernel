@@ -197,6 +197,13 @@ class Content extends \ezp\Base\AbstractModel
     protected $mainLocale;
 
     /**
+     * Versions
+     *
+     * @var Version[]
+     */
+    protected $versions;
+
+    /**
      * Create content based on content type object
      *
      * @param type\Type $contentType
