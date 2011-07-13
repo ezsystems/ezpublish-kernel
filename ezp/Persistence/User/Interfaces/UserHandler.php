@@ -24,7 +24,7 @@ interface UserHandler
     /**
      * Create a user
      *
-     * The User struct used to create the user will contain an ID which is used 
+     * The User struct used to create the user will contain an ID which is used
      * to reference the user.
      *
      * @param \ezp\Persistence\User $user
@@ -71,8 +71,8 @@ interface UserHandler
     /**
      * Adds a policy to a role
      *
-     * @param mixed $roleId 
-     * @param mixed $policyId 
+     * @param mixed $roleId
+     * @param mixed $policyId
      * @return void
      */
     public function addPolicy( $roleId, $policyId );
@@ -80,8 +80,8 @@ interface UserHandler
     /**
      * Removes a policy from a role
      *
-     * @param mixed $roleId 
-     * @param mixed $policyId 
+     * @param mixed $roleId
+     * @param mixed $policyId
      * @return void
      */
     public function removePolicy( $roleId, $policyId );

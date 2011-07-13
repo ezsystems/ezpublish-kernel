@@ -19,7 +19,7 @@ class User extends AbstractValueObject
 {
     /**
      * User ID
-     * 
+     *
      * @var mixed
      */
     public $id;
@@ -32,7 +32,7 @@ class User extends AbstractValueObject
     public $login;
 
     /**
-     * User password 
+     * User password
      *
      * @var string
      */

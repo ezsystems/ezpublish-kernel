@@ -19,9 +19,9 @@ class FieldValue extends \ezp\Persistence\AbstractValueObject
     /**
      * Mixed data, which is contained in the field data
      *
-     * @note: For the "old" storage engine we will need adaptors to map them to 
+     * @note: For the "old" storage engine we will need adaptors to map them to
      * the existing database fields, like data_int, data_float, data_text.
-     * 
+     *
      * @var mixed
      */
     public $data;
@@ -29,9 +29,9 @@ class FieldValue extends \ezp\Persistence\AbstractValueObject
     /**
      * Arbitrary external data.
      *
-     * This field is used to handle data of a field type, which will be stored 
+     * This field is used to handle data of a field type, which will be stored
      * in its own database tables.
-     * 
+     *
      * @var mixed|null
      */
     public $externalData;
@@ -39,9 +39,9 @@ class FieldValue extends \ezp\Persistence\AbstractValueObject
     /**
      * Mixed sort key
      *
-     * @note: For the "old" storage engine we will need adaptors to map them to 
+     * @note: For the "old" storage engine we will need adaptors to map them to
      * the existing database fields, like sort_key_int, sort_key_string
-     * 
+     *
      * @var mixed
      */
     public $sortKey;

@@ -106,34 +106,34 @@ interface Handler
     public function addGroup($contentTypeId, $groupId);
 
     /**
-     * addFieldDefinition 
+     * addFieldDefinition
      *
      *
      *
-     * This method does not update existing content objects depending on the 
+     * This method does not update existing content objects depending on the
      * field (default) values.
-     * 
-     * @param mixed $contentTypeId 
-     * @param Type\FieldDefinition $fieldDefinition 
+     *
+     * @param mixed $contentTypeId
+     * @param Type\FieldDefinition $fieldDefinition
      * @return void
      */
     public function addFieldDefinition( $contentTypeId, Type\FieldDefinition $fieldDefinition );
 
     /**
      * Removes a field definition
-     * 
-     * @param mixed $contentTypeId 
-     * @param mixed $fieldDefinitionId 
+     *
+     * @param mixed $contentTypeId
+     * @param mixed $fieldDefinitionId
      * @return boolean
      */
     public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId );
 
     /**
-     * This method does not update existing content objects depending on the 
+     * This method does not update existing content objects depending on the
      * field (default) values.
-     * 
-     * @param mixed $contentTypeId 
-     * @param Type\FieldDefinition $fieldDefinition 
+     *
+     * @param mixed $contentTypeId
+     * @param Type\FieldDefinition $fieldDefinition
      * @return void
      */
     public function updateFieldDefinition( $contentTypeId, Type\FieldDefinition $fieldDefinition );
@@ -143,12 +143,12 @@ interface Handler
      *
      * Updates content objects, depending on the changed field definition.
      *
-     * A content type has a state which tells if its content objects yet have 
+     * A content type has a state which tells if its content objects yet have
      * been adapted.
      *
      * Flags the content type as updated.
-     * 
-     * @param mixed $contentTypeId 
+     *
+     * @param mixed $contentTypeId
      * @return void
      */
     public function updateContentObjects( $contentTypeId, $fieldDefinitionId );

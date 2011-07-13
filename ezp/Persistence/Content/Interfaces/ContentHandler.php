@@ -41,7 +41,7 @@ interface ContentHandler
     /**
      * Creates a new draft version from $contentId in $version.
      *
-     * Copies all fields from $contentId in $srcVersion and creates a new 
+     * Copies all fields from $contentId in $srcVersion and creates a new
      * version of the referred Content from it.
      *
      * @param int $contentId
@@ -132,7 +132,7 @@ interface ContentHandler
     /**
      * Deletes all versions and fields, all locations (subtree), and all relations.
      *
-     * Removes the relations, but not the related objects. Alle subtrees of the 
+     * Removes the relations, but not the related objects. Alle subtrees of the
      * assigned nodes of this content objects are removed (recursivley).
      *
      * @param int $contentId
@@ -151,7 +151,7 @@ interface ContentHandler
     /**
      * Fetch a content value object containing the values of the translation for $languageCode.
      *
-     * This method might use field filters, if they are designed and available 
+     * This method might use field filters, if they are designed and available
      * at a later point in time.
      *
      * @param int $contentId

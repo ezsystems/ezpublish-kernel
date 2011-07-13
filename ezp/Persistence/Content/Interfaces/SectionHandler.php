@@ -46,8 +46,8 @@ interface SectionHandler
     /**
      * Delete a section
      *
-     * Might throw an exception if the section is still associated with some 
-     * content objects. Make sure that no content objects are associated with 
+     * Might throw an exception if the section is still associated with some
+     * content objects. Make sure that no content objects are associated with
      * the section any more *before* calling this method.
      *
      * @param mixed $id

@@ -373,7 +373,7 @@ class Content extends \ezp\Base\AbstractModel
             throw new \InvalidArgumentException( "Transation {$locale->code} does not exist so it cannot be removed" );
         }
         unset( $this->translations[$locale->code] );
-        // @todo ? remove on each versions in $this->translations[$locale->code] 
+        // @todo ? remove on each versions in $this->translations[$locale->code]
         //foreach ( $this->translations[$locale->code]->versions as $version )
     }
 

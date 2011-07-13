@@ -47,56 +47,56 @@ class FieldDefinition extends \ezp\Persistence\AbstractValueObject
 
     /**
      * Field group name
-     * 
+     *
      * @var mixed
      */
     public $fieldGroup;
 
     /**
      * Position
-     * 
+     *
      * @var int
      */
     public $position;
 
     /**
      * String identifier of the field type
-     * 
+     *
      * @var string
      */
     public $fieldType;
 
     /**
      * If the field type is translatable
-     * 
+     *
      * @var boolean
      */
     public $translatable;
 
     /**
      * Is the field required
-     * 
+     *
      * @var boolean
      */
     public $required;
 
     /**
      * Just a flag
-     * 
+     *
      * @var boolean
      */
     public $isInfoCollector;
 
     /**
      * A map (hash) of field type constraints
-     * 
+     *
      * @var array
      */
     public $fieldTypeConstraints;
 
     /**
      * Default value of the field
-     * 
+     *
      * @var mixed
      */
     public $defaultValue;

@@ -28,9 +28,9 @@ class Version extends \ezp\Persistence\AbstractValueObject
     /**
      * Version number.
      *
-     * In contrast to {@link $id}, this is the version number, which only 
+     * In contrast to {@link $id}, this is the version number, which only
      * increments in scope of a single Content object.
-     * 
+     *
      * @var int
      */
     public $versionNo;

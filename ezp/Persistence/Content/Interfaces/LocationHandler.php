@@ -30,9 +30,9 @@ interface LocationHandler
     /**
      * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
      *
-     * Performs a deep copy of the location identified by $sourceId and all of 
-     * its child locations, copying the most recent published content object 
-     * for each location to a new content object without any additional version 
+     * Performs a deep copy of the location identified by $sourceId and all of
+     * its child locations, copying the most recent published content object
+     * for each location to a new content object without any additional version
      * information. Relations are not copied. URLs are not touched at all.
      *
      * @param mixed $sourceId
@@ -45,7 +45,7 @@ interface LocationHandler
      * Moves location identified by $sourceId into new parent identified by $destinationParentId.
      *
      * Performs a full move of the location identified by $sourceId to a new
-     * destination, identified by $destinationParentId. Relations do not need 
+     * destination, identified by $destinationParentId. Relations do not need
      * to be updated, since they refer to Content. URLs are not touched.
      *
      * @param mixed $sourceId
@@ -71,7 +71,7 @@ interface LocationHandler
     /**
      * Swaps the content object being pointed to by a location object.
      *
-     * Make the location identified by $locationId1 refer to the Content 
+     * Make the location identified by $locationId1 refer to the Content
      * referred to by $locationId2 and vice versa.
      *
      * @param mixed $locationId1
@@ -85,7 +85,7 @@ interface LocationHandler
      *
      * @param \ezp\Persistence\Content\Location\LocationUpdateStruct $location
      * @return boolean
-     * @todo Create LocationUpdateStruct, which allows only to change data of a 
+     * @todo Create LocationUpdateStruct, which allows only to change data of a
      *       location which can safely be changed (e.g. not the $parentId!).
      */
     public function update( \ezp\Persistence\Content\Location\LocationUpdateStruct $updateInfo );
@@ -102,10 +102,10 @@ interface LocationHandler
     /**
      * Removes all Locations under and includin $locationId.
      *
-     * Performs a recursive delete on the location identified by $locationId, 
-     * including all of its child locations. Content which is not referred to 
-     * by any other location is automatically removed. Content which looses its 
-     * main Location will get the first of its other Locations assigned as the 
+     * Performs a recursive delete on the location identified by $locationId,
+     * including all of its child locations. Content which is not referred to
+     * by any other location is automatically removed. Content which looses its
+     * main Location will get the first of its other Locations assigned as the
      * new main Location.
      *
      * @param mixed $locationId
@@ -116,7 +116,7 @@ interface LocationHandler
     /**
      * Sends a subtree to the trash
      *
-     * Moves all locations in the subtree to the Trash. The associated content 
+     * Moves all locations in the subtree to the Trash. The associated content
      * objects are left untouched.
      *
      * @param mixed $locationId
@@ -136,9 +136,9 @@ interface LocationHandler
 
     /**
      * Set section on all content objects in the subtree
-     * 
-     * @param mixed $locationId 
-     * @param mixed $sectionId 
+     *
+     * @param mixed $locationId
+     * @param mixed $sectionId
      * @return boolean
      */
     public function setSectionForSubtree( $locationId, $sectionId );

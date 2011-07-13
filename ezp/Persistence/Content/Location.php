@@ -14,7 +14,7 @@ namespace ezp\Persistence\Content;
  * @package ezp
  * @subpackage persistence_content
  * @todo Add missing attributes (OMS).
- * @todo Create a Location\LocationUpdateStruct as a copy of this class with 
+ * @todo Create a Location\LocationUpdateStruct as a copy of this class with
  *       all "unsafe" properties removed (OMS).
  */
 class Location extends \ezp\Persistence\AbstractValueObject
