@@ -36,7 +36,7 @@ class LocationId extends Criterion implements \ezp\Persistence\Content\Interface
             {
                 throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
             }
-            foreach( $subtreeId as $id )
+            foreach ( $subtreeId as $id )
             {
                 if ( !is_numeric( $id ) )
                 {

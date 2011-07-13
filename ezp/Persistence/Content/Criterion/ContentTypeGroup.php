@@ -38,7 +38,7 @@ class ContentTypeGroup extends Criterion implements \ezp\Persistence\Content\Int
             {
                 throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
             }
-            foreach( $subtreeId as $id )
+            foreach ( $subtreeId as $id )
             {
                 if ( !is_numeric( $id ) )
                 {

@@ -26,7 +26,7 @@ abstract class LogicalOperator extends Criterion
      */
     public function __construct( array $criteria )
     {
-        foreach( $criteria as $criterion )
+        foreach ( $criteria as $criterion )
         {
             if ( !$criterion instanceof Criterion )
             {

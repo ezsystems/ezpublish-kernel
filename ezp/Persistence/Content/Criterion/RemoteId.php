@@ -37,7 +37,7 @@ class RemoteId extends Criterion implements \ezp\Persistence\Content\Interfaces\
             {
                 throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
             }
-            foreach( $subtreeId as $id )
+            foreach ( $subtreeId as $id )
             {
                 if ( !is_numeric( $id ) )
                 {

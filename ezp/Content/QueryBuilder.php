@@ -82,7 +82,7 @@ class QueryBuilder
      */
     public function addCriteria( \ezp\Persistence\Content\Criterion $c )
     {
-        foreach( func_get_args() as $arg )
+        foreach ( func_get_args() as $arg )
         {
             if ( !$arg instanceof \ezp\Persistence\Content\Criterion )
             {
