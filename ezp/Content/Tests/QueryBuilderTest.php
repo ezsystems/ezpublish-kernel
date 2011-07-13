@@ -64,7 +64,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
     public function testLogical( $method, $criteriaCount, $expectedClass )
     {
         $criteria = array();
-        for( $i = 0; $i < $criteriaCount; $i++ )
+        for ( $i = 0; $i < $criteriaCount; $i++ )
         {
             $criteria[] = $this->qb->field->eq( 'title', md5( time() ) );
         }
