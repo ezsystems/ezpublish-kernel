@@ -1,10 +1,13 @@
 <?php
-use ezp\Content\Repository as ContentRepository;
+use ezp\Base\ServiceContainer;
+
+$sc = new ServiceContainer();
+$repository = $sc->getRepository();
+$contentService = $repository->getContentService();
+$locationService = $repository->getLocationService();
 
 $contentId = 60;
 $parentLocationId = 2;
-$contentService = ContentRepository::get()->getContentService();
-$locationService = ContentRepository::get()->getLocationService();
 
 try
 {
@@ -17,10 +20,10 @@ try
      */
     $newContent = clone $content;
     $parentLocation = $locationService->load( $parentLocationId );
-    $content->addLocationUnder( $parentLocation );
+    $newContent->addParent( $parentLocation );
     $contentService->create( $newContent );
 }
-catch ( ezp\Content\PermissionException $e )
+catch ( \ezp\Base\Exception\Forbidden $e )
 {
     echo "Permission issue occurred: {$e->getMessage()}\n";
     exit;

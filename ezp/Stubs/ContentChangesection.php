@@ -1,32 +1,24 @@
 <?php
-use ezp\Content\Repository as ContentRepository;
-use ezp\Content;
+use ezp\Base\ServiceContainer;
+
+$sc = new ServiceContainer();
+$repository = $sc->getRepository();
+$contentService = $repository->getContentService();
+$sectionService = $repository->getSectionService();
 
 $contentId = 60;
 $sectionId = 2;
-$contentService = ContentRepository::get()->getContentService();
-$sectionService = ContentRepository::get()->getSectionService();
 
 try
 {
     $section = $sectionService->load( $sectionId );
     $content = $contentService->load( $contentId );
-    $content->section = $section;
-    $contentService->update( $content );
+    $sectionService->assign( $section, $content );
 }
-catch ( ContentNotFoundException $e )
-{
-    echo "Content ($contentId) does not exist";
-    exit;
-}
-catch ( SectionNotFoundException $e )
-{
-    echo "Section ($sectionId) does not exist";
-    exit;
-}
-catch ( ValidationException $e )
+catch ( \Exception $e )
 {
     echo "An error occurred while updating the content: {$e->getMessage()}";
     exit;
 }
+
 ?>
