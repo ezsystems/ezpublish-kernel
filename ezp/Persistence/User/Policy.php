@@ -34,7 +34,7 @@ class Policy extends \ezp\Persistence\AbstractValueObject
     /**
      * Array of policy limitations, which is just a random hash map.
      *
-     * @var array
+     * @var array|string If string, then only the value '*' is allowed, meaning all limitations.
      */
     public $limitations;
 }

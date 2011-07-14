@@ -34,7 +34,7 @@ class Role extends \ezp\Persistence\AbstractValueObject
     /**
      * Policies associated with the role
      *
-     * @var user\Policy[]
+     * @var Policy[]
      */
     public $policies = array();
 }
