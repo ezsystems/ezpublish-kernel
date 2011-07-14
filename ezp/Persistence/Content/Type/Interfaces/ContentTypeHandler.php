@@ -15,7 +15,7 @@ namespace ezp\Persistence\Content\Type\Interfaces;
  * @package ezp
  * @subpackage persistence_content_type
  */
-interface Handler
+interface ContentTypeHandler
 {
     /**
      * @param Group $group
