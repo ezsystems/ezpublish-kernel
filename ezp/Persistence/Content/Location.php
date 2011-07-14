@@ -13,9 +13,7 @@ namespace ezp\Persistence\Content;
 /**
  * @package ezp
  * @subpackage persistence_content
- * @todo Add missing attributes (OMS).
- * @todo Create a Location\LocationUpdateStruct as a copy of this class with
- *       all "unsafe" properties removed (OMS).
+ * @todo Add missing attributes (OMS), eg sort info
  */
 class Location extends \ezp\Persistence\AbstractValueObject
 {
@@ -27,7 +25,7 @@ class Location extends \ezp\Persistence\AbstractValueObject
     public $id;
 
     /**
-     * Location position.
+     * Location position aka priority
      *
      * Position of the Location among its siblings when sorted using sort order.
      *

@@ -90,9 +90,9 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
     /**
      * @see \ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function update( \ezp\Persistence\Content\Location\LocationUpdateStruct $updateInfo )
+    public function updatePosition( $locationId, $position )
     {
-        //return $this->backend->update( 'Content\\Location', $location->id, (array) $location );
+        return $this->backend->update( 'Content\\Location', $locationId, array( 'position' => $position ) );
     }
 
     /**

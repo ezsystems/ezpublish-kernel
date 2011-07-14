@@ -82,14 +82,13 @@ interface LocationHandler
     public function swap( $locationId1, $locationId2 );
 
     /**
-     * Updates an existing location with data from $location.
+     * Updates an existing location position aka priority.
      *
-     * @param \ezp\Persistence\Content\Location\LocationUpdateStruct $location
+     * @param int $locationId
+     * @param int $position
      * @return boolean
-     * @todo Create LocationUpdateStruct, which allows only to change data of a
-     *       location which can safely be changed (e.g. not the $parentId!).
      */
-    public function update( \ezp\Persistence\Content\Location\LocationUpdateStruct $updateInfo );
+    public function updatePosition( $locationId, $position );
 
     /**
      * Creates a new location for $contentId rooted at $parentId.
