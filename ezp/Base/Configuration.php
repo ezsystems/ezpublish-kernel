@@ -126,21 +126,11 @@ class Configuration extends AbstractOverride
      *
      * @return bool
      */
-    public static function developmentMode()
+    protected static function developmentMode()
     {
         if ( isset( self::$globalConfigurationData['base']['autoload']['development-mode'] ) )
             return self::$globalConfigurationData['base']['autoload']['development-mode'];
         return false;
-    }
-
-    /**
-     * Sets [autoload]\development-mode
-     *
-     * @param bool $mode
-     */
-    public static function setDevelopmentMode( $mode )
-    {
-        self::$globalConfigurationData['base']['autoload']['development-mode'] = $mode;
     }
 
     /**
