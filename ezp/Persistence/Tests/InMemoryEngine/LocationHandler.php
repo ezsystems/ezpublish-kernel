@@ -54,11 +54,6 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
     /**
      * @see \ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function copy( $sourceId, $destinationId ){}
-
-    /**
-     * @see \ezp\Persistence\Content\Interfaces\LocationHandler
-     */
     public function copySubtree( $sourceId, $destinationParentId ){}
 
     /**
@@ -102,11 +97,6 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
     {
         //return $this->backend->create( 'Content\\Location', array(  ) );
     }
-
-    /**
-     * @see \ezp\Persistence\Content\Interfaces\LocationHandler
-     */
-    public function delete( $id ){}
 
     /**
      * @see \ezp\Persistence\Content\Interfaces\LocationHandler
