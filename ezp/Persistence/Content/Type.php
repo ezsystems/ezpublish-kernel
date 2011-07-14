@@ -18,14 +18,19 @@ namespace ezp\Persistence\Content;
 class Type extends \ezp\Persistence\AbstractValueObject
 {
     /**
-     * Primary key
+     * Content type ID
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Name
+     * Human readible of the content type
+     *
+     * The structure of this field is:
+     * <code>
+     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
+     * </code>
      *
      * @var string[]
      */
@@ -33,6 +38,11 @@ class Type extends \ezp\Persistence\AbstractValueObject
 
     /**
      * Description
+     *
+     * The structure of this field is:
+     * <code>
+     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
+     * </code>
      *
      * @var string[]
      */
@@ -46,14 +56,14 @@ class Type extends \ezp\Persistence\AbstractValueObject
     public $identifier;
 
     /**
-     * Created date (timestamp)
+     * Creation date (timestamp)
      *
      * @var int
      */
     public $created;
 
     /**
-     * Modified date (timestamp)
+     * Modification date (timestamp)
      *
      * @var int
      */
@@ -79,20 +89,32 @@ class Type extends \ezp\Persistence\AbstractValueObject
     public $remoteId;
 
     /**
+     * URL alias schema
+     *
+     * @var string
      */
     public $urlAliasSchema;
 
     /**
+     * Name schema
+     *
+     * @var string
      */
     public $nameSchema;
 
     /**
+     * Determines if the type is a container
+     *
+     * @var bool
      */
-    public $container;
+    public $isContainer;
 
     /**
+     * Initial language
+     *
+     * @var mixed
      */
-    public $initialLanguage;
+    public $initialLanguageId;
 
     /**
      * Contains an array of type group IDs
@@ -102,6 +124,8 @@ class Type extends \ezp\Persistence\AbstractValueObject
     public $contentTypeGroupIDs = array();
 
     /**
+     * Content fields in this type
+     *
      * @var Type\FieldDefinition[]
      */
     public $fieldDefinitions = array();
