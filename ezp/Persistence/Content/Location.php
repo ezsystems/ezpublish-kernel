@@ -29,7 +29,7 @@ class Location extends \ezp\Persistence\AbstractValueObject
     /**
      * Location position.
      *
-     * Position of the Location among its siblings.
+     * Position of the Location among its siblings when sorted using sort order.
      *
      * @var int
      */
