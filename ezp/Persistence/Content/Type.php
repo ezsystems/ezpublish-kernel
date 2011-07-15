@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Content;
 
 /**
+ *
  */
 class Type extends \ezp\Persistence\AbstractValueObject
 {
@@ -21,7 +22,7 @@ class Type extends \ezp\Persistence\AbstractValueObject
     public $id;
 
     /**
-     * Human readible of the content type
+     * Human readable name of the content type
      *
      * The structure of this field is:
      * <code>
@@ -33,7 +34,7 @@ class Type extends \ezp\Persistence\AbstractValueObject
     public $name;
 
     /**
-     * Description
+     * Human readable description of the content type
      *
      * The structure of this field is:
      * <code>
@@ -45,7 +46,7 @@ class Type extends \ezp\Persistence\AbstractValueObject
     public $description;
 
     /**
-     * Readable string identifier of a type
+     * String identifier of a type
      *
      * @var string
      */
@@ -70,7 +71,7 @@ class Type extends \ezp\Persistence\AbstractValueObject
      *
      * @var mixed
      */
-    public $creator;
+    public $creatorId;
 
     /**
      * Modifier user id
@@ -78,9 +79,12 @@ class Type extends \ezp\Persistence\AbstractValueObject
      * @var mixed
      *
      */
-    public $modifier;
+    public $modifierId;
 
     /**
+     * Unique remote ID
+     *
+     * @var string
      */
     public $remoteId;
 
