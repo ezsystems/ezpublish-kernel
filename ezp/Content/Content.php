@@ -248,7 +248,7 @@ class Content extends AbstractModel
         $resultArray = array();
         foreach ( $this->translations as $tr )
         {
-            $resultArray = array_merge( $resultArray, (array) $tr->versions );
+            $resultArray = array_merge( $resultArray, (array)$tr->versions );
         }
         return new TypeCollection( 'ezp\\Content\\Version', $resultArray );
     }
@@ -323,7 +323,7 @@ class Content extends AbstractModel
      */
     protected function getSectionId()
     {
-        if  ( $this->section instanceof Proxy || $this->section instanceof Section )
+        if ( $this->section instanceof Proxy || $this->section instanceof Section )
         {
             return $this->section->id;
         }

@@ -31,7 +31,7 @@ abstract class Criterion
 
         // we loop on each specified operator.
         // If the provided operator ain't found, an exception will be thrown at the end
-        foreach( $this->getSpecifications() as $operatorSpecifications )
+        foreach ( $this->getSpecifications() as $operatorSpecifications )
         {
             if ( $operatorSpecifications->operator != $operator )
             {
@@ -61,7 +61,7 @@ abstract class Criterion
             if ( $operatorSpecifications->valueTypes !== null )
             {
                 $callback = $this->getValueTypeCheckCallback( $operatorSpecifications->valueTypes );
-                foreach( $value as $item )
+                foreach ( $value as $item )
                 {
                     if ( $callback( $item ) === false )
                     {

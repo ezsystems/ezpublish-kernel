@@ -16,7 +16,8 @@ require 'ezp/Base/Autoloader.php';
 spl_autoload_register( array( new Autoloader( $settings['base']['autoload'] ), 'load' ) );
 
 $paths = array();
-foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )//@todo Take from configuration
+//@todo Take from configuration
+foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )
 {
     $paths[] = "{$path}/settings/";
 }

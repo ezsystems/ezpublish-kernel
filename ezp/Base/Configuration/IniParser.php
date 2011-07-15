@@ -176,7 +176,7 @@ class IniParser implements ConfigurationParser
                 foreach ( $sectionArray as $setting => $value )
                 {
                     // fix appending ##! and such lines
-                    if ( isset( $value[0] ) && is_string( $value ) && strpos( $value, '#') !== false )
+                    if ( isset( $value[0] ) && is_string( $value ) && strpos( $value, '#' ) !== false )
                     {
                         $value = explode( '#', $value );
                         $configurationData[$section][$setting] = $value[0];
@@ -209,9 +209,9 @@ class IniParser implements ConfigurationParser
         if ( is_numeric( $iniValue ) )
         {
             if ( strpos( $iniValue, '.' ) !== false )
-                return (float) $iniValue;
+                return (float)$iniValue;
 
-            return (int) $iniValue;
+            return (int)$iniValue;
         }
         if ( isset( $iniValue[1] ) && is_string( $iniValue ) )
             return rtrim( $iniValue, ' ' );
@@ -232,7 +232,7 @@ class IniParser implements ConfigurationParser
             foreach ( $valueArray[1] as $variableArrayClearing )
             {
                 $variableArrayClearing .= '[]';
-                $fileContent = str_replace( "\n$variableArrayClearing\n", "\n$variableArrayClearing=" . Configuration::TEMP_INI_UNSET_VAR . "\n" , $fileContent );
+                $fileContent = str_replace( "\n$variableArrayClearing\n", "\n$variableArrayClearing=" . Configuration::TEMP_INI_UNSET_VAR . "\n", $fileContent );
             }
         }
 
@@ -243,7 +243,7 @@ class IniParser implements ConfigurationParser
             foreach ( $valueArray[1] as $variableArrayClearing )
             {
                 $variableArrayClearing .= '[]';
-                $fileContent = str_replace( "\n$variableArrayClearing\n", "\n$variableArrayClearing=" . Configuration::TEMP_INI_UNSET_VAR . "\n" , $fileContent );
+                $fileContent = str_replace( "\n$variableArrayClearing\n", "\n$variableArrayClearing=" . Configuration::TEMP_INI_UNSET_VAR . "\n", $fileContent );
             }
         }
         return $fileContent;
@@ -258,7 +258,7 @@ class IniParser implements ConfigurationParser
      */
     public function write( array $configurationData )
     {
-        if ( !is_writable( $this->file) )
+        if ( !is_writable( $this->file ) )
         {
             throw new LogicException( __METHOD__ . ": {$this->file} is not writable, can not save configuration data!" );
         }

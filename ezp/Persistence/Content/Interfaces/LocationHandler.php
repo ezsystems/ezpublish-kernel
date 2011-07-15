@@ -138,5 +138,5 @@ interface LocationHandler
      * @return boolean
      */
     public function setSectionForSubtree( $locationId, $sectionId );
- }
+}
 ?>

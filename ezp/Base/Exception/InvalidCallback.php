@@ -29,6 +29,6 @@ class InvalidCallback extends BadFunctionCallException implements Exception
      */
     public function __construct( $callback, PHPException $previous = null )
     {
-        parent::__construct( "Invalid callback: " . var_export( $callback, true), 0, $previous );
+        parent::__construct( "Invalid callback: " . var_export( $callback, true ), 0, $previous );
     }
 }

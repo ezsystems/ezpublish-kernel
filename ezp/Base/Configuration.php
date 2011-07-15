@@ -316,7 +316,8 @@ class Configuration extends AbstractOverride
             foreach ( $cacheData['files'] as $inputFile )
             {
                 $fileTime = file_exists( $inputFile ) ? filemtime( $inputFile ) : false;
-                if ( $fileTime === false )// Refresh cache & input files if file is gone
+                // Refresh cache & input files if file is gone
+                if ( $fileTime === false )
                 {
                     return null;
                 }
@@ -324,7 +325,8 @@ class Configuration extends AbstractOverride
                 {
                     trigger_error( __METHOD__ . ': Input file "' . $inputFile . '" has a timestamp higher then current time, ignoring to avoid infinite recursion!', E_USER_WARNING );
                 }
-                else if ( $fileTime > $cacheData['created'] )// Refresh cache if file has been changed
+                // Refresh cache if file has been changed
+                else if ( $fileTime > $cacheData['created'] )
                 {
                     return null;
                 }
@@ -487,7 +489,7 @@ class Configuration extends AbstractOverride
         }
         if ( $fallBackValue === null )
         {
-            trigger_error( __METHOD__ . " could not find {$this->moduleName}.ini\[{$section}]$key setting",  E_USER_WARNING );
+            trigger_error( __METHOD__ . " could not find {$this->moduleName}.ini\[{$section}]$key setting", E_USER_WARNING );
         }
         return $fallBackValue;
     }
@@ -508,7 +510,7 @@ class Configuration extends AbstractOverride
         }
         if ( $fallBackValue === null )
         {
-            trigger_error( __METHOD__ . " could not find {$this->moduleName}.ini\[{$section}]setting",  E_USER_WARNING );
+            trigger_error( __METHOD__ . " could not find {$this->moduleName}.ini\[{$section}]setting", E_USER_WARNING );
         }
         return $fallBackValue;
     }

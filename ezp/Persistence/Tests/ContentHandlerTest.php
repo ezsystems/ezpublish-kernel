@@ -30,9 +30,11 @@ class ContentHandlerTest extends \PHPUnit_Framework_TestCase
         $this->setName( "ContentHandler class tests" );
 
         // Get in memory RepositoryHandler instance
-        $serviceContainer = new ServiceContainer(array(
-            'repository_handler' => array( 'class' => 'ezp\\Persistence\\Tests\\InMemoryEngine\\RepositoryHandler' )
-        ));
+        $serviceContainer = new ServiceContainer(
+            array(
+                'repository_handler' => array( 'class' => 'ezp\\Persistence\\Tests\\InMemoryEngine\\RepositoryHandler' )
+            )
+        );
         $this->handler = $serviceContainer->get( 'repository_handler' );
     }
 
@@ -56,11 +58,14 @@ class ContentHandlerTest extends \PHPUnit_Framework_TestCase
         $struct->ownerId = 14;
         $struct->sectionId = 1;
         $struct->typeId = 2;
-        $struct->fields[] = new Field( array(
-            'type' => 'ezstring',
-            'value' => 'Welcome', // @todo Use FieldValue object
-            'language' => 'eng-GB',
-        ) );
+        $struct->fields[] = new Field(
+            array(
+                'type' => 'ezstring',
+                // @todo Use FieldValue object
+                'value' => 'Welcome',
+                'language' => 'eng-GB',
+            )
+        );
 
         $content = $handler->create( $struct );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content', $content );
@@ -83,7 +88,7 @@ class ContentHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->language );
         $this->assertEquals( 'Welcome', $field->value );
-        $this->assertEquals( $version->id, $field->versionId);
+        $this->assertEquals( $version->id, $field->versionId );
 
         $content = $handler->load( $content->id );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content', $content );
@@ -106,7 +111,7 @@ class ContentHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->language );
         $this->assertEquals( 'Welcome', $field->value );
-        $this->assertEquals( $version->id, $field->versionId);
+        $this->assertEquals( $version->id, $field->versionId );
 
         $this->assertTrue( $handler->delete( $content->id ) );
         $this->assertEquals( null, $handler->load( $content->id ) );

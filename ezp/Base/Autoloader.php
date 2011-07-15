@@ -105,9 +105,11 @@ class Autoloader
             if ( strpos( $className, $namespace . '\\' ) === 0 )
             {
                 $classNamePos = strripos( $className, '\\' );
-                $namespacePart = str_replace( array( './' . $namespace, '\\' ),
-                                              array( './' . $subPath, '/' ),
-                                              './' . substr( $className, 0, $classNamePos ) );
+                $namespacePart = str_replace(
+                    array( './' . $namespace, '\\' ),
+                    array( './' . $subPath, '/' ),
+                    './' . substr( $className, 0, $classNamePos )
+                );
                 $classNamePart = str_replace( '_', '/', substr( $className, $classNamePos + 1 ) );
                 $classPath = $namespacePart . '/' . $classNamePart . '.php';
                 if ( !file_exists( $classPath ) )
@@ -136,7 +138,8 @@ class Autoloader
         $ezpKernelOverrideClasses = array();
 
         // Load eZ Publish autoload files
-        if ( file_exists( 'autoload/ezp_kernel.php' ) )// @todo Temporary, should be forced as the file should be there
+        // @todo Temporary, should be forced as the file should be there
+        if ( file_exists( 'autoload/ezp_kernel.php' ) )
         {
             $ezpClasses = require 'autoload/ezp_kernel.php';
         }

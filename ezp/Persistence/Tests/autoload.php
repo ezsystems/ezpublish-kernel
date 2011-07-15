@@ -7,7 +7,7 @@ if ( ( $fp = @fopen( 'Base/base.php', 'r', true ) ) !== false )
     fclose( $fp );
     require_once 'Base/base.php';
 }
-elseif ( ( $fp = @fopen( 'ezc/Base/base.php', 'r', true ) ) !== false )
+else if ( ( $fp = @fopen( 'ezc/Base/base.php', 'r', true ) ) !== false )
 {
     fclose( $fp );
     require_once 'ezc/Base/base.php';

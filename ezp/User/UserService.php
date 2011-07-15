@@ -26,7 +26,7 @@ class UserService extends AbstractService
      */
     public function load( $id )
     {
-        $user = $this->handler->userHandler()->load( (int) $id );
+        $user = $this->handler->userHandler()->load( (int)$id );
         if ( !$user )
             throw new InvalidArgumentException( "Could not find 'User' with id: {$id}" );
         return $user;

@@ -108,7 +108,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     protected static function getResultTextRepresentation( array $result )
     {
-        return implode( "\n",
+        return implode(
+            "\n",
             array_map(
                 function ( $row )
                 {

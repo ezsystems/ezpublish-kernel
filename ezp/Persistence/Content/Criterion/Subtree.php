@@ -49,7 +49,7 @@ class Subtree extends Criterion implements CriterionInterface
             }
         }
         // single value, EQ operator
-        elseif ( $operator == Operator::EQ )
+        else if ( $operator == Operator::EQ )
         {
             if ( is_array( $value ) )
             {

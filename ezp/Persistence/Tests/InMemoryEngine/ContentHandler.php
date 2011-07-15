@@ -49,24 +49,29 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function create( ContentCreateStruct $content )
     {
-        $contentObj = $this->backend->create( 'Content', array(
-            'name' => $content->name,
-            'typeId' => $content->typeId,
-            'sectionId' => $content->sectionId,
-            'ownerId' => $content->ownerId,
-        ) );
-        $version = $this->backend->create( 'Content\\Version', array(
-            'modified' => time(),
-            'creatorId' => $content->ownerId,
-            'created' => time(),
-            'contentId' => $contentObj->id,
-            'state' => Version::STATUS_DRAFT,
-        ) );
+        $contentObj = $this->backend->create(
+            'Content', array(
+                'name' => $content->name,
+                'typeId' => $content->typeId,
+                'sectionId' => $content->sectionId,
+                'ownerId' => $content->ownerId,
+            )
+        );
+        $version = $this->backend->create(
+            'Content\\Version',
+            array(
+                'modified' => time(),
+                'creatorId' => $content->ownerId,
+                'created' => time(),
+                'contentId' => $contentObj->id,
+                'state' => Version::STATUS_DRAFT,
+            )
+        );
         foreach ( $content->fields as $field )
         {
             $version->fields[] = $this->backend->create(
                 'Content\\Field',
-                array( 'versionId' => $version->id ) + (array) $field
+                array( 'versionId' => $version->id ) + (array)$field
             );
         }
         $contentObj->versionInfos[] = $version;

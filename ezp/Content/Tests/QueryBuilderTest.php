@@ -71,7 +71,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
         $criterion = call_user_func_array( array( $this->qb, $method ), $criteria );
 
         self::assertInstanceOf( $expectedClass, $criterion );
-        self::assertEquals( $criteriaCount, count( $criterion->criteria) );
+        self::assertEquals( $criteriaCount, count( $criterion->criteria ) );
     }
 
     public static function providerForTestLogical()

@@ -5,7 +5,8 @@ $sc = new ServiceContainer();
 $contentService = $sc->getRepository()->getContentService();
 
 $c = $contentService->createCriteria();
-$c->where( // andCondition() is implicit
+$c->where(
+    // andCondition() is implicit
     $c->location->isChildOf( $parentLocation ), // Direct children
     // $c->location->subTree( $parentLocation ), // Recursive
     $c->type( "folder" ),

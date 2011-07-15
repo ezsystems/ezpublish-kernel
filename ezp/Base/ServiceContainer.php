@@ -126,7 +126,8 @@ class ServiceContainer
         $arguments = array();
         foreach ( $settings['arguments'] as $key => $argument )
         {
-            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' ) )// service name / variable
+            // service name / variable
+            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' ) )
             {
                 if ( $argument === '$serviceContainer' )
                 {
@@ -149,7 +150,8 @@ class ServiceContainer
                     goto loadDependency;
                 }
             }
-            else // primitive type / object argument
+            // primitive type / object argument
+            else
             {
                 $arguments[] = $argument;
             }

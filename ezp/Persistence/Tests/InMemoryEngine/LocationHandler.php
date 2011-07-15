@@ -51,22 +51,30 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function copySubtree( $sourceId, $destinationParentId ){}
+    public function copySubtree( $sourceId, $destinationParentId )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function move( $sourceId, $destinationParentId ){}
+    public function move( $sourceId, $destinationParentId )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function hide( $id ){}
+    public function hide( $id )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function unHide( $id ){}
+    public function unHide( $id )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
@@ -106,46 +114,64 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function trashSubtree( $locationId ){}
+    public function trashSubtree( $locationId )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function untrashSubtree( $locationId ){}
+    public function untrashSubtree( $locationId )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function setSectionForSubtree( $locationId, $sectionId ){}
+    public function setSectionForSubtree( $locationId, $sectionId )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function storeUrlAliasPath( $path, $locationId, $languageName = null, $alwaysAvailable = false ){}
+    public function storeUrlAliasPath( $path, $locationId, $languageName = null, $alwaysAvailable = false )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function createCustomUrlAlias( $alias, $locationId, $forwarding = false, $languageName = null, $alwaysAvailable = false ){}
+    public function createCustomUrlAlias( $alias, $locationId, $forwarding = false, $languageName = null, $alwaysAvailable = false )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function createUrlHistoryEntry( $historicUrl, $locationId ){}
+    public function createUrlHistoryEntry( $historicUrl, $locationId )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function listUrlsForLocation( $locationId, $urlType ){}
+    public function listUrlsForLocation( $locationId, $urlType )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function removeUrlsForLocation( $locationId, array $urlIdentifier ){}
+    public function removeUrlsForLocation( $locationId, array $urlIdentifier )
+    {
+    }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function getPath( $locationId, $languageCode ){}
+    public function getPath( $locationId, $languageCode )
+    {
+    }
 }
 ?>

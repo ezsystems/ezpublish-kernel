@@ -51,7 +51,7 @@ class Proxy implements ProxyInterface
     {
         $this->repository = $repository;
         $this->type = $type;
-        $this->id = (int) $id;
+        $this->id = (int)$id;
         if ( $this->id === 0 )
             throw new InvalidArgumentType( 'id', 'int' );
     }

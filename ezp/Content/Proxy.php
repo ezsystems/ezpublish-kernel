@@ -50,7 +50,7 @@ class Proxy implements BaseProxy
     public function __construct( AbstractService $service, $id, $method = 'load' )
     {
         $this->service = $service;
-        $this->id = (int) $id;
+        $this->id = (int)$id;
         $this->method = $method;
         if ( $this->id === 0 )
             throw new InvalidArgumentException( "Id parameter needs to be a valid integer above 0!" );

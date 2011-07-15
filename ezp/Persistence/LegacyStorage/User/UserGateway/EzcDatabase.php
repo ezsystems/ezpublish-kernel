@@ -45,10 +45,10 @@ class EzcDatabase extends UserGateway
         $query = $this->handler->createInsertQuery();
         $query
             ->insertInto( 'ezuser' )
-            ->set( 'contentobject_id',   $query->bindValue( $user->id ) )
-            ->set( 'login',              $query->bindValue( $user->login ) )
-            ->set( 'email',              $query->bindValue( $user->email ) )
-            ->set( 'password_hash',      $query->bindValue( $user->password ) )
+            ->set( 'contentobject_id', $query->bindValue( $user->id ) )
+            ->set( 'login', $query->bindValue( $user->login ) )
+            ->set( 'email', $query->bindValue( $user->email ) )
+            ->set( 'password_hash', $query->bindValue( $user->password ) )
             ->set( 'password_hash_type', $query->bindValue( $user->hashAlgorithm ) );
         $query->prepare()->execute();
     }
@@ -77,9 +77,9 @@ class EzcDatabase extends UserGateway
         $query = $this->handler->createUpdateQuery();
         $query
             ->update( 'ezuser' )
-            ->set( 'login',              $query->bindValue( $user->login ) )
-            ->set( 'email',              $query->bindValue( $user->email ) )
-            ->set( 'password_hash',      $query->bindValue( $user->password ) )
+            ->set( 'login', $query->bindValue( $user->login ) )
+            ->set( 'email', $query->bindValue( $user->email ) )
+            ->set( 'password_hash', $query->bindValue( $user->password ) )
             ->set( 'password_hash_type', $query->bindValue( $user->hashAlgorithm ) )
             ->where( $query->expr->eq( 'contentobject_id', $query->bindValue( $user->id ) ) );
         $query->prepare()->execute();

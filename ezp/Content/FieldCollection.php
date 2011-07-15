@@ -35,7 +35,7 @@ class FieldCollection extends ReadOnlyCollection
         foreach ( $contentVersion->content->contentType->fields as $fieldDefinition )
         {
             if ( !isset( $fieldTypes[$fieldDefinition->fieldTypeString] ) )
-                throw new BadConfiguration( 'content.ini[fields]', "could not load {$fieldDefinition->fieldTypeString}");
+                throw new BadConfiguration( 'content.ini[fields]', "could not load {$fieldDefinition->fieldTypeString}" );
 
             if ( !class_exists( $fieldTypes[$fieldDefinition->fieldTypeString] ) )
                 throw new MissingClass(  $fieldTypes[$fieldDefinition->fieldTypeString], 'field type' );
@@ -62,7 +62,7 @@ class FieldCollection extends ReadOnlyCollection
     public function offsetSet( $offset, $value )
     {
         if ( $offset === null || !$this->offsetExists( $offset ) )
-            throw new ReadOnly("FieldCollection");
+            throw new ReadOnly( "FieldCollection" );
         $this->offsetGet( $offset )->value = $value;
     }
 }
