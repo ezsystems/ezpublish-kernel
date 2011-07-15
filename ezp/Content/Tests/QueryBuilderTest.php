@@ -30,7 +30,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
      */
     public function testCriterionGetter( $accessor )
     {
-        self::assertInstanceOf( 'ezp\Content\CriterionFactory', $this->qb->$accessor );
+        self::assertInstanceOf( 'ezp\\Content\\CriterionFactory', $this->qb->$accessor );
     }
 
     public static function providerForTestCriterionGetter()
@@ -54,7 +54,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
     public function testFieldEq()
     {
         $c = $this->qb->field->eq( 'title', 'Article A' );
-        self::assertInstanceOf( 'ezp\Persistence\Content\Criterion\Field', $c );
+        self::assertInstanceOf( 'ezp\\Persistence\\Content\\Criterion\\Field', $c );
     }
 
     /**
@@ -77,9 +77,9 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
     public static function providerForTestLogical()
     {
         return array(
-            array( 'or',  2, 'ezp\Persistence\Content\Criterion\LogicalOr', 2 ),
-            array( 'and', 2, 'ezp\Persistence\Content\Criterion\LogicalAnd', 2 ),
-            array( 'not', 1, 'ezp\Persistence\Content\Criterion\LogicalNot', 1 ),
+            array( 'or',  2, 'ezp\\Persistence\\Content\\Criterion\\LogicalOr', 2 ),
+            array( 'and', 2, 'ezp\\Persistence\\Content\\Criterion\\LogicalAnd', 2 ),
+            array( 'not', 1, 'ezp\\Persistence\\Content\\Criterion\\LogicalNot', 1 ),
         );
     }
 }

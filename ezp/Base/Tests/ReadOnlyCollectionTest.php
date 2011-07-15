@@ -33,7 +33,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testFromArray()
     {
-        $this->assertEquals( 'ezp\Base\ReadOnlyCollection', get_class( $this->collection ) );
+        $this->assertEquals( 'ezp\\Base\\ReadOnlyCollection', get_class( $this->collection ) );
     }
     /**
      * Test offsetExists

@@ -46,7 +46,7 @@ class SectionHandler implements SectionHandlerInterface
     public function create( $name, $identifier )
     {
         return $this->backend->create(
-            'Content\Section',
+            'Content\\Section',
             array(
                 'name' => $name,
                 'identifier' => $identifier
@@ -60,7 +60,7 @@ class SectionHandler implements SectionHandlerInterface
     public function update( $id, $name, $identifier )
     {
         return $this->backend->update(
-            'Content\Section',
+            'Content\\Section',
             $id,
             array(
                 'id' => $id,
@@ -75,7 +75,7 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function load( $id )
     {
-        return $this->backend->load( 'Content\Section', $id );
+        return $this->backend->load( 'Content\\Section', $id );
     }
 
     /**
@@ -83,7 +83,7 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function delete( $id )
     {
-        return $this->backend->delete( 'Content\Section', $id );
+        return $this->backend->delete( 'Content\\Section', $id );
     }
 
     /**

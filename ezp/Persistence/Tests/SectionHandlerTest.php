@@ -28,7 +28,7 @@ class SectionHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Get in memory RepositoryHandler instance
         $serviceContainer = new ServiceContainer(array(
-            'repository_handler' => array( 'class' => 'ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler' )
+            'repository_handler' => array( 'class' => 'ezp\\Persistence\\Tests\\InMemoryEngine\\RepositoryHandler' )
         ));
         $this->handler = $serviceContainer->get( 'repository_handler' );
     }
@@ -39,7 +39,7 @@ class SectionHandlerTest extends \PHPUnit_Framework_TestCase
     public function testLoad()
     {
         $handler = $this->handler->sectionHandler();
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Section', $handler->load( 1 ) );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Section', $handler->load( 1 ) );
     }
 
      /**
@@ -50,7 +50,7 @@ class SectionHandlerTest extends \PHPUnit_Framework_TestCase
         $handler = $this->handler->sectionHandler();
 
         $section = $handler->create( 'Test', 'test' );
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Section', $section );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Section', $section );
         $this->assertEquals( 2, $section->id );
         $this->assertEquals( 'Test', $section->name );
         $this->assertEquals( 'test', $section->identifier );

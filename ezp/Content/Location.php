@@ -123,8 +123,8 @@ class Location extends AbstractModel implements Observer
      */
     public function __construct( Content $content )
     {
-        $this->containerProperties = new TypeCollection( 'ezp\Content\ContainerProperty' );
-        $this->children = new TypeCollection( 'ezp\Content\Location' );
+        $this->containerProperties = new TypeCollection( 'ezp\\Content\\ContainerProperty' );
+        $this->children = new TypeCollection( 'ezp\\Content\\Location' );
         $this->setContent( $content );
     }
 

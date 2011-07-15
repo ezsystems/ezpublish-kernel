@@ -80,7 +80,7 @@ class Repository
      */
     public function getContentService()
     {
-        return $this->service( 'ezp\Content\Services\Content' );
+        return $this->service( 'ezp\\Content\\Services\\Content' );
     }
 
     /**
@@ -93,7 +93,7 @@ class Repository
      */
     public function getContentTypeService()
     {
-        return $this->service( 'ezp\Content\Services\ContentType' );
+        return $this->service( 'ezp\\Content\\Services\\ContentType' );
     }
 
     /**
@@ -106,7 +106,7 @@ class Repository
      */
     public function getLocationService()
     {
-        return $this->service( 'ezp\Content\Services\Location' );
+        return $this->service( 'ezp\\Content\\Services\\Location' );
     }
 
     /**
@@ -117,7 +117,7 @@ class Repository
      */
     public function getSectionService()
     {
-        return $this->service( 'ezp\Content\Services\Section' );
+        return $this->service( 'ezp\\Content\\Services\\Section' );
     }
 
     /**
@@ -130,7 +130,7 @@ class Repository
      */
     public function getUserService()
     {
-        return $this->service( 'ezp\User\UserService' );
+        return $this->service( 'ezp\\User\\UserService' );
     }
 
     /**
