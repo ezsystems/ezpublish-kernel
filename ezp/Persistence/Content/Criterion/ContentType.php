@@ -12,7 +12,6 @@ namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion;
 
 /**
- * @package ezp.Persistence.Content.Criterion
  */
 class ContentType extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {

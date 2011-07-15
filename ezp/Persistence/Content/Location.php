@@ -11,8 +11,6 @@
 namespace ezp\Persistence\Content;
 
 /**
- * @package ezp
- * @subpackage persistence_content
  * @todo Add missing attributes (OMS), eg sort info
  */
 class Location extends \ezp\Persistence\AbstractValueObject

@@ -12,7 +12,6 @@ use ezp\Persistence\Content\Criterion;
 
 /**
  * This class does...
- * @package ezp.persistence.content.criterion
  */
 class LogicalOr extends LogicalOperator
 {

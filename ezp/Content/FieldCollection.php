@@ -5,8 +5,6 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
 
 /**
@@ -14,8 +12,6 @@
  *
  * Readonly class that takes (Content) Version as input.
  *
- * @package ezp
- * @subpackage content
  */
 namespace ezp\Content;
 class FieldCollection extends \ezp\Base\ReadOnlyCollection

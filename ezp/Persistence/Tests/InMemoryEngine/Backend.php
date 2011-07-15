@@ -5,8 +5,6 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage persistence
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
@@ -19,8 +17,6 @@ namespace ezp\Persistence\Tests\InMemoryEngine;
  * But only their plain properties, associations are not handled and all data is stored in separate "buckets" similar
  * to how it would be in a RDBMS servers.
  *
- * @package ezp
- * @subpackage persistence
  */
 class Backend
 {

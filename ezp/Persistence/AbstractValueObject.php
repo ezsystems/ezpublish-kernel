@@ -11,8 +11,6 @@
 namespace ezp\Persistence;
 
 /**
- * @package ezp
- * @subpackage persistence
  */
 abstract class AbstractValueObject
 {

@@ -5,8 +5,6 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
 
 namespace ezp\Content\Services;
@@ -14,8 +12,6 @@ namespace ezp\Content\Services;
 /**
  * Content Service, extends repository with content specific operations
  *
- * @package ezp
- * @subpackage content
  */
 use \ezp\Base\Exception;
 class ContentType extends \ezp\Base\AbstractService

@@ -10,8 +10,6 @@
 /**
  * This class provides a fluent interface to create a content query
  *
- * @package ezp
- * @subpackage content
  *
  * <code>
  * @todo write

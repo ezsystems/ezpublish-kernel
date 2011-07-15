@@ -5,8 +5,6 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  */
 
 namespace ezp\Base;
@@ -14,8 +12,6 @@ namespace ezp\Base;
 /**
  * Type Collection class, collection only accepts new elements of a certain type
  *
- * @package ezp
- * @subpackage base
  */
 class TypeCollection extends \ArrayObject implements Interfaces\Collection
 {

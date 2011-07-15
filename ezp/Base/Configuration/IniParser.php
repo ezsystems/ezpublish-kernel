@@ -5,8 +5,6 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  *
  * @uses \ezcConfiguration As fallback if parse_ini_string() fails
  */
@@ -16,8 +14,6 @@ namespace ezp\Base\Configuration;
 /**
  * Configuration Ini Parser / writer
  *
- * @package ezp
- * @subpackage base
  */
 use \ezp\Base\Configuration;
 class IniParser implements \ezp\Base\Interfaces\ConfigurationParser

@@ -11,8 +11,6 @@
 namespace ezp\Persistence;
 
 /**
- * @package ezp
- * @subpackage persistence
  */
 class Content extends AbstractValueObject
 {

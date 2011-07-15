@@ -15,7 +15,6 @@ use ezp\Persistence\Content\Criterion;
  * Criterion that matches content against a subtree.
  * Content will be matched if it is part of at least one of the given subtree id
  *
- * @package ezp.persistence.content.criteria
  */
 class SubTree extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {

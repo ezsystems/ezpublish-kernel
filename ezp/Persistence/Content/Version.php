@@ -11,8 +11,6 @@
 namespace ezp\Persistence\Content;
 
 /**
- * @package ezp
- * @subpackage persistence_content
  * @todo Add a restricted VersionInfo struct, which is returned by the {@link
  *       ContentHandler->listVersions()} method.
  */

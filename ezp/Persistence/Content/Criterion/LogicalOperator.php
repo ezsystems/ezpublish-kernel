@@ -12,7 +12,6 @@ namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion;
 
 /**
- * @package ezp.persistence.content.criteria
  *
  * Note that the class should ideally have been in a Logical namespace, but it would have then be named 'And',
  * and 'And' is a PHP reserved word.

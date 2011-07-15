@@ -13,7 +13,6 @@ use ezp\Persistence\Content\Criterion;
 /**
  * A NOT logical criterion
  *
- * @package ezp.persistence.content.criterion
  */
 class LogicalNot extends LogicalOperator
 {

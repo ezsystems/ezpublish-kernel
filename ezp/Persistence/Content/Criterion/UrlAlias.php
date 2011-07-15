@@ -12,7 +12,6 @@ use ezp\Persistence\Content\Criterion;
 
 /**
  * A criterion that matches Content based on Url aliases
- * @package ezp.persistence.content.criteria
  */
 class UrlAlias extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
 {

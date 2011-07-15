@@ -5,8 +5,6 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage persistence
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
@@ -14,8 +12,6 @@ namespace ezp\Persistence\Tests\InMemoryEngine;
 /**
  * The main handler for in memory Storage Engine
  *
- * @package ezp
- * @subpackage persistence
  */
 class RepositoryHandler implements \ezp\Persistence\Interfaces\RepositoryHandler
 {

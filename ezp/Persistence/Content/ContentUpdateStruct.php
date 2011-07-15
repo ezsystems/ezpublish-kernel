@@ -11,8 +11,6 @@
 namespace ezp\Persistence\Content;
 
 /**
- * @package ezp
- * @subpackage persistence_content
  */
 class ContentUpdateStruct extends \ezp\Persistence\AbstractValueObject
 {

@@ -11,7 +11,6 @@
 namespace ezp\Persistence\Fields;
 
 /**
- * @package ezp.persistence.fields
  */
 interface StorageInterface
 {
