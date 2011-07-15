@@ -101,7 +101,10 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
     /**
      * @see \ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function removeSubtree( $locationId ){}
+    public function removeSubtree( $locationId )
+    {
+
+    }
 
     /**
      * @see \ezp\Persistence\Content\Interfaces\LocationHandler

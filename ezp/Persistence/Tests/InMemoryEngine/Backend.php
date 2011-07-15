@@ -77,6 +77,8 @@ class Backend
     /**
      * Find data from in memory store for a specific type that matches criteria (empty array will match all)
      *
+     * Note does not support joins, so only properties on $type is matched.
+     *
      * @param string $type
      * @param array $criteria A simple array criteria with property => value to match against.
      * @return object[]
