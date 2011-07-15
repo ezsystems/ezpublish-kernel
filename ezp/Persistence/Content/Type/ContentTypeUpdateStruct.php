@@ -94,19 +94,5 @@ class ContentTypeUpdateStruct extends \ezp\Persistence\AbstractValueObject
      * @var mixed
      */
     public $initialLanguageId;
-
-    /**
-     * Contains an array of type group IDs
-     *
-     * @var mixed[]
-     */
-    public $contentTypeGroupIDs = array();
-
-    /**
-     * Content fields in this type
-     *
-     * @var Type\FieldDefinition[]
-     */
-    public $fieldDefinitions = array();
 }
 ?>
