@@ -1,0 +1,112 @@
+<?php
+/**
+ * File containing the ContentType class
+ *
+ * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
+ */
+
+namespace ezp\Persistence\Content\Type;
+
+/**
+ *
+ */
+class ContentTypeUpdateStruct extends \ezp\Persistence\AbstractValueObject
+{
+    /**
+     * Human readable name of the content type
+     *
+     * The structure of this field is:
+     * <code>
+     * array( 'eng' => '<name_eng>', 'de' => '<name_de>' );
+     * </code>
+     *
+     * @var string[]
+     */
+    public $name;
+
+    /**
+     * Human readable description of the content type
+     *
+     * The structure of this field is:
+     * <code>
+     * array( 'eng' => '<description_eng>', 'de' => '<description_de>' );
+     * </code>
+     *
+     * @var string[]
+     */
+    public $description;
+
+    /**
+     * String identifier of a type
+     *
+     * @var string
+     */
+    public $identifier;
+
+    /**
+     * Modification date (timestamp)
+     *
+     * @var int
+     */
+    public $modified;
+
+    /**
+     * Modifier user id
+     *
+     * @var mixed
+     *
+     */
+    public $modifierId;
+
+    /**
+     * Unique remote ID
+     *
+     * @var string
+     */
+    public $remoteId;
+
+    /**
+     * URL alias schema
+     *
+     * @var string
+     */
+    public $urlAliasSchema;
+
+    /**
+     * Name schema
+     *
+     * @var string
+     */
+    public $nameSchema;
+
+    /**
+     * Determines if the type is a container
+     *
+     * @var bool
+     */
+    public $isContainer;
+
+    /**
+     * Initial language
+     *
+     * @var mixed
+     */
+    public $initialLanguageId;
+
+    /**
+     * Contains an array of type group IDs
+     *
+     * @var mixed[]
+     */
+    public $contentTypeGroupIDs = array();
+
+    /**
+     * Content fields in this type
+     *
+     * @var Type\FieldDefinition[]
+     */
+    public $fieldDefinitions = array();
+}
+?>
