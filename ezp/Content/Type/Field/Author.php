@@ -19,13 +19,4 @@ class Author extends String
      * @var string
      */
     const FIELD_IDENTIFIER = 'ezauthor';
-
-    /**
-     * Sets identifier on design override and calls parent __construct.
-     */
-    public function __construct()
-    {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
-    }
 }

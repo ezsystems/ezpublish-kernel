@@ -8,6 +8,8 @@
  */
 
 namespace ezp\Content\Type\Field;
+use ezp\Content\Type\Type,
+    ezp\Content\Type\Field as TypeField;
 
 /**
  * Relation Field value object class
@@ -36,20 +38,13 @@ class Datetime extends Int
     public $adjustment = 0;
 
     /**
-     * @var array Readable of properties on this object
+     * @return void
      */
-    protected $readableProperties = array(
-        'default' => 'data_int1',
-        'useSeconds' => 'data_int2',
-        'adjustment' => 'data_text5',
-    );
-
-    /**
-     * Sets identifier on design override and calls parent __construct.
-     */
-    public function __construct()
+    public function __construct( Type $contentType )
     {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
+        $this->readableProperties['default'] = true;
+        $this->readableProperties['useSeconds'] = true;
+        $this->readableProperties['adjustment'] = true;
+        TypeField::__construct( $contentType );
     }
 }

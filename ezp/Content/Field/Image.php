@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\Field;
-use ezp\Content\Interfaces\ContentFieldDefinition;
+use ezp\Content\Version,
+    ezp\Content\Type\Field\Image as ImageDefinition;
 
 /**
  * Image Field value object class
@@ -24,9 +25,8 @@ class Image extends String
     /**
      * @see ezp\Content\Interfaces\ContentFieldType
      */
-    public function __construct( ContentFieldDefinition $contentTypeFieldType )
+    protected function init( ContentFieldDefinition $fieldDefinition )
     {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct( $contentTypeFieldType );
+        parent::init( $fieldDefinition );
     }
 }

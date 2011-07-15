@@ -8,13 +8,13 @@
  */
 
 namespace ezp\Content\Type\Field;
-use ezp\Content\AbstractFieldType,
-    ezp\Content\Interfaces\ContentFieldDefinition;
+use ezp\Content\Type\Type,
+    ezp\Content\Type\Field as TypeField;
 
 /**
- * Float Field value object class
+ * String Field value object class
  */
-class String extends AbstractFieldType implements ContentFieldDefinition
+class String extends TypeField
 {
     /**
      * Field type identifier
@@ -35,19 +35,12 @@ class String extends AbstractFieldType implements ContentFieldDefinition
     public $maxLength = 255;
 
     /**
-     * @var array Readable of properties on this object
+     * @return void
      */
-    protected $readableProperties = array(
-        'default' => 'data_text1',
-        'maxLength' => 'data_int1',
-    );
-
-    /**
-     * Sets identifier on design override and calls parent __construct.
-     */
-    public function __construct()
+    public function __construct( Type $contentType )
     {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
+        $this->readableProperties['default'] = true;
+        $this->readableProperties['maxLength'] = true;
+        TypeField::__construct( $contentType );
     }
 }

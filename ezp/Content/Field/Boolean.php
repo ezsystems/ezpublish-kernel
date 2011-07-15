@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\Field;
-use ezp\Content\Interfaces\ContentFieldDefinition;
+use ezp\Content\Version,
+    ezp\Content\Type\Field\Boolean as BooleanDefinition;
 
 /**
  * Relation Field value object class
@@ -22,11 +23,11 @@ class Boolean extends Int
     const FIELD_IDENTIFIER = 'ezboolean';
 
     /**
-     * @see ezp\Content\Interfaces\ContentFieldType
+     * @param \ezp\Content\Version $contentVersion
+     * @param \ezp\Content\Type\Field\Boolean $fieldDefinition
      */
-    public function __construct( ContentFieldDefinition $contentTypeFieldType )
+    public function __construct( Version $contentVersion, BooleanDefinition $fieldDefinition )
     {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct( $contentTypeFieldType );
+        parent::__construct( $contentVersion, $fieldDefinition );
     }
 }

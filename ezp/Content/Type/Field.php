@@ -8,17 +8,17 @@
  */
 
 namespace ezp\Content\Type;
-use ezp\Content\AbstractField,
-    ezp\Base\TypeCollection,
-    ezp\Base\Configuration,
-    ezp\Base\Interfaces\Observable;
+use ezp\Base\Interfaces\Observable,
+    ezp\Base\Interfaces\Observer,
+    ezp\Base\AbstractModel,
+    ezp\Content\Type\Field as FieldDefinition;
 
 /**
  * Content Type Field (content class attribute) class
  *
  * @property-read string $fieldTypeString
  */
-class Field extends AbstractField
+abstract class Field extends AbstractModel implements Observer
 {
     /**
      * @var array Readable of properties on this object
@@ -26,31 +26,16 @@ class Field extends AbstractField
     protected $readableProperties = array(
         'id' => false,
         'version' => false,
-        'data_text1' => false,
-        'data_text2' => false,
-        'data_text3' => false,
-        'data_text4' => false,
-        'data_text5' => false,
-        'data_int1' => false,
-        'data_int2' => false,
-        'data_int3' => false,
-        'data_int4' => false,
-        'data_float1' => false,
-        'data_float2' => false,
-        'data_float3' => false,
-        'data_float4' => false,
+        'placement' => true,
         'identifier' => true,
         'fieldTypeString' => true,
-        'contentFields' => false,
     );
 
     /**
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'type' => true,
         'contentType' => false,
-        'contentTypeId' => false,
     );
 
     /**
@@ -64,6 +49,11 @@ class Field extends AbstractField
     protected $version;
 
     /**
+     * @var int
+     */
+    public $placement;
+
+    /**
      * @var string
      */
     public $identifier;
@@ -71,83 +61,7 @@ class Field extends AbstractField
     /**
      * @var string
      */
-    protected $data_text1;
-
-    /**
-     * @var string
-     */
-    protected $data_text2;
-
-    /**
-     * @var string
-     */
-    protected $data_text3;
-
-    /**
-     * @var string
-     */
-    protected $data_text4;
-
-    /**
-     * @var string
-     */
-    protected $data_text5;
-
-    /**
-     * @var int
-     */
-    protected $data_int1;
-
-    /**
-     * @var int
-     */
-    protected $data_int2;
-
-    /**
-     * @var int
-     */
-    protected $data_int3;
-
-    /**
-     * @var int
-     */
-    protected $data_int4;
-
-    /**
-     * @var float
-     */
-    protected $data_float1;
-
-    /**
-     * @var float
-     */
-    protected $data_float2;
-
-    /**
-     * @var float
-     */
-    protected $data_float3;
-
-    /**
-     * @var float
-     */
-    protected $data_float4;
-
-    /**
-     * @var string
-     */
     public $fieldTypeString;
-
-
-    /**
-     * @var int
-     */
-    public $placement;
-
-    /**
-     * @var ezp\Content\Field[]
-     */
-    protected $contentFields;
 
     /**
      * @var Type
@@ -162,7 +76,6 @@ class Field extends AbstractField
     public function __construct( Type $contentType )
     {
         $this->contentType = $contentType;
-        $this->contentFields = new TypeCollection( 'ezp\Content\Field' );
     }
 
     /**
@@ -177,30 +90,6 @@ class Field extends AbstractField
             $this->contentType = $this->contentType->load();
         }
         return $this->contentType;
-    }
-
-    /**
-     * Return content type id
-     *
-     * @return int
-     */
-    protected function getContentTypeId()
-    {
-        if ( $this->contentType instanceof Proxy || $this->contentType instanceof Type )
-        {
-            return $this->contentType->id;
-        }
-        return 0;
-    }
-
-    /**
-     * Get mapping of type/definition identifier to class
-     *
-     * @return array
-     */
-    protected function getTypeList()
-    {
-        return Configuration::getInstance( 'content' )->get( 'fields', 'Definition' );
     }
 
     /**

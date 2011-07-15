@@ -29,12 +29,14 @@ $contentType = new Type();
 $contentType->identifier = 'article';
 
 // Add some fields
-$fields = array( 'title' => 'ezstring', 'tags' => 'ezkeyword' );
-foreach ( $fields as $identifier => $fieldTypeString )
+$fields = array( '\\ezp\\Content\\Type\\Field\\String'  => array( 'title', 'ezstring', 'New Article' ),
+                 '\\ezp\\Content\\Type\\Field\\Keyword' => array( 'tags',  'ezkeyword', '' ) );
+foreach ( $fields as $className => $data )
 {
-    $field = new Field( $contentType );
-    $field->identifier = $identifier;
-    $field->fieldTypeString = $fieldTypeString;
+    $field = new $className( $contentType );
+    $field->identifier = $data[0];
+    $field->fieldTypeString = $data[1];
+    $field->default = $data[2];
     $contentType->fields[] = $field;
 }
 
@@ -49,7 +51,7 @@ $content->ownerId = 10;
 $content->section = $section;
 
 $content->fields['tags'] = 'ezpublish, demo, public, api';
-$content->fields['title'] = 'My new Article';
+//$content->fields['title'] = 'My new Article';
 // shortcut for: $content->fields['title']->value = 'My new Article';
 
 $content->notify( 'store' );// Needed to make sure changes in fieldtypes trickle down to field
@@ -61,6 +63,6 @@ echo "Content id: {$content->id}<br />";
 echo "Fields:<br />";
 foreach ( $content->fields as $identifier => $field )
 {
-    echo "$identifier: {$field->type->value}<br />";
+    echo "$identifier: {$field->value}<br />";
 }
 

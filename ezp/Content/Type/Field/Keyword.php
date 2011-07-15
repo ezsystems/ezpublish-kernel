@@ -19,26 +19,4 @@ class Keyword extends String
      * @var string
      */
     const FIELD_IDENTIFIER = 'ezkeyword';
-
-    /**
-     * @public
-     * @var string
-     */
-    public $default = '';
-
-    /**
-     * @var array Readable of properties on this object
-     */
-    protected $readableProperties = array(
-        'default' => 'data_text1',
-    );
-
-    /**
-     * Sets identifier on design override and calls parent __construct.
-     */
-    public function __construct()
-    {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
-    }
 }

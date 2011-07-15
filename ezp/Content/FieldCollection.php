@@ -8,8 +8,12 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\ReadOnlyCollection,
-    InvalidArgumentException;
+use ezp\Base\Configuration,
+    ezp\Base\Exception\BadConfiguration,
+    ezp\Base\Exception\MissingClass,
+    ezp\Base\Exception\ReadOnly,
+    ezp\Base\ReadOnlyCollection,
+    RuntimeException;
 
 /**
  * Field Collection class
@@ -27,9 +31,21 @@ class FieldCollection extends ReadOnlyCollection
     public function __construct( Version $contentVersion )
     {
         $elements = array();
-        foreach ( $contentVersion->content->contentType->fields as $contentTypeField )
+        $fieldTypes = Configuration::getInstance( 'content' )->get( 'fields', 'Type' );
+        foreach ( $contentVersion->content->contentType->fields as $fieldDefinition )
         {
-            $elements[ $contentTypeField->identifier ] = $field = new Field( $contentVersion, $contentTypeField );
+            if ( !isset( $fieldTypes[$fieldDefinition->fieldTypeString] ) )
+                throw new BadConfiguration( 'content.ini[fields]', "could not load {$fieldDefinition->fieldTypeString}");
+
+            if ( !class_exists( $fieldTypes[$fieldDefinition->fieldTypeString] ) )
+                throw new MissingClass(  $fieldTypes[$fieldDefinition->fieldTypeString], 'field type' );
+
+            $className = $fieldTypes[$fieldDefinition->fieldTypeString];
+            $elements[ $fieldDefinition->identifier ] = $field = new $className( $contentVersion, $fieldDefinition );
+
+            if ( !$field instanceof Field )
+                throw new RuntimeException( "Field type value '{$className}' does not implement ezp\\content\\Field" );
+
             $contentVersion->attach( $field, 'store' );
         }
         parent::__construct( $elements );
@@ -39,15 +55,15 @@ class FieldCollection extends ReadOnlyCollection
      * Set value on a offset in collection, only allowed on existing items where value is forwarded to ->type->value
      *
      * @internal
-     * @throws InvalidArgumentException When trying to set new values / append
+     * @throws ReadOnly When trying to set new values / append
      * @param string|int $offset
      * @param mixed $value
      */
     public function offsetSet( $offset, $value )
     {
         if ( $offset === null || !$this->offsetExists( $offset ) )
-            throw new InvalidArgumentException( "FieldCollection is locked and offset:{$offset} can not be appended!" );
-        $this->offsetGet( $offset )->type->value = $value;
+            throw new ReadOnly("FieldCollection");
+        $this->offsetGet( $offset )->value = $value;
     }
 }
 

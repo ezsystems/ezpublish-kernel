@@ -8,6 +8,8 @@
  */
 
 namespace ezp\Content\Type\Field;
+use ezp\Content\Type\Type,
+    ezp\Content\Type\Field as TypeField;
 
 /**
  * XML Field value object class
@@ -32,19 +34,12 @@ class Xml extends Text
     public $columns = 10;
 
     /**
-     * @var array Readable of properties on this object
+     * @return void
      */
-    protected $readableProperties = array(
-        'tagPreset' => 'data_text2',
-        'columns' => 'data_int1',
-    );
-
-    /**
-     * Sets identifier on design override and calls parent __construct.
-     */
-    public function __construct()
+    public function __construct( Type $contentType )
     {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
+        $this->readableProperties['tagPreset'] = true;
+        $this->readableProperties['columns'] = true;
+        TypeField::__construct( $contentType );
     }
 }

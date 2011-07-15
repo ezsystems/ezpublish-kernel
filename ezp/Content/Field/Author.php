@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\Field;
-use ezp\Content\Interfaces\ContentFieldDefinition;
+use ezp\Content\Version,
+    ezp\Content\Type\Field\Author as AuthorDefinition;
 
 /**
  * Keyword Field value object class
@@ -22,11 +23,11 @@ class Author extends String
     const FIELD_IDENTIFIER = 'ezauthor';
 
     /**
-     * @see ezp\Content\Interfaces\ContentFieldType
+     * @param \ezp\Content\Version $contentVersion
+     * @param \ezp\Content\Type\Field\Author $fieldDefinition
      */
-    public function __construct( ContentFieldDefinition $contentTypeFieldType )
+    public function __construct( Version $contentVersion, AuthorDefinition $fieldDefinition )
     {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct( $contentTypeFieldType );
+        parent::__construct( $contentVersion, $fieldDefinition );
     }
 }

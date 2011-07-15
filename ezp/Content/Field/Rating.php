@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\Field;
-use ezp\Content\Interfaces\ContentFieldDefinition;
+use ezp\Content\Version,
+    ezp\Content\Type\Field\Rating as RatingDefinition;
 
 /**
  * Relation Field value object class
@@ -22,11 +23,11 @@ class Rating extends Int
     const FIELD_IDENTIFIER = 'ezsrrating';
 
     /**
-     * @see ezp\Content\Interfaces\ContentFieldType
+     * @param \ezp\Content\Version $contentVersion
+     * @param \ezp\Content\Type\Field\Rating $fieldDefinition
      */
-    public function __construct( ContentFieldDefinition $contentTypeFieldType )
+    public function __construct( Version $contentVersion, RatingDefinition $fieldDefinition )
     {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct( $contentTypeFieldType );
+        parent::__construct( $contentVersion, $fieldDefinition );
     }
 }

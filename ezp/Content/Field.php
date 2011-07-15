@@ -9,23 +9,22 @@
 
 namespace ezp\Content;
 use ezp\Base\Interfaces\Observable,
-    ezp\Content\Type\Field as TypeField,
-    RuntimeException;
+    ezp\Base\Interfaces\Observer,
+    ezp\Base\AbstractModel,
+    ezp\Content\Type\Field as FieldDefinition;
 
 /**
  * This class represents a Content's field
  *
  */
-class Field extends AbstractField
+abstract class Field extends AbstractModel implements Observer
 {
     /**
      * @var array Readable of properties on this object
      */
     protected $readableProperties = array(
         'id' => false,
-        'data_text' => false,
-        'data_int' => false,
-        'data_float' => false,
+        'languageCode' => true,
         'fieldTypeString' => true,
     );
 
@@ -33,35 +32,14 @@ class Field extends AbstractField
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'type' => true,
         'version' => false,
-        'contentTypeField' => false,
+        'fieldDefinition' => false,
     );
 
     /**
      * @var int
      */
     protected $id = 0;
-
-    /**
-     * @var int
-     */
-    protected $contentId = 0;
-
-    /**
-     * @var string
-     */
-    protected $data_text = '';
-
-    /**
-     * @var int
-     */
-    protected $data_int = 0;
-
-    /**
-     * @var float
-     */
-    protected $data_float = 0.0;
 
     /**
      * @var string
@@ -74,14 +52,27 @@ class Field extends AbstractField
     protected $fieldTypeString = '';
 
     /**
-     * @var int
-     */
-    //protected $contentobject_id = 0;
-
-    /**
      * @var Version
      */
     protected $version;
+
+    /**
+     * @var FieldDefinition
+     */
+    protected $fieldDefinition;
+
+    /**
+     * Constructor, sets up properties
+     *
+     * @param Version $contentVersion
+     * @param FieldDefinition $fieldDefinition
+     */
+    public function __construct( Version $contentVersion, FieldDefinition $fieldDefinition )
+    {
+        $this->version = $contentVersion;
+        $this->fieldDefinition = $fieldDefinition;
+        $this->fieldTypeString = $fieldDefinition->fieldTypeString;
+    }
 
     /**
      * Return content version object
@@ -94,50 +85,13 @@ class Field extends AbstractField
     }
 
     /**
-     * @var TypeField
-     */
-    protected $contentTypeField;
-
-    /**
      * Return content type object
      *
-     * @return TypeField
+     * @return FieldDefinition
      */
-    protected function getContentTypeField()
+    protected function getFieldDefinition()
     {
-        return $this->contentTypeField;
-    }
-
-    /**
-     * Constructor, sets up properties
-     *
-     * @param Version $contentVersion
-     * @param TypeField $contentTypeField
-     */
-    public function __construct( Version $contentVersion, TypeField $contentTypeField )
-    {
-        $this->version = $contentVersion;
-        $this->contentTypeField = $contentTypeField;
-        $this->fieldTypeString = $contentTypeField->fieldTypeString;
-    }
-
-    /**
-     * Initialize field type class
-     *
-     * @throws RuntimeException If $className is not instanceof Abstracts\FieldType
-     * @param string $className
-     * @return Abstracts\FieldType
-     */
-    protected function initType( $className )
-    {
-        $type = new $className( $this->getContentTypeField()->getType() );
-        if ( !$type instanceof AbstractFieldType )
-            throw new RuntimeException( "Field type value '{$className}' does not implement ezp\\Content\\AbstractFieldType" );
-        if ( $this->version )
-            $this->toType( $type );
-        else
-            $this->fromType( $type );
-        return $type;
+        return $this->fieldDefinition;
     }
 
     /**
@@ -153,7 +107,6 @@ class Field extends AbstractField
         {
             return $this->notify( $event );
         }
-        return parent::update( $subject, $event );
     }
 
     /**
@@ -164,4 +117,5 @@ class Field extends AbstractField
         return  $this->fieldTypeString;
     }
 }
+
 ?>

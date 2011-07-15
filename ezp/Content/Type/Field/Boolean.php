@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Content\Type\Field;
+use ezp\Content\Type\Field as TypeField;
 
 /**
  * Relation Field value object class
@@ -25,19 +26,13 @@ class Boolean extends Int
      */
     public $default = 0;
 
-    /**
-     * @var array Readable of properties on this object
-     */
-    protected $readableProperties = array(
-        'default' => 'data_int1',
-    );
 
     /**
-     * Sets identifier on design override and calls parent __construct.
+     * @return void
      */
-    public function __construct()
+    public function __construct( Type $contentType )
     {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
+        $this->readableProperties['default'] = true;
+        TypeField::__construct( $contentType );
     }
 }

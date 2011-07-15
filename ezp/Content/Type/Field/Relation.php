@@ -19,13 +19,4 @@ class Relation extends Int
      * @var string
      */
     const FIELD_IDENTIFIER = 'ezobjectrelation';
-
-    /**
-     * Sets identifier on design override and calls parent __construct.
-     */
-    public function __construct()
-    {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
-    }
 }

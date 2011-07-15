@@ -8,14 +8,14 @@
  */
 
 namespace ezp\Content\Field;
-use ezp\Content\AbstractFieldType,
-    ezp\Content\Interfaces\ContentFieldType,
-    ezp\Content\Interfaces\ContentFieldDefinition;
+use ezp\Content\Version,
+    ezp\Content\Field as ContentField,
+    ezp\Content\Type\Field\String as StringDefinition;
 
 /**
  * Float Field value object class
  */
-class String extends AbstractFieldType implements ContentFieldType
+class String extends ContentField
 {
     /**
      * Field type identifier
@@ -30,27 +30,14 @@ class String extends AbstractFieldType implements ContentFieldType
     public $value = '';
 
     /**
-     * @var array Readable of properties on this object
+     * @param \ezp\Content\Version $contentVersion
+     * @param \ezp\Content\Type\Field\String $fieldDefinition
      */
-    protected $readableProperties = array(
-        'value' => 'data_text',
-    );
-
-    /**
-     * @var ContentFieldDefinition
-     */
-    protected $contentTypeFieldType;
-
-    /**
-     * @see ContentFieldType
-     */
-    public function __construct( ContentFieldDefinition $contentTypeFieldType )
+    public function __construct( Version $contentVersion, StringDefinition $fieldDefinition )
     {
-        if ( isset( $contentTypeFieldType->default ) )
-            $this->value = $contentTypeFieldType->default;
-
-        $this->contentTypeFieldType = $contentTypeFieldType;
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct( $contentTypeFieldType );
+        parent::__construct( $contentVersion, $fieldDefinition );
+        $this->readableProperties['value'] = true;
+        if ( isset( $fieldDefinition->default ) )
+            $this->value = $fieldDefinition->default;
     }
 }

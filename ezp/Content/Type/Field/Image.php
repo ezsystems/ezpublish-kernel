@@ -8,6 +8,8 @@
  */
 
 namespace ezp\Content\Type\Field;
+use ezp\Content\Type\Type,
+    ezp\Content\Type\Field as TypeField;
 
 /**
  * Image Field value object class
@@ -33,11 +35,11 @@ class Image extends String
     );
 
     /**
-     * Sets identifier on design override and calls parent __construct.
+     * @return void
      */
-    public function __construct()
+    public function __construct( Type $contentType )
     {
-        $this->types[] = self::FIELD_IDENTIFIER;
-        parent::__construct();
+        $this->readableProperties['maxSize'] = true;
+        TypeField::__construct( $contentType );
     }
 }
