@@ -5,23 +5,22 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  */
+
+namespace ezp\Base;
+use RuntimeException,
+    DomainException;
 
 /**
  * Repository class
  *
- * @package ezp
- * @subpackage base
  */
-namespace ezp\Base;
 class Repository
 {
     /**
      * Repository Handler object
      *
-     * @var \ezp\Persistence\Interfaces\RepositoryHandler
+     * @var RepositoryHandler
      */
     protected $handler;
 
@@ -45,9 +44,9 @@ class Repository
      *
      * Construct repository object with provided storage engine
      *
-     * @param \ezp\Persistence\Interfaces\RepositoryHandler $handler
+     * @param RepositoryHandler $handler
      */
-    public function __construct( \ezp\Persistence\Interfaces\RepositoryHandler $handler/*, \ezp\User\User $user*/ )
+    public function __construct( RepositoryHandler $handler/*, ezp\User\User $user*/ )
     {
         $this->handler = $handler;
         //$this->user = $user;
@@ -58,7 +57,7 @@ class Repository
      *
      * @param string $className
      * @return AbstractService
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     protected function service( $className )
     {
@@ -68,7 +67,7 @@ class Repository
         if ( class_exists( $className ) )
             return $this->services[$className] = new $className( $this, $this->handler );
 
-        throw new \RuntimeException( "Could not load '$className' service!" );
+        throw new RuntimeException( "Could not load '$className' service!" );
     }
 
     /**
@@ -77,11 +76,11 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return \ezp\Content\Services\Content
+     * @return ezp\Content\Services\Content
      */
     public function getContentService()
     {
-        return $this->service( '\ezp\Content\Services\Content' );
+        return $this->service( 'ezp\Content\Services\Content' );
     }
 
     /**
@@ -90,11 +89,11 @@ class Repository
      * Get service object to perform several operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
-     * @return \ezp\Content\Services\ContentType
+     * @return ezp\Content\Services\ContentType
      */
     public function getContentTypeService()
     {
-        return $this->service( '\ezp\Content\Services\ContentType' );
+        return $this->service( 'ezp\Content\Services\ContentType' );
     }
 
     /**
@@ -103,22 +102,22 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return \ezp\Content\Services\Location
+     * @return ezp\Content\Services\Location
      */
     public function getLocationService()
     {
-        return $this->service( '\ezp\Content\Services\Location' );
+        return $this->service( 'ezp\Content\Services\Location' );
     }
 
     /**
      * Get User Service
      *
      *
-     * @return \ezp\Content\Services\Section
+     * @return ezp\Content\Services\Section
      */
     public function getSectionService()
     {
-        return $this->service( '\ezp\Content\Services\Section' );
+        return $this->service( 'ezp\Content\Services\Section' );
     }
 
     /**
@@ -127,11 +126,11 @@ class Repository
      * Get service object to perform several operations on User objects and it's aggregate members.
      * ( UserGroups, UserRole, UserRolePolicy & UserRolePolicyLimitation )
      *
-     * @return \ezp\User\UserService
+     * @return ezp\User\UserService
      */
     public function getUserService()
     {
-        return $this->service( '\ezp\User\UserService' );
+        return $this->service( 'ezp\User\UserService' );
     }
 
     /**
@@ -150,7 +149,7 @@ class Repository
      *
      * Commit transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws \RuntimeException If no transaction has been started
+     * @throws RuntimeException If no transaction has been started
      */
     public function commit()
     {
@@ -162,7 +161,7 @@ class Repository
      *
      * Rollback transaction, or throw exceptions if no transactions has been started.
      *
-     * @throws \RuntimeException If no transaction has been started
+     * @throws RuntimeException If no transaction has been started
      */
     public function rollback()
     {
@@ -176,8 +175,8 @@ class Repository
      *
      * @internal
      * @param AbstractModel $object
-     * @throws \DomainException If object is of wrong type
-     * @throws \RuntimeException If errors occurred in storage engine
+     * @throws DomainException If object is of wrong type
+     * @throws RuntimeException If errors occurred in storage engine
      */
     public function store( AbstractModel $object )
     {
@@ -188,8 +187,8 @@ class Repository
      *
      * @internal
      * @param AbstractModel $object
-     * @throws \DomainException If object is of wrong type
-     * @throws \RuntimeException If errors occurred in storage engine
+     * @throws DomainException If object is of wrong type
+     * @throws RuntimeException If errors occurred in storage engine
      */
     public function delete( AbstractModel $object )
     {

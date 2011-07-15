@@ -5,24 +5,23 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content_tests
  */
 
 namespace ezp\Content\Tests;
-use ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\CriterionFactory;
+use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\CriterionFactory,
+    ezp\Content\QueryBuilder;
 
 class QueryBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Content\QueryBuilder
+     * @var QueryBuilder
      */
     private $qb;
 
     public function setUp()
     {
-        $this->qb = new \ezp\Content\QueryBuilder();
+        $this->qb = new QueryBuilder();
     }
 
     /**

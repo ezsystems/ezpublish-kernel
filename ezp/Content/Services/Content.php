@@ -5,29 +5,28 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content_Services
  */
 
 namespace ezp\Content\Services;
+use ezp\Base\AbstractService,
+    ezp\Base\Exception\NotFound,
+    ezp\Content\Content,
+    ezp\Content\Criteria\CriteriaCollection;
 
 /**
  * Content service, used for Content operations
  *
- * @package ezp
- * @subpackage content_Services
  */
-use \ezp\Base\Exception;
-class Content extends \ezp\Base\AbstractService
+class Content extends AbstractService
 {
     /**
      * Creates the new $content in the content repository
      *
-     * @param \ezp\Content\Content $content
-     * @return \ezp\Content\Content The newly created content
+     * @param Content $content
+     * @return Content The newly created content
      * @throws Exception\Validation If a validation problem has been found for $content
      */
-    public function create( \ezp\Content\Content $content )
+    public function create( Content $content )
     {
         // @todo : Do any necessary actions to insert $content in the content repository
         // go through all locations to create or update them
@@ -37,11 +36,11 @@ class Content extends \ezp\Base\AbstractService
     /**
      * Updates $content in the content repository
      *
-     * @param \ezp\Content\Content $content
-     * @return \ezp\Content\Content
+     * @param Content $content
+     * @return Content
      * @throws Exception\Validation If a validation problem has been found for $content
      */
-    public function update( \ezp\Content\Content $content )
+    public function update( Content $content )
     {
         // @todo : Do any necessary actions to update $content in the content repository
         // go through all locations to create or update them
@@ -51,14 +50,14 @@ class Content extends \ezp\Base\AbstractService
     /**
      * Loads a content from its id ($contentId)
      * @param int $contentId
-     * @return \ezp\Content\Content
-     * @throws Exception\NotFound if content could not be found
+     * @return Content
+     * @throws NotFound if content could not be found
      */
     public function load( $contentId )
     {
         $content = $this->handler->contentHandler()->load( $contentId );
         if ( !$content )
-            throw new Exception\NotFound( 'Content', $contentId );
+            throw new NotFound( 'Content', $contentId );
         return $content;
     }
 
@@ -66,9 +65,9 @@ class Content extends \ezp\Base\AbstractService
     /**
      * Deletes a content from the repository
      *
-     * @param \ezp\Content\Content $content
+     * @param Content $content
      */
-    public function delete( \ezp\Content\Content $content )
+    public function delete( Content $content )
     {
         // take care of:
         // 1. removing the subtree of all content's locations
@@ -80,9 +79,9 @@ class Content extends \ezp\Base\AbstractService
     /**
      * Sends $content to trash
      *
-     * @param \ezp\Content\Content $content
+     * @param Content $content
      */
-    public function trash( \ezp\Content\Content $content )
+    public function trash( Content $content )
     {
 
     }
@@ -90,20 +89,20 @@ class Content extends \ezp\Base\AbstractService
     /**
      * Restores $content from trash
      *
-     * @param \ezp\Content\Content $content
+     * @param Content $content
      */
-    public function unTrash( \ezp\Content\Content $content )
+    public function unTrash( Content $content )
     {
 
     }
 
     /**
      * Creates a new criteria collection object in order to query the content repository
-     * @return \ezp\Content\Criteria\CriteriaCollection
+     * @return CriteriaCollection
      */
     public function createCriteria()
     {
-        return new \ezp\Content\Criteria\CriteriaCollection();
+        return new CriteriaCollection();
     }
 }
 ?>

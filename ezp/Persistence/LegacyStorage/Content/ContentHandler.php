@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentHandler interface
+ * File containing the ContentHandler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,21 +8,18 @@
  *
  */
 
-namespace ezp\Persistence\Content\Interfaces;
-use ezp\Persistence\Content\ContentCreateStruct,
+namespace ezp\Persistence\LegacyStorage\Content;
+use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface,
+    ezp\Persistence\Content\ContentCreateStruct,
     ezp\Persistence\Content\ContentUpdateStruct,
     ezp\Content\Criteria\Criteria;
 
 /**
- * The ContentHandler interface defines content operations on the storage engine.
- *
- * The basic operations which are performed on content objects are collected in
- * this interface. Typically this interface would be used by a service managing
- * business logic for content objects.
+ * The ContentHandler stores Content and ContentType objects.
  *
  * @version //autogentag//
  */
-interface ContentHandler
+class ContentHandler implements ContentHandlerInterface
 {
     /**
      * Creates a new Content entity in the storage engine.
@@ -35,7 +32,10 @@ interface ContentHandler
      * @param ContentCreateStruct $content Content creation struct.
      * @return ezp\Persistence\Content Content value object
      */
-    public function create( ContentCreateStruct $content );
+    public function create( ContentCreateStruct $content )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Creates a new draft version from $contentId in $version.
@@ -47,7 +47,10 @@ interface ContentHandler
      * @param int|bool $srcVersion
      * @return ezp\Persistence\Content\Content
      */
-    public function createDraftFromVersion( $contentId, $srcVersion );
+    public function createDraftFromVersion( $contentId, $srcVersion )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Returns the raw data of a content object identified by $id, in a struct.
@@ -55,18 +58,24 @@ interface ContentHandler
      * @param int $id
      * @return ezp\Persistence\Content Content value object
      */
-    public function load( $id );
+    public function load( $id )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Returns a list of object satisfying the $criteria.
      *
-     * @param  ezp\Content\Criteria\Criteria $criteria
+     * @param  Criteria $criteria
      * @param $offset
      * @param $limit
      * @param $sort
      * @return array(ezp\Persistence\Content) Content value object.
      */
-    public function find( Criteria $criteria, $offset, $limit, $sort );
+    public function find( Criteria $criteria, $offset, $limit, $sort )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Returns a single Content object found.
@@ -75,12 +84,15 @@ interface ContentHandler
      * ensure, that your $criteria ensure that only a single object can be
      * retrieved.
      *
-     * @param ezp\Content\Criteria\Criteria $criteria
+     * @param Criteria $criteria
      * @param mixed $offset
      * @param mixed $sort
      * @return ezp\Persistence\Content
      */
-    public function findSingle( Criteria $criteria, $offset, $sort );
+    public function findSingle( Criteria $criteria, $offset, $sort )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Sets the state of object identified by $contentId and $version to $state.
@@ -93,7 +105,10 @@ interface ContentHandler
      * @see ezp\Content\Content
      * @return boolean
      */
-    public function setState( $contentId, $state, $version );
+    public function setState( $contentId, $state, $version )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Sets the object-state of object identified by $contentId and $stateGroup to $state.
@@ -106,7 +121,10 @@ interface ContentHandler
      * @return boolean
      * @see ezp\Content\Content
      */
-    public function setObjectState( $contentId, $stateGroup, $state );
+    public function setObjectState( $contentId, $stateGroup, $state )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Gets the object-state of object identified by $contentId and $stateGroup to $state.
@@ -118,7 +136,10 @@ interface ContentHandler
      * @return mixed
      * @see ezp\Content\Content
      */
-    public function getObjectState( $contentId, $stateGroup );
+    public function getObjectState( $contentId, $stateGroup )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Updates a content object entity with data and identifier $content
@@ -126,7 +147,10 @@ interface ContentHandler
      * @param ContentUpdateStruct $content
      * @return ezp\Persistence\Content
      */
-    public function update( ContentUpdateStruct $content );
+    public function update( ContentUpdateStruct $content )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Deletes all versions and fields, all locations (subtree), and all relations.
@@ -137,7 +161,10 @@ interface ContentHandler
      * @param int $contentId
      * @return boolean
      */
-    public function delete( $contentId );
+    public function delete( $contentId )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Return the versions for $contentId
@@ -145,7 +172,10 @@ interface ContentHandler
      * @param int $contentId
      * @return array(Version)
      */
-    public function listVersions( $contentId );
+    public function listVersions( $contentId )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 
     /**
      * Fetch a content value object containing the values of the translation for $languageCode.
@@ -157,6 +187,9 @@ interface ContentHandler
      * @param string $languageCode
      * @return ezp\Persistence\Content\Content
      */
-    public function fetchTranslation( $contentId, $languageCode );
+    public function fetchTranslation( $contentId, $languageCode )
+    {
+        throw new Exception( "Not implemented yet." );
+    }
 }
 ?>

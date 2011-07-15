@@ -11,7 +11,6 @@
 namespace ezp\Persistence\Content;
 
 /**
- * @package ezp.persistence.content.criteria
  */
 abstract class Criterion
 {

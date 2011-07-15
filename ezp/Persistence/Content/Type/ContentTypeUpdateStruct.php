@@ -7,21 +7,14 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content;
+namespace ezp\Persistence\Content\Type;
 use ezp\Persistence\AbstractValueObject;
 
 /**
  *
  */
-class Type extends AbstractValueObject
+class ContentTypeUpdateStruct extends AbstractValueObject
 {
-    /**
-     * Content type ID
-     *
-     * @var mixed
-     */
-    public $id;
-
     /**
      * Human readable name of the content type
      *
@@ -54,25 +47,11 @@ class Type extends AbstractValueObject
     public $identifier;
 
     /**
-     * Creation date (timestamp)
-     *
-     * @var int
-     */
-    public $created;
-
-    /**
      * Modification date (timestamp)
      *
      * @var int
      */
     public $modified;
-
-    /**
-     * Creator user id
-     *
-     * @var mixed
-     */
-    public $creatorId;
 
     /**
      * Modifier user id
@@ -116,19 +95,5 @@ class Type extends AbstractValueObject
      * @var mixed
      */
     public $initialLanguageId;
-
-    /**
-     * Contains an array of type group IDs
-     *
-     * @var mixed[]
-     */
-    public $contentTypeGroupIDs = array();
-
-    /**
-     * Content fields in this type
-     *
-     * @var Type\FieldDefinition[]
-     */
-    public $fieldDefinitions = array();
 }
 ?>

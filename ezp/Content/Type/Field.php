@@ -5,17 +5,20 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
+
+namespace ezp\Content\Type;
+use ezp\Content\AbstractField,
+    ezp\Base\TypeCollection,
+    ezp\Base\Configuration,
+    ezp\Base\Interfaces\Observable;
 
 /**
  * Content Type Field (content class attribute) class
  *
  * @property-read string $fieldTypeString
  */
-namespace ezp\Content\Type;
-class Field extends \ezp\Content\AbstractField
+class Field extends AbstractField
 {
     /**
      * @var array Readable of properties on this object
@@ -142,7 +145,7 @@ class Field extends \ezp\Content\AbstractField
     public $placement;
 
     /**
-     * @var \ezp\Content\Field[]
+     * @var ezp\Content\Field[]
      */
     protected $contentFields;
 
@@ -159,7 +162,7 @@ class Field extends \ezp\Content\AbstractField
     public function __construct( Type $contentType )
     {
         $this->contentType = $contentType;
-        $this->contentFields = new \ezp\Base\TypeCollection( '\ezp\Content\Field' );
+        $this->contentFields = new TypeCollection( 'ezp\Content\Field' );
     }
 
     /**
@@ -197,17 +200,17 @@ class Field extends \ezp\Content\AbstractField
      */
     protected function getTypeList()
     {
-        return \ezp\Base\Configuration::getInstance( 'content' )->get( 'fields', 'Definition' );
+        return Configuration::getInstance( 'content' )->get( 'fields', 'Definition' );
     }
 
     /**
      * Called when subject has been updated
      *
-     * @param \ezp\Base\Interfaces\Observable $subject
+     * @param ezp\Base\Interfaces\Observable $subject
      * @param string $event
      * @return Field
      */
-    public function update( \ezp\Base\Interfaces\Observable $subject, $event = 'update' )
+    public function update( Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof Type )
         {

@@ -5,11 +5,10 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  */
 
 namespace ezp\Base\Exception;
+use Exception as PHPException;
 
 /**
  * Bad Request Exception implementation
@@ -17,8 +16,6 @@ namespace ezp\Base\Exception;
  * Use:
  *   throw new BadRequest( 'Oauth Token', 'http header' );
  *
- * @package ezp
- * @subpackage base
  */
 class BadRequest extends AbstractHttp
 {
@@ -27,9 +24,9 @@ class BadRequest extends AbstractHttp
      *
      * @param string $missing
      * @param string $from
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $missing, $from, \Exception $previous = null )
+    public function __construct( $missing, $from, PHPException $previous = null )
     {
         parent::__construct( "Bad request, missing {$missing} in {$from}", self::BAD_REQUEST, $previous );
     }

@@ -5,19 +5,18 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  */
 
 namespace ezp\Base;
+use ezp\Base\Interfaces\Collection,
+    ezp\Base\Exception\InvalidArgumentType,
+    ArrayObject;
 
 /**
  * Type Collection class, collection only accepts new elements of a certain type
  *
- * @package ezp
- * @subpackage base
  */
-class TypeCollection extends \ArrayObject implements Interfaces\Collection
+class TypeCollection extends ArrayObject implements Collection
 {
     /**
      * @var string The class name (including namespace) to accept as input
@@ -29,7 +28,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
      *
      * A type strict collection that throws exception if type is wrong when appended to.
      *
-     * @throws Exception\InvalidArgumentType If elements contains item of wrong type
+     * @throws InvalidArgumentType If elements contains item of wrong type
      * @param string $type
      * @param array $elements
      */
@@ -39,7 +38,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
         foreach ( $elements as $item )
         {
             if ( !$item instanceof $type )
-                throw new Exception\InvalidArgumentType( 'elements', $type, $item );
+                throw new InvalidArgumentType( 'elements', $type, $item );
         }
         parent::__construct( $elements );
     }
@@ -48,7 +47,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
      * Overrides offsetSet to check type and allow if correct
      *
      * @internal
-     * @throws Exception\InvalidArgumentType On wrong type
+     * @throws InvalidArgumentType On wrong type
      * @param string|int $offset
      * @param mixed $value
      */
@@ -56,7 +55,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
     {
         // throw if wrong type
         if ( !$value instanceof $this->type )
-            throw new Exception\InvalidArgumentType( 'value', $this->type, $value );
+            throw new InvalidArgumentType( 'value', $this->type, $value );
 
         // stop if value is already in array
         if ( in_array( $value, $this->getArrayCopy(), true ) )
@@ -68,7 +67,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
     /**
      * Overloads exchangeArray() to do type checks on input.
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentType
      * @param array $input
      * @return array
      */
@@ -77,7 +76,7 @@ class TypeCollection extends \ArrayObject implements Interfaces\Collection
         foreach ( $input as $item )
         {
             if ( !$item instanceof $this->type )
-                throw new Exception\InvalidArgumentType( 'input', $this->type, $item );
+                throw new InvalidArgumentType( 'input', $this->type, $item );
         }
         return parent::exchangeArray( $input );
     }

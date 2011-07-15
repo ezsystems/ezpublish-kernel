@@ -5,19 +5,21 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  */
 
 namespace ezp\Base;
+use ezp\Base\Interfaces\Observable,
+    ezp\Base\Interfaces\Observer,
+    ezp\Base\Interfaces\Model,
+    ezp\Base\Exception\PropertyNotFound,
+    ezp\Base\Exception\PropertyPermission,
+    Traversable;
 
 /**
  * Abstract model class for Domain objects
  *
- * @package ezp
- * @subpackage base
  */
-abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
+abstract class AbstractModel implements Observable, Model
 {
     /**
      * Array indicates which public/protected properties are readable through
@@ -49,7 +51,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
     /**
      * List of event listeners
      *
-     * @var Interfaces\Observer[]
+     * @var Observer[]
      */
     private $observers = array();
 
@@ -66,11 +68,11 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
     /**
      * Attach a event listener to this subject
      *
-     * @param Interfaces\Observer $observer
+     * @param Observer $observer
      * @param string $event
      * @return AbstractModel
      */
-    public function attach( Interfaces\Observer $observer, $event = 'update' )
+    public function attach( Observer $observer, $event = 'update' )
     {
         if ( isset( $this->observers[$event] ) )
         {
@@ -86,11 +88,11 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
     /**
      * Detach a event listener to this subject
      *
-     * @param Interfaces\Observer $observer
+     * @param Observer $observer
      * @param string $event
      * @return AbstractModel
      */
-    public function detach( Interfaces\Observer $observer, $event = 'update' )
+    public function detach( Observer $observer, $event = 'update' )
     {
         if ( !empty( $this->observers[$event] ) )
         {
@@ -126,7 +128,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
      *
      * @param string $property Property name
      * @return mixed
-     * @throws Exception\PropertyNotFound If $property cannot be found
+     * @throws PropertyNotFound If $property cannot be found
      */
     public function __get( $property )
     {
@@ -141,7 +143,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
             return $this->$method();
         }
 
-        throw new Exception\PropertyNotFound( $property, get_class( $this ) );
+        throw new PropertyNotFound( $property, get_class( $this ) );
     }
 
     /**
@@ -151,8 +153,8 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
      *
      * @param string $property
      * @param mixed $value
-     * @throws Exception\PropertyNotFound If $property cannot be found
-     * @throws Exception\PropertyPermission When trying to set a value to a read-only property
+     * @throws PropertyNotFound If $property cannot be found
+     * @throws PropertyPermission When trying to set a value to a read-only property
      */
     public function __set( $property, $value )
     {
@@ -160,10 +162,10 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
         {
             if ( !isset( $this->readableProperties[$property] ) )
             {
-                throw new Exception\PropertyNotFound( $property, get_class( $this ) );
+                throw new PropertyNotFound( $property, get_class( $this ) );
             }
 
-            throw new Exception\PropertyPermission( $property, Exception\PropertyPermission::WRITE, get_class( $this ) );
+            throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
         }
 
         $method = "set{$property}";
@@ -173,7 +175,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
         }
         else
         {
-            throw new Exception\PropertyPermission( $property, Exception\PropertyPermission::WRITE, get_class( $this ) );
+            throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
         }
     }
 
@@ -242,7 +244,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
                 continue;
             }
 
-            if ( !$value instanceof \Traversable && !is_array( $value ) )
+            if ( !$value instanceof Traversable && !is_array( $value ) )
                 continue;
 
             foreach ( $value as $key => $item )
@@ -283,7 +285,7 @@ abstract class AbstractModel implements Interfaces\Observable, Interfaces\Model
                 continue;
             }
 
-            if ( !$value instanceof \Traversable && !is_array( $value ) )
+            if ( !$value instanceof Traversable && !is_array( $value ) )
                 continue;
 
             $hash[$property] = array();

@@ -5,13 +5,14 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  *
- * @uses \ezcPhpGenerator To generate INI cache
+ * @uses ezcPhpGenerator To generate INI cache
  */
 
 namespace ezp\Base;
+use ezp\Base\Exception\BadConfiguration,
+    ezcPhpGenerator;
+
 class Configuration extends AbstractOverride
 {
     /**
@@ -360,13 +361,13 @@ class Configuration extends AbstractOverride
      * @param array $sourceFiles ByRef value or source files that has been/is going to be parsed
      *                           files you pass in will not be checked if they exists.
      * @return array Data structure for parsed ini files
-     * @throws Exception\BadConfiguration If no parser have been defined
+     * @throws BadConfiguration If no parser have been defined
      */
     public static function parse( $moduleName, array $configurationPaths, array &$sourceFiles )
     {
         if ( empty( self::$globalConfigurationData['base']['configuration']['parsers'] ) )
         {
-            throw new Exception\BadConfiguration( 'base\[configuration]\parsers', 'Could not parse configuration files' );
+            throw new BadConfiguration( 'base\[configuration]\parsers', 'Could not parse configuration files' );
         }
         $parsers = self::$globalConfigurationData['base']['configuration']['parsers'];
         foreach ( $configurationPaths as $scopeArray )
@@ -448,7 +449,7 @@ class Configuration extends AbstractOverride
             $cachedFile = self::CONFIG_CACHE_DIR . $cacheName . '.php';
 
             // Store cache
-            $generator = new \ezcPhpGenerator( $cachedFile );
+            $generator = new ezcPhpGenerator( $cachedFile );
             $generator->appendComment( "This file is auto generated based on configuration files for '$moduleName' module. Do not edit!" );
             $generator->appendComment( "Time created (server time): " . date( DATE_RFC822, $rawData['created'] ) );
             $generator->appendEmptyLines();

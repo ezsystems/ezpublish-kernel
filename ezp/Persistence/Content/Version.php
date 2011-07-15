@@ -9,14 +9,13 @@
  */
 
 namespace ezp\Persistence\Content;
+use ezp\Persistence\AbstractValueObject;
 
 /**
- * @package ezp
- * @subpackage persistence_content
  * @todo Add a restricted VersionInfo struct, which is returned by the {@link
  *       ContentHandler->listVersions()} method.
  */
-class Version extends \ezp\Persistence\AbstractValueObject
+class Version extends AbstractValueObject
 {
     /**
      * Version ID.

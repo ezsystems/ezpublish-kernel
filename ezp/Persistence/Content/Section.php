@@ -9,12 +9,11 @@
  */
 
 namespace ezp\Persistence\Content;
+use ezp\Persistence\AbstractValueObject;
 
 /**
- * @package ezp
- * @subpackage persistence_content
  */
-class Section extends \ezp\Persistence\AbstractValueObject
+class Section extends AbstractValueObject
 {
     /**
      */

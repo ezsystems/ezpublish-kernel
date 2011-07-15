@@ -5,11 +5,10 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage persistence
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
+use ezp\Base\Exception\InvalidArgumentValue;
 
 /**
  * The Storage Engine backend for in memory storage
@@ -19,8 +18,6 @@ namespace ezp\Persistence\Tests\InMemoryEngine;
  * But only their plain properties, associations are not handled and all data is stored in separate "buckets" similar
  * to how it would be in a RDBMS servers.
  *
- * @package ezp
- * @subpackage persistence
  */
 class Backend
 {
@@ -49,7 +46,7 @@ class Backend
     public function create( $type, array $data )
     {
         if ( !isset( $this->data[$type] ) )
-            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+            throw new InvalidArgumentValue( 'type', $type );
 
         $data['id'] = count( $this->data[$type] ) +1;
         $this->data[$type][] = $data;
@@ -66,7 +63,7 @@ class Backend
     public function load( $type, $id )
     {
         if ( !isset( $this->data[$type] ) )
-            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+            throw new InvalidArgumentValue( 'type', $type );
 
         $list = $this->find( $type, array( 'id' => $id ) );
         if ( isset( $list[0] ) )
@@ -86,7 +83,7 @@ class Backend
     public function find( $type, array $criteria = array() )
     {
         if ( !isset( $this->data[$type] ) )
-            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+            throw new InvalidArgumentValue( 'type', $type );
 
         $items = $this->findKeys( $type, $criteria );
         foreach ( $items as $key => $typeIndex )
@@ -105,7 +102,7 @@ class Backend
     public function update( $type, $id, array $data )
     {
         if ( !isset( $this->data[$type] ) )
-            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+            throw new InvalidArgumentValue( 'type', $type );
 
         $items = $this->findKeys( $type, array( 'id' => $id ) );
         if ( empty( $items ) )
@@ -126,7 +123,7 @@ class Backend
     public function delete( $type, $id )
     {
         if ( !isset( $this->data[$type] ) )
-            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+            throw new InvalidArgumentValue( 'type', $type );
 
         $items = $this->findKeys( $type, array( 'id' => $id ) );
         if ( empty( $items ) )
@@ -147,7 +144,7 @@ class Backend
     public function count( $type, array $criteria = array() )
     {
         if ( !isset( $this->data[$type] ) )
-            throw new \ezp\Base\Exception\InvalidArgumentValue( 'type', $type );
+            throw new InvalidArgumentValue( 'type', $type );
 
         return count( $this->findKeys( $type, $criteria ) );
     }
@@ -189,7 +186,7 @@ class Backend
      */
     protected function toValue( $type, array $data )
     {
-        $className = "\\ezp\\Persistence\\$type";
+        $className = "ezp\\Persistence\\$type";
         $obj = new $className;
         foreach ( $obj as $prop => $value )
         {

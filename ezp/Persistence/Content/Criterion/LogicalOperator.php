@@ -9,10 +9,10 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion,
+    InvalidArgumentException;
 
 /**
- * @package ezp.persistence.content.criteria
  *
  * Note that the class should ideally have been in a Logical namespace, but it would have then be named 'And',
  * and 'And' is a PHP reserved word.
@@ -30,7 +30,7 @@ abstract class LogicalOperator extends Criterion
         {
             if ( !$criterion instanceof Criterion )
             {
-                throw new \InvalidArgumentException( "Only Criterion objects are accepted" );
+                throw new InvalidArgumentException( "Only Criterion objects are accepted" );
             }
             $this->criteria[] = $criterion;
         }

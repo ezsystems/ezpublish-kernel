@@ -5,23 +5,23 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
+
+namespace ezp\Content;
+use ezp\Base\Interfaces\Proxy as BaseProxy,
+    ezp\Base\AbstractService,
+    InvalidArgumentException;
 
 /**
  * Proxy class for content model objects
  *
- * @package ezp
- * @subpackage content
  */
-namespace ezp\Content;
-class Proxy implements \ezp\Base\Interfaces\Proxy
+class Proxy implements BaseProxy
 {
     /**
      * Service used to load the object the proxy represents.
      *
-     * @var \ezp\Base\AbstractService
+     * @var AbstractService
      */
     protected $service;
 
@@ -42,18 +42,18 @@ class Proxy implements \ezp\Base\Interfaces\Proxy
     /**
      * Setup proxy object with enough info to be able to perform a load operation on the object it proxies.
      *
-     * @param \ezp\Base\AbstractService $service
+     * @param AbstractService $service
      * @param int $id Primary id
      * @param string $method Optional, defines which function on handler to call, 'load' by default.
-     * @throws \InvalidArgumentException If $id is not a int value above zero.
+     * @throws InvalidArgumentException If $id is not a int value above zero.
      */
-    public function __construct( \ezp\Base\AbstractService $service, $id, $method = 'load' )
+    public function __construct( AbstractService $service, $id, $method = 'load' )
     {
         $this->service = $service;
         $this->id = (int) $id;
         $this->method = $method;
         if ( $this->id === 0 )
-            throw new \InvalidArgumentException( "Id parameter needs to be a valid integer above 0!" );
+            throw new InvalidArgumentException( "Id parameter needs to be a valid integer above 0!" );
     }
 
     /**
@@ -70,7 +70,7 @@ class Proxy implements \ezp\Base\Interfaces\Proxy
     /**
      * Provides access to id property
      *
-     * @throws \InvalidArgumentException
+     * @throws InvalidArgumentException
      * @param  string $name
      * @return int
      */
@@ -78,7 +78,7 @@ class Proxy implements \ezp\Base\Interfaces\Proxy
     {
         if ( $name === 'id' )
             return $this->id;
-        throw new \InvalidArgumentException( "{$name} is not a valid property on Proxy class" );
+        throw new InvalidArgumentException( "{$name} is not a valid property on Proxy class" );
     }
 }
 

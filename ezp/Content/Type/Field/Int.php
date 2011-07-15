@@ -5,15 +5,15 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
 
+namespace ezp\Content\Type\Field;
+use ezp\Content\AbstractFieldType,
+    ezp\Content\Interfaces\ContentFieldDefinition;
 /**
  * Int Field value object class
  */
-namespace ezp\Content\Type\Field;
-class Int extends \ezp\Content\AbstractFieldType implements \ezp\Content\Interfaces\ContentFieldDefinition
+class Int extends AbstractFieldType implements ContentFieldDefinition
 {
     /**
      * Field type identifier

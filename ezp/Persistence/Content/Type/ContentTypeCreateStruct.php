@@ -7,21 +7,14 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content;
+namespace ezp\Persistence\Content\Type;
 use ezp\Persistence\AbstractValueObject;
 
 /**
  *
  */
-class Type extends AbstractValueObject
+class ContentTypeCreateStruct extends AbstractValueObject
 {
-    /**
-     * Content type ID
-     *
-     * @var mixed
-     */
-    public $id;
-
     /**
      * Human readable name of the content type
      *

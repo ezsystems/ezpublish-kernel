@@ -5,24 +5,20 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content_tests
  */
 
 namespace ezp\Content\Tests;
+use ezp\Content\Criteria\CriteriaCollection,
+    ReflectionObject;
 
 /**
  * Test case for CriteriaCollection
  *
- * @package ezp
- * @subpackage content_tests
  */
-use ezp\Base\Repository;
-
 class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var new \ezp\Content\Criteria\CriteriaCollection
+     * @var new CriteriaCollection
      */
     protected $criteria;
 
@@ -37,8 +33,8 @@ class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
         $this->setName( "CriteriaCollection class tests" );
 
         // setup a content CriteriaCollection
-        $this->criteria = new \ezp\Content\Criteria\CriteriaCollection();
-        $this->criteriaReflection = new \ReflectionObject( $this->criteria );
+        $this->criteria = new CriteriaCollection();
+        $this->criteriaReflection = new ReflectionObject( $this->criteria );
     }
 
     public function testWhere()
@@ -120,7 +116,7 @@ class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test for the {@link ezp\Content\Criteria\CriteriaCollection::field} property
+     * Test for the {@link CriteriaCollection::field} property
      */
     public function testField()
     {
@@ -129,7 +125,7 @@ class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
 
 
     /**
-     * Test for the {@link ezp\Content\Criteria\CriteriaCollection::meta} property
+     * Test for the {@link CriteriaCollection::meta} property
      */
     public function testMeta()
     {
@@ -137,7 +133,7 @@ class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test for the {@link ezp\Content\Criteria\CriteriaCollection::location} property
+     * Test for the {@link CriteriaCollection::location} property
      */
     public function testLocation()
     {

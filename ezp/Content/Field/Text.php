@@ -5,14 +5,14 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
+
+namespace ezp\Content\Field;
+use ezp\Content\Interfaces\ContentFieldDefinition;
 
 /**
  * Image Field value object class
  */
-namespace ezp\Content\Field;
 class Text extends String
 {
     /**
@@ -22,9 +22,9 @@ class Text extends String
     const FIELD_IDENTIFIER = 'eztext';
 
     /**
-     * @see \ezp\Content\Interfaces\ContentFieldType
+     * @see ezp\Content\Interfaces\ContentFieldType
      */
-    public function __construct( \ezp\Content\Interfaces\ContentFieldDefinition $contentTypeFieldType )
+    public function __construct( ContentFieldDefinition $contentTypeFieldType )
     {
         $this->types[] = self::FIELD_IDENTIFIER;
         parent::__construct( $contentTypeFieldType );

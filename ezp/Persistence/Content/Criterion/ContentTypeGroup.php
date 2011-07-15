@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the \ezp\Persistence\Content\Criterion\ContentTypeGroup
+ * File containing the ezp\Persistence\Content\Criterion\ContentTypeGroup
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,12 +8,13 @@
  */
 
 namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
+    InvalidArgumentException;
 
 /**
- * @package ezp.persistence.content.criteria
  */
-class ContentTypeGroup extends Criterion implements \ezp\Persistence\Content\Interfaces\Criterion
+class ContentTypeGroup extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new ContentTypeGroup criterion
@@ -36,13 +37,13 @@ class ContentTypeGroup extends Criterion implements \ezp\Persistence\Content\Int
         {
             if ( !is_array( $value ) )
             {
-                throw new \InvalidArgumentException( "Operator::IN requires an array of values" );
+                throw new InvalidArgumentException( "Operator::IN requires an array of values" );
             }
             foreach ( $subtreeId as $id )
             {
                 if ( !is_numeric( $id ) )
                 {
-                    throw new \InvalidArgumentException( "Only numeric ids are accepted" );
+                    throw new InvalidArgumentException( "Only numeric ids are accepted" );
                 }
             }
         }
@@ -51,11 +52,11 @@ class ContentTypeGroup extends Criterion implements \ezp\Persistence\Content\Int
         {
             if ( is_array( $value ) )
             {
-                throw new \InvalidArgumentException( "Operator::EQ requires a single value" );
+                throw new InvalidArgumentException( "Operator::EQ requires a single value" );
             }
             if ( !is_numeric( $value ) )
             {
-                throw new \InvalidArgumentException( "Only numeric ids are accepted" );
+                throw new InvalidArgumentException( "Only numeric ids are accepted" );
             }
         }
         $this->operator = $operator;

@@ -5,22 +5,21 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  *
- * @uses \ezcConfiguration As fallback if parse_ini_string() fails
+ * @uses ezcConfiguration As fallback if parse_ini_string() fails
  */
 
 namespace ezp\Base\Configuration;
+use ezp\Base\Configuration,
+    ezp\Base\Interfaces\ConfigurationParser,
+    ezcConfiguration,
+    ezcConfigurationIniReader;
 
 /**
  * Configuration Ini Parser / writer
  *
- * @package ezp
- * @subpackage base
  */
-use \ezp\Base\Configuration;
-class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
+class IniParser implements ConfigurationParser
 {
     /**
      * Constant string used as a temporary true variable during ini parsing to avoid
@@ -150,7 +149,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
         // Parse string
         try
         {
-            $reader = new \ezcConfigurationIniReader( $tempFileName );
+            $reader = new ezcConfigurationIniReader( $tempFileName );
             $configuration = $reader->load();
         }
         catch ( Exception $e)
@@ -168,7 +167,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
             }
 
         }
-        else if ( $configuration instanceof \ezcConfiguration )
+        else if ( $configuration instanceof ezcConfiguration )
         {
             $configurationData = $configuration->getAllSettings();
             foreach ( $configurationData as $section => $sectionArray )
@@ -252,7 +251,7 @@ class IniParser implements \ezp\Base\Interfaces\ConfigurationParser
     /**
      * Store raw configuration data to file
      *
-     * @see \ezp\Base\Interfaces\Configuration\Parser::parse() For $configurationData definition
+     * @see ezp\Base\Interfaces\Configuration\Parser::parse() For $configurationData definition
      * @todo Test..
      * @param array $configurationData
      */

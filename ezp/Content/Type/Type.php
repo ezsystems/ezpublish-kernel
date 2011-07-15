@@ -5,15 +5,15 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
+
+namespace ezp\Content\Type;
+use ezp\Base\AbstractModel,
+    ezp\Base\TypeCollection;
 
 /**
  * Type class ( Content Class )
  *
- * @package ezp
- * @subpackage content
  *
  * @property-read int $id
  * @property-read int $version
@@ -22,8 +22,7 @@
  * @property-read Field[] $fields
  * @property-read Group[] $groups
  */
-namespace ezp\Content\Type;
-class Type extends \ezp\Base\AbstractModel
+class Type extends AbstractModel
 {
     /**
      * @var array Readable of properties on this object
@@ -58,7 +57,7 @@ class Type extends \ezp\Base\AbstractModel
     protected $fields;
 
     /**
-     * @var \ezp\Content\Content[]
+     * @var ezp\Content\Content[]
      */
     protected $contentObjects;
 
@@ -69,9 +68,9 @@ class Type extends \ezp\Base\AbstractModel
 
     public function __construct()
     {
-        $this->groups = new \ezp\Base\TypeCollection( '\ezp\Content\Type\Group' );
-        $this->fields = new \ezp\Base\TypeCollection( '\ezp\Content\Type\Field' );
-        $this->contentObjects = new \ezp\Base\TypeCollection( '\ezp\Content\Content' );
+        $this->groups = new TypeCollection( 'ezp\Content\Type\Group' );
+        $this->fields = new TypeCollection( 'ezp\Content\Type\Field' );
+        $this->contentObjects = new TypeCollection( 'ezp\Content\Content' );
     }
 
     /**

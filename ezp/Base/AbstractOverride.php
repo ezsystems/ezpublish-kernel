@@ -9,12 +9,12 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  *
  */
 
 namespace ezp\Base;
+use ezp\Base\Exception\InvalidArgumentValue;
+
 abstract class AbstractOverride
 {
     /**
@@ -77,7 +77,7 @@ abstract class AbstractOverride
      * Append a path string to instance override path list.
      *
      * @deprecated Forcing use of setDirs() as it is a more efficient way of setting dirs
-     * @throws Exception\InvalidArgumentValue If scope has wrong value
+     * @throws InvalidArgumentValue If scope has wrong value
      * @param string $dir
      * @param string $scope See {@link $globalPaths} for scope values (first level keys)
      * @return bool Return true if cache hash was cleared, indicating reload is needed
@@ -85,7 +85,7 @@ abstract class AbstractOverride
     public function appendDir( $dir, $scope )
     {
         if ( !isset( $this->paths[$scope] ) )
-            throw new Exception\InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
+            throw new InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
 
         $this->paths[$scope][] = $dir;
         if ( $this->pathsHash !== '' )
@@ -100,7 +100,7 @@ abstract class AbstractOverride
      * Prepend a path string to instance override path list.
      *
      * @deprecated Forcing use of setDirs() as it is a more efficient way of setting dirs
-     * @throws Exception\InvalidArgumentValue If scope has wrong value
+     * @throws InvalidArgumentValue If scope has wrong value
      * @param string $dir
      * @param string $scope See {@link $globalPaths} for scope values (first level keys)
      * @return bool Return true if cache hash was cleared, indicating reload is needed
@@ -108,7 +108,7 @@ abstract class AbstractOverride
     public function prependDir( $dir, $scope )
     {
         if ( !isset( $this->paths[$scope] ) )
-            throw new Exception\InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
+            throw new InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
 
         $this->paths[$scope] = array_merge( array( $dir ), $this->paths[$scope] );
         if ( $this->pathsHash !== '' )
@@ -122,7 +122,7 @@ abstract class AbstractOverride
     /**
      * Get raw global override path list data.
      *
-     * @throws Exception\InvalidArgumentValue If scope has wrong value
+     * @throws InvalidArgumentValue If scope has wrong value
      * @param string $scope See {@link $globalPaths} for scope values (first level keys)
      * @return array
      */
@@ -131,7 +131,7 @@ abstract class AbstractOverride
         if ( $scope === null )
             return static::$globalPaths;
         if ( !isset( static::$globalPaths[$scope] ) )
-            throw new Exception\InvalidArgumentValue( 'scope', $scope, get_called_class() );
+            throw new InvalidArgumentValue( 'scope', $scope, get_called_class() );
 
         return static::$globalPaths[$scope];
     }
@@ -141,7 +141,7 @@ abstract class AbstractOverride
      *
      * Warning: Does not invalidate path hash on instances!
      *
-     * @throws Exception\InvalidArgumentValue If scope has wrong value
+     * @throws InvalidArgumentValue If scope has wrong value
      * @param array $paths
      * @param string $scope See {@link $globalPaths} for scope values (first level keys)
      */
@@ -153,7 +153,7 @@ abstract class AbstractOverride
         }
         else if ( !isset( static::$globalPaths[$scope] ) )
         {
-            throw new Exception\InvalidArgumentValue( 'scope', $scope, get_called_class() );
+            throw new InvalidArgumentValue( 'scope', $scope, get_called_class() );
         }
 
         static::$globalPaths[$scope] = $paths;
@@ -163,7 +163,7 @@ abstract class AbstractOverride
     /**
      * Get raw instance override path list data.
      *
-     * @throws Exception\InvalidArgumentValue If scope has wrong value
+     * @throws InvalidArgumentValue If scope has wrong value
      * @param string $scope See {@link $globalPaths} for scope values (first level keys)
      * @return array
      */
@@ -172,7 +172,7 @@ abstract class AbstractOverride
         if ( $scope === null )
             return $this->paths;
         if ( !isset( $this->paths[$scope] ) )
-            throw new Exception\InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
+            throw new InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
 
         return $this->paths[$scope];
     }
@@ -181,7 +181,7 @@ abstract class AbstractOverride
     /**
      * Set raw instance override path list data.
      *
-     * @throws Exception\InvalidArgumentValue If scope has wrong value
+     * @throws InvalidArgumentValue If scope has wrong value
      * @param array $paths
      * @param string $scope See {@link $globalPaths} for scope values (first level keys)
      * @return bool Return true if cache hash was cleared, indicating reload is needed
@@ -196,7 +196,7 @@ abstract class AbstractOverride
         }
         else if ( !isset( $this->paths[$scope] ) )
         {
-            throw new Exception\InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
+            throw new InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
         }
         else if ( $this->paths[$scope] === $paths )
         {

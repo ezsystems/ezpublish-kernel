@@ -5,21 +5,20 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  */
 
 namespace ezp\Base\Exception;
+use ezp\Base\Exception,
+    Exception as PHPException,
+    InvalidArgumentException;
 
 /**
  * Invalid Argument Type Exception implementation
  *
  * @use: throw new InvalidArgument( 'nodes', 'array' );
  *
- * @package ezp
- * @subpackage base
  */
-class InvalidArgumentValue extends \InvalidArgumentException implements \ezp\Base\Exception
+class InvalidArgumentValue extends InvalidArgumentException implements Exception
 {
     /**
      * Generates: Argument '{$argumentName}' got invalid value '{$value}'
@@ -27,9 +26,9 @@ class InvalidArgumentValue extends \InvalidArgumentException implements \ezp\Bas
      * @param string $argumentName
      * @param mixed $value
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $argumentName, $value, $className = null, \Exception $previous = null )
+    public function __construct( $argumentName, $value, $className = null, PHPException $previous = null )
     {
         if ( $className === null )
             parent::__construct( "Argument '{$argumentName}' got invalid value '{$value}'", 0, $previous );

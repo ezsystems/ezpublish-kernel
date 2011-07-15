@@ -5,9 +5,16 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
+
+namespace ezp\Content;
+use ezp\Base\AbstractModel,
+    ezp\Base\Locale,
+    ezp\Base\TypeCollection,
+    ezp\Content\Type\Type,
+    ezp\Content\Version,
+    DateTime,
+    InvalidArgumentException;
 
 /**
  * This class represents a Content item
@@ -49,11 +56,8 @@
  *                                       $myTitle = $content->fields->title; // Where "title" is the field identifier
  *                                       </code>
  *
- * @package ezp
- * @subpackage content
  */
-namespace ezp\Content;
-class Content extends \ezp\Base\AbstractModel
+class Content extends AbstractModel
 {
     /**
      * Publication status constants
@@ -150,7 +154,7 @@ class Content extends \ezp\Base\AbstractModel
     /**
      * Content type object that this Content object is an instance of
      *
-     * @var type\Type
+     * @var Type
      */
     protected $contentType;
 
@@ -206,19 +210,19 @@ class Content extends \ezp\Base\AbstractModel
     /**
      * Create content based on content type object
      *
-     * @param type\Type $contentType
+     * @param Type $contentType
      * @param Locale $mainLocale
      */
-    public function __construct( type\Type $contentType, \ezp\Base\Locale $mainLocale )
+    public function __construct( Type $contentType, Locale $mainLocale )
     {
-        $this->creationDate = new \DateTime();
+        $this->creationDate = new DateTime();
         $this->mainLocale = $mainLocale;
         $this->alwaysAvailable = false;
-        $this->versions = new \ezp\Base\TypeCollection( '\ezp\Content\Version' );
-        $this->locations = new \ezp\Base\TypeCollection( '\ezp\Content\Location' );
-        $this->relations = new \ezp\Base\TypeCollection( '\ezp\Content\Content' );
-        $this->reversedRelations = new \ezp\Base\TypeCollection( '\ezp\Content\Content' );
-        $this->translations = new \ezp\Base\TypeCollection( '\ezp\Content\Translation' );
+        $this->versions = new TypeCollection( 'ezp\Content\Version' );
+        $this->locations = new TypeCollection( 'ezp\Content\Location' );
+        $this->relations = new TypeCollection( 'ezp\Content\Content' );
+        $this->reversedRelations = new TypeCollection( 'ezp\Content\Content' );
+        $this->translations = new TypeCollection( 'ezp\Content\Translation' );
         $this->name = false;
         $this->contentType = $contentType;
         $this->addTranslation( $mainLocale );
@@ -246,7 +250,7 @@ class Content extends \ezp\Base\AbstractModel
         {
             $resultArray = array_merge( $resultArray, (array) $tr->versions );
         }
-        return new \ezp\Base\TypeCollection( '\ezp\Content\Version', $resultArray );
+        return new TypeCollection( 'ezp\Content\Version', $resultArray );
     }
 
     /**
@@ -265,9 +269,9 @@ class Content extends \ezp\Base\AbstractModel
     }
 
     /**
-     * Return type\Type object
+     * Return Type object
      *
-     * @return type\Type
+     * @return Type
      */
     protected function getContentType()
     {
@@ -330,16 +334,16 @@ class Content extends \ezp\Base\AbstractModel
      * Adds a Translation in $locale optionally based on existing
      * translation in $base.
      *
-     * @param \ezp\Base\Locale $locale
-     * @param \ezp\Content\Version $base
+     * @param Locale $locale
+     * @param Version $base
      * @return Translation
-     * @throw \InvalidArgumentException if translation in $base does not exist.
+     * @throw InvalidArgumentException if translation in $base does not exist.
      */
-    public function addTranslation( \ezp\Base\Locale $locale, \ezp\Base\Version $base = null )
+    public function addTranslation( Locale $locale, Version $base = null )
     {
         if ( isset( $this->translations[$locale->code] ) )
         {
-            throw new \InvalidArgumentException( "Translation {$locale->code} already exists" );
+            throw new InvalidArgumentException( "Translation {$locale->code} already exists" );
         }
 
         $tr = new Translation( $locale, $this );
@@ -363,20 +367,20 @@ class Content extends \ezp\Base\AbstractModel
     /**
      * Remove the translation in $locale
      *
-     * @param \ezp\Base\Locale $locale
-     * @throw \InvalidArgumentException if the main locale is the one in
+     * @param Locale $locale
+     * @throw InvalidArgumentException if the main locale is the one in
      *          argument or if there's not translation
      *          in this locale
      */
-    public function removeTranslation( \ezp\Base\Locale $locale )
+    public function removeTranslation( Locale $locale )
     {
         if ( $locale->code === $this->mainLocale->code )
         {
-            throw new \InvalidArgumentException( "Transation {$locale->code} is the main locale of this Content so it cannot be removed" );
+            throw new InvalidArgumentException( "Transation {$locale->code} is the main locale of this Content so it cannot be removed" );
         }
         if ( !isset( $this->translations[$locale->code] ) )
         {
-            throw new \InvalidArgumentException( "Transation {$locale->code} does not exist so it cannot be removed" );
+            throw new InvalidArgumentException( "Transation {$locale->code} does not exist so it cannot be removed" );
         }
         unset( $this->translations[$locale->code] );
         // @todo ? remove on each versions in $this->translations[$locale->code]
@@ -406,7 +410,7 @@ class Content extends \ezp\Base\AbstractModel
 
         // Get the location's, so that new content will be the old one's sibling
         $oldLocations = $this->locations;
-        $this->locations = new \ezp\Base\TypeCollection( '\ezp\Content\Location' );
+        $this->locations = new TypeCollection( 'ezp\Content\Location' );
         foreach ( $oldLocations as $location )
         {
             $this->addParent( $location->parent );

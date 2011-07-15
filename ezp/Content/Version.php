@@ -5,15 +5,17 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
+
+namespace ezp\Content;
+use ezp\Base\AbstractModel,
+    ezp\Base\Locale,
+    ezp\Base\Interfaces\Observer,
+    ezp\Base\Interfaces\Observable;
 
 /**
  * This class represents a Content Version
  *
- * @package ezp
- * @subpackage content
  *
  * @property-read int $id
  * @property-read int $version
@@ -21,8 +23,7 @@
  * @property int $creatorId
  * @property-read ContentField[] $fields An hash structure of fields
  */
-namespace ezp\Content;
-class Version extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\Observer
+class Version extends AbstractModel implements Observer
 {
     /**
      * @todo taken from eZContentObjectVersion, to be redefined
@@ -108,7 +109,7 @@ class Version extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\Ob
     /**
      * Locale
      *
-     * @var \ezp\Base\Locale
+     * @var Locale
      */
     protected $locale;
 
@@ -117,7 +118,7 @@ class Version extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\Ob
      *
      * @param Content $content
      */
-    public function __construct( Content $content, \ezp\Base\Locale $locale )
+    public function __construct( Content $content, Locale $locale )
     {
         $this->content = $content;
         $this->locale = $locale;
@@ -127,11 +128,11 @@ class Version extends \ezp\Base\AbstractModel implements \ezp\Base\Interfaces\Ob
     /**
      * Called when subject has been updated
      *
-     * @param \ezp\Base\Interfaces\Observable $subject
+     * @param Observable $subject
      * @param string $event
      * @return Version
      */
-    public function update( \ezp\Base\Interfaces\Observable $subject, $event = 'update' )
+    public function update( Observable $subject, $event = 'update' )
     {
         if ( $subject instanceof Content )
         {

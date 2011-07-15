@@ -4,22 +4,19 @@
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
- * @package ezp
- * @subpackage persistence_tests
  * @version //autogentag//
  *
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
+use ezp\Persistence\Content\Interfaces\SectionHandler as SectionHandlerInterface;
 
 /**
- * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+ * @see ezp\Persistence\Content\Interfaces\SectionHandler
  *
- * @package ezp
- * @subpackage persistence_tests
  * @version //autogentag//
  */
-class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandler
+class SectionHandler implements SectionHandlerInterface
 {
     /**
      * @var RepositoryHandler
@@ -44,7 +41,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @see ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function create( $name, $identifier )
     {
@@ -58,7 +55,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @see ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function update( $id, $name, $identifier )
     {
@@ -74,7 +71,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @see ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function load( $id )
     {
@@ -82,7 +79,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @see ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function delete( $id )
     {
@@ -90,7 +87,7 @@ class SectionHandler implements \ezp\Persistence\Content\Interfaces\SectionHandl
     }
 
     /**
-     * @see \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @see ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function assign( $sectionId, $contentId )
     {

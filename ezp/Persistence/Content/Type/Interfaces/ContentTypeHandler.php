@@ -5,43 +5,43 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage persistence_content_type
  */
 
 namespace ezp\Persistence\Content\Type\Interfaces;
+use ezp\Persistence\Content\Type,
+    ezp\Persistence\Content\Type\ContentTypeCreateStruct,
+    ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Content\Type\Group;
 
 /**
- * @package ezp
- * @subpackage persistence_content_type
  */
-interface Handler
+interface ContentTypeHandler
 {
     /**
      * @param Group $group
      * @return Group
      */
-    public function createGroup( \ezp\Persistence\Content\Type\Group $group );
+    public function createGroup( Group $group );
 
     /**
      * @todo: Add an update struct, which excludes the contentTypes property from the Group struct
      * @param Group $group
      */
-    public function updateGroup( \ezp\Persistence\Content\Type\Group $group );
+    public function updateGroup( Group $group );
 
     /**
-     * @param int $groupId
+     * @param mixed $groupId
      */
     public function deleteGroup( $groupId );
 
     /**
-     * @return array
+     * @return Group[]
      */
     public function loadAllGroups();
 
     /**
-     * @param int $groupId
-     * @return array
+     * @param mixed $groupId
+     * @return Type[]
      */
     public function loadContentTypes( $groupId );
 
@@ -53,33 +53,36 @@ interface Handler
     public function load( $contentTypeId, $version = 1 );
 
     /**
-     * @param Type $contentType
+     * @param ContentTypeCreateStruct $contentType
      * @return Type
      */
-    public function create( \ezp\Persistence\Content\Type $contentType );
+    public function create( ContentTypeCreateStruct $contentType );
 
     /**
-     * @todo: Add an update struct, which excludes the fieldDefinitions and contentTypeGroupIDs property from the Group struct
-     * @param Type $contentType
+     * @param Type\ContentTypeUpdateStruct $contentType
      */
-    public function update( \ezp\Persistence\Content\Type $contentType );
+    public function update( ContentTypeUpdateStruct $contentType );
 
     /**
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      */
     public function delete( $contentTypeId );
 
     /**
-     * @param int $userId
-     * @param int $contentTypeId
+     * @param mixed $userId
+     * @param mixed $contentTypeId
      * @param int $version
+     * @todo What does this method do? Create a new version of the content type 
+     *       from $version? Is it then expected to return the Type object?
      */
     public function createVersion( $userId, $contentTypeId, $version );
 
     /**
-     * @param int $userId
-     * @param int $contentTypeId
+     * @param mixed $userId
+     * @param mixed $contentTypeId
      * @return Type
+     * @todo What does this method do? Create a new Content\Type as a copy? 
+     *       With which data (e.g. identified)?
      */
     public function copy( $userId, $contentTypeId );
 
@@ -102,25 +105,29 @@ interface Handler
     /**
      * @param int $contentTypeId
      * @param int $groupId
+     * @todo Isn't this the same as {@link link()}?
      */
-    public function addGroup($contentTypeId, $groupId);
+    public function addGroup( $contentTypeId, $groupId );
 
     /**
-     * addFieldDefinition
+     * Adds a new field definition to an existing Type.
      *
-     *
-     *
-     * This method does not update existing content objects depending on the
+     * This method creates a new version of the Type with the $fieldDefinition 
+     * added. It does not update existing content objects depending on the
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param Type\FieldDefinition $fieldDefinition
+     * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function addFieldDefinition( $contentTypeId, Type\FieldDefinition $fieldDefinition );
+    public function addFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition );
 
     /**
-     * Removes a field definition
+     * Removes a field definition from an existing Type.
+     *
+     * This method creates a new version of the Type with the field definition 
+     * referred to by $fieldDefinitionId removed. It does not update existing 
+     * content objects depending on the field (default) values.
      *
      * @param mixed $contentTypeId
      * @param mixed $fieldDefinitionId
@@ -129,14 +136,18 @@ interface Handler
     public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId );
 
     /**
-     * This method does not update existing content objects depending on the
+     * This method updates the given $fieldDefinition on a Type.
+     *
+     * This method creates a new version of the Type with the updated 
+     * $fieldDefinition. It does not update existing content objects depending 
+     * on the
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param Type\FieldDefinition $fieldDefinition
+     * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function updateFieldDefinition( $contentTypeId, Type\FieldDefinition $fieldDefinition );
+    public function updateFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition );
 
     /**
      * Update content objects
@@ -150,6 +161,8 @@ interface Handler
      *
      * @param mixed $contentTypeId
      * @return void
+     * @todo Is it correct that this refers to a $fieldDefinitionId instead of 
+     *       a $typeId?
      */
     public function updateContentObjects( $contentTypeId, $fieldDefinitionId );
 }

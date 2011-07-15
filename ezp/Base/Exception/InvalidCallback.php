@@ -5,11 +5,12 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  */
 
 namespace ezp\Base\Exception;
+use ezp\Base\Exception,
+    Exception as PHPException,
+    BadFunctionCallException;
 
 /**
  * Invalid Callback Exception implementation
@@ -17,18 +18,16 @@ namespace ezp\Base\Exception;
  * Use:
  *   throw new InvalidCallback( array( 'Class', 'nonExistingFunction' ) );
  *
- * @package ezp
- * @subpackage base
  */
-class InvalidCallback extends \BadFunctionCallException implements \ezp\Base\Exception
+class InvalidCallback extends BadFunctionCallException implements Exception
 {
     /**
      * Generates: Invalid callback: $callback
      *
      * @param string|array $callback
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $callback, \Exception $previous = null )
+    public function __construct( $callback, PHPException $previous = null )
     {
         parent::__construct( "Invalid callback: " . var_export( $callback, true), 0, $previous );
     }

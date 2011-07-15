@@ -3,7 +3,12 @@
  * ez Publish - Public API Prototype
  */
 namespace ezp\Content;
-use \ezp\Base\ServiceContainer, \ezp\Base\Configuration, ezp\Base\Autoloader;
+use ezp\Base\ServiceContainer,
+    ezp\Base\Configuration,
+    ezp\Base\Autoloader,
+    ezp\Base\Locale,
+    ezp\Content\Type\Field,
+    ezp\Content\Type\Type;
 
 chdir( '../' );
 require 'config.php';
@@ -20,14 +25,14 @@ Configuration::setGlobalDirs( $paths, 'modules' );
 
 
 // Create Type manually for test
-$contentType = new Type\Type();
+$contentType = new Type();
 $contentType->identifier = 'article';
 
 // Add some fields
 $fields = array( 'title' => 'ezstring', 'tags' => 'ezkeyword' );
 foreach ( $fields as $identifier => $fieldTypeString )
 {
-    $field = new Type\Field( $contentType );
+    $field = new Field( $contentType );
     $field->identifier = $identifier;
     $field->fieldTypeString = $fieldTypeString;
     $contentType->fields[] = $field;
@@ -39,7 +44,7 @@ $section->identifier = 'standard';
 $section->name = "Standard";
 
 // Create Content object
-$content = new Content( $contentType, new \ezp\Base\Locale( 'eng-GB' ) );
+$content = new Content( $contentType, new Locale( 'eng-GB' ) );
 $content->ownerId = 10;
 $content->section = $section;
 

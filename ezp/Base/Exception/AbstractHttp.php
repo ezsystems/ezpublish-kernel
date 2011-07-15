@@ -5,21 +5,20 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  */
 
 namespace ezp\Base\Exception;
+use ezp\Base\Exception,
+    Exception as PHPException,
+    RuntimeException;
 
 /**
  * Abstract Http Exception implementation
  *
  * Exceptions that map to any of the http errors should extend this class.
  *
- * @package ezp
- * @subpackage base
  */
-abstract class AbstractHttp extends \RuntimeException implements \ezp\Base\Exception
+abstract class AbstractHttp extends RuntimeException implements Exception
 {
     const BAD_REQUEST        = 400;
     const UNAUTHORIZED       = 401;
@@ -40,9 +39,9 @@ abstract class AbstractHttp extends \RuntimeException implements \ezp\Base\Excep
     /**
      * @param string $message
      * @param int $code Must be one of the available constants on this class
-     * @param \Exception|null $previous
+     * @param PHPException|null $previous
      */
-    public function __construct( $message, $code, \Exception $previous = null )
+    public function __construct( $message, $code, PHPException $previous = null )
     {
         switch ( $code )
         {

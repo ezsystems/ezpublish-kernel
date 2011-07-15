@@ -5,19 +5,17 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage persistence
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
+use ezp\Persistence\Interfaces\RepositoryHandler as RepositoryHandlerInterface,
+    ezp\Base\Exception\MissingClass;
 
 /**
  * The main handler for in memory Storage Engine
  *
- * @package ezp
- * @subpackage persistence
  */
-class RepositoryHandler implements \ezp\Persistence\Interfaces\RepositoryHandler
+class RepositoryHandler implements RepositoryHandlerInterface
 {
     /**
      * Instances of handlers
@@ -29,7 +27,7 @@ class RepositoryHandler implements \ezp\Persistence\Interfaces\RepositoryHandler
     /**
      * Instance of in-memory backend that reads data from js files into memory and writes to memory
      *
-     * @var \ezp\Persistence\Tests\InMemoryEngine\Backend
+     * @var ezp\Persistence\Tests\InMemoryEngine\Backend
      */
     protected $backend;
 
@@ -41,43 +39,43 @@ class RepositoryHandler implements \ezp\Persistence\Interfaces\RepositoryHandler
         $this->backend = new Backend();
     }
     /**
-     * @return \ezp\Persistence\Content\Interfaces\ContentHandler
+     * @return ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function contentHandler()
     {
-        return $this->serviceHandler( '\ezp\Persistence\Tests\InMemoryEngine\ContentHandler' );
+        return $this->serviceHandler( 'ezp\Persistence\Tests\InMemoryEngine\ContentHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\Content\Type\Interfaces\Handler
+     * @return ezp\Persistence\Content\Type\Interfaces\Handler
      */
     public function contentTypeHandler()
     {
-        return $this->serviceHandler( '\ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler' );
+        return $this->serviceHandler( 'ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\Content\Interfaces\LocationHandler
+     * @return ezp\Persistence\Content\Interfaces\LocationHandler
      */
     public function locationHandler()
     {
-        return $this->serviceHandler( '\ezp\Persistence\Tests\InMemoryEngine\LocationHandler' );
+        return $this->serviceHandler( 'ezp\Persistence\Tests\InMemoryEngine\LocationHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\User\Interfaces\UserHandler
+     * @return ezp\Persistence\User\Interfaces\UserHandler
      */
     public function userHandler()
     {
-        return $this->serviceHandler( '\ezp\Persistence\Tests\InMemoryEngine\UserHandler' );
+        return $this->serviceHandler( 'ezp\Persistence\Tests\InMemoryEngine\UserHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @return ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function sectionHandler()
     {
-        return $this->serviceHandler( '\ezp\Persistence\Tests\InMemoryEngine\SectionHandler' );
+        return $this->serviceHandler( 'ezp\Persistence\Tests\InMemoryEngine\SectionHandler' );
     }
 
     /**
@@ -113,6 +111,6 @@ class RepositoryHandler implements \ezp\Persistence\Interfaces\RepositoryHandler
         if ( class_exists( $className ) )
             return $this->serviceHandlers[$className] = new $className( $this, $this->backend );
 
-        throw new \ezp\Base\Exception\MissingClass( $className, 'service handler' );
+        throw new MissingClass( $className, 'service handler' );
     }
 }

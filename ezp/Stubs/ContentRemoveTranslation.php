@@ -11,7 +11,7 @@ $content = $contentService->load( 2 );
  * fre-FR
  */
 
-$localeFR = \ezp\Base\Locale::get( 'fre-FR' );
+$localeFR = ezp\Base\Locale::get( 'fre-FR' );
 
 try
 {

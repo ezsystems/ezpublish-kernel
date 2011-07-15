@@ -5,23 +5,22 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
+
+namespace ezp\Content\Type;
+use ezp\Base\AbstractModel,
+    ezp\Base\TypeCollection;
 
 /**
  * Group class ( Content Class Group )
  *
- * @package ezp
- * @subpackage content
  *
  * @property-read int $id
  * @property-read int $version
  * @property-read string $name
  * @property-read Type[] $contentTypes
  */
-namespace ezp\Content\Type;
-class Group extends\ezp\Base\AbstractModel
+class Group extends AbstractModel
 {
     /**
      * @var array Readable of properties on this object
@@ -51,7 +50,7 @@ class Group extends\ezp\Base\AbstractModel
 
     public function __construct()
     {
-        $this->contentTypes = new \ezp\Base\TypeCollection( '\ezp\Content\Type\Type' );
+        $this->contentTypes = new TypeCollection( 'ezp\Content\Type\Type' );
     }
 
     /**

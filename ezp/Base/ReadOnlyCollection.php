@@ -5,54 +5,54 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  */
+
+namespace ezp\Base;
+use ezp\Base\Interfaces\Collection,
+    ezp\Base\Exception\ReadOnly,
+    ArrayObject;
 
 /**
  * Read Only Collection class
  *
- * @package ezp
- * @subpackage base
  */
-namespace ezp\Base;
-class ReadOnlyCollection extends \ArrayObject implements Interfaces\Collection
+class ReadOnlyCollection extends ArrayObject implements Collection
 {
     /**
      * Overloads offsetSet() to do exception about being read only.
      *
      * @internal
-     * @throws Exception\ReadOnly
+     * @throws ReadOnly
      * @param string|int $offset
      * @param mixed $value
      */
     public function offsetSet( $offset, $value )
     {
-        throw new Exception\ReadOnly( 'Collection' );
+        throw new ReadOnly( 'Collection' );
     }
 
     /**
      * Overloads offsetUnset() to do exception about being read only.
      *
      * @internal
-     * @throws Exception\ReadOnly
+     * @throws ReadOnly
      * @param string|int $offset
      */
     public function offsetUnset( $offset )
     {
-        throw new Exception\ReadOnly( 'Collection' );
+        throw new ReadOnly( 'Collection' );
     }
 
     /**
      * Overloads exchangeArray() to do exception about being read only.
      *
-     * @throws Exception\ReadOnly
+     * @throws ReadOnly
      * @param array $input
      * @return array
      */
     public function exchangeArray( $input )
     {
-        throw new Exception\ReadOnly( 'Collection' );
+        throw new ReadOnly( 'Collection' );
     }
 }
 

@@ -5,8 +5,6 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage persistence_content
  */
 
 namespace ezp\Persistence\Content\Interfaces;
@@ -14,8 +12,6 @@ namespace ezp\Persistence\Content\Interfaces;
 /**
  * The LocationHandler interface defines operations on Location elements in the storage engine.
  *
- * @package ezp
- * @subpackage persistence_content
  */
 interface LocationHandler
 {
@@ -23,7 +19,7 @@ interface LocationHandler
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
-     * @return \ezp\Persistence\Content\Location
+     * @return ezp\Persistence\Content\Location
      */
     public function load( $locationId );
 
@@ -95,7 +91,7 @@ interface LocationHandler
      *
      * @param mixed $contentId
      * @param mixed $parentId
-     * @return \ezp\Persistence\Content\Location
+     * @return ezp\Persistence\Content\Location
      */
     public function createLocation( $contentId, $parentId );
 

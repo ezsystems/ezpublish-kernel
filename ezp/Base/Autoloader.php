@@ -5,11 +5,11 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage base
  */
 
 namespace ezp\Base;
+use ezcPhpGenerator,
+    eZAutoloadGenerator;
 
 /**
  * Provides the native autoload functionality for eZ Publish
@@ -18,9 +18,7 @@ namespace ezp\Base;
  * require 'ezp/Base/Autoloader.php'
  * spl_autoload_register( array( new ezp\Base\Autoloader(), 'load' ) );
  *
- * @package ezp
- * @subpackage base
- * @uses \ezcPhpGenerator To generate cache files.
+ * @uses ezcPhpGenerator To generate cache files.
  */
 class Autoloader
 {
@@ -207,7 +205,7 @@ class Autoloader
     {
         try
         {
-            $generator = new \ezcPhpGenerator( self::CACHE_FILE );
+            $generator = new ezcPhpGenerator( self::CACHE_FILE );
             $generator->appendComment( "This is auto generated hash of autoload override classes!" );
             $generator->appendValueAssignment( 'classes', $classes );
             $generator->appendCustomCode( 'return $classes;' );
@@ -281,7 +279,7 @@ class Autoloader
      */
     public function updateExtensionAutoloadArray()
     {
-        $autoloadGenerator = new \eZAutoloadGenerator();
+        $autoloadGenerator = new eZAutoloadGenerator();
         try
         {
             $autoloadGenerator->buildAutoloadArrays();

@@ -5,18 +5,16 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
+
+namespace ezp\Content;
+use ezp\Base\AbstractModel;
 
 /**
  * This class represents a container property
  *
- * @package ezp
- * @subpackage content
  */
-namespace ezp\Content;
-class ContainerProperty extends \ezp\Base\AbstractModel
+class ContainerProperty extends AbstractModel
 {
     // TODO const from eZ Publish 4.5
     // needs update to reflect concept changes

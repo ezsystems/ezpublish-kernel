@@ -5,15 +5,17 @@
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
- * @package ezp
- * @subpackage content
  */
+
+namespace ezp\Content\Field;
+use ezp\Content\AbstractFieldType,
+    ezp\Content\Interfaces\ContentFieldType,
+    ezp\Content\Interfaces\ContentFieldDefinition;
 
 /**
  * Float Field value object class
  */
-namespace ezp\Content\Field;
-class String extends \ezp\Content\AbstractFieldType implements \ezp\Content\Interfaces\ContentFieldType
+class String extends AbstractFieldType implements ContentFieldType
 {
     /**
      * Field type identifier
@@ -35,14 +37,14 @@ class String extends \ezp\Content\AbstractFieldType implements \ezp\Content\Inte
     );
 
     /**
-     * @var \ezp\Content\Interfaces\ContentFieldDefinition
+     * @var ContentFieldDefinition
      */
     protected $contentTypeFieldType;
 
     /**
-     * @see \ezp\Content\Interfaces\ContentFieldType
+     * @see ContentFieldType
      */
-    public function __construct( \ezp\Content\Interfaces\ContentFieldDefinition $contentTypeFieldType )
+    public function __construct( ContentFieldDefinition $contentTypeFieldType )
     {
         if ( isset( $contentTypeFieldType->default ) )
             $this->value = $contentTypeFieldType->default;
