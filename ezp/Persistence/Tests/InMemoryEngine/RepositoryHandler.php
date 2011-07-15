@@ -43,7 +43,7 @@ class RepositoryHandler implements RepositoryHandlerInterface
      */
     public function contentHandler()
     {
-        return $this->serviceHandler( 'ezp\Persistence\Tests\InMemoryEngine\ContentHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Tests\\InMemoryEngine\\ContentHandler' );
     }
 
     /**
@@ -51,7 +51,7 @@ class RepositoryHandler implements RepositoryHandlerInterface
      */
     public function contentTypeHandler()
     {
-        return $this->serviceHandler( 'ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Tests\\InMemoryEngine\\ContentTypeHandler' );
     }
 
     /**
@@ -59,7 +59,7 @@ class RepositoryHandler implements RepositoryHandlerInterface
      */
     public function locationHandler()
     {
-        return $this->serviceHandler( 'ezp\Persistence\Tests\InMemoryEngine\LocationHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Tests\\InMemoryEngine\\LocationHandler' );
     }
 
     /**
@@ -67,7 +67,7 @@ class RepositoryHandler implements RepositoryHandlerInterface
      */
     public function userHandler()
     {
-        return $this->serviceHandler( 'ezp\Persistence\Tests\InMemoryEngine\UserHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Tests\\InMemoryEngine\\UserHandler' );
     }
 
     /**
@@ -75,7 +75,7 @@ class RepositoryHandler implements RepositoryHandlerInterface
      */
     public function sectionHandler()
     {
-        return $this->serviceHandler( 'ezp\Persistence\Tests\InMemoryEngine\SectionHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Tests\\InMemoryEngine\\SectionHandler' );
     }
 
     /**

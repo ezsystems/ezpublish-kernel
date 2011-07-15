@@ -31,7 +31,7 @@ class ContentHandlerTest extends \PHPUnit_Framework_TestCase
 
         // Get in memory RepositoryHandler instance
         $serviceContainer = new ServiceContainer(array(
-            'repository_handler' => array( 'class' => 'ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler' )
+            'repository_handler' => array( 'class' => 'ezp\\Persistence\\Tests\\InMemoryEngine\\RepositoryHandler' )
         ));
         $this->handler = $serviceContainer->get( 'repository_handler' );
     }
@@ -63,14 +63,14 @@ class ContentHandlerTest extends \PHPUnit_Framework_TestCase
         ) );
 
         $content = $handler->create( $struct );
-        $this->assertInstanceOf( 'ezp\Persistence\Content', $content );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content', $content );
         $this->assertEquals( 1, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( 'test', $content->name );
         $this->assertEquals( 1, count( $content->versionInfos ) );
 
         $version = $content->versionInfos[0];
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Version', $version );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $version );
         $this->assertEquals( 1, $version->id );
         $this->assertEquals( 14, $version->creatorId );
         $this->assertEquals( Version::STATUS_DRAFT, $version->state );
@@ -78,7 +78,7 @@ class ContentHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals( 1, count( $version->fields ) );
 
         $field = $version->fields[0];
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Field', $field );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Field', $field );
         $this->assertEquals( 1, $field->id );
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->language );
@@ -86,14 +86,14 @@ class ContentHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals( $version->id, $field->versionId);
 
         $content = $handler->load( $content->id );
-        $this->assertInstanceOf( 'ezp\Persistence\Content', $content );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content', $content );
         $this->assertEquals( 1, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( 'test', $content->name );
         $this->assertEquals( 1, count( $content->versionInfos ) );
 
         $version = $content->versionInfos[0];
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Version', $version );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $version );
         $this->assertEquals( 1, $version->id );
         $this->assertEquals( 14, $version->creatorId );
         $this->assertEquals( Version::STATUS_DRAFT, $version->state );
@@ -101,7 +101,7 @@ class ContentHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals( 1, count( $version->fields ) );
 
         $field = $version->fields[0];
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Field', $field );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Field', $field );
         $this->assertEquals( 1, $field->id );
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->language );

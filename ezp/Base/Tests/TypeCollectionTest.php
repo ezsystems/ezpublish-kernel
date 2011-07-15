@@ -26,7 +26,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
         parent::__construct();
         $this->setName( "ReadOnlyCollectionTest class tests" );
         $this->collection = new TypeCollection(
-            'ezp\Base\Tests\TypeCollectionTestTypeClass',
+            'ezp\\Base\\Tests\\TypeCollectionTestTypeClass',
             array(
                 new TypeCollectionTestTypeClass( 1 ),
                 new TypeCollectionTestTypeClass( 42 ),

@@ -65,7 +65,7 @@ class Translation extends AbstractModel
     public function __construct( Locale $locale, Content $content )
     {
         $this->locale = $locale;
-        $this->versions = new TypeCollection( 'ezp\Content\Version' );
+        $this->versions = new TypeCollection( 'ezp\\Content\\Version' );
         $this->content = $content;
     }
 

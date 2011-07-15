@@ -50,7 +50,7 @@ class Group extends AbstractModel
 
     public function __construct()
     {
-        $this->contentTypes = new TypeCollection( 'ezp\Content\Type\Type' );
+        $this->contentTypes = new TypeCollection( 'ezp\\Content\\Type\\Type' );
     }
 
     /**

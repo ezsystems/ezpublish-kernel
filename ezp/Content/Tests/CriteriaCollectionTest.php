@@ -120,7 +120,7 @@ class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testField()
     {
-        self::assertInstanceOf( 'ezp\Content\Criteria\FieldCriteria', $this->criteria->field );
+        self::assertInstanceOf( 'ezp\\Content\\Criteria\\FieldCriteria', $this->criteria->field );
     }
 
 
@@ -129,7 +129,7 @@ class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testMeta()
     {
-        self::assertInstanceOf( 'ezp\Content\Criteria\MetadataCriteria', $this->criteria->meta );
+        self::assertInstanceOf( 'ezp\\Content\\Criteria\\MetadataCriteria', $this->criteria->meta );
     }
 
     /**
@@ -137,7 +137,7 @@ class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testLocation()
     {
-        self::assertInstanceOf( 'ezp\Content\Criteria\LocationCriteria', $this->criteria->location );
+        self::assertInstanceOf( 'ezp\\Content\\Criteria\\LocationCriteria', $this->criteria->location );
     }
 
     /**

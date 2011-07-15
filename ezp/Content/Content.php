@@ -218,11 +218,11 @@ class Content extends AbstractModel
         $this->creationDate = new DateTime();
         $this->mainLocale = $mainLocale;
         $this->alwaysAvailable = false;
-        $this->versions = new TypeCollection( 'ezp\Content\Version' );
-        $this->locations = new TypeCollection( 'ezp\Content\Location' );
-        $this->relations = new TypeCollection( 'ezp\Content\Content' );
-        $this->reversedRelations = new TypeCollection( 'ezp\Content\Content' );
-        $this->translations = new TypeCollection( 'ezp\Content\Translation' );
+        $this->versions = new TypeCollection( 'ezp\\Content\\Version' );
+        $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
+        $this->relations = new TypeCollection( 'ezp\\Content\\Content' );
+        $this->reversedRelations = new TypeCollection( 'ezp\\Content\\Content' );
+        $this->translations = new TypeCollection( 'ezp\\Content\\Translation' );
         $this->name = false;
         $this->contentType = $contentType;
         $this->addTranslation( $mainLocale );
@@ -250,7 +250,7 @@ class Content extends AbstractModel
         {
             $resultArray = array_merge( $resultArray, (array) $tr->versions );
         }
-        return new TypeCollection( 'ezp\Content\Version', $resultArray );
+        return new TypeCollection( 'ezp\\Content\\Version', $resultArray );
     }
 
     /**
@@ -410,7 +410,7 @@ class Content extends AbstractModel
 
         // Get the location's, so that new content will be the old one's sibling
         $oldLocations = $this->locations;
-        $this->locations = new TypeCollection( 'ezp\Content\Location' );
+        $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
         foreach ( $oldLocations as $location )
         {
             $this->addParent( $location->parent );

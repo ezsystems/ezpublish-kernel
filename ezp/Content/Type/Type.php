@@ -68,9 +68,9 @@ class Type extends AbstractModel
 
     public function __construct()
     {
-        $this->groups = new TypeCollection( 'ezp\Content\Type\Group' );
-        $this->fields = new TypeCollection( 'ezp\Content\Type\Field' );
-        $this->contentObjects = new TypeCollection( 'ezp\Content\Content' );
+        $this->groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
+        $this->fields = new TypeCollection( 'ezp\\Content\\Type\\Field' );
+        $this->contentObjects = new TypeCollection( 'ezp\\Content\\Content' );
     }
 
     /**

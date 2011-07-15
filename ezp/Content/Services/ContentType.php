@@ -28,7 +28,7 @@ class ContentType extends AbstractService
     {
         $contentType = $this->handler->contentTypeHandler()->load( $contentTypeId );
         if ( !$contentType )
-            throw new NotFound( 'Content\Type', $contentTypeId );
+            throw new NotFound( 'Content\\Type', $contentTypeId );
         return $contentType;
     }
 
@@ -43,7 +43,7 @@ class ContentType extends AbstractService
     {
         $contentTypes = $this->handler->contentTypeHandler()->loadByIdentifier( $identifier );
         if ( !$contentTypes )
-            throw new NotFound( 'Content\Type', $identifier );
+            throw new NotFound( 'Content\\Type', $identifier );
         return $contentTypes[0];
     }
 }

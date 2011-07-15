@@ -103,7 +103,7 @@ class QueryBuilder
      */
     public function lOr( Criterion $elementOne, Criterion $elementTwo )
     {
-        $criterionFactory = new CriterionFactory( 'ezp\Persistence\Content\Criterion\logicalOr' );
+        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Criterion\\LogicalOr' );
         return call_user_func_array( array( $criterionFactory, 'logicalOr' ), func_get_args() );
     }
 
@@ -118,7 +118,7 @@ class QueryBuilder
      */
     public function lAnd( Criterion $elementOne, Criterion $elementTwo )
     {
-        $criterionFactory = new CriterionFactory( 'ezp\Persistence\Content\Criterion\logicalAnd' );
+        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Criterion\\LogicalAnd' );
         return call_user_func_array( array( $criterionFactory, 'logicalAnd' ), func_get_args() );
     }
 
@@ -132,7 +132,7 @@ class QueryBuilder
      */
     public function not( Criterion $criterion )
     {
-        $criterionFactory = new CriterionFactory( 'ezp\Persistence\Content\Criterion\logicalNot' );
+        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Criterion\\LogicalNot' );
         return call_user_func_array( array( $criterionFactory, 'logicalNot' ), func_get_args() );
     }
 
