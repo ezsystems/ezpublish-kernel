@@ -13,7 +13,8 @@ namespace ezp\Base\Configuration;
 use ezp\Base\Configuration,
     ezp\Base\Interfaces\ConfigurationParser,
     ezcConfiguration,
-    ezcConfigurationIniReader;
+    ezcConfigurationIniReader,
+    LogicException;
 
 /**
  * Configuration Ini Parser / writer
@@ -259,7 +260,7 @@ class IniParser implements ConfigurationParser
     {
         if ( !is_writable( $this->file) )
         {
-            throw new \LogicException( __METHOD__ . ": {$this->file} is not writable, can not save configuration data!" );
+            throw new LogicException( __METHOD__ . ": {$this->file} is not writable, can not save configuration data!" );
         }
 
         if ( strpos( $this->file, '.php', 1 ) !== false )
