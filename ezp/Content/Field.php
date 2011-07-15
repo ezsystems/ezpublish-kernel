@@ -90,14 +90,14 @@ class Field extends AbstractField
     }
 
     /**
-     * @var type\Field
+     * @var Type\Field
      */
     protected $contentTypeField;
 
     /**
      * Return content type object
      *
-     * @return type\Field
+     * @return Type\Field
      */
     protected function getContentTypeField()
     {
@@ -108,9 +108,9 @@ class Field extends AbstractField
      * Constructor, sets up properties
      *
      * @param Version $contentVersion
-     * @param type\Field $contentTypeField
+     * @param Type\Field $contentTypeField
      */
-    public function __construct( Version $contentVersion, type\Field $contentTypeField )
+    public function __construct( Version $contentVersion, Type\Field $contentTypeField )
     {
         $this->version = $contentVersion;
         $this->contentTypeField = $contentTypeField;

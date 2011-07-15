@@ -146,7 +146,7 @@ class Content extends \ezp\Base\AbstractModel
     /**
      * Content type object that this Content object is an instance of
      *
-     * @var type\Type
+     * @var Type\Type
      */
     protected $contentType;
 
@@ -202,10 +202,10 @@ class Content extends \ezp\Base\AbstractModel
     /**
      * Create content based on content type object
      *
-     * @param type\Type $contentType
+     * @param Type\Type $contentType
      * @param Locale $mainLocale
      */
-    public function __construct( type\Type $contentType, \ezp\Base\Locale $mainLocale )
+    public function __construct( Type\Type $contentType, \ezp\Base\Locale $mainLocale )
     {
         $this->creationDate = new \DateTime();
         $this->mainLocale = $mainLocale;
@@ -261,9 +261,9 @@ class Content extends \ezp\Base\AbstractModel
     }
 
     /**
-     * Return type\Type object
+     * Return Type\Type object
      *
-     * @return type\Type
+     * @return Type\Type
      */
     protected function getContentType()
     {
@@ -331,7 +331,7 @@ class Content extends \ezp\Base\AbstractModel
      * @return Translation
      * @throw \InvalidArgumentException if translation in $base does not exist.
      */
-    public function addTranslation( \ezp\Base\Locale $locale, \ezp\Base\Version $base = null )
+    public function addTranslation( \ezp\Base\Locale $locale, \ezp\Content\Version $base = null )
     {
         if ( isset( $this->translations[$locale->code] ) )
         {
