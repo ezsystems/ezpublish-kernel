@@ -123,5 +123,18 @@ class ContentTypeCreateStruct extends AbstractValueObject
      * @var Type\FieldDefinition[]
      */
     public $fieldDefinitions = array();
+
+    /**
+     * Performs a deep cloning.
+     *
+     * @return void
+     */
+    public function __clone()
+    {
+        foreach ( $this->fieldDefinitions as $id => $fieldDef )
+        {
+            $this->fieldDefinitions[$id] = clone $fieldDef;
+        }
+    }
 }
 ?>
