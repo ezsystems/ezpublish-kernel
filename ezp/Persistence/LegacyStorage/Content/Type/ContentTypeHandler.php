@@ -19,6 +19,23 @@ use ezp\Persistence\Content\Type,
 class ContentTypeHandler implements Interfaces\ContentTypeHandler
 {
     /**
+     * ContentTypeGateway
+     *
+     * @var mixed
+     */
+    protected $contentTypeGateway;
+
+    /**
+     * Creates a new content type handler.
+     *
+     * @param ContentTypeGateway $contentTypeGateway
+     */
+    public function __construct( ContentTypeGateway $contentTypeGateway )
+    {
+        $this->contentTypeGateway = $contentTypeGateway;
+    }
+
+    /**
      * @param Group $group
      * @return Group
      */
