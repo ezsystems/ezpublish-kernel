@@ -94,7 +94,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function create( ContentTypeCreateStruct $contentType )
     {
-        
+
     }
 
     /**
@@ -117,7 +117,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $version
-     * @todo What does this method do? Create a new version of the content type 
+     * @todo What does this method do? Create a new version of the content type
      *       from $version? Is it then expected to return the Type object?
      */
     public function createVersion( $userId, $contentTypeId, $version )
@@ -129,7 +129,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @return Type
-     * @todo What does this method do? Create a new Content\Type as a copy? 
+     * @todo What does this method do? Create a new Content\Type as a copy?
      *       With which data (e.g. identified)?
      */
     public function copy( $userId, $contentTypeId )
@@ -172,7 +172,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     /**
      * Adds a new field definition to an existing Type.
      *
-     * This method creates a new version of the Type with the $fieldDefinition 
+     * This method creates a new version of the Type with the $fieldDefinition
      * added. It does not update existing content objects depending on the
      * field (default) values.
      *
@@ -188,8 +188,8 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     /**
      * Removes a field definition from an existing Type.
      *
-     * This method creates a new version of the Type with the field definition 
-     * referred to by $fieldDefinitionId removed. It does not update existing 
+     * This method creates a new version of the Type with the field definition
+     * referred to by $fieldDefinitionId removed. It does not update existing
      * content objects depending on the field (default) values.
      *
      * @param mixed $contentTypeId
@@ -204,8 +204,8 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     /**
      * This method updates the given $fieldDefinition on a Type.
      *
-     * This method creates a new version of the Type with the updated 
-     * $fieldDefinition. It does not update existing content objects depending 
+     * This method creates a new version of the Type with the updated
+     * $fieldDefinition. It does not update existing content objects depending
      * on the
      * field (default) values.
      *
@@ -230,7 +230,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      *
      * @param mixed $contentTypeId
      * @return void
-     * @todo Is it correct that this refers to a $fieldDefinitionId instead of 
+     * @todo Is it correct that this refers to a $fieldDefinitionId instead of
      *       a $typeId?
      */
     public function updateContentObjects( $contentTypeId, $fieldDefinitionId )
