@@ -24,7 +24,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function createGroup( Group $group )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -33,7 +33,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function updateGroup( Group $group )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -41,7 +41,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function deleteGroup( $groupId )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -49,7 +49,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function loadAllGroups()
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -58,7 +58,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function loadContentTypes( $groupId )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -68,7 +68,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function load( $contentTypeId, $version = 1 )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -77,7 +77,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function create( ContentTypeCreateStruct $contentType )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        
     }
 
     /**
@@ -85,7 +85,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function update( ContentTypeUpdateStruct $contentType )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -93,7 +93,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function delete( $contentTypeId )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -105,7 +105,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function createVersion( $userId, $contentTypeId, $version )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -117,7 +117,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function copy( $userId, $contentTypeId )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -128,7 +128,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function unlink( $groupId, $contentTypeId )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -139,7 +139,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function link( $groupId, $contentTypeId )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -149,7 +149,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function addGroup( $contentTypeId, $groupId )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -165,7 +165,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function addFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -181,7 +181,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -198,7 +198,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function updateFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
@@ -218,7 +218,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function updateContentObjects( $contentTypeId, $fieldDefinitionId )
     {
-        throw new RuntimeException( "Not implemented, yet." );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 }
 ?>
