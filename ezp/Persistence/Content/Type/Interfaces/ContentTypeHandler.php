@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Content\Type\Interfaces;
 use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
+    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\Group;
 
