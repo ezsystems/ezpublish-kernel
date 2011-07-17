@@ -40,6 +40,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::create
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::typeFromCreateStruct
      */
     public function testCreate()
     {
