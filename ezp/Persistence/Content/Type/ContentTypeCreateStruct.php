@@ -115,7 +115,7 @@ class ContentTypeCreateStruct extends AbstractValueObject
      *
      * @var mixed[]
      */
-    public $contentTypeGroupIDs = array();
+    public $contentTypeGroupIds = array();
 
     /**
      * Content fields in this type
