@@ -11,7 +11,7 @@ namespace ezp\Persistence\Content;
 use ezp\Persistence\AbstractValueObject;
 
 /**
- *
+ * @todo What about sort_field and sort_order?
  */
 class Type extends AbstractValueObject
 {
