@@ -11,6 +11,8 @@ namespace ezp\Persistence\Content\Type;
 use ezp\Persistence\AbstractValueObject;
 
 /**
+ * @todo Do we need a FieldDefitinitionCreateStruct?
+ * @todo What about the field "is_searchable" in the legacy storage?
  */
 class FieldDefinition extends AbstractValueObject
 {
@@ -46,6 +48,7 @@ class FieldDefinition extends AbstractValueObject
      * Field group name
      *
      * @var mixed
+     * @todo What does this attribute refer to in the legacy storage? "category"?
      */
     public $fieldGroup;
 
