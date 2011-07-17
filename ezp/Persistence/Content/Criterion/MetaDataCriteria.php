@@ -8,11 +8,12 @@
  *
  */
 
-namespace ezp\Persistence\Content\Criteria;
+namespace ezp\Persistence\Content\Criterion;
+use ezp\Persistence\Content\Criterion;
 
 /**
  */
-class MetaDataCriteria extends Criteria
+class MetaDataCriteria extends Criterion
 {
     /**
      */
