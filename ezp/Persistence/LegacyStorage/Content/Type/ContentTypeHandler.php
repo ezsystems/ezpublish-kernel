@@ -11,6 +11,7 @@ namespace ezp\Persistence\LegacyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\Interfaces,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
+    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\Group;
 
@@ -91,10 +92,56 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     /**
      * @param ContentTypeCreateStruct $contentType
      * @return Type
+     * @todo Refactor. Testing way too expensive.
      */
-    public function create( ContentTypeCreateStruct $contentType )
+    public function create( ContentTypeCreateStruct $createStruct )
     {
+        $createStruct = clone $createStruct;
+        $contentType  = new Type();
 
+        $contentType->id = $this->contentTypeGateway->insertType(
+            $createStruct
+        );
+        foreach ( $createStruct->contentTypeGroupIds as $groupId )
+        {
+            $this->contentTypeGateway->insertGroupAssignement(
+                $contentType->id,
+                $groupId
+            );
+        }
+        foreach ( $createStruct->fieldDefinitions as $fieldDef )
+        {
+            $fieldDef->id = $this->contentTypeGateway->insertFieldDefinition(
+                $contentType->id,
+                $fieldDef
+            );
+        }
+        $this->typeFromCreateStruct( $contentType, $createStruct );
+        return $contentType;
+    }
+
+    /**
+     * Copies attributes from $createStruct to $type.
+     *
+     * @param Type $type
+     * @param ContentTypeCreateStruct $createStruct
+     */
+    protected function typeFromCreateStruct( Type $type, ContentTypeCreateStruct $createStruct )
+    {
+        $type->name                = $createStruct->name;
+        $type->description         = $createStruct->description;
+        $type->identifier          = $createStruct->identifier;
+        $type->created             = $createStruct->created;
+        $type->modified            = $createStruct->modified;
+        $type->creatorId           = $createStruct->creatorId;
+        $type->modifierId          = $createStruct->modifierId;
+        $type->remoteId            = $createStruct->remoteId;
+        $type->urlAliasSchema      = $createStruct->urlAliasSchema;
+        $type->nameSchema          = $createStruct->nameSchema;
+        $type->isContainer         = $createStruct->isContainer;
+        $type->initialLanguageId   = $createStruct->initialLanguageId;
+        $type->contentTypeGroupIds = $createStruct->contentTypeGroupIds;
+        $type->fieldDefinitions    = $createStruct->fieldDefinitions;
     }
 
     /**
