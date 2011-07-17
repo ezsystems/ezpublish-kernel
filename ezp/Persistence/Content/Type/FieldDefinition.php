@@ -13,6 +13,7 @@ use ezp\Persistence\AbstractValueObject;
 /**
  * @todo Do we need a FieldDefitinitionCreateStruct?
  * @todo What about the field "is_searchable" in the legacy storage?
+ * @todo What about the "serialized_data_text" field in legacy storage?
  */
 class FieldDefinition extends AbstractValueObject
 {
