@@ -8,30 +8,27 @@
  */
 
 namespace ezp\Content\Tests;
+use PHPUnit_Framework_TestSuite;
 
 /**
  * Test suite for content module
  *
  */
-class Suite extends \PHPUnit_Framework_TestSuite
+class Suite extends PHPUnit_Framework_TestSuite
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setName( 'ezp-next content module Test Suite' );
-
-        $this->addTestSuite( __NAMESPACE__ . '\\LocationTest' );
-        $this->addTestSuite( __NAMESPACE__ . '\\ContentTest'  );
-        // $this->addTestSuite( __NAMESPACE__ . '\\CriteriaCollectionTest'  );
-        $this->addTestSuite( __NAMESPACE__ . '\\TranslationTest'  );
-        $this->addTestSuite( __NAMESPACE__ . '\\QueryBuilderTest'  );
-    }
-
     /**
-     * @return ezp\Content\Tests\TestSuite
+     * @return PHPUnit_Framework_TestSuite
      */
     public static function suite()
     {
-        return new self();
+        $suite = new PHPUnit_Framework_TestSuite( "Content" );
+        
+        $suite->addTestSuite( __NAMESPACE__ . "\\LocationTest" );
+        $suite->addTestSuite( __NAMESPACE__ . "\\ContentTest" );
+        // $suite->addTestSuite( __NAMESPACE__ . "\\CriteriaCollectionTest"  );
+        $suite->addTestSuite( __NAMESPACE__ . "\\TranslationTest" );
+        $suite->addTestSuite( __NAMESPACE__ . "\\QueryBuilderTest" );
+
+        return $suite;
     }
 }

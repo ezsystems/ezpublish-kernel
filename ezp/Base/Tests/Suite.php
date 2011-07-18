@@ -8,29 +8,26 @@
  */
 
 namespace ezp\Base\Tests;
+use PHPUnit_Framework_TestSuite;
 
 /**
  * Test suite for base module
  *
  */
-class Suite extends \PHPUnit_Framework_TestSuite
+class Suite extends PHPUnit_Framework_TestSuite
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setName( 'ezp-next base module Test Suite' );
-
-        $this->addTestSuite( __NAMESPACE__ . '\\AutoloadTest' );
-        $this->addTestSuite( __NAMESPACE__ . '\\IniParserTest' );
-        $this->addTestSuite( __NAMESPACE__ . '\\ReadOnlyCollectionTest' );
-        $this->addTestSuite( __NAMESPACE__ . '\\TypeCollectionTest' );
-    }
-
     /**
-     * @return ezp\Base\Tests\TestSuite
+     * @return PHPUnit_Framework_TestSuite
      */
     public static function suite()
     {
-        return new self();
+        $suite = new PHPUnit_Framework_TestSuite( "Base" );
+
+        $suite->addTestSuite( __NAMESPACE__ . "\\AutoloadTest" );
+        $suite->addTestSuite( __NAMESPACE__ . "\\IniParserTest" );
+        $suite->addTestSuite( __NAMESPACE__ . "\\ReadOnlyCollectionTest" );
+        $suite->addTestSuite( __NAMESPACE__ . "\\TypeCollectionTest" );
+
+        return $suite;
     }
 }

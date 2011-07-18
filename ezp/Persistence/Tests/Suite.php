@@ -8,28 +8,25 @@
  */
 
 namespace ezp\Persistence\Tests;
+use PHPUnit_Framework_TestSuite;
 
 /**
  * Test suite for content module
  *
  */
-class Suite extends \PHPUnit_Framework_TestSuite
+class Suite extends PHPUnit_Framework_TestSuite
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setName( 'ezp-next persistence module Test Suite' );
-
-        $this->addTestSuite( __NAMESPACE__ . '\\RepositoryHandlerTest' );
-        $this->addTestSuite( __NAMESPACE__ . '\\ContentHandlerTest'  );
-        $this->addTestSuite( __NAMESPACE__ . '\\SectionHandlerTest'  );
-    }
-
     /**
-     * @return ezp\Content\Tests\TestSuite
+     * @return PHPUnit_Framework_TestSuite
      */
     public static function suite()
     {
-        return new self();
+        $suite = new PHPUnit_Framework_TestSuite( "Content" );
+
+        $suite->addTestSuite( __NAMESPACE__ . "\\RepositoryHandlerTest" );
+        $suite->addTestSuite( __NAMESPACE__ . "\\ContentHandlerTest" );
+        $suite->addTestSuite( __NAMESPACE__ . "\\SectionHandlerTest" );
+
+        return $suite;
     }
 }
