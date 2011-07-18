@@ -189,30 +189,6 @@ CREATE TABLE 'eznode_assignment' (
 	'sort_field' integer DEFAULT 1,
 	'sort_order' integer DEFAULT 1
 );
-CREATE TABLE 'ezpolicy' (
-	'function_name' text(255),
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'module_name' text(255),
-	'original_id' integer NOT NULL DEFAULT 0,
-	'role_id' integer
-);
-CREATE TABLE 'ezpolicy_limitation' (
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'identifier' text(255) NOT NULL,
-	'policy_id' integer
-);
-CREATE TABLE 'ezpolicy_limitation_value' (
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'limitation_id' integer,
-	'value' text(255)
-);
-CREATE TABLE 'ezrole' (
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
-	'is_new' integer NOT NULL DEFAULT 0,
-	'name' text(255) NOT NULL,
-	'value' text(1),
-	'version' integer DEFAULT 0
-);
 CREATE TABLE 'ezurl' (
 	'created' integer NOT NULL DEFAULT 0,
 	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -266,6 +242,30 @@ CREATE TABLE 'ezuser_role' (
 	'limit_identifier' text(255),
 	'limit_value' text(255),
 	'role_id' integer
+);
+CREATE TABLE 'ezrole' (
+	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'is_new' integer NOT NULL DEFAULT 0,
+	'name' text(255) NOT NULL,
+	'value' text(1),
+	'version' integer DEFAULT 0
+);
+CREATE TABLE 'ezpolicy' (
+	'function_name' text(255),
+	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'module_name' text(255),
+	'original_id' integer NOT NULL DEFAULT 0,
+	'role_id' integer
+);
+CREATE TABLE 'ezpolicy_limitation' (
+	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'identifier' text(255) NOT NULL,
+	'policy_id' integer
+);
+CREATE TABLE 'ezpolicy_limitation_value' (
+	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'limitation_id' integer,
+	'value' text(255)
 );
 CREATE TABLE 'ezuser_setting' (
 	'is_enabled' integer NOT NULL DEFAULT 0,
