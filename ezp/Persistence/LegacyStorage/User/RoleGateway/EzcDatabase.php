@@ -9,7 +9,6 @@
 
 namespace ezp\Persistence\LegacyStorage\User\RoleGateway;
 use ezp\Persistence\LegacyStorage\User\RoleGateway,
-    ezp\Persistence\User,
     ezp\Persistence\User\Role;
 
 /**
