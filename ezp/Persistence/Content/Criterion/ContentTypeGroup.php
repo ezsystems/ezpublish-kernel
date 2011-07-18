@@ -40,7 +40,7 @@ class ContentTypeGroup extends Criterion implements CriterionInterface
         parent::__construct( $target, $operator, $value );
     }
 
-    private function getSpecifications()
+    public function getSpecifications()
     {
         return array(
             new OperatorSpecifications(

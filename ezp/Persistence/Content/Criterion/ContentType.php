@@ -36,7 +36,7 @@ class ContentType extends Criterion implements CriterionInterface
         parent::__construct( $target, $operator, $value );
     }
 
-    protected function getSpecifications()
+    public function getSpecifications()
     {
         $types = array( self::INPUT_VALUE_INTEGER, self::INPUT_VALUE_STRING );
         return array(

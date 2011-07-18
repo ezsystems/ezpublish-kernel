@@ -36,7 +36,7 @@ class UrlAlias extends Criterion implements CriterionInterface
         parent::__construct( $target, $operator, $value );
     }
 
-    protected function getSpecifications()
+    public function getSpecifications()
     {
         return array(
             array(

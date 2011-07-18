@@ -30,7 +30,7 @@ class Field extends Criterion implements CriterionInterface
         parent::__construct( $field, $operator, $value );
     }
 
-    private function getSpecifications()
+    public function getSpecifications()
     {
         return array(
             new OperatorSpecifications( Operator::IN, OperatorSpecifications::FORMAT_ARRAY ),
