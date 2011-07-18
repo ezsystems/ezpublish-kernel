@@ -74,11 +74,26 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        if ( !class_exists( 'ezcBase' ) )
+        {
+            $this->markTestSkipped( 'Missing Apache Zeta Components.' );
+        }
+
+        try
+        {
+            $handler = $this->getDatabaseHandler();
+        }
+        catch ( \PDOException $e )
+        {
+            $this->markTestSkipped(
+                'PDO session could not be created: ' . $e->getMessage()
+            );
+        }
+
         $database = preg_replace( '(^([a-z]+).*)', '\\1', $this->getDsn() );
         $schema   = __DIR__ . '/_fixtures/schema.' . $database . '.sql';
 
         $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schema ) ) );
-        $handler = $this->getDatabaseHandler();
         foreach ( $queries as $query )
         {
             $handler->exec( $query );
