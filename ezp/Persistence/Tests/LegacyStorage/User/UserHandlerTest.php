@@ -9,7 +9,8 @@
 
 namespace ezp\Persistence\Tests\LegacyStorage\User;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
-    ezp\Persistence\LegacyStorage\User;
+    ezp\Persistence\LegacyStorage\User,
+    ezp\Persistence;
 
 /**
  * Test case for UserHandlerTest
@@ -39,6 +40,19 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $this->markTestIncomplete( '@TODO: Implement.' );
+        $user = new Persistence\User();
+        $user->id      = 42;
+        $user->login   = 'kore';
+        $user->pwd     = '1234567890';
+        $user->hashAlg = 'md5';
+    
+        $handler->createUser( $user );
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $this->handler->createSelectQuery()
+                ->select( 'COUNT( * )' )
+                ->from( 'ezuser' ),
+            'Expected one user to be created.'
+        );
     }
 }
