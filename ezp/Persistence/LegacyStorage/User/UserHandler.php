@@ -144,21 +144,20 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
     }
 
     /**
-     * @param mixed $contentId
+     * @param mixed $userId
      * @param mixed $roleId
      * @param array $limitation
-     * @todo Figure out which type $limitation has
      */
-    public function assignRole( $contentId, $roleId, $limitation )
+    public function assignRole( $userId, $roleId, $limitation )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
-     * @param mixed $contentId
+     * @param mixed $userId
      * @param mixed $roleId
      */
-    public function removeRole(  $contentId, $roleId )
+    public function removeRole( $userId, $roleId )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }

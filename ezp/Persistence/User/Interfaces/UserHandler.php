@@ -92,17 +92,16 @@ interface UserHandler
     public function getPermissions( $userId );
 
     /**
-     * @param mixed $contentId
+     * @param mixed $userId
      * @param mixed $roleId
      * @param array $limitation
-     * @todo Figure out which type $limitation has
      */
-    public function assignRole( $contentId, $roleId, $limitation );
+    public function assignRole( $userId, $roleId, $limitation );
 
     /**
-     * @param mixed $contentId
+     * @param mixed $userId
      * @param mixed $roleId
      */
-    public function removeRole(  $contentId, $roleId );
+    public function removeRole(  $userId, $roleId );
 }
 ?>
