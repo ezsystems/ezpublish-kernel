@@ -109,8 +109,16 @@ class Autoloader
                                               array( './' . $subPath, '/' ),
                                               './' . substr( $className, 0, $classNamePos ) );
                 $classNamePart = str_replace( '_', '/', substr( $className, $classNamePos + 1 ) );
-                require( $namespacePart . '/' . $classNamePart . '.php' );
-                return true;
+                $classPath = $namespacePart . '/' . $classNamePart . '.php';
+                if ( !file_exists( $classPath ) )
+                {
+                    return false;
+                }
+                else
+                {
+                    require( $classPath );
+                    return true;
+                }
             }
         }
     }
