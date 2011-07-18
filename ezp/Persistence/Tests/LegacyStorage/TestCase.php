@@ -22,6 +22,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected $dsn;
 
     /**
+     * Database handler -- to not be constructed twice for one test
+     * 
+     * @var \ezcDbHandler
+     */
+    protected $handler;
+
+    /**
      * Get data source name
      * 
      * The database connection string is read from an optional environment 
@@ -51,7 +58,12 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function getDatabaseHandler()
     {
-        return \ezcDbFactory::create( $this->getDsn() );
+        if ( !$this->handler )
+        {
+            $this->handler = \ezcDbFactory::create( $this->getDsn() );
+        }
+
+        return $this->handler;
     }
 
     /**
@@ -71,5 +83,58 @@ class TestCase extends \PHPUnit_Framework_TestCase
         {
             $handler->exec( $query );
         }
+    }
+
+    /**
+     * Get a text representation of a result set
+     * 
+     * @param array $result 
+     * @return string
+     */
+    protected static function getResultTextRepresentation( array $result )
+    {
+        return implode( "\n",
+            array_map(
+                function ( $row )
+                {
+                    return implode( ', ', $row );
+                },
+                $result
+            )
+        );
+    }
+
+    /**
+     * Assert query result as correct
+     *
+     * Vuilds text representations of the asserted and fetched query result, 
+     * based on a ezcQuerySelect object. Compares them using classic diff for 
+     * maximum readability of the differences between expectations and real 
+     * results.
+     *
+     * The expectation MUST be passed as a two dimensional array containing 
+     * rows of columns.
+     * 
+     * @param array $expectation 
+     * @param \ezcQuerySelect $query 
+     * @param string $message 
+     * @return void
+     */
+    public static function assertQueryResult( array $expectation, \ezcQuerySelect $query, $message = null )
+    {
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $result = array();
+        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            $result[] = $row;
+        }
+
+        return self::assertEquals(
+            self::getResultTextRepresentation( $expectation ),
+            self::getResultTextRepresentation( $result ),
+            $message
+        );
     }
 }
