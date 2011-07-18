@@ -8,7 +8,9 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\User\UserGateway;
-use ezp\Persistence\LegacyStorage\User\UserGateway;
+use ezp\Persistence\LegacyStorage\User\UserGateway,
+    ezp\Persistence\User,
+    ezp\Persistence\User\Role;
 
 /**
  * Base class for content type gateways.
@@ -31,5 +33,24 @@ class EzcDatabase extends UserGateway
     public function __construct( \ezcDbHandler $handler )
     {
         $this->handler = $handler;
+    }
+
+    /**
+     * Create user
+     *
+     * @param user $user 
+     * @return mixed
+     */
+    public function createUser( User $user )
+    {
+        $query = $this->handler->createInsertQuery();
+        $query
+            ->insertInto( 'ezuser' )
+            ->set( 'contentobject_id',   $query->bindvalue( $user->id ) )
+            ->set( 'login',              $query->bindvalue( $user->login ) )
+            ->set( 'email',              $query->bindvalue( '' ) )
+            ->set( 'password_hash',      $query->bindvalue( $user->pwd ) )
+            ->set( 'password_hash_type', $query->bindvalue( $user->hashAlg ) );
+        $query->prepare()->execute();
     }
 }

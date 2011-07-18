@@ -45,7 +45,8 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
      */
     public function createUser( User $user )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $user->id = $this->gateway->createUser( $user );
+        return $user;
     }
 
     /**
