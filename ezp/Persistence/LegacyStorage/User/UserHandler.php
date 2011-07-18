@@ -22,17 +22,17 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
      *
      * @var UserGateway
      */
-    protected $gateway;
+    protected $userGateway;
 
     /**
-     * Construct from gateway
+     * Construct from userGateway
      *
-     * @param UserGateway $gateway
+     * @param UserGateway $userGateway
      * @return void
      */
-    public function __construct( UserGateway $gateway )
+    public function __construct( UserGateway $userGateway )
     {
-        $this->gateway = $gateway;
+        $this->userGateway = $userGateway;
     }
 
     /**
@@ -45,7 +45,7 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
      */
     public function createUser( User $user )
     {
-        $this->gateway->createUser( $user );
+        $this->userGateway->createUser( $user );
     }
 
     /**
@@ -55,7 +55,7 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
      */
     public function deleteUser( $userId )
     {
-        $this->gateway->deleteUser( $userId );
+        $this->userGateway->deleteUser( $userId );
     }
 
     /**
@@ -65,7 +65,7 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
      */
     public function updateUser( User $user )
     {
-        $this->gateway->updateUser( $user );
+        $this->userGateway->updateUser( $user );
     }
 
     /**
