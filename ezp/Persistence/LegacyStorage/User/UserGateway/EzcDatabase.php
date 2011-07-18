@@ -9,8 +9,7 @@
 
 namespace ezp\Persistence\LegacyStorage\User\UserGateway;
 use ezp\Persistence\LegacyStorage\User\UserGateway,
-    ezp\Persistence\User,
-    ezp\Persistence\User\Role;
+    ezp\Persistence\User;
 
 /**
  * Base class for content type gateways.

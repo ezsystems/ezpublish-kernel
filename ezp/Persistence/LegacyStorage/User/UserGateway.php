@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\User;
+use ezp\Persistence\User;
 
 /**
  * Base class for content type gateways.
