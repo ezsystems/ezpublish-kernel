@@ -19,15 +19,15 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
 {
     /**
      * Gaateway for storing user data
-     * 
+     *
      * @var UserGateway
      */
     protected $gateway;
 
     /**
      * Construct from gateway
-     * 
-     * @param UserGateway $gateway 
+     *
+     * @param UserGateway $gateway
      * @return void
      */
     public function __construct( UserGateway $gateway )

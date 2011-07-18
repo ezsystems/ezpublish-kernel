@@ -16,24 +16,24 @@ class TestCase extends \PHPUnit_Framework_TestCase
 {
     /**
      * DSN used for the DB backend
-     * 
+     *
      * @var string
      */
     protected $dsn;
 
     /**
      * Database handler -- to not be constructed twice for one test
-     * 
+     *
      * @var \ezcDbHandler
      */
     protected $handler;
 
     /**
      * Get data source name
-     * 
-     * The database connection string is read from an optional environment 
+     *
+     * The database connection string is read from an optional environment
      * variable "DATABASE" and defaults to an in-memory SQLite database.
-     * 
+     *
      * @return string
      */
     protected function getDsn()
@@ -48,12 +48,12 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * Get a ezcDbHandler
-     * 
-     * Get a ezcDbHandler, which can be used to interact with the configured 
-     * database. The database connection string is read from an optional 
-     * environment variable "DATABASE" and defaults to an in-memory SQLite 
+     *
+     * Get a ezcDbHandler, which can be used to interact with the configured
+     * database. The database connection string is read from an optional
+     * environment variable "DATABASE" and defaults to an in-memory SQLite
      * database.
-     * 
+     *
      * @return \ezcDbHandler
      */
     public function getDatabaseHandler()
@@ -67,16 +67,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Resets the database on test setup, so we always operate on a clean 
+     * Resets the database on test setup, so we always operate on a clean
      * database.
-     * 
+     *
      * @return void
      */
     public function setUp()
     {
         $database = preg_replace( '(^([a-z]+).*)', '\\1', $this->getDsn() );
         $schema   = __DIR__ . '/_fixtures/schema.' . $database . '.sql';
-        
+
         $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schema ) ) );
         $handler = $this->getDatabaseHandler();
         foreach ( $queries as $query )
@@ -87,8 +87,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     /**
      * Get a text representation of a result set
-     * 
-     * @param array $result 
+     *
+     * @param array $result
      * @return string
      */
     protected static function getResultTextRepresentation( array $result )
@@ -107,17 +107,17 @@ class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * Assert query result as correct
      *
-     * Vuilds text representations of the asserted and fetched query result, 
-     * based on a ezcQuerySelect object. Compares them using classic diff for 
-     * maximum readability of the differences between expectations and real 
+     * Vuilds text representations of the asserted and fetched query result,
+     * based on a ezcQuerySelect object. Compares them using classic diff for
+     * maximum readability of the differences between expectations and real
      * results.
      *
-     * The expectation MUST be passed as a two dimensional array containing 
+     * The expectation MUST be passed as a two dimensional array containing
      * rows of columns.
-     * 
-     * @param array $expectation 
-     * @param \ezcQuerySelect $query 
-     * @param string $message 
+     *
+     * @param array $expectation
+     * @param \ezcQuerySelect $query
+     * @param string $message
      * @return void
      */
     public static function assertQueryResult( array $expectation, \ezcQuerySelect $query, $message = null )

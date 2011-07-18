@@ -19,15 +19,15 @@ class EzcDatabase extends UserGateway
 {
     /**
      * Database handler
-     * 
+     *
      * @var \ezcDbHandler
      */
     protected $handler;
 
     /**
      * Construct from database handler
-     * 
-     * @param \ezcDbHandler $handler 
+     *
+     * @param \ezcDbHandler $handler
      * @return void
      */
     public function __construct( \ezcDbHandler $handler )
@@ -38,7 +38,7 @@ class EzcDatabase extends UserGateway
     /**
      * Create user
      *
-     * @param user $user 
+     * @param user $user
      * @return mixed
      */
     public function createUser( User $user )
