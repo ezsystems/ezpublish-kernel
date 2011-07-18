@@ -23,11 +23,11 @@ class Type extends AbstractValueObject
     public $id;
 
     /**
-     * Version number. 
+     * Version. 
      *
      * @var int
      */
-    public $versionNo;
+    public $version;
 
     /**
      * Human readable name of the content type
