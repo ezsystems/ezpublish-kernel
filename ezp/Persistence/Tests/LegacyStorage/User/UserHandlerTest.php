@@ -99,7 +99,7 @@ class UserHandlerTest extends TestCase
         $this->assertQueryResult(
             array( array( 0 ) ),
             $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
-            'Expected one user to be created.'
+            'Expected one user to be removed.'
         );
     }
 
@@ -111,7 +111,34 @@ class UserHandlerTest extends TestCase
         $this->assertQueryResult(
             array( array( 0 ) ),
             $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
-            'Expected one user to be created.'
+            'Expected no existing user.'
+        );
+    }
+
+    public function testUpdateUser()
+    {
+        $handler = $this->getUserHandler();
+
+        $handler->createUser( $user = $this->getValidUser() );
+
+        $user->login = 'new_login';
+        $handler->updateUser( $user );
+
+        $this->assertQueryResult(
+            array( array( 42, 'kore@example.org', 'new_login', 1234567890, 'md5' ) ),
+            $this->handler->createSelectQuery()->select( '*' )->from( 'ezuser' ),
+            'Expected user data to be updated.'
+        );
+    }
+
+    public function testSilentlyUpdateNotExistingUser()
+    {
+        $handler = $this->getUserHandler();
+        $handler->updateUser( $this->getValidUser() );
+        $this->assertQueryResult(
+            array( array( 0 ) ),
+            $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
+            'Expected no existing user.'
         );
     }
 }
