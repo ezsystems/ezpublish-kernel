@@ -32,7 +32,7 @@ class EzcDatabaseTest extends TestCase
 
         $this->assertAttributeSame(
             $handlerMock,
-            'db',
+            'dbHandler',
             $gateway
         );
     }

@@ -31,7 +31,7 @@ class EzcDatabase extends ContentTypeGateway
      */
     public function __construct( \ezcDbHandler $db )
     {
-        $this->db = $db;
+        $this->dbHandler = $db;
     }
 
     /**
