@@ -46,11 +46,25 @@ class EzcDatabase extends UserGateway
         $query = $this->handler->createInsertQuery();
         $query
             ->insertInto( 'ezuser' )
-            ->set( 'contentobject_id',   $query->bindvalue( $user->id ) )
-            ->set( 'login',              $query->bindvalue( $user->login ) )
-            ->set( 'email',              $query->bindvalue( '' ) )
-            ->set( 'password_hash',      $query->bindvalue( $user->pwd ) )
-            ->set( 'password_hash_type', $query->bindvalue( $user->hashAlg ) );
+            ->set( 'contentobject_id',   $query->bindValue( $user->id ) )
+            ->set( 'login',              $query->bindValue( $user->login ) )
+            ->set( 'email',              $query->bindValue( '' ) )
+            ->set( 'password_hash',      $query->bindValue( $user->pwd ) )
+            ->set( 'password_hash_type', $query->bindValue( $user->hashAlg ) );
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Delete user with the given ID.
+     *
+     * @param mixed $userId
+     */
+    public function deleteUser( $userId )
+    {
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( 'ezuser' )
+            ->where( $query->expr->eq( 'contentobject_id', $query->bindValue( $userId ) ) );
         $query->prepare()->execute();
     }
 }

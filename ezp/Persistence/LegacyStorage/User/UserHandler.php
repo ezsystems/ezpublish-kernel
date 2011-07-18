@@ -45,8 +45,7 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
      */
     public function createUser( User $user )
     {
-        $user->id = $this->gateway->createUser( $user );
-        return $user;
+        $this->gateway->createUser( $user );
     }
 
     /**
@@ -56,7 +55,7 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
      */
     public function deleteUser( $userId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->gateway->deleteUser( $userId );
     }
 
     /**
