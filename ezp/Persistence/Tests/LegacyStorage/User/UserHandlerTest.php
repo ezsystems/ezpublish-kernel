@@ -39,6 +39,6 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $this->assertTrue( true );
+        $this->markTestIncomplete( '@TODO: Implement.' );
     }
 }
