@@ -22,6 +22,17 @@ use ezp\Persistence\Content\Type,
 class Mapper
 {
     /**
+     * Extracts types and related data from the given $rows.
+     *
+     * @param array $rows
+     * @return array(Type)
+     */
+    public function extractTypesFromRows( array $rows )
+    {
+        throw new \RuntimeException( "Not implemented, yet" );
+    }
+
+    /**
      * Maps properties from $struct to $type.
      *
      * @param Type $type

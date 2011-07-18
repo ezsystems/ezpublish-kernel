@@ -41,4 +41,13 @@ abstract class ContentTypeGateway
      * @return mixed Field definition ID
      */
     abstract public function insertFieldDefinition( $typeId, FieldDefinition $fieldDefinition );
+
+    /**
+     * Loads an array with data about $typeId in $version.
+     *
+     * @param mixed $typeId
+     * @param int $version
+     * @return array(int=>array(string=>mixed)) Data rows.
+     */
+    abstract public function loadTypeData( $typeId, $version );
 }

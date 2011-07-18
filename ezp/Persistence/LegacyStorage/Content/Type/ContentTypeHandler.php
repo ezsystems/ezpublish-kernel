@@ -95,7 +95,13 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function load( $contentTypeId, $version = 1 )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $rows = $this->contentTypeGateway->loadTypeData(
+            $contentTypeId, $version
+        );
+
+        $types = $this->mapper->extractTypesFromRows( $rows );
+
+        return $types[0];
     }
 
     /**

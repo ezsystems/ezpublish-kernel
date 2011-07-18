@@ -68,4 +68,16 @@ class EzcDatabase extends ContentTypeGateway
     {
         throw new \RuntimeException( "Not implemented, yet" );
     }
+
+    /**
+     * Loads an array with data about $typeId in $version.
+     *
+     * @param mixed $typeId
+     * @param int $version
+     * @return array(int=>array(string=>mixed)) Data rows.
+     */
+    public function loadTypeData( $typeId, $version )
+    {
+        throw new \RuntimeException( "Not implemented, yet" );
+    }
 }

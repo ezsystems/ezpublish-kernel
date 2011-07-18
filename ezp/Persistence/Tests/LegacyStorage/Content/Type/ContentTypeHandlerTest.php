@@ -26,9 +26,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCtor()
     {
-        $gatewayMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway'
-        );
+        $gatewayMock = $this->getGatewayMock();
         $mapper = new Mapper();
         $handler = new ContentTypeHandler( $gatewayMock, $mapper );
 
@@ -46,8 +44,45 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::load()
+     */
+    public function testLoad()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadTypeData' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 )
+            )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock = $this->getMock(
+            'ezp\Persistence\LegacyStorage\Content\Type\Mapper',
+            array( 'extractTypesFromRows' )
+        );
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractTypesFromRows' )
+            ->with( $this->equalTo( array() ) )
+            ->will(
+                $this->returnValue(
+                    array( new Type() )
+                )
+            );
+
+        $handler = new ContentTypeHandler( $gatewayMock, $mapperMock );
+        $type = $handler->load( 23, 1 );
+
+        $this->assertEquals(
+            new Type(),
+            $type,
+            'Type not loaded correctly'
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::create
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::typeFromCreateStruct
      */
     public function testCreate()
     {
@@ -56,7 +91,10 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $gatewayMock = $this->getMock(
             'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway',
-            array( 'insertType', 'insertGroupAssignement', 'insertFieldDefinition' )
+            array(
+                'insertType', 'insertGroupAssignement', 'insertFieldDefinition',
+                'loadTypeData'
+            )
         );
 
         $gatewayMock->expects( $this->once() )
@@ -106,6 +144,18 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             $createStructClone,
             $createStructFix,
             'Create struct manipulated'
+        );
+    }
+
+    /**
+     * Returns a gateway mock
+     *
+     * @return ContentTypeGateway
+     */
+    protected function getGatewayMock()
+    {
+        return $this->getMock(
+            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway'
         );
     }
 
