@@ -12,7 +12,8 @@ use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\Operator,
     ezp\Persistence\Content\Criterion\LogicalOr,
     ezp\Persistence\Content\Criterion\LogicalAnd,
-    ezp\Persistence\Content\Criterion\LogicalNot;
+    ezp\Persistence\Content\Criterion\LogicalNot,
+    InvalidArgumentException;
 
 /**
  * This class provides a factory interface to a criterion object.
@@ -32,6 +33,10 @@ class CriterionFactory
      */
     public function __construct( $criterionClass )
     {
+        if ( !class_exists( $criterionClass ) )
+        {
+            throw new InvalidArgumentException( "Criterion class $criterionClass couldn't be found" );
+        }
         $this->criterionClass = $criterionClass;
     }
 

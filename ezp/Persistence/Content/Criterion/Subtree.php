@@ -10,8 +10,7 @@
 
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
-    InvalidArgumentException;
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
  * Criterion that matches content against a subtree.
@@ -65,14 +64,16 @@ class Subtree extends Criterion implements CriterionInterface
         $this->value = $value;
     }
 
-    /**
-     * The subtree value used by the criterion.
-     *
-     * A single value if $operator is Operator::EQ
-     * An array of values if $operator is Operator::IN
-     *
-     * @var integer|array(integer)
-     */
-    public $value;
+    public function getSpecifications()
+    {
+        return array(
+            new OperatorSpecifications(
+                Operator::EQ, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_STRING
+            ),
+            new OperatorSpecifications(
+                Operator::IN, OperatorSpecifications::FORMAT_ARRAY, OperatorSpecifications::TYPE_STRING
+            )
+        );
+    }
 }
 ?>

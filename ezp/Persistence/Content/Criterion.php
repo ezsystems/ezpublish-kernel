@@ -31,12 +31,13 @@ abstract class Criterion
 
         // we loop on each specified operator.
         // If the provided operator ain't found, an exception will be thrown at the end
-        foreach( self::getSpecifications() as $operatorSpecifications )
+        foreach( $this->getSpecifications() as $operatorSpecifications )
         {
             if ( $operatorSpecifications->operator != $operator )
             {
-                break;
+                continue;
             }
+            $operatorFound = true;
 
             // input format check (single/array)
             switch( $operatorSpecifications->valueFormat )

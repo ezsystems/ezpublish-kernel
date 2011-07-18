@@ -14,7 +14,11 @@ use ezp\Persistence\Content\Criterion,
 /**
  * A criterion that matches Content based on Url aliases.
  *
- *
+ * Supported operators:
+ * - IN: will match from a list of URL aliases, wildcards allowed, using *:
+ *   /articles/*
+ * - EQ: strict match against one URL alias
+ * - LIKE: fuzzy match using wildcards
  */
 class UrlAlias extends Criterion implements CriterionInterface
 {

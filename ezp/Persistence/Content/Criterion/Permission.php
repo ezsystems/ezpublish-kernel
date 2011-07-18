@@ -37,6 +37,11 @@ class Permission extends Criterion implements CriterionInterface
         $this->operation = $operation;
     }
 
+    public function getSpecifications()
+    {
+
+    }
+
     /**
      * The id of the user permissions are matched against
      * @var integer

@@ -12,12 +12,12 @@ use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
- * ContentTypeGroup criterion.
- * Will match content whose ContentTypeId matches at least one of the given ContentTypeId
+ * A criterion that will match content based on its ContentTypeGroup id.
+ * The ContentType must belong to at least one of the matched ContentTypeGroups
  *
  * Supported operators:
- * - IN
- * - EQ
+ * - IN: will match from a list of ContentTypeGroup id
+ * - EQ: will match against one ContentTypeGroup id
  */
 class ContentTypeGroup extends Criterion implements CriterionInterface
 {

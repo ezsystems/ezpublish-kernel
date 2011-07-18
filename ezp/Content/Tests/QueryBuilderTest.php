@@ -46,7 +46,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
             array( 'permission' ),
             array( 'remoteId' ),
             array( 'section' ),
-            array( 'subTree' ),
+            array( 'subtree' ),
             array( 'urlAlias' )
         );
     }

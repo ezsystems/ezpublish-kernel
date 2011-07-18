@@ -12,6 +12,13 @@ use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
+ * A criterion that matches content based on its own location id
+ *
+ * Parent location id is done using {@see ParentLocationId}
+ *
+ * Supported operators:
+ * - IN: matches against a list of location ids
+ * - EQ: matches against a unique location id
  */
 class LocationId extends Criterion implements CriterionInterface
 {

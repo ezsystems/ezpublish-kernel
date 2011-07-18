@@ -69,6 +69,11 @@ class MetaData extends Criterion implements CriterionInterface
         $this->target = $target;
     }
 
+    public function getSpecifications()
+    {
+
+    }
+
     /**
      * The criterion operator
      * @var string

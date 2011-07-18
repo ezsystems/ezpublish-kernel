@@ -13,6 +13,11 @@ use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
+ * A criterion that matches content based on its ContentType id
+ *
+ * Supported operators:
+ * - IN: will match from a list of ContentTypeId
+ * - EQ: will match against one ContentTypeId
  */
 class ContentType extends Criterion implements CriterionInterface
 {
