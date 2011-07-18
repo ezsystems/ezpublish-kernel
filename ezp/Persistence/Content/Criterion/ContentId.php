@@ -10,8 +10,7 @@
 
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
-    InvalidArgumentException;
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
  */
@@ -32,40 +31,17 @@ class ContentId extends Criterion implements CriterionInterface
      */
     public function __construct( $target = null, $operator, $value )
     {
-        if ( $operator != Operator::IN )
-        {
-            if ( !is_array( $value ) )
-            {
-                throw new InvalidArgumentException( "Operator::IN requires an array of values" );
-            }
-            foreach ( $subtreeId as $id )
-            {
-                if ( !is_numeric( $id ) )
-                {
-                    throw new InvalidArgumentException( "Only numeric ids are accepted" );
-                }
-            }
-        }
-        // single value, EQ operator
-        elseif ( $operator == Operator::EQ )
-        {
-            if ( is_array( $value ) )
-            {
-                throw new InvalidArgumentException( "Operator::EQ requires a single value" );
-            }
-            if ( !is_numeric( $value ) )
-            {
-                throw new InvalidArgumentException( "Only numeric ids are accepted" );
-            }
-        }
-        $this->operator = $operator;
-        $this->value = $value;
+        parent::__construct( $target, $operator, $value );
     }
 
-    /**
-     * A list of contentId that must be matched
-     * @var array
-     */
-    public $value;
+    protected function getSpecifications()
+    {
+        $types = array( self::INPUT_VALUE_INTEGER, self::INPUT_VALUE_STRING );
+        return array(
+            array( Operator::IN, self::INPUT_TYPE_ARRAY, $types ),
+            array( Operator::EQ, self::INPUT_TYPE_SINGLE, $types ),
+        );
+    }
+
 }
 ?>

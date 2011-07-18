@@ -10,8 +10,7 @@
 
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
-    InvalidArgumentException;
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
  */
@@ -28,53 +27,21 @@ class Field extends Criterion implements CriterionInterface
      */
     public function __construct( $field, $operator, $value )
     {
-        switch ( $operator )
-        {
-            case Operator::IN:
-                if ( !is_array( $value ) )
-                {
-                    throw new InvalidArgumentException( "Operator::IN requires an array of values" );
-                }
-                break;
-
-            case Operator::EQ:
-            case Operator::GT:
-            case Operator::GTE:
-            case Operator::LT:
-            case Operator::LTE:
-            case Operator::LIKE :
-                if ( is_array( $value ) )
-                {
-                    throw new InvalidArgumentException( "Operator::EQ requires a single value" );
-                }
-                break;
-
-            case Operator::BETWEEN:
-                if ( !is_array( $value ) || count( $value ) != 2 )
-                {
-                    throw new InvalidArgumentException( "Operator::EQ requires an array of two values" );
-                }
-                break;
-
-            default:
-                throw new InvalidArgumentException( "Unknown operator $operator" );
-        }
-
-        $this->target = $field;
-        $this->operator = $operator;
-        $this->value = $value;
+        parent::__construct( $field, $operator, $value );
     }
 
-    /**
-     * The ContentField identifier
-     * @var string
-     */
-    public $target;
-
-    /**
-     * The value $fieldIdentifier should be matched against
-     * @var mixed
-     */
-    public $value;
+    private function getSpecifications()
+    {
+        return array(
+            new OperatorSpecifications( Operator::IN, OperatorSpecifications::FORMAT_ARRAY ),
+            new OperatorSpecifications( Operator::EQ, OperatorSpecifications::FORMAT_SINGLE ),
+            new OperatorSpecifications( Operator::GT, OperatorSpecifications::FORMAT_SINGLE ),
+            new OperatorSpecifications( Operator::GTE, OperatorSpecifications::FORMAT_SINGLE ),
+            new OperatorSpecifications( Operator::LT, OperatorSpecifications::FORMAT_SINGLE ),
+            new OperatorSpecifications( Operator::LTE, OperatorSpecifications::FORMAT_SINGLE ),
+            new OperatorSpecifications( Operator::LIKE, OperatorSpecifications::FORMAT_SINGLE ),
+            new OperatorSpecifications( Operator::BETWEEN, OperatorSpecifications::FORMAT_ARRAY, null, 2 ),
+        );
+    }
 }
 ?>

@@ -30,7 +30,7 @@ use ezp\Persistence\Content\Criterion,
  * @property-read ezp\Content\CriterionFactory $location
  * @property-read ezp\Content\CriterionFactory $permission
  * @property-read ezp\Content\CriterionFactory $section
- * @property-read ezp\Content\CriterionFactory $subTree
+ * @property-read ezp\Content\CriterionFactory $subtree
  * @property-read ezp\Content\CriterionFactory $urlAlias
  *
  * @property-read ezp\Content\CriterionFactory $or New logical OR criterion (alias for {@see $lOr})

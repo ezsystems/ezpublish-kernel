@@ -9,10 +9,15 @@
 
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
-    InvalidArgumentException;
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
+ * ContentTypeGroup criterion.
+ * Will match content whose ContentTypeId matches at least one of the given ContentTypeId
+ *
+ * Supported operators:
+ * - IN
+ * - EQ
  */
 class ContentTypeGroup extends Criterion implements CriterionInterface
 {
@@ -28,48 +33,25 @@ class ContentTypeGroup extends Criterion implements CriterionInterface
      *        - Operator::EQ: match against a single contentTypeGroupId. $value must be a single contentTypeGroupId
      * @param integer|array(integer) One or more contentTypeGroupId that must be matched
      *
-     * @throw InvalidArgumentException if a non numeric id is given
-     * @throw InvalidArgumentException if the value type doesn't match the operator
+     * @throw InvalidArgumentException if the parameters don't match what the criterion expects
      */
     public function __construct( $target = null, $operator, $value )
     {
-        if ( $operator != Operator::IN )
-        {
-            if ( !is_array( $value ) )
-            {
-                throw new InvalidArgumentException( "Operator::IN requires an array of values" );
-            }
-            foreach ( $subtreeId as $id )
-            {
-                if ( !is_numeric( $id ) )
-                {
-                    throw new InvalidArgumentException( "Only numeric ids are accepted" );
-                }
-            }
-        }
-        // single value, EQ operator
-        elseif ( $operator == Operator::EQ )
-        {
-            if ( is_array( $value ) )
-            {
-                throw new InvalidArgumentException( "Operator::EQ requires a single value" );
-            }
-            if ( !is_numeric( $value ) )
-            {
-                throw new InvalidArgumentException( "Only numeric ids are accepted" );
-            }
-        }
-        $this->operator = $operator;
-        $this->value = $value;
+        parent::__construct( $target, $operator, $value );
     }
 
-    /**
-     * List of ContentTypeGroup ids that must be matched
-     * @var integer|array(integer)
-     */
-    public $value;
+    private function getSpecifications()
+    {
+        return array(
+            new OperatorSpecifications(
+                Operator::IN,
+                OperatorSpecifications::FORMAT_ARRAY
+            ),
+            new OperatorSpecifications(
+                Operator::EQ,
+                OperatorSpecifications::FORMAT_SINGLE
+            )
+        );
+    }
 }
 ?>
-
-
-

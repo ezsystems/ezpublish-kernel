@@ -10,8 +10,7 @@
 
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
-    InvalidArgumentException;
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
  */
@@ -30,42 +29,25 @@ class RemoteId extends Criterion implements CriterionInterface
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct(  $metadata, $operator, $value  )
+    public function __construct(  $target, $operator, $value  )
     {
-        if ( $operator != Operator::IN )
-        {
-            if ( !is_array( $value ) )
-            {
-                throw new InvalidArgumentException( "Operator::IN requires an array of values" );
-            }
-            foreach ( $subtreeId as $id )
-            {
-                if ( !is_numeric( $id ) )
-                {
-                    throw new InvalidArgumentException( "Only numeric ids are accepted" );
-                }
-            }
-        }
-        // single value, EQ operator
-        elseif ( $operator == Operator::EQ )
-        {
-            if ( is_array( $value ) )
-            {
-                throw new InvalidArgumentException( "Operator::EQ requires a single value" );
-            }
-            if ( !is_numeric( $value ) )
-            {
-                throw new InvalidArgumentException( "Only numeric ids are accepted" );
-            }
-        }
-        $this->operator = $operator;
-        $this->value = $value;
+        parent::__construct( $target, $operator, $value );
     }
 
-    /**
-     * The list of remote ids to be matched against
-     * @var array(string)
-     */
-    public $value;
+    public function getSpecifications()
+    {
+        return array(
+            new OperatorSpecifications(
+                Operator::IN,
+                OperatorSpecifications::FORMAT_ARRAY,
+                array( OperatorSpecifications::TYPE_INTEGER, OperatorSpecifications::TYPE_STRING )
+            ),
+            new OperatorSpecifications(
+                Operator::EQ,
+                OperatorSpecifications::FORMAT_SINGLE,
+                array( OperatorSpecifications::TYPE_INTEGER, OperatorSpecifications::TYPE_STRING )
+            ),
+        );
+    }
 }
 ?>

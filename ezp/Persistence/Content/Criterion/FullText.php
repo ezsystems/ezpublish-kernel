@@ -19,21 +19,20 @@ class FullText extends Criterion implements CriterionInterface
     /**
      * Creates a FullText criterion on $text
      *
-     * @param string $text
+     * @param string $target Not used
+     * @param string $operator Not used
+     * @param string $text The text to match on
      */
-    public function __construct( $target, $operator, $text )
+    public function __construct( $target = null, $operator, $value )
     {
-        $this->value = $value;
-        $this->operator = Operator::LIKE;
-
-        // @todo Not required ?
-        $this->target = null;
+        parent::__construct( $target, $operator, $value );
     }
 
-    /**
-     * The text to match against
-     * @var string
-     */
-    public $value;
+    private function getSpecifications()
+    {
+        return array(
+            new OperatorSpecifications( Operator::LIKE, OperatorSpecifications::FORMAT_SINGLE )
+        );
+    }
 }
 ?>

@@ -18,7 +18,7 @@ use ezp\Persistence\Content\Criterion,
  * Content will be matched if it is part of at least one of the given subtree id
  *
  */
-class SubTree extends Criterion implements CriterionInterface
+class Subtree extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new SubTree criterion

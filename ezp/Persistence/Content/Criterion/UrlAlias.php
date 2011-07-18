@@ -9,8 +9,7 @@
 
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
-    InvalidArgumentException;
+    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
  * A criterion that matches Content based on Url aliases
@@ -32,40 +31,16 @@ class UrlAlias extends Criterion implements CriterionInterface
      */
     public function __construct( $target, $operator, $value )
     {
-        if ( $operator != Operator::IN )
-        {
-            if ( !is_array( $value ) )
-            {
-                throw new InvalidArgumentException( "Operator::IN requires an array of values" );
-            }
-            foreach ( $subtreeId as $id )
-            {
-                if ( !is_numeric( $id ) )
-                {
-                    throw new InvalidArgumentException( "Only numeric ids are accepted" );
-                }
-            }
-        }
-        // single value, EQ operator
-        elseif ( $operator == Operator::EQ || Operator::LIKE)
-        {
-            if ( is_array( $value ) )
-            {
-                throw new InvalidArgumentException( "Operator::EQ and Operator::LIKE require a single value" );
-            }
-            if ( !is_numeric( $value ) )
-            {
-                throw new InvalidArgumentException( "Only numeric ids are accepted" );
-            }
-        }
-        $this->operator = $operator;
-        $this->value = $value;
+        parent::__construct( $target, $operator, $value );
     }
 
-    /**
-     * List of UrlAliases to match against
-     * @var array(string)
-     */
-    public $value;
+    protected function getSpecifications()
+    {
+        return array(
+            array( Operator::IN, array( self::INPUT_VALUE_STRING ), $types ),
+            array( Operator::EQ, array( self::INPUT_VALUE_STRING ), $types ),
+        );
+    }
+
 }
 ?>
