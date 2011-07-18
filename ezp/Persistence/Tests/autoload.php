@@ -2,6 +2,16 @@
 
 namespace ezp;
 
+if ( ( $fp = @fopen( 'Base/base.php', 'r', true ) ) !== false )
+{
+    fclose( $fp );
+    require_once 'Base/base.php';
+}
+else
+{
+    require_once 'Base/src/base.php';
+}
+
 spl_autoload_register(
     function ( $class )
     {
@@ -13,9 +23,9 @@ spl_autoload_register(
         {
             include __DIR__ . '/../../../' . strtr( $class, '\\', '/' ) . '.php';
         }
-        else
-        {
-            throw new RuntimeException( "Class not found: $class" );
-        }
     }
+);
+
+spl_autoload_register(
+    array( 'ezcBase', 'autoload' )
 );
