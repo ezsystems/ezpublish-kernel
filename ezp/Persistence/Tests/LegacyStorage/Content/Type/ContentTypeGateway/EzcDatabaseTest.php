@@ -38,6 +38,30 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::loadTypeData()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::selectColumns()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::createTableColumnAlias()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::qualifiedIdentifier()
+     */
+    public function testLoadTypeData()
+    {
+        $this->insertFixture( 'load_type.php' );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $rows = $gateway->loadTypeData( 1, 0 );
+
+        $this->assertEquals(
+            5,
+            count( $rows )
+        );
+        $this->assertEquals(
+            44,
+            count( $rows[0] )
+        );
+    }
+
+    /**
      * Inserts database fixture from $fileName.
      *
      * @param string $fileName 
