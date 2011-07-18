@@ -48,9 +48,9 @@ class EzcDatabase extends UserGateway
             ->insertInto( 'ezuser' )
             ->set( 'contentobject_id',   $query->bindValue( $user->id ) )
             ->set( 'login',              $query->bindValue( $user->login ) )
-            ->set( 'email',              $query->bindValue( '' ) )
-            ->set( 'password_hash',      $query->bindValue( $user->pwd ) )
-            ->set( 'password_hash_type', $query->bindValue( $user->hashAlg ) );
+            ->set( 'email',              $query->bindValue( $user->email ) )
+            ->set( 'password_hash',      $query->bindValue( $user->password ) )
+            ->set( 'password_hash_type', $query->bindValue( $user->hashAlgorithm ) );
         $query->prepare()->execute();
     }
 

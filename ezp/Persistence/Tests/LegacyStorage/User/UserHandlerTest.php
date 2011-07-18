@@ -36,17 +36,23 @@ class UserHandlerTest extends TestCase
         );
     }
 
+    protected function getValidUser()
+    {
+        $user = new Persistence\User();
+        $user->id            = 42;
+        $user->login         = 'kore';
+        $user->email         = 'kore@example.org';
+        $user->password      = '1234567890';
+        $user->hashAlgorithm = 'md5';
+
+        return $user;
+    }
+
     public function testCreateUser()
     {
         $handler = $this->getUserHandler();
 
-        $user = new Persistence\User();
-        $user->id      = 42;
-        $user->login   = 'kore';
-        $user->pwd     = '1234567890';
-        $user->hashAlg = 'md5';
-
-        $handler->createUser( $user );
+        $handler->createUser( $this->getValidUser() );
         $this->assertQueryResult(
             array( array( 1 ) ),
             $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
@@ -61,13 +67,7 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $user = new Persistence\User();
-        $user->id      = 42;
-        $user->login   = 'kore';
-        $user->pwd     = '1234567890';
-        $user->hashAlg = 'md5';
-
-        $handler->createUser( $user );
+        $handler->createUser( $user = $this->getValidUser() );
         $handler->createUser( $user );
     }
 
@@ -88,13 +88,7 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $user = new Persistence\User();
-        $user->id      = 42;
-        $user->login   = 'kore';
-        $user->pwd     = '1234567890';
-        $user->hashAlg = 'md5';
-
-        $handler->createUser( $user );
+        $handler->createUser( $user = $this->getValidUser() );
         $this->assertQueryResult(
             array( array( 1 ) ),
             $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
