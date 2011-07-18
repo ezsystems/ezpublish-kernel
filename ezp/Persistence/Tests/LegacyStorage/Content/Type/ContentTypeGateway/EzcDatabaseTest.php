@@ -8,42 +8,26 @@
  */
 
 namespace ezp\Persistence\Tests\LegcyStorage\Content\Type\ContentTypeGateway;
+use ezp\Persistence\Tests\LegacyStorage\TestCase;
+
 use ezp\Persistence\Tests\LegcyStorage\Content\Type\ContentTypeGateway,
     ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase;
+
 use ezp\Persistence\Content\Type\ContentTypeCreateStruct,
     ezp\Persistence\Content\Type\FieldDefinition;
 
 /**
  * Test case for ContentTypeHandler.
  */
-class EzcDatabaseTest extends \PHPUnit_Framework_TestCase
+class EzcDatabaseTest extends TestCase
 {
-    /**
-     * Setup
-     *
-     * Checks pre-conditions (Apache Zeta Components and ext/pdo_sqlite).
-     *
-     * @return void
-     */
-    public function setUp()
-    {
-        if ( !class_exists( 'ezcBase' ) )
-        {
-            $this->markTestSkipped( 'Missing Apache Zeta Components.' );
-        }
-        if ( !\ezcBaseFeatures::hasExtensionSupport( 'pdo_sqlite' ) )
-        {
-            $this->markTestSkipped( 'Missing ext/pdo_sqlite support.' );
-        }
-    }
-
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::__construct
      */
     public function testCtor()
     {
-        $handlerMock = $this->getDbHandlerMock();
+        $handlerMock = $this->getDatabaseHandler();
         $gateway = new EzcDatabase( $handlerMock );
 
         $this->assertAttributeSame(
@@ -51,19 +35,6 @@ class EzcDatabaseTest extends \PHPUnit_Framework_TestCase
             'db',
             $gateway
         );
-    }
-
-    /**
-     * Returns an ezcDbHandler mock.
-     *
-     * {@link ezcDbHandler} cannot be mocked, since it extends PDO. Therefore,
-     * we return a real instance on basis of an SQLite memory DB here.
-     *
-     * @return \ezcDbHandler
-     */
-    protected function getDbHandlerMock()
-    {
-        return \ezcDbFactory::create( 'sqlite://:memory:' );
     }
 
     /**
