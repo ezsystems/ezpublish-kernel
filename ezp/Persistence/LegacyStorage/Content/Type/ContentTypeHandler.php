@@ -27,13 +27,22 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     protected $contentTypeGateway;
 
     /**
+     * Mappper for Type objects.
+     *
+     * @var Mapper
+     */
+    protected $mapper;
+
+    /**
      * Creates a new content type handler.
      *
      * @param ContentTypeGateway $contentTypeGateway
+     * @param Mapper $mapper
      */
-    public function __construct( ContentTypeGateway $contentTypeGateway )
+    public function __construct( ContentTypeGateway $contentTypeGateway, Mapper $mapper )
     {
         $this->contentTypeGateway = $contentTypeGateway;
+        $this->mapper             = $mapper;
     }
 
     /**
@@ -97,51 +106,28 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     public function create( ContentTypeCreateStruct $createStruct )
     {
         $createStruct = clone $createStruct;
-        $contentType  = new Type();
-
-        $contentType->id = $this->contentTypeGateway->insertType(
+        $contentType = $this->mapper->createTypeFromCreateStruct(
             $createStruct
         );
-        foreach ( $createStruct->contentTypeGroupIds as $groupId )
+
+        $contentType->id = $this->contentTypeGateway->insertType(
+            $contentType
+        );
+        foreach ( $contentType->contentTypeGroupIds as $groupId )
         {
             $this->contentTypeGateway->insertGroupAssignement(
                 $contentType->id,
                 $groupId
             );
         }
-        foreach ( $createStruct->fieldDefinitions as $fieldDef )
+        foreach ( $contentType->fieldDefinitions as $fieldDef )
         {
             $fieldDef->id = $this->contentTypeGateway->insertFieldDefinition(
                 $contentType->id,
                 $fieldDef
             );
         }
-        $this->typeFromCreateStruct( $contentType, $createStruct );
         return $contentType;
-    }
-
-    /**
-     * Copies attributes from $createStruct to $type.
-     *
-     * @param Type $type
-     * @param ContentTypeCreateStruct $createStruct
-     */
-    protected function typeFromCreateStruct( Type $type, ContentTypeCreateStruct $createStruct )
-    {
-        $type->name                = $createStruct->name;
-        $type->description         = $createStruct->description;
-        $type->identifier          = $createStruct->identifier;
-        $type->created             = $createStruct->created;
-        $type->modified            = $createStruct->modified;
-        $type->creatorId           = $createStruct->creatorId;
-        $type->modifierId          = $createStruct->modifierId;
-        $type->remoteId            = $createStruct->remoteId;
-        $type->urlAliasSchema      = $createStruct->urlAliasSchema;
-        $type->nameSchema          = $createStruct->nameSchema;
-        $type->isContainer         = $createStruct->isContainer;
-        $type->initialLanguageId   = $createStruct->initialLanguageId;
-        $type->contentTypeGroupIds = $createStruct->contentTypeGroupIds;
-        $type->fieldDefinitions    = $createStruct->fieldDefinitions;
     }
 
     /**

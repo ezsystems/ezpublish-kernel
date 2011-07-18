@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content\Type;
-use ezp\Persistence\Content\Type\ContentTypeCreateStruct,
+use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -19,10 +19,10 @@ abstract class ContentTypeGateway
     /**
      * Inserts a new conten type.
      *
-     * @param ContentTypeCreateStruct $createStruct
+     * @param Type $createStruct
      * @return mixed Type ID
      */
-    abstract public function insertType( ContentTypeCreateStruct $createStruct );
+    abstract public function insertType( Type $type );
 
     /**
      * Insert assignement of $typeId to $groupId.

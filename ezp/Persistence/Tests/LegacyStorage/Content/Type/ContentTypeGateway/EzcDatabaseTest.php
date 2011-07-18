@@ -31,6 +31,7 @@ class EzcDatabaseTest extends \PHPUnit_Framework_TestCase
         {
             $this->markTestSkipped( 'Missing Apache Zeta Components.' );
         }
+        var_dump( get_include_path() );
         if ( !\ezcBaseFeatures::hasExtensionSupport( 'pdo_sqlite' ) )
         {
             $this->markTestSkipped( 'Missing ext/pdo_sqlite support.' );

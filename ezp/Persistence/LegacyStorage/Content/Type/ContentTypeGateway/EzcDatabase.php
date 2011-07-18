@@ -37,10 +37,10 @@ class EzcDatabase extends ContentTypeGateway
     /**
      * Inserts a new conten type.
      *
-     * @param ContentTypeCreateStruct $createStruct
+     * @param Type $createStruct
      * @return mixed Type ID
      */
-    public function insertType( ContentTypeCreateStruct $createStruct )
+    public function insertType( Tyoe $type )
     {
         throw new \RuntimeException( "Not implemented, yet" );
     }
