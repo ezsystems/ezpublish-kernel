@@ -67,4 +67,22 @@ class EzcDatabase extends UserGateway
             ->where( $query->expr->eq( 'contentobject_id', $query->bindValue( $userId ) ) );
         $query->prepare()->execute();
     }
+
+    /**
+     * Update the user information specified by the user struct
+     *
+     * @param User $user
+     */
+    public function updateUser( User $user )
+    {
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezuser' )
+            ->set( 'login',              $query->bindValue( $user->login ) )
+            ->set( 'email',              $query->bindValue( $user->email ) )
+            ->set( 'password_hash',      $query->bindValue( $user->password ) )
+            ->set( 'password_hash_type', $query->bindValue( $user->hashAlgorithm ) )
+            ->where( $query->expr->eq( 'contentobject_id', $query->bindValue( $user->id ) ) );
+        $query->prepare()->execute();
+    }
 }

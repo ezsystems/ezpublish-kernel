@@ -65,7 +65,7 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
      */
     public function updateUser( User $user )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->gateway->updateUser( $user );
     }
 
     /**
