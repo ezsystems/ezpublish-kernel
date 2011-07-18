@@ -28,17 +28,24 @@ class User extends AbstractValueObject
     public $login;
 
     /**
+     * User E-Mail address
+     *
+     * @var string
+     */
+    public $email;
+
+    /**
      * User password
      *
      * @var string
      */
-    public $pwd;
+    public $password;
 
     /**
      * Hash algorithm used to has the password
      *
      * @var string
      */
-    public $hashAlg;
+    public $hashAlgorithm;
 }
 ?>
