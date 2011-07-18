@@ -23,6 +23,13 @@ class Type extends AbstractValueObject
     public $id;
 
     /**
+     * Version number. 
+     *
+     * @var int
+     */
+    public $versionNo;
+
+    /**
      * Human readable name of the content type
      *
      * The structure of this field is:
