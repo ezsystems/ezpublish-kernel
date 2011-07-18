@@ -32,7 +32,7 @@ Configuration::setGlobalDirs( $paths, 'modules' );
 
 /**
  * Simple test suite that maps all other tests suits by convention
- * Suite needs to be in [ezp|ezx]/<module>/Tests/Suite.php
+ * TestSuite needs to be in [ezp|ezx]/<module>/Tests/TestSuite.php
  *
  * @internal
  */
@@ -44,9 +44,9 @@ class ezpNextTestSuite extends PHPUnit_Framework_TestSuite
         $this->setName( 'ezp next Test Suite' );
         foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )
         {
-            if ( file_exists( "$path/Tests/Suite.php" ) )
+            if ( file_exists( "$path/Tests/TestSuite.php" ) )
             {
-                $this->addTestSuite( str_replace( '/', '\\', "$path\\Tests\\Suite" )  );
+                $this->addTestSuite( str_replace( '/', '\\', "$path\\Tests\\TestSuite" )  );
             }
         }
     }
