@@ -28,28 +28,63 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
      * Global test for criterion factory getters
      * @dataProvider providerForTestCriterionGetter
      */
-    public function testCriterionGetter( $accessor )
+    public function testCriterionGetter( $accessor, $operator, $parameters )
     {
-        self::assertInstanceOf( 'ezp\\Content\\CriterionFactory', $this->qb->$accessor );
+        $factory = $this->qb->$accessor;
+        self::assertInstanceOf( 'ezp\\Content\\CriterionFactory', $factory );
+        // $factory->operator( $param1, $param2 )
+        $criterion = call_user_func_array( array( $factory, $operator ), $parameters );
+        self::assertInstanceOf( 'ezp\\Persistence\\Content\\Criterion', $criterion );
     }
 
     public static function providerForTestCriterionGetter()
     {
         return array(
-            array( 'contentId' ),
-            array( 'contentType' ),
-            array( 'contentTypeGroup' ),
-            array( 'field' ),
-            array( 'fullText' ),
-            array( 'LocationId' ),
-            array( 'parentLocationId' ),
-            array( 'metaData' ),
-            array( 'permission' ),
-            array( 'remoteId' ),
-            array( 'section' ),
-            array( 'subtree' ),
-            array( 'urlAlias' )
-        );
+            array( 'contentId', 'in', array( array( 1, 2 )  )),
+            array( 'contentId', 'eq', array( 1 ) ),
+            array( 'contentType', 'in', array( array( 1, 2 ) ) ),
+            array( 'contentType', 'eq', array( 'article' ) ),
+            array( 'contentTypeGroup', 'in', array( array( 1, 2 ) ) ),
+            array( 'contentTypeGroup', 'eq', array( 'content' ) ),
+            array( 'field', 'eq', array( 'testfield', 'my test' ) ),
+            array( 'field', 'like', array( 'testfield', 'my test*') ),
+            array( 'field', 'in', array( 'testfield', array( 'a', 'b', 'c' ) ) ),
+            array( 'field', 'gt', array( 'testfield', 1 ) ),
+            array( 'field', 'gte', array( 'testfield', 1 ) ),
+            array( 'field', 'lt', array( 'testfield', 1 ) ),
+            array( 'field', 'lte', array( 'testfield', 1 ) ),
+            array( 'field', 'between', array( 'testfield', 5, 10 ) ),
+            array( 'fullText', 'like', array( 'testvalue%' ) ),
+            array( 'locationId', 'eq', array( 1 ) ),
+            array( 'parentLocationId', 'in', array( array( 1, 2, 3 ) ) ),
+            array( 'parentLocationId', 'eq', array( 1 ) ),
+            array( 'parentLocationId', 'in', array( array( 1, 2, 3 ) ) ),
+            // array( 'metaData' ),
+            array( 'dateMetadata', 'eq',  array( 'modified', time() ) ),
+            array( 'dateMetadata', 'eq',  array( 'created', time() ) ),
+            array( 'dateMetadata', 'gt',  array( 'modified', time() ) ),
+            array( 'dateMetadata', 'gt',  array( 'created', time() ) ),
+            array( 'dateMetadata', 'gte', array( 'modified', time() ) ),
+            array( 'dateMetadata', 'gte', array( 'created', time() ) ),
+            array( 'dateMetadata', 'lt',  array( 'modified', time() ) ),
+            array( 'dateMetadata', 'lt',  array( 'created', time() ) ),
+            array( 'dateMetadata', 'lte', array( 'modified', time() ) ),
+            array( 'dateMetadata', 'lte', array( 'created', time() ) ),
+            array( 'dateMetadata', 'between', array( 'modified', strtotime( 'last month' ), strtotime( 'last week' ) ) ),
+            array( 'dateMetadata', 'between', array( 'created', strtotime( 'last month' ), strtotime( 'last week' ) ) ),
+            array( 'dateMetadata', 'in', array( 'modified', array( strtotime( 'today' ), strtotime( 'yesterday' ) ) ) ),
+            array( 'dateMetadata', 'in', array( 'created', array( strtotime( 'today' ), strtotime( 'yesterday' ) ) ) ),
+            // array( 'permission' ),
+            array( 'remoteId', 'in', array( array( 1, 2 ) ) ),
+            array( 'remoteId', 'eq', array( 1 ) ),
+            array( 'section', 'in', array( array( 1, 2 ) ) ),
+            array( 'section', 'eq', array( 1 ) ),
+            array( 'subtree', 'in', array( array( 1, 2 ) ) ),
+            array( 'subtree', 'eq', array( 1 ) ),
+            array( 'urlAlias', 'in', array( array( '/articles/*', '/blog/*' ) ) ),
+            array( 'urlAlias', 'eq', array( '/homepage' ) ),
+            array( 'urlAlias', 'like', array( '/blog/*' ) ),
+    );
     }
 
     public function testFieldEq()

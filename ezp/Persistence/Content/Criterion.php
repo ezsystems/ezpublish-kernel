@@ -61,11 +61,15 @@ abstract class Criterion
             if ( $operatorSpecifications->valueTypes !== null )
             {
                 $callback = $this->getValueTypeCheckCallback( $operatorSpecifications->valueTypes );
+                if ( !is_array( $value ) )
+                {
+                    $value = array( $value );
+                }
                 foreach ( $value as $item )
                 {
                     if ( $callback( $item ) === false )
                     {
-                        throw new InvalidArgumentException( "Unsupported value type ('$item')" );
+                        throw new InvalidArgumentException( "Unsupported value (" . gettype( $item ) . ")$item" );
                     }
                 }
             }
@@ -92,19 +96,19 @@ abstract class Criterion
         $code = '';
 
         // the callback code will return true as soon as an accepted value type is found
-        if ( in_array( OperatorSpecifications::TYPE_INTEGER ) )
+        if ( in_array( OperatorSpecifications::TYPE_INTEGER, $valueTypes ) )
         {
             $code .= 'if ( is_numeric( $v ) ) return true;';
         }
-        if ( in_array( OperatorSpecifications::TYPE_STRING ) )
+        if ( in_array( OperatorSpecifications::TYPE_STRING, $valueTypes ) )
         {
             $code .= 'if ( is_string( $v ) ) return true;';
         }
-        if ( in_array( OperatorSpecifications::TYPE_BOOL ) )
+        if ( in_array( OperatorSpecifications::TYPE_BOOLEAN, $valueTypes ) )
         {
             $code .= 'if ( is_bool( $v ) ) return true;';
         }
-        $code = 'return false;';
+        $code .= 'return false;';
         return create_function( '$v', $code );
     }
 

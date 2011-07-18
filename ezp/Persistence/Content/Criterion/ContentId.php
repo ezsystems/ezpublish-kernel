@@ -41,10 +41,10 @@ class ContentId extends Criterion implements CriterionInterface
 
     public function getSpecifications()
     {
-        $types = array( self::INPUT_VALUE_INTEGER, self::INPUT_VALUE_STRING );
+        $types = array( OperatorSpecifications::TYPE_INTEGER, OperatorSpecifications::TYPE_STRING );
         return array(
-            array( Operator::IN, self::INPUT_TYPE_ARRAY, $types ),
-            array( Operator::EQ, self::INPUT_TYPE_SINGLE, $types ),
+            new OperatorSpecifications( Operator::IN, OperatorSpecifications::FORMAT_ARRAY, $types ),
+            new OperatorSpecifications( Operator::EQ, OperatorSpecifications::FORMAT_SINGLE, $types ),
         );
     }
 

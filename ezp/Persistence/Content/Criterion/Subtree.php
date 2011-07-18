@@ -27,51 +27,28 @@ class Subtree extends Criterion implements CriterionInterface
      *        Possible values:
      *        - Operator::IN, requires an array of subtree id as the $value
      *        - Operator::EQ, requires a single subtree id as the $value
-     * @param array(integer) $subtreeId an array of subtree ids
+     * @param array(integer) $value an array of subtree ids
      *
      * @throws InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $target = null, $operator, $subtreeId )
+    public function __construct( $target = null, $operator, $value )
     {
-        if ( $operator != Operator::IN )
-        {
-            if ( !is_array( $value ) )
-            {
-                throw new InvalidArgumentException( "Operator::IN requires an array of values" );
-            }
-            foreach ( $subtreeId as $id )
-            {
-                if ( !is_numeric( $id ) )
-                {
-                    throw new InvalidArgumentException( "Only numeric ids are accepted" );
-                }
-            }
-        }
-        // single value, EQ operator
-        else if ( $operator == Operator::EQ )
-        {
-            if ( is_array( $value ) )
-            {
-                throw new InvalidArgumentException( "Operator::EQ requires a single value" );
-            }
-            if ( !is_numeric( $value ) )
-            {
-                throw new InvalidArgumentException( "Only numeric ids are accepted" );
-            }
-        }
-        $this->operator = $operator;
-        $this->value = $value;
+        parent::__construct( $target, $operator, $value );
     }
 
     public function getSpecifications()
     {
         return array(
             new OperatorSpecifications(
-                Operator::EQ, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_STRING
+                Operator::EQ,
+                OperatorSpecifications::FORMAT_SINGLE,
+                array( OperatorSpecifications::TYPE_STRING, OperatorSpecifications::TYPE_INTEGER )
             ),
             new OperatorSpecifications(
-                Operator::IN, OperatorSpecifications::FORMAT_ARRAY, OperatorSpecifications::TYPE_STRING
+                Operator::IN,
+                OperatorSpecifications::FORMAT_ARRAY,
+                array( OperatorSpecifications::TYPE_STRING, OperatorSpecifications::TYPE_INTEGER )
             )
         );
     }

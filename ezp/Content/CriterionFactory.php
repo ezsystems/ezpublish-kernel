@@ -42,71 +42,147 @@ class CriterionFactory
 
     /**
      * Equal operator
+     *
+     * If only one parameter is given, it is assumed that parameter one is the value, and $target is null
+     *
+     * @param mixed $target
+     * @param mixed $value
      */
-    public function eq( $target, $value )
+    public function eq( $target, $value = null)
     {
+        if ( $value === null )
+        {
+            $value = $target;
+            $target = null;
+        }
         return $this->handleCriterion( $target, Operator::EQ, $value );
     }
 
     /**
      * Greater than operator
+     *
+     * If only one parameter is given, it is assumed that parameter one is the value, and $target is null
+     *
+     * @param mixed $target
+     * @param mixed $value
      */
-    public function gt( $target, $value )
+    public function gt( $target, $value = null )
     {
+        if ( $value === null )
+        {
+            $value = $target;
+            $target = null;
+        }
         return $this->handleCriterion( $target, Operator::GT, $value );
     }
 
     /**
      * Greater than or equals operator
+     *
+     * If only one parameter is given, it is assumed that parameter one is the value, and $target is null
+     *
+     * @param mixed $target
+     * @param mixed $value
      */
-    public function gte( $target, $value )
+    public function gte( $target, $value = null )
     {
+        if ( $value === null )
+        {
+            $value = $target;
+            $target = null;
+        }
         return $this->handleCriterion( $target, Operator::GTE, $value );
     }
 
     /**
      * Lower than operator
+     *
+     * If only one parameter is given, it is assumed that parameter one is the value, and $target is null
+     *
+     * @param mixed $target
+     * @param mixed $value
      */
-    public function lt( $target, $value )
+    public function lt( $target, $value = null )
     {
+        if ( $value === null )
+        {
+            $value = $target;
+            $target = null;
+        }
         return $this->handleCriterion( $target, Operator::LT, $value );
     }
 
     /**
      * Lower than or equals operator
+     *
+     * If only one parameter is given, it is assumed that parameter one is the value, and $target is null
+     *
+     * @param mixed $target
+     * @param mixed $value
      */
-    public function lte( $target, $value )
+    public function lte( $target, $value = null )
     {
+        if ( $value === null )
+        {
+            $value = $target;
+            $target = null;
+        }
         return $this->handleCriterion( $target, Operator::LTE, $value );
     }
 
     /**
      * In operator
+     *
+     * If only one parameter is given, it is assumed that parameter one is the value, and $target is null
+     *
+     * @param mixed $target
+     * @param mixed $value
      */
-    public function in( $target, $value )
+    public function in( $target, $value = null )
     {
+        if ( $value === null )
+        {
+            $value = $target;
+            $target = null;
+        }
         return $this->handleCriterion( $target, Operator::IN, $value );
     }
 
     /**
      * Like operator
-     * @param mixed
-     * @param string $target
+     *
+     * If only one parameter is given, it is assumed that parameter one is the value, and $target is null
+     *
+     * @param mixed $target
+     * @param mixed $value
      */
-    public function like( $target, $value )
+    public function like( $target, $value = null )
     {
+        if ( $value === null )
+        {
+            $value = $target;
+            $target = null;
+        }
         return $this->handleCriterion( $target, Operator::LIKE, $value );
     }
 
     /**
      * Between range operator
      *
+     * If only two parameters are given, it is assumed that $target is $valueOne, and $valueOne is $valueTwo
+     *
      * @param string $target
      * @param mixed $valueOne range start value
      * @param mixed $valieTwo range end value
      */
-    public function between( $target, $valueOne, $valueTwo )
+    public function between( $target, $valueOne, $valueTwo = null )
     {
+        if ( $valueTwo === null )
+        {
+            $valueTwo = $valueOne;
+            $valueOne = $target;
+            $target = null;
+        }
         return $this->handleCriterion( $target, Operator::IN, array( $valueOne, $valueTwo) );
     }
 

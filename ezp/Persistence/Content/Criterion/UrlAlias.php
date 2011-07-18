@@ -43,22 +43,22 @@ class UrlAlias extends Criterion implements CriterionInterface
     public function getSpecifications()
     {
         return array(
-            array(
+            new OperatorSpecifications(
                 Operator::IN,
                 OperatorSpecifications::FORMAT_ARRAY,
-                array( self::INPUT_VALUE_STRING )
+                array( OperatorSpecifications::TYPE_STRING )
             ),
-            array(
+            new OperatorSpecifications(
                 Operator::EQ,
                 OperatorSpecifications::FORMAT_SINGLE,
-                array( self::INPUT_VALUE_STRING ),
+                array( OperatorSpecifications::TYPE_STRING )
             ),
-            array(
+            new OperatorSpecifications(
                 Operator::LIKE,
                 OperatorSpecifications::FORMAT_SINGLE,
-                array( self::INPUT_VALUE_STRING ),
+                array( OperatorSpecifications::TYPE_STRING )
             ),
-    );
+        );
     }
 
 }
