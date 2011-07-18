@@ -12,7 +12,9 @@ use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
- * A criterion that matches Content based on Url aliases
+ * A criterion that matches Content based on Url aliases.
+ *
+ *
  */
 class UrlAlias extends Criterion implements CriterionInterface
 {
@@ -37,9 +39,22 @@ class UrlAlias extends Criterion implements CriterionInterface
     protected function getSpecifications()
     {
         return array(
-            array( Operator::IN, array( self::INPUT_VALUE_STRING ), $types ),
-            array( Operator::EQ, array( self::INPUT_VALUE_STRING ), $types ),
-        );
+            array(
+                Operator::IN,
+                OperatorSpecifications::FORMAT_ARRAY,
+                array( self::INPUT_VALUE_STRING )
+            ),
+            array(
+                Operator::EQ,
+                OperatorSpecifications::FORMAT_SINGLE,
+                array( self::INPUT_VALUE_STRING ),
+            ),
+            array(
+                Operator::LIKE,
+                OperatorSpecifications::FORMAT_SINGLE,
+                array( self::INPUT_VALUE_STRING ),
+            ),
+    );
     }
 
 }
