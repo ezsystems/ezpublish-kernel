@@ -9,7 +9,7 @@
 
 namespace ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
 use ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
-use ezp\Persistence\Content\Type\ContentTypeCreateStruct,
+use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -40,7 +40,7 @@ class EzcDatabase extends ContentTypeGateway
      * @param Type $createStruct
      * @return mixed Type ID
      */
-    public function insertType( Tyoe $type )
+    public function insertType( Type $type )
     {
         throw new \RuntimeException( "Not implemented, yet" );
     }
