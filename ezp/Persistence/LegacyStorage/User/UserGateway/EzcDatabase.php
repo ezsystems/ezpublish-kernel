@@ -15,4 +15,21 @@ use ezp\Persistence\LegacyStorage\User\UserGateway;
  */
 class EzcDatabase extends UserGateway
 {
+    /**
+     * Database handler
+     * 
+     * @var \ezcDbHandler
+     */
+    protected $handler;
+
+    /**
+     * Construct from database handler
+     * 
+     * @param \ezcDbHandler $handler 
+     * @return void
+     */
+    public function __construct( \ezcDbHandler $handler )
+    {
+        $this->handler = $handler;
+    }
 }
