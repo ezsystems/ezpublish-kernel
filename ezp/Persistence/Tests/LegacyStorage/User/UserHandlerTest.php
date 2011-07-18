@@ -55,4 +55,34 @@ class UserHandlerTest extends TestCase
             'Expected one user to be created.'
         );
     }
+
+    /**
+     * @expectedException \PDOException
+     */
+    public function testCreateDuplicateUser()
+    {
+        $handler = $this->getUserHandler();
+
+        $user = new Persistence\User();
+        $user->id      = 42;
+        $user->login   = 'kore';
+        $user->pwd     = '1234567890';
+        $user->hashAlg = 'md5';
+    
+        $handler->createUser( $user );
+        $handler->createUser( $user );
+    }
+
+    /**
+     * @expectedException \PDOException
+     */
+    public function testInsertIncompleteUser()
+    {
+        $handler = $this->getUserHandler();
+
+        $user = new Persistence\User();
+        $user->id      = 42;
+    
+        $handler->createUser( $user );
+    }
 }
