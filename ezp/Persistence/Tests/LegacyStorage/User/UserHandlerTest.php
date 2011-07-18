@@ -49,9 +49,7 @@ class UserHandlerTest extends TestCase
         $handler->createUser( $user );
         $this->assertQueryResult(
             array( array( 1 ) ),
-            $this->handler->createSelectQuery()
-                ->select( 'COUNT( * )' )
-                ->from( 'ezuser' ),
+            $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
             'Expected one user to be created.'
         );
     }
@@ -84,5 +82,42 @@ class UserHandlerTest extends TestCase
         $user->id      = 42;
     
         $handler->createUser( $user );
+    }
+
+    public function testCreateAndDeleteUser()
+    {
+        $handler = $this->getUserHandler();
+
+        $user = new Persistence\User();
+        $user->id      = 42;
+        $user->login   = 'kore';
+        $user->pwd     = '1234567890';
+        $user->hashAlg = 'md5';
+    
+        $handler->createUser( $user );
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
+            'Expected one user to be created.'
+        );
+    
+        $handler->deleteUser( $user->id );
+        $this->assertQueryResult(
+            array( array( 0 ) ),
+            $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
+            'Expected one user to be created.'
+        );
+    }
+
+    public function testDeleteNonExistingUser()
+    {
+        $handler = $this->getUserHandler();
+
+        $handler->deleteUser( 'not_existing' );
+        $this->assertQueryResult(
+            array( array( 0 ) ),
+            $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
+            'Expected one user to be created.'
+        );
     }
 }
