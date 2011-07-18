@@ -15,23 +15,30 @@ use ezp\Persistence\Content\Criterion,
 /**
  * This class provides a fluent interface to create a content query
  *
+ * Every Criterion is accessible using a getter on the QueryBuilder object.
+ * For instance, calling $queryBuilder->field will return a CriterionFactory object for a Field Criterion.
+ * This CriterionFactory will then give access to the operators the contained Criterion supports, as methods.
+ * These methods can then be used to construct a new Criterion for the given target & value:
  *
  * <code>
- * @todo write
+ * $queryBuilder = new QueryBuilder();
+ * $queryBuilder->addCriteria( $queryBuilder->contentType->eq( null, 'article' ) );
  * </code>
  *
- * @property-read ezp\Content\CriterionFactory $field
- * @property-read ezp\Content\CriterionFactory $metaData
- * @property-read ezp\Content\CriterionFactory $contentId
- * @property-read ezp\Content\CriterionFactory $contentType
- * @property-read ezp\Content\CriterionFactory $contentTypeGroup
- * @property-read ezp\Content\CriterionFactory $field
- * @property-read ezp\Content\CriterionFactory $fulltext
- * @property-read ezp\Content\CriterionFactory $location
- * @property-read ezp\Content\CriterionFactory $permission
- * @property-read ezp\Content\CriterionFactory $section
- * @property-read ezp\Content\CriterionFactory $subtree
- * @property-read ezp\Content\CriterionFactory $urlAlias
+ * @property-read ezp\Content\CriterionFactory $field A new Field CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $metaData A new MetaData CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $dateMetadata A new DateMetadata CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $contentId A new ContentId CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $contentType A new ContentType CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $contentTypeGroup A new ContentTypeGroup CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $field A new field CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $fullText A new FullText CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $locationId A new LocationId CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $parentLocationId A new ParentLocationId CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $permission A new Permission CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $section A new Section CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $subtree A new Subtree CriterionFactory
+ * @property-read ezp\Content\CriterionFactory $urlAlias An new UrlAlias CriterionFactory
  *
  * @property-read ezp\Content\CriterionFactory $or New logical OR criterion (alias for {@see $lOr})
  * @property-read ezp\Content\CriterionFactory $lOr New logical OR criterion
