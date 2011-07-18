@@ -25,14 +25,22 @@ class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
     protected $userGateway;
 
     /**
+     * Gaateway for storing role data
+     *
+     * @var RoleGateway
+     */
+    protected $roleGateway;
+
+    /**
      * Construct from userGateway
      *
      * @param UserGateway $userGateway
      * @return void
      */
-    public function __construct( UserGateway $userGateway )
+    public function __construct( UserGateway $userGateway, RoleGateway $roleGateway )
     {
         $this->userGateway = $userGateway;
+        $this->roleGateway = $roleGateway;
     }
 
     /**
