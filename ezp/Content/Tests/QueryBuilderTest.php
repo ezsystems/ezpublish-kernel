@@ -42,6 +42,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
             array( 'field' ),
             array( 'fullText' ),
             array( 'LocationId' ),
+            array( 'parentLocationId' ),
             array( 'metaData' ),
             array( 'permission' ),
             array( 'remoteId' ),
