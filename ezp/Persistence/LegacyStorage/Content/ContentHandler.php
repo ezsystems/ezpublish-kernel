@@ -12,7 +12,7 @@ namespace ezp\Persistence\LegacyStorage\Content;
 use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface,
     ezp\Persistence\Content\ContentCreateStruct,
     ezp\Persistence\Content\ContentUpdateStruct,
-    ezp\Content\Criteria\Criteria;
+    ezp\Persistence\Content\Criterion;
 
 /**
  * The ContentHandler stores Content and ContentType objects.
@@ -72,7 +72,7 @@ class ContentHandler implements ContentHandlerInterface
      * @param $sort
      * @return array(ezp\Persistence\Content) Content value object.
      */
-    public function find( Criteria $criteria, $offset, $limit, $sort )
+    public function find( Criterion $criteria, $offset, $limit, $sort )
     {
         throw new Exception( "Not implemented yet." );
     }
@@ -89,7 +89,7 @@ class ContentHandler implements ContentHandlerInterface
      * @param mixed $sort
      * @return ezp\Persistence\Content
      */
-    public function findSingle( Criteria $criteria, $offset, $sort )
+    public function findSingle( Criterion $criteria, $offset, $sort )
     {
         throw new Exception( "Not implemented yet." );
     }
