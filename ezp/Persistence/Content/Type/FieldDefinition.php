@@ -71,7 +71,7 @@ class FieldDefinition extends AbstractValueObject
      *
      * @var boolean
      */
-    public $translatable;
+    public $isTranslatable;
 
     /**
      * Is the field required
