@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Persistence\Content\Interfaces;
-use ezp\Persistence\Content\LocationCreateStruct;
+use ezp\Persistence\Content\LocationCreateStruct,
+    ezp\Persistence\Content\Location;
 
 /**
  * The LocationHandler interface defines operations on Location elements in the storage engine.

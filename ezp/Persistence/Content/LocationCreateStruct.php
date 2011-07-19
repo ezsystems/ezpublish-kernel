@@ -7,7 +7,10 @@
  * @version //autogentag//
  */
 
-class LocationCreateStruct extends \ezp\Persistence\AbstractValueObject
+namespace ezp\Persistence\Content;
+use ezp\Persistence\AbstractValueObject;
+
+class LocationCreateStruct extends AbstractValueObject
 {
     /**
      * Location position aka priority
