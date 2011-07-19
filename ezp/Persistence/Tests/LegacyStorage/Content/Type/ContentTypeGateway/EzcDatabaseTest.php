@@ -23,7 +23,7 @@ class EzcDatabaseTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway::__construct
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::__construct
      */
     public function testCtor()
     {
