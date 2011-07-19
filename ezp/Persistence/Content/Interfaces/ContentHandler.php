@@ -75,12 +75,12 @@ interface ContentHandler
      * ensure, that your $criteria ensure that only a single object can be
      * retrieved.
      *
-     * @param ezp\Content\Criteria\Criteria $criteria
+     * @param ezp\Content\Criterion $criteria
      * @param mixed $offset
      * @param mixed $sort
      * @return ezp\Persistence\Content
      */
-    public function findSingle( Criteria $criteria, $offset, $sort );
+    public function findSingle( Criterion $criteria, $offset, $sort );
 
     /**
      * Sets the state of object identified by $contentId and $version to $state.
