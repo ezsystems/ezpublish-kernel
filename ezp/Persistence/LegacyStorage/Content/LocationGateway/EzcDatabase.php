@@ -165,11 +165,24 @@ class EzcDatabase extends LocationGateway
     /**
      * Sets a location to be hidden, and it self + all children to invisible.
      *
-     * @param mixed $id Location ID
+     * @param string $pathString
      */
-    public function hide( $id )
+    public function hideSubtree( $pathString )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezcontentobject_tree' )
+            ->set( 'is_invisible', $query->bindValue( 1 ) )
+            ->set( 'modified_subnode', $query->bindValue( time() ) )
+            ->where( $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) ) );
+        $query->prepare()->execute();
+
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezcontentobject_tree' )
+            ->set( 'is_hidden', $query->bindValue( 1 ) )
+            ->where( $query->expr->eq( 'path_string', $query->bindValue( $pathString ) ) );
+        $query->prepare()->execute();
     }
 
     /**

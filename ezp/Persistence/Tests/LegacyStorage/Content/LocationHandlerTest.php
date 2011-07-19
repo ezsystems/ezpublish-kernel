@@ -96,4 +96,53 @@ class LocationHandlerTest extends TestCase
                 ->where( $query->expr->eq( 'contentobject_id', 67 ) )
         );
     }
+
+    public function testHideUpdateHidden()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $handler->hide( 69 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( 1, 0, 0 ),
+                array( 2, 0, 0 ),
+                array( 69, 1, 1 ),
+                array( 75, 0, 1 ),
+            ),
+            $query
+                ->select( 'node_id', 'is_hidden', 'is_invisible' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 75 ) ) )
+        );
+    }
+
+    public function testHideSubtreeModificationTimeUpdate()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $time    = time();
+        $handler->hide( 69 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( '/1/' ),
+                array( '/1/2/' ),
+                array( '/1/2/69/' ),
+                array( '/1/2/69/70/' ),
+                array( '/1/2/69/70/71/' ),
+                array( '/1/2/69/72/' ),
+                array( '/1/2/69/72/73/' ),
+                array( '/1/2/69/72/74/' ),
+                array( '/1/2/69/72/75/' ),
+                array( '/1/2/69/76/' ),
+            ),
+            $query
+                ->select( 'path_string' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->gte( 'modified_subnode', $time ) )
+        );
+    }
 }
