@@ -48,8 +48,7 @@ class FieldDefinition extends AbstractValueObject
     /**
      * Field group name
      *
-     * @var mixed
-     * @todo What does this attribute refer to in the legacy storage? "category"?
+     * @var string
      */
     public $fieldGroup;
 
