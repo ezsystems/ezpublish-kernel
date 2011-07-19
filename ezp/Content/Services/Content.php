@@ -69,7 +69,7 @@ class Content extends AbstractService
      */
     public function find( Query $query )
     {
-        return $this->handler->contentHandler()->find( $query );
+        return $this->handler->contentHandler()->find( $query->criteria );
     }
 
     /**
