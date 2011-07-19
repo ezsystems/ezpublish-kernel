@@ -83,10 +83,10 @@ interface LocationHandler
      * Updates an existing location priority.
      *
      * @param int $locationId
-     * @param int $position
+     * @param int $priority
      * @return boolean
      */
-    public function updatePosition( $locationId, $position );
+    public function updatePriority( $locationId, $priority );
 
     /**
      * Creates a new location rooted at $parentId.
