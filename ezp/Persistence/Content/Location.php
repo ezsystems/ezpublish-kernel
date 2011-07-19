@@ -12,7 +12,9 @@ namespace ezp\Persistence\Content;
 use ezp\Persistence\AbstractValueObject;
 
 /**
- * @todo Add missing attributes (OMS), eg sort info
+ * Struct containing accessible properties on Location entities.
+ *
+ * @version //autogentag//
  */
 class Location extends AbstractValueObject
 {
@@ -34,17 +36,24 @@ class Location extends AbstractValueObject
     public $priority;
 
     /**
+     * Indicates that the Location entity has been explicitly marked as hidden.
+     *
      * @var bool
      */
     public $hidden;
 
     /**
+     * Indicates that the Location is implicitly marked as hidden by a parent
+     * location.
+     *
      * @var bool
      */
     public $invisible;
 
     /**
      * Remote ID.
+     *
+     * A universally unique identifier.
      *
      * @var mixed
      */
