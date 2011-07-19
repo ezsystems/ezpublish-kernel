@@ -111,7 +111,10 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function unHide( $id )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $sourceNodeData = $this->locationGateway->getBasicNodeData( $id );
+
+        $this->locationGateway->unhideSubtree( $sourceNodeData['path_string'] );
+        $this->locationGateway->updateSubtreeModificationTime( $sourceNodeData['path_string'] );
     }
 
     /**

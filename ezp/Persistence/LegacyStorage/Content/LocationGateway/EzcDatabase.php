@@ -193,11 +193,51 @@ class EzcDatabase extends LocationGateway
      * Sets a location to be unhidden, and self + children to visible unless a parent is hidding the tree.
      * If not make sure only children down to first hidden node is marked visible.
      *
-     * @param mixed $id
+     * @param string $pathString
      */
-    public function unHide( $id )
+    public function unHideSubtree( $pathString )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        // Find nodes of explicitely hidden subtrees in the subtree which
+        // should be unhidden
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( 'path_string' )
+            ->from( 'ezcontentobject_tree' )
+            ->where( $query->expr->lAnd(
+                $query->expr->eq( 'is_hidden', $query->bindValue( 1 ) ),
+                $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) ),
+                $query->expr->neq( 'path_string', $query->bindValue( $pathString ) )
+            ) );
+        $statement = $query->prepare();
+        $statement->execute();
+        $hiddenSubtrees = $statement->fetchAll( \PDO::FETCH_COLUMN );
+
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezcontentobject_tree' )
+            ->set( 'is_invisible', $query->bindValue( 0 ) )
+            ->set( 'modified_subnode', $query->bindValue( time() ) )
+            ->where( $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) ) );
+        $query->prepare()->execute();
+
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezcontentobject_tree' )
+            ->set( 'is_hidden', $query->bindValue( 0 ) )
+            ->where( $query->expr->eq( 'path_string', $query->bindValue( $pathString ) ) );
+        $query->prepare()->execute();
+
+        // Set hidden subtrees hidden again
+        foreach ( $hiddenSubtrees as $hiddenSubtreePath )
+        {
+            $query = $this->handler->createUpdateQuery();
+            $query
+                ->update( 'ezcontentobject_tree' )
+                ->set( 'is_invisible', $query->bindValue( 1 ) )
+                ->set( 'modified_subnode', $query->bindValue( time() ) )
+                ->where( $query->expr->like( 'path_string', $query->bindValue( $hiddenSubtreePath . '%' ) ) );
+            $query->prepare()->execute();
+        }
     }
 
     /**

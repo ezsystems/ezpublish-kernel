@@ -224,7 +224,7 @@ class LocationHandlerTest extends TestCase
             $query
                 ->select( 'node_id', 'is_hidden', 'is_invisible' )
                 ->from( 'ezcontentobject_tree' )
-                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 75 ) ) )
+                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70, 71, 75 ) ) )
         );
     }
 }

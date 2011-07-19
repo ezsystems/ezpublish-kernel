@@ -76,9 +76,9 @@ abstract class LocationGateway
      * Sets a location to be unhidden, and self + children to visible unless a parent is hidding the tree.
      * If not make sure only children down to first hidden node is marked visible.
      *
-     * @param mixed $id
+     * @param string $pathString
      */
-    abstract public function unHide( $id );
+    abstract public function unHideSubtree( $pathString );
 
     /**
      * Swaps the content object being pointed to by a location object.
