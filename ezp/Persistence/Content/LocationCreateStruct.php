@@ -92,4 +92,22 @@ class LocationCreateStruct extends AbstractValueObject
      * @var int
      */
     public $depth;
+
+    /**
+     * Specifies which property the child locations should be sorted on.
+     *
+     * Valid values are found at {@link Location::SORT_FIELD_*}
+     *
+     * @var mixed
+     */
+    public $sortField;
+
+    /**
+     * Specifies whether the sort order should be ascending or descending.
+     *
+     * Valid values are {@link Location::SORT_ORDER_*}
+     *
+     * @var mixed
+     */
+    public $sortOrder;
 }
