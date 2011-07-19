@@ -24,13 +24,14 @@ class Location extends AbstractValueObject
     public $id;
 
     /**
-     * Location position aka priority
+     * Location priority
      *
-     * Position of the Location among its siblings when sorted using sort order.
+     * Position of the Location among its siblings when sorted using priority
+     * sort order.
      *
      * @var int
      */
-    public $position;
+    public $priority;
 
     /**
      * @var bool

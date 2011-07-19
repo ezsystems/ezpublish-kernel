@@ -13,9 +13,10 @@ use ezp\Persistence\AbstractValueObject;
 class LocationCreateStruct extends AbstractValueObject
 {
     /**
-     * Location position aka priority
+     * Location priority
      *
-     * Position of the Location among its siblings when sorted using sort order.
+     * Position of the Location among its siblings when sorted using priority
+     * sort order.
      *
      * @var int
      */

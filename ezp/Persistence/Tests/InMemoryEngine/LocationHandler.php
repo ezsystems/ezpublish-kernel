@@ -92,7 +92,7 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function updatePosition( $locationId, $position )
     {
-        return $this->backend->update( 'Content\\Location', $locationId, array( 'position' => $position ) );
+        return $this->backend->update( 'Content\\Location', $locationId, array( 'priority' => $position ) );
     }
 
     /**

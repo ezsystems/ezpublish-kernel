@@ -80,7 +80,7 @@ interface LocationHandler
     public function swap( $locationId1, $locationId2 );
 
     /**
-     * Updates an existing location position aka priority.
+     * Updates an existing location priority.
      *
      * @param int $locationId
      * @param int $position
