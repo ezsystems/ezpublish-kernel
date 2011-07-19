@@ -51,6 +51,10 @@ class EzcDatabase extends LocationGateway
     /**
      * Returns an array with basic node data
      *
+     * We might want to cache this, since this method is used by about every
+     * method in the location handler.
+     *
+     * @optimze
      * @param mixed $nodeId
      * @return array
      */
