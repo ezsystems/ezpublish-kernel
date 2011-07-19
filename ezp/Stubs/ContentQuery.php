@@ -21,6 +21,7 @@ $qb->addCriteria(
     $qb->contentType->eq( 'blog_post' ),
     $qb->field->eq( 'author', 'community@ez.no' )
 );
+$contentList = $contentService->find( $qb->getQuery() );
 
 // individual criteria objects
 

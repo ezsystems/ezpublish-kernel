@@ -12,6 +12,7 @@ use ezp\Base\AbstractService,
     ezp\Base\Exception\NotFound,
     ezp\Content\Content,
     ezp\Content\QueryBuilder;
+    ezp\Content\Query;
 
 /**
  * Content service, used for Content operations
@@ -59,6 +60,16 @@ class Content extends AbstractService
         if ( !$content )
             throw new NotFound( 'Content', $contentId );
         return $content;
+    }
+
+    /**
+     * Finds content using a $query
+     * @param Query $query
+     * @return Content[]
+     */
+    public function find( Query $query )
+    {
+        return $this->handler->contentHandler()->find( $query );
     }
 
     /**

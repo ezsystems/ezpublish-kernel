@@ -10,7 +10,8 @@
 namespace ezp\Content;
 use ezp\Persistence\Content\Criterion,
     ezp\Base\Exception\PropertyNotFound,
-    InvalidArgumentException;
+    InvalidArgumentException,
+    ezp\Content\Query;
 
 /**
  * This class provides a fluent interface to create a content query
@@ -50,17 +51,6 @@ use ezp\Persistence\Content\Criterion,
 class QueryBuilder
 {
     /**
-     * The query that is being built
-     * @var ezp\Content\Query
-     */
-    protected $query;
-
-    public function __construct()
-    {
-        $this->query = new Query;
-    }
-
-    /**
      * Magic getter.
      * Gives access to criteria classes by means of their class name:
      * MetaData -> metadata
@@ -95,7 +85,7 @@ class QueryBuilder
             {
                 throw new InvalidArgumentException( "All arguments must be instances of ezp\Persistence\Content\Criterion" );
             }
-            $this->query->criteria[] = $arg;
+            $this->criteria[] = $arg;
         }
     }
 
@@ -167,5 +157,28 @@ class QueryBuilder
                 throw new PropertyNotFound( $method, __CLASS__ );
         }
     }
+
+    /**
+     * Returns the query
+     * @return Query
+     */
+    public function getQuery()
+    {
+        $query = new Query;
+
+        // group all the criteria with a LogicalAnd
+        $query->criteria = call_user_func_array(
+            array( $this, 'and' ),
+            $this->criteria
+        );
+
+        return $query;
+    }
+
+    /**
+     * The internal criteria array
+     * @var Criterion[]
+     */
+    private $criteria = array();
 }
 ?>

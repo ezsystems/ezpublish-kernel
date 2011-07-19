@@ -11,6 +11,20 @@ namespace ezp\Content;
 
 class Query
 {
-    public $criteria = array();
+    /**
+     * The Query criterion
+     * @var Criterion
+     */
+    public $criterion;
+
+    /**
+     * Not implemented yet
+     */
+    public $sortBy;
+
+    /**
+     * Not implemented yet
+     */
+    public $offset;
 }
 ?>
