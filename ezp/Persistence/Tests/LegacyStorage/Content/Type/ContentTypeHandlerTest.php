@@ -44,7 +44,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::load()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::load
      */
     public function testLoad()
     {

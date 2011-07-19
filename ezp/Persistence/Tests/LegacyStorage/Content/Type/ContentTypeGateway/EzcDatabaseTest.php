@@ -39,10 +39,10 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway::loadTypeData()
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway::selectColumns()
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway::createTableColumnAlias()
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway::qualifiedIdentifier()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::loadTypeData
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::selectColumns
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::createTableColumnAlias
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::qualifiedIdentifier
      */
     public function testLoadTypeData()
     {
@@ -72,6 +72,10 @@ class EzcDatabaseTest extends TestCase
          */
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertType
+     */
     public function testInsertType()
     {
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );

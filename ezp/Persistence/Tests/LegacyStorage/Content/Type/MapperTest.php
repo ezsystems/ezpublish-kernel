@@ -20,7 +20,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::createTypeFromCreateStruct()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::createTypeFromCreateStruct
      */
     public function testTypeFromCreateStruct()
     {
@@ -84,7 +84,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::extractTypesFromRows()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::extractTypesFromRows
      */
     public function testExtractTypesFromRowsSingle()
     {
