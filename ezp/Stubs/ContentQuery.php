@@ -8,8 +8,8 @@
  * @subpackage stub
  */
 
-use ezp\base\Repository;
-use ezp\content;
+use ezp\Base\Repository;
+use ezp\Content;
 
 $contentService = Repository::get()->getContentService();
 $qb = $contentService->getQueryBuilder();
@@ -23,7 +23,7 @@ $qb->addCriteria(
 );
 $contentList = $contentService->find( $qb->getQuery() );
 
-// individual criteria objects
+// Other criteria examples
 
 // creation date
 $qb->dateMetadata->between( 'created', strtotime( 'last month' ), strtotime( 'last week' ) );
