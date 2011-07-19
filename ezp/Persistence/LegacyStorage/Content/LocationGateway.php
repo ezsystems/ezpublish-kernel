@@ -37,6 +37,35 @@ abstract class LocationGateway
     abstract public function copySubtree( $sourceId, $destinationParentId );
 
     /**
+     * Update path strings to move nodes in the ezcontentobject_tree table
+     *
+     * This query can likely be optimized to use some more advanced string
+     * operations, which then depend on the respective database.
+     *
+     * @optimize
+     * @param string $fromPathString
+     * @param string $toPathString
+     * @return void
+     */
+    abstract public function moveSubtreeNodes( $fromPathString, $toPathString );
+
+    /**
+     * Updated subtree modification time for all nodes on path
+     *
+     * @param string $pathString
+     * @return void
+     */
+    abstract public function updateSubtreeModificationTime( $pathString );
+
+    /**
+     * Update node assignement table
+     *
+     * @param mixed $nodeId
+     * @return void
+     */
+    abstract public function updateNodeAssignement( $contentObjectId, $newParent );
+
+    /**
      * Sets a location to be hidden, and it self + all children to invisible.
      *
      * @param mixed $id Location ID
