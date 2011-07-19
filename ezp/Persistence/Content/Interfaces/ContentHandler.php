@@ -11,7 +11,7 @@
 namespace ezp\Persistence\Content\Interfaces;
 use ezp\Persistence\Content\ContentCreateStruct,
     ezp\Persistence\Content\ContentUpdateStruct,
-    ezp\Content\Criteria\Criteria;
+    ezp\Persistence\Content\Criterion;
 
 /**
  * The ContentHandler interface defines content operations on the storage engine.
@@ -66,7 +66,7 @@ interface ContentHandler
      * @param $sort
      * @return array(ezp\Persistence\Content) Content value object.
      */
-    public function find( Criteria $criteria, $offset, $limit, $sort );
+    public function find( Criterion $criteria, $offset, $limit, $sort );
 
     /**
      * Returns a single Content object found.
