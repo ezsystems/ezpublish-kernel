@@ -37,19 +37,6 @@ abstract class LocationGateway
     abstract public function copySubtree( $sourceId, $destinationParentId );
 
     /**
-     * Moves location identified by $sourceId into new parent identified by $destinationParentId.
-     *
-     * Performs a full move of the location identified by $sourceId to a new
-     * destination, identified by $destinationParentId. Relations do not need
-     * to be updated, since they refer to Content. URLs are not touched.
-     *
-     * @param mixed $sourceId
-     * @param mixed $destinationParentId
-     * @return boolean
-     */
-    abstract public function move( $sourceId, $destinationParentId );
-
-    /**
      * Sets a location to be hidden, and it self + all children to invisible.
      *
      * @param mixed $id Location ID

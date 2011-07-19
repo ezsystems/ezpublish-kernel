@@ -73,7 +73,21 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function move( $sourceId, $destinationParentId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $sourceNodeData      = $this->locationGateway->getBasicNodeData( $sourceId );
+        $destinationNodeData = $this->locationGateway->getBasicNodeData( $destinationParentId );
+
+        $this->locationGateway->moveSubtreeNodes(
+            $sourceNodeData['path_string'],
+            $destinationNodeData['path_string']
+        );
+
+        $this->locationGateway->updateSubtreeModificationTime(
+            $destinationNodeData['path_string']
+        );
+
+        $this->locationGateway->updateNodeAssignement(
+            $sourceId, $destinationParentId
+        );
     }
 
     /**

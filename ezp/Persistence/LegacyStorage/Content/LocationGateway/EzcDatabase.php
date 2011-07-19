@@ -34,6 +34,24 @@ class EzcDatabase extends LocationGateway
     }
 
     /**
+     * Returns an array with basic node data
+     *
+     * @param mixed $nodeId
+     * @return array
+     */
+    public function getBasicNodeData( $nodeId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( '*' )
+            ->from( 'ezcontentobject_tree' )
+            ->where( $query->expr->eq( 'node_id', $query->bindValue( $nodeId ) ) );
+        $statement = $query->prepare();
+        $statement->execute();
+        return $statement->fetch( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
@@ -62,19 +80,46 @@ class EzcDatabase extends LocationGateway
     }
 
     /**
-     * Moves location identified by $sourceId into new parent identified by $destinationParentId.
+     * Update path strings to move nodes in the ezcontentobject_tree table
      *
-     * Performs a full move of the location identified by $sourceId to a new
-     * destination, identified by $destinationParentId. Relations do not need
-     * to be updated, since they refer to Content. URLs are not touched.
+     * This query can likely be optimized to use some more advanced string
+     * operations, which then depend on the respective database.
      *
-     * @param mixed $sourceId
-     * @param mixed $destinationParentId
-     * @return boolean
+     * @param string $fromPathString
+     * @param string $toPathString
+     * @return void
      */
-    public function move( $sourceId, $destinationParentId )
+    public function moveSubtreeNodes( $fromPathString, $toPathString )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( 'node_id', 'path_string' )
+            ->from( 'ezcontentobject_tree' )
+            ->where( $query->expr->like( 'path_string', $query->bindValue( $fromPathString . '%' ) ) );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $rows = $statement->fetchAll();
+        $oldParentLocation = implode( '/', array_slice( explode( '/', $fromPathString ), 0, -2 ) ) . '/';
+        foreach ( $rows as $row )
+        {
+            $query = $this->handler->createUpdateQuery();
+            $query
+                ->update( 'ezcontentobject_tree' )
+                ->set( 'path_string', $query->bindValue( str_replace( $oldParentLocation, $toPathString, $row['path_string'] ) ) )
+                ->where( $query->expr->eq( 'node_id', $query->bindValue( $row['node_id'] ) ) );
+            $query->prepare()->execute();
+        }
+    }
+
+    public function updateSubtreeModificationTime( $pathString )
+    {
+
+    }
+
+    public function updateNodeAssignement( $nodeId )
+    {
+
     }
 
     /**
