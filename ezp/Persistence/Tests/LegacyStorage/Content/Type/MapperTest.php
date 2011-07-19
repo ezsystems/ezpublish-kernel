@@ -81,4 +81,84 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
         return $struct;
     }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::extractTypesFromRows()
+     */
+    public function testExtractTypesFromRowsSingle()
+    {
+        $rows = $this->getLoadTypeFixture();
+
+        $mapper = new Mapper();
+        $types = $mapper->extractTypesFromRows( $rows );
+
+        $this->assertEquals(
+            1,
+            count( $types ),
+            'Incorrect number of types extracted'
+        );
+
+        $this->assertPropertiesCorrect(
+            // "random" sample
+            array(
+                'id'                  => 1,
+                'version'             => 0,
+                'created'             => 1024392098,
+                'creatorId'           => 14,
+                'modified'            => 1082454875,
+                'modifierId'          => 14,
+                'identifier'          => 'folder',
+                'isContainer'         => true,
+                'contentTypeGroupIds' => array( 1 ),
+            ),
+            $types[0]
+        );
+
+        // "random" sample
+        $this->assertEquals(
+            5,
+            count( $types[0]->fieldDefinitions ),
+            'Incorrect number of field definitions'
+        );
+        $this->assertPropertiesCorrect(
+            // "random" sample
+            array(
+                'id'              => 155,
+                'fieldType'       => 'ezstring',
+                'identifier'      => 'short_name',
+                'isInfoCollector' => false,
+                'isRequired'      => false,
+            ),
+            $types[0]->fieldDefinitions[2]
+        );
+    }
+
+    protected function assertPropertiesCorrect( array $properties, $object )
+    {
+        if ( !is_object( $object ) )
+        {
+            throw new \InvalidArgumentException(
+                'Expected object as second parameter, received ' . gettype( $object )
+            );
+        }
+        foreach ( $properties as $propName => $propVal )
+        {
+            $this->assertSame(
+                $propVal,
+                $object->$propName,
+                "Incorrect value for \${$propName}"
+            );
+        }
+    }
+
+    /**
+     * Returns fixture for {@link testExtractTypesFromRowsSingle()}
+     *
+     * @return array
+     */
+    protected function getLoadTypeFixture()
+    {
+        return require( __DIR__ . '/_fixtures/map_load_type.php' );
+    }
 }
