@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentTypeGateway class
+ * File containing the EzcDatabase location gateway class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,7 +12,7 @@ use ezp\Persistence\LegacyStorage\User\UserGateway,
     ezp\Persistence\User;
 
 /**
- * Base class for content type gateways.
+ * User gateway implementation using the zeta database component.
  */
 class EzcDatabase extends UserGateway
 {
