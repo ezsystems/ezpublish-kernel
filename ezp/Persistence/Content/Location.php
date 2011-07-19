@@ -62,5 +62,45 @@ class Location extends AbstractValueObject
      * @var mixed Location ID.
      */
     public $parentId;
+
+    /**
+     * Legacy format of the url alias.
+     *
+     * This field might be removed in a later version.
+     *
+     * @var string
+     */
+    public $pathIdentificationString;
+
+    /**
+     * The materialized path of the location entry.
+     *
+     * @var string
+     */
+    public $pathString;
+
+    /**
+     * Timestamp of the latest update of a content object in a sub location.
+     *
+     * @var int
+     */
+    public $modifiedSubLocation;
+
+    /**
+     * Identifier of the main location.
+     *
+     * If the content object in this location has multiple locations,
+     * $mainLocationId will point to the main one.
+     *
+     * @var mixed
+     */
+    public $mainLocationId;
+
+    /**
+     * Depth location has in the location tree.
+     *
+     * @var int
+     */
+    public $depth;
 }
 ?>
