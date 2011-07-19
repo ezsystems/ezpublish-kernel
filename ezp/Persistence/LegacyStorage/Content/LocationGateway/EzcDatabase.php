@@ -85,6 +85,7 @@ class EzcDatabase extends LocationGateway
      * This query can likely be optimized to use some more advanced string
      * operations, which then depend on the respective database.
      *
+     * @optimize
      * @param string $fromPathString
      * @param string $toPathString
      * @return void
