@@ -56,7 +56,7 @@ class EzcDatabaseTest extends TestCase
             count( $rows )
         );
         $this->assertEquals(
-            44,
+            45,
             count( $rows[0] )
         );
     }

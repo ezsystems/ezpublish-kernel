@@ -45,6 +45,7 @@ class EzcDatabase extends ContentTypeGateway
         ),
         'ezcontentclass_attribute' => array(
             'id',
+            'can_translate',
             'category',
             'contentclass_id',
             'data_float1',
