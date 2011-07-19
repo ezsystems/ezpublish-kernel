@@ -95,10 +95,57 @@ class EzcDatabase extends ContentTypeGateway
      *
      * @param Type $createStruct
      * @return mixed Type ID
+     * @todo This might lead to race conditions for insert IDs.
+     * @todo PDO->lastInsertId() might require a seq name (Oracle?).
      */
     public function insertType( Type $type )
     {
-        throw new \RuntimeException( "Not implemented, yet" );
+        $q = $this->dbHandler->createInsertQuery();
+        $q->insertInto( 'ezcontentclass' );
+        $q->set(
+            $this->dbHandler->quoteIdentifier( 'version' ),
+            $q->bindValue( $type->version, null, \PDO::PARAM_INT )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'serialized_name_list' ),
+            $q->bindValue( serialize( $type->name ) )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'serialized_description_list' ),
+            $q->bindValue( serialize( $type->description ) )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'identifier' ),
+            $q->bindValue( $type->identifier )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'created' ),
+            $q->bindValue( $type->created, null, \PDO::PARAM_INT )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'modified' ),
+            $q->bindValue( $type->modified, null, \PDO::PARAM_INT )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'creator_id' ),
+            $q->bindValue( $type->creatorId, null, \PDO::PARAM_INT )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'modifier_id' ),
+            $q->bindValue( $type->modifierId, null, \PDO::PARAM_INT )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'remote_id' ),
+            $q->bindValue( $type->remoteId )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'url_alias_name' ),
+            $q->bindValue( $type->urlAliasSchema )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'contentobject_name' ),
+            $q->bindValue( $type->nameSchema )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'is_container' ),
+            $q->bindValue( $type->isContainer ? 1 : 0, null, \PDO::PARAM_INT )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'initial_language_id' ),
+            $q->bindValue( $type->initialLanguageId, null, \PDO::PARAM_INT )
+          );
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $this->dbHandler->lastInsertId();
     }
 
     /**

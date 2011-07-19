@@ -13,7 +13,7 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase;
 use ezp\Persistence\Tests\LegcyStorage\Content\Type\ContentTypeGateway,
     ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase;
 
-use ezp\Persistence\Content\Type\ContentTypeCreateStruct,
+use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -70,6 +70,75 @@ class EzcDatabaseTest extends TestCase
             "<?php\n\nreturn " . var_export( $rows, true ) . ";\n"
         );
          */
+    }
+
+    public function testInsertType()
+    {
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $type = $this->getTypeFixture();
+
+        $gateway->insertType( $type );
+
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( 'COUNT(*)' )
+                ->from( 'ezcontentclass' ),
+            'Type not inserted'
+        );
+        $this->assertQueryResult(
+            array(
+                array(
+                    // "random" sample
+                    'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";}',
+                    'created'              => '1024392098',
+                    'modifier_id'          => '14',
+                    'remote_id'            => 'a3d405b81be900468eb153d774f4f0d2',
+                )
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select(
+                    'serialized_name_list',
+                    'created',
+                    'modifier_id',
+                    'remote_id'
+                )->from( 'ezcontentclass' ),
+            'Inserted Type data incorrect'
+        );
+    }
+
+    /**
+     * Returns a Type fixture.
+     *
+     * @return Type
+     */
+    protected function getTypeFixture()
+    {
+        $type = new Type();
+
+        $type->version = 0;
+        $type->name    = array(
+            'always-available' => 'eng-US',
+            'eng-US'           => 'Folder',
+        );
+        $type->description = array(
+            0                  => '',
+            'always-available' => false,
+        );
+        $type->identifier        = 'folder';
+        $type->created           = 1024392098;
+        $type->modified          = 1082454875;
+        $type->creatorId         = 14;
+        $type->modifierId        = 14;
+        $type->remoteId          = 'a3d405b81be900468eb153d774f4f0d2';
+        $type->urlAliasSchema    = '';
+        $type->nameSchema        = '<short_name|name>';
+        $type->isContainer       = true;
+        $type->initialLanguageId = 2;
+
+        return $type;
     }
 
     /**
