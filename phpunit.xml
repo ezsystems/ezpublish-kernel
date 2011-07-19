@@ -1,0 +1,40 @@
+<phpunit
+  backupGlobals="false"
+  backupStaticAttributes="false"
+  bootstrap="testsBootstrap.php"
+  >
+  <testsuites>
+    <testsuite name="ezp\Base">
+      <!-- could be simplified with:
+      <directory>ezp/Base/Tests</directory>
+      -->
+      <file>ezp/Base/Tests/AutoloadTest.php</file>
+      <file>ezp/Base/Tests/IniParserTest.php</file>
+      <file>ezp/Base/Tests/ReadOnlyCollectionTest.php</file>
+      <file>ezp/Base/Tests/TypeCollectionTest.php</file>
+    </testsuite>
+    <testsuite name="ezp\Content">
+      <!-- could be simplified with:
+      <directory>ezp/Content/Tests</directory>
+      -->
+      <file>ezp/Content/Tests/ContentTest.php</file>
+      <!--file>ezp/Content/Tests/CriteriaCollectionTest.php</file-->
+      <file>ezp/Content/Tests/LocationTest.php</file>
+      <file>ezp/Content/Tests/QueryBuilderTest.php</file>
+      <file>ezp/Content/Tests/TranslationTest.php</file>
+    </testsuite>
+    <testsuite name="ezp\Persistence">
+      <!-- could be simplified with:
+      <directory>ezp/Persistence/Tests</directory>
+      -->
+      <file>ezp/Persistence/Tests/ContentHandlerTest.php</file>
+      <file>ezp/Persistence/Tests/Content/Type/ContentTypeCreateStructTest.php</file>
+      <file>ezp/Persistence/Tests/LegacyStorage/Content/Type/ContentTypeGateway/EzcDatabaseTest.php</file>
+      <file>ezp/Persistence/Tests/LegacyStorage/Content/Type/ContentTypeHandlerTest.php</file>
+      <file>ezp/Persistence/Tests/LegacyStorage/Content/Type/MapperTest.php</file>
+      <file>ezp/Persistence/Tests/LegacyStorage/User/UserHandlerTest.php</file>
+      <file>ezp/Persistence/Tests/RepositoryHandlerTest.php</file>
+      <file>ezp/Persistence/Tests/SectionHandlerTest.php</file>
+    </testsuite>
+  </testsuites>
+</phpunit>
