@@ -16,8 +16,8 @@ return array(
             'modified'                    => 1082454875,
             'modifier_id'                 => 14,
             'remote_id'                   => 'a3d405b81be900468eb153d774f4f0d2',
-            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:6:\"Folder\";}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";}',
             'sort_field'                  => 1,
             'sort_order'                  => 1,
             'url_alias_name'              => '',
@@ -37,8 +37,8 @@ return array(
             'modified'                    => 1082454875,
             'modifier_id'                 => 14,
             'remote_id'                   => 'a3d405b81be900468eb153d774f4f0d2',
-            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:6:\"Folder\";}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";}',
             'sort_field'                  => 1,
             'sort_order'                  => 1,
             'url_alias_name'              => '',
@@ -71,9 +71,9 @@ return array(
             'is_required'                 => 1,
             'is_searchable'               => 1,
             'placement'                   => 1,
-            'serialized_data_text'        => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:4:\"Name\";}',
+            'serialized_data_text'        => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Name";}',
             'version'                     => 0
         ),
         array(
@@ -100,9 +100,9 @@ return array(
             'is_required'                 => 0,
             'is_searchable'               => 1,
             'placement'                   => 3,
-            'serialized_data_text'        => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:17:\"Short description\";}',
+            'serialized_data_text'        => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:17:"Short description";}',
             'version'                     => 0
         ),
         array(
@@ -129,9 +129,9 @@ return array(
             'is_required'                 => 0,
             'is_searchable'               => 1,
             'placement'                   => 2,
-            'serialized_data_text'        => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:10:\"Short name\";}',
+            'serialized_data_text'        => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"Short name";}',
             'version'                     => 0
         ),
         array(
@@ -158,9 +158,9 @@ return array(
             'is_required'                 => 0,
             'is_searchable'               => 1,
             'placement'                   => 4,
-            'serialized_data_text'        => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:11:\"Description\";}',
+            'serialized_data_text'        => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
             'version'                     => 0
         ),
         array(
@@ -187,9 +187,9 @@ return array(
             'is_required'                 => 0,
             'is_searchable'               => 0,
             'placement'                   => 5,
-            'serialized_data_text'        => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:13:\"Show children\";}',
+            'serialized_data_text'        => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:13:"Show children";}',
             'version'                     => 0
         ),
         // not loaded, version mismatch
@@ -217,9 +217,9 @@ return array(
             'is_required'                 => 0,
             'is_searchable'               => 0,
             'placement'                   => 5,
-            'serialized_data_text'        => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:13:\"Show children\";}',
+            'serialized_data_text'        => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:13:"Show children";}',
             'version'                     => 1
         ),
         // not loaded, contentclass_id mismatch
@@ -247,9 +247,9 @@ return array(
             'is_required'                 => 0,
             'is_searchable'               => 0,
             'placement'                   => 5,
-            'serialized_data_text'        => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
-            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:13:\"Show children\";}',
+            'serialized_data_text'        => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:13:"Show children";}',
             'version'                     => 0
         ),
     ),
