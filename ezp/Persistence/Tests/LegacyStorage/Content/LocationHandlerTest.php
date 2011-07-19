@@ -27,40 +27,6 @@ class LocationHandlerTest extends TestCase
         return new \PHPUnit_Framework_TestSuite( __CLASS__ );
     }
 
-    /**
-     * Inserts database fixture from $fileName.
-     *
-     * @todo: Duplication of code in
-     * Content/Type/ContentTypeGateway/EzcDatabaseTest.php -- will be moved
-     * into base class soon.
-     *
-     * @param string $fileName
-     * @return void
-     */
-    protected function insertFixture( $fileName )
-    {
-        $data = require( __DIR__ . '/_fixtures/' . $fileName );
-        $db   = $this->getDatabaseHandler();
-
-        foreach ( $data as $table => $rows )
-        {
-            foreach ( $rows as $row )
-            {
-                $q = $db->createInsertQuery();
-                $q->insertInto( $db->quoteIdentifier( $table ) );
-                foreach ( $row as $col => $val )
-                {
-                    $q->set(
-                        $db->quoteIdentifier( $col ),
-                        $q->bindValue( $val )
-                    );
-                }
-                $stmt = $q->prepare();
-                $stmt->execute();
-            }
-        }
-    }
-
     protected function getLocationHandler()
     {
         $dbHandler = $this->getDatabaseHandler();
@@ -71,7 +37,7 @@ class LocationHandlerTest extends TestCase
 
     public function testMoveSubtreePathUpdate()
     {
-        $this->insertFixture( 'full_example_tree.php' );
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
         $handler->move( 69, 77 );
 
@@ -93,7 +59,7 @@ class LocationHandlerTest extends TestCase
 
     public function testMoveSubtreeModificationTimeUpdate()
     {
-        $this->insertFixture( 'full_example_tree.php' );
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
         $time    = time();
         $handler->move( 69, 77 );
@@ -115,7 +81,7 @@ class LocationHandlerTest extends TestCase
 
     public function testMoveSubtreeAssignementUpdate()
     {
-        $this->insertFixture( 'full_example_tree.php' );
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
         $handler->move( 69, 77 );
 
