@@ -11,7 +11,7 @@ namespace ezp\Content\Services;
 use ezp\Base\AbstractService,
     ezp\Base\Exception\NotFound,
     ezp\Content\Content,
-    ezp\Content\Criteria\CriteriaCollection;
+    ezp\Content\QueryBuilder;
 
 /**
  * Content service, used for Content operations
@@ -61,7 +61,6 @@ class Content extends AbstractService
         return $content;
     }
 
-
     /**
      * Deletes a content from the repository
      *
@@ -100,9 +99,9 @@ class Content extends AbstractService
      * Creates a new criteria collection object in order to query the content repository
      * @return CriteriaCollection
      */
-    public function createCriteria()
+    public function getQueryBuilder()
     {
-        return new CriteriaCollection();
+        return new QueryBuilder();
     }
 }
 ?>
