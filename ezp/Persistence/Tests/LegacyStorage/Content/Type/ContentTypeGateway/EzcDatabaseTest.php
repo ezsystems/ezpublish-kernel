@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\LegacyStorage\Content\Type\ContentTypeHandlerTest class
+ * File contains: ezp\Persistence\Tests\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -17,13 +17,13 @@ use ezp\Persistence\Content\Type\ContentTypeCreateStruct,
     ezp\Persistence\Content\Type\FieldDefinition;
 
 /**
- * Test case for ContentTypeHandler.
+ * Test case for ContentTypeGateway.
  */
 class EzcDatabaseTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::__construct
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway::__construct
      */
     public function testCtor()
     {
@@ -39,10 +39,10 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::loadTypeData()
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::selectColumns()
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::createTableColumnAlias()
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::qualifiedIdentifier()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway::loadTypeData()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway::selectColumns()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway::createTableColumnAlias()
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway::qualifiedIdentifier()
      */
     public function testLoadTypeData()
     {
