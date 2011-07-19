@@ -11,7 +11,8 @@
 namespace ezp\Persistence\Content\Interfaces;
 use ezp\Persistence\Content\ContentCreateStruct,
     ezp\Persistence\Content\ContentUpdateStruct,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\RestrictedVersion;
 
 /**
  * The ContentHandler interface defines content operations on the storage engine.
@@ -143,7 +144,7 @@ interface ContentHandler
      * Return the versions for $contentId
      *
      * @param int $contentId
-     * @return array(Version)
+     * @return array(RestrictedVersion)
      */
     public function listVersions( $contentId );
 
