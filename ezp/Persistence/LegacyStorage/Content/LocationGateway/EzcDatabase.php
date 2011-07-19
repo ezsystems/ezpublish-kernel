@@ -113,9 +113,21 @@ class EzcDatabase extends LocationGateway
         }
     }
 
+    /**
+     * Updated subtree modification time for all nodes on path
+     *
+     * @param string $pathString
+     * @return void
+     */
     public function updateSubtreeModificationTime( $pathString )
     {
-
+        $nodes = array_filter( explode( '/', $pathString ) );
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezcontentobject_tree' )
+            ->set( 'modified_subnode', $query->bindValue( time() ) )
+            ->where( $query->expr->in( 'node_id', $nodes ) );
+        $query->prepare()->execute();
     }
 
     public function updateNodeAssignement( $nodeId )

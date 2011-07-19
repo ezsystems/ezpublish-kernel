@@ -82,7 +82,7 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
         );
 
         $this->locationGateway->updateSubtreeModificationTime(
-            $destinationNodeData['path_string']
+            $destinationNodeData['path_string'] . $sourceNodeData['node_id'] . '/'
         );
 
         $this->locationGateway->updateNodeAssignement(

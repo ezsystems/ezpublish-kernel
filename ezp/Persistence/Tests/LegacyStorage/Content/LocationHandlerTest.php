@@ -78,14 +78,14 @@ class LocationHandlerTest extends TestCase
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( 65, '/1/2/', 1311065058 ),
-                array( 67, '/1/2/77/69/', 1311065014 ),
-                array( 69, '/1/2/77/69/70/71/', 1311065013 ),
-                array( 73, '/1/2/77/69/72/75/', 1311065014 ),
-                array( 75, '/1/2/77/', 1311065017 ),
+                array( 65, '/1/2/' ),
+                array( 67, '/1/2/77/69/' ),
+                array( 69, '/1/2/77/69/70/71/' ),
+                array( 73, '/1/2/77/69/72/75/' ),
+                array( 75, '/1/2/77/' ),
             ),
             $query
-                ->select( 'contentobject_id', 'path_string', 'modified_subnode' )
+                ->select( 'contentobject_id', 'path_string' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 69, 71, 75, 77, 2 ) ) )
         );
@@ -101,10 +101,10 @@ class LocationHandlerTest extends TestCase
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( '/2/' ),
+                array( '/1/' ),
                 array( '/1/2/' ),
-                array( '/1/2/77' ),
-                array( '/1/2/77/69' ),
+                array( '/1/2/77/69/' ),
+                array( '/1/2/77/' ),
             ),
             $query
                 ->select( 'path_string' )
