@@ -78,7 +78,7 @@ class FieldDefinition extends AbstractValueObject
      *
      * @var boolean
      */
-    public $required;
+    public $isRequired;
 
     /**
      * Just a flag
