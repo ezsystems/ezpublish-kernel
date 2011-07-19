@@ -23,6 +23,21 @@ class EzcDatabase extends LocationGateway
     protected $handler;
 
     /**
+     * Constants for node assignment op codes
+     */
+    const
+        NODE_ASSIGNMENT_OP_CODE_NOP        = 0,
+        NODE_ASSIGNMENT_OP_CODE_EXECUTE    = 1,
+        NODE_ASSIGNMENT_OP_CODE_CREATE_NOP = 2,
+        NODE_ASSIGNMENT_OP_CODE_CREATE     = 3,
+        NODE_ASSIGNMENT_OP_CODE_MOVE_NOP   = 4,
+        NODE_ASSIGNMENT_OP_CODE_MOVE       = 5,
+        NODE_ASSIGNMENT_OP_CODE_REMOVE_NOP = 6,
+        NODE_ASSIGNMENT_OP_CODE_REMOVE     = 7,
+        NODE_ASSIGNMENT_OP_CODE_SET_NOP    = 8,
+        NODE_ASSIGNMENT_OP_CODE_SET        = 9;
+
+    /**
      * Construct from database handler
      *
      * @param \ezcDbHandler $handler
@@ -130,9 +145,21 @@ class EzcDatabase extends LocationGateway
         $query->prepare()->execute();
     }
 
-    public function updateNodeAssignement( $nodeId )
+    /**
+     * Update node assignement table
+     *
+     * @param mixed $nodeId
+     * @return void
+     */
+    public function updateNodeAssignement( $contentObjectId, $newParent )
     {
-
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'eznode_assignment' )
+            ->set( 'parent_node', $query->bindValue( $newParent ) )
+            ->set( 'op_code', $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_MOVE ) )
+            ->where( $query->expr->eq( 'contentobject_id', $query->bindValue( $contentObjectId ) ) );
+        $query->prepare()->execute();
     }
 
     /**

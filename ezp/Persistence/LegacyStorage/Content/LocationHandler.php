@@ -86,7 +86,7 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
         );
 
         $this->locationGateway->updateNodeAssignement(
-            $sourceId, $destinationParentId
+            $sourceNodeData['contentobject_id'], $destinationParentId
         );
     }
 
