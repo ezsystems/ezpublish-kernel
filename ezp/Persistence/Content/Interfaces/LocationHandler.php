@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Persistence\Content\Interfaces;
+use ezp\Persistence\Content\LocationCreateStruct;
 
 /**
  * The LocationHandler interface defines operations on Location elements in the storage engine.
@@ -87,13 +88,13 @@ interface LocationHandler
     public function updatePosition( $locationId, $position );
 
     /**
-     * Creates a new location for $contentId rooted at $parentId.
+     * Creates a new location rooted at $parentId.
      *
-     * @param mixed $contentId
+     * @param LocationCreateStruct $location
      * @param mixed $parentId
      * @return ezp\Persistence\Content\Location
      */
-    public function createLocation( $contentId, $parentId );
+    public function createLocation( $location, $parentId );
 
     /**
      * Removes all Locations under and includin $locationId.
