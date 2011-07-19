@@ -46,7 +46,9 @@ class EzcDatabaseTest extends TestCase
      */
     public function testLoadTypeData()
     {
-        $this->insertFixture( 'load_type.php' );
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/load_type.php'
+        );
 
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
         $rows = $gateway->loadTypeData( 1, 0 );
@@ -68,36 +70,6 @@ class EzcDatabaseTest extends TestCase
             "<?php\n\nreturn " . var_export( $rows, true ) . ";\n"
         );
          */
-    }
-
-    /**
-     * Inserts database fixture from $fileName.
-     *
-     * @param string $fileName 
-     * @return void
-     */
-    protected function insertFixture( $fileName )
-    {
-        $data = require( __DIR__ . '/_fixtures/' . $fileName );
-        $db   = $this->getDatabaseHandler();
-
-        foreach ( $data as $table => $rows )
-        {
-            foreach ( $rows as $row )
-            {
-                $q = $db->createInsertQuery();
-                $q->insertInto( $db->quoteIdentifier( $table ) );
-                foreach ( $row as $col => $val )
-                {
-                    $q->set(
-                        $db->quoteIdentifier( $col ),
-                        $q->bindValue( $val )
-                    );
-                }
-                $stmt = $q->prepare();
-                $stmt->execute();
-            }
-        }
     }
 
     /**

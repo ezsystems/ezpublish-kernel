@@ -121,6 +121,36 @@ class TestCase extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Inserts database fixture from $file.
+     *
+     * @param string $file
+     * @return void
+     */
+    protected function insertDatabaseFixture( $file )
+    {
+        $data = require( $file );
+        $db   = $this->getDatabaseHandler();
+
+        foreach ( $data as $table => $rows )
+        {
+            foreach ( $rows as $row )
+            {
+                $q = $db->createInsertQuery();
+                $q->insertInto( $db->quoteIdentifier( $table ) );
+                foreach ( $row as $col => $val )
+                {
+                    $q->set(
+                        $db->quoteIdentifier( $col ),
+                        $q->bindValue( $val )
+                    );
+                }
+                $stmt = $q->prepare();
+                $stmt->execute();
+            }
+        }
+    }
+
+    /**
      * Assert query result as correct
      *
      * Vuilds text representations of the asserted and fetched query result,
