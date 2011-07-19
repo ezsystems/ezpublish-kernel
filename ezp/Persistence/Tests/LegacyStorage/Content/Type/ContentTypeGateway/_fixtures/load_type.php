@@ -2,6 +2,7 @@
 
 return array(
     'ezcontentclass' => array(
+        // loaded
         array(
             'id'                          => 1,
             'always_available'            => 1,
@@ -21,9 +22,31 @@ return array(
             'sort_order'                  => 1,
             'url_alias_name'              => '',
             'version'                     => 0
-        )
+        ),
+        // not loaded, id mismatch
+        array(
+            'id'                          => 2,
+            'always_available'            => 1,
+            'contentobject_name'          => '<short_name|name>',
+            'created'                     => 1024392098,
+            'creator_id'                  => 14,
+            'identifier'                  => 'folder_3',
+            'initial_language_id'         => 2,
+            'is_container'                => 1,
+            'language_mask'               => 3,
+            'modified'                    => 1082454875,
+            'modifier_id'                 => 14,
+            'remote_id'                   => 'a3d405b81be900468eb153d774f4f0d2',
+            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:6:\"Folder\";}',
+            'sort_field'                  => 1,
+            'sort_order'                  => 1,
+            'url_alias_name'              => '',
+            'version'                     => 0
+        ),
     ),
     'ezcontentclass_attribute' => array(
+        // loaded
         array(
             'id'                          => 4,
             'contentclass_id'             => 1,
@@ -168,14 +191,89 @@ return array(
             'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
             'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:13:\"Show children\";}',
             'version'                     => 0
-        )
+        ),
+        // not loaded, version mismatch
+        array(
+            'id'                          => 159,
+            'contentclass_id'             => 1,
+            'can_translate'               => 0,
+            'category'                    => '',
+            'data_float1'                 => 0,
+            'data_float2'                 => 0,
+            'data_float3'                 => 0,
+            'data_float4'                 => 0,
+            'data_int1'                   => 0,
+            'data_int2'                   => 0,
+            'data_int3'                   => 1,
+            'data_int4'                   => 0,
+            'data_text1'                  => '',
+            'data_text2'                  => '',
+            'data_text3'                  => '',
+            'data_text4'                  => '',
+            'data_text5'                  => '',
+            'data_type_string'            => 'ezboolean',
+            'identifier'                  => 'show_children',
+            'is_information_collector'    => 0,
+            'is_required'                 => 0,
+            'is_searchable'               => 0,
+            'placement'                   => 5,
+            'serialized_data_text'        => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:13:\"Show children\";}',
+            'version'                     => 1
+        ),
+        // not loaded, contentclass_id mismatch
+        array(
+            'id'                          => 160,
+            'contentclass_id'             => 2,
+            'can_translate'               => 0,
+            'category'                    => '',
+            'data_float1'                 => 0,
+            'data_float2'                 => 0,
+            'data_float3'                 => 0,
+            'data_float4'                 => 0,
+            'data_int1'                   => 0,
+            'data_int2'                   => 0,
+            'data_int3'                   => 1,
+            'data_int4'                   => 0,
+            'data_text1'                  => '',
+            'data_text2'                  => '',
+            'data_text3'                  => '',
+            'data_text4'                  => '',
+            'data_text5'                  => '',
+            'data_type_string'            => 'ezboolean',
+            'identifier'                  => 'show_children',
+            'is_information_collector'    => 0,
+            'is_required'                 => 0,
+            'is_searchable'               => 0,
+            'placement'                   => 5,
+            'serialized_data_text'        => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
+            'serialized_description_list' => 'a:2:{i:0;s:0:\"\";s:16:\"always-available\";b:0;}',
+            'serialized_name_list'        => 'a:2:{s:16:\"always-available\";s:6:\"eng-US\";s:6:\"eng-US\";s:13:\"Show children\";}',
+            'version'                     => 0
+        ),
     ),
     'ezcontentclass_classgroup' => array(
+        // loaded
         array(
             'contentclass_id'      => 1,
             'contentclass_version' => 0,
             'group_id'             => 1,
             'group_name'           => 'Content'
-       )
+        ),
+        // not loaded, version mismatch
+        array(
+            'contentclass_id'      => 1,
+            'contentclass_version' => 1,
+            'group_id'             => 1,
+            'group_name'           => 'Content'
+        ),
+        // not loaded, id mismatch
+        array(
+            'contentclass_id'      => 2,
+            'contentclass_version' => 0,
+            'group_id'             => 1,
+            'group_name'           => 'Content'
+        ),
     ),
 );
