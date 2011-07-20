@@ -12,8 +12,8 @@ namespace ezp\Persistence\Tests\InMemoryEngine;
 use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface,
     ezp\Persistence\Content\ContentCreateStruct,
     ezp\Persistence\Content\ContentUpdateStruct,
-    ezp\Content\Version,
-    ezp\Content\Criteria\Criteria;
+    ezp\Persistence\Content\Criterion,
+    ezp\Content\Version;
 
 /**
  * @see ezp\Persistence\Content\Interfaces\ContentHandler
@@ -114,14 +114,14 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see ezp\Persistence\Content\Interfaces\ContentHandler
      */
-    public function find( Criteria $criteria, $offset, $limit, $sort )
+    public function find( Criterion $criterion, $offset, $limit, $sort )
     {
     }
 
     /**
      * @see ezp\Persistence\Content\Interfaces\ContentHandler
      */
-    public function findSingle( Criteria $criteria, $offset, $sort )
+    public function findSingle( Criterion $criterion, $offset, $sort )
     {
     }
 

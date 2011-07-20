@@ -60,29 +60,29 @@ interface ContentHandler
     public function load( $id );
 
     /**
-     * Returns a list of object satisfying the $criteria.
+     * Returns a list of object satisfying the $criterion.
      *
-     * @param  ezp\Content\Criteria\Criteria $criteria
+     * @param AbstractCriterion $criterion
      * @param $offset
      * @param $limit
      * @param $sort
      * @return array(ezp\Persistence\Content) Content value object.
      */
-    public function find( AbstractCriterion $criteria, $offset, $limit, $sort );
+    public function find( AbstractCriterion $criterion, $offset, $limit, $sort );
 
     /**
      * Returns a single Content object found.
      *
      * Performs a {@link find()} query to find a single object. You need to
-     * ensure, that your $criteria ensure that only a single object can be
+     * ensure, that your $criterion ensure that only a single object can be
      * retrieved.
      *
-     * @param ezp\Content\AbstractCriterion $criteria
+     * @param AbstractCriterion $criterion
      * @param mixed $offset
      * @param mixed $sort
      * @return ezp\Persistence\Content
      */
-    public function findSingle( AbstractCriterion $criteria, $offset, $sort );
+    public function findSingle( AbstractCriterion $criterion, $offset, $sort );
 
     /**
      * Sets the state of object identified by $contentId and $version to $state.

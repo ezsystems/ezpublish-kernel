@@ -75,7 +75,7 @@ class QueryBuilder
      * The given criteria will be added with a logical AND, meaning that they must all match.
      * To handle OR criteria, the {@see or}/{@see lOr} methods must be used.
      *
-     * @param ezp\content\Criteria\Criterion$... $c
+     * @param Criterion $c
      */
     public function addCriteria( Criterion $c )
     {

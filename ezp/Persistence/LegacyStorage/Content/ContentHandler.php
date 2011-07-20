@@ -64,15 +64,15 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * Returns a list of object satisfying the $criteria.
+     * Returns a list of object satisfying the $criterion.
      *
-     * @param  Criteria $criteria
+     * @param Criterion $criterion
      * @param $offset
      * @param $limit
      * @param $sort
      * @return array(ezp\Persistence\Content) Content value object.
      */
-    public function find( Criterion $criteria, $offset, $limit, $sort )
+    public function find( Criterion $criterion, $offset, $limit, $sort )
     {
         throw new Exception( "Not implemented yet." );
     }
@@ -81,15 +81,15 @@ class ContentHandler implements ContentHandlerInterface
      * Returns a single Content object found.
      *
      * Performs a {@link find()} query to find a single object. You need to
-     * ensure, that your $criteria ensure that only a single object can be
+     * ensure, that your $criterion ensure that only a single object can be
      * retrieved.
      *
-     * @param Criteria $criteria
+     * @param Criterion $criterion
      * @param mixed $offset
      * @param mixed $sort
      * @return ezp\Persistence\Content
      */
-    public function findSingle( Criterion $criteria, $offset, $sort )
+    public function findSingle( Criterion $criterion, $offset, $sort )
     {
         throw new Exception( "Not implemented yet." );
     }
