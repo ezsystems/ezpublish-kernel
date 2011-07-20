@@ -281,17 +281,13 @@ class LocationHandlerTest extends TestCase
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( 1, 0, 0 ),
-                array( 2, 0, 0 ),
-                array( 69, 1, 1 ),
-                array( 70, 0, 1 ),
-                array( 71, 0, 1 ),
-                array( 75, 0, 1 ),
+                array( 70, 76 ),
+                array( 78, 68 ),
             ),
             $query
-                ->select( 'node_id', 'is_hidden', 'is_invisible' )
+                ->select( 'node_id', 'contentobject_id' )
                 ->from( 'ezcontentobject_tree' )
-                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70, 71, 75 ) ) )
+                ->where( $query->expr->in( 'node_id', array( 70, 78 ) ) )
         );
     }
 
