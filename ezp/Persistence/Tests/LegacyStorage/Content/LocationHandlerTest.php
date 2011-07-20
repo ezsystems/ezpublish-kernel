@@ -274,7 +274,68 @@ class LocationHandlerTest extends TestCase
 
     public function testSwapLocations()
     {
-        $this->markTestIncomplete( '@TODO: Reploduce in eZ Publish -- currently results in transaction errors.' );
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $handler->swap( 70, 78 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( 1, 0, 0 ),
+                array( 2, 0, 0 ),
+                array( 69, 1, 1 ),
+                array( 70, 0, 1 ),
+                array( 71, 0, 1 ),
+                array( 75, 0, 1 ),
+            ),
+            $query
+                ->select( 'node_id', 'is_hidden', 'is_invisible' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70, 71, 75 ) ) )
+        );
+    }
+
+    public function testSwapLocationsUpdatePathIdentificationString()
+    {
+        $this->markTestIncomplete( 'Proper way of setting path identification strings yet unknown.' );
+
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $handler->swap( 70, 78 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( 70, 'products/web_publishing' ),
+                array( 78, 'solutions/software' ),
+            ),
+            $query
+                ->select( 'node_id', 'path_identification_string' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->in( 'node_id', array( 70, 78 ) ) )
+        );
+    }
+
+    public function testSwapLocationsSubtreeModificationTimeUpdate()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $time    = time();
+        $handler->swap( 70, 78 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( '/1/' ),
+                array( '/1/2/' ),
+                array( '/1/2/69/' ),
+                array( '/1/2/77/' ),
+            ),
+            $query
+                ->select( 'path_string' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->gte( 'modified_subnode', $time ) )
+        );
     }
 
     public function testUpdatePriority()
