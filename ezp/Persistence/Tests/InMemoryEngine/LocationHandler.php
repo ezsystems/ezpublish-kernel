@@ -90,9 +90,9 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Interfaces\LocationHandler
      */
-    public function updatePosition( $locationId, $position )
+    public function updatePriority( $locationId, $priority )
     {
-        return $this->backend->update( 'Content\\Location', $locationId, array( 'position' => $position ) );
+        return $this->backend->update( 'Content\\Location', $locationId, array( 'priority' => $priority ) );
     }
 
     /**

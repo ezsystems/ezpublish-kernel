@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the (content) Version class
+ * File containing the RestrictedVersion class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,9 +12,12 @@ namespace ezp\Persistence\Content;
 use ezp\Persistence\AbstractValueObject;
 
 /**
- * Struct containing properties for a Version entity.
+ * Struct containing properties for a Version entity without its fields.
+ *
+ * The omission of fields is so that this struct can be used for batch
+ * operations where full set of field data would be unnecessary.
  */
-class Version extends AbstractValueObject
+class RestrictedVersion extends AbstractValueObject
 {
     /**
      * Version ID.
@@ -63,15 +66,5 @@ class Version extends AbstractValueObject
      * @var mixed
      */
     public $contentId;
-
-    /**
-     * Loaded content fields in this version.
-     *
-     * Contains all fields for all languages of this version. Fields which are
-     * not translatable wil only be contained once.
-     *
-     * @var array(Field)
-     */
-    public $fields = array();
 }
 ?>
