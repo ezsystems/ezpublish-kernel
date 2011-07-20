@@ -15,6 +15,13 @@ namespace ezp\Persistence\LegacyStorage\Content;
 class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHandler
 {
     /**
+     * Content handler implementation
+     *
+     * @var ContentHandler
+     */
+    protected $contentHandler;
+
+    /**
      * Gaateway for handling location data
      *
      * @var LocationGateway
@@ -27,8 +34,9 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      * @param LocationGateway $locationGateway
      * @return void
      */
-    public function __construct( LocationGateway $locationGateway )
+    public function __construct( ContentHandler $contentHandler, LocationGateway $locationGateway )
     {
+        $this->contentHandler  = $contentHandler;
         $this->locationGateway = $locationGateway;
     }
 
@@ -157,7 +165,11 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function createLocation( $contentId, $parentId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $parentNodeData = $this->locationGateway->getBasicNodeData( $parentId );
+        $content        = $this->contentHandler->load( $contentId );
+
+        $this->locationGateway->createLocation( $content, $parentNodeData );
+        $this->locationGateway->updateSubtreeModificationTime( $parentNodeData['path_string'] );
     }
 
     /**

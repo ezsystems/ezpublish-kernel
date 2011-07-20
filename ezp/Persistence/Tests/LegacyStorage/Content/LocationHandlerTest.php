@@ -18,6 +18,13 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
 class LocationHandlerTest extends TestCase
 {
     /**
+     * CMocked content handler instance
+     *
+     * @var \ezp\Persistence\LegacyStorage\Content\ContentHandler
+     */
+    protected $contentHandler;
+
+    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
@@ -31,8 +38,17 @@ class LocationHandlerTest extends TestCase
     {
         $dbHandler = $this->getDatabaseHandler();
         return new Content\LocationHandler(
+            $this->contentHandler = $this->getMock( '\ezp\Persistence\LegacyStorage\Content\ContentHandler' ),
             new Content\LocationGateway\EzcDatabase( $dbHandler )
         );
+    }
+
+    protected function getContentObject()
+    {
+        $contentObject = new \ezp\Persistence\Content();
+        $contentObject->id = 68;
+
+        return $contentObject;
     }
 
     public function testMoveSubtreePathUpdate()
@@ -307,19 +323,72 @@ class LocationHandlerTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
+
+        $this->contentHandler
+            ->expects( $this->once() )
+            ->method( 'load' )
+            ->with( 68 )
+            ->will( $this->returnValue( $this->getContentObject() ) );
+
         $handler->createLocation( 68, 77 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( 68, 70, '/1/2/69/70/' ),
-                array( 68, 228, '/1/2/77/228/' ),
-                array( 75, 77, '/1/2/77/' ),
+                array( 70, '/1/2/69/70/' ),
+                array( 228, '/1/2/77/228/' ),
+                array( 77, '/1/2/77/' ),
             ),
             $query
-                ->select( 'contentobject_id', 'node_id', 'path_string' )
+                ->select( 'node_id', 'path_string' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'contentobject_id', array( 68, 75 ) ) )
+        );
+    }
+
+    public static function getLocationValues()
+    {
+        return array(
+            array( 'contentobject_id', 68 ),
+            array( 'contentobject_is_published', 1 ),
+            array( 'contentobject_version', 1 ),
+            array( 'depth', 3 ),
+            array( 'is_hidden', 0 ),
+            array( 'is_invisible', 0 ),
+            array( 'main_node_id', 70 ),
+            array( 'parent_node_id', 77 ),
+            array( 'path_identification_string', 'solutions/software' ),
+            array( 'priority', 0 ),
+            array( 'remote_id', '34d37f301508408dfe6b68f1e1d238ad' ),
+            array( 'sort_field', 1 ),
+            array( 'sort_order', 1 ),
+        );
+    }
+
+    /**
+     * @depends testCreateLocation
+     * @dataProvider getLocationValues
+     */
+    public function testCreateLocationValues( $field, $value )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+
+        $this->contentHandler
+            ->expects( $this->once() )
+            ->method( 'load' )
+            ->with( 68 )
+            ->will( $this->returnValue( $this->getContentObject() ) );
+
+        $handler->createLocation( 68, 77 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( $value ) ),
+            $query
+                ->select( $field )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->eq( 'node_id', 228 ) )
         );
     }
 
@@ -328,6 +397,12 @@ class LocationHandlerTest extends TestCase
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
         $time    = time();
+        $this->contentHandler
+            ->expects( $this->once() )
+            ->method( 'load' )
+            ->with( 68 )
+            ->will( $this->returnValue( $this->getContentObject() ) );
+
         $handler->createLocation( 68, 77 );
 
         $query = $this->handler->createSelectQuery();
@@ -336,11 +411,58 @@ class LocationHandlerTest extends TestCase
                 array( '/1/' ),
                 array( '/1/2/' ),
                 array( '/1/2/77/' ),
+                array( '/1/2/77/228/' ),
             ),
             $query
                 ->select( 'path_string' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->gte( 'modified_subnode', $time ) )
+        );
+    }
+
+    public static function getNodeAssignmentValues()
+    {
+        return array(
+            array( 'contentobject_version', 1 ),
+            array( 'from_node_id', 0 ),
+            array( 'id', 214 ),
+            array( 'is_main', 0 ),
+            array( 'op_code', 2 ),
+            array( 'parent_node', 77 ),
+            array( 'parent_remote_id', '' ),
+            array( 'remote_id', 0 ),
+            array( 'sort_field', 2 ),
+            array( 'sort_order', 0 ),
+        );
+    }
+
+    /**
+     * @depends testCreateLocation
+     * @dataProvider getNodeAssignmentValues
+     */
+    public function testCreateLocationNodeAssignmentCreation( $field, $value )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $time    = time();
+        $this->contentHandler
+            ->expects( $this->once() )
+            ->method( 'load' )
+            ->with( 68 )
+            ->will( $this->returnValue( $this->getContentObject() ) );
+
+        $handler->createLocation( 68, 77 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( $value ) ),
+            $query
+                ->select( $field )
+                ->from( 'eznode_assignment' )
+                ->where( $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 68 ),
+                    $query->expr->eq( 'parent_node', 77 )
+                ) )
         );
     }
 }

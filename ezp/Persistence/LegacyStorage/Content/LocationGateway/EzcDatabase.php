@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content\LocationGateway;
-use ezp\Persistence\LegacyStorage\Content\LocationGateway;
+use ezp\Persistence\LegacyStorage\Content\LocationGateway,
+    ezp\Persistence\Content;
 
 /**
  * Location gateway implementation using the zeta database component.
@@ -285,15 +286,58 @@ class EzcDatabase extends LocationGateway
     }
 
     /**
-     * Creates a new location for $contentId rooted at $parentId.
+     * Creates a new location for $conont in given $parentNode
      *
-     * @param mixed $contentId
-     * @param mixed $parentId
+     * @param Content $content
+     * @param array $parentNode
      * @return ezp\Persistence\Content\Location
      */
-    public function createLocation( $contentId, $parentId )
+    public function createLocation( Content $content, array $parentNode )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createInsertQuery();
+        $query
+            ->insertInto( 'ezcontentobject_tree' )
+            ->set( 'contentobject_id', $query->bindValue( $content->id ) )
+            ->set( 'contentobject_is_published', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'contentobject_version', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'depth', $query->bindValue( $parentNode['depth'] + 1 ) )
+            ->set( 'is_hidden', $query->bindValue( 0 ) )
+            ->set( 'is_invisible', $query->bindValue( 0 ) )
+            ->set( 'main_node_id', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'modified_subnode', $query->bindValue( time() ) )
+            ->set( 'node_id', $query->bindValue( null ) ) // Auto increment
+            ->set( 'parent_node_id', $query->bindValue( $parentNode['node_id'] ) )
+            ->set( 'path_identification_string', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'path_string', $query->bindValue( 'dummy' ) ) // Set later
+            ->set( 'priority', $query->bindValue( 0 ) )
+            ->set( 'remote_id', $query->bindValue( '??' ) ) // @TODO: What to insert?
+            ->set( 'sort_field', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'sort_order', $query->bindValue( null ) ); // @TODO: What to insert?
+        $query->prepare()->execute();
+
+        $newNodeId = $this->handler->lastInsertId();
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezcontentobject_tree' )
+            ->set( 'path_string', $query->bindValue( $parentNode['path_string'] . $newNodeId . '/' ) )
+            ->where( $query->expr->eq( 'node_id', $query->bindValue( $newNodeId ) ) );
+        $query->prepare()->execute();
+
+        $query = $this->handler->createInsertQuery();
+        $query
+            ->insertInto( 'eznode_assignment' )
+            ->set( 'contentobject_id', $query->bindValue( $content->id ) )
+            ->set( 'contentobject_version', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'from_node_id', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'id', $query->bindValue( null ) ) // auto increment
+            ->set( 'is_main', $query->bindValue( 0 ) ) // @TODO: What to insert?
+            ->set( 'op_code', $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP ) )
+            ->set( 'parent_node', $query->bindValue( $parentNode['node_id'] ) )
+            ->set( 'parent_remote_id', $query->bindValue( '' ) )
+            ->set( 'remote_id', $query->bindValue( 0 ) )
+            ->set( 'sort_field', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'sort_order', $query->bindValue( null ) ); // @TODO: What to insert?
+        $query->prepare()->execute();
     }
 
     /**

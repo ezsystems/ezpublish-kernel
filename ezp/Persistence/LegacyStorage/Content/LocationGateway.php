@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content;
+use ezp\Persistence\Content;
 
 /**
  * Base class for location gateways.
@@ -117,13 +118,13 @@ abstract class LocationGateway
     abstract public function updatePriority( $locationId, $priority );
 
     /**
-     * Creates a new location for $contentId rooted at $parentId.
+     * Creates a new location for $conont in given $parentNode
      *
-     * @param mixed $contentId
-     * @param mixed $parentId
+     * @param Content $content
+     * @param array $parentNode
      * @return ezp\Persistence\Content\Location
      */
-    abstract public function createLocation( $contentId, $parentId );
+    abstract public function createLocation( Content $content, array $parentNode );
 
     /**
      * Removes all Locations under and includin $locationId.
