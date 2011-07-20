@@ -51,6 +51,42 @@ class LocationHandlerTest extends TestCase
         return $contentObject;
     }
 
+    public static function getLoadLocationValues()
+    {
+        return array(
+            array( 'id', 77 ),
+            array( 'priority', 0 ),
+            array( 'hidden', 0 ),
+            array( 'invisible', 0 ),
+            array( 'remoteId', 'dbc2f3c8716c12f32c379dbf0b1cb133' ),
+            array( 'parentId', 2 ),
+            array( 'pathIdentificationString', 'solutions' ),
+            array( 'pathString', '/1/2/77/' ),
+            array( 'modifiedSubLocation', 1311065017 ),
+            array( 'mainLocationId', 77 ),
+            array( 'depth', 2 ),
+            array( 'sortField', 2 ),
+            array( 'sortOrder', 1 ),
+        );
+    }
+
+    /**
+     * @dataProvider getLoadLocationValues
+     */
+    public function testLoadLocation( $field, $value )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $location = $handler->load( 77 );
+
+        $this->assertTrue( $location instanceof \ezp\Persistence\Content\Location );
+        $this->assertEquals(
+            $value,
+            $location->$field,
+            "Value in property $field not as expected."
+        );
+    }
+
     public function testMoveSubtreePathUpdate()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
@@ -403,7 +439,7 @@ class LocationHandlerTest extends TestCase
         );
     }
 
-    public static function getLocationValues()
+    public static function getCreateLocationValues()
     {
         return array(
             array( 'contentobject_id', 68 ),
@@ -424,7 +460,7 @@ class LocationHandlerTest extends TestCase
 
     /**
      * @depends testCreateLocation
-     * @dataProvider getLocationValues
+     * @dataProvider getCreateLocationValues
      */
     public function testCreateLocationValues( $field, $value )
     {
