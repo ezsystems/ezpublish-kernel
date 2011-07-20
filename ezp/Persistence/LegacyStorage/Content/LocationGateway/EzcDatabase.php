@@ -182,6 +182,32 @@ class EzcDatabase extends LocationGateway
      */
     public function unHideSubtree( $pathString )
     {
+        // Unhide the requested node
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezcontentobject_tree' )
+            ->set( 'is_hidden', $query->bindValue( 0 ) )
+            ->where( $query->expr->eq( 'path_string', $query->bindValue( $pathString ) ) );
+        $query->prepare()->execute();
+
+        // Check if any parent nodes are explicitely hidden
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( 'path_string' )
+            ->from( 'ezcontentobject_tree' )
+            ->where( $query->expr->lAnd(
+                $query->expr->eq( 'is_hidden', $query->bindValue( 1 ) ),
+                $query->expr->in( 'node_id', array_filter( explode( '/', $pathString ) ) )
+            ) );
+        $statement = $query->prepare();
+        $statement->execute();
+        if ( count( $statement->fetchAll( \PDO::FETCH_COLUMN ) ) )
+        {
+            // There are parent nodes set hidden, so that we can skip marking
+            // something visible again.
+            return;
+        }
+
         // Find nodes of explicitely hidden subtrees in the subtree which
         // should be unhidden
         $query = $this->handler->createSelectQuery();
@@ -190,8 +216,7 @@ class EzcDatabase extends LocationGateway
             ->from( 'ezcontentobject_tree' )
             ->where( $query->expr->lAnd(
                 $query->expr->eq( 'is_hidden', $query->bindValue( 1 ) ),
-                $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) ),
-                $query->expr->neq( 'path_string', $query->bindValue( $pathString ) )
+                $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) )
             ) );
         $statement = $query->prepare();
         $statement->execute();
@@ -201,28 +226,30 @@ class EzcDatabase extends LocationGateway
         $query
             ->update( 'ezcontentobject_tree' )
             ->set( 'is_invisible', $query->bindValue( 0 ) )
-            ->set( 'modified_subnode', $query->bindValue( time() ) )
-            ->where( $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) ) );
-        $query->prepare()->execute();
+            ->set( 'modified_subnode', $query->bindValue( time() ) );
 
-        $query = $this->handler->createUpdateQuery();
-        $query
-            ->update( 'ezcontentobject_tree' )
-            ->set( 'is_hidden', $query->bindValue( 0 ) )
-            ->where( $query->expr->eq( 'path_string', $query->bindValue( $pathString ) ) );
-        $query->prepare()->execute();
-
-        // Set hidden subtrees hidden again
-        foreach ( $hiddenSubtrees as $hiddenSubtreePath )
+        // Build where expression selecting the nodes, which should be made
+        // visible again
+        $where = $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) );
+        if ( count( $hiddenSubtrees ) )
         {
-            $query = $this->handler->createUpdateQuery();
-            $query
-                ->update( 'ezcontentobject_tree' )
-                ->set( 'is_invisible', $query->bindValue( 1 ) )
-                ->set( 'modified_subnode', $query->bindValue( time() ) )
-                ->where( $query->expr->like( 'path_string', $query->bindValue( $hiddenSubtreePath . '%' ) ) );
-            $query->prepare()->execute();
+            $where = $query->expr->lAnd(
+                $where,
+                $query->expr->lAnd(
+                    array_map(
+                        function ( $pathString ) use ( $query )
+                        {
+                            return $query->expr->not(
+                                $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) )
+                            );
+                        },
+                        $hiddenSubtrees
+                    )
+                )
+            );
         }
+        $query->where( $where );
+        $statement = $query->prepare()->execute();
     }
 
     /**
