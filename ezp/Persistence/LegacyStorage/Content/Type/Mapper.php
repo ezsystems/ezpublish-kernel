@@ -108,7 +108,7 @@ class Mapper
         $field->isTranslatable = ( $row['ezcontentclass_attribute_can_translate'] == 1 );
         $field->isRequired =  ( $row['ezcontentclass_attribute_is_required'] == 1 );
         $field->isInfoCollector = ( $row['ezcontentclass_attribute_is_information_collector'] == 1 );
-        // $field->fieldTypeConstra(int)?
+        // $field->fieldTypeConstraint ?
         $field->defaultValue = unserialize( $row['ezcontentclass_attribute_serialized_data_text'] );
         // Correct ^?
 
