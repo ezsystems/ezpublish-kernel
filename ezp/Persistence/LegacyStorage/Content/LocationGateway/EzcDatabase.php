@@ -23,21 +23,6 @@ class EzcDatabase extends LocationGateway
     protected $handler;
 
     /**
-     * Constants for node assignment op codes
-     */
-    const
-        NODE_ASSIGNMENT_OP_CODE_NOP        = 0,
-        NODE_ASSIGNMENT_OP_CODE_EXECUTE    = 1,
-        NODE_ASSIGNMENT_OP_CODE_CREATE_NOP = 2,
-        NODE_ASSIGNMENT_OP_CODE_CREATE     = 3,
-        NODE_ASSIGNMENT_OP_CODE_MOVE_NOP   = 4,
-        NODE_ASSIGNMENT_OP_CODE_MOVE       = 5,
-        NODE_ASSIGNMENT_OP_CODE_REMOVE_NOP = 6,
-        NODE_ASSIGNMENT_OP_CODE_REMOVE     = 7,
-        NODE_ASSIGNMENT_OP_CODE_SET_NOP    = 8,
-        NODE_ASSIGNMENT_OP_CODE_SET        = 9;
-
-    /**
      * Construct from database handler
      *
      * @param \ezcDbHandler $handler
