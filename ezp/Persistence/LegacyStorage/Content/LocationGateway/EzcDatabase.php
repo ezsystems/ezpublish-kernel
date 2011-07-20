@@ -215,10 +215,12 @@ class EzcDatabase extends LocationGateway
         $query
             ->select( 'path_string' )
             ->from( 'ezcontentobject_tree' )
-            ->where( $query->expr->lAnd(
-                $query->expr->eq( 'is_hidden', $query->bindValue( 1 ) ),
-                $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) )
-            ) );
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq( 'is_hidden', $query->bindValue( 1 ) ),
+                    $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) )
+                )
+            );
         $statement = $query->prepare();
         $statement->execute();
         $hiddenSubtrees = $statement->fetchAll( \PDO::FETCH_COLUMN );
