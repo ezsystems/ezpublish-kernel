@@ -166,10 +166,62 @@ class EzcDatabase extends ContentTypeGateway
      * @param mixed $typeId
      * @param FieldDefinition $fieldDefinition
      * @return mixed Field definition ID
+     * @todo What about version, fieldTypeConstraints and defaultValue?
+     * @todo This might lead to race conditions for insert IDs.
+     * @todo PDO->lastInsertId() might require a seq name (Oracle?).
      */
     public function insertFieldDefinition( $typeId, FieldDefinition $fieldDefinition )
     {
-        throw new \RuntimeException( "Not implemented, yet" );
+        $q = $this->dbHandler->createInsertQuery();
+        $q->insertInto( 'ezcontentclass_attribute' );
+        $q->set(
+            $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
+            $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+          /*
+           * version?
+          )->set(
+            $this->dbHandler->quoteIdentifier( '' ),
+            $q->bindValue( serialize( $fieldDefinition->name) )
+          */
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'serialized_name_list' ),
+            $q->bindValue( serialize( $fieldDefinition->name ) )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'serialized_description_list' ),
+            $q->bindValue( serialize( $fieldDefinition->description ) )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'identifier' ),
+            $q->bindValue( $fieldDefinition->identifier )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'category' ),
+            $q->bindValue( $fieldDefinition->fieldGroup )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'placement' ),
+            $q->bindValue( $fieldDefinition->position, null, \PDO::PARAM_INT )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'data_type_string' ),
+            $q->bindValue( $fieldDefinition->fieldType )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'can_translate' ),
+            $q->bindValue( ( $fieldDefinition->isTranslatable ? 1 : 0 ), null, \PDO::PARAM_INT )
+          )->set(
+            $this->dbHandler->quoteIdentifier( 'is_information_collector' ),
+            $q->bindValue( ( $fieldDefinition->isInfoCollector ? 1 : 0 ), null, \PDO::PARAM_INT )
+          /*
+           * fieldTypeConstraints?
+          )->set(
+            $this->dbHandler->quoteIdentifier( '' ),
+            $q->bindValue( $fieldDefinition-> )
+           */
+          )->set(
+            // @todo: Correct?
+            $this->dbHandler->quoteIdentifier( 'serialized_data_text' ),
+            $q->bindValue( serialize( $fieldDefinition->defaultValue ) )
+          );
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $this->dbHandler->lastInsertId();
     }
 
     /**
