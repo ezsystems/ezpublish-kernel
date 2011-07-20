@@ -141,7 +141,11 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function updatePriority( $locationId, $priority )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $sourceNodeData = $this->locationGateway->getBasicNodeData( $locationId );
+        $pathString = implode( '/', array_slice( explode( '/', $sourceNodeData['path_string'] ), 0, -2 ) ) . '/';
+
+        $this->locationGateway->updatePriority( $locationId, $priority );
+        $this->locationGateway->updateSubtreeModificationTime( $pathString );
     }
 
     /**

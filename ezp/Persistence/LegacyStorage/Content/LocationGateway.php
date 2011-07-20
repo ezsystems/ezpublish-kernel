@@ -108,13 +108,13 @@ abstract class LocationGateway
     abstract public function swap( $locationId1, $locationId2 );
 
     /**
-     * Updates an existing location position aka priority.
+     * Updates an existing location priority.
      *
      * @param int $locationId
-     * @param int $position
+     * @param int $priority
      * @return boolean
      */
-    abstract public function updatePosition( $locationId, $position );
+    abstract public function updatePriority( $locationId, $priority );
 
     /**
      * Creates a new location for $contentId rooted at $parentId.

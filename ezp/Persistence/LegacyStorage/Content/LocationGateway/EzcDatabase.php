@@ -268,15 +268,20 @@ class EzcDatabase extends LocationGateway
     }
 
     /**
-     * Updates an existing location position aka priority.
+     * Updates an existing location priority.
      *
      * @param int $locationId
-     * @param int $position
+     * @param int $priority
      * @return boolean
      */
-    public function updatePosition( $locationId, $position )
+    public function updatePriority( $locationId, $priority )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezcontentobject_tree' )
+            ->set( 'priority', $query->bindValue( $priority ) )
+            ->where( $query->expr->eq( 'node_id', $query->bindValue( $locationId ) ) );
+        $query->prepare()->execute();
     }
 
     /**
