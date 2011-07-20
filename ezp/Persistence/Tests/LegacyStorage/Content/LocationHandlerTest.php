@@ -302,4 +302,45 @@ class LocationHandlerTest extends TestCase
                 ->where( $query->expr->gte( 'modified_subnode', $time ) )
         );
     }
+
+    public function testCreateLocation()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $handler->createLocation( 68, 77 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( 68, 70, '/1/2/69/70/' ),
+                array( 68, 228, '/1/2/77/228/' ),
+                array( 75, 77, '/1/2/77/' ),
+            ),
+            $query
+                ->select( 'contentobject_id', 'node_id', 'path_string' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->in( 'contentobject_id', array( 68, 75 ) ) )
+        );
+    }
+
+    public function testCreateLocationSubtreeModificationTimeUpdate()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $time    = time();
+        $handler->createLocation( 68, 77 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( '/1/' ),
+                array( '/1/2/' ),
+                array( '/1/2/77/' ),
+            ),
+            $query
+                ->select( 'path_string' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->gte( 'modified_subnode', $time ) )
+        );
+    }
 }
