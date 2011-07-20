@@ -169,20 +169,20 @@ class EzcDatabaseTest extends TestCase
                     'placement'            => '4',
                     'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
                 ),
-                $this->getDatabaseHandler()
-                    ->createSelectQuery()
-                    ->select(
-                        'category',
-                        'contentclass_id',
-                        'data_type_string',
-                        'identifier',
-                        'is_required',
-                        'placement',
-                        'serialized_name_list'
-                    )
-                    ->from( 'ezcontentclass_attribute' ),
-                'FieldDefinition not inserted correctly'
-            )
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select(
+                    'category',
+                    'contentclass_id',
+                    'data_type_string',
+                    'identifier',
+                    'is_required',
+                    'placement',
+                    'serialized_name_list'
+                )
+                ->from( 'ezcontentclass_attribute' ),
+            'FieldDefinition not inserted correctly'
         );
     }
 
