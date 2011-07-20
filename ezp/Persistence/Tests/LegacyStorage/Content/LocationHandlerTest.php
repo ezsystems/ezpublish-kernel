@@ -203,7 +203,7 @@ class LocationHandlerTest extends TestCase
     /**
      * @depends testHideUpdateHidden
      */
-    public function testHideUnhidePartialSubtree()
+    public function testHideUnhideParentTree()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
@@ -220,6 +220,34 @@ class LocationHandlerTest extends TestCase
                 array( 70, 1, 1 ),
                 array( 71, 0, 1 ),
                 array( 75, 0, 0 ),
+            ),
+            $query
+                ->select( 'node_id', 'is_hidden', 'is_invisible' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70, 71, 75 ) ) )
+        );
+    }
+
+    /**
+     * @depends testHideUpdateHidden
+     */
+    public function testHideUnhidePartialSubtree()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $handler->hide( 69 );
+        $handler->hide( 70 );
+        $handler->unhide( 70 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( 1, 0, 0 ),
+                array( 2, 0, 0 ),
+                array( 69, 1, 1 ),
+                array( 70, 0, 1 ),
+                array( 71, 0, 1 ),
+                array( 75, 0, 1 ),
             ),
             $query
                 ->select( 'node_id', 'is_hidden', 'is_invisible' )
