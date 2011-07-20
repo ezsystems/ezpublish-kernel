@@ -11,7 +11,8 @@
 namespace ezp\Persistence\Content\Interfaces;
 use ezp\Persistence\Content\ContentCreateStruct,
     ezp\Persistence\Content\ContentUpdateStruct,
-    ezp\Persistence\Content\Criterion,
+    // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
+    ezp\Persistence\Content\Criterion as AbstractCriterion,
     ezp\Persistence\Content\RestrictedVersion;
 
 /**
@@ -67,7 +68,7 @@ interface ContentHandler
      * @param $sort
      * @return array(ezp\Persistence\Content) Content value object.
      */
-    public function find( Criterion $criteria, $offset, $limit, $sort );
+    public function find( AbstractCriterion $criteria, $offset, $limit, $sort );
 
     /**
      * Returns a single Content object found.
@@ -76,12 +77,12 @@ interface ContentHandler
      * ensure, that your $criteria ensure that only a single object can be
      * retrieved.
      *
-     * @param ezp\Content\Criterion $criteria
+     * @param ezp\Content\AbstractCriterion $criteria
      * @param mixed $offset
      * @param mixed $sort
      * @return ezp\Persistence\Content
      */
-    public function findSingle( Criterion $criteria, $offset, $sort );
+    public function findSingle( AbstractCriterion $criteria, $offset, $sort );
 
     /**
      * Sets the state of object identified by $contentId and $version to $state.
