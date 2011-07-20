@@ -260,4 +260,46 @@ class LocationHandlerTest extends TestCase
     {
         $this->markTestIncomplete( '@TODO: Reploduce in eZ Publish -- currently results in transaction errors.' );
     }
+
+    public function testUpdatePriority()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $handler->updatePriority( 70, 23 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( 1, 0 ),
+                array( 2, 0 ),
+                array( 69, 0 ),
+                array( 70, 23 ),
+            ),
+            $query
+                ->select( 'node_id', 'priority' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70 ) ) )
+        );
+    }
+
+    public function testUpdatePrioritySubtreeModificationTimeUpdate()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $time    = time();
+        $handler->updatePriority( 70, 23 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( '/1/' ),
+                array( '/1/2/' ),
+                array( '/1/2/69/' ),
+            ),
+            $query
+                ->select( 'path_string' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->gte( 'modified_subnode', $time ) )
+        );
+    }
 }
