@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content;
+use ezp\Persistence\Content\Location;
 
 /**
  * The LocationHandler interface defines operations on Location elements in the storage engine.
@@ -59,7 +60,25 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function load( $locationId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $data     = $this->locationGateway->getBasicNodeData( $locationId );
+        $location = new Location();
+
+        $location->id                       = $data['node_id'];
+        $location->priority                 = $data['priority'];
+        $location->hidden                   = $data['is_hidden'];
+        $location->invisible                = $data['is_invisible'];
+        $location->remoteId                 = $data['remote_id'];
+        $location->contentId                = $data['contentobject_id'];
+        $location->parentId                 = $data['parent_node_id'];
+        $location->pathIdentificationString = $data['path_identification_string'];
+        $location->pathString               = $data['path_string'];
+        $location->modifiedSubLocation      = $data['modified_subnode'];
+        $location->mainLocationId           = $data['main_node_id'];
+        $location->depth                    = $data['depth'];
+        $location->sortField                = $data['sort_field'];
+        $location->sortOrder                = $data['sort_order'];
+
+        return $location;
     }
 
     /**
