@@ -129,7 +129,7 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function swap( $locationId1, $locationId2 )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( '@TODO: Reproduce in eZ Publish. Currently results in tranctions errors.' );
     }
 
     /**

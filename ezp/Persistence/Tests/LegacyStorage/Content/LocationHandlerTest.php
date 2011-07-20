@@ -255,4 +255,9 @@ class LocationHandlerTest extends TestCase
                 ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70, 71, 75 ) ) )
         );
     }
+
+    public function testSwapLocations()
+    {
+        $this->markTestIncomplete( '@TODO: Reploduce in eZ Publish -- currently results in transaction errors.' );
+    }
 }
