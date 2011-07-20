@@ -146,6 +146,80 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertFieldDefinition
+     */
+    public function testInsertFieldDefinition()
+    {
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $field = $this->getFieldDefinitionFixture();
+
+        $gateway->insertFieldDefinition( 23, $field );
+
+        $this->assertQueryResult(
+            array(
+                // "random" sample
+                array(
+                    'category'             => '',
+                    'contentclass_id'      => 23,
+                    'data_type_string'     => 'ezxmltext',
+                    'identifier'           => 'description',
+                    'is_required'          => '0',
+                    'placement'            => '4',
+                    'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
+                ),
+                $this->getDatabaseHandler()
+                    ->createSelectQuery()
+                    ->select(
+                        'category',
+                        'contentclass_id',
+                        'data_type_string',
+                        'identifier',
+                        'is_required',
+                        'placement',
+                        'serialized_name_list'
+                    )
+                    ->from( 'ezcontentclass_attribute' ),
+                'FieldDefinition not inserted correctly'
+            )
+        );
+    }
+
+    /**
+     * Returns a FieldDefinition fixture.
+     *
+     * @return FieldDefinition
+     */
+    protected function getFieldDefinitionFixture()
+    {
+        $field = new FieldDefinition();
+
+        $field->name = array(
+            'always-available' => 'eng-US',
+            'eng-US'           => 'Description',
+        );
+        $field->description = array(
+            0                  => '',
+            'always-available' => false,
+        );
+        $field->identifier      = 'description';
+        $field->fieldGroup      = '';
+        $field->position        = 4;
+        $field->fieldType       = 'ezxmltext';
+        $field->isTranslatable  = true;
+        $field->isRequired      = false;
+        $field->isInfoCollector = false;
+        // $field->fieldTypeConstraints ???
+        $field->defaultValue = array(
+            0                  => '',
+            'always-available' => false,
+        );
+
+        return $field;
+    }
+
+    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
