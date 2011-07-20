@@ -41,6 +41,17 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
     }
 
     /**
+     * Return parent path string for a path string
+     *
+     * @param string $pathString
+     * @return string
+     */
+    protected function getParentPathString( $pathString )
+    {
+        return implode( '/', array_slice( explode( '/', $pathString ), 0, -2 ) ) . '/';
+    }
+
+    /**
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
@@ -137,7 +148,13 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function swap( $locationId1, $locationId2 )
     {
-        throw new \RuntimeException( '@TODO: Reproduce in eZ Publish. Currently results in tranctions errors.' );
+        $this->locationGateway->swap( $locationId1, $locationId2 );
+
+        $locationData1 = $this->locationGateway->getBasicNodeData( $locationId1 );
+        $this->locationGateway->updateSubtreeModificationTime( $this->getParentPathString( $locationData1['path_string'] ) );
+
+        $locationData2 = $this->locationGateway->getBasicNodeData( $locationId2 );
+        $this->locationGateway->updateSubtreeModificationTime( $this->getParentPathString( $locationData2['path_string'] ) );
     }
 
     /**
@@ -150,10 +167,9 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
     public function updatePriority( $locationId, $priority )
     {
         $sourceNodeData = $this->locationGateway->getBasicNodeData( $locationId );
-        $pathString = implode( '/', array_slice( explode( '/', $sourceNodeData['path_string'] ), 0, -2 ) ) . '/';
 
         $this->locationGateway->updatePriority( $locationId, $priority );
-        $this->locationGateway->updateSubtreeModificationTime( $pathString );
+        $this->locationGateway->updateSubtreeModificationTime( $this->getParentPathString( $sourceNodeData['path_string'] ) );
     }
 
     /**

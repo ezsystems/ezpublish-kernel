@@ -265,7 +265,31 @@ class EzcDatabase extends LocationGateway
      */
     public function swap( $locationId1, $locationId2 )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( 'node_id', 'contentobject_id' )
+            ->from( 'ezcontentobject_tree' )
+            ->where( $query->expr->in( 'node_id', array( $locationId1, $locationId2 ) ) );
+        $statement = $query->prepare();
+        $statement->execute();
+        foreach ( $statement->fetchAll() as $row )
+        {
+            $contentObjects[$row['node_id']] = $row['contentobject_id'];
+        }
+
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezcontentobject_tree' )
+            ->set( 'contentobject_id', $query->bindValue( $contentObjects[$locationId2] ) )
+            ->where( $query->expr->eq( 'node_id', $query->bindValue( $locationId1 ) ) );
+        $query->prepare()->execute();
+
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezcontentobject_tree' )
+            ->set( 'contentobject_id', $query->bindValue( $contentObjects[$locationId1] ) )
+            ->where( $query->expr->eq( 'node_id', $query->bindValue( $locationId2 ) ) );
+        $query->prepare()->execute();
     }
 
     /**
