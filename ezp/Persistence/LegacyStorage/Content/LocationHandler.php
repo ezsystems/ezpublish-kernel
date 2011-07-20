@@ -133,13 +133,13 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
     }
 
     /**
-     * Updates an existing location position aka priority.
+     * Updates an existing location priority.
      *
      * @param int $locationId
-     * @param int $position
+     * @param int $priority
      * @return boolean
      */
-    public function updatePosition( $locationId, $position )
+    public function updatePriority( $locationId, $priority )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
