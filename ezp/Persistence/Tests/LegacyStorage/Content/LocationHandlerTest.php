@@ -568,4 +568,67 @@ class LocationHandlerTest extends TestCase
                 ) )
         );
     }
+
+    public function testTrashSubtree()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $handler->trashSubtree( 69 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( 1, 0 ),
+                array( 2, 0 ),
+            ),
+            $query
+                ->select( 'node_id', 'priority' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70 ) ) )
+        );
+    }
+
+    public function testTrashSubtreeUpdateTrashTable()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $handler->trashSubtree( 69 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( 69, '/1/2/69/' ),
+                array( 70, '/1/2/69/70/' ),
+                array( 71, '/1/2/69/70/71/' ),
+                array( 72, '/1/2/69/72/' ),
+                array( 73, '/1/2/69/72/73/' ),
+                array( 74, '/1/2/69/72/74/' ),
+                array( 75, '/1/2/69/72/75/' ),
+                array( 76, '/1/2/69/76/' ),
+            ),
+            $query
+                ->select( 'node_id', 'path_string' )
+                ->from( 'ezcontentobject_trash' )
+        );
+    }
+
+    public function testTrashSubtreeSubtreeModificationTimeUpdate()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationHandler();
+        $time    = time();
+        $handler->trashSubtree( 69 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array(
+                array( '/1/' ),
+                array( '/1/2/' ),
+            ),
+            $query
+                ->select( 'path_string' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->gte( 'modified_subnode', $time ) )
+        );
+    }
 }
