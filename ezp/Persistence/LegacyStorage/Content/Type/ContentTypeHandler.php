@@ -13,7 +13,9 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
     ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\Group;
+    ezp\Persistence\Content\Type\Group,
+    ezp\Persistence\Content\Type\Group\GroupCreateStruct,
+    ezp\Persistence\Content\Type\Group\GroupUpdateStruct;
 
 /**
  */
@@ -44,21 +46,19 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
         $this->contentTypeGateway = $contentTypeGateway;
         $this->mapper             = $mapper;
     }
-
     /**
-     * @param Group $group
+     * @param GroupCreateStruct $group
      * @return Group
      */
-    public function createGroup( Group $group )
+    public function createGroup( GroupCreateStruct $group )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
-     * @todo: Add an update struct, which excludes the contentTypes property from the Group struct
      * @param Group $group
      */
-    public function updateGroup( Group $group )
+    public function updateGroup( GroupUpdateStruct $group )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -82,6 +82,8 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     /**
      * @param mixed $groupId
      * @return Type[]
+     * @todo These are already present in the Group instance. Why load them 
+     *       dedicatedly here?;
      */
     public function loadContentTypes( $groupId )
     {

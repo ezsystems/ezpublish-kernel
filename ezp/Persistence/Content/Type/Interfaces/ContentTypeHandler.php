@@ -12,6 +12,8 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
     ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Content\Type\Group\GroupCreateStruct,
+    ezp\Persistence\Content\Type\Group\GroupUpdateStruct,
     ezp\Persistence\Content\Type\Group;
 
 /**
@@ -19,16 +21,15 @@ use ezp\Persistence\Content\Type,
 interface ContentTypeHandler
 {
     /**
-     * @param Group $group
+     * @param GroupCreateStruct $group
      * @return Group
      */
-    public function createGroup( Group $group );
+    public function createGroup( GroupCreateStruct $group );
 
     /**
-     * @todo: Add an update struct, which excludes the contentTypes property from the Group struct
      * @param Group $group
      */
-    public function updateGroup( Group $group );
+    public function updateGroup( GroupUpdateStruct $group );
 
     /**
      * @param mixed $groupId
