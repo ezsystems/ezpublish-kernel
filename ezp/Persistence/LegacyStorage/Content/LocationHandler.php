@@ -235,7 +235,10 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function trashSubtree( $locationId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $sourceNodeData = $this->locationGateway->getBasicNodeData( $locationId );
+
+        $this->locationGateway->trashSubtree( $sourceNodeData['path_string'] );
+        $this->locationGateway->updateSubtreeModificationTime( $this->getParentPathString( $sourceNodeData['path_string'] ) );
     }
 
     /**

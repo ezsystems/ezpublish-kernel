@@ -392,9 +392,37 @@ class EzcDatabase extends LocationGateway
      * @param mixed $locationId
      * @return boolean
      */
-    public function trashSubtree( $locationId )
+    public function trashSubtree( $pathString )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( '*' )
+            ->from( 'ezcontentobject_tree' )
+            ->where( $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) ) );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $nodeIds = array();
+        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            unset( $row['contentobject_is_published'] );
+            $query = $this->handler->createInsertQuery();
+            $query->insertInto( 'ezcontentobject_trash' );
+
+            foreach ( $row as $key => $value )
+            {
+                $query->set( $key, $query->bindValue( $value ) );
+            }
+
+            $query->prepare()->execute();
+            $nodeIds[] = $row['node_id'];
+        }
+
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( 'ezcontentobject_tree' )
+            ->where( $query->expr->in( 'node_id', $nodeIds ) );
+        $query->prepare()->execute();
     }
 
     /**
