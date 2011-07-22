@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
-use ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
-use ezp\Persistence\Content\Type,
+use ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway,
+    ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\Group;
 
@@ -188,47 +188,47 @@ class EzcDatabase extends ContentTypeGateway
         $q->set(
             $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
             $q->bindValue( $typeId, null, \PDO::PARAM_INT )
-          /*
-           * version?
-          )->set(
+        /*
+         * version?
+        )->set(
             $this->dbHandler->quoteIdentifier( '' ),
             $q->bindValue( serialize( $fieldDefinition->name) )
-          */
-          )->set(
+        */
+        )->set(
             $this->dbHandler->quoteIdentifier( 'serialized_name_list' ),
             $q->bindValue( serialize( $fieldDefinition->name ) )
-          )->set(
+        )->set(
             $this->dbHandler->quoteIdentifier( 'serialized_description_list' ),
             $q->bindValue( serialize( $fieldDefinition->description ) )
-          )->set(
+        )->set(
             $this->dbHandler->quoteIdentifier( 'identifier' ),
             $q->bindValue( $fieldDefinition->identifier )
-          )->set(
+        )->set(
             $this->dbHandler->quoteIdentifier( 'category' ),
             $q->bindValue( $fieldDefinition->fieldGroup )
-          )->set(
+        )->set(
             $this->dbHandler->quoteIdentifier( 'placement' ),
             $q->bindValue( $fieldDefinition->position, null, \PDO::PARAM_INT )
-          )->set(
+        )->set(
             $this->dbHandler->quoteIdentifier( 'data_type_string' ),
             $q->bindValue( $fieldDefinition->fieldType )
-          )->set(
+        )->set(
             $this->dbHandler->quoteIdentifier( 'can_translate' ),
             $q->bindValue( ( $fieldDefinition->isTranslatable ? 1 : 0 ), null, \PDO::PARAM_INT )
-          )->set(
+        )->set(
             $this->dbHandler->quoteIdentifier( 'is_information_collector' ),
             $q->bindValue( ( $fieldDefinition->isInfoCollector ? 1 : 0 ), null, \PDO::PARAM_INT )
-          /*
-           * fieldTypeConstraints?
-          )->set(
+        /*
+         * fieldTypeConstraints?
+        )->set(
             $this->dbHandler->quoteIdentifier( '' ),
             $q->bindValue( $fieldDefinition-> )
-           */
-          )->set(
+        */
+        )->set(
             // @todo: Correct?
             $this->dbHandler->quoteIdentifier( 'serialized_data_text' ),
             $q->bindValue( serialize( $fieldDefinition->defaultValue ) )
-          );
+        );
         $stmt = $q->prepare();
         $stmt->execute();
 

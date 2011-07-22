@@ -42,7 +42,6 @@ class Location extends AbstractService
 
     }
 
-
     public function children( Location $location )
     {
 
@@ -133,7 +132,6 @@ class Location extends AbstractService
         // 2. changing path attribute to the subtree below $location
     }
 
-
     /**
      * Deletes the $locations and all descendants of $location.
      *
@@ -151,7 +149,6 @@ class Location extends AbstractService
         // children ?)
         // note: this is different from Content::delete()
     }
-
 
     /**
      * Assigns $section to the contents hold by $startingPoint location and

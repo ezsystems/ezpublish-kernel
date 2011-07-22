@@ -63,12 +63,12 @@ abstract class AbstractOverride
     {
         if ( $byRef )
         {
-            $this->paths     = &static::$globalPaths;
+            $this->paths = &static::$globalPaths;
             $this->pathsHash = &static::$globalPathsHash;
         }
         else
         {
-            $this->paths     = static::$globalPaths;
+            $this->paths = static::$globalPaths;
             $this->pathsHash = static::$globalPathsHash;
         }
     }
@@ -176,7 +176,6 @@ abstract class AbstractOverride
 
         return $this->paths[$scope];
     }
-
 
     /**
      * Set raw instance override path list data.

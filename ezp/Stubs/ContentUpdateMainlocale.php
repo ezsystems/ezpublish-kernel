@@ -13,5 +13,4 @@ $content = $contentService->load( 2 );
 
 $content->mainLocale = ezp\Base\Locale::get( 'fre-FR' );
 
-
 $contentService->update( $content );

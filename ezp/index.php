@@ -21,17 +21,19 @@ foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )
 {
     $paths[] = "{$path}/settings/";
 }
+
 Configuration::setGlobalConfigurationData( $settings );
 Configuration::setGlobalDirs( $paths, 'modules' );
-
 
 // Create Type manually for test
 $contentType = new Type();
 $contentType->identifier = 'article';
 
 // Add some fields
-$fields = array( '\\ezp\\Content\\Type\\Field\\String'  => array( 'title', 'ezstring', 'New Article' ),
-                 '\\ezp\\Content\\Type\\Field\\Keyword' => array( 'tags',  'ezkeyword', '' ) );
+$fields = array(
+    '\\ezp\\Content\\Type\\Field\\String' => array( 'title', 'ezstring', 'New Article' ),
+    '\\ezp\\Content\\Type\\Field\\Keyword' => array( 'tags',  'ezkeyword', '' )
+);
 foreach ( $fields as $className => $data )
 {
     $field = new $className( $contentType );
@@ -56,8 +58,6 @@ $content->fields['tags'] = 'ezpublish, demo, public, api';
 // shortcut for: $content->fields['title']->value = 'My new Article';
 
 $content->notify( 'store' );// Needed to make sure changes in fieldtypes trickle down to field
-
-
 
 echo "Content id: {$content->id}<br />";
 

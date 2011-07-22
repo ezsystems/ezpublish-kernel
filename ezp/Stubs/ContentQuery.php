@@ -8,8 +8,8 @@
  * @subpackage stub
  */
 
-use ezp\Base\Repository;
-use ezp\Content;
+use ezp\Base\Repository,
+    ezp\Content;
 
 $contentService = Repository::get()->getContentService();
 $qb = $contentService->getQueryBuilder();

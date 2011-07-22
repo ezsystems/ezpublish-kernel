@@ -23,5 +23,4 @@ catch ( ValidationException $e )
     exit;
 }
 
-
 ?>

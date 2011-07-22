@@ -50,10 +50,10 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $struct = new ContentTypeCreateStruct();
         $struct->name = array(
             'always-available' => 'eng-US',
-            'eng-US'           => 'Folder',
+            'eng-US' => 'Folder',
         );
         $struct->description = array(
-            0                  => '',
+            0 => '',
             'always-available' => false,
         );
         $struct->identifier = 'folder';
@@ -102,14 +102,14 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $this->assertPropertiesCorrect(
             // "random" sample
             array(
-                'id'                  => 1,
-                'version'             => 0,
-                'created'             => 1024392098,
-                'creatorId'           => 14,
-                'modified'            => 1082454875,
-                'modifierId'          => 14,
-                'identifier'          => 'folder',
-                'isContainer'         => true,
+                'id' => 1,
+                'version' => 0,
+                'created' => 1024392098,
+                'creatorId' => 14,
+                'modified' => 1082454875,
+                'modifierId' => 14,
+                'identifier' => 'folder',
+                'isContainer' => true,
                 'contentTypeGroupIds' => array( 1 ),
             ),
             $types[0]
@@ -124,11 +124,11 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $this->assertPropertiesCorrect(
             // "random" sample
             array(
-                'id'              => 155,
-                'fieldType'       => 'ezstring',
-                'identifier'      => 'short_name',
+                'id' => 155,
+                'fieldType' => 'ezstring',
+                'identifier' => 'short_name',
                 'isInfoCollector' => false,
-                'isRequired'      => false,
+                'isRequired' => false,
             ),
             $types[0]->fieldDefinitions[2]
         );
@@ -159,6 +159,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
      */
     protected function getLoadTypeFixture()
     {
-        return require( __DIR__ . '/_fixtures/map_load_type.php' );
+        return require __DIR__ . '/_fixtures/map_load_type.php';
     }
 }

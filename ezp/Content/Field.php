@@ -114,7 +114,7 @@ abstract class Field extends AbstractModel implements Observer
      */
     public function __toString()
     {
-        return  $this->fieldTypeString;
+        return $this->fieldTypeString;
     }
 }
 

@@ -113,7 +113,7 @@ class LocationHandlerTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
-        $time    = time();
+        $time = time();
         $handler->move( 69, 77 );
 
         $query = $this->handler->createSelectQuery();
@@ -174,7 +174,7 @@ class LocationHandlerTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
-        $time    = time();
+        $time = time();
         $handler->hide( 69 );
 
         $query = $this->handler->createSelectQuery();
@@ -227,7 +227,7 @@ class LocationHandlerTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
-        $time    = time();
+        $time = time();
         $handler->hide( 69 );
         $handler->unhide( 69 );
 
@@ -352,7 +352,7 @@ class LocationHandlerTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
-        $time    = time();
+        $time = time();
         $handler->swap( 70, 78 );
 
         $query = $this->handler->createSelectQuery();
@@ -395,7 +395,7 @@ class LocationHandlerTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
-        $time    = time();
+        $time = time();
         $handler->updatePriority( 70, 23 );
 
         $query = $this->handler->createSelectQuery();
@@ -494,7 +494,7 @@ class LocationHandlerTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
-        $time    = time();
+        $time = time();
         $this->contentHandler
             ->expects( $this->once() )
             ->method( 'load' )
@@ -547,7 +547,7 @@ class LocationHandlerTest extends TestCase
 
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
-        $time    = time();
+        $time = time();
         $this->contentHandler
             ->expects( $this->once() )
             ->method( 'load' )
@@ -562,10 +562,12 @@ class LocationHandlerTest extends TestCase
             $query
                 ->select( $field )
                 ->from( 'eznode_assignment' )
-                ->where( $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 68 ),
-                    $query->expr->eq( 'parent_node', 77 )
-                ) )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 68 ),
+                        $query->expr->eq( 'parent_node', 77 )
+                    )
+                )
         );
     }
 
@@ -616,7 +618,7 @@ class LocationHandlerTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationHandler();
-        $time    = time();
+        $time = time();
         $handler->trashSubtree( 69 );
 
         $query = $this->handler->createSelectQuery();

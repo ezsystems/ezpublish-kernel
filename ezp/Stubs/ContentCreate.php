@@ -35,7 +35,6 @@ $content->addTranslation( $localeFR, $localeEN );
 $content->translations["fre-FR"]->last->fields["name"] = "Nom du dossier";
 $content->translations["fre-FR"]->last->fields["description"] = "<p>Ceci est la <strong>description HTML</strong></p>";
 
-
 // Get the content service from the repository and insert the new content
 try
 {

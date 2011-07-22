@@ -18,16 +18,16 @@ abstract class LocationGateway
     /**
      * Constants for node assignment op codes
      */
-    const NODE_ASSIGNMENT_OP_CODE_NOP        = 0;
-    const NODE_ASSIGNMENT_OP_CODE_EXECUTE    = 1;
+    const NODE_ASSIGNMENT_OP_CODE_NOP = 0;
+    const NODE_ASSIGNMENT_OP_CODE_EXECUTE = 1;
     const NODE_ASSIGNMENT_OP_CODE_CREATE_NOP = 2;
-    const NODE_ASSIGNMENT_OP_CODE_CREATE     = 3;
-    const NODE_ASSIGNMENT_OP_CODE_MOVE_NOP   = 4;
-    const NODE_ASSIGNMENT_OP_CODE_MOVE       = 5;
+    const NODE_ASSIGNMENT_OP_CODE_CREATE = 3;
+    const NODE_ASSIGNMENT_OP_CODE_MOVE_NOP = 4;
+    const NODE_ASSIGNMENT_OP_CODE_MOVE = 5;
     const NODE_ASSIGNMENT_OP_CODE_REMOVE_NOP = 6;
-    const NODE_ASSIGNMENT_OP_CODE_REMOVE     = 7;
-    const NODE_ASSIGNMENT_OP_CODE_SET_NOP    = 8;
-    const NODE_ASSIGNMENT_OP_CODE_SET        = 9;
+    const NODE_ASSIGNMENT_OP_CODE_REMOVE = 7;
+    const NODE_ASSIGNMENT_OP_CODE_SET_NOP = 8;
+    const NODE_ASSIGNMENT_OP_CODE_SET = 9;
 
     /**
      * Loads the data for the location identified by $locationId.

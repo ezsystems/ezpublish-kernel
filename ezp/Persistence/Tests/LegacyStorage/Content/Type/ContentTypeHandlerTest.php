@@ -139,7 +139,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $createStructFix   = $this->getContenTypeCreateStructFixture();
+        $createStructFix = $this->getContenTypeCreateStructFixture();
         $createStructClone = clone $createStructFix;
 
         $gatewayMock = $this->getMock(

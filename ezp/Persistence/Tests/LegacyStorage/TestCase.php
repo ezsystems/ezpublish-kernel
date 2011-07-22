@@ -91,7 +91,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         $database = preg_replace( '(^([a-z]+).*)', '\\1', $this->getDsn() );
-        $schema   = __DIR__ . '/_fixtures/schema.' . $database . '.sql';
+        $schema = __DIR__ . '/_fixtures/schema.' . $database . '.sql';
 
         $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schema ) ) );
         foreach ( $queries as $query )
@@ -128,8 +128,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     protected function insertDatabaseFixture( $file )
     {
-        $data = require( $file );
-        $db   = $this->getDatabaseHandler();
+        $data = require $file;
+        $db = $this->getDatabaseHandler();
 
         foreach ( $data as $table => $rows )
         {

@@ -40,7 +40,6 @@ class Translation extends AbstractModel
         'current' => false,
     );
 
-
     /**
      * Content
      *
@@ -138,7 +137,6 @@ class Translation extends AbstractModel
         }
         return $version->fields;
     }
-
 
     /**
      * Create a new Version in the locale referenced by the translation

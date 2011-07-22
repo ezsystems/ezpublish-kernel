@@ -103,7 +103,6 @@ class IniParser implements ConfigurationParser
             {
                 foreach ( $sectionArray as $setting => $settingValue )
                 {
-
                     if ( is_array( $settingValue ) )
                     {
                         foreach ( $settingValue as $key => $keyValue )
@@ -159,14 +158,13 @@ class IniParser implements ConfigurationParser
         }
 
         $configurationData = array();
-        $result            = $reader->validate();
+        $result = $reader->validate();
         if ( !$result->isValid )
         {
             foreach ( $result->getResultList() as $resultItem )
             {
                  trigger_error( __METHOD__ . ': ezc parser error in ' . $resultItem->file . ':' . $resultItem->line . ':' . $resultItem->column. ': ' . $resultItem->details, E_USER_WARNING );
             }
-
         }
         else if ( $configuration instanceof ezcConfiguration )
         {

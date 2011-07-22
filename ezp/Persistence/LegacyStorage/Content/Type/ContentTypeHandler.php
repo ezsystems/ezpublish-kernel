@@ -44,7 +44,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     public function __construct( ContentTypeGateway $contentTypeGateway, Mapper $mapper )
     {
         $this->contentTypeGateway = $contentTypeGateway;
-        $this->mapper             = $mapper;
+        $this->mapper = $mapper;
     }
     /**
      * @param GroupCreateStruct $createStruct

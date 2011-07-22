@@ -18,6 +18,4 @@ catch ( ezp\Base\Exception\Forbidden $e )
     exit;
 }
 
-
-
 ?>

@@ -37,8 +37,10 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $this->contentType->identifier = 'article';
 
         // Add some fields
-        $fields = array( '\\ezp\\Content\\Type\\Field\\String'  => array( 'title', 'ezstring', 'New Article' ),
-                         '\\ezp\\Content\\Type\\Field\\Keyword' => array( 'tags',  'ezkeyword', '' ) );
+        $fields = array(
+            '\\ezp\\Content\\Type\\Field\\String' => array( 'title', 'ezstring', 'New Article' ),
+            '\\ezp\\Content\\Type\\Field\\Keyword' => array( 'tags',  'ezkeyword', '' )
+        );
         foreach ( $fields as $className => $data )
         {
             $field = new $className( $this->contentType );

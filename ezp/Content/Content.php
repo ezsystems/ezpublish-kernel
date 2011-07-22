@@ -363,7 +363,6 @@ class Content extends AbstractModel
         return $tr;
     }
 
-
     /**
      * Remove the translation in $locale
      *

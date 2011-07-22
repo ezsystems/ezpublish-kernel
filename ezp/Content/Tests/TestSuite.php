@@ -22,7 +22,7 @@ class TestSuite extends PHPUnit_Framework_TestSuite
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite( "Content" );
-        
+
         $suite->addTestSuite( __NAMESPACE__ . "\\LocationTest" );
         $suite->addTestSuite( __NAMESPACE__ . "\\ContentTest" );
         // $suite->addTestSuite( __NAMESPACE__ . "\\CriteriaCollectionTest"  );

@@ -29,7 +29,7 @@ class Mapper
      */
     public function extractTypesFromRows( array $rows )
     {
-        $types  = array();
+        $types = array();
         $fields = array();
 
         foreach ( $rows as $row )
@@ -69,22 +69,22 @@ class Mapper
     {
         $type = new Type();
 
-        $type->id                  = (int)$row['ezcontentclass_id'];
-        $type->version             = (int)$row['ezcontentclass_version'];
-        $type->name                = unserialize( $row['ezcontentclass_serialized_name_list'] );
-        $type->description         = unserialize( $row['ezcontentclass_serialized_description_list'] );
-        $type->identifier          = $row['ezcontentclass_identifier'];
-        $type->created             = (int)$row['ezcontentclass_created'];
-        $type->modified            = (int)$row['ezcontentclass_modified'];
-        $type->modifierId          = (int)$row['ezcontentclass_modifier_id'];
-        $type->creatorId           = (int)$row['ezcontentclass_creator_id'];
-        $type->remoteId            = (int)$row['ezcontentclass_remote_id'];
-        $type->urlAliasSchema      = (int)$row['ezcontentclass_url_alias_name'];
-        $type->nameSchema          = (int)$row['ezcontentclass_contentobject_name'];
-        $type->isContainer         = ( $row['ezcontentclass_is_container'] == 1 );
-        $type->initialLanguageId   = (int)$row['ezcontentclass_initial_language_id'];
+        $type->id = (int)$row['ezcontentclass_id'];
+        $type->version = (int)$row['ezcontentclass_version'];
+        $type->name = unserialize( $row['ezcontentclass_serialized_name_list'] );
+        $type->description = unserialize( $row['ezcontentclass_serialized_description_list'] );
+        $type->identifier = $row['ezcontentclass_identifier'];
+        $type->created = (int)$row['ezcontentclass_created'];
+        $type->modified = (int)$row['ezcontentclass_modified'];
+        $type->modifierId = (int)$row['ezcontentclass_modifier_id'];
+        $type->creatorId = (int)$row['ezcontentclass_creator_id'];
+        $type->remoteId = (int)$row['ezcontentclass_remote_id'];
+        $type->urlAliasSchema = (int)$row['ezcontentclass_url_alias_name'];
+        $type->nameSchema = (int)$row['ezcontentclass_contentobject_name'];
+        $type->isContainer = ( $row['ezcontentclass_is_container'] == 1 );
+        $type->initialLanguageId = (int)$row['ezcontentclass_initial_language_id'];
         $type->contentTypeGroupIds = array();
-        $type->fieldDefinitions    = array();
+        $type->fieldDefinitions = array();
 
         return $type;
     }
@@ -106,8 +106,8 @@ class Mapper
         $field->fieldGroup = $row['ezcontentclass_attribute_category'];
         $field->fieldType = $row['ezcontentclass_attribute_data_type_string'];
         $field->isTranslatable = ( $row['ezcontentclass_attribute_can_translate'] == 1 );
-        $field->isRequired =  ( $row['ezcontentclass_attribute_is_required'] == 1 );
-        $field->isInfoCollector = ( $row['ezcontentclass_attribute_is_information_collector'] == 1 );
+        $field->isRequired = $row['ezcontentclass_attribute_is_required'] == 1;
+        $field->isInfoCollector = $row['ezcontentclass_attribute_is_information_collector'] == 1;
         // $field->fieldTypeConstraint ?
         $field->defaultValue = unserialize( $row['ezcontentclass_attribute_serialized_data_text'] );
         // Correct ^?
@@ -126,20 +126,20 @@ class Mapper
     {
         $type = new Type();
 
-        $type->name                = $createStruct->name;
-        $type->description         = $createStruct->description;
-        $type->identifier          = $createStruct->identifier;
-        $type->created             = $createStruct->created;
-        $type->modified            = $createStruct->modified;
-        $type->creatorId           = $createStruct->creatorId;
-        $type->modifierId          = $createStruct->modifierId;
-        $type->remoteId            = $createStruct->remoteId;
-        $type->urlAliasSchema      = $createStruct->urlAliasSchema;
-        $type->nameSchema          = $createStruct->nameSchema;
-        $type->isContainer         = $createStruct->isContainer;
-        $type->initialLanguageId   = $createStruct->initialLanguageId;
+        $type->name = $createStruct->name;
+        $type->description = $createStruct->description;
+        $type->identifier = $createStruct->identifier;
+        $type->created = $createStruct->created;
+        $type->modified = $createStruct->modified;
+        $type->creatorId = $createStruct->creatorId;
+        $type->modifierId = $createStruct->modifierId;
+        $type->remoteId = $createStruct->remoteId;
+        $type->urlAliasSchema = $createStruct->urlAliasSchema;
+        $type->nameSchema = $createStruct->nameSchema;
+        $type->isContainer = $createStruct->isContainer;
+        $type->initialLanguageId = $createStruct->initialLanguageId;
         $type->contentTypeGroupIds = $createStruct->contentTypeGroupIds;
-        $type->fieldDefinitions    = $createStruct->fieldDefinitions;
+        $type->fieldDefinitions = $createStruct->fieldDefinitions;
 
         return $type;
     }

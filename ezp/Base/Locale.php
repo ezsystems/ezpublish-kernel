@@ -23,5 +23,4 @@ class Locale extends AbstractModel
     }
 }
 
-
 ?>

@@ -111,7 +111,6 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-
 /**
  * Used by TypeCollectionTest as the type items in collection needs to be
  *

@@ -37,7 +37,7 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function __construct( ContentHandler $contentHandler, LocationGateway $locationGateway )
     {
-        $this->contentHandler  = $contentHandler;
+        $this->contentHandler = $contentHandler;
         $this->locationGateway = $locationGateway;
     }
 
@@ -60,23 +60,23 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function load( $locationId )
     {
-        $data     = $this->locationGateway->getBasicNodeData( $locationId );
+        $data = $this->locationGateway->getBasicNodeData( $locationId );
         $location = new Location();
 
-        $location->id                       = $data['node_id'];
-        $location->priority                 = $data['priority'];
-        $location->hidden                   = $data['is_hidden'];
-        $location->invisible                = $data['is_invisible'];
-        $location->remoteId                 = $data['remote_id'];
-        $location->contentId                = $data['contentobject_id'];
-        $location->parentId                 = $data['parent_node_id'];
+        $location->id = $data['node_id'];
+        $location->priority = $data['priority'];
+        $location->hidden = $data['is_hidden'];
+        $location->invisible = $data['is_invisible'];
+        $location->remoteId = $data['remote_id'];
+        $location->contentId = $data['contentobject_id'];
+        $location->parentId = $data['parent_node_id'];
         $location->pathIdentificationString = $data['path_identification_string'];
-        $location->pathString               = $data['path_string'];
-        $location->modifiedSubLocation      = $data['modified_subnode'];
-        $location->mainLocationId           = $data['main_node_id'];
-        $location->depth                    = $data['depth'];
-        $location->sortField                = $data['sort_field'];
-        $location->sortOrder                = $data['sort_order'];
+        $location->pathString = $data['path_string'];
+        $location->modifiedSubLocation = $data['modified_subnode'];
+        $location->mainLocationId = $data['main_node_id'];
+        $location->depth = $data['depth'];
+        $location->sortField = $data['sort_field'];
+        $location->sortOrder = $data['sort_order'];
 
         return $location;
     }
@@ -111,7 +111,7 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function move( $sourceId, $destinationParentId )
     {
-        $sourceNodeData      = $this->locationGateway->getBasicNodeData( $sourceId );
+        $sourceNodeData = $this->locationGateway->getBasicNodeData( $sourceId );
         $destinationNodeData = $this->locationGateway->getBasicNodeData( $destinationParentId );
 
         $this->locationGateway->moveSubtreeNodes(
@@ -201,7 +201,7 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
     public function createLocation( $contentId, $parentId )
     {
         $parentNodeData = $this->locationGateway->getBasicNodeData( $parentId );
-        $content        = $this->contentHandler->load( $contentId );
+        $content = $this->contentHandler->load( $contentId );
 
         $this->locationGateway->createLocation( $content, $parentNodeData );
         $this->locationGateway->updateSubtreeModificationTime( $parentNodeData['path_string'] );

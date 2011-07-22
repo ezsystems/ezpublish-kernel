@@ -24,7 +24,7 @@ class ContentTypeCreateStructTest extends \PHPUnit_Framework_TestCase
     {
         $cStruct = new ContentTypeCreateStruct();
 
-        $cStruct->identifier       = "foo";
+        $cStruct->identifier = "foo";
         $cStruct->fieldDefinitions = array(
             new FieldDefinition(),
         );

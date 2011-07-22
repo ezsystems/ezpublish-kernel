@@ -8,12 +8,10 @@
  */
 
 namespace ezp\Persistence\Tests\LegcyStorage\Content\Type\ContentTypeGateway;
-use ezp\Persistence\Tests\LegacyStorage\TestCase;
-
-use ezp\Persistence\Tests\LegcyStorage\Content\Type\ContentTypeGateway,
-    ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase;
-
-use ezp\Persistence\Content\Type,
+use ezp\Persistence\Tests\LegacyStorage\TestCase,
+    ezp\Persistence\Tests\LegcyStorage\Content\Type\ContentTypeGateway,
+    ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase,
+    ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition;
 
 /**
@@ -96,9 +94,9 @@ class EzcDatabaseTest extends TestCase
                 array(
                     // "random" sample
                     'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";}',
-                    'created'              => '1024392098',
-                    'modifier_id'          => '14',
-                    'remote_id'            => 'a3d405b81be900468eb153d774f4f0d2',
+                    'created' => '1024392098',
+                    'modifier_id' => '14',
+                    'remote_id' => 'a3d405b81be900468eb153d774f4f0d2',
                 )
             ),
             $this->getDatabaseHandler()
@@ -123,23 +121,23 @@ class EzcDatabaseTest extends TestCase
         $type = new Type();
 
         $type->version = 0;
-        $type->name    = array(
+        $type->name = array(
             'always-available' => 'eng-US',
-            'eng-US'           => 'Folder',
+            'eng-US' => 'Folder',
         );
         $type->description = array(
-            0                  => '',
+            0 => '',
             'always-available' => false,
         );
-        $type->identifier        = 'folder';
-        $type->created           = 1024392098;
-        $type->modified          = 1082454875;
-        $type->creatorId         = 14;
-        $type->modifierId        = 14;
-        $type->remoteId          = 'a3d405b81be900468eb153d774f4f0d2';
-        $type->urlAliasSchema    = '';
-        $type->nameSchema        = '<short_name|name>';
-        $type->isContainer       = true;
+        $type->identifier = 'folder';
+        $type->created = 1024392098;
+        $type->modified = 1082454875;
+        $type->creatorId = 14;
+        $type->modifierId = 14;
+        $type->remoteId = 'a3d405b81be900468eb153d774f4f0d2';
+        $type->urlAliasSchema = '';
+        $type->nameSchema = '<short_name|name>';
+        $type->isContainer = true;
         $type->initialLanguageId = 2;
 
         return $type;
@@ -161,12 +159,12 @@ class EzcDatabaseTest extends TestCase
             array(
                 // "random" sample
                 array(
-                    'category'             => '',
-                    'contentclass_id'      => 23,
-                    'data_type_string'     => 'ezxmltext',
-                    'identifier'           => 'description',
-                    'is_required'          => '0',
-                    'placement'            => '4',
+                    'category' => '',
+                    'contentclass_id' => 23,
+                    'data_type_string' => 'ezxmltext',
+                    'identifier' => 'description',
+                    'is_required' => '0',
+                    'placement' => '4',
                     'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
                 ),
             ),
@@ -197,22 +195,22 @@ class EzcDatabaseTest extends TestCase
 
         $field->name = array(
             'always-available' => 'eng-US',
-            'eng-US'           => 'Description',
+            'eng-US' => 'Description',
         );
         $field->description = array(
-            0                  => '',
+            0 => '',
             'always-available' => false,
         );
-        $field->identifier      = 'description';
-        $field->fieldGroup      = '';
-        $field->position        = 4;
-        $field->fieldType       = 'ezxmltext';
-        $field->isTranslatable  = true;
-        $field->isRequired      = false;
+        $field->identifier = 'description';
+        $field->fieldGroup = '';
+        $field->position = 4;
+        $field->fieldType = 'ezxmltext';
+        $field->isTranslatable = true;
+        $field->isRequired = false;
         $field->isInfoCollector = false;
         // $field->fieldTypeConstraints ???
         $field->defaultValue = array(
-            0                  => '',
+            0 => '',
             'always-available' => false,
         );
 

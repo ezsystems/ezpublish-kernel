@@ -118,7 +118,7 @@ class Autoloader
                 }
                 else
                 {
-                    require( $classPath );
+                    require $classPath;
                     return true;
                 }
             }

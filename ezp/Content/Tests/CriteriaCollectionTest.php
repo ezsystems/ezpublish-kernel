@@ -123,7 +123,6 @@ class CriteriaCollectionTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf( 'ezp\\Content\\Criteria\\FieldCriteria', $this->criteria->field );
     }
 
-
     /**
      * Test for the {@link CriteriaCollection::meta} property
      */

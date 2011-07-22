@@ -26,7 +26,6 @@ class Boolean extends Int
      */
     public $default = 0;
 
-
     /**
      * @return void
      */

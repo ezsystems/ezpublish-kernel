@@ -15,7 +15,6 @@ $content = $contentService->load( 2 );
 $fieldsFR = $content->translations['fre-FR']->fields;
 $fieldsEN = $content->translations['eng-GB']->fields;
 
-
 echo "Name fre-FR : {$fieldsFR['name']->value}\n";
 echo "Name eng-GB : {$fieldsGB['name']->value}\n";
 
@@ -29,6 +28,5 @@ catch ( ezp\Base\Exception\NotFound $e )
     $fieldsNO = $content->translations['nor-NO']->last->fields;
     echo "Name nor-NO (not yet published): {$fieldsNO['name']->value}\n";
 }
-
 
 ?>

@@ -62,7 +62,6 @@ class Configuration extends AbstractOverride
         'global' => array( 'settings/override/' ),
     );
 
-
     /**
      * The global configuration data (overrides all other configuration)
      *
@@ -346,12 +345,12 @@ class Configuration extends AbstractOverride
     protected static function generateRawData( $configurationPathsHash, array $configurationData, array $sourceFiles = array(), array $sourcePaths = array() )
     {
         return array(
-            'hash'    => $configurationPathsHash,
-            'paths'   => $sourcePaths,
-            'files'   => $sourceFiles,
-            'data'    => $configurationData,
+            'hash' => $configurationPathsHash,
+            'paths' => $sourcePaths,
+            'files' => $sourceFiles,
+            'data' => $configurationData,
             'created' => time(),
-            'rev'     => self::CONFIG_CACHE_REV,
+            'rev' => self::CONFIG_CACHE_REV,
         );
     }
 
@@ -393,7 +392,7 @@ class Configuration extends AbstractOverride
             return array();
         }
 
-        $configurationData     = array();
+        $configurationData = array();
         $configurationFileData = array();
         foreach ( $sourceFiles as $fileName => $suffix )
         {

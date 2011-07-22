@@ -48,7 +48,7 @@ class Backend
         if ( !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $data['id'] = count( $this->data[$type] ) +1;
+        $data['id'] = count( $this->data[$type] ) + 1;
         $this->data[$type][] = $data;
         return $this->toValue( $type, $data );
     }
@@ -169,7 +169,6 @@ class Backend
             {
                 if ( !isset( $hash[$property] ) || $hash[$property] != $value )
                     continue 2;
-
             }
             $keys[] = $key;
         }

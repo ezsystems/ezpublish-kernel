@@ -6,7 +6,6 @@ $sectionService = $sc->getRepository()->getSectionService();
 
 $sectionIdentifier = 'content';
 
-
 try
 {
     $section = $sectionService->loadByIdentifier( $sectionIdentifier );
@@ -22,6 +21,5 @@ catch ( ValidationException $e )
     echo "Can not remove section ({$sectionIdentifier}) because {$e->getMessage()}";
     exit;
 }
-
 
 ?>

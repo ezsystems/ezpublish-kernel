@@ -34,14 +34,14 @@ class OperatorSpecifications
     /**
      * Criterion input type description constants.
      */
-    const FORMAT_SINGLE  = 'single';
+    const FORMAT_SINGLE = 'single';
     const FORMAT_ARRAY = 'array';
 
     /**
      * Criterion input value type description constants.
      * Used by {@see getDescription()} to say which type of values an operator expects
      */
-    const TYPE_INTEGER  = 'integer';
+    const TYPE_INTEGER = 'integer';
     const TYPE_STRING = 'string';
     const TYPE_BOOLEAN = 'bool';
 

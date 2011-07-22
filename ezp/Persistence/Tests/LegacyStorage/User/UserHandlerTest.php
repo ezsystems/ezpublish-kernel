@@ -39,10 +39,10 @@ class UserHandlerTest extends TestCase
     protected function getValidUser()
     {
         $user = new Persistence\User();
-        $user->id            = 42;
-        $user->login         = 'kore';
-        $user->email         = 'kore@example.org';
-        $user->password      = '1234567890';
+        $user->id = 42;
+        $user->login = 'kore';
+        $user->email = 'kore@example.org';
+        $user->password = '1234567890';
         $user->hashAlgorithm = 'md5';
 
         return $user;
@@ -79,7 +79,7 @@ class UserHandlerTest extends TestCase
         $handler = $this->getUserHandler();
 
         $user = new Persistence\User();
-        $user->id      = 42;
+        $user->id = 42;
 
         $handler->createUser( $user );
     }

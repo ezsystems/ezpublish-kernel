@@ -141,7 +141,6 @@ class Version extends AbstractModel implements Observer
         return $this;
     }
 
-
     /**
      * Sets the locale of the version
      *
@@ -159,7 +158,6 @@ class Version extends AbstractModel implements Observer
     {
         return $this->id . ' ('  . $this->version . ')';
     }
-
 
     /**
      * Clones the version
