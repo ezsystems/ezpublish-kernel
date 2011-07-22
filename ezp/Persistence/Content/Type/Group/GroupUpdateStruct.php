@@ -15,6 +15,13 @@ use ezp\Persistence\AbstractValueObject;
 class GroupUpdateStruct extends AbstractValueObject
 {
     /**
+     * Primary key
+     *
+     * @var mixed
+     */
+    public $id;
+
+    /**
      * Name
      *
      * @var string[]
