@@ -35,7 +35,7 @@ class LocationId extends Criterion implements CriterionInterface
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $target = null, $operator, $value )
+    public function __construct( $target, $operator, $value )
     {
         parent::__construct( $target, $operator, $value );
     }

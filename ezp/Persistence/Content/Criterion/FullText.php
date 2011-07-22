@@ -23,7 +23,7 @@ class FullText extends Criterion implements CriterionInterface
      * @param string $operator Not used
      * @param string $text The text to match on
      */
-    public function __construct( $target = null, $operator, $value )
+    public function __construct( $target, $operator, $value )
     {
         parent::__construct( $target, $operator, $value );
     }

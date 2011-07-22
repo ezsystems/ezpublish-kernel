@@ -35,7 +35,7 @@ class ContentTypeGroup extends Criterion implements CriterionInterface
      *
      * @throw InvalidArgumentException if the parameters don't match what the criterion expects
      */
-    public function __construct( $target = null, $operator, $value )
+    public function __construct( $target, $operator, $value )
     {
         parent::__construct( $target, $operator, $value );
     }
