@@ -251,7 +251,7 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      */
     public function untrashSubtree( $locationId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( '@TODO: Discussion pending…' );
     }
 
     /**
