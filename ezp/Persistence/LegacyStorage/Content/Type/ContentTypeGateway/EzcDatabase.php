@@ -10,7 +10,8 @@
 namespace ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
 use ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
 use ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\FieldDefinition;
+    ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Content\Type\Group;
 
 /**
  * Zeta Component Database based content type gateway.
@@ -88,6 +89,16 @@ class EzcDatabase extends ContentTypeGateway
     public function __construct( \ezcDbHandler $db )
     {
         $this->dbHandler = $db;
+    }
+
+    /**
+     * Inserts the given $group.
+     *
+     * @return mixed Group ID
+     */
+    public function insertGroup( Group $group )
+    {
+        throw new \RuntimeException( "Not implemented, yet" );
     }
 
     /**

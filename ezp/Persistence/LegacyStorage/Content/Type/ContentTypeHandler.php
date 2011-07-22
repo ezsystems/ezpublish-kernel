@@ -47,12 +47,20 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
         $this->mapper             = $mapper;
     }
     /**
-     * @param GroupCreateStruct $group
+     * @param GroupCreateStruct $createStruct
      * @return Group
      */
-    public function createGroup( GroupCreateStruct $group )
+    public function createGroup( GroupCreateStruct $createStruct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $group = $this->mapper->createGroupFromCreateStruct(
+            $createStruct
+        );
+
+        $group->id = $this->contentTypeGateway->insertGroup(
+            $group
+        );
+
+        return $group;
     }
 
     /**

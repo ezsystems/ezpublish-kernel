@@ -11,6 +11,11 @@ namespace ezp\Persistence\Tests\LegcyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
+
+    ezp\Persistence\Content\Type\Group,
+    ezp\Persistence\Content\Type\Group\GroupCreateStruct,
+    ezp\Persistence\Content\Type\Group\GroupUpdateStruct,
+
     ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler,
     ezp\Persistence\LegacyStorage\Content\Type\Mapper,
     ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
@@ -39,6 +44,54 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             $mapper,
             'mapper',
             $handler
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::createGroup
+     */
+    public function testCreateGroup()
+    {
+        $createStruct = new GroupCreateStruct();
+
+        $mapperMock = $this->getMock(
+            'ezp\Persistence\LegacyStorage\Content\Type\Mapper',
+            array( 'createGroupFromCreateStruct' )
+        );
+        $mapperMock->expects( $this->once() )
+            ->method( 'createGroupFromCreateStruct' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\Persistence\Content\Type\Group\GroupCreateStruct'
+                )
+            )
+            ->will(
+                $this->returnValue( new Group() )
+            );
+
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'insertGroup' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\Persistence\Content\Type\Group'
+                )
+            )
+            ->will( $this->returnValue( 23 ) );
+
+        $handler = new ContentTypeHandler( $gatewayMock, $mapperMock );
+        $group = $handler->createGroup(
+            new GroupCreateStruct()
+        );
+
+        $this->assertInstanceOf(
+            'ezp\Persistence\Content\Type\Group',
+            $group
+        );
+        $this->assertEquals(
+            23,
+            $group->id
         );
     }
 
@@ -93,7 +146,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway',
             array(
                 'insertType', 'insertGroupAssignement', 'insertFieldDefinition',
-                'loadTypeData'
+                'loadTypeData', 'insertGroup'
             )
         );
 
