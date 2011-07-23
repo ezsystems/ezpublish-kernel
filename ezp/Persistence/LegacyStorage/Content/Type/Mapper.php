@@ -12,7 +12,8 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
     ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\Group;
+    ezp\Persistence\Content\Type\Group,
+    ezp\Persistence\Content\Type\Group\GroupCreateStruct;
 
 /**
  * Mapper for ContentTypeHandler.
@@ -21,6 +22,27 @@ use ezp\Persistence\Content\Type,
  */
 class Mapper
 {
+    /**
+     * Creates a Group from its create struct.
+     *
+     * @param GroupCreateStruct $struct
+     * @return Group
+     */
+    public function createGroupFromCreateStruct( GroupCreateStruct $struct )
+    {
+        $group = new Group();
+
+        $group->name        = $struct->name;
+        $group->description = $struct->description;
+        $group->identifier  = $struct->identifier;
+        $group->created     = $struct->created;
+        $group->modified    = $struct->modified;
+        $group->creatorId   = $struct->creatorId;
+        $group->modifierId  = $struct->modifierId;
+
+        return $group;
+    }
+
     /**
      * Extracts types and related data from the given $rows.
      *

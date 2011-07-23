@@ -8,16 +8,79 @@
  */
 
 namespace ezp\Persistence\Tests\LegcyStorage\Content\Type;
-use ezp\Persistence\Content\Type,
+use ezp\Persistence\LegacyStorage\Content\Type\Mapper,
+
+    ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\LegacyStorage\Content\Type\Mapper;
+
+    ezp\Persistence\Content\Type\Group,
+    ezp\Persistence\Content\Type\Group\GroupCreateStruct;
 
 /**
  * Test case for Mapper.
  */
 class MapperTest extends \PHPUnit_Framework_TestCase
 {
+    public function testCreateGroupFromCreateStruct()
+    {
+        $createStruct = $this->getGroupCreateStructFixture();
+
+        $mapper = new Mapper();
+
+        $group = $mapper->createGroupFromCreateStruct( $createStruct );
+
+        $this->assertInstanceOf(
+            'ezp\Persistence\Content\Type\Group',
+            $group
+        );
+        $this->assertPropertiesCorrect(
+            array(
+                'id'   => null,
+                'name' => array(
+                    'always-available' => 'eng-GB',
+                    'eng-GB' => 'Media',
+                ),
+                'description' => array(
+                    'always-available' => 'eng-GB',
+                    'eng-GB' => '',
+                ),
+                'identifier' => 'Media',
+                'created'    => 1032009743,
+                'modified'   => 1033922120,
+                'creatorId'  => 14,
+                'modifierId' => 14,
+            ),
+            $group
+        );
+    }
+
+    /**
+     * Returns a GroupCreateStruct fixture.
+     *
+     * @return GroupCreateStruct
+     */
+    protected function getGroupCreateStructFixture()
+    {
+        $struct = new GroupCreateStruct();
+
+        $struct->name = array(
+            'always-available' => 'eng-GB',
+            'eng-GB' => 'Media',
+        );
+        $struct->description = array(
+            'always-available' => 'eng-GB',
+            'eng-GB' => '',
+        );
+        $struct->identifier = 'Media';
+        $struct->created    = 1032009743;
+        $struct->modified   = 1033922120;
+        $struct->creatorId  = 14;
+        $struct->modifierId = 14;
+
+        return $struct;
+    }
+
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::createTypeFromCreateStruct
