@@ -97,6 +97,7 @@ class EzcDatabase extends ContentTypeGateway
      * @return mixed Group ID
      * @todo This might lead to race conditions for insert IDs.
      * @todo PDO->lastInsertId() might require a seq name (Oracle?).
+     * @todo Isn't $identifier more the "name"?
      */
     public function insertGroup( Group $group )
     {
