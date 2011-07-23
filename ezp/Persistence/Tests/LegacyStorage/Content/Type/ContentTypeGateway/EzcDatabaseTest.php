@@ -11,8 +11,10 @@ namespace ezp\Persistence\Tests\LegcyStorage\Content\Type\ContentTypeGateway;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\Tests\LegcyStorage\Content\Type\ContentTypeGateway,
     ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase,
+
     ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\FieldDefinition;
+    ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Content\Type\Group;
 
 /**
  * Test case for ContentTypeGateway.
@@ -33,6 +35,65 @@ class EzcDatabaseTest extends TestCase
             'dbHandler',
             $gateway
         );
+    }
+
+    public function testInsertGroup()
+    {
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $group = $this->getGroupFixture();
+
+        $id = $gateway->insertGroup( $group );
+
+        $this->assertQueryResult(
+            array(
+                array(
+                    'id'          => '1',
+                    'created'     => '1032009743',
+                    'creator_id'  => '14',
+                    'modified'    => '1033922120',
+                    'modifier_id' => '14',
+                    'name'        => 'Media',
+                )
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select(
+                    'id',
+                    'created',
+                    'creator_id',
+                    'modified',
+                    'modifier_id',
+                    'name'
+                )
+                ->from( 'ezcontentclassgroup' )
+        );
+    }
+
+    /**
+     * Returns a Group fixture.
+     *
+     * @return Group
+     */
+    protected function getGroupFixture()
+    {
+        $group = new Group();
+
+        $group->name = array(
+            'always-available' => 'eng-GB',
+            'eng-GB' => 'Media',
+        );
+        $group->description = array(
+            'always-available' => 'eng-GB',
+            'eng-GB' => '',
+        );
+        $group->identifier = 'Media';
+        $group->created    = 1032009743;
+        $group->modified   = 1033922120;
+        $group->creatorId  = 14;
+        $group->modifierId = 14;
+
+        return $group;
     }
 
     /**

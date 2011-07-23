@@ -95,10 +95,34 @@ class EzcDatabase extends ContentTypeGateway
      * Inserts the given $group.
      *
      * @return mixed Group ID
+     * @todo This might lead to race conditions for insert IDs.
+     * @todo PDO->lastInsertId() might require a seq name (Oracle?).
      */
     public function insertGroup( Group $group )
     {
-        throw new \RuntimeException( "Not implemented, yet" );
+        $q = $this->dbHandler->createInsertQuery();
+        $q->insertInto(
+            $this->dbHandler->quoteIdentifier( 'ezcontentclassgroup' )
+        )->set(
+            $this->dbHandler->quoteIdentifier( 'created' ),
+            $q->bindValue( $group->created, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteIdentifier( 'creator_id' ),
+            $q->bindValue( $group->creatorId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteIdentifier( 'modified' ),
+            $q->bindValue( $group->modified, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteIdentifier( 'modifier_id' ),
+            $q->bindValue( $group->modifierId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteIdentifier( 'name' ),
+            $q->bindValue( $group->name[$group->name['always-available']] )
+        );
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $this->dbHandler->lastInsertId();
     }
 
     /**
