@@ -41,10 +41,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
                     'always-available' => 'eng-GB',
                     'eng-GB' => 'Media',
                 ),
-                'description' => array(
-                    'always-available' => 'eng-GB',
-                    'eng-GB' => '',
-                ),
+                'description' => null,
                 'identifier' => 'Media',
                 'created'    => 1032009743,
                 'modified'   => 1033922120,

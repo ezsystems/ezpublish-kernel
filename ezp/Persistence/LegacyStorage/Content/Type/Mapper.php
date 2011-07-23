@@ -27,13 +27,17 @@ class Mapper
      *
      * @param GroupCreateStruct $struct
      * @return Group
+     * @todo $description is not supported by database, yet
      */
     public function createGroupFromCreateStruct( GroupCreateStruct $struct )
     {
         $group = new Group();
 
         $group->name        = $struct->name;
-        $group->description = $struct->description;
+
+        // Indentionally left out, since DB structure does not support it, yet
+        // $group->description = $struct->description;
+
         $group->identifier  = $struct->identifier;
         $group->created     = $struct->created;
         $group->modified    = $struct->modified;
