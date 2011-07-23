@@ -55,6 +55,6 @@ class GroupUpdateStruct extends AbstractValueObject
      * @var mixed
      *
      */
-    public $modifier;
+    public $modifierId;
 }
 ?>

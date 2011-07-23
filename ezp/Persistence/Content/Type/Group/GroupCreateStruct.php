@@ -54,7 +54,7 @@ class GroupCreateStruct extends AbstractValueObject
      *
      * @var mixed
      */
-    public $creator;
+    public $creatorId;
 
     /**
      * Modifier user id
@@ -62,6 +62,6 @@ class GroupCreateStruct extends AbstractValueObject
      * @var mixed
      *
      */
-    public $modifier;
+    public $modifierId;
 }
 ?>

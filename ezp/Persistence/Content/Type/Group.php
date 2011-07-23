@@ -61,7 +61,7 @@ class Group extends AbstractValueObject
      *
      * @var mixed
      */
-    public $creator;
+    public $creatorId;
 
     /**
      * Modifier user id
@@ -69,7 +69,7 @@ class Group extends AbstractValueObject
      * @var mixed
      *
      */
-    public $modifier;
+    public $modifierId;
 
     /**
      * @var array(Content\Type)
