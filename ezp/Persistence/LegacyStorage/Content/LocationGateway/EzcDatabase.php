@@ -57,17 +57,6 @@ class EzcDatabase extends LocationGateway
     }
 
     /**
-     * Loads the data for the location identified by $locationId.
-     *
-     * @param int $locationId
-     * @return ezp\Persistence\Content\Location
-     */
-    public function load( $locationId )
-    {
-        throw new RuntimeException( '@TODO: Implement' );
-    }
-
-    /**
      * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
      *
      * Performs a deep copy of the location identified by $sourceId and all of

@@ -30,12 +30,16 @@ abstract class LocationGateway
     const NODE_ASSIGNMENT_OP_CODE_SET = 9;
 
     /**
-     * Loads the data for the location identified by $locationId.
+     * Returns an array with basic node data
      *
-     * @param int $locationId
-     * @return ezp\Persistence\Content\Location
+     * We might want to cache this, since this method is used by about every
+     * method in the location handler.
+     *
+     * @optimze
+     * @param mixed $nodeId
+     * @return array
      */
-    abstract public function load( $locationId );
+    abstract public function getBasicNodeData( $nodeId );
 
     /**
      * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
