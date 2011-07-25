@@ -373,7 +373,7 @@ class EzcDatabaseTest extends TestCase
 
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
 
-        $gateway->deleteFieldDefinitionsForType( 1 );
+        $gateway->deleteFieldDefinitionsForType( 1, 0 );
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
@@ -385,8 +385,9 @@ class EzcDatabaseTest extends TestCase
                     1
                 )
         );
+        // 1 left with version 1
         $this->assertQueryResult(
-            array( array( 0 ) ),
+            array( array( 1 ) ),
             $countAffectedAttr
         );
 
@@ -396,7 +397,7 @@ class EzcDatabaseTest extends TestCase
             ->from( 'ezcontentclass_attribute' );
 
         $this->assertQueryResult(
-            array( array( 1 ) ),
+            array( array( 2 ) ),
             $countNotAffectedAttr
         );
     }
@@ -413,7 +414,7 @@ class EzcDatabaseTest extends TestCase
 
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
 
-        $gateway->deleteFieldDefinitionsForType( 23 );
+        $gateway->deleteFieldDefinitionsForType( 23, 1 );
 
         $countNotAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
@@ -438,7 +439,7 @@ class EzcDatabaseTest extends TestCase
 
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
 
-        $gateway->deleteGroupAssignementsForType( 1 );
+        $gateway->deleteGroupAssignementsForType( 1, 0 );
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
@@ -446,7 +447,7 @@ class EzcDatabaseTest extends TestCase
             ->from( 'ezcontentclass_classgroup' );
 
         $this->assertQueryResult(
-            array( array( 1 ) ),
+            array( array( 2 ) ),
             $countAffectedAttr
         );
     }
@@ -463,7 +464,7 @@ class EzcDatabaseTest extends TestCase
 
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
 
-        $gateway->deleteType( 23 );
+        $gateway->deleteType( 23, 1 );
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
@@ -488,7 +489,7 @@ class EzcDatabaseTest extends TestCase
 
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
 
-        $gateway->deleteType( 1 );
+        $gateway->deleteType( 1, 0 );
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
@@ -513,7 +514,7 @@ class EzcDatabaseTest extends TestCase
 
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
 
-        $gateway->deleteType( 23 );
+        $gateway->deleteType( 23, 1 );
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();

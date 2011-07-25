@@ -383,13 +383,18 @@ class EzcDatabase extends ContentTypeGateway
      */
     public function deleteFieldDefinitionsForType( $typeId, $version )
     {
-        // FIXME: Use version
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom( 'ezcontentclass_attribute' )
             ->where(
-                $q->expr->eq(
-                    $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
-                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                $q->expr->lAnd(
+                    $q->expr->eq(
+                        $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
+                        $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                    ),
+                    $q->expr->eq(
+                        $this->dbHandler->quoteIdentifier( 'version' ),
+                        $q->bindValue( $version, null, \PDO::PARAM_INT )
+                    )
                 )
         );
         $stmt = $q->prepare();
@@ -406,13 +411,18 @@ class EzcDatabase extends ContentTypeGateway
      */
     public function deleteType( $typeId, $version )
     {
-        // FIXME: User version
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom( 'ezcontentclass' )
             ->where(
-                $q->expr->eq(
-                    $this->dbHandler->quoteIdentifier( 'id' ),
-                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                $q->expr->lAnd(
+                    $q->expr->eq(
+                        $this->dbHandler->quoteIdentifier( 'id' ),
+                        $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                    ),
+                    $q->expr->eq(
+                        $this->dbHandler->quoteIdentifier( 'version' ),
+                        $q->bindValue( $version, null, \PDO::PARAM_INT )
+                    )
                 )
         );
         $stmt = $q->prepare();
@@ -427,13 +437,18 @@ class EzcDatabase extends ContentTypeGateway
      */
     public function deleteGroupAssignementsForType( $typeId, $version )
     {
-        // FIXME: Use version
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom( 'ezcontentclass_classgroup' )
             ->where(
-                $q->expr->eq(
-                    $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
-                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                $q->expr->lAnd(
+                    $q->expr->eq(
+                        $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
+                        $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                    ),
+                    $q->expr->eq(
+                        $this->dbHandler->quoteIdentifier( 'contentclass_version' ),
+                        $q->bindValue( $version, null, \PDO::PARAM_INT )
+                    )
                 )
         );
         $stmt = $q->prepare();
