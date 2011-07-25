@@ -10,7 +10,8 @@
 namespace ezp\Persistence\LegacyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\Group;
+    ezp\Persistence\Content\Type\Group,
+    ezp\Persistence\Content\Type\Group\GroupUpdateStruct;
 
 /**
  * Base class for content type gateways.
@@ -23,6 +24,14 @@ abstract class ContentTypeGateway
      * @return mixed Group ID
      */
     abstract public function insertGroup( Group $group );
+
+    /**
+     * Updates a group with data in $group.
+     *
+     * @param GroupUpdateStruct $group
+     * @return void
+     */
+    abstract public function updateGroup( GroupUpdateStruct $group );
 
     /**
      * Inserts a new conten type.

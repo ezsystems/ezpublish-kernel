@@ -14,7 +14,8 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
 
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\Group;
+    ezp\Persistence\Content\Type\Group,
+    ezp\Persistence\Content\Type\Group\GroupUpdateStruct;
 
 /**
  * Test case for ContentTypeGateway.
@@ -37,6 +38,10 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertGroup
+     */
     public function testInsertGroup()
     {
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
@@ -94,6 +99,84 @@ class EzcDatabaseTest extends TestCase
         $group->modifierId = 14;
 
         return $group;
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::updateGroup
+     */
+    public function testUpdateGroup()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_groups.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $struct = $this->getGroupUpdateStructFixture();
+
+        $res = $gateway->updateGroup( $struct );
+
+        $this->assertQueryResult(
+            array(
+                array( '3' )
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( 'COUNT(*)' )
+                ->from( 'ezcontentclassgroup' )
+        );
+
+        $q = $this->getDatabaseHandler()->createSelectQuery();
+        $q->select(
+                'id',
+                'created',
+                'creator_id',
+                'modified',
+                'modifier_id',
+                'name'
+            )->from( 'ezcontentclassgroup' )
+            ->where(
+                $q->expr->eq( 'id', 2 )
+            );
+        $this->assertQueryResult(
+            array(
+                array(
+                    'id'          => 2,
+                    'created'     => 1031216941,
+                    'creator_id'  => 14,
+                    'modified'    => 1311454096,
+                    'modifier_id' => 23,
+                    'name'        => 'UpdatedGroupName',
+                ),
+            ),
+            $q
+        );
+    }
+
+    /**
+     * Returns a Group update struct fixture.
+     *
+     * @return GroupUpdateStruct
+     */
+    protected function getGroupUpdateStructFixture()
+    {
+        $struct = new GroupUpdateStruct();
+
+        $struct->id = 2;
+        $struct->name = array(
+            'always-available' => 'eng-GB',
+            'eng-GB' => 'UpdatedGroupName',
+        );
+        $struct->description = array(
+            'always-available' => 'eng-GB',
+            'eng-GB' => '',
+        );
+        $struct->identifier = 'UpdatedGroup';
+        $struct->modified   = 1311454096;
+        $struct->modifierId = 23;
+
+        return $struct;
     }
 
     /**
