@@ -22,6 +22,10 @@ use ezp\Persistence\LegacyStorage\Content\Type\Mapper,
  */
 class MapperTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::createGroupFromCreateStruct
+     */
     public function testCreateGroupFromCreateStruct()
     {
         $createStruct = $this->getGroupCreateStructFixture();
@@ -146,6 +150,8 @@ class MapperTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::extractTypesFromRows
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::extractTypeFromRow
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::extractFieldFromRow
      */
     public function testExtractTypesFromRowsSingle()
     {
