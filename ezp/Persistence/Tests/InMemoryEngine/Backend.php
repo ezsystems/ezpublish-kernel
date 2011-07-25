@@ -28,11 +28,18 @@ class Backend
     protected $data = array();
 
     /**
+     * @var array
+     */
+    protected $dataCounters = array();
+
+    /**
      * Construct backend by reading data in data.json
      */
     public function __construct()
     {
         $this->data = json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) + $this->data;
+        foreach ( $this->data as $type => $data )
+            $this->dataCounters[$type] = count( $data );
     }
 
     /**
@@ -48,8 +55,8 @@ class Backend
         if ( !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $data['id'] = count( $this->data[$type] ) + 1;
-        $this->data[$type][] = $data;
+        $data['id'] = ++$this->dataCounters[$type];
+        $this->data[$type][$data['id']] = $data;
         return $this->toValue( $type, $data );
     }
 
@@ -65,9 +72,9 @@ class Backend
         if ( !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $list = $this->find( $type, array( 'id' => $id ) );
-        if ( isset( $list[0] ) )
-            return $list[0];
+        if ( isset( $this->data[$type][$id] ) )
+            return $this->toValue( $type, $this->data[$type][$id] );
+
         return null;
     }
 
