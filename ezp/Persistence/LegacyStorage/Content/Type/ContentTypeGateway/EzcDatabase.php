@@ -425,7 +425,16 @@ class EzcDatabase extends ContentTypeGateway
      */
     public function deleteGroupAssignementsForType( $typeId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $q = $this->dbHandler->createDeleteQuery();
+        $q->deleteFrom( 'ezcontentclass_classgroup' )
+            ->where(
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                )
+        );
+        $stmt = $q->prepare();
+        $stmt->execute();
     }
 
     /**

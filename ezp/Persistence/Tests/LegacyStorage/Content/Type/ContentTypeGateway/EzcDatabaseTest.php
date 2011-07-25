@@ -428,6 +428,56 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteGroupAssignementsForType
+     */
+    public function testDeleteGroupAssignementsForTypeExisting()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $gateway->deleteGroupAssignementsForType( 1 );
+
+        $countAffectedAttr = $this->getDatabaseHandler()
+            ->createSelectQuery();
+        $countAffectedAttr->select( 'COUNT(*)' )
+            ->from( 'ezcontentclass_classgroup' );
+
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $countAffectedAttr
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteGroupAssignementsForType
+     */
+    public function testDeleteGroupAssignementsForTypeNotExisting()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $gateway->deleteType( 23 );
+
+        $countAffectedAttr = $this->getDatabaseHandler()
+            ->createSelectQuery();
+        $countAffectedAttr->select( 'COUNT(*)' )
+            ->from( 'ezcontentclass_classgroup' );
+
+        $this->assertQueryResult(
+            array( array( 3 ) ),
+            $countAffectedAttr
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteType
      */
     public function testDeleteTypeExisting()
