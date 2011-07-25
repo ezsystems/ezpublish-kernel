@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Tests\LegcyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
+    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
 
     ezp\Persistence\Content\Type\Group,
@@ -232,6 +233,46 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             $createStructClone,
             $createStructFix,
             'Create struct manipulated'
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::update
+     */
+    public function testUpdate()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'updateType' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 ),
+                $this->isInstanceOf(
+                    'ezp\Persistence\Content\Type\ContentTypeUpdateStruct'
+                )
+            );
+
+        $handlerMock = $this->getMock(
+            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler',
+            array( 'load' ),
+            array( $gatewayMock, new Mapper() )
+        );
+        $handlerMock->expects( $this->once() )
+            ->method( 'load' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 )
+            )
+            ->will( $this->returnValue( new Type() ) );
+
+        $res = $handlerMock->update(
+            23, 1, new ContentTypeUpdateStruct()
+        );
+
+        $this->assertInstanceOf(
+            'ezp\Persistence\Content\Type',
+            $res
         );
     }
 

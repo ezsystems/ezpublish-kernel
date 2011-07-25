@@ -155,11 +155,19 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     }
 
     /**
+     * @param mixed $typeId
+     * @param int $version
      * @param Type\ContentTypeUpdateStruct $contentType
+     * @return Type
      */
     public function update( $typeId, $version, ContentTypeUpdateStruct $contentType )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $this->contentTypeGateway->updateType(
+            $typeId, $version, $contentType
+        );
+        return $this->load(
+            $typeId, $version
+        );
     }
 
     /**

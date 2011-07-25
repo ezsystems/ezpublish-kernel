@@ -10,6 +10,7 @@
 namespace ezp\Persistence\LegacyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
     ezp\Persistence\Content\Type\Group,
     ezp\Persistence\Content\Type\Group\GroupUpdateStruct;
 
@@ -60,6 +61,16 @@ abstract class ContentTypeGateway
      * @return mixed Field definition ID
      */
     abstract public function insertFieldDefinition( $typeId, $version, FieldDefinition $fieldDefinition );
+
+    /**
+     * Update a type with $updateStruct.
+     *
+     * @param mixed $type
+     * @param int $version
+     * @param ContentTypeUpdateStruct $updateStruct
+     * @return void
+     */
+    abstract public function updateType( $typeId, $version, ContentTypeUpdateStruct $updateStruct );
 
     /**
      * Loads an array with data about $typeId in $version.

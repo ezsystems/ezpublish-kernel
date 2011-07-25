@@ -11,6 +11,7 @@ namespace ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
 use ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway,
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
     ezp\Persistence\Content\Type\Group,
     ezp\Persistence\Content\Type\Group\GroupUpdateStruct;
 
@@ -333,6 +334,19 @@ class EzcDatabase extends ContentTypeGateway
         $stmt->execute();
 
         return $this->dbHandler->lastInsertId();
+    }
+
+    /**
+     * Update a type with $updateStruct.
+     *
+     * @param mixed $type
+     * @param int $version
+     * @param ContentTypeUpdateStruct $updateStruct
+     * @return void
+     */
+    public function updateType( $typeId, $version, ContentTypeUpdateStruct $updateStruct )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
     }
 
     /**
