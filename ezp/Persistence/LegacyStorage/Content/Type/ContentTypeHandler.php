@@ -99,7 +99,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @todo These are already present in the Group instance. Why load them 
      *       dedicatedly here?;
      */
-    public function loadContentTypes( $groupId )
+    public function loadContentTypes( $groupId, $version = 0 )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -155,7 +155,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     /**
      * @param Type\ContentTypeUpdateStruct $contentType
      */
-    public function update( ContentTypeUpdateStruct $contentType )
+    public function update( $typeId, $version, ContentTypeUpdateStruct $contentType )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -164,8 +164,9 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param mixed $contentTypeId
      * @TODO Needs to delete all content objects of that type, too.
      */
-    public function delete( $contentTypeId )
+    public function delete( $contentTypeId, $version )
     {
+        // FIXME: $version needs to be used!
         $this->contentTypeGateway->deleteGroupAssignementsForType( $contentTypeId );
         $this->contentTypeGateway->deleteFieldDefinitionsForType( $contentTypeId );
         $this->contentTypeGateway->deleteType( $contentTypeId );
@@ -180,7 +181,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @todo What does this method do? Create a new version of the content type
      *       from $version? Is it then expected to return the Type object?
      */
-    public function createVersion( $userId, $contentTypeId, $version )
+    public function createVersion( $userId, $contentTypeId, $fromVersion, $toVersion )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -192,7 +193,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @todo What does this method do? Create a new Content\Type as a copy?
      *       With which data (e.g. identified)?
      */
-    public function copy( $userId, $contentTypeId )
+    public function copy( $userId, $contentTypeId, $version )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -203,7 +204,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      */
-    public function unlink( $groupId, $contentTypeId )
+    public function unlink( $groupId, $contentTypeId, $version )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -214,17 +215,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      */
-    public function link( $groupId, $contentTypeId )
-    {
-        throw new \RuntimeException( "Not implemented, yet." );
-    }
-
-    /**
-     * @param int $contentTypeId
-     * @param int $groupId
-     * @todo Isn't this the same as {@link link()}?
-     */
-    public function addGroup( $contentTypeId, $groupId )
+    public function link( $groupId, $contentTypeId, $version )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -240,7 +231,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function addFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition )
+    public function addFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -256,7 +247,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param mixed $fieldDefinitionId
      * @return boolean
      */
-    public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId )
+    public function removeFieldDefinition( $contentTypeId, $version, $fieldDefinitionId )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -273,7 +264,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function updateFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition )
+    public function updateFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
@@ -293,7 +284,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @todo Is it correct that this refers to a $fieldDefinitionId instead of
      *       a $typeId?
      */
-    public function updateContentObjects( $contentTypeId, $fieldDefinitionId )
+    public function updateContentObjects( $contentTypeId, $version, $fieldDefinitionId )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
