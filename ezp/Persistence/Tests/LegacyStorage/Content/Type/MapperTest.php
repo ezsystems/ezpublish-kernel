@@ -112,6 +112,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             'always-available' => 'eng-US',
             'eng-US' => 'Folder',
         );
+        $struct->version = 0;
         $struct->description = array(
             0 => '',
             'always-available' => false,

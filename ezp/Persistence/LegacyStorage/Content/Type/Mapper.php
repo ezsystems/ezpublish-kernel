@@ -153,6 +153,7 @@ class Mapper
         $type = new Type();
 
         $type->name = $createStruct->name;
+        $type->version = $createStruct->version;
         $type->description = $createStruct->description;
         $type->identifier = $createStruct->identifier;
         $type->created = $createStruct->created;
