@@ -325,6 +325,36 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::addFieldDefinition
+     */
+    public function testAddFieldDefinition()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'insertFieldDefinition' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 ),
+                $this->isInstanceOf(
+                    'ezp\Persistence\Content\Type\FieldDefinition'
+                )
+            )->will(
+                $this->returnValue( 42 )
+            );
+
+        $fieldDef = new FieldDefinition();
+
+        $handler = new ContentTypeHandler( $gatewayMock, new Mapper() );
+        $handler->addFieldDefinition( 23, 1, $fieldDef );
+
+        $this->assertEquals(
+            42,
+            $fieldDef->id
+        );
+    }
+
+    /**
      * Returns a gateway mock
      *
      * @return ContentTypeGateway

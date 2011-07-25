@@ -253,7 +253,9 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function addFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $fieldDefinition->id = $this->contentTypeGateway->insertFieldDefinition(
+            $contentTypeId, $version, $fieldDefinition
+        );
     }
 
     /**
