@@ -381,8 +381,9 @@ class EzcDatabase extends ContentTypeGateway
      * @param mixed $typeId
      * @return void
      */
-    public function deleteFieldDefinitionsForType( $typeId )
+    public function deleteFieldDefinitionsForType( $typeId, $version )
     {
+        // FIXME: Use version
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom( 'ezcontentclass_attribute' )
             ->where(
@@ -403,8 +404,9 @@ class EzcDatabase extends ContentTypeGateway
      * @param mixed $typeId
      * @return void
      */
-    public function deleteType( $typeId )
+    public function deleteType( $typeId, $version )
     {
+        // FIXME: User version
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom( 'ezcontentclass' )
             ->where(
@@ -423,8 +425,9 @@ class EzcDatabase extends ContentTypeGateway
      * @param mixed $typeId
      * @return void
      */
-    public function deleteGroupAssignementsForType( $typeId )
+    public function deleteGroupAssignementsForType( $typeId, $version )
     {
+        // FIXME: Use version
         $q = $this->dbHandler->createDeleteQuery();
         $q->deleteFrom( 'ezcontentclass_classgroup' )
             ->where(

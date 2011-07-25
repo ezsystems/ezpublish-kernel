@@ -166,10 +166,15 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function delete( $contentTypeId, $version )
     {
-        // FIXME: $version needs to be used!
-        $this->contentTypeGateway->deleteGroupAssignementsForType( $contentTypeId );
-        $this->contentTypeGateway->deleteFieldDefinitionsForType( $contentTypeId );
-        $this->contentTypeGateway->deleteType( $contentTypeId );
+        $this->contentTypeGateway->deleteGroupAssignementsForType(
+            $contentTypeId, $version
+        );
+        $this->contentTypeGateway->deleteFieldDefinitionsForType(
+            $contentTypeId, $version
+        );
+        $this->contentTypeGateway->deleteType(
+            $contentTypeId, $version
+        );
 
         return true;
     }

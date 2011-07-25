@@ -74,7 +74,7 @@ abstract class ContentTypeGateway
      * @param mixed $typeId
      * @return void
      */
-    abstract public function deleteFieldDefinitionsForType( $typeId );
+    abstract public function deleteFieldDefinitionsForType( $typeId, $version );
 
     /**
      * Deletes a the Type.
@@ -84,7 +84,7 @@ abstract class ContentTypeGateway
      * @param mixed $typeId
      * @return void
      */
-    abstract public function deleteType( $typeId );
+    abstract public function deleteType( $typeId, $version );
 
     /**
      * Deletes all group assignements for a Type.
@@ -92,5 +92,5 @@ abstract class ContentTypeGateway
      * @param mixed $typeId
      * @return void
      */
-    abstract public function deleteGroupAssignementsForType( $typeId );
+    abstract public function deleteGroupAssignementsForType( $typeId, $version );
 }

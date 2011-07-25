@@ -238,17 +238,17 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteFieldDefinitionsForType' )
-            ->with( $this->equalTo( 23 ) );
+            ->with( $this->equalTo( 23, 0 ) );
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteType' )
-            ->with( $this->equalTo( 23 ) );
+            ->with( $this->equalTo( 23, 0 ) );
 
         $mapperMock = $this->getMock(
             'ezp\Persistence\LegacyStorage\Content\Type\Mapper'
         );
 
         $handler = new ContentTypeHandler( $gatewayMock, $mapperMock );
-        $res = $handler->delete( 23 );
+        $res = $handler->delete( 23, 0 );
 
         $this->assertTrue( $res );
     }
