@@ -221,7 +221,57 @@ class EzcDatabase extends ContentTypeGateway
      */
     public function insertGroupAssignement( $typeId, $version, $groupId )
     {
-        throw new \RuntimeException( "Not implemented, yet" );
+        $group = $this->loadGroupData( $groupId );
+
+        $q = $this->dbHandler->createInsertQuery();
+        $q->insertInto( 'ezcontentclass_classgroup' )
+            ->set(
+                $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
+                $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+            )->set(
+                $this->dbHandler->quoteIdentifier( 'contentclass_version' ),
+                $q->bindValue( $version, null, \PDO::PARAM_INT )
+            )->set(
+                $this->dbHandler->quoteIdentifier( 'group_id' ),
+                $q->bindValue( $groupId, null, \PDO::PARAM_INT )
+            )->set(
+                $this->dbHandler->quoteIdentifier( 'group_name' ),
+                $q->bindValue( $group['name'] )
+        );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+    }
+
+    /**
+     * Loads data about Group with $groupId.
+     *
+     * @param mixed $groupId
+     * @return string[]
+     */
+    protected function loadGroupData( $groupId )
+    {
+        $q = $this->dbHandler->createSelectQuery();
+        $q->select(
+            $this->dbHandler->quoteIdentifier( 'created' ),
+            $this->dbHandler->quoteIdentifier( 'creator_id' ),
+            $this->dbHandler->quoteIdentifier( 'id' ),
+            $this->dbHandler->quoteIdentifier( 'modified' ),
+            $this->dbHandler->quoteIdentifier( 'modifier_id' ),
+            $this->dbHandler->quoteIdentifier( 'name' )
+        )->from(
+            $this->dbHandler->quoteIdentifier( 'ezcontentclassgroup' )
+        )->where(
+            $q->expr->eq(
+                $this->dbHandler->quoteIdentifier( 'id' ),
+                $q->bindValue( $groupId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $stmt->fetch( \PDO::FETCH_ASSOC );
     }
 
     /**

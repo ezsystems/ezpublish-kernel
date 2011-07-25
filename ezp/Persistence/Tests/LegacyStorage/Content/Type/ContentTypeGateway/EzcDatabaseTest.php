@@ -363,6 +363,36 @@ class EzcDatabaseTest extends TestCase
         return $field;
     }
 
+    public function testInsertGroupAssignement()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_groups.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $gateway->insertGroupAssignement( 23, 1, 3 );
+
+        $this->assertQueryResult(
+            array(
+                array(
+                    'contentclass_id'      => '23',
+                    'contentclass_version' => '1',
+                    'group_id'             => '3',
+                    'group_name'           => 'Media',
+                )
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select(
+                    'contentclass_id',
+                    'contentclass_version',
+                    'group_id',
+                    'group_name'
+                )->from( 'ezcontentclass_classgroup' )
+        );
+    }
+
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteFieldDefinitionsForType
