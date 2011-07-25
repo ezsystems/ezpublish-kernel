@@ -191,10 +191,16 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'insertGroupAssignement' )
             ->with(
                 $this->equalTo( 23 ),
-                $this->equalTo( 1 )
+                $this->equalTo( 1 ),
+                $this->equalTo( 42 )
             );
         $gatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'insertFieldDefinition' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 ),
+                $this->isInstanceOf( 'ezp\Persistence\Content\Type\FieldDefinition' )
+            )
             ->will( $this->returnValue( 42 ) );
 
         $handler = new ContentTypeHandler( $gatewayMock, new Mapper() );
@@ -276,8 +282,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     protected function getContenTypeCreateStructFixture()
     {
         $struct = new ContentTypeCreateStruct();
+        $struct->version = 1;
         $struct->contentTypeGroupIds = array(
-            1,
+            42,
         );
 
         $fieldDefName = new FieldDefinition();

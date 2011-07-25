@@ -297,7 +297,7 @@ class EzcDatabaseTest extends TestCase
 
         $field = $this->getFieldDefinitionFixture();
 
-        $gateway->insertFieldDefinition( 23, $field );
+        $gateway->insertFieldDefinition( 23, 1, $field );
 
         $this->assertQueryResult(
             array(
@@ -305,6 +305,7 @@ class EzcDatabaseTest extends TestCase
                 array(
                     'category' => '',
                     'contentclass_id' => 23,
+                    'version' => 1,
                     'data_type_string' => 'ezxmltext',
                     'identifier' => 'description',
                     'is_required' => '0',
@@ -317,6 +318,7 @@ class EzcDatabaseTest extends TestCase
                 ->select(
                     'category',
                     'contentclass_id',
+                    'version',
                     'data_type_string',
                     'identifier',
                     'is_required',

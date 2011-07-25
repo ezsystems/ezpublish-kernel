@@ -45,19 +45,21 @@ abstract class ContentTypeGateway
      * Insert assignement of $typeId to $groupId.
      *
      * @param mixed $typeId
+     * @param int $version
      * @param mixed $groupId
      * @return void
      */
-    abstract public function insertGroupAssignement( $typeId, $groupId );
+    abstract public function insertGroupAssignement( $typeId, $version, $groupId );
 
     /**
      * Inserts a $fieldDefinition for $typeId.
      *
      * @param mixed $typeId
+     * @param int $version
      * @param FieldDefinition $fieldDefinition
      * @return mixed Field definition ID
      */
-    abstract public function insertFieldDefinition( $typeId, FieldDefinition $fieldDefinition );
+    abstract public function insertFieldDefinition( $typeId, $version, FieldDefinition $fieldDefinition );
 
     /**
      * Loads an array with data about $typeId in $version.

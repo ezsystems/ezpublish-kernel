@@ -215,10 +215,11 @@ class EzcDatabase extends ContentTypeGateway
      * Insert assignement of $typeId to $groupId.
      *
      * @param mixed $typeId
+     * @param int $version
      * @param mixed $groupId
      * @return void
      */
-    public function insertGroupAssignement( $typeId, $groupId )
+    public function insertGroupAssignement( $typeId, $version, $groupId )
     {
         throw new \RuntimeException( "Not implemented, yet" );
     }
@@ -229,23 +230,20 @@ class EzcDatabase extends ContentTypeGateway
      * @param mixed $typeId
      * @param FieldDefinition $fieldDefinition
      * @return mixed Field definition ID
-     * @todo What about version, fieldTypeConstraints and defaultValue?
+     * @todo What about fieldTypeConstraints and defaultValue?
      * @todo This might lead to race conditions for insert IDs.
      * @todo PDO->lastInsertId() might require a seq name (Oracle?).
      */
-    public function insertFieldDefinition( $typeId, FieldDefinition $fieldDefinition )
+    public function insertFieldDefinition( $typeId, $version, FieldDefinition $fieldDefinition )
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto( 'ezcontentclass_attribute' );
         $q->set(
             $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
             $q->bindValue( $typeId, null, \PDO::PARAM_INT )
-        /*
-         * version?
         )->set(
-            $this->dbHandler->quoteIdentifier( '' ),
-            $q->bindValue( serialize( $fieldDefinition->name) )
-        */
+            $this->dbHandler->quoteIdentifier( 'version' ),
+            $q->bindValue( $version, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteIdentifier( 'serialized_name_list' ),
             $q->bindValue( serialize( $fieldDefinition->name ) )

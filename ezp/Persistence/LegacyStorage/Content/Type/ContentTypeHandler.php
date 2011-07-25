@@ -139,6 +139,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
         {
             $this->contentTypeGateway->insertGroupAssignement(
                 $contentType->id,
+                $contentType->version,
                 $groupId
             );
         }
@@ -146,6 +147,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
         {
             $fieldDef->id = $this->contentTypeGateway->insertFieldDefinition(
                 $contentType->id,
+                $contentType->version,
                 $fieldDef
             );
         }
