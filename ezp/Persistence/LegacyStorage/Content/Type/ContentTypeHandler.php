@@ -162,10 +162,14 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
 
     /**
      * @param mixed $contentTypeId
+     * @TODO Needs to delete all content objects of that type, too.
      */
     public function delete( $contentTypeId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $this->contentTypeGateway->deleteFieldDefinitionsForType( $contentTypeId );
+        $this->contentTypeGateway->deleteType( $contentTypeId );
+
+        return true;
     }
 
     /**

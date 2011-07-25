@@ -67,4 +67,22 @@ abstract class ContentTypeGateway
      * @return array(int=>array(string=>mixed)) Data rows.
      */
     abstract public function loadTypeData( $typeId, $version );
+
+    /**
+     * Deletes all field definitions of a Type.
+     *
+     * @param mixed $typeId
+     * @return void
+     */
+    abstract public function deleteFieldDefinitionsForType( $typeId );
+
+    /**
+     * Deletes a the Type.
+     *
+     * Does no delete the field definitions!
+     *
+     * @param mixed $typeId
+     * @return void
+     */
+    abstract public function deleteType( $typeId );
 }

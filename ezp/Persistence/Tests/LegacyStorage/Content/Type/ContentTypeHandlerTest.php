@@ -230,6 +230,30 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::delete
+     */
+    public function testDelete()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteFieldDefinitionsForType' )
+            ->with( $this->equalTo( 23 ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteType' )
+            ->with( $this->equalTo( 23 ) );
+
+        $mapperMock = $this->getMock(
+            'ezp\Persistence\LegacyStorage\Content\Type\Mapper'
+        );
+
+        $handler = new ContentTypeHandler( $gatewayMock, $mapperMock );
+        $res = $handler->delete( 23 );
+
+        $this->assertTrue( $res );
+    }
+
+    /**
      * Returns a gateway mock
      *
      * @return ContentTypeGateway

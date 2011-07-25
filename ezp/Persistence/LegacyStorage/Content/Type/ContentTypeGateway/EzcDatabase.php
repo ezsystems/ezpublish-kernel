@@ -376,6 +376,30 @@ class EzcDatabase extends ContentTypeGateway
     }
 
     /**
+     * Deletes all field definitions of a Type.
+     *
+     * @param mixed $typeId
+     * @return void
+     */
+    public function deleteFieldDefinitionsForType( $typeId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
+     * Deletes a the Type.
+     *
+     * Does no delete the field definitions!
+     *
+     * @param mixed $typeId
+     * @return void
+     */
+    public function deleteType( $typeId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Creates an array of select columns for $tableName.
      *
      * @param string $tableName
