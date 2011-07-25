@@ -8,31 +8,39 @@
  */
 
 namespace ezp\Persistence\Tests;
-use ezp\Base\ServiceContainer;
+use ezp\Persistence\Content\Section;
 
 /**
  * Test case for SectionHandler using in memory storage.
  *
  */
-class SectionHandlerTest extends \PHPUnit_Framework_TestCase
+class SectionHandlerTest extends HandlerTest
 {
     /**
-     * @var ezp\Persistence\Interfaces\RepositoryHandler
+     * @var Section
      */
-    protected $handler;
+    protected $section;
 
-    public function __construct()
+    /**
+     * Setup the SectionHandlerTest.
+     */
+    protected function setUp()
     {
-        parent::__construct();
-        $this->setName( "SectionHandler class tests" );
+        parent::setUp();
 
-        // Get in memory RepositoryHandler instance
-        $serviceContainer = new ServiceContainer(
-            array(
-                'repository_handler' => array( 'class' => 'ezp\\Persistence\\Tests\\InMemoryEngine\\RepositoryHandler' )
-            )
-        );
-        $this->handler = $serviceContainer->get( 'repository_handler' );
+        $this->section = $this->repositoryHandler->sectionHandler()->create( "Test", "test" );
+    }
+
+    /**
+     * Removes stuff created in setUp().
+     */
+    protected function tearDown()
+    {
+        $sectionHandler = $this->repositoryHandler->sectionHandler();
+        // Removing default objects as well as those created by
+        $sectionHandler->delete( 2 );
+        $sectionHandler->delete( 3 );
+        parent::tearDown();
     }
 
     /**
@@ -40,29 +48,47 @@ class SectionHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testLoad()
     {
-        $handler = $this->handler->sectionHandler();
-        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Section', $handler->load( 1 ) );
+        $section = $this->repositoryHandler->sectionHandler()->load( $this->section->id );
+        $this->assertTrue( $section instanceof Section );
+        $this->assertEquals( 'Test', $section->name );
+        $this->assertEquals( 'test', $section->identifier );
     }
 
     /**
-     * Test create / update / delete functions
+     * Test create function
      */
-    public function testCreateUpdateDelete()
+    public function testCreate()
     {
-        $handler = $this->handler->sectionHandler();
+        $section = $this->repositoryHandler->sectionHandler()->create( 'Test2', 'test2' );
+        $this->assertTrue( $section instanceof Section );
+        $this->assertEquals( 3, $section->id );
+        $this->assertEquals( 'Test2', $section->name );
+        $this->assertEquals( 'test2', $section->identifier );
+    }
 
-        $section = $handler->create( 'Test', 'test' );
-        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Section', $section );
-        $this->assertEquals( 2, $section->id );
-        $this->assertEquals( 'Test', $section->name );
-        $this->assertEquals( 'test', $section->identifier );
+    /**
+     * Test update function
+     */
+    public function testUpdate()
+    {
+        $sectionHandler = $this->repositoryHandler->sectionHandler();
 
-        $this->assertTrue( $handler->update( $section->id, 'Change', 'change' ) );
+        $this->assertTrue( $sectionHandler->update( $this->section->id, 'Change', 'change' ) );
 
-        $section = $handler->load( $section->id );
+        $section = $sectionHandler->load( $this->section->id );
         $this->assertEquals( 2, $section->id );
         $this->assertEquals( 'Change', $section->name );
         $this->assertEquals( 'change', $section->identifier );
-        $this->assertTrue( $handler->delete( $section->id ) );
+    }
+
+    /**
+     * Test delete function
+     */
+    public function testDelete()
+    {
+        $sectionHandler = $this->repositoryHandler->sectionHandler();
+
+        $this->assertTrue( $sectionHandler->delete( $this->section->id ) );
+        $this->assertNull( $sectionHandler->load( $this->section->id ) );
     }
 }

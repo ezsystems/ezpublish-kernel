@@ -8,41 +8,20 @@
  */
 
 namespace ezp\Persistence\Tests;
-use ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler,
-    ezp\Base\ServiceContainer;
 
 /**
  * Test case for RepositoryHandler using in memory storage.
  *
  */
-class RepositoryHandlerTest extends \PHPUnit_Framework_TestCase
+class RepositoryHandlerTest extends HandlerTest
 {
-    /**
-     * @var ezp\Persistence\Interfaces\RepositoryHandler
-     */
-    protected $handler;
-
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setName( "RepositoryHandler class tests" );
-
-        // Get in memory RepositoryHandler instance
-        $serviceContainer = new ServiceContainer(
-            array(
-                'repository_handler' => array( 'class' => 'ezp\\Persistence\\Tests\\InMemoryEngine\\RepositoryHandler' )
-            )
-        );
-        $this->handler = $serviceContainer->get( 'repository_handler' );
-    }
-
     /**
      * Test that instance is of correct type
      */
     public function testHandler()
     {
-        $this->assertInstanceOf( 'ezp\\Persistence\\Interfaces\\RepositoryHandler', $this->handler );
-        $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\RepositoryHandler', $this->handler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Interfaces\\RepositoryHandler', $this->repositoryHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\RepositoryHandler', $this->repositoryHandler );
     }
 
     /**
@@ -50,7 +29,7 @@ class RepositoryHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testContentHandler()
     {
-        $contentHandler = $this->handler->contentHandler();
+        $contentHandler = $this->repositoryHandler->contentHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Interfaces\\ContentHandler', $contentHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\ContentHandler', $contentHandler );
     }
@@ -60,7 +39,7 @@ class RepositoryHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSectionHandler()
     {
-        $sectionHandler = $this->handler->sectionHandler();
+        $sectionHandler = $this->repositoryHandler->sectionHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Interfaces\\SectionHandler', $sectionHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\SectionHandler', $sectionHandler );
     }
