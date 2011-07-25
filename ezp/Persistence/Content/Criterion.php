@@ -93,23 +93,35 @@ abstract class Criterion
      */
     private function getValueTypeCheckCallback( $valueTypes )
     {
-        $code = '';
+        $callback = function( $value )
+        {
+            return false;
+        };
 
         // the callback code will return true as soon as an accepted value type is found
         if ( in_array( OperatorSpecifications::TYPE_INTEGER, $valueTypes ) )
         {
-            $code .= 'if ( is_numeric( $v ) ) return true;';
+            $callback = function( $value ) use ($callback)
+            {
+                return is_numeric( $value ) || $callback( $value );
+            };
         }
         if ( in_array( OperatorSpecifications::TYPE_STRING, $valueTypes ) )
         {
-            $code .= 'if ( is_string( $v ) ) return true;';
+            $callback = function( $value ) use ($callback)
+            {
+                return is_string( $value ) || $callback( $value );
+            };
         }
         if ( in_array( OperatorSpecifications::TYPE_BOOLEAN, $valueTypes ) )
         {
-            $code .= 'if ( is_bool( $v ) ) return true;';
+            $callback = function( $value ) use ($callback)
+            {
+                return is_bool( $value ) || $callback( $value );
+            };
         }
-        $code .= 'return false;';
-        return create_function( '$v', $code );
+
+        return $callback;
     }
 
     /**
