@@ -418,6 +418,17 @@ class EzcDatabase extends ContentTypeGateway
     }
 
     /**
+     * Deletes all group assignements for a Type.
+     *
+     * @param mixed $typeId
+     * @return void
+     */
+    public function deleteGroupAssignementsForType( $typeId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Creates an array of select columns for $tableName.
      *
      * @param string $tableName

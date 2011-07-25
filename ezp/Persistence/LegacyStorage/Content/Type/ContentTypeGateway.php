@@ -85,4 +85,12 @@ abstract class ContentTypeGateway
      * @return void
      */
     abstract public function deleteType( $typeId );
+
+    /**
+     * Deletes all group assignements for a Type.
+     *
+     * @param mixed $typeId
+     * @return void
+     */
+    abstract public function deleteGroupAssignementsForType( $typeId );
 }
