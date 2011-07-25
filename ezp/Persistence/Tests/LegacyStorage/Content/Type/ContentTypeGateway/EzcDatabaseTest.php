@@ -189,7 +189,7 @@ class EzcDatabaseTest extends TestCase
     public function testLoadTypeData()
     {
         $this->insertDatabaseFixture(
-            __DIR__ . '/_fixtures/load_type.php'
+            __DIR__ . '/_fixtures/existing_types.php'
         );
 
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
