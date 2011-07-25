@@ -14,6 +14,7 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
 
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
     ezp\Persistence\Content\Type\Group,
     ezp\Persistence\Content\Type\Group\GroupUpdateStruct;
 
@@ -363,6 +364,10 @@ class EzcDatabaseTest extends TestCase
         return $field;
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertGroupAssignement
+     */
     public function testInsertGroupAssignement()
     {
         $this->insertDatabaseFixture(
@@ -391,6 +396,75 @@ class EzcDatabaseTest extends TestCase
                     'group_name'
                 )->from( 'ezcontentclass_classgroup' )
         );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::updateType
+     */
+    public function testUpdateType()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $updateStruct = $this->getTypeUpdateFixture();
+
+        $gateway->updateType( 1, 0, $updateStruct );
+
+        $this->assertQueryResult(
+            array(
+                array(
+                    // "random" sample
+                    'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"New Folder";}',
+                    'created' => '1024392098',
+                    'modifier_id' => '42',
+                    'remote_id' => 'foobar',
+                )
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select(
+                    'serialized_name_list',
+                    'created',
+                    'modifier_id',
+                    'remote_id'
+                )->from( 'ezcontentclass' )
+                ->where( 'id = 1 AND version = 0' ),
+            'Inserted Type data incorrect'
+        );
+
+    }
+
+    /**
+     * Returns a ContentTypeUpdateStruct fixture.
+     *
+     * @return ContentTypeUpdateStruct
+     */
+    protected function getTypeUpdateFixture()
+    {
+        $struct = new ContentTypeUpdateStruct();
+
+        $struct->name = array(
+            'always-available' => 'eng-US',
+            'eng-US' => 'New Folder',
+        );
+        $struct->description = array(
+            0 => '',
+            'always-available' => false,
+        );
+        $struct->identifier = 'new_folder';
+        $struct->modified = 1311621548;
+        $struct->modifierId = 42;
+        $struct->remoteId = 'foobar';
+        $struct->urlAliasSchema = 'some scheke';
+        $struct->nameSchema = '<short_name>';
+        $struct->isContainer = false;
+        $struct->initialLanguageId = 23;
+
+        return $struct;
     }
 
     /**

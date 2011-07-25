@@ -170,6 +170,30 @@ class EzcDatabase extends ContentTypeGateway
             $this->dbHandler->quoteIdentifier( 'version' ),
             $q->bindValue( $type->version, null, \PDO::PARAM_INT )
         )->set(
+            $this->dbHandler->quoteIdentifier( 'created' ),
+            $q->bindValue( $type->created, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteIdentifier( 'creator_id' ),
+            $q->bindValue( $type->creatorId, null, \PDO::PARAM_INT )
+        );
+        $this->setCommonTypeColumns( $q, $type );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $this->dbHandler->lastInsertId();
+    }
+
+    /**
+     * Set common columns for insert/update of a Type.
+     *
+     * @param \ezcQuerySelect $q
+     * @param mixed $typeStruct
+     * @return void
+     */
+    protected function setCommonTypeColumns( \ezcQuery $q, $type )
+    {
+        $q->set(
             $this->dbHandler->quoteIdentifier( 'serialized_name_list' ),
             $q->bindValue( serialize( $type->name ) )
         )->set(
@@ -179,14 +203,8 @@ class EzcDatabase extends ContentTypeGateway
             $this->dbHandler->quoteIdentifier( 'identifier' ),
             $q->bindValue( $type->identifier )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'created' ),
-            $q->bindValue( $type->created, null, \PDO::PARAM_INT )
-        )->set(
             $this->dbHandler->quoteIdentifier( 'modified' ),
             $q->bindValue( $type->modified, null, \PDO::PARAM_INT )
-        )->set(
-            $this->dbHandler->quoteIdentifier( 'creator_id' ),
-            $q->bindValue( $type->creatorId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteIdentifier( 'modifier_id' ),
             $q->bindValue( $type->modifierId, null, \PDO::PARAM_INT )
@@ -206,10 +224,6 @@ class EzcDatabase extends ContentTypeGateway
             $this->dbHandler->quoteIdentifier( 'initial_language_id' ),
             $q->bindValue( $type->initialLanguageId, null, \PDO::PARAM_INT )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
-
-        return $this->dbHandler->lastInsertId();
     }
 
     /**
@@ -339,14 +353,33 @@ class EzcDatabase extends ContentTypeGateway
     /**
      * Update a type with $updateStruct.
      *
-     * @param mixed $type
+     * @param mixed $typeId
      * @param int $version
      * @param ContentTypeUpdateStruct $updateStruct
      * @return void
      */
     public function updateType( $typeId, $version, ContentTypeUpdateStruct $updateStruct )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $q = $this->dbHandler->createUpdateQuery();
+        $q->update( $this->dbHandler->quoteIdentifier( 'ezcontentclass' ) );
+
+        $this->setCommonTypeColumns( $q, $updateStruct );
+
+        $q->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'version' ),
+                    $q->bindValue( $version, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
     }
 
     /**
