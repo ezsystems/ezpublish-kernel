@@ -142,12 +142,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $createStructFix = $this->getContenTypeCreateStructFixture();
         $createStructClone = clone $createStructFix;
 
-        $gatewayMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway',
-            array(
-                'insertType', 'insertGroupAssignement', 'insertFieldDefinition',
-                'loadTypeData', 'insertGroup'
-            )
+        $gatewayMock = $this->getMockForAbstractClass(
+            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway'
         );
 
         $gatewayMock->expects( $this->once() )
@@ -207,7 +203,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getGatewayMock()
     {
-        return $this->getMock(
+        return $this->getMockForAbstractClass(
             'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway'
         );
     }
