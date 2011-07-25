@@ -218,6 +218,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertType
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::setCommonTypeColumns
      */
     public function testInsertType()
     {
@@ -367,6 +368,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertGroupAssignement
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::loadGroupData
      */
     public function testInsertGroupAssignement()
     {
@@ -401,6 +403,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::updateType
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::setCommonTypeColumns
      */
     public function testUpdateType()
     {
