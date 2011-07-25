@@ -28,6 +28,13 @@ class ContentTypeCreateStruct extends AbstractValueObject
     public $name;
 
     /**
+     * Version (state) to create.
+     *
+     * @var int
+     */
+    public $version;
+
+    /**
      * Human readable description of the content type
      *
      * The structure of this field is:
