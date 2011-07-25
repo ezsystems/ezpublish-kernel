@@ -262,6 +262,27 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue( $res );
     }
 
+    public function testLink()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'insertGroupAssignement' )
+            ->with(
+                $this->equalTo( 3 ),
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 )
+            );
+
+        $mapperMock = $this->getMock(
+            'ezp\Persistence\LegacyStorage\Content\Type\Mapper'
+        );
+
+        $handler = new ContentTypeHandler( $gatewayMock, $mapperMock );
+        $res = $handler->link( 3, 23, 1 );
+
+        $this->assertTrue( $res );
+    }
+
     /**
      * Returns a gateway mock
      *

@@ -210,6 +210,8 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
+     * @param int $version
+     * @param int $version
      */
     public function unlink( $groupId, $contentTypeId, $version )
     {
@@ -224,7 +226,10 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function link( $groupId, $contentTypeId, $version )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $this->contentTypeGateway->insertGroupAssignement(
+            $groupId, $contentTypeId, $version
+        );
+        return true;
     }
 
     /**
