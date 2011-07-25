@@ -383,7 +383,16 @@ class EzcDatabase extends ContentTypeGateway
      */
     public function deleteFieldDefinitionsForType( $typeId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $q = $this->dbHandler->createDeleteQuery();
+        $q->deleteFrom( 'ezcontentclass_attribute' )
+            ->where(
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                )
+        );
+        $stmt = $q->prepare();
+        $stmt->execute();
     }
 
     /**
@@ -396,7 +405,16 @@ class EzcDatabase extends ContentTypeGateway
      */
     public function deleteType( $typeId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $q = $this->dbHandler->createDeleteQuery();
+        $q->deleteFrom( 'ezcontentclass' )
+            ->where(
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                )
+        );
+        $stmt = $q->prepare();
+        $stmt->execute();
     }
 
     /**

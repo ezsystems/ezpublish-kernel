@@ -362,6 +362,121 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteFieldDefinitionsForType
+     */
+    public function testDeleteFieldDefinitionsForTypeExisting()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $gateway->deleteFieldDefinitionsForType( 1 );
+
+        $countAffectedAttr = $this->getDatabaseHandler()
+            ->createSelectQuery();
+        $countAffectedAttr->select( 'COUNT(*)' )
+            ->from( 'ezcontentclass_attribute' )
+            ->where(
+                $countAffectedAttr->expr->eq(
+                    'contentclass_id',
+                    1
+                )
+        );
+        $this->assertQueryResult(
+            array( array( 0 ) ),
+            $countAffectedAttr
+        );
+
+        $countNotAffectedAttr = $this->getDatabaseHandler()
+            ->createSelectQuery();
+        $countNotAffectedAttr->select( 'COUNT(*)' )
+            ->from( 'ezcontentclass_attribute' );
+
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $countNotAffectedAttr
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteFieldDefinitionsForType
+     */
+    public function testDeleteFieldDefinitionsForTypeNotExisting()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $gateway->deleteFieldDefinitionsForType( 23 );
+
+        $countNotAffectedAttr = $this->getDatabaseHandler()
+            ->createSelectQuery();
+        $countNotAffectedAttr->select( 'COUNT(*)' )
+            ->from( 'ezcontentclass_attribute' );
+
+        $this->assertQueryResult(
+            array( array( 7 ) ),
+            $countNotAffectedAttr
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteType
+     */
+    public function testDeleteTypeExisting()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $gateway->deleteType( 1 );
+
+        $countAffectedAttr = $this->getDatabaseHandler()
+            ->createSelectQuery();
+        $countAffectedAttr->select( 'COUNT(*)' )
+            ->from( 'ezcontentclass' );
+
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $countAffectedAttr
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteType
+     */
+    public function testDeleteTypeNotExisting()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $gateway->deleteType( 23 );
+
+        $countAffectedAttr = $this->getDatabaseHandler()
+            ->createSelectQuery();
+        $countAffectedAttr->select( 'COUNT(*)' )
+            ->from( 'ezcontentclass' );
+
+        $this->assertQueryResult(
+            array( array( 2 ) ),
+            $countAffectedAttr
+        );
+    }
+
+    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
