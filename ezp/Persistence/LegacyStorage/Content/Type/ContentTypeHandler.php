@@ -64,11 +64,17 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     }
 
     /**
-     * @param Group $group
+     * @param GroupUpdateStruct $group
+     * @return bool
+     * @todo Should we return the Group here? Would require an additional 
+     *       SELECt, though.
      */
-    public function updateGroup( GroupUpdateStruct $group )
+    public function updateGroup( GroupUpdateStruct $struct )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $this->contentTypeGateway->updateGroup(
+            $struct
+        );
+        return true;
     }
 
     /**

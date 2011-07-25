@@ -97,6 +97,39 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::updateGroup
+     */
+    public function testUpdateGroup()
+    {
+        $createStruct = new GroupUpdateStruct();
+
+        $mapperMock = $this->getMock(
+            'ezp\Persistence\LegacyStorage\Content\Type\Mapper',
+            array( 'createGroupFromCreateStruct' )
+        );
+
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'updateGroup' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\Persistence\Content\Type\Group\GroupUpdateStruct'
+                )
+            );
+
+        $handler = new ContentTypeHandler( $gatewayMock, $mapperMock );
+        $res = $handler->updateGroup(
+            new GroupUpdateStruct()
+        );
+
+        $this->assertSame(
+            true,
+            $res
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::load
      */
     public function testLoad()
