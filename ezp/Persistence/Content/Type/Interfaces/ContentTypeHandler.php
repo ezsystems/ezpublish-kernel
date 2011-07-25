@@ -43,14 +43,16 @@ interface ContentTypeHandler
 
     /**
      * @param mixed $groupId
+     * @param int $version ContentType version
      * @return Type[]
      */
-    public function loadContentTypes( $groupId );
+    public function loadContentTypes( $groupId, $version = 0 );
 
     /**
      * @param int $contentTypeId
      * @param int $version
      * @todo Use constant for $version?
+     * @todo Shouldn't this default to 0?
      */
     public function load( $contentTypeId, $version = 1 );
 
@@ -61,55 +63,55 @@ interface ContentTypeHandler
     public function create( ContentTypeCreateStruct $contentType );
 
     /**
+     * @param mixed $typeId
+     * @param int $version
      * @param Type\ContentTypeUpdateStruct $contentType
      */
-    public function update( ContentTypeUpdateStruct $contentType );
+    public function update( $typeId, $version, ContentTypeUpdateStruct $contentType );
 
     /**
      * @param mixed $contentTypeId
+     * @param int $version
      */
-    public function delete( $contentTypeId );
+    public function delete( $contentTypeId, $version );
+
+    /**
+     * @param mixed $userId
+     * @param mixed $contentTypeId
+     * @param int $fromVersion
+     * @param int $toVersion
+     * @todo What does this method do? Create a new version of the content type 
+     *       from $version? Is it then expected to return the Type object?
+     */
+    public function createVersion( $userId, $contentTypeId, $fromVersion, $toVersion );
 
     /**
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $version
-     * @todo What does this method do? Create a new version of the content type 
-     *       from $version? Is it then expected to return the Type object?
-     */
-    public function createVersion( $userId, $contentTypeId, $version );
-
-    /**
-     * @param mixed $userId
-     * @param mixed $contentTypeId
      * @return Type
      * @todo What does this method do? Create a new Content\Type as a copy? 
      *       With which data (e.g. identified)?
      */
-    public function copy( $userId, $contentTypeId );
+    public function copy( $userId, $contentTypeId, $version );
 
     /**
      * Unlink a content type group from a content type
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
+     * @param int $version
      */
-    public function unlink( $groupId, $contentTypeId );
+    public function unlink( $groupId, $contentTypeId, $version );
 
     /**
      * Link a content type group with a content type
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
+     * @param int $version
      */
-    public function link( $groupId, $contentTypeId );
-
-    /**
-     * @param int $contentTypeId
-     * @param int $groupId
-     * @todo Isn't this the same as {@link link()}?
-     */
-    public function addGroup( $contentTypeId, $groupId );
+    public function link( $groupId, $contentTypeId, $version );
 
     /**
      * Adds a new field definition to an existing Type.
@@ -119,10 +121,11 @@ interface ContentTypeHandler
      * field (default) values.
      *
      * @param mixed $contentTypeId
+     * @param int $version
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function addFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition );
+    public function addFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition );
 
     /**
      * Removes a field definition from an existing Type.
@@ -132,10 +135,11 @@ interface ContentTypeHandler
      * content objects depending on the field (default) values.
      *
      * @param mixed $contentTypeId
+     * @param int $version
      * @param mixed $fieldDefinitionId
      * @return boolean
      */
-    public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId );
+    public function removeFieldDefinition( $contentTypeId, $version, $fieldDefinitionId );
 
     /**
      * This method updates the given $fieldDefinition on a Type.
@@ -146,10 +150,11 @@ interface ContentTypeHandler
      * field (default) values.
      *
      * @param mixed $contentTypeId
+     * @param int $version
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function updateFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition );
+    public function updateFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition );
 
     /**
      * Update content objects
@@ -162,10 +167,11 @@ interface ContentTypeHandler
      * Flags the content type as updated.
      *
      * @param mixed $contentTypeId
+     * @param int $version
      * @return void
      * @todo Is it correct that this refers to a $fieldDefinitionId instead of 
      *       a $typeId?
      */
-    public function updateContentObjects( $contentTypeId, $fieldDefinitionId );
+    public function updateContentObjects( $contentTypeId, $version, $fieldDefinitionId );
 }
 ?>
