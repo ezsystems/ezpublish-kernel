@@ -125,7 +125,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     /**
      * @param ContentTypeCreateStruct $contentType
      * @return Type
-     * @todo Refactor. Testing way too expensive.
+     * @todo Maintain contentclass_name
      */
     public function create( ContentTypeCreateStruct $createStruct )
     {
@@ -161,6 +161,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param int $version
      * @param Type\ContentTypeUpdateStruct $contentType
      * @return Type
+     * @todo Maintain contentclass_name
      */
     public function update( $typeId, $version, ContentTypeUpdateStruct $contentType )
     {
@@ -174,7 +175,8 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
 
     /**
      * @param mixed $contentTypeId
-     * @TODO Needs to delete all content objects of that type, too.
+     * @todo Needs to delete all content objects of that type, too.
+     * @todo Maintain contentclass_name
      */
     public function delete( $contentTypeId, $version )
     {
