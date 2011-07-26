@@ -17,6 +17,8 @@ class RepositoryHandlerTest extends HandlerTest
 {
     /**
      * Test that instance is of correct type
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler::__construct
      */
     public function testHandler()
     {
@@ -26,6 +28,8 @@ class RepositoryHandlerTest extends HandlerTest
 
     /**
      * Test that instance is of correct type
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::__construct
      */
     public function testContentHandler()
     {
@@ -34,8 +38,10 @@ class RepositoryHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\ContentHandler', $contentHandler );
     }
 
-     /**
+    /**
      * Test that instance is of correct type
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\SectionHandler::__construct
      */
     public function testSectionHandler()
     {

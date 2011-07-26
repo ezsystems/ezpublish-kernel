@@ -64,6 +64,8 @@ class ContentHandlerTest extends HandlerTest
 
     /**
      * Test load function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::load
      */
     public function testLoad()
     {
@@ -77,6 +79,8 @@ class ContentHandlerTest extends HandlerTest
 
     /**
      * Test create function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::create
      */
     public function testCreate()
     {
@@ -120,6 +124,8 @@ class ContentHandlerTest extends HandlerTest
 
     /**
      * Test delete function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::delete
      */
     public function testDelete()
     {
@@ -131,6 +137,8 @@ class ContentHandlerTest extends HandlerTest
 
     /**
      * Test find function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::find
      */
     public function testFind()
     {

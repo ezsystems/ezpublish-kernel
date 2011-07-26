@@ -45,6 +45,8 @@ class SectionHandlerTest extends HandlerTest
 
     /**
      * Test load function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\SectionHandler::load
      */
     public function testLoad()
     {
@@ -56,6 +58,8 @@ class SectionHandlerTest extends HandlerTest
 
     /**
      * Test create function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\SectionHandler::create
      */
     public function testCreate()
     {
@@ -68,6 +72,8 @@ class SectionHandlerTest extends HandlerTest
 
     /**
      * Test update function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\SectionHandler::update
      */
     public function testUpdate()
     {
@@ -83,6 +89,8 @@ class SectionHandlerTest extends HandlerTest
 
     /**
      * Test delete function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\SectionHandler::delete
      */
     public function testDelete()
     {
