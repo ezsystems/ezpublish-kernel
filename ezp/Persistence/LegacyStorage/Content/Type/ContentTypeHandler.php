@@ -75,6 +75,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
         $this->contentTypeGateway->updateGroup(
             $struct
         );
+        // FIXME: Determine if Group should be returned instead
         return true;
     }
 
@@ -187,6 +188,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
             $contentTypeId, $version
         );
 
+        // FIXME: Return true only if deletion happened
         return true;
     }
 
@@ -238,6 +240,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
         $this->contentTypeGateway->insertGroupAssignement(
             $groupId, $contentTypeId, $version
         );
+        // FIXME: What is to be returned?
         return true;
     }
 
@@ -272,7 +275,11 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function removeFieldDefinition( $contentTypeId, $version, $fieldDefinitionId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $this->contentTypeGateway->deleteFieldDefinition(
+            $contentTypeId, $version, $fieldDefinitionId
+        );
+        // FIXME: Return true only if deletion happened
+        return true;
     }
 
     /**
@@ -289,7 +296,9 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function updateFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $this->contentTypeGateway->updateFieldDefinition(
+            $contentTypeId, $version, $fieldDefinition
+        );
     }
 
     /**

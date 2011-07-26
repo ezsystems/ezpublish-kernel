@@ -355,6 +355,52 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::removeFieldDefinition
+     */
+    public function testRemoveFieldDefinition()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteFieldDefinition' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 ),
+                $this->equalTo( 42 )
+            );
+
+        $handler = new ContentTypeHandler( $gatewayMock, new Mapper() );
+        $res = $handler->removeFieldDefinition( 23, 1, 42 );
+
+        $this->assertTrue( $res );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::updateFieldDefinition
+     */
+    public function testUpdateFieldDefinition()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'updateFieldDefinition' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 ),
+                $this->isInstanceOf(
+                    'ezp\Persistence\Content\Type\FieldDefinition'
+                )
+            );
+
+        $fieldDef = new FieldDefinition();
+
+        $handler = new ContentTypeHandler( $gatewayMock, new Mapper() );
+        $res = $handler->updateFieldDefinition( 23, 1, $fieldDef );
+
+        $this->assertNull( $res );
+    }
+
+    /**
      * Returns a gateway mock
      *
      * @return ContentTypeGateway

@@ -351,6 +351,32 @@ class EzcDatabase extends ContentTypeGateway
     }
 
     /**
+     * Deletes a field definition.
+     *
+     * @param mixed $typeId
+     * @param int $version
+     * @param mixed $fieldDefinitionId
+     * @return void
+     */
+    public function deleteFieldDefinition( $typeId, $version, $fieldDefinitionId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
+     * Updates a $fieldDefinition for $typeId.
+     *
+     * @param mixed $typeId
+     * @param int $version
+     * @param FieldDefinition $fieldDefinition
+     * @return void
+     */
+    public function updateFieldDefinition( $typeId, $version, FieldDefinition $fieldDefinition )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Update a type with $updateStruct.
      *
      * @param mixed $typeId

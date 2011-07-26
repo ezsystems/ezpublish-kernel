@@ -63,6 +63,26 @@ abstract class ContentTypeGateway
     abstract public function insertFieldDefinition( $typeId, $version, FieldDefinition $fieldDefinition );
 
     /**
+     * Deletes a field definition.
+     *
+     * @param mixed $typeId
+     * @param int $version
+     * @param mixed $fieldDefinitionId
+     * @return void
+     */
+    abstract public function deleteFieldDefinition( $typeId, $version, $fieldDefinitionId );
+
+    /**
+     * Updates a $fieldDefinition for $typeId.
+     *
+     * @param mixed $typeId
+     * @param int $version
+     * @param FieldDefinition $fieldDefinition
+     * @return void
+     */
+    abstract public function updateFieldDefinition( $typeId, $version, FieldDefinition $fieldDefinition );
+
+    /**
      * Update a type with $updateStruct.
      *
      * @param mixed $type
