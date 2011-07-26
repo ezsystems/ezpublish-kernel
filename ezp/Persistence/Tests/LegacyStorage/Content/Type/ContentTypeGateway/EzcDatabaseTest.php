@@ -346,8 +346,8 @@ class EzcDatabaseTest extends TestCase
             'eng-US' => 'Description',
         );
         $field->description = array(
-            0 => '',
-            'always-available' => false,
+            'always-available' => 'eng-GB',
+            'eng-GB' => 'Some description',
         );
         $field->identifier = 'description';
         $field->fieldGroup = '';
@@ -363,6 +363,77 @@ class EzcDatabaseTest extends TestCase
         );
 
         return $field;
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteFieldDefinition
+     */
+    public function testDeleteFieldDefinition()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $gateway->deleteFieldDefinition( 1, 0, 119 );
+
+        $this->assertQueryResult(
+            array( array( 6 ) ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( 'COUNT(*)' )
+                ->from( 'ezcontentclass_attribute' )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::updateFieldDefinition
+     */
+    public function testUpdateFieldDefinition()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+        $fieldDefinitionFixture = $this->getFieldDefinitionFixture();
+        $fieldDefinitionFixture->id = 160;
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway->updateFieldDefinition( 2, 0, $fieldDefinitionFixture );
+
+        $this->assertQueryResult(
+            array(
+                // "random" sample
+                array(
+                    'category' => '',
+                    'contentclass_id' => '2',
+                    'version' => '0',
+                    'data_type_string' => 'ezxmltext',
+                    'identifier' => 'description',
+                    'is_information_collector' => '0',
+                    'placement' => '4',
+                    'serialized_description_list' => 'a:2:{s:16:"always-available";s:6:"eng-GB";s:6:"eng-GB";s:16:"Some description";}',
+                ),
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select(
+                    'category',
+                    'contentclass_id',
+                    'version',
+                    'data_type_string',
+                    'identifier',
+                    'is_information_collector',
+                    'placement',
+                    'serialized_description_list'
+                )
+                ->from( 'ezcontentclass_attribute' )
+                ->where( 'id = 160' ),
+            'FieldDefinition not updated correctly'
+        );
+
     }
 
     /**

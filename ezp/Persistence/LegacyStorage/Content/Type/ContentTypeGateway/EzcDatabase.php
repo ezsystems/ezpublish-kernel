@@ -309,7 +309,25 @@ class EzcDatabase extends ContentTypeGateway
         )->set(
             $this->dbHandler->quoteIdentifier( 'version' ),
             $q->bindValue( $version, null, \PDO::PARAM_INT )
-        )->set(
+        );
+        $this->setCommonFieldColumns( $q, $fieldDefinition );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $this->dbHandler->lastInsertId();
+    }
+
+    /**
+     * Set common columns for insert/update of FieldDefinition.
+     *
+     * @param \ezcQuery $q
+     * @param FieldDefinition $fieldDefinition
+     * @return void
+     */
+    protected function setCommonFieldColumns( \ezcQuery $q, FieldDefinition $fieldDefinition )
+    {
+        $q->set(
             $this->dbHandler->quoteIdentifier( 'serialized_name_list' ),
             $q->bindValue( serialize( $fieldDefinition->name ) )
         )->set(
@@ -344,10 +362,6 @@ class EzcDatabase extends ContentTypeGateway
             $this->dbHandler->quoteIdentifier( 'serialized_data_text' ),
             $q->bindValue( serialize( $fieldDefinition->defaultValue ) )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
-
-        return $this->dbHandler->lastInsertId();
     }
 
     /**
@@ -360,7 +374,29 @@ class EzcDatabase extends ContentTypeGateway
      */
     public function deleteFieldDefinition( $typeId, $version, $fieldDefinitionId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $q = $this->dbHandler->createDeleteQuery();
+        $q->deleteFrom(
+            $this->dbHandler->quoteIdentifier( 'ezcontentclass_attribute' )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'id' ),
+                    $q->bindValue( $fieldDefinitionId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'version' ),
+                    $q->bindValue( $version, null, \PDO::PARAM_INT )
+                ),
+                // FIXME: Actually not needed
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
     }
 
     /**
@@ -373,7 +409,27 @@ class EzcDatabase extends ContentTypeGateway
      */
     public function updateFieldDefinition( $typeId, $version, FieldDefinition $fieldDefinition )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $q = $this->dbHandler->createUpdateQuery();
+        $q->update( 'ezcontentclass_attribute' )
+            ->where(
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'id' ),
+                    $q->bindValue( $fieldDefinition->id, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'version' ),
+                    $q->bindValue( $version, null, \PDO::PARAM_INT )
+                ),
+                // FIXME: Actually not needed
+                $q->expr->eq(
+                    $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                )
+            );
+        $this->setCommonFieldColumns( $q, $fieldDefinition );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
     }
 
     /**
