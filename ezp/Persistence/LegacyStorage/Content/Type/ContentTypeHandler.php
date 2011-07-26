@@ -46,6 +46,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
         $this->contentTypeGateway = $contentTypeGateway;
         $this->mapper = $mapper;
     }
+
     /**
      * @param GroupCreateStruct $createStruct
      * @return Group
@@ -66,7 +67,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     /**
      * @param GroupUpdateStruct $group
      * @return bool
-     * @todo Should we return the Group here? Would require an additional 
+     * @todo Should we return the Group here? Would require an additional
      *       SELECt, though.
      */
     public function updateGroup( GroupUpdateStruct $struct )
@@ -96,7 +97,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
     /**
      * @param mixed $groupId
      * @return Type[]
-     * @todo These are already present in the Group instance. Why load them 
+     * @todo These are already present in the Group instance. Why load them
      *       dedicatedly here?;
      */
     public function loadContentTypes( $groupId, $version = 0 )
