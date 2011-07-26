@@ -243,7 +243,11 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      */
     public function unlink( $groupId, $contentTypeId, $version )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $this->contentTypeGateway->deleteGroupAssignement(
+            $groupId, $contentTypeId, $version
+        );
+        // FIXME: What is to be returned?
+        return true;
     }
 
     /**

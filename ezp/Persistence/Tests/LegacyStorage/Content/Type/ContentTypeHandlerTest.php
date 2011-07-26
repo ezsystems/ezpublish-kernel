@@ -468,6 +468,31 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::unlink
+     */
+    public function testUnlink()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'DeleteGroupAssignement' )
+            ->with(
+                $this->equalTo( 3 ),
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 )
+            );
+
+        $mapperMock = $this->getMock(
+            'ezp\Persistence\LegacyStorage\Content\Type\Mapper'
+        );
+
+        $handler = new ContentTypeHandler( $gatewayMock, $mapperMock );
+        $res = $handler->unlink( 3, 23, 1 );
+
+        $this->assertTrue( $res );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::addFieldDefinition
      */
     public function testAddFieldDefinition()
