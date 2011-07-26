@@ -451,7 +451,27 @@ class EzcDatabaseTest extends TestCase
 
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
 
-        $gateway->insertGroupAssignement( 23, 1, 3 );
+        $gateway->insertGroupAssignement( 3, 42, 1 );
+
+        $this->assertQueryResult(
+            array(
+                array(
+                    'contentclass_id'      => '42',
+                    'contentclass_version' => '1',
+                    'group_id'             => '3',
+                    'group_name'           => 'Media',
+                )
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select(
+                    'contentclass_id',
+                    'contentclass_version',
+                    'group_id',
+                    'group_name'
+                )->from( 'ezcontentclass_classgroup' )
+        );
+    }
 
         $this->assertQueryResult(
             array(

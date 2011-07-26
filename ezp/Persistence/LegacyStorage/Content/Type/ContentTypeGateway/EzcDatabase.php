@@ -229,12 +229,12 @@ class EzcDatabase extends ContentTypeGateway
     /**
      * Insert assignement of $typeId to $groupId.
      *
+     * @param mixed $groupId
      * @param mixed $typeId
      * @param int $version
-     * @param mixed $groupId
      * @return void
      */
-    public function insertGroupAssignement( $typeId, $version, $groupId )
+    public function insertGroupAssignement( $groupId, $typeId, $version )
     {
         $group = $this->loadGroupData( $groupId );
 
