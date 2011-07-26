@@ -68,7 +68,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param GroupUpdateStruct $group
      * @return bool
      * @todo Should we return the Group here? Would require an additional
-     *       SELECt, though.
+     *       SELECT, though.
      */
     public function updateGroup( GroupUpdateStruct $struct )
     {
@@ -81,14 +81,22 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
 
     /**
      * @param mixed $groupId
+     * @todo Is cascading (Group -> Type -> Content) intended?
      */
     public function deleteGroup( $groupId )
     {
+        // Load type-version combinations which are not in any other group
+        // Delete group assignement
+        // Delete all types that have no more groups
+        //   Delete all content objects of these types
         throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
      * @return Group[]
+     * @todo This will result in basically all Type definitions (including
+     *       all field definitions) to be loaded, since they are inherently
+     *       loaded with a Group. Is this really intended?
      */
     public function loadAllGroups()
     {
@@ -99,7 +107,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param mixed $groupId
      * @return Type[]
      * @todo These are already present in the Group instance. Why load them
-     *       dedicatedly here?;
+     *       dedicatedly here?
      */
     public function loadContentTypes( $groupId, $version = 0 )
     {
