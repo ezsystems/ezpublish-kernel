@@ -292,6 +292,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertFieldDefinition
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::setCommonFieldColumns
      */
     public function testInsertFieldDefinition()
     {
@@ -391,6 +392,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::updateFieldDefinition
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::setCommonFieldColumns
      */
     public function testUpdateFieldDefinition()
     {
