@@ -135,7 +135,8 @@ class ContentHandlerTest extends HandlerTest
     public function testFind()
     {
         $contentHandler = $this->repositoryHandler->contentHandler();
-        var_dump( $contentHandler->find( new ContentId( null, Operator::EQ, 1 ), null, null, null ) );
-        $this->assertTrue( true );
+        $this->markTestIncomplete(
+            "This test has not been implemented yet."
+        );
     }
 }
