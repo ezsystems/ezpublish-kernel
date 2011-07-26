@@ -218,12 +218,19 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @return Type
-     * @todo What does this method do? Create a new Content\Type as a copy?
-     *       With which data (e.g. identified)?
+     * @todo Can be optimized in gateway?
      */
     public function copy( $userId, $contentTypeId, $version )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $createStruct = $this->mapper->createCreateStructFromType(
+            $this->load( $contentTypeId, $version )
+        );
+        $createStruct->modifierId = $userId;
+        $createStruct->modified   = time();
+        $createStruct->creatorId  = $userId;
+        $createStruct->created    = time();
+
+        return $this->create( $createStruct );
     }
 
     /**
