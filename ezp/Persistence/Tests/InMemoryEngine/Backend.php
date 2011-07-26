@@ -33,13 +33,19 @@ class Backend
     protected $dataCounters = array();
 
     /**
+     * @var array
+     */
+    protected $dataMapping = array();
+
+    /**
      * Construct backend by reading data in data.json
      */
-    public function __construct()
+    public function __construct( array $dataMapping = null )
     {
         $this->data = json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) + $this->data;
         foreach ( $this->data as $type => $data )
             $this->dataCounters[$type] = count( $data );
+        $this->dataMapping = $dataMapping;
     }
 
     /**
@@ -185,12 +191,14 @@ class Backend
      */
     protected function toValue( $type, array $data )
     {
-        $className = "ezp\\Persistence\\$type";
-        $obj = new $className;
-        foreach ( $obj as $prop => $value )
+        if ( !isset( $this->dataMapping[$type] ) )
+            return $data;
+
+        $obj = new $this->dataMapping[$type];
+        foreach ( $obj as $prop => &$value )
         {
             if ( isset( $data[$prop] ) )
-                $obj->$prop = $data[$prop];
+                $value = $data[$prop];
         }
         return $obj;
     }

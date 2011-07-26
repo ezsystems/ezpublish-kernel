@@ -36,8 +36,23 @@ class RepositoryHandler implements RepositoryHandlerInterface
      */
     public function __construct()
     {
-        $this->backend = new Backend();
+        $this->backend = new Backend(
+            array(
+                "Content" => "ezp\\Persistence\\Content",
+                "Content\\Field" => "ezp\\Persistence\\Content\\Field",
+                "Content\\Location" => "ezp\\Persistence\\Content\\Location",
+                "Content\\Version" => "ezp\\Persistence\\Content\\Version",
+                "Content\\Section" => "ezp\\Persistence\\Content\\Section",
+                "Content\\Type" => "ezp\\Persistence\\Content\\Type",
+                "Content\\Type\\FieldDefintion" => "ezp\\Persistence\\Content\\Type\\FieldDefintion",
+                "Content\\Type\\Group" => "ezp\\Persistence\\Content\\Type\\Group",
+                "Content\\Policy" => "ezp\\Persistence\\Content\\Policy",
+                "User" => "ezp\\Persistence\\User",
+                "User\\Role" => "ezp\\Persistence\\User\\Role",
+            )
+        );
     }
+
     /**
      * @return ezp\Persistence\Content\Interfaces\ContentHandler
      */
