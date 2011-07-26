@@ -33,6 +33,8 @@
       <file>ezp/Persistence/Tests/LegacyStorage/Content/Type/ContentTypeHandlerTest.php</file>
       <file>ezp/Persistence/Tests/LegacyStorage/Content/Type/MapperTest.php</file>
       <file>ezp/Persistence/Tests/LegacyStorage/User/UserHandlerTest.php</file>
+      <file>ezp/Persistence/Tests/InMemoryEngine/BackendTest.php</file>
+      <file>ezp/Persistence/Tests/InMemoryEngine/BackendDataTest.php</file>
       <file>ezp/Persistence/Tests/RepositoryHandlerTest.php</file>
       <file>ezp/Persistence/Tests/SectionHandlerTest.php</file>
     </testsuite>
