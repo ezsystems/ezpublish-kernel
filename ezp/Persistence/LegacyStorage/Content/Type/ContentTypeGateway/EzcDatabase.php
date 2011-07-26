@@ -259,6 +259,38 @@ class EzcDatabase extends ContentTypeGateway
     }
 
     /**
+     * Deletes a group assignements for a Type.
+     *
+     * @param mixed $groupId
+     * @param mixed $typeId
+     * @param int $version
+     * @return void
+     */
+    public function deleteGroupAssignement( $groupId, $typeId, $version )
+    {
+        $q = $this->dbHandler->createDeleteQuery();
+        $q->deleteFrom( 'ezcontentclass_classgroup' )
+            ->where(
+                $q->expr->lAnd(
+                    $q->expr->eq(
+                        $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
+                        $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                    ),
+                    $q->expr->eq(
+                        $this->dbHandler->quoteIdentifier( 'contentclass_version' ),
+                        $q->bindValue( $version, null, \PDO::PARAM_INT )
+                    ),
+                    $q->expr->eq(
+                        $this->dbHandler->quoteIdentifier( 'group_id' ),
+                        $q->bindValue( $groupId, null, \PDO::PARAM_INT )
+                    )
+                )
+        );
+        $stmt = $q->prepare();
+        $stmt->execute();
+    }
+
+    /**
      * Loads data about Group with $groupId.
      *
      * @param mixed $groupId

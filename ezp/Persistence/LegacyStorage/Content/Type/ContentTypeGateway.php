@@ -53,6 +53,16 @@ abstract class ContentTypeGateway
     abstract public function insertGroupAssignement( $typeId, $version, $groupId );
 
     /**
+     * Deletes a group assignements for a Type.
+     *
+     * @param mixed $groupId
+     * @param mixed $typeId
+     * @param int $version
+     * @return void
+     */
+    abstract public function deleteGroupAssignement( $groupId, $typeId, $version );
+
+    /**
      * Inserts a $fieldDefinition for $typeId.
      *
      * @param mixed $typeId

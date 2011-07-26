@@ -473,23 +473,28 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteGroupAssignement
+     */
+    public function testDeleteGroupAssignement()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $gateway->deleteGroupAssignement( 1, 1, 0 );
+
         $this->assertQueryResult(
-            array(
-                array(
-                    'contentclass_id'      => '23',
-                    'contentclass_version' => '1',
-                    'group_id'             => '3',
-                    'group_name'           => 'Media',
-                )
-            ),
+            array( array( '1' ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select(
-                    'contentclass_id',
-                    'contentclass_version',
-                    'group_id',
-                    'group_name'
+                    'COUNT(*)'
                 )->from( 'ezcontentclass_classgroup' )
+                ->where( 'contentclass_id = 1' )
         );
     }
 
