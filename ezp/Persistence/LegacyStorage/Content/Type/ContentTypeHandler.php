@@ -198,12 +198,20 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $version
-     * @todo What does this method do? Create a new version of the content type
-     *       from $version? Is it then expected to return the Type object?
+     * @todo Can be optimized in gateway?
+     * @todo $userId becomes only $modifierId or also $creatorId?
+     * @todo What about $modified and $created?
      */
     public function createVersion( $userId, $contentTypeId, $fromVersion, $toVersion )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $createStruct = $this->mapper->createCreateStructFromType(
+            $this->load( $contentTypeId, $fromVersion )
+        );
+        $createStruct->version    = $toVersion;
+        $createStruct->modifierId = $userId;
+        $createStruct->modified   = time();
+
+        return $this->create( $createStruct );
     }
 
     /**

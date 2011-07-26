@@ -170,4 +170,15 @@ class Mapper
 
         return $type;
     }
+
+    /**
+     * Creates a create struct from an existing $type.
+     *
+     * @param Type $type
+     * @return ContentTypeCreateStruct
+     */
+    public function createCreateStructFromType( Type $type )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
 }

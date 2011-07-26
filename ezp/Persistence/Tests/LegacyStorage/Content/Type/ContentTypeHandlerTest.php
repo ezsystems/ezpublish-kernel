@@ -305,6 +305,72 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::createVersion
+     */
+    public function testCreateVersion()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMock(
+            'ezp\Persistence\LegacyStorage\Content\Type\Mapper',
+            array( 'createCreateStructFromType' )
+        );
+        $mapperMock->expects( $this->once() )
+            ->method( 'createCreateStructFromType' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\Persistence\Content\Type'
+                )
+            )->will(
+                $this->returnValue( new ContentTypeCreateStruct() )
+            );
+
+        $handlerMock = $this->getMock(
+            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler',
+            array( 'load', 'create' ),
+            array( $gatewayMock, $mapperMock )
+        );
+        $handlerMock->expects( $this->once() )
+            ->method( 'load' )
+            ->with(
+                $this->equalTo( 23, 0 )
+            )->will(
+                $this->returnValue(
+                    new Type()
+                )
+            );
+        $handlerMock->expects( $this->once() )
+            ->method( 'create' )
+            ->with(
+                $this->logicalAnd(
+                    $this->attributeEqualTo(
+                        'version', 1
+                    ),
+                    $this->attributeEqualTo(
+                        'modifierId', 42
+                    ),
+                    $this->attribute(
+                        $this->greaterThanOrEqual(
+                            time()
+                        ),
+                        'modified'
+                    )
+                )
+            )->will(
+                $this->returnValue( new Type() )
+            );
+
+        $res = $handlerMock->createVersion(
+            42, 23, 0, 1
+        );
+
+        $this->assertInstanceOf(
+            'ezp\Persistence\Content\Type',
+            $res
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::link
      */
     public function testLink()
