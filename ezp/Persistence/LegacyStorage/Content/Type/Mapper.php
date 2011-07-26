@@ -179,6 +179,24 @@ class Mapper
      */
     public function createCreateStructFromType( Type $type )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $createStruct = new ContentTypeCreateStruct();
+
+        $createStruct->name = $type->name;
+        $createStruct->version = $type->version;
+        $createStruct->description = $type->description;
+        $createStruct->identifier = $type->identifier;
+        $createStruct->created = $type->created;
+        $createStruct->modified = $type->modified;
+        $createStruct->creatorId = $type->creatorId;
+        $createStruct->modifierId = $type->modifierId;
+        $createStruct->remoteId = $type->remoteId;
+        $createStruct->urlAliasSchema = $type->urlAliasSchema;
+        $createStruct->nameSchema = $type->nameSchema;
+        $createStruct->isContainer = $type->isContainer;
+        $createStruct->initialLanguageId = $type->initialLanguageId;
+        $createStruct->contentTypeGroupIds = $type->contentTypeGroupIds;
+        $createStruct->fieldDefinitions = $type->fieldDefinitions;
+
+        return $createStruct;
     }
 }

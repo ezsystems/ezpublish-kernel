@@ -149,6 +149,75 @@ class MapperTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::createCreateStructFromType
+     */
+    public function testCreateStructFromType()
+    {
+        $type = $this->getContenTypeFixture();
+
+        $mapper = new Mapper();
+        $struct = $mapper->createCreateStructFromType( $type );
+
+        // Iterate through struct, since it has fewer props
+        foreach ( $struct as $propName => $propVal )
+        {
+            $this->assertEquals(
+                $struct->$propName,
+                $type->$propName,
+                "Property \${$propName} not equal"
+            );
+        }
+    }
+
+    /**
+     * Returns a Type fixture.
+     *
+     * @return Type
+     */
+    protected function getContenTypeFixture()
+    {
+        // Taken from example DB
+        $type = new Type();
+        $type->id = 23;
+        $type->name = array(
+            'always-available' => 'eng-US',
+            'eng-US' => 'Folder',
+        );
+        $type->version = 0;
+        $type->description = array(
+            0 => '',
+            'always-available' => false,
+        );
+        $type->identifier = 'folder';
+        $type->created = 1024392098;
+        $type->modified = 1082454875;
+        $type->creatorId = 14;
+        $type->modifierId = 14;
+        $type->remoteId = 'a3d405b81be900468eb153d774f4f0d2';
+        $type->urlAliasSchema = '';
+        $type->nameSchema = '<short_name|name>';
+        $type->isContainer = true;
+        $type->initialLanguageId = 2;
+        $type->contentTypeGroupIds = array(
+            1,
+        );
+
+        $fieldDefName = new FieldDefinition();
+        $fieldDefName->id = 42;
+
+        $fieldDefShortDescription = new FieldDefinition();
+        $fieldDefName->id = 128;
+
+        $type->fieldDefinitions = array(
+            $fieldDefName,
+            $fieldDefShortDescription
+        );
+
+        return $type;
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::extractTypesFromRows
      * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::extractTypeFromRow
      * @covers ezp\Persistence\LegacyStorage\Content\Type\Mapper::extractFieldFromRow
