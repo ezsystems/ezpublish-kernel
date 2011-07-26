@@ -39,6 +39,6 @@ class Field extends AbstractValueObject
     /**
      * @var int|null Null if not created yet
      */
-    public $versionId;
+    public $versionNo;
 }
 ?>
