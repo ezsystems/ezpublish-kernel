@@ -215,9 +215,9 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
         $createStruct = $this->mapper->createCreateStructFromType(
             $this->load( $contentTypeId, $fromVersion )
         );
-        $createStruct->version    = $toVersion;
+        $createStruct->version = $toVersion;
         $createStruct->modifierId = $userId;
-        $createStruct->modified   = time();
+        $createStruct->modified = time();
 
         return $this->create( $createStruct );
     }
@@ -234,9 +234,9 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
             $this->load( $contentTypeId, $version )
         );
         $createStruct->modifierId = $userId;
-        $createStruct->modified   = time();
-        $createStruct->creatorId  = $userId;
-        $createStruct->created    = time();
+        $createStruct->modified = time();
+        $createStruct->creatorId = $userId;
+        $createStruct->created = time();
 
         return $this->create( $createStruct );
     }

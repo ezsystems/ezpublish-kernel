@@ -11,6 +11,8 @@ namespace ezp\Persistence\Tests;
 use ezp\Persistence\Content,
     ezp\Persistence\Content\ContentCreateStruct,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\Criterion\ContentId,
+    ezp\Persistence\Content\Criterion\Operator,
     ezp\Content\Version;
 
 /**
@@ -125,5 +127,15 @@ class ContentHandlerTest extends HandlerTest
         $this->assertTrue( $contentHandler->delete( $this->content->id ) );
         $this->assertNull( $contentHandler->load( $this->content->id ) );
         $this->assertEquals( 0, count( $contentHandler->listVersions( $this->content->id ) ) );
+    }
+
+    /**
+     * Test find function
+     */
+    public function testFind()
+    {
+        $contentHandler = $this->repositoryHandler->contentHandler();
+        var_dump( $contentHandler->find( new ContentId( null, Operator::EQ, 1 ), null, null, null ) );
+        $this->assertTrue( true );
     }
 }

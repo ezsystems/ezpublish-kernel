@@ -54,12 +54,12 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'id'          => '1',
-                    'created'     => '1032009743',
-                    'creator_id'  => '14',
-                    'modified'    => '1033922120',
+                    'id' => '1',
+                    'created' => '1032009743',
+                    'creator_id' => '14',
+                    'modified' => '1033922120',
                     'modifier_id' => '14',
-                    'name'        => 'Media',
+                    'name' => 'Media',
                 )
             ),
             $this->getDatabaseHandler()
@@ -94,9 +94,9 @@ class EzcDatabaseTest extends TestCase
             'eng-GB' => '',
         );
         $group->identifier = 'Media';
-        $group->created    = 1032009743;
-        $group->modified   = 1033922120;
-        $group->creatorId  = 14;
+        $group->created = 1032009743;
+        $group->modified = 1033922120;
+        $group->creatorId = 14;
         $group->modifierId = 14;
 
         return $group;
@@ -129,26 +129,28 @@ class EzcDatabaseTest extends TestCase
         );
 
         $q = $this->getDatabaseHandler()->createSelectQuery();
-        $q->select(
+        $q
+            ->select(
                 'id',
                 'created',
                 'creator_id',
                 'modified',
                 'modifier_id',
                 'name'
-            )->from( 'ezcontentclassgroup' )
+            )
+            ->from( 'ezcontentclassgroup' )
             ->where(
                 $q->expr->eq( 'id', 2 )
             );
         $this->assertQueryResult(
             array(
                 array(
-                    'id'          => 2,
-                    'created'     => 1031216941,
-                    'creator_id'  => 14,
-                    'modified'    => 1311454096,
+                    'id' => 2,
+                    'created' => 1031216941,
+                    'creator_id' => 14,
+                    'modified' => 1311454096,
                     'modifier_id' => 23,
-                    'name'        => 'UpdatedGroupName',
+                    'name' => 'UpdatedGroupName',
                 ),
             ),
             $q
@@ -174,7 +176,7 @@ class EzcDatabaseTest extends TestCase
             'eng-GB' => '',
         );
         $struct->identifier = 'UpdatedGroup';
-        $struct->modified   = 1311454096;
+        $struct->modified = 1311454096;
         $struct->modifierId = 23;
 
         return $struct;
@@ -456,10 +458,10 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'contentclass_id'      => '42',
+                    'contentclass_id' => '42',
                     'contentclass_version' => '1',
-                    'group_id'             => '3',
-                    'group_name'           => 'Media',
+                    'group_id' => '3',
+                    'group_name' => 'Media',
                 )
             ),
             $this->getDatabaseHandler()
@@ -584,14 +586,15 @@ class EzcDatabaseTest extends TestCase
 
         $countAffectedAttr = $this->getDatabaseHandler()
             ->createSelectQuery();
-        $countAffectedAttr->select( 'COUNT(*)' )
+        $countAffectedAttr
+            ->select( 'COUNT(*)' )
             ->from( 'ezcontentclass_attribute' )
             ->where(
                 $countAffectedAttr->expr->eq(
                     'contentclass_id',
                     1
                 )
-        );
+            );
         // 1 left with version 1
         $this->assertQueryResult(
             array( array( 1 ) ),

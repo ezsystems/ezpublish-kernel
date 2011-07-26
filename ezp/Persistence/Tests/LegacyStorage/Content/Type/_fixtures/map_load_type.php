@@ -1,7 +1,7 @@
 <?php
 
-return array (
-    0 => array (
+return array(
+    0 => array(
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',
@@ -48,7 +48,7 @@ return array (
         'ezcontentclass_attribute_serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:4:"Name";}',
         'ezcontentclass_classgroup_group_id' => '1',
     ),
-    1 => array (
+    1 => array(
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',
@@ -95,7 +95,7 @@ return array (
         'ezcontentclass_attribute_serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:17:"Short description";}',
         'ezcontentclass_classgroup_group_id' => '1',
     ),
-    2 => array (
+    2 => array(
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',
@@ -142,7 +142,7 @@ return array (
         'ezcontentclass_attribute_serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"Short name";}',
         'ezcontentclass_classgroup_group_id' => '1',
     ),
-    3 => array (
+    3 => array(
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',
@@ -189,7 +189,7 @@ return array (
         'ezcontentclass_attribute_serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
         'ezcontentclass_classgroup_group_id' => '1',
     ),
-    4 => array (
+    4 => array(
         'ezcontentclass_id' => '1',
         'ezcontentclass_always_available' => '1',
         'ezcontentclass_contentobject_name' => '<short_name|name>',

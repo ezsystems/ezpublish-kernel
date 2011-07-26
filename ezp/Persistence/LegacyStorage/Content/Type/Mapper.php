@@ -33,16 +33,16 @@ class Mapper
     {
         $group = new Group();
 
-        $group->name        = $struct->name;
+        $group->name = $struct->name;
 
         // Indentionally left out, since DB structure does not support it, yet
         // $group->description = $struct->description;
 
-        $group->identifier  = $struct->identifier;
-        $group->created     = $struct->created;
-        $group->modified    = $struct->modified;
-        $group->creatorId   = $struct->creatorId;
-        $group->modifierId  = $struct->modifierId;
+        $group->identifier = $struct->identifier;
+        $group->created = $struct->created;
+        $group->modified = $struct->modified;
+        $group->creatorId = $struct->creatorId;
+        $group->modifierId = $struct->modifierId;
 
         return $group;
     }

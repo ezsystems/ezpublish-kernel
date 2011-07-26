@@ -68,7 +68,7 @@ class EzpDatabaseTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $data    = $handler->getBasicNodeData( 77 );
+        $data = $handler->getBasicNodeData( 77 );
 
         $this->assertEquals(
             $value,
@@ -121,7 +121,7 @@ class EzpDatabaseTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $time    = time();
+        $time = time();
         $handler->updateSubtreeModificationTime( '/1/2/69/' );
 
         $query = $this->handler->createSelectQuery();
@@ -308,8 +308,8 @@ class EzpDatabaseTest extends TestCase
         $handler->createLocation(
             $this->getContentObject(),
             array(
-                'node_id'     => '77',
-                'depth'       => '2',
+                'node_id' => '77',
+                'depth' => '2',
                 'path_string' => '/1/2/77/',
             )
         );
@@ -363,8 +363,8 @@ class EzpDatabaseTest extends TestCase
         $handler->createLocation(
             $this->getContentObject(),
             array(
-                'node_id'     => '77',
-                'depth'       => '2',
+                'node_id' => '77',
+                'depth' => '2',
                 'path_string' => '/1/2/77/',
             )
         );
@@ -411,8 +411,8 @@ class EzpDatabaseTest extends TestCase
         $handler->createLocation(
             $this->getContentObject(),
             array(
-                'node_id'     => '77',
-                'depth'       => '2',
+                'node_id' => '77',
+                'depth' => '2',
                 'path_string' => '/1/2/77/',
             )
         );
@@ -423,10 +423,12 @@ class EzpDatabaseTest extends TestCase
             $query
                 ->select( $field )
                 ->from( 'eznode_assignment' )
-                ->where( $query->expr->lAnd(
-                    $query->expr->eq( 'contentobject_id', 68 ),
-                    $query->expr->eq( 'parent_node', 77 )
-                ) )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 68 ),
+                        $query->expr->eq( 'parent_node', 77 )
+                    )
+                )
         );
     }
 

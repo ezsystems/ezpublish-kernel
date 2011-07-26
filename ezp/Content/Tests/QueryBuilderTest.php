@@ -40,7 +40,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
     public static function providerForTestCriterionGetter()
     {
         return array(
-            array( 'contentId', 'in', array( array( 1, 2 )  )),
+            array( 'contentId', 'in', array( array( 1, 2 )  ) ),
             array( 'contentId', 'eq', array( 1 ) ),
 
             array( 'contentType', 'in', array( array( 1, 2 ) ) ),
@@ -50,7 +50,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
             array( 'contentTypeGroup', 'eq', array( 'content' ) ),
 
             array( 'field', 'eq', array( 'testfield', 'my test' ) ),
-            array( 'field', 'like', array( 'testfield', 'my test*') ),
+            array( 'field', 'like', array( 'testfield', 'my test*' ) ),
             array( 'field', 'in', array( 'testfield', array( 'a', 'b', 'c' ) ) ),
             array( 'field', 'gt', array( 'testfield', 1 ) ),
             array( 'field', 'gte', array( 'testfield', 1 ) ),
@@ -66,14 +66,14 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
             array( 'parentLocationId', 'eq', array( 1 ) ),
             array( 'parentLocationId', 'in', array( array( 1, 2, 3 ) ) ),
 
-            array( 'dateMetadata', 'eq',  array( 'modified', time() ) ),
-            array( 'dateMetadata', 'eq',  array( 'created', time() ) ),
-            array( 'dateMetadata', 'gt',  array( 'modified', time() ) ),
-            array( 'dateMetadata', 'gt',  array( 'created', time() ) ),
+            array( 'dateMetadata', 'eq', array( 'modified', time() ) ),
+            array( 'dateMetadata', 'eq', array( 'created', time() ) ),
+            array( 'dateMetadata', 'gt', array( 'modified', time() ) ),
+            array( 'dateMetadata', 'gt', array( 'created', time() ) ),
             array( 'dateMetadata', 'gte', array( 'modified', time() ) ),
             array( 'dateMetadata', 'gte', array( 'created', time() ) ),
-            array( 'dateMetadata', 'lt',  array( 'modified', time() ) ),
-            array( 'dateMetadata', 'lt',  array( 'created', time() ) ),
+            array( 'dateMetadata', 'lt', array( 'modified', time() ) ),
+            array( 'dateMetadata', 'lt', array( 'created', time() ) ),
             array( 'dateMetadata', 'lte', array( 'modified', time() ) ),
             array( 'dateMetadata', 'lte', array( 'created', time() ) ),
             array( 'dateMetadata', 'between', array( 'modified', strtotime( 'last month' ), strtotime( 'last week' ) ) ),
@@ -116,7 +116,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
     public static function providerForTestLogical()
     {
         return array(
-            array( 'or',  2, 'ezp\\Persistence\\Content\\Criterion\\LogicalOr', 2 ),
+            array( 'or', 2, 'ezp\\Persistence\\Content\\Criterion\\LogicalOr', 2 ),
             array( 'and', 2, 'ezp\\Persistence\\Content\\Criterion\\LogicalAnd', 2 ),
             array( 'not', 1, 'ezp\\Persistence\\Content\\Criterion\\LogicalNot', 1 ),
         );

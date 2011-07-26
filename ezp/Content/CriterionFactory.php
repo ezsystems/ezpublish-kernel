@@ -183,7 +183,7 @@ class CriterionFactory
             $valueOne = $target;
             $target = null;
         }
-        return $this->handleCriterion( $target, Operator::IN, array( $valueOne, $valueTwo) );
+        return $this->handleCriterion( $target, Operator::IN, array( $valueOne, $valueTwo ) );
     }
 
     /**

@@ -45,7 +45,7 @@ class LocationHandlerTest extends TestCase
     {
         $dbHandler = $this->getDatabaseHandler();
         return new Content\LocationHandler(
-            $this->contentHandler  = $this->getMock( '\ezp\Persistence\LegacyStorage\Content\ContentHandler' ),
+            $this->contentHandler = $this->getMock( '\ezp\Persistence\LegacyStorage\Content\ContentHandler' ),
             $this->locationGateway = $this->getMock( '\ezp\Persistence\LegacyStorage\Content\LocationGateway' )
         );
     }
@@ -89,22 +89,26 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->once() )
             ->method( 'getBasicNodeData' )
             ->with( 77 )
-            ->will( $this->returnValue( array(
-                'node_id'                    => 77 ,
-                'priority'                   => 0 ,
-                'is_hidden'                  => 0 ,
-                'is_invisible'               => 0 ,
-                'remote_id'                  => 'dbc2f3c8716c12f32c379dbf0b1cb133' ,
-                'contentobject_id'           => 75 ,
-                'parent_node_id'             => 2 ,
-                'path_identification_string' => 'solutions' ,
-                'path_string'                => '/1/2/77/' ,
-                'modified_subnode'           => 1311065017 ,
-                'main_node_id'               => 77 ,
-                'depth'                      => 2 ,
-                'sort_field'                 => 2 ,
-                'sort_order'                 => 1 ,
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 77,
+                        'priority' => 0,
+                        'is_hidden' => 0,
+                        'is_invisible' => 0,
+                        'remote_id' => 'dbc2f3c8716c12f32c379dbf0b1cb133',
+                        'contentobject_id' => 75,
+                        'parent_node_id' => 2,
+                        'path_identification_string' => 'solutions',
+                        'path_string' => '/1/2/77/',
+                        'modified_subnode' => 1311065017,
+                        'main_node_id' => 77,
+                        'depth' => 2,
+                        'sort_field' => 2,
+                        'sort_order' => 1,
+                    )
+                )
+            );
 
         $location = $handler->load( 77 );
 
@@ -124,20 +128,28 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 0 ) )
             ->method( 'getBasicNodeData' )
             ->with( 69 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 69,
-                'path_string'      => '/1/2/69/',
-                'contentobject_id' => 67,
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 69,
+                        'path_string' => '/1/2/69/',
+                        'contentobject_id' => 67,
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->at( 1 ) )
             ->method( 'getBasicNodeData' )
             ->with( 77 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 77,
-                'path_string'      => '/1/2/77/',
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 77,
+                        'path_string' => '/1/2/77/',
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -160,20 +172,28 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 0 ) )
             ->method( 'getBasicNodeData' )
             ->with( 69 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 69,
-                'path_string'      => '/1/2/69/',
-                'contentobject_id' => 67,
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 69,
+                        'path_string' => '/1/2/69/',
+                        'contentobject_id' => 67,
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->at( 1 ) )
             ->method( 'getBasicNodeData' )
             ->with( 77 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 77,
-                'path_string'      => '/1/2/77/',
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 77,
+                        'path_string' => '/1/2/77/',
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -191,11 +211,15 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 0 ) )
             ->method( 'getBasicNodeData' )
             ->with( 69 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 69,
-                'path_string'      => '/1/2/69/',
-                'contentobject_id' => 67,
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 69,
+                        'path_string' => '/1/2/69/',
+                        'contentobject_id' => 67,
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -213,11 +237,15 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 0 ) )
             ->method( 'getBasicNodeData' )
             ->with( 69 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 69,
-                'path_string'      => '/1/2/69/',
-                'contentobject_id' => 67,
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 69,
+                        'path_string' => '/1/2/69/',
+                        'contentobject_id' => 67,
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -238,11 +266,15 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 0 ) )
             ->method( 'getBasicNodeData' )
             ->with( 69 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 69,
-                'path_string'      => '/1/2/69/',
-                'contentobject_id' => 67,
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 69,
+                        'path_string' => '/1/2/69/',
+                        'contentobject_id' => 67,
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -260,11 +292,15 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 0 ) )
             ->method( 'getBasicNodeData' )
             ->with( 69 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 69,
-                'path_string'      => '/1/2/69/',
-                'contentobject_id' => 67,
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 69,
+                        'path_string' => '/1/2/69/',
+                        'contentobject_id' => 67,
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -294,10 +330,14 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 1 ) )
             ->method( 'getBasicNodeData' )
             ->with( 70 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 70,
-                'path_string'      => '/1/2/69/70/',
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 70,
+                        'path_string' => '/1/2/69/70/',
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->at( 2 ) )
@@ -308,10 +348,14 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 3 ) )
             ->method( 'getBasicNodeData' )
             ->with( 78 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 78,
-                'path_string'      => '/1/2/77/78/',
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 78,
+                        'path_string' => '/1/2/77/78/',
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->at( 4 ) )
@@ -341,10 +385,14 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->once() )
             ->method( 'getBasicNodeData' )
             ->with( 70 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 70,
-                'path_string'      => '/1/2/69/70/',
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 70,
+                        'path_string' => '/1/2/69/70/',
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -362,10 +410,14 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->once() )
             ->method( 'getBasicNodeData' )
             ->with( 77 )
-            ->will( $this->returnValue( $parentInfo = array(
-                'node_id'          => 77,
-                'path_string'      => '/1/2/77/',
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    $parentInfo = array(
+                        'node_id' => 77,
+                        'path_string' => '/1/2/77/',
+                    )
+                )
+            );
 
         $this->contentHandler
             ->expects( $this->once() )
@@ -389,10 +441,14 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->once() )
             ->method( 'getBasicNodeData' )
             ->with( 77 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 77,
-                'path_string'      => '/1/2/77/',
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 77,
+                        'path_string' => '/1/2/77/',
+                    )
+                )
+            );
 
         $this->contentHandler
             ->expects( $this->once() )
@@ -416,11 +472,15 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 0 ) )
             ->method( 'getBasicNodeData' )
             ->with( 69 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 69,
-                'path_string'      => '/1/2/69/',
-                'contentobject_id' => 67,
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 69,
+                        'path_string' => '/1/2/69/',
+                        'contentobject_id' => 67,
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->once() )
@@ -438,11 +498,15 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->at( 0 ) )
             ->method( 'getBasicNodeData' )
             ->with( 69 )
-            ->will( $this->returnValue( array(
-                'node_id'          => 69,
-                'path_string'      => '/1/2/69/',
-                'contentobject_id' => 67,
-            ) ) );
+            ->will(
+                $this->returnValue(
+                    array(
+                        'node_id' => 69,
+                        'path_string' => '/1/2/69/',
+                        'contentobject_id' => 67,
+                    )
+                )
+            );
 
         $this->locationGateway
             ->expects( $this->once() )

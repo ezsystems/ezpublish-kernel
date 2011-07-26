@@ -39,7 +39,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         // Add some fields
         $fields = array(
             '\\ezp\\Content\\Type\\Field\\String' => array( 'title', 'ezstring', 'New Article' ),
-            '\\ezp\\Content\\Type\\Field\\Keyword' => array( 'tags',  'ezkeyword', '' )
+            '\\ezp\\Content\\Type\\Field\\Keyword' => array( 'tags', 'ezkeyword', '' )
         );
         foreach ( $fields as $className => $data )
         {

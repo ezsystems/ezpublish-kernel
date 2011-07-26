@@ -40,16 +40,16 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertPropertiesCorrect(
             array(
-                'id'   => null,
+                'id' => null,
                 'name' => array(
                     'always-available' => 'eng-GB',
                     'eng-GB' => 'Media',
                 ),
                 'description' => null,
                 'identifier' => 'Media',
-                'created'    => 1032009743,
-                'modified'   => 1033922120,
-                'creatorId'  => 14,
+                'created' => 1032009743,
+                'modified' => 1033922120,
+                'creatorId' => 14,
                 'modifierId' => 14,
             ),
             $group
@@ -74,9 +74,9 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             'eng-GB' => '',
         );
         $struct->identifier = 'Media';
-        $struct->created    = 1032009743;
-        $struct->modified   = 1033922120;
-        $struct->creatorId  = 14;
+        $struct->created = 1032009743;
+        $struct->modified = 1033922120;
+        $struct->creatorId = 14;
         $struct->modifierId = 14;
 
         return $struct;
