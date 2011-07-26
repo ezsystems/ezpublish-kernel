@@ -240,6 +240,7 @@ class ContentTypeHandler implements Interfaces\ContentTypeHandler
      * @param mixed $contentTypeId
      * @param int $version
      * @param int $version
+     * @todo Check if content type is in another group, otherwise delete?
      */
     public function unlink( $groupId, $contentTypeId, $version )
     {
