@@ -303,6 +303,10 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue( $res );
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler::link
+     */
     public function testLink()
     {
         $gatewayMock = $this->getGatewayMock();
