@@ -52,8 +52,7 @@ class Backend
      */
     public function create( $type, array $data )
     {
-        if ( !isset( $this->data[$type] ) )
-            throw new InvalidArgumentValue( 'type', $type );
+        $this->checkType( $type );
 
         $data['id'] = ++$this->dataCounters[$type];
         $this->data[$type][$data['id']] = $data;
@@ -69,8 +68,7 @@ class Backend
      */
     public function load( $type, $id )
     {
-        if ( !isset( $this->data[$type] ) )
-            throw new InvalidArgumentValue( 'type', $type );
+        $this->checkType( $type );
 
         if ( isset( $this->data[$type][$id] ) )
             return $this->toValue( $type, $this->data[$type][$id] );
@@ -89,8 +87,7 @@ class Backend
      */
     public function find( $type, array $criteria = array() )
     {
-        if ( !isset( $this->data[$type] ) )
-            throw new InvalidArgumentValue( 'type', $type );
+        $this->checkType( $type );
 
         $items = $this->findKeys( $type, $criteria );
         foreach ( $items as $key => $typeIndex )
@@ -108,8 +105,7 @@ class Backend
      */
     public function update( $type, $id, array $data )
     {
-        if ( !isset( $this->data[$type] ) )
-            throw new InvalidArgumentValue( 'type', $type );
+        $this->checkType( $type );
 
         $items = $this->findKeys( $type, array( 'id' => $id ) );
         if ( empty( $items ) )
@@ -129,8 +125,7 @@ class Backend
      */
     public function delete( $type, $id )
     {
-        if ( !isset( $this->data[$type] ) )
-            throw new InvalidArgumentValue( 'type', $type );
+        $this->checkType( $type );
 
         $items = $this->findKeys( $type, array( 'id' => $id ) );
         if ( empty( $items ) )
@@ -150,8 +145,7 @@ class Backend
      */
     public function count( $type, array $criteria = array() )
     {
-        if ( !isset( $this->data[$type] ) )
-            throw new InvalidArgumentValue( 'type', $type );
+        $this->checkType( $type );
 
         return count( $this->findKeys( $type, $criteria ) );
     }
@@ -166,8 +160,7 @@ class Backend
      */
     protected function findKeys( $type, array $criteria )
     {
-        if ( !isset( $this->data[$type] ) )
-            return array();
+        $this->checkType( $type );
 
         $keys = array();
         foreach ( $this->data[$type] as $key => $hash )
@@ -200,5 +193,17 @@ class Backend
                 $obj->$prop = $data[$prop];
         }
         return $obj;
+    }
+
+    /**
+     * Checks if the $type is correct, otherwise @throw InvalidArgumentValue
+     *
+     * @param string $type
+     * @return void
+     */
+    private function checkType( $type )
+    {
+        if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
+            throw new InvalidArgumentValue( 'type', $type );
     }
 }
