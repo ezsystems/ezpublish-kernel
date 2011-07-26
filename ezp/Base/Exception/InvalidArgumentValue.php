@@ -30,9 +30,11 @@ class InvalidArgumentValue extends InvalidArgumentException implements Exception
      */
     public function __construct( $argumentName, $value, $className = null, PHPException $previous = null )
     {
-        if ( $className === null )
-            parent::__construct( "Argument '{$argumentName}' got invalid value '{$value}'", 0, $previous );
-        else
-            parent::__construct( "Argument '{$argumentName}' got invalid value '{$value}' on class '{$className}'", 0, $previous );
+        parent::__construct(
+            "Argument '{$argumentName}' got invalid value '" . var_export( $value, true ) . "'" .
+            ( $className !== null ? " on class '{$className}'" : "" ),
+            0,
+            $previous
+        );
     }
 }
