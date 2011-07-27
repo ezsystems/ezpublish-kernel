@@ -9,6 +9,7 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content;
+use ezp\Persistence\Fields\StorageInterface;
 
 /**
  * Registry for external storages
@@ -31,7 +32,7 @@ class StorageRegistry
      */
     public function register( $typeName, StorageInterface $storage )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $this->storageMap[$typeName] = $storage;
     }
 
     /**
@@ -42,6 +43,6 @@ class StorageRegistry
      */
     public function getStorage( $typeName )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        return $this->storageMap[$typeName];
     }
 }
