@@ -119,7 +119,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->language );
         $this->assertEquals( 'Welcome', $field->value );
-        $this->assertEquals( $version->id, $field->versionId );
+        $this->assertEquals( $version->id, $field->versionNo );
     }
 
     /**
