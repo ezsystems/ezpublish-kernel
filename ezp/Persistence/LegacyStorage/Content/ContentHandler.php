@@ -69,12 +69,43 @@ class ContentHandler implements ContentHandlerInterface
      *
      * Will contain always a complete list of fields.
      *
-     * @param ContentCreateStruct $content Content creation struct.
+     * @param ContentCreateStruct $struct Content creation struct.
      * @return ezp\Persistence\Content Content value object
+     * @todo Take care of initial locations!
+     * @todo Method too complex, refactor!
      */
-    public function create( ContentCreateStruct $content )
+    public function create( ContentCreateStruct $struct )
     {
-        throw new Exception( "Not implemented yet." );
+        $content = $this->mapper->createContentFromCreateStruct(
+            $struct
+        );
+        $content->id = $this->contentGateway->insertContentObject( $content );
+
+        $version = $this->mapper->createVersionForContent( $content, 1 );
+
+        $version->id = $this->contentGateway->insertVersion(
+            $version
+        );
+
+        // TODO: Maybe it makes sense to introduce a dedicated
+        // ContentFieldHandler for the legacy storage? Should be checked later, 
+        // if this is possible and sensible
+        foreach ( $struct->fields as $field )
+        {
+            $field->versionNo = $version->versionNo;
+            $field->id = $this->contentGateway->insertNewField(
+                $content,
+                $field,
+                $this->mapper->convertToStorageValue( $field )
+            );
+            $this->storageRegistry->getStorage( $field->type )
+                ->storeFieldData( $field->id, $field->value );
+            $version->fields[] = $field;
+        }
+
+        $content->versionInfos = array( $version );
+
+        return $content;
     }
 
     /**
