@@ -56,7 +56,7 @@ class ContentHandlerTest extends HandlerTest
     protected function tearDown()
     {
         $contentHandler = $this->repositoryHandler->contentHandler();
-        // Removing default objects as well as those created by
+        // Removing default objects as well as those created by tests
         $contentHandler->delete( 1 );
         $contentHandler->delete( 2 );
         parent::tearDown();
