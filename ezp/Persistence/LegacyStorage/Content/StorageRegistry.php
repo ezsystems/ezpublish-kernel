@@ -9,7 +9,8 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content;
-use ezp\Persistence\Fields\StorageInterface;
+use ezp\Persistence\Fields\StorageInterface,
+    ezp\Persistence\LegacyStorage\Exception;
 
 /**
  * Registry for external storages
@@ -43,6 +44,10 @@ class StorageRegistry
      */
     public function getStorage( $typeName )
     {
+        if ( !isset( $this->storageMap[$typeName] ) )
+        {
+            throw new Exception\StorageNotFoundException( $typeName );
+        }
         return $this->storageMap[$typeName];
     }
 }
