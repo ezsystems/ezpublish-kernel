@@ -336,6 +336,34 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test counting content without results
+     *
+     * @dataProvider providerForFindEmpty
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::count
+     */
+    public function testCountEmpty( $searchData )
+    {
+        $this->assertEquals(
+            0,
+            $this->backend->count( "Content", $searchData )
+        );
+    }
+
+    /**
+     * Test counting content with results
+     *
+     * @dataProvider providerForFind
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::count
+     */
+    public function testCount( $searchData, $result )
+    {
+        $this->assertEquals(
+            count( $result ),
+            $this->backend->count( "Content", $searchData )
+        );
+    }
+
+    /**
      * Test loading content without results
      *
      * @dataProvider providerForLoadEmpty
