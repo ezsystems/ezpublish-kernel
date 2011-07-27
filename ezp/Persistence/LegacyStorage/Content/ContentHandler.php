@@ -9,6 +9,9 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content;
+use ezp\Persistence\LegacyStorage\Content\ContentGateway,
+    ezp\Persistence\LegacyStorage\Content\Mapper;
+
 use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface,
     ezp\Persistence\Content\ContentCreateStruct,
     ezp\Persistence\Content\ContentUpdateStruct,
@@ -21,6 +24,31 @@ use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface
  */
 class ContentHandler implements ContentHandlerInterface
 {
+    /**
+     * Content gateway.
+     *
+     * @var ContentGateway
+     */
+    protected $contentGateway;
+
+    /**
+     * Mapper.
+     *
+     * @var Mapper
+     */
+    protected $mapper;
+
+    /**
+     * Creates a new content handler.
+     *
+     * @param ContentGateway $contentGateway
+     */
+    public function __construct( ContentGateway $contentGateway, Mapper $mapper )
+    {
+        $this->contentGateway = $contentGateway;
+        $this->mapper         = $mapper;
+    }
+
     /**
      * Creates a new Content entity in the storage engine.
      *
