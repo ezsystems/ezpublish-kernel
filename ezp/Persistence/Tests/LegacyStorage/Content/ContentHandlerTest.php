@@ -17,6 +17,10 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
  */
 class ContentHandlerTest extends TestCase
 {
+    /**
+     * @return void
+     * @covers ezp\Persistence\LegacyStorage\ContentHandler::__construct
+     */
     public function testCtor()
     {
         $gatewayMock = $this->getGatewayMock();
