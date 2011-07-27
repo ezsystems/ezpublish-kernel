@@ -15,7 +15,7 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
 /**
  * Test case for ContentHandler
  */
-class LocationHandlerTest extends TestCase
+class ContentHandlerTest extends TestCase
 {
     public function testCtor()
     {
