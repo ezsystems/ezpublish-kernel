@@ -23,8 +23,15 @@ class ContentHandlerTest extends TestCase
         $mapperMock = $this->getMock(
             'ezp\Persistence\LegacyStorage\Content\Mapper'
         );
+        $storageRegistryMock = $this->getMockForAbstractClass(
+            'ezp\Persistence\LegacyStorage\Content\StorageRegistry'
+        );
 
-        $handler = new ContentHandler( $gatewayMock, $mapperMock );
+        $handler = new ContentHandler(
+            $gatewayMock,
+            $mapperMock,
+            $storageRegistryMock
+        );
 
         $this->assertAttributeSame(
             $gatewayMock,
@@ -34,6 +41,11 @@ class ContentHandlerTest extends TestCase
         $this->assertAttributeSame(
             $mapperMock,
             'mapper',
+            $handler
+        );
+        $this->assertAttributeSame(
+            $storageRegistryMock,
+            'storageRegistry',
             $handler
         );
     }

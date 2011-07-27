@@ -39,14 +39,26 @@ class ContentHandler implements ContentHandlerInterface
     protected $mapper;
 
     /**
+     * Registry for storages
+     *
+     * @var StorageRegistry
+     */
+    protected $storageRegistry;
+
+    /**
      * Creates a new content handler.
      *
      * @param ContentGateway $contentGateway
      */
-    public function __construct( ContentGateway $contentGateway, Mapper $mapper )
+    public function __construct(
+        ContentGateway $contentGateway,
+        Mapper $mapper,
+        StorageRegistry $storageRegistry
+    )
     {
-        $this->contentGateway = $contentGateway;
-        $this->mapper         = $mapper;
+        $this->contentGateway  = $contentGateway;
+        $this->mapper          = $mapper;
+        $this->storageRegistry = $storageRegistry;
     }
 
     /**
