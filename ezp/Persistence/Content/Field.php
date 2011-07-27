@@ -16,9 +16,18 @@ use ezp\Persistence\AbstractValueObject;
 class Field extends AbstractValueObject
 {
     /**
-     * @var int
+     * Field ID
+     *
+     * @var mixed
      */
     public $id;
+
+    /**
+     * Corresponding field definition
+     *
+     * @var mixed
+     */
+    public $fieldDefinitionId;
 
     /**
      * Data type name.
@@ -28,16 +37,20 @@ class Field extends AbstractValueObject
     public $type;
 
     /**
+     * Value of the field
+     *
      * @var FieldValue
      */
     public $value;
 
     /**
+     * @todo What is supposed to be stored here?
      */
     public $language;
 
     /**
      * @var int|null Null if not created yet
+     * @todo Normally we would use a create struct here
      */
     public $versionNo;
 }
