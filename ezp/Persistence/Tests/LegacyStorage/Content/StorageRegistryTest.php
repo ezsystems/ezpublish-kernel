@@ -29,7 +29,7 @@ class StorageRegistryTest extends TestCase
 
         $registry->register( 'some-type', $storage );
 
-        $this->assertPropertySame(
+        $this->assertAttributeSame(
             array(
                 'some-type' => $storage,
             ),
@@ -49,7 +49,7 @@ class StorageRegistryTest extends TestCase
         $storage = $this->getStorageMock();
         $registry->register( 'some-type', $storage );
 
-        $res = $storage->getStorage( 'some-type' );
+        $res = $registry->getStorage( 'some-type' );
 
         $this->assertSame(
             $storage,
