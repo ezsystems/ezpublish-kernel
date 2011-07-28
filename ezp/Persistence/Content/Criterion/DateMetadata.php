@@ -52,25 +52,25 @@ class DateMetadata extends Criterion implements CriterionInterface
     {
         return array(
             new OperatorSpecifications(
-                Operator::EQ, OperatorSpecifications::FORMAT_SINGLE, array( OperatorSpecifications::TYPE_INTEGER )
+                Operator::EQ, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_INTEGER
             ),
             new OperatorSpecifications(
-                Operator::GT, OperatorSpecifications::FORMAT_SINGLE, array( OperatorSpecifications::TYPE_INTEGER )
+                Operator::GT, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_INTEGER
             ),
             new OperatorSpecifications(
-                Operator::GTE, OperatorSpecifications::FORMAT_SINGLE, array( OperatorSpecifications::TYPE_INTEGER )
+                Operator::GTE, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_INTEGER
             ),
             new OperatorSpecifications(
-                Operator::LT, OperatorSpecifications::FORMAT_SINGLE, array( OperatorSpecifications::TYPE_INTEGER )
+                Operator::LT, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_INTEGER
             ),
             new OperatorSpecifications(
-                Operator::LTE, OperatorSpecifications::FORMAT_SINGLE, array( OperatorSpecifications::TYPE_INTEGER )
+                Operator::LTE, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_INTEGER
             ),
             new OperatorSpecifications(
-                Operator::IN, OperatorSpecifications::FORMAT_ARRAY, array( OperatorSpecifications::TYPE_INTEGER )
+                Operator::IN, OperatorSpecifications::FORMAT_ARRAY, OperatorSpecifications::TYPE_INTEGER
             ),
             new OperatorSpecifications(
-                Operator::BETWEEN, OperatorSpecifications::FORMAT_ARRAY, array( OperatorSpecifications::TYPE_INTEGER ), 2
+                Operator::BETWEEN, OperatorSpecifications::FORMAT_ARRAY, OperatorSpecifications::TYPE_INTEGER, 2
             ),
         );
     }

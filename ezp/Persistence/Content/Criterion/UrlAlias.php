@@ -46,17 +46,17 @@ class UrlAlias extends Criterion implements CriterionInterface
             new OperatorSpecifications(
                 Operator::IN,
                 OperatorSpecifications::FORMAT_ARRAY,
-                array( OperatorSpecifications::TYPE_STRING )
+                OperatorSpecifications::TYPE_STRING
             ),
             new OperatorSpecifications(
                 Operator::EQ,
                 OperatorSpecifications::FORMAT_SINGLE,
-                array( OperatorSpecifications::TYPE_STRING )
+                OperatorSpecifications::TYPE_STRING
             ),
             new OperatorSpecifications(
                 Operator::LIKE,
                 OperatorSpecifications::FORMAT_SINGLE,
-                array( OperatorSpecifications::TYPE_STRING )
+                OperatorSpecifications::TYPE_STRING
             ),
         );
     }

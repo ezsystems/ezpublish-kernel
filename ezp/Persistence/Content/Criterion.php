@@ -88,7 +88,7 @@ abstract class Criterion
 
     /**
      * Returns a callback that checks the values types depending on the operator specifications
-     * @param array $valueTypes The accepted values, as an array of OperatorSpecifications::TYPE_* constants
+     * @param int $valueTypes The accepted values, as a bit field of OperatorSpecifications::TYPE_* constants
      * @return callback
      */
     private function getValueTypeCheckCallback( $valueTypes )
@@ -99,21 +99,21 @@ abstract class Criterion
         };
 
         // the callback code will return true as soon as an accepted value type is found
-        if ( in_array( OperatorSpecifications::TYPE_INTEGER, $valueTypes ) )
+        if ( $valueTypes & OperatorSpecifications::TYPE_INTEGER )
         {
             $callback = function( $value ) use ($callback)
             {
                 return is_numeric( $value ) || $callback( $value );
             };
         }
-        if ( in_array( OperatorSpecifications::TYPE_STRING, $valueTypes ) )
+        if ( $valueTypes & OperatorSpecifications::TYPE_STRING )
         {
             $callback = function( $value ) use ($callback)
             {
                 return is_string( $value ) || $callback( $value );
             };
         }
-        if ( in_array( OperatorSpecifications::TYPE_BOOLEAN, $valueTypes ) )
+        if ( $valueTypes & OperatorSpecifications::TYPE_BOOLEAN )
         {
             $callback = function( $value ) use ($callback)
             {

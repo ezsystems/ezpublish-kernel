@@ -20,7 +20,7 @@ class OperatorSpecifications
      * Creates a new OperatorSpecifications object
      * @pparam string $operator The specified operator, as one of the Operator::* constants
      * @param string $valueFormat The accepted value format, either {@see self::FORMAT_ARRAY} or {@see self::FORMAT_SINGLE}
-     * @param string $valueTypes The supported value types, as one of the {@see self::TYPES_*} constants
+     * @param int $valueTypes The supported value types, as a bit field of the {@see self::TYPES_*} constants
      * @param integer $valueCount The required number of values, when the accepted format is {@see self::FORMAT_ARRAY}
      */
     public function __construct( $operator, $valueFormat, $valueTypes = null, $valueCount = null )
@@ -41,9 +41,9 @@ class OperatorSpecifications
      * Criterion input value type description constants.
      * Used by {@see getDescription()} to say which type of values an operator expects
      */
-    const TYPE_INTEGER = 'integer';
-    const TYPE_STRING = 'string';
-    const TYPE_BOOLEAN = 'bool';
+    const TYPE_INTEGER = 1;
+    const TYPE_STRING = 2;
+    const TYPE_BOOLEAN = 4;
 
     /**
     * Specified operator, as one of the Operator::* constants
@@ -60,7 +60,7 @@ class OperatorSpecifications
     /**
     * Accepted values types, specifying what type of variables are accepted as a value
     * @see self::INPUT_VALUE_*
-    * @param array(self::INPUT_VALUE_*)
+    * @var int
     */
     public $valueTypes;
 

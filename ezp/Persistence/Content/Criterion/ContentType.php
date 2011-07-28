@@ -43,7 +43,7 @@ class ContentType extends Criterion implements CriterionInterface
 
     public function getSpecifications()
     {
-        $types = array( OperatorSpecifications::TYPE_INTEGER, OperatorSpecifications::TYPE_STRING );
+        $types = OperatorSpecifications::TYPE_INTEGER | OperatorSpecifications::TYPE_STRING;
         return array(
             new OperatorSpecifications( Operator::IN, OperatorSpecifications::FORMAT_ARRAY, $types ),
             new OperatorSpecifications( Operator::EQ, OperatorSpecifications::FORMAT_SINGLE, $types ),
