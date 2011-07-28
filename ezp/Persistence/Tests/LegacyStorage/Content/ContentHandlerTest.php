@@ -66,7 +66,7 @@ class ContentHandlerTest extends TestCase
         $gatewayMock    = $this->getGatewayMock();
         $storageRegMock = $this->getStorageRegistryMock();
         $storageMock    = $this->getMock(
-            'ezp\Persistence\Fields\StorageInterface'
+            'ezp\\Persistence\\Fields\\StorageInterface'
         );
 
         $handler = new ContentHandler(
@@ -79,7 +79,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'createContentFromCreateStruct' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\ContentCreateStruct'
+                    'ezp\\Persistence\\Content\\ContentCreateStruct'
                 )
             )->will(
                 $this->returnValue( new Content() )
@@ -88,7 +88,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'createVersionForContent' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content'
+                    'ezp\\Persistence\\Content'
                 )
             )->will(
                 $this->returnValue( new Version() )
@@ -97,7 +97,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'convertToStorageValue' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Field'
+                    'ezp\\Persistence\\Content\\Field'
                 )
             )->will(
                 $this->returnValue( new StorageFieldValue() )
@@ -106,21 +106,21 @@ class ContentHandlerTest extends TestCase
         $gatewayMock->expects( $this->once() )
             ->method( 'insertContentObject' )
             ->with(
-                $this->isInstanceOf( 'ezp\Persistence\Content' )
+                $this->isInstanceOf( 'ezp\\Persistence\\Content' )
             )->will( $this->returnValue( 23 ) );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertVersion' )
             ->with(
-                $this->isInstanceOf( 'ezp\Persistence\Content\Version' )
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Version' )
             )->will( $this->returnValue( 1 ) );
 
         $gatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'insertNewField' )
             ->with(
-                $this->isInstanceOf( 'ezp\Persistence\Content' ),
-                $this->isInstanceOf( 'ezp\Persistence\Content\Field' ),
-                $this->isInstanceOf( 'ezp\Persistence\LegacyStorage\Content\StorageFieldValue' )
+                $this->isInstanceOf( 'ezp\\Persistence\\Content' ),
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ),
+                $this->isInstanceOf( 'ezp\\Persistence\\LegacyStorage\\Content\\StorageFieldValue' )
             )->will( $this->returnValue( 42 ) );
 
         $storageRegMock->expects( $this->exactly( 2 ) )
@@ -135,14 +135,14 @@ class ContentHandlerTest extends TestCase
             ->with(
                 $this->equalTo( 42 ),
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\FieldValue'
+                    'ezp\\Persistence\\Content\\FieldValue'
                 )
             );
 
         $res = $handler->create( $this->getContentCreateStructFixture() );
 
         $this->assertInstanceOf(
-            'ezp\Persistence\Content',
+            'ezp\\Persistence\\Content',
             $res,
             'Content not created'
         );
@@ -205,7 +205,7 @@ class ContentHandlerTest extends TestCase
     protected function getStorageRegistryMock()
     {
         return $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\StorageRegistry',
+            'ezp\\Persistence\\LegacyStorage\\Content\\StorageRegistry',
             array( 'getStorage' )
         );
     }
@@ -218,7 +218,7 @@ class ContentHandlerTest extends TestCase
     protected function getMapperMock()
     {
         return $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Mapper'
+            'ezp\\Persistence\\LegacyStorage\\Content\\Mapper'
         );
     }
 
@@ -230,7 +230,7 @@ class ContentHandlerTest extends TestCase
     protected function getGatewayMock()
     {
         return $this->getMockForAbstractClass(
-            'ezp\Persistence\LegacyStorage\Content\ContentGateway'
+            'ezp\\Persistence\\LegacyStorage\\Content\\ContentGateway'
         );
     }
 

@@ -35,7 +35,7 @@ class MapperTest extends \PHPUnit_Framework_TestCase
         $group = $mapper->createGroupFromCreateStruct( $createStruct );
 
         $this->assertInstanceOf(
-            'ezp\Persistence\Content\Type\Group',
+            'ezp\\Persistence\\Content\\Type\\Group',
             $group
         );
         $this->assertPropertiesCorrect(

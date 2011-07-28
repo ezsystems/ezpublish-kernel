@@ -57,14 +57,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $createStruct = new GroupCreateStruct();
 
         $mapperMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\Mapper',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Mapper',
             array( 'createGroupFromCreateStruct' )
         );
         $mapperMock->expects( $this->once() )
             ->method( 'createGroupFromCreateStruct' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Type\Group\GroupCreateStruct'
+                    'ezp\\Persistence\\Content\\Type\\Group\\GroupCreateStruct'
                 )
             )
             ->will(
@@ -76,7 +76,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'insertGroup' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Type\Group'
+                    'ezp\\Persistence\\Content\\Type\\Group'
                 )
             )
             ->will( $this->returnValue( 23 ) );
@@ -87,7 +87,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'ezp\Persistence\Content\Type\Group',
+            'ezp\\Persistence\\Content\\Type\\Group',
             $group
         );
         $this->assertEquals(
@@ -105,7 +105,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $createStruct = new GroupUpdateStruct();
 
         $mapperMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\Mapper',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Mapper',
             array( 'createGroupFromCreateStruct' )
         );
 
@@ -114,7 +114,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'updateGroup' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Type\Group\GroupUpdateStruct'
+                    'ezp\\Persistence\\Content\\Type\\Group\\GroupUpdateStruct'
                 )
             );
 
@@ -145,7 +145,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( array() ) );
 
         $mapperMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\Mapper',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Mapper',
             array( 'extractTypesFromRows' )
         );
         $mapperMock->expects( $this->once() )
@@ -177,14 +177,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $createStructClone = clone $createStructFix;
 
         $gatewayMock = $this->getMockForAbstractClass(
-            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway'
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\ContentTypeGateway'
         );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertType' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Type'
+                    'ezp\\Persistence\\Content\\Type'
                 )
             )
             ->will( $this->returnValue( 23 ) );
@@ -200,7 +200,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo( 23 ),
                 $this->equalTo( 1 ),
-                $this->isInstanceOf( 'ezp\Persistence\Content\Type\FieldDefinition' )
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type\\FieldDefinition' )
             )
             ->will( $this->returnValue( 42 ) );
 
@@ -208,7 +208,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $type = $handler->create( $createStructFix );
 
         $this->assertInstanceOf(
-            'ezp\Persistence\Content\Type',
+            'ezp\\Persistence\\Content\\Type',
             $type,
             'Incorrect type returned from create()'
         );
@@ -249,12 +249,12 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 23 ),
                 $this->equalTo( 1 ),
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Type\ContentTypeUpdateStruct'
+                    'ezp\\Persistence\\Content\\Type\\ContentTypeUpdateStruct'
                 )
             );
 
         $handlerMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\ContentTypeHandler',
             array( 'load' ),
             array( $gatewayMock, new Mapper() )
         );
@@ -271,7 +271,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'ezp\Persistence\Content\Type',
+            'ezp\\Persistence\\Content\\Type',
             $res
         );
     }
@@ -294,7 +294,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) );
 
         $mapperMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\Mapper'
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Mapper'
         );
 
         $handler = new ContentTypeHandler( $gatewayMock, $mapperMock );
@@ -311,21 +311,21 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\Mapper',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Mapper',
             array( 'createCreateStructFromType' )
         );
         $mapperMock->expects( $this->once() )
             ->method( 'createCreateStructFromType' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Type'
+                    'ezp\\Persistence\\Content\\Type'
                 )
             )->will(
                 $this->returnValue( new ContentTypeCreateStruct() )
             );
 
         $handlerMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\ContentTypeHandler',
             array( 'load', 'create' ),
             array( $gatewayMock, $mapperMock )
         );
@@ -364,7 +364,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'ezp\Persistence\Content\Type',
+            'ezp\\Persistence\\Content\\Type',
             $res
         );
     }
@@ -377,21 +377,21 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $gatewayMock = $this->getGatewayMock();
         $mapperMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\Mapper',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Mapper',
             array( 'createCreateStructFromType' )
         );
         $mapperMock->expects( $this->once() )
             ->method( 'createCreateStructFromType' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Type'
+                    'ezp\\Persistence\\Content\\Type'
                 )
             )->will(
                 $this->returnValue( new ContentTypeCreateStruct() )
             );
 
         $handlerMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\ContentTypeHandler',
             array( 'load', 'create' ),
             array( $gatewayMock, $mapperMock )
         );
@@ -436,7 +436,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'ezp\Persistence\Content\Type',
+            'ezp\\Persistence\\Content\\Type',
             $res
         );
     }
@@ -457,7 +457,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             );
 
         $mapperMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\Mapper'
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Mapper'
         );
 
         $handler = new ContentTypeHandler( $gatewayMock, $mapperMock );
@@ -482,7 +482,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             );
 
         $mapperMock = $this->getMock(
-            'ezp\Persistence\LegacyStorage\Content\Type\Mapper'
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Mapper'
         );
 
         $handler = new ContentTypeHandler( $gatewayMock, $mapperMock );
@@ -504,7 +504,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 23 ),
                 $this->equalTo( 1 ),
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Type\FieldDefinition'
+                    'ezp\\Persistence\\Content\\Type\\FieldDefinition'
                 )
             )->will(
                 $this->returnValue( 42 )
@@ -555,7 +555,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 23 ),
                 $this->equalTo( 1 ),
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Type\FieldDefinition'
+                    'ezp\\Persistence\\Content\\Type\\FieldDefinition'
                 )
             );
 
@@ -575,7 +575,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     protected function getGatewayMock()
     {
         return $this->getMockForAbstractClass(
-            'ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway'
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\ContentTypeGateway'
         );
     }
 

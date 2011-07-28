@@ -78,7 +78,7 @@ class StorageRegistryTest extends TestCase
     protected function getStorageMock()
     {
         return $this->getMock(
-            'ezp\Persistence\Fields\StorageInterface'
+            'ezp\\Persistence\\Fields\\StorageInterface'
         );
     }
 
