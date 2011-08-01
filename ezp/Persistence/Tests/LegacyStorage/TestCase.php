@@ -250,7 +250,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         }
         foreach ( $propertyNames as $propName )
         {
-            $this->assertEqual(
+            $this->assertEquals(
                 $expStruct->$propName,
                 $actStruct->$propName,
                 "Properties \${$propName} not same"
