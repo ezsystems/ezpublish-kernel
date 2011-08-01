@@ -8,8 +8,7 @@
  */
 
 namespace ezp\Base;
-use ezp\Base\Interfaces\Proxy as ProxyInterface,
-    ezp\Base\Exception\InvalidArgumentType,
+use ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\PropertyNotFound;
 
 /**

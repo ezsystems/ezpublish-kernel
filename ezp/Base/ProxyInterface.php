@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Interfaces;
+namespace ezp\Base;
 
 /**
  * Interface for Proxy object
  *
  */
-interface Proxy
+interface ProxyInterface
 {
     /**
      * Load the object this proxy object represent

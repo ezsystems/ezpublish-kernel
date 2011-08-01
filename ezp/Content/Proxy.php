@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\Interfaces\Proxy as BaseProxy,
+use ezp\Base\ProxyInterface,
     ezp\Base\Service,
     InvalidArgumentException;
 
@@ -16,7 +16,7 @@ use ezp\Base\Interfaces\Proxy as BaseProxy,
  * Proxy class for content model objects
  *
  */
-class Proxy implements BaseProxy
+class Proxy implements ProxyInterface
 {
     /**
      * Service used to load the object the proxy represents.
