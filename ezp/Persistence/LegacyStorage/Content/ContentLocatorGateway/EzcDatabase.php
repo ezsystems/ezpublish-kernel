@@ -13,7 +13,7 @@ use ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway,
     ezp\Persistence\Content\Criterion;
 
 /**
- * Content locator gateway implementation using the zeta database component.
+ * Content locator gateway implementation using the zeta handler component.
  */
 class EzcDatabase extends ContentLocatorGateway
 {
@@ -25,14 +25,22 @@ class EzcDatabase extends ContentLocatorGateway
     protected $handler;
 
     /**
-     * Construct from database handler
+     * Criteria converter
+     *
+     * @var CriteriaConverter
+     */
+    protected $converter;
+
+    /**
+     * Construct from handler handler
      *
      * @param \ezcDbHandler $handler
      * @return void
      */
-    public function __construct( \ezcDbHandler $handler )
+    public function __construct( \ezcDbHandler $handler, CriteriaConverter $converter = null )
     {
-        $this->handler = $handler;
+        $this->handler   = $handler;
+        $this->converter = $converter ?: new CriteriaConverter();
     }
 
     /**
@@ -51,7 +59,7 @@ class EzcDatabase extends ContentLocatorGateway
             ->select( 'id' )
             ->from( 'ezcontentobject' )
             ->where(
-                $this->convertCriteria( $query, $criterion )
+                $this->converter->convertCriteria( $query, $criterion )
             )
             ->limit( $limit, $offset );
 
@@ -71,25 +79,28 @@ class EzcDatabase extends ContentLocatorGateway
     /**
      * Generic converter of criteria into query fragments
      *
-     * @param ezcDatabaseSelectQuery $query
+     * @param \ezcQuerySelect $query
      * @param Criterion $criterion
-     * @return ezcDatabaseExpression
+     * @return \ezcQueryExpression
      */
-    protected function convertCriteria( $query, Criterion $criterion )
+    protected function convertCriteria( \ezcQuerySelect $query, Criterion $criterion )
     {
+        foreach ( $this->handler as $handler )
+        {
+            if ( $handler->accept( $criterion ) )
+            {
+                return $handler->handle( $query, $criterion );
+            }
+        }
+
+        throw new \RuntimeException( 'No conversion for criterion found.' );
+
         // @TODO: Refactor
         switch ( true )
         {
             case $criterion instanceof Criterion\ContentId:
-                return $query->expr->in( 'id', $criterion->value );
 
             case $criterion instanceof Criterion\LogicalAnd:
-                $subexpressions = array();
-                foreach ( $criterion->criteria as $subCriterion )
-                {
-                    $subexpressions[] = $this->convertCriteria( $query, $subCriterion );
-                }
-                return $query->expr->lAnd( $subexpressions );
 
             case $criterion instanceof Criterion\LogicalOr:
                 $subexpressions = array();
