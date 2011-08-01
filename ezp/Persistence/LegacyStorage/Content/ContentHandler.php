@@ -13,8 +13,8 @@ use ezp\Persistence\LegacyStorage\Content\ContentGateway,
     ezp\Persistence\LegacyStorage\Content\Mapper;
 
 use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface,
-    ezp\Persistence\Content\ContentCreateStruct,
-    ezp\Persistence\Content\ContentUpdateStruct,
+    ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Criterion;
 
 /**
@@ -69,12 +69,12 @@ class ContentHandler implements ContentHandlerInterface
      *
      * Will contain always a complete list of fields.
      *
-     * @param ContentCreateStruct $struct Content creation struct.
+     * @param CreateStruct $struct Content creation struct.
      * @return \ezp\Persistence\Content Content value object
      * @todo Take care of initial locations!
      * @todo Method too complex, refactor!
      */
-    public function create( ContentCreateStruct $struct )
+    public function create( CreateStruct $struct )
     {
         $content = $this->mapper->createContentFromCreateStruct(
             $struct
@@ -213,10 +213,10 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * Updates a content object entity with data and identifier $content
      *
-     * @param ContentUpdateStruct $content
+     * @param UpdateStruct $content
      * @return \ezp\Persistence\Content
      */
-    public function update( ContentUpdateStruct $content )
+    public function update( UpdateStruct $content )
     {
         throw new Exception( "Not implemented yet." );
     }

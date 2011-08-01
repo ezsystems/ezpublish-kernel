@@ -13,7 +13,7 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Version,
-    ezp\Persistence\Content\ContentCreateStruct,
+    ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\LegacyStorage\Content\StorageFieldValue,
     ezp\Persistence\LegacyStorage\Content\ContentHandler;
 
@@ -79,7 +79,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'createContentFromCreateStruct' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\ContentCreateStruct'
+                    'ezp\\Persistence\\Content\\CreateStruct'
                 )
             )->will(
                 $this->returnValue( new Content() )
@@ -139,7 +139,7 @@ class ContentHandlerTest extends TestCase
                 )
             );
 
-        $res = $handler->create( $this->getContentCreateStructFixture() );
+        $res = $handler->create( $this->getCreateStructFixture() );
 
         $this->assertInstanceOf(
             'ezp\\Persistence\\Content',
@@ -177,13 +177,13 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * Returns a ContentCreateStruct fixture.
+     * Returns a CreateStruct fixture.
      *
-     * @return ContentCreateStruct
+     * @return CreateStruct
      */
-    public function getContentCreateStructFixture()
+    public function getCreateStructFixture()
     {
-        $struct = new ContentCreateStruct();
+        $struct = new CreateStruct();
 
         $firstField        = new Field();
         $firstField->type  = 'some-type';

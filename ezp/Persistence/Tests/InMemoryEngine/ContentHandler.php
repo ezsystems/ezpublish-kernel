@@ -10,8 +10,8 @@
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
 use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface,
-    ezp\Persistence\Content\ContentCreateStruct,
-    ezp\Persistence\Content\ContentUpdateStruct,
+    ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Criterion,
     ezp\Content\Version;
 
@@ -47,7 +47,7 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see ezp\Persistence\Content\Interfaces\ContentHandler
      */
-    public function create( ContentCreateStruct $content )
+    public function create( CreateStruct $content )
     {
         $contentObj = $this->backend->create(
             'Content', array(
@@ -155,7 +155,7 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see ezp\Persistence\Content\Interfaces\ContentHandler
      */
-    public function update( ContentUpdateStruct $content )
+    public function update( UpdateStruct $content )
     {
         // @todo Will need version number to be able to know which version to update.
     }

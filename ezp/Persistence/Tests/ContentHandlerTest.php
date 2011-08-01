@@ -9,7 +9,7 @@
 
 namespace ezp\Persistence\Tests;
 use ezp\Persistence\Content,
-    ezp\Persistence\Content\ContentCreateStruct,
+    ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
@@ -33,7 +33,7 @@ class ContentHandlerTest extends HandlerTest
     {
         parent::setUp();
 
-        $struct = new ContentCreateStruct();
+        $struct = new CreateStruct();
         $struct->name = "test";
         $struct->ownerId = 14;
         $struct->sectionId = 1;
@@ -84,7 +84,7 @@ class ContentHandlerTest extends HandlerTest
      */
     public function testCreate()
     {
-        $struct = new ContentCreateStruct();
+        $struct = new CreateStruct();
         $struct->name = "test";
         $struct->ownerId = 14;
         $struct->sectionId = 1;

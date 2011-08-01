@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentCreateStruct struct
+ * File containing the CreateStruct struct
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,7 +13,7 @@ use ezp\Persistence\ValueObject;
 
 /**
  */
-class ContentCreateStruct extends ValueObject
+class CreateStruct extends ValueObject
 {
     /**
      * @var string

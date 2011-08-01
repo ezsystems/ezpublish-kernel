@@ -10,7 +10,7 @@
 
 namespace ezp\Persistence\LegacyStorage\Content;
 use ezp\Persistence\Content,
-    ezp\Persistence\Content\ContentCreateStruct,
+    ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\Version;
 
@@ -39,10 +39,10 @@ class Mapper
     /**
      * Creates a Content from the given $struct
      *
-     * @param ContentCreateStruct $struct
+     * @param CreateStruct $struct
      * @return Content
      */
-    public function createContentFromCreateStruct( ContentCreateStruct $struct )
+    public function createContentFromCreateStruct( CreateStruct $struct )
     {
         $content = new Content();
 

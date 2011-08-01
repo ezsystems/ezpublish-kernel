@@ -9,8 +9,8 @@
  */
 
 namespace ezp\Persistence\Content\Interfaces;
-use ezp\Persistence\Content\ContentCreateStruct,
-    ezp\Persistence\Content\ContentUpdateStruct,
+use ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Content\UpdateStruct,
     // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
     ezp\Persistence\Content\Criterion as AbstractCriterion,
     ezp\Persistence\Content\RestrictedVersion;
@@ -34,10 +34,10 @@ interface ContentHandler
      *
      * Will contain always a complete list of fields.
      *
-     * @param ContentCreateStruct $content Content creation struct.
+     * @param CreateStruct $content Content creation struct.
      * @return \ezp\Persistence\Content Content value object
      */
-    public function create( ContentCreateStruct $content );
+    public function create( CreateStruct $content );
 
     /**
      * Creates a new draft version from $contentId in $version.
@@ -123,10 +123,10 @@ interface ContentHandler
     /**
      * Updates a content object entity with data and identifier $content
      *
-     * @param ContentUpdateStruct $content
+     * @param UpdateStruct $content
      * @return \ezp\Persistence\Content
      */
-    public function update( ContentUpdateStruct $content );
+    public function update( UpdateStruct $content );
 
     /**
      * Deletes all versions and fields, all locations (subtree), and all relations.
