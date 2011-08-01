@@ -156,11 +156,9 @@ class ContentHandler implements ContentHandlerInterface
      * retrieved.
      *
      * @param Criterion $criterion
-     * @param mixed $offset
-     * @param mixed $sort
      * @return ezp\Persistence\Content
      */
-    public function findSingle( Criterion $criterion, $offset, $sort )
+    public function findSingle( Criterion $criterion )
     {
         throw new Exception( "Not implemented yet." );
     }
