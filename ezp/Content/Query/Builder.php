@@ -1,28 +1,29 @@
 <?php
 /**
- * File containing the ezp\Content\QueryBuilder class.
+ * File containing the ezp\Content\Query\Builder class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://ez.no/licenses/gnu_gpl GNU GPL v2
  * @version //autogentag//
  */
 
-namespace ezp\Content;
+namespace ezp\Content\Query;
 use ezp\Persistence\Content\Criterion,
     ezp\Base\Exception\PropertyNotFound,
     InvalidArgumentException,
+    ezp\Content\CriterionFactory,
     ezp\Content\Query;
 
 /**
  * This class provides a fluent interface to create a content query
  *
- * Every Criterion is accessible using a getter on the QueryBuilder object.
+ * Every Criterion is accessible using a getter on the Builder object.
  * For instance, calling $queryBuilder->field will return a CriterionFactory object for a Field Criterion.
  * This CriterionFactory will then give access to the operators the contained Criterion supports, as methods.
  * These methods can then be used to construct a new Criterion for the given target & value:
  *
  * <code>
- * $queryBuilder = new QueryBuilder();
+ * $queryBuilder = new ezp\Content\Query\Builder();
  * $queryBuilder->addCriteria( $queryBuilder->contentType->eq( null, 'article' ) );
  * </code>
  *
@@ -48,7 +49,7 @@ use ezp\Persistence\Content\Criterion,
  * @property-read ezp\Content\CriterionFactory $not New logical NOT criterion (alias for {@see $lNot})
  * @property-read ezp\Content\CriterionFactory $lNot
  */
-class QueryBuilder
+class Builder
 {
     /**
      * Magic getter.

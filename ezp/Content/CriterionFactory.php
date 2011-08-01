@@ -19,7 +19,7 @@ use ezp\Persistence\Content\Criterion,
  * This class provides a factory interface to a criterion object.
  *
  * <code>
- * $queryBuilder = new QueryBuilder;
+ * $queryBuilder = new ezp\Content\Query\Builder;
  * $criterionFactory = $queryBuilder->metadata;
  * </code>
  */
@@ -224,7 +224,7 @@ class CriterionFactory
      * @param string $operator
      * @param $argument$... Criterion arguments
      *
-     * @return QueryBuilder
+     * @return ezp\Content\Query\Builder
      */
     private function handleCriterion( $target, $operator, $value )
     {

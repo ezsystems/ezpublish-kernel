@@ -11,8 +11,8 @@ namespace ezp\Content\Services;
 use ezp\Base\Service,
     ezp\Base\Exception\NotFound,
     ezp\Content,
-    ezp\Content\QueryBuilder;
     ezp\Content\Query;
+    ezp\Content\Query\Builder;
 
 /**
  * Content service, used for Content operations
@@ -112,7 +112,7 @@ class Content extends Service
      */
     public function getQueryBuilder()
     {
-        return new QueryBuilder();
+        return new Builder();
     }
 }
 ?>
