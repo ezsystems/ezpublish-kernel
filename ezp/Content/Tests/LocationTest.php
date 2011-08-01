@@ -11,7 +11,7 @@ namespace ezp\Content\Tests;
 use ezp\Content\Location,
     ezp\Content,
     ezp\Content\Section,
-    ezp\Content\Type\Type,
+    ezp\Content\Type,
     ezp\Base\Locale;
 
 /**

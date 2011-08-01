@@ -12,7 +12,7 @@ use ezp\Base\AbstractModel,
     ezp\Base\Locale,
     ezp\Base\TypeCollection,
     ezp\Content\Translation,
-    ezp\Content\Type\Type,
+    ezp\Content\Type,
     ezp\Content\Version,
     DateTime,
     InvalidArgumentException;

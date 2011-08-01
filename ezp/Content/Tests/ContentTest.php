@@ -12,7 +12,7 @@ use ezp\Content,
     ezp\Content\Location,
     ezp\Content\Section,
     ezp\Content\Translation,
-    ezp\Content\Type\Type,
+    ezp\Content\Type,
     ezp\Content\Type\Field,
     ezp\Base\Locale;
 

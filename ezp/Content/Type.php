@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Type;
+namespace ezp\Content;
 use ezp\Base\AbstractModel,
     ezp\Base\TypeCollection;
 

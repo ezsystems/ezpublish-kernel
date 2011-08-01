@@ -8,7 +8,7 @@ use ezp\Base\Service\Container,
     ezp\Base\Autoloader,
     ezp\Base\Locale,
     ezp\Content\Type\Field,
-    ezp\Content\Type\Type;
+    ezp\Content\Type;
 
 chdir( '../' );
 require 'config.php';

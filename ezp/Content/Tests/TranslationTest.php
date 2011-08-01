@@ -10,7 +10,7 @@
 namespace ezp\Content\Tests;
 use ezp\Content,
     ezp\Content\Translation,
-    ezp\Content\Type\Type,
+    ezp\Content\Type,
     ezp\Base\Locale;
 
 /**

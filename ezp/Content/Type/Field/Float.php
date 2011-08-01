@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Type\Field;
-use ezp\Content\Type\Type,
+use ezp\Content\Type,
     ezp\Content\Type\Field as TypeField;
 
 /**
