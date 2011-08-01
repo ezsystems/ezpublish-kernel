@@ -40,7 +40,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         if ( !$this->dsn )
         {
-            $this->dsn = getenv( 'DATABASE' ) ?: 'sqlite://:memory:';
+            $this->dsn = $_ENV['DATABASE'] ?: 'sqlite://:memory:';
         }
 
         return $this->dsn;
