@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Interfaces;
+namespace ezp\Base\Configuration;
 
 /**
  * Configuration Interfaces for configuration parser & writer
  *
  */
-interface ConfigurationParser
+interface Parser
 {
     /**
      * Construct an instance for a specific file

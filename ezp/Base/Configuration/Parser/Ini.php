@@ -11,7 +11,7 @@
 
 namespace ezp\Base\Configuration\Parser;
 use ezp\Base\Configuration,
-    ezp\Base\Interfaces\ConfigurationParser,
+    ezp\Base\Configuration\Parser,
     ezcConfiguration,
     ezcConfigurationIniReader,
     LogicException;
@@ -20,7 +20,7 @@ use ezp\Base\Configuration,
  * Configuration Ini Parser / writer
  *
  */
-class Ini implements ConfigurationParser
+class Ini implements Parser
 {
     /**
      * Constant string used as a temporary true variable during ini parsing to avoid
@@ -250,7 +250,7 @@ class Ini implements ConfigurationParser
     /**
      * Store raw configuration data to file
      *
-     * @see ezp\Base\Interfaces\Configuration\Parser::parse() For $configurationData definition
+     * @see ezp\Base\Configuration\Parser::parse() For $configurationData definition
      * @todo Test..
      * @param array $configurationData
      */
