@@ -218,7 +218,11 @@ class ContentHandlerTest extends TestCase
     protected function getMapperMock()
     {
         return $this->getMock(
-            'ezp\\Persistence\\LegacyStorage\\Content\\Mapper'
+            'ezp\\Persistence\\LegacyStorage\\Content\\Mapper',
+            array(),
+            array(),
+            '',
+            false
         );
     }
 
