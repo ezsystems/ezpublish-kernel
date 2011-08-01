@@ -12,7 +12,8 @@ use ezp\Base\AbstractModel,
     ezp\Base\Locale,
     ezp\Base\Observer,
     ezp\Base\Observable,
-    ezp\Content;
+    ezp\Content,
+    ezp\Content\Field\Collection;
 
 /**
  * This class represents a Content Version
@@ -123,7 +124,7 @@ class Version extends AbstractModel implements Observer
     {
         $this->content = $content;
         $this->locale = $locale;
-        $this->fields = new FieldCollection( $this );
+        $this->fields = new Collection( $this );
     }
 
     /**

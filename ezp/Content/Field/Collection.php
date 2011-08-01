@@ -7,12 +7,14 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content;
+namespace ezp\Content\Field;
 use ezp\Base\Configuration,
     ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\MissingClass,
     ezp\Base\Exception\ReadOnly as ReadOnlyException,
     ezp\Base\Collection\ReadOnly,
+    ezp\Content\Field,
+    ezp\Content\Version,
     RuntimeException;
 
 /**
@@ -21,10 +23,10 @@ use ezp\Base\Configuration,
  * Readonly class that takes (Content) Version as input.
  *
  */
-class FieldCollection extends ReadOnly
+class Collection extends ReadOnly
 {
     /**
-     * Constructor, sets up FieldCollection based on contentType fields
+     * Constructor, sets up Collection based on contentType fields
      *
      * @param Version $contentVersion
      */
@@ -62,7 +64,7 @@ class FieldCollection extends ReadOnly
     public function offsetSet( $offset, $value )
     {
         if ( $offset === null || !$this->offsetExists( $offset ) )
-            throw new ReadOnlyException( "FieldCollection" );
+            throw new ReadOnlyException( "Field\\Collection" );
         $this->offsetGet( $offset )->value = $value;
     }
 }
