@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\Interfaces\Observable,
-    ezp\Base\Interfaces\Observer,
+use ezp\Base\Observable,
+    ezp\Base\Observer,
     ezp\Base\AbstractModel,
     ezp\Content\Type\Field as FieldDefinition;
 

@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Base;
-use ezp\Base\Interfaces\Observable,
-    ezp\Base\Interfaces\Observer,
+use ezp\Base\Observable,
+    ezp\Base\Observer,
     ezp\Base\Interfaces\Model,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,

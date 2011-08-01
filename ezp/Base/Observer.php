@@ -8,7 +8,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Interfaces;
+namespace ezp\Base;
 
 /**
  * Interface for Observers

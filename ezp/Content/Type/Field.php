@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Content\Type;
-use ezp\Base\Interfaces\Observable,
-    ezp\Base\Interfaces\Observer,
+use ezp\Base\Observable,
+    ezp\Base\Observer,
     ezp\Base\AbstractModel,
     ezp\Content\Type\Field as FieldDefinition;
 
@@ -95,7 +95,7 @@ abstract class Field extends AbstractModel implements Observer
     /**
      * Called when subject has been updated
      *
-     * @param ezp\Base\Interfaces\Observable $subject
+     * @param ezp\Base\Observable $subject
      * @param string $event
      * @return Field
      */

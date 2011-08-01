@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Interfaces;
+namespace ezp\Base;
 use Countable,
     ArrayAccess,
     Serializable;

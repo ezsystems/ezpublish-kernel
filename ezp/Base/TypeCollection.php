@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Base;
-use ezp\Base\Interfaces\Collection,
+use ezp\Base\Collection,
     ezp\Base\Exception\InvalidArgumentType,
     ArrayObject;
 

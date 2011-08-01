@@ -9,9 +9,9 @@
 
 namespace ezp\Content;
 use ezp\Base\AbstractModel,
-    ezp\Base\Interfaces\Observer,
+    ezp\Base\Observer,
     ezp\Base\TypeCollection,
-    ezp\Base\Interfaces\Observable;
+    ezp\Base\Observable;
 
 /**
  * This class represents a Content Location
@@ -210,7 +210,7 @@ class Location extends AbstractModel implements Observer
     /**
      * Called when subject has been updated
      *
-     * @param ezp\Base\Interfaces\Observable $subject
+     * @param ezp\Base\Observable $subject
      * @param string $event
      * @return Location
      */

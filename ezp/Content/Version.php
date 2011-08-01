@@ -10,8 +10,8 @@
 namespace ezp\Content;
 use ezp\Base\AbstractModel,
     ezp\Base\Locale,
-    ezp\Base\Interfaces\Observer,
-    ezp\Base\Interfaces\Observable;
+    ezp\Base\Observer,
+    ezp\Base\Observable;
 
 /**
  * This class represents a Content Version
