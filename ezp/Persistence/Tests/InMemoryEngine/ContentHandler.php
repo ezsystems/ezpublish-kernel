@@ -121,7 +121,7 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see ezp\Persistence\Content\Interfaces\ContentHandler
      */
-    public function findSingle( Criterion $criterion, $offset, $sort )
+    public function findSingle( Criterion $criterion )
     {
     }
 
