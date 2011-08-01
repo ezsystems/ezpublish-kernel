@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Criterion\Operator\Specifications,
     ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface,
     InvalidArgumentException;
 
@@ -51,26 +52,26 @@ class DateMetadata extends Criterion implements CriterionInterface
     public function getSpecifications()
     {
         return array(
-            new OperatorSpecifications(
-                Operator::EQ, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_INTEGER
+            new Specifications(
+                Operator::EQ, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER
             ),
-            new OperatorSpecifications(
-                Operator::GT, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_INTEGER
+            new Specifications(
+                Operator::GT, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER
             ),
-            new OperatorSpecifications(
-                Operator::GTE, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_INTEGER
+            new Specifications(
+                Operator::GTE, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER
             ),
-            new OperatorSpecifications(
-                Operator::LT, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_INTEGER
+            new Specifications(
+                Operator::LT, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER
             ),
-            new OperatorSpecifications(
-                Operator::LTE, OperatorSpecifications::FORMAT_SINGLE, OperatorSpecifications::TYPE_INTEGER
+            new Specifications(
+                Operator::LTE, Specifications::FORMAT_SINGLE, Specifications::TYPE_INTEGER
             ),
-            new OperatorSpecifications(
-                Operator::IN, OperatorSpecifications::FORMAT_ARRAY, OperatorSpecifications::TYPE_INTEGER
+            new Specifications(
+                Operator::IN, Specifications::FORMAT_ARRAY, Specifications::TYPE_INTEGER
             ),
-            new OperatorSpecifications(
-                Operator::BETWEEN, OperatorSpecifications::FORMAT_ARRAY, OperatorSpecifications::TYPE_INTEGER, 2
+            new Specifications(
+                Operator::BETWEEN, Specifications::FORMAT_ARRAY, Specifications::TYPE_INTEGER, 2
             ),
         );
     }

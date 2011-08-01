@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Criterion\Operator\Specifications,
     ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
@@ -43,13 +44,13 @@ class ContentTypeGroup extends Criterion implements CriterionInterface
     public function getSpecifications()
     {
         return array(
-            new OperatorSpecifications(
+            new Specifications(
                 Operator::IN,
-                OperatorSpecifications::FORMAT_ARRAY
+                Specifications::FORMAT_ARRAY
             ),
-            new OperatorSpecifications(
+            new Specifications(
                 Operator::EQ,
-                OperatorSpecifications::FORMAT_SINGLE
+                Specifications::FORMAT_SINGLE
             )
         );
     }

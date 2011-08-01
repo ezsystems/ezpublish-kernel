@@ -1,23 +1,23 @@
 <?php
 /**
- * File containing the ezp\Persistence\Content\Criterion\OperatorSpecifications class.
+ * File containing the ezp\Persistence\Content\Criterion\Operator\Specifications class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Criterion;
+namespace ezp\Persistence\Content\Criterion\Operator;
 
 /**
  * This class is used by Criteria to describe which operators they support
  *
  * Instances of this class are returned in an array by the {@see Criterion::getSpecifications()} method
  */
-class OperatorSpecifications
+class Specifications
 {
     /**
-     * Creates a new OperatorSpecifications object
+     * Creates a new Specifications object
      * @pparam string $operator The specified operator, as one of the Operator::* constants
      * @param string $valueFormat The accepted value format, either {@see self::FORMAT_ARRAY} or {@see self::FORMAT_SINGLE}
      * @param int $valueTypes The supported value types, as a bit field of the {@see self::TYPES_*} constants

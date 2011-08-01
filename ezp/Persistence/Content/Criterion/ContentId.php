@@ -10,6 +10,7 @@
 
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Criterion\Operator\Specifications,
     ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
@@ -41,10 +42,10 @@ class ContentId extends Criterion implements CriterionInterface
 
     public function getSpecifications()
     {
-        $types = OperatorSpecifications::TYPE_INTEGER | OperatorSpecifications::TYPE_STRING;
+        $types = Specifications::TYPE_INTEGER | Specifications::TYPE_STRING;
         return array(
-            new OperatorSpecifications( Operator::IN, OperatorSpecifications::FORMAT_ARRAY, $types ),
-            new OperatorSpecifications( Operator::EQ, OperatorSpecifications::FORMAT_SINGLE, $types ),
+            new Specifications( Operator::IN, Specifications::FORMAT_ARRAY, $types ),
+            new Specifications( Operator::EQ, Specifications::FORMAT_SINGLE, $types ),
         );
     }
 

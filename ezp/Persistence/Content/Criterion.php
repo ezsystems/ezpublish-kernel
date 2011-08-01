@@ -9,7 +9,7 @@
  */
 
 namespace ezp\Persistence\Content;
-use ezp\Persistence\Content\Criterion\OperatorSpecifications,
+use ezp\Persistence\Content\Criterion\Operator\Specifications,
     InvalidArgumentException;
 
 /**
@@ -42,14 +42,14 @@ abstract class Criterion
             // input format check (single/array)
             switch( $operatorSpecifications->valueFormat )
             {
-                case OperatorSpecifications::FORMAT_SINGLE:
+                case Specifications::FORMAT_SINGLE:
                     if ( is_array( $value ) )
                     {
                         throw new InvalidArgumentException( "The Criterion expects a single value" );
                     }
                     break;
 
-                case OperatorSpecifications::FORMAT_ARRAY:
+                case Specifications::FORMAT_ARRAY:
                     if ( !is_array( $value ) )
                     {
                         throw new InvalidArgumentException( "The criterion expects an array of values" );
@@ -88,7 +88,7 @@ abstract class Criterion
 
     /**
      * Returns a callback that checks the values types depending on the operator specifications
-     * @param int $valueTypes The accepted values, as a bit field of OperatorSpecifications::TYPE_* constants
+     * @param int $valueTypes The accepted values, as a bit field of Specifications::TYPE_* constants
      * @return callback
      */
     private function getValueTypeCheckCallback( $valueTypes )
@@ -99,21 +99,21 @@ abstract class Criterion
         };
 
         // the callback code will return true as soon as an accepted value type is found
-        if ( $valueTypes & OperatorSpecifications::TYPE_INTEGER )
+        if ( $valueTypes & Specifications::TYPE_INTEGER )
         {
             $callback = function( $value ) use ($callback)
             {
                 return is_numeric( $value ) || $callback( $value );
             };
         }
-        if ( $valueTypes & OperatorSpecifications::TYPE_STRING )
+        if ( $valueTypes & Specifications::TYPE_STRING )
         {
             $callback = function( $value ) use ($callback)
             {
                 return is_string( $value ) || $callback( $value );
             };
         }
-        if ( $valueTypes & OperatorSpecifications::TYPE_BOOLEAN )
+        if ( $valueTypes & Specifications::TYPE_BOOLEAN )
         {
             $callback = function( $value ) use ($callback)
             {

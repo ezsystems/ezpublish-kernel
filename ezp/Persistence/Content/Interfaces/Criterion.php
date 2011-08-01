@@ -27,7 +27,7 @@ interface Criterion
      * Criterion description function.
      *
      * Returns the combination of the Criterion's supported operator/value,
-     * as an array of Criterion\OperatorSpecifications objects
+     * as an array of ezp\Persistence\Content\Criterion\Operator\Specifications objects
      * - Operator is one supported Operator, as an Operator::* constant
      * - ValueType is the type of input value this operator requires, either array or single
      * - SupportedTypes is an array of types the operator will accept
@@ -37,20 +37,20 @@ interface Criterion
      * // IN and EQ are supported
      * return array(
      *     // The EQ operator expects a single value, either as an integer or a string
-     *     new OperatorSpecifications(
+     *     new Specifications(
      *         Operator::EQ,
-     *         OperatorSpecifications::INPUT_TYPE_SINGLE,
-     *         array( OperatorSpecifications::INPUT_VALUE_INTEGER, OperatorSpecifications::INPUT_VALUE_STRING ),
+     *         Specifications::INPUT_TYPE_SINGLE,
+     *         array( Specifications::INPUT_VALUE_INTEGER, Specifications::INPUT_VALUE_STRING ),
      *     ),
      *     // The IN operator expects an array of values, of either integers or strings
-     *     new OperatorSpecifications(
+     *     new Specifications(
      *         Operator::IN,
-     *         OperatorSpecifications::INPUT_TYPE_ARRAY,
-     *         array( OperatorSpecifications::INPUT_VALUE_INTEGER, OperatorSpecifications::INPUT_VALUE_STRING )
+     *         Specifications::INPUT_TYPE_ARRAY,
+     *         array( Specifications::INPUT_VALUE_INTEGER, Specifications::INPUT_VALUE_STRING )
      *     )
      * )*
      * </code>
-     * @return \ezp\Persistence\Content\Criterion\OperatorSpecifications[]
+     * @return ezp\Persistence\Content\Criterion\Operator\Specifications[]
      */
     public function getSpecifications();
 }

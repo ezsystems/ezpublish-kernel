@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Criterion\Operator\Specifications,
     ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
 
 /**
@@ -43,20 +44,20 @@ class UrlAlias extends Criterion implements CriterionInterface
     public function getSpecifications()
     {
         return array(
-            new OperatorSpecifications(
+            new Specifications(
                 Operator::IN,
-                OperatorSpecifications::FORMAT_ARRAY,
-                OperatorSpecifications::TYPE_STRING
+                Specifications::FORMAT_ARRAY,
+                Specifications::TYPE_STRING
             ),
-            new OperatorSpecifications(
+            new Specifications(
                 Operator::EQ,
-                OperatorSpecifications::FORMAT_SINGLE,
-                OperatorSpecifications::TYPE_STRING
+                Specifications::FORMAT_SINGLE,
+                Specifications::TYPE_STRING
             ),
-            new OperatorSpecifications(
+            new Specifications(
                 Operator::LIKE,
-                OperatorSpecifications::FORMAT_SINGLE,
-                OperatorSpecifications::TYPE_STRING
+                Specifications::FORMAT_SINGLE,
+                Specifications::TYPE_STRING
             ),
         );
     }
