@@ -201,4 +201,78 @@ class TestCase extends \PHPUnit_Framework_TestCase
             $message
         );
     }
+
+    /**
+     * Asserts correct property values on $object.
+     *
+     * Asserts that for all keys in $properties a corresponding property 
+     * exists in $object with the *same* value as in $properties.
+     *
+     * @param array $properties
+     * @param object $object
+     * @return void
+     */
+    protected function assertPropertiesCorrect( array $properties, $object )
+    {
+        if ( !is_object( $object ) )
+        {
+            throw new \InvalidArgumentException(
+                'Expected object as second parameter, received ' . gettype( $object )
+            );
+        }
+        foreach ( $properties as $propName => $propVal )
+        {
+            $this->assertSame(
+                $propVal,
+                $object->$propName,
+                "Incorrect value for \${$propName}"
+            );
+        }
+    }
+
+    /**
+     * Asserts $expStruct equals $actStruct in at least $propertyNames
+     *
+     * Asserts that properties of $actStruct equal properties of $expStruct (not
+     * vice versa!). If $propertyNames is null, all properties are checked.
+     * Otherwise, $propertyNames provides a white list.
+     *
+     * @param object $expStruct
+     * @param object $actStruct
+     * @param array $propertyNames
+     */
+    protected function assertStructsEqual(
+        $expStruct, $actStruct, array $propertyNames = null )
+    {
+        if ( $propertyNames === null )
+        {
+            $propertyNames = $this->getPublicPropertyNames( $expStruct );
+        }
+        foreach ( $propertyNames as $propName )
+        {
+            $this->assertEqual(
+                $expStruct->$propName,
+                $actStruct->$propName,
+                "Properties \${$propName} not same"
+            );
+        }
+    }
+
+    /**
+     * Returns public property names in $object
+     *
+     * @param object $object
+     * @return array
+     */
+    protected function getPublicPropertyNames( $object )
+    {
+        $refl = new ReflectionObject( $object );
+        return array_map(
+            function ( $prop )
+            {
+                return $prop->getName();
+            },
+            $refl->getProperties( ReflectionProperty::IS_PUBLIC )
+        );
+    }
 }

@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Persistence\Tests\LegcyStorage\Content\Type;
-use ezp\Persistence\LegacyStorage\Content\Type\Mapper,
+use ezp\Persistence\Tests\LegacyStorage\TestCase,
+    ezp\Persistence\LegacyStorage\Content\Type\Mapper,
 
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
@@ -20,7 +21,7 @@ use ezp\Persistence\LegacyStorage\Content\Type\Mapper,
 /**
  * Test case for Mapper.
  */
-class MapperTest extends \PHPUnit_Framework_TestCase
+class MapperTest extends TestCase
 {
     /**
      * @return void
@@ -268,24 +269,6 @@ class MapperTest extends \PHPUnit_Framework_TestCase
             ),
             $types[0]->fieldDefinitions[2]
         );
-    }
-
-    protected function assertPropertiesCorrect( array $properties, $object )
-    {
-        if ( !is_object( $object ) )
-        {
-            throw new \InvalidArgumentException(
-                'Expected object as second parameter, received ' . gettype( $object )
-            );
-        }
-        foreach ( $properties as $propName => $propVal )
-        {
-            $this->assertSame(
-                $propVal,
-                $object->$propName,
-                "Incorrect value for \${$propName}"
-            );
-        }
     }
 
     /**
