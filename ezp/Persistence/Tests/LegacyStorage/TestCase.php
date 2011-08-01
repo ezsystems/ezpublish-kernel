@@ -40,7 +40,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         if ( !$this->dsn )
         {
-            $this->dsn = $_ENV['DATABASE'] ?: 'sqlite://:memory:';
+            $this->dsn = @$_ENV['DATABASE'] ?: 'sqlite://:memory:';
         }
 
         return $this->dsn;
@@ -99,15 +99,19 @@ class TestCase extends \PHPUnit_Framework_TestCase
             $handler->exec( $query );
         }
 
-        // We need this trigger for SQLite, because it does not support a multi
-        // column key with one of them being set to auto-increment.
-        $handler->exec( '
-            CREATE TRIGGER my_ezcontentobject_attribute_increment
-            AFTER INSERT
-            ON ezcontentobject_attribute
-            BEGIN
-                UPDATE ezcontentobject_attribute SET id = (SELECT MAX(id) FROM ezcontentobject_attribute) + 1  WHERE rowid = new.rowid AND id = 0;
-            END;' );
+        if ( strpos( $this->getDsn(), 'sqlite://' ) === 0 )
+        {
+            // We need this trigger for SQLite, because it does not support a multi
+            // column key with one of them being set to auto-increment.
+            $handler->exec( '
+                CREATE TRIGGER my_ezcontentobject_attribute_increment
+                AFTER INSERT
+                ON ezcontentobject_attribute
+                BEGIN
+                    UPDATE ezcontentobject_attribute SET id = (SELECT MAX(id) FROM ezcontentobject_attribute) + 1  WHERE rowid = new.rowid AND id = 0;
+                END;' );
+
+        }
     }
 
     /**
