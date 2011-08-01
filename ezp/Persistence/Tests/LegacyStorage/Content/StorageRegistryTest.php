@@ -10,7 +10,7 @@
 namespace ezp\Persistence\Tests\LegacyStorage\Content;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\LegacyStorage\Content\StorageRegistry,
-    ezp\Persistence\Fields\StorageInterface;
+    ezp\Persistence\Fields\Storage;
 
 /**
  * Test case for StorageRegistry
@@ -72,14 +72,14 @@ class StorageRegistryTest extends TestCase
     }
 
     /**
-     * Returns a mock for StorageInterface
+     * Returns a mock for Storage
      *
-     * @return StorageInterface
+     * @return Storage
      */
     protected function getStorageMock()
     {
         return $this->getMock(
-            'ezp\\Persistence\\Fields\\StorageInterface'
+            'ezp\\Persistence\\Fields\\Storage'
         );
     }
 

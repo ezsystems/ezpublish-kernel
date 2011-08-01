@@ -9,7 +9,7 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content;
-use ezp\Persistence\Fields\StorageInterface,
+use ezp\Persistence\Fields\Storage,
     ezp\Persistence\LegacyStorage\Exception;
 
 /**
@@ -28,10 +28,10 @@ class StorageRegistry
      * Register a storage
      *
      * @param string $typeName
-     * @param StorageInterface $storage
+     * @param Storage $storage
      * @return void
      */
-    public function register( $typeName, StorageInterface $storage )
+    public function register( $typeName, Storage $storage )
     {
         $this->storageMap[$typeName] = $storage;
     }

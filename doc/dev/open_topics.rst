@@ -31,8 +31,8 @@ Conclusion
 ~~~~~~~~~~
 
 
-StorageInterface
-----------------
+Storage interface
+-----------------
 
 Summary
 ~~~~~~~

@@ -72,9 +72,9 @@ class FieldValueConverterRegistryTest extends TestCase
     }
 
     /**
-     * Returns a mock for StorageInterface
+     * Returns a mock for Storage
      *
-     * @return StorageInterface
+     * @return Storage
      */
     protected function getFieldValueConverterMock()
     {

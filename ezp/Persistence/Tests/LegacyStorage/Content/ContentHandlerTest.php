@@ -66,7 +66,7 @@ class ContentHandlerTest extends TestCase
         $gatewayMock    = $this->getGatewayMock();
         $storageRegMock = $this->getStorageRegistryMock();
         $storageMock    = $this->getMock(
-            'ezp\\Persistence\\Fields\\StorageInterface'
+            'ezp\\Persistence\\Fields\\Storage'
         );
 
         $handler = new ContentHandler(
