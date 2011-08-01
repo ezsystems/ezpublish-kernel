@@ -17,7 +17,7 @@ use Exception as PHPException;
  *   throw new BadRequest( 'Oauth Token', 'http header' );
  *
  */
-class BadRequest extends AbstractHttp
+class BadRequest extends Http
 {
     /**
      * Generates: Bad request, missing {$missing} in {$from}

@@ -18,7 +18,7 @@ use ezp\Base\Exception,
  * Exceptions that map to any of the http errors should extend this class.
  *
  */
-abstract class AbstractHttp extends RuntimeException implements Exception
+abstract class Http extends RuntimeException implements Exception
 {
     const BAD_REQUEST = 400;
     const UNAUTHORIZED = 401;

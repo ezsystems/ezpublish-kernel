@@ -17,7 +17,7 @@ use Exception as PHPException;
  *   throw new Expired( 'Oauth Token' );
  *
  */
-class Expired extends AbstractHttp
+class Expired extends Http
 {
     /**
      * Generates: '{$expired}' has expired

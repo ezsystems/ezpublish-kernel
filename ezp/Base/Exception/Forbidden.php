@@ -17,7 +17,7 @@ use Exception as PHPException;
  *   throw new Forbidden( 'Content', 'create' );
  *
  */
-class Forbidden extends AbstractHttp
+class Forbidden extends Http
 {
     /**
      * Generates: User does not have access to $action '{$type}'

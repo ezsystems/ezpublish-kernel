@@ -17,7 +17,7 @@ use Exception as PHPException;
  *   throw new Unauthorized( 'Content' );
  *
  */
-class Unauthorized extends AbstractHttp
+class Unauthorized extends Http
 {
     /**
      * Generates: Login required to get access to '{$what}'

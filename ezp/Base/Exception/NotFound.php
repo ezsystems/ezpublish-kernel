@@ -17,7 +17,7 @@ use Exception as PHPException;
  *   throw new NotFound( 'Content', 42 );
  *
  */
-class NotFound extends AbstractHttp
+class NotFound extends Http
 {
     /**
      * Generates: Could not find '{$what}' with identifier '{$identifier}'
