@@ -30,6 +30,19 @@ abstract class LocationGateway
     const NODE_ASSIGNMENT_OP_CODE_SET = 9;
 
     /**
+     * Generate remote ID
+     *
+     * Copy of the implementation in lib/ezutils/classes/ezremoteidutility.php
+     *
+     * @param string $type
+     * @return string
+     */
+    public static function getRemoteId( $type = 'node' )
+    {
+        return md5( uniqid( $type, true ) );
+    }
+
+    /**
      * Returns an array with basic node data
      *
      * We might want to cache this, since this method is used by about every

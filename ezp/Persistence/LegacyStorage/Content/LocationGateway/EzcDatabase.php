@@ -315,21 +315,21 @@ class EzcDatabase extends LocationGateway
         $query
             ->insertInto( 'ezcontentobject_tree' )
             ->set( 'contentobject_id', $query->bindValue( $content->id ) )
-            ->set( 'contentobject_is_published', $query->bindValue( null ) ) // @TODO: What to insert?
-            ->set( 'contentobject_version', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'contentobject_is_published', $query->bindValue( 0 ) ) // Will be set to 1, once the contentt object has been published
+            ->set( 'contentobject_version', $query->bindValue( null ) ) // @TODO: Get latest published from content object
             ->set( 'depth', $query->bindValue( $parentNode['depth'] + 1 ) )
             ->set( 'is_hidden', $query->bindValue( 0 ) )
             ->set( 'is_invisible', $query->bindValue( 0 ) )
-            ->set( 'main_node_id', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'main_node_id', $query->bindValue( 0 ) ) // 0 at the beginning, set to something else later
             ->set( 'modified_subnode', $query->bindValue( time() ) )
             ->set( 'node_id', $query->bindValue( null ) ) // Auto increment
             ->set( 'parent_node_id', $query->bindValue( $parentNode['node_id'] ) )
-            ->set( 'path_identification_string', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'path_identification_string', $query->bindValue( null ) ) // Set later by the publishing operation
             ->set( 'path_string', $query->bindValue( 'dummy' ) ) // Set later
             ->set( 'priority', $query->bindValue( 0 ) )
-            ->set( 'remote_id', $query->bindValue( '??' ) ) // @TODO: What to insert?
-            ->set( 'sort_field', $query->bindValue( null ) ) // @TODO: What to insert?
-            ->set( 'sort_order', $query->bindValue( null ) ); // @TODO: What to insert?
+            ->set( 'remote_id', $query->bindValue( self::getRemoteId() ) )
+            ->set( 'sort_field', $query->bindValue( null ) ) // @TODO: Get from content object / type
+            ->set( 'sort_order', $query->bindValue( null ) ); // @TODO: Get from content object / type
         $query->prepare()->execute();
 
         $newNodeId = $this->handler->lastInsertId();
@@ -344,16 +344,16 @@ class EzcDatabase extends LocationGateway
         $query
             ->insertInto( 'eznode_assignment' )
             ->set( 'contentobject_id', $query->bindValue( $content->id ) )
-            ->set( 'contentobject_version', $query->bindValue( null ) ) // @TODO: What to insert?
-            ->set( 'from_node_id', $query->bindValue( null ) ) // @TODO: What to insert?
+            ->set( 'contentobject_version', $query->bindValue( null ) ) // @TODO: Get latest published from content object
+            ->set( 'from_node_id', $query->bindValue( 0 ) ) // unused field
             ->set( 'id', $query->bindValue( null ) ) // auto increment
-            ->set( 'is_main', $query->bindValue( 0 ) ) // @TODO: What to insert?
+            ->set( 'is_main', $query->bindValue( 0 ) ) // Changed by the business layer, later
             ->set( 'op_code', $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP ) )
             ->set( 'parent_node', $query->bindValue( $parentNode['node_id'] ) )
             ->set( 'parent_remote_id', $query->bindValue( '' ) )
             ->set( 'remote_id', $query->bindValue( 0 ) )
-            ->set( 'sort_field', $query->bindValue( null ) ) // @TODO: What to insert?
-            ->set( 'sort_order', $query->bindValue( null ) ); // @TODO: What to insert?
+            ->set( 'sort_field', $query->bindValue( 2 ) ) // eZContentObjectTreeNode::SORT_FIELD_PUBLISHED
+            ->set( 'sort_order', $query->bindValue( 0 ) ); // eZContentObjectTreeNode::SORT_ORDER_DESC
         $query->prepare()->execute();
     }
 

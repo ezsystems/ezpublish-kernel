@@ -259,27 +259,6 @@ class EzpDatabaseTest extends TestCase
         );
     }
 
-    public function testSwapLocationsUpdatePathIdentificationString()
-    {
-        $this->markTestIncomplete( 'Proper way of setting path identification strings yet unknown.' );
-
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
-        $handler = $this->getLocationGateway();
-        $handler->swap( 70, 78 );
-
-        $query = $this->handler->createSelectQuery();
-        $this->assertQueryResult(
-            array(
-                array( 70, 'products/web_publishing' ),
-                array( 78, 'solutions/software' ),
-            ),
-            $query
-                ->select( 'node_id', 'path_identification_string' )
-                ->from( 'ezcontentobject_tree' )
-                ->where( $query->expr->in( 'node_id', array( 70, 78 ) ) )
-        );
-    }
-
     public function testUpdatePriority()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
@@ -332,16 +311,17 @@ class EzpDatabaseTest extends TestCase
     {
         return array(
             array( 'contentobject_id', 68 ),
-            array( 'contentobject_is_published', null ), // 1
+            array( 'contentobject_is_published', 0 ),
             array( 'contentobject_version', null ), // 1
             array( 'depth', 3 ),
             array( 'is_hidden', 0 ),
             array( 'is_invisible', 0 ),
-            array( 'main_node_id', null ), // 70
+            array( 'main_node_id', 0 ),
             array( 'parent_node_id', 77 ),
-            array( 'path_identification_string', null ), // solutions/software
+            array( 'path_identification_string', '' ),
             array( 'priority', 0 ),
-            array( 'remote_id', null ), // 34d37f301508408dfe6b68f1e1d238ad
+            // The remote ID is random, and thus not really testable
+            // array( 'remote_id', '' ),
             array( 'sort_field', null ), // 1
             array( 'sort_order', null ), // 1
         );
@@ -383,15 +363,15 @@ class EzpDatabaseTest extends TestCase
     {
         return array(
             array( 'contentobject_version', null ), // 1
-            array( 'from_node_id', null ), // 0
+            array( 'from_node_id', 0 ),
             array( 'id', 214 ),
-            array( 'is_main', null ), // 0
+            array( 'is_main', 0 ),
             array( 'op_code', 2 ),
             array( 'parent_node', 77 ),
-            array( 'parent_remote_id', null ), // ''
-            array( 'remote_id', null ), // 0
-            array( 'sort_field', null ), // 2
-            array( 'sort_order', null ), // 0
+            array( 'parent_remote_id', '' ),
+            array( 'remote_id', 0 ),
+            array( 'sort_field', 2 ),
+            array( 'sort_order', 0 ),
         );
     }
 
