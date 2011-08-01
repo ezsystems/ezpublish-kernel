@@ -16,4 +16,11 @@
 		  </exclude>
       </whitelist>
     </filter>
+	<!-- To run tests against a specific database use the following.
+		 By default, tests are run against SQLite in-memory. -->
+	<!--
+	<php>
+		<env name="DATABASE" value="mysql://root:root@localhost/ezp-test"/>
+	</php>
+	-->
 </phpunit>
