@@ -47,7 +47,7 @@ class Repository
      *
      * @param ezp\Persistence\Repository\Handler $handler
      */
-    public function __construct( Handler $handler/*, ezp\User\User $user*/ )
+    public function __construct( Handler $handler/*, ezp\User $user*/ )
     {
         $this->handler = $handler;
         //$this->user = $user;

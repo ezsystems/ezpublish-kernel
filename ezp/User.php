@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\User;
+namespace ezp;
 use ezp\Base\AbstractModel;
 
 class User extends AbstractModel
