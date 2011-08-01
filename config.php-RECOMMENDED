@@ -4,6 +4,7 @@
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  *
  * @doc Copy this file to config.php to get started, for more info see doc/readme.txt
  */
@@ -54,8 +55,8 @@ $settings = array(
             'use-cache' => false,
             // List of parser classes where key is file suffix
             'parsers' => array(
-                '.ini'            => 'ezp\\Base\\Configuration\\IniParser',
-                '.ini.append.php' => 'ezp\\Base\\Configuration\\IniParser',
+                '.ini' => 'ezp\\Base\\Configuration\\Parser\\Ini',
+                '.ini.append.php' => 'ezp\\Base\\Configuration\\Parser\\Ini',
             ),
         ),
     )

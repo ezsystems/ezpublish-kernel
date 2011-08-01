@@ -9,7 +9,7 @@
  * @uses ezcConfiguration As fallback if parse_ini_string() fails
  */
 
-namespace ezp\Base\Configuration;
+namespace ezp\Base\Configuration\Parser;
 use ezp\Base\Configuration,
     ezp\Base\Interfaces\ConfigurationParser,
     ezcConfiguration,
@@ -20,7 +20,7 @@ use ezp\Base\Configuration,
  * Configuration Ini Parser / writer
  *
  */
-class IniParser implements ConfigurationParser
+class Ini implements ConfigurationParser
 {
     /**
      * Constant string used as a temporary true variable during ini parsing to avoid

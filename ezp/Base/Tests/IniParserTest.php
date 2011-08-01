@@ -8,11 +8,11 @@
  */
 
 namespace ezp\Base\Tests;
-use ezp\Base\Configuration\IniParser,
+use ezp\Base\Configuration\Parser\Ini,
     ezp\Base\Configuration;
 
 /**
- * Test case for IniParser class
+ * Test case for Parser\Ini class
  *
  */
 class IniParserTest extends \PHPUnit_Framework_TestCase
@@ -21,8 +21,8 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
     public function __construct()
     {
         parent::__construct();
-        $this->setName( "IniParser class tests" );
-        $this->parser = new IniParser( null );
+        $this->setName( "Parser\Ini class tests" );
+        $this->parser = new Ini( null );
     }
 
     /**
