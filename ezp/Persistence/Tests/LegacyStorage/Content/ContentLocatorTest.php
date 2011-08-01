@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Tests\LegacyStorage\Content;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\LegacyStorage\Content,
+    ezp\Persistence\Content\Criterion,
     ezp\Persistence;
 
 /**
@@ -48,8 +49,37 @@ class ContentLocatorTest extends TestCase
         }
     }
 
-    public function testStub()
+    protected function getContentLocator()
     {
-        $this->markTestIncomplete( "@TODO: Add tests." );
+        return new Content\ContentLocator(
+            new Content\ContentLocatorGateway\EzcDatabase(
+                $this->getDatabaseHandler()
+            )
+        );
+    }
+
+    public function testContentIdFilter()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\ContentId(
+                null,
+                Criterion\Operator::IN,
+                array( 1, 2, 3 )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 1, 2, 3 ),
+            array_map(
+                function ( $content )
+                {
+                    return $content->id;
+                },
+                $result
+            )
+        );
     }
 }
