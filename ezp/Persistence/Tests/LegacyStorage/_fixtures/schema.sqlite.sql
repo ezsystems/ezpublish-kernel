@@ -104,12 +104,13 @@ CREATE TABLE 'ezcontentobject_attribute' (
 	'data_int' integer,
 	'data_text' clob,
 	'data_type_string' text(50),
-	'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+	'id' integer NOT NULL DEFAULT 0,
 	'language_code' text(20) NOT NULL,
 	'language_id' integer NOT NULL DEFAULT 0,
 	'sort_key_int' integer NOT NULL DEFAULT 0,
 	'sort_key_string' text(255) NOT NULL,
-	'version' integer NOT NULL DEFAULT 0
+	'version' integer NOT NULL DEFAULT 0,
+    PRIMARY KEY ( id, version )
 );
 CREATE TABLE 'ezcontentobject_link' (
 	'contentclassattribute_id' integer NOT NULL DEFAULT 0,

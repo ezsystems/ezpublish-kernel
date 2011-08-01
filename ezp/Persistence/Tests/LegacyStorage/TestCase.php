@@ -98,6 +98,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
         {
             $handler->exec( $query );
         }
+
+        // We need this trigger for SQLite, because it does not support a multi
+        // column key with one of them being set to auto-increment.
+        $handler->exec( '
+            CREATE TRIGGER my_ezcontentobject_attribute_increment
+            AFTER INSERT
+            ON ezcontentobject_attribute
+            BEGIN
+                UPDATE ezcontentobject_attribute SET id = (SELECT MAX(id) FROM ezcontentobject_attribute) + 1  WHERE rowid = new.rowid AND id = 0;
+            END;' );
     }
 
     /**
@@ -135,17 +145,25 @@ class TestCase extends \PHPUnit_Framework_TestCase
         {
             foreach ( $rows as $row )
             {
-                $q = $db->createInsertQuery();
-                $q->insertInto( $db->quoteIdentifier( $table ) );
-                foreach ( $row as $col => $val )
+                try
                 {
-                    $q->set(
-                        $db->quoteIdentifier( $col ),
-                        $q->bindValue( $val )
-                    );
+                    $q = $db->createInsertQuery();
+                    $q->insertInto( $db->quoteIdentifier( $table ) );
+                    foreach ( $row as $col => $val )
+                    {
+                        $q->set(
+                            $db->quoteIdentifier( $col ),
+                            $q->bindValue( $val )
+                        );
+                    }
+                    $stmt = $q->prepare();
+                    $stmt->execute();
                 }
-                $stmt = $q->prepare();
-                $stmt->execute();
+                catch ( \Exception $e )
+                {
+                    echo "$table ( ", implode( ', ', $row ), " )\n";
+                    throw $e;
+                }
             }
         }
     }
