@@ -8,10 +8,10 @@
  */
 
 namespace ezp\Base\Tests;
-use ezp\Base\ReadOnlyCollection;
+use ezp\Base\Collection\ReadOnly;
 
 /**
- * Test case for ReadOnlyCollection class
+ * Test case for Collection\ReadOnly class
  *
  */
 class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
@@ -25,7 +25,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     {
         parent::__construct();
         $this->setName( "ReadOnlyCollectionTest class tests" );
-        $this->collection = new ReadOnlyCollection( array( 1, 55, 'collection', 'test' ) );
+        $this->collection = new ReadOnly( array( 1, 55, 'collection', 'test' ) );
     }
 
     /**
@@ -33,7 +33,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
      */
     public function testFromArray()
     {
-        $this->assertEquals( 'ezp\\Base\\ReadOnlyCollection', get_class( $this->collection ) );
+        $this->assertInstanceOf( 'ezp\\Base\\Collection\\ReadOnly', $this->collection );
     }
     /**
      * Test offsetExists

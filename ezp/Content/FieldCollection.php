@@ -11,8 +11,8 @@ namespace ezp\Content;
 use ezp\Base\Configuration,
     ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\MissingClass,
-    ezp\Base\Exception\ReadOnly,
-    ezp\Base\ReadOnlyCollection,
+    ezp\Base\Exception\ReadOnly as ReadOnlyException,
+    ezp\Base\Collection\ReadOnly,
     RuntimeException;
 
 /**
@@ -21,7 +21,7 @@ use ezp\Base\Configuration,
  * Readonly class that takes (Content) Version as input.
  *
  */
-class FieldCollection extends ReadOnlyCollection
+class FieldCollection extends ReadOnly
 {
     /**
      * Constructor, sets up FieldCollection based on contentType fields
@@ -55,14 +55,14 @@ class FieldCollection extends ReadOnlyCollection
      * Set value on a offset in collection, only allowed on existing items where value is forwarded to ->type->value
      *
      * @internal
-     * @throws ReadOnly When trying to set new values / append
+     * @throws ezp\Base\Exception\ReadOnly When trying to set new values / append
      * @param string|int $offset
      * @param mixed $value
      */
     public function offsetSet( $offset, $value )
     {
         if ( $offset === null || !$this->offsetExists( $offset ) )
-            throw new ReadOnly( "FieldCollection" );
+            throw new ReadOnlyException( "FieldCollection" );
         $this->offsetGet( $offset )->value = $value;
     }
 }

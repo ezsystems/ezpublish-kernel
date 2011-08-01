@@ -7,52 +7,52 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base;
+namespace ezp\Base\Collection;
 use ezp\Base\Collection,
-    ezp\Base\Exception\ReadOnly,
+    ezp\Base\Exception\ReadOnly as ReadOnlyException,
     ArrayObject;
 
 /**
  * Read Only Collection class
  *
  */
-class ReadOnlyCollection extends ArrayObject implements Collection
+class ReadOnly extends ArrayObject implements Collection
 {
     /**
      * Overloads offsetSet() to do exception about being read only.
      *
      * @internal
-     * @throws ReadOnly
+     * @throws ezp\Base\Exception\ReadOnly
      * @param string|int $offset
      * @param mixed $value
      */
     public function offsetSet( $offset, $value )
     {
-        throw new ReadOnly( 'Collection' );
+        throw new ReadOnlyException( 'Collection' );
     }
 
     /**
      * Overloads offsetUnset() to do exception about being read only.
      *
      * @internal
-     * @throws ReadOnly
+     * @throws ezp\Base\Exception\ReadOnly
      * @param string|int $offset
      */
     public function offsetUnset( $offset )
     {
-        throw new ReadOnly( 'Collection' );
+        throw new ReadOnlyException( 'Collection' );
     }
 
     /**
      * Overloads exchangeArray() to do exception about being read only.
      *
-     * @throws ReadOnly
+     * @throws ezp\Base\Exception\ReadOnly
      * @param array $input
      * @return array
      */
     public function exchangeArray( $input )
     {
-        throw new ReadOnly( 'Collection' );
+        throw new ReadOnlyException( 'Collection' );
     }
 }
 
