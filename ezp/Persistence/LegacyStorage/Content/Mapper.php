@@ -39,7 +39,7 @@ class Mapper
     /**
      * Creates a Content from the given $struct
      *
-     * @param CreateStruct $struct
+     * @param ezp\Persistence\Content\CreateStruct $struct
      * @return Content
      */
     public function createContentFromCreateStruct( CreateStruct $struct )

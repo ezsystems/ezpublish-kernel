@@ -12,11 +12,11 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\LegacyStorage\Content\Type\Mapper,
 
     ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\ContentTypeCreateStruct,
+    ezp\Persistence\Content\Type\CreateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
 
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\GroupCreateStruct;
+    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 
 /**
  * Test case for Mapper.
@@ -60,7 +60,7 @@ class MapperTest extends TestCase
     /**
      * Returns a GroupCreateStruct fixture.
      *
-     * @return GroupCreateStruct
+     * @return ezp\Persistence\Content\Type\Group\CreateStruct
      */
     protected function getGroupCreateStructFixture()
     {
@@ -105,14 +105,14 @@ class MapperTest extends TestCase
     }
 
     /**
-     * Returns a ContentTypeCreateStruct fixture.
+     * Returns a CreateStruct fixture.
      *
-     * @return ContentTypeCreateStruct
+     * @return ezp\Persistence\Content\Type\CreateStruct
      */
     protected function getContenTypeCreateStructFixture()
     {
         // Taken from example DB
-        $struct = new ContentTypeCreateStruct();
+        $struct = new CreateStruct();
         $struct->name = array(
             'always-available' => 'eng-US',
             'eng-US' => 'Folder',

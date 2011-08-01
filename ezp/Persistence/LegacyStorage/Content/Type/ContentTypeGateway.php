@@ -10,9 +10,9 @@
 namespace ezp\Persistence\LegacyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
+    ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\GroupUpdateStruct;
+    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 
 /**
  * Base class for content type gateways.
@@ -29,7 +29,7 @@ abstract class ContentTypeGateway
     /**
      * Updates a group with data in $group.
      *
-     * @param GroupUpdateStruct $group
+     * @param ezp\Persistence\Content\Type\Group\UpdateStruct $group
      * @return void
      */
     abstract public function updateGroup( GroupUpdateStruct $group );
@@ -97,10 +97,10 @@ abstract class ContentTypeGateway
      *
      * @param mixed $type
      * @param int $version
-     * @param ContentTypeUpdateStruct $updateStruct
+     * @param ezp\Persistence\Content\Type\UpdateStruct $updateStruct
      * @return void
      */
-    abstract public function updateType( $typeId, $version, ContentTypeUpdateStruct $updateStruct );
+    abstract public function updateType( $typeId, $version, UpdateStruct $updateStruct );
 
     /**
      * Loads an array with data about $typeId in $version.

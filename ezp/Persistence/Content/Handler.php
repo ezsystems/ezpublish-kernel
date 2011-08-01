@@ -34,7 +34,7 @@ interface Handler
      *
      * Will contain always a complete list of fields.
      *
-     * @param CreateStruct $content Content creation struct.
+     * @param ezp\Persistence\Content\CreateStruct $content Content creation struct.
      * @return \ezp\Persistence\Content Content value object
      */
     public function create( CreateStruct $content );
@@ -123,7 +123,7 @@ interface Handler
     /**
      * Updates a content object entity with data and identifier $content
      *
-     * @param UpdateStruct $content
+     * @param ezp\Persistence\Content\UpdateStruct $content
      * @return \ezp\Persistence\Content
      */
     public function update( UpdateStruct $content );

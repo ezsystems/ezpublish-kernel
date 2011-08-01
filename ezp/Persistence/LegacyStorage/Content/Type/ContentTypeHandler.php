@@ -10,12 +10,12 @@
 namespace ezp\Persistence\LegacyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\Handler as BaseContentTypeHandler,
-    ezp\Persistence\Content\Type\ContentTypeCreateStruct,
-    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
+    ezp\Persistence\Content\Type\CreateStruct,
+    ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\GroupCreateStruct,
-    ezp\Persistence\Content\Type\Group\GroupUpdateStruct;
+    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
+    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 
 /**
  */
@@ -48,7 +48,7 @@ class ContentTypeHandler implements BaseContentTypeHandler
     }
 
     /**
-     * @param GroupCreateStruct $createStruct
+     * @param ezp\Persistence\Content\Type\Group\CreateStruct $createStruct
      * @return Group
      */
     public function createGroup( GroupCreateStruct $createStruct )
@@ -65,7 +65,7 @@ class ContentTypeHandler implements BaseContentTypeHandler
     }
 
     /**
-     * @param GroupUpdateStruct $group
+     * @param ezp\Persistence\Content\Type\Group\UpdateStruct $group
      * @return bool
      * @todo Should we return the Group here? Would require an additional
      *       SELECT, though.
@@ -131,11 +131,11 @@ class ContentTypeHandler implements BaseContentTypeHandler
     }
 
     /**
-     * @param ContentTypeCreateStruct $contentType
+     * @param ezp\Persistence\Content\Type\CreateStruct $contentType
      * @return Type
      * @todo Maintain contentclass_name
      */
-    public function create( ContentTypeCreateStruct $createStruct )
+    public function create( CreateStruct $createStruct )
     {
         $createStruct = clone $createStruct;
         $contentType = $this->mapper->createTypeFromCreateStruct(
@@ -167,11 +167,11 @@ class ContentTypeHandler implements BaseContentTypeHandler
     /**
      * @param mixed $typeId
      * @param int $version
-     * @param Type\ContentTypeUpdateStruct $contentType
+     * @param ezp\Persistence\Content\Type\UpdateStruct $contentType
      * @return Type
      * @todo Maintain contentclass_name
      */
-    public function update( $typeId, $version, ContentTypeUpdateStruct $contentType )
+    public function update( $typeId, $version, UpdateStruct $contentType )
     {
         $this->contentTypeGateway->updateType(
             $typeId, $version, $contentType

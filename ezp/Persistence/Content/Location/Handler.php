@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Persistence\Content\Location;
-use ezp\Persistence\Content\LocationCreateStruct,
-    ezp\Persistence\Content\Location;
+use ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Location\CreateStruct;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
@@ -91,7 +91,7 @@ interface Handler
     /**
      * Creates a new location rooted at $parentId.
      *
-     * @param LocationCreateStruct $location
+     * @param ezp\Persistence\Content\Location\CreateStruct $location
      * @param mixed $parentId
      * @return \ezp\Persistence\Content\Location
      */

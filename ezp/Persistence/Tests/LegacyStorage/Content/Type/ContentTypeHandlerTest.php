@@ -9,13 +9,13 @@
 
 namespace ezp\Persistence\Tests\LegacyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\ContentTypeCreateStruct,
-    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
+    ezp\Persistence\Content\Type\CreateStruct,
+    ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
 
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\GroupCreateStruct,
-    ezp\Persistence\Content\Type\Group\GroupUpdateStruct,
+    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
+    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
 
     ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler,
     ezp\Persistence\LegacyStorage\Content\Type\Mapper,
@@ -64,7 +64,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'createGroupFromCreateStruct' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\Group\\GroupCreateStruct'
+                    'ezp\\Persistence\\Content\\Type\\Group\\CreateStruct'
                 )
             )
             ->will(
@@ -114,7 +114,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'updateGroup' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\Group\\GroupUpdateStruct'
+                    'ezp\\Persistence\\Content\\Type\\Group\\UpdateStruct'
                 )
             );
 
@@ -249,7 +249,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 23 ),
                 $this->equalTo( 1 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\ContentTypeUpdateStruct'
+                    'ezp\\Persistence\\Content\\Type\\UpdateStruct'
                 )
             );
 
@@ -267,7 +267,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->will( $this->returnValue( new Type() ) );
 
         $res = $handlerMock->update(
-            23, 1, new ContentTypeUpdateStruct()
+            23, 1, new UpdateStruct()
         );
 
         $this->assertInstanceOf(
@@ -321,7 +321,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                     'ezp\\Persistence\\Content\\Type'
                 )
             )->will(
-                $this->returnValue( new ContentTypeCreateStruct() )
+                $this->returnValue( new CreateStruct() )
             );
 
         $handlerMock = $this->getMock(
@@ -387,7 +387,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                     'ezp\\Persistence\\Content\\Type'
                 )
             )->will(
-                $this->returnValue( new ContentTypeCreateStruct() )
+                $this->returnValue( new CreateStruct() )
             );
 
         $handlerMock = $this->getMock(
@@ -580,13 +580,13 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns a ContentTypeCreateStruct fixture.
+     * Returns a CreateStruct fixture.
      *
-     * @return ContentTypeCreateStruct
+     * @return ezp\Persistence\Content\Type\CreateStruct
      */
     protected function getContenTypeCreateStructFixture()
     {
-        $struct = new ContentTypeCreateStruct();
+        $struct = new CreateStruct();
         $struct->version = 1;
         $struct->contentTypeGroupIds = array(
             42,

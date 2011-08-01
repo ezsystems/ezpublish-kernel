@@ -9,11 +9,11 @@
 
 namespace ezp\Persistence\Content\Type;
 use ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\ContentTypeCreateStruct,
-    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
+    ezp\Persistence\Content\Type\CreateStruct,
+    ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\Group\GroupCreateStruct,
-    ezp\Persistence\Content\Type\Group\GroupUpdateStruct,
+    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
+    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
     ezp\Persistence\Content\Type\Group;
 
 /**
@@ -21,13 +21,13 @@ use ezp\Persistence\Content\Type,
 interface Handler
 {
     /**
-     * @param GroupCreateStruct $group
+     * @param ezp\Persistence\Content\Type\Group\CreateStruct $group
      * @return Group
      */
     public function createGroup( GroupCreateStruct $group );
 
     /**
-     * @param Group $group
+     * @param ezp\Persistence\Content\Type\Group\UpdateStruct $group
      */
     public function updateGroup( GroupUpdateStruct $group );
 
@@ -57,17 +57,17 @@ interface Handler
     public function load( $contentTypeId, $version = 1 );
 
     /**
-     * @param ContentTypeCreateStruct $contentType
+     * @param ezp\Persistence\Content\Type\CreateStruct $contentType
      * @return Type
      */
-    public function create( ContentTypeCreateStruct $contentType );
+    public function create( CreateStruct $contentType );
 
     /**
      * @param mixed $typeId
      * @param int $version
-     * @param Type\ContentTypeUpdateStruct $contentType
+     * @param ezp\Persistence\Content\Type\UpdateStruct $contentType
      */
-    public function update( $typeId, $version, ContentTypeUpdateStruct $contentType );
+    public function update( $typeId, $version, UpdateStruct $contentType );
 
     /**
      * @param mixed $contentTypeId

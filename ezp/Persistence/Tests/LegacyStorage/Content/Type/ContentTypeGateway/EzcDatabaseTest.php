@@ -14,9 +14,9 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
 
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
+    ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\GroupUpdateStruct;
+    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 
 /**
  * Test case for ContentTypeGateway.
@@ -160,7 +160,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Returns a Group update struct fixture.
      *
-     * @return GroupUpdateStruct
+     * @return ezp\Persistence\Content\Type\Group\UpdateStruct
      */
     protected function getGroupUpdateStructFixture()
     {
@@ -542,13 +542,13 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
-     * Returns a ContentTypeUpdateStruct fixture.
+     * Returns a ezp\Persistence\Content\Type\UpdateStruct fixture.
      *
-     * @return ContentTypeUpdateStruct
+     * @return ezp\Persistence\Content\Type\UpdateStruct
      */
     protected function getTypeUpdateFixture()
     {
-        $struct = new ContentTypeUpdateStruct();
+        $struct = new UpdateStruct();
 
         $struct->name = array(
             'always-available' => 'eng-US',

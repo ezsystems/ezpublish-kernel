@@ -13,7 +13,7 @@ use ezp\Persistence\ValueObject;
 /**
  *
  */
-class ContentTypeCreateStruct extends ValueObject
+class UpdateStruct extends ValueObject
 {
     /**
      * Human readable name of the content type
@@ -26,13 +26,6 @@ class ContentTypeCreateStruct extends ValueObject
      * @var string[]
      */
     public $name;
-
-    /**
-     * Version (state) to create.
-     *
-     * @var int
-     */
-    public $version;
 
     /**
      * Human readable description of the content type
@@ -54,25 +47,11 @@ class ContentTypeCreateStruct extends ValueObject
     public $identifier;
 
     /**
-     * Creation date (timestamp)
-     *
-     * @var int
-     */
-    public $created;
-
-    /**
      * Modification date (timestamp)
      *
      * @var int
      */
     public $modified;
-
-    /**
-     * Creator user id
-     *
-     * @var mixed
-     */
-    public $creatorId;
 
     /**
      * Modifier user id
@@ -116,32 +95,5 @@ class ContentTypeCreateStruct extends ValueObject
      * @var mixed
      */
     public $initialLanguageId;
-
-    /**
-     * Contains an array of type group IDs
-     *
-     * @var mixed[]
-     */
-    public $contentTypeGroupIds = array();
-
-    /**
-     * Content fields in this type
-     *
-     * @var Type\FieldDefinition[]
-     */
-    public $fieldDefinitions = array();
-
-    /**
-     * Performs a deep cloning.
-     *
-     * @return void
-     */
-    public function __clone()
-    {
-        foreach ( $this->fieldDefinitions as $id => $fieldDef )
-        {
-            $this->fieldDefinitions[$id] = clone $fieldDef;
-        }
-    }
 }
 ?>

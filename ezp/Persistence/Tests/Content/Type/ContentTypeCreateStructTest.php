@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\Content\Type\ContentTypeCreateStructTest class
+ * File contains: ezp\Persistence\Tests\Content\Type\CreateStructTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,21 +8,21 @@
  */
 
 namespace ezp\Persistence\Tests\Content\Type;
-use ezp\Persistence\Content\Type\ContentTypeCreateStruct,
+use ezp\Persistence\Content\Type\CreateStruct,
     ezp\Persistence\Content\Type\FieldDefinition;
 
 /**
- * Test case for ContentTypeCreateStruct.
+ * Test case for CreateStruct.
  *
  */
-class ContentTypeCreateStructTest extends \PHPUnit_Framework_TestCase
+class CreateStructTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @return void
      */
     public function testClone()
     {
-        $cStruct = new ContentTypeCreateStruct();
+        $cStruct = new CreateStruct();
 
         $cStruct->identifier = "foo";
         $cStruct->fieldDefinitions = array(

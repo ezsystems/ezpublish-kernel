@@ -179,7 +179,7 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a CreateStruct fixture.
      *
-     * @return CreateStruct
+     * @return ezp\Persistence\Content\CreateStruct
      */
     public function getCreateStructFixture()
     {

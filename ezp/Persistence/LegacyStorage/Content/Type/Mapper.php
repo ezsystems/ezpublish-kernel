@@ -9,11 +9,11 @@
 
 namespace ezp\Persistence\LegacyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\ContentTypeCreateStruct,
-    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
+    ezp\Persistence\Content\Type\CreateStruct,
+    ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\GroupCreateStruct;
+    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 
 /**
  * Mapper for ContentTypeHandler.
@@ -25,7 +25,7 @@ class Mapper
     /**
      * Creates a Group from its create struct.
      *
-     * @param GroupCreateStruct $struct
+     * @param ezp\Persistence\Content\Type\Group\CreateStruct $struct
      * @return Group
      * @todo $description is not supported by database, yet
      */
@@ -145,10 +145,10 @@ class Mapper
      * Maps properties from $struct to $type.
      *
      * @param Type $type
-     * @param ContentTypeCreateStruct $struct
+     * @param ezp\Persistence\Content\Type\CreateStruct $struct
      * @return void
      */
-    public function createTypeFromCreateStruct( ContentTypeCreateStruct $createStruct )
+    public function createTypeFromCreateStruct( CreateStruct $createStruct )
     {
         $type = new Type();
 
@@ -175,11 +175,11 @@ class Mapper
      * Creates a create struct from an existing $type.
      *
      * @param Type $type
-     * @return ContentTypeCreateStruct
+     * @return ezp\Persistence\Content\Type\CreateStruct
      */
     public function createCreateStructFromType( Type $type )
     {
-        $createStruct = new ContentTypeCreateStruct();
+        $createStruct = new CreateStruct();
 
         $createStruct->name = $type->name;
         $createStruct->version = $type->version;

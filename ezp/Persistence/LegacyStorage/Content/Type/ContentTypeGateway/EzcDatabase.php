@@ -11,9 +11,9 @@ namespace ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
 use ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway,
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
+    ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\GroupUpdateStruct;
+    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 
 /**
  * Zeta Component Database based content type gateway.
@@ -131,7 +131,7 @@ class EzcDatabase extends ContentTypeGateway
     /**
      * Updates a group with data in $group.
      *
-     * @param GroupUpdateStruct $group
+     * @param ezp\Persistence\Content\Type\Group\UpdateStruct $group
      * @return void
      */
     public function updateGroup( GroupUpdateStruct $group )
@@ -469,10 +469,10 @@ class EzcDatabase extends ContentTypeGateway
      *
      * @param mixed $typeId
      * @param int $version
-     * @param ContentTypeUpdateStruct $updateStruct
+     * @param ezp\Persistence\Content\Type\UpdateStruct $updateStruct
      * @return void
      */
-    public function updateType( $typeId, $version, ContentTypeUpdateStruct $updateStruct )
+    public function updateType( $typeId, $version, UpdateStruct $updateStruct )
     {
         $q = $this->dbHandler->createUpdateQuery();
         $q->update( $this->dbHandler->quoteIdentifier( 'ezcontentclass' ) );
