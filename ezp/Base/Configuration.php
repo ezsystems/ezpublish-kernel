@@ -64,7 +64,7 @@ use ezp\Base\Exception\BadConfiguration,
  *
  * @uses \ezcPhpGenerator When generating cache files.
  */
-class Configuration extends AbstractOverride
+class Configuration extends Override
 {
     /**
      * Constant path to directory for configuration cache

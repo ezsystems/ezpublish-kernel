@@ -15,7 +15,7 @@
 namespace ezp\Base;
 use ezp\Base\Exception\InvalidArgumentValue;
 
-abstract class AbstractOverride
+abstract class Override
 {
     /**
      * The global path array, scoped in the order they should be parsed
