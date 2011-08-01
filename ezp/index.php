@@ -3,7 +3,7 @@
  * ez Publish - Public API Prototype
  */
 namespace ezp\Content;
-use ezp\Base\ServiceContainer,
+use ezp\Base\Service\Container,
     ezp\Base\Configuration,
     ezp\Base\Autoloader,
     ezp\Base\Locale,

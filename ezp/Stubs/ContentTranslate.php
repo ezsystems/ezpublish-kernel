@@ -1,8 +1,8 @@
 <?php
 
-use ezp\Base\ServiceContainer;
+use ezp\Base\Service\Container;
 
-$sc = new ServiceContainer();
+$sc = new Container();
 $contentService = $sc->getRepository()->getContentService();
 $content = $contentService->load( 2 );
 

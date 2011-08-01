@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the ezp\Content\Services\ContentType class.
+ * File containing the ezp\Content\Type\Service class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Services;
-use ezp\Base\Service,
+namespace ezp\Content\Type;
+use ezp\Base\Service as BaseService,
     ezp\Base\Exception\NotFound;
 
 /**
  * Content Service, extends repository with content specific operations
  *
  */
-class ContentType extends Service
+class Service extends BaseService
 {
     /**
      * Get an Content Type object by id

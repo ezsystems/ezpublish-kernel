@@ -77,11 +77,11 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return \ezp\Content\Services\Content
+     * @return ezp\Content\Service
      */
     public function getContentService()
     {
-        return $this->service( 'ezp\\Content\\Services\\Content' );
+        return $this->service( 'ezp\\Content\\Service' );
     }
 
     /**
@@ -90,11 +90,11 @@ class Repository
      * Get service object to perform several operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
-     * @return \ezp\Content\Services\ContentType
+     * @return ezp\Content\Type\Service
      */
     public function getContentTypeService()
     {
-        return $this->service( 'ezp\\Content\\Services\\ContentType' );
+        return $this->service( 'ezp\\Content\\Type\\Service' );
     }
 
     /**
@@ -103,22 +103,22 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return \ezp\Content\Services\Location
+     * @return ezp\Content\Location\Service
      */
     public function getLocationService()
     {
-        return $this->service( 'ezp\\Content\\Services\\Location' );
+        return $this->service( 'ezp\\Content\\Location\\Service' );
     }
 
     /**
      * Get User Service
      *
      *
-     * @return \ezp\Content\Services\Section
+     * @return ezp\Content\Section\Service
      */
     public function getSectionService()
     {
-        return $this->service( 'ezp\\Content\\Services\\Section' );
+        return $this->service( 'ezp\\Content\\Section\\Service' );
     }
 
     /**
@@ -127,11 +127,11 @@ class Repository
      * Get service object to perform several operations on User objects and it's aggregate members.
      * ( UserGroups, UserRole, UserRolePolicy & UserRolePolicyLimitation )
      *
-     * @return \ezp\User\UserService
+     * @return ezp\User\Service
      */
     public function getUserService()
     {
-        return $this->service( 'ezp\\User\\UserService' );
+        return $this->service( 'ezp\\User\\Service' );
     }
 
     /**

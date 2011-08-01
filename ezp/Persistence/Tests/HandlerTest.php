@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\Tests;
-use ezp\Base\ServiceContainer,
+use ezp\Base\Service\Container,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -30,7 +30,7 @@ class HandlerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         // Get in memory RepositoryHandler instance
-        $serviceContainer = new ServiceContainer(
+        $serviceContainer = new Container(
             array(
                 '@repository_handler' => new \ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler()
             )

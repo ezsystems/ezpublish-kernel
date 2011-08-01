@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base;
+namespace ezp\Base\Service;
 use ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\MissingClass,
@@ -45,7 +45,7 @@ use ezp\Base\Exception\BadConfiguration,
  * @todo Add support for factory functions, could simply check for existence of :: or -> for static / instance factories
  * @todo If needed add optional settings that define that service should be created on every call (not singleton)
  */
-class ServiceContainer
+class Container
 {
     /**
      * Holds service objects and variables

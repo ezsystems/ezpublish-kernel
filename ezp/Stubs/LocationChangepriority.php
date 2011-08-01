@@ -1,7 +1,7 @@
 <?php
-use ezp\Base\ServiceContainer;
+use ezp\Base\Service\Container;
 
-$sc = new ServiceContainer();
+$sc = new Container();
 $locationService = $sc->getRepository()->getLocationService();
 
 $locationId = 60;
