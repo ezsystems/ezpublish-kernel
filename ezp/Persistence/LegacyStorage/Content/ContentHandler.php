@@ -12,7 +12,7 @@ namespace ezp\Persistence\LegacyStorage\Content;
 use ezp\Persistence\LegacyStorage\Content\ContentGateway,
     ezp\Persistence\LegacyStorage\Content\Mapper;
 
-use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface,
+use ezp\Persistence\Content\Handler as BaseContentHandler,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Criterion;
@@ -22,7 +22,7 @@ use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface
  *
  * @version //autogentag//
  */
-class ContentHandler implements ContentHandlerInterface
+class ContentHandler implements BaseContentHandler
 {
     /**
      * Content gateway.

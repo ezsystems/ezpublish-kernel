@@ -10,7 +10,7 @@
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\Operator\Specifications,
-    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
+    ezp\Persistence\Content\CriterionInterface;
 
 /**
  * A criterion that matches content based on its own location id

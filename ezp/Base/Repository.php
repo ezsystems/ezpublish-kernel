@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Base;
-use ezp\Persistence\Interfaces\RepositoryHandler,
+use ezp\Persistence\Repository\Handler,
     RuntimeException,
     DomainException;
 
@@ -21,7 +21,7 @@ class Repository
     /**
      * Repository Handler object
      *
-     * @var RepositoryHandler
+     * @var ezp\Persistence\Repository\Handler
      */
     protected $handler;
 
@@ -45,9 +45,9 @@ class Repository
      *
      * Construct repository object with provided storage engine
      *
-     * @param \ezp\Persistence\Interfaces\RepositoryHandler $handler
+     * @param ezp\Persistence\Repository\Handler $handler
      */
-    public function __construct( RepositoryHandler $handler/*, ezp\User\User $user*/ )
+    public function __construct( Handler $handler/*, ezp\User\User $user*/ )
     {
         $this->handler = $handler;
         //$this->user = $user;

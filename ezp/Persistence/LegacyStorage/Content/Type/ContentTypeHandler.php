@@ -9,7 +9,7 @@
 
 namespace ezp\Persistence\LegacyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\Interfaces,
+    ezp\Persistence\Content\Type\Handler as BaseContentTypeHandler,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
     ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
@@ -19,7 +19,7 @@ use ezp\Persistence\Content\Type,
 
 /**
  */
-class ContentTypeHandler implements Interfaces\ContentTypeHandler
+class ContentTypeHandler implements BaseContentTypeHandler
 {
     /**
      * ContentTypeGateway

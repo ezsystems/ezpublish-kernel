@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the ContentTypeHandler class
+ * File containing the Content Type Handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Type\Interfaces;
+namespace ezp\Persistence\Content\Type;
 use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
     ezp\Persistence\Content\Type\ContentTypeUpdateStruct,
@@ -18,7 +18,7 @@ use ezp\Persistence\Content\Type,
 
 /**
  */
-interface ContentTypeHandler
+interface Handler
 {
     /**
      * @param GroupCreateStruct $group

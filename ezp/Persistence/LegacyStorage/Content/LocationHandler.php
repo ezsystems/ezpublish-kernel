@@ -8,12 +8,13 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content;
-use ezp\Persistence\Content\Location;
+use ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Location\Handler as BaseLocationHandler;
 
 /**
  * The LocationHandler interface defines operations on Location elements in the storage engine.
  */
-class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHandler
+class LocationHandler implements BaseLocationHandler
 {
     /**
      * Content handler implementation

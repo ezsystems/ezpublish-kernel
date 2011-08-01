@@ -8,14 +8,14 @@
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
-use ezp\Persistence\Interfaces\RepositoryHandler as RepositoryHandlerInterface,
+use ezp\Persistence\Repository\Handler as BaseRepositoryHandler,
     ezp\Base\Exception\MissingClass;
 
 /**
  * The main handler for in memory Storage Engine
  *
  */
-class RepositoryHandler implements RepositoryHandlerInterface
+class RepositoryHandler implements BaseRepositoryHandler
 {
     /**
      * Instances of handlers
@@ -54,7 +54,7 @@ class RepositoryHandler implements RepositoryHandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Interfaces\ContentHandler
+     * @return ezp\Persistence\Content\Handler
      */
     public function contentHandler()
     {
@@ -62,7 +62,7 @@ class RepositoryHandler implements RepositoryHandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Type\Interfaces\Handler
+     * @return ezp\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler()
     {
@@ -70,7 +70,7 @@ class RepositoryHandler implements RepositoryHandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Interfaces\LocationHandler
+     * @return ezp\Persistence\Content\Location\Handler
      */
     public function locationHandler()
     {
@@ -78,7 +78,7 @@ class RepositoryHandler implements RepositoryHandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\User\Interfaces\UserHandler
+     * @return ezp\Persistence\User\Handler
      */
     public function userHandler()
     {
@@ -86,7 +86,7 @@ class RepositoryHandler implements RepositoryHandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @return ezp\Persistence\Content\Section\Handler
      */
     public function sectionHandler()
     {

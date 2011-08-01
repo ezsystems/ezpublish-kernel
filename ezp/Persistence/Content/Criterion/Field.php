@@ -11,7 +11,7 @@
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\Operator\Specifications,
-    ezp\Persistence\Content\Interfaces\Criterion as CriterionInterface;
+    ezp\Persistence\Content\CriterionInterface;
 
 /**
  */

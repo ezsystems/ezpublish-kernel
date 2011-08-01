@@ -1,18 +1,18 @@
 <?php
 /**
- * File containing the ezp\Persistence\Content\Interfaces\Criterion interface.
+ * File containing the ezp\Persistence\Content\CriterionInterface interface.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Interfaces;
+namespace ezp\Persistence\Content;
 
 /**
  * Base interface for Criterion implementations
  */
-interface Criterion
+interface CriterionInterface
 {
     /**
      * Constructs a Criterion for $target with operator $operator on $value

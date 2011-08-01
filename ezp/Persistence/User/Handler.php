@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the UserHandler interface
+ * File containing the User Handler interface
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\User\Interfaces;
+namespace ezp\Persistence\User;
 use ezp\Persistence\User,
     ezp\Persistence\User\Role;
 
@@ -15,7 +15,7 @@ use ezp\Persistence\User,
  * Storage Engine handler for user module
  *
  */
-interface UserHandler
+interface Handler
 {
 
     /**

@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the UrlAliasHandler interface
+ * File containing the UrlAlias Handler interface
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Interfaces;
+namespace ezp\Persistence\Content\UrlAlias;
 
 /**
- * The UrlAliasHandler interface provides nice urls management.
+ * The UrlAlias Handler interface provides nice urls management.
  *
  * Its methods operate on a representation of the url alias data structure held
  * inside a storage engine.
  */
-interface UrlAliasHandler
+interface Handler
 {
     /**
       * Create a (nice) url alias, $path pointing to $locationId, in $languageName.

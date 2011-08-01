@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentHandler interface
+ * File containing the Content Handler interface
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence\Content\Interfaces;
+namespace ezp\Persistence\Content;
 use ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
@@ -16,7 +16,7 @@ use ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\RestrictedVersion;
 
 /**
- * The ContentHandler interface defines content operations on the storage engine.
+ * The Content Handler interface defines content operations on the storage engine.
  *
  * The basic operations which are performed on content objects are collected in
  * this interface. Typically this interface would be used by a service managing
@@ -24,7 +24,7 @@ use ezp\Persistence\Content\CreateStruct,
  *
  * @version //autogentag//
  */
-interface ContentHandler
+interface Handler
 {
     /**
      * Creates a new Content entity in the storage engine.

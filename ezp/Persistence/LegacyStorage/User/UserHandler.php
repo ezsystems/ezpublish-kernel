@@ -9,13 +9,14 @@
 
 namespace ezp\Persistence\LegacyStorage\User;
 use ezp\Persistence\User,
+    ezp\Persistence\User\Handler as BaseUserHandler,
     ezp\Persistence\User\Role;
 
 /**
  * Storage Engine handler for user module
  *
  */
-class UserHandler implements \ezp\Persistence\User\Interfaces\UserHandler
+class UserHandler implements BaseUserHandler
 {
     /**
      * Gaateway for storing user data

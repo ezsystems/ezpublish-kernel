@@ -22,7 +22,7 @@ class RepositoryHandlerTest extends HandlerTest
      */
     public function testHandler()
     {
-        $this->assertInstanceOf( 'ezp\\Persistence\\Interfaces\\RepositoryHandler', $this->repositoryHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Repository\\Handler', $this->repositoryHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\RepositoryHandler', $this->repositoryHandler );
     }
 
@@ -34,7 +34,7 @@ class RepositoryHandlerTest extends HandlerTest
     public function testContentHandler()
     {
         $contentHandler = $this->repositoryHandler->contentHandler();
-        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Interfaces\\ContentHandler', $contentHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Handler', $contentHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\ContentHandler', $contentHandler );
     }
 
@@ -46,7 +46,7 @@ class RepositoryHandlerTest extends HandlerTest
     public function testSectionHandler()
     {
         $sectionHandler = $this->repositoryHandler->sectionHandler();
-        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Interfaces\\SectionHandler', $sectionHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Section\\Handler', $sectionHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\SectionHandler', $sectionHandler );
     }
 }

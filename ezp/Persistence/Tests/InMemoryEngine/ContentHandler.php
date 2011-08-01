@@ -9,14 +9,14 @@
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
-use ezp\Persistence\Content\Interfaces\ContentHandler as ContentHandlerInterface,
+use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Criterion,
     ezp\Content\Version;
 
 /**
- * @see ezp\Persistence\Content\Interfaces\ContentHandler
+ * @see ezp\Persistence\Content\Handler
  *
  * @version //autogentag//
  */
@@ -45,7 +45,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function create( CreateStruct $content )
     {
@@ -85,14 +85,14 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function createDraftFromVersion( $contentId, $srcVersion = false )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function load( $id )
     {
@@ -125,35 +125,35 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function findSingle( Criterion $criterion )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function setState( $contentId, $state, $version )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function setObjectState( $contentId, $stateGroup, $state )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function getObjectState( $contentId, $stateGroup )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function update( UpdateStruct $content )
     {
@@ -161,7 +161,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function delete( $contentId )
     {
@@ -190,21 +190,21 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function trash( $contentId )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function untrash( $contentId )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function listVersions( $contentId )
     {
@@ -212,7 +212,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\ContentHandler
+     * @see ezp\Persistence\Content\Handler
      */
     public function fetchTranslation( $contentId, $languageCode )
     {

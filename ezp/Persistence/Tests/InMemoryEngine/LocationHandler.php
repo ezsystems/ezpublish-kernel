@@ -9,10 +9,10 @@
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
-use ezp\Persistence\Content\Interfaces\LocationHandler as LocationHandlerInterface;
+use ezp\Persistence\Content\Location\Handler as LocationHandlerInterface;
 
 /**
- * @see ezp\Persistence\Content\Interfaces\LocationHandler
+ * @see ezp\Persistence\Content\Location\Handler
  *
  * @version //autogentag//
  */
@@ -41,7 +41,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function load( $locationId )
     {
@@ -49,35 +49,35 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function copySubtree( $sourceId, $destinationParentId )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function move( $sourceId, $destinationParentId )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function hide( $id )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function unHide( $id )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function swap( $locationId1, $locationId2 )
     {
@@ -88,7 +88,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function updatePriority( $locationId, $priority )
     {
@@ -96,7 +96,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function createLocation( $contentId, $parentId )
     {
@@ -104,7 +104,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function removeSubtree( $locationId )
     {
@@ -112,63 +112,63 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function trashSubtree( $locationId )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function untrashSubtree( $locationId )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function setSectionForSubtree( $locationId, $sectionId )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function storeUrlAliasPath( $path, $locationId, $languageName = null, $alwaysAvailable = false )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function createCustomUrlAlias( $alias, $locationId, $forwarding = false, $languageName = null, $alwaysAvailable = false )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function createUrlHistoryEntry( $historicUrl, $locationId )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function listUrlsForLocation( $locationId, $urlType )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function removeUrlsForLocation( $locationId, array $urlIdentifier )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Interfaces\LocationHandler
+     * @see ezp\Persistence\Content\Location\Handler
      */
     public function getPath( $locationId, $languageCode )
     {

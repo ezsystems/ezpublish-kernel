@@ -9,7 +9,7 @@
 
 namespace ezp\Base;
 use ezp\Base\Repository,
-    ezp\Persistence\Interfaces\RepositoryHandler;
+    ezp\Persistence\Repository\Handler;
 
 /**
  * Abstract Repository Services
@@ -23,17 +23,17 @@ abstract class Service
     protected $repository;
 
     /**
-     * @var \ezp\Persistence\Interfaces\RepositoryHandler
+     * @var ezp\Persistence\Repository\Handler
      */
     protected $handler;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \ezp\Base\Repository $repository
-     * @param \ezp\Persistence\Interfaces\RepositoryHandler $handler
+     * @param ezp\Base\Repository $repository
+     * @param ezp\Persistence\Repository\Handler $handler
      */
-    public function __construct( Repository $repository, RepositoryHandler $handler )
+    public function __construct( Repository $repository, Handler $handler )
     {
         $this->repository = $repository;
         $this->handler = $handler;
