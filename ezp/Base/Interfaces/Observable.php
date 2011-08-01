@@ -34,7 +34,7 @@ interface Observable// extends \SplSubject
     public function detach( Observer $observer, $event = 'update' );
 
     /**
-     * Notify listeners about certain events, if $event is null then it's plain 'update'
+     * Notify listeners about certain events, by default a 'update' event
      *
      * @param string $event
      * @return Observable
