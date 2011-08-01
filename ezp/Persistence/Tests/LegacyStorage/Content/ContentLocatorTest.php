@@ -78,10 +78,7 @@ class ContentLocatorTest extends TestCase
         $this->assertEquals(
             array( 4, 10 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->id;
-                },
+                function ( $content ) { return $content->id; },
                 $result
             )
         );
@@ -110,10 +107,36 @@ class ContentLocatorTest extends TestCase
         $this->assertEquals(
             array( 4 ),
             array_map(
-                function ( $content )
-                {
-                    return $content->id;
-                },
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
+
+    public function testContentOrCombinatorFilter()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\LogicalOr( array(
+                new Criterion\ContentId(
+                    null,
+                    Criterion\Operator::IN,
+                    array( 1, 4, 10 )
+                ),
+                new Criterion\ContentId(
+                    null,
+                    Criterion\Operator::IN,
+                    array( 4, 12 )
+                ),
+            ) ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 4, 10, 12 ),
+            array_map(
+                function ( $content ) { return $content->id; },
                 $result
             )
         );

@@ -91,6 +91,14 @@ class EzcDatabase extends ContentLocatorGateway
                 }
                 return $query->expr->lAnd( $subexpressions );
 
+            case $criterion instanceof Criterion\LogicalOr:
+                $subexpressions = array();
+                foreach ( $criterion->criteria as $subCriterion )
+                {
+                    $subexpressions[] = $this->convertCriteria( $query, $subCriterion );
+                }
+                return $query->expr->lOr( $subexpressions );
+
             default:
                 throw new \RuntimeException( 'No conversion for criterion found.' );
         }
