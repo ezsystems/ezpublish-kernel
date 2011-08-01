@@ -66,13 +66,13 @@ class ContentLocatorTest extends TestCase
             new Criterion\ContentId(
                 null,
                 Criterion\Operator::IN,
-                array( 1, 2, 3 )
+                array( 1, 4, 10 )
             ),
             0, 10, null
         );
 
         $this->assertEquals(
-            array( 1, 2, 3 ),
+            array( 4, 10 ),
             array_map(
                 function ( $content )
                 {

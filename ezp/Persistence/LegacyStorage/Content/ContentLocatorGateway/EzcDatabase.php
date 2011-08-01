@@ -49,7 +49,11 @@ class EzcDatabase extends ContentLocatorGateway
         $query = $this->handler->createSelectQuery();
         $query
             ->select( 'id' )
-            ->from( 'ezcontentobject' );
+            ->from( 'ezcontentobject' )
+            ->where(
+                $this->convertCriteria( $query, $criterion )
+            )
+            ->limit( $limit, $offset );
 
         $statement = $query->prepare();
         $statement->execute();
@@ -62,6 +66,16 @@ class EzcDatabase extends ContentLocatorGateway
         }
 
         return $objects;
+    }
+
+    protected function convertCriteria( $query, Criterion $criterion )
+    {
+        // @TODO: Refactor
+        switch ( true )
+        {
+            case $criterion instanceof Criterion\ContentId:
+                return $query->expr->in( 'id', $criterion->value );
+        }
     }
 }
 
