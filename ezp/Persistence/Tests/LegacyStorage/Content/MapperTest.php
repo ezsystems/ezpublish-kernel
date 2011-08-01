@@ -15,6 +15,7 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\LegacyStorage\Content\StorageFieldValue,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\ContentCreateStruct;
 
 /**
@@ -142,13 +143,18 @@ class MapperTest extends TestCase
         );
         $convMock->expects( $this->once() )
             ->method( 'toStorage' )
-            ->will( $this->returnValue( new StorageFieldValue() ) );
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content\\FieldValue'
+                )
+            )->will( $this->returnValue( new StorageFieldValue() ) );
 
         $reg = new FieldValueConverterRegistry();
         $reg->register( 'some-type', $convMock );
 
         $field = new Field();
         $field->type = 'some-type';
+        $field->value = new FieldValue();
 
         $mapper = new Mapper( $reg );
         $res = $mapper->convertToStorageValue( $field );
