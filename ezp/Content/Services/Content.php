@@ -10,7 +10,7 @@
 namespace ezp\Content\Services;
 use ezp\Base\Service,
     ezp\Base\Exception\NotFound,
-    ezp\Content\Content,
+    ezp\Content,
     ezp\Content\QueryBuilder;
     ezp\Content\Query;
 

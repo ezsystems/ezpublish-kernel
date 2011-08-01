@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Tests;
-use ezp\Content\Content,
+use ezp\Content,
     ezp\Content\Location,
     ezp\Content\Section,
     ezp\Content\Translation,

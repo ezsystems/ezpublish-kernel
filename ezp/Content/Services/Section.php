@@ -10,7 +10,7 @@
 namespace ezp\Content\Services;
 use ezp\Base\Exception\NotFound,
     ezp\Base\Service,
-    ezp\Content\Content,
+    ezp\Content,
     ezp\Content\Section as SectionObject;
 
 /**

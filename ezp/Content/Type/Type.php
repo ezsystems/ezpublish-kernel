@@ -57,7 +57,7 @@ class Type extends AbstractModel
     protected $fields;
 
     /**
-     * @var ezp\Content\Content[]
+     * @var ezp\Content[]
      */
     protected $contentObjects;
 
@@ -70,7 +70,7 @@ class Type extends AbstractModel
     {
         $this->groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
         $this->fields = new TypeCollection( 'ezp\\Content\\Type\\Field' );
-        $this->contentObjects = new TypeCollection( 'ezp\\Content\\Content' );
+        $this->contentObjects = new TypeCollection( 'ezp\\Content' );
     }
 
     /**

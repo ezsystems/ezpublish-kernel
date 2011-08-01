@@ -1,16 +1,17 @@
 <?php
 /**
- * File containing the ezp\Content\Content class.
+ * File containing the ezp\Content class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content;
+namespace ezp;
 use ezp\Base\AbstractModel,
     ezp\Base\Locale,
     ezp\Base\TypeCollection,
+    ezp\Content\Translation,
     ezp\Content\Type\Type,
     ezp\Content\Version,
     DateTime,
@@ -220,8 +221,8 @@ class Content extends AbstractModel
         $this->alwaysAvailable = false;
         $this->versions = new TypeCollection( 'ezp\\Content\\Version' );
         $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
-        $this->relations = new TypeCollection( 'ezp\\Content\\Content' );
-        $this->reversedRelations = new TypeCollection( 'ezp\\Content\\Content' );
+        $this->relations = new TypeCollection( 'ezp\\Content' );
+        $this->reversedRelations = new TypeCollection( 'ezp\\Content' );
         $this->translations = new TypeCollection( 'ezp\\Content\\Translation' );
         $this->name = false;
         $this->contentType = $contentType;

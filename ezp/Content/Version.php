@@ -11,7 +11,8 @@ namespace ezp\Content;
 use ezp\Base\AbstractModel,
     ezp\Base\Locale,
     ezp\Base\Observer,
-    ezp\Base\Observable;
+    ezp\Base\Observable,
+    ezp\Content;
 
 /**
  * This class represents a Content Version

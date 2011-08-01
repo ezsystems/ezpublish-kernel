@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Tests;
 use ezp\Content\Location,
-    ezp\Content\Content,
+    ezp\Content,
     ezp\Content\Section,
     ezp\Content\Type\Type,
     ezp\Base\Locale;

@@ -11,7 +11,8 @@ namespace ezp\Content;
 use ezp\Base\AbstractModel,
     ezp\Base\Observer,
     ezp\Base\TypeCollection,
-    ezp\Base\Observable;
+    ezp\Base\Observable,
+    ezp\Content;
 
 /**
  * This class represents a Content Location
