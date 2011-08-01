@@ -78,11 +78,9 @@ interface ContentHandler
      * retrieved.
      *
      * @param AbstractCriterion $criterion
-     * @param mixed $offset
-     * @param mixed $sort
      * @return ezp\Persistence\Content
      */
-    public function findSingle( AbstractCriterion $criterion, $offset, $sort );
+    public function findSingle( AbstractCriterion $criterion );
 
     /**
      * Sets the state of object identified by $contentId and $version to $state.
