@@ -14,7 +14,7 @@ try
 }
 catch ( ezp\Base\Exception\NotFound $e )
 {
-    echo "Section #{$sectionId} not found !"
+    echo "Section #{$sectionId} not found !";
     exit;
 }
 catch ( ValidationException $e )
