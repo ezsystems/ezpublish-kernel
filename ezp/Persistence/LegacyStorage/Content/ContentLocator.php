@@ -58,14 +58,14 @@ class ContentLocator
      * Returns a list of object satisfying the $criterion.
      *
      * @param Criterion $criterion
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int $limit
      * @param $sort
      * @return array(ezp\Persistence\Content) Content value object.
      */
     public function find( Criterion $criterion, $offset, $limit, $sort )
     {
-        throw new \Exception( "Not implemented yet." );
+        return $this->gateway->find( $criterion, $offset, $limit, $sort );
     }
 
     /**
