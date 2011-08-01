@@ -141,4 +141,35 @@ class ContentLocatorTest extends TestCase
             )
         );
     }
+
+    public function testContentNotCombinatorFilter()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\LogicalAnd( array(
+                new Criterion\ContentId(
+                    null,
+                    Criterion\Operator::IN,
+                    array( 1, 4, 10 )
+                ),
+                new Criterion\LogicalNot( array(
+                    new Criterion\ContentId(
+                        null,
+                        Criterion\Operator::IN,
+                        array( 10, 12 )
+                    ),
+                ) ),
+            ) ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 4 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
 }
