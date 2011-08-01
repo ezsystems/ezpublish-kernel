@@ -20,6 +20,23 @@ use ezp\Persistence\Content,
 class Mapper
 {
     /**
+     * FieldValue converter registry
+     *
+     * @var FieldValueConverterRegistry
+     */
+    protected $converterRegistry;
+
+    /**
+     * Creates a new mapper.
+     *
+     * @param FieldValueConverterRegistry $converterRegistry
+     */
+    public function __construct( FieldValueConverterRegistry $converterRegistry )
+    {
+        $this->converterRegistry = $converterRegistry;
+    }
+
+    /**
      * Creates a Content from the given $struct
      *
      * @param ContentCreateStruct $struct
@@ -48,8 +65,8 @@ class Mapper
         $version->created   = time();
         $version->modified  = $version->created;
         $version->creatorId = $content->ownerId;
-        // @todo: Define
-        $version->state     = 1;
+        // @todo: Is draft version correct?
+        $version->state     = 0;
         $version->contentId = $content->id;
 
         return $version;
