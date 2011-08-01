@@ -68,6 +68,13 @@ class EzcDatabase extends ContentLocatorGateway
         return $objects;
     }
 
+    /**
+     * Generic converter of criteria into query fragments
+     *
+     * @param ezcDatabaseSelectQuery $query
+     * @param Criterion $criterion
+     * @return ezcDatabaseExpression
+     */
     protected function convertCriteria( $query, Criterion $criterion )
     {
         // @TODO: Refactor
@@ -75,6 +82,17 @@ class EzcDatabase extends ContentLocatorGateway
         {
             case $criterion instanceof Criterion\ContentId:
                 return $query->expr->in( 'id', $criterion->value );
+
+            case $criterion instanceof Criterion\LogicalAnd:
+                $subexpressions = array();
+                foreach ( $criterion->criteria as $subCriterion )
+                {
+                    $subexpressions[] = $this->convertCriteria( $query, $subCriterion );
+                }
+                return $query->expr->lAnd( $subexpressions );
+
+            default:
+                throw new \RuntimeException( 'No conversion for criterion found.' );
         }
     }
 }
