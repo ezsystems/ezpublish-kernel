@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Services;
 use ezp\Base\Exception\NotFound,
-    ezp\Base\AbstractService,
+    ezp\Base\Service,
     ezp\Content\Content,
     ezp\Content\Section as SectionObject;
 
@@ -17,7 +17,7 @@ use ezp\Base\Exception\NotFound,
  * Section service, used for section operations
  *
  */
-class Section extends AbstractService
+class Section extends Service
 {
     /**
      * Creates the a new Section in the content repository

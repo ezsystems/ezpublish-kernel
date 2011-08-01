@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Services;
-use ezp\Base\AbstractService,
+use ezp\Base\Service,
     ezp\Base\Exception\NotFound,
     ezp\Content\Content,
     ezp\Content\QueryBuilder;
@@ -18,7 +18,7 @@ use ezp\Base\AbstractService,
  * Content service, used for Content operations
  *
  */
-class Content extends AbstractService
+class Content extends Service
 {
     /**
      * Creates the new $content in the content repository

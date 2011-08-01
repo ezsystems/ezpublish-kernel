@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains Service Abstract, for services attached to repository
+ * File contains abstract Service, for services attached to repository
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -15,7 +15,7 @@ use ezp\Base\Repository,
  * Abstract Repository Services
  *
  */
-abstract class AbstractService
+abstract class Service
 {
     /**
      * @var \ezp\Base\Repository

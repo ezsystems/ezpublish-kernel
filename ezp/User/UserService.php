@@ -8,14 +8,14 @@
  */
 
 namespace ezp\User;
-use ezp\Base\AbstractService,
+use ezp\Base\Service,
     InvalidArgumentException;
 
 /**
  * User Service, extends repository with user specific operations
  *
  */
-class UserService extends AbstractService
+class UserService extends Service
 {
     /**
      * Get an User object by id

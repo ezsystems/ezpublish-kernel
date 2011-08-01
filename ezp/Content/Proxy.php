@@ -9,7 +9,7 @@
 
 namespace ezp\Content;
 use ezp\Base\Interfaces\Proxy as BaseProxy,
-    ezp\Base\AbstractService,
+    ezp\Base\Service,
     InvalidArgumentException;
 
 /**
@@ -21,7 +21,7 @@ class Proxy implements BaseProxy
     /**
      * Service used to load the object the proxy represents.
      *
-     * @var AbstractService
+     * @var Service
      */
     protected $service;
 
@@ -42,12 +42,12 @@ class Proxy implements BaseProxy
     /**
      * Setup proxy object with enough info to be able to perform a load operation on the object it proxies.
      *
-     * @param AbstractService $service
+     * @param Service $service
      * @param int $id Primary id
      * @param string $method Optional, defines which function on handler to call, 'load' by default.
      * @throws InvalidArgumentException If $id is not a int value above zero.
      */
-    public function __construct( AbstractService $service, $id, $method = 'load' )
+    public function __construct( Service $service, $id, $method = 'load' )
     {
         $this->service = $service;
         $this->id = (int)$id;

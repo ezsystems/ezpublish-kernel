@@ -9,14 +9,14 @@
 
 namespace ezp\Content\Services;
 use ezp\Base\Exception,
-    ezp\Base\AbstractService,
+    ezp\Base\Service,
     ezp\Content\Location,
     ezp\Content\Section;
 
 /**
  * Location service, used for complex subtree operations
  */
-class Location extends AbstractService
+class Location extends Service
 {
 
     /**

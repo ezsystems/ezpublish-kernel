@@ -8,14 +8,14 @@
  */
 
 namespace ezp\Content\Services;
-use ezp\Base\AbstractService,
+use ezp\Base\Service,
     ezp\Base\Exception\NotFound;
 
 /**
  * Content Service, extends repository with content specific operations
  *
  */
-class ContentType extends AbstractService
+class ContentType extends Service
 {
     /**
      * Get an Content Type object by id
