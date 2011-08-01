@@ -44,7 +44,15 @@ class Mapper
      */
     public function createContentFromCreateStruct( ContentCreateStruct $struct )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $content = new Content();
+
+        $content->name         = $struct->name;
+        $content->typeId       = $struct->typeId;
+        $content->sectionId    = $struct->sectionId;
+        $content->ownerId      = $struct->ownerId;
+        $content->versionInfos = array();
+
+        return $content;
     }
 
     /**
@@ -57,8 +65,6 @@ class Mapper
      */
     public function createVersionForContent( Content $content, $versionNo )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
-        /*
         $version = new Version();
 
         $version->versionNo = $versionNo;
@@ -70,7 +76,6 @@ class Mapper
         $version->contentId = $content->id;
 
         return $version;
-        */
     }
 
     /**
@@ -81,6 +86,11 @@ class Mapper
      */
     public function convertToStorageValue( Field $field )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $converter = $this->converterRegistry->getConverter(
+            $field->type
+        );
+        return $converter->toStorage(
+            $field->value
+        );
     }
 }
