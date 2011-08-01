@@ -11,7 +11,7 @@ namespace ezp\Persistence;
 
 /**
  */
-class User extends AbstractValueObject
+class User extends ValueObject
 {
     /**
      * User ID

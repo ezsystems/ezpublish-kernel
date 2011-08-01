@@ -8,14 +8,14 @@
  */
 
 namespace ezp\Persistence\Content\Type;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  * @todo Do we need a FieldDefitinitionCreateStruct?
  * @todo What about the field "is_searchable" in the legacy storage?
  * @todo What about the "serialized_data_text" field in legacy storage?
  */
-class FieldDefinition extends AbstractValueObject
+class FieldDefinition extends ValueObject
 {
     /**
      * Primary key

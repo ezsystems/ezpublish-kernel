@@ -8,12 +8,12 @@
  */
 
 namespace ezp\Persistence\Content\Type;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  *
  */
-class ContentTypeCreateStruct extends AbstractValueObject
+class ContentTypeCreateStruct extends ValueObject
 {
     /**
      * Human readable name of the content type

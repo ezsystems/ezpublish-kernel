@@ -9,14 +9,14 @@
  */
 
 namespace ezp\Persistence\Content;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  * Struct containing accessible properties on Location entities.
  *
  * @version //autogentag//
  */
-class Location extends AbstractValueObject
+class Location extends ValueObject
 {
     // Following constants borrowed from eZContentObjectTreeNode, for data compatibility.
     // Actual names ought to be changed to better match current concepts.

@@ -12,7 +12,7 @@ namespace ezp\Persistence;
 
 /**
  */
-class Content extends AbstractValueObject
+class Content extends ValueObject
 {
     /**
      * @var int

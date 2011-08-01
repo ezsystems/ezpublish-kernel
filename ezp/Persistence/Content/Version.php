@@ -9,12 +9,12 @@
  */
 
 namespace ezp\Persistence\Content;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  * Struct containing properties for a Version entity.
  */
-class Version extends AbstractValueObject
+class Version extends ValueObject
 {
     /**
      * Version ID.

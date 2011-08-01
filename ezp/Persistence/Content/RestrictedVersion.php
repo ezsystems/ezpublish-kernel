@@ -9,7 +9,7 @@
  */
 
 namespace ezp\Persistence\Content;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  * Struct containing properties for a Version entity without its fields.
@@ -17,7 +17,7 @@ use ezp\Persistence\AbstractValueObject;
  * The omission of fields is so that this struct can be used for batch
  * operations where full set of field data would be unnecessary.
  */
-class RestrictedVersion extends AbstractValueObject
+class RestrictedVersion extends ValueObject
 {
     /**
      * Version ID.

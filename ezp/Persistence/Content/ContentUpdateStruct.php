@@ -9,11 +9,11 @@
  */
 
 namespace ezp\Persistence\Content;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  */
-class ContentUpdateStruct extends AbstractValueObject
+class ContentUpdateStruct extends ValueObject
 {
     /**
      * @todo Which version is this?

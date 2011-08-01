@@ -8,11 +8,11 @@
  */
 
 namespace ezp\Persistence\Content\Type\Group;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  */
-class GroupCreateStruct extends AbstractValueObject
+class GroupCreateStruct extends ValueObject
 {
     /**
      * Name

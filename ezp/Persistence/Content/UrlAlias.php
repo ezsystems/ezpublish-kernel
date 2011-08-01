@@ -14,7 +14,7 @@ namespace ezp\Persistence;
  *
  * This class models the legacy structure used for url aliases.
  */
-class UrlAlias extends AbstractValueObject
+class UrlAlias extends ValueObject
 {
     /**
      * The action of the url alias path element.

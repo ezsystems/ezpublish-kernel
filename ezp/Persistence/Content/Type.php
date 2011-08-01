@@ -8,12 +8,12 @@
  */
 
 namespace ezp\Persistence\Content;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  * @todo What about sort_field and sort_order?
  */
-class Type extends AbstractValueObject
+class Type extends ValueObject
 {
     /**
      * Content type ID

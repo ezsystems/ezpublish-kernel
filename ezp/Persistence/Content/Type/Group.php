@@ -8,11 +8,11 @@
  */
 
 namespace ezp\Persistence\Content\Type;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  */
-class Group extends AbstractValueObject
+class Group extends ValueObject
 {
     /**
      * Primary key

@@ -9,11 +9,11 @@
  */
 
 namespace ezp\Persistence\Content;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  */
-class Section extends AbstractValueObject
+class Section extends ValueObject
 {
     /**
      * Id of the section

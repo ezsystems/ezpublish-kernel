@@ -10,9 +10,9 @@
 
 namespace ezp\Persistence\LegacyStorage\Content;
 
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
-class StorageFieldValue extends AbstractValueObject
+class StorageFieldValue extends ValueObject
 {
     /**
      * Float data.

@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Persistence\Content;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
-class LocationCreateStruct extends AbstractValueObject
+class LocationCreateStruct extends ValueObject
 {
     /**
      * Location priority

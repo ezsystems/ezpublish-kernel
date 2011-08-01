@@ -9,11 +9,11 @@
  */
 
 namespace ezp\Persistence\Content;
-use ezp\Persistence\AbstractValueObject;
+use ezp\Persistence\ValueObject;
 
 /**
  */
-class Field extends AbstractValueObject
+class Field extends ValueObject
 {
     /**
      * Field ID
