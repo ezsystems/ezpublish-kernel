@@ -45,7 +45,7 @@ class Subtree extends CriterionHandler
         }
 
         $query
-            ->rightJoin(
+            ->innerJoin(
                 'ezcontentobject_tree',
                 $query->expr->eq( 'ezcontentobject_tree.contentobject_id', 'ezcontentobject.id' )
             );
