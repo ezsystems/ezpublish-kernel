@@ -46,9 +46,9 @@ class RepositoryHandler implements RepositoryHandlerInterface
                 "Content\\Type" => "ezp\\Persistence\\Content\\Type",
                 "Content\\Type\\FieldDefintion" => "ezp\\Persistence\\Content\\Type\\FieldDefintion",
                 "Content\\Type\\Group" => "ezp\\Persistence\\Content\\Type\\Group",
-                "Content\\Policy" => "ezp\\Persistence\\Content\\Policy",
                 "User" => "ezp\\Persistence\\User",
                 "User\\Role" => "ezp\\Persistence\\User\\Role",
+                "User\\Policy" => "ezp\\Persistence\\User\\Policy",
             )
         );
     }
