@@ -19,7 +19,7 @@ use ezp\Base\Exception\BadConfiguration,
  * A configuration class with override setting support that uses parsers to deal with
  * files so you can support ini/yaml/xml/json given it is defined when setting up the class.
  *
- * Class is to quite static and uses multi-singletons for instances pr module.
+ * Class is quite static and uses multi-singletons for instances pr module.
  *
  * By default values are cached to a raw php files and files are not read again unless
  * development mode is on and some file has been removed or modified since cache was created.
