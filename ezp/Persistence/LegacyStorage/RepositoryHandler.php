@@ -14,9 +14,10 @@ use ezp\Persistence\Interfaces,
     ezp\Persistence\LegacyStorage\User;
 
 /**
- * The main handler for the legacy storage engine
+ * The repository handler for the legacy storage engine
  *
- * @todo Cache handler instances
+ * @todo If possible, the handler should not receive the DSN but the database
+ *       connection instead, so that the implementation becomes fully testable.
  */
 class RepositoryHandler implements Interfaces\RepositoryHandler
 {
@@ -71,6 +72,24 @@ class RepositoryHandler implements Interfaces\RepositoryHandler
 
     /**
      * Creates a new repository handler.
+     *
+     * The $dsn is a data source name as expected by the Zeta Components
+     * database component. The format is:
+     *
+     *     <database>://<user>:<password>@<host>/<database>
+     *
+     * For example
+     *
+     *     mysql://root:secret@localhost/ezp
+     *
+     * for a MySQL database connection or
+     *
+     *    sqlite://:memory:
+     *
+     * for an SQLite in-memory database.
+     *
+     * For further information refer to
+     * {@see http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html#handler-usage}
      *
      * @param string $dsn
      */
