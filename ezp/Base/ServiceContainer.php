@@ -15,9 +15,35 @@ use ezp\Base\Exception\BadConfiguration,
 
 /**
  * Service container class
- * A dependency injection container aka a variant of
- * Registry pattern that reads configuration from settings
- * instead of requiring code to set it up.
+ *
+ * A dependency injection container that uses configuration for defining dependencies.
+ *
+ * Usage:
+ *
+ *     $sc = new ServiceContainer();
+ *     $sc->GetRepository->GetContentService()->load( 42 );
+ *
+ * Or overriding dependencies (in unit tests):
+ *
+ *     $sc = new ServiceContainer( array( '@repository_handler' => new \ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler() ) );
+ *     $sc->GetRepository->GetContentService()->load( 42 );
+ *
+ * Settings are defined in base.ini like the following example:
+ *
+ *     [service_repository]
+ *     class=ezp\Base\Repository
+ *     arguments[repository_handler]=@repository_handler
+ *
+ *     [service_repository_handler]
+ *     class=ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler
+ *
+ * Arguments can start with either @ in case of other services being dependency, $ if a predefined global variable
+ * is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES and $serviceContainer ) or plain string if
+ * that is to be given directly as argument value.
+ *
+ *
+ * @todo Add support for factory functions, could simply check for existence of :: or -> for static / instance factories
+ * @todo If needed add optional settings that define that service should be created on every call (not singleton)
  */
 class ServiceContainer
 {
