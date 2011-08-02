@@ -37,6 +37,7 @@ class CriteriaConverter
             new CriterionHandler\LogicalAnd(),
             new CriterionHandler\LogicalOr(),
             new CriterionHandler\Subtree(),
+            new CriterionHandler\ContentType(),
         );
     }
 
