@@ -48,11 +48,11 @@ class EzcDatabase extends ContentLocatorGateway
      *
      * @param Criterion $criterion
      * @param int $offset
-     * @param int $limit
+     * @param int|null $limit
      * @param $sort
      * @return array(ezp\Persistence\Content) Content value object.
      */
-    public function find( Criterion $criterion, $offset, $limit, $sort )
+    public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null )
     {
         $query = $this->handler->createSelectQuery();
         $query

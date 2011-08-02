@@ -63,12 +63,12 @@ interface ContentHandler
      * Returns a list of object satisfying the $criterion.
      *
      * @param AbstractCriterion $criterion
-     * @param $offset
-     * @param $limit
+     * @param int $offset
+     * @param int|null $limit
      * @param $sort
      * @return array(ezp\Persistence\Content) Content value object.
      */
-    public function find( AbstractCriterion $criterion, $offset, $limit, $sort );
+    public function find( AbstractCriterion $criterion, $offset = 0, $limit = null, $sort = null );
 
     /**
      * Returns a single Content object found.
