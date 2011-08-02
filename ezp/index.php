@@ -44,7 +44,7 @@ foreach ( $fields as $className => $data )
 }
 
 // Create section
-$section = Section::__set_state( array( 'id' => 1 ) );
+$section = new Section();
 $section->identifier = 'standard';
 $section->name = "Standard";
 

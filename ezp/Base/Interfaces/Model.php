@@ -10,7 +10,7 @@
 namespace ezp\Base\Interfaces;
 
 /**
- * Interface for content domain objects
+ * Interface for domain objects
  *
  */
 interface Model
@@ -18,11 +18,12 @@ interface Model
     /**
      * Returns an instance of the desired object, initialized from $state.
      *
-     * This method must return a new instance of the class it is implemented
-     * in, which has its properties set from the given $state array.
+     * This method must return a new instance of the class it is implemented in,
+     * which has its properties set from the given $state array independent of visibility.
      *
+     * @internal
      * @param array $state
-     * @return Interfaces\Model
+     * @return Model
      */
     public static function __set_state( array $state );
 }

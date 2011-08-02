@@ -16,13 +16,24 @@ use ezp\Persistence\AbstractValueObject;
 class Section extends AbstractValueObject
 {
     /**
+     * Id of the section
+     *
+     * @var int
      */
     public $id;
+
     /**
-     */
-    public $name;
-    /**
+     * Unique identifier of the section
+     *
+     * @var string
      */
     public $identifier;
+
+    /**
+     * Name of the section
+     *
+     * @var string
+     */
+    public $name;
 }
 ?>

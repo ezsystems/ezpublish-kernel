@@ -127,7 +127,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     public function testLocationWrongClass()
     {
         $content = new Content( $this->contentType, new Locale( 'eng-GB' ) );
-        $content->locations[] = Section::__set_state( array( 'id' => 1 ) );
+        $content->locations[] = new Section();
     }
 
     /**

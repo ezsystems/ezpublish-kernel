@@ -8,43 +8,37 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\AbstractModel;
+use ezp\Base\Model,
+    ezp\Persistence\Content\Section as SectionValue;
 
 /**
- * This class represents a Section
+ * This class represents a Section object
  *
+ * @property-read integer $id
+ *                The ID, automatically assigned by the persistence layer
+ * @property string $identifier
+ *                Unique identifier for the section.
+ * @property string $name
+ *                Human readable name of the section (preferably short for gui's)
  */
-class Section extends AbstractModel
+class Section extends Model
 {
-    protected $readableProperties = array(
+    /**
+     * @inherit-doc
+     * @var array
+     */
+    protected $readWriteProperties = array(
         'id' => false,
         'identifier' => true,
         'name' => true,
     );
 
     /**
-     * Id of the section
-     *
-     * @var int
+     * Constructor, setups all internal objects.
      */
-    protected $id = 0;
-
-    /**
-     * Identifier of the section
-     *
-     * @var string
-     */
-    public $identifier = "";
-
-    /**
-     * Name of the section
-     *
-     * @var string
-     */
-    public $name = "";
-
     public function __construct()
     {
+        $this->properties = new SectionValue();
     }
 
 }

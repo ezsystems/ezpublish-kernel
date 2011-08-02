@@ -40,7 +40,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     public function testChildrenWrongClass()
     {
         $location = new Location( $this->content );
-        $location->children[] = Section::__set_state( array( 'id' => 1 ) );
+        $location->children[] = new Section();
     }
 
     /**
@@ -49,7 +49,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     public function testParentWrongClass()
     {
         $location = new Location( $this->content );
-        $location->parent = Section::__set_state( array( 'id' => 1 ) );
+        $location->parent = new Section();
     }
 
     /**
