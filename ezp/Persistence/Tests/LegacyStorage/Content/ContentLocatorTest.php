@@ -262,4 +262,114 @@ class ContentLocatorTest extends TestCase
             )
         );
     }
+
+    public function testDateMetadataFilterModifiedGreater()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\DateMetadata(
+                Criterion\DateMetadata::MODIFIED,
+                Criterion\Operator::GT,
+                1311154214
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 11, 225 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
+
+    public function testDateMetadataFilterModifiedGreaterOrEqual()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\DateMetadata(
+                Criterion\DateMetadata::MODIFIED,
+                Criterion\Operator::GTE,
+                1311154214
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 11, 14, 225 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
+
+    public function testDateMetadataFilterModifiedIn()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\DateMetadata(
+                Criterion\DateMetadata::MODIFIED,
+                Criterion\Operator::IN,
+                array( 1311154214, 1311154215 )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 11, 14, 225 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
+
+    public function testDateMetadataFilterModifiedBetween()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\DateMetadata(
+                Criterion\DateMetadata::MODIFIED,
+                Criterion\Operator::BETWEEN,
+                array( 1311154213, 1311154215 )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 11, 14, 225 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
+
+    public function testDateMetadataFilterCreatedBetween()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\DateMetadata(
+                Criterion\DateMetadata::CREATED,
+                Criterion\Operator::BETWEEN,
+                array( 1299780749, 1311154215 )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 131, 66, 225 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
 }

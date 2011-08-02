@@ -39,6 +39,7 @@ class CriteriaConverter
             new CriterionHandler\Subtree(),
             new CriterionHandler\ContentType(),
             new CriterionHandler\ContentTypeGroup(),
+            new CriterionHandler\DateMetadata(),
         );
     }
 

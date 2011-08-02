@@ -17,6 +17,20 @@ use ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway,
 abstract class CriterionHandler
 {
     /**
+     * Map of criterion operators to the respective function names in the zeta 
+     * Database abstraction layer.
+     *
+     * @var array
+     */
+    protected $comparatorMap = array(
+        Criterion\Operator::EQ      => "eq",
+        Criterion\Operator::GT      => "gt",
+        Criterion\Operator::GTE     => "gte",
+        Criterion\Operator::LT      => "lt",
+        Criterion\Operator::LTE     => "lte",
+    );
+
+    /**
      * Check if this criterion handler accepts to handle the given criterion.
      *
      * @param Criterion $criterion
