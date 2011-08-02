@@ -44,6 +44,7 @@ class CriteriaConverter
             new CriterionHandler\ParentLocationId(),
             new CriterionHandler\RemoteId(),
             new CriterionHandler\Section(),
+            new CriterionHandler\Status(),
         );
     }
 

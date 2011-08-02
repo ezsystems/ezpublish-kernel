@@ -460,4 +460,26 @@ class ContentLocatorTest extends TestCase
             )
         );
     }
+
+    public function testStatusFilter()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\Status(
+                null,
+                Criterion\Operator::IN,
+                array( Criterion\Status::STATUS_PUBLISHED )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
 }
