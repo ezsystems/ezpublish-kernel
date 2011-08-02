@@ -16,8 +16,8 @@ use ezp\Persistence\Content\Criterion,
  * A criterion that matches content based on its RemoteId
  *
  * Supported operators:
- * - IN: will match from a list of ContentTypeId
- * - EQ: will match against one ContentTypeId
+ * - IN: will match from a list of RemoteId
+ * - EQ: will match against one RemoteId
  */
 class RemoteId extends Criterion implements CriterionInterface
 {
