@@ -394,4 +394,26 @@ class ContentLocatorTest extends TestCase
             )
         );
     }
+
+    public function testParentLocationIdFilter()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\ParentLocationId(
+                null,
+                Criterion\Operator::IN,
+                array( 1 )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 4, 41, 45, 56, 65 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
 }
