@@ -44,13 +44,15 @@ class Subtree extends CriterionHandler
             $statements[] = $query->expr->like( 'ezcontentobject_tree.path_string', $query->bindValue( $pattern . '%' ) );
         }
 
-        $query
-            ->innerJoin(
-                'ezcontentobject_tree',
-                $query->expr->eq( 'ezcontentobject_tree.contentobject_id', 'ezcontentobject.id' )
+        $subSelect = $query->subSelect();
+        $subSelect
+            ->select( 'contentobject_id' )
+            ->from( 'ezcontentobject_tree' )
+            ->where(
+                $query->expr->lOr( $statements )
             );
 
-        return $query->expr->lOr( $statements );
+        return $query->expr->in( 'id', $subSelect );
     }
 }
 
