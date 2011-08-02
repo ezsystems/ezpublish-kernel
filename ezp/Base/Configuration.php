@@ -1,6 +1,6 @@
 <?php
 /**
- * Configuration, a full configuration class to load and get configuration values using overrides.
+ * File containing the Configuration class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,6 +13,56 @@ namespace ezp\Base;
 use ezp\Base\Exception\BadConfiguration,
     ezcPhpGenerator;
 
+/**
+ * Configuration class with focus on performance
+ *
+ * A configuration class with override setting support that uses parsers to deal with
+ * files so you can support ini/yaml/xml/json given it is defined when setting up the class.
+ *
+ * Class is to quite static and uses multi-singletons for instances pr module.
+ *
+ * By default values are cached to a raw php files and files are not read again unless
+ * development mode is on and some file has been removed or modified since cache was created.
+ *
+ *
+ * Setup:
+ *
+ *     // Setup global configuration that needs to be defined before loading setting files
+ *     Configuration::setGlobalConfigurationData( array(
+ *         'base' => array(
+ *             'autoload' => array(
+ *                 // Optional bool value for global development mode setting
+ *                 // Default: false, checks modified time and if files exist on every request if true
+ *                 'development-mode' => true,
+ *             ),
+ *             'configuration' => array(
+ *                 // Optional bool value to specify if cache files should be used
+ *                 // Default: true, parses files on every request if false
+ *                 'use-cache' => false,
+ *                 // Required list of parser classes where key is file suffix
+ *                 'parsers' => array(
+ *                     '.ini'            => 'ezp\base\Configuration\IniParser',
+ *                     '.ini.append.php' => 'ezp\base\Configuration\IniParser',
+ *                 ),
+ *             ),
+ *         )
+ *     ) );
+ *     // Specify additional locations that might contain settings (hence you don't have to check if folder exist)
+ *     Configuration::setGlobalDirs( array( 'ezp/base/settings/' ), 'modules' );
+ *
+ *
+ * Usage:
+ *
+ *     $bool = Configuration::getInstance()->get( 'autoload', 'development-mode' );
+ *
+ *
+ * Usage2:
+ *
+ *     $array = Configuration::getInstance('content')->get( 'fields', 'Type' );
+ *
+ *
+ * @uses \ezcPhpGenerator When generating cache files.
+ */
 class Configuration extends AbstractOverride
 {
     /**
@@ -362,7 +412,7 @@ class Configuration extends AbstractOverride
      * @param array $sourceFiles ByRef value or source files that has been/is going to be parsed
      *                           files you pass in will not be checked if they exists.
      * @return array Data structure for parsed ini files
-     * @throws BadConfiguration If no parser have been defined
+     * @throws ezp\Base\Exception\BadConfiguration If no parser have been defined
      */
     public static function parse( $moduleName, array $configurationPaths, array &$sourceFiles )
     {
