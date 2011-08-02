@@ -54,27 +54,27 @@ class ServiceContainer
     /**
      * Service function to get Event instance.
      *
-     * @param array $callChainDependancieOverrides Overrides dependencies throughout the call (dependency) chain
+     * @param array $callChainDependencyOverrides Overrides dependencies throughout the call (dependency) chain
      * @return Interfaces\Event
      */
-    public function getEvent( array $callChainDependancieOverrides = array() )
+    public function getEvent( array $callChainDependencyOverrides = array() )
     {
         if ( isset( $this->dependencies['@event'] ) )
             return $this->dependencies['@event'];
-        return $this->get( 'event', $callChainDependancieOverrides );
+        return $this->get( 'event', $callChainDependencyOverrides );
     }
 
     /**
      * Service function to get Repository object
      *
-     * @param array $callChainDependancieOverrides Overrides dependencies throughout the call (dependency) chain
+     * @param array $callChainDependencyOverrides Overrides dependencies throughout the call (dependency) chain
      * @return Repository
      */
-    public function getRepository( array $callChainDependancieOverrides = array() )
+    public function getRepository( array $callChainDependencyOverrides = array() )
     {
         if ( isset( $this->dependencies['@repository'] ) )
             return $this->dependencies['@repository'];
-        return $this->get( 'repository', $callChainDependancieOverrides );
+        return $this->get( 'repository', $callChainDependencyOverrides );
     }
 
     /**
@@ -82,10 +82,10 @@ class ServiceContainer
      *
      * @throws InvalidArgumentException
      * @param string $serviceName
-     * @param array $callChainDependancieOverrides Overrides dependencies throughout the call (dependency) chain
+     * @param array $callChainDependencyOverrides Overrides dependencies throughout the call (dependency) chain
      * @return object
      */
-    public function get( $serviceName, array $callChainDependancieOverrides = array() )
+    public function get( $serviceName, array $callChainDependencyOverrides = array() )
     {
         $serviceKey = "@{$serviceName}";
         if ( isset( $this->dependencies[$serviceKey] ) )
@@ -133,9 +133,9 @@ class ServiceContainer
                 {
                     $arguments[] = $this;
                 }
-                else if ( isset( $callChainDependancieOverrides[ $argument ] ) )
+                else if ( isset( $callChainDependencyOverrides[ $argument ] ) )
                 {
-                    $arguments[] = $callChainDependancieOverrides[ $argument ];
+                    $arguments[] = $callChainDependencyOverrides[ $argument ];
                 }
                 else if ( isset( $this->dependencies[ $argument ] ) )
                 {
@@ -160,7 +160,7 @@ class ServiceContainer
             loadDependency: { // load service dependency
                 try
                 {
-                    $arguments[] = $this->get( ltrim( $argument, '@' ), $callChainDependancieOverrides );
+                    $arguments[] = $this->get( ltrim( $argument, '@' ), $callChainDependencyOverrides );
                 }
                 catch ( InvalidArgumentException $e )
                 {
