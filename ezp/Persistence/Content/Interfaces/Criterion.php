@@ -50,7 +50,7 @@ interface Criterion
      *     )
      * )*
      * </code>
-     * @return ezp\Persistence\Content\Criterion\OperatorSpecifications[]
+     * @return \ezp\Persistence\Content\Criterion\OperatorSpecifications[]
      */
     public function getSpecifications();
 }

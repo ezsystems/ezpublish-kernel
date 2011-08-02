@@ -76,7 +76,7 @@ class ContentLocator
      * retrieved.
      *
      * @param Criterion $criterion
-     * @return ezp\Persistence\Content
+     * @return \ezp\Persistence\Content
      */
     public function findSingle( Criterion $criterion )
     {

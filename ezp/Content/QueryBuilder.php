@@ -57,7 +57,7 @@ class QueryBuilder
      * Field -> Field
      * A criterion factory
      *
-     * @return ezp\Persistence\Content\CriterionFactory
+     * @return \ezp\Persistence\Content\CriterionFactory
      */
     public function __get( $property )
     {
@@ -96,7 +96,7 @@ class QueryBuilder
      * @param Criterion $elementOne
      * @param Criterion $elementTwo$...
      *
-     * @return ezp\Persistence\Content\Criterion\LogicalOr
+     * @return \ezp\Persistence\Content\Criterion\LogicalOr
      */
     public function lOr( Criterion $elementOne, Criterion $elementTwo )
     {
@@ -111,7 +111,7 @@ class QueryBuilder
      * @param Criterion $elementOne
      * @param Criterion $elementTwo$...
      *
-     * @return ezp\Persistence\Content\Criterion\LogicalAnd
+     * @return \ezp\Persistence\Content\Criterion\LogicalAnd
      */
     public function lAnd( Criterion $elementOne, Criterion $elementTwo )
     {
@@ -125,7 +125,7 @@ class QueryBuilder
      *
      * @param Criterion $criterion
      *
-     * @return ezp\Persistence\Content\Criterion\LogicalNot
+     * @return \ezp\Persistence\Content\Criterion\LogicalNot
      */
     public function not( Criterion $criterion )
     {
@@ -139,7 +139,7 @@ class QueryBuilder
      * @param string $method
      * @param array $arguments
      *
-     * @return ezp\Persistence\Content\Criterion
+     * @return \ezp\Persistence\Content\Criterion
      */
     public function __call( $method, $arguments )
     {

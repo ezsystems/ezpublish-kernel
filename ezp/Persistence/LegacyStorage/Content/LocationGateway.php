@@ -138,7 +138,7 @@ abstract class LocationGateway
      *
      * @param Content $content
      * @param array $parentNode
-     * @return ezp\Persistence\Content\Location
+     * @return \ezp\Persistence\Content\Location
      */
     abstract public function createLocation( Content $content, array $parentNode );
 

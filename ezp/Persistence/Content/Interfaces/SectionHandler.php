@@ -18,7 +18,7 @@ interface SectionHandler
      *
      * @param string $name
      * @param string $identifier
-     * @return ezp\Persistence\Content\Section
+     * @return \ezp\Persistence\Content\Section
      */
     public function create( $name, $identifier );
 
@@ -35,7 +35,7 @@ interface SectionHandler
      * Get section data
      *
      * @param mixed $id
-     * @return ezp\Persistence\Content\Section|null
+     * @return \ezp\Persistence\Content\Section|null
      */
     public function load( $id );
 

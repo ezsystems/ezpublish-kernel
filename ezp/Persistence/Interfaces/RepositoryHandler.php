@@ -16,27 +16,27 @@ namespace ezp\Persistence\Interfaces;
 interface RepositoryHandler
 {
     /**
-     * @return ezp\Persistence\Content\Interfaces\ContentHandler
+     * @return \ezp\Persistence\Content\Interfaces\ContentHandler
      */
     public function contentHandler();
 
     /**
-     * @return ezp\Persistence\Content\Type\Interfaces\Handler
+     * @return \ezp\Persistence\Content\Type\Interfaces\Handler
      */
     public function contentTypeHandler();
 
     /**
-     * @return ezp\Persistence\Content\Interfaces\LocationHandler
+     * @return \ezp\Persistence\Content\Interfaces\LocationHandler
      */
     public function locationHandler();
 
     /**
-     * @return ezp\Persistence\User\Interfaces\UserHandler
+     * @return \ezp\Persistence\User\Interfaces\UserHandler
      */
     public function userHandler();
 
     /**
-     * @return ezp\Persistence\Content\Interfaces\SectionHandler
+     * @return \ezp\Persistence\Content\Interfaces\SectionHandler
      */
     public function sectionHandler();
 

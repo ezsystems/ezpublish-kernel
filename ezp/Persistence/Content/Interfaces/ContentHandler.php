@@ -35,7 +35,7 @@ interface ContentHandler
      * Will contain always a complete list of fields.
      *
      * @param ContentCreateStruct $content Content creation struct.
-     * @return ezp\Persistence\Content Content value object
+     * @return \ezp\Persistence\Content Content value object
      */
     public function create( ContentCreateStruct $content );
 
@@ -47,7 +47,7 @@ interface ContentHandler
      *
      * @param int $contentId
      * @param int|bool $srcVersion
-     * @return ezp\Persistence\Content\Content
+     * @return \ezp\Persistence\Content\Content
      */
     public function createDraftFromVersion( $contentId, $srcVersion );
 
@@ -55,7 +55,7 @@ interface ContentHandler
      * Returns the raw data of a content object identified by $id, in a struct.
      *
      * @param int $id
-     * @return ezp\Persistence\Content Content value object
+     * @return \ezp\Persistence\Content Content value object
      */
     public function load( $id );
 
@@ -78,7 +78,7 @@ interface ContentHandler
      * retrieved.
      *
      * @param AbstractCriterion $criterion
-     * @return ezp\Persistence\Content
+     * @return \ezp\Persistence\Content
      */
     public function findSingle( AbstractCriterion $criterion );
 
@@ -124,7 +124,7 @@ interface ContentHandler
      * Updates a content object entity with data and identifier $content
      *
      * @param ContentUpdateStruct $content
-     * @return ezp\Persistence\Content
+     * @return \ezp\Persistence\Content
      */
     public function update( ContentUpdateStruct $content );
 
@@ -155,7 +155,7 @@ interface ContentHandler
      *
      * @param int $contentId
      * @param string $languageCode
-     * @return ezp\Persistence\Content\Content
+     * @return \ezp\Persistence\Content\Content
      */
     public function fetchTranslation( $contentId, $languageCode );
 }

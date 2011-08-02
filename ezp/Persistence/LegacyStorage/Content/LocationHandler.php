@@ -56,7 +56,7 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
-     * @return ezp\Persistence\Content\Location
+     * @return \ezp\Persistence\Content\Location
      */
     public function load( $locationId )
     {
@@ -196,7 +196,7 @@ class LocationHandler implements \ezp\Persistence\Content\Interfaces\LocationHan
      *
      * @param mixed $contentId
      * @param mixed $parentId
-     * @return ezp\Persistence\Content\Location
+     * @return \ezp\Persistence\Content\Location
      */
     public function createLocation( $contentId, $parentId )
     {

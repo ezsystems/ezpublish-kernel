@@ -21,7 +21,7 @@ interface LocationHandler
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
-     * @return ezp\Persistence\Content\Location
+     * @return \ezp\Persistence\Content\Location
      */
     public function load( $locationId );
 
@@ -93,7 +93,7 @@ interface LocationHandler
      *
      * @param LocationCreateStruct $location
      * @param mixed $parentId
-     * @return ezp\Persistence\Content\Location
+     * @return \ezp\Persistence\Content\Location
      */
     public function createLocation( $location, $parentId );
 

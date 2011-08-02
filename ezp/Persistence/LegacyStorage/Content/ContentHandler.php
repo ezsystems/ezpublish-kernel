@@ -70,7 +70,7 @@ class ContentHandler implements ContentHandlerInterface
      * Will contain always a complete list of fields.
      *
      * @param ContentCreateStruct $struct Content creation struct.
-     * @return ezp\Persistence\Content Content value object
+     * @return \ezp\Persistence\Content Content value object
      * @todo Take care of initial locations!
      * @todo Method too complex, refactor!
      */
@@ -116,7 +116,7 @@ class ContentHandler implements ContentHandlerInterface
      *
      * @param int $contentId
      * @param int|bool $srcVersion
-     * @return ezp\Persistence\Content\Content
+     * @return \ezp\Persistence\Content\Content
      */
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
@@ -127,7 +127,7 @@ class ContentHandler implements ContentHandlerInterface
      * Returns the raw data of a content object identified by $id, in a struct.
      *
      * @param int $id
-     * @return ezp\Persistence\Content Content value object
+     * @return \ezp\Persistence\Content Content value object
      */
     public function load( $id )
     {
@@ -156,7 +156,7 @@ class ContentHandler implements ContentHandlerInterface
      * retrieved.
      *
      * @param Criterion $criterion
-     * @return ezp\Persistence\Content
+     * @return \ezp\Persistence\Content
      */
     public function findSingle( Criterion $criterion )
     {
@@ -214,7 +214,7 @@ class ContentHandler implements ContentHandlerInterface
      * Updates a content object entity with data and identifier $content
      *
      * @param ContentUpdateStruct $content
-     * @return ezp\Persistence\Content
+     * @return \ezp\Persistence\Content
      */
     public function update( ContentUpdateStruct $content )
     {
@@ -254,7 +254,7 @@ class ContentHandler implements ContentHandlerInterface
      *
      * @param int $contentId
      * @param string $languageCode
-     * @return ezp\Persistence\Content\Content
+     * @return \ezp\Persistence\Content\Content
      */
     public function fetchTranslation( $contentId, $languageCode )
     {

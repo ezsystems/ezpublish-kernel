@@ -307,7 +307,7 @@ class EzcDatabase extends LocationGateway
      *
      * @param Content $content
      * @param array $parentNode
-     * @return ezp\Persistence\Content\Location
+     * @return \ezp\Persistence\Content\Location
      */
     public function createLocation( Content $content, array $parentNode )
     {

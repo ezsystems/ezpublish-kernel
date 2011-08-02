@@ -21,7 +21,7 @@ class ContentType extends AbstractService
      * Get an Content Type object by id
      *
      * @param int $contentTypeId
-     * @return ezp\Content\Type\Type
+     * @return \ezp\Content\Type\Type
      * @throws NotFound
      */
     public function load( $contentTypeId )
@@ -36,7 +36,7 @@ class ContentType extends AbstractService
      * Get an Content Type by identifier
      *
      * @param string $identifier
-     * @return ezp\Content\Type\Type
+     * @return \ezp\Content\Type\Type
      * @throws NotFound
      */
     public function loadByIdentifier( $identifier )
