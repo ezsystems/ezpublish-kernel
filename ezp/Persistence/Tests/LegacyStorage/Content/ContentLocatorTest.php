@@ -416,4 +416,26 @@ class ContentLocatorTest extends TestCase
             )
         );
     }
+
+    public function testRemoteIdFilter()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\RemoteId(
+                null,
+                Criterion\Operator::IN,
+                array( 'f5c88a2209584891056f987fd965b0ba', 'faaeb9be3bd98ed09f606fc16d144eca' )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 4, 10 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
 }

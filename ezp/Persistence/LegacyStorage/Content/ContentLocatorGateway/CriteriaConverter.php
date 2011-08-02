@@ -42,6 +42,7 @@ class CriteriaConverter
             new CriterionHandler\DateMetadata(),
             new CriterionHandler\LocationId(),
             new CriterionHandler\ParentLocationId(),
+            new CriterionHandler\RemoteId(),
         );
     }
 
