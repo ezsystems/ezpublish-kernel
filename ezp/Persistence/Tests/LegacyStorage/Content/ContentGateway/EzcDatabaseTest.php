@@ -55,20 +55,20 @@ class EzcDatabaseTest extends TestCase
                     'contentclass_id'     => '23',
                     'current_version'     => 1,
                     // @FIXME
-                    'initial_language_id' => null,
+                    'initial_language_id' => 0,
                     // @FIXME
-                    'language_mask'       => null,
+                    'language_mask'       => 0,
                     // @FIXME
-                    'modified'            => null,
+                    'modified'            => 0,
                     'name'                => 'Content name',
                     'owner_id'            => '13',
                     // @FIXME
-                    'published'           => null,
+                    'published'           => 0,
                     // @FIXME
                     'remote_id'           => null,
                     'section_id'          => '42',
                     // @FIXME
-                    'status'              => null,
+                    'status'              => 0,
                 ),
             ),
             $this->getDatabaseHandler()
@@ -124,22 +124,22 @@ class EzcDatabaseTest extends TestCase
                     'created'             => '1312278322',
                     'creator_id'          => '13',
                     // @FIXME
-                    'initial_language_id' => null,
+                    'initial_language_id' => '0',
                     // @FIXME
-                    'language_mask'       => null,
+                    'language_mask'       => '0',
                     'modified'            => '1312278323',
                     'status'              => '0',
                     // @FIXME
-                    'user_id'             => null,
+                    'user_id'             => '0',
                     'version'             => '1',
-                    'workflow_event_pos'  => null,
+                    'workflow_event_pos'  => '0',
 
                 )
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select(
-                    array( 
+                    array(
                         'contentobject_id',
                         'created',
                         'creator_id',
@@ -191,17 +191,17 @@ class EzcDatabaseTest extends TestCase
             array(
                 array(
                     // @FIXME
-                    'attribute_original_id'    => null,
+                    'attribute_original_id'    => '0',
                     'contentclassattribute_id' => '231',
-                    'contentobject_id'         => '23',
+                    'contentobject_id'         => '2342',
                     'data_float'               => '24.42',
                     'data_int'                 => '42',
                     'data_text'                => 'Test text',
                     'data_type_string'         => 'ezstring',
+                    // @FIXME Is language_code correct?
+                    'language_code'            => '31',
                     // @FIXME
-                    'language_code'            => null,
-                    // @FIXME
-                    'language_id'              => null,
+                    'language_id'              => 0,
                     'sort_key_int'             => '23',
                     'sort_key_string'          => 'Test',
                     'version'                  => '1',
@@ -211,7 +211,7 @@ class EzcDatabaseTest extends TestCase
                 ->createSelectQuery()
                 ->select(
                     array(
-                        'original_id',
+                        'attribute_original_id',
                         'contentclassattribute_id',
                         'contentobject_id',
                         'data_float',
@@ -239,7 +239,7 @@ class EzcDatabaseTest extends TestCase
 
         $field->fieldDefinitionId = 231;
         $field->type              = 'ezstring';
-        $field->language          = null;
+        $field->language          = 31;
         $field->versionNo         = 1;
 
         return $field;
