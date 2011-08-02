@@ -29,21 +29,12 @@ class ServiceContainer
     private $dependencies;
 
     /**
-     * Instance overrides for configuration
-     *
-     * @var array[]
-     */
-    private $configurationOverrides;
-
-    /**
      * Construct object with optional configuration overrides
      *
-     * @param array[] $configurationOverrides
-     * @param array[]|object[] $dependencies
+     * @param mixed[]|object[] $dependencies
      */
-    public function __construct( array $configurationOverrides = array(), array $dependencies = array() )
+    public function __construct( array $dependencies = array() )
     {
-        $this->configurationOverrides = $configurationOverrides;
         $this->dependencies = $dependencies +
             array(
                 '$_SERVER' => $_SERVER,
@@ -95,14 +86,7 @@ class ServiceContainer
         }
 
         // Get settings
-        if ( isset( $this->configurationOverrides[$serviceName] ) )
-        {
-            $settings = $this->configurationOverrides[$serviceName];
-        }
-        else
-        {
-            $settings = Configuration::getInstance()->getSection( "service_{$serviceName}", false );
-        }
+        $settings = Configuration::getInstance()->getSection( "service_{$serviceName}", false );
 
         // Validate settings
         if ( $settings === false )
