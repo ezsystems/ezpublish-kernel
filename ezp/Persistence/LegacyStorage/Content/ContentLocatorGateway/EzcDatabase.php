@@ -75,49 +75,5 @@ class EzcDatabase extends ContentLocatorGateway
 
         return $objects;
     }
-
-    /**
-     * Generic converter of criteria into query fragments
-     *
-     * @param \ezcQuerySelect $query
-     * @param Criterion $criterion
-     * @return \ezcQueryExpression
-     */
-    protected function convertCriteria( \ezcQuerySelect $query, Criterion $criterion )
-    {
-        foreach ( $this->handler as $handler )
-        {
-            if ( $handler->accept( $criterion ) )
-            {
-                return $handler->handle( $query, $criterion );
-            }
-        }
-
-        throw new \RuntimeException( 'No conversion for criterion found.' );
-
-        // @TODO: Refactor
-        switch ( true )
-        {
-            case $criterion instanceof Criterion\ContentId:
-
-            case $criterion instanceof Criterion\LogicalAnd:
-
-            case $criterion instanceof Criterion\LogicalOr:
-                $subexpressions = array();
-                foreach ( $criterion->criteria as $subCriterion )
-                {
-                    $subexpressions[] = $this->convertCriteria( $query, $subCriterion );
-                }
-                return $query->expr->lOr( $subexpressions );
-
-            case $criterion instanceof Criterion\LogicalNot:
-                return $query->expr->not(
-                    $this->convertCriteria( $query, $criterion->criteria[0] )
-                );
-
-            default:
-                throw new \RuntimeException( 'No conversion for criterion found.' );
-        }
-    }
 }
 
