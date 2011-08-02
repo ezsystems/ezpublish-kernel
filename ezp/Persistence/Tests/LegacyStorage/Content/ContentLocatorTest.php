@@ -240,4 +240,26 @@ class ContentLocatorTest extends TestCase
             )
         );
     }
+
+    public function testContentTypeGroupFilter()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\ContentTypeGroup(
+                null,
+                Criterion\Operator::EQ,
+                2
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 4, 11, 12, 13, 42, 225, 10, 14 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
 }

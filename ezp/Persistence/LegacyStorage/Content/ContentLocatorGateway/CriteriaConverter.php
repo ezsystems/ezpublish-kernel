@@ -38,6 +38,7 @@ class CriteriaConverter
             new CriterionHandler\LogicalOr(),
             new CriterionHandler\Subtree(),
             new CriterionHandler\ContentType(),
+            new CriterionHandler\ContentTypeGroup(),
         );
     }
 
