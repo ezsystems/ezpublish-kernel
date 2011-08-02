@@ -372,4 +372,26 @@ class ContentLocatorTest extends TestCase
             )
         );
     }
+
+    public function testLocationIdFilter()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\LocationId(
+                null,
+                Criterion\Operator::IN,
+                array( 1, 2, 5 )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 4, 65 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
 }

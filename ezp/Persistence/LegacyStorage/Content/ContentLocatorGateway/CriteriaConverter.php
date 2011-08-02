@@ -40,6 +40,7 @@ class CriteriaConverter
             new CriterionHandler\ContentType(),
             new CriterionHandler\ContentTypeGroup(),
             new CriterionHandler\DateMetadata(),
+            new CriterionHandler\LocationId(),
         );
     }
 
