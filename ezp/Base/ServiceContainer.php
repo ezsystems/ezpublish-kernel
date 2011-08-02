@@ -8,7 +8,9 @@
  */
 
 namespace ezp\Base;
-use InvalidArgumentException,
+use ezp\Base\Exception\BadConfiguration,
+    ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\MissingClass,
     ReflectionClass;
 
 /**
@@ -105,15 +107,15 @@ class ServiceContainer
         // Validate settings
         if ( $settings === false )
         {
-            throw new InvalidArgumentException( "{$serviceName} is not a valid Service(Configuration section service_{$serviceName} does not exist), ". __CLASS__ );
+            throw new BadConfiguration( "base\\[service_{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
         else if ( empty( $settings['class'] ) )
         {
-            throw new InvalidArgumentException( "{$serviceName} does not have a Service class(value empty/ not defined), " . __CLASS__ );
+            throw new BadConfiguration( "base\\[service_{$serviceName}]\\class", 'class setting is not defined' );
         }
         else if ( !class_exists( $settings['class'] ) )
         {
-            throw new InvalidArgumentException( "{$serviceName} does not have a valid Service class({$settings['class']} is not a valid class), " . __CLASS__ );
+            throw new MissingClass( $settings['class'], 'dependency' );
         }
 
         // Create service directly if it does not have any arguments
@@ -142,19 +144,12 @@ class ServiceContainer
                 else if ( $argument[0] === '$' )
                 {
                     // Undefined variables will trow an exception
-                    throw new InvalidArgumentException( "$serviceName argument $key => $argument is not a valid variable, ". __CLASS__ );
+                    throw new InvalidArgumentValue( "arguments[{$key}]", $argument );
                 }
                 else
                 {
                     // Try to load a @service dependency
-                    try
-                    {
-                        $arguments[] = $this->get( ltrim( $argument, '@' ) );
-                    }
-                    catch ( InvalidArgumentException $e )
-                    {
-                        throw new InvalidArgumentException( "$serviceName argument {$settings['arguments'][$key]} => $argument threw an exception, ". __CLASS__, 0, $e );
-                    }
+                    $arguments[] = $this->get( ltrim( $argument, '@' ) );
                 }
             }
             // Primitive type / object argument

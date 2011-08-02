@@ -16,7 +16,7 @@ use ezp\Base\Exception,
  * BadConfiguration Exception implementation
  *
  * Use:
- *   throw new BadConfiguration( "base\[configuration]\parsers", "could not parse configuration files" );
+ *   throw new BadConfiguration( "base\\[configuration]\\parsers", "could not parse configuration files" );
  *
  */
 class BadConfiguration extends LogicException implements Exception
