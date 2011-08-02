@@ -54,27 +54,25 @@ class ServiceContainer
     /**
      * Service function to get Event instance.
      *
-     * @param array $callChainDependencyOverrides Overrides dependencies throughout the call (dependency) chain
      * @return Interfaces\Event
      */
-    public function getEvent( array $callChainDependencyOverrides = array() )
+    public function getEvent( )
     {
         if ( isset( $this->dependencies['@event'] ) )
             return $this->dependencies['@event'];
-        return $this->get( 'event', $callChainDependencyOverrides );
+        return $this->get( 'event' );
     }
 
     /**
      * Service function to get Repository object
      *
-     * @param array $callChainDependencyOverrides Overrides dependencies throughout the call (dependency) chain
      * @return Repository
      */
-    public function getRepository( array $callChainDependencyOverrides = array() )
+    public function getRepository()
     {
         if ( isset( $this->dependencies['@repository'] ) )
             return $this->dependencies['@repository'];
-        return $this->get( 'repository', $callChainDependencyOverrides );
+        return $this->get( 'repository' );
     }
 
     /**
@@ -82,17 +80,19 @@ class ServiceContainer
      *
      * @throws InvalidArgumentException
      * @param string $serviceName
-     * @param array $callChainDependencyOverrides Overrides dependencies throughout the call (dependency) chain
      * @return object
      */
-    public function get( $serviceName, array $callChainDependencyOverrides = array() )
+    public function get( $serviceName )
     {
         $serviceKey = "@{$serviceName}";
+
+        // Return directly if already exists
         if ( isset( $this->dependencies[$serviceKey] ) )
         {
             return $this->dependencies[$serviceKey];
         }
 
+        // Get settings
         if ( isset( $this->configurationOverrides[$serviceName] ) )
         {
             $settings = $this->configurationOverrides[$serviceName];
@@ -102,7 +102,7 @@ class ServiceContainer
             $settings = Configuration::getInstance()->getSection( "service_{$serviceName}", false );
         }
 
-        // validate settings
+        // Validate settings
         if ( $settings === false )
         {
             throw new InvalidArgumentException( "{$serviceName} is not a valid Service(Configuration section service_{$serviceName} does not exist), ". __CLASS__ );
@@ -126,47 +126,43 @@ class ServiceContainer
         $arguments = array();
         foreach ( $settings['arguments'] as $key => $argument )
         {
-            // service name / variable
+            // @Service / $Variable
             if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' ) )
             {
                 if ( $argument === '$serviceContainer' )
                 {
+                    // Self
                     $arguments[] = $this;
-                }
-                else if ( isset( $callChainDependencyOverrides[ $argument ] ) )
-                {
-                    $arguments[] = $callChainDependencyOverrides[ $argument ];
                 }
                 else if ( isset( $this->dependencies[ $argument ] ) )
                 {
+                    // Existing dependencies
                     $arguments[] = $this->dependencies[ $argument ];
                 }
                 else if ( $argument[0] === '$' )
                 {
+                    // Undefined variables will trow an exception
                     throw new InvalidArgumentException( "$serviceName argument $key => $argument is not a valid variable, ". __CLASS__ );
                 }
                 else
                 {
-                    goto loadDependency;
+                    // Try to load a @service dependency
+                    try
+                    {
+                        $arguments[] = $this->get( ltrim( $argument, '@' ) );
+                    }
+                    catch ( InvalidArgumentException $e )
+                    {
+                        throw new InvalidArgumentException( "$serviceName argument {$settings['arguments'][$key]} => $argument threw an exception, ". __CLASS__, 0, $e );
+                    }
                 }
             }
-            // primitive type / object argument
+            // Primitive type / object argument
             else
             {
                 $arguments[] = $argument;
             }
             continue;
-
-            loadDependency: { // load service dependency
-                try
-                {
-                    $arguments[] = $this->get( ltrim( $argument, '@' ), $callChainDependencyOverrides );
-                }
-                catch ( InvalidArgumentException $e )
-                {
-                    throw new InvalidArgumentException( "$serviceName argument {$settings['arguments'][$key]} => $argument threw an exception, ". __CLASS__, 0, $e );
-                }
-            }
         }
 
         // Use "new" if just 1 or 2 arguments (premature optimization to avoid use of reflection in most cases)
