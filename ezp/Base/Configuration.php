@@ -53,6 +53,7 @@ use ezp\Base\Exception\BadConfiguration,
  *
  * Usage:
  *
+ *     // Default value on $module is 'base', so this will parse base.ini[.append.php] files given setup above
  *     $bool = Configuration::getInstance()->get( 'autoload', 'development-mode' );
  *
  *
