@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Base;
-use ezp\Persistence\Interfaces\RepositoryHandler;
+use ezp\Base\Repository,
+    ezp\Persistence\Interfaces\RepositoryHandler;
 
 /**
  * Abstract Repository Services
@@ -17,20 +18,20 @@ use ezp\Persistence\Interfaces\RepositoryHandler;
 abstract class AbstractService
 {
     /**
-     * @var Repository
+     * @var \ezp\Base\Repository
      */
     protected $repository;
 
     /**
-     * @var RepositoryHandler
+     * @var \ezp\Persistence\Interfaces\RepositoryHandler
      */
     protected $handler;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param Repository $repository
-     * @param RepositoryHandler $handler
+     * @param \ezp\Base\Repository $repository
+     * @param \ezp\Persistence\Interfaces\RepositoryHandler $handler
      */
     public function __construct( Repository $repository, RepositoryHandler $handler )
     {

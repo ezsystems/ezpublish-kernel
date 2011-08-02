@@ -28,6 +28,7 @@ class TestSuite extends PHPUnit_Framework_TestSuite
         // $suite->addTestSuite( __NAMESPACE__ . "\\CriteriaCollectionTest"  );
         $suite->addTestSuite( __NAMESPACE__ . "\\TranslationTest" );
         $suite->addTestSuite( __NAMESPACE__ . "\\QueryBuilderTest" );
+        $suite->addTestSuite( __NAMESPACE__ . "\\SectionTest" );
 
         return $suite;
     }

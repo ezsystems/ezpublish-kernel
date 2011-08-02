@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Base;
-use RuntimeException,
+use ezp\Persistence\Interfaces\RepositoryHandler,
+    RuntimeException,
     DomainException;
 
 /**
@@ -44,7 +45,7 @@ class Repository
      *
      * Construct repository object with provided storage engine
      *
-     * @param RepositoryHandler $handler
+     * @param \ezp\Persistence\Interfaces\RepositoryHandler $handler
      */
     public function __construct( RepositoryHandler $handler/*, ezp\User\User $user*/ )
     {
@@ -76,7 +77,7 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return ezp\Content\Services\Content
+     * @return \ezp\Content\Services\Content
      */
     public function getContentService()
     {
@@ -89,7 +90,7 @@ class Repository
      * Get service object to perform several operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
-     * @return ezp\Content\Services\ContentType
+     * @return \ezp\Content\Services\ContentType
      */
     public function getContentTypeService()
     {
@@ -102,7 +103,7 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return ezp\Content\Services\Location
+     * @return \ezp\Content\Services\Location
      */
     public function getLocationService()
     {
@@ -113,7 +114,7 @@ class Repository
      * Get User Service
      *
      *
-     * @return ezp\Content\Services\Section
+     * @return \ezp\Content\Services\Section
      */
     public function getSectionService()
     {
@@ -126,7 +127,7 @@ class Repository
      * Get service object to perform several operations on User objects and it's aggregate members.
      * ( UserGroups, UserRole, UserRolePolicy & UserRolePolicyLimitation )
      *
-     * @return ezp\User\UserService
+     * @return \ezp\User\UserService
      */
     public function getUserService()
     {

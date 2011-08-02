@@ -8,10 +8,10 @@
  */
 
 namespace ezp\Content\Services;
-use ezp\Base\Exception\Validation,
+use ezp\Base\Exception\NotFound,
     ezp\Base\AbstractService,
     ezp\Content\Content,
-    ezp\Content\Section;
+    ezp\Content\Section as SectionObject;
 
 /**
  * Section service, used for section operations
@@ -22,65 +22,78 @@ class Section extends AbstractService
     /**
      * Creates the a new Section in the content repository
      *
-     * @param Section $section
-     * @return Section The newly create section
-     * @throws Exception\Validation If a validation problem has been found for $section
+     * @param \ezp\Content\Section $section
+     * @return \ezp\Content\Section The newly create section
+     * @todo Inject Value object into exising $section instead of creating a new one?
      */
-    public function create( Section $section )
+    public function create( SectionObject $section )
     {
+        $valueObject = $this->handler->sectionHandler()->create( $section->name, $section->identifier );
+        return SectionObject::__set_state( array( 'properties' =>  $valueObject ) );
     }
 
     /**
      * Updates $section in the content repository
      *
-     * @param Section $section
-     * @return Section
+     * @param \ezp\Content\Section $section
+     * @return \ezp\Content\Section
      * @throws Exception\Validation If a validation problem has been found for $section
      */
-    public function update( Section $section )
+    public function update( SectionObject $section )
     {
+        $this->handler->sectionHandler()->update( $section->id, $section->identifier, $section->name );
+        return $section;
     }
 
     /**
      * Loads a Section from its id ($sectionId)
      *
      * @param int $sectionId
-     * @return Section
-     * @throws Exception\NotFound if section could not be found
+     * @return \ezp\Content\Section|null
+     * @throws \ezp\Base\Exception\NotFound if section could not be found
      */
     public function load( $sectionId )
     {
+        $valueObject = $this->handler->sectionHandler()->load( $sectionId );
+        if ( !$valueObject )
+            throw new NotFound( 'section', $sectionId );
+        return SectionObject::__set_state( array( 'properties' =>  $valueObject ) );
     }
 
     /**
      * Loads a Section from its identifier ($sectionIdentifier)
      *
      * @param string $sectionIdentifier
-     * @return Section
-     * @throws Exception\NotFound if section could not be found
+     * @return \ezp\Content\Section
+     * @throws \ezp\Base\Exception\NotFound if section could not be found
      */
     public function loadByIdentifier( $sectionIdentifier )
     {
+        throw new NotFound( 'section', $sectionIdentifier );
     }
 
     /**
      * Counts the contents which $section is assigned to
      *
-     * @param Section $section
+     * @param int $sectionId
      * @return int
      */
-    public function countAssignedContents( Section $section )
+    public function countAssignedContents( $sectionId )
     {
+        return 0;
     }
 
     /**
      * Counts the contents which $section is assigned to
      *
-     * @param Section $section
+     * @todo should this function assign section object to content->section?
+     *       What if that is already done but nothing is saved, then first line here will fail.
+     *
+     * @param ezp\Content\Section $section
      * @param Content $content
-     * @uses ezp\Base\StorageEngine\SectionHandler::assign()
+     * @uses \ezp\Base\StorageEngine\SectionHandler::assign()
      */
-    public function assign( Section $section, Content $content )
+    public function assign( SectionObject $section, Content $content )
     {
         if ( $section->id === $content->section->id )
             return;
@@ -90,19 +103,19 @@ class Section extends AbstractService
     /**
      * Deletes $section from content repository
      *
-     * @param Section $section
+     * @param int $sectionId
      * @return void
      * @throws Exception\Validation
      *         if section can not be deleted
      *         because it is still assigned to some contents.
      */
-    public function delete( Section $section )
+    public function delete( $sectionId )
     {
-        if ( $this->countAssignedContents( $section ) > 0 )
+        if ( $this->countAssignedContents( $sectionId ) > 0 )
         {
             throw new Validation( 'This section is assigned to some contents' );
         }
-        // do the removal
+        return $this->handler->sectionHandler()->delete( $sectionId );
     }
 }
 ?>
