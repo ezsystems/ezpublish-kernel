@@ -172,4 +172,50 @@ class ContentLocatorTest extends TestCase
             )
         );
     }
+
+    public function testContentSubtreeFilterIn()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\Subtree(
+                null,
+                Criterion\Operator::IN,
+                array(
+                    '/1/2/69/',
+                )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 67, 68, 69, 70, 71, 72, 73, 74 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
+
+    public function testContentSubtreeFilterEq()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\Subtree(
+                null,
+                Criterion\Operator::EQ,
+                '/1/2/69/'
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 67, 68, 69, 70, 71, 72, 73, 74 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
 }

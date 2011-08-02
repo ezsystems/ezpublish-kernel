@@ -36,6 +36,7 @@ class CriteriaConverter
             new CriterionHandler\LogicalNot(),
             new CriterionHandler\LogicalAnd(),
             new CriterionHandler\LogicalOr(),
+            new CriterionHandler\Subtree(),
         );
     }
 
