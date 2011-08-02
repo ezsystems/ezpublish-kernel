@@ -134,7 +134,8 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Mapper::convertToStorageValue;
+     * @covers ezp\Persistence\LegacyStorage\Content\Mapper::convertToStorageValue
+     * @covers ezp\Persistence\LegacyStorage\Content\StorageFieldValue
      */
     public function testConvertToStorageValue()
     {

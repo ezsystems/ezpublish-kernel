@@ -60,6 +60,7 @@ class StorageRegistryTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\StorageRegistry::getStorage
+     * @covers ezp\Persistence\LegacyStorage\Exception\StorageNotFoundException
      * @expectedException ezp\Persistence\LegacyStorage\Exception\StorageNotFoundException
      * @expectedExceptionMessage Storage for type "not-found" not found.
      */

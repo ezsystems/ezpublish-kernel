@@ -24,7 +24,7 @@ class ContentHandlerTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\ContentHandler::__construct
+     * @covers ezp\Persistence\LegacyStorage\Content\ContentHandler::__construct
      */
     public function testCtor()
     {
@@ -57,7 +57,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\ContentHandler::create
+     * @covers ezp\Persistence\LegacyStorage\Content\ContentHandler::create
      * @todo Current method way to complex to test, refactor!
      */
     public function testCreate()

@@ -60,6 +60,7 @@ class FieldValueConverterRegistryTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\LegacyStorage\Content\FieldValueConverterRegistry::getConverter
+     * @covers ezp\Persistence\LegacyStorage\Exception\FieldValueConverterNotFoundException
      * @expectedException ezp\Persistence\LegacyStorage\Exception\FieldValueConverterNotFoundException
      * @expectedExceptionMessage FieldValueConverter for type "not-found" not found.
      */
