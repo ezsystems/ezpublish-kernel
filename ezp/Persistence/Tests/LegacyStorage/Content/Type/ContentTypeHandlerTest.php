@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests\LegcyStorage\Content\Type;
+namespace ezp\Persistence\Tests\LegacyStorage\Content\Type;
 use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\ContentTypeCreateStruct,
     ezp\Persistence\Content\Type\ContentTypeUpdateStruct,

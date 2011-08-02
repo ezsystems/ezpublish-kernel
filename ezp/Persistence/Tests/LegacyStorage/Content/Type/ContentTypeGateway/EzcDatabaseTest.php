@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests\LegcyStorage\Content\Type\ContentTypeGateway;
+namespace ezp\Persistence\Tests\LegacyStorage\Content\Type\ContentTypeGateway;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
-    ezp\Persistence\Tests\LegcyStorage\Content\Type\ContentTypeGateway,
+    ezp\Persistence\Tests\LegacyStorage\Content\Type\ContentTypeGateway,
     ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase,
 
     ezp\Persistence\Content\Type,
