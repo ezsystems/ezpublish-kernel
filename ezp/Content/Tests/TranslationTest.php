@@ -25,10 +25,9 @@ class TranslationTest extends \PHPUnit_Framework_TestCase
 
     protected $localeEN;
 
-    public function __construct()
+    public function setUp()
     {
-        parent::__construct();
-        $this->setName( "Translation class tests" );
+        parent::setUp();
 
         $this->contentType = new Type();
         $this->contentType->identifier = 'article';

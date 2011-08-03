@@ -17,12 +17,6 @@ use ezp\Content\Section,
  */
 class SectionTest extends \PHPUnit_Framework_TestCase
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setName( "Section class tests" );
-    }
-
     /**
      * @return \ezp\Content\SectionService
      */

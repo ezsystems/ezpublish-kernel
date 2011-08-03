@@ -16,12 +16,6 @@ use ezp\Base\Autoloader;
  */
 class AutoloadTest extends \PHPUnit_Framework_TestCase
 {
-    public function __construct()
-    {
-        parent::__construct();
-        $this->setName( "Autoload class tests" );
-    }
-
     /**
      * Test that multiple instances of Autoloader manages to live side by side independent of
      * ezcBase Autoloader being loaded or not, and registered or not.

@@ -21,10 +21,9 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
      */
     private $collection;
 
-    public function __construct()
+    public function setUp()
     {
-        parent::__construct();
-        $this->setName( "ReadOnlyCollectionTest class tests" );
+        parent::setUp();
         $this->collection = new ReadOnly( array( 1, 55, 'collection', 'test' ) );
     }
 

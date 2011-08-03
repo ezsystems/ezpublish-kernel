@@ -27,10 +27,9 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     protected $localeFR;
     protected $localeEN;
 
-    public function __construct()
+    public function setUp()
     {
-        parent::__construct();
-        $this->setName( "Content class tests" );
+        parent::setUp();
 
         // setup a content type & content object of use by tests
         $this->contentType = new Type();

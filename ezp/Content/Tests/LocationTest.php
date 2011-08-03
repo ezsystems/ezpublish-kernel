@@ -22,10 +22,9 @@ class LocationTest extends \PHPUnit_Framework_TestCase
 {
     protected $content;
 
-    public function __construct()
+    public function setUp()
     {
-        parent::__construct();
-        $this->setName( "Location class tests" );
+        parent::setUp();
 
         // setup a content type & content object of use by tests, fields are not needed for location
         $contentType = new Type();

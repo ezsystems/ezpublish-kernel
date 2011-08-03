@@ -18,10 +18,10 @@ use ezp\Base\Configuration\Parser\Ini,
 class IniParserTest extends \PHPUnit_Framework_TestCase
 {
     protected $parser;
-    public function __construct()
+
+    public function setUp()
     {
-        parent::__construct();
-        $this->setName( "Parser\Ini class tests" );
+        parent::setUp();
         $this->parser = new Ini( null );
     }
 
