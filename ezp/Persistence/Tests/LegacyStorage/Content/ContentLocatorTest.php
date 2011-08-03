@@ -55,7 +55,7 @@ class ContentLocatorTest extends TestCase
 
     protected function getContentLocator()
     {
-        return new Content\ContentLocator(
+        return new Content\Locator(
             new Content\ContentLocatorGateway\EzcDatabase(
                 $this->getDatabaseHandler()
             )

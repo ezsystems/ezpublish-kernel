@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentLocator class
+ * File containing the Content Locator class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,7 +13,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\Criterion;
 
 /**
- * The ContentLocator retrieves sets of of Content objects, based on a set of
+ * The Content Locator retrieves sets of of Content objects, based on a set of
  * criteria.
  *
  * The basic idea of this class is to do the following:
@@ -35,7 +35,7 @@ use ezp\Persistence\Content,
  *
  * @version //autogentag//
  */
-class ContentLocator
+class Locator
 {
     /**
      * Content locator gateway.
