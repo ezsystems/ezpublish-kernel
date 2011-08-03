@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Tests;
 use ezp\Content\Section,
-    ezp\Base\ServiceContainer;
+    ezp\Base\Service\Container;
 
 /**
  * Test case for Location class
@@ -28,7 +28,7 @@ class SectionTest extends \PHPUnit_Framework_TestCase
      */
     protected function getService()
     {
-        $serviceContainer = new ServiceContainer(
+        $serviceContainer = new Container(
             array(
                 '@repository_handler' => new \ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler()
             )

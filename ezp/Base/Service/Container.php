@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Base\Service;
-use ezp\Base\Exception\BadConfiguration,
+use ezp\Base\Configuration,
+    ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\MissingClass,
     ReflectionClass;
@@ -20,12 +21,12 @@ use ezp\Base\Exception\BadConfiguration,
  *
  * Usage:
  *
- *     $sc = new ServiceContainer();
+ *     $sc = new ezp\Base\Service\Container();
  *     $sc->GetRepository->GetContentService()->load( 42 );
  *
  * Or overriding dependencies (in unit tests):
  *
- *     $sc = new ServiceContainer( array( '@repository_handler' => new \ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler() ) );
+ *     $sc = new ezp\Base\Service\Container( array( '@repository_handler' => new \ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler() ) );
  *     $sc->GetRepository->GetContentService()->load( 42 );
  *
  * Settings are defined in base.ini like the following example:
