@@ -7,9 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests\LegacyStorage\Content\LocationGateway;
+namespace ezp\Persistence\Tests\LegacyStorage\Content\Location\Gateway;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
-    ezp\Persistence\LegacyStorage\Content,
+    ezp\Persistence\Content,
+    ezp\Persistence\LegacyStorage\Content\Location\Gateway\EzcDatabase,
     ezp\Persistence;
 
 /**
@@ -30,12 +31,12 @@ class EzpDatabaseTest extends TestCase
     protected function getLocationGateway()
     {
         $dbHandler = $this->getDatabaseHandler();
-        return new Content\LocationGateway\EzcDatabase( $dbHandler );
+        return new EzcDatabase( $dbHandler );
     }
 
     protected function getContentObject()
     {
-        $contentObject = new \ezp\Persistence\Content();
+        $contentObject = new Content();
         $contentObject->id = 68;
 
         return $contentObject;

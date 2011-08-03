@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\LegacyStorage\Content;
 use ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Location\Gateway,
     ezp\Persistence\Content\Location\Handler as BaseLocationHandler;
 
 /**
@@ -26,17 +27,17 @@ class LocationHandler implements BaseLocationHandler
     /**
      * Gaateway for handling location data
      *
-     * @var LocationGateway
+     * @var ezp\Persistence\LegacyStorage\Content\Location\Gateway
      */
     protected $locationGateway;
 
     /**
      * Construct from userGateway
      *
-     * @param LocationGateway $locationGateway
+     * @param ezp\Persistence\Content\Location\Gateway $locationGateway
      * @return void
      */
-    public function __construct( ContentHandler $contentHandler, LocationGateway $locationGateway )
+    public function __construct( ContentHandler $contentHandler, Gateway $locationGateway )
     {
         $this->contentHandler = $contentHandler;
         $this->locationGateway = $locationGateway;

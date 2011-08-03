@@ -20,14 +20,14 @@ class LocationHandlerTest extends TestCase
     /**
      * Mocked content handler instance
      *
-     * @var \ezp\Persistence\LegacyStorage\Content\ContentHandler
+     * @var ezp\Persistence\LegacyStorage\Content\ContentHandler
      */
     protected $contentHandler;
 
     /**
      * Mocked location gateway instance
      *
-     * @var \ezp\Persistence\LegacyStorage\Content\LocationGateway
+     * @var ezp\Persistence\LegacyStorage\Content\Location\Gateway
      */
     protected $locationGateway;
 
@@ -46,13 +46,13 @@ class LocationHandlerTest extends TestCase
         $dbHandler = $this->getDatabaseHandler();
         return new Content\LocationHandler(
             $this->contentHandler = $this->getMock(
-                '\ezp\Persistence\LegacyStorage\Content\ContentHandler',
+                'ezp\\Persistence\\LegacyStorage\\Content\\ContentHandler',
                 array(),
                 array(),
                 '',
                 false
             ),
-            $this->locationGateway = $this->getMock( '\ezp\Persistence\LegacyStorage\Content\LocationGateway' )
+            $this->locationGateway = $this->getMock( 'ezp\\Persistence\\LegacyStorage\\Content\\Location\\Gateway' )
         );
     }
 

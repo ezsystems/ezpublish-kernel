@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\LegacyStorage\Content\LocationGateway;
-use ezp\Persistence\LegacyStorage\Content\LocationGateway,
+namespace ezp\Persistence\LegacyStorage\Content\Location\Gateway;
+use ezp\Persistence\LegacyStorage\Content\Location\Gateway,
     ezp\Persistence\Content;
 
 /**
  * Location gateway implementation using the zeta database component.
  */
-class EzcDatabase extends LocationGateway
+class EzcDatabase extends Gateway
 {
     /**
      * Database handler

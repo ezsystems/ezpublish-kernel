@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the LocationGateway class
+ * File containing the Location Gateway class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,7 +13,7 @@ use ezp\Persistence\Content;
 /**
  * Base class for location gateways.
  */
-abstract class LocationGateway
+abstract class Gateway
 {
     /**
      * Constants for node assignment op codes
