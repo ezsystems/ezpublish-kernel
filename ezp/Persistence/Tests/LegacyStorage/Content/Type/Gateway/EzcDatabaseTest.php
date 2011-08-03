@@ -240,20 +240,35 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    // "random" sample
+                    'version' => '0',
                     'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";}',
+                    'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+                    'identifier' => 'folder',
                     'created' => '1024392098',
+                    'modified' => '1082454875',
+                    'creator_id' => '14',
                     'modifier_id' => '14',
                     'remote_id' => 'a3d405b81be900468eb153d774f4f0d2',
+                    'url_alias_name' => '',
+                    'is_container' => '1',
+                    'initial_language_id' => '2',
                 )
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select(
+                    'version',
                     'serialized_name_list',
+                    'serialized_description_list',
+                    'identifier',
                     'created',
+                    'modified',
+                    'creator_id',
                     'modifier_id',
-                    'remote_id'
+                    'remote_id',
+                    'url_alias_name',
+                    'is_container',
+                    'initial_language_id'
                 )->from( 'ezcontentclass' ),
             'Inserted Type data incorrect'
         );
