@@ -19,7 +19,7 @@ use ezp\Base\Observable,
  * Abstract model class for Domain objects
  *
  */
-abstract class AbstractModel implements Observable, Model
+abstract class AbstractModel implements Observable, ModelInterface
 {
     /**
      * Array indicates which public/protected properties are readable through
