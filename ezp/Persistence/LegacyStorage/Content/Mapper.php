@@ -93,4 +93,19 @@ class Mapper
             $field->value
         );
     }
+
+    /**
+     * Extracts Content objects (and nested) from database result $rows
+     *
+     * Expects database rows to be indexed by keys of the format
+     *
+     *      "$tableName_$columnName"
+     *
+     * @param array $rows
+     * @return array(Content)
+     */
+    public function extractContentFromRows( array $rows )
+    {
+        return array();
+    }
 }
