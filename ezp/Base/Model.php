@@ -10,7 +10,7 @@
 namespace ezp\Base;
 use ezp\Base\Observable,
     ezp\Base\Observer,
-    ezp\Base\Interfaces\Model as ModelInterface,
+    ezp\Base\ModelInterface,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
     Traversable;
@@ -222,26 +222,42 @@ abstract class Model implements Observable, ModelInterface
     }
 
     /**
-     * Restores the state of a model object, gives access to initialize an object on variables that are not public.
+     * Sets internal variables on object from array
      *
-     * This function does not perform any type checking so is purely for internal use.
+     * Key is property name and value is property value.
      *
      * @internal
      * @param array $state
      * @return Model
      */
-    public static function __set_state( array $state )
+    public function setState( array $state )
     {
-        $obj = new static();
-        foreach ( $state as $variable => $value )
+        foreach ( $state as $name => $value )
         {
-            if ( property_exists( $obj, $variable ) )
-                $obj->$variable = $value;
+            if ( property_exists( $this, $name ) )
+                $this->$name = $value;
             else
-                throw new PropertyNotFound( $variable, get_class( $obj ) );
+                throw new PropertyNotFound( $name, get_class( $this ) );
         }
+        return $this;
+    }
 
-        return $obj;
+    /**
+     * Gets internal variables on object as array
+     *
+     * Key is property name and value is property value.
+     *
+     * @internal param $
+     * @return array
+     */
+    public function getState()
+    {
+        $arr = array();
+        foreach ( $this as $name => $value )
+        {
+            $arr[$name] = $value;
+        }
+        return (array) $this;
     }
 
     /**

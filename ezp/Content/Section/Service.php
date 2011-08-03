@@ -28,7 +28,8 @@ class Service extends BaseService
     public function create( SectionObject $section )
     {
         $valueObject = $this->handler->sectionHandler()->create( $section->name, $section->identifier );
-        return SectionObject::__set_state( array( 'properties' =>  $valueObject ) );
+        $section = new SectionObject();
+        return $section->setState( array( 'properties' =>  $valueObject ) );
     }
 
     /**
@@ -56,7 +57,8 @@ class Service extends BaseService
         $valueObject = $this->handler->sectionHandler()->load( $sectionId );
         if ( !$valueObject )
             throw new NotFound( 'section', $sectionId );
-        return SectionObject::__set_state( array( 'properties' =>  $valueObject ) );
+        $section = new SectionObject();
+        return $section->setState( array( 'properties' =>  $valueObject ) );
     }
 
     /**
