@@ -175,7 +175,7 @@ class MapperTest extends TestCase
         $convMock = $this->getMock(
             'ezp\\Persistence\\LegacyStorage\\Content\\FieldValueConverter'
         );
-        $convMock->expects( $this->exactly( 8 ) )
+        $convMock->expects( $this->exactly( 9 ) )
             ->method( 'toFieldValue' )
             ->with(
                 $this->isInstanceOf(
