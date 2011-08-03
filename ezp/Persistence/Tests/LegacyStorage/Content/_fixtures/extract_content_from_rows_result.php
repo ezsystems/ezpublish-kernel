@@ -14,8 +14,8 @@ $content->ownerId      = 14;
 $content->versionInfos = array();
 
 $v1            = new Version();
-$v1->id        = 675;
-$v1->versionNo = 4;
+$v1->id        = 677;
+$v1->versionNo = 3;
 $v1->modified  = 1312302914;
 $v1->creatorId = 14;
 $v1->created   = 1312302870;
