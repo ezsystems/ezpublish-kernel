@@ -16,7 +16,7 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\ContentCreateStruct;
+    ezp\Persistence\Content\CreateStruct;
 
 /**
  * Test case for Mapper
@@ -59,13 +59,13 @@ class MapperTest extends TestCase
     }
 
     /**
-     * Returns a ContentCreateStruct fixture
+     * Returns a ezp\Persistence\Content\CreateStruct fixture
      *
-     * @return ContentCreateStruct
+     * @return ezp\Persistence\Content\CreateStruct
      */
     protected function getCreateStructFixture()
     {
-        $struct = new ContentCreateStruct();
+        $struct = new CreateStruct();
 
         $struct->name            = 'Content name';
         $struct->typeId          = 23;
