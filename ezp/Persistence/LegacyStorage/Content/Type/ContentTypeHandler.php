@@ -148,9 +148,9 @@ class ContentTypeHandler implements BaseContentTypeHandler
         foreach ( $contentType->contentTypeGroupIds as $groupId )
         {
             $this->contentTypeGateway->insertGroupAssignement(
+                $groupId,
                 $contentType->id,
-                $contentType->version,
-                $groupId
+                $contentType->version
             );
         }
         foreach ( $contentType->fieldDefinitions as $fieldDef )

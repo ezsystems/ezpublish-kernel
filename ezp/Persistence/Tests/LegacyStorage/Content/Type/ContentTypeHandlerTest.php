@@ -228,9 +228,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $gatewayMock->expects( $this->once() )
             ->method( 'insertGroupAssignement' )
             ->with(
+                $this->equalTo( 42 ),
                 $this->equalTo( 23 ),
-                $this->equalTo( 1 ),
-                $this->equalTo( 42 )
+                $this->equalTo( 1 )
             );
         $gatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'insertFieldDefinition' )
