@@ -9,7 +9,7 @@
  */
 
 namespace ezp\Persistence\LegacyStorage\Content;
-use ezp\Persistence\LegacyStorage\Content\ContentGateway,
+use ezp\Persistence\LegacyStorage\Content\Gateway,
     ezp\Persistence\LegacyStorage\Content\Mapper;
 
 use ezp\Persistence\Content\Handler as BaseContentHandler,
@@ -27,7 +27,7 @@ class ContentHandler implements BaseContentHandler
     /**
      * Content gateway.
      *
-     * @var ContentGateway
+     * @var ezp\Persistence\LegacyStorage\Content\Gateway
      */
     protected $contentGateway;
 
@@ -48,10 +48,10 @@ class ContentHandler implements BaseContentHandler
     /**
      * Creates a new content handler.
      *
-     * @param ContentGateway $contentGateway
+     * @param ezp\Persistence\LegacyStorage\Content\Gateway $contentGateway
      */
     public function __construct(
-        ContentGateway $contentGateway,
+        Gateway $contentGateway,
         Mapper $mapper,
         StorageRegistry $storageRegistry
     )
