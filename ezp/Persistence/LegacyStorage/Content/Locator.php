@@ -10,7 +10,8 @@
 namespace ezp\Persistence\LegacyStorage\Content;
 
 use ezp\Persistence\Content,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Criterion,
+    ezp\Persistence\LegacyStorage\Content\Locator\Gateway as LocatorGateway;
 
 /**
  * The Content Locator retrieves sets of of Content objects, based on a set of
@@ -40,16 +41,16 @@ class Locator
     /**
      * Content locator gateway.
      *
-     * @var ContentLocatorGateway
+     * @var ezp\Persistence\LegacyStorage\Content\Locator\Gateway
      */
     protected $gateway;
 
     /**
      * Creates a new content handler.
      *
-     * @param \ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway $gateway
+     * @param \ezp\Persistence\LegacyStorage\Content\Locator\Gateway $gateway
      */
-    public function __construct( ContentLocatorGateway $gateway )
+    public function __construct( LocatorGateway $gateway )
     {
         $this->gateway = $gateway;
     }

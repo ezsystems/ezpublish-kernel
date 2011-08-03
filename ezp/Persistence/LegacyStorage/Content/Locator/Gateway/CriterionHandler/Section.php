@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the EzcDatabase logical and criterion handler class
+ * File containing the EzcDatabase section criterion handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway\CriterionHandler;
-use ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway\CriterionHandler,
-    ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway\CriteriaConverter,
+namespace ezp\Persistence\LegacyStorage\Content\Locator\Gateway\CriterionHandler;
+use ezp\Persistence\LegacyStorage\Content\Locator\Gateway\CriterionHandler,
+    ezp\Persistence\LegacyStorage\Content\Locator\Gateway\CriteriaConverter,
     ezp\Persistence\Content\Criterion;
 
 /**
- * Logical and criterion handler
+ * Section criterion handler
  */
-class LogicalAnd extends CriterionHandler
+class Section extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -25,7 +25,7 @@ class LogicalAnd extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\LogicalAnd;
+        return $criterion instanceof Criterion\Section;
     }
 
     /**
@@ -38,12 +38,7 @@ class LogicalAnd extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
-        $subexpressions = array();
-        foreach ( $criterion->criteria as $subCriterion )
-        {
-            $subexpressions[] = $converter->convertCriteria( $query, $subCriterion );
-        }
-        return $query->expr->lAnd( $subexpressions );
+        return $query->expr->in( 'section_id', $criterion->value );
     }
 }
 

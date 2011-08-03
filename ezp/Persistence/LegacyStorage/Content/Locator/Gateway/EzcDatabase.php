@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway;
-use ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway,
+namespace ezp\Persistence\LegacyStorage\Content\Locator\Gateway;
+use ezp\Persistence\LegacyStorage\Content\Locator\Gateway,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Criterion;
 
 /**
  * Content locator gateway implementation using the zeta handler component.
  */
-class EzcDatabase extends ContentLocatorGateway
+class EzcDatabase extends Gateway
 {
     /**
      * Database handler

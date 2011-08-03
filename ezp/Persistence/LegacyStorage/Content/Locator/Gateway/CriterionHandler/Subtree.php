@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the EzcDatabase parent location id criterion handler class
+ * File containing the EzcDatabase subtree criterion handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway\CriterionHandler;
-use ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway\CriterionHandler,
-    ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway\CriteriaConverter,
+namespace ezp\Persistence\LegacyStorage\Content\Locator\Gateway\CriterionHandler;
+use ezp\Persistence\LegacyStorage\Content\Locator\Gateway\CriterionHandler,
+    ezp\Persistence\LegacyStorage\Content\Locator\Gateway\CriteriaConverter,
     ezp\Persistence\Content\Criterion;
 
 /**
- * Parent location id criterion handler
+ * Subtree criterion handler
  */
-class ParentLocationId extends CriterionHandler
+class Subtree extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -25,7 +25,7 @@ class ParentLocationId extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\ParentLocationId;
+        return $criterion instanceof Criterion\Subtree;
     }
 
     /**
@@ -38,12 +38,18 @@ class ParentLocationId extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
+        $statements = array();
+        foreach ( $criterion->value as $pattern )
+        {
+            $statements[] = $query->expr->like( 'ezcontentobject_tree.path_string', $query->bindValue( $pattern . '%' ) );
+        }
+
         $subSelect = $query->subSelect();
         $subSelect
             ->select( 'contentobject_id' )
             ->from( 'ezcontentobject_tree' )
             ->where(
-                $query->expr->in( 'parent_node_id', $criterion->value )
+                $query->expr->lOr( $statements )
             );
 
         return $query->expr->in( 'id', $subSelect );

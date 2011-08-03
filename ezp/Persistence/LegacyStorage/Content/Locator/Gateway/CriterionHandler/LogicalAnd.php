@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the EzcDatabase remote id criterion handler class
+ * File containing the EzcDatabase logical and criterion handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway\CriterionHandler;
-use ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway\CriterionHandler,
-    ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway\CriteriaConverter,
+namespace ezp\Persistence\LegacyStorage\Content\Locator\Gateway\CriterionHandler;
+use ezp\Persistence\LegacyStorage\Content\Locator\Gateway\CriterionHandler,
+    ezp\Persistence\LegacyStorage\Content\Locator\Gateway\CriteriaConverter,
     ezp\Persistence\Content\Criterion;
 
 /**
- * Remote id criterion handler
+ * Logical and criterion handler
  */
-class RemoteId extends CriterionHandler
+class LogicalAnd extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -25,7 +25,7 @@ class RemoteId extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\RemoteId;
+        return $criterion instanceof Criterion\LogicalAnd;
     }
 
     /**
@@ -38,7 +38,12 @@ class RemoteId extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
-        return $query->expr->in( 'remote_id', $criterion->value );
+        $subexpressions = array();
+        foreach ( $criterion->criteria as $subCriterion )
+        {
+            $subexpressions[] = $converter->convertCriteria( $query, $subCriterion );
+        }
+        return $query->expr->lAnd( $subexpressions );
     }
 }
 
