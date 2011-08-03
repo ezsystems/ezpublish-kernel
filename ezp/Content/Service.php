@@ -11,7 +11,7 @@ namespace ezp\Content;
 use ezp\Base\Service as BaseService,
     ezp\Base\Exception\NotFound,
     ezp\Content,
-    ezp\Content\Query;
+    ezp\Content\Query,
     ezp\Content\Query\Builder;
 
 /**
