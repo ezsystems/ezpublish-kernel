@@ -9,7 +9,7 @@
 
 namespace ezp\Content;
 use ezp\Base\ProxyInterface,
-    ezp\Base\Service,
+    ezp\Base\Service as BaseService,
     InvalidArgumentException;
 
 /**
@@ -47,7 +47,7 @@ class Proxy implements ProxyInterface
      * @param string $method Optional, defines which function on handler to call, 'load' by default.
      * @throws InvalidArgumentException If $id is not a int value above zero.
      */
-    public function __construct( Service $service, $id, $method = 'load' )
+    public function __construct( BaseService $service, $id, $method = 'load' )
     {
         $this->service = $service;
         $this->id = (int)$id;
