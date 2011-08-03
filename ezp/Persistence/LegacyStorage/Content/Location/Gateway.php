@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\LegacyStorage\Content;
+namespace ezp\Persistence\LegacyStorage\Content\Location;
 use ezp\Persistence\Content;
 
 /**
