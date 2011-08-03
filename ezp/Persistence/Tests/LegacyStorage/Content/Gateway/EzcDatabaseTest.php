@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests\LegacyStorage\Content\ContentGateway;
+namespace ezp\Persistence\Tests\LegacyStorage\Content\Gateway;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
-    ezp\Persistence\LegacyStorage\Content\ContentGateway\EzcDatabase,
+    ezp\Persistence\LegacyStorage\Content\Gateway\EzcDatabase,
     ezp\Persistence\LegacyStorage\Content\StorageFieldValue,
 
     ezp\Persistence\Content,
@@ -17,13 +17,13 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\Content\Version;
 
 /**
- * Test case for ContentGateway.
+ * Test case for ezp\Persistence\LegacyStorage\Content\Gateway\EzcDatabase.
  */
 class EzcDatabaseTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\ContentGateway\EzcDatabase::__construct
+     * @covers ezp\Persistence\LegacyStorage\Content\Gateway\EzcDatabase::__construct
      */
     public function testCtor()
     {
@@ -39,7 +39,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\ContentGateway\EzcDatabase::insertContentObject
+     * @covers ezp\Persistence\LegacyStorage\Content\Gateway\EzcDatabase::insertContentObject
      * @todo Fix not available fields
      */
     public function testInsertContentObject()

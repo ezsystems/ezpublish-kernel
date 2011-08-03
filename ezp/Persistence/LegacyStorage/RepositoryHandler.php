@@ -106,7 +106,7 @@ class RepositoryHandler implements Interfaces\RepositoryHandler
         if ( !isset( $this->contentHandler ) )
         {
             $this->contentHandler = new Content\ContentHandler(
-                new Content\ContentGateway\EzcDatabase( $this->dbHandler ),
+                new Content\Gateway\EzcDatabase( $this->dbHandler ),
                 new Content\Mapper( $this->getFieldValueConverterRegistry() ),
                 new Content\StorageRegistry( $this->getStorageRegistry() )
             );

@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\LegacyStorage\Content\ContentGateway;
-use ezp\Persistence\LegacyStorage\Content\ContentGateway,
+namespace ezp\Persistence\LegacyStorage\Content\Gateway;
+use ezp\Persistence\LegacyStorage\Content\Gateway,
     ezp\Persistence\LegacyStorage\Content\StorageFieldValue,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Version,
@@ -18,7 +18,7 @@ use ezp\Persistence\LegacyStorage\Content\ContentGateway,
 /**
  * ezcDatabase based content gateway
  */
-class EzcDatabase extends ContentGateway
+class EzcDatabase extends Gateway
 {
     /**
      * Zeta Components database handler.

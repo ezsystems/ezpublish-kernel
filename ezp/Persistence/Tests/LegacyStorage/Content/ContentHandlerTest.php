@@ -229,12 +229,12 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a mock object for the Content Gateway.
      *
-     * @return ezp\Persistence\LegacyStorage\Content\Content\Gateway
+     * @return ezp\Persistence\LegacyStorage\Content\Gateway
      */
     protected function getGatewayMock()
     {
         return $this->getMockForAbstractClass(
-            'ezp\\Persistence\\LegacyStorage\\Content\\Content\\Gateway'
+            'ezp\\Persistence\\LegacyStorage\\Content\\Gateway'
         );
     }
 
