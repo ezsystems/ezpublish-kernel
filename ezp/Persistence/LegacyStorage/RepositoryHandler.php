@@ -151,7 +151,7 @@ class RepositoryHandler implements Interfaces\RepositoryHandler
         if ( !isset( $this->contentTypeHandler ) )
         {
             $this->contentTypeHandler = new Type\ContentTypeHandler(
-                new Type\ContentTypeGateway\EzcDatabase( $this->dbHandler ),
+                new Type\Gateway\EzcDatabase( $this->dbHandler ),
                 new Type\Mapper()
             );
         }
@@ -167,7 +167,7 @@ class RepositoryHandler implements Interfaces\RepositoryHandler
         {
             $this->locationHandler = new Content\LocationHandler(
                 $this->contentHandler(),
-                new Content\LocationGateway\EzcDatabase( $this->dbHandler )
+                new Content\Location\Gateway\EzcDatabase( $this->dbHandler )
             );
         }
         return $this->locationHandler;
