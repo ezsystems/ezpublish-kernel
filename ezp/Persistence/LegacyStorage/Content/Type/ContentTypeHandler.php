@@ -119,7 +119,7 @@ class ContentTypeHandler implements BaseContentTypeHandler
      * @param int $version
      * @todo Use constant for $version?
      */
-    public function load( $contentTypeId, $version = 1 )
+    public function load( $contentTypeId, $version = 0 )
     {
         $rows = $this->contentTypeGateway->loadTypeData(
             $contentTypeId, $version
