@@ -26,7 +26,7 @@ class RepositoryHandlerTest extends TestCase
         $contentHandler = $handler->contentHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Interfaces\\ContentHandler',
+            'ezp\\Persistence\\Content\\Handler',
             $contentHandler
         );
         $this->assertInstanceOf(
@@ -117,7 +117,7 @@ class RepositoryHandlerTest extends TestCase
         $contentTypeHandler = $handler->contentTypeHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Type\\Interfaces\\ContentTypeHandler',
+            'ezp\\Persistence\\Content\\Type\\Handler',
             $contentTypeHandler
         );
         $this->assertInstanceOf(
@@ -150,7 +150,7 @@ class RepositoryHandlerTest extends TestCase
         $locationHandler = $handler->locationHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Interfaces\\LocationHandler',
+            'ezp\\Persistence\\Content\\Location\\Handler',
             $locationHandler
         );
         $this->assertInstanceOf(
@@ -183,7 +183,7 @@ class RepositoryHandlerTest extends TestCase
         $userHandler = $handler->userHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\User\\Interfaces\\UserHandler',
+            'ezp\\Persistence\\User\\Handler',
             $userHandler
         );
         $this->assertInstanceOf(

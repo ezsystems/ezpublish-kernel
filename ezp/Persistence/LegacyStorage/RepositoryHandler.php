@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\LegacyStorage;
-use ezp\Persistence\Interfaces,
+use ezp\Persistence\Repository\Handler as HandlerInterface,
     ezp\Persistence\LegacyStorage\Content,
     ezp\Persistence\LegacyStorage\Content\Type,
     ezp\Persistence\LegacyStorage\User;
@@ -19,7 +19,7 @@ use ezp\Persistence\Interfaces,
  * @todo If possible, the handler should not receive the DSN but the database
  *       connection instead, so that the implementation becomes fully testable.
  */
-class RepositoryHandler implements Interfaces\RepositoryHandler
+class RepositoryHandler implements HandlerInterface
 {
     /**
      * Content handler
