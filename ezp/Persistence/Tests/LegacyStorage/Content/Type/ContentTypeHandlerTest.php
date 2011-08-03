@@ -19,7 +19,7 @@ use ezp\Persistence\Content\Type,
 
     ezp\Persistence\LegacyStorage\Content\Type\ContentTypeHandler,
     ezp\Persistence\LegacyStorage\Content\Type\Mapper,
-    ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
+    ezp\Persistence\LegacyStorage\Content\Type\Gateway;
 
 /**
  * Test case for ContentTypeHandler.
@@ -177,7 +177,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $createStructClone = clone $createStructFix;
 
         $gatewayMock = $this->getMockForAbstractClass(
-            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\ContentTypeGateway'
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Gateway'
         );
 
         $gatewayMock->expects( $this->once() )
@@ -570,12 +570,12 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a gateway mock
      *
-     * @return ContentTypeGateway
+     * @return ezp\Persistence\LegacyStorage\Content\Type\Gateway
      */
     protected function getGatewayMock()
     {
         return $this->getMockForAbstractClass(
-            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\ContentTypeGateway'
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Gateway'
         );
     }
 

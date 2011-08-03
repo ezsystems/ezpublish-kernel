@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabaseTest class
+ * File contains: ezp\Persistence\Tests\LegacyStorage\Content\Type\Gateway\EzcDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests\LegacyStorage\Content\Type\ContentTypeGateway;
+namespace ezp\Persistence\Tests\LegacyStorage\Content\Type\Gateway;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
-    ezp\Persistence\Tests\LegacyStorage\Content\Type\ContentTypeGateway,
-    ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase,
+    ezp\Persistence\Tests\LegacyStorage\Content\Type\Gateway,
+    ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase,
 
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
@@ -19,13 +19,13 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
 
 /**
- * Test case for ContentTypeGateway.
+ * Test case for ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase.
  */
 class EzcDatabaseTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::__construct
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::__construct
      */
     public function testCtor()
     {
@@ -41,7 +41,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertGroup
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::insertGroup
      */
     public function testInsertGroup()
     {
@@ -104,7 +104,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::updateGroup
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::updateGroup
      */
     public function testUpdateGroup()
     {
@@ -184,10 +184,10 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::loadTypeData
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::selectColumns
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::createTableColumnAlias
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::qualifiedIdentifier
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::loadTypeData
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::selectColumns
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::createTableColumnAlias
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::qualifiedIdentifier
      */
     public function testLoadTypeData()
     {
@@ -219,8 +219,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertType
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::setCommonTypeColumns
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::insertType
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
      */
     public function testInsertType()
     {
@@ -293,8 +293,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertFieldDefinition
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::setCommonFieldColumns
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::insertFieldDefinition
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::setCommonFieldColumns
      */
     public function testInsertFieldDefinition()
     {
@@ -370,7 +370,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteFieldDefinition
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::deleteFieldDefinition
      */
     public function testDeleteFieldDefinition()
     {
@@ -393,8 +393,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::updateFieldDefinition
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::setCommonFieldColumns
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::updateFieldDefinition
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::setCommonFieldColumns
      */
     public function testUpdateFieldDefinition()
     {
@@ -442,8 +442,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::insertGroupAssignement
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::loadGroupData
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::insertGroupAssignement
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::loadGroupData
      */
     public function testInsertGroupAssignement()
     {
@@ -477,7 +477,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteGroupAssignement
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::deleteGroupAssignement
      */
     public function testDeleteGroupAssignement()
     {
@@ -502,8 +502,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::updateType
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::setCommonTypeColumns
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::updateType
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
      */
     public function testUpdateType()
     {
@@ -572,7 +572,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteFieldDefinitionsForType
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::deleteFieldDefinitionsForType
      */
     public function testDeleteFieldDefinitionsForTypeExisting()
     {
@@ -614,7 +614,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteFieldDefinitionsForType
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::deleteFieldDefinitionsForType
      */
     public function testDeleteFieldDefinitionsForTypeNotExisting()
     {
@@ -639,7 +639,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteGroupAssignementsForType
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::deleteGroupAssignementsForType
      */
     public function testDeleteGroupAssignementsForTypeExisting()
     {
@@ -664,7 +664,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteGroupAssignementsForType
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::deleteGroupAssignementsForType
      */
     public function testDeleteGroupAssignementsForTypeNotExisting()
     {
@@ -689,7 +689,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteType
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::deleteType
      */
     public function testDeleteTypeExisting()
     {
@@ -714,7 +714,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway\EzcDatabase::deleteType
+     * @covers ezp\Persistence\LegacyStorage\Content\Type\Gateway\EzcDatabase::deleteType
      */
     public function testDeleteTypeNotExisting()
     {

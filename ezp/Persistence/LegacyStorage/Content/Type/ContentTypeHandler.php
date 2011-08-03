@@ -22,7 +22,7 @@ use ezp\Persistence\Content\Type,
 class ContentTypeHandler implements BaseContentTypeHandler
 {
     /**
-     * ContentTypeGateway
+     * ezp\Persistence\LegacyStorage\Content\Type\Gateway
      *
      * @var mixed
      */
@@ -38,10 +38,10 @@ class ContentTypeHandler implements BaseContentTypeHandler
     /**
      * Creates a new content type handler.
      *
-     * @param ContentTypeGateway $contentTypeGateway
+     * @param ezp\Persistence\LegacyStorage\Content\Type\Gateway $contentTypeGateway
      * @param Mapper $mapper
      */
-    public function __construct( ContentTypeGateway $contentTypeGateway, Mapper $mapper )
+    public function __construct( Gateway $contentTypeGateway, Mapper $mapper )
     {
         $this->contentTypeGateway = $contentTypeGateway;
         $this->mapper = $mapper;

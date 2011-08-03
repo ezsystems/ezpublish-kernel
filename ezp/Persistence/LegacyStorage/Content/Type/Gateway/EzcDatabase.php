@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway;
-use ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway,
+namespace ezp\Persistence\LegacyStorage\Content\Type\Gateway;
+use ezp\Persistence\LegacyStorage\Content\Type\Gateway,
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\UpdateStruct,
@@ -18,7 +18,7 @@ use ezp\Persistence\LegacyStorage\Content\Type\ContentTypeGateway,
 /**
  * Zeta Component Database based content type gateway.
  */
-class EzcDatabase extends ContentTypeGateway
+class EzcDatabase extends Gateway
 {
     /**
      * Columns of database tables.
