@@ -104,9 +104,9 @@ class Mapper
         $type->modified = (int)$row['ezcontentclass_modified'];
         $type->modifierId = (int)$row['ezcontentclass_modifier_id'];
         $type->creatorId = (int)$row['ezcontentclass_creator_id'];
-        $type->remoteId = (int)$row['ezcontentclass_remote_id'];
-        $type->urlAliasSchema = (int)$row['ezcontentclass_url_alias_name'];
-        $type->nameSchema = (int)$row['ezcontentclass_contentobject_name'];
+        $type->remoteId = $row['ezcontentclass_remote_id'];
+        $type->urlAliasSchema = $row['ezcontentclass_url_alias_name'];
+        $type->nameSchema = $row['ezcontentclass_contentobject_name'];
         $type->isContainer = ( $row['ezcontentclass_is_container'] == 1 );
         $type->initialLanguageId = (int)$row['ezcontentclass_initial_language_id'];
         $type->contentTypeGroupIds = array();

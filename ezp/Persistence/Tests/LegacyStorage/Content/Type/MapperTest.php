@@ -241,12 +241,24 @@ class MapperTest extends TestCase
             array(
                 'id' => 1,
                 'version' => 0,
+                'name' => array(
+                    'always-available' => 'eng-US',
+                    'eng-US'           => 'Folder'
+                ),
+                'description' => array(
+                    0                  => '',
+                    'always-available' => false,
+                ),
                 'created' => 1024392098,
                 'creatorId' => 14,
                 'modified' => 1082454875,
                 'modifierId' => 14,
                 'identifier' => 'folder',
+                'remoteId' => 'a3d405b81be900468eb153d774f4f0d2',
+                'urlAliasSchema' => '',
+                'nameSchema' => '<short_name|name>',
                 'isContainer' => true,
+                'initialLanguageId' => 2,
                 'contentTypeGroupIds' => array( 1 ),
             ),
             $types[0]
