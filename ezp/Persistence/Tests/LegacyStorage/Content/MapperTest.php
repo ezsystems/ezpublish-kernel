@@ -167,6 +167,65 @@ class MapperTest extends TestCase
     }
 
     /**
+     * @return void
+     * @todo Load referencing locations!
+     */
+    public function testExtractContentFromRows()
+    {
+        $convMock = $this->getMock(
+            'ezp\\Persistence\\LegacyStorage\\Content\\FieldValueConverter'
+        );
+        $convMock->expects( $this->exactly( 8 ) )
+            ->method( 'toFieldValue' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\LegacyStorage\\Content\\StorageFieldValue'
+                )
+            )->will( $this->returnValue( new FieldValue() ) );
+
+        $reg = new FieldValueConverterRegistry();
+        $reg->register( 'ezstring', $convMock );
+        $reg->register( 'ezxmltext', $convMock );
+        $reg->register( 'ezdatetime', $convMock );
+
+        $rowsFixture = $this->getContentExtractFixture();
+
+        $mapper = new Mapper( $reg );
+        $result = $mapper->extractContentFromRows( $rowsFixture );
+
+        $this->assertEquals(
+            array(
+                $this->getContentExtractReference(),
+            ),
+            $result
+        );
+    }
+
+    /**
+     * Returns a fixture of database rows for content extraction
+     *
+     * Fixture is stored in _fixtures/extract_content_from_rows.php
+     *
+     * @return array
+     */
+    protected function getContentExtractFixture()
+    {
+        return require __DIR__ . '/_fixtures/extract_content_from_rows.php';
+    }
+
+    /**
+     * Returns a reference result for content extraction
+     *
+     * Fixture is stored in _fixtures/extract_content_from_rows_result.php
+     *
+     * @return Content
+     */
+    protected function getContentExtractReference()
+    {
+        return require __DIR__ . '/_fixtures/extract_content_from_rows_result.php';
+    }
+
+    /**
      * Returns a FieldValue converter registry mock
      *
      * @return FieldValueConverterRegistry
