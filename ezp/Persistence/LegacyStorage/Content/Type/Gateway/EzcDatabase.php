@@ -381,6 +381,9 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteIdentifier( 'can_translate' ),
             $q->bindValue( ( $fieldDefinition->isTranslatable ? 1 : 0 ), null, \PDO::PARAM_INT )
         )->set(
+            $this->dbHandler->quoteIdentifier( 'is_required' ),
+            $q->bindValue( ( $fieldDefinition->isRequired ? 1 : 0 ), null, \PDO::PARAM_INT )
+        )->set(
             $this->dbHandler->quoteIdentifier( 'is_information_collector' ),
             $q->bindValue( ( $fieldDefinition->isInfoCollector ? 1 : 0 ), null, \PDO::PARAM_INT )
         /*

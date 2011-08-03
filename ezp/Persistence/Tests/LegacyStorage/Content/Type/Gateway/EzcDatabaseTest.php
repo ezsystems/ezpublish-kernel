@@ -321,29 +321,36 @@ class EzcDatabaseTest extends TestCase
 
         $this->assertQueryResult(
             array(
-                // "random" sample
                 array(
-                    'category' => '',
-                    'contentclass_id' => 23,
-                    'version' => 1,
-                    'data_type_string' => 'ezxmltext',
-                    'identifier' => 'description',
-                    'is_required' => '0',
-                    'placement' => '4',
+                    'contentclass_id' => '23',
                     'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
+                    'serialized_description_list' => 'a:2:{s:16:"always-available";s:6:"eng-GB";s:6:"eng-GB";s:16:"Some description";}',
+                    'identifier' => 'description',
+                    'category' => '',
+                    'placement' => '4',
+                    'data_type_string' => 'ezxmltext',
+                    'can_translate' => '1',
+                    'is_required' => '1',
+                    'is_information_collector' => '1',
+                    'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
+                    'version' => '1',
                 ),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select(
-                    'category',
                     'contentclass_id',
-                    'version',
-                    'data_type_string',
+                    'serialized_name_list',
+                    'serialized_description_list',
                     'identifier',
-                    'is_required',
+                    'category',
                     'placement',
-                    'serialized_name_list'
+                    'data_type_string',
+                    'can_translate',
+                    'is_required',
+                    'is_information_collector',
+                    'serialized_data_text',
+                    'version'
                 )
                 ->from( 'ezcontentclass_attribute' ),
             'FieldDefinition not inserted correctly'
@@ -372,8 +379,8 @@ class EzcDatabaseTest extends TestCase
         $field->position = 4;
         $field->fieldType = 'ezxmltext';
         $field->isTranslatable = true;
-        $field->isRequired = false;
-        $field->isInfoCollector = false;
+        $field->isRequired = true;
+        $field->isInfoCollector = true;
         // $field->fieldTypeConstraints ???
         $field->defaultValue = array(
             0 => '',
@@ -431,7 +438,7 @@ class EzcDatabaseTest extends TestCase
                     'version' => '0',
                     'data_type_string' => 'ezxmltext',
                     'identifier' => 'description',
-                    'is_information_collector' => '0',
+                    'is_information_collector' => '1',
                     'placement' => '4',
                     'serialized_description_list' => 'a:2:{s:16:"always-available";s:6:"eng-GB";s:6:"eng-GB";s:16:"Some description";}',
                 ),
