@@ -257,7 +257,7 @@ abstract class Model implements Observable, ModelInterface
         {
             $arr[$name] = $value;
         }
-        return (array) $this;
+        return $arr;
     }
 
     /**
