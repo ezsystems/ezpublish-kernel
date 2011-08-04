@@ -28,12 +28,18 @@ class Backend
     protected $data = array();
 
     /**
-     * Construct backend  and assign data
+     * Construct backend and assign data
      *
-     * Use
+     * Use:
      *     new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
      *
-     * @param array $data
+     * @param array $data Data where key is type like "Content" or "Content\\Type" which then have to map to
+     *                    Value objects in ezp\Persistence\*, data is an array of hash values with same structure as
+     *                    the corresponding value object.
+     *                    Foreign keys: In some cases value objects does not contain these as they are internal, so this
+     *                                  needs to be handled in InMemory handlers by assigning keys like "_typeId" on
+     *                                  Type\FieldDefintion hash values for instance. These will be stored and can be
+     *                                  matched with find(), but will not be returned as part of VO so purely internal.
      */
     public function __construct( array $data )
     {
@@ -54,7 +60,7 @@ class Backend
             throw new InvalidArgumentValue( 'type', $type );
 
         $data['id'] = $this->getNextId( $type );
-        $this->data[$type][$data['id']] = $data;
+        $this->data[$type][] = $data;
         return $this->toValue( $type, $data );
     }
 
@@ -70,10 +76,11 @@ class Backend
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        if ( isset( $this->data[$type][$id] ) )
-            return $this->toValue( $type, $this->data[$type][$id] );
+        $items = $this->findKeys( $type, array( 'id' => $id ) );
+        if ( empty( $items ) )
+            return null;
 
-        return null;
+        return $this->toValue( $type, $this->data[$type][ $items[0] ] );
     }
 
     /**
@@ -188,7 +195,7 @@ class Backend
     private function getNextId( $type )
     {
         $id = 0;
-        foreach ( $this->data[$type] as $key => $hash )
+        foreach ( $this->data[$type] as $hash )
         {
             $id = max( $id, $hash['id'] );
         }
