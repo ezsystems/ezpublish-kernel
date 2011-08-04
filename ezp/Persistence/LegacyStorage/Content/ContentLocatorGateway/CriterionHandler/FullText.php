@@ -73,46 +73,63 @@ class FullText extends CriterionHandler
     }
 
     /**
-     * Get array of word IDs
+     * Get single word query expression
+     *
+     * Depending on the configuration of the full text search criterion 
+     * converter wildcards are either transformed into the repsective LIKE 
+     * queries, or everything is just compared using equal.
+     *
+     * @param \ezcQuerySelect $query
+     * @param string $token
+     * @return \ezcQueryExpression
+     */
+    protected function getWordExpression( \ezcQuerySelect $query, $token )
+    {
+        if ( $this->configuration['enableWildcards'] &&
+             $token[0] === '*' )
+        {
+            return $query->expr->like(
+                'word',
+                $query->bindValue( '%' . substr( $token, 1 ) )
+            );
+        }
+
+        if ( $this->configuration['enableWildcards'] &&
+             $token[strlen( $token ) - 1] === '*' )
+        {
+            return $query->expr->like(
+                'word',
+                $query->bindValue( substr( $token, 0, -1 ) . '%' )
+            );
+        }
+
+        return $query->expr->eq(
+            'word',
+            $query->bindValue( $token )
+        );
+    }
+
+    /**
+     * Get subquery to select relevant word IDs
      *
      * @param string $string
-     * @return array
+     * @return \ezcQuerySelect
      */
     protected function getWordIdSubquery( $query, $string )
     {
-        $subQuery = $query->subSelect();
+        $subQuery        = $query->subSelect();
+        $tokens          = $this->tokenizeString( $string );
+        $wordExpressions = array();
+        foreach ( $tokens as $token )
+        {
+            $wordExpressions[] = $this->getWordExpression( $subQuery, $token );
+        }
+
         $subQuery
             ->select( 'id' )
             ->from( 'ezsearch_word' )
             ->where( $subQuery->expr->lAnd(
-                $subQuery->expr->lOr(
-                    array_map(
-                        function ( $token ) use ( $subQuery )
-                        {
-                            if ( $token[0] === '*' )
-                            {
-                                return $subQuery->expr->like(
-                                    'word',
-                                    $subQuery->bindValue( '%' . substr( $token, 1 ) )
-                                );
-                            }
-
-                            if ( $token[strlen( $token ) - 1] === '*' )
-                            {
-                                return $subQuery->expr->like(
-                                    'word',
-                                    $subQuery->bindValue( substr( $token, 0, -1 ) . '%' )
-                                );
-                            }
-
-                            return $subQuery->expr->eq(
-                                'word',
-                                $subQuery->bindValue( $token )
-                            );
-                        },
-                        $this->tokenizeString( $string )
-                    )
-                ),
+                $subQuery->expr->lOr( $wordExpressions ),
                 $subQuery->expr->lt( 'object_count', $subQuery->bindValue( $this->configuration['searchThresholdValue'] ) )
             ) );
         return $subQuery;
