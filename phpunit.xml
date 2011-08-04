@@ -21,20 +21,20 @@
       <file>ezp/Content/Tests/QueryBuilderTest.php</file>
       <file>ezp/Content/Tests/TranslationTest.php</file>
     </testsuite>
-    <testsuite name="ezp\Persistence">
-      <directory>ezp/Persistence/Tests</directory>
+    <testsuite name="ezp\Persistence\Storage\Legacy">
+      <directory>ezp/Persistence/Storage/Legacy/Tests</directory>
     </testsuite>
   </testsuites>
   <filter>
     <whitelist>
       <directory suffix=".php">ezp</directory>
       <exclude>
-        <directory suffix=".php">ezp/Persistence/Tests/LegacyStorage/_fixtures</directory>
-        <directory suffix=".php">ezp/Persistence/Tests/LegacyStorage/Content/_fixtures/</directory>
-        <directory suffix=".php">ezp/Persistence/Tests/LegacyStorage/Content/Type/_fixtures</directory>
-        <directory suffix=".php">ezp/Persistence/Tests/LegacyStorage/Content/Type/Gateway/_fixtures</directory>
-        <directory suffix=".php">ezp/Persistence/Tests/LegacyStorage/Content/ContentLocator/_fixtures</directory>
-        <directory suffix=".php">ezp/Persistence/Tests/LegacyStorage/Content/Location/Gateway/_fixtures</directory>
+        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/_fixtures</directory>
+        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/Content/_fixtures/</directory>
+        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/Content/Type/_fixtures</directory>
+        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/Content/Type/Gateway/_fixtures</directory>
+        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/Content/ContentLocator/_fixtures</directory>
+        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/Content/Location/Gateway/_fixtures</directory>
         <directory suffix=".php">ezp/Stubs</directory>
         <file>ezp/index.php</file>
       </exclude>
