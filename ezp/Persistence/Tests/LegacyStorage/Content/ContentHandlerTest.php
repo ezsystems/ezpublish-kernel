@@ -179,7 +179,7 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a CreateStruct fixture.
      *
-     * @return ezp\Persistence\Content\CreateStruct
+     * @return \ezp\Persistence\Content\CreateStruct
      */
     public function getCreateStructFixture()
     {
@@ -229,7 +229,7 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a mock object for the Content Gateway.
      *
-     * @return ezp\Persistence\LegacyStorage\Content\Gateway
+     * @return \ezp\Persistence\LegacyStorage\Content\Gateway
      */
     protected function getGatewayMock()
     {

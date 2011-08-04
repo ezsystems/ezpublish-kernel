@@ -77,7 +77,7 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return ezp\Content\Service
+     * @return \ezp\Content\Service
      */
     public function getContentService()
     {
@@ -90,7 +90,7 @@ class Repository
      * Get service object to perform several operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
-     * @return ezp\Content\Type\Service
+     * @return \ezp\Content\Type\Service
      */
     public function getContentTypeService()
     {
@@ -103,7 +103,7 @@ class Repository
      * Get service object to perform several operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return ezp\Content\Location\Service
+     * @return \ezp\Content\Location\Service
      */
     public function getLocationService()
     {
@@ -114,7 +114,7 @@ class Repository
      * Get User Service
      *
      *
-     * @return ezp\Content\Section\Service
+     * @return \ezp\Content\Section\Service
      */
     public function getSectionService()
     {
@@ -127,7 +127,7 @@ class Repository
      * Get service object to perform several operations on User objects and it's aggregate members.
      * ( UserGroups, UserRole, UserRolePolicy & UserRolePolicyLimitation )
      *
-     * @return ezp\User\Service
+     * @return \ezp\User\Service
      */
     public function getUserService()
     {

@@ -607,7 +607,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a gateway mock
      *
-     * @return ezp\Persistence\LegacyStorage\Content\Type\Gateway
+     * @return \ezp\Persistence\LegacyStorage\Content\Type\Gateway
      */
     protected function getGatewayMock()
     {
@@ -619,7 +619,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a CreateStruct fixture.
      *
-     * @return ezp\Persistence\Content\Type\CreateStruct
+     * @return \ezp\Persistence\Content\Type\CreateStruct
      */
     protected function getContenTypeCreateStructFixture()
     {

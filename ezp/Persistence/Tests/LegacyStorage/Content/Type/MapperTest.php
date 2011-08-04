@@ -60,7 +60,7 @@ class MapperTest extends TestCase
     /**
      * Returns a GroupCreateStruct fixture.
      *
-     * @return ezp\Persistence\Content\Type\Group\CreateStruct
+     * @return \ezp\Persistence\Content\Type\Group\CreateStruct
      */
     protected function getGroupCreateStructFixture()
     {
@@ -107,7 +107,7 @@ class MapperTest extends TestCase
     /**
      * Returns a CreateStruct fixture.
      *
-     * @return ezp\Persistence\Content\Type\CreateStruct
+     * @return \ezp\Persistence\Content\Type\CreateStruct
      */
     protected function getContenTypeCreateStructFixture()
     {

@@ -224,7 +224,7 @@ class CriterionFactory
      * @param string $operator
      * @param $argument$... Criterion arguments
      *
-     * @return ezp\Content\Query\Builder
+     * @return \ezp\Content\Query\Builder
      */
     private function handleCriterion( $target, $operator, $value )
     {

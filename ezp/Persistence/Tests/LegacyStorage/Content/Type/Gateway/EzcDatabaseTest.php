@@ -160,7 +160,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Returns a Group update struct fixture.
      *
-     * @return ezp\Persistence\Content\Type\Group\UpdateStruct
+     * @return \ezp\Persistence\Content\Type\Group\UpdateStruct
      */
     protected function getGroupUpdateStructFixture()
     {
@@ -566,7 +566,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Returns a ezp\Persistence\Content\Type\UpdateStruct fixture.
      *
-     * @return ezp\Persistence\Content\Type\UpdateStruct
+     * @return \ezp\Persistence\Content\Type\UpdateStruct
      */
     protected function getTypeUpdateFixture()
     {

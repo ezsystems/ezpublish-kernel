@@ -21,7 +21,7 @@ class Service extends BaseService
      * Get an Content Type object by id
      *
      * @param int $contentTypeId
-     * @return ezp\Content\Type
+     * @return \ezp\Content\Type
      * @throws NotFound
      */
     public function load( $contentTypeId )
@@ -36,7 +36,7 @@ class Service extends BaseService
      * Get an Content Type by identifier
      *
      * @param string $identifier
-     * @return ezp\Content\Type
+     * @return \ezp\Content\Type
      * @throws NotFound
      */
     public function loadByIdentifier( $identifier )

@@ -40,7 +40,7 @@ class RepositoryHandler implements BaseRepositoryHandler
     }
 
     /**
-     * @return ezp\Persistence\Content\Handler
+     * @return \ezp\Persistence\Content\Handler
      */
     public function contentHandler()
     {
@@ -48,7 +48,7 @@ class RepositoryHandler implements BaseRepositoryHandler
     }
 
     /**
-     * @return ezp\Persistence\Content\Type\Handler
+     * @return \ezp\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler()
     {
@@ -56,7 +56,7 @@ class RepositoryHandler implements BaseRepositoryHandler
     }
 
     /**
-     * @return ezp\Persistence\Content\Location\Handler
+     * @return \ezp\Persistence\Content\Location\Handler
      */
     public function locationHandler()
     {
@@ -64,7 +64,7 @@ class RepositoryHandler implements BaseRepositoryHandler
     }
 
     /**
-     * @return ezp\Persistence\User\Handler
+     * @return \ezp\Persistence\User\Handler
      */
     public function userHandler()
     {
@@ -72,7 +72,7 @@ class RepositoryHandler implements BaseRepositoryHandler
     }
 
     /**
-     * @return ezp\Persistence\Content\Section\Handler
+     * @return \ezp\Persistence\Content\Section\Handler
      */
     public function sectionHandler()
     {

@@ -61,7 +61,7 @@ class MapperTest extends TestCase
     /**
      * Returns a ezp\Persistence\Content\CreateStruct fixture
      *
-     * @return ezp\Persistence\Content\CreateStruct
+     * @return \ezp\Persistence\Content\CreateStruct
      */
     protected function getCreateStructFixture()
     {

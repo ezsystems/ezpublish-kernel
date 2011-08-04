@@ -175,7 +175,7 @@ class Mapper
      * Creates a create struct from an existing $type.
      *
      * @param Type $type
-     * @return ezp\Persistence\Content\Type\CreateStruct
+     * @return \ezp\Persistence\Content\Type\CreateStruct
      */
     public function createCreateStructFromType( Type $type )
     {
