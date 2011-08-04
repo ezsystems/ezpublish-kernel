@@ -152,6 +152,8 @@ class Backend
     /**
      * Find count of objects of a given type matching a simple $match (empty array will match all)
      *
+     * Note does not support joins, so only properties on $type is matched.
+     *
      * @param string $type
      * @param array $match A simple array with property => value to match against.
      * @return int
