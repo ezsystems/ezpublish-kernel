@@ -216,6 +216,15 @@ abstract class AbstractModel implements Observable, ModelInterface
         return $obj;
     }
 
+
+    public function setState( array $state )
+    {
+    }
+
+    public function getState()
+    {
+    }
+
     /**
      * Set properties with hash, name is same as used in ezc Persistent
      *
