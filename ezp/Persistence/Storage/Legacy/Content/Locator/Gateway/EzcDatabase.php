@@ -37,10 +37,10 @@ class EzcDatabase extends Gateway
      * @param \ezcDbHandler $handler
      * @return void
      */
-    public function __construct( \ezcDbHandler $handler, CriteriaConverter $converter = null )
+    public function __construct( \ezcDbHandler $handler, CriteriaConverter $converter )
     {
         $this->handler   = $handler;
-        $this->converter = $converter ?: new CriteriaConverter();
+        $this->converter = $converter;
     }
 
     /**
