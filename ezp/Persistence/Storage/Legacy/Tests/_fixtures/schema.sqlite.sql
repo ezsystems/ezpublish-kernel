@@ -273,6 +273,26 @@ CREATE TABLE 'ezuser_setting' (
 	'max_login' integer,
 	'user_id' integer NOT NULL DEFAULT 0
 );
+CREATE TABLE 'ezsearch_object_word_link' (
+      'contentclass_attribute_id' integer NOT NULL DEFAULT '0',
+      'contentclass_id' integer NOT NULL DEFAULT '0',
+      'contentobject_id' integer NOT NULL DEFAULT '0',
+      'frequency' float NOT NULL DEFAULT '0',
+      'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+      'identifier' text(255) NOT NULL DEFAULT '',
+      'integer_value' integer NOT NULL DEFAULT '0',
+      'next_word_id' integer NOT NULL DEFAULT '0',
+      'placement' integer NOT NULL DEFAULT '0',
+      'prev_word_id' integer NOT NULL DEFAULT '0',
+      'published' integer NOT NULL DEFAULT '0',
+      'section_id' integer NOT NULL DEFAULT '0',
+      'word_id' integer NOT NULL DEFAULT '0'
+);
+CREATE TABLE 'ezsearch_word' (
+      'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+      'object_count' integer NOT NULL DEFAULT '0',
+      'word' text(150) DEFAULT NULL
+);
 CREATE UNIQUE INDEX 'ezbinaryfile_pri' ON 'ezbinaryfile' ( 'contentobject_attribute_id', 'version' );
 CREATE INDEX 'ezco_link_from' ON 'ezcontentobject_link' ( 'from_contentobject_id', 'from_contentobject_version', 'contentclassattribute_id' );
 CREATE INDEX 'ezco_link_to_co_id' ON 'ezcontentobject_link' ( 'to_contentobject_id' );
@@ -349,3 +369,10 @@ CREATE INDEX 'modified_subnode' ON 'ezcontentobject_tree' ( 'modified_subnode' )
 CREATE INDEX 'policy_id' ON 'ezpolicy_limitation' ( 'policy_id' );
 CREATE INDEX 'sort_key_int' ON 'ezcontentobject_attribute' ( 'sort_key_int' );
 CREATE INDEX 'sort_key_string' ON 'ezcontentobject_attribute' ( 'sort_key_string' );
+CREATE INDEX 'ezsearch_object_word_link_frequency' ON 'ezsearch_object_word_link' ( 'frequency' );
+CREATE INDEX 'ezsearch_object_word_link_identifier' ON 'ezsearch_object_word_link' ( 'identifier' );
+CREATE INDEX 'ezsearch_object_word_link_integer_value' ON 'ezsearch_object_word_link' ( 'integer_value' );
+CREATE INDEX 'ezsearch_object_word_link_object' ON 'ezsearch_object_word_link' ( 'contentobject_id' );
+CREATE INDEX 'ezsearch_object_word_link_word' ON 'ezsearch_object_word_link' ( 'word_id' );
+CREATE INDEX 'ezsearch_word_obj_count' ON 'ezsearch_word' ( 'object_count' );
+CREATE INDEX 'ezsearch_word_word_i' ON 'ezsearch_word' ( 'word' );
