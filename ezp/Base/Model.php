@@ -247,7 +247,7 @@ abstract class Model implements Observable, ModelInterface
      *
      * Key is property name and value is property value.
      *
-     * @internal param $
+     * @internal
      * @return array
      */
     public function getState()
