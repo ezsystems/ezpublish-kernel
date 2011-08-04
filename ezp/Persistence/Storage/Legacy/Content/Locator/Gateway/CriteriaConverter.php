@@ -29,23 +29,9 @@ class CriteriaConverter
      * @param array $handler
      * @return void
      */
-    public function __construct( array $handler = array() )
+    public function __construct( array $handler )
     {
-        $this->handler = $handler ?: array(
-            new CriterionHandler\ContentId(),
-            new CriterionHandler\LogicalNot(),
-            new CriterionHandler\LogicalAnd(),
-            new CriterionHandler\LogicalOr(),
-            new CriterionHandler\Subtree(),
-            new CriterionHandler\ContentType(),
-            new CriterionHandler\ContentTypeGroup(),
-            new CriterionHandler\DateMetadata(),
-            new CriterionHandler\LocationId(),
-            new CriterionHandler\ParentLocationId(),
-            new CriterionHandler\RemoteId(),
-            new CriterionHandler\Section(),
-            new CriterionHandler\Status(),
-        );
+        $this->handler = $handler;
     }
 
     /**

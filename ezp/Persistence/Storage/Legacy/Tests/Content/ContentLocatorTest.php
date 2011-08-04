@@ -57,7 +57,22 @@ class ContentLocatorTest extends TestCase
     {
         return new Content\Locator(
             new Content\Locator\Gateway\EzcDatabase(
-                $this->getDatabaseHandler()
+                $database = $this->getDatabaseHandler(),
+                new Content\ContentLocatorGateway\CriteriaConverter( array(
+                    new Content\Locator\Gateway\CriterionHandler\ContentId(),
+                    new Content\Locator\Gateway\CriterionHandler\LogicalNot(),
+                    new Content\Locator\Gateway\CriterionHandler\LogicalAnd(),
+                    new Content\Locator\Gateway\CriterionHandler\LogicalOr(),
+                    new Content\Locator\Gateway\CriterionHandler\Subtree(),
+                    new Content\Locator\Gateway\CriterionHandler\ContentType(),
+                    new Content\Locator\Gateway\CriterionHandler\ContentTypeGroup(),
+                    new Content\Locator\Gateway\CriterionHandler\DateMetadata(),
+                    new Content\Locator\Gateway\CriterionHandler\LocationId(),
+                    new Content\Locator\Gateway\CriterionHandler\ParentLocationId(),
+                    new Content\Locator\Gateway\CriterionHandler\RemoteId(),
+                    new Content\Locator\Gateway\CriterionHandler\Section(),
+                    new Content\Locator\Gateway\CriterionHandler\Status(),
+                ) )
             )
         );
     }
