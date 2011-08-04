@@ -11,9 +11,10 @@ namespace ezp\Base;
 use ezp\Base\Observable,
     ezp\Base\Observer,
     ezp\Base\ModelInterface,
+    ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Exception\Logic,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
-    ezp\Base\Exception\InvalidArgumentType,
     Traversable;
 
 /**
@@ -169,6 +170,8 @@ abstract class Model implements Observable, ModelInterface
             {
                 return $this->properties->$property;
             }
+
+            throw new Logic( '$readWriteProperties', "property {$property} could not be found." );
         }
 
         if ( isset( $this->dynamicProperties[$property] ) )
