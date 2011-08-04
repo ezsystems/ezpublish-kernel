@@ -24,7 +24,7 @@ use ezp\Field\FieldProperties;
  * data containers for Content objects. Therefore, while field types can be used
  * independently, they are designed to be used as a part of a Content object.
  *
- * Field types are primed and preconfigured with the Field Definitions found in
+ * Field types are primed and pre-configured with the Field Definitions found in
  * Content Types.
  */
 abstract class FieldType
