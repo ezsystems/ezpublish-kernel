@@ -25,7 +25,7 @@ class RepositoryHandler implements HandlerInterface
     /**
      * Content handler
      *
-     * @var Content\ContentHandler
+     * @var ezp\Persistence\LegacyStorage\Content\Handler
      */
     protected $contentHandler;
 
@@ -106,7 +106,7 @@ class RepositoryHandler implements HandlerInterface
     {
         if ( !isset( $this->contentHandler ) )
         {
-            $this->contentHandler = new Content\ContentHandler(
+            $this->contentHandler = new Content\Handler(
                 new Content\Gateway\EzcDatabase( $this->dbHandler ),
                 new Content\Mapper( $this->getFieldValueConverterRegistry() ),
                 new Content\StorageRegistry( $this->getStorageRegistry() )

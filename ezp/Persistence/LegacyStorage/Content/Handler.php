@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentHandler class
+ * File containing the Content Handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -18,11 +18,11 @@ use ezp\Persistence\Content\Handler as BaseContentHandler,
     ezp\Persistence\Content\Criterion;
 
 /**
- * The ContentHandler stores Content and ContentType objects.
+ * The Content Handler stores Content and ContentType objects.
  *
  * @version //autogentag//
  */
-class ContentHandler implements BaseContentHandler
+class Handler implements BaseContentHandler
 {
     /**
      * Content gateway.

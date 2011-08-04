@@ -12,7 +12,7 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\LegacyStorage\RepositoryHandler;
 
 /**
- * Test case for ContentHandler
+ * Test case for Repository Handler
  */
 class RepositoryHandlerTest extends TestCase
 {
@@ -30,7 +30,7 @@ class RepositoryHandlerTest extends TestCase
             $contentHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\LegacyStorage\\Content\\ContentHandler',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Handler',
             $contentHandler
         );
     }

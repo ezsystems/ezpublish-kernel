@@ -15,16 +15,16 @@ use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\LegacyStorage\Content\StorageFieldValue,
-    ezp\Persistence\LegacyStorage\Content\ContentHandler;
+    ezp\Persistence\LegacyStorage\Content\Handler;
 
 /**
- * Test case for ContentHandler
+ * Test case for Content Handler
  */
 class ContentHandlerTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\ContentHandler::__construct
+     * @covers ezp\Persistence\LegacyStorage\Content\Handler::__construct
      */
     public function testCtor()
     {
@@ -32,7 +32,7 @@ class ContentHandlerTest extends TestCase
         $mapperMock = $this->getMapperMock();
         $storageRegistryMock = $this->getStorageRegistryMock();
 
-        $handler = new ContentHandler(
+        $handler = new Handler(
             $gatewayMock,
             $mapperMock,
             $storageRegistryMock
@@ -57,7 +57,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\ContentHandler::create
+     * @covers ezp\Persistence\LegacyStorage\Content\Handler::create
      * @todo Current method way to complex to test, refactor!
      */
     public function testCreate()
@@ -69,7 +69,7 @@ class ContentHandlerTest extends TestCase
             'ezp\\Persistence\\Fields\\Storage'
         );
 
-        $handler = new ContentHandler(
+        $handler = new Handler(
             $gatewayMock,
             $mapperMock,
             $storageRegMock
