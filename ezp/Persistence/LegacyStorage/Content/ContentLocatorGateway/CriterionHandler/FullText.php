@@ -57,6 +57,22 @@ class FullText extends CriterionHandler
     }
 
     /**
+     * Tokenize String
+     *
+     * @param string $string
+     * @return array
+     */
+    protected function tokenizeString( $string )
+    {
+        return array_filter(
+            array_map(
+                'trim',
+                preg_split( '(\p{Z})u', strtr( $string, '\'"', '' ) )
+            )
+        );
+    }
+
+    /**
      * Get array of word IDs
      *
      * @param string $string
@@ -94,12 +110,7 @@ class FullText extends CriterionHandler
                                 $subQuery->bindValue( $token )
                             );
                         },
-                        array_filter(
-                            array_map(
-                                'trim',
-                                preg_split( '(\p{Z})u', strtr( $string, '\'"', '' ) )
-                            )
-                        )
+                        $this->tokenizeString( $string )
                     )
                 ),
                 $subQuery->expr->lt( 'object_count', $subQuery->bindValue( $this->configuration['searchThresholdValue'] ) )
