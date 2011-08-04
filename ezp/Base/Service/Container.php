@@ -74,7 +74,7 @@ class Container
     /**
      * Service function to get Event instance.
      *
-     * @return Interfaces\Event
+     * @return Event
      */
     public function getEvent( )
     {

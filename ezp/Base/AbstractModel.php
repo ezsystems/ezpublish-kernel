@@ -10,7 +10,7 @@
 namespace ezp\Base;
 use ezp\Base\Observable,
     ezp\Base\Observer,
-    ezp\Base\Interfaces\Model,
+    ezp\Base\ModelInterface,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
     Traversable;

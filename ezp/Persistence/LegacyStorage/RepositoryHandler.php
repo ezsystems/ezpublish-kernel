@@ -99,7 +99,7 @@ class RepositoryHandler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Interfaces\ContentHandler
+     * @return \ezp\Persistence\Content\Handler
      */
     public function contentHandler()
     {
@@ -144,7 +144,7 @@ class RepositoryHandler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Type\Interfaces\Handler
+     * @return \ezp\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler()
     {
@@ -159,7 +159,7 @@ class RepositoryHandler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Interfaces\LocationHandler
+     * @return \ezp\Persistence\Content\Location\Handler
      */
     public function locationHandler()
     {
@@ -174,7 +174,7 @@ class RepositoryHandler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\User\Interfaces\UserHandler
+     * @return \ezp\Persistence\User\Handler
      */
     public function userHandler()
     {
@@ -189,7 +189,7 @@ class RepositoryHandler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Interfaces\SectionHandler
+     * @return \ezp\Persistence\Content\Section\Handler
      */
     public function sectionHandler()
     {

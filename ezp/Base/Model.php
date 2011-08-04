@@ -78,7 +78,7 @@ abstract class Model implements Observable, ModelInterface
     /**
      * List of event listeners
      *
-     * @var \ezp\Base\Interfaces\Observer[]
+     * @var \ezp\Base\Observer[]
      */
     private $observers = array();
 
@@ -95,7 +95,7 @@ abstract class Model implements Observable, ModelInterface
     /**
      * Attach a event listener to this subject
      *
-     * @param \ezp\Base\Interfaces\Observer $observer
+     * @param \ezp\Base\Observer $observer
      * @param string $event
      * @return Model
      */
@@ -115,7 +115,7 @@ abstract class Model implements Observable, ModelInterface
     /**
      * Detach a event listener to this subject
      *
-     * @param \ezp\Base\Interfaces\Observer $observer
+     * @param \ezp\Base\Observer $observer
      * @param string $event
      * @return Model
      */
