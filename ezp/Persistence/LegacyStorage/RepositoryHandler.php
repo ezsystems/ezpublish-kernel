@@ -11,6 +11,7 @@ namespace ezp\Persistence\LegacyStorage;
 use ezp\Persistence\Repository\Handler as HandlerInterface,
     ezp\Persistence\LegacyStorage\Content,
     ezp\Persistence\LegacyStorage\Content\Type,
+    ezp\Persistence\LegacyStorage\Content\Location\Handler as LocationHandler,
     ezp\Persistence\LegacyStorage\User,
     ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry;
 
@@ -53,7 +54,7 @@ class RepositoryHandler implements HandlerInterface
     /**
      * Location handler
      *
-     * @var Content\LocationHandler
+     * @var ezp\Persistence\LegacyStorage\Content\Location\Handler
      */
     protected $locationHandler;
 
@@ -166,7 +167,7 @@ class RepositoryHandler implements HandlerInterface
     {
         if ( !isset( $this->locationHandler ) )
         {
-            $this->locationHandler = new Content\LocationHandler(
+            $this->locationHandler = new LocationHandler(
                 $this->contentHandler(),
                 new Content\Location\Gateway\EzcDatabase( $this->dbHandler )
             );

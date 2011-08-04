@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\LegacyStorage\Location\LocationHandlerTest class
+ * File contains: ezp\Persistence\Tests\LegacyStorage\Content\LocationHandlerTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Tests\LegacyStorage\Content;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\LegacyStorage\Content,
+    ezp\Persistence\LegacyStorage\Content\Location\Handler,
     ezp\Persistence;
 
 /**
@@ -44,7 +45,7 @@ class LocationHandlerTest extends TestCase
     protected function getLocationHandler()
     {
         $dbHandler = $this->getDatabaseHandler();
-        return new Content\LocationHandler(
+        return new Handler(
             $this->contentHandler = $this->getMock(
                 'ezp\\Persistence\\LegacyStorage\\Content\\Handler',
                 array(),

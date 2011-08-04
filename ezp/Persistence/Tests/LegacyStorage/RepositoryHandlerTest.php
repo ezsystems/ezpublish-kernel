@@ -154,7 +154,7 @@ class RepositoryHandlerTest extends TestCase
             $locationHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\LegacyStorage\\Content\\LocationHandler',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Location\\Handler',
             $locationHandler
         );
     }

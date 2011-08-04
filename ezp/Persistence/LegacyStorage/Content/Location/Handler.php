@@ -1,21 +1,22 @@
 <?php
 /**
- * File containing the LocationHandler class
+ * File containing the Location Handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\LegacyStorage\Content;
+namespace ezp\Persistence\LegacyStorage\Content\Location;
 use ezp\Persistence\Content\Location,
     ezp\Persistence\Content\Location\Handler as BaseLocationHandler,
+    ezp\Persistence\LegacyStorage\Content\Handler as ContentHandler,
     ezp\Persistence\LegacyStorage\Content\Location\Gateway as LocationGateway;
 
 /**
- * The LocationHandler interface defines operations on Location elements in the storage engine.
+ * The Location Handler interface defines operations on Location elements in the storage engine.
  */
-class LocationHandler implements BaseLocationHandler
+class Handler implements BaseLocationHandler
 {
     /**
      * Content handler implementation
@@ -38,7 +39,7 @@ class LocationHandler implements BaseLocationHandler
      * @param \ezp\Persistence\LegacyStorage\Content\Location\Gateway $locationGateway
      * @return void
      */
-    public function __construct( Handler $contentHandler, LocationGateway $locationGateway )
+    public function __construct( ContentHandler $contentHandler, LocationGateway $locationGateway )
     {
         $this->contentHandler = $contentHandler;
         $this->locationGateway = $locationGateway;
