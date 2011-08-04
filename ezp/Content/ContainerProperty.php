@@ -8,13 +8,14 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\AbstractModel;
+use ezp\Base\Model,
+    ezp\Base\Exception\InvalidArgumentType;
 
 /**
  * This class represents a container property
  *
  */
-class ContainerProperty extends AbstractModel
+class ContainerProperty extends Model
 {
     // TODO const from eZ Publish 4.5
     // needs update to reflect concept changes
@@ -33,6 +34,10 @@ class ContainerProperty extends AbstractModel
 
     const SORT_ORDER_DESC = 0;
     const SORT_ORDER_ASC = 1;
+
+    protected $dynamicProperties = array(
+        "location" => false,
+    );
 
     /**
      * Id the Location the ContainerProperty refers to
@@ -58,27 +63,23 @@ class ContainerProperty extends AbstractModel
     public $sortOrder = self::SORT_ORDER_ASC;
 
     /**
-     * Id of the container property
+     * Location the ContainerProperty refers to
      *
-     * @var int
+     * @var Location|Proxy
      */
-    protected $id = 0;
+    protected $location;
 
     public function __construct()
     {
-        $this->readableProperties = array(
-            "id" => true,
-        );
 
-        $this->dynamicProperties = array(
-            "location" => true,
-        );
     }
 
     protected function getLocation()
     {
-        return Repository::get()->getSubtreeService()->load( $this->locationId );
+        if ( $this->location instanceof Proxy )
+        {
+            $this->location = $this->location->load();
+        }
+        return $this->location;
     }
 }
-
-?>
