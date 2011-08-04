@@ -64,6 +64,12 @@ class Location extends Model implements Observer
     protected $content;
 
     /**
+     * Current location's parent
+     * @var Content|Proxy
+     */
+    protected $parent;
+
+    /**
      * Setups empty children collection and attaches $content
      *
      * @param Content|Proxy $content
