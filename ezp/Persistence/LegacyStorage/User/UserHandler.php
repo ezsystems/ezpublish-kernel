@@ -21,7 +21,7 @@ class UserHandler implements BaseUserHandler
     /**
      * Gaateway for storing user data
      *
-     * @var UserGateway
+     * @var ezp\Persistence\LegacyStorage\User\Gateway
      */
     protected $userGateway;
 
@@ -35,10 +35,10 @@ class UserHandler implements BaseUserHandler
     /**
      * Construct from userGateway
      *
-     * @param UserGateway $userGateway
+     * @param ezp\Persistence\LegacyStorage\User\Gateway $userGateway
      * @return void
      */
-    public function __construct( UserGateway $userGateway, RoleGateway $roleGateway )
+    public function __construct( Gateway $userGateway, RoleGateway $roleGateway )
     {
         $this->userGateway = $userGateway;
         $this->roleGateway = $roleGateway;

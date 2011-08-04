@@ -31,7 +31,7 @@ class UserHandlerTest extends TestCase
     {
         $dbHandler = $this->getDatabaseHandler();
         return new User\UserHandler(
-            new User\UserGateway\EzcDatabase( $dbHandler ),
+            new User\Gateway\EzcDatabase( $dbHandler ),
             new User\RoleGateway\EzcDatabase( $dbHandler )
         );
     }

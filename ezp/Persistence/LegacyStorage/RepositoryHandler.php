@@ -181,7 +181,7 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->userHandler ) )
         {
             $this->userHandler = new User\UserHandler(
-                new User\UserGateway\EzcDatabase( $this->dbHandler ),
+                new User\Gateway\EzcDatabase( $this->dbHandler ),
                 new User\RoleGateway\EzcDatabase( $this->dbHandler )
             );
         }
