@@ -11,7 +11,13 @@ namespace ezp\Content\Location;
 use ezp\Base\Exception,
     ezp\Base\Service as BaseService,
     ezp\Content\Location,
-    ezp\Content\Section;
+    ezp\Content\Proxy,
+    ezp\Content\Section,
+    ezp\Content\ContainerProperty,
+    ezp\Base\Exception\NotFound,
+    ezp\Base\Exception\InvalidArgumentType,
+    ezp\Persistence\Content\Location as LocationValue,
+    ezp\Persistence\ValueObject;
 
 /**
  * Location service, used for complex subtree operations
@@ -162,5 +168,33 @@ class Service extends BaseService
     public function assignSection( Location $startingPoint, Section $section )
     {
     }
+
+    protected function buildDomainObject( ValueObject $vo )
+    {
+        if ( !$vo instanceof LocationValue )
+        {
+            throw new InvalidArgumentType( 'Value object', 'ezp\\Persistence\\Content\\Location', $vo );
+        }
+
+        $location = new Location( new Proxy( $this->repository->getContentService(), $valueObject->contentId ) );
+        $location->setState(
+            array(
+                'parent' => new Proxy( $this, $vo->parentId ),
+                'properties' => $vo
+            )
+        );
+
+        // Container property (default sorting)
+        $containerProperty = new ContainerProperty;
+        $location->containerProperties[] = $containerProperty->setState(
+            array(
+                'locationId' => $vo->id,
+                'sortField' => $vo->sortField,
+                'sortOrder' => $vo->sortOrder,
+                'location' => new Proxy( $this, $vo->id )
+            )
+        );
+
+        return $location;
+    }
 }
-?>
