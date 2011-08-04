@@ -37,4 +37,9 @@ class HandlerTest extends PHPUnit_Framework_TestCase
         );
         $this->repositoryHandler = $serviceContainer->get( 'repository_handler' );
     }
+
+    public function testStub()
+    {
+        $this->markTestIncomplete( '@TODO: Add tests.' );
+    }
 }
