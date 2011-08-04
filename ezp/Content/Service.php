@@ -114,5 +114,10 @@ class Service extends BaseService
     {
         return new Builder();
     }
+
+    protected function buildDomainObject( ValueObject $vo )
+    {
+
+    }
 }
 ?>

@@ -31,4 +31,9 @@ class Service extends BaseService
             throw new InvalidArgumentException( "Could not find 'User' with id: {$id}" );
         return $user;
     }
+
+    protected function buildDomainObject( ValueObject $vo )
+    {
+
+    }
 }

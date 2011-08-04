@@ -46,4 +46,9 @@ class Service extends BaseService
             throw new NotFound( 'Content\\Type', $identifier );
         return $contentTypes[0];
     }
+
+    protected function buildDomainObject( ValueObject $vo )
+    {
+
+    }
 }

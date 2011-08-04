@@ -11,7 +11,8 @@ namespace ezp\Content\Section;
 use ezp\Base\Exception\NotFound,
     ezp\Base\Service as BaseService,
     ezp\Content,
-    ezp\Content\Section as SectionObject;
+    ezp\Content\Section as SectionObject,
+    ezp\Persistence\ValueObject;
 
 /**
  * Section service, used for section operations
@@ -117,6 +118,11 @@ class Service extends BaseService
             throw new Validation( 'This section is assigned to some contents' );
         }
         return $this->handler->sectionHandler()->delete( $sectionId );
+    }
+
+    protected function buildDomainObject( ValueObject $vo )
+    {
+
     }
 }
 ?>
