@@ -48,7 +48,7 @@ class ContentHandler implements BaseContentHandler
     /**
      * Creates a new content handler.
      *
-     * @param ezp\Persistence\LegacyStorage\Content\Gateway $contentGateway
+     * @param \ezp\Persistence\LegacyStorage\Content\Gateway $contentGateway
      */
     public function __construct(
         Gateway $contentGateway,
@@ -69,7 +69,7 @@ class ContentHandler implements BaseContentHandler
      *
      * Will contain always a complete list of fields.
      *
-     * @param ezp\Persistence\Content\CreateStruct $struct Content creation struct.
+     * @param \ezp\Persistence\Content\CreateStruct $struct Content creation struct.
      * @return \ezp\Persistence\Content Content value object
      * @todo Take care of initial locations!
      * @todo Method too complex, refactor!
@@ -213,7 +213,7 @@ class ContentHandler implements BaseContentHandler
     /**
      * Updates a content object entity with data and identifier $content
      *
-     * @param ezp\Persistence\Content\UpdateStruct $content
+     * @param \ezp\Persistence\Content\UpdateStruct $content
      * @return \ezp\Persistence\Content
      */
     public function update( UpdateStruct $content )

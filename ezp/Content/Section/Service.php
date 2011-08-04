@@ -91,7 +91,7 @@ class Service extends BaseService
      * @todo should this function assign section object to content->section?
      *       What if that is already done but nothing is saved, then first line here will fail.
      *
-     * @param ezp\Content\Section $section
+     * @param \ezp\Content\Section $section
      * @param Content $content
      * @uses \ezp\Base\StorageEngine\SectionHandler::assign()
      */

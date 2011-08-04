@@ -91,7 +91,7 @@ interface Handler
     /**
      * Creates a new location rooted at $parentId.
      *
-     * @param ezp\Persistence\Content\Location\CreateStruct $location
+     * @param \ezp\Persistence\Content\Location\CreateStruct $location
      * @param mixed $parentId
      * @return \ezp\Persistence\Content\Location
      */

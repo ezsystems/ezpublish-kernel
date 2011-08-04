@@ -31,8 +31,8 @@ abstract class Service
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param ezp\Base\Repository $repository
-     * @param ezp\Persistence\Repository\Handler $handler
+     * @param \ezp\Base\Repository $repository
+     * @param \ezp\Persistence\Repository\Handler $handler
      */
     public function __construct( Repository $repository, Handler $handler )
     {

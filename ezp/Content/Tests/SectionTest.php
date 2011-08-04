@@ -18,7 +18,7 @@ use ezp\Content\Section,
 class SectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @return \ezp\Content\SectionService
+     * @return \ezp\Content\Section\Service
      */
     protected function getService()
     {

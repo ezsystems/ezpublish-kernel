@@ -29,7 +29,7 @@ abstract class Gateway
     /**
      * Updates a group with data in $group.
      *
-     * @param ezp\Persistence\Content\Type\Group\UpdateStruct $group
+     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
      * @return void
      */
     abstract public function updateGroup( GroupUpdateStruct $group );
@@ -97,7 +97,7 @@ abstract class Gateway
      *
      * @param mixed $type
      * @param int $version
-     * @param ezp\Persistence\Content\Type\UpdateStruct $updateStruct
+     * @param \ezp\Persistence\Content\Type\UpdateStruct $updateStruct
      * @return void
      */
     abstract public function updateType( $typeId, $version, UpdateStruct $updateStruct );

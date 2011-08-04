@@ -96,7 +96,7 @@ abstract class Field extends AbstractModel implements Observer
     /**
      * Called when subject has been updated
      *
-     * @param ezp\Base\Observable $subject
+     * @param \ezp\Base\Observable $subject
      * @param string $event
      * @return Field
      */

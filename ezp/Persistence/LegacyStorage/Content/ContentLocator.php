@@ -47,7 +47,7 @@ class ContentLocator
     /**
      * Creates a new content handler.
      *
-     * @param ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway $gateway
+     * @param \ezp\Persistence\LegacyStorage\Content\ContentLocatorGateway $gateway
      */
     public function __construct( ContentLocatorGateway $gateway )
     {

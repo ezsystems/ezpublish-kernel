@@ -25,7 +25,7 @@ class Mapper
     /**
      * Creates a Group from its create struct.
      *
-     * @param ezp\Persistence\Content\Type\Group\CreateStruct $struct
+     * @param \ezp\Persistence\Content\Type\Group\CreateStruct $struct
      * @return Group
      * @todo $description is not supported by database, yet
      */
@@ -145,7 +145,7 @@ class Mapper
      * Maps properties from $struct to $type.
      *
      * @param Type $type
-     * @param ezp\Persistence\Content\Type\CreateStruct $struct
+     * @param \ezp\Persistence\Content\Type\CreateStruct $struct
      * @return void
      */
     public function createTypeFromCreateStruct( CreateStruct $createStruct )

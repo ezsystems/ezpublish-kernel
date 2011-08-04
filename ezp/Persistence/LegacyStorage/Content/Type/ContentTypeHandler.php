@@ -38,7 +38,7 @@ class ContentTypeHandler implements BaseContentTypeHandler
     /**
      * Creates a new content type handler.
      *
-     * @param ezp\Persistence\LegacyStorage\Content\Type\Gateway $contentTypeGateway
+     * @param \ezp\Persistence\LegacyStorage\Content\Type\Gateway $contentTypeGateway
      * @param Mapper $mapper
      */
     public function __construct( Gateway $contentTypeGateway, Mapper $mapper )
@@ -48,7 +48,7 @@ class ContentTypeHandler implements BaseContentTypeHandler
     }
 
     /**
-     * @param ezp\Persistence\Content\Type\Group\CreateStruct $createStruct
+     * @param \ezp\Persistence\Content\Type\Group\CreateStruct $createStruct
      * @return Group
      */
     public function createGroup( GroupCreateStruct $createStruct )
@@ -65,7 +65,7 @@ class ContentTypeHandler implements BaseContentTypeHandler
     }
 
     /**
-     * @param ezp\Persistence\Content\Type\Group\UpdateStruct $group
+     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
      * @return bool
      * @todo Should we return the Group here? Would require an additional
      *       SELECT, though.
@@ -131,7 +131,7 @@ class ContentTypeHandler implements BaseContentTypeHandler
     }
 
     /**
-     * @param ezp\Persistence\Content\Type\CreateStruct $contentType
+     * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
      * @return Type
      * @todo Maintain contentclass_name
      */
@@ -167,7 +167,7 @@ class ContentTypeHandler implements BaseContentTypeHandler
     /**
      * @param mixed $typeId
      * @param int $version
-     * @param ezp\Persistence\Content\Type\UpdateStruct $contentType
+     * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
      * @return Type
      * @todo Maintain contentclass_name
      */

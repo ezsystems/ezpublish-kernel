@@ -45,7 +45,7 @@ class Repository
      *
      * Construct repository object with provided storage engine
      *
-     * @param ezp\Persistence\Repository\Handler $handler
+     * @param \ezp\Persistence\Repository\Handler $handler
      */
     public function __construct( Handler $handler/*, ezp\User $user*/ )
     {

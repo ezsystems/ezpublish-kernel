@@ -21,13 +21,13 @@ use ezp\Persistence\Content\Type,
 interface Handler
 {
     /**
-     * @param ezp\Persistence\Content\Type\Group\CreateStruct $group
+     * @param \ezp\Persistence\Content\Type\Group\CreateStruct $group
      * @return Group
      */
     public function createGroup( GroupCreateStruct $group );
 
     /**
-     * @param ezp\Persistence\Content\Type\Group\UpdateStruct $group
+     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
      */
     public function updateGroup( GroupUpdateStruct $group );
 
@@ -57,7 +57,7 @@ interface Handler
     public function load( $contentTypeId, $version = 1 );
 
     /**
-     * @param ezp\Persistence\Content\Type\CreateStruct $contentType
+     * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
      * @return Type
      */
     public function create( CreateStruct $contentType );
@@ -65,7 +65,7 @@ interface Handler
     /**
      * @param mixed $typeId
      * @param int $version
-     * @param ezp\Persistence\Content\Type\UpdateStruct $contentType
+     * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
      */
     public function update( $typeId, $version, UpdateStruct $contentType );
 

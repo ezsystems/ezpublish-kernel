@@ -34,8 +34,8 @@ class LocationHandler implements BaseLocationHandler
     /**
      * Construct from userGateway
      *
-     * @param ezp\Persistence\LegacyStorage\Content\ContentHandler $contentHandler
-     * @param ezp\Persistence\LegacyStorage\Content\Location\Gateway $locationGateway
+     * @param \ezp\Persistence\LegacyStorage\Content\ContentHandler $contentHandler
+     * @param \ezp\Persistence\LegacyStorage\Content\Location\Gateway $locationGateway
      * @return void
      */
     public function __construct( ContentHandler $contentHandler, LocationGateway $locationGateway )

@@ -131,7 +131,7 @@ class EzcDatabase extends Gateway
     /**
      * Updates a group with data in $group.
      *
-     * @param ezp\Persistence\Content\Type\Group\UpdateStruct $group
+     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
      * @return void
      */
     public function updateGroup( GroupUpdateStruct $group )
@@ -472,7 +472,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $typeId
      * @param int $version
-     * @param ezp\Persistence\Content\Type\UpdateStruct $updateStruct
+     * @param \ezp\Persistence\Content\Type\UpdateStruct $updateStruct
      * @return void
      */
     public function updateType( $typeId, $version, UpdateStruct $updateStruct )
