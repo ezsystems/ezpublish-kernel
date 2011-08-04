@@ -9,7 +9,8 @@
 
 namespace ezp\User;
 use ezp\Base\Service as BaseService,
-    InvalidArgumentException;
+    InvalidArgumentException,
+    ezp\Persistence\ValueObject;
 
 /**
  * User Service, extends repository with user specific operations

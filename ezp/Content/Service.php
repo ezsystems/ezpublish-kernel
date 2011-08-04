@@ -12,7 +12,8 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Exception\NotFound,
     ezp\Content,
     ezp\Content\Query,
-    ezp\Content\Query\Builder;
+    ezp\Content\Query\Builder,
+    ezp\Persistence\ValueObject;
 
 /**
  * Content service, used for Content operations

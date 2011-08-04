@@ -9,7 +9,8 @@
 
 namespace ezp\Content\Type;
 use ezp\Base\Service as BaseService,
-    ezp\Base\Exception\NotFound;
+    ezp\Base\Exception\NotFound,
+    ezp\Persistence\ValueObject;
 
 /**
  * Content Service, extends repository with content specific operations
