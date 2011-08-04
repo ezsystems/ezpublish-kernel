@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the FieldValueConverterRegistry class
+ * File containing the FieldValue Converter Registry class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,10 +8,11 @@
  *
  */
 
-namespace ezp\Persistence\LegacyStorage\Content;
-use ezp\Persistence\LegacyStorage\Exception\FieldValueConverterNotFoundException;
+namespace ezp\Persistence\LegacyStorage\Content\FieldValue\Converter;
+use ezp\Persistence\LegacyStorage\Content\FieldValue\Converter,
+    ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Exception\NotFound;
 
-class FieldValueConverterRegistry
+class Registry
 {
     /**
      * Map of converters.
@@ -24,10 +25,10 @@ class FieldValueConverterRegistry
      * Register $converter for $typeName
      *
      * @param string $typeName
-     * @param FieldValueConverter $converter
+     * @param ezp\Persistence\LegacyStorage\Content\FieldValue\Converter $converter
      * @return void
      */
-    public function register( $typeName, FieldValueConverter $converter )
+    public function register( $typeName, Converter $converter )
     {
         $this->converterMap[$typeName] = $converter;
     }
@@ -36,13 +37,14 @@ class FieldValueConverterRegistry
      * Returns converter for $typeName
      *
      * @param string $typeName
-     * @return FieldValueConverter
+     * @throws ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Exception\NotFound
+     * @return ezp\Persistence\LegacyStorage\Content\FieldValue\Converter
      */
     public function getConverter( $typeName )
     {
         if ( !isset( $this->converterMap[$typeName] ) )
         {
-            throw new FieldValueConverterNotFoundException( $typeName );
+            throw new NotFound( $typeName );
         }
         return $this->converterMap[$typeName];
     }

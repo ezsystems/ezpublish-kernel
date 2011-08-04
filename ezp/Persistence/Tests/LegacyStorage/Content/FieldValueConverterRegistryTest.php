@@ -9,21 +9,21 @@
 
 namespace ezp\Persistence\Tests\LegacyStorage\Content;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
-    ezp\Persistence\LegacyStorage\Content\FieldValueConverterRegistry,
-    ezp\Persistence\LegacyStorage\Content\FieldValueConverter;
+    ezp\Persistence\LegacyStorage\Content\FieldValue\Converter,
+    ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry;
 
 /**
- * Test case for FieldValueConverterRegistry
+ * Test case for FieldValue Converter Registry
  */
 class FieldValueConverterRegistryTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\FieldValueConverterRegistry::register
+     * @covers ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry::register
      */
     public function testRegister()
     {
-        $registry = new FieldValueConverterRegistry();
+        $registry = new Registry();
 
         $converter = $this->getFieldValueConverterMock();
 
@@ -40,11 +40,11 @@ class FieldValueConverterRegistryTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\FieldValueConverterRegistry::getConverter
+     * @covers ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry::getConverter
      */
     public function testGetStorage()
     {
-        $registry = new FieldValueConverterRegistry();
+        $registry = new Registry();
 
         $converter = $this->getFieldValueConverterMock();
         $registry->register( 'some-type', $converter );
@@ -59,14 +59,14 @@ class FieldValueConverterRegistryTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\LegacyStorage\Content\FieldValueConverterRegistry::getConverter
-     * @covers ezp\Persistence\LegacyStorage\Exception\FieldValueConverterNotFoundException
-     * @expectedException ezp\Persistence\LegacyStorage\Exception\FieldValueConverterNotFoundException
-     * @expectedExceptionMessage FieldValueConverter for type "not-found" not found.
+     * @covers ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry::getConverter
+     * @covers ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Exception\NotFound
+     * @expectedException ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Exception\NotFound
+     * @expectedExceptionMessage FieldValue Converter for type "not-found" not found.
      */
     public function testGetNotFound()
     {
-        $registry = new FieldValueConverterRegistry();
+        $registry = new Registry();
 
         $registry->getConverter( 'not-found' );
     }
@@ -79,7 +79,7 @@ class FieldValueConverterRegistryTest extends TestCase
     protected function getFieldValueConverterMock()
     {
         return $this->getMockForAbstractClass(
-            'ezp\\Persistence\\LegacyStorage\\Content\\FieldValueConverter'
+            'ezp\\Persistence\\LegacyStorage\\Content\\FieldValue\\Converter'
         );
     }
 

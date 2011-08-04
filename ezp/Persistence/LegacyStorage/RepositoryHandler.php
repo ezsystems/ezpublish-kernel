@@ -11,7 +11,8 @@ namespace ezp\Persistence\LegacyStorage;
 use ezp\Persistence\Repository\Handler as HandlerInterface,
     ezp\Persistence\LegacyStorage\Content,
     ezp\Persistence\LegacyStorage\Content\Type,
-    ezp\Persistence\LegacyStorage\User;
+    ezp\Persistence\LegacyStorage\User,
+    ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry;
 
 /**
  * The repository handler for the legacy storage engine
@@ -31,7 +32,7 @@ class RepositoryHandler implements HandlerInterface
     /**
      * Field value converter registry
      *
-     * @var Content\FieldValueConverterRegistry
+     * @var ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry
      */
     protected $fieldValueConverterRegistry;
 
@@ -117,14 +118,14 @@ class RepositoryHandler implements HandlerInterface
     /**
      * Returns the field value converter registry
      *
-     * @return Content\FieldValueConverterRegistry
+     * @return ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry
      */
     public function getFieldValueConverterRegistry()
     {
         if ( !isset( $this->fieldValueConverterRegistry ) )
         {
             $this->fieldValueConverterRegistry =
-                new Content\FieldValueConverterRegistry();
+                new Registry();
         }
         return $this->fieldValueConverterRegistry;
     }

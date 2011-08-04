@@ -59,7 +59,7 @@ class RepositoryHandlerTest extends TestCase
         $registry = $handler->getFieldValueConverterRegistry();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\LegacyStorage\\Content\\FieldValueConverterRegistry',
+            'ezp\\Persistence\\LegacyStorage\\Content\\FieldValue\\Converter\\Registry',
             $registry
         );
     }

@@ -12,7 +12,8 @@ namespace ezp\Persistence\LegacyStorage\Content;
 use ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\Version;
+    ezp\Persistence\Content\Version,
+    ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry;
 
 /**
  *
@@ -22,16 +23,16 @@ class Mapper
     /**
      * FieldValue converter registry
      *
-     * @var FieldValueConverterRegistry
+     * @var ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry
      */
     protected $converterRegistry;
 
     /**
      * Creates a new mapper.
      *
-     * @param FieldValueConverterRegistry $converterRegistry
+     * @param ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry $converterRegistry
      */
-    public function __construct( FieldValueConverterRegistry $converterRegistry )
+    public function __construct( Registry $converterRegistry )
     {
         $this->converterRegistry = $converterRegistry;
     }
@@ -207,7 +208,7 @@ class Mapper
      * @param array $row
      * @param string $type
      * @return FieldValue
-     * @throws \ezp\Persistence\LegacyStorage\Exception\FieldValueConverterNotFoundException
+     * @throws ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Exception\NotFound
      *         if the necessary converter for $type could not be found.
      */
     protected function extractFieldValueFromRow( array $row, $type )

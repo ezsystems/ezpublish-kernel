@@ -10,8 +10,8 @@
 namespace ezp\Persistence\Tests\LegacyStorage\Content;
 use ezp\Persistence\Tests\LegacyStorage\TestCase,
     ezp\Persistence\LegacyStorage\Content\Mapper,
-    ezp\Persistence\LegacyStorage\Content\FieldValueConverter,
-    ezp\Persistence\LegacyStorage\Content\FieldValueConverterRegistry,
+    ezp\Persistence\LegacyStorage\Content\FieldValue\Converter,
+    ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry,
     ezp\Persistence\LegacyStorage\Content\StorageFieldValue,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Field,
@@ -140,7 +140,7 @@ class MapperTest extends TestCase
     public function testConvertToStorageValue()
     {
         $convMock = $this->getMock(
-            'ezp\\Persistence\\LegacyStorage\\Content\\FieldValueConverter'
+            'ezp\\Persistence\\LegacyStorage\\Content\\FieldValue\\Converter'
         );
         $convMock->expects( $this->once() )
             ->method( 'toStorage' )
@@ -150,7 +150,7 @@ class MapperTest extends TestCase
                 )
             )->will( $this->returnValue( new StorageFieldValue() ) );
 
-        $reg = new FieldValueConverterRegistry();
+        $reg = new Registry();
         $reg->register( 'some-type', $convMock );
 
         $field = new Field();
@@ -173,7 +173,7 @@ class MapperTest extends TestCase
     public function testExtractContentFromRows()
     {
         $convMock = $this->getMock(
-            'ezp\\Persistence\\LegacyStorage\\Content\\FieldValueConverter'
+            'ezp\\Persistence\\LegacyStorage\\Content\\FieldValue\\Converter'
         );
         $convMock->expects( $this->exactly( 9 ) )
             ->method( 'toFieldValue' )
@@ -183,7 +183,7 @@ class MapperTest extends TestCase
                 )
             )->will( $this->returnValue( new FieldValue() ) );
 
-        $reg = new FieldValueConverterRegistry();
+        $reg = new Registry();
         $reg->register( 'ezstring', $convMock );
         $reg->register( 'ezxmltext', $convMock );
         $reg->register( 'ezdatetime', $convMock );
@@ -228,12 +228,12 @@ class MapperTest extends TestCase
     /**
      * Returns a FieldValue converter registry mock
      *
-     * @return FieldValueConverterRegistry
+     * @return ezp\Persistence\LegacyStorage\Content\FieldValue\Converter\Registry
      */
     protected function getValueConverterRegistryMock()
     {
         return $this->getMock(
-            'ezp\\Persistence\\LegacyStorage\\Content\FieldValueConverterRegistry'
+            'ezp\\Persistence\\LegacyStorage\\Content\FieldValue\\Converter\\Registry'
         );
     }
 
