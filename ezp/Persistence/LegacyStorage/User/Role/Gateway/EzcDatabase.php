@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\LegacyStorage\User\RoleGateway;
-use ezp\Persistence\LegacyStorage\User\RoleGateway,
+namespace ezp\Persistence\LegacyStorage\User\Role\Gateway;
+use ezp\Persistence\LegacyStorage\User\Role\Gateway,
     ezp\Persistence\User\Role;
 
 /**
  * Base class for content type gateways.
  */
-class EzcDatabase extends RoleGateway
+class EzcDatabase extends Gateway
 {
     /**
      * Database handler

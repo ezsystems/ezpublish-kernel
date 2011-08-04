@@ -10,7 +10,8 @@
 namespace ezp\Persistence\LegacyStorage\User;
 use ezp\Persistence\User,
     ezp\Persistence\User\Handler as BaseUserHandler,
-    ezp\Persistence\User\Role;
+    ezp\Persistence\User\Role,
+    ezp\Persistence\LegacyStorage\User\Role\Gateway as RoleGateway;
 
 /**
  * Storage Engine handler for user module
@@ -28,7 +29,7 @@ class Handler implements BaseUserHandler
     /**
      * Gaateway for storing role data
      *
-     * @var RoleGateway
+     * @var ezp\Persistence\LegacyStorage\User\Role\Gateway
      */
     protected $roleGateway;
 
@@ -36,6 +37,7 @@ class Handler implements BaseUserHandler
      * Construct from userGateway
      *
      * @param ezp\Persistence\LegacyStorage\User\Gateway $userGateway
+     * @param ezp\Persistence\LegacyStorage\User\Role\Gateway $roleGateway
      * @return void
      */
     public function __construct( Gateway $userGateway, RoleGateway $roleGateway )
