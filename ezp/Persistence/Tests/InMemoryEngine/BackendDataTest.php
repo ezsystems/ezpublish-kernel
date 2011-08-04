@@ -28,15 +28,14 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->backend = new Backend();
+        $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
 
         for ( $i = 0; $i < 10; ++$i)
             $this->backend->create(
                 "Content",
                 array(
-                    "foo{$i}" => "bar{$i}",
-                    "baz{$i}" => "buzz{$i}",
-                    "int" => 42,
+                    "name" => "bar{$i}",
+                    "ownerId" => 42
                 )
             );
 
@@ -44,9 +43,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             $this->backend->create(
                 "Content",
                 array(
-                    "bar{$i}" => "foo{$i}",
-                    "baz{$i}" => "buzz{$i}",
-                    "float" => 42.42,
+                    "name" => "foo{$i}",
                 )
             );
     }
@@ -89,246 +86,77 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFind( $searchData, $result )
     {
-        $this->assertEquals(
-            $result,
-            $this->backend->find( "Content", $searchData )
-        );
+        $list = $this->backend->find( "Content", $searchData );
+        foreach ( $list as $key => $content )
+        {
+            $this->assertEquals( $result[$key]['id'], $content->id );
+            $this->assertEquals( $result[$key]['name'], $content->name );
+        }
     }
 
     public function providerForFind()
     {
         return array(
             array(
-                array( "foo0" => "bar0" ),
+                array( "name" => "bar0" ),
                 array(
                     array(
                         "id" => 1,
-                        "foo0" => "bar0",
-                        "baz0" => "buzz0",
-                        "int" => 42,
+                        "name" => "bar0",
                     )
                 )
             ),
             array(
-                array( "bar5" => "foo5" ),
+                array( "name" => "foo5" ),
                 array(
                     array(
                         "id" => 16,
-                        "bar5" => "foo5",
-                        "baz5" => "buzz5",
-                        "float" => 42.42,
+                        "name" => "foo5",
                     )
                 )
             ),
             array(
-                array( "baz5" => "buzz5" ),
-                array(
-                    array(
-                        "id" => 6,
-                        "foo5" => "bar5",
-                        "baz5" => "buzz5",
-                        "int" => 42,
-                    ),
-                    array(
-                        "id" => 16,
-                        "bar5" => "foo5",
-                        "baz5" => "buzz5",
-                        "float" => 42.42,
-                    )
-                )
-            ),
-            array(
-                array( "int" => 42 ),
+                array( "ownerId" => 42 ),
                 array(
                     array(
                         "id" => 1,
-                        "foo0" => "bar0",
-                        "baz0" => "buzz0",
-                        "int" => 42,
+                        "name" => "bar0",
                     ),
                     array(
                         "id" => 2,
-                        "foo1" => "bar1",
-                        "baz1" => "buzz1",
-                        "int" => 42,
+                        "name" => "bar1",
                     ),
                     array(
                         "id" => 3,
-                        "foo2" => "bar2",
-                        "baz2" => "buzz2",
-                        "int" => 42,
+                        "name" => "bar2",
                     ),
                     array(
                         "id" => 4,
-                        "foo3" => "bar3",
-                        "baz3" => "buzz3",
-                        "int" => 42,
+                        "name" => "bar3",
                     ),
                     array(
                         "id" => 5,
-                        "foo4" => "bar4",
-                        "baz4" => "buzz4",
-                        "int" => 42,
+                        "name" => "bar4",
                     ),
                     array(
                         "id" => 6,
-                        "foo5" => "bar5",
-                        "baz5" => "buzz5",
-                        "int" => 42,
+                        "name" => "bar5",
                     ),
                     array(
                         "id" => 7,
-                        "foo6" => "bar6",
-                        "baz6" => "buzz6",
-                        "int" => 42,
+                        "name" => "bar6",
                     ),
                     array(
                         "id" => 8,
-                        "foo7" => "bar7",
-                        "baz7" => "buzz7",
-                        "int" => 42,
+                        "name" => "bar7",
                     ),
                     array(
                         "id" => 9,
-                        "foo8" => "bar8",
-                        "baz8" => "buzz8",
-                        "int" => 42,
+                        "name" => "bar8",
                     ),
                     array(
                         "id" => 10,
-                        "foo9" => "bar9",
-                        "baz9" => "buzz9",
-                        "int" => 42,
-                    ),
-                ),
-            ),
-            array(
-                array( "int" => "42" ),
-                array(
-                    array(
-                        "id" => 1,
-                        "foo0" => "bar0",
-                        "baz0" => "buzz0",
-                        "int" => 42,
-                    ),
-                    array(
-                        "id" => 2,
-                        "foo1" => "bar1",
-                        "baz1" => "buzz1",
-                        "int" => 42,
-                    ),
-                    array(
-                        "id" => 3,
-                        "foo2" => "bar2",
-                        "baz2" => "buzz2",
-                        "int" => 42,
-                    ),
-                    array(
-                        "id" => 4,
-                        "foo3" => "bar3",
-                        "baz3" => "buzz3",
-                        "int" => 42,
-                    ),
-                    array(
-                        "id" => 5,
-                        "foo4" => "bar4",
-                        "baz4" => "buzz4",
-                        "int" => 42,
-                    ),
-                    array(
-                        "id" => 6,
-                        "foo5" => "bar5",
-                        "baz5" => "buzz5",
-                        "int" => 42,
-                    ),
-                    array(
-                        "id" => 7,
-                        "foo6" => "bar6",
-                        "baz6" => "buzz6",
-                        "int" => 42,
-                    ),
-                    array(
-                        "id" => 8,
-                        "foo7" => "bar7",
-                        "baz7" => "buzz7",
-                        "int" => 42,
-                    ),
-                    array(
-                        "id" => 9,
-                        "foo8" => "bar8",
-                        "baz8" => "buzz8",
-                        "int" => 42,
-                    ),
-                    array(
-                        "id" => 10,
-                        "foo9" => "bar9",
-                        "baz9" => "buzz9",
-                        "int" => 42,
-                    ),
-                ),
-            ),
-            array(
-                array( "float" => 42.42 ),
-                array(
-                    array(
-                        "id" => 11,
-                        "bar0" => "foo0",
-                        "baz0" => "buzz0",
-                        "float" => 42.42,
-                    ),
-                    array(
-                        "id" => 12,
-                        "bar1" => "foo1",
-                        "baz1" => "buzz1",
-                        "float" => 42.42,
-                    ),
-                    array(
-                        "id" => 13,
-                        "bar2" => "foo2",
-                        "baz2" => "buzz2",
-                        "float" => 42.42,
-                    ),
-                    array(
-                        "id" => 14,
-                        "bar3" => "foo3",
-                        "baz3" => "buzz3",
-                        "float" => 42.42,
-                    ),
-                    array(
-                        "id" => 15,
-                        "bar4" => "foo4",
-                        "baz4" => "buzz4",
-                        "float" => 42.42,
-                    ),
-                    array(
-                        "id" => 16,
-                        "bar5" => "foo5",
-                        "baz5" => "buzz5",
-                        "float" => 42.42,
-                    ),
-                    array(
-                        "id" => 17,
-                        "bar6" => "foo6",
-                        "baz6" => "buzz6",
-                        "float" => 42.42,
-                    ),
-                    array(
-                        "id" => 18,
-                        "bar7" => "foo7",
-                        "baz7" => "buzz7",
-                        "float" => 42.42,
-                    ),
-                    array(
-                        "id" => 19,
-                        "bar8" => "foo8",
-                        "baz8" => "buzz8",
-                        "float" => 42.42,
-                    ),
-                    array(
-                        "id" => 20,
-                        "bar9" => "foo9",
-                        "baz9" => "buzz9",
-                        "float" => 42.42,
+                        "name" => "bar9",
                     ),
                 ),
             ),
@@ -396,10 +224,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testLoad( $searchData, $result )
     {
-        $this->assertEquals(
-            $result,
-            $this->backend->load( "Content", $searchData )
-        );
+        //$this->markTestSkipped( "Invalid test" );
+        $content = $this->backend->load( "Content", $searchData );
+        foreach ( $result as $name => $value )
+            $this->assertEquals( $value, $content->$name );
     }
 
     public function providerForLoad()
@@ -409,36 +237,32 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 1,
                 array(
                     "id" => 1,
-                    "foo0" => "bar0",
-                    "baz0" => "buzz0",
-                    "int" => 42,
+                    "name" => "bar0",
+                    "ownerId" => 42,
                 )
             ),
             array(
                 "1",
                 array(
                     "id" => 1,
-                    "foo0" => "bar0",
-                    "baz0" => "buzz0",
-                    "int" => 42,
+                    "name" => "bar0",
+                    "ownerId" => 42,
                 )
             ),
             array(
                 2,
                 array(
                     "id" => 2,
-                    "foo1" => "bar1",
-                    "baz1" => "buzz1",
-                    "int" => 42,
+                    "name" => "bar1",
+                    "ownerId" => 42,
                 )
             ),
             array(
                 11,
                 array(
                     "id" => 11,
-                    "bar0" => "foo0",
-                    "baz0" => "buzz0",
-                    "float" => 42.42,
+                    "name" => "foo0",
+                    "ownerId" => null,
                 )
             ),
         );
@@ -464,18 +288,12 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     public function testUpdateNewAttribute()
     {
         $this->assertTrue(
-            $this->backend->update( "Content", 1, array( "new" => "data" ) )
+            $this->backend->update( "Content", 1, array( "ownerId" => 5 ) )
         );
-        $this->assertEquals(
-            array(
-                "id" => 1,
-                "foo0" => "bar0",
-                "baz0" => "buzz0",
-                "int" => 42,
-                "new" => "data",
-            ),
-            $this->backend->load( "Content", 1 )
-        );
+        $content = $this->backend->load( "Content", 1 );
+        $this->assertEquals( 1, $content->id );
+        $this->assertEquals( 'bar0', $content->name );
+        $this->assertEquals( 5, $content->ownerId );
     }
 
     /**
@@ -486,17 +304,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     public function testUpdate()
     {
         $this->assertTrue(
-            $this->backend->update( "Content", 2, array( "foo1" => "data" ) )
+            $this->backend->update( "Content", 2, array( "name" => 'Testing' ) )
         );
-        $this->assertEquals(
-            array(
-                "id" => 2,
-                "foo1" => "data",
-                "baz1" => "buzz1",
-                "int" => 42,
-            ),
-            $this->backend->load( "Content", 2 )
-        );
+        $content = $this->backend->load( "Content", 2 );
+        $this->assertEquals( 'Testing', $content->name );
     }
 
     /**
@@ -507,16 +318,9 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     public function testUpdateWithNullValue()
     {
         $this->assertTrue(
-            $this->backend->update( "Content", 3, array( "foo2" => null ) )
+            $this->backend->update( "Content", 3, array( "name" => null ) )
         );
-        $this->assertEquals(
-            array(
-                "id" => 3,
-                "foo2" => null,
-                "baz2" => "buzz2",
-                "int" => 42,
-            ),
-            $this->backend->load( "Content", 3 )
-        );
+        $content = $this->backend->load( "Content", 3 );
+        $this->assertEquals( null, $content->name );
     }
 }

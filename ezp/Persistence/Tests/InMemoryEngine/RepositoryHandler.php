@@ -36,21 +36,7 @@ class RepositoryHandler implements BaseRepositoryHandler
      */
     public function __construct()
     {
-        $this->backend = new Backend(
-            array(
-                "Content" => "ezp\\Persistence\\Content",
-                "Content\\Field" => "ezp\\Persistence\\Content\\Field",
-                "Content\\Location" => "ezp\\Persistence\\Content\\Location",
-                "Content\\Version" => "ezp\\Persistence\\Content\\Version",
-                "Content\\Section" => "ezp\\Persistence\\Content\\Section",
-                "Content\\Type" => "ezp\\Persistence\\Content\\Type",
-                "Content\\Type\\FieldDefintion" => "ezp\\Persistence\\Content\\Type\\FieldDefintion",
-                "Content\\Type\\Group" => "ezp\\Persistence\\Content\\Type\\Group",
-                "User" => "ezp\\Persistence\\User",
-                "User\\Role" => "ezp\\Persistence\\User\\Role",
-                "User\\Policy" => "ezp\\Persistence\\User\\Policy",
-            )
-        );
+        $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
     }
 
     /**

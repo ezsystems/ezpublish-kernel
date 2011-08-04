@@ -29,7 +29,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->backend = new Backend();
+        $this->backend = new Backend( array( 'Content' => array() ) );
     }
 
     /**
@@ -117,14 +117,11 @@ class BackendTest extends PHPUnit_Framework_TestCase
      */
     public function testCreate()
     {
-        $this->assertEquals(
-            array(
-                "id" => 1,
-                "foo" => "bar",
-                "baz" => "buzz",
-            ),
-            $this->backend->create( "Content", array( "foo" => "bar", "baz" => "buzz" ) )
-        );
+        $content = $this->backend->create( "Content", array( "name" => "bar", "sectionId" => 2 ));
+        $this->assertEquals( 1, $content->id );
+        $this->assertEquals( 'bar', $content->name );
+        $this->assertEquals( 2, $content->sectionId );
+        $this->assertEquals( null, $content->ownerId );
     }
 
     /**
@@ -135,14 +132,10 @@ class BackendTest extends PHPUnit_Framework_TestCase
     public function testCreateMultiple()
     {
         for ( $i = 1; $i <= 10; ++$i)
-            $this->assertEquals(
-                array(
-                    "id" => $i,
-                    "foo" => "bar",
-                    "baz" => "buzz",
-                ),
-                $this->backend->create( "Content", array( "foo" => "bar", "baz" => "buzz" ) )
-            );
+        {
+            $content = $this->backend->create( "Content", array( "name" => "bar", "sectionId" => 2 ) );
+            $this->assertEquals( $i, $content->id );
+        }
     }
 
     /**

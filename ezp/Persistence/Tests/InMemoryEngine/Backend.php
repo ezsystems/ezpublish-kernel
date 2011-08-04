@@ -28,24 +28,16 @@ class Backend
     protected $data = array();
 
     /**
-     * @var array
+     * Construct backend  and assign data
+     *
+     * Use
+     *     new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
+     *
+     * @param array $data
      */
-    protected $dataCounters = array();
-
-    /**
-     * @var array
-     */
-    protected $dataMapping = array();
-
-    /**
-     * Construct backend by reading data in data.json
-     */
-    public function __construct( array $dataMapping = null )
+    public function __construct( array $data )
     {
-        $this->data = json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) + $this->data;
-        foreach ( $this->data as $type => $data )
-            $this->dataCounters[$type] = count( $data );
-        $this->dataMapping = $dataMapping;
+        $this->data = $data + $this->data;
     }
 
     /**
@@ -58,9 +50,10 @@ class Backend
      */
     public function create( $type, array $data )
     {
-        $this->checkType( $type );
+        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+            throw new InvalidArgumentValue( 'type', $type );
 
-        $data['id'] = ++$this->dataCounters[$type];
+        $data['id'] = $this->getNextId( $type );
         $this->data[$type][$data['id']] = $data;
         return $this->toValue( $type, $data );
     }
@@ -74,7 +67,8 @@ class Backend
      */
     public function load( $type, $id )
     {
-        $this->checkType( $type );
+        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+            throw new InvalidArgumentValue( 'type', $type );
 
         if ( isset( $this->data[$type][$id] ) )
             return $this->toValue( $type, $this->data[$type][$id] );
@@ -93,7 +87,8 @@ class Backend
      */
     public function find( $type, array $criteria = array() )
     {
-        $this->checkType( $type );
+        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+            throw new InvalidArgumentValue( 'type', $type );
 
         $items = $this->findKeys( $type, $criteria );
         foreach ( $items as $key => $typeIndex )
@@ -111,7 +106,8 @@ class Backend
      */
     public function update( $type, $id, array $data )
     {
-        $this->checkType( $type );
+        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+            throw new InvalidArgumentValue( 'type', $type );
 
         $items = $this->findKeys( $type, array( 'id' => $id ) );
         if ( empty( $items ) )
@@ -131,7 +127,8 @@ class Backend
      */
     public function delete( $type, $id )
     {
-        $this->checkType( $type );
+        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+            throw new InvalidArgumentValue( 'type', $type );
 
         $items = $this->findKeys( $type, array( 'id' => $id ) );
         if ( empty( $items ) )
@@ -151,7 +148,8 @@ class Backend
      */
     public function count( $type, array $criteria = array() )
     {
-        $this->checkType( $type );
+        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+            throw new InvalidArgumentValue( 'type', $type );
 
         return count( $this->findKeys( $type, $criteria ) );
     }
@@ -166,8 +164,6 @@ class Backend
      */
     protected function findKeys( $type, array $criteria )
     {
-        $this->checkType( $type );
-
         $keys = array();
         foreach ( $this->data[$type] as $key => $hash )
         {
@@ -182,6 +178,24 @@ class Backend
     }
 
     /**
+     * Finds the max id number and that +1
+     *
+     * Makes sure no id conflicts occur if data for some reason contains gaps in id numbers.
+     *
+     * @param $type
+     * @return int
+     */
+    private function getNextId( $type )
+    {
+        $id = 0;
+        foreach ( $this->data[$type] as $key => $hash )
+        {
+            $id = max( $id, $hash['id'] );
+        }
+        return $id + 1;
+    }
+
+    /**
      * Creates Value object / struct based on array value from Backend.
      *
      * @internal
@@ -191,27 +205,13 @@ class Backend
      */
     protected function toValue( $type, array $data )
     {
-        if ( !isset( $this->dataMapping[$type] ) )
-            return $data;
-
-        $obj = new $this->dataMapping[$type];
+        $className = "ezp\\Persistence\\$type";
+        $obj = new $className;
         foreach ( $obj as $prop => &$value )
         {
             if ( isset( $data[$prop] ) )
                 $value = $data[$prop];
         }
         return $obj;
-    }
-
-    /**
-     * Checks if the $type is correct, otherwise @throw InvalidArgumentValue
-     *
-     * @param string $type
-     * @return void
-     */
-    private function checkType( $type )
-    {
-        if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
-            throw new InvalidArgumentValue( 'type', $type );
     }
 }
