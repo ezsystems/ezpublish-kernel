@@ -43,12 +43,12 @@ abstract class FieldType
     /**
      * @var boolean Flag telling whether or not the data is applicable for translation.
      */
-    protected $isTranslatable;
+    protected $isTranslatable = false;
 
     /**
      * @var boolean Flag telling whether search index extraction is applicable.
      */
-    protected $isSearchable;
+    protected $isSearchable = false;
 
     /*
      * This flag is disabled for now. Information collection will probably be
@@ -67,4 +67,26 @@ abstract class FieldType
      *                      in the FieldDefiniton on ContentTypes
      */
     protected $fieldProperties;
+
+    /**
+     * Does the field type supports translation of its data.
+     *
+     * @abstract
+     * @return boolean
+     */
+    public function supportsTranslation()
+    {
+        return $this->isTranslatable;
+    }
+
+    /**
+     * Does the field type support search.
+     *
+     * @abstract
+     * @return boolean
+     */
+    public function supportsSearch()
+    {
+        return $this->isSearchable;
+    }
 }
