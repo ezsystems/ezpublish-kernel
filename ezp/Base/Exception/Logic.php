@@ -16,7 +16,7 @@ use ezp\Base\Exception,
  * Logic Exception implementation
  *
  * Use:
- *   throw new Logic( "base\\[configuration]\\parsers", "could not parse configuration files" );
+ *   throw new Logic( "readWriteProperties", "property {$property} could not be found." );
  *
  */
 class Logic extends LogicException implements Exception
