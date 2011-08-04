@@ -163,12 +163,10 @@ abstract class Model implements Observable, ModelInterface
         {
             if ( property_exists( $this, $property ) )
             {
-                if ( $property === 'id' || $property === 'name' )var_dump( 'HEI!', $property, $this->$property );
                 return $this->$property;
             }
             else if ( property_exists( $this->properties, $property ) )
             {
-
                 return $this->properties->$property;
             }
         }
