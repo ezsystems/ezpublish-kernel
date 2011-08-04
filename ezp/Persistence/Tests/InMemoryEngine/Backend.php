@@ -84,20 +84,20 @@ class Backend
     }
 
     /**
-     * Find data from in memory store for a specific type that matches criteria (empty array will match all)
+     * Find data from in memory store for a specific type that matches $match (empty array will match all)
      *
      * Note does not support joins, so only properties on $type is matched.
      *
      * @param string $type
-     * @param array $criteria A simple array criteria with property => value to match against.
+     * @param array $match A simple array with property => value to match against.
      * @return object[]
      */
-    public function find( $type, array $criteria = array() )
+    public function find( $type, array $match = array() )
     {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $items = $this->findKeys( $type, $criteria );
+        $items = $this->findKeys( $type, $match );
         foreach ( $items as $key => $typeIndex )
             $items[$key] = $this->toValue( $type, $this->data[$type][$typeIndex] );
         return $items;
@@ -147,34 +147,34 @@ class Backend
     }
 
     /**
-     * Find count of objects of a given type matching a simple criteria (empty array will match all)
+     * Find count of objects of a given type matching a simple $match (empty array will match all)
      *
      * @param string $type
-     * @param array $criteria A simple array criteria with property => value to match against.
+     * @param array $match A simple array with property => value to match against.
      * @return int
      */
-    public function count( $type, array $criteria = array() )
+    public function count( $type, array $match = array() )
     {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        return count( $this->findKeys( $type, $criteria ) );
+        return count( $this->findKeys( $type, $match ) );
     }
 
     /**
-     * Find keys for data from in memory store for a specific type that matches criteria
+     * Find keys for data from in memory store for a specific type that matches $match
      *
      * @internal
      * @param string $type
-     * @param array $criteria A simple array criteria with property => value to match against.
+     * @param array $match A simple array with property => value to match against.
      * @return int[]
      */
-    protected function findKeys( $type, array $criteria )
+    protected function findKeys( $type, array $match )
     {
         $keys = array();
         foreach ( $this->data[$type] as $key => $hash )
         {
-            foreach ( $criteria as $property => $value )
+            foreach ( $match as $property => $value )
             {
                 if ( !isset( $hash[$property] ) || $hash[$property] != $value )
                     continue 2;
