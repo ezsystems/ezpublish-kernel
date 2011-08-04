@@ -21,7 +21,7 @@ use ezp\Field\FieldProperties;
  * capabilities can also be checked via the supports*() methods.
  *
  * A field type are the base building blocks of Content Types, and serve as
- * data containers for Content objects. Therefore whiel field types can be used
+ * data containers for Content objects. Therefore, while field types can be used
  * independently, they are designed to be used as a part of a Content object.
  *
  * Field types are primed and preconfigured with the Field Definitions found in
