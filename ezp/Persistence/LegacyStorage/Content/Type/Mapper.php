@@ -16,7 +16,7 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 
 /**
- * Mapper for ContentTypeHandler.
+ * Mapper for Content Type Handler.
  *
  * Performs mapping of Type objects.
  */

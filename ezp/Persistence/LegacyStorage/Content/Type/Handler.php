@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ContentTypeHandler class
+ * File containing the Content Type Handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -19,7 +19,7 @@ use ezp\Persistence\Content\Type,
 
 /**
  */
-class ContentTypeHandler implements BaseContentTypeHandler
+class Handler implements BaseContentTypeHandler
 {
     /**
      * ezp\Persistence\LegacyStorage\Content\Type\Gateway

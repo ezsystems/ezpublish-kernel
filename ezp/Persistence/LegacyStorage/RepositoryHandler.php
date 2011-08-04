@@ -45,7 +45,7 @@ class RepositoryHandler implements HandlerInterface
     /**
      * Content type handler
      *
-     * @var Content\Type\ContentTypeHandler
+     * @var Content\Type\Handler
      */
     protected $contentTypeHandler;
 
@@ -150,7 +150,7 @@ class RepositoryHandler implements HandlerInterface
     {
         if ( !isset( $this->contentTypeHandler ) )
         {
-            $this->contentTypeHandler = new Type\ContentTypeHandler(
+            $this->contentTypeHandler = new Type\Handler(
                 new Type\Gateway\EzcDatabase( $this->dbHandler ),
                 new Type\Mapper()
             );

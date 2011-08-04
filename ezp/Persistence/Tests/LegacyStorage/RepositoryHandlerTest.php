@@ -121,7 +121,7 @@ class RepositoryHandlerTest extends TestCase
             $contentTypeHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\ContentTypeHandler',
+            'ezp\\Persistence\\LegacyStorage\\Content\\Type\\Handler',
             $contentTypeHandler
         );
     }
