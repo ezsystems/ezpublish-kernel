@@ -60,9 +60,9 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $content = new Content( $this->contentType, $this->localeEN );
         $tr = $content->translations['eng-GB'];
-        self::assertEquals( count( $content->translations ), 1 );
-        self::assertEquals( count( $content->versions ), 1 );
-        self::assertEquals( count( $tr->versions ), 1 );
+        self::assertEquals( 1, count( $content->translations ) );
+        self::assertEquals( 1, count( $content->versions ) );
+        self::assertEquals( 1, count( $tr->versions ) );
         self::assertEquals( $tr->locale->code, $this->localeEN->code );
     }
 
@@ -116,8 +116,8 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $content = new Content( $this->contentType, $this->localeEN );
         $tr = $content->addTranslation( $this->localeFR );
         self::assertEquals( $tr->locale->code, $this->localeFR->code );
-        self::assertEquals( count( $tr->versions ), 1 );
-        self::assertEquals( count( $content->versions ), 2 );
+        self::assertEquals( 1, count( $tr->versions ) );
+        self::assertEquals( 2, count( $content->versions ) );
     }
 
     /**
@@ -136,7 +136,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $content = new Content( $this->contentType, new Locale( 'eng-GB' ) );
         $location = new Location( $content );
-        $this->assertEquals( $location, $content->locations[0], 'Location on Content is not correctly updated when Location is created with content in constructor!' );
+        $this->assertEquals( $content->locations[0], $location, 'Location on Content is not correctly updated when Location is created with content in constructor!' );
         $content->locations[] = $location;
         $this->assertEquals( 1, count( $content->locations ), 'Collection allows several instances of same object!' );
     }
