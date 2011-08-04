@@ -45,7 +45,13 @@ class Service extends BaseService
      */
     public function load( $locationId )
     {
+        $locationVO = $this->handler->locationHandler()->load( $locationId );
+        if ( !$locationVO instanceof LocationValue )
+        {
+            throw new NotFound( 'Location', $locationId );
+        }
 
+        return $this->buildDomainObject( $locationVO );
     }
 
     public function children( Location $location )
