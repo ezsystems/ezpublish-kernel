@@ -72,6 +72,9 @@ class ContentLocatorTest extends TestCase
                     new Content\Locator\Gateway\CriterionHandler\RemoteId(),
                     new Content\Locator\Gateway\CriterionHandler\Section(),
                     new Content\Locator\Gateway\CriterionHandler\Status(),
+                    new Content\Locator\Gateway\CriterionHandler\FullText(
+                        $database
+                    ),
                 ) )
             )
         );
@@ -491,6 +494,28 @@ class ContentLocatorTest extends TestCase
 
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
+
+    public function testFullTextFilter()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\FullText(
+                null,
+                Criterion\Operator::LIKE,
+                'applied webpage'
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 191 ),
             array_map(
                 function ( $content ) { return $content->id; },
                 $result
