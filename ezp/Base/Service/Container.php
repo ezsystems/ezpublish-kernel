@@ -168,7 +168,6 @@ class Container
             {
                 $arguments[] = $argument;
             }
-            continue;
         }
 
         // Use "new" if just 1 or 2 arguments (premature optimization to avoid use of reflection in most cases)
