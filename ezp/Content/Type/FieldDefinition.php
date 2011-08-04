@@ -11,15 +11,14 @@ namespace ezp\Content\Type;
 use ezp\Base\Observable,
     ezp\Base\Observer,
     ezp\Base\Model,
-    ezp\Content\Type,
-    ezp\Content\Type\Field as FieldDefinition;
+    ezp\Content\Type;
 
 /**
  * Content Type Field (content class attribute) class
  *
  * @property-read string $fieldTypeString
  */
-abstract class Field extends Model implements Observer
+abstract class FieldDefinition extends Model implements Observer
 {
     /**
      * @var array Readable of properties on this object
@@ -98,7 +97,7 @@ abstract class Field extends Model implements Observer
      *
      * @param \ezp\Base\Observable $subject
      * @param string $event
-     * @return Field
+     * @return FieldDefinition
      */
     public function update( Observable $subject, $event = 'update' )
     {

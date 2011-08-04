@@ -11,7 +11,7 @@ namespace ezp\Content;
 use ezp\Base\Observable,
     ezp\Base\Observer,
     ezp\Base\Model,
-    ezp\Content\Type\Field as FieldDefinition;
+    ezp\Content\Type\FieldDefinition;
 
 /**
  * This class represents a Content's field

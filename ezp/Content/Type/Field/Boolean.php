@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Type\Field;
-use ezp\Content\Type\Field as TypeField;
+use ezp\Content\Type\FieldDefinition;
 
 /**
  * Relation Field value object class

@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Type\Field;
 use ezp\Content\Type,
-    ezp\Content\Type\Field as TypeField;
+    ezp\Content\Type\FieldDefinition;
 
 /**
  * XML Field value object class

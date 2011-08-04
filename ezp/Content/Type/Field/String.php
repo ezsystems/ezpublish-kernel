@@ -9,12 +9,12 @@
 
 namespace ezp\Content\Type\Field;
 use ezp\Content\Type,
-    ezp\Content\Type\Field as TypeField;
+    ezp\Content\Type\FieldDefinition;
 
 /**
  * String Field value object class
  */
-class String extends TypeField
+class String extends FieldDefinition
 {
     /**
      * Field type identifier
@@ -41,6 +41,6 @@ class String extends TypeField
     {
         $this->readWriteProperties['default'] = true;
         $this->readWriteProperties['maxLength'] = true;
-        TypeField::__construct( $contentType );
+        FieldDefinition::__construct( $contentType );
     }
 }

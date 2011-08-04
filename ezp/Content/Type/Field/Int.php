@@ -9,12 +9,12 @@
 
 namespace ezp\Content\Type\Field;
 use ezp\Content\Type,
-    ezp\Content\Type\Field as TypeField;
+    ezp\Content\Type\FieldDefinition;
 
 /**
  * Int Field value object class
  */
-class Int extends TypeField
+class Int extends FieldDefinition
 {
     /**
      * Field type identifier
@@ -51,6 +51,6 @@ class Int extends TypeField
         $this->readWriteProperties['max'] = true;
         $this->readWriteProperties['default'] = true;
         $this->readWriteProperties['state'] = true;
-        TypeField::__construct( $contentType );
+        FieldDefinition::__construct( $contentType );
     }
 }
