@@ -13,6 +13,7 @@ use ezp\Base\Observable,
     ezp\Base\ModelInterface,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
+    ezp\Base\Exception\InvalidArgumentType,
     Traversable;
 
 /**
@@ -160,7 +161,15 @@ abstract class Model implements Observable, ModelInterface
     {
         if ( isset( $this->readWriteProperties[$property] ) )
         {
-            return $this->properties->$property;
+            if ( isset( $this->$property ) )
+            {
+                return $this->$property;
+            }
+            else if ( isset( $this->properties->$property ) )
+            {
+
+                return $this->properties->$property;
+            }
         }
 
         if ( isset( $this->dynamicProperties[$property] ) )
@@ -342,5 +351,3 @@ abstract class Model implements Observable, ModelInterface
         return $hash;
     }
 }
-
-?>
