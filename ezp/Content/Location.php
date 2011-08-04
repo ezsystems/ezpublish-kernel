@@ -83,9 +83,19 @@ class Location extends Model implements Observer
         }
 
         $this->properties = new LocationValue;
-        $this->content = $content;
         $this->containerProperties = new TypeCollection( 'ezp\\Content\\ContainerProperty' );
         $this->children = new TypeCollection( 'ezp\\Content\\Location' );
+
+        // If instantiation is made with concrete Content,
+        // do concrete setContent() to fixup dependencies between Content and Location
+        if ( $content instanceof Content )
+        {
+            $this->setContent( $content );
+        }
+        else
+        {
+            $this->content = $content;
+        }
     }
 
     /**
