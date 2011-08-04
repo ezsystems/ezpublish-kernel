@@ -7,39 +7,38 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Type\Field;
+namespace ezp\Content\Type\FieldDefinition;
 use ezp\Content\Type,
     ezp\Content\Type\FieldDefinition;
 
 /**
  * Image Field value object class
  */
-class Image extends String
+class Text extends String
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezimage';
+    const FIELD_IDENTIFIER = 'eztext';
+
+    /**
+     * @var string
+     */
+    public $default = '';
 
     /**
      * @var int
      */
-    public $maxSize = 0;
-
-    /**
-     * @var array Readable of properties on this object
-     */
-    protected $readWriteProperties = array(
-        'maxSize' => 'data_int1',
-    );
+    public $columns = 10;
 
     /**
      * @return void
      */
     public function __construct( Type $contentType )
     {
-        $this->readWriteProperties['maxSize'] = true;
-        TypeField::__construct( $contentType );
+        $this->readWriteProperties['default'] = true;
+        $this->readWriteProperties['columns'] = true;
+        FieldDefinition::__construct( $contentType );
     }
 }

@@ -1,41 +1,38 @@
 <?php
 /**
- * Relation Field domain object
+ * String Field domain object
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Type\Field;
+namespace ezp\Content\Type\FieldDefinition;
 use ezp\Content\Type,
     ezp\Content\Type\FieldDefinition;
 
 /**
- * Relation Field value object class
+ * String Field value object class
  */
-class Datetime extends Int
+class String extends FieldDefinition
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'ezdatetime';
+    const FIELD_IDENTIFIER = 'ezstring';
 
     /**
-     * @var int
-     */
-    public $default = 0;
-
-    /**
-     * @var int
-     */
-    public $useSeconds = 0;
-
-    /**
+     * @public
      * @var string
      */
-    public $adjustment = 0;
+    public $default = '';
+
+    /**
+     * @public
+     * @var int
+     */
+    public $maxLength = 255;
 
     /**
      * @return void
@@ -43,8 +40,7 @@ class Datetime extends Int
     public function __construct( Type $contentType )
     {
         $this->readWriteProperties['default'] = true;
-        $this->readWriteProperties['useSeconds'] = true;
-        $this->readWriteProperties['adjustment'] = true;
-        TypeField::__construct( $contentType );
+        $this->readWriteProperties['maxLength'] = true;
+        FieldDefinition::__construct( $contentType );
     }
 }

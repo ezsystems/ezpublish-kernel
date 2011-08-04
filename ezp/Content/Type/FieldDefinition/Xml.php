@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Type\Field;
+namespace ezp\Content\Type\FieldDefinition;
 use ezp\Content\Type,
     ezp\Content\Type\FieldDefinition;
 
@@ -40,6 +40,6 @@ class Xml extends Text
     {
         $this->readWriteProperties['tagPreset'] = true;
         $this->readWriteProperties['columns'] = true;
-        TypeField::__construct( $contentType );
+        FieldDefinition::__construct( $contentType );
     }
 }

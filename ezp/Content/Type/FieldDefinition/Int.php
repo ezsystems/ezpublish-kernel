@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Type\Field;
+namespace ezp\Content\Type\FieldDefinition;
 use ezp\Content\Type,
     ezp\Content\Type\FieldDefinition;
 

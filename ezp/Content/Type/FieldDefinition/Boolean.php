@@ -1,36 +1,30 @@
 <?php
 /**
- * Image Field domain object
+ * Relation Field domain object
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Type\Field;
-use ezp\Content\Type,
-    ezp\Content\Type\FieldDefinition;
+namespace ezp\Content\Type\FieldDefinition;
+use ezp\Content\Type\FieldDefinition;
 
 /**
- * Image Field value object class
+ * Relation Field value object class
  */
-class Text extends String
+class Boolean extends Int
 {
     /**
      * Field type identifier
      * @var string
      */
-    const FIELD_IDENTIFIER = 'eztext';
-
-    /**
-     * @var string
-     */
-    public $default = '';
+    const FIELD_IDENTIFIER = 'ezboolean';
 
     /**
      * @var int
      */
-    public $columns = 10;
+    public $default = 0;
 
     /**
      * @return void
@@ -38,7 +32,6 @@ class Text extends String
     public function __construct( Type $contentType )
     {
         $this->readWriteProperties['default'] = true;
-        $this->readWriteProperties['columns'] = true;
-        TypeField::__construct( $contentType );
+        FieldDefinition::__construct( $contentType );
     }
 }
