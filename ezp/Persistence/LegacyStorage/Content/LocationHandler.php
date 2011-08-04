@@ -268,5 +268,15 @@ class LocationHandler implements BaseLocationHandler
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
+
+    /**
+     * Removes a location from its $locationId
+     *
+     * @param mixed $locationId
+     */
+    public function delete( $locationId )
+    {
+        throw new RuntimeException( '@TODO: Implement' );
+    }
 }
 ?>
