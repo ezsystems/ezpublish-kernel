@@ -8,22 +8,24 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\AbstractModel,
-    ezp\Base\Observer,
+use ezp\Base\Model,
+    ezp\Base\Interfaces\Observer,
     ezp\Base\TypeCollection,
-    ezp\Base\Observable,
-    ezp\Content;
+    ezp\Base\Interfaces\Observable,
+    ezp\Content,
+    ezp\Persistence\Content\Location as LocationValue,
+    ezp\Base\Exception\InvalidArgumentType;
 
 /**
  * This class represents a Content Location
  *
  */
-class Location extends AbstractModel implements Observer
+class Location extends Model implements Observer
 {
     /**
      * @var array Readable of properties on this object
      */
-    protected $readableProperties = array(
+    protected $readWriteProperties = array(
         'id' => false,
         'depth' => false,
         'isHidden' => true,
@@ -43,74 +45,6 @@ class Location extends AbstractModel implements Observer
     );
 
     /**
-     * @var int
-     */
-    protected $depth;
-
-    /**
-     * A custom ID for the Location.
-     *
-     * @var string
-     */
-    public $remoteId = '';
-
-    /**
-     * The path of the Location in the tree
-     *
-     * @var string
-     */
-    public $path = '';
-
-    /**
-     * The parent Location
-     *
-     * @var Proxy|Location
-     */
-    protected $parent;
-
-    /**
-     * The children Location
-     *
-     * @var Location[]
-     */
-    protected $children;
-
-    /**
-     * The Content the Location holds
-     *
-     * @var Proxy|Content
-     */
-    protected $content;
-
-    /**
-     * Hidden flag
-     *
-     * @var bool
-     */
-    public $hidden = false;
-
-    /**
-     * Visible flag
-     *
-     * @var bool
-     */
-    public $visible = true;
-
-    /**
-     * Priority of the Location
-     *
-     * @var int
-     */
-    public $priority = 0;
-
-    /**
-     * Id of the location
-     *
-     * @var int
-     */
-    protected $id = 0;
-
-    /**
      * Container properties
      *
      * @var ContainerProperty[]
@@ -118,15 +52,34 @@ class Location extends AbstractModel implements Observer
     protected $containerProperties;
 
     /**
+     * Children of current location
+     * @var Location[]
+     */
+    protected $children;
+
+    /**
+     * Content for current location
+     * @var Content|Proxy
+     */
+    protected $content;
+
+    /**
      * Setups empty children collection and attaches $content
      *
-     * @param Content $content
+     * @param Content|Proxy $content
+     * @throws \ezp\Base\Exception\InvalidArgumentType
      */
-    public function __construct( Content $content )
+    public function __construct( $content )
     {
+        if ( !$content instanceof Content && !$content instanceof Proxy )
+        {
+            throw new InvalidArgumentType( '$content', 'ezp\\Content, ezp\\Content\\Proxy', $content );
+        }
+
+        $this->properties = new LocationValue;
+        $this->content = $content;
         $this->containerProperties = new TypeCollection( 'ezp\\Content\\ContainerProperty' );
         $this->children = new TypeCollection( 'ezp\\Content\\Location' );
-        $this->setContent( $content );
     }
 
     /**
@@ -224,4 +177,3 @@ class Location extends AbstractModel implements Observer
         return $this;
     }
 }
-?>
