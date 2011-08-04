@@ -140,5 +140,12 @@ interface Handler
      * @return boolean
      */
     public function setSectionForSubtree( $locationId, $sectionId );
+
+    /**
+     * Removes a location from its $locationId
+     *
+     * @param mixed $locationId
+     */
+    public function delete( $locationId );
 }
 ?>

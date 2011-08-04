@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
-use PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase,
+    ReflectionObject;
 
 /**
  * Test case for Handler using in memory storage.
@@ -28,7 +29,14 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        // Create a new backend from JSON data and empty Content data to make it clean
         $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
+        $refObj = new ReflectionObject( $this->backend );
+        $refData = $refObj->getProperty( 'data' );
+        $refData->setAccessible( true );
+        $data = $refData->getValue( $this->backend );
+        $data['Content'] = array();
+        $refData->setValue( $this->backend, $data );
 
         for ( $i = 0; $i < 10; ++$i)
             $this->backend->create(
@@ -46,6 +54,12 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                     "name" => "foo{$i}",
                 )
             );
+    }
+
+    protected function tearDown()
+    {
+        unset( $this->backend );
+        parent::tearDown();
     }
 
     /**

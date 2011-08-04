@@ -1,13 +1,24 @@
 {
-    "Content": {},
+    "Content": {
+        "1" : {"id": 1, "name": "eZ Publish", "typeId": 1, "sectionId": 1, "ownerId": "14"}
+    },
     "Content\\Field": {},
-    "Content\\Location" : {},
+    "Content\\Location" : {
+        "1" : {"id": 1, "priority": 0, "hidden": false, "invisible": false, "remoteId": "remoteIDForLocation1", "contentId": 0, "parentId": 1, "pathIdentificationString": "", "pathString": "/1/", "modifiedSubLocation": 1312473387, "mainLocationId": 1, "depth": 0, "sortField": 1, "sortOrder": 1},
+        "2" : {"id": 2, "priority": 0, "hidden": false, "invisible": false, "remoteId": "remoteIDForLocation2", "contentId": 1, "parentId": 1, "pathIdentificationString": "", "pathString": "/1/2/", "modifiedSubLocation": 1312473387, "mainLocationId": 2, "depth": 1, "sortField": 8, "sortOrder": 1}
+    },
     "Content\\Version" : {},
     "Content\\Section" : {"1" : {"id": 1, "identifier": "standard", "name": "Standard"}},
-    "Content\\Type": {},
-    "Content\\Type\\FieldDefintion" : {},
-    "Content\\Type\\Group" : {},
-    "User": {},
+    "Content\\Type": {
+        "1" : {"id": 1, "version": 0, "name": {"eng-GB": "Folder"}, "description": {"eng-GB": "A simple folder"}, "identifier": "folder", "created": 1312473387, "modified": 1312473387, "creatorId": 14, "modifierId": 14, "urlAliasSchema": null, "nameSchema": "<short_name|name>", "isContainer": true, "initialLanguageId": 2, "contentTypeGroupIds": [1]}
+    },
+    "Content\\Type\\FieldDefinition" : {},
+    "Content\\Type\\Group" : {
+        "1" : {"id": 1, "name": "Content", "description": "Content group"}
+    },
+    "User": {
+        "1" : {"id": 14, "login": "admin", "email": "nospam@ez.no", "password": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorythm": 2}
+    },
     "User\\Role" : {},
     "User\\Policy" : {}
 }

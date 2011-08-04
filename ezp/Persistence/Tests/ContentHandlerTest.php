@@ -27,6 +27,18 @@ class ContentHandlerTest extends HandlerTest
     protected $content;
 
     /**
+     *
+     * @var int
+     */
+    protected $contentId;
+
+    /**
+     *
+     * @var ezp
+     */
+    protected $contentToDelete = array();
+
+    /**
      * Setup the HandlerTest.
      */
     protected function setUp()
@@ -48,6 +60,8 @@ class ContentHandlerTest extends HandlerTest
         );
 
         $this->content = $this->repositoryHandler->contentHandler()->create( $struct );
+        $this->contentToDelete[] = $this->content;
+        $this->contentId = $this->content->id;
     }
 
     /**
@@ -57,8 +71,12 @@ class ContentHandlerTest extends HandlerTest
     {
         $contentHandler = $this->repositoryHandler->contentHandler();
         // Removing default objects as well as those created by tests
-        $contentHandler->delete( 1 );
-        $contentHandler->delete( 2 );
+        foreach ( $this->contentToDelete as $content )
+        {
+            $contentHandler->delete( $content->id );
+        }
+        unset( $this->contentId );
+        //$contentHandler->delete( 2 );
         parent::tearDown();
     }
 
@@ -71,7 +89,7 @@ class ContentHandlerTest extends HandlerTest
     {
         $content = $this->repositoryHandler->contentHandler()->load( $this->content->id );
         $this->assertTrue( $content instanceof Content );
-        $this->assertEquals( 1, $content->id );
+        $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( 'test', $content->name );
         $this->assertEquals( 1, count( $content->versionInfos ) );
@@ -99,8 +117,9 @@ class ContentHandlerTest extends HandlerTest
         );
 
         $content = $this->repositoryHandler->contentHandler()->create( $struct );
+        $this->contentToDelete[] = $content;
         $this->assertTrue( $content instanceof Content );
-        $this->assertEquals( 2, $content->id );
+        $this->assertEquals( $this->contentId + 1, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( 'test', $content->name );
         $this->assertEquals( 1, count( $content->versionInfos ) );

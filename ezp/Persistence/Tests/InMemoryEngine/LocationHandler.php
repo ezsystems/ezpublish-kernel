@@ -173,5 +173,15 @@ class LocationHandler implements LocationHandlerInterface
     public function getPath( $locationId, $languageCode )
     {
     }
+
+    /**
+     * @see ezp\Persistence\Content\Location\Handler
+     */
+    public function delete( $locationId )
+    {
+        $return = $this->backend->delete( 'Content\\Location', $locationId );
+        if ( !$return )
+            return $return;
+    }
 }
 ?>
