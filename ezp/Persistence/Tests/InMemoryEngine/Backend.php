@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
-use ezp\Base\Exception\InvalidArgumentValue;
+use ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\Logic;
 
 /**
  * The Storage Engine backend for in memory storage
@@ -79,6 +80,8 @@ class Backend
         $items = $this->findKeys( $type, array( 'id' => $id ) );
         if ( empty( $items ) )
             return null;
+        else if ( isset( $items[1] ) )
+            throw new Logic( $type, "more then one item exist with id: {$id}" );
 
         return $this->toValue( $type, $this->data[$type][ $items[0] ] );
     }
