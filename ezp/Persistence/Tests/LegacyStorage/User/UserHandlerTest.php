@@ -30,7 +30,7 @@ class UserHandlerTest extends TestCase
     protected function getUserHandler()
     {
         $dbHandler = $this->getDatabaseHandler();
-        return new User\UserHandler(
+        return new User\Handler(
             new User\Gateway\EzcDatabase( $dbHandler ),
             new User\RoleGateway\EzcDatabase( $dbHandler )
         );

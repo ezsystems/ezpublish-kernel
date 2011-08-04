@@ -16,7 +16,7 @@ use ezp\Persistence\User,
  * Storage Engine handler for user module
  *
  */
-class UserHandler implements BaseUserHandler
+class Handler implements BaseUserHandler
 {
     /**
      * Gaateway for storing user data

@@ -59,7 +59,7 @@ class RepositoryHandler implements HandlerInterface
     /**
      * User handler
      *
-     * @var User\UserHandler
+     * @var User\Handler
      */
     protected $userHandler;
 
@@ -180,7 +180,7 @@ class RepositoryHandler implements HandlerInterface
     {
         if ( !isset( $this->userHandler ) )
         {
-            $this->userHandler = new User\UserHandler(
+            $this->userHandler = new User\Handler(
                 new User\Gateway\EzcDatabase( $this->dbHandler ),
                 new User\RoleGateway\EzcDatabase( $this->dbHandler )
             );

@@ -187,7 +187,7 @@ class RepositoryHandlerTest extends TestCase
             $userHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\LegacyStorage\\User\\UserHandler',
+            'ezp\\Persistence\\LegacyStorage\\User\\Handler',
             $userHandler
         );
     }
