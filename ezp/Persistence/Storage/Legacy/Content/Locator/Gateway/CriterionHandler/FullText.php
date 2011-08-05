@@ -40,9 +40,10 @@ class FullText extends CriterionHandler
      * @param \ezcDbHandler $handler
      * @return void
      */
-    public function __construct( \ezcDbHandler $handler )
+    public function __construct( \ezcDbHandler $handler, array $configuration = array() )
     {
-        $this->handler = $handler;
+        $this->handler       = $handler;
+        $this->configuration = $configuration + $this->configuration;
     }
 
     /**

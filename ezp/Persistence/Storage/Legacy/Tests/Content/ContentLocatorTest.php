@@ -53,7 +53,7 @@ class ContentLocatorTest extends TestCase
         }
     }
 
-    protected function getContentLocator()
+    protected function getContentLocator( array $fullTextSearchConfiguration = array() )
     {
         return new Content\Locator(
             new Content\Locator\Gateway\EzcDatabase(
@@ -73,7 +73,8 @@ class ContentLocatorTest extends TestCase
                     new Content\Locator\Gateway\CriterionHandler\Section(),
                     new Content\Locator\Gateway\CriterionHandler\Status(),
                     new Content\Locator\Gateway\CriterionHandler\FullText(
-                        $database
+                        $database,
+                        $fullTextSearchConfiguration
                     ),
                 ) )
             )
@@ -520,6 +521,98 @@ class ContentLocatorTest extends TestCase
                 function ( $content ) { return $content->id; },
                 $result
             )
+        );
+    }
+
+    public function testFullTextWildcardFilter()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\FullText(
+                null,
+                Criterion\Operator::LIKE,
+                'applie*'
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 191 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
+
+    public function testFullTextDisabledWildcardFilter()
+    {
+        $locator = $this->getContentLocator( array(
+            'enableWildcards' => false,
+        ) );
+
+        $result = $locator->find(
+            new Criterion\FullText(
+                null,
+                Criterion\Operator::LIKE,
+                'applie*'
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array(),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
+
+    public function testFullTextFilterStopwordRemoval()
+    {
+        $locator = $this->getContentLocator();
+
+        $result = $locator->find(
+            new Criterion\FullText(
+                null,
+                Criterion\Operator::LIKE,
+                'the'
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array(),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            )
+        );
+    }
+
+    public function testFullTextFilterNoStopwordRemoval()
+    {
+        $locator = $this->getContentLocator( array(
+            'searchThresholdValue' => PHP_INT_MAX
+        ) );
+
+        $result = $locator->find(
+            new Criterion\FullText(
+                null,
+                Criterion\Operator::LIKE,
+                'the'
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            10,
+            count( array_map(
+                function ( $content ) { return $content->id; },
+                $result
+            ) )
         );
     }
 }
