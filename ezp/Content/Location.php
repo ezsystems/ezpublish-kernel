@@ -108,6 +108,7 @@ class Location extends Model implements Observer
         if ( $this->parent instanceof Proxy )
         {
             $this->parent = $this->parent->load();
+            $this->parent->children[] = $this;
         }
         return $this->parent;
     }
@@ -147,6 +148,7 @@ class Location extends Model implements Observer
         if ( $this->content instanceof Proxy )
         {
             $this->content = $this->content->load();
+            $this->content->locations[] = $this;
         }
         return $this->content;
     }
@@ -174,7 +176,6 @@ class Location extends Model implements Observer
     {
         $this->content = $content;
         $content->locations[] = $this;
-
     }
 
     /**
