@@ -21,6 +21,9 @@
       <file>ezp/Content/Tests/QueryBuilderTest.php</file>
       <file>ezp/Content/Tests/TranslationTest.php</file>
     </testsuite>
+    <testsuite name="ezp\Persistence">
+      <directory>ezp/Persistence/Tests</directory>
+    </testsuite>
     <testsuite name="ezp\Persistence\Storage\Legacy">
       <directory>ezp/Persistence/Storage/Legacy/Tests</directory>
     </testsuite>
