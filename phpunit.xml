@@ -32,12 +32,7 @@
     <whitelist>
       <directory suffix=".php">ezp</directory>
       <exclude>
-        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/_fixtures</directory>
-        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/Content/_fixtures/</directory>
-        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/Content/Type/_fixtures</directory>
-        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/Content/Type/Gateway/_fixtures</directory>
-        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/Content/ContentLocator/_fixtures</directory>
-        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests/Content/Location/Gateway/_fixtures</directory>
+        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests</directory>
         <directory suffix=".php">ezp/Stubs</directory>
         <file>ezp/index.php</file>
       </exclude>
