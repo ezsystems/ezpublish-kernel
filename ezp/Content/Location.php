@@ -27,9 +27,17 @@ class Location extends Model implements Observer
      */
     protected $readWriteProperties = array(
         'id' => false,
-        'depth' => false,
+        'priority' => true,
         'isHidden' => true,
-        'isInvisible' => true,
+        'invisible' => false,
+        'hidden' => false,
+        'remoteId' => true,
+        'pathIdentificationString' => false,
+        'pathString' => false,
+        'mainLocationId' => false,
+        'depth' => false,
+        'sortField' => true,
+        'sortOrder' => true,
         'containerProperties' => true,
         'children' => false,
     );
@@ -40,8 +48,8 @@ class Location extends Model implements Observer
     protected $dynamicProperties = array(
         'content' => false,
         'parent' => false,
-        //"parentId" => true,
-        //"contentId" => true,
+        'parentId' => true,
+        'contentId' => true,
     );
 
     /**

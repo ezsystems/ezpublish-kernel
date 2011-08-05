@@ -182,7 +182,7 @@ class Service extends BaseService
             throw new InvalidArgumentType( 'Value object', 'ezp\\Persistence\\Content\\Location', $vo );
         }
 
-        $location = new Location( new Proxy( $this->repository->getContentService(), $valueObject->contentId ) );
+        $location = new Location( new Proxy( $this->repository->getContentService(), $vo->contentId ) );
         $location->setState(
             array(
                 'parent' => new Proxy( $this, $vo->parentId ),
@@ -197,7 +197,7 @@ class Service extends BaseService
                 'locationId' => $vo->id,
                 'sortField' => $vo->sortField,
                 'sortOrder' => $vo->sortOrder,
-                'location' => new Proxy( $this, $vo->id )
+                'location' => $location
             )
         );
 

@@ -20,6 +20,7 @@
       <file>ezp/Content/Tests/SectionTest.php</file>
       <file>ezp/Content/Tests/QueryBuilderTest.php</file>
       <file>ezp/Content/Tests/TranslationTest.php</file>
+      <directory>ezp/Content/Tests/Location</directory>
     </testsuite>
     <testsuite name="ezp\Persistence">
       <directory>ezp/Persistence/Tests</directory>
