@@ -40,7 +40,7 @@ class StorageRegistry
      * Returns the storage for $typeName
      *
      * @param string $typeName
-     * @return void
+     * @return Storage
      */
     public function getStorage( $typeName )
     {
