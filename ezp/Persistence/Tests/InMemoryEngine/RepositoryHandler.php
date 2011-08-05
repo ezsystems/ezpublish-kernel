@@ -9,7 +9,8 @@
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
 use ezp\Persistence\Repository\Handler as BaseRepositoryHandler,
-    ezp\Base\Exception\MissingClass;
+    ezp\Base\Exception\MissingClass,
+    RuntimeException;
 
 /**
  * The main handler for in memory Storage Engine
@@ -27,7 +28,7 @@ class RepositoryHandler implements BaseRepositoryHandler
     /**
      * Instance of in-memory backend that reads data from js files into memory and writes to memory
      *
-     * @var ezp\Persistence\Tests\InMemoryEngine\Backend
+     * @var \ezp\Persistence\Tests\InMemoryEngine\Backend
      */
     protected $backend;
 
@@ -83,18 +84,21 @@ class RepositoryHandler implements BaseRepositoryHandler
      */
     public function beginTransaction()
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
      */
     public function commit()
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
      */
     public function rollback()
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
      /**

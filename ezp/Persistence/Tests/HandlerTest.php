@@ -18,7 +18,7 @@ use ezp\Base\Service\Container,
 class HandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var ezp\Persistence\Repository\Handler
+     * @var \ezp\Persistence\Repository\Handler
      */
     protected $repositoryHandler;
 

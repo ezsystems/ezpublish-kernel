@@ -9,7 +9,8 @@
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
-use ezp\Persistence\Content\Section\Handler as SectionHandlerInterface;
+use ezp\Persistence\Content\Section\Handler as SectionHandlerInterface,
+    RuntimeException;
 
 /**
  * @see ezp\Persistence\Content\Section\Handler
@@ -92,6 +93,7 @@ class SectionHandler implements SectionHandlerInterface
     public function assign( $sectionId, $contentId )
     {
         // @todo Depends on working SubTree Criterion implementation.
+        throw new RuntimeException( '@TODO: Implement' );
     }
 }
 ?>

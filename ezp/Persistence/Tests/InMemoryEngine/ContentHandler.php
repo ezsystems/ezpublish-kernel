@@ -13,7 +13,8 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Criterion,
-    ezp\Content\Version;
+    ezp\Content\Version,
+    RuntimeException;
 
 /**
  * @see ezp\Persistence\Content\Handler
@@ -89,6 +90,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function createDraftFromVersion( $contentId, $srcVersion = false )
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -122,6 +124,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null )
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -129,6 +132,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function findSingle( Criterion $criterion )
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -136,6 +140,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function setState( $contentId, $state, $version )
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -143,6 +148,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function setObjectState( $contentId, $stateGroup, $state )
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -150,6 +156,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function getObjectState( $contentId, $stateGroup )
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -158,6 +165,7 @@ class ContentHandler implements ContentHandlerInterface
     public function update( UpdateStruct $content )
     {
         // @todo Will need version number to be able to know which version to update.
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -194,6 +202,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function trash( $contentId )
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -201,6 +210,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function untrash( $contentId )
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -216,6 +226,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function fetchTranslation( $contentId, $languageCode )
     {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 }
 ?>
