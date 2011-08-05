@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Content Locator class
+ * File containing the Content SearchHandler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,11 +10,10 @@
 namespace ezp\Persistence\Storage\Legacy\Content;
 
 use ezp\Persistence\Content,
-    ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Storage\Legacy\Content\Locator\Gateway as LocatorGateway;
+    ezp\Persistence\Content\Criterion;
 
 /**
- * The Content Locator retrieves sets of of Content objects, based on a set of
+ * The Content SearchHandler retrieves sets of of Content objects, based on a set of
  * criteria.
  *
  * The basic idea of this class is to do the following:
@@ -36,21 +35,21 @@ use ezp\Persistence\Content,
  *
  * @version //autogentag//
  */
-class Locator
+class SearchHandler
 {
     /**
      * Content locator gateway.
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Locator\Gateway
+     * @var ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway
      */
     protected $gateway;
 
     /**
      * Creates a new content handler.
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Locator\Gateway $gateway
+     * @param \ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway $gateway
      */
-    public function __construct( LocatorGateway $gateway )
+    public function __construct( SearchHandler\Gateway $gateway )
     {
         $this->gateway = $gateway;
     }

@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\ContentLocatorTest class
+ * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\ContentSearchHandlerTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,9 +14,9 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence;
 
 /**
- * Test case for ContentLocator
+ * Test case for ContentSearchHandler
  */
-class ContentLocatorTest extends TestCase
+class ContentSearchHandlerTest extends TestCase
 {
     protected static $setUp = false;
 
@@ -44,7 +44,7 @@ class ContentLocatorTest extends TestCase
         if ( !self::$setUp )
         {
             parent::setUp();
-            $this->insertDatabaseFixture( __DIR__ . '/ContentLocator/_fixtures/full_dump.php' );
+            $this->insertDatabaseFixture( __DIR__ . '/SearchHandler/_fixtures/full_dump.php' );
             self::$setUp = $this->handler;
         }
         else
@@ -53,26 +53,26 @@ class ContentLocatorTest extends TestCase
         }
     }
 
-    protected function getContentLocator( array $fullTextSearchConfiguration = array() )
+    protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
-        return new Content\Locator(
-            new Content\Locator\Gateway\EzcDatabase(
+        return new Content\SearchHandler(
+            new Content\SearchHandler\Gateway\EzcDatabase(
                 $database = $this->getDatabaseHandler(),
-                new Content\Locator\Gateway\CriteriaConverter( array(
-                    new Content\Locator\Gateway\CriterionHandler\ContentId(),
-                    new Content\Locator\Gateway\CriterionHandler\LogicalNot(),
-                    new Content\Locator\Gateway\CriterionHandler\LogicalAnd(),
-                    new Content\Locator\Gateway\CriterionHandler\LogicalOr(),
-                    new Content\Locator\Gateway\CriterionHandler\Subtree(),
-                    new Content\Locator\Gateway\CriterionHandler\ContentType(),
-                    new Content\Locator\Gateway\CriterionHandler\ContentTypeGroup(),
-                    new Content\Locator\Gateway\CriterionHandler\DateMetadata(),
-                    new Content\Locator\Gateway\CriterionHandler\LocationId(),
-                    new Content\Locator\Gateway\CriterionHandler\ParentLocationId(),
-                    new Content\Locator\Gateway\CriterionHandler\RemoteId(),
-                    new Content\Locator\Gateway\CriterionHandler\Section(),
-                    new Content\Locator\Gateway\CriterionHandler\Status(),
-                    new Content\Locator\Gateway\CriterionHandler\FullText(
+                new Content\SearchHandler\Gateway\CriteriaConverter( array(
+                    new Content\SearchHandler\Gateway\CriterionHandler\ContentId(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\LogicalNot(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\LogicalAnd(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\LogicalOr(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\Subtree(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\ContentType(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\ContentTypeGroup(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\DateMetadata(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\LocationId(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\ParentLocationId(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\RemoteId(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\Section(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\Status(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\FullText(
                         $database,
                         $fullTextSearchConfiguration
                     ),
@@ -83,7 +83,7 @@ class ContentLocatorTest extends TestCase
 
     public function testContentIdFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\ContentId(
@@ -105,7 +105,7 @@ class ContentLocatorTest extends TestCase
 
     public function testContentAndCombinatorFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\LogicalAnd( array(
@@ -134,7 +134,7 @@ class ContentLocatorTest extends TestCase
 
     public function testContentOrCombinatorFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\LogicalOr( array(
@@ -163,7 +163,7 @@ class ContentLocatorTest extends TestCase
 
     public function testContentNotCombinatorFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\LogicalAnd( array(
@@ -194,7 +194,7 @@ class ContentLocatorTest extends TestCase
 
     public function testContentSubtreeFilterIn()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\Subtree(
@@ -218,7 +218,7 @@ class ContentLocatorTest extends TestCase
 
     public function testContentSubtreeFilterEq()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\Subtree(
@@ -240,7 +240,7 @@ class ContentLocatorTest extends TestCase
 
     public function testContentTypeFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\ContentType(
@@ -262,7 +262,7 @@ class ContentLocatorTest extends TestCase
 
     public function testContentTypeGroupFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\ContentTypeGroup(
@@ -284,7 +284,7 @@ class ContentLocatorTest extends TestCase
 
     public function testDateMetadataFilterModifiedGreater()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\DateMetadata(
@@ -306,7 +306,7 @@ class ContentLocatorTest extends TestCase
 
     public function testDateMetadataFilterModifiedGreaterOrEqual()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\DateMetadata(
@@ -328,7 +328,7 @@ class ContentLocatorTest extends TestCase
 
     public function testDateMetadataFilterModifiedIn()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\DateMetadata(
@@ -350,7 +350,7 @@ class ContentLocatorTest extends TestCase
 
     public function testDateMetadataFilterModifiedBetween()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\DateMetadata(
@@ -372,7 +372,7 @@ class ContentLocatorTest extends TestCase
 
     public function testDateMetadataFilterCreatedBetween()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\DateMetadata(
@@ -394,7 +394,7 @@ class ContentLocatorTest extends TestCase
 
     public function testLocationIdFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\LocationId(
@@ -416,7 +416,7 @@ class ContentLocatorTest extends TestCase
 
     public function testParentLocationIdFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\ParentLocationId(
@@ -438,7 +438,7 @@ class ContentLocatorTest extends TestCase
 
     public function testRemoteIdFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\RemoteId(
@@ -460,7 +460,7 @@ class ContentLocatorTest extends TestCase
 
     public function testSectionFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\Section(
@@ -482,7 +482,7 @@ class ContentLocatorTest extends TestCase
 
     public function testStatusFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\Status(
@@ -504,7 +504,7 @@ class ContentLocatorTest extends TestCase
 
     public function testFullTextFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\FullText(
@@ -526,7 +526,7 @@ class ContentLocatorTest extends TestCase
 
     public function testFullTextWildcardFilter()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\FullText(
@@ -548,7 +548,7 @@ class ContentLocatorTest extends TestCase
 
     public function testFullTextDisabledWildcardFilter()
     {
-        $locator = $this->getContentLocator( array(
+        $locator = $this->getContentSearchHandler( array(
             'enableWildcards' => false,
         ) );
 
@@ -572,7 +572,7 @@ class ContentLocatorTest extends TestCase
 
     public function testFullTextFilterStopwordRemoval()
     {
-        $locator = $this->getContentLocator();
+        $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
             new Criterion\FullText(
@@ -594,7 +594,7 @@ class ContentLocatorTest extends TestCase
 
     public function testFullTextFilterNoStopwordRemoval()
     {
-        $locator = $this->getContentLocator( array(
+        $locator = $this->getContentSearchHandler( array(
             'searchThresholdValue' => PHP_INT_MAX
         ) );
 

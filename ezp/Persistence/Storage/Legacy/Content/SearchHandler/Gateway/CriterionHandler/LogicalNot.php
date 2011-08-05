@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the EzcDatabase content type group criterion handler class
+ * File containing the EzcDatabase logical not criterion handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Locator\Gateway\CriterionHandler;
-use ezp\Persistence\Storage\Legacy\Content\Locator\Gateway\CriterionHandler,
-    ezp\Persistence\Storage\Legacy\Content\Locator\Gateway\CriteriaConverter,
+namespace ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriterionHandler;
+use ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriterionHandler,
+    ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriteriaConverter,
     ezp\Persistence\Content\Criterion;
 
 /**
- * Content type group criterion handler
+ * Logical not criterion handler
  */
-class ContentTypeGroup extends CriterionHandler
+class LogicalNot extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -25,7 +25,7 @@ class ContentTypeGroup extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\ContentTypeGroup;
+        return $criterion instanceof Criterion\LogicalNot;
     }
 
     /**
@@ -38,15 +38,9 @@ class ContentTypeGroup extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
-        $subSelect = $query->subSelect();
-        $subSelect
-            ->select( 'contentclass_id' )
-            ->from( 'ezcontentclass_classgroup' )
-            ->where(
-                $query->expr->in( 'group_id', $criterion->value )
-            );
-
-        return $query->expr->in( 'contentclass_id', $subSelect );
+        return $query->expr->not(
+            $converter->convertCriteria( $query, $criterion->criteria[0] )
+        );
     }
 }
 
