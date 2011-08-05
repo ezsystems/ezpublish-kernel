@@ -93,8 +93,21 @@ class Backend
      * Note does not support joins, so only properties on $type is matched.
      *
      * @param string $type
-     * @param array $match A simple array with property => value to match against
-     * @param array $joinInfo
+     * @param array $match A flat array with property => value to match against
+     * @param array $joinInfo Optional info on how to join in other objects to become part of a
+     *                        aggregate where $type is root.
+     *                        Format:
+     *                            array( '<property>' => array(
+     *                                'type' => '<foreign-type>',
+     *                                'match' => array( '<foreign-key-property>' => '<key-property>' ) ),
+     *                                ['sub' => <$joinInfo>]
+     *                            )
+     *                        Example (joining Location when finding Content):
+     *                            array( 'locations' => array(
+     *                                'type' => 'Content\\Location',
+     *                                'match' => array( 'contentId' => 'id' ) )
+     *                            )
+     *                        Value of 'sub' follows exactly same format as $joinInfo allowing recursive joining.
      * @return object[]
      */
     public function find( $type, array $match = array(), array $joinInfo = array() )
@@ -130,7 +143,7 @@ class Backend
      * Type with version=0 for instance.
      *
      * @param string $type
-     * @param array $match
+     * @param array $match A flat array with property => value to match against
      * @param array $data
      * @return bool False if data does not exist and can not be updated
      */
@@ -167,7 +180,7 @@ class Backend
      * Type with version=0 for instance.
      *
      * @param string $type
-     * @param array $match
+     * @param array $match A flat array with property => value to match against
      * @return bool False if data does not exist and can not be deleted
      */
     public function deleteByMatch( $type, array $match )
@@ -190,7 +203,7 @@ class Backend
      * Note does not support joins, so only properties on $type is matched.
      *
      * @param string $type
-     * @param array $match A simple array with property => value to match against.
+     * @param array $match A flat array with property => value to match against
      * @return int
      */
     public function count( $type, array $match = array() )
@@ -206,7 +219,7 @@ class Backend
      *
      * @internal
      * @param string $type
-     * @param array $match A simple array with property => value to match against.
+     * @param array $match A flat array with property => value to match against
      * @return int[]
      */
     protected function findKeys( $type, array $match )
@@ -258,7 +271,7 @@ class Backend
      * @internal
      * @param string $type
      * @param array $data
-     * @param array $joinInfo
+     * @param array $joinInfo See {@link find()}
      * @return object
      */
     protected function toValue( $type, array $data, array $joinInfo = array() )
@@ -277,7 +290,7 @@ class Backend
      * Joins in foreign objects ( one to many realtions )
      *
      * @param \ezp\Persistence\ValueObject $item
-     * @param array $joinInfo
+     * @param array $joinInfo See {@link find()}
      * @return ValueObject
      */
     private function join( ValueObject $item, array $joinInfo = array() )
