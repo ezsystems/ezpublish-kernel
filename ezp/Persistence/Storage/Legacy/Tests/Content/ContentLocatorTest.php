@@ -58,7 +58,7 @@ class ContentLocatorTest extends TestCase
         return new Content\Locator(
             new Content\Locator\Gateway\EzcDatabase(
                 $database = $this->getDatabaseHandler(),
-                new Content\ContentLocatorGateway\CriteriaConverter( array(
+                new Content\Locator\Gateway\CriteriaConverter( array(
                     new Content\Locator\Gateway\CriterionHandler\ContentId(),
                     new Content\Locator\Gateway\CriterionHandler\LogicalNot(),
                     new Content\Locator\Gateway\CriterionHandler\LogicalAnd(),
