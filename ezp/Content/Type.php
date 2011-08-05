@@ -57,7 +57,7 @@ class Type extends AbstractModel
     protected $fields;
 
     /**
-     * @var ezp\Content[]
+     * @var \ezp\Content[]
      */
     protected $contentObjects;
 

@@ -18,7 +18,7 @@ use PHPUnit_Framework_TestCase,
 class ServiceTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var ezp\Base\Repository
+     * @var \ezp\Base\Repository
      */
     protected $repository;
 

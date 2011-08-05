@@ -22,22 +22,22 @@ class Handler implements BaseUserHandler
     /**
      * Gaateway for storing user data
      *
-     * @var ezp\Persistence\Storage\Legacy\User\Gateway
+     * @var \ezp\Persistence\Storage\Legacy\User\Gateway
      */
     protected $userGateway;
 
     /**
      * Gaateway for storing role data
      *
-     * @var ezp\Persistence\Storage\Legacy\User\Role\Gateway
+     * @var \ezp\Persistence\Storage\Legacy\User\Role\Gateway
      */
     protected $roleGateway;
 
     /**
      * Construct from userGateway
      *
-     * @param ezp\Persistence\Storage\Legacy\User\Gateway $userGateway
-     * @param ezp\Persistence\Storage\Legacy\User\Role\Gateway $roleGateway
+     * @param \ezp\Persistence\Storage\Legacy\User\Gateway $userGateway
+     * @param \ezp\Persistence\Storage\Legacy\User\Role\Gateway $roleGateway
      * @return void
      */
     public function __construct( Gateway $userGateway, RoleGateway $roleGateway )

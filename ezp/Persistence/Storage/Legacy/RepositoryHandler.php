@@ -26,14 +26,14 @@ class RepositoryHandler implements HandlerInterface
     /**
      * Content handler
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Handler
+     * @var \ezp\Persistence\Storage\Legacy\Content\Handler
      */
     protected $contentHandler;
 
     /**
      * Field value converter registry
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $fieldValueConverterRegistry;
 
@@ -54,7 +54,7 @@ class RepositoryHandler implements HandlerInterface
     /**
      * Location handler
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Location\Handler
+     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Handler
      */
     protected $locationHandler;
 
@@ -119,7 +119,7 @@ class RepositoryHandler implements HandlerInterface
     /**
      * Returns the field value converter registry
      *
-     * @return ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @return \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
      */
     public function getFieldValueConverterRegistry()
     {

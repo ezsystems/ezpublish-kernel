@@ -22,14 +22,14 @@ class LocationHandlerTest extends TestCase
     /**
      * Mocked content handler instance
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Handler
+     * @var \ezp\Persistence\Storage\Legacy\Content\Handler
      */
     protected $contentHandler;
 
     /**
      * Mocked location gateway instance
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
 

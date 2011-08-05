@@ -40,7 +40,7 @@ class SearchHandler
     /**
      * Content locator gateway.
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway
+     * @var \ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway
      */
     protected $gateway;
 

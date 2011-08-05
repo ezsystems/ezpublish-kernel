@@ -24,7 +24,7 @@ abstract class Service
     protected $repository;
 
     /**
-     * @var ezp\Persistence\Repository\Handler
+     * @var \ezp\Persistence\Repository\Handler
      */
     protected $handler;
 

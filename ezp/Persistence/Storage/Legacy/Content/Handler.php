@@ -27,7 +27,7 @@ class Handler implements BaseContentHandler
     /**
      * Content gateway.
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
      */
     protected $contentGateway;
 

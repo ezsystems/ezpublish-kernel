@@ -15,7 +15,7 @@ use ezp\Persistence\Content\Criterion,
 class QueryBuilderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var ezp\Content\Query\Builder
+     * @var \ezp\Content\Query\Builder
      */
     private $qb;
 

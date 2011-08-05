@@ -23,14 +23,14 @@ class Mapper
     /**
      * FieldValue converter registry
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $converterRegistry;
 
     /**
      * Creates a new mapper.
      *
-     * @param ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
+     * @param \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
      */
     public function __construct( Registry $converterRegistry )
     {

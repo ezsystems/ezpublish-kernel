@@ -22,14 +22,14 @@ class Handler implements BaseLocationHandler
     /**
      * Content handler implementation
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Handler
+     * @var \ezp\Persistence\Storage\Legacy\Content\Handler
      */
     protected $contentHandler;
 
     /**
      * Gaateway for handling location data
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
 

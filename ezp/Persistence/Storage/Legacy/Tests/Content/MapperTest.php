@@ -228,7 +228,7 @@ class MapperTest extends TestCase
     /**
      * Returns a FieldValue converter registry mock
      *
-     * @return ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @return \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
      */
     protected function getValueConverterRegistryMock()
     {

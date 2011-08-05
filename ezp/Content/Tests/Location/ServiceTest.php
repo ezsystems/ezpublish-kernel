@@ -22,7 +22,7 @@ use ezp\Content\Tests\ServiceTest as BaseServiceTest,
 class ServiceTest extends BaseServiceTest
 {
     /**
-     * @var ezp\Content\Location\Service
+     * @var \ezp\Content\Location\Service
      */
     protected $service;
 
