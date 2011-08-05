@@ -9,7 +9,8 @@
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
 use ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\Logic;
+    ezp\Base\Exception\Logic,
+    ezp\Persistence\ValueObject;
 
 /**
  * The Storage Engine backend for in memory storage
@@ -92,17 +93,20 @@ class Backend
      * Note does not support joins, so only properties on $type is matched.
      *
      * @param string $type
-     * @param array $match A simple array with property => value to match against.
+     * @param array $match A simple array with property => value to match against
+     * @param array $joinInfo
      * @return object[]
      */
-    public function find( $type, array $match = array() )
+    public function find( $type, array $match = array(), array $joinInfo = array() )
     {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
         $items = $this->findKeys( $type, $match );
-        foreach ( $items as $key => $typeIndex )
-            $items[$key] = $this->toValue( $type, $this->data[$type][$typeIndex] );
+        foreach ( $items as $key => $index )
+        {
+            $items[$key] = $this->toValue( $type, $this->data[$type][$index], $joinInfo );
+        }
         return $items;
     }
 
@@ -218,14 +222,15 @@ class Backend
     }
 
     /**
-     * Creates Value object / struct based on array value from Backend.
+     * Creates Value object based on array value from Backend.
      *
      * @internal
      * @param string $type
      * @param array $data
+     * @param array $joinInfo
      * @return object
      */
-    protected function toValue( $type, array $data )
+    protected function toValue( $type, array $data, array $joinInfo = array() )
     {
         $className = "ezp\\Persistence\\$type";
         $obj = new $className;
@@ -234,6 +239,27 @@ class Backend
             if ( isset( $data[$prop] ) )
                 $value = $data[$prop];
         }
-        return $obj;
+        return $this->join( $obj, $joinInfo );
+    }
+
+    /**
+     * Joins in foreign objects ( one to many realtions )
+     *
+     * @param \ezp\Persistence\ValueObject $item
+     * @param array $joinInfo
+     * @return ValueObject
+     */
+    private function join( ValueObject $item, array $joinInfo = array() )
+    {
+        foreach ( $joinInfo as $property => $info )
+        {
+            foreach ( $info['match'] as $key => $matchProperty )
+                $info['match'][$key] = $item->$matchProperty;
+            $item->$property = $this->find( $info['type'],
+                                            $info['match'],
+                                            ( isset( $info['sub'] ) ? $info['sub'] : array() )
+            );
+        }
+        return $item;
     }
 }

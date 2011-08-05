@@ -9,7 +9,9 @@
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
 use PHPUnit_Framework_TestCase,
-    ReflectionObject;
+    ReflectionObject,
+    ezp\Persistence\Content,
+    ezp\Persistence\Content\Location;
 
 /**
  * Test case for Handler using in memory storage.
@@ -177,7 +179,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         );
     }
 
-     /**
+    /**
      * Test finding content with results
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
@@ -191,6 +193,49 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             $this->assertEquals( 1, $content->id );
             $this->assertEquals( 'folder', $content->identifier );
         }
+    }
+
+    /**
+     * Test finding content with results using join
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     */
+    public function testFindJoin()
+    {
+        $backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
+        /**
+         * @var \ezp\Persistence\Content[] $list
+         */
+        $list = $backend->find( "Content",
+                                      array( "id" => 1 ),
+                                      array( 'locations' => array(
+                                          'type' => 'Content\\Location',
+                                          'match' => array( 'contentId' => 'id' ) )
+                                      ));
+        $this->assertEquals( 1, count( $list ) );
+        foreach ( $list as $key => $content )
+        {
+            $this->assertTrue( $content instanceof Content );
+            $this->assertEquals( 1, $content->id );
+            $this->assertEquals( 'eZ Publish', $content->name );
+            $this->assertEquals( 1, count( $content->locations ) );
+            foreach ( $content->locations as $location )
+            {
+                $this->assertTrue( $location instanceof Location );
+                $this->assertEquals( 2, $location->id );
+                $this->assertEquals( 1, $location->contentId );
+            }
+        }
+    }
+
+    /**
+     * Test finding content with results using several levels of join
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     */
+    public function testFindSubJoin()
+    {
+        $this->markTestIncomplete("Pending Content\\Version and Content\\Field data in data.json");
     }
 
     /**
