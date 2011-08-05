@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Tests\Location;
-use ezp\Content\Tests\ServiceTest as BaseServiceTest,
+use ezp\Content\Tests\BaseServiceTest,
     ezp\Content\Location\Service,
     \ReflectionObject,
     ezp\Persistence\Content,
