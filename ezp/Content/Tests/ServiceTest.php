@@ -23,7 +23,7 @@ class ServiceTest extends PHPUnit_Framework_TestCase
     protected $repository;
 
     /**
-     * @var type ezp\Persistence\Repository\Handler
+     * @var \ezp\Persistence\Repository\Handler
      */
     protected $repositoryHandler;
 
