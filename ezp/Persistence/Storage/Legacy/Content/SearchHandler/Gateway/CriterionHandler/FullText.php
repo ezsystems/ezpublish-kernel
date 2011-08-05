@@ -18,13 +18,6 @@ use ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriterionHandle
 class FullText extends CriterionHandler
 {
     /**
-     * Database handler
-     *
-     * @var \ezcDbHandler
-     */
-    protected $handler;
-
-    /**
      * Full text search configuration options
      *
      * @var array
@@ -35,14 +28,13 @@ class FullText extends CriterionHandler
     );
 
     /**
-     * Construct from handler handler
+     * Construct from full text search configuration
      *
-     * @param \ezcDbHandler $handler
+     * @param array $configuration
      * @return void
      */
-    public function __construct( \ezcDbHandler $handler, array $configuration = array() )
+    public function __construct( array $configuration = array() )
     {
-        $this->handler       = $handler;
         $this->configuration = $configuration + $this->configuration;
     }
 
@@ -76,8 +68,8 @@ class FullText extends CriterionHandler
     /**
      * Get single word query expression
      *
-     * Depending on the configuration of the full text search criterion 
-     * converter wildcards are either transformed into the repsective LIKE 
+     * Depending on the configuration of the full text search criterion
+     * converter wildcards are either transformed into the repsective LIKE
      * queries, or everything is just compared using equal.
      *
      * @param \ezcQuerySelect $query

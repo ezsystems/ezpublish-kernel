@@ -57,7 +57,7 @@ class ContentSearchHandlerTest extends TestCase
     {
         return new Content\SearchHandler(
             new Content\SearchHandler\Gateway\EzcDatabase(
-                $database = $this->getDatabaseHandler(),
+                $this->getDatabaseHandler(),
                 new Content\SearchHandler\Gateway\CriteriaConverter( array(
                     new Content\SearchHandler\Gateway\CriterionHandler\ContentId(),
                     new Content\SearchHandler\Gateway\CriterionHandler\LogicalNot(),
@@ -73,7 +73,6 @@ class ContentSearchHandlerTest extends TestCase
                     new Content\SearchHandler\Gateway\CriterionHandler\Section(),
                     new Content\SearchHandler\Gateway\CriterionHandler\Status(),
                     new Content\SearchHandler\Gateway\CriterionHandler\FullText(
-                        $database,
                         $fullTextSearchConfiguration
                     ),
                 ) )
