@@ -46,7 +46,7 @@ class StorageRegistry
     {
         if ( !isset( $this->storageMap[$typeName] ) )
         {
-            throw new Exception\StorageNotFoundException( $typeName );
+            throw new Exception\StorageNotFound( $typeName );
         }
         return $this->storageMap[$typeName];
     }
