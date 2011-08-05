@@ -126,7 +126,7 @@ class Translation extends AbstractModel
      * Returns the field collection in the currently published version added to
      * the translation
      *
-     * @return ezp/Content/Field/Collection
+     * @return \ezp/Content/Field/Collection
      * @throw DomainException if there's no currently published version
      */
     protected function getFields()

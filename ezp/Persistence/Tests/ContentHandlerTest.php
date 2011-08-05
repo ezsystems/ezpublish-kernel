@@ -34,7 +34,7 @@ class ContentHandlerTest extends HandlerTest
 
     /**
      *
-     * @var ezp
+     * @var \ezp
      */
     protected $contentToDelete = array();
 
