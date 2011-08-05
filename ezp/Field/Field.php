@@ -71,7 +71,6 @@ abstract class FieldType
     /**
      * Does the field type supports translation of its data.
      *
-     * @abstract
      * @return boolean
      */
     public function supportsTranslation()
@@ -82,7 +81,6 @@ abstract class FieldType
     /**
      * Does the field type support search.
      *
-     * @abstract
      * @return boolean
      */
     public function supportsSearch()
