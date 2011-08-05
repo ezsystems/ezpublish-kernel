@@ -52,9 +52,9 @@ class Backend
      * Creates data in in memory store
      *
      * @param string $type
-     * @param int|string $id
      * @param array $data
      * @return object
+     * @throws InvalidArgumentValue On invalid $type
      */
     public function create( $type, array $data )
     {
@@ -72,19 +72,24 @@ class Backend
      * @param string $type
      * @param int|string $id
      * @return object|null
+     * @throws InvalidArgumentValue On invalid $type
      */
     public function load( $type, $id )
     {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $items = $this->findKeys( $type, array( 'id' => $id ) );
-        if ( empty( $items ) )
-            return null;
-        else if ( isset( $items[1] ) )
-            throw new Logic( $type, "more then one item exist with id: {$id}" );
+        $return = null;
+        foreach ( $this->data[$type] as $key => $item )
+        {
+            if ( $item['id'] != $id )
+                continue;
+            else if ( $return )
+                throw new Logic( $type, "more then one item exist with id: {$id}" );
 
-        return $this->toValue( $type, $this->data[$type][ $items[0] ] );
+            $return = $this->toValue( $type, $item );
+        }
+        return $return;
     }
 
     /**
@@ -93,7 +98,7 @@ class Backend
      * Note does not support joins, so only properties on $type is matched.
      *
      * @param string $type
-     * @param array $match A flat array with property => value to match against
+     * @param array $match A multi level array with property => value to match against
      * @param array $joinInfo Optional info on how to join in other objects to become part of a
      *                        aggregate where $type is root.
      *                        Format:
@@ -109,17 +114,14 @@ class Backend
      *                            )
      *                        Value of 'sub' follows exactly same format as $joinInfo allowing recursive joining.
      * @return object[]
+     * @uses rawFind()
      */
     public function find( $type, array $match = array(), array $joinInfo = array() )
     {
-        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
-            throw new InvalidArgumentValue( 'type', $type );
+        $items = $this->rawFind( $type, $match, $joinInfo );
+        foreach ( $items as $key => $item )
+            $items[$key] = $this->toValue( $type, $item, $joinInfo );
 
-        $items = $this->findKeys( $type, $match );
-        foreach ( $items as $key => $index )
-        {
-            $items[$key] = $this->toValue( $type, $this->data[$type][$index], $joinInfo );
-        }
         return $items;
     }
 
@@ -130,6 +132,7 @@ class Backend
      * @param int|string $id
      * @param array $data
      * @return bool False if data does not exist and can not be updated
+     * @uses updateByMatch()
      */
     public function update( $type, $id, array $data )
     {
@@ -146,19 +149,23 @@ class Backend
      * @param array $match A flat array with property => value to match against
      * @param array $data
      * @return bool False if data does not exist and can not be updated
+     * @throws InvalidArgumentValue On invalid $type
      */
     public function updateByMatch( $type, array $match, array $data )
     {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $items = $this->findKeys( $type, $match );
-        if ( empty( $items ) )
-            return false;
-
-        foreach ( $items as $index )
-            $this->data[$type][$index] = $data + $this->data[$type][$index];
-        return true;
+        $return = false;
+        foreach ( $this->data[$type] as $key => $item )
+        {
+            if ( $this->match( $item, $match ) )
+            {
+                $this->data[$type][$key] = $data + $this->data[$type][$key];
+                $return = true;
+            }
+        }
+        return $return;
     }
 
     /**
@@ -167,6 +174,7 @@ class Backend
      * @param string $type
      * @param int|string $id
      * @return bool False if data does not exist and can not be deleted
+     * @uses deleteByMatch()
      */
     public function delete( $type, $id )
     {
@@ -182,19 +190,23 @@ class Backend
      * @param string $type
      * @param array $match A flat array with property => value to match against
      * @return bool False if data does not exist and can not be deleted
+     * @throws InvalidArgumentValue On invalid $type
      */
     public function deleteByMatch( $type, array $match )
     {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $items = $this->findKeys( $type, $match );
-        if ( empty( $items ) )
-            return false;
-
-        foreach ( $items as $index )
-            unset( $this->data[$type][$index] );
-        return true;
+        $return = false;
+        foreach ( $this->data[$type] as $key => $item )
+        {
+            if ( $this->match( $item, $match ) )
+            {
+                unset( $this->data[$type][$key] );
+                $return = true;
+            }
+        }
+        return $return;
     }
 
     /**
@@ -204,47 +216,88 @@ class Backend
      *
      * @param string $type
      * @param array $match A flat array with property => value to match against
+     * @param array $joinInfo See {@link find()}
      * @return int
+     * @uses rawFind()
      */
-    public function count( $type, array $match = array() )
+    public function count( $type, array $match = array(), array $joinInfo = array() )
+    {
+        return count( $this->rawFind( $type, $match, $joinInfo ) );
+    }
+
+    /**
+     * Find data from in memory store for a specific type that matches $match (empty array will match all)
+     *
+     * Note does not support joins, so only properties on $type is matched.
+     *
+     * @param string $type
+     * @param array $match A multi level array with property => value to match against
+     * @param array $joinInfo See {@link find()}
+     * @return array[]
+     * @throws InvalidArgumentValue On invalid $type
+     * @throws Logic When there is a collision between match rules in $joinInfo and $match
+     */
+    protected function rawFind( $type, array $match = array(), array $joinInfo = array() )
     {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        return count( $this->findKeys( $type, $match ) );
+        $items = array();
+        foreach ( $this->data[$type] as $key => $item )
+        {
+            foreach ( $joinInfo as $joinProperty => $joinItem )
+            {
+                foreach ( $joinItem['match'] as $joinMatchKey => $joinMatchProperty )
+                {
+                    $joinItem['match'][$joinMatchKey] = $item[$joinMatchProperty];
+                    if ( isset( $match[$joinProperty][$joinMatchKey] ) )
+                        throw new Logic( "\$match[$joinProperty][$joinMatchKey]", "collision with match in \$joinInfo" );
+                }
+                $item[$joinProperty] = $this->rawFind( $joinItem['type'],
+                                                       $joinItem['match'],
+                                                       ( isset( $joinItem['sub'] ) ? $joinItem['sub'] : array() ) );
+            }
+            if ( $this->match( $item, $match ) )
+                $items[] = $item;
+        }
+        return $items;
     }
 
     /**
-     * Find keys for data from in memory store for a specific type that matches $match
+     * Checks if a $item (a raw VO item) matches $match recursively
      *
-     * @internal
-     * @param string $type
-     * @param array $match A flat array with property => value to match against
-     * @return int[]
+     * @param array $item
+     * @param array $match
+     * @return bool
      */
-    protected function findKeys( $type, array $match )
+    private function match( array $item, array $match )
     {
-        $keys = array();
-        foreach ( $this->data[$type] as $key => $hash )
+        foreach ( $match as $matchProperty => $matchValue )
         {
-            foreach ( $match as $property => $value )
-            {
-                if ( !isset( $hash[$property] ) )
-                    continue 2;
+            if ( !isset( $item[$matchProperty] ) )
+                return false;
 
-                if ( is_array( $hash[$property] ) )
+            if ( is_array( $item[$matchProperty] ) )
+            {
+                if ( is_array( $matchValue ) )
                 {
-                    if ( !in_array( $value, $hash[$property] ) )
-                        continue 2;
+                    foreach ( $item[$matchProperty] as $subItem )
+                    {
+                        if ( !$this->match( $subItem, $matchValue ) )
+                            return false;
+                    }
                 }
-                else if ( $hash[$property] != $value )
+                else if ( !in_array( $matchValue, $item[$matchProperty] ) )
                 {
-                    continue 2;
+                    return false;
                 }
             }
-            $keys[] = $key;
+            else if ( $item[$matchProperty] != $matchValue )
+            {
+                return false;
+            }
         }
-        return $keys;
+        return true;
     }
 
     /**
@@ -258,9 +311,9 @@ class Backend
     private function getNextId( $type )
     {
         $id = 0;
-        foreach ( $this->data[$type] as $hash )
+        foreach ( $this->data[$type] as $item )
         {
-            $id = max( $id, $hash['id'] );
+            $id = max( $id, $item['id'] );
         }
         return $id + 1;
     }
@@ -268,7 +321,6 @@ class Backend
     /**
      * Creates Value object based on array value from Backend.
      *
-     * @internal
      * @param string $type
      * @param array $data
      * @param array $joinInfo See {@link find()}
@@ -283,26 +335,26 @@ class Backend
             if ( isset( $data[$prop] ) )
                 $value = $data[$prop];
         }
-        return $this->join( $obj, $joinInfo );
+        return $this->joinToValue( $obj, $joinInfo );
     }
 
     /**
-     * Joins in foreign objects ( one to many realtions )
+     * Creates value objects on join properties
      *
      * @param \ezp\Persistence\ValueObject $item
      * @param array $joinInfo See {@link find()}
      * @return ValueObject
      */
-    private function join( ValueObject $item, array $joinInfo = array() )
+    private function joinToValue( ValueObject $item, array $joinInfo = array() )
     {
         foreach ( $joinInfo as $property => $info )
         {
-            foreach ( $info['match'] as $key => $matchProperty )
-                $info['match'][$key] = $item->$matchProperty;
-            $item->$property = $this->find( $info['type'],
-                                            $info['match'],
-                                            ( isset( $info['sub'] ) ? $info['sub'] : array() )
-            );
+            foreach ( $item->$property as $key => &$joinItem )
+            {
+                $joinItem = $this->toValue( $info['type'],
+                                        $joinItem,
+                                        ( isset( $info['sub'] ) ? $info['sub'] : array() ) );
+            }
         }
         return $item;
     }

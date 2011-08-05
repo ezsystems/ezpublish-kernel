@@ -33,6 +33,19 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
 
         // Create a new backend from JSON data and empty Content data to make it clean
         $this->backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
+    }
+
+    protected function tearDown()
+    {
+        unset( $this->backend );
+        parent::tearDown();
+    }
+
+    /**
+     * Clear Content in backend data and custom data for testing
+     */
+    protected function insertCustomContent()
+    {
         $refObj = new ReflectionObject( $this->backend );
         $refData = $refObj->getProperty( 'data' );
         $refData->setAccessible( true );
@@ -58,12 +71,6 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             );
     }
 
-    protected function tearDown()
-    {
-        unset( $this->backend );
-        parent::tearDown();
-    }
-
     /**
      * Test finding content without results
      *
@@ -72,6 +79,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindEmpty( $searchData )
     {
+        $this->insertCustomContent();
         $this->assertEquals(
             array(),
             $this->backend->find( "Content", $searchData )
@@ -102,6 +110,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFind( $searchData, $result )
     {
+        $this->insertCustomContent();
         $list = $this->backend->find( "Content", $searchData );
         foreach ( $list as $key => $content )
         {
@@ -202,11 +211,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindJoin()
     {
-        $backend = new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
         /**
          * @var \ezp\Persistence\Content[] $list
          */
-        $list = $backend->find( "Content",
+        $list = $this->backend->find( "Content",
                                       array( "id" => 1 ),
                                       array( 'locations' => array(
                                           'type' => 'Content\\Location',
@@ -229,6 +237,54 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test finding content with results using join and deep matching
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     */
+    public function testFindJoinDeepMatch()
+    {
+        /**
+         * @var \ezp\Persistence\Content[] $list
+         */
+        $list = $this->backend->find( "Content",
+                                      array( "locations" => array( 'id' => 2 ) ),
+                                      array( 'locations' => array(
+                                          'type' => 'Content\\Location',
+                                          'match' => array( 'contentId' => 'id' ) )
+                                      ));
+        $this->assertEquals( 1, count( $list ) );
+        foreach ( $list as $content )
+        {
+            $this->assertTrue( $content instanceof Content );
+            $this->assertEquals( 1, $content->id );
+            $this->assertEquals( 'eZ Publish', $content->name );
+            $this->assertEquals( 1, count( $content->locations ) );
+            foreach ( $content->locations as $location )
+            {
+                $this->assertTrue( $location instanceof Location );
+                $this->assertEquals( 2, $location->id );
+                $this->assertEquals( 1, $location->contentId );
+            }
+        }
+    }
+
+    /**
+     * Test finding content with results using join and deep matching where match collides with join
+     *
+     * @expectedException ezp\Base\Exception\Logic
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     */
+    public function testFindJoinDeepMatchCollision()
+    {
+        $this->backend->find( "Content",
+                                      array( "locations" => array( 'contentId' => 2 ) ),
+                                      array( 'locations' => array(
+                                          'type' => 'Content\\Location',
+                                          'match' => array( 'contentId' => 'id' ) )
+                                      ));
+    }
+
+    /**
      * Test finding content with results using several levels of join
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
@@ -246,6 +302,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testCountEmpty( $searchData )
     {
+        $this->insertCustomContent();
         $this->assertEquals(
             0,
             $this->backend->count( "Content", $searchData )
@@ -260,10 +317,42 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testCount( $searchData, $result )
     {
+        $this->insertCustomContent();
         $this->assertEquals(
             count( $result ),
             $this->backend->count( "Content", $searchData )
         );
+    }
+
+    /**
+     * Test counting content with results using join and deep matching
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::count
+     */
+    public function testCountJoinDeepMatch()
+    {
+        $this->assertEquals( 1, $this->backend->count( "Content",
+                                      array( "locations" => array( 'id' => 2 ) ),
+                                      array( 'locations' => array(
+                                          'type' => 'Content\\Location',
+                                          'match' => array( 'contentId' => 'id' ) )
+                                      )) );
+    }
+
+    /**
+     * Test count content with results using join and deep matching where match collides with join
+     *
+     * @expectedException ezp\Base\Exception\Logic
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     */
+    public function testCountJoinDeepMatchCollision()
+    {
+        $this->backend->count( "Content",
+                                      array( "locations" => array( 'contentId' => 2 ) ),
+                                      array( 'locations' => array(
+                                          'type' => 'Content\\Location',
+                                          'match' => array( 'contentId' => 'id' ) )
+                                      ));
     }
 
     /**
@@ -274,6 +363,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadEmpty( $searchData )
     {
+        $this->insertCustomContent();
         $this->assertNull(
             $this->backend->load( "Content", $searchData )
         );
@@ -299,7 +389,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testLoad( $searchData, $result )
     {
-        //$this->markTestSkipped( "Invalid test" );
+        $this->insertCustomContent();
         $content = $this->backend->load( "Content", $searchData );
         foreach ( $result as $name => $value )
             $this->assertEquals( $value, $content->$name );
@@ -362,6 +452,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateNewAttribute()
     {
+        $this->insertCustomContent();
         $this->assertTrue(
             $this->backend->update( "Content", 1, array( "ownerId" => 5 ) )
         );
@@ -378,6 +469,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdate()
     {
+        $this->insertCustomContent();
         $this->assertTrue(
             $this->backend->update( "Content", 2, array( "name" => 'Testing' ) )
         );
@@ -392,6 +484,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateWithNullValue()
     {
+        $this->insertCustomContent();
         $this->assertTrue(
             $this->backend->update( "Content", 3, array( "name" => null ) )
         );
