@@ -120,15 +120,31 @@ class Backend
      */
     public function update( $type, $id, array $data )
     {
+        return $this->updateByMatch( $type, array( 'id' => $id ), $data );
+    }
+
+    /**
+     * Updates data in in memory store by match
+     *
+     * Useful in cases where a specific state of an object should be updated,
+     * Type with version=0 for instance.
+     *
+     * @param string $type
+     * @param array $match
+     * @param array $data
+     * @return bool False if data does not exist and can not be updated
+     */
+    public function updateByMatch( $type, array $match, array $data )
+    {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $items = $this->findKeys( $type, array( 'id' => $id ) );
+        $items = $this->findKeys( $type, $match );
         if ( empty( $items ) )
             return false;
 
-        foreach ( $items as $typeIndex )
-            $this->data[$type][$typeIndex] = $data + $this->data[$type][$typeIndex];
+        foreach ( $items as $index )
+            $this->data[$type][$index] = $data + $this->data[$type][$index];
         return true;
     }
 
@@ -141,15 +157,30 @@ class Backend
      */
     public function delete( $type, $id )
     {
+        return $this->deleteByMatch( $type, array( 'id' => $id ) );
+    }
+
+    /**
+     * Deletes data in in memory store
+     *
+     * Useful in cases where a specific state of an object should be updated,
+     * Type with version=0 for instance.
+     *
+     * @param string $type
+     * @param array $match
+     * @return bool False if data does not exist and can not be deleted
+     */
+    public function deleteByMatch( $type, array $match )
+    {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $items = $this->findKeys( $type, array( 'id' => $id ) );
+        $items = $this->findKeys( $type, $match );
         if ( empty( $items ) )
             return false;
 
-        foreach ( $items as $typeIndex )
-            unset( $this->data[$type][$typeIndex] );
+        foreach ( $items as $index )
+            unset( $this->data[$type][$index] );
         return true;
     }
 
