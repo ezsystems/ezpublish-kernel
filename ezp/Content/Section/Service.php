@@ -29,8 +29,7 @@ class Service extends BaseService
     public function create( SectionObject $section )
     {
         $valueObject = $this->handler->sectionHandler()->create( $section->name, $section->identifier );
-        $section = new SectionObject();
-        return $section->setState( array( 'properties' =>  $valueObject ) );
+        return $this->buildDomainObject( $valueObject );
     }
 
     /**
@@ -58,8 +57,7 @@ class Service extends BaseService
         $valueObject = $this->handler->sectionHandler()->load( $sectionId );
         if ( !$valueObject )
             throw new NotFound( 'section', $sectionId );
-        $section = new SectionObject();
-        return $section->setState( array( 'properties' =>  $valueObject ) );
+        return $this->buildDomainObject( $valueObject );
     }
 
     /**
@@ -120,9 +118,16 @@ class Service extends BaseService
         return $this->handler->sectionHandler()->delete( $sectionId );
     }
 
+    /**
+     * Build DO based on VO
+     *
+     * @param \ezp\Persistence\ValueObject $vo
+     * @return \ezp\Content\Section
+     */
     protected function buildDomainObject( ValueObject $vo )
     {
-
+        $section = new SectionObject();
+        return $section->setState( array( 'properties' =>  $vo ) );
     }
 }
 ?>
