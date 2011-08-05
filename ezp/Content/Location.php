@@ -19,6 +19,20 @@ use ezp\Base\Model,
 /**
  * This class represents a Content Location
  *
+ * @property int $priority
+ * @property bool $hidden
+ * @property string $remoteId
+ * @property int $sortField Sort field int, to be compared with \ezp\Content\ContainerProperty::SORT_FIELD_* constants
+ * @property int $sortOrder Sort order int, to be compared with \ezp\Content\ContainerProperty::SORT_ORDER_* constants
+ * @property-read int $id
+ * @property-read bool $invisible
+ * @property-read string $pathIdentificationString
+ * @property-read string $pathString Path string for location (like /1/2/)
+ * @property-read int $mainLocationId
+ * @property-read int $depth
+ * @property-read \ezp\Content\Location[] $children Location's children in subtree
+ * @property-read \ezp\Content\Content $content Associated Content object
+ * @property-read \ezp\Content\Location $parent Location's parent location
  */
 class Location extends Model implements Observer
 {
@@ -28,18 +42,15 @@ class Location extends Model implements Observer
     protected $readWriteProperties = array(
         'id' => false,
         'priority' => true,
-        'isHidden' => true,
+        'hidden' => true,
         'invisible' => false,
-        'hidden' => false,
         'remoteId' => true,
         'pathIdentificationString' => false,
         'pathString' => false,
         'mainLocationId' => false,
         'depth' => false,
-        'sortField' => true,
-        'sortOrder' => true,
         'containerProperties' => true,
-        'children' => false,
+        'children' => false
     );
 
     /**
@@ -48,8 +59,10 @@ class Location extends Model implements Observer
     protected $dynamicProperties = array(
         'content' => false,
         'parent' => false,
-        'parentId' => true,
-        'contentId' => true,
+        'parentId' => false,
+        'contentId' => false,
+        'sortField' => true,
+        'sortOrder' => true
     );
 
     /**
@@ -182,6 +195,68 @@ class Location extends Model implements Observer
     {
         $this->content = $content;
         $content->locations[] = $this;
+    }
+
+    /**
+     * Dynamic property getter
+     * Returns sort field for location
+     * @return int Sort field int, to be compared with \ezp\Content\ContainerProperty::SORT_FIELD_* constants
+     */
+    protected function getSortField()
+    {
+        if ( isset( $this->containerProperties[0] ) )
+        {
+            return $this->containerProperties[0]->sortField;
+        }
+
+        return $this->properties->sortField;
+    }
+
+    /**
+     * Dynamic property setter
+     * Sets sort field for location
+     * @param int $sortField One of \ezp\Content\ContainerProperty::SORT_FIELD_* constants
+     */
+    protected function setSortField( $sortField )
+    {
+        if ( !isset( $this->containerProperties[0] ) )
+        {
+            $this->containerProperties[] = new ContainerProperty;
+        }
+
+        $this->containerProperties[0]->sortField = $sortField;
+        $this->properties->sortField = $sortField;
+    }
+
+    /**
+     * Dynamic property getter
+     * Returns sort order for location
+     * @return int Sort order int, to be compared with \ezp\Content\ContainerProperty::SORT_ORDER_* constants
+     */
+    protected function getSortOrder()
+    {
+        if ( isset( $this->containerProperties[0] ) )
+        {
+            return $this->containerProperties[0]->sortOrder;
+        }
+
+        return $this->properties->sortOrder;
+    }
+
+    /**
+     * Dynamic property setter
+     * Sets sort order for location
+     * @param int $sortOrder One of \ezp\Content\ContainerProperty::SORT_ORDER_* constants
+     */
+    protected function setSortOrder( $sortOrder )
+    {
+        if ( !isset( $this->containerProperties[0] ) )
+        {
+            $this->containerProperties[] = new ContainerProperty;
+        }
+
+        $this->containerProperties[0]->sortOrder = $sortOrder;
+        $this->properties->sortOrder = $sortOrder;
     }
 
     /**

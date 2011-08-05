@@ -95,7 +95,7 @@ interface Handler
      * @param mixed $parentId
      * @return \ezp\Persistence\Content\Location
      */
-    public function createLocation( $location, $parentId );
+    public function createLocation( CreateStruct $location, $parentId );
 
     /**
      * Removes all Locations under and includin $locationId.

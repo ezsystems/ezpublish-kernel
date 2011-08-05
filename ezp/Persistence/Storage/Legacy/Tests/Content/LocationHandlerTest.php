@@ -11,7 +11,8 @@ namespace ezp\Persistence\Storage\Legacy\Tests\Content;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Content,
     ezp\Persistence\Storage\Legacy\Content\Location\Handler,
-    ezp\Persistence;
+    ezp\Persistence,
+    ezp\Persistence\Content\Location\CreateStruct;
 
 /**
  * Test case for LocationHandlerTest
@@ -437,7 +438,7 @@ class LocationHandlerTest extends TestCase
             ->method( 'createLocation' )
             ->with( $content, $parentInfo );
 
-        $handler->createLocation( 68, 77 );
+        $handler->createLocation( new CreateStruct( array( 'contentId' => 68 ) ), 77 );
     }
 
     public function testCreateLocationSubtreeModificationTimeUpdate()
@@ -468,7 +469,7 @@ class LocationHandlerTest extends TestCase
             ->method( 'updateSubtreeModificationTime' )
             ->with( '/1/2/77/' );
 
-        $handler->createLocation( 68, 77 );
+        $handler->createLocation( new CreateStruct( array( 'contentId' => 68 ) ), 77 );
     }
 
     public function testTrashSubtree()

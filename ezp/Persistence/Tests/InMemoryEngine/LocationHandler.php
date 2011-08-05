@@ -9,7 +9,8 @@
  */
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
-use ezp\Persistence\Content\Location\Handler as LocationHandlerInterface;
+use ezp\Persistence\Content\Location\Handler as LocationHandlerInterface,
+    ezp\Persistence\Content\Location\CreateStruct;
 
 /**
  * @see ezp\Persistence\Content\Location\Handler
@@ -98,9 +99,11 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Location\Handler
      */
-    public function createLocation( $contentId, $parentId )
+    public function createLocation( CreateStruct $locationStruct, $parentId )
     {
-        //return $this->backend->create( 'Content\\Location', array(  ) );
+        $params = (array)$locationStruct;
+        $params['parentId'] = $parentId;
+        return $this->backend->create( 'Content\\Location', $params );
     }
 
     /**

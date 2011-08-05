@@ -16,8 +16,10 @@ use ezp\Base\Exception,
     ezp\Content\ContainerProperty,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Exception\Logic,
     ezp\Persistence\Content\Location as LocationValue,
-    ezp\Persistence\ValueObject;
+    ezp\Persistence\ValueObject,
+    ezp\Persistence\Content\Location\CreateStruct;
 
 /**
  * Location service, used for complex subtree operations
@@ -64,10 +66,30 @@ class Service extends BaseService
      *
      * @param Location $location
      * @return Location the newly created Location
-     * @throws Exception\Validation If a validation problem has been found for $content
+     * @throws ezp\Base\Exception\Logic If a validation problem has been found for $content
      */
     public function create( Location $location )
     {
+        if ( $location->parentId == 0 )
+        {
+            throw new Logic( 'Location', 'Parent location is not defined' );
+        }
+
+        $struct = new CreateStruct();
+        foreach ( $location->properties() as $name => $value )
+        {
+            if ( property_exists( $struct, $name ) )
+            {
+                $struct->$name = $location->$name;
+            }
+        }
+
+        $struct->invisible = ( $location->parent->invisible == true ) || ( $location->parent->hidden == true );
+        $struct->contentId = $location->contentId;
+
+        $vo = $this->handler->locationHandler()->createLocation( $struct, $location->parentId );
+        $location->setState( array( 'properties' => $vo ) );
+
         // repo/storage stuff
         return $location;
     }

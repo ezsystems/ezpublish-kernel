@@ -20,7 +20,7 @@ class CreateStruct extends ValueObject
      *
      * @var int
      */
-    public $position;
+    public $priority;
 
     /**
      * Indicates that the Location entity has been explicitly marked as hidden.

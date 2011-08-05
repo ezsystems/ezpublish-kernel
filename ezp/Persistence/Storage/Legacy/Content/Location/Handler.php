@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Location;
 use ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\Location\Handler as BaseLocationHandler,
     ezp\Persistence\Storage\Legacy\Content\Handler as ContentHandler,
     ezp\Persistence\Storage\Legacy\Content\Location\Gateway as LocationGateway;
@@ -198,14 +199,14 @@ class Handler implements BaseLocationHandler
     /**
      * Creates a new location for $contentId rooted at $parentId.
      *
-     * @param mixed $contentId
+     * @param \ezp\Persistence\Content\Location\CreateStruct $contentId
      * @param mixed $parentId
      * @return \ezp\Persistence\Content\Location
      */
-    public function createLocation( $contentId, $parentId )
+    public function createLocation( CreateStruct $locationStruct, $parentId )
     {
         $parentNodeData = $this->locationGateway->getBasicNodeData( $parentId );
-        $content = $this->contentHandler->load( $contentId );
+        $content = $this->contentHandler->load( $locationStruct->contentId );
 
         $this->locationGateway->createLocation( $content, $parentNodeData );
         $this->locationGateway->updateSubtreeModificationTime( $parentNodeData['path_string'] );
