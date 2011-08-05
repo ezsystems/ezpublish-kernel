@@ -177,6 +177,22 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         );
     }
 
+     /**
+     * Test finding content with results
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     */
+    public function testFindMatchOnArray()
+    {
+        $list = $this->backend->find( "Content\\Type", array( "contentTypeGroupIds" => 1 ) );
+        $this->assertEquals( 1, count( $list ) );
+        foreach ( $list as $key => $content )
+        {
+            $this->assertEquals( 1, $content->id );
+            $this->assertEquals( 'folder', $content->identifier );
+        }
+    }
+
     /**
      * Test counting content without results
      *

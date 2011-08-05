@@ -181,8 +181,18 @@ class Backend
         {
             foreach ( $match as $property => $value )
             {
-                if ( !isset( $hash[$property] ) || $hash[$property] != $value )
+                if ( !isset( $hash[$property] ) )
                     continue 2;
+
+                if ( is_array( $hash[$property] ) )
+                {
+                    if ( !in_array( $value, $hash[$property] ) )
+                        continue 2;
+                }
+                else if ( $hash[$property] != $value )
+                {
+                    continue 2;
+                }
             }
             $keys[] = $key;
         }
