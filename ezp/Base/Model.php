@@ -20,25 +20,31 @@ use ezp\Base\Observable,
 /**
  * Abstract model class for Domain objects
  *
- * - Simple class:
- * class Section extends Model
- * {
- *     protected $readWriteProperties = array(
- *         'id' => false,
- *         'identifier' => true,
- *         'name' => true,
- *     );
+ * NOTE: Class is ATM meant for Domain Objects that uses a ValueObject as property backend, in other
+ * words a "Persistent" Object. So instead of using this class in other cases, a base class should be
+ * created that contains the functionality such objects needs, and Model should extend it.
  *
- *     public function __construct()
+ * - Simple class:
+ *
+ *     class Section extends Model
  *     {
- *         $this->properties = new SectionValue();
+ *         protected $readWriteProperties = array(
+ *             'id' => false,
+ *             'identifier' => true,
+ *             'name' => true,
+ *         );
+ *
+ *         public function __construct()
+ *         {
+ *             $this->properties = new SectionValue();
+ *         }
  *     }
- * }
  *
  *
  * - Use when setting up object based on existing value object:
  *
- * $section = Section::__set_state( array( 'properties' => $valueObject ) );
+ *     $section = new Section();
+ *     $section->setState( array( 'properties' => $valueObject ) );
  *
  */
 abstract class Model implements Observable, ModelInterface
@@ -46,7 +52,7 @@ abstract class Model implements Observable, ModelInterface
     /**
      * Value object that serves as the property store
      *
-     * @var object
+     * @var \ezp\Persistence\ValueObject
      */
     protected $properties;
 
