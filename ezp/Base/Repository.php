@@ -26,10 +26,9 @@ class Repository
     protected $handler;
 
     /**
-     * This class uses doctrine directly as backend, in BL it should talk to a
-     * persistent interface
+     * Currently logged in user object for permission purposes
      *
-     * @var User
+     * @var \ezp\User
      */
     protected $user;
 
