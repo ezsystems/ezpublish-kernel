@@ -177,7 +177,7 @@ abstract class Model implements Observable, ModelInterface
                 return $this->properties->$property;
             }
 
-            throw new Logic( '$readWriteProperties', "property {$property} could not be found." );
+            throw new Logic( '$readWriteProperties', "property '{$property}' could not be found." );
         }
 
         if ( isset( $this->dynamicProperties[$property] ) )

@@ -9,7 +9,8 @@
 
 namespace ezp\Content;
 use ezp\Base\Model,
-    ezp\Base\TypeCollection;
+    ezp\Base\TypeCollection,
+    ezp\Persistence\Content\Type as TypeValue;
 
 /**
  * Type class ( Content Class )
@@ -17,68 +18,87 @@ use ezp\Base\Model,
  *
  * @property-read int $id
  * @property-read int $version
- * @property-read string $identifier
- * @property-read Content[] $contentObjects
- * @property-read Field[] $fields
- * @property-read Group[] $groups
+ * @property string $name
+ * @property string $description
+ * @property string $identifier
+ * @property mixed $created
+ * @property string $creatorId
+ * @property mixed $modified
+ * @property string $modifierId
+ * @property-read string $remoteId
+ * @property string $urlAliasSchema
+ * @property string $nameSchema
+ * @property bool $isContainer
+ * @property bool $initialLanguageId
+ * @property-read bool $contentTypeGroupIds
+ * @property-read Type\Field[] $fields
+ * @property-read Type\Group[] $groups
  */
 class Type extends Model
 {
     /**
-     * @var array Readable of properties on this object
+     * @var array List of VO properties on this object
      */
     protected $readWriteProperties = array(
         'id' => false,
         'version' => false,
+        'name' => true,
+        'description' => true,
         'identifier' => true,
-        'contentObjects' => false,
-        'groups' => true,
-        'fields' => true,
+        'created' => true,
+        'creatorId' => true,
+        'modified' => true,
+        'modifierId' => true,
+        'remoteId' => false,
+        'urlAliasSchema' => true,
+        'nameSchema' => true,
+        'isContainer' => true,
+        'initialLanguageId' => true,
+        'contentTypeGroupIds' => false,
     );
 
     /**
-     * @var int
+     * @var array List of dynamic properties on this object
      */
-    protected $id;
+    protected $dynamicProperties = array(
+        'fields' => true,
+        'groups' => true,
+    );
 
     /**
-     * @var int
+     * @var Type\Field[]
      */
-    protected $version;
+    protected $_fields;
 
     /**
-     * @var string
+     * @var Type\Group[]
      */
-    public $identifier;
+    protected $_groups;
 
     /**
-     * @var Field[]
+     * Construct type and init all internal objects
      */
-    protected $fields;
-
-    /**
-     * @var \ezp\Content[]
-     */
-    protected $contentObjects;
-
-    /**
-     * @var Group[]
-     */
-    protected $groups;
-
     public function __construct()
     {
-        $this->groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
-        $this->fields = new TypeCollection( 'ezp\\Content\\Type\\Field' );
-        $this->contentObjects = new TypeCollection( 'ezp\\Content' );
+        $this->properties = new TypeValue();
+        $this->_fields = new TypeCollection( 'ezp\\Content\\Type\\Field' );
+        $this->_groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
     }
 
     /**
-     * @return string
+     * @return Type\Field[]
      */
-    public function __toString()
+    public function getFields()
     {
-        return $this->identifier;
+        return $this->_fields;
+    }
+
+    /**
+     * @return Type\Group[]
+     */
+    public function getGroup()
+    {
+        return $this->_groups;
     }
 }
 ?>

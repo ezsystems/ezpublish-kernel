@@ -9,7 +9,8 @@
 
 namespace ezp\Content\Type;
 use ezp\Base\Model,
-    ezp\Base\TypeCollection;
+    ezp\Base\TypeCollection,
+    ezp\Persistence\Content\Type\Group as GroupValue;
 
 /**
  * Group class ( Content Class Group )
@@ -17,47 +18,58 @@ use ezp\Base\Model,
  *
  * @property-read int $id
  * @property-read int $version
- * @property-read string $name
+ * @property string $name
+ * @property string $description
+ * @property string $identifier
+ * @property mixed $created
+ * @property string $creatorId
+ * @property mixed $modified
+ * @property string $modifierId
  * @property-read Type[] $contentTypes
  */
 class Group extends Model
 {
     /**
-     * @var array Readable of properties on this object
+     * @var array List of read/Write VO properties on this object
      */
     protected $readWriteProperties = array(
         'id' => false,
         'version' => false,
-        'name' => false,
-        //'identifier' => true,
-        'contentTypes' => false,
+        'name' => true,
+        'description' => true,
+        'identifier' => true,
+        'created' => true,
+        'creatorId' => true,
+        'modified' => true,
+        'modifierId' => true,
     );
 
     /**
-     * @var int
+     * @var array List of dynamic properties on this object
      */
-    protected $id;
-
-    /**
-     * @var string
-     */
-    public $name;
+    protected $dynamicProperties = array(
+        'contentTypes' => true,
+    );
 
     /**
      * @var Type[]
      */
-    protected $contentTypes;
+    protected $_contentTypes;
 
+    /**
+     * Construct object with all internal objects
+     */
     public function __construct()
     {
-        $this->contentTypes = new TypeCollection( 'ezp\\Content\\Type' );
+        $this->properties = new GroupValue();
+        $this->_contentTypes = new TypeCollection( 'ezp\\Content\\Type' );
     }
 
     /**
-     * @return string
+     * @return Type[]
      */
-    public function __toString()
+    public function getContentTypes()
     {
-        return $this->name;
+        return $this->_contentTypes;
     }
 }
