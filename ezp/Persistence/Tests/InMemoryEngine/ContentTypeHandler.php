@@ -53,7 +53,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function createGroup( GroupCreateStruct $group )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $groupArr = (array) $group;
+        return $this->backend->create( 'Content\\Type\\Group', $groupArr );
     }
 
     /**
@@ -61,7 +62,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function updateGroup( GroupUpdateStruct $group )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $groupArr = (array) $group;
+        $this->backend->update( 'Content\\Type\\Group', $groupArr['id'], $groupArr );
     }
 
     /**
@@ -69,7 +71,29 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function deleteGroup( $groupId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->delete( 'Content\\Type\\Group', $groupId );
+
+        // Remove group id from content types
+        $types = $this->backend->find( 'Content\\Type', array( 'contentTypeGroupIds' => $groupId ) );
+        foreach ( $types as $type )
+        {
+            $update = false;
+            foreach ( $type->contentTypeGroupIds as $key => $contentTypeGroupId )
+            {
+                if ( $contentTypeGroupId == $groupId )
+                {
+                    unset( $type->contentTypeGroupIds[$key] );
+                    $update = true;
+                }
+            }
+
+            if ( $update )
+            {
+                $this->backend->update( 'Content\\Type',
+                                        $type->id,
+                                        array( 'contentTypeGroupIds' => $type->contentTypeGroupIds ) );
+            }
+        }
     }
 
     /**

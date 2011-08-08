@@ -23,6 +23,85 @@ use ezp\Persistence\Content\Type,
 class ContentTypeHandlerTest extends HandlerTest
 {
     /**
+     * Test create group function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::createGroup
+     */
+    public function testCreateGroup()
+    {
+        $struct = new GroupCreateStruct();
+        $struct->created = $struct->modified = time();
+        $struct->creatorId = $struct->modifierId = 14;
+        $struct->name = array( 'eng-GB' => 'Media' );
+        $struct->description = array( 'eng-GB' => 'Group for media content types' );
+        $struct->identifier = 'media';
+        $group = $this->repositoryHandler->ContentTypeHandler()->createGroup( $struct );
+        $this->assertTrue( $group instanceof Group );
+        $this->assertEquals( 2, $group->id );
+        $this->assertEquals( array( 'eng-GB' => 'Media' ), $group->name );
+    }
+
+    /**
+     * Test update group function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::updateGroup
+     */
+    public function testUpdateGroup()
+    {
+        $struct = new GroupUpdateStruct();
+        $struct->id = 1;
+        $struct->modified = time();
+        $struct->modifierId = 14;
+        $struct->name = array( 'eng-GB' => 'Content2' );
+        $struct->description = array( 'eng-GB' => 'TestTest' );
+        $struct->identifier = 'content2';
+        $this->repositoryHandler->ContentTypeHandler()->updateGroup( $struct );
+        $group = $this->repositoryHandler->ContentTypeHandler()->loadGroup( 1 );
+        $this->assertEquals( 1, $group->id );
+        $this->assertEquals( array( 'eng-GB' => 'Content2' ), $group->name );
+    }
+
+    /**
+     * Test delete group function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::deleteGroup
+     */
+    public function testDeleteGroup()
+    {
+        $this->repositoryHandler->ContentTypeHandler()->deleteGroup( 1 );
+        $this->assertNull( $this->repositoryHandler->ContentTypeHandler()->loadGroup( 1 ) );
+        $type = $this->repositoryHandler->ContentTypeHandler()->load( 1 );
+        $this->assertEquals( array(), $type->contentTypeGroupIds );
+    }
+
+    /**
+     * Test load group function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::loadGroup
+     */
+    public function testLoadGroup()
+    {
+        $obj = $this->repositoryHandler->ContentTypeHandler()->loadGroup( 1 );
+        $this->assertTrue( $obj instanceof Group );
+        $this->assertEquals( 1, $obj->id );
+        $this->assertEquals( array( 'eng-GB' => 'Content' ), $obj->name );
+    }
+
+    /**
+     * Test load all groups function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::loadAllGroups
+     */
+    public function testLoadAllGroups()
+    {
+        $list = $this->repositoryHandler->ContentTypeHandler()->loadAllGroups();
+        $this->assertEquals( 1, count( $list ) );
+        $this->assertTrue( $list[0] instanceof Group );
+        $this->assertEquals( 1, $list[0]->id );
+        $this->assertEquals( array( 'eng-GB' => 'Content' ), $list[0]->name );
+    }
+
+    /**
      * Test load function
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::loadContentTypes
@@ -171,7 +250,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $field->isInfoCollector = false;
         $field->defaultValue = 'New Article';
         $field->name = array( 'eng-GB' => "Title" );
-        $field->description = array( 'eng-GB' => "Article title, used for headers, and url if short_title is empty" );
+        $field->description = array( 'eng-GB' => "Title, used for headers, and url if short_title is empty" );
         return $field;
     }
 }
