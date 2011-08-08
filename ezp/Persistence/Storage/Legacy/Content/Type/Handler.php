@@ -93,6 +93,15 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
+     * @param int $groupId
+     * @return Group
+     */
+    public function loadGroup( $groupId )
+    {
+        throw new \RuntimeException( "Not implemented, yet." );
+    }
+
+    /**
      * @return Group[]
      * @todo This will result in basically all Type definitions (including
      *       all field definitions) to be loaded, since they are inherently

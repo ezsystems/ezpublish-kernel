@@ -22,7 +22,7 @@ interface Handler
 {
     /**
      * @param \ezp\Persistence\Content\Type\Group\CreateStruct $group
-     * @return Group
+     * @return \ezp\Persistence\Content\Type\Group
      */
     public function createGroup( GroupCreateStruct $group );
 
@@ -37,14 +37,20 @@ interface Handler
     public function deleteGroup( $groupId );
 
     /**
-     * @return Group[]
+     * @param int $groupId
+     * @return \ezp\Persistence\Content\Type\Group
+     */
+    public function loadGroup( $groupId );
+
+    /**
+     * @return \ezp\Persistence\Content\Type\Group[]
      */
     public function loadAllGroups();
 
     /**
      * @param mixed $groupId
      * @param int $version ContentType version
-     * @return Type[]
+     * @return \ezp\Persistence\Content\Type[]
      */
     public function loadContentTypes( $groupId, $version = 0 );
 
@@ -53,12 +59,13 @@ interface Handler
      * @param int $version
      * @todo Use constant for $version?
      * @todo Shouldn't this default to 0?
+     * @return \ezp\Persistence\Content\Type
      */
     public function load( $contentTypeId, $version = 1 );
 
     /**
      * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
-     * @return Type
+     * @return \ezp\Persistence\Content\Type
      */
     public function create( CreateStruct $contentType );
 

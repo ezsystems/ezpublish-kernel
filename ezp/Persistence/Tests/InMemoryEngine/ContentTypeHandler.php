@@ -77,8 +77,15 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadAllGroups()
     {
-        throw new RuntimeException( '@TODO: Implement' );
-        //return $this->backend->find( 'Content\\Type\\Group' );
+        return $this->backend->find( 'Content\\Type\\Group', array() );
+    }
+
+    /**
+     * @see ezp\Persistence\Content\Type\Handler
+     */
+    public function loadGroup( $groupId )
+    {
+        return $this->backend->load( 'Content\\Type\\Group', $groupId );
     }
 
     /**
