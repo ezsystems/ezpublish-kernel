@@ -14,7 +14,7 @@
     ],
     "Content\\Type\\FieldDefinition" : [],
     "Content\\Type\\Group" : [
-        {"id": 1, "name": "Content", "description": "Content group"}
+        {"id": 1, "name": {"eng-GB": "Content"}, "description": {"eng-GB": "Content type group"}  }
     ],
     "User": [
         {"id": 14, "login": "admin", "email": "nospam@ez.no", "password": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorythm": 2}
