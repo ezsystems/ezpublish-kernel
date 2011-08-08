@@ -23,6 +23,7 @@ abstract class Converter
      *
      * @param FieldValue $value
      * @return StorageFieldValue
+     * @todo Rename toStorageValue()
      */
     abstract public function toStorage( FieldValue $value );
 
@@ -33,6 +34,22 @@ abstract class Converter
      * @return FieldValue
      */
     abstract public function toFieldValue( StorageFieldValue $value );
+
+    /**
+     * Converts a FieldDefinition to a StorageFieldDefitinion
+     *
+     * @param FieldDefinition $fieldDef
+     * @return StorageFieldDefitinion
+     */
+    abstract public function toStorageFieldDefinition( FieldDefinition $fieldDef );
+
+    /**
+     * Converts a StorageFieldDefitinion to a FieldDefinition
+     *
+     * @param StorageFieldDefitinion $storageDef
+     * @return FieldDefinition
+     */
+    abstract public function toFieldDefinition( StorageFieldDefitinion $storageDef );
 
     /**
      * Returns the name of the index column in the attribute table
