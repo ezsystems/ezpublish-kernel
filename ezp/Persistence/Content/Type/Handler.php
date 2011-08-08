@@ -58,10 +58,9 @@ interface Handler
      * @param int $contentTypeId
      * @param int $version
      * @todo Use constant for $version?
-     * @todo Shouldn't this default to 0?
      * @return \ezp\Persistence\Content\Type
      */
-    public function load( $contentTypeId, $version = 1 );
+    public function load( $contentTypeId, $version = 0 );
 
     /**
      * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
