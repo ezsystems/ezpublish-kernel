@@ -64,17 +64,6 @@ Conclusion
 Initial feeling is that Exceptions should be defined for these methods.
 
 
-ezp\Persistence\Content\Type\Group->contentTypes
-------------------------------------------------
-
-Summary
-~~~~~~~
-Implies always eager loading of content types despite use.
-
-Conclusion
-~~~~~~~~~~
-
-
 ezp\Persistence\Content->name
 -----------------------------
 

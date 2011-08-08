@@ -89,6 +89,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
 
             if ( $update )
             {
+                // @todo If contentTypeGroupIds is empty, content type and content of that type should be deleted
                 $this->backend->update( 'Content\\Type',
                                         $type->id,
                                         array( 'contentTypeGroupIds' => $type->contentTypeGroupIds ) );

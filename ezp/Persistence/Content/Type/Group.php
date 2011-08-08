@@ -70,10 +70,5 @@ class Group extends ValueObject
      *
      */
     public $modifierId;
-
-    /**
-     * @var array(Content\Type)
-     */
-    public $contentTypes = array();
 }
 ?>

@@ -103,9 +103,6 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @return Group[]
-     * @todo This will result in basically all Type definitions (including
-     *       all field definitions) to be loaded, since they are inherently
-     *       loaded with a Group. Is this really intended?
      */
     public function loadAllGroups()
     {
@@ -115,8 +112,6 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param mixed $groupId
      * @return Type[]
-     * @todo These are already present in the Group instance. Why load them
-     *       dedicatedly here?
      */
     public function loadContentTypes( $groupId, $version = 0 )
     {
