@@ -264,7 +264,7 @@ class Location extends Model implements Observer
      *
      * @param \ezp\Base\Observable $subject
      * @param string $event
-     * @return Location
+     * @return \ezp\Content\Location
      */
     public function update( Observable $subject, $event = 'update' )
     {
