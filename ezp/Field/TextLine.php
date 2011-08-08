@@ -12,7 +12,7 @@ use ezp\Field\FieldType;
 
 class TextLine extends FieldType
 {
-    public $fieldTypeString = 'ezstring';
+    protected $fieldTypeString = 'ezstring';
     protected $defaultValue = '';
     protected $isSearchable = true;
     protected $isTranslateable = true;
