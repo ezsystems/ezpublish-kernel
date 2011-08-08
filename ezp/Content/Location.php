@@ -20,18 +20,18 @@ use ezp\Base\Model,
  * This class represents a Content Location
  *
  * @property int $priority
- * @property bool $hidden
  * @property string $remoteId
  * @property int $sortField Sort field int, to be compared with \ezp\Content\ContainerProperty::SORT_FIELD_* constants
  * @property int $sortOrder Sort order int, to be compared with \ezp\Content\ContainerProperty::SORT_ORDER_* constants
  * @property-read int $id
+ * @property-read bool $hidden
  * @property-read bool $invisible
  * @property-read string $pathIdentificationString
  * @property-read string $pathString Path string for location (like /1/2/)
  * @property-read int $mainLocationId
  * @property-read int $depth
  * @property-read \ezp\Content\Location[] $children Location's children in subtree
- * @property-read \ezp\Content\Content $content Associated Content object
+ * @property-read \ezp\Content $content Associated Content object
  * @property-read \ezp\Content\Location $parent Location's parent location
  */
 class Location extends Model implements Observer
@@ -68,32 +68,32 @@ class Location extends Model implements Observer
     /**
      * Container properties
      *
-     * @var ContainerProperty[]
+     * @var \ezp\Content\ContainerProperty[]
      */
     protected $containerProperties;
 
     /**
      * Children of current location
-     * @var Location[]
+     * @var \ezp\Content\Location[]
      */
     protected $children;
 
     /**
      * Content for current location
-     * @var Content|Proxy
+     * @var \ezp\Content|\ezp\Content\Proxy
      */
     protected $content;
 
     /**
      * Current location's parent
-     * @var Content|Proxy
+     * @var \ezp\Content\Location|\ezp\Content\Proxy
      */
     protected $parent;
 
     /**
      * Setups empty children collection and attaches $content
      *
-     * @param Content|Proxy $content
+     * @param \ezp\Content|\ezp\Content\Proxy $content
      * @throws \ezp\Base\Exception\InvalidArgumentType
      */
     public function __construct( $content )
@@ -122,7 +122,7 @@ class Location extends Model implements Observer
     /**
      * Returns the parent Location
      *
-     * @return Location
+     * @return \ezp\Content\Location
      */
     protected function getParent()
     {
@@ -150,7 +150,7 @@ class Location extends Model implements Observer
     /**
      * Sets the parent Location and updates inverse side ( $parent->children )
      *
-     * @param Location $parent
+     * @param \ezp\Content\Location $parent
      */
     protected function setParent( Location $parent )
     {
@@ -161,7 +161,7 @@ class Location extends Model implements Observer
     /**
      * Returns the Content the Location holds
      *
-     * @return Content
+     * @return \ezp\Content
      */
     protected function getContent()
     {
@@ -189,7 +189,7 @@ class Location extends Model implements Observer
     /**
      * Sets the content and updates inverse side ( $content->locations )
      *
-     * @param Content $content
+     * @param \ezp\Content $content
      */
     protected function setContent( Content $content )
     {

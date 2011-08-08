@@ -30,10 +30,10 @@ class Service extends BaseService
     /**
      * Copies the subtree starting from $subtree as a new subtree of $targetLocation
      *
-     * @param Location $subtree
-     * @param Location $targetLocation
+     * @param \ezp\Content\Location $subtree
+     * @param \ezp\Content\Location $targetLocation
      *
-     * @return Location The newly created subtree
+     * @return \ezp\Content\Location The newly created subtree
      */
     public function copy( Location $subtree, Location $targetLocation )
     {
@@ -42,8 +42,8 @@ class Service extends BaseService
     /**
      * Loads a location object from its $locationId
      * @param integer $locationId
-     * @return Location
-     * @throws Exception\NotFound if no location is available with $locationId
+     * @return \ezp\Content\Location
+     * @throws \ezp\Base\Exception\NotFound if no location is available with $locationId
      */
     public function load( $locationId )
     {
@@ -64,9 +64,9 @@ class Service extends BaseService
     /**
      * Creates the new $location in the content repository
      *
-     * @param Location $location
-     * @return Location the newly created Location
-     * @throws ezp\Base\Exception\Logic If a validation problem has been found for $content
+     * @param \ezp\Content\Location $location
+     * @return \ezp\Content\Location the newly created Location
+     * @throws \ezp\Base\Exception\Logic If a validation problem has been found for $content
      */
     public function create( Location $location )
     {
@@ -97,9 +97,9 @@ class Service extends BaseService
     /**
      * Updates $location in the content repository
      *
-     * @param Location $location
-     * @return Location the updated Location
-     * @throws Exception\Validation If a validation problem has been found for $content
+     * @param \ezp\Content\Location $location
+     * @return \ezp\Content\Location the updated Location
+     * @throws \ezp\Base\Exception\Validation If a validation problem has been found for $content
      */
     public function update( Location $location )
     {
@@ -110,10 +110,10 @@ class Service extends BaseService
     /**
      * Swaps the contents hold by the $location1 and $location2
      *
-     * @param Location $location1
-     * @param Location $location2
+     * @param \ezp\Content\Location $location1
+     * @param \ezp\Content\Location $location2
      * @return void
-     * @throws Exception\Validation If a validation problem has been found
+     * @throws \ezp\Base\Exception\Validation If a validation problem has been found
      */
     public function swap( Location $location1, Location $location2 )
     {
@@ -123,9 +123,9 @@ class Service extends BaseService
     /**
      * Hides the $location and marks invisible all descendants of $location.
      *
-     * @param Location $location
+     * @param \ezp\Content\Location $location
      * @return void
-     * @throws Exception\Validation If a validation problem has been found
+     * @throws \ezp\Base\Exception\Validation If a validation problem has been found
      */
     public function hide( Location $location )
     {
@@ -138,9 +138,9 @@ class Service extends BaseService
      * Unhides the $location and marks visible all descendants of $locations
      * until a hidden location is found.
      *
-     * @param Location $location
+     * @param \ezp\Content\Location $location
      * @return void
-     * @throws Exception\Validation If a validation problem has been found;
+     * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
      */
     public function unhide( Location $location )
     {
@@ -154,10 +154,10 @@ class Service extends BaseService
      * Moves $location under $newParent and updates all descendants of
      * $location accordingly.
      *
-     * @param Location $location
-     * @param Location $newParent
+     * @param \ezp\Content\Location $location
+     * @param \ezp\Content\Location $newParent
      * @return void
-     * @throws Exception\Validation If a validation problem has been found;
+     * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
      */
     public function move( Location $location, Location $newParent )
     {
@@ -169,9 +169,9 @@ class Service extends BaseService
     /**
      * Deletes the $locations and all descendants of $location.
      *
-     * @param Location $location
+     * @param \ezp\Content\Location $location
      * @return void
-     * @throws Exception\Validation If a validation problem has been found;
+     * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
      */
     public function delete( Location $location )
     {
@@ -188,15 +188,22 @@ class Service extends BaseService
      * Assigns $section to the contents hold by $startingPoint location and
      * all contents hold by descendants location of $startingPoint
      *
-     * @param Location $startingPoint
+     * @param \ezp\Content\Location $startingPoint
      * @param Section $section
      * @return void
-     * @throws Exception\Validation If a validation problem has been found;
+     * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
      */
     public function assignSection( Location $startingPoint, Section $section )
     {
     }
 
+    /**
+     * Builds Location domain object from $vo ValueObject returned by Persistence API
+     * @param \ezp\Persistence\Location $vo Location value object (extending \ezp\Persistence\ValueObject)
+     *                                      returned by persistence
+     * @return \ezp\content\Location
+     * @throws \ezp\Base\Exception\InvalidArgumentType
+     */
     protected function buildDomainObject( ValueObject $vo )
     {
         if ( !$vo instanceof LocationValue )
