@@ -36,20 +36,20 @@ abstract class Converter
     abstract public function toFieldValue( StorageFieldValue $value );
 
     /**
-     * Converts a FieldDefinition to a StorageFieldDefitinion
+     * Converts a FieldDefinition to a StorageFieldDefinition
      *
      * @param FieldDefinition $fieldDef
-     * @return StorageFieldDefitinion
+     * @return StorageFieldDefinition
      */
     abstract public function toStorageFieldDefinition( FieldDefinition $fieldDef );
 
     /**
-     * Converts a StorageFieldDefitinion to a FieldDefinition
+     * Converts a StorageFieldDefinition to a FieldDefinition
      *
-     * @param StorageFieldDefitinion $storageDef
+     * @param StorageFieldDefinition $storageDef
      * @return FieldDefinition
      */
-    abstract public function toFieldDefinition( StorageFieldDefitinion $storageDef );
+    abstract public function toFieldDefinition( StorageFieldDefinition $storageDef );
 
     /**
      * Returns the name of the index column in the attribute table
