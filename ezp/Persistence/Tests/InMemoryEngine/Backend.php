@@ -156,6 +156,9 @@ class Backend
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
+        // Make sure id isn't changed
+        unset( $data['id'] );
+
         $return = false;
         foreach ( $this->data[$type] as $key => $item )
         {
