@@ -32,7 +32,7 @@ abstract class FieldType
     /**
      * @var string The textual identifier of the field type.
      */
-    public $fieldTypeString;
+    protected $fieldTypeString;
 
     /**
      * @var mixed Fallback default value of field type when no such default
@@ -86,5 +86,15 @@ abstract class FieldType
     public function supportsSearch()
     {
         return $this->isSearchable;
+    }
+
+    /**
+     * Returns the field type identifier.
+     *
+     * @return string
+     */
+    public function fieldTypeIdentifier()
+    {
+        return $this->fieldTypeString;
     }
 }
