@@ -39,8 +39,8 @@ class String extends TypeField
      */
     public function __construct( Type $contentType )
     {
-        $this->readableProperties['default'] = true;
-        $this->readableProperties['maxLength'] = true;
+        $this->readWriteProperties['default'] = true;
+        $this->readWriteProperties['maxLength'] = true;
         TypeField::__construct( $contentType );
     }
 }

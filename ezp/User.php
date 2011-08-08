@@ -8,9 +8,9 @@
  */
 
 namespace ezp;
-use ezp\Base\AbstractModel;
+use ezp\Base\Model;
 
-class User extends AbstractModel
+class User extends Model
 {
 
 }

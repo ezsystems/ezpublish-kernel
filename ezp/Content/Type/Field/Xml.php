@@ -38,8 +38,8 @@ class Xml extends Text
      */
     public function __construct( Type $contentType )
     {
-        $this->readableProperties['tagPreset'] = true;
-        $this->readableProperties['columns'] = true;
+        $this->readWriteProperties['tagPreset'] = true;
+        $this->readWriteProperties['columns'] = true;
         TypeField::__construct( $contentType );
     }
 }

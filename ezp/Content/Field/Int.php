@@ -36,7 +36,7 @@ class Int extends ContentField
     public function __construct( Version $contentVersion, IntDefinition $fieldDefinition )
     {
         parent::__construct( $contentVersion, $fieldDefinition );
-        $this->readableProperties['value'] = true;
+        $this->readWriteProperties['value'] = true;
         if ( isset( $fieldDefinition->default ) )
             $this->value = $fieldDefinition->default;
     }

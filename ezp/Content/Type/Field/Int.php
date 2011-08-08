@@ -47,10 +47,10 @@ class Int extends TypeField
      */
     public function __construct( Type $contentType )
     {
-        $this->readableProperties['min'] = true;
-        $this->readableProperties['max'] = true;
-        $this->readableProperties['default'] = true;
-        $this->readableProperties['state'] = true;
+        $this->readWriteProperties['min'] = true;
+        $this->readWriteProperties['max'] = true;
+        $this->readWriteProperties['default'] = true;
+        $this->readWriteProperties['state'] = true;
         TypeField::__construct( $contentType );
     }
 }

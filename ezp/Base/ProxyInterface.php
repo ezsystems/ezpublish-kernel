@@ -18,7 +18,7 @@ interface ProxyInterface
     /**
      * Load the object this proxy object represent
      *
-     * @return \ezp\Base\AbstractModel
+     * @return \ezp\Base\Model
      */
     public function load();
 }

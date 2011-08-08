@@ -42,9 +42,9 @@ class Datetime extends Int
      */
     public function __construct( Type $contentType )
     {
-        $this->readableProperties['default'] = true;
-        $this->readableProperties['useSeconds'] = true;
-        $this->readableProperties['adjustment'] = true;
+        $this->readWriteProperties['default'] = true;
+        $this->readWriteProperties['useSeconds'] = true;
+        $this->readWriteProperties['adjustment'] = true;
         TypeField::__construct( $contentType );
     }
 }

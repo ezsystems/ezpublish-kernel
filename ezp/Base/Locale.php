@@ -13,7 +13,7 @@ namespace ezp\Base;
  * This class represents a Locale
  *
  */
-class Locale extends AbstractModel
+class Locale extends Model
 {
     public $code;
 

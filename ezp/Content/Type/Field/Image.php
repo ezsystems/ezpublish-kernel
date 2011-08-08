@@ -30,7 +30,7 @@ class Image extends String
     /**
      * @var array Readable of properties on this object
      */
-    protected $readableProperties = array(
+    protected $readWriteProperties = array(
         'maxSize' => 'data_int1',
     );
 
@@ -39,7 +39,7 @@ class Image extends String
      */
     public function __construct( Type $contentType )
     {
-        $this->readableProperties['maxSize'] = true;
+        $this->readWriteProperties['maxSize'] = true;
         TypeField::__construct( $contentType );
     }
 }

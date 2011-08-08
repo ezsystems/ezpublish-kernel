@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\AbstractModel,
+use ezp\Base\Model,
     ezp\Base\TypeCollection;
 
 /**
@@ -22,12 +22,12 @@ use ezp\Base\AbstractModel,
  * @property-read Field[] $fields
  * @property-read Group[] $groups
  */
-class Type extends AbstractModel
+class Type extends Model
 {
     /**
      * @var array Readable of properties on this object
      */
-    protected $readableProperties = array(
+    protected $readWriteProperties = array(
         'id' => false,
         'version' => false,
         'identifier' => true,

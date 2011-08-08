@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\AbstractModel,
+use ezp\Base\Model,
     ezp\Base\Locale,
     ezp\Base\TypeCollection,
     ezp\Content,
@@ -18,13 +18,13 @@ use ezp\Base\AbstractModel,
  * This class represents a Content Translation
  *
  */
-class Translation extends AbstractModel
+class Translation extends Model
 {
 
     /**
      * @var array Readable of properties on this object
      */
-    protected $readableProperties = array(
+    protected $readWriteProperties = array(
         'versions' => false,
         'locale' => false,
         'content' => false,

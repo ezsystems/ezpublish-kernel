@@ -8,13 +8,13 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\AbstractModel;
+use ezp\Base\Model;
 
 /**
  * This class represents a Relationship between Contents
  *
  */
-class Relation extends AbstractModel
+class Relation extends Model
 {
 }
 ?>

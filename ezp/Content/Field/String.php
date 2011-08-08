@@ -36,7 +36,7 @@ class String extends ContentField
     public function __construct( Version $contentVersion, StringDefinition $fieldDefinition )
     {
         parent::__construct( $contentVersion, $fieldDefinition );
-        $this->readableProperties['value'] = true;
+        $this->readWriteProperties['value'] = true;
         if ( isset( $fieldDefinition->default ) )
             $this->value = $fieldDefinition->default;
     }

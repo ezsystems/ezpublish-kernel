@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\AbstractModel,
+use ezp\Base\Model,
     ezp\Base\Locale,
     ezp\Base\Observer,
     ezp\Base\Observable,
@@ -25,7 +25,7 @@ use ezp\Base\AbstractModel,
  * @property int $creatorId
  * @property-read ContentField[] $fields An hash structure of fields
  */
-class Version extends AbstractModel implements Observer
+class Version extends Model implements Observer
 {
     /**
      * @todo taken from eZContentObjectVersion, to be redefined
@@ -42,7 +42,7 @@ class Version extends AbstractModel implements Observer
     /**
      * @var array Readable of properties on this object
      */
-    protected $readableProperties = array(
+    protected $readWriteProperties = array(
         'id' => false,
         'version' => false,
         'userId' => true,

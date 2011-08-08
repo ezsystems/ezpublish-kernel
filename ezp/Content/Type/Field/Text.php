@@ -37,8 +37,8 @@ class Text extends String
      */
     public function __construct( Type $contentType )
     {
-        $this->readableProperties['default'] = true;
-        $this->readableProperties['columns'] = true;
+        $this->readWriteProperties['default'] = true;
+        $this->readWriteProperties['columns'] = true;
         TypeField::__construct( $contentType );
     }
 }

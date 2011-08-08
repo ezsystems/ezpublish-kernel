@@ -10,19 +10,19 @@
 namespace ezp\Content;
 use ezp\Base\Observable,
     ezp\Base\Observer,
-    ezp\Base\AbstractModel,
+    ezp\Base\Model,
     ezp\Content\Type\Field as FieldDefinition;
 
 /**
  * This class represents a Content's field
  *
  */
-abstract class Field extends AbstractModel implements Observer
+abstract class Field extends Model implements Observer
 {
     /**
      * @var array Readable of properties on this object
      */
-    protected $readableProperties = array(
+    protected $readWriteProperties = array(
         'id' => false,
         'languageCode' => true,
         'fieldTypeString' => true,

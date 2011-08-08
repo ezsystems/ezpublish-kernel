@@ -31,7 +31,7 @@ class Boolean extends Int
      */
     public function __construct( Type $contentType )
     {
-        $this->readableProperties['default'] = true;
+        $this->readWriteProperties['default'] = true;
         TypeField::__construct( $contentType );
     }
 }

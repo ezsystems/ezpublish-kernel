@@ -36,7 +36,7 @@ class Float extends ContentField
     public function __construct( Version $contentVersion, FloatDefinition $fieldDefinition )
     {
         parent::__construct( $contentVersion, $fieldDefinition );
-        $this->readableProperties['value'] = true;
+        $this->readWriteProperties['value'] = true;
         if ( isset( $fieldDefinition->default ) )
             $this->value = $fieldDefinition->default;
     }
