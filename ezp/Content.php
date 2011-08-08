@@ -8,7 +8,8 @@
  */
 
 namespace ezp;
-use ezp\Base\AbstractModel,
+use ezp\Base\Model,
+    ezp\Base\Observable,
     ezp\Base\Locale,
     ezp\Base\TypeCollection,
     ezp\Content\Translation,
@@ -58,7 +59,7 @@ use ezp\Base\AbstractModel,
  *                                       </code>
  *
  */
-class Content extends AbstractModel
+class Content extends Model
 {
     /**
      * Publication status constants
@@ -71,7 +72,7 @@ class Content extends AbstractModel
     /**
      * @var array Readable of properties on this object
      */
-    protected $readableProperties = array(
+    protected $readWriteProperties = array(
         'id' => false,
         'currentVersion' => false,
         'status' => false,
