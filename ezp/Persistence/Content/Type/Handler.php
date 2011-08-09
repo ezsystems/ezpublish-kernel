@@ -55,9 +55,11 @@ interface Handler
     public function loadContentTypes( $groupId, $version = 0 );
 
     /**
+     * Load a content type by id and version
+     *
+     * @todo Use constant for $version?
      * @param int $contentTypeId
      * @param int $version
-     * @todo Use constant for $version?
      * @return \ezp\Persistence\Content\Type
      */
     public function load( $contentTypeId, $version = 0 );
