@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Field;
-use ezp\Field\FieldProperties;
+use ezp\Field\FieldSettings;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -61,12 +61,13 @@ abstract class FieldType
     */
 
     /**
-     * @var FieldProperties Custom properties which are specific to the field
+     * @var FieldSettings Custom properties which are specific to the field
      *                      type. Typically these properties are used to
      *                      configure behaviour of field types and normally set
      *                      in the FieldDefiniton on ContentTypes
+     * @todo Method to quickly init. the field settings from predefined settings in FieldDefinition
      */
-    protected $fieldProperties;
+    protected $fieldSettings;
 
     /**
      * Internal value of field type.
