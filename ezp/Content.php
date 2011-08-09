@@ -52,6 +52,8 @@ use ezp\Base\Model,
  *                   $anotherLocation = $content->locations[2];
  *                   $locationById = $content->locations->byId( 60 );
  *                   </code>
+ * @property-read DateTime $creationDate The date the object was created
+ * @property-read \ezp\Content\Section $section The Section the content belongs to
  * @property Content[] $relations
  *                                          Collection of ezp\Content objects, related to the current one
  * @property Content[] $reverseRelations
@@ -110,13 +112,6 @@ class Content extends Model
         'contentType' => false,
         'versions' => false,
     );
-
-    /**
-     * The date the object was created
-     *
-     * @var DateTime
-     */
-    public $creationDate;
 
     /**
      * The Section the content belongs to
@@ -197,7 +192,6 @@ class Content extends Model
         $this->relations = new TypeCollection( 'ezp\\Content' );
         $this->reversedRelations = new TypeCollection( 'ezp\\Content' );
         $this->translations = new TypeCollection( 'ezp\\Content\\Translation' );
-        $this->name = false;
         $this->contentType = $contentType;
         $this->addTranslation( $mainLocale );
     }
