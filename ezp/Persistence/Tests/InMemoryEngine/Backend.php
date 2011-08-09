@@ -85,7 +85,7 @@ class Backend
             if ( $item['id'] != $id )
                 continue;
             else if ( $return )
-                throw new Logic( $type, "more then one item exist with id: {$id}" );
+                throw new Logic( $type, "more than one item exist with id: {$id}" );
 
             $return = $this->toValue( $type, $item );
         }
@@ -299,18 +299,8 @@ class Backend
             // Like an SQL IN() statement
             else if ( is_array( $matchValue ) )
             {
-                foreach ( $matchValue as $value )
-                {
-                    if ( !$this->match( $item, array( $matchProperty => $value ) ) )
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        goto doMatch;
-                    }
-                }
-                return false;
+                if ( !in_array( $item[$matchProperty], $matchValue ) )
+                    return false;
             }
             // Use of wildcards like in SQL, at the end of $matchValue
             // i.e. /1/2/% (for pathString)
