@@ -247,14 +247,18 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Returns a trashed subtree to normal state.
+     * Returns a trashed location to normal state.
      *
-     * The affected subtree is now again part of matching content queries.
+     * Recreates the originally trashed location in the new position. If no new
+     * position has been specified, it will be tried to re-create the location
+     * at the old position. If this is not possible ( because the old location
+     * does not exist any more) and exception is thrown.
      *
      * @param mixed $locationId
+     * @param mixed $newParentId
      * @return boolean
      */
-    public function untrashSubtree( $locationId )
+    public function untrashLocation( $locationId, $newParentId = null )
     {
         throw new \RuntimeException( '@TODO: Discussion pending…' );
     }

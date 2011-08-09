@@ -124,7 +124,7 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Location\Handler
      */
-    public function untrashSubtree( $locationId )
+    public function untrashLocation( $locationId, $newParentId = null )
     {
     }
 
