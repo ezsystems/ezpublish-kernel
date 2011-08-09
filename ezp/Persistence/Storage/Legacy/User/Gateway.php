@@ -36,4 +36,29 @@ abstract class Gateway
      * @param User $user
      */
     abstract public function updateUser( User $user );
+
+    /**
+     * Returns the user policies associated with the user
+     *
+     * @param mixed $userId
+     * @return UserPolicy[]
+     */
+    abstract public function getPermissions( $userId );
+
+    /**
+     * Assign role to user with given limitation
+     *
+     * @param mixed $userId
+     * @param mixed $roleId
+     * @param array $limitation
+     */
+    abstract public function assignRole( $userId, $roleId, $limitation );
+
+    /**
+     * Remove role from user
+     *
+     * @param mixed $userId
+     * @param mixed $roleId
+     */
+    abstract public function removeRole( $userId, $roleId );
 }

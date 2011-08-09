@@ -295,4 +295,22 @@ class UserHandlerTest extends TestCase
             'Expected a new policy.'
         );
     }
+
+    public function testAddRoleToUser()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = $this->createRole();
+        $handler->createUser( $user = $this->getValidUser() );
+
+        $handler->assignRole( $user->id, $role->id, array() );
+
+        $this->assertQueryResult(
+            array(
+                array( 1, 42, 1, null, null ),
+            ),
+            $this->handler->createSelectQuery()->select( 'id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value' )->from( 'ezuser_role' ),
+            'Expected a new user policy association.'
+        );
+    }
 }

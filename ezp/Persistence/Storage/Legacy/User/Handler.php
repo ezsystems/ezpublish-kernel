@@ -157,13 +157,15 @@ class Handler implements BaseUserHandler
     }
 
     /**
+     * Assign role to user with given limitation
+     *
      * @param mixed $userId
      * @param mixed $roleId
      * @param array $limitation
      */
     public function assignRole( $userId, $roleId, $limitation )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->userGateway->assignRole( $userId, $roleId, $limitation );
     }
 
     /**

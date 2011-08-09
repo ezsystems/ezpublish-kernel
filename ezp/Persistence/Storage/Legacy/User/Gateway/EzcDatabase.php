@@ -84,4 +84,45 @@ class EzcDatabase extends Gateway
             ->where( $query->expr->eq( 'contentobject_id', $query->bindValue( $user->id ) ) );
         $query->prepare()->execute();
     }
+
+    /**
+     * Returns the user policies associated with the user
+     *
+     * @param mixed $userId
+     * @return UserPolicy[]
+     */
+    public function getPermissions( $userId )
+    {
+
+    }
+
+    /**
+     * Assign role to user with given limitation
+     *
+     * @param mixed $userId
+     * @param mixed $roleId
+     * @param array $limitation
+     */
+    public function assignRole( $userId, $roleId, $limitation )
+    {
+        $query = $this->handler->createInsertQuery();
+        $query
+            ->insertInto( 'ezuser_role' )
+            ->set( 'contentobject_id', $query->bindValue( $userId ) )
+            ->set( 'role_id', $query->bindValue( $roleId ) )
+            ->set( 'limit_identifier', $query->bindValue( '' ) )
+            ->set( 'limit_value', $query->bindValue( '' ) );
+        $query->prepare()->execute();
+    }
+
+    /**
+     * Remove role from user
+     *
+     * @param mixed $userId
+     * @param mixed $roleId
+     */
+    public function removeRole( $userId, $roleId )
+    {
+
+    }
 }
