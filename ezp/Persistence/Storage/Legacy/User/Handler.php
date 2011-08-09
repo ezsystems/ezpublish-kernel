@@ -116,7 +116,7 @@ class Handler implements BaseUserHandler
      */
     public function deleteRole( $roleId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->roleGateway->deleteRole( $roleId );
     }
 
     /**

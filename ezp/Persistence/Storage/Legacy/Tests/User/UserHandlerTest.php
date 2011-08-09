@@ -191,4 +191,22 @@ class UserHandlerTest extends TestCase
             'Expected a changed role.'
         );
     }
+
+    public function testDeleteRole()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+
+        $role = $handler->createRole( $role );
+
+        $handler->deleteRole( $role->id );
+
+        $this->assertQueryResult(
+            array( ),
+            $this->handler->createSelectQuery()->select( 'id', 'name' )->from( 'ezrole' ),
+            'Expected an empty set.'
+        );
+    }
 }

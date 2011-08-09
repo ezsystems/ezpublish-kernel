@@ -77,6 +77,10 @@ class EzcDatabase extends Gateway
      */
     public function deleteRole( $roleId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( 'ezrole' )
+            ->where( $query->expr->eq( 'id', $query->bindValue( $roleId ) ) );
+        $query->prepare()->execute();
     }
 }
