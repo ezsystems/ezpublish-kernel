@@ -69,6 +69,29 @@ abstract class FieldType
     protected $fieldProperties;
 
     /**
+     * Internal value of field type.
+     *
+     * This value is the value which can be passed on to the persistence interface.
+     * Ultimately the field value is packaged inside a {@link ezp\Persistence\Content\FieldValue}
+     * for persistence purposes via the {@link ezp\Persistence\Fields\Storage} interface.
+     *
+     * @var mixed
+     */
+    protected $value;
+
+    /**
+     * Value set by user to field type.
+     *
+     * This is converted to the internal {@link $value} via the SerializeInterface,
+     * but allows for original user input to be retained, which is useful,
+     * when it must be returned due to an invalid input error, or a validation
+     * error.
+     *
+     * @var mixed
+     */
+    protected $inputValue;
+
+    /**
      * Does the field type supports translation of its data.
      *
      * @return boolean
