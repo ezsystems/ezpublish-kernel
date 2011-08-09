@@ -152,8 +152,8 @@ class UserHandlerTest extends TestCase
         $handler->createRole( $role );
 
         $this->assertQueryResult(
-            array( array( 1 ) ),
-            $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezrole' ),
+            array( array( 1, 'Test' ) ),
+            $this->handler->createSelectQuery()->select( 'id', 'name' )->from( 'ezrole' ),
             'Expected a new role.'
         );
     }
