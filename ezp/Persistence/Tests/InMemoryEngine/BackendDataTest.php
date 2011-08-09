@@ -322,10 +322,28 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test finding content with wildcard
+     *
+     * @covers ezp\Persistence\Tests/InMemoryEngine\Backend::find
+     * @group inMemoryBackend
+     */
+    public function testFindWildcard()
+    {
+        $this->insertCustomContent();
+        $list = $this->backend->find( 'Content', array( 'name' => 'foo%' ) );
+        foreach ( $list as $vo )
+        {
+            self::assertInstanceOf( 'ezp\Persistence\Content', $vo );
+            self::assertTrue( strpos( $vo->name, 'foo' ) === 0 );
+        }
+    }
+
+    /**
      * Test counting content without results
      *
      * @dataProvider providerForFindEmpty
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::count
+     * @group inMemoryBackend
      */
     public function testCountEmpty( $searchData )
     {
