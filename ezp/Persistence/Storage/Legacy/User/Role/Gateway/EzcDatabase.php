@@ -125,5 +125,8 @@ class EzcDatabase extends Gateway
                 $query->expr->eq( 'role_id', $query->bindValue( $roleId ) )
             ) );
         $query->prepare()->execute();
+
+        // @TODO: Cascade on delete to policy limitations and limitation
+        // values.
     }
 }
