@@ -19,7 +19,6 @@ use ezp\Base\Model,
  * @property-read mixed $id
  * @property-ready string $type
  * @property-read FieldValue $value
- * @property string $languageCode
  * @property string $type
  * @property mixed $language
  * @property-read int $versionNo
