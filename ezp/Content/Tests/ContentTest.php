@@ -13,7 +13,7 @@ use ezp\Content,
     ezp\Content\Section,
     ezp\Content\Translation,
     ezp\Content\Type,
-    ezp\Content\Type\Field,
+    ezp\Content\Type\FieldDefinition,
     ezp\Base\Locale;
 
 /**
