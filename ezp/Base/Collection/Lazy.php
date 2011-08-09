@@ -18,7 +18,7 @@ use ezp\Base\Collection,
 /**
  * Lazy Collection class, lazy collection only accepts new elements of a certain type
  *
- * Takes a list of primary id's as input, these are loaded one by one on demand.
+ * Takes a primary id as input, items connected to this id will be loaded when collection is first accessed.
  *
  */
 class Lazy extends TypeCollection
