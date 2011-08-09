@@ -76,6 +76,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerForFindEmpty
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     * @group inMemoryBackend
      */
     public function testFindEmpty( $searchData )
     {
@@ -107,6 +108,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerForFind
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     * @group inMemoryBackend
      */
     public function testFind( $searchData, $result )
     {
@@ -192,6 +194,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test finding content with multiple ids
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     * @group inMemoryBackend
      */
     public function testFindMultipleIds()
     {
@@ -211,6 +214,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test finding content with results
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     * @group inMemoryBackend
      */
     public function testFindMatchOnArray()
     {
@@ -227,6 +231,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test finding content with results using join
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     * @group inMemoryBackend
      */
     public function testFindJoin()
     {
@@ -259,6 +264,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test finding content with results using join and deep matching
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     * @group inMemoryBackend
      */
     public function testFindJoinDeepMatch()
     {
@@ -292,6 +298,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      *
      * @expectedException ezp\Base\Exception\Logic
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     * @group inMemoryBackend
      */
     public function testFindJoinDeepMatchCollision()
     {
@@ -307,6 +314,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test finding content with results using several levels of join
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     * @group inMemoryBackend
      */
     public function testFindSubJoin()
     {
@@ -333,6 +341,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerForFind
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::count
+     * @group inMemoryBackend
      */
     public function testCount( $searchData, $result )
     {
@@ -347,6 +356,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test counting content with results using join and deep matching
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::count
+     * @group inMemoryBackend
      */
     public function testCountJoinDeepMatch()
     {
@@ -363,6 +373,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      *
      * @expectedException ezp\Base\Exception\Logic
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     * @group inMemoryBackend
      */
     public function testCountJoinDeepMatchCollision()
     {
@@ -379,6 +390,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerForLoadEmpty
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::load
+     * @group inMemoryBackend
      */
     public function testLoadEmpty( $searchData )
     {
@@ -405,6 +417,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      *
      * @dataProvider providerForLoad
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::load
+     * @group inMemoryBackend
      */
     public function testLoad( $searchData, $result )
     {
@@ -456,6 +469,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test updating content on unexisting ID
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::update
+     * @group inMemoryBackend
      */
     public function testUpdateUnexistingId()
     {
@@ -468,6 +482,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test updating content with an extra attribute
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::update
+     * @group inMemoryBackend
      */
     public function testUpdateNewAttribute()
     {
@@ -485,6 +500,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test updating content
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::update
+     * @group inMemoryBackend
      */
     public function testUpdate()
     {
@@ -500,6 +516,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test updating content with a null value
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::update
+     * @group inMemoryBackend
      */
     public function testUpdateWithNullValue()
     {
