@@ -10,10 +10,11 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Search;
 
 use ezp\Persistence\Content,
+    ezp\Persistence\Content\Search\Handler as BaseSearchHandler,
     ezp\Persistence\Content\Criterion;
 
 /**
- * The Content Search handler retrieves sets of of Content objects, based on a 
+ * The Content Search handler retrieves sets of of Content objects, based on a
  * set of criteria.
  *
  * The basic idea of this class is to do the following:
@@ -35,7 +36,7 @@ use ezp\Persistence\Content,
  *
  * @version //autogentag//
  */
-class Handler
+class Handler extends BaseSearchHandler
 {
     /**
      * Content locator gateway.
@@ -79,6 +80,17 @@ class Handler
      * @return \ezp\Persistence\Content
      */
     public function findSingle( Criterion $criterion )
+    {
+        throw new \Exception( "Not implemented yet." );
+    }
+
+    /**
+     * Indexes a content object
+     *
+     * @param ezp\Persistence\Content $content
+     * @return void
+     */
+    public function indexContent( Content $content )
     {
         throw new \Exception( "Not implemented yet." );
     }
