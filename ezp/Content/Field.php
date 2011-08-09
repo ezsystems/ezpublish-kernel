@@ -32,7 +32,7 @@ class Field extends Model
     protected $readWriteProperties = array(
         'id' => false,
         'type' => false,
-        'value' => false,//object
+        'value' => true,
         'language' => true,
         'versionNo' => false,
     );
@@ -68,6 +68,7 @@ class Field extends Model
         $this->properties = new FieldVO( array(
                                                'type' => $fieldDefinition->fieldType,
                                                'fieldDefinitionId' => $fieldDefinition->id,
+                                               'value' => $fieldDefinition->defaultValue,
                                            ) );
     }
 

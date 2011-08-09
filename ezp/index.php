@@ -6,7 +6,8 @@ namespace ezp\Content;
 use ezp\Base\Configuration,
     ezp\Base\Autoloader,
     ezp\Base\Locale,
-    ezp\Content;
+    ezp\Content,
+    ezp\Content\Type\FieldDefinition;
 
 chdir( '../' );
 require 'config.php';
@@ -29,15 +30,14 @@ $contentType->identifier = 'article';
 
 // Add some fields
 $fields = array(
-    '\\ezp\\Content\\Type\\Field\\String' => array( 'title', 'ezstring', 'New Article' ),
-    '\\ezp\\Content\\Type\\Field\\Keyword' => array( 'tags', 'ezkeyword', '' )
+    'title' => array( 'ezstring', 'New Article' ),
+    'tags' => array( 'ezkeyword', '' )
 );
-foreach ( $fields as $className => $data )
+foreach ( $fields as $identifier => $data )
 {
-    $field = new $className( $contentType );
-    $field->identifier = $data[0];
-    $field->fieldTypeString = $data[1];
-    $field->default = $data[2];
+    $field = new FieldDefinition( $contentType, $data[0] );
+    $field->identifier = $identifier;
+    $field->defaultValue = $data[1];
     $contentType->fields[] = $field;
 }
 
