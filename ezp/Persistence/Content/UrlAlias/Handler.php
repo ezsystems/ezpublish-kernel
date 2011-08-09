@@ -80,9 +80,9 @@ interface Handler
       * Returns the full url alias to $locationId from /.
       *
       * @param $locationId
-      * @param $languageCode
+      * @param $language
       * @return string
       */
-     public function getPath( $locationId, $languageCode );
+     public function getPath( $locationId, $language );
 
 }

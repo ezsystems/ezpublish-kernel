@@ -254,7 +254,7 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Location\Handler
      */
-    public function getPath( $locationId, $languageCode )
+    public function getPath( $locationId, $language )
     {
     }
 

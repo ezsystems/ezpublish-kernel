@@ -218,16 +218,16 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Fetch a content value object containing the values of the translation for $languageCode.
+     * Fetch a content value object containing the values of the translation for $language.
      *
      * This method might use field filters, if they are designed and available
      * at a later point in time.
      *
      * @param int $contentId
-     * @param string $languageCode
+     * @param string $language
      * @return \ezp\Persistence\Content\Content
      */
-    public function fetchTranslation( $contentId, $languageCode )
+    public function fetchTranslation( $contentId, $language )
     {
         throw new Exception( "Not implemented yet." );
     }

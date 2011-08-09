@@ -224,7 +224,7 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see ezp\Persistence\Content\Handler
      */
-    public function fetchTranslation( $contentId, $languageCode )
+    public function fetchTranslation( $contentId, $language )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
