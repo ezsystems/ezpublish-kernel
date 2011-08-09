@@ -59,5 +59,10 @@ class Content extends ValueObject
      * @var bool Always available flag
      */
     public $alwaysAvailable;
+
+    /**
+     * @var string Remote identifier used as a custom identifier for the object
+     */
+    public $remoteId;
 }
 ?>

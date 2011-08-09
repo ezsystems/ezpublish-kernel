@@ -95,6 +95,7 @@ class Content extends Model
         'locations' => true,
         'contentType' => false,
         'alwaysAvailable' => true,
+        'remoteId' => true,
     );
 
     /**
