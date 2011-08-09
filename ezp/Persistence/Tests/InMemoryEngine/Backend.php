@@ -320,7 +320,6 @@ class Backend
             }
         }
 
-        doMatch:
         return true;
     }
 
