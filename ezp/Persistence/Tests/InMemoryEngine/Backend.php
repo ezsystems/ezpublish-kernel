@@ -295,11 +295,38 @@ class Backend
                     return false;
                 }
             }
+            // A property trying to match a list of values
+            // Like an SQL IN() statement
+            else if ( is_array( $matchValue ) )
+            {
+                foreach ( $matchValue as $value )
+                {
+                    if ( !$this->match( $item, array( $matchProperty => $value ) ) )
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        goto doMatch;
+                    }
+                }
+                return false;
+            }
+            // Use of wildcards like in SQL, at the end of $matchValue
+            // i.e. /1/2/% (for pathString)
+            else if ( ( $wildcardPos = strpos( $matchValue, '%' ) ) > 0 && ( $wildcardPos === strlen( $matchValue ) + 1 ) )
+            {
+                // Returns true if $item[$matchProperty] begins with $matchValue (minus '%' wildcard char)
+                if ( !strpos( $item[$matchProperty], substr( $matchValue, 0, -1 ) ) === 0 )
+                    return false;
+            }
             else if ( $item[$matchProperty] != $matchValue )
             {
                 return false;
             }
         }
+
+        doMatch:
         return true;
     }
 

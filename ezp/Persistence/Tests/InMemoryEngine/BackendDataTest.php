@@ -189,6 +189,25 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Test finding content with multiple ids
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     */
+    public function testFindMultipleIds()
+    {
+        $this->insertCustomContent();
+        $searchIds = array( 3, 5, 7 );
+        $list = $this->backend->find( 'Content', array( 'id' => $searchIds ) );
+        self::assertEquals( count( $searchIds ), count( $list ) );
+
+        foreach ( $list as $vo )
+        {
+            self::assertInstanceOf( 'ezp\\Persistence\\Content', $vo );
+            self::assertContains( $vo->id, $searchIds );
+        }
+    }
+
+    /**
      * Test finding content with results
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
