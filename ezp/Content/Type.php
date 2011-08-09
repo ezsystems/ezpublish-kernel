@@ -96,7 +96,7 @@ class Type extends Model
     /**
      * @return Type\Group[]
      */
-    public function getGroup()
+    public function getGroups()
     {
         return $this->_groups;
     }
