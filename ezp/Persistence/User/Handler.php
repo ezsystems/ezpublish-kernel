@@ -93,11 +93,28 @@ interface Handler
     public function getPermissions( $userId );
 
     /**
+     * Assign role to user with given limitation
+     *
+     * The limitation array may look like:
+     * <code>
+     *  array(
+     *      'Subtree' => array(
+     *          '/1/2/',
+     *          '/1/4/',
+     *      ),
+     *      'Foo' => array( 'Bar' ),
+     *      …
+     *  )
+     * </code>
+     *
+     * Where the keys are the limitation identifiers, and the respective values
+     * are an array of limitation values. The limitation parameter is optional.
+     *
      * @param mixed $userId
      * @param mixed $roleId
      * @param array $limitation
      */
-    public function assignRole( $userId, $roleId, $limitation );
+    public function assignRole( $userId, $roleId, array $limitation = null );
 
     /**
      * @param mixed $userId
