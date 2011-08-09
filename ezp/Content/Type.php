@@ -16,21 +16,21 @@ use ezp\Base\Model,
  * Type class ( Content Class )
  *
  *
- * @property-read int $id
+ * @property-read mixed $id
  * @property-read int $version
  * @property string $name
  * @property string $description
  * @property string $identifier
  * @property mixed $created
- * @property string $creatorId
+ * @property int $creatorId
  * @property mixed $modified
- * @property string $modifierId
+ * @property int $modifierId
  * @property-read string $remoteId
  * @property string $urlAliasSchema
  * @property string $nameSchema
  * @property bool $isContainer
- * @property bool $initialLanguageId
- * @property-read bool $contentTypeGroupIds
+ * @property int $initialLanguageId
+ * @property-read int[] $contentTypeGroupIds
  * @property-read Type\Field[] $fields
  * @property-read Type\Group[] $groups
  */
@@ -81,7 +81,7 @@ class Type extends Model
     public function __construct()
     {
         $this->properties = new TypeValue();
-        $this->_fields = new TypeCollection( 'ezp\\Content\\Type\\Field' );
+        $this->_fields = new TypeCollection( 'ezp\\Content\\Type\\FieldDefinition' );
         $this->_groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
     }
 

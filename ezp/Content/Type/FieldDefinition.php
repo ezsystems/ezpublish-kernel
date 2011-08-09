@@ -8,27 +8,45 @@
  */
 
 namespace ezp\Content\Type;
-use ezp\Base\Observable,
-    ezp\Base\Observer,
-    ezp\Base\Model,
-    ezp\Content\Type;
+use ezp\Base\Model,
+    ezp\Content\Type,
+    ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue;
 
 /**
  * Content Type Field (content class attribute) class
  *
- * @property-read string $fieldTypeString
+ * @property-read mixed $id
+ * @property string[] $name
+ * @property string[] $description
+ * @property string $identifier
+ * @property string $fieldGroup
+ * @property int $position
+ * @property-read string $fieldType
+ * @property bool $isTranslatable
+ * @property bool $isRequired
+ * @property bool $isInfoCollector
+ * @property array $fieldTypeConstraints
+ * @property mixed $defaultValue
+ * @property-read \ezp\Content\Type $contentType
  */
-abstract class FieldDefinition extends Model implements Observer
+class FieldDefinition extends Model
 {
     /**
      * @var array Readable of properties on this object
      */
     protected $readWriteProperties = array(
         'id' => false,
-        'version' => false,
-        'placement' => true,
+        'name' => true,
+        'description' => true,
         'identifier' => true,
-        'fieldTypeString' => true,
+        'fieldGroup' => true,
+        'position' => true,
+        'fieldType' => false,
+        'isTranslatable' => true,
+        'isRequired' => true,
+        'isInfoCollector' => true,
+        'fieldTypeConstraints' => true,
+        'defaultValue' => true,
     );
 
     /**
@@ -39,80 +57,29 @@ abstract class FieldDefinition extends Model implements Observer
     );
 
     /**
-     * @var int
+     * @var \ezp\Content\Type
      */
-    protected $id;
+    protected $_contentType;
 
     /**
-     * @var int
-     */
-    protected $version;
-
-    /**
-     * @var int
-     */
-    public $placement;
-
-    /**
-     * @var string
-     */
-    public $identifier;
-
-    /**
-     * @var string
-     */
-    public $fieldTypeString;
-
-    /**
-     * @var Type
-     */
-    protected $contentType;
-
-    /**
-     * Constructor, sets up empty contentFields collection and attach $contentType
+     * Constructor, sets up value object, fieldType string and attach $contentType
      *
-     * @param Type $contentType
+     * @param \ezp\Content\Type $contentType
+     * @param string $fieldType
      */
-    public function __construct( Type $contentType )
+    public function __construct( Type $contentType, $fieldType )
     {
-        $this->contentType = $contentType;
+        $this->_contentType = $contentType;
+        $this->properties = new FieldDefinitionValue( array( 'fieldType' => $fieldType ) );
     }
 
     /**
      * Return content type object
      *
-     * @return Type
+     * @return \ezp\Content\Type
      */
     protected function getContentType()
     {
-        if ( $this->contentType instanceof Proxy )
-        {
-            $this->contentType = $this->contentType->load();
-        }
-        return $this->contentType;
-    }
-
-    /**
-     * Called when subject has been updated
-     *
-     * @param \ezp\Base\Observable $subject
-     * @param string $event
-     * @return FieldDefinition
-     */
-    public function update( Observable $subject, $event = 'update' )
-    {
-        if ( $subject instanceof Type )
-        {
-            return $this->notify( $event );
-        }
-        return parent::update( $subject, $event );
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->identifier;
+        return $this->_contentType;
     }
 }

@@ -36,11 +36,11 @@ class Collection extends ReadOnly
         $fieldTypes = Configuration::getInstance( 'content' )->get( 'fields', 'Type' );
         foreach ( $contentVersion->content->contentType->fields as $fieldDefinition )
         {
-            if ( !isset( $fieldTypes[$fieldDefinition->fieldTypeString] ) )
-                throw new BadConfiguration( 'content.ini[fields]', "could not load {$fieldDefinition->fieldTypeString}" );
+            if ( !isset( $fieldTypes[$fieldDefinition->fieldType] ) )
+                throw new BadConfiguration( 'content.ini[fields]', "could not load {$fieldDefinition->fieldType}" );
 
-            if ( !class_exists( $fieldTypes[$fieldDefinition->fieldTypeString] ) )
-                throw new MissingClass(  $fieldTypes[$fieldDefinition->fieldTypeString], 'field type' );
+            if ( !class_exists( $fieldTypes[$fieldDefinition->fieldType] ) )
+                throw new MissingClass(  $fieldTypes[$fieldDefinition->fieldType], 'field type' );
 
             $className = $fieldTypes[$fieldDefinition->fieldTypeString];
             $elements[ $fieldDefinition->identifier ] = $field = new $className( $contentVersion, $fieldDefinition );
