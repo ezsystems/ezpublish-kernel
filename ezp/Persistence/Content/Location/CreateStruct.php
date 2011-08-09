@@ -20,14 +20,14 @@ class CreateStruct extends ValueObject
      *
      * @var int
      */
-    public $priority;
+    public $priority = 0;
 
     /**
      * Indicates that the Location entity has been explicitly marked as hidden.
      *
      * @var bool
      */
-    public $hidden;
+    public $hidden = false;
 
     /**
      * Indicates that the Location is implicitly marked as hidden by a parent
@@ -35,7 +35,7 @@ class CreateStruct extends ValueObject
      *
      * @var bool
      */
-    public $invisible;
+    public $invisible = false;
 
     /**
      * Remote ID.
