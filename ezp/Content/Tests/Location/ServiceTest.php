@@ -96,7 +96,7 @@ class ServiceTest extends BaseServiceTest
      * returned by repository handler
      *
      * @group locationService
-     * @covers \ezp\Content\Location\Service::testBuildDomainObject
+     * @covers \ezp\Content\Location\Service::buildDomainObject
      */
     public function testBuildDomainObject()
     {
@@ -138,7 +138,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      * @group locationService
-     * @covers \ezp\Content\Location\Service::testBuildDomainObject
+     * @covers \ezp\Content\Location\Service::buildDomainObject
      */
     public function testBuildDomainObjectNotFromLocationVo()
     {
