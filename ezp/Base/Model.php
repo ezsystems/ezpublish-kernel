@@ -61,6 +61,7 @@ abstract class Model implements Observable, ModelInterface
      * the magic getter and setter.
      * Key is property name, value is bool indicating if property is writable.
      *
+     * @todo should mention that no type checking is done internal props.?
      * @var array
      */
     protected $readWriteProperties;
