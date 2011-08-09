@@ -356,4 +356,25 @@ class UserHandlerTest extends TestCase
             'Expected a new user policy association.'
         );
     }
+
+    public function testRemoveUserRoleAssociation()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = $this->createRole();
+        $handler->createUser( $user = $this->getValidUser() );
+
+        $handler->assignRole( $user->id, $role->id, array(
+            'Subtree' => array( '/1', '/1/2' ),
+            'Foo' => array( 'Bar' ),
+        ) );
+
+        $handler->removeRole( $user->id, $role->id );
+
+        $this->assertQueryResult(
+            array(),
+            $this->handler->createSelectQuery()->select( 'id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value' )->from( 'ezuser_role' ),
+            'Expected no user policy associations.'
+        );
+    }
 }

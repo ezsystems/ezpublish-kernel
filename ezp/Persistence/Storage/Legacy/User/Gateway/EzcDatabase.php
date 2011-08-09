@@ -129,6 +129,13 @@ class EzcDatabase extends Gateway
      */
     public function removeRole( $userId, $roleId )
     {
-
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( 'ezuser_role' )
+            ->where( $query->expr->lAnd(
+                $query->expr->eq( 'contentobject_id', $query->bindValue( $userId ) ),
+                $query->expr->eq( 'role_id', $query->bindValue( $roleId ) )
+            ) );
+        $query->prepare()->execute();
     }
 }
