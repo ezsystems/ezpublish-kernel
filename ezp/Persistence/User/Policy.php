@@ -15,6 +15,13 @@ use ezp\Persistence\ValueObject;
 class Policy extends ValueObject
 {
     /**
+     * ID of the policy
+     *
+     * @var int|string
+     */
+    public $id;
+
+    /**
      * Name of module, associated with the Policy
      *
      * @var string
