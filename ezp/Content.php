@@ -123,7 +123,7 @@ class Content extends Model
      *
      * @var Section
      */
-    public $section;
+    public $_section;
 
     /**
      * The Content's status, as one of the ezp\Content::STATUS_* constants
@@ -192,7 +192,6 @@ class Content extends Model
         $this->properties = new ContentValue;
         $this->creationDate = new DateTime();
         $this->mainLocale = $mainLocale;
-        $this->alwaysAvailable = false;
         $this->versions = new TypeCollection( 'ezp\\Content\\Version' );
         $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
         $this->relations = new TypeCollection( 'ezp\\Content' );
@@ -274,7 +273,7 @@ class Content extends Model
      */
     protected function setSection( Section $section )
     {
-        $this->section = $section;
+        $this->_section = $section;
     }
 
     /**
@@ -284,11 +283,11 @@ class Content extends Model
      */
     protected function getSection()
     {
-        if ( $this->section instanceof Proxy )
+        if ( $this->_section instanceof Proxy )
         {
-            $this->section = $this->section->load();
+            $this->_section = $this->_section->load();
         }
-        return $this->section;
+        return $this->_section;
     }
 
     /**
@@ -298,9 +297,9 @@ class Content extends Model
      */
     protected function getSectionId()
     {
-        if ( $this->section instanceof Proxy || $this->section instanceof Section )
+        if ( $this->_section instanceof Proxy || $this->_section instanceof Section )
         {
-            return $this->section->id;
+            return $this->_section->id;
         }
         return 0;
     }
