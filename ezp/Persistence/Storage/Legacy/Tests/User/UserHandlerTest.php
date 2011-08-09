@@ -248,7 +248,7 @@ class UserHandlerTest extends TestCase
         $this->assertEquals( 1, $policy->id );
     }
 
-    public function testImplicitelyCreatePolicies()
+    protected function createRole()
     {
         $handler = $this->getUserHandler();
 
@@ -263,7 +263,12 @@ class UserHandlerTest extends TestCase
         $role = new Persistence\User\Role();
         $role->name = 'Test';
         $role->policies = array( $policy1, $policy2 );
-        $handler->createRole( $role );
+        return $handler->createRole( $role );
+    }
+
+    public function testImplicitelyCreatePolicies()
+    {
+        $this->createRole();
 
         $this->assertQueryResult(
             array(
@@ -279,20 +284,8 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $policy1 = new Persistence\User\Policy();
-        $policy1->module = 'foo';
-        $policy1->moduleFunction = 'bar';
-
-        $policy2 = new Persistence\User\Policy();
-        $policy2->module = 'foo';
-        $policy2->moduleFunction = 'blubb';
-
-        $role = new Persistence\User\Role();
-        $role->name = 'Test';
-        $role->policies = array( $policy1, $policy2 );
-        $handler->createRole( $role );
-
-        $handler->removePolicy( $role->id, $policy1->id );
+        $role = $this->createRole();
+        $handler->removePolicy( $role->id, $role->policies[0]->id );
 
         $this->assertQueryResult(
             array(
