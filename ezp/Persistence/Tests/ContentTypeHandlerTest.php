@@ -128,7 +128,8 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->assertTrue( $obj instanceof Type );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( 'folder', $obj->identifier );
-        $this->assertEquals( array(), $obj->fieldDefinitions );
+        $this->assertEquals( 1, count( $obj->fieldDefinitions ) );
+        $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
 
         $obj = $this->repositoryHandler->ContentTypeHandler()->load( 2, 0 );
         $this->assertNull( $obj );
@@ -166,7 +167,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->assertEquals( 2, $obj->id );
         $this->assertEquals( 'article', $obj->identifier );
         $this->assertEquals( "<short_title|title>", $obj->nameSchema );
-        $field->id = 1;
+        $field->id = $obj->fieldDefinitions[0]->id;
         $this->assertEquals( array( $field ), $obj->fieldDefinitions );
     }
 

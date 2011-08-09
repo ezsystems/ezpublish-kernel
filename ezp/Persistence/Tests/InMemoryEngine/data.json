@@ -1,6 +1,6 @@
 {
     "Content": [
-        {"id": 1, "name": "eZ Publish", "typeId": 1, "sectionId": 1, "ownerId": "14"}
+        {"id": 1, "name": "eZ Publish", "typeId": 1, "sectionId": 1, "ownerId": 14}
     ],
     "Content\\Field": [],
     "Content\\Location" : [
@@ -12,7 +12,9 @@
     "Content\\Type": [
         {"id": 1, "version": 0, "name": {"eng-GB": "Folder"}, "description": {"eng-GB": "A simple folder"}, "identifier": "folder", "created": 1312473387, "modified": 1312473387, "creatorId": 14, "modifierId": 14, "urlAliasSchema": null, "nameSchema": "<short_name|name>", "isContainer": true, "initialLanguageId": 2, "contentTypeGroupIds": [1]}
     ],
-    "Content\\Type\\FieldDefinition" : [],
+    "Content\\Type\\FieldDefinition" : [
+        {"id": 1, "name": {"eng-GB": "Name"}, "description": {"eng-GB": "Folder name"}, "identifier": "name", "fieldGroup": "", "position": 0, "fieldType": "ezstring", "isTranslatable": true, "isRequired": true, "isInfoCollector": true, "fieldTypeConstraints": {}, "defaultValue": "New Folder", "_typeId": 1, "_version": 0}
+    ],
     "Content\\Type\\Group" : [
         {"id": 1, "name": {"eng-GB": "Content"}, "description": {"eng-GB": "Content type group"}  }
     ],
