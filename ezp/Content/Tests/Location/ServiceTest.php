@@ -286,4 +286,12 @@ class ServiceTest extends BaseServiceTest
         self::assertTrue( $locationShouldStayInvisible->invisible );
         self::assertGreaterThanOrEqual( $time, $this->locationHandler->load( $parent->id )->modifiedSubLocation );
     }
+
+    /**
+     * @group locationService
+     */
+    public function testSwap()
+    {
+        $this->markTestIncomplete();
+    }
 }

@@ -126,9 +126,29 @@ class LocationHandler implements LocationHandlerInterface
     public function swap( $locationId1, $locationId2 )
     {
         $location1 = $this->backend->load( 'Content\\Location', $locationId1 );
+        $content1 = $this->backend->load( 'Content', $location1->contentId );
+
         $location2 = $this->backend->load( 'Content\\Location', $locationId2 );
-        $this->backend->update( 'Content\\Location', $locationId1, array( 'contentId' => $location2->contentId ) );
-        $this->backend->update( 'Content\\Location', $locationId2, array( 'contentId' => $location1->contentId ) );
+        $content2 = $this->backend->load( 'Content', $location2->contentId );
+
+        $this->backend->update(
+            'Content\\Location',
+            $locationId1,
+            array(
+                'contentId' => $location2->contentId,
+                'pathIdentificationString' => trim( str_replace(' ', '_', strtolower( $content2->name ) ) )
+            )
+        );
+        $this->backend->update(
+            'Content\\Location',
+            $locationId2,
+            array(
+                'contentId' => $location1->contentId,
+                'pathIdentificationString' => trim( str_replace(' ', '_', strtolower( $content1->name ) ) )
+            )
+        );
+        $this->updateSubtreeModificationTime( $this->getParentPathString( $location1->pathString ) );
+        $this->updateSubtreeModificationTime( $this->getParentPathString( $location2->pathString ) );
     }
 
     /**

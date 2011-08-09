@@ -117,7 +117,7 @@ class Service extends BaseService
      */
     public function swap( Location $location1, Location $location2 )
     {
-
+        $this->handler->locationHandler()->swap( $location1->id, $location2->id );
     }
 
     /**
