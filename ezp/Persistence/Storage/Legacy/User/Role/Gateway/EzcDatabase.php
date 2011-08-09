@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Storage\Legacy\User\Role\Gateway;
 use ezp\Persistence\Storage\Legacy\User\Role\Gateway,
+    ezp\Persistence\User\RoleUpdateStruct,
     ezp\Persistence\User\Role;
 
 /**
@@ -57,11 +58,16 @@ class EzcDatabase extends Gateway
     /**
      * Update role
      *
-     * @param Role $role
+     * @param RoleUpdateStruct $role
      */
-    public function updateRole( Role $role )
+    public function updateRole( RoleUpdateStruct $role )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( 'ezrole' )
+            ->set( 'name', $query->bindValue( $role->name ) )
+            ->where( $query->expr->eq( 'id', $query->bindValue( $role->id ) ) );
+        $query->prepare()->execute();
     }
 
     /**

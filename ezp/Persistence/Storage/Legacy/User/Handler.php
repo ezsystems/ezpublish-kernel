@@ -106,7 +106,7 @@ class Handler implements BaseUserHandler
      */
     public function updateRole( RoleUpdateStruct $role )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->roleGateway->updateRole( $role );
     }
 
     /**

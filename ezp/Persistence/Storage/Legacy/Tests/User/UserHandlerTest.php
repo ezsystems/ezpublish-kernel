@@ -169,4 +169,26 @@ class UserHandlerTest extends TestCase
 
         $this->assertSame( '1', $role->id );
     }
+
+    public function testUpdateRole()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+
+        $role = $handler->createRole( $role );
+
+        $update = new Persistence\User\RoleUpdateStruct();
+        $update->id = $role->id;
+        $update->name = 'Changed';
+
+        $handler->updateRole( $update );
+
+        $this->assertQueryResult(
+            array( array( 1, 'Changed' ) ),
+            $this->handler->createSelectQuery()->select( 'id', 'name' )->from( 'ezrole' ),
+            'Expected a changed role.'
+        );
+    }
 }
