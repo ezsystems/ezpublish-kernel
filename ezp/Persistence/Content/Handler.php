@@ -60,29 +60,6 @@ interface Handler
     public function load( $id );
 
     /**
-     * Returns a list of object satisfying the $criterion.
-     *
-     * @param AbstractCriterion $criterion
-     * @param int $offset
-     * @param int|null $limit
-     * @param $sort
-     * @return array(ezp\Persistence\Content) Content value object.
-     */
-    public function find( AbstractCriterion $criterion, $offset = 0, $limit = null, $sort = null );
-
-    /**
-     * Returns a single Content object found.
-     *
-     * Performs a {@link find()} query to find a single object. You need to
-     * ensure, that your $criterion ensure that only a single object can be
-     * retrieved.
-     *
-     * @param AbstractCriterion $criterion
-     * @return \ezp\Persistence\Content
-     */
-    public function findSingle( AbstractCriterion $criterion );
-
-    /**
      * Sets the state of object identified by $contentId and $version to $state.
      *
      * The $state can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED.
