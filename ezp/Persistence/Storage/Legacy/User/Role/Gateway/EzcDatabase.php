@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Storage\Legacy\User\Role\Gateway;
 use ezp\Persistence\Storage\Legacy\User\Role\Gateway,
+    ezp\Persistence\User\Policy,
     ezp\Persistence\User\RoleUpdateStruct,
     ezp\Persistence\User\Role;
 
@@ -82,5 +83,40 @@ class EzcDatabase extends Gateway
             ->deleteFrom( 'ezrole' )
             ->where( $query->expr->eq( 'id', $query->bindValue( $roleId ) ) );
         $query->prepare()->execute();
+    }
+
+    /**
+     * Adds a policy to a role
+     *
+     * @param mixed $roleId
+     * @param Policy $policy
+     * @return void
+     */
+    public function addPolicy( $roleId, Policy $policy )
+    {
+        $query = $this->handler->createInsertQuery();
+        $query
+            ->insertInto( 'ezpolicy' )
+            ->set( 'function_name', $query->bindValue( $policy->moduleFunction ) )
+            ->set( 'module_name', $query->bindValue( $policy->module ) )
+            ->set( 'original_id', 0 )
+            ->set( 'role_id', $query->bindValue( $roleId ) );
+        $query->prepare()->execute();
+
+        $policy->id = $this->handler->lastInsertId();
+
+        // @TODO: Handle limitations -- this still has to be documented by eZ.
+    }
+
+    /**
+     * Removes a policy from a role
+     *
+     * @param mixed $roleId
+     * @param mixed $policyId
+     * @return void
+     */
+    public function removePolicy( $roleId, $policyId )
+    {
+        throw new RuntimeException( '@TODO: Implement' );
     }
 }

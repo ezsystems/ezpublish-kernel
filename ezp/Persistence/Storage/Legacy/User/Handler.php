@@ -128,7 +128,9 @@ class Handler implements BaseUserHandler
      */
     public function addPolicy( $roleId, Policy $policy )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->roleGateway->addPolicy( $roleId, $policy );
+
+        return $policy;
     }
 
     /**

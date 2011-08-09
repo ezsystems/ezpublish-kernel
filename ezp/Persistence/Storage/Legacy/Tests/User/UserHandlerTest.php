@@ -209,4 +209,69 @@ class UserHandlerTest extends TestCase
             'Expected an empty set.'
         );
     }
+
+    public function testAddPolicyToRole()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+        $handler->createRole( $role );
+
+        $policy = new Persistence\User\Policy();
+        $policy->module = 'foo';
+        $policy->moduleFunction = 'bar';
+
+        $handler->addPolicy( $role->id, $policy );
+
+        $this->assertQueryResult(
+            array( array( 1, 'foo', 'bar', 1 ) ),
+            $this->handler->createSelectQuery()->select( 'id', 'module_name', 'function_name', 'role_id' )->from( 'ezpolicy' ),
+            'Expected a new policy.'
+        );
+    }
+
+    public function testAddPolicyPolicyId()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+        $handler->createRole( $role );
+
+        $policy = new Persistence\User\Policy();
+        $policy->module = 'foo';
+        $policy->moduleFunction = 'bar';
+
+        $policy = $handler->addPolicy( $role->id, $policy );
+
+        $this->assertEquals( 1, $policy->id );
+    }
+
+    public function testImplicitelyCreatePolicies()
+    {
+        $handler = $this->getUserHandler();
+
+        $policy1 = new Persistence\User\Policy();
+        $policy1->module = 'foo';
+        $policy1->moduleFunction = 'bar';
+
+        $policy2 = new Persistence\User\Policy();
+        $policy2->module = 'foo';
+        $policy2->moduleFunction = 'blubb';
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+        $role->policies = array( $policy1, $policy2 );
+        $handler->createRole( $role );
+
+        $this->assertQueryResult(
+            array(
+                array( 1, 'foo', 'bar', 1 ),
+                array( 2, 'foo', 'blubb', 1 ),
+            ),
+            $this->handler->createSelectQuery()->select( 'id', 'module_name', 'function_name', 'role_id' )->from( 'ezpolicy' ),
+            'Expected a new policy.'
+        );
+    }
 }
