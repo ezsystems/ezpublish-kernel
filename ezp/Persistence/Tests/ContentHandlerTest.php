@@ -22,7 +22,7 @@ use ezp\Persistence\Content,
 class ContentHandlerTest extends HandlerTest
 {
     /**
-     * @var Content
+     * @var \ezp\Content
      */
     protected $content;
 
@@ -33,8 +33,7 @@ class ContentHandlerTest extends HandlerTest
     protected $contentId;
 
     /**
-     *
-     * @var \ezp
+     * @var \ezp\Content[]
      */
     protected $contentToDelete = array();
 
