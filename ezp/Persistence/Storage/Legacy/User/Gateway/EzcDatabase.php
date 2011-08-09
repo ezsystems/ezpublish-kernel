@@ -103,16 +103,22 @@ class EzcDatabase extends Gateway
      * @param mixed $roleId
      * @param array $limitation
      */
-    public function assignRole( $userId, $roleId, $limitation )
+    public function assignRole( $userId, $roleId, array $limitation )
     {
-        $query = $this->handler->createInsertQuery();
-        $query
-            ->insertInto( 'ezuser_role' )
-            ->set( 'contentobject_id', $query->bindValue( $userId ) )
-            ->set( 'role_id', $query->bindValue( $roleId ) )
-            ->set( 'limit_identifier', $query->bindValue( '' ) )
-            ->set( 'limit_value', $query->bindValue( '' ) );
-        $query->prepare()->execute();
+        foreach ( $limitation as $identifier => $values )
+        {
+            foreach ( $values as $value )
+            {
+                $query = $this->handler->createInsertQuery();
+                $query
+                    ->insertInto( 'ezuser_role' )
+                    ->set( 'contentobject_id', $query->bindValue( $userId ) )
+                    ->set( 'role_id', $query->bindValue( $roleId ) )
+                    ->set( 'limit_identifier', $query->bindValue( $identifier ) )
+                    ->set( 'limit_value', $query->bindValue( $value ) );
+                $query->prepare()->execute();
+            }
+        }
     }
 
     /**

@@ -313,4 +313,47 @@ class UserHandlerTest extends TestCase
             'Expected a new user policy association.'
         );
     }
+
+    public function testAddRoleToUserWithLimitation()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = $this->createRole();
+        $handler->createUser( $user = $this->getValidUser() );
+
+        $handler->assignRole( $user->id, $role->id, array(
+            'Subtree' => array( '/1' ),
+        ) );
+
+        $this->assertQueryResult(
+            array(
+                array( 1, 42, 1, 'Subtree', '/1' ),
+            ),
+            $this->handler->createSelectQuery()->select( 'id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value' )->from( 'ezuser_role' ),
+            'Expected a new user policy association.'
+        );
+    }
+
+    public function testAddRoleToUserWithComplexLimitation()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = $this->createRole();
+        $handler->createUser( $user = $this->getValidUser() );
+
+        $handler->assignRole( $user->id, $role->id, array(
+            'Subtree' => array( '/1', '/1/2' ),
+            'Foo' => array( 'Bar' ),
+        ) );
+
+        $this->assertQueryResult(
+            array(
+                array( 1, 42, 1, 'Subtree', '/1' ),
+                array( 2, 42, 1, 'Subtree', '/1/2' ),
+                array( 3, 42, 1, 'Foo', 'Bar' ),
+            ),
+            $this->handler->createSelectQuery()->select( 'id', 'contentobject_id', 'role_id', 'limit_identifier', 'limit_value' )->from( 'ezuser_role' ),
+            'Expected a new user policy association.'
+        );
+    }
 }

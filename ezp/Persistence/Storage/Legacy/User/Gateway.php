@@ -52,7 +52,7 @@ abstract class Gateway
      * @param mixed $roleId
      * @param array $limitation
      */
-    abstract public function assignRole( $userId, $roleId, $limitation );
+    abstract public function assignRole( $userId, $roleId, array $limitation );
 
     /**
      * Remove role from user
