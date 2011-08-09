@@ -64,13 +64,13 @@ class ContentSearchHandlerTest extends TestCase
                     new Content\SearchHandler\Gateway\CriterionHandler\LogicalAnd(),
                     new Content\SearchHandler\Gateway\CriterionHandler\LogicalOr(),
                     new Content\SearchHandler\Gateway\CriterionHandler\Subtree(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\ContentType(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\ContentTypeGroup(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\ContentTypeId(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\ContentTypeGroupId(),
                     new Content\SearchHandler\Gateway\CriterionHandler\DateMetadata(),
                     new Content\SearchHandler\Gateway\CriterionHandler\LocationId(),
                     new Content\SearchHandler\Gateway\CriterionHandler\ParentLocationId(),
                     new Content\SearchHandler\Gateway\CriterionHandler\RemoteId(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\Section(),
+                    new Content\SearchHandler\Gateway\CriterionHandler\SectionId(),
                     new Content\SearchHandler\Gateway\CriterionHandler\Status(),
                     new Content\SearchHandler\Gateway\CriterionHandler\FullText(
                         $fullTextSearchConfiguration
@@ -242,7 +242,7 @@ class ContentSearchHandlerTest extends TestCase
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
-            new Criterion\ContentType(
+            new Criterion\ContentTypeId(
                 null,
                 Criterion\Operator::EQ,
                 4
@@ -264,7 +264,7 @@ class ContentSearchHandlerTest extends TestCase
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
-            new Criterion\ContentTypeGroup(
+            new Criterion\ContentTypeGroupId(
                 null,
                 Criterion\Operator::EQ,
                 2
@@ -462,7 +462,7 @@ class ContentSearchHandlerTest extends TestCase
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
-            new Criterion\Section(
+            new Criterion\SectionId(
                 null,
                 Criterion\Operator::IN,
                 array( 2 )

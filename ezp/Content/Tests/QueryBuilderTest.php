@@ -43,11 +43,11 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
             array( 'contentId', 'in', array( array( 1, 2 )  ) ),
             array( 'contentId', 'eq', array( 1 ) ),
 
-            array( 'contentType', 'in', array( array( 1, 2 ) ) ),
-            array( 'contentType', 'eq', array( 'article' ) ),
+            array( 'contentTypeId', 'in', array( array( 1, 2 ) ) ),
+            array( 'contentTypeId', 'eq', array( 'article' ) ),
 
-            array( 'contentTypeGroup', 'in', array( array( 1, 2 ) ) ),
-            array( 'contentTypeGroup', 'eq', array( 'content' ) ),
+            array( 'contentTypeGroupId', 'in', array( array( 1, 2 ) ) ),
+            array( 'contentTypeGroupId', 'eq', array( 'content' ) ),
 
             array( 'field', 'eq', array( 'testfield', 'my test' ) ),
             array( 'field', 'like', array( 'testfield', 'my test*' ) ),
@@ -84,8 +84,8 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
             array( 'remoteId', 'in', array( array( 1, 2 ) ) ),
             array( 'remoteId', 'eq', array( 1 ) ),
 
-            array( 'section', 'in', array( array( 1, 2 ) ) ),
-            array( 'section', 'eq', array( 1 ) ),
+            array( 'sectionId', 'in', array( array( 1, 2 ) ) ),
+            array( 'sectionId', 'eq', array( 1 ) ),
 
             array( 'subtree', 'in', array( array( 1, 2 ) ) ),
             array( 'subtree', 'eq', array( 1 ) ),

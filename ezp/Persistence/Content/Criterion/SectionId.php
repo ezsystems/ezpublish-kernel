@@ -15,7 +15,7 @@ use ezp\Persistence\Content\Criterion,
 
 /**
  */
-class Section extends Criterion implements CriterionInterface
+class SectionId extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new Section criterion

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the EzcDatabase section criterion handler class
+ * File containing the EzcDatabase content type group criterion handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -13,9 +13,9 @@ use ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriterionHandle
     ezp\Persistence\Content\Criterion;
 
 /**
- * Section criterion handler
+ * Content type group criterion handler
  */
-class Section extends CriterionHandler
+class ContentTypeGroupId extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -25,7 +25,7 @@ class Section extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\Section;
+        return $criterion instanceof Criterion\ContentTypeGroupId;
     }
 
     /**
@@ -38,7 +38,15 @@ class Section extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
-        return $query->expr->in( 'section_id', $criterion->value );
+        $subSelect = $query->subSelect();
+        $subSelect
+            ->select( 'contentclass_id' )
+            ->from( 'ezcontentclass_classgroup' )
+            ->where(
+                $query->expr->in( 'group_id', $criterion->value )
+            );
+
+        return $query->expr->in( 'contentclass_id', $subSelect );
     }
 }
 

@@ -20,7 +20,7 @@ use ezp\Persistence\Content\Criterion,
  * - IN: will match from a list of ContentTypeGroup id
  * - EQ: will match against one ContentTypeGroup id
  */
-class ContentTypeGroup extends Criterion implements CriterionInterface
+class ContentTypeGroupId extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new ContentTypeGroup criterion
