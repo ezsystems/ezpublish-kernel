@@ -11,6 +11,7 @@ namespace ezp\Persistence\Storage\Legacy\User;
 use ezp\Persistence\User,
     ezp\Persistence\User\Handler as BaseUserHandler,
     ezp\Persistence\User\Role,
+    ezp\Persistence\User\RoleUpdateStruct,
     ezp\Persistence\User\Policy,
     ezp\Persistence\Storage\Legacy\User\Role\Gateway as RoleGateway;
 
@@ -88,16 +89,22 @@ class Handler implements BaseUserHandler
      */
     public function createRole( Role $role )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->roleGateway->createRole( $role );
+
+        foreach ( $role->policies as $policy )
+        {
+            $this->addPolicy( $role->id, $policy );
+        }
+
+        return $role;
     }
 
     /**
      * Update role
      *
-     * @todo Create a RoleUpdateStruct, which omits the policies
-     * @param Role $role
+     * @param RoleUpdateStruct $role
      */
-    public function updateRole( Role $role )
+    public function updateRole( RoleUpdateStruct $role )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
