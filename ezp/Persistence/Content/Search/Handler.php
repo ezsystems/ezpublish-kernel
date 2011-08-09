@@ -27,7 +27,7 @@ abstract class Handler
      * @param int $offset
      * @param int|null $limit
      * @param $sort
-     * @return array(ezp\Persistence\Content) Content value object.
+     * @return ezp\Persistence\Content\Search\Result
      */
     abstract public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null );
 
