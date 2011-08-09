@@ -15,6 +15,7 @@ use ezp\Base\Model,
     ezp\Content\Translation,
     ezp\Content\Type,
     ezp\Content\Version,
+    ezp\Persistence\Content as ContentValue,
     DateTime,
     InvalidArgumentException;
 
@@ -25,8 +26,18 @@ use ezp\Base\Model,
  *
  * @property-read integer $id
  *                The Content's ID, automatically assigned by the persistence layer
+ * @property-read integer $currentVersion
+ *                The Content's current version
+ * @property-read string $remoteId
+ *                The Content's remote identifier (custom identifier for the object)
+ * @property-read string $name
+ *                The Content's name
+ * @property-read bool $alwaysAvailable
+ *                The Content's always available flag
  * @property-read integer status
  *                The Content's status, as one of the ezp\Content::STATUS_* constants
+ * @property-read \ezp\Content\Type contentType
+                  The Conent's type
  * @property-read Version[] $versions
  *                   Iterable collection of versions for content. Array-accessible :;
  *                   <code>
@@ -57,7 +68,7 @@ use ezp\Base\Model,
  *                                       <code>
  *                                       $myTitle = $content->fields->title; // Where "title" is the field identifier
  *                                       </code>
- *
+ * @property int $ownerId Owner identifier
  */
 class Content extends Model
 {
@@ -83,12 +94,14 @@ class Content extends Model
         'translations' => true,
         'locations' => true,
         'contentType' => false,
+        'alwaysAvailable' => true,
     );
 
     /**
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
+        'creationDate' => false,
         'mainLocation' => false,
         'section' => false,
         'sectionId' => false,
@@ -98,39 +111,11 @@ class Content extends Model
     );
 
     /**
-     * Content object id.
-     *
-     * @var int
-     */
-    protected $id = 0;
-
-    /**
-     * Content object current version.
-     *
-     * @var int
-     */
-    protected $currentVersion = 0;
-
-    /**
-     * A custom ID for the object
-     *
-     * @var string
-     */
-    public $remoteId = '';
-
-    /**
      * The date the object was created
      *
      * @var DateTime
      */
     public $creationDate;
-
-    /**
-     * The id of the user who first created the content
-     *
-     * @var int
-     */
-    public $ownerId = 0;
 
     /**
      * The Section the content belongs to
@@ -182,23 +167,9 @@ class Content extends Model
     protected $translations;
 
     /**
-     * Name of the content
-     *
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * Always available flag
-     *
-     * @var boolean
-     */
-    public $alwaysAvailable;
-
-    /**
      * Locale
      *
-     * @var Locale
+     * @var \ezp\Base\Locale
      */
     protected $mainLocale;
 
@@ -212,11 +183,12 @@ class Content extends Model
     /**
      * Create content based on content type object
      *
-     * @param Type $contentType
-     * @param Locale $mainLocale
+     * @param \ezp\Content\Type $contentType
+     * @param \ezp\Base\Locale $mainLocale
      */
     public function __construct( Type $contentType, Locale $mainLocale )
     {
+        $this->properties = new ContentValue;
         $this->creationDate = new DateTime();
         $this->mainLocale = $mainLocale;
         $this->alwaysAvailable = false;

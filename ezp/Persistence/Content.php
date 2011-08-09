@@ -54,5 +54,10 @@ class Content extends ValueObject
      * @var array(Content\Location)
      */
     public $locations = array();
+
+    /**
+     * @var bool Always available flag
+     */
+    public $alwaysAvailable;
 }
 ?>

@@ -13,7 +13,8 @@ use ezp\Base\Service as BaseService,
     ezp\Content,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
-    ezp\Persistence\ValueObject;
+    ezp\Persistence\ValueObject,
+    ezp\Persistence\Content as ContentValue;
 
 /**
  * Content service, used for Content operations
