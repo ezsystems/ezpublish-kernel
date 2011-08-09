@@ -1,20 +1,20 @@
 <?php
 /**
- * File containing the Content SearchHandler class
+ * File containing the Content Search handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content;
+namespace ezp\Persistence\Storage\Legacy\Content\Search;
 
 use ezp\Persistence\Content,
     ezp\Persistence\Content\Criterion;
 
 /**
- * The Content SearchHandler retrieves sets of of Content objects, based on a set of
- * criteria.
+ * The Content Search handler retrieves sets of of Content objects, based on a 
+ * set of criteria.
  *
  * The basic idea of this class is to do the following:
  *
@@ -35,21 +35,21 @@ use ezp\Persistence\Content,
  *
  * @version //autogentag//
  */
-class SearchHandler
+class Handler
 {
     /**
      * Content locator gateway.
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway
+     * @var \ezp\Persistence\Storage\Legacy\Content\Search\Gateway
      */
     protected $gateway;
 
     /**
      * Creates a new content handler.
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway $gateway
+     * @param \ezp\Persistence\Storage\Legacy\Content\Search\Gateway $gateway
      */
-    public function __construct( SearchHandler\Gateway $gateway )
+    public function __construct( Gateway $gateway )
     {
         $this->gateway = $gateway;
     }

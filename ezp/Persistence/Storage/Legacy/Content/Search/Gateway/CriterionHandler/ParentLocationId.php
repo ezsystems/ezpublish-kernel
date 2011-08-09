@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the EzcDatabase remote id criterion handler class
+ * File containing the EzcDatabase parent location id criterion handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriterionHandler;
-use ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriterionHandler,
-    ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriteriaConverter,
+namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler;
+use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
+    ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
     ezp\Persistence\Content\Criterion;
 
 /**
- * Remote id criterion handler
+ * Parent location id criterion handler
  */
-class RemoteId extends CriterionHandler
+class ParentLocationId extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -25,7 +25,7 @@ class RemoteId extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\RemoteId;
+        return $criterion instanceof Criterion\ParentLocationId;
     }
 
     /**
@@ -38,7 +38,15 @@ class RemoteId extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
-        return $query->expr->in( 'remote_id', $criterion->value );
+        $subSelect = $query->subSelect();
+        $subSelect
+            ->select( 'contentobject_id' )
+            ->from( 'ezcontentobject_tree' )
+            ->where(
+                $query->expr->in( 'parent_node_id', $criterion->value )
+            );
+
+        return $query->expr->in( 'id', $subSelect );
     }
 }
 

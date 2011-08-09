@@ -1,21 +1,21 @@
 <?php
 /**
- * File containing the EzcDatabase content type criterion handler class
+ * File containing the EzcDatabase section criterion handler class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriterionHandler;
-use ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriterionHandler,
-    ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriteriaConverter,
+namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler;
+use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
+    ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
     ezp\Persistence\Content\Criterion;
 
 /**
- * Content type criterion handler
+ * Section criterion handler
  */
-class ContentTypeId extends CriterionHandler
+class SectionId extends CriterionHandler
 {
     /**
      * Check if this criterion handler accepts to handle the given criterion.
@@ -25,7 +25,7 @@ class ContentTypeId extends CriterionHandler
      */
     public function accept( Criterion $criterion )
     {
-        return $criterion instanceof Criterion\ContentTypeId;
+        return $criterion instanceof Criterion\SectionId;
     }
 
     /**
@@ -38,7 +38,7 @@ class ContentTypeId extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
-        return $query->expr->in( 'contentclass_id', $criterion->value );
+        return $query->expr->in( 'section_id', $criterion->value );
     }
 }
 

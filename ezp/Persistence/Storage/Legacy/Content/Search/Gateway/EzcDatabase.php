@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway;
-use ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway,
+namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
+use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Criterion;
 

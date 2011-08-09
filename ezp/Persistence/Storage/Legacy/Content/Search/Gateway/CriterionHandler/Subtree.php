@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriterionHandler;
-use ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriterionHandler,
-    ezp\Persistence\Storage\Legacy\Content\SearchHandler\Gateway\CriteriaConverter,
+namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler;
+use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
+    ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
     ezp\Persistence\Content\Criterion;
 
 /**

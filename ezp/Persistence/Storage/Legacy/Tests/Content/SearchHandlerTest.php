@@ -55,24 +55,24 @@ class ContentSearchHandlerTest extends TestCase
 
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
-        return new Content\SearchHandler(
-            new Content\SearchHandler\Gateway\EzcDatabase(
+        return new Content\Search\Handler(
+            new Content\Search\Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
-                new Content\SearchHandler\Gateway\CriteriaConverter( array(
-                    new Content\SearchHandler\Gateway\CriterionHandler\ContentId(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\LogicalNot(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\LogicalAnd(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\LogicalOr(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\Subtree(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\ContentTypeId(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\ContentTypeGroupId(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\DateMetadata(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\LocationId(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\ParentLocationId(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\RemoteId(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\SectionId(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\Status(),
-                    new Content\SearchHandler\Gateway\CriterionHandler\FullText(
+                new Content\Search\Gateway\CriteriaConverter( array(
+                    new Content\Search\Gateway\CriterionHandler\ContentId(),
+                    new Content\Search\Gateway\CriterionHandler\LogicalNot(),
+                    new Content\Search\Gateway\CriterionHandler\LogicalAnd(),
+                    new Content\Search\Gateway\CriterionHandler\LogicalOr(),
+                    new Content\Search\Gateway\CriterionHandler\Subtree(),
+                    new Content\Search\Gateway\CriterionHandler\ContentTypeId(),
+                    new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(),
+                    new Content\Search\Gateway\CriterionHandler\DateMetadata(),
+                    new Content\Search\Gateway\CriterionHandler\LocationId(),
+                    new Content\Search\Gateway\CriterionHandler\ParentLocationId(),
+                    new Content\Search\Gateway\CriterionHandler\RemoteId(),
+                    new Content\Search\Gateway\CriterionHandler\SectionId(),
+                    new Content\Search\Gateway\CriterionHandler\Status(),
+                    new Content\Search\Gateway\CriterionHandler\FullText(
                         $fullTextSearchConfiguration
                     ),
                 ) )
