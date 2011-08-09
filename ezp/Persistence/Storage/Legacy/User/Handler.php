@@ -142,7 +142,7 @@ class Handler implements BaseUserHandler
      */
     public function removePolicy( $roleId, $policyId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->roleGateway->removePolicy( $roleId, $policyId );
     }
 
     /**

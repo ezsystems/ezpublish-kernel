@@ -117,6 +117,13 @@ class EzcDatabase extends Gateway
      */
     public function removePolicy( $roleId, $policyId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( 'ezpolicy' )
+            ->where( $query->expr->lAnd(
+                $query->expr->eq( 'id', $query->bindValue( $policyId ) ),
+                $query->expr->eq( 'role_id', $query->bindValue( $roleId ) )
+            ) );
+        $query->prepare()->execute();
     }
 }

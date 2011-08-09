@@ -274,4 +274,32 @@ class UserHandlerTest extends TestCase
             'Expected a new policy.'
         );
     }
+
+    public function testRemovePolicy()
+    {
+        $handler = $this->getUserHandler();
+
+        $policy1 = new Persistence\User\Policy();
+        $policy1->module = 'foo';
+        $policy1->moduleFunction = 'bar';
+
+        $policy2 = new Persistence\User\Policy();
+        $policy2->module = 'foo';
+        $policy2->moduleFunction = 'blubb';
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+        $role->policies = array( $policy1, $policy2 );
+        $handler->createRole( $role );
+
+        $handler->removePolicy( $role->id, $policy1->id );
+
+        $this->assertQueryResult(
+            array(
+                array( 2, 'foo', 'blubb', 1 ),
+            ),
+            $this->handler->createSelectQuery()->select( 'id', 'module_name', 'function_name', 'role_id' )->from( 'ezpolicy' ),
+            'Expected a new policy.'
+        );
+    }
 }
