@@ -108,13 +108,14 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadByGroup()
     {
-        $obj = $this->repositoryHandler->ContentTypeHandler()->loadContentTypes( 1, 0 );
-        $this->assertTrue( $obj instanceof Type );
-        $this->assertEquals( 1, $obj->id );
-        $this->assertEquals( 'folder', $obj->identifier );
+        $list = $this->repositoryHandler->ContentTypeHandler()->loadContentTypes( 1, 0 );
+        $this->assertEquals( 1, count( $list ) );
+        $this->assertTrue( $list[0] instanceof Type );
+        $this->assertEquals( 1, $list[0]->id );
+        $this->assertEquals( 'folder', $list[0]->identifier );
 
-        $obj = $this->repositoryHandler->ContentTypeHandler()->loadContentTypes( 2, 0 );
-        $this->assertNull( $obj );
+        $list = $this->repositoryHandler->ContentTypeHandler()->loadContentTypes( 2, 0 );
+        $this->assertEquals( array(), $list );
     }
 
     /**

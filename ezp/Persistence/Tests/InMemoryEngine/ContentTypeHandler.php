@@ -118,7 +118,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function loadContentTypes( $groupId, $version = 0 )
     {
-        $type = $this->backend->find(
+        return $this->backend->find(
             'Content\\Type',
             array( 'contentTypeGroupIds' => $groupId, 'version' => $version ),
             array( 'fieldDefinitions' => array(
@@ -126,11 +126,6 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
                 'match' => array( '_typeId' => 'id',  '_version' => 'version' ) )
             )
         );
-
-        if ( !$type )
-            return null;
-
-        return $type[0];
     }
 
     /**
