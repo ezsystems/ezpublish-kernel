@@ -201,7 +201,7 @@ class Service extends BaseService
      * Builds Location domain object from $vo ValueObject returned by Persistence API
      * @param \ezp\Persistence\Location $vo Location value object (extending \ezp\Persistence\ValueObject)
      *                                      returned by persistence
-     * @return \ezp\content\Location
+     * @return \ezp\Content\Location
      * @throws \ezp\Base\Exception\InvalidArgumentType
      */
     protected function buildDomainObject( ValueObject $vo )
