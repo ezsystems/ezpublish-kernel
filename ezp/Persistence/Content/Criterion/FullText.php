@@ -14,6 +14,24 @@ use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\CriterionInterface;
 
 /**
+ * Full text search criterion
+ *
+ * The string provided in this criterion is matched as a full text query
+ * against all indexed content objects in the storage layer.
+ *
+ * Normalization and querying capabilities might depend on the system
+ * configuration or the used search engine and might differ. The following
+ * basic query seamtics are supported:
+ *
+ * - If multiple words are specified an AND query is performed. OR queries are
+ *   not yet supported.
+ *
+ * - Simple wild cards are supported. If an asterisk (*) is used at the end or
+ *   beginning of a word this is translated into a wild card query. Thus "fo*"
+ *   would match "foo" and "foobar", for example.
+ *
+ * - Simple stop word removal might be applied to the words provided in the
+ *   query.
  */
 class FullText extends Criterion implements CriterionInterface
 {
