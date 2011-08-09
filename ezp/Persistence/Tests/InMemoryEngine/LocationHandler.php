@@ -75,7 +75,7 @@ class LocationHandler implements LocationHandlerInterface
                                        array( 'pathString' => "{$locationVO->pathString}%" ),
                                        array( 'invisible' => true ) );
 
-       $this->backend->update( 'Content\\Location', $locationVO->parentId, array( 'modifiedSubLocation' => time() ) );
+       $this->updateSubtreeModificationTime( $this->getParentPathString( $locationVO->pathString ) );
     }
 
     /**
@@ -117,7 +117,7 @@ class LocationHandler implements LocationHandlerInterface
         }
 
         $this->backend->updateByMatch( 'Content\\Location', array( 'id' => $locationsToUnhide ), array( 'invisible' => false ) );
-        $this->backend->update( 'Content\\Location', $locationVO->parentId, array( 'modifiedSubLocation' => time() ) );
+        $this->updateSubtreeModificationTime( $this->getParentPathString( $locationVO->pathString ) );
     }
 
     /**
@@ -159,15 +159,11 @@ class LocationHandler implements LocationHandlerInterface
         $contentName = $this->backend->load( 'Content', $locationStruct->contentId )->name;
         $params['pathIdentificationString'] = trim( str_replace(' ', '_', strtolower( $contentName ) ) );
 
-        // modifiedSubLocation
-        $modifiedSubLocation = time();
-        $params['modifiedSubLocation'] = time();
-        $this->backend->update( 'Content\\Location', $parentId, array( 'modifiedSubLocation' => $modifiedSubLocation ) );
-
         // Creation, then update for pathString
         $vo = $this->backend->create( 'Content\\Location', $params );
         $pathString = $parent->pathString . $vo->id . '/';
         $this->backend->update( 'Content\\Location', $vo->id, array( 'pathString' => $pathString ) );
+        $this->updateSubtreeModificationTime( $this->getParentPathString( $parent->pathString ) );
         return $this->load( $vo->id );
     }
 
@@ -250,6 +246,29 @@ class LocationHandler implements LocationHandlerInterface
         $return = $this->backend->delete( 'Content\\Location', $locationId );
         if ( !$return )
             return $return;
+    }
+
+    /**
+     * Updates subtree modification time for all locations starting from $startPathString
+     * @param string $startPathString
+     */
+    private function updateSubtreeModificationTime( $startPathString )
+    {
+        $this->backend->updateByMatch(
+            'Content\\Location',
+            array( 'pathString' => $startPathString . '%' ),
+            array( 'modifiedSubLocation' => time() )
+        );
+    }
+
+    /**
+     * Returns parent path string for $pathString
+     * @param string $pathString
+     * @return string
+     */
+    private function getParentPathString( $pathString )
+    {
+        return substr( $pathString, 0, -2 );
     }
 }
 ?>

@@ -284,6 +284,6 @@ class ServiceTest extends BaseServiceTest
         self::assertTrue( $locationShouldStayHidden->hidden && $locationShouldStayHidden->invisible,
                           'A hidden location should not be made visible by superior location' );
         self::assertTrue( $locationShouldStayInvisible->invisible );
-        self::assertGreaterThanOrEqual( $time, $this->locationHandler->load( $parent->parentId )->modifiedSubLocation );
+        self::assertGreaterThanOrEqual( $time, $this->locationHandler->load( $parent->id )->modifiedSubLocation );
     }
 }
