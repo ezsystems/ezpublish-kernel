@@ -124,14 +124,28 @@ class Service extends BaseService
      * Hides the $location and marks invisible all descendants of $location.
      *
      * @param \ezp\Content\Location $location
-     * @return void
-     * @throws \ezp\Base\Exception\Validation If a validation problem has been found
+     * @return \ezp\Content\Location $location, with updated hidden value
+     * @todo Make children visibility update more dynamic with some kind of LazyLoadedCollection
      */
     public function hide( Location $location )
     {
-        // take care of :
-        // 1. hiding $location
-        // 2. making the whole subtree invisible
+        $this->handler->locationHandler()->hide( $location->id );
+
+        // Get VO, update hidden property and re-inject the reference it to $location
+        $state = $location->getState();
+        $state['properties']->hidden = true;
+        $location->setState( array( 'properties' => $state['properties'] ) );
+
+        foreach ( $location->children as $child )
+        {
+            $childState = $child->getState();
+            $childState['properties']->invisible = true;
+            // Following line is not needed but present for clarification
+            // $childState['properties'] is actually a reference of $child::$properties
+            $child->setState( array( 'properties' => $childState['properties'] ) );
+        }
+
+        return $location;
     }
 
     /**
@@ -139,15 +153,28 @@ class Service extends BaseService
      * until a hidden location is found.
      *
      * @param \ezp\Content\Location $location
-     * @return void
-     * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
+     * @return \ezp\Content\Location $location, with updated hidden value
+     * @todo Make children visibility update more dynamic with some kind of LazyLoadedCollection
      */
     public function unhide( Location $location )
     {
-        // take care of :
-        // 1. unhiding $location
-        // 2. making the whole subtree visible (unless we found a hidden
-        // location)
+        $this->handler->locationHandler()->unHide( $location->id );
+
+        // Get VO, update hidden property and re-inject the reference to $location
+        $state = $location->getState();
+        $state['properties']->hidden = false;
+        $location->setState( array( 'properties' => $state['properties'] ) );
+
+        foreach ( $location->children as $child )
+        {
+            $childState = $child->getState();
+            $childState['properties']->invisible = false;
+            // Following line is not needed but present for clarification
+            // $childState['properties'] is actually a reference of $child::$properties
+            $child->setState( array( 'properties' => $childState['properties'] ) );
+        }
+
+        return $location;
     }
 
     /**

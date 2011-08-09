@@ -314,10 +314,14 @@ class Backend
             }
             // Use of wildcards like in SQL, at the end of $matchValue
             // i.e. /1/2/% (for pathString)
-            else if ( ( $wildcardPos = strpos( $matchValue, '%' ) ) > 0 && ( $wildcardPos === strlen( $matchValue ) + 1 ) )
+            else if ( ( $wildcardPos = strpos( $matchValue, '%' ) ) > 0 && ( $wildcardPos === strlen( $matchValue ) - 1 ) )
             {
                 // Returns true if $item[$matchProperty] begins with $matchValue (minus '%' wildcard char)
-                if ( !strpos( $item[$matchProperty], substr( $matchValue, 0, -1 ) ) === 0 )
+                $matchValue = substr( $matchValue, 0, -1 );
+                $pos = strpos( $item[$matchProperty], $matchValue );
+                if ( $matchValue === $item[$matchProperty] )
+                    return false;
+                if ( $pos !== 0 )
                     return false;
             }
             else if ( $item[$matchProperty] != $matchValue )

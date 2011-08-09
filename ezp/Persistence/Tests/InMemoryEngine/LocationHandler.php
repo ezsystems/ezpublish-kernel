@@ -68,6 +68,14 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function hide( $id )
     {
+        $this->backend->update( 'Content\\Location' , $id, array( 'hidden' => true, 'invisible' => true ) );
+
+        $locationVO = $this->backend->load( 'Content\\Location', $id );
+        $this->backend->updateByMatch( 'Content\\Location',
+                                       array( 'pathString' => "{$locationVO->pathString}%" ),
+                                       array( 'invisible' => true ) );
+
+       $this->backend->update( 'Content\\Location', $locationVO->parentId, array( 'modifiedSubLocation' => time() ) );
     }
 
     /**
@@ -75,6 +83,41 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function unHide( $id )
     {
+        $this->backend->update( 'Content\\Location', $id, array( 'hidden' => false, 'invisible' => false ) );
+
+        $locationVO = $this->backend->load( 'Content\\Location', $id );
+        $hiddenLocations = $this->backend->find( 'Content\\Location',
+                                                 array(
+                                                     'pathString' => "{$locationVO->pathString}%",
+                                                     'hidden' => true
+                                                 )
+                                               );
+
+        $invisibleLocations = $this->backend->find( 'Content\\Location',
+                                                    array(
+                                                        'pathString' => "{$locationVO->pathString}%",
+                                                        'invisible' => true,
+                                                        'hidden' => false
+                                                    ));
+
+        $locationsToUnhide = array();
+        // Loop against all invisible locations and figure out
+        // if they are under a hidden one.
+        // If this is the case, the location won't be made visible
+        foreach ( $invisibleLocations as $loc )
+        {
+            foreach ( $hiddenLocations as $hiddenLoc )
+            {
+                if ( strpos( $loc->pathString, $hiddenLoc->pathString ) === 0 )
+                {
+                    continue 2;
+                }
+            }
+            $locationsToUnhide[] = $loc->id;
+        }
+
+        $this->backend->updateByMatch( 'Content\\Location', array( 'id' => $locationsToUnhide ), array( 'invisible' => false ) );
+        $this->backend->update( 'Content\\Location', $locationVO->parentId, array( 'modifiedSubLocation' => time() ) );
     }
 
     /**
@@ -105,6 +148,7 @@ class LocationHandler implements LocationHandlerInterface
         $params = (array)$locationStruct;
         $params['parentId'] = $parentId;
         $params['depth'] = $parent->depth + 1;
+        $params['hidden'] = (bool)$locationStruct->hidden;
         if ( !isset( $params['remoteId'] ) )
         {
             $params['remoteId'] = md5( uniqid( 'Content\\Location', true ) );

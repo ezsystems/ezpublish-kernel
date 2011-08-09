@@ -38,10 +38,21 @@ class ServiceTest extends BaseServiceTest
      */
     protected $contentToDelete = array();
 
+    /**
+     * @var \ezp\Content\Location[]
+     */
+    protected $locationToDelete = array();
+
+    /**
+     * @var \ezp\Persistence\Content\Location\Handler
+     */
+    protected $locationHandler;
+
     protected function setUp()
     {
         parent::setUp();
         $this->service = $this->repository->getLocationService();
+        $this->locationHandler = $this->repositoryHandler->locationHandler();
 
         $struct = new CreateStruct();
         $struct->name = "test";
@@ -71,6 +82,11 @@ class ServiceTest extends BaseServiceTest
         foreach ( $this->contentToDelete as $content )
         {
             $contentHandler->delete( $content->id );
+        }
+
+        foreach ( $this->locationToDelete as $location )
+        {
+            $this->locationHandler->delete( $location->id );
         }
         parent::tearDown();
     }
@@ -165,6 +181,7 @@ class ServiceTest extends BaseServiceTest
         $location->priority = 100;
 
         $newLocation = $this->service->create( $location );
+        $this->locationToDelete[] = $newLocation;
         $locationId = $newLocation->id;
         self::assertSame( $remoteId, $newLocation->remoteId );
         self::assertSame( 2, $newLocation->parentId );
@@ -178,8 +195,6 @@ class ServiceTest extends BaseServiceTest
         $expectedDepth = count( explode( '/', substr( $location->pathString, 1, -1 ) ) ) - 1;
         self::assertequals( $expectedDepth, $location->depth );
         self::assertEquals( $parent->depth + 1, $location->depth );
-
-        $this->repositoryHandler->locationHandler()->delete( $locationId );
     }
 
     /**
@@ -191,5 +206,84 @@ class ServiceTest extends BaseServiceTest
     {
         $location = new Location( new Proxy( $this->repository->getContentService(), 1 ) );
         $do = $this->service->create( $location );
+    }
+
+    /**
+     * @group locationService
+     */
+    public function testHide()
+    {
+        $parent = $this->service->load( 2 );
+        $time = time();
+        // Setup a location for test content and delete local variable
+        $locationForTestContent = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $locationForTestContent->parent = $parent;
+        $locationForTestContent = $this->service->create( $locationForTestContent );
+        $this->locationToDelete[] = $locationForTestContent;
+
+        $hiddenLocation = $this->service->hide( $parent );
+        self::assertInstanceOf( 'ezp\\Content\\Location' , $hiddenLocation );
+        self::assertTrue( $hiddenLocation->hidden );
+        self::assertTrue( $locationForTestContent->invisible );
+        unset( $locationForTestContent );
+        self::assertGreaterThanOrEqual( $time, $this->locationHandler->load( 2 )->modifiedSubLocation );
+
+        // Try to create a new location under a hidden one.
+        // Newly created location should be invisible
+        $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $location->parent = $parent;
+        self::assertTrue( $this->service->create( $location )->invisible );
+        $this->locationToDelete[] = $location;
+
+        // Create a new location under an invisible one
+        // New location should also be invisible
+        $anotherLocation4AnotherContent = new Location( new Proxy( $this->repository->getContentService(), 1 ) );
+        $anotherLocation4AnotherContent->parent = $location;
+        self::assertTrue( $this->service->create( $anotherLocation4AnotherContent )->invisible );
+        $this->locationToDelete[] = $anotherLocation4AnotherContent;
+    }
+
+    /**
+     * @group locationService
+     */
+    public function testUnhide()
+    {
+        // First set up some locations to test
+        $parent = $this->service->load( 2 );
+        $time = time();
+        $locationForTestContent = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $locationForTestContent->parent = $parent;
+        $locationForTestContent = $this->service->create( $locationForTestContent );
+        $this->locationToDelete[] = $locationForTestContent;
+
+        $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $location->parent = $parent;
+        $this->service->create( $location );
+        $this->locationToDelete[] = $location;
+
+        // Hide the main location
+        $hiddenLocation = $this->service->hide( $parent );
+
+        // Create a new location that will be hidden
+        $locationShouldStayHidden = new Location( new Proxy( $this->repository->getContentService(), 1 ) );
+        $locationShouldStayHidden->parent = $location;
+        $this->service->create( $locationShouldStayHidden );
+        $this->locationToDelete[] = $locationShouldStayHidden;
+        $this->service->hide( $locationShouldStayHidden );
+
+        // Create again a new location, under the last hidden one
+        $locationShouldStayInvisible = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $locationShouldStayInvisible->parent = $locationShouldStayHidden;
+        $locationShouldStayInvisible = $this->service->create( $locationShouldStayInvisible );
+
+        // Now test
+        $parentMadeVisible = $this->service->unhide( $parent );
+        self::assertInstanceOf( 'ezp\\Content\\Location' , $parentMadeVisible );
+        self::assertFalse( $location->invisible );
+        self::assertFalse( $location->hidden );
+        self::assertTrue( $locationShouldStayHidden->hidden && $locationShouldStayHidden->invisible,
+                          'A hidden location should not be made visible by superior location' );
+        self::assertTrue( $locationShouldStayInvisible->invisible );
+        self::assertGreaterThanOrEqual( $time, $this->locationHandler->load( $parent->parentId )->modifiedSubLocation );
     }
 }

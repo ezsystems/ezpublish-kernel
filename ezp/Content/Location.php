@@ -42,7 +42,7 @@ class Location extends Model implements Observer
     protected $readWriteProperties = array(
         'id' => false,
         'priority' => true,
-        'hidden' => true,
+        'hidden' => false,
         'invisible' => false,
         'remoteId' => true,
         'pathIdentificationString' => false,
