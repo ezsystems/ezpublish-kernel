@@ -42,7 +42,16 @@ class EzcDatabase extends Gateway
      */
     public function createRole( Role $role )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createInsertQuery();
+        $query
+            ->insertInto( 'ezrole' )
+            ->set( 'is_new', 0 )
+            ->set( 'name', $query->bindValue( $role->name ) )
+            ->set( 'value', 0 )
+            ->set( 'version', 0 );
+        $query->prepare()->execute();
+
+        $role->id = $this->handler->lastInsertId();
     }
 
     /**

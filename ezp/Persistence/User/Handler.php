@@ -10,6 +10,7 @@
 namespace ezp\Persistence\User;
 use ezp\Persistence\User,
     ezp\Persistence\User\Role,
+    ezp\Persistence\User\RoleUpdateStruct,
     ezp\Persistence\User\Policy;
 
 /**
@@ -54,10 +55,9 @@ interface Handler
     /**
      * Update role
      *
-     * @todo Create a RoleUpdateStruct, which omits the policies
-     * @param Role $role
+     * @param RoleUpdateStruct $role
      */
-    public function updateRole( Role $role );
+    public function updateRole( RoleUpdateStruct $role );
 
     /**
      * Delete the specified role

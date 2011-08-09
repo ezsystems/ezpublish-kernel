@@ -141,4 +141,32 @@ class UserHandlerTest extends TestCase
             'Expected no existing user.'
         );
     }
+
+    public function testCreateNewRoleWithoutPolicies()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+
+        $handler->createRole( $role );
+
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezrole' ),
+            'Expected a new role.'
+        );
+    }
+
+    public function testCreateNewRoleRoleId()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+
+        $role = $handler->createRole( $role );
+
+        $this->assertSame( '1', $role->id );
+    }
 }
