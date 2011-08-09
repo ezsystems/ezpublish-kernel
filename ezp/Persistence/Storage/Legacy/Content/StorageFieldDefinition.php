@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the StorageFieldValue class
+ * File containing the StorageFieldDefinition class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -104,4 +104,11 @@ class StorageFieldDefinition extends ValueObject
      * @var string
      */
     protected $dataText5;
+
+    /**
+     * Data text I18n
+     *
+     * @var string[]
+     */
+    protected $serializedDataText;
 }
