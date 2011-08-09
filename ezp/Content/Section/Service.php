@@ -9,6 +9,7 @@
 
 namespace ezp\Content\Section;
 use ezp\Base\Exception\NotFound,
+    ezp\Base\Exception\Logic,
     ezp\Base\Service as BaseService,
     ezp\Content,
     ezp\Content\Section as SectionObject,
@@ -24,12 +25,12 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Section $section
      * @return \ezp\Content\Section The newly create section
-     * @todo Inject Value object into exising $section instead of creating a new one?
+     * @todo Should api be adjusted to take name and identifier like handler instead of object?
      */
     public function create( SectionObject $section )
     {
         $valueObject = $this->handler->sectionHandler()->create( $section->name, $section->identifier );
-        return $this->buildDomainObject( $valueObject );
+        return $section->setState( array( 'properties' => $valueObject ) );
     }
 
     /**
@@ -105,7 +106,7 @@ class Service extends BaseService
      *
      * @param int $sectionId
      * @return void
-     * @throws Exception\Validation
+     * @throws \ezp\Base\Exception\Logic
      *         if section can not be deleted
      *         because it is still assigned to some contents.
      */
@@ -113,9 +114,10 @@ class Service extends BaseService
     {
         if ( $this->countAssignedContents( $sectionId ) > 0 )
         {
-            throw new Validation( 'This section is assigned to some contents' );
+            throw new Logic( "delete( {$sectionId} )",
+                             'section can not be deleted as its assigned to content objects.' );
         }
-        return $this->handler->sectionHandler()->delete( $sectionId );
+        $this->handler->sectionHandler()->delete( $sectionId );
     }
 
     /**
