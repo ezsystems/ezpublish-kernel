@@ -9,7 +9,8 @@
 
 namespace ezp\Persistence\User;
 use ezp\Persistence\User,
-    ezp\Persistence\User\Role;
+    ezp\Persistence\User\Role,
+    ezp\Persistence\User\Policy;
 
 /**
  * Storage Engine handler for user module
@@ -69,10 +70,10 @@ interface Handler
      * Adds a policy to a role
      *
      * @param mixed $roleId
-     * @param mixed $policyId
+     * @param Policy $policy
      * @return void
      */
-    public function addPolicy( $roleId, $policyId );
+    public function addPolicy( $roleId, Policy $policy );
 
     /**
      * Removes a policy from a role

@@ -11,6 +11,7 @@ namespace ezp\Persistence\Storage\Legacy\User;
 use ezp\Persistence\User,
     ezp\Persistence\User\Handler as BaseUserHandler,
     ezp\Persistence\User\Role,
+    ezp\Persistence\User\Policy,
     ezp\Persistence\Storage\Legacy\User\Role\Gateway as RoleGateway;
 
 /**
@@ -115,10 +116,10 @@ class Handler implements BaseUserHandler
      * Adds a policy to a role
      *
      * @param mixed $roleId
-     * @param mixed $policyId
+     * @param Policy $policy
      * @return void
      */
-    public function addPolicy( $roleId, $policyId )
+    public function addPolicy( $roleId, Policy $policy )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
