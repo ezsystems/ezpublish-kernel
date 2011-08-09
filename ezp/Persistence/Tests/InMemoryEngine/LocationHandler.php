@@ -101,9 +101,30 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function createLocation( CreateStruct $locationStruct, $parentId )
     {
+        $parent = $this->load( $parentId );
         $params = (array)$locationStruct;
         $params['parentId'] = $parentId;
-        return $this->backend->create( 'Content\\Location', $params );
+        $params['depth'] = $parent->depth + 1;
+        if ( !isset( $params['remoteId'] ) )
+        {
+            $params['remoteId'] = md5( uniqid( 'Content\\Location', true ) );
+        }
+
+        // pathIdentificationString
+        // @todo: support for accentuated chars
+        $contentName = $this->backend->load( 'Content', $locationStruct->contentId )->name;
+        $params['pathIdentificationString'] = trim( str_replace(' ', '_', strtolower( $contentName ) ) );
+
+        // modifiedSubLocation
+        $modifiedSubLocation = time();
+        $params['modifiedSubLocation'] = time();
+        $this->backend->update( 'Content\\Location', $parentId, array( 'modifiedSubLocation' => $modifiedSubLocation ) );
+
+        // Creation, then update for pathString
+        $vo = $this->backend->create( 'Content\\Location', $params );
+        $pathString = $parent->pathString . $vo->id . '/';
+        $this->backend->update( 'Content\\Location', $vo->id, array( 'pathString' => $pathString ) );
+        return $this->load( $vo->id );
     }
 
     /**

@@ -12,6 +12,8 @@ use ezp\Content\Tests\BaseServiceTest,
     ezp\Content\Location\Service,
     \ReflectionObject,
     ezp\Persistence\Content,
+    ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Content\Field,
     ezp\Content\Location,
     ezp\Content\Proxy,
     ezp\Content\ContainerProperty;
@@ -26,10 +28,51 @@ class ServiceTest extends BaseServiceTest
      */
     protected $service;
 
+    /**
+     * @var \ezp\Content
+     */
+    protected $content;
+
+    /**
+     * @var \ezp\Content[]
+     */
+    protected $contentToDelete = array();
+
     protected function setUp()
     {
         parent::setUp();
         $this->service = $this->repository->getLocationService();
+
+        $struct = new CreateStruct();
+        $struct->name = "test";
+        $struct->ownerId = 14;
+        $struct->sectionId = 1;
+        $struct->typeId = 2;
+        $struct->fields[] = new Field(
+            array(
+                'type' => 'ezstring',
+                // @todo Use FieldValue object
+                'value' => 'Welcome',
+                'language' => 'eng-GB',
+            )
+        );
+
+        $this->content = $this->repositoryHandler->contentHandler()->create( $struct );
+        $this->contentToDelete[] = $this->content;
+    }
+
+    /**
+     * Removes stuff created in setUp().
+     */
+    protected function tearDown()
+    {
+        $contentHandler = $this->repositoryHandler->contentHandler();
+        // Removing default objects as well as those created by tests
+        foreach ( $this->contentToDelete as $content )
+        {
+            $contentHandler->delete( $content->id );
+        }
+        parent::tearDown();
     }
 
     /**
@@ -114,7 +157,7 @@ class ServiceTest extends BaseServiceTest
     {
         $remoteId = md5(microtime());
         $parent = $this->service->load( 2 );
-        $location = new Location( new Proxy( $this->repository->getContentService(), 1 ) );
+        $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
         $location->parent = $parent;
         $location->remoteId = $remoteId;
         $location->sortField = ContainerProperty::SORT_FIELD_PRIORITY;
@@ -127,9 +170,16 @@ class ServiceTest extends BaseServiceTest
         self::assertSame( 2, $newLocation->parentId );
         unset( $location, $newLocation );
 
-        self::assertInstanceOf( 'ezp\\Content\\Location', $this->service->load( $locationId ) );
+        $location = $this->service->load( $locationId );
+        self::assertInstanceOf( 'ezp\\Content\\Location', $location );
+        self::assertEquals( $parent->pathString . $location->id . '/', $location->pathString );
 
-        $this->markTestIncomplete( '@todo: Test "invisible" from parent' ) ;
+        // Expected depth should be number of locations in pathString - 1 (first level doesn't count)
+        $expectedDepth = count( explode( '/', substr( $location->pathString, 1, -1 ) ) ) - 1;
+        self::assertequals( $expectedDepth, $location->depth );
+        self::assertEquals( $parent->depth + 1, $location->depth );
+
+        $this->repositoryHandler->locationHandler()->delete( $locationId );
     }
 
     /**
