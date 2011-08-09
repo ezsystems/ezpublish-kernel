@@ -185,7 +185,10 @@ class Content extends Model
     public function __construct( Type $contentType, Locale $mainLocale )
     {
         $this->properties = new ContentValue;
+        /*
+        @FIXME where is this property going to be stored?
         $this->creationDate = new DateTime();
+        */
         $this->mainLocale = $mainLocale;
         $this->versions = new TypeCollection( 'ezp\\Content\\Version' );
         $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
