@@ -8,24 +8,33 @@
  */
 
 namespace ezp\Content;
-use ezp\Base\Observable,
-    ezp\Base\Observer,
-    ezp\Base\Model,
-    ezp\Content\Type\FieldDefinition;
+use ezp\Base\Model,
+    ezp\Content\Version,
+    ezp\Content\Type\FieldDefinition,
+    ezp\Persistence\Content\Field as FieldVO;
 
 /**
  * This class represents a Content's field
  *
+ * @property-read mixed $id
+ * @property-ready string $type
+ * @property-read FieldValue $value
+ * @property mixed $language
+ * @property-read int $versionNo
+ * @property-read \ezp\Content\Version $version
+ * @property-read \ezp\Content\Type\FieldDefinition $fieldDefinition
  */
-abstract class Field extends Model implements Observer
+class Field extends Model
 {
     /**
      * @var array Readable of properties on this object
      */
     protected $readWriteProperties = array(
         'id' => false,
-        'languageCode' => true,
-        'fieldTypeString' => true,
+        'type' => false,
+        'value' => false,//object
+        'language' => true,
+        'versionNo' => false,
     );
 
     /**
@@ -37,84 +46,49 @@ abstract class Field extends Model implements Observer
     );
 
     /**
-     * @var int
+     * @var \ezp\Content\Version
      */
-    protected $id = 0;
+    protected $_version;
 
     /**
-     * @var string
+     * @var \ezp\Content\Type\FieldDefinition
      */
-    protected $languageCode = '';
-
-    /**
-     * @var string
-     */
-    protected $fieldTypeString = '';
-
-    /**
-     * @var Version
-     */
-    protected $version;
-
-    /**
-     * @var FieldDefinition
-     */
-    protected $fieldDefinition;
+    protected $_fieldDefinition;
 
     /**
      * Constructor, sets up properties
      *
-     * @param Version $contentVersion
-     * @param FieldDefinition $fieldDefinition
+     * @param \ezp\Content\Version $contentVersion
+     * @param \ezp\Content\Type\FieldDefinition $fieldDefinition
      */
     public function __construct( Version $contentVersion, FieldDefinition $fieldDefinition )
     {
-        $this->version = $contentVersion;
-        $this->fieldDefinition = $fieldDefinition;
-        $this->fieldTypeString = $fieldDefinition->fieldTypeString;
+        $this->_version = $contentVersion;
+        $this->_fieldDefinition = $fieldDefinition;
+        $this->properties = new FieldVO( array(
+                                               'type' => $fieldDefinition->fieldType,
+                                               'fieldDefinitionId' => $fieldDefinition->id,
+                                           ) );
     }
 
     /**
      * Return content version object
      *
-     * @return Version
+     * @return \ezp\Content\Version
      */
     protected function getVersion()
     {
-        return $this->version;
+        return $this->_version;
     }
 
     /**
      * Return content type object
      *
-     * @return FieldDefinition
+     * @return \ezp\Content\Type\FieldDefinition
      */
     protected function getFieldDefinition()
     {
-        return $this->fieldDefinition;
-    }
-
-    /**
-     * Called when subject has been updated
-     *
-     * @param Observable $subject
-     * @param string $event
-     * @return ContentField
-     */
-    public function update( Observable $subject, $event = 'update' )
-    {
-        if ( $subject instanceof Version )
-        {
-            return $this->notify( $event );
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->fieldTypeString;
+        return $this->_fieldDefinition;
     }
 }
 

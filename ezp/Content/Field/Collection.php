@@ -33,22 +33,9 @@ class Collection extends ReadOnly
     public function __construct( Version $contentVersion )
     {
         $elements = array();
-        $fieldTypes = Configuration::getInstance( 'content' )->get( 'fields', 'Type' );
         foreach ( $contentVersion->content->contentType->fields as $fieldDefinition )
         {
-            if ( !isset( $fieldTypes[$fieldDefinition->fieldType] ) )
-                throw new BadConfiguration( 'content.ini[fields]', "could not load {$fieldDefinition->fieldType}" );
-
-            if ( !class_exists( $fieldTypes[$fieldDefinition->fieldType] ) )
-                throw new MissingClass(  $fieldTypes[$fieldDefinition->fieldType], 'field type' );
-
-            $className = $fieldTypes[$fieldDefinition->fieldTypeString];
-            $elements[ $fieldDefinition->identifier ] = $field = new $className( $contentVersion, $fieldDefinition );
-
-            if ( !$field instanceof Field )
-                throw new RuntimeException( "Field type value '{$className}' does not implement ezp\\content\\Field" );
-
-            $contentVersion->attach( $field, 'store' );
+            $elements[ $fieldDefinition->identifier ] = new Field( $contentVersion, $fieldDefinition );
         }
         parent::__construct( $elements );
     }
