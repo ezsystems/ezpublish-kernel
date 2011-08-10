@@ -17,7 +17,6 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Type\Group,
     ezp\Persistence\Content\Type as TypeValue,
     ezp\Persistence\Content\Type\Group as GroupValue,
-    ezp\Persistence\ValueObject,
     RuntimeException;
 
 /**
@@ -39,7 +38,7 @@ class Service extends BaseService
         $contentType = $this->handler->contentTypeHandler()->load( $contentTypeId, $version );
         if ( !$contentType )
             throw new NotFound( 'Content\\Type', $contentTypeId );
-        return $this->buildDomainObject( $contentType );
+        return $this->buildType( $contentType );
     }
 
     /**
@@ -53,7 +52,7 @@ class Service extends BaseService
     {
         $list = $this->handler->contentTypeHandler()->loadContentTypes( $groupId, $version );
         foreach ( $list as $key => $vo )
-            $list[$key] = $this->buildDomainObject( $vo );
+            $list[$key] = $this->buildType( $vo );
 
         return $list;
     }
@@ -87,10 +86,10 @@ class Service extends BaseService
 
 
     /**
-     * @param \ezp\Persistence\ValueObject $vo
+     * @param \ezp\Persistence\Content\Type $vo
      * @return \ezp\Content\Type
      */
-    protected function buildDomainObject( ValueObject $vo )
+    protected function buildType( TypeValue $vo )
     {
         $type = new Type();
         foreach ( $vo->fieldDefinitions as $fieldDefinitionVo )
