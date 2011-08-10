@@ -147,20 +147,40 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
         foreach ( $data as $table => $rows )
         {
+            // Check that at least one row exists
+            if ( !isset( $rows[0] ) )
+                continue;
+                
+            $q = $db->createInsertQuery();
+            $q->insertInto( $db->quoteIdentifier( $table ) );
+
+            // Contains the bound parameters
+            $values = array();
+
+            // Binding the parameters
+            foreach ( $rows[0] as $col => $val )
+            {
+                $q->set(
+                    $db->quoteIdentifier( $col ),
+                    $q->bindParam( $values[$col] )
+                );
+            }
+
+            $stmt = $q->prepare();
+
             foreach ( $rows as $row )
             {
                 try
                 {
-                    $q = $db->createInsertQuery();
-                    $q->insertInto( $db->quoteIdentifier( $table ) );
+                    // This CANNOT be replaced by:
+                    // $values = $row
+                    // each $values[$col] is a PHP reference which should be
+                    // kept for parameters binding to work
                     foreach ( $row as $col => $val )
                     {
-                        $q->set(
-                            $db->quoteIdentifier( $col ),
-                            $q->bindValue( $val )
-                        );
+                        $values[$col] = $val;
                     }
-                    $stmt = $q->prepare();
+
                     $stmt->execute();
                 }
                 catch ( \Exception $e )
