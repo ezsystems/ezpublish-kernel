@@ -41,14 +41,14 @@ use ezp\Base\Exception\BadConfiguration,
  *                 'use-cache' => false,
  *                 // Required list of parser classes where key is file suffix
  *                 'parsers' => array(
- *                     '.ini'            => 'ezp\base\Configuration\IniParser',
- *                     '.ini.append.php' => 'ezp\base\Configuration\IniParser',
+ *                     '.ini' => 'ezp\\Base\\Configuration\\Parser\\Ini',
+ *                     '.ini.append.php' => 'ezp\\Base\\Configuration\\Parser\\Ini',
  *                 ),
  *             ),
  *         )
  *     ) );
  *     // Specify additional locations that might contain settings (hence you don't have to check if folder exist)
- *     Configuration::setGlobalDirs( array( 'ezp/base/settings/' ), 'modules' );
+ *     Configuration::setGlobalDirs( array( 'ezp/Base/settings/' ), 'modules' );
  *
  *
  * Usage:
@@ -59,7 +59,7 @@ use ezp\Base\Exception\BadConfiguration,
  *
  * Usage2:
  *
- *     $array = Configuration::getInstance('content')->get( 'fields', 'Type' );
+ *     $array = Configuration::getInstance( 'content' )->get( 'fields', 'Type' );
  *
  *
  * @uses \ezcPhpGenerator When generating cache files.
