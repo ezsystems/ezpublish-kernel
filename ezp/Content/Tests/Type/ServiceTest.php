@@ -31,8 +31,6 @@ class ServiceTest extends BaseServiceTest
     }
 
     /**
-     * Test for load function
-     *
      * @group contentTypeService
      * @covers \ezp\Content\Type\Service::load
      */
@@ -49,5 +47,40 @@ class ServiceTest extends BaseServiceTest
         $this->assertEquals( 1, count( $type->groups[0]->contentTypes ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $type->groups[0]->contentTypes[0] );
         $this->assertEquals( $type->id, $type->groups[0]->contentTypes[0]->id );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers \ezp\Content\Type\Service::loadByGroupId
+     */
+    public function testLoadByGroupId()
+    {
+        $list = $this->service->loadByGroupId( 1 );
+        $this->assertEquals( 1, count( $list ) );
+
+        $type = $list[0];
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
+        $this->assertEquals( 1, count( $type->fields ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
+        // lazy collection tests
+        $this->assertEquals( 1, count( $type->groups ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $type->groups[0] );
+        $this->assertEquals( 1, count( $type->groups[0]->contentTypes ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $type->groups[0]->contentTypes[0] );
+        $this->assertEquals( $type->id, $type->groups[0]->contentTypes[0]->id );
+    }
+
+
+    /**
+     * @group contentTypeService
+     * @covers \ezp\Content\Type\Service::loadGroup
+     */
+    public function testLoadGroup()
+    {
+        $group = $this->service->loadGroup( 1 );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $group );
+        $this->assertEquals( 1, count( $group->contentTypes ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $group->contentTypes[0] );
+        $this->assertEquals( array( 'eng-GB' => "Content" ), $group->name );
     }
 }
