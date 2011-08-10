@@ -27,7 +27,7 @@ use ezp\Base\Model,
  * @property bool $isInfoCollector
  * @property array $fieldTypeConstraints
  * @property mixed $defaultValue
- * @property-read \ezp\Content\Type $contentType
+ * @property-read \ezp\Content\Type $type
  */
 class FieldDefinition extends Model
 {
@@ -53,13 +53,13 @@ class FieldDefinition extends Model
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'contentType' => false,
+        'type' => false,
     );
 
     /**
      * @var \ezp\Content\Type
      */
-    protected $_contentType;
+    protected $contentType;
 
     /**
      * Constructor, sets up value object, fieldType string and attach $contentType
@@ -69,7 +69,7 @@ class FieldDefinition extends Model
      */
     public function __construct( Type $contentType, $fieldType )
     {
-        $this->_contentType = $contentType;
+        $this->contentType = $contentType;
         $this->properties = new FieldDefinitionValue( array( 'fieldType' => $fieldType ) );
     }
 
@@ -78,8 +78,8 @@ class FieldDefinition extends Model
      *
      * @return \ezp\Content\Type
      */
-    protected function getContentType()
+    protected function getType()
     {
-        return $this->_contentType;
+        return $this->contentType;
     }
 }

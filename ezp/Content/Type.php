@@ -31,7 +31,7 @@ use ezp\Base\Model,
  * @property bool $isContainer
  * @property int $initialLanguageId
  * @property-read int[] $contentTypeGroupIds
- * @property-read Type\Field[] $fields
+ * @property-read Type\FieldDefinition[] $fields
  * @property-read Type\Group[] $groups
  */
 class Type extends Model
@@ -66,14 +66,14 @@ class Type extends Model
     );
 
     /**
-     * @var Type\Field[]
+     * @var Type\FieldDefinition[]
      */
-    protected $_fields;
+    protected $fieldDefinitions;
 
     /**
      * @var Type\Group[]
      */
-    protected $_groups;
+    protected $typeGroups;
 
     /**
      * Construct type and init all internal objects
@@ -81,16 +81,16 @@ class Type extends Model
     public function __construct()
     {
         $this->properties = new TypeValue();
-        $this->_fields = new TypeCollection( 'ezp\\Content\\Type\\FieldDefinition' );
-        $this->_groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
+        $this->fieldDefinitions = new TypeCollection( 'ezp\\Content\\Type\\FieldDefinition' );
+        $this->typeGroups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
     }
 
     /**
-     * @return Type\Field[]
+     * @return Type\FieldDefinition[]
      */
     public function getFields()
     {
-        return $this->_fields;
+        return $this->fieldDefinitions;
     }
 
     /**
@@ -98,7 +98,7 @@ class Type extends Model
      */
     public function getGroups()
     {
-        return $this->_groups;
+        return $this->typeGroups;
     }
 }
 ?>

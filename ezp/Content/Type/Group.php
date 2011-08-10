@@ -25,7 +25,7 @@ use ezp\Base\Model,
  * @property string $creatorId
  * @property mixed $modified
  * @property string $modifierId
- * @property-read Type[] $contentTypes
+ * @property-read \ezp\Content\Type[] $types
  */
 class Group extends Model
 {
@@ -48,13 +48,13 @@ class Group extends Model
      * @var array List of dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'contentTypes' => true,
+        'types' => true,
     );
 
     /**
-     * @var Type[]
+     * @var \ezp\Content\Type[]
      */
-    protected $_contentTypes;
+    protected $contentTypes;
 
     /**
      * Construct object with all internal objects
@@ -62,14 +62,14 @@ class Group extends Model
     public function __construct()
     {
         $this->properties = new GroupValue();
-        $this->_contentTypes = new TypeCollection( 'ezp\\Content\\Type' );
+        $this->contentTypes = new TypeCollection( 'ezp\\Content\\Type' );
     }
 
     /**
      * @return Type[]
      */
-    public function getContentTypes()
+    public function getTypes()
     {
-        return $this->_contentTypes;
+        return $this->contentTypes;
     }
 }

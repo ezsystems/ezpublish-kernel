@@ -44,9 +44,9 @@ class ServiceTest extends BaseServiceTest
         // lazy collection tests
         $this->assertEquals( 1, count( $type->groups ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $type->groups[0] );
-        $this->assertEquals( 1, count( $type->groups[0]->contentTypes ) );
-        $this->assertInstanceOf( 'ezp\\Content\\Type', $type->groups[0]->contentTypes[0] );
-        $this->assertEquals( $type->id, $type->groups[0]->contentTypes[0]->id );
+        $this->assertEquals( 1, count( $type->groups[0]->types ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $type->groups[0]->types[0] );
+        $this->assertEquals( $type->id, $type->groups[0]->types[0]->id );
     }
 
     /**
@@ -65,9 +65,9 @@ class ServiceTest extends BaseServiceTest
         // lazy collection tests
         $this->assertEquals( 1, count( $type->groups ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $type->groups[0] );
-        $this->assertEquals( 1, count( $type->groups[0]->contentTypes ) );
-        $this->assertInstanceOf( 'ezp\\Content\\Type', $type->groups[0]->contentTypes[0] );
-        $this->assertEquals( $type->id, $type->groups[0]->contentTypes[0]->id );
+        $this->assertEquals( 1, count( $type->groups[0]->types ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $type->groups[0]->types[0] );
+        $this->assertEquals( $type->id, $type->groups[0]->types[0]->id );
     }
 
 
@@ -79,8 +79,8 @@ class ServiceTest extends BaseServiceTest
     {
         $group = $this->service->loadGroup( 1 );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $group );
-        $this->assertEquals( 1, count( $group->contentTypes ) );
-        $this->assertInstanceOf( 'ezp\\Content\\Type', $group->contentTypes[0] );
+        $this->assertEquals( 1, count( $group->types ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $group->types[0] );
         $this->assertEquals( array( 'eng-GB' => "Content" ), $group->name );
     }
 }

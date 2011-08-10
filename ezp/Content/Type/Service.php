@@ -98,10 +98,10 @@ class Service extends BaseService
             $type->fields[] = $fieldDefinition->setState( array( 'properties' => $fieldDefinitionVo ) );
         }
         $type->setState( array( 'properties' => $vo,
-                                 '_groups' => new LazyIdList( 'ezp\\Content\\Type\\Group',
-                                                               $vo->contentTypeGroupIds,
-                                                               $this,
-                                                               'loadGroup' )
+                                'typeGroups' => new LazyIdList( 'ezp\\Content\\Type\\Group',
+                                                                $vo->contentTypeGroupIds,
+                                                                $this,
+                                                                'loadGroup' )
                          ) );
         return $type;
     }
@@ -114,10 +114,10 @@ class Service extends BaseService
     {
         $obj = new Group();
         $obj->setState( array( 'properties' => $vo,
-                                 '_contentTypes' => new Lazy( 'ezp\\Content\\Type',
-                                                               $this,
-                                                               $vo->id,
-                                                               'loadByGroupId' ) ) );
+                               'contentTypes' => new Lazy( 'ezp\\Content\\Type',
+                                                           $this,
+                                                           $vo->id,
+                                                           'loadByGroupId' ) ) );
         return $obj;
     }
 }
