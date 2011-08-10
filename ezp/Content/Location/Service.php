@@ -19,7 +19,8 @@ use ezp\Base\Exception,
     ezp\Base\Exception\Logic,
     ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\ValueObject,
-    ezp\Persistence\Content\Location\CreateStruct;
+    ezp\Persistence\Content\Location\CreateStruct,
+    ezp\Persistence\Content\Location\UpdateStruct;
 
 /**
  * Location service, used for complex subtree operations
@@ -99,11 +100,24 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Location $location
      * @return \ezp\Content\Location the updated Location
-     * @throws \ezp\Base\Exception\Validation If a validation problem has been found for $content
+     * @throws \ezp\Base\Exception\Logic If a validation problem has been found for $location
      */
     public function update( Location $location )
     {
-        // repo/storage stuff
+        $struct = new UpdateStruct;
+        foreach ( $location->properties() as $name => $value )
+        {
+            if ( property_exists( $struct, $name ) )
+            {
+                $struct->$name = $location->$name;
+            }
+        }
+
+        if ( !$this->handler->locationHandler()->updateLocation( $struct, $location->id ) )
+        {
+            throw new Logic( "Location #{$location->id}", 'Could not be updated' );
+        }
+
         return $location;
     }
 

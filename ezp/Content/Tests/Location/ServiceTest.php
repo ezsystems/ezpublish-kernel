@@ -358,4 +358,41 @@ class ServiceTest extends BaseServiceTest
         $newState = $refreshedLocation->getState();
         self::assertSame( (array)$voDifferentLocation, (array)$newState['properties'] );
     }
+
+    /**
+     * @group locationService
+     */
+    public function testUpdate()
+    {
+        $newRemoteId = 'anotherRemoteId';
+        $newPriority = 357;
+        $newSortField = ContainerProperty::SORT_FIELD_DEPTH;
+        $newSortOrder = ContainerProperty::SORT_ORDER_DESC;
+        $locationId = $this->location->id;
+
+        $this->location->remoteId = $newRemoteId;
+        $this->location->priority = $newPriority;
+        $this->location->sortField = $newSortField;
+        $this->location->sortOrder = $newSortOrder;
+        $this->service->update( $this->location );
+        unset( $this->location );
+
+        $reloadedLocation = $this->service->load( $locationId );
+        self::assertSame( $newRemoteId, $reloadedLocation->remoteId );
+        self::assertSame( $newPriority, $reloadedLocation->priority );
+        self::assertSame( $newSortField, $reloadedLocation->sortField );
+        self::assertSame( $newSortOrder, $reloadedLocation->sortOrder );
+    }
+
+    /**
+     * @group locationService
+     * @expectedException \ezp\Base\Exception\Logic
+     */
+    public function testUpdateFail()
+    {
+        $state = $this->location->getState();
+        $state['properties']->id = 123456789;
+        $this->location->setState( array( 'properties' => $state['properties'] ) );
+        $this->service->update( $this->location );
+    }
 }

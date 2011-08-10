@@ -10,7 +10,8 @@
 
 namespace ezp\Persistence\Tests\InMemoryEngine;
 use ezp\Persistence\Content\Location\Handler as LocationHandlerInterface,
-    ezp\Persistence\Content\Location\CreateStruct;
+    ezp\Persistence\Content\Location\CreateStruct,
+    ezp\Persistence\Content\Location\UpdateStruct;
 
 /**
  * @see ezp\Persistence\Content\Location\Handler
@@ -144,7 +145,6 @@ class LocationHandler implements LocationHandlerInterface
             $locationId1,
             array(
                 'contentId' => $location2->contentId,
-//                'pathIdentificationString' => trim( str_replace(' ', '_', strtolower( $content2->name ) ) )
             )
         );
         $this->backend->update(
@@ -152,7 +152,6 @@ class LocationHandler implements LocationHandlerInterface
             $locationId2,
             array(
                 'contentId' => $location1->contentId,
-//                'pathIdentificationString' => trim( str_replace(' ', '_', strtolower( $content1->name ) ) )
             )
         );
         $this->updateSubtreeModificationTime( $this->getParentPathString( $location1->pathString ) );
@@ -162,9 +161,13 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Location\Handler
      */
-    public function updatePriority( $locationId, $priority )
+    public function updateLocation( UpdateStruct $location, $locationId )
     {
-        return $this->backend->update( 'Content\\Location', $locationId, array( 'priority' => $priority ) );
+        return $this->backend->update(
+            'Content\\Location',
+            $locationId,
+            (array)$location
+        );
     }
 
     /**

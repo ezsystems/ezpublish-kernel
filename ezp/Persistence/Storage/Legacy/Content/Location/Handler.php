@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Location;
 use ezp\Persistence\Content\Location,
     ezp\Persistence\Content\Location\CreateStruct,
+    ezp\Persistence\Content\Location\UpdateStruct,
     ezp\Persistence\Content\Location\Handler as BaseLocationHandler,
     ezp\Persistence\Storage\Legacy\Content\Handler as ContentHandler,
     ezp\Persistence\Storage\Legacy\Content\Location\Gateway as LocationGateway;
@@ -178,15 +179,15 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Updates an existing location priority.
+     * Updates an existing location.
      *
+     * @param \ezp\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
-     * @param int $priority
      * @return boolean
      */
-    public function updatePriority( $locationId, $priority )
+    public function updateLocation( UpdateStruct $location, $locationId )
     {
-        $this->locationGateway->updatePriority( $locationId, $priority );
+        throw new RuntimeException( '@TODO: Implement' );
     }
 
     /**

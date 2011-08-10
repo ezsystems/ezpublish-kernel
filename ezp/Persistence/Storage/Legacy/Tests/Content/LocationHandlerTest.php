@@ -224,18 +224,6 @@ class LocationHandlerTest extends TestCase
         $handler->swap( 70, 78 );
     }
 
-    public function testUpdatePriority()
-    {
-        $handler = $this->getLocationHandler();
-
-        $this->locationGateway
-            ->expects( $this->once() )
-            ->method( 'updatePriority' )
-            ->with( 70, 23 );
-
-        $handler->updatePriority( 70, 23 );
-    }
-
     public function testCreateLocation()
     {
         $handler = $this->getLocationHandler();
