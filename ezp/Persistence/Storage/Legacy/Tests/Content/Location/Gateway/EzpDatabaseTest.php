@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Storage\Legacy\Tests\Content\Location\Gateway;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content,
+    ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase,
     ezp\Persistence;
 
@@ -32,14 +33,6 @@ class EzpDatabaseTest extends TestCase
     {
         $dbHandler = $this->getDatabaseHandler();
         return new EzcDatabase( $dbHandler );
-    }
-
-    protected function getContentObject()
-    {
-        $contentObject = new Content();
-        $contentObject->id = 68;
-
-        return $contentObject;
     }
 
     public static function getLoadLocationValues()
@@ -286,7 +279,10 @@ class EzpDatabaseTest extends TestCase
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
         $handler->createLocation(
-            $this->getContentObject(),
+            new CreateStruct( array(
+                'contentId' => 68,
+                'remoteId'  => 'some_id',
+            ) ),
             array(
                 'node_id' => '77',
                 'depth' => '2',
@@ -313,18 +309,17 @@ class EzpDatabaseTest extends TestCase
         return array(
             array( 'contentobject_id', 68 ),
             array( 'contentobject_is_published', 0 ),
-            array( 'contentobject_version', null ), // 1
+            array( 'contentobject_version', 1 ),
             array( 'depth', 3 ),
-            array( 'is_hidden', 0 ),
-            array( 'is_invisible', 0 ),
-            array( 'main_node_id', 0 ),
+            array( 'is_hidden', false ),
+            array( 'is_invisible', false ),
+            array( 'main_node_id', 42 ),
             array( 'parent_node_id', 77 ),
             array( 'path_identification_string', '' ),
-            array( 'priority', 0 ),
-            // The remote ID is random, and thus not really testable
-            // array( 'remote_id', '' ),
-            array( 'sort_field', null ), // 1
-            array( 'sort_order', null ), // 1
+            array( 'priority', 1 ),
+            array( 'remote_id', 'some_id' ),
+            array( 'sort_field', 1 ),
+            array( 'sort_order', 1 ),
         );
     }
 
@@ -342,7 +337,16 @@ class EzpDatabaseTest extends TestCase
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
         $handler->createLocation(
-            $this->getContentObject(),
+            new CreateStruct( array(
+                'contentId'      => 68,
+                'contentVersion' => 1,
+                'remoteId'       => 'some_id',
+                'mainLocationId' => 42,
+                'priority'       => 1,
+                'remoteId'       => 'some_id',
+                'sortField'      => 1,
+                'sortOrder'      => 1,
+            ) ),
             array(
                 'node_id' => '77',
                 'depth' => '2',
@@ -390,7 +394,16 @@ class EzpDatabaseTest extends TestCase
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
         $handler->createLocation(
-            $this->getContentObject(),
+            new CreateStruct( array(
+                'contentId'      => 68,
+                'contentVersion' => 1,
+                'remoteId'       => 'some_id',
+                'mainLocationId' => 1,
+                'priority'       => 1,
+                'remoteId'       => 'some_id',
+                'sortField'      => 1,
+                'sortOrder'      => 1,
+            ) ),
             array(
                 'node_id' => '77',
                 'depth' => '2',
