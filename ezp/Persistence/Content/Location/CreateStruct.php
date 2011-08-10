@@ -54,6 +54,13 @@ class CreateStruct extends ValueObject
     public $contentId;
 
     /**
+     * version of the corresponding {@link Content}.
+     *
+     * @var int Content version.
+     */
+    public $contentVersion;
+
+    /**
      * Legacy format of the url alias.
      *
      * This field might be removed in a later version.
@@ -71,13 +78,6 @@ class CreateStruct extends ValueObject
      * @var mixed
      */
     public $mainLocationId;
-
-    /**
-     * Depth location has in the location tree.
-     *
-     * @var int
-     */
-    public $depth;
 
     /**
      * Specifies which property the child locations should be sorted on.
