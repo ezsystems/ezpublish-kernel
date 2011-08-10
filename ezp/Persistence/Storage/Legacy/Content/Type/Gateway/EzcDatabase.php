@@ -216,6 +216,31 @@ class EzcDatabase extends Gateway
         $stmt->execute();
     }
 
+    protected function insertTypeNameData( Type $type )
+    {
+        $alwaysAvailable = null;
+        $languages       = $type->name;
+        $mapping         = $this->getLanguageMapping();
+        if ( isset( $languages['always-available'] ) )
+        {
+            $alwaysAvailable = $languages['always-available'];
+            unset( $languages['always-available'] );
+        }
+
+        foreach ( $languages as $language => $name )
+        {
+            $query = $this->dbHandler->createInsertQuery();
+            $query
+                ->insertInto( 'ezcontentclass_name' )
+                ->set( 'contentclass_id', $query->bindValue( $type->id ) )
+                ->set( 'contentclass_version', $query->bindValue( $type->version ) )
+                ->set( 'language_id', $query->bindValue( $mapping[$language] | ( $alwaysAvailable === $language ? 1 : 0 ) ) )
+                ->set( 'language_locale', $query->bindValue( $language ) )
+                ->set( 'name', $query->bindValue( $name ) );
+            $query->prepare()->execute();
+        }
+    }
+
     /**
      * Inserts a new conten type.
      *
@@ -240,7 +265,10 @@ class EzcDatabase extends Gateway
         $this->setCommonTypeColumns( $q, $type );
         $q->prepare()->execute();
 
-        return $this->dbHandler->lastInsertId();
+        $type->id = $this->dbHandler->lastInsertId();
+        $this->insertTypeNameData( $type );
+
+        return $type->id;
     }
 
     /**

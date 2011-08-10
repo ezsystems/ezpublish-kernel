@@ -234,12 +234,12 @@ class EzcDatabaseTest extends TestCase
             array( 'identifier', 'folder' ),
             array( 'initial_language_id', '2' ),
             array( 'is_container', '1' ),
-            array( 'language_mask', 3 ),
+            array( 'language_mask', 7 ),
             array( 'modified', '1082454875' ),
             array( 'modifier_id', '14' ),
             array( 'remote_id', 'a3d405b81be900468eb153d774f4f0d2' ),
             array( 'serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}' ),
-            array( 'serialized_name_list', 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";}' ),
+            array( 'serialized_name_list', 'a:3:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";s:6:"eng-GB";s:11:"Folder (GB)";}' ),
             array( 'sort_field', 1 ),
             array( 'sort_order', 1 ),
             array( 'url_alias_name', '' ),
@@ -272,11 +272,11 @@ class EzcDatabaseTest extends TestCase
     public static function getTypeCreationContentClassNameExpectations()
     {
         return array(
-            array( 'contentclass_id', 1 ),
-            array( 'contentclass_version', 0 ),
-            array( 'language_id', 3 ),
-            array( 'language_locale', 'eng-US' ),
-            array( 'name', 'Folder' ),
+            array( 'contentclass_id', array( 1, 1 ) ),
+            array( 'contentclass_version', array( 0, 0 ) ),
+            array( 'language_id', array( 3, 4 ) ),
+            array( 'language_locale', array( 'eng-US', 'eng-GB' ) ),
+            array( 'name', array( 'Folder', 'Folder (GB)' ) ),
         );
     }
 
@@ -293,7 +293,7 @@ class EzcDatabaseTest extends TestCase
         $gateway->insertType( $type );
 
         $this->assertQueryResult(
-            array( array($expectation ) ),
+            array_map( function( $value ) { return array( $value ); }, $expectation ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( $column )
@@ -315,6 +315,7 @@ class EzcDatabaseTest extends TestCase
         $type->name = array(
             'always-available' => 'eng-US',
             'eng-US' => 'Folder',
+            'eng-GB' => 'Folder (GB)',
         );
         $type->description = array(
             0 => '',
