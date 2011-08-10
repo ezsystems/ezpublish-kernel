@@ -236,7 +236,8 @@ abstract class Model implements Observable, ModelInterface
      */
     public function __isset( $property )
     {
-        return isset( $this->readWriteProperties[$property] ) || isset( $this->dynamicProperties[$property] );
+        return ( isset( $this->readWriteProperties[$property] ) && isset( $this->properties->$property ) )
+            || ( isset( $this->dynamicProperties[$property] ) && isset( $this->$property ) );
     }
 
     /**
