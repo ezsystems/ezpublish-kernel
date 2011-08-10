@@ -24,59 +24,50 @@ use ezp\Base\Model,
  *
  * It is used for both input and output manipulation.
  *
- * @property-read integer $id
- *                The Content's ID, automatically assigned by the persistence layer
- * @property-read integer $currentVersion
- *                The Content's current version
- * @property-read string $remoteId
- *                The Content's remote identifier (custom identifier for the object)
- * @property-read string $name
- *                The Content's name
- * @property-read bool $alwaysAvailable
- *                The Content's always available flag
- * @property-read integer status
- *                The Content's status, as one of the ezp\Content::STATUS_* constants
- * @property-read \ezp\Content\Type contentType
-                  The Conent's type
- * @property-read Version[] $versions
- *                   Iterable collection of versions for content. Array-accessible :;
- *                   <code>
- *                   $myFirstVersion = $content->versions[1];
- *                   $myThirdVersion = $content->versions[3];
- *                   </code>
- * @property-read Location[] $locations
- *                   Locations for content. Iterable, countable and Array-accessible (with numeric indexes)
- *                   First location referenced in the collection represents the main location for content
- *                   <code>
- *                   $mainLocation = $content->locations[0];
- *                   $anotherLocation = $content->locations[2];
- *                   $locationById = $content->locations->byId( 60 );
- *                   </code>
+ * @property-read int $id The Content's ID, automatically assigned by the persistence layer
+ * @property-read int $currentVersion The Content's current version
+ * @property-read string $remoteId The Content's remote identifier (custom identifier for the object)
+ * @property-read string $name The Content's name
+ * @property-read bool $alwaysAvailable The Content's always available flag
+ * @property-read int status The Content's status, as one of the ezp\Content::STATUS_* constants
+ * @property-read \ezp\Content\Type contentType The Content's type
+ * @property-read \ezp\Content\Version[] $versions
+ *                Iterable collection of versions for content. Array-accessible :;
+ *                <code>
+ *                $myFirstVersion = $content->versions[1];
+ *                $myThirdVersion = $content->versions[3];
+ *                </code>
+ * @property-read \ezp\Content\Location[] $locations
+ *                Locations for content. Iterable, countable and Array-accessible (with numeric indexes)
+ *                First location referenced in the collection represents the main location for content
+ *                <code>
+ *                $mainLocation = $content->locations[0];
+ *                $anotherLocation = $content->locations[2];
+ *                $locationById = $content->locations->byId( 60 );
+ *                </code>
  * @property-read DateTime $creationDate The date the object was created
  * @property-read \ezp\Content\Section $section The Section the content belongs to
- * @property Content[] $relations
- *                                          Collection of ezp\Content objects, related to the current one
- * @property Content[] $reverseRelations
- *                                          Collection of ezp\Content objects, reverse-related to the current one
- * @property Translation[] $translations
- *                                             Collection of content's translations, indexed by locale (ie. eng-GB)
- *                                             <code>
- *                                             $myEnglishTranslation = $content->translations["eng-GB"];
- *                                             $myEnglishTitle = $content->translations["eng-GB"]->fields->title; // Where "title" is the field identifier
- *                                             </code>
- * @property Field[] $fields
- *                                       Collection of content's fields in default (current) language.
- *                                       Shorthand property to directly access to the content's fields in current language
- *                                       <code>
- *                                       $myTitle = $content->fields->title; // Where "title" is the field identifier
- *                                       </code>
+ * @property \ezp\Content[] $relations Collection of ezp\Content objects, related to the current one
+ * @property \ezp\Content[] $reverseRelations Collection of ezp\Content objects, reverse-related to the current one
+ * @property \ezp\Content\Translation[] $translations
+ *           Collection of content's translations, indexed by locale (ie. eng-GB)
+ *           <code>
+ *           $myEnglishTranslation = $content->translations["eng-GB"];
+ *           $myEnglishTitle = $content->translations["eng-GB"]->fields->title; // Where "title" is the field identifier
+ *           </code>
+ * @property \ezp\Content\Field[] $fields
+ *           Collection of content's fields in default (current) language.
+ *           Shorthand property to directly access to the content's fields in current language
+ *           <code>
+ *           $myTitle = $content->fields->title; // Where "title" is the field identifier
+ *           </code>
  * @property int $ownerId Owner identifier
  */
 class Content extends Model
 {
     /**
      * Publication status constants
-     * @var integer
+     * @var int
      */
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
@@ -116,7 +107,7 @@ class Content extends Model
     /**
      * The Section the content belongs to
      *
-     * @var Section
+     * @var \ezp\Content\Section
      */
     public $_section;
 
@@ -151,12 +142,12 @@ class Content extends Model
     /**
      * Translations collection
      *
-     * @var Translation[]
+     * @var \ezp\Content\Translation[]
      */
     protected $translations;
 
     /**
-     * Locale
+     * \ezp\Base\Locale
      *
      * @var \ezp\Base\Locale
      */
@@ -165,7 +156,7 @@ class Content extends Model
     /**
      * Versions
      *
-     * @var Version[]
+     * @var \ezp\Content\Version[]
      */
     protected $versions;
 
@@ -195,7 +186,7 @@ class Content extends Model
     /**
      * Return Main location object on this Content object
      *
-     * @return Location
+     * @return \ezp\Content\Location
      */
     protected function getMainLocation()
     {
@@ -205,7 +196,7 @@ class Content extends Model
     /**
      * Return a collection containing all available versions of the Content
      *
-     * @return Version[]
+     * @return \ezp\Content\Version[]
      */
     protected function getVersions()
     {
@@ -220,7 +211,7 @@ class Content extends Model
     /**
      * Find current version amongst version objects
      *
-     * @return Version|null
+     * @return \ezp\Content\Version|null
      */
     protected function getCurrentVersion()
     {
@@ -259,7 +250,7 @@ class Content extends Model
     /**
      * Sets the Section the Content belongs to
      *
-     * @param Section $section
+     * @param \ezp\Content\Section $section
      */
     protected function setSection( Section $section )
     {
@@ -269,7 +260,7 @@ class Content extends Model
     /**
      * Returns the Section the Content belongs to
      *
-     * @return Section
+     * @return \ezp\Content\Section
      */
     protected function getSection()
     {
@@ -298,9 +289,9 @@ class Content extends Model
      * Adds a Translation in $locale optionally based on existing
      * translation in $base.
      *
-     * @param Locale $locale
-     * @param Version $base
-     * @return Translation
+     * @param \ezp\Base\Locale $locale
+     * @param \ezp\Content\Version $base
+     * @return \ezp\Content\Translation
      * @throw InvalidArgumentException if translation in $base does not exist.
      */
     public function addTranslation( Locale $locale, Version $base = null )
@@ -330,7 +321,7 @@ class Content extends Model
     /**
      * Remove the translation in $locale
      *
-     * @param Locale $locale
+     * @param \ezp\Base\Locale $locale
      * @throw InvalidArgumentException if the main locale is the one in
      *          argument or if there's not translation
      *          in this locale
@@ -353,8 +344,8 @@ class Content extends Model
     /**
      * Adds a new location to content under an existing one.
      *
-     * @param Location $parentLocation
-     * @return Location
+     * @param \ezp\Content\Location $parentLocation
+     * @return \ezp\Content\Location
      */
     public function addParent( Location $parentLocation )
     {
