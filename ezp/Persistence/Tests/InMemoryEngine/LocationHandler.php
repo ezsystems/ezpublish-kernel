@@ -66,6 +66,14 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Location\Handler
      */
+    public function markSubtreeModified( $locationId, $timeStamp = null )
+    {
+    }
+
+
+    /**
+     * @see ezp\Persistence\Content\Location\Handler
+     */
     public function hide( $id )
     {
         $this->backend->update( 'Content\\Location' , $id, array( 'hidden' => true, 'invisible' => true ) );

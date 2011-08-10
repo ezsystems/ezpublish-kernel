@@ -134,6 +134,21 @@ class Handler implements BaseLocationHandler
     }
 
     /**
+     * Marks the given nodes and all ancestors as modified
+     *
+     * Optionally a time stamp with the modification date may be specified,
+     * otherwise the current time is used.
+     *
+     * @param int|string $locationId
+     * @param int $timeStamp
+     * @return void
+     */
+    public function markSubtreeModified( $locationId, $timeStamp = null )
+    {
+        throw new \RuntimeException( '@TODO: Implement.' );
+    }
+
+    /**
      * Sets a location to be hidden, and it self + all children to invisible.
      *
      * @param mixed $id Location ID
