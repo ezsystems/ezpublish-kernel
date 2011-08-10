@@ -13,6 +13,8 @@ use \ArrayObject,
 
 /**
  * Container for field type specific properties.
+ *
+ * @internal
  */
 class FieldSettings extends ArrayObject
 {
