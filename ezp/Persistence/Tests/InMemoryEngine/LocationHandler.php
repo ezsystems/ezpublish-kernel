@@ -144,7 +144,7 @@ class LocationHandler implements LocationHandlerInterface
             $locationId1,
             array(
                 'contentId' => $location2->contentId,
-                'pathIdentificationString' => trim( str_replace(' ', '_', strtolower( $content2->name ) ) )
+//                'pathIdentificationString' => trim( str_replace(' ', '_', strtolower( $content2->name ) ) )
             )
         );
         $this->backend->update(
@@ -152,7 +152,7 @@ class LocationHandler implements LocationHandlerInterface
             $locationId2,
             array(
                 'contentId' => $location1->contentId,
-                'pathIdentificationString' => trim( str_replace(' ', '_', strtolower( $content1->name ) ) )
+//                'pathIdentificationString' => trim( str_replace(' ', '_', strtolower( $content1->name ) ) )
             )
         );
         $this->updateSubtreeModificationTime( $this->getParentPathString( $location1->pathString ) );

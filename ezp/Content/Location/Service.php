@@ -117,7 +117,14 @@ class Service extends BaseService
      */
     public function swap( Location $location1, Location $location2 )
     {
-        $this->handler->locationHandler()->swap( $location1->id, $location2->id );
+        $location1Id = $location1->id;
+        $location2Id = $location2->id;
+
+        $this->handler->locationHandler()->swap( $location1Id, $location2Id );
+
+        // Update Domain objects references
+        $this->refreshDomainObject( $location1 );
+        $this->refreshDomainObject( $location2 );
     }
 
     /**
@@ -239,12 +246,38 @@ class Service extends BaseService
         }
 
         $location = new Location( new Proxy( $this->repository->getContentService(), $vo->contentId ) );
-        $location->setState(
-            array(
-                'parent' => new Proxy( $this, $vo->parentId ),
-                'properties' => $vo
-            )
+
+        return $this->refreshDomainObject( $location, $vo );
+    }
+
+    /**
+     * Refreshes provided $location. Useful if backend data has changed
+     *
+     * @param \ezp\Content\Location $location Location to refresh
+     * @param \ezp\Persistence\Location $vo Location value object. If provided, $location will be updated with $vo's data
+     * @return \ezp\Content\Location
+     * @throws \ezp\Base\Exception\InvalidArgumentType
+     */
+    protected function refreshDomainObject( Location $location, LocationValue $vo = null )
+    {
+        if ( $vo === null )
+        {
+            $vo = $this->handler->locationHandler()->load( $location->id );
+        }
+
+        if ( !$vo instanceof LocationValue )
+        {
+            throw new InvalidArgumentType( 'Value object', 'ezp\\Persistence\\Content\\Location', $vo );
+        }
+
+        $newState = array(
+            'parent' => new Proxy( $this, $vo->parentId ),
+            'properties' => $vo
         );
+        // Check if associated content also needs to be refreshed
+        if ( $vo->contentId != $location->contentId )
+            $newState['content'] = new Proxy( $this->repository->getContentService(), $vo->contentId );
+        $location->setState( $newState );
 
         // Container property (default sorting)
         $containerProperty = new ContainerProperty;

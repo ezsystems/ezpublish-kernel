@@ -34,6 +34,16 @@ class ServiceTest extends BaseServiceTest
     protected $content;
 
     /**
+     * @var \ezp\Content\Location
+     */
+    protected $topLocation;
+
+    /**
+     * @var \ezp\Content\Location
+     */
+    protected $location;
+
+    /**
      * @var \ezp\Content[]
      */
     protected $contentToDelete = array();
@@ -48,11 +58,17 @@ class ServiceTest extends BaseServiceTest
      */
     protected $locationHandler;
 
+    /**
+     * @var \ezp\Persistence\Content\Handler
+     */
+    protected $contentHandler;
+
     protected function setUp()
     {
         parent::setUp();
         $this->service = $this->repository->getLocationService();
         $this->locationHandler = $this->repositoryHandler->locationHandler();
+        $this->contentHandler = $this->repositoryHandler->contentHandler();
 
         $struct = new CreateStruct();
         $struct->name = "test";
@@ -68,8 +84,15 @@ class ServiceTest extends BaseServiceTest
             )
         );
 
-        $this->content = $this->repositoryHandler->contentHandler()->create( $struct );
+        $this->content = $this->contentHandler->create( $struct );
         $this->contentToDelete[] = $this->content;
+
+        // Now creating location for content
+        $this->topLocation = $this->service->load( 2 );
+        $this->location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $this->location->parent = $this->topLocation;
+        $this->location = $this->service->create( $this->location );
+        $this->locationToDelete[] = $this->location;
     }
 
     /**
@@ -77,11 +100,10 @@ class ServiceTest extends BaseServiceTest
      */
     protected function tearDown()
     {
-        $contentHandler = $this->repositoryHandler->contentHandler();
         // Removing default objects as well as those created by tests
         foreach ( $this->contentToDelete as $content )
         {
-            $contentHandler->delete( $content->id );
+            $this->contentHandler->delete( $content->id );
         }
 
         foreach ( $this->locationToDelete as $location )
@@ -213,15 +235,14 @@ class ServiceTest extends BaseServiceTest
      */
     public function testHide()
     {
-        $parent = $this->service->load( 2 );
         $time = time();
         // Setup a location for test content and delete local variable
         $locationForTestContent = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
-        $locationForTestContent->parent = $parent;
+        $locationForTestContent->parent = $this->topLocation;
         $locationForTestContent = $this->service->create( $locationForTestContent );
         $this->locationToDelete[] = $locationForTestContent;
 
-        $hiddenLocation = $this->service->hide( $parent );
+        $hiddenLocation = $this->service->hide( $this->topLocation );
         self::assertInstanceOf( 'ezp\\Content\\Location' , $hiddenLocation );
         self::assertTrue( $hiddenLocation->hidden );
         self::assertTrue( $locationForTestContent->invisible );
@@ -231,7 +252,7 @@ class ServiceTest extends BaseServiceTest
         // Try to create a new location under a hidden one.
         // Newly created location should be invisible
         $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
-        $location->parent = $parent;
+        $location->parent = $this->topLocation;
         self::assertTrue( $this->service->create( $location )->invisible );
         $this->locationToDelete[] = $location;
 
@@ -248,25 +269,14 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUnhide()
     {
-        // First set up some locations to test
-        $parent = $this->service->load( 2 );
         $time = time();
-        $locationForTestContent = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
-        $locationForTestContent->parent = $parent;
-        $locationForTestContent = $this->service->create( $locationForTestContent );
-        $this->locationToDelete[] = $locationForTestContent;
-
-        $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
-        $location->parent = $parent;
-        $this->service->create( $location );
-        $this->locationToDelete[] = $location;
 
         // Hide the main location
-        $hiddenLocation = $this->service->hide( $parent );
+        $hiddenLocation = $this->service->hide( $this->topLocation );
 
         // Create a new location that will be hidden
         $locationShouldStayHidden = new Location( new Proxy( $this->repository->getContentService(), 1 ) );
-        $locationShouldStayHidden->parent = $location;
+        $locationShouldStayHidden->parent = $this->location;
         $this->service->create( $locationShouldStayHidden );
         $this->locationToDelete[] = $locationShouldStayHidden;
         $this->service->hide( $locationShouldStayHidden );
@@ -277,14 +287,14 @@ class ServiceTest extends BaseServiceTest
         $locationShouldStayInvisible = $this->service->create( $locationShouldStayInvisible );
 
         // Now test
-        $parentMadeVisible = $this->service->unhide( $parent );
+        $parentMadeVisible = $this->service->unhide( $this->topLocation );
         self::assertInstanceOf( 'ezp\\Content\\Location' , $parentMadeVisible );
-        self::assertFalse( $location->invisible );
-        self::assertFalse( $location->hidden );
+        self::assertFalse( $this->location->invisible );
+        self::assertFalse( $this->location->hidden );
         self::assertTrue( $locationShouldStayHidden->hidden && $locationShouldStayHidden->invisible,
                           'A hidden location should not be made visible by superior location' );
         self::assertTrue( $locationShouldStayInvisible->invisible );
-        self::assertGreaterThanOrEqual( $time, $this->locationHandler->load( $parent->id )->modifiedSubLocation );
+        self::assertGreaterThanOrEqual( $time, $this->locationHandler->load( $this->topLocation->id )->modifiedSubLocation );
     }
 
     /**
@@ -292,6 +302,60 @@ class ServiceTest extends BaseServiceTest
      */
     public function testSwap()
     {
-        $this->markTestIncomplete();
+        $topContentId = $this->topLocation->contentId;
+        $topContentName = $this->topLocation->content->name;
+        $topLocationId = $this->topLocation->id;
+        $contentId = $this->location->contentId;
+        $contentName = $this->location->content->name;
+        $locationId = $this->location->id;
+
+        $this->service->swap( $this->topLocation, $this->location );
+
+        self::assertSame( $topContentId, $this->location->contentId );
+        self::assertSame( $topContentName, $this->location->content->name );
+        self::assertSame( $contentId, $this->topLocation->contentId );
+        self::assertSame( $contentName, $this->topLocation->content->name );
+        self::assertSame( $topLocationId, $this->topLocation->id, 'Swapped locations keep same Ids' );
+        self::assertSame( $locationId, $this->location->id, 'Swapped locations keep same Ids' );
+    }
+
+    /**
+     * @group locationService
+     * @covers \ezp\Content\Location\Service::refreshDomainObject
+     */
+    public function testRefreshDomainObjectWithoutArg()
+    {
+        $refService = new ReflectionObject( $this->service );
+        $refMethod = $refService->getMethod( 'refreshDomainObject' );
+        $refMethod->setAccessible( true );
+
+        $stateBeforeEdit = $this->service->load( 2 )->getState();
+        $voBeforeEdit = (array)$stateBeforeEdit['properties'];
+
+        $this->topLocation->remoteId = 'anotherRemoteId';
+        $this->topLocation->priority = 357;
+        $refreshedLocation = $refMethod->invoke( $this->service, $this->topLocation );
+        $newState = $refreshedLocation->getState();
+        self::assertSame( $voBeforeEdit, (array)$newState['properties'] );
+    }
+
+    /**
+     * Test LocationService::refreshDomainObject() by injecting a different VO
+     *
+     * @group locationService
+     * @covers \ezp\Content\Location\Service::refreshDomainObject
+     */
+    public function testRefreshDomainObjectWithArg()
+    {
+        $refService = new ReflectionObject( $this->service );
+        $refMethod = $refService->getMethod( 'refreshDomainObject' );
+        $refMethod->setAccessible( true );
+
+        $stateDifferentLocation = $this->location->getState();
+        $voDifferentLocation = $stateDifferentLocation['properties'];
+
+        $refreshedLocation = $refMethod->invoke( $this->service, $this->topLocation, $voDifferentLocation );
+        $newState = $refreshedLocation->getState();
+        self::assertSame( (array)$voDifferentLocation, (array)$newState['properties'] );
     }
 }
