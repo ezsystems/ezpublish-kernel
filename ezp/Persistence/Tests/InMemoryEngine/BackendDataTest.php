@@ -333,7 +333,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $list = $this->backend->find( 'Content', array( 'name' => 'foo%' ) );
         foreach ( $list as $vo )
         {
-            self::assertInstanceOf( 'ezp\Persistence\Content', $vo );
+            self::assertInstanceOf( 'ezp\\Persistence\\Content', $vo );
             self::assertTrue( strpos( $vo->name, 'foo' ) === 0 );
         }
     }

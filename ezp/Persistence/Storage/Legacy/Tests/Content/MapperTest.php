@@ -233,7 +233,7 @@ class MapperTest extends TestCase
     protected function getValueConverterRegistryMock()
     {
         return $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\FieldValue\\Converter\\Registry'
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
         );
     }
 
