@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Field;
+namespace ezp\Content\FieldType;
 use \ArrayObject,
     ezp\Base\Exception\PropertyPermission;
 

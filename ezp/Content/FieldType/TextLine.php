@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Field;
-use ezp\Field\FieldType;
+namespace ezp\Content\FieldType;
+use ezp\Content\FieldType;
 
 /**
  * The TextLine field type.

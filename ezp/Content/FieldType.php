@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Field;
-use ezp\Field\FieldSettings;
+namespace ezp\Content;
+use ezp\Content\FieldType\FieldSettings;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
