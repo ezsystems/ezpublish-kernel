@@ -220,18 +220,23 @@ class EzcDatabaseTest extends TestCase
     public static function getTypeCreationExpectations()
     {
         return array(
-            array( 'version', '0' ),
-            array( 'serialized_name_list', 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";}' ),
-            array( 'serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}' ),
-            array( 'identifier', 'folder' ),
+            array( 'always_available', 0 ),
+            array( 'contentobject_name', '<short_name|name>' ),
             array( 'created', '1024392098' ),
-            array( 'modified', '1082454875' ),
             array( 'creator_id', '14' ),
+            array( 'identifier', 'folder' ),
+            array( 'initial_language_id', '2' ),
+            array( 'is_container', '1' ),
+            array( 'language_mask', 3 ),
+            array( 'modified', '1082454875' ),
             array( 'modifier_id', '14' ),
             array( 'remote_id', 'a3d405b81be900468eb153d774f4f0d2' ),
+            array( 'serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}' ),
+            array( 'serialized_name_list', 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";}' ),
+            array( 'sort_field', 1 ),
+            array( 'sort_order', 1 ),
             array( 'url_alias_name', '' ),
-            array( 'is_container', '1' ),
-            array( 'initial_language_id', '2' ),
+            array( 'version', '0' ),
         );
     }
 
@@ -248,20 +253,45 @@ class EzcDatabaseTest extends TestCase
         $gateway->insertType( $type );
 
         $this->assertQueryResult(
-            array( array( 1 ) ),
-            $this->getDatabaseHandler()
-                ->createSelectQuery()
-                ->select( 'COUNT(*)' )
-                ->from( 'ezcontentclass' ),
-            'Type not inserted'
-        );
-        $this->assertQueryResult(
             array( array($expectation ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( $column )
                 ->from( 'ezcontentclass' ),
-            'Inserted Type data incorrect'
+            'Inserted Type data incorrect in column ' . $column
+        );
+    }
+
+    public static function getTypeCreationContentClassNameExpectations()
+    {
+        return array(
+            array( 'contentclass_id', 1 ),
+            array( 'contentclass_version', 0 ),
+            array( 'language_id', 3 ),
+            array( 'language_locale', 'eng-US' ),
+            array( 'name', 'folder' ),
+        );
+    }
+
+    /**
+     * @dataProvider getTypeCreationContentClassNameExpectations
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertType
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
+     */
+    public function testInsertTypeContentClassName( $column, $expectation )
+    {
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $type = $this->getTypeFixture();
+
+        $gateway->insertType( $type );
+
+        $this->assertQueryResult(
+            array( array($expectation ) ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( $column )
+                ->from( 'ezcontentclass_name' ),
+            'Inserted Type data incorrect in column ' . $column
         );
     }
 
