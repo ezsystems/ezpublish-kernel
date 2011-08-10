@@ -10,10 +10,24 @@
 namespace ezp\Field;
 use ezp\Field\FieldType;
 
+/**
+ * The TextLine field type.
+ *
+ * This field type represents a simple string.
+ */
 class TextLine extends FieldType
 {
     protected $fieldTypeString = 'ezstring';
     protected $defaultValue = '';
     protected $isSearchable = true;
     protected $isTranslateable = true;
+
+    protected $allowedSettings = array( 'maxStringLength' => null );
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+
 }
