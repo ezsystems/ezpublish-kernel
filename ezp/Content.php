@@ -109,7 +109,7 @@ class Content extends Model
      *
      * @var \ezp\Content\Section
      */
-    public $_section;
+    protected $_section;
 
     /**
      * The Content's status, as one of the ezp\Content::STATUS_* constants
