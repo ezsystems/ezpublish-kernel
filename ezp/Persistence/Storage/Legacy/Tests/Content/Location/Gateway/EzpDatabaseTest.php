@@ -367,7 +367,7 @@ class EzpDatabaseTest extends TestCase
     public static function getNodeAssignmentValues()
     {
         return array(
-            array( 'contentobject_version', null ), // 1
+            array( 'contentobject_version', 1 ),
             array( 'from_node_id', 0 ),
             array( 'id', 214 ),
             array( 'is_main', 0 ),
