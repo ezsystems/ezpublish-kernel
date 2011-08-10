@@ -9,7 +9,8 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Location\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Location\Gateway,
-    ezp\Persistence\Content;
+    ezp\Persistence\Content,
+    ezp\Persistence\Content\Location\CreateStruct;
 
 /**
  * Location gateway implementation using the zeta database component.
@@ -303,13 +304,13 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Creates a new location for $conont in given $parentNode
+     * Creates a new location in given $parentNode
      *
-     * @param Content $content
+     * @param \ezp\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
      * @return \ezp\Persistence\Content\Location
      */
-    public function createLocation( Content $content, array $parentNode )
+    public function createLocation( CreateStruct $createStruct, array $parentNode )
     {
         $query = $this->handler->createInsertQuery();
         $query

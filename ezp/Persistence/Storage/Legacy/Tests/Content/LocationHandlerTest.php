@@ -47,23 +47,8 @@ class LocationHandlerTest extends TestCase
     {
         $dbHandler = $this->getDatabaseHandler();
         return new Handler(
-            $this->contentHandler = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
-                array(),
-                array(),
-                '',
-                false
-            ),
             $this->locationGateway = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Gateway' )
         );
-    }
-
-    protected function getContentObject()
-    {
-        $contentObject = new \ezp\Persistence\Content();
-        $contentObject->id = 68;
-
-        return $contentObject;
     }
 
     public static function getLoadLocationValues()
@@ -255,6 +240,8 @@ class LocationHandlerTest extends TestCase
     {
         $handler = $this->getLocationHandler();
 
+        $createStruct = new CreateStruct();
+
         $this->locationGateway
             ->expects( $this->once() )
             ->method( 'getBasicNodeData' )
@@ -268,18 +255,12 @@ class LocationHandlerTest extends TestCase
                 )
             );
 
-        $this->contentHandler
-            ->expects( $this->once() )
-            ->method( 'load' )
-            ->with( 68 )
-            ->will( $this->returnValue( $content = $this->getContentObject() ) );
-
         $this->locationGateway
             ->expects( $this->once() )
             ->method( 'createLocation' )
-            ->with( $content, $parentInfo );
+            ->with( $createStruct, $parentInfo );
 
-        $handler->createLocation( new CreateStruct( array( 'contentId' => 68 ) ), 77 );
+        $handler->createLocation( $createStruct, 77 );
     }
 
     public function testTrashSubtree()

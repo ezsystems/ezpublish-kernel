@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Content\Location;
-use ezp\Persistence\Content;
+use ezp\Persistence\Content,
+    ezp\Persistence\Content\Location\CreateStruct;
 
 /**
  * Base class for location gateways.
@@ -28,19 +29,6 @@ abstract class Gateway
     const NODE_ASSIGNMENT_OP_CODE_REMOVE = 7;
     const NODE_ASSIGNMENT_OP_CODE_SET_NOP = 8;
     const NODE_ASSIGNMENT_OP_CODE_SET = 9;
-
-    /**
-     * Generate remote ID
-     *
-     * Copy of the implementation in lib/ezutils/classes/ezremoteidutility.php
-     *
-     * @param string $type
-     * @return string
-     */
-    public static function getRemoteId( $type = 'node' )
-    {
-        return md5( uniqid( $type, true ) );
-    }
 
     /**
      * Returns an array with basic node data
@@ -134,13 +122,13 @@ abstract class Gateway
     abstract public function updatePriority( $locationId, $priority );
 
     /**
-     * Creates a new location for $conont in given $parentNode
+     * Creates a new location in given $parentNode
      *
-     * @param Content $content
+     * @param \ezp\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
      * @return \ezp\Persistence\Content\Location
      */
-    abstract public function createLocation( Content $content, array $parentNode );
+    abstract public function createLocation( CreateStruct $createStruct, array $parentNode );
 
     /**
      * Removes all Locations under and includin $locationId.

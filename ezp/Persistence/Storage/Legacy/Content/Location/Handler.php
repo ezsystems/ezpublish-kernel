@@ -20,13 +20,6 @@ use ezp\Persistence\Content\Location,
 class Handler implements BaseLocationHandler
 {
     /**
-     * Content handler implementation
-     *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Handler
-     */
-    protected $contentHandler;
-
-    /**
      * Gaateway for handling location data
      *
      * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
@@ -36,13 +29,11 @@ class Handler implements BaseLocationHandler
     /**
      * Construct from userGateway
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Handler $contentHandler
      * @param \ezp\Persistence\Storage\Legacy\Content\Location\Gateway $locationGateway
      * @return void
      */
-    public function __construct( ContentHandler $contentHandler, LocationGateway $locationGateway )
+    public function __construct( LocationGateway $locationGateway )
     {
-        $this->contentHandler = $contentHandler;
         $this->locationGateway = $locationGateway;
     }
 
@@ -208,9 +199,7 @@ class Handler implements BaseLocationHandler
     public function createLocation( CreateStruct $locationStruct, $parentId )
     {
         $parentNodeData = $this->locationGateway->getBasicNodeData( $parentId );
-        $content = $this->contentHandler->load( $locationStruct->contentId );
-
-        $this->locationGateway->createLocation( $content, $parentNodeData );
+        $this->locationGateway->createLocation( $locationStruct, $parentNodeData );
     }
 
     /**
