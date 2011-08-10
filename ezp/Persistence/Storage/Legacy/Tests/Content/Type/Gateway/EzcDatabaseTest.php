@@ -23,6 +23,13 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
  */
 class EzcDatabaseTest extends TestCase
 {
+    public function setUp()
+    {
+        parent::setUp();
+
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/languages.php' );
+    }
+
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::__construct
@@ -269,7 +276,7 @@ class EzcDatabaseTest extends TestCase
             array( 'contentclass_version', 0 ),
             array( 'language_id', 3 ),
             array( 'language_locale', 'eng-US' ),
-            array( 'name', 'folder' ),
+            array( 'name', 'Folder' ),
         );
     }
 

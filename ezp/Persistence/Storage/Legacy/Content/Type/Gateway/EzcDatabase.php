@@ -84,6 +84,13 @@ class EzcDatabase extends Gateway
     protected $dbHandler;
 
     /**
+     * Cache for language mapping information
+     *
+     * @var array
+     */
+    protected $languageMapping;
+
+    /**
      * Creates a new gateway based on $db
      *
      * @param ezcDbHandler $db
@@ -91,6 +98,62 @@ class EzcDatabase extends Gateway
     public function __construct( \ezcDbHandler $db )
     {
         $this->dbHandler = $db;
+    }
+
+    /**
+     * Get language mapping
+     *
+     * Get mapping of languages to their respective IDs in the database.
+     *
+     * @return array
+     */
+    protected function getLanguageMapping()
+    {
+        if ( $this->languageMapping )
+        {
+            return $this->languageMapping;
+        }
+
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select( 'id', 'locale' )->from( 'ezcontent_language' );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $this->languageMapping = array();
+        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            $this->languageMapping[$row['locale']] = (int) $row['id'];
+        }
+
+        return $this->languageMapping;
+    }
+
+    /**
+     * Get language mask
+     *
+     * Return the language mask for a common array of language specifications
+     * for a type name or description.
+     *
+     * @param array $languages
+     * @return int
+     */
+    protected function getLanguageMask( array $languages )
+    {
+        $mask    = 0;
+        if ( isset( $languages['always-available'] ) )
+        {
+            $mask |= $languages['always-available'] ? 1 : 0;
+            unset( $languages['always-available'] );
+        }
+
+        $mapping = $this->getLanguageMapping();
+        foreach ( $languages as $language => $value )
+        {
+            $mask |= $mapping[$language];
+        }
+
+        return $mask;
     }
 
     /**
@@ -175,9 +238,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $type->creatorId, null, \PDO::PARAM_INT )
         );
         $this->setCommonTypeColumns( $q, $type );
-
-        $stmt = $q->prepare();
-        $stmt->execute();
+        $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId();
     }
@@ -218,6 +279,9 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteIdentifier( 'is_container' ),
             $q->bindValue( $type->isContainer ? 1 : 0, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteIdentifier( 'language_mask' ),
+            $q->bindValue( $this->getLanguageMask( $type->name ), null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteIdentifier( 'initial_language_id' ),
             $q->bindValue( $type->initialLanguageId, null, \PDO::PARAM_INT )
