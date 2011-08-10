@@ -49,12 +49,12 @@ class Field extends Model
     /**
      * @var \ezp\Content\Version
      */
-    protected $contentVersion;
+    protected $version;
 
     /**
      * @var \ezp\Content\Type\FieldDefinition
      */
-    protected $typeFieldDefinition;
+    protected $fieldDefinition;
 
     /**
      * Constructor, sets up properties
@@ -64,8 +64,8 @@ class Field extends Model
      */
     public function __construct( Version $contentVersion, FieldDefinition $fieldDefinition )
     {
-        $this->contentVersion = $contentVersion;
-        $this->typeFieldDefinition = $fieldDefinition;
+        $this->version = $contentVersion;
+        $this->fieldDefinition = $fieldDefinition;
         $this->properties = new FieldVO( array(
                                                'type' => $fieldDefinition->fieldType,
                                                'fieldDefinitionId' => $fieldDefinition->id,
@@ -80,7 +80,7 @@ class Field extends Model
      */
     protected function getVersion()
     {
-        return $this->contentVersion;
+        return $this->version;
     }
 
     /**
@@ -90,7 +90,7 @@ class Field extends Model
      */
     protected function getFieldDefinition()
     {
-        return $this->typeFieldDefinition;
+        return $this->fieldDefinition;
     }
 }
 

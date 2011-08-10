@@ -68,12 +68,12 @@ class Type extends Model
     /**
      * @var Type\FieldDefinition[]
      */
-    protected $fieldDefinitions;
+    protected $fields;
 
     /**
      * @var Type\Group[]
      */
-    protected $typeGroups;
+    protected $groups;
 
     /**
      * Construct type and init all internal objects
@@ -81,8 +81,8 @@ class Type extends Model
     public function __construct()
     {
         $this->properties = new TypeValue();
-        $this->fieldDefinitions = new TypeCollection( 'ezp\\Content\\Type\\FieldDefinition' );
-        $this->typeGroups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
+        $this->fields = new TypeCollection( 'ezp\\Content\\Type\\FieldDefinition' );
+        $this->groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
     }
 
     /**
@@ -90,7 +90,7 @@ class Type extends Model
      */
     public function getFields()
     {
-        return $this->fieldDefinitions;
+        return $this->fields;
     }
 
     /**
@@ -98,7 +98,7 @@ class Type extends Model
      */
     public function getGroups()
     {
-        return $this->typeGroups;
+        return $this->groups;
     }
 }
 ?>

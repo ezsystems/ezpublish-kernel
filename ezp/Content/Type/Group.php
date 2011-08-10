@@ -54,7 +54,7 @@ class Group extends Model
     /**
      * @var \ezp\Content\Type[]
      */
-    protected $contentTypes;
+    protected $types;
 
     /**
      * Construct object with all internal objects
@@ -62,7 +62,7 @@ class Group extends Model
     public function __construct()
     {
         $this->properties = new GroupValue();
-        $this->contentTypes = new TypeCollection( 'ezp\\Content\\Type' );
+        $this->types = new TypeCollection( 'ezp\\Content\\Type' );
     }
 
     /**
@@ -70,6 +70,6 @@ class Group extends Model
      */
     public function getTypes()
     {
-        return $this->contentTypes;
+        return $this->types;
     }
 }

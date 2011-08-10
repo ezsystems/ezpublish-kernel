@@ -59,7 +59,7 @@ class FieldDefinition extends Model
     /**
      * @var \ezp\Content\Type
      */
-    protected $contentType;
+    protected $type;
 
     /**
      * Constructor, sets up value object, fieldType string and attach $contentType
@@ -69,7 +69,7 @@ class FieldDefinition extends Model
      */
     public function __construct( Type $contentType, $fieldType )
     {
-        $this->contentType = $contentType;
+        $this->type = $contentType;
         $this->properties = new FieldDefinitionValue( array( 'fieldType' => $fieldType ) );
     }
 
@@ -80,6 +80,6 @@ class FieldDefinition extends Model
      */
     protected function getType()
     {
-        return $this->contentType;
+        return $this->type;
     }
 }
