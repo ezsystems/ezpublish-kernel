@@ -73,7 +73,7 @@ abstract class FieldType
      *
      * The key is the setting name, and the value is the default value for given
      * setting, set to null if no particular default should be set.
-     * 
+     *
      * @var array
      */
     protected $allowedSettings = array();
