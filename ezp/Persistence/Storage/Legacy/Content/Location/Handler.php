@@ -141,8 +141,6 @@ class Handler implements BaseLocationHandler
      */
     public function markSubtreeModified( $locationId, $timeStamp = null )
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
-
         $nodeData  = $this->locationGateway->getBasicNodeData( $locationId );
         $timeStamp = $timeStamp ?: time();
         $this->locationGateway->updateSubtreeModificationTime( $nodeData['path_string'], $timeStamp );
