@@ -97,7 +97,6 @@ class EzcDatabase extends Gateway
      * Inserts the given $group.
      *
      * @return mixed Group ID
-     * @todo This might lead to race conditions for insert IDs.
      * @todo PDO->lastInsertId() might require a seq name (Oracle?).
      * @todo Isn't $identifier more the "name"?
      */
@@ -159,7 +158,6 @@ class EzcDatabase extends Gateway
      *
      * @param Type $createStruct
      * @return mixed Type ID
-     * @todo This might lead to race conditions for insert IDs.
      * @todo PDO->lastInsertId() might require a seq name (Oracle?).
      */
     public function insertType( Type $type )
@@ -328,7 +326,6 @@ class EzcDatabase extends Gateway
      * @param FieldDefinition $fieldDefinition
      * @return mixed Field definition ID
      * @todo What about fieldTypeConstraints and defaultValue?
-     * @todo This might lead to race conditions for insert IDs.
      * @todo PDO->lastInsertId() might require a seq name (Oracle?).
      */
     public function insertFieldDefinition( $typeId, $version, FieldDefinition $fieldDefinition )
