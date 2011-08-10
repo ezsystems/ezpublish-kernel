@@ -217,12 +217,30 @@ class EzcDatabaseTest extends TestCase
          */
     }
 
+    public static function getTypeCreationExpectations()
+    {
+        return array(
+            array( 'version', '0' ),
+            array( 'serialized_name_list', 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";}' ),
+            array( 'serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}' ),
+            array( 'identifier', 'folder' ),
+            array( 'created', '1024392098' ),
+            array( 'modified', '1082454875' ),
+            array( 'creator_id', '14' ),
+            array( 'modifier_id', '14' ),
+            array( 'remote_id', 'a3d405b81be900468eb153d774f4f0d2' ),
+            array( 'url_alias_name', '' ),
+            array( 'is_container', '1' ),
+            array( 'initial_language_id', '2' ),
+        );
+    }
+
     /**
-     * @return void
+     * @dataProvider getTypeCreationExpectations
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertType
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
      */
-    public function testInsertType()
+    public function testInsertType( $column, $expectation )
     {
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
         $type = $this->getTypeFixture();
@@ -238,38 +256,11 @@ class EzcDatabaseTest extends TestCase
             'Type not inserted'
         );
         $this->assertQueryResult(
-            array(
-                array(
-                    'version' => '0',
-                    'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";}',
-                    'serialized_description_list' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
-                    'identifier' => 'folder',
-                    'created' => '1024392098',
-                    'modified' => '1082454875',
-                    'creator_id' => '14',
-                    'modifier_id' => '14',
-                    'remote_id' => 'a3d405b81be900468eb153d774f4f0d2',
-                    'url_alias_name' => '',
-                    'is_container' => '1',
-                    'initial_language_id' => '2',
-                )
-            ),
+            array( array($expectation ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
-                ->select(
-                    'version',
-                    'serialized_name_list',
-                    'serialized_description_list',
-                    'identifier',
-                    'created',
-                    'modified',
-                    'creator_id',
-                    'modifier_id',
-                    'remote_id',
-                    'url_alias_name',
-                    'is_container',
-                    'initial_language_id'
-                )->from( 'ezcontentclass' ),
+                ->select( $column )
+                ->from( 'ezcontentclass' ),
             'Inserted Type data incorrect'
         );
     }
