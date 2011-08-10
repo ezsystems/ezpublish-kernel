@@ -65,9 +65,18 @@ abstract class FieldType
      *                      type. Typically these properties are used to
      *                      configure behaviour of field types and normally set
      *                      in the FieldDefiniton on ContentTypes
-     * @todo Method to quickly init. the field settings from predefined settings in FieldDefinition
      */
     protected $fieldSettings;
+
+    /**
+     * The setting keys which are available on this field type.
+     *
+     * The key is the setting name, and the value is the default value for given
+     * setting, set to null if no particular default should be set.
+     * 
+     * @var array
+     */
+    protected $allowedSettings = array();
 
     /**
      * Internal value of field type.
@@ -91,6 +100,14 @@ abstract class FieldType
      * @var mixed
      */
     protected $inputValue;
+
+    /**
+     * Constructs field type object, initializing internal data structures.
+     */
+    public function __construct()
+    {
+        $this->fieldSettings = new FieldSettings( $this->allowedSettings );
+    }
 
     /**
      * Does the field type supports translation of its data.
@@ -121,4 +138,51 @@ abstract class FieldType
     {
         return $this->fieldTypeString;
     }
+
+    /**
+     * Set $setting on field type.
+     *
+     * Allowed options are in {@link $allowedSettings}
+     *
+     * @param string $setting
+     * @param mixed $value
+     * @return void
+     */
+    public function setFieldSetting( $setting, $value )
+    {
+        $this->fieldSettings[$setting] = $value;
+    }
+
+    /**
+     * Set all settings on field type.
+     *
+     * Useful to initialize field type from a field definition.
+     *
+     * @param array $values
+     * @return void
+     */
+    public function initializeSettings( array $values )
+    {
+        $this->fieldSettings->exchangeArray( $values );
+    }
+
+    /**
+     * Return a copy of the array of fieldSettings.
+     *
+     * @return array
+     */
+    public function getFieldTypeSettings()
+    {
+        return $this->fieldSettings->getArrayCopy();
+    }
+
+    /**
+     * Keys of settings which are available on this fieldtype.
+     * @return array
+     */
+    public function allowedSettings()
+    {
+        return array_keys( $this->allowedSettings );
+    }
+
 }
