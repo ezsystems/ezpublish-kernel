@@ -623,23 +623,23 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteTable( 'ezcontentclass_attribute' ),
             $q->expr->lAnd(
                 $q->expr->eq(
-                    $this->qualifiedIdentifier(
-                        'ezcontentclass',
-                        'id'
+                    $this->dbHandler->quoteColumn(
+                        'id',
+                        'ezcontentclass'
                     ),
-                    $this->qualifiedIdentifier(
-                        'ezcontentclass_attribute',
-                        'contentclass_id'
+                    $this->dbHandler->quoteColumn(
+                        'contentclass_id',
+                        'ezcontentclass_attribute'
                     )
                 ),
                 $q->expr->eq(
-                    $this->qualifiedIdentifier(
-                        'ezcontentclass',
-                        'version'
+                    $this->dbHandler->quoteColumn(
+                        'version',
+                        'ezcontentclass'
                     ),
-                    $this->qualifiedIdentifier(
-                        'ezcontentclass_attribute',
-                        'version'
+                    $this->dbHandler->quoteColumn(
+                        'version',
+                        'ezcontentclass_attribute'
                     )
                 )
             )
@@ -647,34 +647,34 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' ),
             $q->expr->lAnd(
                 $q->expr->eq(
-                    $this->qualifiedIdentifier(
-                        'ezcontentclass',
-                        'id'
+                    $this->dbHandler->quoteColumn(
+                        'id',
+                        'ezcontentclass'
                     ),
-                    $this->qualifiedIdentifier(
-                        'ezcontentclass_classgroup',
-                        'contentclass_id'
+                    $this->dbHandler->quoteColumn(
+                        'contentclass_id',
+                        'ezcontentclass_classgroup'
                     )
                 ),
                 $q->expr->eq(
-                    $this->qualifiedIdentifier(
-                        'ezcontentclass',
-                        'version'
+                    $this->dbHandler->quoteColumn(
+                        'version',
+                        'ezcontentclass'
                     ),
-                    $this->qualifiedIdentifier(
-                        'ezcontentclass_classgroup',
-                        'contentclass_version'
+                    $this->dbHandler->quoteColumn(
+                        'contentclass_version',
+                        'ezcontentclass_classgroup'
                     )
                 )
             )
         )->where(
             $q->expr->lAnd(
                 $q->expr->eq(
-                    $this->qualifiedIdentifier( 'ezcontentclass', 'id' ),
+                    $this->dbHandler->quoteColumn( 'id', 'ezcontentclass' ),
                     $q->bindValue( $typeId )
                 ),
                 $q->expr->eq(
-                    $this->qualifiedIdentifier( 'ezcontentclass', 'version' ),
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentclass' ),
                     $q->bindValue( $version )
                 )
             )
@@ -793,18 +793,5 @@ class EzcDatabase extends Gateway
     {
         // @TODO: Replace calls to this function
         return $this->dbHandler->aliasedColumn( $query, $columnName, $tableName );
-    }
-
-    /**
-     * Returns a qualified identifier for $columnName in $tableName.
-     *
-     * @param string $tableName
-     * @param string $columnName
-     * @return string
-     */
-    public function qualifiedIdentifier( $tableName, $columnName )
-    {
-        // @TODO: Replace calls to this function
-        return $this->dbHandler->quoteColumn( $columnName, $tableName );
     }
 }
