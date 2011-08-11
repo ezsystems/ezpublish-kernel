@@ -51,8 +51,11 @@ class EzcDatabase extends Gateway
         $query = $this->handler->createSelectQuery();
         $query
             ->select( '*' )
-            ->from( 'ezcontentobject_tree' )
-            ->where( $query->expr->eq( 'node_id', $query->bindValue( $nodeId ) ) );
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'node_id' ),
+                $query->bindValue( $nodeId )
+            ) );
         $statement = $query->prepare();
         $statement->execute();
         return $statement->fetch( \PDO::FETCH_ASSOC );
@@ -90,9 +93,15 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( 'node_id', 'path_string' )
-            ->from( 'ezcontentobject_tree' )
-            ->where( $query->expr->like( 'path_string', $query->bindValue( $fromPathString . '%' ) ) );
+            ->select(
+                $this->handler->quoteColumn( 'node_id' ),
+                $this->handler->quoteColumn( 'path_string' )
+            )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where( $query->expr->like(
+                $this->handler->quoteColumn( 'path_string' ),
+                $query->bindValue( $fromPathString . '%' )
+            ) );
         $statement = $query->prepare();
         $statement->execute();
 
@@ -102,9 +111,15 @@ class EzcDatabase extends Gateway
         {
             $query = $this->handler->createUpdateQuery();
             $query
-                ->update( 'ezcontentobject_tree' )
-                ->set( 'path_string', $query->bindValue( str_replace( $oldParentLocation, $toPathString, $row['path_string'] ) ) )
-                ->where( $query->expr->eq( 'node_id', $query->bindValue( $row['node_id'] ) ) );
+                ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+                ->set(
+                    $this->handler->quoteColumn( 'path_string' ),
+                    $query->bindValue( str_replace( $oldParentLocation, $toPathString, $row['path_string'] ) )
+                )
+                ->where( $query->expr->eq(
+                    $this->handler->quoteColumn( 'node_id' ),
+                    $query->bindValue( $row['node_id'] )
+                ) );
             $query->prepare()->execute();
         }
     }
@@ -120,9 +135,15 @@ class EzcDatabase extends Gateway
         $nodes = array_filter( explode( '/', $pathString ) );
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezcontentobject_tree' )
-            ->set( 'modified_subnode', $query->bindValue( time() ) )
-            ->where( $query->expr->in( 'node_id', $nodes ) );
+            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'modified_subnode' ),
+                $query->bindValue( time() )
+            )
+            ->where( $query->expr->in(
+                $this->handler->quoteColumn( 'node_id' ),
+                $nodes )
+            );
         $query->prepare()->execute();
     }
 
@@ -136,10 +157,19 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'eznode_assignment' )
-            ->set( 'parent_node', $query->bindValue( $newParent ) )
-            ->set( 'op_code', $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_MOVE ) )
-            ->where( $query->expr->eq( 'contentobject_id', $query->bindValue( $contentObjectId ) ) );
+            ->update( $this->handler->quoteTable( 'eznode_assignment' ) )
+            ->set(
+                $this->handler->quoteColumn( 'parent_node' ),
+                $query->bindValue( $newParent )
+            )
+            ->set(
+                $this->handler->quoteColumn( 'op_code' ),
+                $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_MOVE )
+            )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $contentObjectId )
+            ) );
         $query->prepare()->execute();
     }
 
@@ -152,17 +182,32 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezcontentobject_tree' )
-            ->set( 'is_invisible', $query->bindValue( 1 ) )
-            ->set( 'modified_subnode', $query->bindValue( time() ) )
-            ->where( $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) ) );
+            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'is_invisible' ),
+                $query->bindValue( 1 )
+            )
+            ->set(
+                $this->handler->quoteColumn( 'modified_subnode' ),
+                $query->bindValue( time() )
+            )
+            ->where( $query->expr->like(
+                $this->handler->quoteColumn( 'path_string' ),
+                $query->bindValue( $pathString . '%' )
+            ) );
         $query->prepare()->execute();
 
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezcontentobject_tree' )
-            ->set( 'is_hidden', $query->bindValue( 1 ) )
-            ->where( $query->expr->eq( 'path_string', $query->bindValue( $pathString ) ) );
+            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'is_hidden' ),
+                $query->bindValue( 1 )
+            )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'path_string' ),
+                $query->bindValue( $pathString )
+            ) );
         $query->prepare()->execute();
     }
 
@@ -177,20 +222,32 @@ class EzcDatabase extends Gateway
         // Unhide the requested node
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezcontentobject_tree' )
-            ->set( 'is_hidden', $query->bindValue( 0 ) )
-            ->where( $query->expr->eq( 'path_string', $query->bindValue( $pathString ) ) );
+            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'is_hidden' ),
+                $query->bindValue( 0 )
+            )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'path_string' ),
+                $query->bindValue( $pathString )
+            ) );
         $query->prepare()->execute();
 
         // Check if any parent nodes are explicitely hidden
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( 'path_string' )
-            ->from( 'ezcontentobject_tree' )
+            ->select( $this->handler->quoteColumn( 'path_string' ) )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->where(
                 $query->expr->lAnd(
-                    $query->expr->eq( 'is_hidden', $query->bindValue( 1 ) ),
-                    $query->expr->in( 'node_id', array_filter( explode( '/', $pathString ) ) )
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'is_hidden' ),
+                        $query->bindValue( 1 )
+                    ),
+                    $query->expr->in(
+                        $this->handler->quoteColumn( 'node_id' ),
+                        array_filter( explode( '/', $pathString ) )
+                    )
                 )
             );
         $statement = $query->prepare();
@@ -206,12 +263,18 @@ class EzcDatabase extends Gateway
         // should be unhidden
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( 'path_string' )
-            ->from( 'ezcontentobject_tree' )
+            ->select( $this->handler->quoteColumn( 'path_string' ) )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->where(
                 $query->expr->lAnd(
-                    $query->expr->eq( 'is_hidden', $query->bindValue( 1 ) ),
-                    $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) )
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'is_hidden' ),
+                        $query->bindValue( 1 )
+                    ),
+                    $query->expr->like(
+                        $this->handler->quoteColumn( 'path_string' ),
+                        $query->bindValue( $pathString . '%' )
+                    )
                 )
             );
         $statement = $query->prepare();
@@ -220,23 +283,36 @@ class EzcDatabase extends Gateway
 
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezcontentobject_tree' )
-            ->set( 'is_invisible', $query->bindValue( 0 ) )
-            ->set( 'modified_subnode', $query->bindValue( time() ) );
+            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'is_invisible' ),
+                $query->bindValue( 0 )
+            )
+            ->set(
+                $this->handler->quoteColumn( 'modified_subnode' ),
+                $query->bindValue( time() )
+            );
 
         // Build where expression selecting the nodes, which should be made
         // visible again
-        $where = $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) );
+        $where = $query->expr->like(
+            $this->handler->quoteColumn( 'path_string' ),
+            $query->bindValue( $pathString . '%' )
+        );
         if ( count( $hiddenSubtrees ) )
         {
+            $handler = $this->handler;
             $where = $query->expr->lAnd(
                 $where,
                 $query->expr->lAnd(
                     array_map(
-                        function ( $pathString ) use ( $query )
+                        function ( $pathString ) use ( $query, $handler )
                         {
                             return $query->expr->not(
-                                $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) )
+                                $query->expr->like(
+                                    $handler->quoteColumn( 'path_string' ),
+                                    $query->bindValue( $pathString . '%' )
+                                )
                             );
                         },
                         $hiddenSubtrees
@@ -262,9 +338,15 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( 'node_id', 'contentobject_id' )
-            ->from( 'ezcontentobject_tree' )
-            ->where( $query->expr->in( 'node_id', array( $locationId1, $locationId2 ) ) );
+            ->select(
+                $this->handler->quoteColumn( 'node_id' ),
+                $this->handler->quoteColumn( 'contentobject_id' )
+            )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where( $query->expr->in(
+                $this->handler->quoteColumn( 'node_id' ),
+                array( $locationId1, $locationId2 ) )
+            );
         $statement = $query->prepare();
         $statement->execute();
         foreach ( $statement->fetchAll() as $row )
@@ -274,16 +356,28 @@ class EzcDatabase extends Gateway
 
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezcontentobject_tree' )
-            ->set( 'contentobject_id', $query->bindValue( $contentObjects[$locationId2] ) )
-            ->where( $query->expr->eq( 'node_id', $query->bindValue( $locationId1 ) ) );
+            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $contentObjects[$locationId2] )
+            )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'node_id' ),
+                $query->bindValue( $locationId1 ) )
+            );
         $query->prepare()->execute();
 
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezcontentobject_tree' )
-            ->set( 'contentobject_id', $query->bindValue( $contentObjects[$locationId1] ) )
-            ->where( $query->expr->eq( 'node_id', $query->bindValue( $locationId2 ) ) );
+            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $contentObjects[$locationId1] )
+            )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'node_id' ),
+                $query->bindValue( $locationId2 )
+            ) );
         $query->prepare()->execute();
     }
 
@@ -298,9 +392,15 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezcontentobject_tree' )
-            ->set( 'priority', $query->bindValue( $priority ) )
-            ->where( $query->expr->eq( 'node_id', $query->bindValue( $locationId ) ) );
+            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'priority' ),
+                $query->bindValue( $priority )
+            )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'node_id' ),
+                $query->bindValue( $locationId )
+            ) );
         $query->prepare()->execute();
     }
 
@@ -315,47 +415,109 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createInsertQuery();
         $query
-            ->insertInto( 'ezcontentobject_tree' )
-            ->set( 'contentobject_id', $query->bindValue( $createStruct->contentId ) )
-            ->set( 'contentobject_is_published', $query->bindValue( 0 ) ) // Will be set to 1, once the contentt object has been published
-            ->set( 'contentobject_version', $query->bindValue( $createStruct->contentVersion ) )
-            ->set( 'depth', $query->bindValue( $parentNode['depth'] + 1 ) )
-            ->set( 'is_hidden', $query->bindValue( $createStruct->hidden ) )
-            ->set( 'is_invisible', $query->bindValue( $createStruct->invisible ) )
-            ->set( 'main_node_id', $query->bindValue( $createStruct->mainLocationId ) )
-            ->set( 'modified_subnode', $query->bindValue( time() ) )
-            ->set( 'node_id', $query->bindValue( null ) ) // Auto increment
-            ->set( 'parent_node_id', $query->bindValue( $parentNode['node_id'] ) )
-            ->set( 'path_identification_string', $query->bindValue( null ) ) // Set later by the publishing operation
-            ->set( 'path_string', $query->bindValue( 'dummy' ) ) // Set later
-            ->set( 'priority', $query->bindValue( $createStruct->priority ) )
-            ->set( 'remote_id', $query->bindValue( $createStruct->remoteId ) )
-            ->set( 'sort_field', $query->bindValue( $createStruct->sortField ) )
-            ->set( 'sort_order', $query->bindValue( $createStruct->sortOrder ) );
+            ->insertInto( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'contentobject_id' ),
+                 $query->bindValue( $createStruct->contentId )
+            )->set(
+                $this->handler->quoteColumn( 'contentobject_is_published' ),
+                 $query->bindValue( 0 ) // Will be set to 1, once the contentt object has been published
+            )->set(
+                $this->handler->quoteColumn( 'contentobject_version' ),
+                 $query->bindValue( $createStruct->contentVersion )
+            )->set(
+                $this->handler->quoteColumn( 'depth' ),
+                 $query->bindValue( $parentNode['depth'] + 1 )
+            )->set(
+                $this->handler->quoteColumn( 'is_hidden' ),
+                 $query->bindValue( $createStruct->hidden )
+            )->set(
+                $this->handler->quoteColumn( 'is_invisible' ),
+                 $query->bindValue( $createStruct->invisible )
+            )->set(
+                $this->handler->quoteColumn( 'main_node_id' ),
+                 $query->bindValue( $createStruct->mainLocationId )
+            )->set(
+                $this->handler->quoteColumn( 'modified_subnode' ),
+                 $query->bindValue( time() )
+            )->set(
+                $this->handler->quoteColumn( 'node_id' ),
+                 $query->bindValue( null ) // Auto increment
+            )->set(
+                $this->handler->quoteColumn( 'parent_node_id' ),
+                 $query->bindValue( $parentNode['node_id'] )
+            )->set(
+                $this->handler->quoteColumn( 'path_identification_string' ),
+                 $query->bindValue( null ) // Set later by the publishing operation
+            )->set(
+                $this->handler->quoteColumn( 'path_string' ),
+                 $query->bindValue( 'dummy' ) // Set later
+            )->set(
+                $this->handler->quoteColumn( 'priority' ),
+                 $query->bindValue( $createStruct->priority )
+            )->set(
+                $this->handler->quoteColumn( 'remote_id' ),
+                 $query->bindValue( $createStruct->remoteId )
+            )->set(
+                $this->handler->quoteColumn( 'sort_field' ),
+                 $query->bindValue( $createStruct->sortField )
+            )->set(
+                $this->handler->quoteColumn( 'sort_order' ),
+                 $query->bindValue( $createStruct->sortOrder )
+            );
         $query->prepare()->execute();
 
         $newNodeId = $this->handler->lastInsertId();
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezcontentobject_tree' )
-            ->set( 'path_string', $query->bindValue( $parentNode['path_string'] . $newNodeId . '/' ) )
-            ->where( $query->expr->eq( 'node_id', $query->bindValue( $newNodeId ) ) );
+            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'path_string' ),
+                $query->bindValue( $parentNode['path_string'] . $newNodeId . '/' )
+            )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'node_id' ),
+                $query->bindValue( $newNodeId )
+            ) );
         $query->prepare()->execute();
 
         $query = $this->handler->createInsertQuery();
         $query
-            ->insertInto( 'eznode_assignment' )
-            ->set( 'contentobject_id', $query->bindValue( $createStruct->contentId ) )
-            ->set( 'contentobject_version', $query->bindValue( $createStruct->contentVersion ) )
-            ->set( 'from_node_id', $query->bindValue( 0 ) ) // unused field
-            ->set( 'id', $query->bindValue( null ) ) // auto increment
-            ->set( 'is_main', $query->bindValue( 0 ) ) // Changed by the business layer, later
-            ->set( 'op_code', $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP ) )
-            ->set( 'parent_node', $query->bindValue( $parentNode['node_id'] ) )
-            ->set( 'parent_remote_id', $query->bindValue( '' ) )
-            ->set( 'remote_id', $query->bindValue( 0 ) )
-            ->set( 'sort_field', $query->bindValue( 2 ) ) // eZContentObjectTreeNode::SORT_FIELD_PUBLISHED
-            ->set( 'sort_order', $query->bindValue( 0 ) ); // eZContentObjectTreeNode::SORT_ORDER_DESC
+            ->insertInto( $this->handler->quoteTable( 'eznode_assignment' ) )
+            ->set(
+                $this->handler->quoteColumn( 'contentobject_id' ),
+                 $query->bindValue( $createStruct->contentId )
+            )->set(
+                $this->handler->quoteColumn( 'contentobject_version' ),
+                 $query->bindValue( $createStruct->contentVersion )
+            )->set(
+                $this->handler->quoteColumn( 'from_node_id' ),
+                 $query->bindValue( 0 ) // unused field
+            )->set(
+                $this->handler->quoteColumn( 'id' ),
+                 $query->bindValue( null ) // auto increment
+            )->set(
+                $this->handler->quoteColumn( 'is_main' ),
+                 $query->bindValue( 0 ) // Changed by the business layer, later
+            )->set(
+                $this->handler->quoteColumn( 'op_code' ),
+                 $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP )
+            )->set(
+                $this->handler->quoteColumn( 'parent_node' ),
+                 $query->bindValue( $parentNode['node_id'] )
+            )->set(
+                $this->handler->quoteColumn( 'parent_remote_id' ),
+                 $query->bindValue( '' )
+            )->set(
+                $this->handler->quoteColumn( 'remote_id' ),
+                 $query->bindValue( 0 )
+            )->set(
+                $this->handler->quoteColumn( 'sort_field' ),
+                 $query->bindValue( 2 ) // eZContentObjectTreeNode::SORT_FIELD_PUBLISHED
+            )->set(
+                $this->handler->quoteColumn( 'sort_order' ),
+                 $query->bindValue( 0 ) // eZContentObjectTreeNode::SORT_ORDER_DESC
+            );
         $query->prepare()->execute();
     }
 
@@ -390,8 +552,11 @@ class EzcDatabase extends Gateway
         $query = $this->handler->createSelectQuery();
         $query
             ->select( '*' )
-            ->from( 'ezcontentobject_tree' )
-            ->where( $query->expr->like( 'path_string', $query->bindValue( $pathString . '%' ) ) );
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where( $query->expr->like(
+                $this->handler->quoteColumn( 'path_string' ),
+                $query->bindValue( $pathString . '%' )
+            ) );
         $statement = $query->prepare();
         $statement->execute();
 
@@ -400,7 +565,7 @@ class EzcDatabase extends Gateway
         {
             unset( $row['contentobject_is_published'] );
             $query = $this->handler->createInsertQuery();
-            $query->insertInto( 'ezcontentobject_trash' );
+            $query->insertInto( $this->handler->quoteTable( 'ezcontentobject_trash' ) );
 
             foreach ( $row as $key => $value )
             {
@@ -414,7 +579,10 @@ class EzcDatabase extends Gateway
         $query = $this->handler->createDeleteQuery();
         $query
             ->deleteFrom( 'ezcontentobject_tree' )
-            ->where( $query->expr->in( 'node_id', $nodeIds ) );
+            ->where( $query->expr->in(
+                $this->handler->quoteColumn( 'node_id' ),
+                $nodeIds
+            ) );
         $query->prepare()->execute();
     }
 
