@@ -11,7 +11,8 @@
 namespace ezp\Persistence\Tests\InMemoryEngine;
 use ezp\Persistence\Content\Location\Handler as LocationHandlerInterface,
     ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Content\Location\UpdateStruct;
+    ezp\Persistence\Content\Location\UpdateStruct,
+    ezp\Persistence\Content\Location as LocationValue;
 
 /**
  * @see ezp\Persistence\Content\Location\Handler
@@ -20,6 +21,10 @@ use ezp\Persistence\Content\Location\Handler as LocationHandlerInterface,
  */
 class LocationHandler implements LocationHandlerInterface
 {
+    const CHARS_ACCENT = 'ÀÁÂÃÄÅàáâãäåÒÓÔÕÖØòóôõöøÈÉÊËéèêëÇçÌÍÎÏìíîïÙÚÛÜùúûüÿÑñ';
+
+    const CHARS_NOACCENT = 'AAAAAAaaaaaaOOOOOOooooooEEEEeeeeCcIIIIiiiiUUUUuuuuyNn';
+
     /**
      * @var RepositoryHandler
      */
@@ -185,15 +190,17 @@ class LocationHandler implements LocationHandlerInterface
             $params['remoteId'] = md5( uniqid( 'Content\\Location', true ) );
         }
 
-        // pathIdentificationString
-        // @todo: support for accentuated chars
-        $contentName = $this->backend->load( 'Content', $locationStruct->contentId )->name;
-        $params['pathIdentificationString'] = trim( str_replace(' ', '_', strtolower( $contentName ) ) );
-
         // Creation, then update for pathString
         $vo = $this->backend->create( 'Content\\Location', $params );
         $pathString = $parent->pathString . $vo->id . '/';
-        $this->backend->update( 'Content\\Location', $vo->id, array( 'pathString' => $pathString ) );
+        $this->backend->update(
+            'Content\\Location',
+            $vo->id,
+            array(
+                'pathString' => $pathString,
+                'pathIdentificationString' => $this->getPathIdentificationString( $vo )
+            )
+        );
         $this->updateSubtreeModificationTime( $this->getParentPathString( $parent->pathString ) );
         return $this->load( $vo->id );
     }
@@ -301,5 +308,39 @@ class LocationHandler implements LocationHandlerInterface
     {
         return substr( $pathString, 0, -2 );
     }
+
+    /**
+     * Returns pathIdentificationString for provided location value object
+     * @param ezp\Persistence\Content\Location $vo
+     * @return string
+     */
+    private function getPathIdentificationString( LocationValue $vo )
+    {
+        $parent = $this->load( $vo->parentId );
+        if ( $vo->parentId == 1 )
+        {
+            return '';
+        }
+        else if ( empty( $parent->pathIdentificationString ) )
+        {
+            return $this->getStrippedContentName( $vo );
+        }
+
+        return $parent->pathIdentificationString . '/' . $this->getStrippedContentName( $vo );
+    }
+
+    /**
+     * Returns stripped content name from location value
+     * All downcase, special chars to underscores
+     * e.g. my_content_name
+     * @param LocationValue $vo
+     * @return string
+     */
+    private function getStrippedContentName( LocationValue $vo )
+    {
+        $contentName = $this->backend->load( 'Content', $vo->contentId )->name;
+        $strippedName = strtolower( trim( strtr( $contentName, self::CHARS_ACCENT, self::CHARS_NOACCENT ) ) );
+        $strippedName = preg_replace( '`[^a-z0-9_]`i', '_', $strippedName );
+        return $strippedName;
+    }
 }
-?>
