@@ -39,6 +39,13 @@ class EzcDbHandler
         $this->ezcDbHandler = $ezcDbHandler;
     }
 
+    /**
+     * Proxy methods to the aggregated DB handler
+     *
+     * @param string $method
+     * @param array $parameters
+     * @return void
+     */
     public function __call( $method, $parameters )
     {
         return call_user_func_array( array( $this->ezcDbHandler, $method ), $parameters );
