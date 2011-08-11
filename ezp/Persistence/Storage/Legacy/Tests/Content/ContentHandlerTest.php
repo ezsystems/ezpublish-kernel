@@ -14,7 +14,12 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
+    ezp\Persistence\Storage\Legacy\Content\Mapper,
+    ezp\Persistence\Storage\Legacy\Content\Gateway,
+    ezp\Persistence\Storage\Legacy\Content\Location,
+    ezp\Persistence\Storage\Legacy\Content\StorageRegistry,
     ezp\Persistence\Storage\Legacy\Content\Handler;
 
 /**
@@ -106,6 +111,18 @@ class ContentHandlerTest extends TestCase
             )->will(
                 $this->returnValue( new StorageFieldValue() )
             );
+        $mapperMock->expects( $this->once() )
+            ->method( 'createLocationCreateStruct' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content'
+                ),
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content\\CreateStruct'
+                )
+            )->will(
+                $this->returnValue( new \ezp\Persistence\Content\Location\CreateStruct() )
+            );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertContentObject' )
@@ -141,6 +158,15 @@ class ContentHandlerTest extends TestCase
                 $this->isInstanceOf(
                     'ezp\\Persistence\\Content\\FieldValue'
                 )
+            );
+
+        $locationMock->expects( $this->once() )
+            ->method( 'createLocation' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content\\Location\\CreateStruct'
+                ),
+                $this->equalTo( 42 )
             );
 
         $res = $handler->create( $this->getCreateStructFixture() );
@@ -198,6 +224,9 @@ class ContentHandlerTest extends TestCase
         $struct->fields = array(
             $firstField, $secondField
         );
+
+        $struct->parentLocations = array( 42 );
+
         return $struct;
     }
 
@@ -239,7 +268,7 @@ class ContentHandlerTest extends TestCase
     {
         return $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Handler',
-            array(),
+            array( 'createLocation' ),
             array(),
             '',
             false

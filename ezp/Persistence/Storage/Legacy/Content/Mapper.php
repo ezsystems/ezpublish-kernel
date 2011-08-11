@@ -57,6 +57,23 @@ class Mapper
     }
 
     /**
+     * Creates a Content from the given $struct
+     *
+     * @param \ezp\Persistence\Content\CreateStruct $struct
+     * @return Content
+     */
+    public function createLocationCreateStruct( Content $content, CreateStruct $struct )
+    {
+        $location = new Content\Location\CreateStruct();
+
+        $location->remoteId       = md5( uniqid() );
+        $location->contentId      = $content->id;
+        $location->contentVersion = $content->versionInfos[0]->id;
+
+        return $location;
+    }
+
+    /**
      * Creates a new version for the given $content
      *
      * @param Content $content

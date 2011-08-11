@@ -112,6 +112,23 @@ class MapperTest extends TestCase
         );
     }
 
+    public function testCreateLocationFromContent()
+    {
+        $mapper = new Mapper( $this->getValueConverterRegistryMock() );
+        $location = $mapper->createLocationCreateStruct(
+            $content = $this->getFullContentFixture(),
+            $struct = $this->getCreateStructFixture()
+        );
+
+        $this->assertPropertiesCorrect(
+            array(
+                'contentId'      => $content->id,
+                'contentVersion' => 1,
+            ),
+            $location
+        );
+    }
+
     /**
      * Returns a Content fixture
      *
@@ -128,6 +145,19 @@ class MapperTest extends TestCase
         $struct->ownerId         = 13;
         $struct->versionInfos    = array();
         $struct->locations       = array();
+
+        return $struct;
+    }
+
+    protected function getFullContentFixture()
+    {
+        $struct = $this->getContentFixture();
+
+        $struct->versionInfos = array(
+            new Content\Version( array(
+                'id' => 1,
+            ) )
+        );
 
         return $struct;
     }

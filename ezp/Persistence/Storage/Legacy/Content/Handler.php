@@ -80,8 +80,6 @@ class Handler implements BaseContentHandler
      *
      * @param \ezp\Persistence\Content\CreateStruct $struct Content creation struct.
      * @return \ezp\Persistence\Content Content value object
-     * @todo Take care of initial locations!
-     * @todo Method too complex, refactor!
      */
     public function create( CreateStruct $struct )
     {
@@ -97,7 +95,7 @@ class Handler implements BaseContentHandler
         );
 
         // TODO: Maybe it makes sense to introduce a dedicated
-        // ContentFieldHandler for the legacy storage? Should be checked later, 
+        // ContentFieldHandler for the legacy storage? Should be checked later,
         // if this is possible and sensible
         foreach ( $struct->fields as $field )
         {
@@ -113,6 +111,14 @@ class Handler implements BaseContentHandler
         }
 
         $content->versionInfos = array( $version );
+
+        foreach ( $struct->parentLocations as $location )
+        {
+            $this->locationHandler->createLocation(
+                $this->mapper->createLocationCreateStruct( $content, $struct ),
+                $location
+            );
+        }
 
         return $content;
     }
