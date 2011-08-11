@@ -118,7 +118,7 @@ class ServiceTest extends BaseServiceTest
      * returned by repository handler
      *
      * @group locationService
-     * @covers \ezp\Content\Location\Service::buildDomainObject
+     * @covers ezp\Content\Location\Service::buildDomainObject
      */
     public function testBuildDomainObject()
     {
@@ -160,7 +160,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      * @group locationService
-     * @covers \ezp\Content\Location\Service::buildDomainObject
+     * @covers ezp\Content\Location\Service::buildDomainObject
      */
     public function testBuildDomainObjectNotFromLocationVo()
     {
@@ -321,7 +321,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group locationService
-     * @covers \ezp\Content\Location\Service::refreshDomainObject
+     * @covers ezp\Content\Location\Service::refreshDomainObject
      */
     public function testRefreshDomainObjectWithoutArg()
     {
@@ -343,7 +343,7 @@ class ServiceTest extends BaseServiceTest
      * Test LocationService::refreshDomainObject() by injecting a different VO
      *
      * @group locationService
-     * @covers \ezp\Content\Location\Service::refreshDomainObject
+     * @covers ezp\Content\Location\Service::refreshDomainObject
      */
     public function testRefreshDomainObjectWithArg()
     {

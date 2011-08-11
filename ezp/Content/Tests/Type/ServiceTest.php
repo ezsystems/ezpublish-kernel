@@ -32,7 +32,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::createGroup
+     * @covers ezp\Content\Type\Service::createGroup
      */
     public function testCreateGroup()
     {
@@ -49,7 +49,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::createGroup
+     * @covers ezp\Content\Type\Service::createGroup
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testCreateGroupException()
@@ -61,7 +61,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::updateGroup
+     * @covers ezp\Content\Type\Service::updateGroup
      */
     public function testUpdateGroup()
     {
@@ -79,7 +79,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::updateGroup
+     * @covers ezp\Content\Type\Service::updateGroup
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testUpdateGroupException()
@@ -91,7 +91,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::deleteGroup
+     * @covers ezp\Content\Type\Service::deleteGroup
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDeleteGroup()
@@ -102,7 +102,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::loadGroup
+     * @covers ezp\Content\Type\Service::loadGroup
      */
     public function testLoadGroup()
     {
@@ -115,7 +115,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::loadAllGroups
+     * @covers ezp\Content\Type\Service::loadAllGroups
      */
     public function testLoadAllGroups()
     {
@@ -129,7 +129,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::create
+     * @covers ezp\Content\Type\Service::create
      */
     public function testCreate()
     {
@@ -149,7 +149,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::create
+     * @covers ezp\Content\Type\Service::create
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testCreateException()
@@ -161,7 +161,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::update
+     * @covers ezp\Content\Type\Service::update
      */
     public function testUpdate()
     {
@@ -179,7 +179,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::update
+     * @covers ezp\Content\Type\Service::update
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testUpdateException()
@@ -191,7 +191,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::delete
+     * @covers ezp\Content\Type\Service::delete
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDelete()
@@ -201,7 +201,7 @@ class ServiceTest extends BaseServiceTest
     }
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::load
+     * @covers ezp\Content\Type\Service::load
      */
     public function testLoad()
     {
@@ -220,7 +220,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
-     * @covers \ezp\Content\Type\Service::loadByGroupId
+     * @covers ezp\Content\Type\Service::loadByGroupId
      */
     public function testLoadByGroupId()
     {
