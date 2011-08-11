@@ -109,6 +109,7 @@ class RepositoryHandler implements HandlerInterface
         {
             $this->contentHandler = new Content\Handler(
                 new Content\Gateway\EzcDatabase( $this->dbHandler ),
+                $this->locationHandler(),
                 new Content\Mapper( $this->getFieldValueConverterRegistry() ),
                 new Content\StorageRegistry( $this->getStorageRegistry() )
             );

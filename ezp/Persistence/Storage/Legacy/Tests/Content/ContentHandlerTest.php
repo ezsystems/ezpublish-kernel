@@ -28,12 +28,14 @@ class ContentHandlerTest extends TestCase
      */
     public function testCtor()
     {
-        $gatewayMock = $this->getGatewayMock();
-        $mapperMock = $this->getMapperMock();
+        $gatewayMock         = $this->getGatewayMock();
+        $locationMock        = $this->getLocationHandlerMock();
+        $mapperMock          = $this->getMapperMock();
         $storageRegistryMock = $this->getStorageRegistryMock();
 
         $handler = new Handler(
             $gatewayMock,
+            $locationMock,
             $mapperMock,
             $storageRegistryMock
         );
@@ -63,6 +65,7 @@ class ContentHandlerTest extends TestCase
     public function testCreate()
     {
         $mapperMock     = $this->getMapperMock();
+        $locationMock   = $this->getLocationHandlerMock();
         $gatewayMock    = $this->getGatewayMock();
         $storageRegMock = $this->getStorageRegistryMock();
         $storageMock    = $this->getMock(
@@ -71,6 +74,7 @@ class ContentHandlerTest extends TestCase
 
         $handler = new Handler(
             $gatewayMock,
+            $locationMock,
             $mapperMock,
             $storageRegMock
         );
@@ -219,6 +223,22 @@ class ContentHandlerTest extends TestCase
     {
         return $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Mapper',
+            array(),
+            array(),
+            '',
+            false
+        );
+    }
+
+    /**
+     * Returns a Location handler mock
+     *
+     * @return Mapper
+     */
+    protected function getLocationHandlerMock()
+    {
+        return $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Handler',
             array(),
             array(),
             '',

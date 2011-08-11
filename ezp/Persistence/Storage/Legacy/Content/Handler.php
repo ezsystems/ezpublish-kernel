@@ -32,6 +32,13 @@ class Handler implements BaseContentHandler
     protected $contentGateway;
 
     /**
+     * Location handler.
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Handler
+     */
+    protected $locationHandler;
+
+    /**
      * Mapper.
      *
      * @var Mapper
@@ -52,11 +59,13 @@ class Handler implements BaseContentHandler
      */
     public function __construct(
         Gateway $contentGateway,
+        Location\Handler $locationHandler,
         Mapper $mapper,
         StorageRegistry $storageRegistry
     )
     {
         $this->contentGateway  = $contentGateway;
+        $this->locationHandler = $locationHandler;
         $this->mapper          = $mapper;
         $this->storageRegistry = $storageRegistry;
     }
