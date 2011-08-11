@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Storage\Legacy\User\Gateway;
 use ezp\Persistence\Storage\Legacy\User\Gateway,
+    ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\User;
 
 /**
@@ -19,17 +20,17 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var \ezcDbHandler
+     * @var EzcDbHandler
      */
     protected $handler;
 
     /**
      * Construct from database handler
      *
-     * @param \ezcDbHandler $handler
+     * @param EzcDbHandler $handler
      * @return void
      */
-    public function __construct( \ezcDbHandler $handler )
+    public function __construct( EzcDbHandler $handler )
     {
         $this->handler = $handler;
     }

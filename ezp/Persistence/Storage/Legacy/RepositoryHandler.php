@@ -97,7 +97,7 @@ class RepositoryHandler implements HandlerInterface
      */
     public function __construct( $dsn )
     {
-        $this->dbHandler = \ezcDbFactory::create( $dsn );
+        $this->dbHandler = new EzcDbHandler( \ezcDbFactory::create( $dsn ) );
     }
 
     /**

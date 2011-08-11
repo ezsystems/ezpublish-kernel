@@ -60,7 +60,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         if ( !$this->handler )
         {
-            $this->handler = \ezcDbFactory::create( $this->getDsn() );
+            $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler( 
+                \ezcDbFactory::create( $this->getDsn() )
+            );
         }
 
         return $this->handler;

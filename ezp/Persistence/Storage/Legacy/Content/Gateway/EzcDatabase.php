@@ -10,6 +10,7 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Gateway,
+    ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Version,
@@ -23,16 +24,16 @@ class EzcDatabase extends Gateway
     /**
      * Zeta Components database handler.
      *
-     * @var ezcDbHandler
+     * @var EzcDbHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new gateway based on $db
      *
-     * @param ezcDbHandler $db
+     * @param EzcDbHandler $db
      */
-    public function __construct( \ezcDbHandler $db )
+    public function __construct( EzcDbHandler $db )
     {
         $this->dbHandler = $db;
     }
@@ -177,6 +178,5 @@ class EzcDatabase extends Gateway
      */
     public function load( $contentId, $version = null )
     {
-
     }
 }

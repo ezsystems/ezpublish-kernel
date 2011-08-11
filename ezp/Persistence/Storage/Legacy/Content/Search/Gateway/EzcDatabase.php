@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
+    ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Criterion;
 
@@ -20,7 +21,7 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @var \ezcDbHandler
+     * @var EzcDbHandler
      */
     protected $handler;
 
@@ -34,10 +35,10 @@ class EzcDatabase extends Gateway
     /**
      * Construct from handler handler
      *
-     * @param \ezcDbHandler $handler
+     * @param EzcDbHandler $handler
      * @return void
      */
-    public function __construct( \ezcDbHandler $handler, CriteriaConverter $converter )
+    public function __construct( EzcDbHandler $handler, CriteriaConverter $converter )
     {
         $this->handler   = $handler;
         $this->converter = $converter;
