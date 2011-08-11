@@ -611,10 +611,10 @@ class EzcDatabase extends Gateway
         $this->selectColumns( $q, 'ezcontentclass' );
         $this->selectColumns( $q, 'ezcontentclass_attribute' );
         $q->select(
-            $this->createTableColumnAlias(
+            $this->dbHandler->aliasedColumn(
                 $q,
-                'ezcontentclass_classgroup',
-                'group_id'
+                'group_id',
+                'ezcontentclass_classgroup'
             )
         );
         $q->from(
@@ -776,22 +776,8 @@ class EzcDatabase extends Gateway
         foreach ( $this->columns[$tableName] as $col )
         {
             $q->select(
-                $this->createTableColumnAlias( $q, $tableName, $col )
+                $this->dbHandler->aliasedColumn( $q, $col, $tableName )
             );
         }
-    }
-
-    /**
-     * Creates an alias for $tableName, $columnName in $query.
-     *
-     * @param ezcDbQuery $query
-     * @param string $tableName
-     * @param string $columnName
-     * @return string
-     */
-    public function createTableColumnAlias( \ezcQuerySelect $query, $tableName, $columnName )
-    {
-        // @TODO: Replace calls to this function
-        return $this->dbHandler->aliasedColumn( $query, $columnName, $tableName );
     }
 }
