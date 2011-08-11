@@ -14,6 +14,7 @@ use ezp\Base\Model,
     ezp\Base\TypeCollection,
     ezp\Content\Translation,
     ezp\Content\Type,
+    ezp\Content\Proxy,
     ezp\Content\Version,
     ezp\Persistence\Content as ContentValue,
     DateTime,
@@ -86,7 +87,6 @@ class Content extends Model
         'reversedRelations' => false,
         'translations' => true,
         'locations' => true,
-        'contentType' => false,
         'alwaysAvailable' => true,
         'remoteId' => true,
     );
@@ -109,7 +109,7 @@ class Content extends Model
      *
      * @var \ezp\Content\Section
      */
-    protected $_section;
+    protected $section;
 
     /**
      * The Content's status, as one of the ezp\Content::STATUS_* constants
@@ -254,7 +254,7 @@ class Content extends Model
      */
     protected function setSection( Section $section )
     {
-        $this->_section = $section;
+        $this->section = $section;
     }
 
     /**
@@ -264,11 +264,11 @@ class Content extends Model
      */
     protected function getSection()
     {
-        if ( $this->_section instanceof Proxy )
+        if ( $this->section instanceof Proxy )
         {
-            $this->_section = $this->_section->load();
+            $this->section = $this->section->load();
         }
-        return $this->_section;
+        return $this->section;
     }
 
     /**
@@ -278,9 +278,9 @@ class Content extends Model
      */
     protected function getSectionId()
     {
-        if ( $this->_section instanceof Proxy || $this->_section instanceof Section )
+        if ( $this->section instanceof Proxy || $this->section instanceof Section )
         {
-            return $this->_section->id;
+            return $this->section->id;
         }
         return 0;
     }

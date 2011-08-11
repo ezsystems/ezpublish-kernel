@@ -10,6 +10,8 @@
 namespace ezp\Content;
 use ezp\Base\Service as BaseService,
     ezp\Base\Exception\NotFound,
+    ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Locale,
     ezp\Content,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
@@ -58,10 +60,11 @@ class Service extends BaseService
      */
     public function load( $contentId )
     {
-        $content = $this->handler->contentHandler()->load( $contentId );
-        if ( !$content )
+        $contentVO = $this->handler->contentHandler()->load( $contentId );
+        if ( !$contentVO instanceof ContentValue )
             throw new NotFound( 'Content', $contentId );
-        return $content;
+
+        return $this->buildDomainObject( $contentVO );
     }
 
     /**
@@ -119,7 +122,34 @@ class Service extends BaseService
 
     protected function buildDomainObject( ValueObject $vo )
     {
+        if ( !$vo instanceof ContentValue )
+        {
+            throw new InvalidArgumentType( 'Value object', 'ezp\\Persistence\\Content', $vo );
+        }
 
+        $content = new Content( new Type, new Locale( "eng-GB" ) );
+        $content->setState(
+            array(
+                "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
+                "contentType" => new Proxy( $this->repository->getContentTypeService(), $vo->typeId ),
+                "properties" => $vo
+            )
+        );
+
+        /*
+        // Container property (default sorting)
+        $containerProperty = new ContainerProperty;
+        $content->containerProperties[] = $containerProperty->setState(
+            array(
+                'contentId' => $vo->id,
+                'sortField' => $vo->sortField,
+                'sortOrder' => $vo->sortOrder,
+                'location' => $content
+            )
+        );
+        */
+
+        return $content;
     }
 }
 ?>
