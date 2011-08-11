@@ -50,5 +50,40 @@ class EzcDbHandler
     {
         return call_user_func_array( array( $this->ezcDbHandler, $method ), $parameters );
     }
+
+    /**
+     * Creates an alias for $tableName, $columnName in $query.
+     *
+     * @param ezcDbQuery $query
+     * @param string $columnName
+     * @param string $tableName
+     * @return string
+     */
+    public function quoteColumn( \ezcQuerySelect $query, $columnName, $tableName = null )
+    {
+        return $query->alias(
+            $this->qualifiedIdentifier( $columnName, $tableName ),
+            $this->ezcDbHandler->quoteIdentifier(
+                ( $tableName ? $tableName . '_' : '' ) .
+                $columnName
+            )
+        );
+    }
+
+    /**
+     * Returns a qualified identifier for $columnName in $tableName.
+     *
+     * @param string $columnName
+     * @param string $tableName
+     * @return string
+     */
+    public function qualifiedIdentifier( $columnName, $tableName = null )
+    {
+        // @TODO: For oracle we need a mapping of table and column names to
+        // their shortened variants here.
+        return
+            ( $tableName ? $this->ezcDbHandler->quoteIdentifier( $tableName ) . '.' : '' ) .
+            $this->ezcDbHandler->quoteIdentifier( $columnName );
+    }
 }
 

@@ -774,40 +774,29 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Creates an alias for $tableName, $columnName in $q.
+     * Creates an alias for $tableName, $columnName in $query.
      *
-     * @param ezcDbQuery $q
+     * @param ezcDbQuery $query
      * @param string $tableName
      * @param string $columnName
      * @return string
      */
-    protected function createTableColumnAlias( \ezcQuerySelect $q, $tableName, $columnName )
+    public function createTableColumnAlias( \ezcQuerySelect $query, $tableName, $columnName )
     {
-        return $q->alias(
-            $this->qualifiedIdentifier( $tableName, $columnName ),
-            $this->dbHandler->quoteIdentifier(
-                sprintf(
-                    '%s_%s',
-                    $tableName,
-                    $columnName
-                )
-            )
-        );
+        // @TODO: Replace calls to this function
+        return $this->dbHandler->quoteColumn( $query, $columnName, $tableName );
     }
 
     /**
-     * Returns a qualified identifier for $column in $table.
+     * Returns a qualified identifier for $columnName in $tableName.
      *
-     * @param string $table
-     * @param string $column
+     * @param string $tableName
+     * @param string $columnName
      * @return string
      */
-    protected function qualifiedIdentifier( $table, $column )
+    public function qualifiedIdentifier( $tableName, $columnName )
     {
-        return sprintf(
-            '%s.%s',
-            $this->dbHandler->quoteIdentifier( $table ),
-            $this->dbHandler->quoteIdentifier( $column )
-        );
+        // @TODO: Replace calls to this function
+        return $this->dbHandler->qualifiedIdentifier( $columnName, $tableName );
     }
 }
