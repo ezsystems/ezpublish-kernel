@@ -27,6 +27,8 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that ending hash boom is stripped out
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFilePhp
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFileEzc
      */
     public function testHashBoom()
     {
@@ -51,6 +53,9 @@ HashBoomer=enabled##!';
 
     /**
      * Test that types in ini is properly parsed to native php types
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFilePhpPostFilter
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFilePhp
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFileEzc
      */
     public function testTypes()
     {
@@ -93,6 +98,8 @@ String=Test';
 
     /**
      * Test that types in ini is properly parsed to native php types in arrays
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFilePhp
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFileEzc
      */
     public function testArrayTypes()
     {
@@ -122,6 +129,8 @@ Mixed[]=4,4';
 
     /**
      * Test that empty arrays are returned
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFilePhp
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFileEzc
      */
     public function testEmptyArray()
     {
@@ -146,6 +155,8 @@ empty-array[]';
 
     /**
      * Test that complex hash structures with symbol use in key and value are parsed
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFilePhp
+     * @covers \ezp\Base\Configuration\Parser\Ini::parseFileEzc
      */
     public function testComplexHash()
     {
@@ -180,6 +191,7 @@ conditions[]=uri\\0:§£$content';
 
     /**
      * Test that arrays contain clearing hint to Configuration class
+     * @covers \ezp\Base\Configuration\Parser\Ini::parserClearArraySupport
      */
     public function testArrayClearing()
     {

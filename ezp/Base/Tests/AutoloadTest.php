@@ -19,6 +19,7 @@ class AutoloadTest extends \PHPUnit_Framework_TestCase
     /**
      * Test that multiple instances of Autoloader manages to live side by side independent of
      * ezcBase Autoloader being loaded or not, and registered or not.
+     * @covers \ezp\Base\Autoloader::load
      */
     public function testEzcLoading()
     {

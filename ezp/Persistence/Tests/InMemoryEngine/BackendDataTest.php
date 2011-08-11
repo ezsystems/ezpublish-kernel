@@ -324,7 +324,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     /**
      * Test finding content with wildcard
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::find
+     * @covers \ezp\Persistence\Tests\InMemoryEngine\Backend::find
      * @group inMemoryBackend
      */
     public function testFindWildcard()

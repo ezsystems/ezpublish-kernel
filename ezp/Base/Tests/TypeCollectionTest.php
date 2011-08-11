@@ -36,6 +36,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * Test offsetExists
+     * @covers \ezp\Base\TypeCollection::offsetExists
      */
     public function testExists()
     {
@@ -45,6 +46,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test offsetGet
+     * @covers \ezp\Base\TypeCollection::offsetGet
      */
     public function testGet()
     {
@@ -54,6 +56,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException PHPUnit_Framework_Error
+     * @covers \ezp\Base\TypeCollection::offsetGet
      */
     public function testGetInvalid()
     {
@@ -62,6 +65,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test set
+     * @covers \ezp\Base\TypeCollection::offsetSet
      */
     public function testSet()
     {
@@ -70,6 +74,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * @expectedException ezp\Base\Exception\InvalidArgumentType
+     * @covers \ezp\Base\TypeCollection::offsetSet
      */
     public function testSetInvalid()
     {
@@ -78,6 +83,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\InvalidArgumentType
+     * @covers \ezp\Base\TypeCollection::offsetSet
      */
     public function testSetAppendInvalid()
     {
@@ -86,6 +92,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\InvalidArgumentType
+     * @covers \ezp\Base\TypeCollection::append
      */
     public function testAppendInvalid()
     {
@@ -94,6 +101,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\InvalidArgumentType
+     * @covers \ezp\Base\TypeCollection::exchangeArray
      */
     public function testExchangeArray()
     {
@@ -102,8 +110,9 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * test unset
+     * @covers \ezp\Base\TypeCollection::offsetUnset
      */
-    public function testUnSet()
+    public function testUnset()
     {
         unset( $this->collection['key'] );
         $this->assertEquals( 3, count( $this->collection ) );

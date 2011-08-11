@@ -28,14 +28,17 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Test offsetExists
+     * Test constructor
+     * @covers ezp\Base\Collection\ReadOnly::__construct
      */
     public function testFromArray()
     {
-        $this->assertInstanceOf( 'ezp\\Base\\Collection\\ReadOnly', $this->collection );
+        $this->assertInstanceOf( 'ezp\\Base\\Collection\\ReadOnly', new ReadOnly( array( 1, 55, 'collection', 'test' ) ) );
     }
+
     /**
      * Test offsetExists
+     * @covers ezp\Base\Collection\ReadOnly::offsetExists
      */
     public function testExists()
     {
@@ -44,6 +47,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test offsetGet
+     * @covers ezp\Base\Collection\ReadOnly::offsetGet
      */
     public function testGet()
     {
@@ -54,6 +58,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException PHPUnit_Framework_Error
+     * @covers ezp\Base\Collection\ReadOnly::offsetGet
      */
     public function testGetInvalid()
     {
@@ -62,6 +67,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\ReadOnly
+     * @covers ezp\Base\Collection\ReadOnly::offsetSet
      */
     public function testSetInvalid()
     {
@@ -70,6 +76,7 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\ReadOnly
+     * @covers ezp\Base\Collection\ReadOnly::offsetSet
      */
     public function testSetAppendInvalid()
     {
@@ -78,8 +85,9 @@ class ReadOnlyCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\ReadOnly
+     * @covers ezp\Base\Collection\ReadOnly::offsetUnset
      */
-    public function testUnSet()
+    public function testUnset()
     {
         unset( $this->collection[2] );
     }

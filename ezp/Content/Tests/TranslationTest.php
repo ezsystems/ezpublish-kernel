@@ -38,6 +38,7 @@ class TranslationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException DomainException
+     * @FIXME Use "@covers"
      */
     public function testTranslationFields()
     {
@@ -47,6 +48,7 @@ class TranslationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException DomainException
+     * @FIXME Use "@covers"
      */
     public function testTranslationLast()
     {
@@ -56,6 +58,7 @@ class TranslationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that current version is null in a new Translation
+     * @FIXME Use "@covers"
      */
     public function testTranslationCurrent()
     {
@@ -65,6 +68,7 @@ class TranslationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the locale code is right in a new Translation
+     * @FIXME Use "@covers"
      */
     public function testTranslationLocaleCode()
     {
@@ -74,6 +78,7 @@ class TranslationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that Translation::createNewVersion() adds a new version
+     * @covers \ezp\Content\Translation::createNewVersion
      */
     public function testTranslationCreateVersion()
     {

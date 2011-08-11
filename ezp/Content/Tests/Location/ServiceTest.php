@@ -200,6 +200,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers ezp\Content\Location\Service::load
      */
     public function testLoad()
     {
@@ -209,6 +210,7 @@ class ServiceTest extends BaseServiceTest
     /**
      * @expectedException \ezp\Base\Exception\NotFound
      * @group locationService
+     * @covers ezp\Content\Location\Service::load
      */
     public function testLoadNonExistent()
     {
@@ -218,6 +220,7 @@ class ServiceTest extends BaseServiceTest
     /**
      * Test location creation
      * @group locationService
+     * @covers ezp\Content\Location\Service::create
      */
     public function testCreate()
     {
@@ -252,6 +255,7 @@ class ServiceTest extends BaseServiceTest
      * When creating a location, parent location is mandatory
      * @expectedException \ezp\Base\Exception\Logic
      * @group locationService
+     * @covers ezp\Content\Location\Service::create
      */
     public function testCreateNoParent()
     {
@@ -261,6 +265,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers ezp\Content\Location\Service::hide
      */
     public function testHide()
     {
@@ -295,6 +300,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers ezp\Content\Location\Service::unhide
      */
     public function testUnhide()
     {
@@ -328,6 +334,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers ezp\Content\Location\Service::swap
      */
     public function testSwap()
     {
@@ -350,7 +357,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group locationService
-     * @covers ezp\Content\Location\Service::refreshDomainObject
+     * @covers \ezp\Content\Location\Service::refreshDomainObject
      */
     public function testRefreshDomainObjectWithoutArg()
     {
@@ -372,7 +379,7 @@ class ServiceTest extends BaseServiceTest
      * Test LocationService::refreshDomainObject() by injecting a different VO
      *
      * @group locationService
-     * @covers ezp\Content\Location\Service::refreshDomainObject
+     * @covers \ezp\Content\Location\Service::refreshDomainObject
      */
     public function testRefreshDomainObjectWithArg()
     {
@@ -390,6 +397,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers \ezp\Content\Location\Service::update
      */
     public function testUpdate()
     {
@@ -416,6 +424,7 @@ class ServiceTest extends BaseServiceTest
     /**
      * @group locationService
      * @expectedException \ezp\Base\Exception\Logic
+     * @covers \ezp\Content\Location\Service::update
      */
     public function testUpdateFail()
     {

@@ -35,6 +35,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\InvalidArgumentType
+     * @FIXME Use "@covers"
      */
     public function testChildrenWrongClass()
     {
@@ -44,6 +45,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException PHPUnit_Framework_Error
+     * @FIXME Use "@covers"
      */
     public function testParentWrongClass()
     {
@@ -53,6 +55,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that children on parent is updated when you assign a Location to children
+     * @FIXME Use "@covers"
      */
     public function testChildrenWhenSetWithParent()
     {

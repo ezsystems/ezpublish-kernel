@@ -54,6 +54,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test the default Translation internally created with a Content is created
+     * @covers \ezp\Content::__construct
      */
     public function testDefaultContentTranslation()
     {
@@ -67,6 +68,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
+     * @covers \ezp\Content::addTranslation
      */
     public function testContentAddExistingTranslation()
     {
@@ -76,6 +78,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
+     * @covers \ezp\Content::removeTranslation
      */
     public function testContentRemoveUnexistingTranslation()
     {
@@ -85,6 +88,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException InvalidArgumentException
+     * @covers \ezp\Content::removeTranslation
      */
     public function testContentRemoveMainLocaleTranslation()
     {
@@ -95,6 +99,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     /**
      * Test that Content::removeTranslation() really removes the Translation
      * object
+     * @covers \ezp\Content::removeTranslation
      */
     public function testContentRemoveTranslation()
     {
@@ -109,6 +114,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      * - new Translation has the right locale
      * - new Translation has one version
      * - a new version is also added to the Content
+     * @covers \ezp\Content::addTranslation
      */
     public function testContentAddTranslation()
     {
@@ -121,6 +127,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\InvalidArgumentType
+     * @FIXME Use "@covers"
      */
     public function testLocationWrongClass()
     {
@@ -130,6 +137,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test that foreign side of relation is updated for Location -> Content when Location is created
+     * @FIXME Use "@covers"
      */
     public function testContentLocationWhenLocationIsCreated()
     {
