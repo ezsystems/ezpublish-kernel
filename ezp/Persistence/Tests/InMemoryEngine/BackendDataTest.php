@@ -218,7 +218,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindMatchOnArray()
     {
-        $list = $this->backend->find( "Content\\Type", array( "contentTypeGroupIds" => 1 ) );
+        $list = $this->backend->find( "Content\\Type", array( "groupIds" => 1 ) );
         $this->assertEquals( 1, count( $list ) );
         foreach ( $list as $key => $content )
         {

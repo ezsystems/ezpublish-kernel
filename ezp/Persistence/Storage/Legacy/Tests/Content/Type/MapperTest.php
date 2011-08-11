@@ -132,7 +132,7 @@ class MapperTest extends TestCase
         $struct->nameSchema = '<short_name|name>';
         $struct->isContainer = true;
         $struct->initialLanguageId = 2;
-        $struct->contentTypeGroupIds = array(
+        $struct->groupIds = array(
             1,
         );
 
@@ -199,7 +199,7 @@ class MapperTest extends TestCase
         $type->nameSchema = '<short_name|name>';
         $type->isContainer = true;
         $type->initialLanguageId = 2;
-        $type->contentTypeGroupIds = array(
+        $type->groupIds = array(
             1,
         );
 
@@ -259,7 +259,7 @@ class MapperTest extends TestCase
                 'nameSchema' => '<short_name|name>',
                 'isContainer' => true,
                 'initialLanguageId' => 2,
-                'contentTypeGroupIds' => array( 1 ),
+                'groupIds' => array( 1 ),
             ),
             $types[0]
         );

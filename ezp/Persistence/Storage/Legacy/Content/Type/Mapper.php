@@ -75,9 +75,9 @@ class Mapper
             }
 
             $groupId = (int)$row['ezcontentclass_classgroup_group_id'];
-            if ( !in_array( $groupId, $types[$typeId]->contentTypeGroupIds ) )
+            if ( !in_array( $groupId, $types[$typeId]->groupIds ) )
             {
-                $types[$typeId]->contentTypeGroupIds[] = $groupId;
+                $types[$typeId]->groupIds[] = $groupId;
             }
         }
 
@@ -109,7 +109,7 @@ class Mapper
         $type->nameSchema = $row['ezcontentclass_contentobject_name'];
         $type->isContainer = ( $row['ezcontentclass_is_container'] == 1 );
         $type->initialLanguageId = (int)$row['ezcontentclass_initial_language_id'];
-        $type->contentTypeGroupIds = array();
+        $type->groupIds = array();
         $type->fieldDefinitions = array();
 
         return $type;
@@ -165,7 +165,7 @@ class Mapper
         $type->nameSchema = $createStruct->nameSchema;
         $type->isContainer = $createStruct->isContainer;
         $type->initialLanguageId = $createStruct->initialLanguageId;
-        $type->contentTypeGroupIds = $createStruct->contentTypeGroupIds;
+        $type->groupIds = $createStruct->groupIds;
         $type->fieldDefinitions = $createStruct->fieldDefinitions;
 
         return $type;
@@ -194,7 +194,7 @@ class Mapper
         $createStruct->nameSchema = $type->nameSchema;
         $createStruct->isContainer = $type->isContainer;
         $createStruct->initialLanguageId = $type->initialLanguageId;
-        $createStruct->contentTypeGroupIds = $type->contentTypeGroupIds;
+        $createStruct->groupIds = $type->groupIds;
         $createStruct->fieldDefinitions = $type->fieldDefinitions;
 
         return $createStruct;

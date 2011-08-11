@@ -30,7 +30,7 @@ use ezp\Base\Model,
  * @property string $nameSchema
  * @property bool $isContainer
  * @property int $initialLanguageId
- * @property-read int[] $contentTypeGroupIds
+ * @property-read int[] $groupIds
  * @property-read Type\FieldDefinition[] $fields
  * @property-read Type\Group[] $groups
  */
@@ -54,7 +54,7 @@ class Type extends Model
         'nameSchema' => true,
         'isContainer' => true,
         'initialLanguageId' => true,
-        'contentTypeGroupIds' => false,
+        'groupIds' => false,
     );
 
     /**

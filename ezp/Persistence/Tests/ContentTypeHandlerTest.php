@@ -65,7 +65,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->repositoryHandler->ContentTypeHandler()->deleteGroup( 1 );
         $this->assertNull( $this->repositoryHandler->ContentTypeHandler()->loadGroup( 1 ) );
         $type = $this->repositoryHandler->ContentTypeHandler()->load( 1 );
-        $this->assertEquals( array(), $type->contentTypeGroupIds );
+        $this->assertEquals( array(), $type->groupIds );
     }
 
     /**
@@ -207,7 +207,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $handler->createGroup( $group );
         $handler->link( 2, 1, 0 );
         $type = $handler->load( 1, 0 );
-        $this->assertEquals( array( 1, 2 ), $type->contentTypeGroupIds );
+        $this->assertEquals( array( 1, 2 ), $type->groupIds );
     }
 
     /**
@@ -226,7 +226,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $struct->initialLanguageId = 2;
         $struct->nameSchema = "<short_title|title>";
         $struct->fieldDefinitions = array();
-        $struct->contentTypeGroupIds = array( 1 );
+        $struct->groupIds = array( 1 );
         return $struct;
     }
 

@@ -625,7 +625,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $struct = new CreateStruct();
         $struct->version = 1;
-        $struct->contentTypeGroupIds = array(
+        $struct->groupIds = array(
             42,
         );
 

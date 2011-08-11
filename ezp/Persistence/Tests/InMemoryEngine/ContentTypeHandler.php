@@ -75,25 +75,25 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $this->backend->delete( 'Content\\Type\\Group', $groupId );
 
         // Remove group id from content types
-        $types = $this->backend->find( 'Content\\Type', array( 'contentTypeGroupIds' => $groupId ) );
+        $types = $this->backend->find( 'Content\\Type', array( 'groupIds' => $groupId ) );
         foreach ( $types as $type )
         {
             $update = false;
-            foreach ( $type->contentTypeGroupIds as $key => $contentTypeGroupId )
+            foreach ( $type->groupIds as $key => $contentTypeGroupId )
             {
                 if ( $contentTypeGroupId == $groupId )
                 {
-                    unset( $type->contentTypeGroupIds[$key] );
+                    unset( $type->groupIds[$key] );
                     $update = true;
                 }
             }
 
             if ( $update )
             {
-                // @todo If contentTypeGroupIds is empty, content type and content of that type should be deleted
+                // @todo If groupIds is empty, content type and content of that type should be deleted
                 $this->backend->update( 'Content\\Type',
                                         $type->id,
-                                        array( 'contentTypeGroupIds' => $type->contentTypeGroupIds ) );
+                                        array( 'groupIds' => $type->groupIds ) );
             }
         }
     }
@@ -121,7 +121,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     {
         return $this->backend->find(
             'Content\\Type',
-            array( 'contentTypeGroupIds' => $groupId, 'version' => $version ),
+            array( 'groupIds' => $groupId, 'version' => $version ),
             array( 'fieldDefinitions' => array(
                 'type' => 'Content\\Type\\FieldDefinition',
                 'match' => array( '_typeId' => 'id',  '_version' => 'version' ) )
@@ -227,7 +227,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
 
         $this->backend->updateByMatch( 'Content\\Type',
                                array( 'id' => $contentTypeId, 'version' => $version ),
-                               array( 'contentTypeGroupIds' => array_merge( $list[0]->contentTypeGroupIds, array( $groupId ) ) ) );
+                               array( 'groupIds' => array_merge( $list[0]->groupIds, array( $groupId ) ) ) );
     }
 
     /**

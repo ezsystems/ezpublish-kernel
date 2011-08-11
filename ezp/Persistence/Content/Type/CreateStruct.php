@@ -122,7 +122,7 @@ class CreateStruct extends ValueObject
      *
      * @var mixed[]
      */
-    public $contentTypeGroupIds = array();
+    public $groupIds = array();
 
     /**
      * Content fields in this type

@@ -200,7 +200,7 @@ class Service extends BaseService
         }
         $type->setState( array( 'properties' => $vo,
                                 'groups' => new LazyIdList( 'ezp\\Content\\Type\\Group',
-                                                            $vo->contentTypeGroupIds,
+                                                            $vo->groupIds,
                                                             $this,
                                                             'loadGroup' )
                          ) );

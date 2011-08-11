@@ -149,7 +149,7 @@ class Handler implements BaseContentTypeHandler
         $contentType->id = $this->contentTypeGateway->insertType(
             $contentType
         );
-        foreach ( $contentType->contentTypeGroupIds as $groupId )
+        foreach ( $contentType->groupIds as $groupId )
         {
             $this->contentTypeGateway->insertGroupAssignement(
                 $groupId,
