@@ -211,6 +211,28 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
+     * Test link function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::link
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLinkMissingGroup()
+    {
+        $this->repositoryHandler->contentTypeHandler()->link( 64, 1, 0 );
+    }
+
+    /**
+     * Test link function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::link
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLinkMissingType()
+    {
+        $this->repositoryHandler->contentTypeHandler()->link( 1, 64, 0 );
+    }
+
+    /**
      * @return \ezp\Persistence\Content\Type\CreateStruct
      */
     private function getTypeCreateStruct()
