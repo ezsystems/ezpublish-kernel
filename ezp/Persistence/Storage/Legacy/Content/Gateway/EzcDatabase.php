@@ -165,4 +165,18 @@ class EzcDatabase extends Gateway
 
         return $this->dbHandler->lastInsertId();
     }
+
+    /**
+     * Load data for a content object
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param mixed $contentId
+     * @param mixed $version
+     * @return array
+     */
+    public function load( $contentId, $version = null )
+    {
+
+    }
 }

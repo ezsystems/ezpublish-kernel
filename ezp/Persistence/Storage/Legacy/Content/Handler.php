@@ -141,10 +141,14 @@ class Handler implements BaseContentHandler
     /**
      * Returns the raw data of a content object identified by $id, in a struct.
      *
-     * @param int $id
+     * Optionally a version to be loaded may be specified. If no version has
+     * been specified, the current version of the object will be reuturned.
+     *
+     * @param int|string $id
+     * @param int|string $version
      * @return \ezp\Persistence\Content Content value object
      */
-    public function load( $id )
+    public function load( $id, $version = null )
     {
         throw new Exception( "Not implemented yet." );
     }
