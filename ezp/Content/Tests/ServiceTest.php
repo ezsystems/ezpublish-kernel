@@ -86,12 +86,18 @@ class ServiceTest extends BaseServiceTest
     }
 
     /**
+     * Test the Content Service load operation
      * @group contentService
      * @covers \ezp\Content\Service::load
      */
     public function testLoad()
     {
-        self::assertInstanceOf( "ezp\\Content", $this->service->load( 1 ) );
+        $content = $this->service->load( 1 );
+        self::assertInstanceOf( "ezp\\Content", $content );
+        self::assertEquals( 1 , $content->id, "ID not correctly set" );
+        self::assertEquals( "eZ Publish" , $content->name, "Name not correctly set" );
+        self::assertEquals( 14, $content->ownerId, "Owner ID not correctly set" );
+        self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
     }
 
     /**
