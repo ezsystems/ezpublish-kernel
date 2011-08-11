@@ -185,6 +185,18 @@ class Service extends BaseService
         throw new RuntimeException( "@TODO: Implement" );
     }
 
+    /**
+     * Link a content type to a group ( add a group to a type )
+     *
+     * @param int $groupId
+     * @param int $typeId
+     * @param int $version
+     * @throws \ezp\Base\Exception\NotFound If type or group is not found
+     */
+    public function link( $groupId, $typeId, $version )
+    {
+        $this->handler->contentTypeHandler()->link( $groupId, $typeId, $version );
+    }
 
     /**
      * @param \ezp\Content\Type $type

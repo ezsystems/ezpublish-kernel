@@ -198,16 +198,16 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test link function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::delete
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::link
      */
     public function testLink()
     {
         $group = $this->getGroupCreateStruct();
         $handler = $this->repositoryHandler->ContentTypeHandler();
-        $handler->createGroup( $group );
-        $handler->link( 2, 1, 0 );
+        $vo = $handler->createGroup( $group );
+        $handler->link( $vo->id, 1, 0 );
         $type = $handler->load( 1, 0 );
-        $this->assertEquals( array( 1, 2 ), $type->groupIds );
+        $this->assertEquals( array( 1, $vo->id ), $type->groupIds );
     }
 
     /**

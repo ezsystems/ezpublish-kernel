@@ -238,4 +238,24 @@ class ServiceTest extends BaseServiceTest
         $this->assertInstanceOf( 'ezp\\Content\\Type', $type->groups[0]->types[0] );
         $this->assertEquals( $type->id, $type->groups[0]->types[0]->id );
     }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::link
+     */
+    public function testLink()
+    {
+        $do = new Group();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do = $this->service->createGroup( $do );
+
+        $this->service->link( $do->id, 1, 0 );
+
+        $type = $this->service->load( 1, 0 );
+        $this->assertEquals( 2, count( $type->groups ) );
+        $this->assertEquals( $do->id, $type->groups[1]->id );
+    }
 }
