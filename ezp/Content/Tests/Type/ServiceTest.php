@@ -36,15 +36,15 @@ class ServiceTest extends BaseServiceTest
      */
     public function testCreateGroup()
     {
-        $group = new Group();
-        $group->created = $group->modified = time();
-        $group->creatorId = $group->modifierId = 14;
-        $group->name = $group->description = array( 'eng-GB' => 'Test' );
-        $group->identifier = 'test';
-        $group = $this->service->createGroup( $group );
-        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $group );
-        $this->assertEquals( 0, count( $group->types ) );
-        $this->assertEquals( array( 'eng-GB' => "Test" ), $group->name );
+        $do = new Group();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do = $this->service->createGroup( $do );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $do );
+        $this->assertEquals( 0, count( $do->types ) );
+        $this->assertEquals( array( 'eng-GB' => "Test" ), $do->name );
     }
 
     /**
@@ -54,9 +54,9 @@ class ServiceTest extends BaseServiceTest
      */
     public function testCreateGroupException()
     {
-        $group = new Group();
-        $group->created = $group->modified = time();
-        $this->service->createGroup( $group );
+        $do = new Group();
+        $do->created = $do->modified = time();
+        $this->service->createGroup( $do );
     }
 
     /**
@@ -65,16 +65,16 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUpdateGroup()
     {
-        $group = $this->service->loadGroup( 1 );
-        $group->created = $group->modified = time();
-        $group->creatorId = $group->modifierId = 14;
-        $group->name = $group->description = array( 'eng-GB' => 'Test' );
-        $group->identifier = 'test';
-        $this->service->updateGroup( $group );
-        $group = $this->service->loadGroup( 1 );
-        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $group );
-        $this->assertEquals( 1, count( $group->types ) );
-        $this->assertEquals( array( 'eng-GB' => "Test" ), $group->name );
+        $do = $this->service->loadGroup( 1 );
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $this->service->updateGroup( $do );
+        $do = $this->service->loadGroup( 1 );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $do );
+        $this->assertEquals( 1, count( $do->types ) );
+        $this->assertEquals( array( 'eng-GB' => "Test" ), $do->name );
     }
 
     /**
@@ -84,9 +84,9 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUpdateGroupException()
     {
-        $group = $this->service->loadGroup( 1 );
-        $group->identifier = null;
-        $this->service->updateGroup( $group );
+        $do = $this->service->loadGroup( 1 );
+        $do->identifier = null;
+        $this->service->updateGroup( $do );
     }
 
     /**
@@ -106,11 +106,11 @@ class ServiceTest extends BaseServiceTest
      */
     public function testLoadGroup()
     {
-        $group = $this->service->loadGroup( 1 );
-        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $group );
-        $this->assertEquals( 1, count( $group->types ) );
-        $this->assertInstanceOf( 'ezp\\Content\\Type', $group->types[0] );
-        $this->assertEquals( array( 'eng-GB' => "Content" ), $group->name );
+        $do = $this->service->loadGroup( 1 );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $do );
+        $this->assertEquals( 1, count( $do->types ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $do->types[0] );
+        $this->assertEquals( array( 'eng-GB' => "Content" ), $do->name );
     }
 
     /**
@@ -119,14 +119,86 @@ class ServiceTest extends BaseServiceTest
      */
     public function testLoadAllGroups()
     {
-        $groups = $this->service->loadAllGroups();
-        $this->assertEquals( 1, count( $groups ) );
-        $group = $groups[0];
-        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $group );
-        $this->assertEquals( 1, count( $group->types ) );
-        $this->assertEquals( array( 'eng-GB' => "Content type group" ), $group->description );
+        $list = $this->service->loadAllGroups();
+        $this->assertEquals( 1, count( $list ) );
+        $do = $list[0];
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $do );
+        $this->assertEquals( 1, count( $do->types ) );
+        $this->assertEquals( array( 'eng-GB' => "Content type group" ), $do->description );
     }
 
+    /**
+     * @group contentTypeService
+     * @covers \ezp\Content\Type\Service::create
+     */
+    public function testCreate()
+    {
+        $do = new Type();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do->nameSchema = $do->urlAliasSchema = "<>";
+        $do->isContainer = true;
+        $do->initialLanguageId = 1;
+        $do = $this->service->create( $do );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
+        $this->assertEquals( 0, count( $do->groups ) );
+        $this->assertEquals( array( 'eng-GB' => "Test" ), $do->name );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers \ezp\Content\Type\Service::create
+     * @expectedException \ezp\Base\Exception\PropertyNotFound
+     */
+    public function testCreateException()
+    {
+        $do = new Type();
+        $do->created = $do->modified = time();
+        $this->service->create( $do );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers \ezp\Content\Type\Service::update
+     */
+    public function testUpdate()
+    {
+        $do = $this->service->load( 1 );
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $this->service->update( $do );
+        $do = $this->service->load( 1 );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
+        $this->assertEquals( 1, count( $do->groups ) );
+        $this->assertEquals( array( 'eng-GB' => "Test" ), $do->name );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers \ezp\Content\Type\Service::update
+     * @expectedException \ezp\Base\Exception\PropertyNotFound
+     */
+    public function testUpdateException()
+    {
+        $do = $this->service->load( 1 );
+        $do->identifier = null;
+        $this->service->update( $do );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers \ezp\Content\Type\Service::delete
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testDelete()
+    {
+        $this->service->delete( 1 );
+        $this->service->load( 1 );
+    }
     /**
      * @group contentTypeService
      * @covers \ezp\Content\Type\Service::load

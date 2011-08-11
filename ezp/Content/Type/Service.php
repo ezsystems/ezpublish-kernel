@@ -10,7 +10,6 @@
 namespace ezp\Content\Type;
 use ezp\Base\Service as BaseService,
     ezp\Base\Exception\NotFound,
-    ezp\Base\Exception\PropertyNull,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Collection\LazyIdList,
     ezp\Base\Collection\Lazy,
@@ -19,6 +18,8 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Type\FieldDefinition,
     ezp\Content\Type\Group,
     ezp\Persistence\Content\Type as TypeValue,
+    ezp\Persistence\Content\Type\CreateStruct,
+    ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\Group as GroupValue,
     ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
@@ -35,21 +36,22 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Type\Group $group
      * @return \ezp\Content\Type\Group
-     * @throws RuntimeException If there are properties needed for create on $group w/o value
+     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
      */
     public function createGroup( Group $group )
     {
         $struct = new GroupCreateStruct();
         $this->fillStruct( $struct, $group );
-        $obj = $this->handler->contentTypeHandler()->createGroup( $struct  );
-        return $this->buildGroup( $group, $obj );
+        $vo = $this->handler->contentTypeHandler()->createGroup( $struct  );
+        return $this->buildGroup( $group, $vo );
     }
 
     /**
      * Update a Content Type Group object
      *
      * @param \ezp\Content\Type\Group $group
-     * @throws RuntimeException If there are properties needed for update on $group w/o value
+     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
+     * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
     public function updateGroup( Group $group )
     {
@@ -62,6 +64,7 @@ class Service extends BaseService
      * Update a Content Type Group object
      *
      * @param int $groupId
+     * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
     public function deleteGroup( $groupId )
     {
@@ -69,11 +72,11 @@ class Service extends BaseService
     }
 
     /**
-     * Get an Content Type Group object by id
+     * Get a Content Type Group object by id
      *
      * @param int $groupId
      * @return \ezp\Content\Type\Group
-     * @throws NotFound
+     * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
     public function loadGroup( $groupId )
     {
@@ -98,12 +101,53 @@ class Service extends BaseService
     }
 
     /**
-     * Get an Content Type object by id
+     * Create a Content Type object
+     *
+     * @param \ezp\Content\Type $contentType
+     * @return \ezp\Content\Type
+     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
+     */
+    public function create( Type $contentType )
+    {
+        $struct = new CreateStruct();
+        $this->fillStruct( $struct, $contentType );
+        $vo = $this->handler->contentTypeHandler()->create( $struct  );
+        return $this->buildType( $contentType, $vo );
+    }
+
+    /**
+     * Update a Content Type Group object
+     *
+     * @param \ezp\Content\Type $contentType
+     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
+     * @throws \ezp\Base\Exception\NotFound If object can not be found
+     */
+    public function update( Type $contentType )
+    {
+        $struct = new UpdateStruct();
+        $this->fillStruct( $struct, $contentType );
+        $this->handler->contentTypeHandler()->update( $contentType->id, $contentType->version, $struct  );
+    }
+
+    /**
+     * Delete a Content Type object
+     *
+     * @param int $contentTypeId
+     * @param int $version
+     * @throws \ezp\Base\Exception\NotFound If object can not be found
+     */
+    public function delete( $contentTypeId, $version = 0 )
+    {
+        $this->handler->contentTypeHandler()->delete( $contentTypeId, $version );
+    }
+
+    /**
+     * Get a Content Type object by id
      *
      * @param int $contentTypeId
      * @param int $version
      * @return \ezp\Content\Type
-     * @throws NotFound
+     * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
     public function load( $contentTypeId, $version = 0 )
     {
@@ -114,7 +158,7 @@ class Service extends BaseService
     }
 
     /**
-     * Get an Content Type object by group Id
+     * Get Content Type objects by group Id
      *
      * @param int $groupId
      * @param int $version
@@ -130,11 +174,11 @@ class Service extends BaseService
     }
 
     /**
-     * Get an Content Type by identifier
+     * Get a Content Type by identifier
      *
      * @param string $identifier
      * @return \ezp\Content\Type
-     * @throws NotFound
+     * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
     public function loadByIdentifier( $identifier )
     {
@@ -183,15 +227,44 @@ class Service extends BaseService
      *
      * @param \ezp\Persistence\ValueObject $struct
      * @param \ezp\Base\Model $do
-     * @throws RuntimeException If property is missing on $do or has a value of null
+     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing on $do or has a value of null
+     *                                              Unless one of these properties which is filled by conventions:
+     *                                              - remoteId
+     *                                              - created
+     *                                              - modified
+     *                                              - creatorId
+     *                                              - modifierId
      */
     protected function fillStruct( ValueObject $struct, Model $do )
     {
-        foreach ( $struct as $prop => $value )
+        $state = $do->getState();
+        $vo = $state['properties'];
+        foreach ( $struct as $property => $value )
         {
-           if ( !isset( $do->$prop ) )
-               throw new PropertyNotFound( $prop, get_class( $do ) );
-           $struct->$prop = $do->$prop;
+            // set property value if there is one
+            if ( isset( $vo->$property ) )
+            {
+                $struct->$property = $vo->$property;
+                continue;
+            }
+
+            // set by convention if match, if not throw PropertyNotFound exception
+            switch ( $property )
+            {
+                case 'remoteId':
+                    $struct->$property = md5( uniqid( get_class( $do ), true ) );
+                    break;
+                case 'created':
+                case 'modified':
+                    $struct->$property = time();
+                    break;
+                case 'creatorId':
+                case 'modifierId':
+                    $struct->$property = 14;// @todo Use user object when that is made part of repository/services
+                    break;
+                default:
+                    throw new PropertyNotFound( $property, get_class( $do ) );
+            }
         }
     }
 }

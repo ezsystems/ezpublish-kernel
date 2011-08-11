@@ -10,7 +10,7 @@
     "Content\\Version" : [],
     "Content\\Section" : [{"id": 1, "identifier": "standard", "name": "Standard"}],
     "Content\\Type": [
-        {"id": 1, "version": 0, "name": {"eng-GB": "Folder"}, "description": {"eng-GB": "A simple folder"}, "identifier": "folder", "created": 1312473387, "modified": 1312473387, "creatorId": 14, "modifierId": 14, "urlAliasSchema": null, "nameSchema": "<short_name|name>", "isContainer": true, "initialLanguageId": 2, "contentTypeGroupIds": [1]}
+        {"id": 1, "version": 0, "name": {"eng-GB": "Folder"}, "description": {"eng-GB": "A simple folder"}, "identifier": "folder", "remoteId": "remoteIDForType1", "created": 1312473387, "modified": 1312473387, "creatorId": 14, "modifierId": 14, "urlAliasSchema": null, "nameSchema": "<short_name|name>", "urlAliasSchema": "<short_name|name>", "isContainer": true, "initialLanguageId": 2, "contentTypeGroupIds": [1]}
     ],
     "Content\\Type\\FieldDefinition" : [
         {"id": 1, "name": {"eng-GB": "Name"}, "description": {"eng-GB": "Folder name"}, "identifier": "name", "fieldGroup": "", "position": 0, "fieldType": "ezstring", "isTranslatable": true, "isRequired": true, "isInfoCollector": true, "fieldTypeConstraints": {}, "defaultValue": "New Folder", "_typeId": 1, "_version": 0}
