@@ -17,6 +17,7 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
     ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
     ezp\Persistence\Content\Type\Group,
+    ezp\Base\Exception\NotFound,
     RuntimeException;
 
 /**
@@ -217,7 +218,16 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function link( $groupId, $contentTypeId, $version )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'version' => $version ) );
+        if ( !isset( $list[0] ) )
+            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and version '{$version}" );
+
+        if ( !$this->backend->load('Content\\Type\\Group', $groupId ) )
+            throw new NotFound( 'Content\\Type\\Group', $groupId );
+
+        $this->backend->updateByMatch( 'Content\\Type',
+                               array( 'id' => $contentTypeId, 'version' => $version ),
+                               array( 'contentTypeGroupIds' => array_merge( $list[0]->contentTypeGroupIds, array( $groupId ) ) ) );
     }
 
     /**

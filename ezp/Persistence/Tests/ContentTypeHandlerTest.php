@@ -29,13 +29,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCreateGroup()
     {
-        $struct = new GroupCreateStruct();
-        $struct->created = $struct->modified = time();
-        $struct->creatorId = $struct->modifierId = 14;
-        $struct->name = array( 'eng-GB' => 'Media' );
-        $struct->description = array( 'eng-GB' => 'Group for media content types' );
-        $struct->identifier = 'media';
-        $group = $this->repositoryHandler->ContentTypeHandler()->createGroup( $struct );
+        $group = $this->repositoryHandler->ContentTypeHandler()->createGroup( $this->getGroupCreateStruct() );
         $this->assertTrue( $group instanceof Group );
         $this->assertEquals( 2, $group->id );
         $this->assertEquals( array( 'eng-GB' => 'Media' ), $group->name );
@@ -197,9 +191,23 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testDelete()
     {
         $handler = $this->repositoryHandler->ContentTypeHandler();
-
         $handler->delete( 1, 0 );
         $this->assertNull( $handler->load( 1, 0 ) );
+    }
+
+    /**
+     * Test link function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::delete
+     */
+    public function testLink()
+    {
+        $group = $this->getGroupCreateStruct();
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler->createGroup( $group );
+        $handler->link( 2, 1, 0 );
+        $type = $handler->load( 1, 0 );
+        $this->assertEquals( array( 1, 2 ), $type->contentTypeGroupIds );
     }
 
     /**
@@ -236,6 +244,20 @@ class ContentTypeHandlerTest extends HandlerTest
         $struct->isContainer = true;
         $struct->initialLanguageId = 2;
         $struct->nameSchema = "<short_title|title>";
+        return $struct;
+    }
+
+    /**
+     * @return \ezp\Persistence\Content\Type\Group\CreateStruct
+     */
+    protected function getGroupCreateStruct()
+    {
+        $struct = new GroupCreateStruct();
+        $struct->created = $struct->modified = time();
+        $struct->creatorId = $struct->modifierId = 14;
+        $struct->name = array( 'eng-GB' => 'Media' );
+        $struct->description = array( 'eng-GB' => 'Group for media content types' );
+        $struct->identifier = 'media';
         return $struct;
     }
 
