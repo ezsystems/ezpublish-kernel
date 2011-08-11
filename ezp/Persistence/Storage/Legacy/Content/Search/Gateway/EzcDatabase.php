@@ -57,8 +57,8 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createSelectQuery();
         $query
-            ->select( 'id' )
-            ->from( 'ezcontentobject' )
+            ->select( $this->handler->quoteColumn( 'id' ) )
+            ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
             ->where(
                 $this->converter->convertCriteria( $query, $criterion )
             )
