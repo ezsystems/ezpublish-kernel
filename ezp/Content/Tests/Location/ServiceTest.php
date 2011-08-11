@@ -156,21 +156,6 @@ class ServiceTest extends BaseServiceTest
     }
 
     /**
-     * Try to build Location domain object from not valid value object
-     *
-     * @expectedException \ezp\Base\Exception\InvalidArgumentType
-     * @group locationService
-     * @covers ezp\Content\Location\Service::buildDomainObject
-     */
-    public function testBuildDomainObjectNotFromLocationVo()
-    {
-        $refService = new ReflectionObject( $this->service );
-        $refMethod = $refService->getMethod( 'buildDomainObject' );
-        $refMethod->setAccessible( true );
-        $do = $refMethod->invoke( $this->service, new Content );
-    }
-
-    /**
      * @group locationService
      */
     public function testLoad()

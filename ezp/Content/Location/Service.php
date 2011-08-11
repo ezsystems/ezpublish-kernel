@@ -252,13 +252,8 @@ class Service extends BaseService
      * @return \ezp\Content\Location
      * @throws \ezp\Base\Exception\InvalidArgumentType
      */
-    protected function buildDomainObject( ValueObject $vo )
+    protected function buildDomainObject( LocationValue $vo )
     {
-        if ( !$vo instanceof LocationValue )
-        {
-            throw new InvalidArgumentType( 'Value object', 'ezp\\Persistence\\Content\\Location', $vo );
-        }
-
         $location = new Location( new Proxy( $this->repository->getContentService(), $vo->contentId ) );
 
         return $this->refreshDomainObject( $location, $vo );
@@ -277,11 +272,6 @@ class Service extends BaseService
         if ( $vo === null )
         {
             $vo = $this->handler->locationHandler()->load( $location->id );
-        }
-
-        if ( !$vo instanceof LocationValue )
-        {
-            throw new InvalidArgumentType( 'Value object', 'ezp\\Persistence\\Content\\Location', $vo );
         }
 
         $newState = array(
