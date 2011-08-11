@@ -82,8 +82,21 @@ class EzcDbHandler
         // @TODO: For oracle we need a mapping of table and column names to
         // their shortened variants here.
         return
-            ( $tableName ? $this->ezcDbHandler->quoteIdentifier( $tableName ) . '.' : '' ) .
+            ( $tableName ? $this->quoteTable( $tableName ) . '.' : '' ) .
             $this->ezcDbHandler->quoteIdentifier( $columnName );
+    }
+
+    /**
+     * Returns a qualified identifier for $tableName.
+     *
+     * @param string $tableName
+     * @return string
+     */
+    public function quoteTable( $tableName )
+    {
+        // @TODO: For oracle we need a mapping of table and column names to
+        // their shortened variants here.
+        return $this->ezcDbHandler->quoteIdentifier( $tableName );
     }
 }
 

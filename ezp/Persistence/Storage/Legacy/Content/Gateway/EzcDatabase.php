@@ -50,22 +50,22 @@ class EzcDatabase extends Gateway
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
-            $this->dbHandler->quoteIdentifier( 'ezcontentobject' )
+            $this->dbHandler->quoteColumn( 'ezcontentobject' )
         )->set(
             // @FIXME: Determine version?
-            $this->dbHandler->quoteIdentifier( 'current_version' ),
+            $this->dbHandler->quoteColumn( 'current_version' ),
             $q->bindValue( 1, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'name' ),
+            $this->dbHandler->quoteColumn( 'name' ),
             $q->bindValue( $content->name )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'contentclass_id' ),
+            $this->dbHandler->quoteColumn( 'contentclass_id' ),
             $q->bindValue( $content->typeId, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'section_id' ),
+            $this->dbHandler->quoteColumn( 'section_id' ),
             $q->bindValue( $content->sectionId, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'owner_id' ),
+            $this->dbHandler->quoteColumn( 'owner_id' ),
             $q->bindValue( $content->ownerId, null, \PDO::PARAM_INT )
         );
 
@@ -85,24 +85,24 @@ class EzcDatabase extends Gateway
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
-            $this->dbHandler->quoteIdentifier( 'ezcontentobject_version' )
+            $this->dbHandler->quoteColumn( 'ezcontentobject_version' )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'version' ),
+            $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $version->versionNo )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'modified' ),
+            $this->dbHandler->quoteColumn( 'modified' ),
             $q->bindValue( $version->modified, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'creator_id' ),
+            $this->dbHandler->quoteColumn( 'creator_id' ),
             $q->bindValue( $version->creatorId, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'created' ),
+            $this->dbHandler->quoteColumn( 'created' ),
             $q->bindValue( $version->created, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'status' ),
+            $this->dbHandler->quoteColumn( 'status' ),
             $q->bindValue( $version->state, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'contentobject_id' ),
+            $this->dbHandler->quoteColumn( 'contentobject_id' ),
             $q->bindValue( $version->contentId, null, \PDO::PARAM_INT )
         );
 
@@ -127,37 +127,37 @@ class EzcDatabase extends Gateway
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
-            $this->dbHandler->quoteIdentifier( 'ezcontentobject_attribute' )
+            $this->dbHandler->quoteColumn( 'ezcontentobject_attribute' )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'contentobject_id' ),
+            $this->dbHandler->quoteColumn( 'contentobject_id' ),
             $q->bindValue( $content->id, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'contentclassattribute_id' ),
+            $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
             $q->bindValue( $field->fieldDefinitionId, null, \PDO::PARAM_INT )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'data_type_string' ),
+            $this->dbHandler->quoteColumn( 'data_type_string' ),
             $q->bindValue( $field->type )
         )->set(
             // @FIXME: Is language code correct?
-            $this->dbHandler->quoteIdentifier( 'language_code' ),
+            $this->dbHandler->quoteColumn( 'language_code' ),
             $q->bindValue( $field->language )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'version' ),
+            $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $field->versionNo )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'data_float' ),
+            $this->dbHandler->quoteColumn( 'data_float' ),
             $q->bindValue( $value->dataFloat )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'data_int' ),
+            $this->dbHandler->quoteColumn( 'data_int' ),
             $q->bindValue( $value->dataInt )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'data_text' ),
+            $this->dbHandler->quoteColumn( 'data_text' ),
             $q->bindValue( $value->dataText )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'sort_key_int' ),
+            $this->dbHandler->quoteColumn( 'sort_key_int' ),
             $q->bindValue( $value->sortKeyInt )
         )->set(
-            $this->dbHandler->quoteIdentifier( 'sort_key_string' ),
+            $this->dbHandler->quoteColumn( 'sort_key_string' ),
             $q->bindValue( $value->sortKeyString )
         );
 
