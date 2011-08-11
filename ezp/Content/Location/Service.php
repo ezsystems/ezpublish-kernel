@@ -209,9 +209,8 @@ class Service extends BaseService
      */
     public function move( Location $location, Location $newParent )
     {
-        // take care of :
-        // 1. set parentId and path for $location
-        // 2. changing path attribute to the subtree below $location
+        $this->handler->locationHandler()->move( $location->id, $newParent->id );
+        $this->refreshDomainObject( $location );
     }
 
     /**

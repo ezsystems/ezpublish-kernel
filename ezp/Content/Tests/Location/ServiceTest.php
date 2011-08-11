@@ -63,6 +63,12 @@ class ServiceTest extends BaseServiceTest
      */
     protected $contentHandler;
 
+    /**
+     * Locations that have been created by insertSubtree()
+     * @var \ezp\Content\Location[]
+     */
+    protected $insertedLocations = array();
+
     protected function setUp()
     {
         parent::setUp();
@@ -105,12 +111,49 @@ class ServiceTest extends BaseServiceTest
         {
             $this->contentHandler->delete( $content->id );
         }
+        $this->contentToDelete = array();
 
         foreach ( $this->locationToDelete as $location )
         {
             $this->locationHandler->delete( $location->id );
         }
+        $this->locationToDelete = array();
+        $this->insertedLocations = array();
+
         parent::tearDown();
+    }
+
+    /**
+     * Inserts a deep basic subtree
+     */
+    private function insertSubtree()
+    {
+        $parentId = $this->topLocation->id;
+        for ( $i = 0; $i < 10; $i++ )
+        {
+            $struct = new CreateStruct();
+            $struct->name = "foo$i";
+            $struct->ownerId = 14;
+            $struct->sectionId = 1;
+            $struct->typeId = 2;
+            $struct->fields[] = new Field(
+                array(
+                    'type' => 'ezstring',
+                    // @todo Use FieldValue object
+                    'value' => "bar$i",
+                    'language' => 'eng-GB',
+                )
+            );
+            $contentVO = $this->contentHandler->create( $struct );
+            $this->contentToDelete[] = $contentVO;
+
+            $location = new Location( new Proxy( $this->repository->getContentService(), $contentVO->id ) );
+            $location->parent = $this->service->load( $parentId );
+            $location = $this->service->create( $location );
+            $this->locationToDelete[] = $location;
+            $this->insertedLocations[] = $location;
+            $parentId = $location->id;
+        }
     }
 
     /**
@@ -197,6 +240,7 @@ class ServiceTest extends BaseServiceTest
         $location = $this->service->load( $locationId );
         self::assertInstanceOf( 'ezp\\Content\\Location', $location );
         self::assertEquals( $parent->pathString . $location->id . '/', $location->pathString );
+        self::assertSame( 'test', $location->pathIdentificationString );
 
         // Expected depth should be number of locations in pathString - 1 (first level doesn't count)
         $expectedDepth = count( explode( '/', substr( $location->pathString, 1, -1 ) ) ) - 1;
@@ -379,5 +423,34 @@ class ServiceTest extends BaseServiceTest
         $state['properties']->id = 123456789;
         $this->location->setState( array( 'properties' => $state['properties'] ) );
         $this->service->update( $this->location );
+    }
+
+    /**
+     * @group locationService
+     */
+    public function testMove()
+    {
+        $this->insertSubtree();
+        $startIndex = 5;
+        $locationToMove = $this->insertedLocations[$startIndex];
+        $this->service->move( $locationToMove, $this->topLocation );
+        self::assertEquals(
+            $this->topLocation->pathString . $locationToMove->id . '/',
+            $locationToMove->pathString
+        );
+        self::assertSame( $this->topLocation->id, $locationToMove->parentId );
+        // @todo: test pathIdentificationString
+
+        $parentId = $locationToMove->id;
+        $parentPathString = $locationToMove->pathString;
+        foreach ( array_splice( $this->insertedLocations, $startIndex + 1 ) as $key => $location )
+        {
+            $location = $this->service->load( $location->id );
+            self::assertEquals( $parentId, $location->parentId );
+            self::assertEquals( $parentPathString . $location->id . '/', $location->pathString );
+            // @todo: test pathIdentificationString
+            $parentId = $location->id;
+            $parentPathString = $location->pathString;
+        }
     }
 }

@@ -67,6 +67,41 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function move( $sourceId, $destinationParentId )
     {
+        $vo = $this->load( $sourceId );
+        $newParentVO = $this->load( $destinationParentId );
+        $oldPathString = $vo->pathString;
+        $newPathString = $newParentVO->pathString . $sourceId . '/';
+        $oldPathIdentificationString = $vo->pathIdentificationString;
+        $newPathIdentificationString = '';
+        if ( $newParentVO->parentId == 1 )
+            $newPathIdentificationString = $this->getStrippedContentName( $vo );
+        else
+            $newPathIdentificationString = $this->getPathIdentificationString ( $newParentVO ) . '/' . $this->getStrippedContentName( $vo );
+
+        $this->backend->update(
+            'Content\\Location',
+            $sourceId,
+            array(
+                'parentId' => $destinationParentId,
+                'pathString' => $newPathString,
+                'pathIdentificationString' => $newPathIdentificationString
+            )
+        );
+
+        $children = $this->backend->find( 'Content\\Location', array( 'pathString' => "$vo->pathString%" ) );
+        foreach ( $children as $child )
+        {
+            $this->backend->update(
+                'Content\\Location',
+                $child->id,
+                array(
+                    'pathString' => str_replace( $oldPathString, $newPathString, $child->pathString ),
+                    'pathIdentificationString' => str_replace( $oldPathIdentificationString, $newPathIdentificationString, $child->pathIdentificationString )
+                )
+            );
+        }
+
+        $this->updateSubtreeModificationTime( $newParentVO->pathString );
     }
 
     /**
