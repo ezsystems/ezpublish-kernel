@@ -59,10 +59,10 @@ class EzcDbHandler
      * @param string $tableName
      * @return string
      */
-    public function quoteColumn( \ezcQuerySelect $query, $columnName, $tableName = null )
+    public function aliasedColumn( \ezcQuerySelect $query, $columnName, $tableName = null )
     {
         return $query->alias(
-            $this->qualifiedIdentifier( $columnName, $tableName ),
+            $this->quoteColumn( $columnName, $tableName ),
             $this->ezcDbHandler->quoteIdentifier(
                 ( $tableName ? $tableName . '_' : '' ) .
                 $columnName
@@ -77,7 +77,7 @@ class EzcDbHandler
      * @param string $tableName
      * @return string
      */
-    public function qualifiedIdentifier( $columnName, $tableName = null )
+    public function quoteColumn( $columnName, $tableName = null )
     {
         // @TODO: For oracle we need a mapping of table and column names to
         // their shortened variants here.

@@ -784,7 +784,7 @@ class EzcDatabase extends Gateway
     public function createTableColumnAlias( \ezcQuerySelect $query, $tableName, $columnName )
     {
         // @TODO: Replace calls to this function
-        return $this->dbHandler->quoteColumn( $query, $columnName, $tableName );
+        return $this->dbHandler->aliasedColumn( $query, $columnName, $tableName );
     }
 
     /**
@@ -797,6 +797,6 @@ class EzcDatabase extends Gateway
     public function qualifiedIdentifier( $tableName, $columnName )
     {
         // @TODO: Replace calls to this function
-        return $this->dbHandler->qualifiedIdentifier( $columnName, $tableName );
+        return $this->dbHandler->quoteColumn( $columnName, $tableName );
     }
 }
