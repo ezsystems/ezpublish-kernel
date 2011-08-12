@@ -49,7 +49,7 @@ class Location extends Model implements Observer
         'pathString' => false,
         'mainLocationId' => false,
         'depth' => false,
-        'containerProperties' => true,
+        'containerProperties' => false,
         'children' => false
     );
 
