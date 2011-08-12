@@ -43,15 +43,15 @@ class Content extends ValueObject
      * The loaded version
      *
      * The Version, containing version information and all
-     * {@link \ezp\Content\Field}s in this version (in all languages).
+     * {@link \ezp\Persistence\Content\Field}s in this version (in all languages).
      * Non-translateable fields will only occur once!
      *
-     * @var \ezp\Content\Version
+     * @var \ezp\Persistence\Content\Version
      */
     public $version;
 
     /**
-     * @var \ezp\Content\Location[]
+     * @var \ezp\Persistence\Content\Location[]
      */
     public $locations = array();
 
