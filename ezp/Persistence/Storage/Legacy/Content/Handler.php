@@ -110,7 +110,7 @@ class Handler implements BaseContentHandler
             $version->fields[] = $field;
         }
 
-        $content->versionInfos = array( $version );
+        $content->version = $version;
 
         foreach ( $struct->parentLocations as $location )
         {

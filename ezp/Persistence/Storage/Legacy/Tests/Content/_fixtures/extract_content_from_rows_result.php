@@ -13,122 +13,79 @@ $content->sectionId       = 1;
 $content->ownerId         = 14;
 $content->remoteId        = '0d5109156ee806da8e86c8cea8004434';
 $content->alwaysAvailable = true;
-$content->versionInfos    = array();
 
-$v1            = new Version();
-$v1->id        = 677;
-$v1->versionNo = 3;
-$v1->modified  = 1312302914;
-$v1->creatorId = 14;
-$v1->created   = 1312302870;
-$v1->state     = 3;
-$v1->contentId = 226;
-$v1->fields    = array();
+$version            = new Version();
+$version->id        = 679;
+$version->versionNo = 4;
+$version->modified  = 1312373715;
+$version->creatorId = 14;
+$version->created   = 1312373690;
+$version->state     = 1;
+$version->contentId = 226;
+$version->fields    = array();
 
-$v1TitleField                    = new Field();
-$v1TitleField->id                = 1332;
-$v1TitleField->fieldDefinitionId = 214;
-$v1TitleField->type              = 'ezstring';
-$v1TitleField->value             = new FieldValue();
-$v1TitleField->language          = 'eng-US';
-$v1TitleField->versionNo         = 3;
+$versionUkTitleField                    = new Field();
+$versionUkTitleField->id                = 1338;
+$versionUkTitleField->fieldDefinitionId = 214;
+$versionUkTitleField->type              = 'ezstring';
+$versionUkTitleField->value             = new FieldValue();
+$versionUkTitleField->language          = 'eng-GB';
+$versionUkTitleField->versionNo         = 4;
 
-$v1->fields[] = $v1TitleField;
+$version->fields[] = $versionUkTitleField;
 
-$v1BodyField                    = new Field();
-$v1BodyField->id                = 1333;
-$v1BodyField->fieldDefinitionId = 215;
-$v1BodyField->type              = 'ezxmltext';
-$v1BodyField->value             = new FieldValue();
-$v1BodyField->language          = 'eng-US';
-$v1BodyField->versionNo         = 3;
+$versionUkBodyField                    = new Field();
+$versionUkBodyField->id                = 1339;
+$versionUkBodyField->fieldDefinitionId = 215;
+$versionUkBodyField->type              = 'ezxmltext';
+$versionUkBodyField->value             = new FieldValue();
+$versionUkBodyField->language          = 'eng-GB';
+$versionUkBodyField->versionNo         = 4;
 
-$v1->fields[] = $v1BodyField;
+$version->fields[] = $versionUkBodyField;
 
-$v1PubDateField                    = new Field();
-$v1PubDateField->id                = 1334;
-$v1PubDateField->fieldDefinitionId = 216;
-$v1PubDateField->type              = 'ezdatetime';
-$v1PubDateField->value             = new FieldValue();
-$v1PubDateField->language          = 'eng-US';
-$v1PubDateField->versionNo         = 3;
+$versionUkPubDateField                    = new Field();
+$versionUkPubDateField->id                = 1340;
+$versionUkPubDateField->fieldDefinitionId = 216;
+$versionUkPubDateField->type              = 'ezdatetime';
+$versionUkPubDateField->value             = new FieldValue();
+$versionUkPubDateField->language          = 'eng-GB';
+$versionUkPubDateField->versionNo         = 4;
 
-$v1->fields[] = $v1PubDateField;
+$version->fields[] = $versionUkPubDateField;
 
-$content->versionInfos[] = $v1;
+$versionUsTitleField                    = new Field();
+$versionUsTitleField->id                = 1332;
+$versionUsTitleField->fieldDefinitionId = 214;
+$versionUsTitleField->type              = 'ezstring';
+$versionUsTitleField->value             = new FieldValue();
+$versionUsTitleField->language          = 'eng-US';
+$versionUsTitleField->versionNo         = 4;
 
-$v2            = new Version();
-$v2->id        = 679;
-$v2->versionNo = 4;
-$v2->modified  = 1312373715;
-$v2->creatorId = 14;
-$v2->created   = 1312373690;
-$v2->state     = 1;
-$v2->contentId = 226;
-$v2->fields    = array();
+$version->fields[] = $versionUsTitleField;
 
-$v2UkTitleField                    = new Field();
-$v2UkTitleField->id                = 1338;
-$v2UkTitleField->fieldDefinitionId = 214;
-$v2UkTitleField->type              = 'ezstring';
-$v2UkTitleField->value             = new FieldValue();
-$v2UkTitleField->language          = 'eng-GB';
-$v2UkTitleField->versionNo         = 4;
+$versionUsBodyField                    = new Field();
+$versionUsBodyField->id                = 1333;
+$versionUsBodyField->fieldDefinitionId = 215;
+$versionUsBodyField->type              = 'ezxmltext';
+$versionUsBodyField->value             = new FieldValue();
+$versionUsBodyField->language          = 'eng-US';
+$versionUsBodyField->versionNo         = 4;
 
-$v2->fields[] = $v2UkTitleField;
+$version->fields[] = $versionUsBodyField;
 
-$v2UkBodyField                    = new Field();
-$v2UkBodyField->id                = 1339;
-$v2UkBodyField->fieldDefinitionId = 215;
-$v2UkBodyField->type              = 'ezxmltext';
-$v2UkBodyField->value             = new FieldValue();
-$v2UkBodyField->language          = 'eng-GB';
-$v2UkBodyField->versionNo         = 4;
-
-$v2->fields[] = $v2UkBodyField;
-
-$v2UkPubDateField                    = new Field();
-$v2UkPubDateField->id                = 1340;
-$v2UkPubDateField->fieldDefinitionId = 216;
-$v2UkPubDateField->type              = 'ezdatetime';
-$v2UkPubDateField->value             = new FieldValue();
-$v2UkPubDateField->language          = 'eng-GB';
-$v2UkPubDateField->versionNo         = 4;
-
-$v2->fields[] = $v2UkPubDateField;
-
-$v2UsTitleField                    = new Field();
-$v2UsTitleField->id                = 1332;
-$v2UsTitleField->fieldDefinitionId = 214;
-$v2UsTitleField->type              = 'ezstring';
-$v2UsTitleField->value             = new FieldValue();
-$v2UsTitleField->language          = 'eng-US';
-$v2UsTitleField->versionNo         = 4;
-
-$v2->fields[] = $v2UsTitleField;
-
-$v2UsBodyField                    = new Field();
-$v2UsBodyField->id                = 1333;
-$v2UsBodyField->fieldDefinitionId = 215;
-$v2UsBodyField->type              = 'ezxmltext';
-$v2UsBodyField->value             = new FieldValue();
-$v2UsBodyField->language          = 'eng-US';
-$v2UsBodyField->versionNo         = 4;
-
-$v2->fields[] = $v2UsBodyField;
-
-$v2UsPubDateField                    = new Field();
-$v2UsPubDateField->id                = 1334;
-$v2UsPubDateField->fieldDefinitionId = 216;
-$v2UsPubDateField->type              = 'ezdatetime';
-$v2UsPubDateField->value             = new FieldValue();
-$v2UsPubDateField->language          = 'eng-US';
-$v2UsPubDateField->versionNo         = 4;
+$versionUsPubDateField                    = new Field();
+$versionUsPubDateField->id                = 1334;
+$versionUsPubDateField->fieldDefinitionId = 216;
+$versionUsPubDateField->type              = 'ezdatetime';
+$versionUsPubDateField->value             = new FieldValue();
+$versionUsPubDateField->language          = 'eng-US';
+$versionUsPubDateField->versionNo         = 4;
 
 // @FIXME: This field is not translateable and should therefore only
 // occur once!
-$v2->fields[] = $v2UsPubDateField;
+$version->fields[] = $versionUsPubDateField;
 
-$content->versionInfos[] = $v2;
+$content->version = $version;
 
 return $content;

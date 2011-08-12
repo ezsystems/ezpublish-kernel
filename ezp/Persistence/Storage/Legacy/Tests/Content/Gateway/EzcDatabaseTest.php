@@ -104,7 +104,6 @@ class EzcDatabaseTest extends TestCase
         $struct->typeId          = 23;
         $struct->sectionId       = 42;
         $struct->ownerId         = 13;
-        $struct->versionInfos    = array();
         $struct->locations       = array();
 
         return $struct;

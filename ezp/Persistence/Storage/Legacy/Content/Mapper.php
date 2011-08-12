@@ -51,7 +51,6 @@ class Mapper
         $content->typeId       = $struct->typeId;
         $content->sectionId    = $struct->sectionId;
         $content->ownerId      = $struct->ownerId;
-        $content->versionInfos = array();
 
         return $content;
     }
@@ -68,7 +67,7 @@ class Mapper
 
         $location->remoteId       = md5( uniqid() );
         $location->contentId      = $content->id;
-        $location->contentVersion = $content->versionInfos[0]->id;
+        $location->contentVersion = $content->version->id;
 
         return $location;
     }
@@ -126,7 +125,6 @@ class Mapper
     public function extractContentFromRows( array $rows )
     {
         $contentObjs = array();
-        $versions    = array();
 
         foreach ( $rows as $row )
         {
@@ -134,23 +132,19 @@ class Mapper
             if ( !isset( $contentObjs[$contentId] ) )
             {
                 $contentObjs[$contentId]  = $this->extractContentFromRow( $row );
-                $versions[$contentId] = array();
             }
 
-            $versionNo = (int) $row['ezcontentobject_version_version'];
-            if ( !isset( $versions[$contentId][$versionNo] ) )
+            if ( !isset( $versions[$contentId] ) )
             {
-                $versions[$contentId][$versionNo] =
-                    $this->extractVersionFromRow( $row );
+                $versions[$contentId] = $this->extractVersionFromRow( $row );
             }
 
-            $versions[$contentId][$versionNo]->fields[] =
-                $this->extractFieldFromRow( $row );
+            $versions[$contentId]->fields[] = $this->extractFieldFromRow( $row );
         }
 
         foreach ( $contentObjs as $content )
         {
-            $content->versionInfos = array_values( $versions[$content->id] );
+            $content->version = $versions[$content->id];
         }
         return array_values( $contentObjs );
     }
@@ -173,7 +167,6 @@ class Mapper
         $content->ownerId         = (int) $row['ezcontentobject_owner_id'];
         $content->remoteId        = $row['ezcontentobject_remote_id'];
         $content->alwaysAvailable = (bool) ( $row['ezcontentobject_version_language_mask'] & 1 );
-        $content->versionInfos    = array();
         $content->locations       = array();
 
         return $content;

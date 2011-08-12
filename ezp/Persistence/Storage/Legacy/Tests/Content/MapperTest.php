@@ -143,7 +143,6 @@ class MapperTest extends TestCase
         $struct->typeId          = 23;
         $struct->sectionId       = 42;
         $struct->ownerId         = 13;
-        $struct->versionInfos    = array();
         $struct->locations       = array();
 
         return $struct;
@@ -153,11 +152,9 @@ class MapperTest extends TestCase
     {
         $struct = $this->getContentFixture();
 
-        $struct->versionInfos = array(
-            new Content\Version( array(
-                'id' => 1,
-            ) )
-        );
+        $struct->version = new Content\Version( array(
+            'id' => 1,
+        ) );
 
         return $struct;
     }
@@ -205,7 +202,7 @@ class MapperTest extends TestCase
         $convMock = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
         );
-        $convMock->expects( $this->exactly( 9 ) )
+        $convMock->expects( $this->exactly( 6 ) )
             ->method( 'toFieldValue' )
             ->with(
                 $this->isInstanceOf(

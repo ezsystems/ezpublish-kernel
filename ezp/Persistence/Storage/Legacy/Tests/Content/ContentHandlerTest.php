@@ -181,22 +181,22 @@ class ContentHandlerTest extends TestCase
             $res->id,
             'Content ID not set correctly'
         );
-        $this->assertInternalType(
-            'array',
-            $res->versionInfos,
+        $this->assertInstanceOf(
+            '\\ezp\\Persistence\\Content\\Version',
+            $res->version,
             'Version infos not created'
         );
         $this->assertEquals(
             1,
-            $res->versionInfos[0]->id,
+            $res->version->id,
             'Version ID not set correctly'
         );
         $this->assertEquals(
             2,
-            count( $res->versionInfos[0]->fields ),
+            count( $res->version->fields ),
             'Fields not set correctly in version'
         );
-        foreach ( $res->versionInfos[0]->fields as $field )
+        foreach ( $res->version->fields as $field )
         {
             $this->assertEquals(
                 42,
@@ -297,7 +297,7 @@ class ContentHandlerTest extends TestCase
 
         $content = $handler->load( 14, 4 );
 
-        $this->assertEquals( $content->versionInfos[0]->$property, $value );
+        $this->assertEquals( $content->version->$property, $value );
     }
 
     public function testLoadContentFieldDataFiledTypes()
@@ -396,7 +396,7 @@ class ContentHandlerTest extends TestCase
 
         $content = $handler->load( 14, 4 );
 
-        $this->assertEquals( $content->versionInfos[0]->fields[0]->$property, $value );
+        $this->assertEquals( $content->version->fields[0]->$property, $value );
     }
 
     /**
