@@ -99,7 +99,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( 'test', $content->name );
-        $this->assertEquals( $content->version instanceof Version  );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
     }
 
     /**
@@ -131,7 +131,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 'test', $content->name );
 
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
-        $this->assertEquals( 2, $content->version->id );
+        $this->assertEquals( 3, $content->version->id );
         $this->assertEquals( 14, $content->version->creatorId );
         $this->assertEquals( Version::STATUS_DRAFT, $content->version->state );
         $this->assertEquals( $content->id, $content->version->contentId );

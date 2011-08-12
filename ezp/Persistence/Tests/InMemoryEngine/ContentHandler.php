@@ -104,8 +104,8 @@ class ContentHandler implements ContentHandlerInterface
         if ( !$content )
             return null;
 
-        $version = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id, "versionNo" => $version ) );
-        $version[0]->fields = $this->backend->find( 'Content\\Field', array( 'versionNo' => $version->id ) );
+        $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id, "versionNo" => $version ) );
+        $versions[0]->fields = $this->backend->find( 'Content\\Field', array( 'versionNo' => $versions[0]->id ) );
 
         $content->version = $version[0];
         // @todo Loading locations by content object id should be possible using handler API.
@@ -137,6 +137,11 @@ class ContentHandler implements ContentHandlerInterface
         if ( $criterion instanceof ContentId && $criterion->operator === Operator::EQ )
         {
             $content = $this->backend->load( "Content", $criterion->value[0] );
+
+            $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id ) );
+            $versions[0]->fields = $this->backend->find( 'Content\\Field', array( 'versionNo' => $versions[0]->id ) );
+
+            $content->version = $versions[0];
 
             // @todo Loading locations by content object id should be possible using handler API.
             $content->locations = $this->backend->find( "Content\\Location", array( "contentId" => $content->id  ) );
