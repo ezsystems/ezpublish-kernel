@@ -50,7 +50,7 @@ class EzcDatabase extends Gateway
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
-            $this->dbHandler->quoteColumn( 'ezcontentobject' )
+            $this->dbHandler->quoteTable( 'ezcontentobject' )
         )->set(
             // @FIXME: Determine version?
             $this->dbHandler->quoteColumn( 'current_version' ),
@@ -85,7 +85,7 @@ class EzcDatabase extends Gateway
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
-            $this->dbHandler->quoteColumn( 'ezcontentobject_version' )
+            $this->dbHandler->quoteTable( 'ezcontentobject_version' )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $version->versionNo )
@@ -127,7 +127,7 @@ class EzcDatabase extends Gateway
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
-            $this->dbHandler->quoteColumn( 'ezcontentobject_attribute' )
+            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
             $q->bindValue( $content->id, null, \PDO::PARAM_INT )
