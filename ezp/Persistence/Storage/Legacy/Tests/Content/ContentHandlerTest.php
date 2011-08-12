@@ -206,6 +206,33 @@ class ContentHandlerTest extends TestCase
         }
     }
 
+    protected function getAlmostRealContentHandler()
+    {
+        $handler = new Handler(
+            new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+            new Location\Handler(
+                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() )
+            ),
+            new Mapper(
+                $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
+            ),
+            new StorageRegistry()
+        );
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->any() )
+            ->method( 'toFieldValue' )
+            ->will( $this->returnValue( new FieldValue() ) );
+
+        $registry
+            ->expects( $this->any() )
+            ->method( 'getConverter' )
+            ->will( $this->returnValue( $converter ) );
+
+        return $handler;
+    }
+
     public static function getLoadedContentBaseData()
     {
         return array(
@@ -225,28 +252,7 @@ class ContentHandlerTest extends TestCase
     public function testLoadContentBaseData( $property, $value )
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
-
-        $handler = new Handler(
-            new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
-            new Location\Handler(
-                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() )
-            ),
-            new Mapper(
-                $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
-            ),
-            new StorageRegistry()
-        );
-
-        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
-        $converter
-            ->expects( $this->exactly( 5 ) )
-            ->method( 'toFieldValue' )
-            ->will( $this->returnValue( new FieldValue() ) );
-
-        $registry
-            ->expects( $this->exactly( 5 ) )
-            ->method( 'getConverter' )
-            ->will( $this->returnValue( $converter ) );
+        $handler = $this->getAlmostRealContentHandler();
 
         $content = $handler->load( 14, 4 );
 
@@ -272,28 +278,7 @@ class ContentHandlerTest extends TestCase
     public function testLoadContentVersionData( $property, $value )
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
-
-        $handler = new Handler(
-            new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
-            new Location\Handler(
-                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() )
-            ),
-            new Mapper(
-                $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
-            ),
-            new StorageRegistry()
-        );
-
-        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
-        $converter
-            ->expects( $this->exactly( 5 ) )
-            ->method( 'toFieldValue' )
-            ->will( $this->returnValue( new FieldValue() ) );
-
-        $registry
-            ->expects( $this->exactly( 5 ) )
-            ->method( 'getConverter' )
-            ->will( $this->returnValue( $converter ) );
+        $handler = $this->getAlmostRealContentHandler();
 
         $content = $handler->load( 14, 4 );
 
@@ -371,28 +356,7 @@ class ContentHandlerTest extends TestCase
     public function testLoadContentFieldData( $property, $value )
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
-
-        $handler = new Handler(
-            new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
-            new Location\Handler(
-                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() )
-            ),
-            new Mapper(
-                $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
-            ),
-            new StorageRegistry()
-        );
-
-        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
-        $converter
-            ->expects( $this->exactly( 5 ) )
-            ->method( 'toFieldValue' )
-            ->will( $this->returnValue( new FieldValue() ) );
-
-        $registry
-            ->expects( $this->exactly( 5 ) )
-            ->method( 'getConverter' )
-            ->will( $this->returnValue( $converter ) );
+        $handler = $this->getAlmostRealContentHandler();
 
         $content = $handler->load( 14, 4 );
 
