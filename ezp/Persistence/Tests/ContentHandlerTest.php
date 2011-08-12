@@ -88,18 +88,18 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * Test load function
+     * Test findSingle function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::load
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::findSingle
      */
-    public function testLoad()
+    public function testFindSingle()
     {
-        $content = $this->repositoryHandler->contentHandler()->load( $this->content->id );
+        $content = $this->repositoryHandler->contentHandler()->findSingle( new ContentId( $this->content->id ) );
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( 'test', $content->name );
-        $this->assertEquals( $content->version instanceof Version  );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
     }
 
     /**
@@ -131,7 +131,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 'test', $content->name );
 
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
-        $this->assertEquals( 2, $content->version->id );
+        $this->assertEquals( 3, $content->version->id );
         $this->assertEquals( 14, $content->version->creatorId );
         $this->assertEquals( Version::STATUS_DRAFT, $content->version->state );
         $this->assertEquals( $content->id, $content->version->contentId );
@@ -143,7 +143,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->language );
         $this->assertEquals( 'Welcome', $field->value );
-        $this->assertEquals( $version->id, $field->versionNo );
+        $this->assertEquals( $content->version->id, $field->versionNo );
     }
 
     /**
@@ -158,7 +158,7 @@ class ContentHandlerTest extends HandlerTest
 
         try
         {
-            $contentHandler->load( $this->content->id );
+            $contentHandler->findSingle( new ContentId( $this->content->id ) );
             $this->fail( "Content not removed correctly" );
         }
         catch ( NotFound $e )

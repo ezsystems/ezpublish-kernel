@@ -18,7 +18,9 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
     ezp\Persistence\ValueObject,
-    ezp\Persistence\Content as ContentValue;
+    ezp\Persistence\Content as ContentValue,
+    ezp\Persistence\Content\Criterion\ContentId,
+    ezp\Persistence\Content\Criterion\Operator;
 
 /**
  * Content service, used for Content operations
@@ -63,7 +65,7 @@ class Service extends BaseService
      */
     public function load( $contentId )
     {
-        $contentVO = $this->handler->contentHandler()->load( $contentId );
+        $contentVO = $this->handler->contentHandler()->findSingle( new ContentId( $contentId ) );
         if ( !$contentVO instanceof ContentValue )
             throw new NotFound( 'Content', $contentId );
 
@@ -89,11 +91,7 @@ class Service extends BaseService
      */
     public function delete( Content $content )
     {
-        // take care of:
-        // 1. removing the subtree of all content's locations
-        // 2. removing the content it self (with version, translations, fields
-        // and so on...)
-        // note: this is different from Subtree::delete()
+        $this->handler->contentHandler()->delete( $content->id );
     }
 
     /**

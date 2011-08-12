@@ -13,6 +13,8 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Criterion\ContentId,
+    ezp\Persistence\Content\Criterion\Operator,
     ezp\Content\Version,
     RuntimeException;
 
@@ -102,12 +104,10 @@ class ContentHandler implements ContentHandlerInterface
         if ( !$content )
             return null;
 
-        $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id ) );
-        foreach ( $versions as $version )
-        {
-            $version->fields = $this->backend->find( 'Content\\Field', array( 'versionNo' => $version->id ) );
-        }
-        $content->versionInfos = $versions;
+        $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id, "versionNo" => $version ) );
+        $versions[0]->fields = $this->backend->find( 'Content\\Field', array( 'versionNo' => $versions[0]->id ) );
+
+        $content->version = $version[0];
         // @todo Loading locations by content object id should be possible using handler API.
         $content->locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $content->id  ) );
         return $content;
@@ -132,7 +132,22 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function findSingle( Criterion $criterion )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        // Using "Coding by exception" anti pattern since it has been decided
+        // not to implement search functionalities in InMemoryEngine
+        if ( $criterion instanceof ContentId && $criterion->operator === Operator::EQ )
+        {
+            $content = $this->backend->load( "Content", $criterion->value[0] );
+
+            $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id ) );
+            $versions[0]->fields = $this->backend->find( 'Content\\Field', array( 'versionNo' => $versions[0]->id ) );
+
+            $content->version = $versions[0];
+
+            // @todo Loading locations by content object id should be possible using handler API.
+            $content->locations = $this->backend->find( "Content\\Location", array( "contentId" => $content->id  ) );
+            return $content;
+        }
+        throw new RuntimeException( "@TODO: Implement" );
     }
 
     /**

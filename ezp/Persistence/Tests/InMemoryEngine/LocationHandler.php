@@ -12,7 +12,8 @@ namespace ezp\Persistence\Tests\InMemoryEngine;
 use ezp\Persistence\Content\Location\Handler as LocationHandlerInterface,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\Location\UpdateStruct,
-    ezp\Persistence\Content\Location as LocationValue;
+    ezp\Persistence\Content\Location as LocationValue,
+    ezp\Base\Exception\NotFound;
 
 /**
  * @see ezp\Persistence\Content\Location\Handler
@@ -341,7 +342,14 @@ class LocationHandler implements LocationHandlerInterface
         // Else, update the mainLocationId if needed
         if ( empty( $remainingLocations ) )
         {
-            $this->handler->contentHandler()->delete( $location->contentId );
+            try
+            {
+                $this->handler->contentHandler()->delete( $location->contentId );
+            }
+            // Ignoring a NotFound exception since the content handler also takes care of removing itself and locations
+            catch ( NotFound $e )
+            {
+            }
         }
         else
         {

@@ -120,6 +120,13 @@ class Content extends Model
     protected $status = self::STATUS_DRAFT;
 
     /**
+     * Locations collection
+     *
+     * @var Location[]
+     */
+    protected $locations;
+
+    /**
      * Content type object that this Content object is an instance of
      *
      * @var Type
