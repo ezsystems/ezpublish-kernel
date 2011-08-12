@@ -46,13 +46,9 @@ abstract class Service
      *
      * @param \ezp\Persistence\ValueObject $struct
      * @param \ezp\Base\Model $do
-     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing on $do or has a value of null
-     *                                              Unless one of these properties which is filled by conventions:
-     *                                              - remoteId
-     *                                              - created
-     *                                              - modified
-     *                                              - creatorId
-     *                                              - modifierId
+     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing, has a value of null
+     *                                              and {@link setPropertyByConvention()} returns false.
+     * @uses setPropertyByConvention()
      */
     protected function fillStruct( ValueObject $struct, Model $do )
     {
@@ -67,23 +63,44 @@ abstract class Service
                 continue;
             }
 
-            // set by convention if match, if not throw PropertyNotFound exception
-            switch ( $property )
-            {
-                case 'remoteId':
-                    $struct->$property = md5( uniqid( get_class( $do ), true ) );
-                    break;
-                case 'created':
-                case 'modified':
-                    $struct->$property = time();
-                    break;
-                case 'creatorId':
-                case 'modifierId':
-                    $struct->$property = 14;// @todo Use user object when that is made part of repository/services
-                    break;
-                default:
-                    throw new PropertyNotFound( $property, get_class( $do ) );
-            }
+            // Try to set by convention, if not throw PropertyNotFound exception
+            if ( !$this->setPropertyByConvention( $struct, $property ) )
+                throw new PropertyNotFound( $property, get_class( $do ) );
         }
+    }
+
+    /**
+     * General method to fill in property value by convention
+     *
+     * Properties filled by convention:
+     *     - remoteId
+     *     - created
+     *     - modified
+     *     - creatorId
+     *     - modifierId
+     *
+     * @param \ezp\Persistence\ValueObject $struct
+     * @param string $property
+     * @return bool False if no property was set by convention
+     */
+    protected function setPropertyByConvention( ValueObject $struct, $property )
+    {
+        switch ( $property )
+        {
+            case 'remoteId':
+                $struct->$property = md5( uniqid( get_class( $struct ), true ) );
+                break;
+            case 'created':
+            case 'modified':
+                $struct->$property = time();
+                break;
+            case 'creatorId':
+            case 'modifierId':
+                $struct->$property = 14;// @todo Use user object when that is made part of repository/services
+                break;
+            default:
+                return false;
+        }
+        return true;
     }
 }
