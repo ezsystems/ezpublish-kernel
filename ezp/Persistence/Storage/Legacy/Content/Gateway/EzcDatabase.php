@@ -185,6 +185,7 @@ class EzcDatabase extends Gateway
                 $this->dbHandler->aliasedColumn( $query, 'contentclass_id', 'ezcontentobject' ),
                 $this->dbHandler->aliasedColumn( $query, 'section_id', 'ezcontentobject' ),
                 $this->dbHandler->aliasedColumn( $query, 'owner_id', 'ezcontentobject' ),
+                $this->dbHandler->aliasedColumn( $query, 'remote_id', 'ezcontentobject' ),
                 // Content object version
                 $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
                 $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_version' ),
@@ -193,6 +194,7 @@ class EzcDatabase extends Gateway
                 $this->dbHandler->aliasedColumn( $query, 'created', 'ezcontentobject_version' ),
                 $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject_version' ),
                 $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject_version' ),
                 // Content object fields
                 $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_attribute' ),
                 $this->dbHandler->aliasedColumn( $query, 'contentclassattribute_id', 'ezcontentobject_attribute' ),

@@ -206,7 +206,23 @@ class ContentHandlerTest extends TestCase
         }
     }
 
-    public function testLoadContent()
+    public static function getLoadedContentBaseData()
+    {
+        return array(
+            array( 'id', 14 ),
+            array( 'name', 'Administrator User' ),
+            array( 'typeId', 4 ),
+            array( 'sectionId', 2 ),
+            array( 'ownerId', 14 ),
+            array( 'alwaysAvailable', true ),
+            array( 'remoteId', '1bb4fe25487f05527efa8bfd394cecc7' ),
+        );
+    }
+
+    /**
+     * @dataProvider getLoadedContentBaseData
+     */
+    public function testLoadContentBaseData( $property, $value )
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
 
@@ -233,6 +249,8 @@ class ContentHandlerTest extends TestCase
             ->will( $this->returnValue( $converter ) );
 
         $content = $handler->load( 14, 4 );
+
+        $this->assertEquals( $content->$property, $value );
     }
 
     /**

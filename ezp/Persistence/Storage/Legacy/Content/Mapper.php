@@ -166,13 +166,15 @@ class Mapper
     {
         $content = new Content();
 
-        $content->id           = (int) $row['ezcontentobject_id'];
-        $content->name         = $row['ezcontentobject_name'];
-        $content->typeId       = (int) $row['ezcontentobject_contentclass_id'];
-        $content->sectionId    = (int) $row['ezcontentobject_section_id'];
-        $content->ownerId      = (int) $row['ezcontentobject_owner_id'];
-        $content->versionInfos = array();
-        $content->locations    = array();
+        $content->id              = (int) $row['ezcontentobject_id'];
+        $content->name            = $row['ezcontentobject_name'];
+        $content->typeId          = (int) $row['ezcontentobject_contentclass_id'];
+        $content->sectionId       = (int) $row['ezcontentobject_section_id'];
+        $content->ownerId         = (int) $row['ezcontentobject_owner_id'];
+        $content->remoteId        = $row['ezcontentobject_remote_id'];
+        $content->alwaysAvailable = (bool) ( $row['ezcontentobject_version_language_mask'] & 1 );
+        $content->versionInfos    = array();
+        $content->locations       = array();
 
         return $content;
     }
