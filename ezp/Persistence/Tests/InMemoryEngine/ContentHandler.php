@@ -217,13 +217,5 @@ class ContentHandler implements ContentHandlerInterface
     {
         return $this->backend->find( 'Content\\Version', array( 'contentId' => $contentId ) );
     }
-
-    /**
-     * @see ezp\Persistence\Content\Handler
-     */
-    public function fetchTranslation( $contentId, $language )
-    {
-        throw new RuntimeException( '@TODO: Implement' );
-    }
 }
 ?>
