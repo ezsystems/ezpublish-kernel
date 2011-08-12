@@ -12,6 +12,7 @@ $content->typeId          = 20;
 $content->sectionId       = 1;
 $content->ownerId         = 14;
 $content->remoteId        = '0d5109156ee806da8e86c8cea8004434';
+$content->locations       = array( 23 );
 $content->alwaysAvailable = true;
 
 $version            = new Version();
