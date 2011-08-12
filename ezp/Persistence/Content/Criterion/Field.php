@@ -14,19 +14,22 @@ use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\CriterionInterface;
 
 /**
+ * The Field Criterion class.
+ *
+ * Provides content filtering based on Fields contents & values.
  */
 class Field extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new Field Criterion.
      *
-     * Matches $fieldIdentifier against $value using $operator
+     * Matches $field against $value using $operator
      *
-     * @param string $target The target field
-     * @param string $operato The match operator
-     * @param mixed $matchValue The value to match against
+     * @param FieldIdentifierStruct $target The target type/field
+     * @param string $operator The match operator
+     * @param mixed $value The value to match against
      */
-    public function __construct( $field, $operator, $value )
+    public function __construct( FieldIdentifierStruct $field, $operator, $value )
     {
         parent::__construct( $field, $operator, $value );
     }
