@@ -45,12 +45,23 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createInsertQuery();
         $query
-            ->insertInto( 'ezuser' )
-            ->set( 'contentobject_id', $query->bindValue( $user->id ) )
-            ->set( 'login', $query->bindValue( $user->login ) )
-            ->set( 'email', $query->bindValue( $user->email ) )
-            ->set( 'password_hash', $query->bindValue( $user->password ) )
-            ->set( 'password_hash_type', $query->bindValue( $user->hashAlgorithm ) );
+            ->insertInto( $this->handler->quoteTable( 'ezuser' ) )
+            ->set(
+                $this->handler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $user->id )
+            )->set(
+                $this->handler->quoteColumn( 'login' ),
+                $query->bindValue( $user->login )
+            )->set(
+                $this->handler->quoteColumn( 'email' ),
+                $query->bindValue( $user->email )
+            )->set(
+                $this->handler->quoteColumn( 'password_hash' ),
+                $query->bindValue( $user->password )
+            )->set(
+                $this->handler->quoteColumn( 'password_hash_type' ),
+                $query->bindValue( $user->hashAlgorithm )
+            );
         $query->prepare()->execute();
     }
 
@@ -63,8 +74,11 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createDeleteQuery();
         $query
-            ->deleteFrom( 'ezuser' )
-            ->where( $query->expr->eq( 'contentobject_id', $query->bindValue( $userId ) ) );
+            ->deleteFrom( $this->handler->quoteTable( 'ezuser' ) )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $userId )
+            ) );
         $query->prepare()->execute();
     }
 
@@ -77,12 +91,23 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezuser' )
-            ->set( 'login', $query->bindValue( $user->login ) )
-            ->set( 'email', $query->bindValue( $user->email ) )
-            ->set( 'password_hash', $query->bindValue( $user->password ) )
-            ->set( 'password_hash_type', $query->bindValue( $user->hashAlgorithm ) )
-            ->where( $query->expr->eq( 'contentobject_id', $query->bindValue( $user->id ) ) );
+            ->update( $this->handler->quoteTable( 'ezuser' ) )
+            ->set(
+                $this->handler->quoteColumn( 'login' ),
+                $query->bindValue( $user->login )
+            )->set(
+                $this->handler->quoteColumn( 'email' ),
+                $query->bindValue( $user->email )
+            )->set(
+                $this->handler->quoteColumn( 'password_hash' ),
+                $query->bindValue( $user->password )
+            )->set(
+                $this->handler->quoteColumn( 'password_hash_type' ),
+                $query->bindValue( $user->hashAlgorithm )
+            )->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $user->id )
+            ) );
         $query->prepare()->execute();
     }
 
@@ -112,11 +137,20 @@ class EzcDatabase extends Gateway
             {
                 $query = $this->handler->createInsertQuery();
                 $query
-                    ->insertInto( 'ezuser_role' )
-                    ->set( 'contentobject_id', $query->bindValue( $userId ) )
-                    ->set( 'role_id', $query->bindValue( $roleId ) )
-                    ->set( 'limit_identifier', $query->bindValue( $identifier ) )
-                    ->set( 'limit_value', $query->bindValue( $value ) );
+                    ->insertInto( $this->handler->quoteTable( 'ezuser_role' ) )
+                    ->set(
+                        $this->handler->quoteColumn( 'contentobject_id' ),
+                        $query->bindValue( $userId )
+                    )->set(
+                        $this->handler->quoteColumn( 'role_id' ),
+                        $query->bindValue( $roleId )
+                    )->set(
+                        $this->handler->quoteColumn( 'limit_identifier' ),
+                        $query->bindValue( $identifier )
+                    )->set(
+                        $this->handler->quoteColumn( 'limit_value' ),
+                        $query->bindValue( $value )
+                    );
                 $query->prepare()->execute();
             }
         }
@@ -132,10 +166,16 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createDeleteQuery();
         $query
-            ->deleteFrom( 'ezuser_role' )
+            ->deleteFrom( $this->handler->quoteTable( 'ezuser_role' ) )
             ->where( $query->expr->lAnd(
-                $query->expr->eq( 'contentobject_id', $query->bindValue( $userId ) ),
-                $query->expr->eq( 'role_id', $query->bindValue( $roleId ) )
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $userId )
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'role_id' ),
+                    $query->bindValue( $roleId )
+                )
             ) );
         $query->prepare()->execute();
     }
