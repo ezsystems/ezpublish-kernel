@@ -193,8 +193,6 @@ class EzcDatabaseTest extends TestCase
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::createTableColumnAlias
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::qualifiedIdentifier
      */
     public function testLoadTypeData()
     {
