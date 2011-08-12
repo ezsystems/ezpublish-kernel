@@ -8,8 +8,9 @@
  */
 
 namespace ezp\Base;
-use ezp\Base\Repository,
-        ezp\Base\Exception\PropertyNotFound,
+use ezp\Base\Model,
+    ezp\Base\Repository,
+    ezp\Base\Exception\PropertyNotFound,
     ezp\Persistence\Repository\Handler,
     ezp\Persistence\ValueObject;
 
@@ -46,18 +47,24 @@ abstract class Service
      *
      * @param \ezp\Persistence\ValueObject $struct
      * @param \ezp\Base\Model $do
+     * @param array $skipProperties List of properties that should be skipped
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing, has a value of null
      *                                              and {@link setPropertyByConvention()} returns false.
      * @uses setPropertyByConvention()
      */
-    protected function fillStruct( ValueObject $struct, Model $do )
+    protected function fillStruct( ValueObject $struct, Model $do, array $skipProperties = array() )
     {
         $state = $do->getState();
         $vo = $state['properties'];
         foreach ( $struct as $property => $value )
         {
+            // skip property if mentioned in $skipProperties
+            if ( in_array( $property, $skipProperties ) )
+            {
+                continue;
+            }
             // set property value if there is one
-            if ( isset( $vo->$property ) )
+            else if ( isset( $vo->$property ) )
             {
                 $struct->$property = $vo->$property;
                 continue;
