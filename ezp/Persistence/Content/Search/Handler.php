@@ -23,13 +23,18 @@ abstract class Handler
     /**
      * Returns a list of object satisfying the $criterion.
      *
+     * Optionally a translation filter may be specified. If specified only the
+     * translations with the listed language codes will be retrieved. If not,
+     * all translations will be retrieved.
+     *
      * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit
      * @param $sort
+     * @param string[] $translations
      * @return ezp\Persistence\Content\Search\Result
      */
-    abstract public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null );
+    abstract public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null, $translations = null );
 
     /**
      * Returns a single Content object found.
@@ -38,10 +43,15 @@ abstract class Handler
      * ensure, that your $criterion ensure that only a single object can be
      * retrieved.
      *
+     * Optionally a translation filter may be specified. If specified only the
+     * translations with the listed language codes will be retrieved. If not,
+     * all translations will be retrieved.
+     *
      * @param Criterion $criterion
+     * @param string[] $translations
      * @return \ezp\Persistence\Content
      */
-    abstract public function findSingle( Criterion $criterion );
+    abstract public function findSingle( Criterion $criterion, $translations = null );
 
     /**
      * Indexes a content object

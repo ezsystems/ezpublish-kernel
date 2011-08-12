@@ -58,13 +58,18 @@ class Handler extends BaseSearchHandler
     /**
      * Returns a list of object satisfying the $criterion.
      *
+     * Optionally a translation filter may be specified. If specified only the
+     * translations with the listed language codes will be retrieved. If not,
+     * all translations will be retrieved.
+     *
      * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit
      * @param $sort
+     * @param string[] $translations
      * @return ezp\Persistence\Content\Search\Result
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null )
+    public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null, $translations = null )
     {
         return $this->gateway->find( $criterion, $offset, $limit, $sort );
     }
@@ -76,10 +81,15 @@ class Handler extends BaseSearchHandler
      * ensure, that your $criterion ensure that only a single object can be
      * retrieved.
      *
+     * Optionally a translation filter may be specified. If specified only the
+     * translations with the listed language codes will be retrieved. If not,
+     * all translations will be retrieved.
+     *
      * @param Criterion $criterion
+     * @param string[] $translations
      * @return \ezp\Persistence\Content
      */
-    public function findSingle( Criterion $criterion )
+    public function findSingle( Criterion $criterion, $translations = null )
     {
         throw new \Exception( "Not implemented yet." );
     }
