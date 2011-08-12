@@ -14,7 +14,8 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\CreateStruct,
-    ezp\Persistence\Content\Type\UpdateStruct;
+    ezp\Persistence\Content\Type\UpdateStruct,
+    ezp\Base\Exception\NotFound;
 
 /**
  * Test case for SectionHandler using in memory storage.
@@ -63,9 +64,20 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testDeleteGroup()
     {
         $this->repositoryHandler->ContentTypeHandler()->deleteGroup( 1 );
-        $this->assertNull( $this->repositoryHandler->ContentTypeHandler()->loadGroup( 1 ) );
-        $type = $this->repositoryHandler->ContentTypeHandler()->load( 1 );
-        $this->assertEquals( array(), $type->groupIds );
+
+        try
+        {
+            $this->repositoryHandler->ContentTypeHandler()->loadGroup( 1 );
+            $this->fail( "Group not deleted correctly" );
+        }
+        catch ( NotFound $e )
+        {
+        }
+
+        $this->assertEquals(
+            array(),
+            $this->repositoryHandler->ContentTypeHandler()->load( 1 )->groupIds
+        );
     }
 
     /**

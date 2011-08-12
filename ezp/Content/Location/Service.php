@@ -219,6 +219,7 @@ class Service extends BaseService
      * @param \ezp\Content\Location $location
      * @return void
      * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
+     * @throws \ezp\Base\Exception\NotFound if no location is available with $locationId
      */
     public function delete( Location $location )
     {

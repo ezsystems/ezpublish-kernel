@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Persistence\Tests;
-use ezp\Persistence\Content\Section;
+use ezp\Persistence\Content\Section,
+    ezp\Base\Exception\NotFound;
 
 /**
  * Test case for SectionHandler using in memory storage.
@@ -38,8 +39,14 @@ class SectionHandlerTest extends HandlerTest
     {
         $sectionHandler = $this->repositoryHandler->sectionHandler();
         // Removing default objects as well as those created by
-        $sectionHandler->delete( 2 );
-        $sectionHandler->delete( 3 );
+        try
+        {
+            $sectionHandler->delete( 2 );
+            $sectionHandler->delete( 3 );
+        }
+        catch ( NotFound $e )
+        {
+        }
         parent::tearDown();
     }
 
@@ -96,7 +103,14 @@ class SectionHandlerTest extends HandlerTest
     {
         $sectionHandler = $this->repositoryHandler->sectionHandler();
 
-        $this->assertTrue( $sectionHandler->delete( $this->section->id ) );
-        $this->assertNull( $sectionHandler->load( $this->section->id ) );
+        $sectionHandler->delete( $this->section->id );
+        try
+        {
+            $sectionHandler->load( $this->section->id );
+            $this->fail( "Section has not been deleted" );
+        }
+        catch ( NotFound $e )
+        {
+        }
     }
 }

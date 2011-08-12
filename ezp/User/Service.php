@@ -28,6 +28,7 @@ class Service extends BaseService
     public function load( $id )
     {
         $user = $this->handler->userHandler()->load( (int)$id );
+        // @FIXME: Shouldn't this be a NotFound exception instead?
         if ( !$user )
             throw new InvalidArgumentException( "Could not find 'User' with id: {$id}" );
         return $user;

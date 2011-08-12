@@ -173,9 +173,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function delete( $contentId )
     {
-        $return = $this->backend->delete( 'Content', $contentId );
-        if ( !$return )
-            return $return;
+        $this->backend->delete( "Content", $contentId );
 
         $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $contentId ) );
         foreach ( $versions as $version )
@@ -194,7 +192,6 @@ class ContentHandler implements ContentHandlerInterface
         {
             $locationHandler->delete( $location->id );
         }
-        return $return;
     }
 
     /**

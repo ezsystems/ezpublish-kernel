@@ -10,6 +10,7 @@
 namespace ezp\Content\Tests\Location;
 use ezp\Content\Tests\BaseServiceTest,
     ezp\Content\Location\Service,
+    ezp\Base\Exception\NotFound,
     \ReflectionObject,
     ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
@@ -106,16 +107,22 @@ class ServiceTest extends BaseServiceTest
      */
     protected function tearDown()
     {
-        // Removing default objects as well as those created by tests
-        foreach ( $this->contentToDelete as $content )
+        try
         {
-            $this->contentHandler->delete( $content->id );
-        }
+            // Removing default objects as well as those created by tests
+            foreach ( $this->contentToDelete as $content )
+            {
+                $this->contentHandler->delete( $content->id );
+            }
         $this->contentToDelete = array();
 
-        foreach ( $this->locationToDelete as $location )
+            foreach ( $this->locationToDelete as $location )
+            {
+                $this->locationHandler->delete( $location->id );
+            }
+        }
+        catch ( NotFound $e )
         {
-            $this->locationHandler->delete( $location->id );
         }
         $this->locationToDelete = array();
         $this->insertedLocations = array();

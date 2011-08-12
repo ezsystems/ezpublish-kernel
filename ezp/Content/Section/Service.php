@@ -109,6 +109,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\Logic
      *         if section can not be deleted
      *         because it is still assigned to some contents.
+     * @throws \ezp\Base\Exception\NotFound If the specified section is not found
      */
     public function delete( $sectionId )
     {

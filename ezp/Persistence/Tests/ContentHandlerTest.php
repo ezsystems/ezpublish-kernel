@@ -13,6 +13,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
+    ezp\Base\Exception\NotFound,
     ezp\Content\Version;
 
 /**
@@ -69,10 +70,17 @@ class ContentHandlerTest extends HandlerTest
     protected function tearDown()
     {
         $contentHandler = $this->repositoryHandler->contentHandler();
-        // Removing default objects as well as those created by tests
-        foreach ( $this->contentToDelete as $content )
+
+        try
         {
-            $contentHandler->delete( $content->id );
+            // Removing default objects as well as those created by tests
+            foreach ( $this->contentToDelete as $content )
+            {
+                $contentHandler->delete( $content->id );
+            }
+        }
+        catch ( NotFound $e )
+        {
         }
         unset( $this->contentId );
         //$contentHandler->delete( 2 );
@@ -148,8 +156,17 @@ class ContentHandlerTest extends HandlerTest
     public function testDelete()
     {
         $contentHandler = $this->repositoryHandler->contentHandler();
-        $this->assertTrue( $contentHandler->delete( $this->content->id ) );
-        $this->assertNull( $contentHandler->load( $this->content->id ) );
+        $contentHandler->delete( $this->content->id );
+
+        try
+        {
+            $contentHandler->load( $this->content->id );
+            $this->fail( "Content not removed correctly" );
+        }
+        catch ( NotFound $e )
+        {
+        }
+
         $this->assertEquals( 0, count( $contentHandler->listVersions( $this->content->id ) ) );
     }
 

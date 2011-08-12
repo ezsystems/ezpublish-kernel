@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Tests\InMemoryEngine;
 use PHPUnit_Framework_TestCase,
     ReflectionObject,
+    ezp\Base\Exception\NotFound,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Location;
 
@@ -407,15 +408,14 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      * Test loading content without results
      *
      * @dataProvider providerForLoadEmpty
+     * @expectedException \ezp\Base\Exception\NotFound
      * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::load
      * @group inMemoryBackend
      */
     public function testLoadEmpty( $searchData )
     {
         $this->insertCustomContent();
-        $this->assertNull(
-            $this->backend->load( "Content", $searchData )
-        );
+        $this->backend->load( "Content", $searchData );
     }
 
     public function providerForLoadEmpty()
@@ -544,5 +544,38 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         );
         $content = $this->backend->load( "Content", 3 );
         $this->assertEquals( null, $content->name );
+    }
+
+    /**
+     * Test deleting content
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::delete
+     * @group inMemoryBackend
+     */
+    public function testDelete()
+    {
+        $this->insertCustomContent();
+        $this->backend->delete( "Content", 1 );
+        try
+        {
+            $this->backend->load( "Content", 1 );
+            $this->fail( "Content has not been deleted" );
+        }
+        catch ( NotFound $e )
+        {
+        }
+    }
+
+    /**
+     * Test deleting content which does not exist
+     *
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @covers ezp\Persistence\Tests\InMemoryEngine\Backend::delete
+     * @group inMemoryBackend
+     */
+    public function testDeleteNotFound()
+    {
+        $this->insertCustomContent();
+        $this->backend->delete( "Content", 42 );
     }
 }

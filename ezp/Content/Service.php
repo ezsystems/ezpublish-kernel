@@ -54,9 +54,10 @@ class Service extends BaseService
 
     /**
      * Loads a content from its id ($contentId)
+     *
      * @param int $contentId
      * @return Content
-     * @throws NotFound if content could not be found
+     * @throws \ezp\Base\Exception\NotFound if content could not be found
      */
     public function load( $contentId )
     {
@@ -69,6 +70,7 @@ class Service extends BaseService
 
     /**
      * Finds content using a $query
+     *
      * @param Query $query
      * @return Content[]
      */
@@ -81,6 +83,7 @@ class Service extends BaseService
      * Deletes a content from the repository
      *
      * @param Content $content
+     * @throws \ezp\Base\Exception\NotFound if content could not be found
      */
     public function delete( Content $content )
     {

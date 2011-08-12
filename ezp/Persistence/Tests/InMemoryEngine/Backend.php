@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Tests\InMemoryEngine;
 use ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\Logic,
+    ezp\Base\Exception\NotFound,
     ezp\Persistence\ValueObject;
 
 /**
@@ -71,8 +72,9 @@ class Backend
      *
      * @param string $type
      * @param int|string $id
-     * @return object|null
+     * @return object
      * @throws InvalidArgumentValue On invalid $type
+     * @throws \ezp\Base\Exception\NotFound If data does not exist
      */
     public function load( $type, $id )
     {
@@ -80,6 +82,7 @@ class Backend
             throw new InvalidArgumentValue( 'type', $type );
 
         $return = null;
+        $found = false;
         foreach ( $this->data[$type] as $key => $item )
         {
             if ( $item['id'] != $id )
@@ -88,7 +91,12 @@ class Backend
                 throw new Logic( $type, "more than one item exist with id: {$id}" );
 
             $return = $this->toValue( $type, $item );
+            $found = true;
         }
+
+        if ( !$found )
+            throw new NotFound( $type, $id );
+
         return $return;
     }
 
@@ -176,12 +184,12 @@ class Backend
      *
      * @param string $type
      * @param int|string $id
-     * @return bool False if data does not exist and can not be deleted
+     * @throws \ezp\Base\Exception\NotFound If data does not exist
      * @uses deleteByMatch()
      */
     public function delete( $type, $id )
     {
-        return $this->deleteByMatch( $type, array( 'id' => $id ) );
+        $this->deleteByMatch( $type, array( 'id' => $id ) );
     }
 
     /**
@@ -192,24 +200,26 @@ class Backend
      *
      * @param string $type
      * @param array $match A flat array with property => value to match against
-     * @return bool False if data does not exist and can not be deleted
      * @throws InvalidArgumentValue On invalid $type
+     * @throws \ezp\Base\Exception\NotFound If no data to delete have been found
      */
     public function deleteByMatch( $type, array $match )
     {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $return = false;
+        $found = false;
         foreach ( $this->data[$type] as $key => $item )
         {
             if ( $this->match( $item, $match ) )
             {
                 unset( $this->data[$type][$key] );
-                $return = true;
+                $found = true;
             }
         }
-        return $return;
+
+        if ( !$found )
+            throw new NotFound( $type, $match );
     }
 
     /**

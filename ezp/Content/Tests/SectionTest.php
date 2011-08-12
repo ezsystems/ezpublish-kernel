@@ -81,6 +81,7 @@ class SectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test service function for deleting sections
+     *
      * @expectedException \ezp\Base\Exception\NotFound
      * @covers \ezp\Content\Section\Service::delete
      */
@@ -117,6 +118,7 @@ class SectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test service function for loading sections
+     *
      * @expectedException \ezp\Base\Exception\NotFound
      * @covers \ezp\Content\Section\Service::load
      */
