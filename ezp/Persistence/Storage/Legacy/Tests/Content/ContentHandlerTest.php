@@ -300,6 +300,105 @@ class ContentHandlerTest extends TestCase
         $this->assertEquals( $content->versionInfos[0]->$property, $value );
     }
 
+    public function testLoadContentFieldDataFiledTypes()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
+
+        $handler = new Handler(
+            new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+            new Location\Handler(
+                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() )
+            ),
+            new Mapper(
+                $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
+            ),
+            new StorageRegistry()
+        );
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->exactly( 5 ) )
+            ->method( 'toFieldValue' )
+            ->will( $this->returnValue( new FieldValue() ) );
+
+        $registry
+            ->expects( $this->at( 0 ) )
+            ->method( 'getConverter' )
+            ->with( 'ezstring' )
+            ->will( $this->returnValue( $converter ) );
+
+        $registry
+            ->expects( $this->at( 1 ) )
+            ->method( 'getConverter' )
+            ->with( 'ezstring' )
+            ->will( $this->returnValue( $converter ) );
+
+        $registry
+            ->expects( $this->at( 2 ) )
+            ->method( 'getConverter' )
+            ->with( 'ezuser' )
+            ->will( $this->returnValue( $converter ) );
+
+        $registry
+            ->expects( $this->at( 3 ) )
+            ->method( 'getConverter' )
+            ->with( 'eztext' )
+            ->will( $this->returnValue( $converter ) );
+
+        $registry
+            ->expects( $this->at( 4 ) )
+            ->method( 'getConverter' )
+            ->with( 'ezimage' )
+            ->will( $this->returnValue( $converter ) );
+
+        $content = $handler->load( 14, 4 );
+    }
+
+    public static function getLoadedContentFieldData()
+    {
+        return array(
+            array( 'id', 28 ),
+            array( 'fieldDefinitionId', 8 ),
+            array( 'type', 'ezstring' ),
+            array( 'language', 'eng-US' ),
+            array( 'versionNo', 4 ),
+        );
+    }
+
+    /**
+     * @dataProvider getLoadedContentFieldData
+     */
+    public function testLoadContentFieldData( $property, $value )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
+
+        $handler = new Handler(
+            new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+            new Location\Handler(
+                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() )
+            ),
+            new Mapper(
+                $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
+            ),
+            new StorageRegistry()
+        );
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->exactly( 5 ) )
+            ->method( 'toFieldValue' )
+            ->will( $this->returnValue( new FieldValue() ) );
+
+        $registry
+            ->expects( $this->exactly( 5 ) )
+            ->method( 'getConverter' )
+            ->will( $this->returnValue( $converter ) );
+
+        $content = $handler->load( 14, 4 );
+
+        $this->assertEquals( $content->versionInfos[0]->fields[0]->$property, $value );
+    }
+
     /**
      * Returns a CreateStruct fixture.
      *
