@@ -40,15 +40,15 @@ class Content extends ValueObject
     public $ownerId;
 
     /**
-     * List containing the loaded version.
+     * The loaded version
      *
-     * List with only a single Version, containing version information and all
-     * {@link \ezp\Content\Field}s in this version (in all languages). Non-translateable
-     * fields will only occur once!
+     * The Version, containing version information and all
+     * {@link \ezp\Content\Field}s in this version (in all languages).
+     * Non-translateable fields will only occur once!
      *
-     * @var \ezp\Content\Version[]
+     * @var \ezp\Content\Version
      */
-    public $versionInfos = array();
+    public $version;
 
     /**
      * @var \ezp\Content\Location[]
