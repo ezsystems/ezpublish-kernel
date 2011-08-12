@@ -92,10 +92,9 @@ abstract class FieldType
     /**
      * Value set by user to field type.
      *
-     * This is converted to the internal {@link $value} via the SerializeInterface,
-     * but allows for original user input to be retained, which is useful,
-     * when it must be returned due to an invalid input error, or a validation
-     * error.
+     * This is converted to the internal {@link $value}, but allows for original
+     * user input to be retained, which is useful, when it must be returned due
+     * to an invalid input error, or a validation error.
      *
      * @var mixed
      */
@@ -185,4 +184,44 @@ abstract class FieldType
         return array_keys( $this->allowedSettings );
     }
 
+    /**
+     * Parses value given to field type.
+     *
+     * This method will read input data, and convert it to the internal format.
+     *
+     * This method will throw an exception if the input data is not recognized.
+     *
+     * @abstract
+     * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
+     * @param mixed $inputValue
+     * @return mixed
+     */
+    abstract protected function parseValue( $inputValue );
+
+    /**
+     * Sets the value of a field type.
+     *
+     * @abstract
+     * @param $inputValue
+     * @return void
+     */
+    abstract public function setValue( $inputValue );
+
+
+    /**
+     * Returns the input-format value of a field type.
+     *
+     * @abstract
+     * @return void
+     */
+    abstract public function getValue();
+
+    /**
+     * Returns a handler, aka. a helper object which aids in the manipulation of
+     * complex field type values.
+     *
+     * @abstract
+     * @return ezp\Content\FieldType\Handler
+     */
+    abstract public function getTypeHandler();
 }
