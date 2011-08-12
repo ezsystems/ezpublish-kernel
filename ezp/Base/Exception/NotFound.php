@@ -28,6 +28,6 @@ class NotFound extends Http
      */
     public function __construct( $what, $identifier, PHPException $previous = null )
     {
-        parent::__construct( "Could not find '{$what}' with identifier '{$identifier}'", self::NOT_FOUND, $previous );
+        parent::__construct( "Could not find '{$what}' with identifier '" . var_export( $identifier, true ) . "'", self::NOT_FOUND, $previous );
     }
 }
