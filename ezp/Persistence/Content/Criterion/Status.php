@@ -11,7 +11,8 @@
 namespace ezp\Persistence\Content\Criterion;
 use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\Operator\Specifications,
-    ezp\Persistence\Content\CriterionInterface;
+    ezp\Persistence\Content\CriterionInterface,
+    InvalidArgumentException;
 
 /**
  * A criterion that matches content based on its status
