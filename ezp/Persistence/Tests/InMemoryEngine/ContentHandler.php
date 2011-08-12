@@ -96,7 +96,7 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see ezp\Persistence\Content\Handler
      */
-    public function load( $id, $version = null )
+    public function load( $id, $version )
     {
         $content = $this->backend->load( 'Content', $id );
         if ( !$content )

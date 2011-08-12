@@ -176,7 +176,8 @@ class EzcDatabase extends Gateway
      * @param mixed $version
      * @return array
      */
-    public function load( $contentId, $version = null )
+    public function load( $contentId, $version )
     {
+
     }
 }
