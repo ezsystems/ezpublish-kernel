@@ -112,8 +112,8 @@ interface Handler
     /**
      * Deletes all versions and fields, all locations (subtree), and all relations.
      *
-     * Removes the relations, but not the related objects. Alle subtrees of the
-     * assigned nodes of this content objects are removed (recursivley).
+     * Removes the relations, but not the related objects. All subtrees of the
+     * assigned nodes of this content objects are removed (recursively).
      *
      * @param int $contentId
      * @return boolean
