@@ -252,6 +252,11 @@ class ServiceTest extends BaseServiceTest
         self::assertEquals( $parent->pathString . $location->id . '/', $location->pathString );
         self::assertSame( 'test', $location->pathIdentificationString );
 
+        // As $this->content already had a location ($this->location),
+        // mainLocationId should be $this->location->id
+        self::assertSame( $this->location->id, $location->mainLocationId );
+        self::assertSame( $this->location->id, $this->location->mainLocationId );
+
         // Expected depth should be number of locations in pathString - 1 (first level doesn't count)
         $expectedDepth = count( explode( '/', substr( $location->pathString, 1, -1 ) ) ) - 1;
         self::assertequals( $expectedDepth, $location->depth );

@@ -225,7 +225,13 @@ class LocationHandler implements LocationHandlerInterface
             $params['remoteId'] = md5( uniqid( 'Content\\Location', true ) );
         }
 
-        // Creation, then update for pathString
+        // Creation, then update for pathString/pathIdentificationString/mainLocationId
+        $mainLocationId = null;
+        $otherLocationsForContent = $this->backend->find( 'Content\\Location', array( 'contentId' => $locationStruct->contentId ) );
+        if ( !empty( $otherLocationsForContent ) )
+        {
+            $mainLocationId = $otherLocationsForContent[0]->id;
+        }
         $vo = $this->backend->create( 'Content\\Location', $params );
         $pathString = $parent->pathString . $vo->id . '/';
         $this->backend->update(
@@ -233,7 +239,8 @@ class LocationHandler implements LocationHandlerInterface
             $vo->id,
             array(
                 'pathString' => $pathString,
-                'pathIdentificationString' => $this->getPathIdentificationString( $vo )
+                'pathIdentificationString' => $this->getPathIdentificationString( $vo ),
+                'mainLocationId' => isset( $mainLocationId ) ? $mainLocationId : $vo->id
             )
         );
         $this->updateSubtreeModificationTime( $this->getParentPathString( $parent->pathString ) );
