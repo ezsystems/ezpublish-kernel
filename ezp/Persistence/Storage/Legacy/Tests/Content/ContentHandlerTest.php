@@ -253,6 +253,53 @@ class ContentHandlerTest extends TestCase
         $this->assertEquals( $content->$property, $value );
     }
 
+    public static function getLoadedContentVersionData()
+    {
+        return array(
+            array( 'id', 672 ),
+            array( 'versionNo', 4 ),
+            array( 'modified', 1311154214 ),
+            array( 'creatorId', 14 ),
+            array( 'created', 1311154214 ),
+            array( 'state', 1 ),
+            array( 'contentId', 14 ),
+        );
+    }
+
+    /**
+     * @dataProvider getLoadedContentVersionData
+     */
+    public function testLoadContentVersionData( $property, $value )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
+
+        $handler = new Handler(
+            new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+            new Location\Handler(
+                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() )
+            ),
+            new Mapper(
+                $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
+            ),
+            new StorageRegistry()
+        );
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->exactly( 5 ) )
+            ->method( 'toFieldValue' )
+            ->will( $this->returnValue( new FieldValue() ) );
+
+        $registry
+            ->expects( $this->exactly( 5 ) )
+            ->method( 'getConverter' )
+            ->will( $this->returnValue( $converter ) );
+
+        $content = $handler->load( 14, 4 );
+
+        $this->assertEquals( $content->versionInfos[0]->$property, $value );
+    }
+
     /**
      * Returns a CreateStruct fixture.
      *
