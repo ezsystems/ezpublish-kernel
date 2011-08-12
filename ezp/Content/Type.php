@@ -9,7 +9,7 @@
 
 namespace ezp\Content;
 use ezp\Base\Model,
-    ezp\Base\TypeCollection,
+    ezp\Base\Collection\Type as TypeCollection,
     ezp\Persistence\Content\Type as TypeValue;
 
 /**

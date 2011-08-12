@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Type;
 use ezp\Base\Model,
-    ezp\Base\TypeCollection,
+    ezp\Base\Collection\Type as TypeCollection,
     ezp\Persistence\Content\Type\Group as GroupValue;
 
 /**

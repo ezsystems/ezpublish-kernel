@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Base\Tests;
-use ezp\Base\TypeCollection;
+use ezp\Base\Collection\Type as TypeCollection;
 
 /**
  * Test case for TypeCollection class
@@ -36,7 +36,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * Test offsetExists
-     * @covers \ezp\Base\TypeCollection::offsetExists
+     * @covers \ezp\Base\Collection\Type::offsetExists
      */
     public function testExists()
     {
@@ -46,7 +46,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test offsetGet
-     * @covers \ezp\Base\TypeCollection::offsetGet
+     * @covers \ezp\Base\Collection\Type::offsetGet
      */
     public function testGet()
     {
@@ -56,7 +56,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException PHPUnit_Framework_Error
-     * @covers \ezp\Base\TypeCollection::offsetGet
+     * @covers \ezp\Base\Collection\Type::offsetGet
      */
     public function testGetInvalid()
     {
@@ -65,7 +65,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Test set
-     * @covers \ezp\Base\TypeCollection::offsetSet
+     * @covers \ezp\Base\Collection\Type::offsetSet
      */
     public function testSet()
     {
@@ -74,7 +74,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
     }
     /**
      * @expectedException ezp\Base\Exception\InvalidArgumentType
-     * @covers \ezp\Base\TypeCollection::offsetSet
+     * @covers \ezp\Base\Collection\Type::offsetSet
      */
     public function testSetInvalid()
     {
@@ -83,7 +83,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\InvalidArgumentType
-     * @covers \ezp\Base\TypeCollection::offsetSet
+     * @covers \ezp\Base\Collection\Type::offsetSet
      */
     public function testSetAppendInvalid()
     {
@@ -92,7 +92,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\InvalidArgumentType
-     * @covers \ezp\Base\TypeCollection::append
+     * @covers \ezp\Base\Collection\Type::append
      */
     public function testAppendInvalid()
     {
@@ -101,7 +101,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\InvalidArgumentType
-     * @covers \ezp\Base\TypeCollection::exchangeArray
+     * @covers \ezp\Base\Collection\Type::exchangeArray
      */
     public function testExchangeArray()
     {
@@ -110,7 +110,7 @@ class TypeCollectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * test unset
-     * @covers \ezp\Base\TypeCollection::offsetUnset
+     * @covers \ezp\Base\Collection\Type::offsetUnset
      */
     public function testUnset()
     {

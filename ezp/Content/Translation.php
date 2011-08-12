@@ -10,7 +10,7 @@
 namespace ezp\Content;
 use ezp\Base\Model,
     ezp\Base\Locale,
-    ezp\Base\TypeCollection,
+    ezp\Base\Collection\Type as TypeCollection,
     ezp\Content,
     DomainException;
 

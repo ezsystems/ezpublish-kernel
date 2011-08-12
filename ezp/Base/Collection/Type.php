@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base;
+namespace ezp\Base\Collection;
 use ezp\Base\Collection,
     ezp\Base\Exception\InvalidArgumentType,
     ArrayObject;
@@ -16,7 +16,7 @@ use ezp\Base\Collection,
  * Type Collection class, collection only accepts new elements of a certain type
  *
  */
-class TypeCollection extends ArrayObject implements Collection
+class Type extends ArrayObject implements Collection
 {
     /**
      * @var string The class name (including namespace) to accept as input

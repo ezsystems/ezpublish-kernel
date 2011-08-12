@@ -11,7 +11,7 @@ namespace ezp;
 use ezp\Base\Model,
     ezp\Base\Observable,
     ezp\Base\Locale,
-    ezp\Base\TypeCollection,
+    ezp\Base\Collection\Type as TypeCollection,
     ezp\Content\Translation,
     ezp\Content\Type,
     ezp\Content\Section,

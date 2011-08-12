@@ -12,7 +12,7 @@ use ezp\Base\Collection,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Model,
     ezp\Base\Service,
-    ezp\Base\TypeCollection,
+    ezp\Base\Collection\Type as TypeCollection,
     ArrayObject;
 
 /**
