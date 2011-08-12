@@ -31,9 +31,9 @@ class Lazy extends TypeCollection
     protected $service;
 
     /**
-     * Primary id used for collection lookup
+     * The variable used for collection lookup
      *
-     * @var int
+     * @var mixed
      */
     protected $id;
 
@@ -52,7 +52,7 @@ class Lazy extends TypeCollection
      * @throws InvalidArgumentType If elements contains item of wrong type
      * @param string $type
      * @param Service $service
-     * @param array $id Primary id to do lookup on
+     * @param mixed $id Primary id to do lookup on
      * @param string $method Optional, defines which function on handler to call, 'load' by default.
      */
     public function __construct( $type, Service $service, $id, $method = 'load' )

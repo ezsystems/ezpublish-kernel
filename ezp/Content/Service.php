@@ -9,10 +9,12 @@
 
 namespace ezp\Content;
 use ezp\Base\Service as BaseService,
+    ezp\Base\Collection\Lazy,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Locale,
     ezp\Content,
+    ezp\Content\Location,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
     ezp\Persistence\ValueObject,
@@ -123,13 +125,8 @@ class Service extends BaseService
         return new Builder();
     }
 
-    protected function buildDomainObject( ValueObject $vo )
+    protected function buildDomainObject( ContentValue $vo )
     {
-        if ( !$vo instanceof ContentValue )
-        {
-            throw new InvalidArgumentType( 'Value object', 'ezp\\Persistence\\Content', $vo );
-        }
-
         $content = new Content( new Type, new Locale( "eng-GB" ) );
         $content->setState(
             array(
@@ -139,18 +136,20 @@ class Service extends BaseService
             )
         );
 
-        /*
-        // Container property (default sorting)
-        $containerProperty = new ContainerProperty;
-        $content->containerProperties[] = $containerProperty->setState(
-            array(
-                'contentId' => $vo->id,
-                'sortField' => $vo->sortField,
-                'sortOrder' => $vo->sortOrder,
-                'location' => $content
-            )
-        );
-        */
+        $locationHandler = $this->repository->getLocationService();
+        foreach ( $vo->locations as $locationValue )
+        {
+            $content->locations[] = $location = new Location( $content );
+            $location->setState( array( 'properties' => $locationValue,
+                                        'parent' => new Proxy( $locationHandler, $locationValue->parentId ),
+                                        'children' => new Lazy(
+                                            'ezp\\Content\\Location',
+                                            $locationHandler,
+                                            $location, // api seems to use location to be able to get out sort info as well
+                                            'children' // Not implemented yet so this collection will return empty array atm
+                                        ) ) );
+
+        }
 
         return $content;
     }
