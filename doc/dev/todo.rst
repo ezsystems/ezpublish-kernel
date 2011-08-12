@@ -19,3 +19,6 @@ struct classes + the value object they bnellong to.
 Need possibly a small story or just time to do it.
 
 
+ContainerProperties
+-------------------
+Is not supported by Persistence, so should be removed until we add it there as it just complicates and duplicates data.
