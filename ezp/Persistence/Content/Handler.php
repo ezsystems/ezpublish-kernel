@@ -58,11 +58,16 @@ interface Handler
      * version of a content object use SearchHandler::findSingle() with the
      * ContentId criterion.
      *
+     * Optionally a translation filter may be specified. If specified only the
+     * translations with the listed language codes will be retrieved. If not,
+     * all translations will be retrieved.
+     *
      * @param int|string $id
      * @param int|string $version
+     * @param string[] $translations
      * @return \ezp\Persistence\Content Content value object
      */
-    public function load( $id, $version );
+    public function load( $id, $version, $translations = null );
 
     /**
      * Sets the state of object identified by $contentId and $version to $state.
