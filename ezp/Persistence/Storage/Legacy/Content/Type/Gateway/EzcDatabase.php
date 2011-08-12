@@ -366,7 +366,7 @@ class EzcDatabase extends Gateway
     public function deleteGroupAssignement( $groupId, $typeId, $version )
     {
         $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom( 'ezcontentclass_classgroup' )
+        $q->deleteFrom( $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' ) )
             ->where(
                 $q->expr->lAnd(
                     $q->expr->eq(
@@ -694,7 +694,7 @@ class EzcDatabase extends Gateway
     public function deleteFieldDefinitionsForType( $typeId, $version )
     {
         $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom( 'ezcontentclass_attribute' )
+        $q->deleteFrom( $this->dbHandler->quoteTable( 'ezcontentclass_attribute' ) )
             ->where(
                 $q->expr->lAnd(
                     $q->expr->eq(
@@ -722,7 +722,7 @@ class EzcDatabase extends Gateway
     public function deleteType( $typeId, $version )
     {
         $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom( 'ezcontentclass' )
+        $q->deleteFrom( $this->dbHandler->quoteTable( 'ezcontentclass' ) )
             ->where(
                 $q->expr->lAnd(
                     $q->expr->eq(
@@ -748,7 +748,7 @@ class EzcDatabase extends Gateway
     public function deleteGroupAssignementsForType( $typeId, $version )
     {
         $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom( 'ezcontentclass_classgroup' )
+        $q->deleteFrom( $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' ) )
             ->where(
                 $q->expr->lAnd(
                     $q->expr->eq(
