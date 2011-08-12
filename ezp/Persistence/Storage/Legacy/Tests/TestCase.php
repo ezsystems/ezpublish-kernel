@@ -151,8 +151,10 @@ class TestCase extends \PHPUnit_Framework_TestCase
         {
             // Check that at least one row exists
             if ( !isset( $rows[0] ) )
+            {
                 continue;
-                
+            }
+
             $q = $db->createInsertQuery();
             $q->insertInto( $db->quoteIdentifier( $table ) );
 
