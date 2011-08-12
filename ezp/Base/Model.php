@@ -267,16 +267,20 @@ abstract class Model implements Observable, ModelInterface
      * Key is property name and value is property value.
      *
      * @internal
-     * @return array
+     * @param string|null $property Optional, lets you specify to only return one property by name
+     * @return array|mixed Always returns array if $property is null, else value of property if found or null
      */
-    public function getState()
+    public function getState( $property = null )
     {
         $arr = array();
         foreach ( $this as $name => $value )
         {
-            $arr[$name] = $value;
+            if ( $property === $name )
+                return $value;
+            else if ( $property === null )
+                $arr[$name] = $value;
         }
-        return $arr;
+        return $property === null ? $arr: null;
     }
 
     /**
