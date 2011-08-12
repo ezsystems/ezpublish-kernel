@@ -5,13 +5,15 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Version;
 
-$content               = new Content();
-$content->id           = 226;
-$content->name         = 'Test blog title - edited';
-$content->typeId       = 20;
-$content->sectionId    = 1;
-$content->ownerId      = 14;
-$content->versionInfos = array();
+$content                  = new Content();
+$content->id              = 226;
+$content->name            = 'Test blog title - edited';
+$content->typeId          = 20;
+$content->sectionId       = 1;
+$content->ownerId         = 14;
+$content->remoteId        = '0d5109156ee806da8e86c8cea8004434';
+$content->alwaysAvailable = true;
+$content->versionInfos    = array();
 
 $v1            = new Version();
 $v1->id        = 677;
