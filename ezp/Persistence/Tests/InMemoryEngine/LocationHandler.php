@@ -252,7 +252,18 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function removeSubtree( $locationId )
     {
+        $location = $this->load( $locationId );
+        $this->delete( $locationId );
 
+        // Begin recursive call on children, if any
+        $directChildren = $this->backend->find( 'Content\\Location', array( 'parentId' => $locationId ) );
+        if ( !empty( $directChildren ) )
+        {
+            foreach ( $directChildren as $child )
+            {
+                $this->removeSubtree( $child->id );
+            }
+        }
     }
 
     /**
@@ -323,9 +334,25 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function delete( $locationId )
     {
-        $return = $this->backend->delete( 'Content\\Location', $locationId );
-        if ( !$return )
-            return $return;
+        $location = $this->load( $locationId );
+        $this->backend->delete( 'Content\\Location', $locationId );
+        $remainingLocations = $this->backend->find( 'Content\\Location', array( 'contentId' => $location->contentId ) );
+        // If no remaining location for associated content, remove the content as well
+        // Else, update the mainLocationId if needed
+        if ( empty( $remainingLocations ) )
+        {
+            $this->handler->contentHandler()->delete( $location->contentId );
+        }
+        else
+        {
+            $this->backend->updateByMatch(
+                'Content\\Location',
+                array( 'contentId' => $location->contentId ),
+                array( 'mainLocationId' => $remainingLocations[0]->id )
+            );
+        }
+
+        $this->updateSubtreeModificationTime( $this->getParentPathString( $location->pathString ) );
     }
 
     /**

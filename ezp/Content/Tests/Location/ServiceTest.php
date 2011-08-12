@@ -474,4 +474,47 @@ class ServiceTest extends BaseServiceTest
             $parentPathString = $location->pathString;
         }
     }
+
+    /**
+     * @group locationService
+     */
+    public function testDelete()
+    {
+        $this->insertSubtree();
+        $startIndex = 5;
+        $this->service->delete( $this->insertedLocations[$startIndex] );
+
+
+        foreach ( array_splice( $this->insertedLocations, $startIndex ) as $key => $location )
+        {
+            try
+            {
+                $this->service->load( $location->id );
+                $this->fail( "Location #{$location->id} has not been properly removed" );
+            }
+            catch( NotFound $e )
+            {
+            }
+
+            try
+            {
+                $this->contentHandler->load( $location->contentId, 1 );
+                $this->fail( "Content #{$location->contentId} has not been properly removed" );
+            }
+            catch( NotFound $e )
+            {
+            }
+        }
+
+        // Create a secondary location for one the inserted locations
+        // Delete the previous one and check if only location has been removed
+        $startIndex--;
+        $newLocation = new Location( new Proxy( $this->repository->getContentService(), $this->insertedLocations[$startIndex]->contentId ) );
+        $newLocation->parent = $this->topLocation;
+        $newLocation = $this->service->create( $newLocation );
+        $this->service->delete( $this->insertedLocations[$startIndex] );
+        // Reload location from backend
+        $newLocation = $this->service->load( $newLocation->id );
+        self::assertSame( $newLocation->id, $newLocation->mainLocationId );
+    }
 }

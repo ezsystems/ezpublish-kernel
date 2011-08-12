@@ -223,13 +223,9 @@ class Service extends BaseService
      */
     public function delete( Location $location )
     {
-        // take care of:
-        // 1. removing the current location
-        // 2. removing the content addressed by the location if there's no more
-        // location
-        // 3. do the same operations on the subtree (recursive calls through
-        // children ?)
-        // note: this is different from Content::delete()
+        $this->handler->locationHandler()->removeSubtree( $location->id );
+        $state = $location->getState();
+        $this->refreshDomainObject( $location, $state['properties'] );
     }
 
     /**
