@@ -122,28 +122,28 @@ class Content extends Model
     /**
      * Locations collection
      *
-     * @var Location[]
+     * @var \ezp\Content\Location[]
      */
     protected $locations;
 
     /**
      * Content type object that this Content object is an instance of
      *
-     * @var Type
+     * @var \ezp\Content\Type
      */
     protected $contentType;
 
     /**
      * Relations collection
      *
-     * @var Content[]
+     * @var \ezp\Content[]
      */
     protected $relations;
 
     /**
      * Reverse relation collection
      *
-     * @var Content[]
+     * @var \ezp\Content[]
      */
     protected $reversedRelations;
 
@@ -234,7 +234,7 @@ class Content extends Model
     /**
      * Return Type object
      *
-     * @return Type
+     * @return \ezp\Content\Type
      */
     protected function getContentType()
     {
@@ -248,7 +248,7 @@ class Content extends Model
     /**
      * Get fields of current version
      *
-     * @return Field[]
+     * @return \ezp\Content\Field[]
      */
     protected function getFields()
     {
@@ -332,7 +332,7 @@ class Content extends Model
      * @param \ezp\Base\Locale $locale
      * @throw InvalidArgumentException if the main locale is the one in
      *          argument or if there's not translation
-     *          in this locale
+     *          in this locale @todo Use Base exceptions
      */
     public function removeTranslation( Locale $locale )
     {
