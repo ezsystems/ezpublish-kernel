@@ -75,7 +75,7 @@ class ContentHandler implements ContentHandlerInterface
                 array( 'versionNo' => $version->id ) + (array)$field
             );
         }
-        $contentObj->versionInfos[] = $version;
+        $contentObj->version = $version;
 
         $locationHandler = $this->handler->locationHandler();
         foreach ( $content->parentLocations as $parentLocationId )

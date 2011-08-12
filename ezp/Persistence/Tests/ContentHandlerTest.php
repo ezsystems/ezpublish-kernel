@@ -99,7 +99,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( 'test', $content->name );
-        $this->assertEquals( 1, count( $content->versionInfos ) );
+        $this->assertEquals( $content->version instanceof Version  );
     }
 
     /**
@@ -129,17 +129,15 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( $this->contentId + 1, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( 'test', $content->name );
-        $this->assertEquals( 1, count( $content->versionInfos ) );
 
-        $version = $content->versionInfos[0];
-        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $version );
-        $this->assertEquals( 2, $version->id );
-        $this->assertEquals( 14, $version->creatorId );
-        $this->assertEquals( Version::STATUS_DRAFT, $version->state );
-        $this->assertEquals( $content->id, $version->contentId );
-        $this->assertEquals( 1, count( $version->fields ) );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
+        $this->assertEquals( 2, $content->version->id );
+        $this->assertEquals( 14, $content->version->creatorId );
+        $this->assertEquals( Version::STATUS_DRAFT, $content->version->state );
+        $this->assertEquals( $content->id, $content->version->contentId );
+        $this->assertEquals( 1, count( $content->version->fields ) );
 
-        $field = $version->fields[0];
+        $field = $content->version->fields[0];
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Field', $field );
         $this->assertEquals( 2, $field->id );
         $this->assertEquals( 'ezstring', $field->type );
