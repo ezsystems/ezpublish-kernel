@@ -33,6 +33,7 @@ interface Handler
 
     /**
      * @param mixed $groupId
+     * @todo Throw exception if group is not found, also if group contains types
      */
     public function deleteGroup( $groupId );
 
@@ -109,6 +110,7 @@ interface Handler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $version
+     * @todo Throw exception if last group on content type (hence, it should be deleted instead)
      */
     public function unlink( $groupId, $contentTypeId, $version );
 
