@@ -10,7 +10,6 @@
 namespace ezp\Content\Type;
 use ezp\Base\Service as BaseService,
     ezp\Base\Exception\NotFound,
-    ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Collection\LazyIdList,
     ezp\Base\Collection\Lazy,
     ezp\Base\Model,
@@ -232,51 +231,5 @@ class Service extends BaseService
                                                       $vo->id,
                                                       'loadByGroupId' ) ) );
         return $group;
-    }
-
-    /**
-     * Fill in property values in struct from model
-     *
-     * @param \ezp\Persistence\ValueObject $struct
-     * @param \ezp\Base\Model $do
-     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing on $do or has a value of null
-     *                                              Unless one of these properties which is filled by conventions:
-     *                                              - remoteId
-     *                                              - created
-     *                                              - modified
-     *                                              - creatorId
-     *                                              - modifierId
-     */
-    protected function fillStruct( ValueObject $struct, Model $do )
-    {
-        $state = $do->getState();
-        $vo = $state['properties'];
-        foreach ( $struct as $property => $value )
-        {
-            // set property value if there is one
-            if ( isset( $vo->$property ) )
-            {
-                $struct->$property = $vo->$property;
-                continue;
-            }
-
-            // set by convention if match, if not throw PropertyNotFound exception
-            switch ( $property )
-            {
-                case 'remoteId':
-                    $struct->$property = md5( uniqid( get_class( $do ), true ) );
-                    break;
-                case 'created':
-                case 'modified':
-                    $struct->$property = time();
-                    break;
-                case 'creatorId':
-                case 'modifierId':
-                    $struct->$property = 14;// @todo Use user object when that is made part of repository/services
-                    break;
-                default:
-                    throw new PropertyNotFound( $property, get_class( $do ) );
-            }
-        }
     }
 }
