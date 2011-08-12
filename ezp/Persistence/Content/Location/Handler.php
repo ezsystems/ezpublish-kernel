@@ -111,7 +111,7 @@ interface Handler
     public function createLocation( CreateStruct $location, $parentId );
 
     /**
-     * Removes all Locations under and includin $locationId.
+     * Removes all Locations under and including $locationId.
      *
      * Performs a recursive delete on the location identified by $locationId,
      * including all of its child locations. Content which is not referred to
@@ -159,7 +159,9 @@ interface Handler
     public function setSectionForSubtree( $locationId, $sectionId );
 
     /**
-     * Removes a location from its $locationId
+     * Removes a location from its $locationId.
+     * Content which looses its main Location will get the first
+     * of its other Locations assigned as the new main Location.
      *
      * @param mixed $locationId
      */
