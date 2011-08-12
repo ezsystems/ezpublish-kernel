@@ -151,7 +151,16 @@ class Handler implements BaseContentHandler
      */
     public function load( $id, $version )
     {
-        throw new Exception( "Not implemented yet." );
+        $rows = $this->contentGateway->load( $id, $version );
+
+        if ( !count( $rows ) )
+        {
+            // @TODO: Use proper exception here.
+            throw new \RuntimeException( 'Content object not found.' );
+        }
+
+        $contentObjects = $this->mapper->extractContentFromRows( $rows );
+        return $contentObjects[0];
     }
 
     /**

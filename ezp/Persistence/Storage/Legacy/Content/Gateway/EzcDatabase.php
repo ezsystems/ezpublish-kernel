@@ -177,6 +177,75 @@ class EzcDatabase extends Gateway
      */
     public function load( $contentId, $version )
     {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+                // Content object
+                $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject' ),
+                $this->dbHandler->aliasedColumn( $query, 'name', 'ezcontentobject' ),
+                $this->dbHandler->aliasedColumn( $query, 'contentclass_id', 'ezcontentobject' ),
+                $this->dbHandler->aliasedColumn( $query, 'section_id', 'ezcontentobject' ),
+                $this->dbHandler->aliasedColumn( $query, 'owner_id', 'ezcontentobject' ),
+                // Content object version
+                $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'modified', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'creator_id', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'created', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_version' ),
+                // Content object fields
+                $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_attribute' ),
+                $this->dbHandler->aliasedColumn( $query, 'contentclassattribute_id', 'ezcontentobject_attribute' ),
+                $this->dbHandler->aliasedColumn( $query, 'data_type_string', 'ezcontentobject_attribute' ),
+                $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' ),
+                $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_attribute' ),
+                // Content object field data
+                $this->dbHandler->aliasedColumn( $query, 'data_float', 'ezcontentobject_attribute' ),
+                $this->dbHandler->aliasedColumn( $query, 'data_int', 'ezcontentobject_attribute' ),
+                $this->dbHandler->aliasedColumn( $query, 'data_text', 'ezcontentobject_attribute' ),
+                $this->dbHandler->aliasedColumn( $query, 'sort_key_int', 'ezcontentobject_attribute' ),
+                $this->dbHandler->aliasedColumn( $query, 'sort_key_string', 'ezcontentobject_attribute' )
+            )
+            ->from( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
+            ->leftJoin(
+                $this->dbHandler->quoteTable( 'ezcontentobject_version' ),
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
+                        $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
+                        $query->bindValue( $version )
+                    )
+                )
+            )
+            ->leftJoin(
+                $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ),
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_attribute' ),
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
+                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
+                    )
+                )
+            )
+            ->where( $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+                $query->bindValue( $contentId )
+            ) );
+        $statement = $query->prepare();
+        $statement->execute();
 
+        $rows = array();
+        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            $rows[] = $row;
+        }
+
+        return $rows;
     }
 }

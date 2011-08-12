@@ -206,6 +206,35 @@ class ContentHandlerTest extends TestCase
         }
     }
 
+    public function testLoadContent()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
+
+        $handler = new Handler(
+            new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+            new Location\Handler(
+                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() )
+            ),
+            new Mapper(
+                $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
+            ),
+            new StorageRegistry()
+        );
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->exactly( 5 ) )
+            ->method( 'toFieldValue' )
+            ->will( $this->returnValue( new FieldValue() ) );
+
+        $registry
+            ->expects( $this->exactly( 5 ) )
+            ->method( 'getConverter' )
+            ->will( $this->returnValue( $converter ) );
+
+        $content = $handler->load( 14, 4 );
+    }
+
     /**
      * Returns a CreateStruct fixture.
      *
