@@ -144,6 +144,31 @@ class ServiceTest extends BaseServiceTest
         $do = $this->service->create( $do );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
         $this->assertEquals( 0, count( $do->groups ) );
+        $this->assertEquals( 0, count( $do->fields ) );
+        $this->assertEquals( array( 'eng-GB' => "Test" ), $do->name );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::create
+     */
+    public function testCreateWithField()
+    {
+        $do = new Type();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do->nameSchema = $do->urlAliasSchema = "<>";
+        $do->isContainer = true;
+        $do->initialLanguageId = 1;
+        $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
+        $field->identifier = 'title';
+        $field->defaultValue = 'New Test';
+        $do = $this->service->create( $do );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
+        $this->assertEquals( 0, count( $do->groups ) );
+        $this->assertEquals( 1, count( $do->fields ) );
         $this->assertEquals( array( 'eng-GB' => "Test" ), $do->name );
     }
 

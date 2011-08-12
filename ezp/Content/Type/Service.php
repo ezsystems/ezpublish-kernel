@@ -43,7 +43,7 @@ class Service extends BaseService
         $struct = new GroupCreateStruct();
         $this->fillStruct( $struct, $group );
         $vo = $this->handler->contentTypeHandler()->createGroup( $struct  );
-        return $this->buildGroup( $group, $vo );
+        return $this->buildGroup( $vo );
     }
 
     /**
@@ -83,7 +83,7 @@ class Service extends BaseService
         $vo = $this->handler->contentTypeHandler()->loadGroup( $groupId );
         if ( !$vo )
             throw new NotFound( 'Content\\Type\\Group', $groupId );
-        return $this->buildGroup( new Group(), $vo );
+        return $this->buildGroup( $vo );
     }
 
     /**
@@ -95,7 +95,7 @@ class Service extends BaseService
     {
         $list = $this->handler->contentTypeHandler()->loadAllGroups();
         foreach ( $list as $key => $vo )
-            $list[$key] = $this->buildGroup( new Group(), $vo );
+            $list[$key] = $this->buildGroup( $vo );
 
         return $list;
     }
@@ -110,9 +110,13 @@ class Service extends BaseService
     public function create( Type $contentType )
     {
         $struct = new CreateStruct();
-        $this->fillStruct( $struct, $contentType );
+        $this->fillStruct( $struct, $contentType, array( 'fieldDefinitions' ) );
+        foreach ( $contentType->fields as $field )
+        {
+            $struct->fieldDefinitions[] = $field->getState( 'properties' );
+        }
         $vo = $this->handler->contentTypeHandler()->create( $struct  );
-        return $this->buildType( $contentType, $vo );
+        return $this->buildType( $vo );
     }
 
     /**
@@ -154,7 +158,7 @@ class Service extends BaseService
         $vo = $this->handler->contentTypeHandler()->load( $contentTypeId, $version );
         if ( !$vo )
             throw new NotFound( 'Content\\Type', $contentTypeId );
-        return $this->buildType( new Type(), $vo );
+        return $this->buildType( $vo );
     }
 
     /**
@@ -168,7 +172,7 @@ class Service extends BaseService
     {
         $list = $this->handler->contentTypeHandler()->loadContentTypes( $groupId, $version );
         foreach ( $list as $key => $vo )
-            $list[$key] = $this->buildType( new Type(), $vo );
+            $list[$key] = $this->buildType( $vo );
 
         return $list;
     }
@@ -199,12 +203,12 @@ class Service extends BaseService
     }
 
     /**
-     * @param \ezp\Content\Type $type
      * @param \ezp\Persistence\Content\Type $vo
      * @return \ezp\Content\Type
      */
-    protected function buildType( Type $type, TypeValue $vo )
+    protected function buildType( TypeValue $vo )
     {
+        $type = new Type();
         foreach ( $vo->fieldDefinitions as $fieldDefinitionVo )
         {
             $fieldDefinition = new FieldDefinition( $type, $fieldDefinitionVo->fieldType );
@@ -220,12 +224,12 @@ class Service extends BaseService
     }
 
     /**
-     * @param \ezp\Content\Type\Group $group
      * @param \ezp\Persistence\Content\Type\Group $vo
      * @return \ezp\Content\Type\Group
      */
-    protected function buildGroup( Group $group, GroupValue $vo )
+    protected function buildGroup( GroupValue $vo )
     {
+        $group = new Group();
         $group->setState( array( 'properties' => $vo,
                                  'types' => new Lazy( 'ezp\\Content\\Type',
                                                       $this,
