@@ -43,7 +43,6 @@ class EzcDatabase extends Gateway
      *
      * @param Content $content
      * @return int ID
-     * @todo Race condition by lastInsertId()?
      * @todo Oracle sequences?
      */
     public function insertContentObject( Content $content )
