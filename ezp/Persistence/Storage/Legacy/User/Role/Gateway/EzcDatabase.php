@@ -47,11 +47,20 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createInsertQuery();
         $query
-            ->insertInto( 'ezrole' )
-            ->set( 'is_new', 0 )
-            ->set( 'name', $query->bindValue( $role->name ) )
-            ->set( 'value', 0 )
-            ->set( 'version', 0 );
+            ->insertInto( $this->handler->quoteTable( 'ezrole' ) )
+            ->set(
+                $this->handler->quoteColumn( 'is_new' ),
+                0
+            )->set(
+                $this->handler->quoteColumn( 'name' ),
+                $query->bindValue( $role->name )
+            )->set(
+                $this->handler->quoteColumn( 'value' ),
+                0
+            )->set(
+                $this->handler->quoteColumn( 'version' ),
+                0
+            );
         $query->prepare()->execute();
 
         $role->id = $this->handler->lastInsertId();
@@ -66,9 +75,14 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createUpdateQuery();
         $query
-            ->update( 'ezrole' )
-            ->set( 'name', $query->bindValue( $role->name ) )
-            ->where( $query->expr->eq( 'id', $query->bindValue( $role->id ) ) );
+            ->update( $this->handler->quoteTable( 'ezrole' ) )
+            ->set(
+                $this->handler->quoteColumn( 'name' ),
+                $query->bindValue( $role->name )
+            )->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'id' ),
+                $query->bindValue( $role->id )
+            ) );
         $query->prepare()->execute();
     }
 
@@ -81,8 +95,11 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createDeleteQuery();
         $query
-            ->deleteFrom( 'ezrole' )
-            ->where( $query->expr->eq( 'id', $query->bindValue( $roleId ) ) );
+            ->deleteFrom( $this->handler->quoteTable( 'ezrole' ) )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'id' ),
+                $query->bindValue( $roleId )
+            ) );
         $query->prepare()->execute();
     }
 
@@ -97,11 +114,20 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createInsertQuery();
         $query
-            ->insertInto( 'ezpolicy' )
-            ->set( 'function_name', $query->bindValue( $policy->moduleFunction ) )
-            ->set( 'module_name', $query->bindValue( $policy->module ) )
-            ->set( 'original_id', 0 )
-            ->set( 'role_id', $query->bindValue( $roleId ) );
+            ->insertInto( $this->handler->quoteTable( 'ezpolicy' ) )
+            ->set(
+                $this->handler->quoteColumn( 'function_name' ),
+                $query->bindValue( $policy->moduleFunction )
+            )->set(
+                $this->handler->quoteColumn( 'module_name' ),
+                $query->bindValue( $policy->module )
+            )->set(
+                $this->handler->quoteColumn( 'original_id' ),
+                0
+            )->set(
+                $this->handler->quoteColumn( 'role_id' ),
+                $query->bindValue( $roleId )
+            );
         $query->prepare()->execute();
 
         $policy->id = $this->handler->lastInsertId();
@@ -120,10 +146,16 @@ class EzcDatabase extends Gateway
     {
         $query = $this->handler->createDeleteQuery();
         $query
-            ->deleteFrom( 'ezpolicy' )
+            ->deleteFrom( $this->handler->quoteTable( 'ezpolicy' ) )
             ->where( $query->expr->lAnd(
-                $query->expr->eq( 'id', $query->bindValue( $policyId ) ),
-                $query->expr->eq( 'role_id', $query->bindValue( $roleId ) )
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'id' ),
+                    $query->bindValue( $policyId )
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'role_id' ),
+                    $query->bindValue( $roleId )
+                )
             ) );
         $query->prepare()->execute();
 
