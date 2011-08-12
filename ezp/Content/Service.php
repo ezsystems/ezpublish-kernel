@@ -89,11 +89,7 @@ class Service extends BaseService
      */
     public function delete( Content $content )
     {
-        // take care of:
-        // 1. removing the subtree of all content's locations
-        // 2. removing the content it self (with version, translations, fields
-        // and so on...)
-        // note: this is different from Subtree::delete()
+        $this->handler->contentHandler()->delete( $content->id );
     }
 
     /**

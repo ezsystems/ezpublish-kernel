@@ -8,8 +8,11 @@
  */
 
 namespace ezp\Content\Tests;
-use ezp\Content\Tests\BaseServiceTest,
-    ezp\Persistence\Content,
+use ezp\Content,
+    ezp\Content\Type,
+    ezp\Content\Tests\BaseServiceTest,
+    ezp\Base\Locale,
+    ezp\Base\Exception\NotFound,
     ezp\Persistence\Content\Location,
     \ReflectionObject;
 
@@ -98,6 +101,45 @@ class ServiceTest extends BaseServiceTest
         self::assertEquals( "eZ Publish" , $content->name, "Name not correctly set" );
         self::assertEquals( 14, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
+    }
+
+    /**
+     * Test the Content Service delete operation
+     * @group contentService
+     * @covers \ezp\Content\Service::delete
+     */
+    public function testDelete()
+    {
+        $content = $this->service->load( 1 );
+        $locations = $content->locations;
+        $this->service->delete( $content );
+        $locationService = $this->repository->getLocationService();
+        foreach ( $locations as $location )
+        {
+            try
+            {
+                $locationService->load( $location->id );
+                $this->fail( "Location not correctly deleted while deleting Content" );
+            }
+            catch ( NotFound $e )
+            {
+            }
+        }
+    }
+
+    /**
+     * Test the Content Service delete operation
+     *
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @group contentService
+     * @covers \ezp\Content\Service::delete
+     */
+    public function testDeleteNotExistant()
+    {
+        $content = new Content( new Type, new Locale( "eng-GB" ) );
+        $refContent = new ReflectionObject( $content );
+        $refContent->getProperty( "properties" )->id = 42;
+        $this->service->delete( $content );
     }
 
     /**
