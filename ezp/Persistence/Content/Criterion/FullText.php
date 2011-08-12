@@ -36,15 +36,13 @@ use ezp\Persistence\Content\Criterion,
 class FullText extends Criterion implements CriterionInterface
 {
     /**
-     * Creates a FullText criterion on $text
+     * Creates a FullText criterion on $text, using the IN Operator
      *
-     * @param string $target Not used
-     * @param string $operator Not used
      * @param string $text The text to match on
      */
-    public function __construct( $target, $operator, $value )
+    public function __construct( $value )
     {
-        parent::__construct( $target, $operator, $value );
+        parent::__construct( null, Operator::LIKE, $value );
     }
 
     public function getSpecifications()
@@ -52,6 +50,11 @@ class FullText extends Criterion implements CriterionInterface
         return array(
             new Specifications( Operator::LIKE, Specifications::FORMAT_SINGLE )
         );
+    }
+
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new self( $value );
     }
 }
 ?>

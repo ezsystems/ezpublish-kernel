@@ -10,6 +10,7 @@
 
 namespace ezp\Persistence\Content;
 use ezp\Persistence\Content\Criterion\Operator\Specifications,
+    ezp\Persistence\Content\Criterion\Operator,
     InvalidArgumentException;
 
 /**
@@ -18,8 +19,10 @@ abstract class Criterion
 {
     /**
      * Performs operator validation based on the Criterion specifications returned by {@see getSpecifications()}
-     * @param string|null $target
+     * @param string|null $target The target the Criterion applies to: metadata identifier, field identifier...
      * @param string|null $operator
+     *        The operator the Criterion uses. If null is given, will default to Operator::IN if $value is an array,
+     *        Operator::IN if it is not.
      * @param string[]|int[]|int|string $value
      *
      * @todo Add a dedicated exception
@@ -27,6 +30,11 @@ abstract class Criterion
      */
     public function __construct( $target, $operator, $value )
     {
+        if ( $operator === null )
+        {
+            $operator = is_array( $value ) ? Operator::IN : Operator::EQ;
+        }
+
         $operatorFound = false;
 
         // we loop on each specified operator.
@@ -122,6 +130,11 @@ abstract class Criterion
         }
 
         return $callback;
+    }
+
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new static( $target, $operator, $value );
     }
 
     /**

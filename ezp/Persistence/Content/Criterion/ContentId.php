@@ -25,19 +25,14 @@ class ContentId extends Criterion implements CriterionInterface
     /**
      * Creates a new ContentId criterion
      *
-     * @param null $target Not used
-     * @param string $operator
-     *        Possible values:
-     *        - Operator::IN: match against a list of contentId. $value must be an array of contentId
-     *        - Operator::EQ: match against a single contentId. $value must be a single contentId
-     * @param integer|array(integer) One or more content Id that must be matched
+     * @param integer|array(integer) One or more content Id that must be matched.
      *
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $target, $operator, $value )
+    public function __construct( $value )
     {
-        parent::__construct( $target, $operator, $value );
+        parent::__construct( null, null, $value );
     }
 
     public function getSpecifications()
@@ -49,5 +44,9 @@ class ContentId extends Criterion implements CriterionInterface
         );
     }
 
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new self( $value );
+    }
 }
 ?>

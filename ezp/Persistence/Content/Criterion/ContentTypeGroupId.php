@@ -27,18 +27,13 @@ class ContentTypeGroupId extends Criterion implements CriterionInterface
      *
      * Content will be matched if it matches one of the contentTypeGroupId in $value
      *
-     * @param null $target Not used
-     * @param string $operator
-     *        Possible values:
-     *        - Operator::IN: match against a list of contentTypeGroupId. $value must be an array of contentTypeGroupId
-     *        - Operator::EQ: match against a single contentTypeGroupId. $value must be a single contentTypeGroupId
      * @param integer|array(integer) One or more contentTypeGroupId that must be matched
      *
      * @throw InvalidArgumentException if the parameters don't match what the criterion expects
      */
-    public function __construct( $target, $operator, $value )
+    public function __construct( $value )
     {
-        parent::__construct( $target, $operator, $value );
+        parent::__construct( null, null, $value );
     }
 
     public function getSpecifications()
@@ -53,6 +48,11 @@ class ContentTypeGroupId extends Criterion implements CriterionInterface
                 Specifications::FORMAT_SINGLE
             )
         );
+    }
+
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new self( $value );
     }
 }
 ?>

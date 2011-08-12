@@ -14,6 +14,9 @@ use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\CriterionInterface;
 
 /**
+ * SectionId Criterion
+ *
+ * Will match content that belongs to one of the given sections
  */
 class SectionId extends Criterion implements CriterionInterface
 {
@@ -32,9 +35,9 @@ class SectionId extends Criterion implements CriterionInterface
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $target, $operator, $value  )
+    public function __construct( $value  )
     {
-        parent::__construct( $target, $operator, $value );
+        parent::__construct( null, null, $value );
     }
 
     public function getSpecifications()
@@ -51,6 +54,11 @@ class SectionId extends Criterion implements CriterionInterface
                 Specifications::TYPE_INTEGER | Specifications::TYPE_STRING
             ),
         );
+    }
+
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new self( $value );
     }
 }
 ?>

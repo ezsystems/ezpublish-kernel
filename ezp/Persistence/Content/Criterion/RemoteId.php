@@ -25,19 +25,14 @@ class RemoteId extends Criterion implements CriterionInterface
     /**
      * Creates a new remoteId criterion
      *
-     * @param null $target Not used
-     * @param string $operator
-     *        Possible values:
-     *        - Operator::IN: match against a list of remoteId. $value must be an array of remoteId
-     *        - Operator::EQ: match against a single remoteId. $value must be a single remoteId
      * @param integer|array(integer) One or more remoteId that must be matched
      *
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct(  $target, $operator, $value  )
+    public function __construct( $value  )
     {
-        parent::__construct( $target, $operator, $value );
+        parent::__construct( null, null, $value );
     }
 
     public function getSpecifications()
@@ -54,6 +49,11 @@ class RemoteId extends Criterion implements CriterionInterface
                 Specifications::TYPE_INTEGER | Specifications::TYPE_STRING
             ),
         );
+    }
+
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new self( $value );
     }
 }
 ?>

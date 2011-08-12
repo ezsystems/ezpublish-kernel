@@ -26,7 +26,6 @@ class UrlAlias extends Criterion implements CriterionInterface
     /**
      * Creates a new UrlAlias Criterion
      *
-     * @param string $target Not used
      * @param string $operator
      *        Possible values:
      *        - Operator::IN, requires an array of subtree id as the $value
@@ -36,9 +35,9 @@ class UrlAlias extends Criterion implements CriterionInterface
      * @throws InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $target, $operator, $value )
+    public function __construct( $operator, $value )
     {
-        parent::__construct( $target, $operator, $value );
+        parent::__construct( null, $operator, $value );
     }
 
     public function getSpecifications()
@@ -62,5 +61,9 @@ class UrlAlias extends Criterion implements CriterionInterface
         );
     }
 
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new self( $operator, $value );
+    }
 }
 ?>

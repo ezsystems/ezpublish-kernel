@@ -26,19 +26,14 @@ class ParentLocationId extends Criterion implements CriterionInterface
     /**
      * Creates a new ParentLocationId criterion
      *
-     * @param null $target Not used
-     * @param string $operator
-     *        Possible values:
-     *        - Operator::IN: match parent locations against a list of locationId. $value must be an array of locationId
-     *        - Operator::EQ: match parent locations against a single locationId. $value must be a single locationId
      * @param integer|array(integer) One or more locationId parent locations must be matched against
      *
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $target, $operator, $value )
+    public function __construct( $value )
     {
-        parent::__construct( $target, $operator, $value );
+        parent::__construct( null, null, $value );
     }
 
     public function getSpecifications()
@@ -55,6 +50,11 @@ class ParentLocationId extends Criterion implements CriterionInterface
                 Specifications::TYPE_INTEGER | Specifications::TYPE_STRING
             ),
         );
+    }
+
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new self( $value );
     }
 }
 ?>

@@ -228,7 +228,7 @@ class CriterionFactory
      */
     private function handleCriterion( $target, $operator, $value )
     {
-        return new $this->criterionClass( $target, $operator, $value );
+        return call_user_func( array( $this->criterionClass, 'createFromQueryBuilder' ), $target, $operator, $value );
     }
 
     /**

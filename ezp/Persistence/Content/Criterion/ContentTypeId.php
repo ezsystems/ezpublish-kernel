@@ -27,19 +27,14 @@ class ContentTypeId extends Criterion implements CriterionInterface
      *
      * Content will be matched if it matches one of the contentTypeId in $value
      *
-     * @param null $target Not used
-     * @param string $operator
-     *        Possible values:
-     *        - Operator::IN: match against a list of contentTypeId. $value must be an array of contentTypeId
-     *        - Operator::EQ: match against a single contentTypeId. $value must be a single contentTypeId
      * @param integer|array(integer) One or more content Id that must be matched
      *
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $target, $operator, $value )
+    public function __construct( $value )
     {
-        parent::__construct( $target, $operator, $value );
+        parent::__construct( null, null, $value );
     }
 
     public function getSpecifications()
@@ -49,6 +44,11 @@ class ContentTypeId extends Criterion implements CriterionInterface
             new Specifications( Operator::IN, Specifications::FORMAT_ARRAY, $types ),
             new Specifications( Operator::EQ, Specifications::FORMAT_SINGLE, $types ),
         );
+    }
+
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new self( $value );
     }
 }
 ?>

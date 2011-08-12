@@ -15,13 +15,15 @@ namespace ezp\Persistence\Content;
 interface CriterionInterface
 {
     /**
-     * Constructs a Criterion for $target with operator $operator on $value
+     * Creates a new Criterion for $target with operator $operator on $value
      *
      * @param string $target The target (field identifier for a field, metadata identifier, etc)
      * @param string $operator The criterion operator, from Criterion\Operator
      * @param mixed $value The Criterion value, either as an individual item or an array
+     *
+     *@return CriterionInterface
      */
-    public function __construct( $target, $operator, $value );
+    public static function createFromQueryBuilder( $target, $operator, $value );
 
     /**
      * Criterion description function.

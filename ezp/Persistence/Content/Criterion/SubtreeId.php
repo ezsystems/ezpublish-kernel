@@ -14,28 +14,23 @@ use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\CriterionInterface;
 
 /**
- * Criterion that matches content against a subtree.
- * Content will be matched if it is part of at least one of the given subtree id
+ * Criterion that matches content that belongs to a given list of SubtreeId
  *
+ * Content will be matched if it is part of at least one of the given subtree id
  */
-class Subtree extends Criterion implements CriterionInterface
+class SubtreeId extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new SubTree criterion
      *
-     * @param string $target Not used
-     * @param string $operator
-     *        Possible values:
-     *        - Operator::IN, requires an array of subtree id as the $value
-     *        - Operator::EQ, requires a single subtree id as the $value
-     * @param array(integer) $value an array of subtree ids
+     * @param integer|array(integer) $value an array of subtree ids
      *
      * @throws InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $target, $operator, $value )
+    public function __construct( $value )
     {
-        parent::__construct( $target, $operator, $value );
+        parent::__construct( null, null, $value );
     }
 
     public function getSpecifications()
@@ -52,6 +47,11 @@ class Subtree extends Criterion implements CriterionInterface
                 Specifications::TYPE_INTEGER | Specifications::TYPE_STRING
             )
         );
+    }
+
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new self( $value );
     }
 }
 ?>
