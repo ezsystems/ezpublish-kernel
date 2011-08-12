@@ -77,7 +77,7 @@ class ServiceTest extends BaseServiceTest
     /**
      * Try to build Content domain object from not valid value object
      *
-     * @expectedException \ezp\Base\Exception\InvalidArgumentType
+     * @expectedException \PHPUnit_Framework_Error
      * @group contentService
      * @covers \ezp\Content\Service::buildDomainObject
      */
