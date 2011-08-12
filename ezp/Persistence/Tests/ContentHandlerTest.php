@@ -88,13 +88,13 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * Test load function
+     * Test findSingle function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::load
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::findSingle
      */
-    public function testLoad()
+    public function testFindSingle()
     {
-        $content = $this->repositoryHandler->contentHandler()->load( $this->content->id );
+        $content = $this->repositoryHandler->contentHandler()->findSingle( new ContentId( $this->content->id ) );
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( 14, $content->ownerId );
@@ -158,7 +158,7 @@ class ContentHandlerTest extends HandlerTest
 
         try
         {
-            $contentHandler->load( $this->content->id );
+            $contentHandler->findSingle( new ContentId( $this->content->id ) );
             $this->fail( "Content not removed correctly" );
         }
         catch ( NotFound $e )

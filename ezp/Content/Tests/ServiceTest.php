@@ -14,6 +14,7 @@ use ezp\Content,
     ezp\Base\Locale,
     ezp\Base\Exception\NotFound,
     ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Criterion\ContentId,
     \ReflectionObject;
 
 /**
@@ -41,7 +42,7 @@ class ServiceTest extends BaseServiceTest
      */
     public function testBuildDomainObject()
     {
-        $vo = $this->repositoryHandler->contentHandler()->load( 1 );
+        $vo = $this->repositoryHandler->contentHandler()->findSingle( new ContentId( 1 ) );
 
         $refService = new ReflectionObject( $this->service );
         $refMethod = $refService->getMethod( "buildDomainObject" );

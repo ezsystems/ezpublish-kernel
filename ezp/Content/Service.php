@@ -18,7 +18,9 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
     ezp\Persistence\ValueObject,
-    ezp\Persistence\Content as ContentValue;
+    ezp\Persistence\Content as ContentValue,
+    ezp\Persistence\Content\Criterion\ContentId,
+    ezp\Persistence\Content\Criterion\Operator;
 
 /**
  * Content service, used for Content operations
@@ -63,7 +65,7 @@ class Service extends BaseService
      */
     public function load( $contentId )
     {
-        $contentVO = $this->handler->contentHandler()->load( $contentId );
+        $contentVO = $this->handler->contentHandler()->findSingle( new ContentId( $contentId ) );
         if ( !$contentVO instanceof ContentValue )
             throw new NotFound( 'Content', $contentId );
 
