@@ -221,7 +221,7 @@ abstract class FieldType
      * complex field type values.
      *
      * @abstract
-     * @return ezp\Content\FieldType\Handler
+     * @return void|ezp\Content\FieldType\Handler
      */
     abstract public function getTypeHandler();
 }
