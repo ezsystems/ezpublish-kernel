@@ -120,7 +120,6 @@ class Mapper
      *
      * @param array $rows
      * @return array(Content)
-     * @todo Take care for locations
      */
     public function extractContentFromRows( array $rows )
     {
@@ -139,12 +138,20 @@ class Mapper
                 $versions[$contentId] = $this->extractVersionFromRow( $row );
             }
 
-            $versions[$contentId]->fields[] = $this->extractFieldFromRow( $row );
+            $field = (int) $row['ezcontentobject_attribute_id'];
+            if ( !isset( $versions[$contentId]->fields[$field] ) )
+            {
+                $versions[$contentId]->fields[$field] = $this->extractFieldFromRow( $row );
+            }
+
+            $contentObjs[$contentId]->locations[(int) $row['ezcontentobject_tree_node_id']] = true;
         }
 
         foreach ( $contentObjs as $content )
         {
-            $content->version = $versions[$content->id];
+            $content->version         = $versions[$content->id];
+            $content->version->fields = array_values( $content->version->fields );
+            $content->locations       = array_keys( $content->locations );
         }
         return array_values( $contentObjs );
     }
@@ -154,7 +161,6 @@ class Mapper
      *
      * @param array $row
      * @return Content
-     * @todo Take care for locations
      */
     protected function extractContentFromRow( array $row )
     {

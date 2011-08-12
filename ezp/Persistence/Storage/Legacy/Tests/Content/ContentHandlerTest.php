@@ -363,6 +363,19 @@ class ContentHandlerTest extends TestCase
         $this->assertEquals( $content->version->fields[0]->$property, $value );
     }
 
+    public function testLoadContentLocations()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
+        $handler = $this->getAlmostRealContentHandler();
+
+        $content = $handler->load( 14, 4 );
+
+        $this->assertEquals(
+            array( 15 ),
+            $content->locations
+        );
+    }
+
     /**
      * Returns a CreateStruct fixture.
      *

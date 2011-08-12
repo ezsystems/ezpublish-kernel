@@ -206,7 +206,9 @@ class EzcDatabase extends Gateway
                 $this->dbHandler->aliasedColumn( $query, 'data_int', 'ezcontentobject_attribute' ),
                 $this->dbHandler->aliasedColumn( $query, 'data_text', 'ezcontentobject_attribute' ),
                 $this->dbHandler->aliasedColumn( $query, 'sort_key_int', 'ezcontentobject_attribute' ),
-                $this->dbHandler->aliasedColumn( $query, 'sort_key_string', 'ezcontentobject_attribute' )
+                $this->dbHandler->aliasedColumn( $query, 'sort_key_string', 'ezcontentobject_attribute' ),
+                // Content object locations
+                $this->dbHandler->aliasedColumn( $query, 'node_id', 'ezcontentobject_tree' )
             )
             ->from( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
             ->leftJoin(
@@ -231,6 +233,19 @@ class EzcDatabase extends Gateway
                     ),
                     $query->expr->eq(
                         $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' ),
+                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
+                    )
+                )
+            )
+            ->leftJoin(
+                $this->dbHandler->quoteTable( 'ezcontentobject_tree' ),
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_version', 'ezcontentobject_tree' ),
                         $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' )
                     )
                 )
