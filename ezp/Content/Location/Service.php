@@ -13,7 +13,6 @@ use ezp\Base\Exception,
     ezp\Content\Location,
     ezp\Content\Proxy,
     ezp\Content\Section,
-    ezp\Content\ContainerProperty,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\Logic,
@@ -276,19 +275,10 @@ class Service extends BaseService
         );
         // Check if associated content also needs to be refreshed
         if ( $vo->contentId != $location->contentId )
+        {
             $newState['content'] = new Proxy( $this->repository->getContentService(), $vo->contentId );
+        }
         $location->setState( $newState );
-
-        // Container property (default sorting)
-        $containerProperty = new ContainerProperty;
-        $location->containerProperties[] = $containerProperty->setState(
-            array(
-                'locationId' => $vo->id,
-                'sortField' => $vo->sortField,
-                'sortOrder' => $vo->sortOrder,
-                'location' => $location
-            )
-        );
 
         return $location;
     }

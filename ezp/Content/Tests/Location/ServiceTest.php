@@ -16,8 +16,7 @@ use ezp\Content\Tests\BaseServiceTest,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
     ezp\Content\Location,
-    ezp\Content\Proxy,
-    ezp\Content\ContainerProperty;
+    ezp\Content\Proxy;
 
 /**
  * Test case for Location service
@@ -197,12 +196,8 @@ class ServiceTest extends BaseServiceTest
         self::assertInstanceOf( 'ezp\\Content\\Proxy', $content, 'Content must be a valid Proxy object after init by service' );
         self::assertEquals( $vo->contentId, $content->id );
 
-        $containerProperty = $do->containerProperties[0];
-        self::assertInstanceOf( 'ezp\\Content\\ContainerProperty' , $containerProperty );
-        self::assertEquals( $containerProperty->locationId, $vo->id );
-        self::assertEquals( $containerProperty->sortField, $vo->sortField );
-        self::assertEquals( $containerProperty->sortOrder, $vo->sortOrder );
-        self::assertSame( $do, $containerProperty->location );
+        self::assertEquals( $do->sortField, $vo->sortField );
+        self::assertEquals( $do->sortOrder, $vo->sortOrder );
     }
 
     /**
@@ -236,8 +231,8 @@ class ServiceTest extends BaseServiceTest
         $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
         $location->parent = $parent;
         $location->remoteId = $remoteId;
-        $location->sortField = ContainerProperty::SORT_FIELD_PRIORITY;
-        $location->sortOrder = ContainerProperty::SORT_ORDER_DESC;
+        $location->sortField = Location::SORT_FIELD_PRIORITY;
+        $location->sortOrder = Location::SORT_ORDER_DESC;
         $location->priority = 100;
 
         $newLocation = $this->service->create( $location );
@@ -415,8 +410,8 @@ class ServiceTest extends BaseServiceTest
     {
         $newRemoteId = 'anotherRemoteId';
         $newPriority = 357;
-        $newSortField = ContainerProperty::SORT_FIELD_DEPTH;
-        $newSortOrder = ContainerProperty::SORT_ORDER_DESC;
+        $newSortField = Location::SORT_FIELD_DEPTH;
+        $newSortOrder = Location::SORT_ORDER_DESC;
         $locationId = $this->location->id;
 
         $this->location->remoteId = $newRemoteId;
