@@ -29,5 +29,20 @@ class TextLine extends FieldType
         parent::__construct();
     }
 
+    protected function parseValue( $inputValue )
+    {
+    }
+
+    public function setValue( $inputValue )
+    {
+    }
+
+    public function getValue()
+    {
+    }
+
+    public function getTypeHandler()
+    {
+    }
 
 }
