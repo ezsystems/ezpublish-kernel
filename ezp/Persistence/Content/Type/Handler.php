@@ -137,7 +137,8 @@ interface Handler
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param FieldDefinition $fieldDefinition
-     * @return void
+     * @return FieldDefinition
+     * @throws \ezp\Base\Exception\NotFound If type is not found
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
 
@@ -151,7 +152,8 @@ interface Handler
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param mixed $fieldDefinitionId
-     * @return boolean
+     * @return void
+     * @throws \ezp\Base\Exception\NotFound If field is not found
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId );
 
@@ -167,6 +169,7 @@ interface Handler
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param FieldDefinition $fieldDefinition
      * @return void
+     * @throws \ezp\Base\Exception\NotFound If field is not found
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
 
