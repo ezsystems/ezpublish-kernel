@@ -50,39 +50,42 @@ interface Handler
 
     /**
      * @param mixed $groupId
-     * @param int $version ContentType version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type[]
      */
-    public function loadContentTypes( $groupId, $version = 0 );
+    public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED );
 
     /**
-     * Load a content type by id and version
+     * Load a content type by id and status
      *
-     * @todo Use constant for $version?
      * @param int $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type
      */
-    public function load( $contentTypeId, $version = 0 );
+    public function load( $contentTypeId, $status = Type::STATUS_DEFINED );
 
     /**
+     * Create a content type with status {@link Type::STATUS_DRAFT}
+     *
      * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
      * @return \ezp\Persistence\Content\Type
      */
     public function create( CreateStruct $contentType );
 
     /**
+     * Update Content type with status {@link Type::STATUS_DRAFT}
+     *
+     * @todo Add api to be able to update name and description on a specific status (as it does not need publish)?
      * @param mixed $typeId
-     * @param int $version
      * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
      */
-    public function update( $typeId, $version, UpdateStruct $contentType );
+    public function update( $typeId, UpdateStruct $contentType );
 
     /**
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
-    public function delete( $contentTypeId, $version );
+    public function delete( $contentTypeId, $status );
 
     /**
      * @param mixed $userId
@@ -90,101 +93,99 @@ interface Handler
      * @param int $fromVersion
      * @param int $toVersion
      * @todo What does this method do? Create a new version of the content type 
-     *       from $version? Is it then expected to return the Type object?
+     *       from $status? Is it then expected to return the Type object?
+     * @todo Define a more specific api that is more synced with actually allowed content type workflow
      */
-    public function createVersion( $userId, $contentTypeId, $fromVersion, $toVersion );
+    public function createVersion( $userId, $contentTypeId, $fromStatus );
 
     /**
+     * Copy a Content Type incl fields and groups from a given status to a new Content Type with status {@link Type::STATUS_DRAFT}
+     *
+     * New Content Type will have $userId as creator / modifier as well as updated created / modified timestamps.
+     *
      * @param mixed $userId
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return Type
-     * @todo What does this method do? Create a new Content\Type as a copy? 
-     *       With which data (e.g. identified)?
      */
-    public function copy( $userId, $contentTypeId, $version );
+    public function copy( $userId, $contentTypeId, $status );
 
     /**
      * Unlink a content type group from a content type
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $version 0|1
-     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
      */
-    public function unlink( $groupId, $contentTypeId, $version );
+    public function unlink( $groupId, $contentTypeId, $status );
 
     /**
      * Link a content type group with a content type
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $version
-     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is already part of group
      */
-    public function link( $groupId, $contentTypeId, $version );
+    public function link( $groupId, $contentTypeId, $status );
 
     /**
-     * Adds a new field definition to an existing Type.
+     * Adds a new field definition to an existing Type with status {@link Type::STATUS_DRAFT}
      *
-     * This method creates a new version of the Type with the $fieldDefinition 
+     * This method modifies a Type draft with the $fieldDefinition
      * added. It does not update existing content objects depending on the
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param int $version
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function addFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition );
+    public function addFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition );
 
     /**
-     * Removes a field definition from an existing Type.
+     * Removes a field definition from an existing Type with status {@link Type::STATUS_DRAFT}
      *
-     * This method creates a new version of the Type with the field definition 
+     * This method modifies a Type draft with the field definition
      * referred to by $fieldDefinitionId removed. It does not update existing 
      * content objects depending on the field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param int $version
      * @param mixed $fieldDefinitionId
      * @return boolean
      */
-    public function removeFieldDefinition( $contentTypeId, $version, $fieldDefinitionId );
+    public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId );
 
     /**
-     * This method updates the given $fieldDefinition on a Type.
+     * This method updates the given $fieldDefinition on a Type with status {@link Type::STATUS_DRAFT}
      *
-     * This method creates a new version of the Type with the updated 
-     * $fieldDefinition. It does not update existing content objects depending 
-     * on the
-     * field (default) values.
+     * This method modifies a Type draft with the updated $fieldDefinition.
+     * It does not update existing content objects depending on the field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param int $version
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function updateFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition );
+    public function updateFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition );
 
     /**
      * Update content objects
      *
      * Updates content objects, depending on the changed field definition.
      *
-     * A content type has a state which tells if its content objects yet have
-     * been adapted.
+     * A content type has a state which tells if its content objects yet have been adapted.
      *
      * Flags the content type as updated.
      *
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return void
      * @todo Is it correct that this refers to a $fieldDefinitionId instead of 
      *       a $typeId?
+     * @todo Should probably be internal to SE and optionally be done (if needed) when Type is "published"
      */
-    public function updateContentObjects( $contentTypeId, $version, $fieldDefinitionId );
+    public function updateContentObjects( $contentTypeId, $status, $fieldDefinitionId );
 }
 ?>

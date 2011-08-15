@@ -196,7 +196,8 @@ class ServiceTest extends BaseServiceTest
         $do->name = $do->description = array( 'eng-GB' => 'Test' );
         $do->identifier = 'test';
         $this->service->update( $do );
-        $do = $this->service->load( 1 );
+        $this->markTestIncomplete( '@todo: Rewrite to use new planned createDraft function' );
+        $do = $this->service->load( 1, 1 );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
         $this->assertEquals( 1, count( $do->groups ) );
         $this->assertEquals( array( 'eng-GB' => "Test" ), $do->name );

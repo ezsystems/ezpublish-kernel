@@ -17,7 +17,6 @@ use ezp\Base\Model,
  *
  *
  * @property-read int $id
- * @property-read int $version
  * @property string $name
  * @property string $description
  * @property string $identifier
@@ -34,7 +33,6 @@ class Group extends Model
      */
     protected $readWriteProperties = array(
         'id' => false,
-        'version' => false,
         'name' => true,
         'description' => true,
         'identifier' => true,

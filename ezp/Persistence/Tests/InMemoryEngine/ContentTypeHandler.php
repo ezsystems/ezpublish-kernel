@@ -91,7 +91,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
 
             if ( $update )
             {
-                // @todo If groupIds is empty, content type and content of that type should be deleted
+                // @todo If groupIds is empty, content type and content of that type should be deleted?
                 $this->backend->update( 'Content\\Type',
                                         $type->id,
                                         array( 'groupIds' => $type->groupIds ) );
@@ -118,14 +118,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function loadContentTypes( $groupId, $version = 0 )
+    public function loadContentTypes( $groupId, $status = 0 )
     {
         return $this->backend->find(
             'Content\\Type',
-            array( 'groupIds' => $groupId, 'version' => $version ),
+            array( 'groupIds' => $groupId, 'status' => $status ),
             array( 'fieldDefinitions' => array(
                 'type' => 'Content\\Type\\FieldDefinition',
-                'match' => array( '_typeId' => 'id',  '_version' => 'version' ) )
+                'match' => array( '_typeId' => 'id',  '_status' => 'status' ) )
             )
         );
     }
@@ -133,14 +133,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function load( $contentTypeId, $version = 0 )
+    public function load( $contentTypeId, $status = 0 )
     {
         $type = $this->backend->find(
             'Content\\Type',
-            array( 'id' => $contentTypeId, 'version' => $version ),
+            array( 'id' => $contentTypeId, 'status' => $status ),
             array( 'fieldDefinitions' => array(
                 'type' => 'Content\\Type\\FieldDefinition',
-                'match' => array( '_typeId' => 'id',  '_version' => 'version' ) )
+                'match' => array( '_typeId' => 'id',  '_status' => 'status' ) )
             )
         );
 
@@ -156,13 +156,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     public function create( CreateStruct $contentType )
     {
         $contentTypeArr = (array) $contentType;
+        $contentTypeArr['status'] = Type::STATUS_DRAFT;
         unset( $contentTypeArr['fieldDefinitions'] );
         $contentTypeObj = $this->backend->create( 'Content\\Type', $contentTypeArr );
         foreach ( $contentType->fieldDefinitions as $field )
         {
             $contentTypeObj->fieldDefinitions[] = $this->backend->create(
                 'Content\\Type\\FieldDefinition',
-                array( '_typeId' => $contentTypeObj->id, '_version' => $contentTypeObj->version ) + (array) $field
+                array( '_typeId' => $contentTypeObj->id, '_status' => $contentTypeObj->status ) + (array) $field
             );
         }
         return $contentTypeObj;
@@ -171,29 +172,30 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function update( $typeId, $version, UpdateStruct $contentType )
+    public function update( $typeId, UpdateStruct $contentType )
     {
+        // @todo Throw if type with status is not found
         $contentTypeArr = (array) $contentType;
         $this->backend->updateByMatch( 'Content\\Type',
-                                       array( 'id' => $typeId, 'version' => $version ),
+                                       array( 'id' => $typeId, 'status' => Type::STATUS_DRAFT ),
                                        $contentTypeArr );
     }
 
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function delete( $contentTypeId, $version )
+    public function delete( $contentTypeId, $status )
     {
         $this->backend->deleteByMatch( 'Content\\Type',
-                                       array( 'id' => $contentTypeId, 'version' => $version ) );
+                                       array( 'id' => $contentTypeId, 'status' => $status ) );
         $this->backend->deleteByMatch( 'Content\\Type\\FieldDefinition',
-                                           array( '_typeId' => $contentTypeId, '_version' => $version ) );
+                                           array( '_typeId' => $contentTypeId, '_status' => $status ) );
     }
 
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function createVersion( $userId, $contentTypeId, $fromVersion, $toVersion )
+    public function createVersion( $userId, $contentTypeId, $fromStatus )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
@@ -201,7 +203,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function copy( $userId, $contentTypeId, $version )
+    public function copy( $userId, $contentTypeId, $status )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
@@ -211,15 +213,15 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $version 0|1
-     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
      */
-    public function unlink( $groupId, $contentTypeId, $version )
+    public function unlink( $groupId, $contentTypeId, $status )
     {
-        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'version' => $version ) );
+        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
         if ( !isset( $list[0] ) )
-            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and version '{$version}" );
+            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
 
         $type = $list[0];
         if ( !in_array( $groupId, $type->groupIds ) )
@@ -233,7 +235,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
             throw new NotFound( 'Content\\Type\\Group', $groupId );
 
         $this->backend->updateByMatch( 'Content\\Type',
-                            array( 'id' => $contentTypeId, 'version' => $version ),
+                            array( 'id' => $contentTypeId, 'status' => $status ),
                             array( 'groupIds' => array_values( array_diff( $type->groupIds, array( $groupId ) ) ) ) );
     }
 
@@ -242,15 +244,15 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $version
-     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is already part of group
      */
-    public function link( $groupId, $contentTypeId, $version )
+    public function link( $groupId, $contentTypeId, $status )
     {
-        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'version' => $version ) );
+        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
         if ( !isset( $list[0] ) )
-            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and version '{$version}" );
+            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
 
         $type = $list[0];
         if ( in_array( $groupId, $type->groupIds ) )
@@ -260,14 +262,53 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
             throw new NotFound( 'Content\\Type\\Group', $groupId );
 
         $this->backend->updateByMatch( 'Content\\Type',
-                               array( 'id' => $contentTypeId, 'version' => $version ),
+                               array( 'id' => $contentTypeId, 'status' => $status ),
                                array( 'groupIds' => array_merge( $type->groupIds, array( $groupId ) ) ) );
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * Adds a new field definition to an existing Type with status {@link Type::STATUS_DRAFT}
+     *
+     * This method modifies a Type draft with the $fieldDefinition
+     * added. It does not update existing content objects depending on the
+     * field (default) values.
+     *
+     * @param mixed $contentTypeId
+     * @param FieldDefinition $fieldDefinition
+     * @return void
      */
-    public function addFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition )
+    public function addFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition )
+    {
+        throw new RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
+     * Removes a field definition from an existing Type with status {@link Type::STATUS_DRAFT}
+     *
+     * This method modifies a Type draft with the field definition
+     * referred to by $fieldDefinitionId removed. It does not update existing
+     * content objects depending on the field (default) values.
+     *
+     * @param mixed $contentTypeId
+     * @param mixed $fieldDefinitionId
+     * @return boolean
+     */
+    public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId )
+    {
+        throw new RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
+     * This method updates the given $fieldDefinition on a Type with status {@link Type::STATUS_DRAFT}
+     *
+     * This method modifies a Type draft with the updated $fieldDefinition.
+     * It does not update existing content objects depending on the field (default) values.
+     *
+     * @param mixed $contentTypeId
+     * @param FieldDefinition $fieldDefinition
+     * @return void
+     */
+    public function updateFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
@@ -275,23 +316,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function removeFieldDefinition( $contentTypeId, $version, $fieldDefinitionId )
-    {
-        throw new RuntimeException( '@TODO: Implement' );
-    }
-
-    /**
-     * @see ezp\Persistence\Content\Type\Handler
-     */
-    public function updateFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition )
-    {
-        throw new RuntimeException( '@TODO: Implement' );
-    }
-
-    /**
-     * @see ezp\Persistence\Content\Type\Handler
-     */
-    public function updateContentObjects( $contentTypeId, $version, $fieldDefinitionId )
+    public function updateContentObjects( $contentTypeId, $status, $fieldDefinitionId )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }

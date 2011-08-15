@@ -16,18 +16,33 @@ use ezp\Persistence\ValueObject;
 class Type extends ValueObject
 {
     /**
-     * Content type ID
+     * @var int Status constant for defined (aka "published") Type
+     */
+    const STATUS_DEFINED = 0;
+
+    /**
+     * @var int Status constant for draft (aka "temporary") Type
+     */
+    const STATUS_DRAFT = 1;
+
+    /**
+     * @var int Status constant for modified (aka "deferred for publishing") Type
+     */
+    const STATUS_MODIFIED = 2;
+
+    /**
+     * Primary key: Content type ID
      *
      * @var mixed
      */
     public $id;
 
     /**
-     * Version. 
+     * Primary key: Status (legacy: "version")
      *
-     * @var int
+     * @var int One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
-    public $version;
+    public $status;
 
     /**
      * Human readable name of the content type

@@ -85,7 +85,7 @@ class Handler implements BaseContentTypeHandler
      */
     public function deleteGroup( $groupId )
     {
-        // Load type-version combinations which are not in any other group
+        // Load type-status combinations which are not in any other group
         // Delete group assignement
         // Delete all types that have no more groups
         //   Delete all content objects of these types
@@ -113,20 +113,19 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $groupId
      * @return Type[]
      */
-    public function loadContentTypes( $groupId, $version = 0 )
+    public function loadContentTypes( $groupId, $status = 0 )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
 
     /**
      * @param int $contentTypeId
-     * @param int $version
-     * @todo Use constant for $version?
+     * @param int $status
      */
-    public function load( $contentTypeId, $version = 0 )
+    public function load( $contentTypeId, $status = 0 )
     {
         $rows = $this->contentTypeGateway->loadTypeData(
-            $contentTypeId, $version
+            $contentTypeId, $status
         );
 
         $types = $this->mapper->extractTypesFromRows( $rows );
@@ -154,14 +153,14 @@ class Handler implements BaseContentTypeHandler
             $this->contentTypeGateway->insertGroupAssignement(
                 $groupId,
                 $contentType->id,
-                $contentType->version
+                $contentType->status
             );
         }
         foreach ( $contentType->fieldDefinitions as $fieldDef )
         {
             $fieldDef->id = $this->contentTypeGateway->insertFieldDefinition(
                 $contentType->id,
-                $contentType->version,
+                $contentType->status,
                 $fieldDef
             );
         }
@@ -170,18 +169,17 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param mixed $typeId
-     * @param int $version
      * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
      * @return Type
      * @todo Maintain contentclass_name
      */
-    public function update( $typeId, $version, UpdateStruct $contentType )
+    public function update( $typeId, UpdateStruct $contentType )
     {
         $this->contentTypeGateway->updateType(
-            $typeId, $version, $contentType
+            $typeId, Type::STATUS_DRAFT, $contentType
         );
         return $this->load(
-            $typeId, $version
+            $typeId, Type::STATUS_DRAFT
         );
     }
 
@@ -190,16 +188,16 @@ class Handler implements BaseContentTypeHandler
      * @todo Needs to delete all content objects of that type, too.
      * @todo Maintain contentclass_name
      */
-    public function delete( $contentTypeId, $version )
+    public function delete( $contentTypeId, $status )
     {
         $this->contentTypeGateway->deleteGroupAssignementsForType(
-            $contentTypeId, $version
+            $contentTypeId, $status
         );
         $this->contentTypeGateway->deleteFieldDefinitionsForType(
-            $contentTypeId, $version
+            $contentTypeId, $status
         );
         $this->contentTypeGateway->deleteType(
-            $contentTypeId, $version
+            $contentTypeId, $status
         );
 
         // FIXME: Return true only if deletion happened
@@ -209,17 +207,16 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param mixed $userId
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $fromStatus
      * @todo Can be optimized in gateway?
      * @todo $userId becomes only $modifierId or also $creatorId?
      * @todo What about $modified and $created?
      */
-    public function createVersion( $userId, $contentTypeId, $fromVersion, $toVersion )
+    public function createVersion( $userId, $contentTypeId, $fromStatus )
     {
         $createStruct = $this->mapper->createCreateStructFromType(
-            $this->load( $contentTypeId, $fromVersion )
+            $this->load( $contentTypeId, $fromStatus )
         );
-        $createStruct->version = $toVersion;
         $createStruct->modifierId = $userId;
         $createStruct->modified = time();
 
@@ -232,10 +229,10 @@ class Handler implements BaseContentTypeHandler
      * @return Type
      * @todo Can be optimized in gateway?
      */
-    public function copy( $userId, $contentTypeId, $version )
+    public function copy( $userId, $contentTypeId, $status )
     {
         $createStruct = $this->mapper->createCreateStructFromType(
-            $this->load( $contentTypeId, $version )
+            $this->load( $contentTypeId, $status )
         );
         $createStruct->modifierId = $userId;
         $createStruct->modified = time();
@@ -250,14 +247,13 @@ class Handler implements BaseContentTypeHandler
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $version
-     * @param int $version
+     * @param int $status
      * @todo Check if content type is in another group, otherwise delete?
      */
-    public function unlink( $groupId, $contentTypeId, $version )
+    public function unlink( $groupId, $contentTypeId, $status )
     {
         $this->contentTypeGateway->deleteGroupAssignement(
-            $groupId, $contentTypeId, $version
+            $groupId, $contentTypeId, $status
         );
         // FIXME: What is to be returned?
         return true;
@@ -269,10 +265,10 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      */
-    public function link( $groupId, $contentTypeId, $version )
+    public function link( $groupId, $contentTypeId, $status )
     {
         $this->contentTypeGateway->insertGroupAssignement(
-            $groupId, $contentTypeId, $version
+            $groupId, $contentTypeId, $status
         );
         // FIXME: What is to be returned?
         return true;
@@ -281,7 +277,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * Adds a new field definition to an existing Type.
      *
-     * This method creates a new version of the Type with the $fieldDefinition
+     * This method creates a new  of the Type with the $fieldDefinition
      * added. It does not update existing content objects depending on the
      * field (default) values.
      *
@@ -289,17 +285,17 @@ class Handler implements BaseContentTypeHandler
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function addFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition )
+    public function addFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition )
     {
         $fieldDefinition->id = $this->contentTypeGateway->insertFieldDefinition(
-            $contentTypeId, $version, $fieldDefinition
+            $contentTypeId, Type::STATUS_DRAFT, $fieldDefinition
         );
     }
 
     /**
      * Removes a field definition from an existing Type.
      *
-     * This method creates a new version of the Type with the field definition
+     * This method creates a new status of the Type with the field definition
      * referred to by $fieldDefinitionId removed. It does not update existing
      * content objects depending on the field (default) values.
      *
@@ -307,10 +303,10 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $fieldDefinitionId
      * @return boolean
      */
-    public function removeFieldDefinition( $contentTypeId, $version, $fieldDefinitionId )
+    public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId )
     {
         $this->contentTypeGateway->deleteFieldDefinition(
-            $contentTypeId, $version, $fieldDefinitionId
+            $contentTypeId, Type::STATUS_DRAFT, $fieldDefinitionId
         );
         // FIXME: Return true only if deletion happened
         return true;
@@ -319,7 +315,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * This method updates the given $fieldDefinition on a Type.
      *
-     * This method creates a new version of the Type with the updated
+     * This method creates a new status of the Type with the updated
      * $fieldDefinition. It does not update existing content objects depending
      * on the
      * field (default) values.
@@ -328,10 +324,10 @@ class Handler implements BaseContentTypeHandler
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function updateFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition )
+    public function updateFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition )
     {
         $this->contentTypeGateway->updateFieldDefinition(
-            $contentTypeId, $version, $fieldDefinition
+            $contentTypeId, Type::STATUS_DRAFT, $fieldDefinition
         );
     }
 
@@ -350,7 +346,7 @@ class Handler implements BaseContentTypeHandler
      * @todo Is it correct that this refers to a $fieldDefinitionId instead of
      *       a $typeId?
      */
-    public function updateContentObjects( $contentTypeId, $version, $fieldDefinitionId )
+    public function updateContentObjects( $contentTypeId, $status, $fieldDefinitionId )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }

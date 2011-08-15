@@ -186,8 +186,9 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testUpdate()
     {
         $handler = $this->repositoryHandler->ContentTypeHandler();
-        $handler->update( 1, 0, $this->getTypeUpdateStruct() );
-        $obj = $handler->load( 1, 0 );
+        $handler->update( 1, $this->getTypeUpdateStruct() );
+        $this->markTestIncomplete( '@todo: Rewrite to use proposed createDraft api' );
+        $obj = $handler->load( 1, 1 );
         $this->assertTrue( $obj instanceof Type );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( 'article', $obj->identifier );
@@ -328,7 +329,6 @@ class ContentTypeHandlerTest extends HandlerTest
         $struct->description = array( 'eng-GB' => 'Article content type' );
         $struct->identifier = 'article';
         $struct->isContainer = true;
-        $struct->version = 0;
         $struct->initialLanguageId = 2;
         $struct->nameSchema = "<short_title|title>";
         $struct->fieldDefinitions = array();
