@@ -142,6 +142,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param int $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
@@ -155,7 +156,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         );
 
         if ( !$type )
-            return null;
+            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
 
         return $type[0];
     }
@@ -213,11 +214,32 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * Copy a Type incl fields and group-relations from a given status to a new Type with status {@link Type::STATUS_DRAFT}
+     *
+     * New Content Type will have $userId as creator / modifier, created / modified should be updated, new remoteId
+     * and identifier should be appended with '_' and new remoteId or another unique number.
+     *
+     * @param mixed $userId
+     * @param mixed $contentTypeId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
      */
     public function copy( $userId, $contentTypeId, $status )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $type = $this->load( $contentTypeId, $status );
+
+        // @todo Validate $userId
+        $struct = new CreateStruct();
+        foreach ( $struct as $property => $value )
+        {
+            $struct->$property = $type->$property;
+        }
+        $struct->created = $struct->modified = time();
+        $struct->creatorId = $struct->modifierId = $userId;
+        $struct->status = Type::STATUS_DRAFT;
+        $struct->identifier .= '_' . ( $struct->remoteId = md5( uniqid( get_class( $struct ), true ) ) );
+        return $this->create( $struct );
     }
 
     /**

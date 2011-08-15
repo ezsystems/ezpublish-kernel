@@ -137,9 +137,28 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->assertEquals( 'folder', $obj->identifier );
         $this->assertEquals( 1, count( $obj->fieldDefinitions ) );
         $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
+    }
 
-        $obj = $this->repositoryHandler->ContentTypeHandler()->load( 2, 0 );
-        $this->assertNull( $obj );
+    /**
+     * Test load function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::load
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadUnExistingTypeId()
+    {
+        $this->repositoryHandler->ContentTypeHandler()->load( 22, 0 );
+    }
+
+    /**
+     * Test load function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::load
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadUnExistingStatus()
+    {
+        $this->repositoryHandler->ContentTypeHandler()->load( 1, 1 );
     }
 
     /**
@@ -199,12 +218,55 @@ class ContentTypeHandlerTest extends HandlerTest
      * Test delete function
      *
      * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::delete
+     * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDelete()
     {
         $handler = $this->repositoryHandler->ContentTypeHandler();
         $handler->delete( 1, 0 );
         $this->assertNull( $handler->load( 1, 0 ) );
+    }
+
+    /**
+     * Test copy function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::copy
+     */
+    public function testCopy()
+    {
+        $obj = $this->repositoryHandler->ContentTypeHandler()->copy( 10, 1, 0 );
+        $original = $this->repositoryHandler->ContentTypeHandler()->load( 1, 0 );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
+        $this->assertEquals( 2, $obj->id );
+        $this->assertStringStartsWith( 'folder_', $obj->identifier );
+        $this->assertEquals( 10, $obj->creatorId );
+        $this->assertEquals( time(), $obj->created );//ehm
+        $this->assertGreaterThan( $original->created, $obj->created );
+        $this->assertEquals( 1, count( $obj->fieldDefinitions ) );
+        $this->assertEquals( 2, $obj->fieldDefinitions[0]->id );
+        $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
+    }
+
+    /**
+     * Test copy function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::copy
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testCopyNonExistingTypeId()
+    {
+        $this->repositoryHandler->ContentTypeHandler()->copy( 10, 22, 0 );
+    }
+
+    /**
+     * Test copy function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::copy
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testCopyNonExistingStatus()
+    {
+        $this->repositoryHandler->ContentTypeHandler()->copy( 10, 1, 1 );
     }
 
     /**
