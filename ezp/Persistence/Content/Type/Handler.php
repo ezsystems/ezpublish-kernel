@@ -98,7 +98,7 @@ interface Handler
     public function createVersion( $userId, $contentTypeId, $fromStatus );
 
     /**
-     * Copy a Content Type incl fields and groups from a given status to a new Content Type with status {@link Type::STATUS_DRAFT}
+     * Copy a Type incl fields and groups from a given status to a new Type with status {@link Type::STATUS_DRAFT}
      *
      * New Content Type will have $userId as creator / modifier as well as updated created / modified timestamps.
      *
