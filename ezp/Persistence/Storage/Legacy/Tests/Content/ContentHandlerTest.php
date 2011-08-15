@@ -376,6 +376,145 @@ class ContentHandlerTest extends TestCase
         );
     }
 
+    protected function getTestCreateDraftFromVersion()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
+        $handler = $this->getAlmostRealContentHandler();
+        $content = $handler->load( 14, 4 );
+
+        // Build up basic mocks
+        $mapper = new Mapper(
+            $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
+        );
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->any() )
+            ->method( 'toStorage' )
+            ->will( $this->returnValue( new StorageFieldValue() ) );
+
+        $registry
+            ->expects( $this->any() )
+            ->method( 'getConverter' )
+            ->will( $this->returnValue( $converter ) );
+
+        $locationMock   = $this->getLocationHandlerMock();
+        $gatewayMock    = $this->getGatewayMock();
+        $storageRegMock = $this->getStorageRegistryMock();
+        $storageMock    = $this->getMock(
+            'ezp\\Persistence\\Fields\\Storage'
+        );
+
+        $handler = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
+            array( 'load' ),
+            array( $gatewayMock, $locationMock, $mapper, $storageRegMock )
+        );
+
+        // Handler expects load() to be called on itself, where we return a "proper"
+        // content object.
+        $handler
+            ->expects( $this->once() )
+            ->method( 'load' )
+            ->with( 14, 4 )
+            ->will( $this->returnValue( $content ) );
+
+        // Ensure the external storage handler is called properly.
+        $storageRegMock->expects( $this->exactly( 5 ) )
+            ->method( 'getStorage' )
+            ->will(
+                $this->returnValue( $storageMock )
+            );
+
+        $storageMock->expects( $this->exactly( 5 ) )
+            ->method( 'storeFieldData' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content\\FieldValue'
+                )
+            );
+
+        // These are the actually important expectations -- ensuring the
+        // correct methods are called on the mapper.
+        $gatewayMock->expects( $this->once() )
+            ->method( 'insertVersion' )
+            ->with(
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Version' )
+            )->will( $this->returnValue( 2 ) );
+
+        $gatewayMock->expects( $this->exactly( 5 ) )
+            ->method( 'insertNewField' )
+            ->with(
+                $this->isInstanceOf( 'ezp\\Persistence\\Content' ),
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ),
+                $this->isInstanceOf( 'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue' )
+            )->will( $this->returnValue( 23 ) );
+
+        return $handler->createDraftFromVersion( 14, 4 );
+    }
+
+    public static function getCreateDraftFromVersionProperties()
+    {
+        return array(
+            array( 'id', 14 ),
+            array( 'name', 'Administrator User' ),
+            array( 'typeId', 4 ),
+            array( 'sectionId', 2 ),
+            array( 'ownerId', 14 ),
+            array( 'locations', array( 15 ) ),
+            array( 'alwaysAvailable', true ),
+            array( 'remoteId', '1bb4fe25487f05527efa8bfd394cecc7' ),
+        );
+    }
+
+    /**
+     * @dataProvider getCreateDraftFromVersionProperties
+     */
+    public function testCreateDraftFromVersion( $property, $expectation )
+    {
+        $content = $this->getTestCreateDraftFromVersion();
+
+        $this->assertEquals(
+            $expectation,
+            $content->$property
+        );
+    }
+
+    public static function getCreateDraftFromVersionVersionProperties()
+    {
+        return array(
+            array( 'id', 2 ),
+            array( 'versionNo', 5 ),
+            array( 'creatorId', 14 ),
+            array( 'state', 0 ),
+            array( 'contentId', 14 ),
+        );
+    }
+
+    /**
+     * @dataProvider getCreateDraftFromVersionVersionProperties
+     */
+    public function testCreateDraftFromVersionVersionProperties( $property, $expectation )
+    {
+        $content = $this->getTestCreateDraftFromVersion();
+
+        $this->assertEquals(
+            $expectation,
+            $content->version->$property
+        );
+    }
+
+    public function testCreateDraftFromVersionFields()
+    {
+        $content = $this->getTestCreateDraftFromVersion();
+
+        foreach ( $content->version->fields as $field )
+        {
+            $this->assertEquals( 23, $field->id );
+            $this->assertEquals( 5, $field->versionNo );
+        }
+    }
+
     /**
      * Returns a CreateStruct fixture.
      *

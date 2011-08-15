@@ -94,9 +94,6 @@ class Handler implements BaseContentHandler
             $version
         );
 
-        // TODO: Maybe it makes sense to introduce a dedicated
-        // ContentFieldHandler for the legacy storage? Should be checked later,
-        // if this is possible and sensible
         foreach ( $struct->fields as $field )
         {
             $field->versionNo = $version->versionNo;
@@ -129,13 +126,43 @@ class Handler implements BaseContentHandler
      * Copies all fields from $contentId in $srcVersion and creates a new
      * version of the referred Content from it.
      *
+     * Note: When creating a new draft in the old admin interface there will
+     * also be an entry in the `eznode_assignment` created for the draft. This
+     * is ignored in this implementation.
+     *
      * @param int $contentId
      * @param int|bool $srcVersion
      * @return \ezp\Persistence\Content\Content
      */
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
-        throw new Exception( "Not implemented yet." );
+        $content = $this->load( $contentId, $srcVersion );
+
+        // Create new version
+        $version = $this->mapper->createVersionForContent(
+            $content,
+            $content->version->versionNo + 1
+        );
+
+        $version->id = $this->contentGateway->insertVersion(
+            $version
+        );
+
+        foreach ( $content->version->fields as $field )
+        {
+            $field->versionNo = $version->versionNo;
+            $field->id = $this->contentGateway->insertNewField(
+                $content,
+                $field,
+                $this->mapper->convertToStorageValue( $field )
+            );
+            $this->storageRegistry->getStorage( $field->type )
+                ->storeFieldData( $field->id, $field->value );
+            $version->fields[] = $field;
+        }
+
+        $content->version = $version;
+        return $content;
     }
 
 
