@@ -267,6 +267,48 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
+     * @covers ezp\Content\Type\Service::copy
+     */
+    public function testCopy()
+    {
+        $type = $this->service->copy( 10, 1 );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
+        $this->assertStringStartsWith( 'folder_', $type->identifier );
+        $this->assertEquals( 1, count( $type->fields ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
+        // lazy collection tests
+        $this->assertEquals( 1, count( $type->groups ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $type->groups[0] );
+        $this->assertEquals( 1, count( $type->groups[0]->types ) );
+        // newly created type should be draft
+        $drafts = $this->service->loadByGroupId( $type->groups[0]->id, 1 );
+        $this->assertEquals( 1, count( $drafts ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $drafts[0] );
+        $this->assertEquals( $type->id, $drafts[0]->id );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::copy
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testCopyInValidTypeId()
+    {
+        $this->service->copy( 10, 22 );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::copy
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testCopyInValidStatus()
+    {
+        $this->service->copy( 10, 1, 1 );
+    }
+
+    /**
+     * @group contentTypeService
      * @covers ezp\Content\Type\Service::link
      */
     public function testLink()

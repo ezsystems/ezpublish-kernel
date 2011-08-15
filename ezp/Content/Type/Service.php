@@ -65,7 +65,7 @@ class Service extends BaseService
     /**
      * Update a Content Type Group object
      *
-     * @param int $groupId
+     * @param mixed $groupId
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
     public function deleteGroup( $groupId )
@@ -142,7 +142,7 @@ class Service extends BaseService
      * @param int $status
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
-    public function delete( $typeId, $status = 0 )
+    public function delete( $typeId, $status = TypeValue::STATUS_DEFINED )
     {
         $this->handler->contentTypeHandler()->delete( $typeId, $status );
     }
@@ -155,12 +155,9 @@ class Service extends BaseService
      * @return \ezp\Content\Type
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
-    public function load( $typeId, $status = 0 )
+    public function load( $typeId, $status = TypeValue::STATUS_DEFINED )
     {
-        $vo = $this->handler->contentTypeHandler()->load( $typeId, $status );
-        if ( !$vo )
-            throw new NotFound( 'Content\\Type', $typeId );
-        return $this->buildType( $vo );
+        return $this->buildType( $this->handler->contentTypeHandler()->load( $typeId, $status ) );
     }
 
     /**
@@ -170,7 +167,7 @@ class Service extends BaseService
      * @param int $status
      * @return \ezp\Content\Type[]
      */
-    public function loadByGroupId( $groupId, $status = 0 )
+    public function loadByGroupId( $groupId, $status = TypeValue::STATUS_DEFINED )
     {
         $list = $this->handler->contentTypeHandler()->loadContentTypes( $groupId, $status );
         foreach ( $list as $key => $vo )
@@ -189,6 +186,23 @@ class Service extends BaseService
     public function loadByIdentifier( $identifier )
     {
         throw new RuntimeException( "@TODO: Implement" );
+    }
+
+    /**
+     * Copy Type incl fields and groupIds from a given status to a new Type with status {@link TypeValue::STATUS_DRAFT}
+     *
+     * New Type will have $userId as creator / modifier, created / modified should be updated with current time,
+     * updated remoteId and identifier should be appended with '_' + unique string.
+     *
+     * @param mixed $userId
+     * @param mixed $typeId
+     * @param int $status
+     * @return \ezp\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
+     */
+    public function copy( $userId, $typeId, $status = TypeValue::STATUS_DEFINED )
+    {
+        return $this->buildType( $this->handler->contentTypeHandler()->copy( $userId, $typeId, $status ) );
     }
 
     /**
