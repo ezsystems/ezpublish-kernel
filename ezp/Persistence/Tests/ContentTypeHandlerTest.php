@@ -31,7 +31,7 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testCreateGroup()
     {
         $group = $this->repositoryHandler->ContentTypeHandler()->createGroup( $this->getGroupCreateStruct() );
-        $this->assertTrue( $group instanceof Group );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\Group', $group );
         $this->assertEquals( 2, $group->id );
         $this->assertEquals( array( 'eng-GB' => 'Media' ), $group->name );
     }
@@ -88,7 +88,7 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testLoadGroup()
     {
         $obj = $this->repositoryHandler->ContentTypeHandler()->loadGroup( 1 );
-        $this->assertTrue( $obj instanceof Group );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\Group', $obj );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( array( 'eng-GB' => 'Content' ), $obj->name );
     }
@@ -102,7 +102,7 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $list = $this->repositoryHandler->ContentTypeHandler()->loadAllGroups();
         $this->assertEquals( 1, count( $list ) );
-        $this->assertTrue( $list[0] instanceof Group );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\Group', $list[0] );
         $this->assertEquals( 1, $list[0]->id );
         $this->assertEquals( array( 'eng-GB' => 'Content' ), $list[0]->name );
     }
@@ -116,7 +116,7 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $list = $this->repositoryHandler->ContentTypeHandler()->loadContentTypes( 1, 0 );
         $this->assertEquals( 1, count( $list ) );
-        $this->assertTrue( $list[0] instanceof Type );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $list[0] );
         $this->assertEquals( 1, $list[0]->id );
         $this->assertEquals( 'folder', $list[0]->identifier );
 
@@ -132,7 +132,7 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testLoad()
     {
         $obj = $this->repositoryHandler->ContentTypeHandler()->load( 1, 0 );
-        $this->assertTrue( $obj instanceof Type );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( 'folder', $obj->identifier );
         $this->assertEquals( 1, count( $obj->fieldDefinitions ) );
@@ -151,7 +151,7 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $handler = $this->repositoryHandler->ContentTypeHandler();
         $obj = $handler->create( $this->getTypeCreateStruct() );
-        $this->assertTrue( $obj instanceof Type );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
         $this->assertEquals( 2, $obj->id );
         $this->assertEquals( 'article', $obj->identifier );
         $this->assertEquals( "<short_title|title>", $obj->nameSchema );
@@ -170,7 +170,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $struct->fieldDefinitions[] = $field =$this->getTypeFieldDefinition();
 
         $obj = $handler->create( $struct );
-        $this->assertTrue( $obj instanceof Type );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
         $this->assertEquals( 2, $obj->id );
         $this->assertEquals( 'article', $obj->identifier );
         $this->assertEquals( "<short_title|title>", $obj->nameSchema );
@@ -188,7 +188,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $handler = $this->repositoryHandler->ContentTypeHandler();
         $handler->update( 1, 0, $this->getTypeUpdateStruct() );
         $obj = $handler->load( 1, 0 );
-        $this->assertTrue( $obj instanceof Type );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( 'article', $obj->identifier );
         $this->assertEquals( "<short_title|title>", $obj->nameSchema );
