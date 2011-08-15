@@ -45,6 +45,7 @@ class ServiceTest extends BaseServiceTest
         $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $do );
         $this->assertEquals( 0, count( $do->types ) );
         $this->assertEquals( array( 'eng-GB' => "Test" ), $do->name );
+        $this->assertEquals( 2, $do->id );
     }
 
     /**
