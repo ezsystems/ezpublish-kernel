@@ -56,7 +56,7 @@ interface Handler
     public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED );
 
     /**
-     * Load a content type by id and version
+     * Load a content type by id and status
      *
      * @param int $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
@@ -94,12 +94,14 @@ interface Handler
     public function createVersion( $userId, $contentTypeId, $fromStatus, $toStatus );
 
     /**
+     * Copy a Type incl fields and groups from a given status to a new Type with status {@link Type::STATUS_DRAFT}
+     *
+     * New Content Type will have $userId as creator / modifier as well as updated created / modified timestamps.
+     *
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return Type
-     * @todo What does this method do? Create a new Content\Type as a copy? 
-     *       With which data (e.g. identified)?
      */
     public function copy( $userId, $contentTypeId, $status );
 
@@ -109,7 +111,7 @@ interface Handler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
      */
     public function unlink( $groupId, $contentTypeId, $status );
@@ -120,7 +122,7 @@ interface Handler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is already part of group
      */
     public function link( $groupId, $contentTypeId, $status );
