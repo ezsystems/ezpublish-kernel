@@ -139,6 +139,7 @@ interface Handler
      * @param FieldDefinition $fieldDefinition
      * @return FieldDefinition
      * @throws \ezp\Base\Exception\NotFound If type is not found
+     * @todo Add FieldDefintion\CreateStruct?
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
 
@@ -154,6 +155,7 @@ interface Handler
      * @param mixed $fieldDefinitionId
      * @return void
      * @throws \ezp\Base\Exception\NotFound If field is not found
+     * @todo Add FieldDefintion\UpdateStruct?
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId );
 
