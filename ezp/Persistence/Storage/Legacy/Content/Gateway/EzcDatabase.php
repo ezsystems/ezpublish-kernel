@@ -13,6 +13,7 @@ use ezp\Persistence\Storage\Legacy\Content\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content,
+    ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Content\Field;
 
@@ -112,6 +113,37 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Updates an existing version
+     *
+     * @param int|string $version
+     * @param int $versionNo
+     * @param int|string $userId
+     * @return void
+     */
+    public function updateVersion( $version, $versionNo, $userId )
+    {
+        $q = $this->dbHandler->createUpdateQuery();
+        $q->update(
+            $this->dbHandler->quoteTable( 'ezcontentobject_version' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'version' ),
+            $q->bindValue( $versionNo )
+        )->set(
+            $this->dbHandler->quoteColumn( 'modified' ),
+            $q->bindValue( time(), null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'user_id' ),
+            $q->bindValue( $userId, null, \PDO::PARAM_INT )
+        )->where( $q->expr->eq(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $q->bindValue( $version )
+        ) );
+        $q->prepare()->execute();
+
+        return $this->dbHandler->lastInsertId();
+    }
+
+    /**
      * Inserts a new field.
      *
      * Only used when a new content object is created. After that, field IDs
@@ -164,6 +196,46 @@ class EzcDatabase extends Gateway
         $stmt->execute();
 
         return $this->dbHandler->lastInsertId();
+    }
+
+    /**
+     * Updates an existing field
+     *
+     * @param Field $field
+     * @param StorageFieldValue $value
+     * @return void
+     */
+    public function updateField( Field $field, StorageFieldValue $value )
+    {
+        $q = $this->dbHandler->createUpdateQuery();
+        $q->update(
+            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_float' ),
+            $q->bindValue( $value->dataFloat )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_int' ),
+            $q->bindValue( $value->dataInt )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_text' ),
+            $q->bindValue( $value->dataText )
+        )->set(
+            $this->dbHandler->quoteColumn( 'sort_key_int' ),
+            $q->bindValue( $value->sortKeyInt )
+        )->set(
+            $this->dbHandler->quoteColumn( 'sort_key_string' ),
+            $q->bindValue( $value->sortKeyString )
+        )->where( $q->expr->lAnd(
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $q->bindValue( $field->id )
+            ),
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'version' ),
+                $q->bindValue( $field->versionNo )
+            )
+        ) );
+        $q->prepare()->execute();
     }
 
     /**

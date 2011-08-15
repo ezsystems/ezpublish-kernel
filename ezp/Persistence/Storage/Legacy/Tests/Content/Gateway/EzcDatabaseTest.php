@@ -154,6 +154,29 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    public function testUpdateVersion()
+    {
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $time        = time();
+        $version     = $this->getVersionFixture();
+        $version->id = $gateway->insertVersion( $version );
+
+        $gateway->updateVersion( $version->id, 2, 14 );
+
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 2, 14 ) ),
+            $query
+                ->select( array( 'version', 'user_id' ) )
+                ->from( 'ezcontentobject_version' )
+                ->where( $query->expr->lAnd(
+                    $query->expr->eq( 'id', $query->bindValue( $version->id ) ),
+                    $query->expr->gte( 'modified', $time )
+                ) )
+        );
+    }
+
     /**
      * Returns a Version fixture
      *
@@ -222,6 +245,51 @@ class EzcDatabaseTest extends TestCase
                         'sort_key_int',
                         'sort_key_string',
                         'version',
+                    )
+                )->from( 'ezcontentobject_attribute' )
+        );
+    }
+
+    public function testUpdateField()
+    {
+        $content = $this->getContentFixture();
+        $content->id = 2342;
+
+        $field = $this->getFieldFixture();
+        $value = $this->getStorageValueFixture();
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $field->id = $gateway->insertNewField( $content, $field, $value );
+
+        $newValue = new StorageFieldValue( array(
+            'dataFloat'     => 124.42,
+            'dataInt'       => 142,
+            'dataText'      => 'New text',
+            'sortKeyInt'    => 123,
+            'sortKeyString' => 'new_text',
+        ) );
+
+        $gateway->updateField( $field, $newValue );
+
+        $this->assertQueryResult(
+            array(
+                array(
+                    'data_float'               => '124.42',
+                    'data_int'                 => '142',
+                    'data_text'                => 'New text',
+                    'sort_key_int'             => '123',
+                    'sort_key_string'          => 'new_text',
+                )
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select(
+                    array(
+                        'data_float',
+                        'data_int',
+                        'data_text',
+                        'sort_key_int',
+                        'sort_key_string',
                     )
                 )->from( 'ezcontentobject_attribute' )
         );
