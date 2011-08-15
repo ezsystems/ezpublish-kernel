@@ -317,6 +317,159 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
+     * Test addFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::addFieldDefinition
+     */
+    public function testAddFieldDefinition()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $field = $this->getTypeFieldDefinition();
+        $vo = $handler->addFieldDefinition( 1, 0, $field );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\FieldDefinition', $vo );
+        $type = $handler->load( 1, 0 );
+        $this->assertEquals( 2, count( $type->fieldDefinitions ) );
+    }
+
+    /**
+     * Test addFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::addFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testAddFieldDefinitionInvalidTypeId()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $field = $this->getTypeFieldDefinition();
+        $handler->addFieldDefinition( 22, 0, $field );
+    }
+
+    /**
+     * Test addFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::addFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testAddFieldDefinitionInvalidStatus()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $field = $this->getTypeFieldDefinition();
+        $handler->addFieldDefinition( 1, 1, $field );
+    }
+
+    /**
+     * Test removeFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::removeFieldDefinition
+     */
+    public function testRemoveFieldDefinitionDefinition()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler->removeFieldDefinition( 1, 0, 1 );
+        $type = $handler->load( 1, 0 );
+        $this->assertEquals( 0, count( $type->fieldDefinitions ) );
+    }
+
+    /**
+     * Test removeFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::removeFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testRemoveFieldDefinitionInvalidTypeId()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler->removeFieldDefinition( 22, 0, 1 );
+    }
+
+    /**
+     * Test removeFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::removeFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testRemoveFieldDefinitionInvalidStatus()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler->removeFieldDefinition( 1, 1, 1 );
+    }
+
+    /**
+     * Test removeFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::removeFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testRemoveFieldDefinitionInvalidFieldId()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler->removeFieldDefinition( 1, 0, 22 );
+    }
+
+    /**
+     * Test updateFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::updateFieldDefinition
+     */
+    public function testUpdateFieldDefinitionDefinition()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $type = $handler->load( 1, 0 );
+        $fieldDefinition = $type->fieldDefinitions[0];
+        $fieldDefinition->name = $fieldDefinition->name + array( 'nor-NB' => 'Navn' );
+        $handler->updateFieldDefinition( 1, 0, $fieldDefinition );
+        $type = $handler->load( 1, 0 );
+        $this->assertEquals( 1, count( $type->fieldDefinitions ) );
+        $this->assertEquals( array( 'eng-GB' => 'Name', 'nor-NB' => 'Navn' ), $type->fieldDefinitions[0]->name );
+    }
+
+    /**
+     * Test updateFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::updateFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUpdateFieldDefinitionDefinitionInvalidTypeId()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $type = $handler->load( 1, 0 );
+        $fieldDefinition = $type->fieldDefinitions[0];
+        $fieldDefinition->name = $fieldDefinition->name + array( 'nor-NB' => 'Navn' );
+        $handler->updateFieldDefinition( 22, 0, $fieldDefinition );
+    }
+
+    /**
+     * Test updateFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::updateFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUpdateFieldDefinitionDefinitionInvalidStatus()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $type = $handler->load( 1, 0 );
+        $fieldDefinition = $type->fieldDefinitions[0];
+        $fieldDefinition->name = $fieldDefinition->name + array( 'nor-NB' => 'Navn' );
+        $handler->updateFieldDefinition( 1, 1, $fieldDefinition );
+    }
+
+    /**
+     * Test updateFieldDefinition function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::updateFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUpdateFieldDefinitionDefinitionInvalidFieldDefinitionId()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $type = $handler->load( 1, 0 );
+        $fieldDefinition = $type->fieldDefinitions[0];
+        $fieldDefinition->id = 22;
+        $fieldDefinition->name = $fieldDefinition->name + array( 'nor-NB' => 'Navn' );
+        $handler->updateFieldDefinition( 1, 0, $fieldDefinition );
+    }
+
+    /**
      * @return \ezp\Persistence\Content\Type\CreateStruct
      */
     private function getTypeCreateStruct()

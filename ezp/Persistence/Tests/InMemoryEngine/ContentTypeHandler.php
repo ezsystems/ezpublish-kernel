@@ -279,27 +279,77 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * Adds a new field definition to an existing Type.
+     *
+     * This method creates a new version of the Type with the $fieldDefinition
+     * added. It does not update existing content objects depending on the
+     * field (default) values.
+     *
+     * @param mixed $contentTypeId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @param FieldDefinition $fieldDefinition
+     * @return FieldDefinition
+     * @throws \ezp\Base\Exception\NotFound If type is not found
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
+        if ( !isset( $list[0] ) )
+            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
+
+        $fieldDefinitionArr = (array) $fieldDefinition;
+        $fieldDefinitionArr['_typeId'] = $contentTypeId;
+        $fieldDefinitionArr['_status'] = $status;
+
+        return $this->backend->create( 'Content\\Type\\FieldDefinition', $fieldDefinitionArr );
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * Removes a field definition from an existing Type.
+     *
+     * This method creates a new version of the Type with the field definition
+     * referred to by $fieldDefinitionId removed. It does not update existing
+     * content objects depending on the field (default) values.
+     *
+     * @param mixed $contentTypeId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @param mixed $fieldDefinitionId
+     * @return void
+     * @throws \ezp\Base\Exception\NotFound If field is not found
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->deleteByMatch( 'Content\\Type\\FieldDefinition', array(
+                                                                           '_typeId' => $contentTypeId,
+                                                                           '_status' => $status,
+                                                                           'id' => $fieldDefinitionId,
+                                                                         ) );
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * This method updates the given $fieldDefinition on a Type.
+     *
+     * This method creates a new version of the Type with the updated
+     * $fieldDefinition. It does not update existing content objects depending
+     * on the
+     * field (default) values.
+     *
+     * @param mixed $contentTypeId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @param FieldDefinition $fieldDefinition
+     * @return void
+     * @throws \ezp\Base\Exception\NotFound If field is not found
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $fieldDefinitionArr = (array) $fieldDefinition;
+        $updated = $this->backend->updateByMatch( 'Content\\Type\\FieldDefinition', array(
+                                                                           '_typeId' => $contentTypeId,
+                                                                           '_status' => $status,
+                                                                           'id' => $fieldDefinition->id,
+                                                                         ), $fieldDefinitionArr );
+        if ( !$updated )
+            throw new NotFound( 'Content\\Type\\FieldDefinition', $fieldDefinition->id );
     }
 
     /**
