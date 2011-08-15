@@ -50,20 +50,19 @@ interface Handler
 
     /**
      * @param mixed $groupId
-     * @param int $version ContentType version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type[]
      */
-    public function loadContentTypes( $groupId, $version = 0 );
+    public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED );
 
     /**
      * Load a content type by id and version
      *
-     * @todo Use constant for $version?
      * @param int $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type
      */
-    public function load( $contentTypeId, $version = 0 );
+    public function load( $contentTypeId, $status = Type::STATUS_DEFINED );
 
     /**
      * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
@@ -73,58 +72,58 @@ interface Handler
 
     /**
      * @param mixed $typeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
      */
-    public function update( $typeId, $version, UpdateStruct $contentType );
+    public function update( $typeId, $status, UpdateStruct $contentType );
 
     /**
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
-    public function delete( $contentTypeId, $version );
+    public function delete( $contentTypeId, $status );
 
     /**
      * @param mixed $userId
      * @param mixed $contentTypeId
-     * @param int $fromVersion
-     * @param int $toVersion
+     * @param int $fromStatus One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @param int $toStatus One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @todo What does this method do? Create a new version of the content type 
-     *       from $version? Is it then expected to return the Type object?
+     *       from $status? Is it then expected to return the Type object?
      */
-    public function createVersion( $userId, $contentTypeId, $fromVersion, $toVersion );
+    public function createVersion( $userId, $contentTypeId, $fromStatus, $toStatus );
 
     /**
      * @param mixed $userId
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return Type
      * @todo What does this method do? Create a new Content\Type as a copy? 
      *       With which data (e.g. identified)?
      */
-    public function copy( $userId, $contentTypeId, $version );
+    public function copy( $userId, $contentTypeId, $status );
 
     /**
      * Unlink a content type group from a content type
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $version 0|1
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @throws \ezp\Base\Exception\NotFound If group or type is not found
      * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
      */
-    public function unlink( $groupId, $contentTypeId, $version );
+    public function unlink( $groupId, $contentTypeId, $status );
 
     /**
      * Link a content type group with a content type
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @throws \ezp\Base\Exception\NotFound If group or type is not found
      * @throws \ezp\Base\Exception\BadRequest If type is already part of group
      */
-    public function link( $groupId, $contentTypeId, $version );
+    public function link( $groupId, $contentTypeId, $status );
 
     /**
      * Adds a new field definition to an existing Type.
@@ -134,11 +133,11 @@ interface Handler
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function addFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition );
+    public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
 
     /**
      * Removes a field definition from an existing Type.
@@ -148,11 +147,11 @@ interface Handler
      * content objects depending on the field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param mixed $fieldDefinitionId
      * @return boolean
      */
-    public function removeFieldDefinition( $contentTypeId, $version, $fieldDefinitionId );
+    public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId );
 
     /**
      * This method updates the given $fieldDefinition on a Type.
@@ -163,11 +162,11 @@ interface Handler
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    public function updateFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition );
+    public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition );
 
     /**
      * Update content objects
@@ -180,11 +179,11 @@ interface Handler
      * Flags the content type as updated.
      *
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return void
      * @todo Is it correct that this refers to a $fieldDefinitionId instead of 
      *       a $typeId?
      */
-    public function updateContentObjects( $contentTypeId, $version, $fieldDefinitionId );
+    public function updateContentObjects( $contentTypeId, $status, $fieldDefinitionId );
 }
 ?>

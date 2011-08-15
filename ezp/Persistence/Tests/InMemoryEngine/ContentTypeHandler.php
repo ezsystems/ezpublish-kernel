@@ -51,7 +51,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * @param \ezp\Persistence\Content\Type\Group\CreateStruct $group
+     * @return \ezp\Persistence\Content\Type\Group
      */
     public function createGroup( GroupCreateStruct $group )
     {
@@ -60,7 +61,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
      */
     public function updateGroup( GroupUpdateStruct $group )
     {
@@ -69,7 +70,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * @param mixed $groupId
+     * @todo Throw exception if group is not found, also if group contains types
      */
     public function deleteGroup( $groupId )
     {
@@ -91,7 +93,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
 
             if ( $update )
             {
-                // @todo If groupIds is empty, content type and content of that type should be deleted
+                // @todo If groupIds is empty, content type and content of that type should be deleted?
                 $this->backend->update( 'Content\\Type',
                                         $type->id,
                                         array( 'groupIds' => $type->groupIds ) );
@@ -100,15 +102,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
-     */
-    public function loadAllGroups()
-    {
-        return $this->backend->find( 'Content\\Type\\Group', array() );
-    }
-
-    /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * @param int $groupId
+     * @return \ezp\Persistence\Content\Type\Group
      */
     public function loadGroup( $groupId )
     {
@@ -116,7 +111,17 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * @return \ezp\Persistence\Content\Type\Group[]
+     */
+    public function loadAllGroups()
+    {
+        return $this->backend->find( 'Content\\Type\\Group', array() );
+    }
+
+    /**
+     * @param mixed $groupId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @return \ezp\Persistence\Content\Type[]
      */
     public function loadContentTypes( $groupId, $status = 0 )
     {
@@ -131,7 +136,11 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * Load a content type by id and version
+     *
+     * @param int $contentTypeId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @return \ezp\Persistence\Content\Type
      */
     public function load( $contentTypeId, $status = 0 )
     {
@@ -151,7 +160,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
+     * @return \ezp\Persistence\Content\Type
      */
     public function create( CreateStruct $contentType )
     {
@@ -169,7 +179,9 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * @param mixed $typeId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
      */
     public function update( $typeId, $status, UpdateStruct $contentType )
     {
@@ -180,7 +192,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * @param mixed $contentTypeId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
     public function delete( $contentTypeId, $status )
     {
@@ -211,7 +224,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $status 0|1
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @throws \ezp\Base\Exception\NotFound If group or type is not found
      * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
      */
@@ -242,7 +255,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $status
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @throws \ezp\Base\Exception\NotFound If group or type is not found
      * @throws \ezp\Base\Exception\BadRequest If type is already part of group
      */
