@@ -309,7 +309,7 @@ class EzcDatabaseTest extends TestCase
     {
         $type = new Type();
 
-        $type->version = 0;
+        $type->status = 0;
         $type->name = array(
             'always-available' => 'eng-US',
             'eng-US' => 'Folder',

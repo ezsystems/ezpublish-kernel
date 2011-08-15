@@ -24,7 +24,7 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
 /**
  * @see ezp\Persistence\Content\Type\Handler
  *
- * @version //autogentag//
+ * @status //autogentag//
  */
 class ContentTypeHandler implements ContentTypeHandlerInterface
 {

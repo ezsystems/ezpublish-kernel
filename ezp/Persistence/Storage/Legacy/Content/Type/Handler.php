@@ -277,7 +277,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * Adds a new field definition to an existing Type.
      *
-     * This method creates a new  of the Type with the $fieldDefinition
+     * This method creates a new status of the Type with the $fieldDefinition
      * added. It does not update existing content objects depending on the
      * field (default) values.
      *
