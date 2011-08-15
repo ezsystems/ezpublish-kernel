@@ -10,6 +10,7 @@
 namespace ezp\Content\Type;
 use ezp\Base\Service as BaseService,
     ezp\Base\Exception\NotFound,
+    ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Collection\LazyIdList,
     ezp\Base\Collection\Lazy,
     ezp\Base\Collection\Type as TypeCollection,
@@ -28,6 +29,7 @@ use ezp\Base\Service as BaseService,
 /**
  * Content Service, extends repository with content specific operations
  *
+ * @todo Figure out which methods should manipulate object provided or add doc on having to re fetch object.
  */
 class Service extends BaseService
 {
@@ -190,28 +192,74 @@ class Service extends BaseService
     }
 
     /**
-     * Link a content type to a group ( add a group to a type )
+     * Un-Link a content type from a group ( remove a group from a type )
      *
-     * @param Type $contentType
+     * @param Type $type
      * @param Group $group
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
      * @throws \ezp\Base\Exception\BadRequest If $groupId is not an group on type or is the last one
      */
-    public function unlink( Type $contentType, Group $group )
+    public function unlink( Type $type, Group $group )
     {
-        $this->handler->contentTypeHandler()->unlink( $group->id, $contentType->id, $contentType->status );
+        $this->handler->contentTypeHandler()->unlink( $group->id, $type->id, $type->status );
     }
 
     /**
      * Link a content type to a group ( add a group to a type )
      *
-     * @param Type $contentType
+     * @param Type $type
      * @param Group $group
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
      */
-    public function link( Type $contentType, Group $group  )
+    public function link( Type $type, Group $group  )
     {
-        $this->handler->contentTypeHandler()->link( $group->id, $contentType->id, $contentType->status );
+        $this->handler->contentTypeHandler()->link( $group->id, $type->id, $type->status );
+    }
+
+    /**
+     * Adds a new field definition to an existing Type.
+     *
+     * @param Type $type
+     * @param FieldDefinition $field
+     * @throws \ezp\Base\Exception\InvalidArgumentType If field has id already
+     * @throws \ezp\Base\Exception\NotFound If type is not found
+     */
+    public function addFieldDefinition( Type $type, FieldDefinition $field  )
+    {
+        if ( $field->id )
+            throw new InvalidArgumentType( '$field->id', 'false' );
+
+        $this->handler->contentTypeHandler()->addFieldDefinition( $type->id,
+                                                                  $type->status,
+                                                                  $field->getState( 'properties' ) );
+    }
+
+    /**
+     * Remove a field definition from an existing Type.
+     *
+     * @param Type $type
+     * @param FieldDefinition $field
+     * @throws \ezp\Base\Exception\NotFound If field/type is not found
+     */
+    public function removeFieldDefinition( Type $type, FieldDefinition $field  )
+    {
+        $this->handler->contentTypeHandler()->removeFieldDefinition( $type->id,
+                                                                     $type->status,
+                                                                     $field->id );
+    }
+
+    /**
+     * Remove a field definition from an existing Type.
+     *
+     * @param Type $type
+     * @param FieldDefinition $field
+     * @throws \ezp\Base\Exception\NotFound If field/type is not found
+     */
+    public function updateFieldDefinition( Type $type, FieldDefinition $field  )
+    {
+        $this->handler->contentTypeHandler()->updateFieldDefinition( $type->id,
+                                                                     $type->status,
+                                                                     $field->getState( 'properties' ) );
     }
 
     /**

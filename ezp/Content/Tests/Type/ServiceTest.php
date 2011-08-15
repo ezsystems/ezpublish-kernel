@@ -396,4 +396,131 @@ class ServiceTest extends BaseServiceTest
         $existingGroup = $this->service->loadGroup( 1 );
         $this->service->unlink( $type, $existingGroup );
     }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::addFieldDefinition
+     */
+    public function testAddFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $field = new FieldDefinition( $type, 'ezstring' );
+        $field->name = $field->description = array( 'eng-GB' => 'Test' );
+        $field->defaultValue = $field->fieldGroup = '';
+        $field->identifier = 'test';
+        $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
+        $this->service->addFieldDefinition( $type, $field );
+
+        $type = $this->service->load( 1, 0 );
+        $this->assertEquals( 2, count( $type->fields ) );
+        $this->assertEquals( 'test', $type->fields[1]->identifier );
+        $this->assertEquals( 2, $type->fields[1]->id );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::addFieldDefinition
+     * @expectedException \ezp\Base\Exception\InvalidArgumentType
+     */
+    public function testAddFieldDefinitionWithExistingFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $this->service->addFieldDefinition( $type, $type->fields[0] );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::addFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testAddFieldDefinitionWithUnExistingType()
+    {
+        $type = $this->service->load( 1, 0 );
+        $this->service->delete( $type->id, $type->status );
+
+        $field = new FieldDefinition( $type, 'ezstring' );
+        $field->name = $field->description = array( 'eng-GB' => 'Test' );
+        $field->defaultValue = $field->fieldGroup = '';
+        $field->identifier = 'test';
+        $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
+        $this->service->addFieldDefinition( $type, $field );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::removeFieldDefinition
+     */
+    public function testRemoveFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+
+        $type = $this->service->load( 1, 0 );
+        $this->assertEquals( 0, count( $type->fields ) );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::removeFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testRemoveFieldDefinitionWithUnExistingFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::removeFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testRemoveFieldDefinitionWithUnExistingType()
+    {
+        $type = $this->service->load( 1, 0 );
+        $this->service->delete( $type->id, $type->status );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::updateFieldDefinition
+     */
+    public function testUpdateFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $type->fields[0]->name = array( 'eng-GB' => 'New name' );
+        $this->service->updateFieldDefinition( $type, $type->fields[0] );
+
+        $type = $this->service->load( 1, 0 );
+        $this->assertEquals( 1, count( $type->fields ) );
+        $this->assertEquals( array( 'eng-GB' => 'New name' ), $type->fields[0]->name );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::updateFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUpdateFieldDefinitionWithUnExistingFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $type->fields[0]->name = array( 'eng-GB' => 'New name' );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+        $this->service->updateFieldDefinition( $type, $type->fields[0] );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::updateFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUpdateFieldDefinitionWithUnExistingType()
+    {
+        $type = $this->service->load( 1, 0 );
+        $type->fields[0]->name = array( 'eng-GB' => 'New name' );
+        $this->service->delete( $type->id, $type->status );
+        $this->service->updateFieldDefinition( $type, $type->fields[0] );
+    }
 }
