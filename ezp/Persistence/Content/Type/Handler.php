@@ -90,8 +90,7 @@ interface Handler
     /**
      * @param mixed $userId
      * @param mixed $contentTypeId
-     * @param int $fromVersion
-     * @param int $toVersion
+     * @param int $fromStatus One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @todo What does this method do? Create a new version of the content type 
      *       from $status? Is it then expected to return the Type object?
      * @todo Define a more specific api that is more synced with actually allowed content type workflow
