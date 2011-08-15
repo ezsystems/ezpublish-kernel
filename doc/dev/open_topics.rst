@@ -73,16 +73,3 @@ Does not follow same format as other name/description fields that have several l
 
 Conclusion
 ~~~~~~~~~~
-
-
-VO / create struct / update struct OOP
---------------------------------------
-
-Summary
-~~~~~~~
-This objects have 95% similarities and should probably extend each other for code/doc reuse.
-Eg: VO (and update struct) could if possible extend createstruct and in most cases just add $id.
-NOTE: If done then api's that allow create struct should be checked to make sure it does not fail if it gets a VO.
-
-Conclusion
-~~~~~~~~~~
