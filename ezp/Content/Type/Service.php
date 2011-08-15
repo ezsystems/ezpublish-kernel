@@ -192,28 +192,26 @@ class Service extends BaseService
     /**
      * Link a content type to a group ( add a group to a type )
      *
-     * @param int $groupId
-     * @param int $typeId
-     * @param int $status
+     * @param Type $contentType
+     * @param Group $group
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
-     * @throws \ezp\Base\Exception\BadRequest If $groupId is not an id on type or is the last one
+     * @throws \ezp\Base\Exception\BadRequest If $groupId is not an group on type or is the last one
      */
-    public function unlink( $groupId, $typeId, $status )
+    public function unlink( Type $contentType, Group $group )
     {
-        $this->handler->contentTypeHandler()->unlink( $groupId, $typeId, $status );
+        $this->handler->contentTypeHandler()->unlink( $group->id, $contentType->id, $contentType->status );
     }
 
     /**
      * Link a content type to a group ( add a group to a type )
      *
-     * @param int $groupId
-     * @param int $typeId
-     * @param int $status
+     * @param Type $contentType
+     * @param Group $group
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
      */
-    public function link( $groupId, $typeId, $status )
+    public function link( Type $contentType, Group $group  )
     {
-        $this->handler->contentTypeHandler()->link( $groupId, $typeId, $status );
+        $this->handler->contentTypeHandler()->link( $group->id, $contentType->id, $contentType->status );
     }
 
     /**

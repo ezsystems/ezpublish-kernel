@@ -270,18 +270,19 @@ class ServiceTest extends BaseServiceTest
      */
     public function testLink()
     {
-        $do = new Group();
-        $do->created = $do->modified = time();
-        $do->creatorId = $do->modifierId = 14;
-        $do->name = $do->description = array( 'eng-GB' => 'Test' );
-        $do->identifier = 'test';
-        $do = $this->service->createGroup( $do );
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+        $newGroup = $this->service->createGroup( $newGroup );
+        $type = $this->service->load( 1, 0 );
 
-        $this->service->link( $do->id, 1, 0 );
+        $this->service->link( $type, $newGroup );
 
         $type = $this->service->load( 1, 0 );
         $this->assertEquals( 2, count( $type->groups ) );
-        $this->assertEquals( $do->id, $type->groups[1]->id );
+        $this->assertEquals( $newGroup->id, $type->groups[1]->id );
         $this->assertEquals( array( 'eng-GB' => 'Test' ), $type->groups[1]->name );
         $this->assertEquals( 'test', $type->groups[1]->identifier );
     }
@@ -293,7 +294,14 @@ class ServiceTest extends BaseServiceTest
      */
     public function testLinkGroupNotFound()
     {
-        $this->service->link( 64, 1, 0 );
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+
+        $type = $this->service->load( 1, 0 );
+        $this->service->link( $type, $newGroup );
     }
 
     /**
@@ -303,7 +311,10 @@ class ServiceTest extends BaseServiceTest
      */
     public function testLinkTypeNotFound()
     {
-        $this->service->link( 1, 2, 0 );
+        $type = $this->service->load( 1, 0 );
+        $existingGroup = $this->service->loadGroup( 1 );
+        $this->service->delete( 1, 0 );
+        $this->service->link( $type, $existingGroup );
     }
 
     /**
@@ -313,7 +324,9 @@ class ServiceTest extends BaseServiceTest
      */
     public function testLinkTypeAlreadyPartOfGroup()
     {
-        $this->service->link( 1, 1, 0 );
+        $type = $this->service->load( 1, 0 );
+        $existingGroup = $this->service->loadGroup( 1 );
+        $this->service->link( $type, $existingGroup );
     }
 
     /**
@@ -322,19 +335,22 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUnLink()
     {
-        $do = new Group();
-        $do->created = $do->modified = time();
-        $do->creatorId = $do->modifierId = 14;
-        $do->name = $do->description = array( 'eng-GB' => 'Test' );
-        $do->identifier = 'test';
-        $do = $this->service->createGroup( $do );
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+        $newGroup = $this->service->createGroup( $newGroup );
 
-        $this->service->link( $do->id, 1, 0 );
-        $this->service->unlink( 1, 1, 0 );
+        $type = $this->service->load( 1, 0 );
+        $existingGroup = $this->service->loadGroup( 1 );
+
+        $this->service->link( $type, $newGroup );
+        $this->service->unlink( $type, $existingGroup );
 
         $type = $this->service->load( 1, 0 );
         $this->assertEquals( 1, count( $type->groups ) );
-        $this->assertEquals( $do->id, $type->groups[0]->id );
+        $this->assertEquals( $newGroup->id, $type->groups[0]->id );
     }
 
     /**
@@ -344,7 +360,10 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUnLinkTypeNotFound()
     {
-        $this->service->unlink( 1, 2, 0 );
+        $type = $this->service->load( 1, 0 );
+        $existingGroup = $this->service->loadGroup( 1 );
+        $this->service->delete( 1, 0 );
+        $this->service->unlink( $type, $existingGroup );
     }
 
     /**
@@ -354,7 +373,15 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUnLinkTypeNotPartOfGroup()
     {
-        $this->service->unlink( 2, 1, 0 );
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+        $newGroup = $this->service->createGroup( $newGroup );
+
+        $type = $this->service->load( 1, 0 );
+        $this->service->unlink( $type, $newGroup );
     }
 
     /**
@@ -364,6 +391,8 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUnLinkLastGroup()
     {
-        $this->service->unlink( 1, 1, 0 );
+        $type = $this->service->load( 1, 0 );
+        $existingGroup = $this->service->loadGroup( 1 );
+        $this->service->unlink( $type, $existingGroup );
     }
 }
