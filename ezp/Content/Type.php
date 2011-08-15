@@ -17,7 +17,7 @@ use ezp\Base\Model,
  *
  *
  * @property-read mixed $id
- * @property-read int $version
+ * @property-read int $status
  * @property string $name
  * @property string $description
  * @property string $identifier
@@ -41,7 +41,7 @@ class Type extends Model
      */
     protected $readWriteProperties = array(
         'id' => false,
-        'version' => false,
+        'status' => false,
         'name' => true,
         'description' => true,
         'identifier' => true,
@@ -80,7 +80,7 @@ class Type extends Model
      */
     public function __construct()
     {
-        $this->properties = new TypeValue( array( 'version' => 0 ) );
+        $this->properties = new TypeValue( array( 'status' => TypeValue::STATUS_DRAFT ) );
         $this->fields = new TypeCollection( 'ezp\\Content\\Type\\FieldDefinition' );
         $this->groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
     }

@@ -380,7 +380,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->logicalAnd(
                     $this->attributeEqualTo(
-                        'version', 1
+                        'status', 1
                     ),
                     $this->attributeEqualTo(
                         'modifierId', 42
@@ -624,7 +624,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     protected function getContenTypeCreateStructFixture()
     {
         $struct = new CreateStruct();
-        $struct->version = 1;
+        $struct->status = 1;
         $struct->groupIds = array(
             42,
         );

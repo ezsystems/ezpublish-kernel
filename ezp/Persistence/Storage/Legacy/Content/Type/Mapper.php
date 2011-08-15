@@ -96,7 +96,7 @@ class Mapper
         $type = new Type();
 
         $type->id = (int)$row['ezcontentclass_id'];
-        $type->version = (int)$row['ezcontentclass_version'];
+        $type->status = (int)$row['ezcontentclass_version'];
         $type->name = unserialize( $row['ezcontentclass_serialized_name_list'] );
         $type->description = unserialize( $row['ezcontentclass_serialized_description_list'] );
         $type->identifier = $row['ezcontentclass_identifier'];
@@ -153,7 +153,7 @@ class Mapper
         $type = new Type();
 
         $type->name = $createStruct->name;
-        $type->version = $createStruct->version;
+        $type->status = $createStruct->status;
         $type->description = $createStruct->description;
         $type->identifier = $createStruct->identifier;
         $type->created = $createStruct->created;
@@ -182,7 +182,7 @@ class Mapper
         $createStruct = new CreateStruct();
 
         $createStruct->name = $type->name;
-        $createStruct->version = $type->version;
+        $createStruct->status = $type->status;
         $createStruct->description = $type->description;
         $createStruct->identifier = $type->identifier;
         $createStruct->created = $type->created;

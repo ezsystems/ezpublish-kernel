@@ -32,7 +32,7 @@ class CreateStruct extends ValueObject
      *
      * @var int
      */
-    public $version;
+    public $status;
 
     /**
      * Human readable description of the content type

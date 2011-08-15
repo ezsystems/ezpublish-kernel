@@ -24,7 +24,7 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
 /**
  * @see ezp\Persistence\Content\Type\Handler
  *
- * @version //autogentag//
+ * @status //autogentag//
  */
 class ContentTypeHandler implements ContentTypeHandlerInterface
 {
@@ -118,14 +118,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function loadContentTypes( $groupId, $version = 0 )
+    public function loadContentTypes( $groupId, $status = 0 )
     {
         return $this->backend->find(
             'Content\\Type',
-            array( 'groupIds' => $groupId, 'version' => $version ),
+            array( 'groupIds' => $groupId, 'status' => $status ),
             array( 'fieldDefinitions' => array(
                 'type' => 'Content\\Type\\FieldDefinition',
-                'match' => array( '_typeId' => 'id',  '_version' => 'version' ) )
+                'match' => array( '_typeId' => 'id',  '_status' => 'status' ) )
             )
         );
     }
@@ -133,14 +133,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function load( $contentTypeId, $version = 0 )
+    public function load( $contentTypeId, $status = 0 )
     {
         $type = $this->backend->find(
             'Content\\Type',
-            array( 'id' => $contentTypeId, 'version' => $version ),
+            array( 'id' => $contentTypeId, 'status' => $status ),
             array( 'fieldDefinitions' => array(
                 'type' => 'Content\\Type\\FieldDefinition',
-                'match' => array( '_typeId' => 'id',  '_version' => 'version' ) )
+                'match' => array( '_typeId' => 'id',  '_status' => 'status' ) )
             )
         );
 
@@ -162,7 +162,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         {
             $contentTypeObj->fieldDefinitions[] = $this->backend->create(
                 'Content\\Type\\FieldDefinition',
-                array( '_typeId' => $contentTypeObj->id, '_version' => $contentTypeObj->version ) + (array) $field
+                array( '_typeId' => $contentTypeObj->id, '_status' => $contentTypeObj->status ) + (array) $field
             );
         }
         return $contentTypeObj;
@@ -171,23 +171,23 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function update( $typeId, $version, UpdateStruct $contentType )
+    public function update( $typeId, $status, UpdateStruct $contentType )
     {
         $contentTypeArr = (array) $contentType;
         $this->backend->updateByMatch( 'Content\\Type',
-                                       array( 'id' => $typeId, 'version' => $version ),
+                                       array( 'id' => $typeId, 'status' => $status ),
                                        $contentTypeArr );
     }
 
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function delete( $contentTypeId, $version )
+    public function delete( $contentTypeId, $status )
     {
         $this->backend->deleteByMatch( 'Content\\Type',
-                                       array( 'id' => $contentTypeId, 'version' => $version ) );
+                                       array( 'id' => $contentTypeId, 'status' => $status ) );
         $this->backend->deleteByMatch( 'Content\\Type\\FieldDefinition',
-                                           array( '_typeId' => $contentTypeId, '_version' => $version ) );
+                                           array( '_typeId' => $contentTypeId, '_status' => $status ) );
     }
 
     /**
@@ -201,7 +201,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function copy( $userId, $contentTypeId, $version )
+    public function copy( $userId, $contentTypeId, $status )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
@@ -211,15 +211,15 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $version 0|1
+     * @param int $status 0|1
      * @throws \ezp\Base\Exception\NotFound If group or type is not found
      * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
      */
-    public function unlink( $groupId, $contentTypeId, $version )
+    public function unlink( $groupId, $contentTypeId, $status )
     {
-        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'version' => $version ) );
+        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
         if ( !isset( $list[0] ) )
-            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and version '{$version}" );
+            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
 
         $type = $list[0];
         if ( !in_array( $groupId, $type->groupIds ) )
@@ -233,7 +233,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
             throw new NotFound( 'Content\\Type\\Group', $groupId );
 
         $this->backend->updateByMatch( 'Content\\Type',
-                            array( 'id' => $contentTypeId, 'version' => $version ),
+                            array( 'id' => $contentTypeId, 'status' => $status ),
                             array( 'groupIds' => array_values( array_diff( $type->groupIds, array( $groupId ) ) ) ) );
     }
 
@@ -242,15 +242,15 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $version
+     * @param int $status
      * @throws \ezp\Base\Exception\NotFound If group or type is not found
      * @throws \ezp\Base\Exception\BadRequest If type is already part of group
      */
-    public function link( $groupId, $contentTypeId, $version )
+    public function link( $groupId, $contentTypeId, $status )
     {
-        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'version' => $version ) );
+        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
         if ( !isset( $list[0] ) )
-            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and version '{$version}" );
+            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
 
         $type = $list[0];
         if ( in_array( $groupId, $type->groupIds ) )
@@ -260,14 +260,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
             throw new NotFound( 'Content\\Type\\Group', $groupId );
 
         $this->backend->updateByMatch( 'Content\\Type',
-                               array( 'id' => $contentTypeId, 'version' => $version ),
+                               array( 'id' => $contentTypeId, 'status' => $status ),
                                array( 'groupIds' => array_merge( $type->groupIds, array( $groupId ) ) ) );
     }
 
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function addFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition )
+    public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
@@ -275,7 +275,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function removeFieldDefinition( $contentTypeId, $version, $fieldDefinitionId )
+    public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
@@ -283,7 +283,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function updateFieldDefinition( $contentTypeId, $version, FieldDefinition $fieldDefinition )
+    public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }
@@ -291,7 +291,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @see ezp\Persistence\Content\Type\Handler
      */
-    public function updateContentObjects( $contentTypeId, $version, $fieldDefinitionId )
+    public function updateContentObjects( $contentTypeId, $status, $fieldDefinitionId )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }

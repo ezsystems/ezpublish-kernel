@@ -117,7 +117,7 @@ class MapperTest extends TestCase
             'always-available' => 'eng-US',
             'eng-US' => 'Folder',
         );
-        $struct->version = 0;
+        $struct->status = 0;
         $struct->description = array(
             0 => '',
             'always-available' => false,
@@ -184,7 +184,7 @@ class MapperTest extends TestCase
             'always-available' => 'eng-US',
             'eng-US' => 'Folder',
         );
-        $type->version = 0;
+        $type->status = 0;
         $type->description = array(
             0 => '',
             'always-available' => false,
@@ -240,7 +240,7 @@ class MapperTest extends TestCase
             // "random" sample
             array(
                 'id' => 1,
-                'version' => 0,
+                'status' => 0,
                 'name' => array(
                     'always-available' => 'eng-US',
                     'eng-US'           => 'Folder'

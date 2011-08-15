@@ -328,7 +328,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $struct->description = array( 'eng-GB' => 'Article content type' );
         $struct->identifier = 'article';
         $struct->isContainer = true;
-        $struct->version = 0;
+        $struct->status = 0;
         $struct->initialLanguageId = 2;
         $struct->nameSchema = "<short_title|title>";
         $struct->fieldDefinitions = array();

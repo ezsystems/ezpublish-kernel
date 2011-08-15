@@ -130,32 +130,32 @@ class Service extends BaseService
     {
         $struct = new UpdateStruct();
         $this->fillStruct( $struct, $contentType );
-        $this->handler->contentTypeHandler()->update( $contentType->id, $contentType->version, $struct  );
+        $this->handler->contentTypeHandler()->update( $contentType->id, $contentType->status, $struct  );
     }
 
     /**
      * Delete a Content Type object
      *
      * @param int $contentTypeId
-     * @param int $version
+     * @param int $status
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
-    public function delete( $contentTypeId, $version = 0 )
+    public function delete( $contentTypeId, $status = 0 )
     {
-        $this->handler->contentTypeHandler()->delete( $contentTypeId, $version );
+        $this->handler->contentTypeHandler()->delete( $contentTypeId, $status );
     }
 
     /**
      * Get a Content Type object by id
      *
      * @param int $contentTypeId
-     * @param int $version
+     * @param int $status
      * @return \ezp\Content\Type
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
-    public function load( $contentTypeId, $version = 0 )
+    public function load( $contentTypeId, $status = 0 )
     {
-        $vo = $this->handler->contentTypeHandler()->load( $contentTypeId, $version );
+        $vo = $this->handler->contentTypeHandler()->load( $contentTypeId, $status );
         if ( !$vo )
             throw new NotFound( 'Content\\Type', $contentTypeId );
         return $this->buildType( $vo );
@@ -165,12 +165,12 @@ class Service extends BaseService
      * Get Content Type objects by group Id
      *
      * @param int $groupId
-     * @param int $version
+     * @param int $status
      * @return \ezp\Content\Type[]
      */
-    public function loadByGroupId( $groupId, $version = 0 )
+    public function loadByGroupId( $groupId, $status = 0 )
     {
-        $list = $this->handler->contentTypeHandler()->loadContentTypes( $groupId, $version );
+        $list = $this->handler->contentTypeHandler()->loadContentTypes( $groupId, $status );
         foreach ( $list as $key => $vo )
             $list[$key] = $this->buildType( $vo );
 
@@ -194,13 +194,13 @@ class Service extends BaseService
      *
      * @param int $groupId
      * @param int $typeId
-     * @param int $version
+     * @param int $status
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
      * @throws \ezp\Base\Exception\BadRequest If $groupId is not an id on type or is the last one
      */
-    public function unlink( $groupId, $typeId, $version )
+    public function unlink( $groupId, $typeId, $status )
     {
-        $this->handler->contentTypeHandler()->unlink( $groupId, $typeId, $version );
+        $this->handler->contentTypeHandler()->unlink( $groupId, $typeId, $status );
     }
 
     /**
@@ -208,12 +208,12 @@ class Service extends BaseService
      *
      * @param int $groupId
      * @param int $typeId
-     * @param int $version
+     * @param int $status
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
      */
-    public function link( $groupId, $typeId, $version )
+    public function link( $groupId, $typeId, $status )
     {
-        $this->handler->contentTypeHandler()->link( $groupId, $typeId, $version );
+        $this->handler->contentTypeHandler()->link( $groupId, $typeId, $status );
     }
 
     /**
