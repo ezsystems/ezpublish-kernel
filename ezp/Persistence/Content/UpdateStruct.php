@@ -16,10 +16,14 @@ use ezp\Persistence\ValueObject;
 class UpdateStruct extends ValueObject
 {
     /**
-     * @todo Which version is this?
-     * @var int
+     * @var int|string
      */
     public $id;
+
+    /**
+     * @var int
+     */
+    public $versionNo;
 
     /**
      * @var int
