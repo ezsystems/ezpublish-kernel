@@ -13,6 +13,9 @@ use ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue;
 
 /**
+ * Interface for setting field type data.
+ *
+ * Methods in this interface are called by storage engine.
  */
 interface Storage
 {
