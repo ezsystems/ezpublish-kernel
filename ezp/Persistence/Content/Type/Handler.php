@@ -61,6 +61,7 @@ interface Handler
      * @param int $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If type with provided status is not found
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED );
 
@@ -94,14 +95,16 @@ interface Handler
     public function createVersion( $userId, $contentTypeId, $fromStatus, $toStatus );
 
     /**
-     * Copy a Type incl fields and groups from a given status to a new Type with status {@link Type::STATUS_DRAFT}
+     * Copy a Type incl fields and group-relations from a given status to a new Type with status {@link Type::STATUS_DRAFT}
      *
-     * New Content Type will have $userId as creator / modifier as well as updated created / modified timestamps.
+     * New Content Type will have $userId as creator / modifier, created / modified should be updated, new remoteId
+     * and identifier should be appended with '_' and new remoteId or another unique number.
      *
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @return Type
+     * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
      */
     public function copy( $userId, $contentTypeId, $status );
 
