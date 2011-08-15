@@ -109,8 +109,9 @@ interface Handler
      *
      * @param mixed $groupId
      * @param mixed $contentTypeId
-     * @param int $version
-     * @todo Throw exception if last group on content type (hence, it should be deleted instead)
+     * @param int $version 0|1
+     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
      */
     public function unlink( $groupId, $contentTypeId, $version );
 
@@ -120,6 +121,8 @@ interface Handler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $version
+     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @throws \ezp\Base\Exception\BadRequest If type is already part of group
      */
     public function link( $groupId, $contentTypeId, $version );
 
