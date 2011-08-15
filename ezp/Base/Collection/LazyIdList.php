@@ -20,6 +20,7 @@ use ezp\Base\Collection,
  *
  * Takes a list of primary id's as input, these are loaded one by one on demand.
  *
+ * @todo Remove this in favour of using array/collection with proxy objects to avoid getIterator "mess"
  */
 class LazyIdList extends ArrayObject implements Collection
 {
@@ -59,6 +60,26 @@ class LazyIdList extends ArrayObject implements Collection
         $this->service = $service;
         $this->method = $method;
         parent::__construct( $ids );
+    }
+
+    /**
+     * Overrides getIterator to lazy load items
+     *
+     * @internal
+     * @return object
+     */
+    public function getIterator()
+    {
+        $fn = $this->method;
+        foreach ( $this->getArrayCopy() as $index => $value )
+        {
+            if ( $value instanceof $this->type )
+                continue;
+
+            $obj = $this->service->$fn( $value );
+            $this->offsetSet( $index, $obj );
+        }
+        return parent::getIterator();
     }
 
     /**

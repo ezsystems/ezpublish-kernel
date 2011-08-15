@@ -35,7 +35,7 @@ class Lazy extends TypeCollection
      *
      * @var mixed
      */
-    protected $id;
+    protected $primary;
 
     /**
      * Method to use on the service to load the object
@@ -52,13 +52,13 @@ class Lazy extends TypeCollection
      * @throws InvalidArgumentType If elements contains item of wrong type
      * @param string $type
      * @param Service $service
-     * @param mixed $id Primary id to do lookup on
+     * @param mixed $primary Primary key to do lookup on
      * @param string $method Optional, defines which function on handler to call, 'load' by default.
      */
-    public function __construct( $type, Service $service, $id, $method = 'load' )
+    public function __construct( $type, Service $service, $primary, $method = 'load' )
     {
         $this->service = $service;
-        $this->id = $id;
+        $this->primary = $primary;
         $this->method = $method;
         parent::__construct( $type );
     }
@@ -70,15 +70,27 @@ class Lazy extends TypeCollection
      */
     protected function load()
     {
-        if ( $this->id === false )
+        if ( $this->primary === false )
             return;
         $fn = $this->method;
-        $this->exchangeArray( $this->service->$fn( $this->id ) );
-        $this->id = false;// signal that loading is done
+        $this->exchangeArray( $this->service->$fn( $this->primary ) );
+        $this->primary = false;// signal that loading is done
     }
 
     /**
-     * Overrides offsetGet to lazy load item
+     * Overrides getIterator to lazy load items
+     *
+     * @internal
+     * @return object
+     */
+    public function getIterator()
+    {
+        $this->load();
+        return parent::getIterator();
+    }
+
+    /**
+     * Overrides offsetGet to lazy load items
      *
      * @internal
      * @param string|int $index
@@ -91,7 +103,7 @@ class Lazy extends TypeCollection
     }
 
     /**
-     * Overrides offsetExists to lazy load item
+     * Overrides offsetExists to lazy load items
      *
      * @internal
      * @param string|int $index
@@ -104,7 +116,7 @@ class Lazy extends TypeCollection
     }
 
     /**
-     * Overrides offsetUnset to lazy load item
+     * Overrides offsetUnset to lazy load items
      *
      * @internal
      * @param string|int $index
@@ -116,7 +128,7 @@ class Lazy extends TypeCollection
     }
 
     /**
-     * Overrides offsetSet to check type and allow if correct
+     * Overrides offsetSet to lazy load items
      *
      * @internal
      * @throws InvalidArgumentType On wrong type
