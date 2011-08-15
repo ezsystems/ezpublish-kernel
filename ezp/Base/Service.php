@@ -54,8 +54,7 @@ abstract class Service
      */
     protected function fillStruct( ValueObject $struct, Model $do, array $skipProperties = array() )
     {
-        $state = $do->getState();
-        $vo = $state['properties'];
+        $vo = $do->getState( 'properties' );
         foreach ( $struct as $property => $value )
         {
             // skip property if mentioned in $skipProperties
