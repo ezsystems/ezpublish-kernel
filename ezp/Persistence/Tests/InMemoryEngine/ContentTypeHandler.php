@@ -25,6 +25,7 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
  * @see ezp\Persistence\Content\Type\Handler
  *
  * @status //autogentag//
+ * @todo Validate $status arguments
  */
 class ContentTypeHandler implements ContentTypeHandlerInterface
 {
@@ -123,7 +124,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type[]
      */
-    public function loadContentTypes( $groupId, $status = 0 )
+    public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED )
     {
         return $this->backend->find(
             'Content\\Type',
@@ -136,13 +137,13 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * Load a content type by id and version
+     * Load a content type by id and status
      *
      * @param int $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type
      */
-    public function load( $contentTypeId, $status = 0 )
+    public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
         $type = $this->backend->find(
             'Content\\Type',
@@ -225,7 +226,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
      */
     public function unlink( $groupId, $contentTypeId, $status )
@@ -256,7 +257,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is already part of group
      */
     public function link( $groupId, $contentTypeId, $status )
