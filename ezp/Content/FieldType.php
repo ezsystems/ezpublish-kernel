@@ -81,9 +81,9 @@ abstract class FieldType
     /**
      * Internal value of field type.
      *
-     * This value is the value which can be passed on to the persistence interface.
+     * This value is the value which can be passed on to the persistence layer.
      * Ultimately the field value is packaged inside a {@link ezp\Persistence\Content\FieldValue}
-     * for persistence purposes via the {@link ezp\Persistence\Fields\Storage} interface.
+     * for persistence purposes.
      *
      * @var mixed
      */
