@@ -103,15 +103,15 @@ class Service extends BaseService
     /**
      * Create a Content Type object
      *
-     * @param \ezp\Content\Type $contentType
+     * @param \ezp\Content\Type $type
      * @return \ezp\Content\Type
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
      */
-    public function create( Type $contentType )
+    public function create( Type $type )
     {
         $struct = new CreateStruct();
-        $this->fillStruct( $struct, $contentType, array( 'fieldDefinitions' ) );
-        foreach ( $contentType->fields as $field )
+        $this->fillStruct( $struct, $type, array( 'fieldDefinitions' ) );
+        foreach ( $type->fields as $field )
         {
             $struct->fieldDefinitions[] = $field->getState( 'properties' );
         }
@@ -122,42 +122,42 @@ class Service extends BaseService
     /**
      * Update a Content Type Group object
      *
-     * @param \ezp\Content\Type $contentType
+     * @param \ezp\Content\Type $type
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
-    public function update( Type $contentType )
+    public function update( Type $type )
     {
         $struct = new UpdateStruct();
-        $this->fillStruct( $struct, $contentType );
-        $this->handler->contentTypeHandler()->update( $contentType->id, $contentType->status, $struct  );
+        $this->fillStruct( $struct, $type );
+        $this->handler->contentTypeHandler()->update( $type->id, $type->status, $struct  );
     }
 
     /**
      * Delete a Content Type object
      *
-     * @param int $contentTypeId
+     * @param int $typeId
      * @param int $status
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
-    public function delete( $contentTypeId, $status = 0 )
+    public function delete( $typeId, $status = 0 )
     {
-        $this->handler->contentTypeHandler()->delete( $contentTypeId, $status );
+        $this->handler->contentTypeHandler()->delete( $typeId, $status );
     }
 
     /**
      * Get a Content Type object by id
      *
-     * @param int $contentTypeId
+     * @param int $typeId
      * @param int $status
      * @return \ezp\Content\Type
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
-    public function load( $contentTypeId, $status = 0 )
+    public function load( $typeId, $status = 0 )
     {
-        $vo = $this->handler->contentTypeHandler()->load( $contentTypeId, $status );
+        $vo = $this->handler->contentTypeHandler()->load( $typeId, $status );
         if ( !$vo )
-            throw new NotFound( 'Content\\Type', $contentTypeId );
+            throw new NotFound( 'Content\\Type', $typeId );
         return $this->buildType( $vo );
     }
 
