@@ -282,5 +282,88 @@ class ServiceTest extends BaseServiceTest
         $type = $this->service->load( 1, 0 );
         $this->assertEquals( 2, count( $type->groups ) );
         $this->assertEquals( $do->id, $type->groups[1]->id );
+        $this->assertEquals( array( 'eng-GB' => 'Test' ), $type->groups[1]->name );
+        $this->assertEquals( 'test', $type->groups[1]->identifier );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::link
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLinkGroupNotFound()
+    {
+        $this->service->link( 64, 1, 0 );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::link
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLinkTypeNotFound()
+    {
+        $this->service->link( 1, 2, 0 );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::link
+     * @expectedException \ezp\Base\Exception\BadRequest
+     */
+    public function testLinkTypeAlreadyPartOfGroup()
+    {
+        $this->service->link( 1, 1, 0 );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::unlink
+     */
+    public function testUnLink()
+    {
+        $do = new Group();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do = $this->service->createGroup( $do );
+
+        $this->service->link( $do->id, 1, 0 );
+        $this->service->unlink( 1, 1, 0 );
+
+        $type = $this->service->load( 1, 0 );
+        $this->assertEquals( 1, count( $type->groups ) );
+        $this->assertEquals( $do->id, $type->groups[0]->id );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::unlink
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUnLinkTypeNotFound()
+    {
+        $this->service->unlink( 1, 2, 0 );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::unlink
+     * @expectedException \ezp\Base\Exception\BadRequest
+     */
+    public function testUnLinkTypeNotPartOfGroup()
+    {
+        $this->service->unlink( 2, 1, 0 );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::unlink
+     * @expectedException \ezp\Base\Exception\BadRequest
+     */
+    public function testUnLinkLastGroup()
+    {
+        $this->service->unlink( 1, 1, 0 );
     }
 }

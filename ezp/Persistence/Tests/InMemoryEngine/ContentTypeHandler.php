@@ -18,6 +18,7 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
     ezp\Persistence\Content\Type\Group,
     ezp\Base\Exception\NotFound,
+    ezp\Base\Exception\BadRequest,
     RuntimeException;
 
 /**
@@ -206,15 +207,44 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * Unlink a content type group from a content type
+     *
+     * @param mixed $groupId
+     * @param mixed $contentTypeId
+     * @param int $version 0|1
+     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
      */
     public function unlink( $groupId, $contentTypeId, $version )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'version' => $version ) );
+        if ( !isset( $list[0] ) )
+            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and version '{$version}" );
+
+        $type = $list[0];
+        if ( !in_array( $groupId, $type->groupIds ) )
+            throw new BadRequest( "group:{$groupId}", "groupIds on Type:{$contentTypeId}" );
+
+        if ( !isset( $type->groupIds[1] ) )
+            throw new BadRequest( 'groups', "Type: {$contentTypeId}.\n"
+                                          . "Can not remove last Group: {$groupId}, delete Type instead" );
+
+        if ( !$this->backend->load('Content\\Type\\Group', $groupId ) )
+            throw new NotFound( 'Content\\Type\\Group', $groupId );
+
+        $this->backend->updateByMatch( 'Content\\Type',
+                            array( 'id' => $contentTypeId, 'version' => $version ),
+                            array( 'groupIds' => array_values( array_diff( $type->groupIds, array( $groupId ) ) ) ) );
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * Link a content type group with a content type
+     *
+     * @param mixed $groupId
+     * @param mixed $contentTypeId
+     * @param int $version
+     * @throws \ezp\Base\Exception\NotFound If group or type is not found
+     * @throws \ezp\Base\Exception\BadRequest If type is already part of group
      */
     public function link( $groupId, $contentTypeId, $version )
     {
@@ -222,12 +252,16 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         if ( !isset( $list[0] ) )
             throw new NotFound( 'Content\\Type', "{$contentTypeId}' and version '{$version}" );
 
+        $type = $list[0];
+        if ( in_array( $groupId, $type->groupIds ) )
+            throw new BadRequest( "group:{$groupId}", "groupIds on Type:{$contentTypeId}" );
+
         if ( !$this->backend->load('Content\\Type\\Group', $groupId ) )
             throw new NotFound( 'Content\\Type\\Group', $groupId );
 
         $this->backend->updateByMatch( 'Content\\Type',
                                array( 'id' => $contentTypeId, 'version' => $version ),
-                               array( 'groupIds' => array_merge( $list[0]->groupIds, array( $groupId ) ) ) );
+                               array( 'groupIds' => array_merge( $type->groupIds, array( $groupId ) ) ) );
     }
 
     /**

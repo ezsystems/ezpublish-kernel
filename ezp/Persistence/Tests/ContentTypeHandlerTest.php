@@ -245,6 +245,78 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
+     * Test link function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::link
+     * @expectedException \ezp\Base\Exception\BadRequest
+     */
+    public function testLinkExistingGroupLink()
+    {
+        $this->repositoryHandler->contentTypeHandler()->link( 1, 1, 0 );
+    }
+
+    /**
+     * Test unlink function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::unlink
+     */
+    public function testUnLink()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $group = $this->getGroupCreateStruct();
+        $vo = $handler->createGroup( $group );
+        $handler->link( $vo->id, 1, 0 );
+        $handler->unlink( 1, 1, 0 );
+        $type = $handler->load( 1, 0 );
+        $this->assertEquals( array( $vo->id ), $type->groupIds );
+    }
+
+    /**
+     * Test unlink function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::unlink
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @todo Will have to insert broken data to be able to test this (a group type is part of that does not exist)
+     */
+    /*public function testUnLinkMissingGroup()
+    {
+        $this->repositoryHandler->contentTypeHandler()->unlink( 64, 1, 0 );
+    }*/
+
+    /**
+     * Test unlink function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::unlink
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUnLinkMissingType()
+    {
+        $this->repositoryHandler->contentTypeHandler()->unlink( 1, 64, 0 );
+    }
+
+    /**
+     * Test unlink function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::unlink
+     * @expectedException \ezp\Base\Exception\BadRequest
+     */
+    public function testUnLinkNotInGroup()
+    {
+        $this->repositoryHandler->contentTypeHandler()->unlink( 2, 1, 0 );
+    }
+
+    /**
+     * Test unlink function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::unlink
+     * @expectedException \ezp\Base\Exception\BadRequest
+     */
+    public function testUnLinkLastGroup()
+    {
+        $this->repositoryHandler->contentTypeHandler()->unlink( 1, 1, 0 );
+    }
+
+    /**
      * @return \ezp\Persistence\Content\Type\CreateStruct
      */
     private function getTypeCreateStruct()

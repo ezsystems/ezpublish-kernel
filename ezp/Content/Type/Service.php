@@ -196,6 +196,20 @@ class Service extends BaseService
      * @param int $typeId
      * @param int $version
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
+     * @throws \ezp\Base\Exception\BadRequest If $groupId is not an id on type or is the last one
+     */
+    public function unlink( $groupId, $typeId, $version )
+    {
+        $this->handler->contentTypeHandler()->unlink( $groupId, $typeId, $version );
+    }
+
+    /**
+     * Link a content type to a group ( add a group to a type )
+     *
+     * @param int $groupId
+     * @param int $typeId
+     * @param int $version
+     * @throws \ezp\Base\Exception\NotFound If type or group is not found
      */
     public function link( $groupId, $typeId, $version )
     {
