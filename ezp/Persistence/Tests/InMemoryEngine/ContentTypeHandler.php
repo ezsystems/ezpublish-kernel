@@ -103,7 +103,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @param int $groupId
+     * @param mixed $groupId
      * @return \ezp\Persistence\Content\Type\Group
      */
     public function loadGroup( $groupId )
@@ -139,7 +139,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * Load a content type by id and status
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found

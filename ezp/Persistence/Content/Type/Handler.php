@@ -38,7 +38,7 @@ interface Handler
     public function deleteGroup( $groupId );
 
     /**
-     * @param int $groupId
+     * @param mixed $groupId
      * @return \ezp\Persistence\Content\Type\Group
      */
     public function loadGroup( $groupId );
@@ -58,7 +58,7 @@ interface Handler
     /**
      * Load a content type by id and status
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If type with provided status is not found
