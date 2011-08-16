@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content;
-use ezp\Content\FieldType\FieldSettings;
+use ezp\Content\FieldType\FieldSettings,
+    ezp\Persistence\Content\FieldValue;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -223,4 +224,16 @@ abstract class FieldType
      */
     abstract public function getHandler();
 
+    /**
+     * Method to populate the FieldValue struct for field types.
+     *
+     * This method is used by the business layer to populate the value object
+     * for field type data.
+     *
+     * @internal
+     * @abstract
+     * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
+     * @return void
+     */
+    abstract public function setFieldValue( FieldValue $valueStruct );
 }
