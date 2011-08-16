@@ -22,6 +22,7 @@ use ezp\Base\Model,
  *
  * @property-read int $id
  * @property-read int $versionNo
+ * @property-read mixed $contentId
  * @property-read int $state
  * @property-read \ezp\Content $content
  * @property int $creatorId
@@ -57,6 +58,7 @@ class Version extends Model implements Observer
         'fields' => false,
         "state" => false,
         'content' => false,
+        "contentId" => false,
     );
 
     /**
