@@ -129,7 +129,7 @@ class Version extends Model implements Observer
      */
     public function __toString()
     {
-        return $this->id . ' ('  . $this->version . ')';
+        return $this->id . ' ('  . $this->versionNo . ')';
     }
 
     /**
