@@ -60,13 +60,13 @@ class TextLine extends FieldType
     }
 
     /**
-     * Returns the string value.
+     * This field type does not have a handler object.
      *
-     * @return string
+     * @return void
      */
-    public function getValue()
+    public function getHandler()
     {
-        return $this->inputValue;
+        return;
     }
 
     /**
