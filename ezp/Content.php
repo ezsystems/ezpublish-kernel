@@ -14,6 +14,7 @@ use ezp\Base\Model,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Content\Translation,
     ezp\Content\Type,
+    ezp\Content\Location,
     ezp\Content\Section,
     ezp\Content\Proxy,
     ezp\Content\Version,
@@ -29,7 +30,7 @@ use ezp\Base\Model,
  * @property-read int $id The Content's ID, automatically assigned by the persistence layer
  * @property-read int $currentVersion The Content's current version
  * @property-read string $remoteId The Content's remote identifier (custom identifier for the object)
- * @property-read string $name The Content's name
+ * @property string $name The Content's name
  * @property-read bool $alwaysAvailable The Content's always available flag
  * @property-read int status The Content's status, as one of the ezp\Content::STATUS_* constants
  * @property-read \ezp\Content\Type contentType The Content's type
@@ -82,7 +83,7 @@ class Content extends Model
         'id' => false,
         'currentVersion' => false,
         'status' => false,
-        'name' => false,
+        'name' => true, // @todo: Make readOnly and generate on store event from attributes based on type nameScheme
         'ownerId' => true,
         'relations' => false,
         'reversedRelations' => false,
@@ -176,10 +177,9 @@ class Content extends Model
      */
     public function __construct( Type $contentType, Locale $mainLocale )
     {
-        $this->properties = new ContentValue;
+        $this->properties = new ContentValue( array( 'typeId' => $contentType->id ) );
         /*
-        @FIXME where is this property going to be stored?
-        $this->creationDate = new DateTime();
+        @TODO Make sure all dynamic properties writes to value object if scalar value (creationDate (int)-> properties->created )
         */
         $this->mainLocale = $mainLocale;
         $this->versions = new TypeCollection( 'ezp\\Content\\Version' );
@@ -263,6 +263,7 @@ class Content extends Model
     protected function setSection( Section $section )
     {
         $this->section = $section;
+        $this->properties->sectionId = $section->id;
     }
 
     /**
