@@ -15,6 +15,7 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Locale,
     ezp\Content,
     ezp\Content\Location,
+    ezp\Content\Version,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
     ezp\Persistence\ValueObject,
@@ -115,6 +116,33 @@ class Service extends BaseService
     public function delete( Content $content )
     {
         $this->handler->contentHandler()->delete( $content->id );
+    }
+
+    /**
+     * List versions of a $content
+     *
+     * @param Content $content
+     * @return \ezp\Content\Version[]
+     */
+    public function listVersions( Content $content )
+    {
+        // @FIXME: should the return be an array or some sort of collection?
+        $list = array();
+
+        foreach ( $this->handler->contentHandler()->listVersions( $content->id ) as $versionVO )
+        {
+            $version = new Version( $content, new Locale( "eng-GB" ) );
+            $version->setState(
+                array(
+                    "properties" => $versionVO,
+                    // @FIXME: should probably be a collection
+                    "fields" => array(),
+                )
+            );
+            $list[] = $version;
+        }
+
+        return $list;
     }
 
     /**

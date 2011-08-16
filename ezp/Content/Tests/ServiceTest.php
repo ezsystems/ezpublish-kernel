@@ -11,6 +11,7 @@ namespace ezp\Content\Tests;
 use ezp\Content,
     ezp\Content\Location,
     ezp\Content\Type,
+    ezp\Content\Version,
     ezp\Content\Tests\BaseServiceTest,
     ezp\Base\Locale,
     ezp\Base\Exception\NotFound,
@@ -136,7 +137,64 @@ class ServiceTest extends BaseServiceTest
     }
 
     /**
+     * Test the Content Service listVersions operation
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::listVersions
+     */
+    public function testListVersions()
+    {
+        $content = $this->service->load( 1 );
+        $versions = $this->service->listVersions( $content );
+        $this->assertEquals( 2, count( $versions ) );
+        $foundVersions = array();
+        foreach ( $versions as $version )
+        {
+            $foundVersions[$version->id] = true;
+            $this->assertEquals( 1, $version->contentId );
+            $this->assertEquals( 14, $version->creatorId );
+            $this->assertEquals( $version->id, $version->versionNo );
+
+            if ( $version->id == 1 )
+            {
+                $this->assertEquals( 1310792400, $version->modified );
+                $this->assertEquals( 1310792400, $version->created );
+                $this->assertEquals( 1, $version->state );
+            }
+            else if ( $version->id == 2 )
+            {
+                $this->assertEquals( 1310793400, $version->modified );
+                $this->assertEquals( 1310793400, $version->created );
+                $this->assertEquals( 0, $version->state );
+            }
+        }
+        $this->assertEquals( array( 1 => true, 2 => true), $foundVersions, "The versions returned is not correct" );
+    }
+
+    /**
+     * Test the Content Service listVersions operation
+     * with a wrong Content argument
+     *
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @group contentService
+     * @covers \ezp\Content\Service::listVersions
+     */
+    public function testListVersionsNotExisting()
+    {
+        $content = new Content( new Type, new Locale( "eng-GB" ) );
+        $contentValue = new ContentValue;
+        $contentValue->id = 42;
+        $content->setState(
+            array(
+                "properties" => $contentValue,
+            )
+        );
+        $versions = $this->service->listVersions( $content );
+    }
+
+    /**
      * Test the Content Service delete operation
+     *
      * @group contentService
      * @covers \ezp\Content\Service::delete
      */
