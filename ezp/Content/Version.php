@@ -13,16 +13,22 @@ use ezp\Base\Model,
     ezp\Base\Observer,
     ezp\Base\Observable,
     ezp\Content,
-    ezp\Content\Field\Collection;
+    ezp\Content\Field\Collection,
+    ezp\Persistence\Content\Version as VersionValue;
 
 /**
  * This class represents a Content Version
  *
  *
  * @property-read int $id
- * @property-read int $version
+ * @property-read int $versionNo
+ * @property-read int $state
+ * @property-read \ezp\Content $content
  * @property int $userId
  * @property int $creatorId
+ * @property int $created
+ * @property int $modified
+ * @property \ezp\Base\Locale $locale
  * @property-read ContentField[] $fields An hash structure of fields
  */
 class Version extends Model implements Observer
@@ -44,13 +50,14 @@ class Version extends Model implements Observer
      */
     protected $readWriteProperties = array(
         'id' => false,
-        'version' => false,
+        'versionNo' => false,
         'userId' => true,
         'creatorId' => true,
         'created' => true,
         'modified' => true,
         'locale' => true,
         'fields' => false,
+        "state" => false,
         'content' => false,
     );
 
@@ -64,37 +71,7 @@ class Version extends Model implements Observer
     /**
      * @var int
      */
-    protected $id = 0;
-
-    /**
-     * @var int
-     */
-    protected $version = 0;
-
-    /**
-     * @var int
-     */
     protected $userId = 0;
-
-    /**
-     * @var int
-     */
-    protected $creatorId = 0;
-
-    /**
-     * @var int
-     */
-    protected $created = 0;
-
-    /**
-     * @var int
-     */
-    protected $modified = 0;
-
-    /**
-     * @var int
-     */
-    protected $status = 0;
 
     /**
      * @var Field[]
@@ -122,6 +99,7 @@ class Version extends Model implements Observer
      */
     public function __construct( Content $content, Locale $locale )
     {
+        $this->properties = new VersionValue;
         $this->content = $content;
         $this->locale = $locale;
         $this->fields = new Collection( $this );
