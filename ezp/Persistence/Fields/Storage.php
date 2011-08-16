@@ -13,20 +13,12 @@ use ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue;
 
 /**
+ * Interface for setting field type data.
+ *
+ * Methods in this interface are called by storage engine.
  */
 interface Storage
 {
-    /**
-     * Business layer set method.
-     *
-     * This method is used in the business layer to set the $field values from
-     * $data.
-     *
-     * @param array $data
-     * @param Field $field
-     */
-    public function setValue( array $data, Field $field );
-
     /**
      * Stores $value for $fieldId in an external data source.
      *

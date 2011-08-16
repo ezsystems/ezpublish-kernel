@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content;
-use ezp\Content\FieldType\FieldSettings;
+use ezp\Content\FieldType\FieldSettings,
+    ezp\Persistence\Content\FieldValue;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -26,6 +27,8 @@ use ezp\Content\FieldType\FieldSettings;
  *
  * Field types are primed and pre-configured with the Field Definitions found in
  * Content Types.
+ *
+ * @todo Merge and optimize concepts for settings, validator data and field type properties.
  */
 abstract class FieldType
 {
@@ -69,6 +72,13 @@ abstract class FieldType
     protected $fieldSettings;
 
     /**
+     * Values for usage in validators.
+     *
+     * @var FieldSettings
+     */
+    protected $validatorData;
+
+    /**
      * The setting keys which are available on this field type.
      *
      * The key is the setting name, and the value is the default value for given
@@ -79,26 +89,20 @@ abstract class FieldType
     protected $allowedSettings = array();
 
     /**
-     * Internal value of field type.
+     * Validators which are supported for this field type.
      *
-     * This value is the value which can be passed on to the persistence interface.
-     * Ultimately the field value is packaged inside a {@link ezp\Persistence\Content\FieldValue}
-     * for persistence purposes via the {@link ezp\Persistence\Fields\Storage} interface.
+     * Key is the name of supported validators, value is an array of stored settings.
+     *
+     * @var array
+     */
+    protected $allowedValidators = array();
+
+    /**
+     * Value of field type.
      *
      * @var mixed
      */
     protected $value;
-
-    /**
-     * Value set by user to field type.
-     *
-     * This is converted to the internal {@link $value}, but allows for original
-     * user input to be retained, which is useful, when it must be returned due
-     * to an invalid input error, or a validation error.
-     *
-     * @var mixed
-     */
-    protected $inputValue;
 
     /**
      * Constructs field type object, initializing internal data structures.
@@ -106,6 +110,7 @@ abstract class FieldType
     public function __construct()
     {
         $this->fieldSettings = new FieldSettings( $this->allowedSettings );
+        $this->validatorData = new FieldSettings( $this->allowedValidators );
     }
 
     /**
@@ -133,7 +138,7 @@ abstract class FieldType
      *
      * @return string
      */
-    public function fieldTypeIdentifier()
+    public function type()
     {
         return $this->fieldTypeString;
     }
@@ -185,18 +190,39 @@ abstract class FieldType
     }
 
     /**
-     * Parses value given to field type.
+     * Sets the constraint, $setting, associated with $validator, to $value.
      *
-     * This method will read input data, and convert it to the internal format.
+     * @param string $validator
+     * @param string $setting
+     * @param mixed $value
+     * @return void
+     */
+    public function setValidatorSetting( $validator, $setting, $value )
+    {
+        $this->validatorData[$validator][$setting] = $value;
+    }
+
+    /**
+     * Return an array of allowed validators to operate on this field type.
      *
-     * This method will throw an exception if the input data is not recognized.
+     * @return array
+     */
+    public function allowedValidators()
+    {
+        return array_keys( $this->allowedValidators );
+    }
+
+    /**
+     * Checks if value can be parsed.
+     *
+     * If the value actually can be parsed, the value is returned.
      *
      * @abstract
      * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
      * @param mixed $inputValue
      * @return mixed
      */
-    abstract protected function parseValue( $inputValue );
+    abstract protected function canParseValue( $inputValue );
 
     /**
      * Sets the value of a field type.
@@ -209,12 +235,21 @@ abstract class FieldType
 
 
     /**
-     * Returns the input-format value of a field type.
+     * Returns the value of a field type.
      *
-     * @abstract
-     * @return void
+     * If no value has yet been set, the default value of that field type is
+     * returned.
+     *
+     * @return mixed
      */
-    abstract public function getValue();
+    public function getValue()
+    {
+        if ( $this->value === null )
+        {
+            return $this->defaultValue;
+        }
+        return $this->value;
+    }
 
     /**
      * Returns a handler, aka. a helper object which aids in the manipulation of
@@ -223,5 +258,44 @@ abstract class FieldType
      * @abstract
      * @return void|ezp\Content\FieldType\Handler
      */
-    abstract public function getTypeHandler();
+    abstract public function getHandler();
+
+    /**
+     * Method to populate the FieldValue struct for field types.
+     *
+     * This method is used by the business layer to populate the value object
+     * for field type data.
+     *
+     * @internal
+     * @abstract
+     * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
+     * @return void
+     */
+    abstract public function setFieldValue( FieldValue $valueStruct );
+
+    /**
+     * Returns information for FieldValue->$sortKey relevant to the field type.
+     *
+     * @abstract
+     * @return array
+     */
+    abstract protected function getSortInfo();
+
+    /**
+     * Returns the value of the field type in a format suitable for packing it
+     * in a FieldValue.
+     *
+     * @abstract
+     * @return array
+     */
+    abstract protected function getValueData();
+
+    /**
+     * Returns stored validation data in format suitable for packing it in a
+     * FieldValue
+     *
+     * @abstract
+     * @return array
+     */
+    abstract protected function getValidationData();
 }

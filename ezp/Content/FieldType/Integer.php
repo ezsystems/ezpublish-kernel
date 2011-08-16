@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the TextLine class
+ * File containing the Integer field type
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,25 +12,15 @@ use ezp\Content\FieldType,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Persistence\Content\FieldValue;
 
-/**
- * The TextLine field type.
- *
- * This field type represents a simple string.
- */
-class TextLine extends FieldType
+class Integer extends FieldType
 {
-    protected $fieldTypeString = 'ezstring';
-    protected $defaultValue = '';
+    protected $fieldTypeString = 'ezinteger';
+    protected $defaultValue = 0;
+    protected $isTranslateable = false;
     protected $isSearchable = true;
-    protected $isTranslateable = true;
 
-    protected $allowedValidators = array( 'StringValidator' => array( 'maxStringLength' => null ) );
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
+    protected $allowedValidators = array( 'IntegerValidator' => array( 'minValue' => null,
+                                                                       'maxValue' => null ) );
     /**
      * Checks if value can be parsed.
      *
@@ -42,7 +32,7 @@ class TextLine extends FieldType
      */
     protected function canParseValue( $inputValue )
     {
-        if ( ! is_string( $inputValue ) )
+        if ( !is_integer( $inputValue ) )
         {
             throw new BadFieldTypeInput( $inputValue, __CLASS__ );
         }
@@ -52,7 +42,7 @@ class TextLine extends FieldType
     /**
      * Sets the value of a field type.
      *
-     * @param string $inputValue
+     * @param $inputValue
      * @return void
      */
     public function setValue( $inputValue )
@@ -61,9 +51,10 @@ class TextLine extends FieldType
     }
 
     /**
-     * This field type does not have a handler object.
+     * Returns a handler, aka. a helper object which aids in the manipulation of
+     * complex field type values.
      *
-     * @return void
+     * @return void|ezp\Content\FieldType\Handler
      */
     public function getHandler()
     {
@@ -71,7 +62,10 @@ class TextLine extends FieldType
     }
 
     /**
-     * Method to populate the FieldValue struct for field types
+     * Method to populate the FieldValue struct for field types.
+     *
+     * This method is used by the business layer to populate the value object
+     * for field type data.
      *
      * @internal
      * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
@@ -86,23 +80,11 @@ class TextLine extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
-     * @todo String normalization should occur here.
      * @return array
      */
     protected function getSortInfo()
     {
-         return array( 'sort_key_string' => $this->value );
-    }
-
-    /**
-     * Returns stored validation data in format suitable for packing it in a
-     * FieldValue
-     *
-     * @return array
-     */
-    protected function getValidationData()
-    {
-        return array();
+        return array( 'sort_key_int' => $this->value );
     }
 
     /**
@@ -114,6 +96,16 @@ class TextLine extends FieldType
     protected function getValueData()
     {
         return array( 'value' => $this->value );
+    }
+
+    /**
+     * Returns stored validation data in format suitable for packing it in a
+     * FieldValue
+     *
+     * @return array
+     */
+    protected function getValidationData()
+    {
     }
 
 }
