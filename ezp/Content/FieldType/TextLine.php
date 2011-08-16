@@ -74,7 +74,7 @@ class TextLine extends FieldType
      *
      * @return void
      */
-    public function getTypeHandler()
+    public function getHandler()
     {
         return;
     }
