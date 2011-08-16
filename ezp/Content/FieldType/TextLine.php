@@ -78,4 +78,37 @@ class TextLine extends FieldType
     {
         return;
     }
+
+    /**
+     * Returns information for FieldValue->$sortKey relevant to the field type.
+     *
+     * @return array
+     */
+    protected function getSortInfo()
+    {
+         return array( 'sort_key_string' => $this->value );
+    }
+
+    /**
+     * Returns stored validation data in format suitable for packing it in a
+     * FieldValue
+     *
+     * @return array
+     */
+    protected function getValidationData()
+    {
+        return array();
+    }
+
+    /**
+     * Returns the value of the field type in a format suitable for packing it
+     * in a FieldValue.
+     *
+     * @return array
+     */
+    protected function getValueData()
+    {
+        return array( 'value' => $this->value );
+    }
+
 }
