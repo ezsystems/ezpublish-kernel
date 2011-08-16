@@ -165,7 +165,7 @@ class ServiceTest extends BaseServiceTest
      * @group contentService
      * @covers \ezp\Content\Service::delete
      */
-    public function testDeleteNotExistant()
+    public function testDeleteNotExisting()
     {
         $content = new Content( new Type, new Locale( "eng-GB" ) );
         $refContent = new ReflectionObject( $content );
@@ -178,7 +178,7 @@ class ServiceTest extends BaseServiceTest
      * @group contentService
      * @covers \ezp\Content\Service::load
      */
-    public function testLoadNonExistent()
+    public function testLoadNotExisting()
     {
         $this->service->load( 0 );
     }
