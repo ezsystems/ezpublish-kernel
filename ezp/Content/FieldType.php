@@ -208,12 +208,21 @@ abstract class FieldType
 
 
     /**
-     * Returns the input-format value of a field type.
+     * Returns the value of a field type.
      *
-     * @abstract
-     * @return void
+     * If no value has yet been set, the default value of that field type is
+     * returned.
+     *
+     * @return mixed
      */
-    abstract public function getValue();
+    public function getValue()
+    {
+        if ( $this->value === null )
+        {
+            return $this->defaultValue;
+        }
+        return $this->value;
+    }
 
     /**
      * Returns a handler, aka. a helper object which aids in the manipulation of
