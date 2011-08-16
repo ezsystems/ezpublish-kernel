@@ -24,7 +24,6 @@ use ezp\Base\Model,
  * @property-read int $versionNo
  * @property-read int $state
  * @property-read \ezp\Content $content
- * @property int $userId
  * @property int $creatorId
  * @property int $created
  * @property int $modified
@@ -51,7 +50,6 @@ class Version extends Model implements Observer
     protected $readWriteProperties = array(
         'id' => false,
         'versionNo' => false,
-        'userId' => true,
         'creatorId' => true,
         'created' => true,
         'modified' => true,
@@ -67,11 +65,6 @@ class Version extends Model implements Observer
     protected $dynamicProperties = array(
         'locale' => false,
     );
-
-    /**
-     * @var int
-     */
-    protected $userId = 0;
 
     /**
      * @var Field[]
