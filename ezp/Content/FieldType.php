@@ -27,6 +27,8 @@ use ezp\Content\FieldType\FieldSettings,
  *
  * Field types are primed and pre-configured with the Field Definitions found in
  * Content Types.
+ *
+ * @todo Merge and optimize concepts for settings, validator data and field type properties.
  */
 abstract class FieldType
 {
@@ -70,6 +72,13 @@ abstract class FieldType
     protected $fieldSettings;
 
     /**
+     * Values for usage in validators.
+     *
+     * @var FieldSettings
+     */
+    protected $validatorData;
+
+    /**
      * The setting keys which are available on this field type.
      *
      * The key is the setting name, and the value is the default value for given
@@ -78,6 +87,15 @@ abstract class FieldType
      * @var array
      */
     protected $allowedSettings = array();
+
+    /**
+     * Validators which are supported for this field type.
+     *
+     * Key is the name of supported validators, value is an array of stored settings.
+     *
+     * @var array
+     */
+    protected $allowedValidators = array();
 
     /**
      * Value of field type.
@@ -92,6 +110,7 @@ abstract class FieldType
     public function __construct()
     {
         $this->fieldSettings = new FieldSettings( $this->allowedSettings );
+        $this->validatorData = new FieldSettings( $this->allowedValidators );
     }
 
     /**
@@ -168,6 +187,29 @@ abstract class FieldType
     public function allowedSettings()
     {
         return array_keys( $this->allowedSettings );
+    }
+
+    /**
+     * Sets the constraint, $setting, associated with $validator, to $value.
+     *
+     * @param string $validator
+     * @param string $setting
+     * @param mixed $value
+     * @return void
+     */
+    public function setValidatorSetting( $validator, $setting, $value )
+    {
+        $this->validatorData[$validator][$setting] = $value;
+    }
+
+    /**
+     * Return an array of allowed validators to operate on this field type.
+     *
+     * @return array
+     */
+    public function allowedValidators()
+    {
+        return array_keys( $this->allowedValidators );
     }
 
     /**

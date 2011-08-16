@@ -24,7 +24,7 @@ class TextLine extends FieldType
     protected $isSearchable = true;
     protected $isTranslateable = true;
 
-    protected $allowedSettings = array( 'maxStringLength' => null );
+    protected $allowedValidators = array( 'StringValidator' => array( 'maxStringLength' => null ) );
 
     public function __construct()
     {
