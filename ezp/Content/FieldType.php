@@ -221,5 +221,6 @@ abstract class FieldType
      * @abstract
      * @return void|ezp\Content\FieldType\Handler
      */
-    abstract public function getTypeHandler();
+    abstract public function getHandler();
+
 }
