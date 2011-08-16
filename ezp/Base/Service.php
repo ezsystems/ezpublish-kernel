@@ -68,11 +68,18 @@ abstract class Service
                 $struct->$property = $vo->$property;
                 continue;
             }
+            else if ( $struct->$property !== null )
+            {
+                continue;// Struct contains default value
+            }
 
             // Try to set by convention, if not throw PropertyNotFound exception
             if ( !$this->setPropertyByConvention( $struct, $property ) )
+            {
                 throw new PropertyNotFound( $property, get_class( $do ) );
+            }
         }
+        return $struct;
     }
 
     /**

@@ -28,7 +28,7 @@ use ezp\Base\Model,
  * It is used for both input and output manipulation.
  *
  * @property-read int $id The Content's ID, automatically assigned by the persistence layer
- * @property-read int $currentVersion The Content's current version
+ * @property-read int $currentVersionNo The Content's current version
  * @property-read string $remoteId The Content's remote identifier (custom identifier for the object)
  * @property string $name The Content's name
  * @property-read bool $alwaysAvailable The Content's always available flag
@@ -81,7 +81,7 @@ class Content extends Model
      */
     protected $readWriteProperties = array(
         'id' => false,
-        'currentVersion' => false,
+        'currentVersionNo' => false,
         'status' => false,
         'name' => true, // @todo: Make readOnly and generate on store event from attributes based on type nameScheme
         'ownerId' => true,
@@ -115,6 +115,7 @@ class Content extends Model
 
     /**
      * The Content's status, as one of the ezp\Content::STATUS_* constants
+     * @todo Move to VO!
      *
      * @var int
      */
@@ -225,7 +226,7 @@ class Content extends Model
     {
         foreach ( $this->translations[$this->mainLocale->code]->versions as $contentVersion )
         {
-            if ( $this->currentVersion == $contentVersion->version )
+            if ( $this->properties->currentVersionNo == $contentVersion->versionNo )
                 return $contentVersion;
         }
         return null;

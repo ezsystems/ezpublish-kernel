@@ -58,6 +58,7 @@ class ContentHandler implements ContentHandlerInterface
                 'typeId' => $content->typeId,
                 'sectionId' => $content->sectionId,
                 'ownerId' => $content->ownerId,
+                'currentVersionNo' => 1,
             )
         );
         $version = $this->backend->create(
@@ -80,9 +81,11 @@ class ContentHandler implements ContentHandlerInterface
         $contentObj->version = $version;
 
         $locationHandler = $this->handler->locationHandler();
-        foreach ( $content->parentLocations as $parentLocationId )
+        foreach ( $content->parentLocations as $locationStruct )
         {
-            $contentObj->locations[] = $locationHandler->createLocation( $contentObj->id, $parentLocationId );
+            $locationStruct->contentId = $contentObj->id;
+            $locationStruct->contentVersion = $contentObj->currentVersionNo;
+            $contentObj->locations[] = $locationHandler->createLocation( $locationStruct );
         }
         return $contentObj;
     }

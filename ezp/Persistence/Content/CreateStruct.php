@@ -16,8 +16,8 @@ use ezp\Persistence\ValueObject;
 class CreateStruct extends ValueObject
 {
     /**
-     * @var string
      * @todo Language?
+     * @var string
      */
     public $name;
 
@@ -37,6 +37,10 @@ class CreateStruct extends ValueObject
     public $ownerId;
 
     /**
+     * contentId, contentVersion and mainLocationId are allowed to be left empty
+     * when used on with this struct as these values are created by the create method.
+     * @todo Use custom create struct and api?
+     *
      * @var \ezp\Persistence\Content\Location\CreateStruct[]
      */
     public $parentLocations = array();
@@ -52,5 +56,15 @@ class CreateStruct extends ValueObject
      * @var Field[]
      */
     public $fields = array();
+
+    /**
+     * @var bool Always available flag
+     */
+    public $alwaysAvailable = false;
+
+    /**
+     * @var string Remote identifier used as a custom identifier for the object
+     */
+    public $remoteId;
 }
 ?>

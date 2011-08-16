@@ -9,11 +9,12 @@
 
 namespace ezp\Content\Tests;
 use ezp\Content,
+    ezp\Content\Location,
     ezp\Content\Type,
     ezp\Content\Tests\BaseServiceTest,
     ezp\Base\Locale,
     ezp\Base\Exception\NotFound,
-    ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content\Criterion\ContentId,
     \ReflectionObject;
 
@@ -86,7 +87,36 @@ class ServiceTest extends BaseServiceTest
         $refService = new ReflectionObject( $this->service );
         $refMethod = $refService->getMethod( "buildDomainObject" );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $this->service, new Location );
+        $refMethod->invoke( $this->service, new LocationValue );
+    }
+
+    /**
+     * @group contentService
+     * @covers \ezp\Content\Service::create
+     */
+    public function testCreate()
+    {
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $location = $this->repository->getLocationService()->load( 2 );
+        $section = $this->repository->getSectionService()->load( 1 );
+        $content = new Content( $type, new Locale( 'eng-GB' ) );
+        $content->addParent( $location );
+        $content->name = "New object";
+        $content->ownerId = 10;
+        $content->section = $section;
+
+        $content = $this->service->create( $content );
+        // @todo: Deal with field value when that is ready for manipulation
+        self::assertInstanceOf( "ezp\\Content", $content );
+        self::assertEquals( 2 , $content->id, "ID not correctly set" );
+        self::assertEquals( "New object" , $content->name, "Name not correctly set" );
+        self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
+        self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
+        self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
+        self::assertEquals( Content::STATUS_DRAFT, $content->status, "Status not correctly set" );
+        self::assertEquals( 1, count( $content->locations ), "Location count is wrong" );
+        self::assertEquals( 3, $content->locations[0]->id, "Location id is not correct" );
+        self::assertEquals( 3, $content->locations[0]->mainLocationId, "Location id is not correct" );
     }
 
     /**

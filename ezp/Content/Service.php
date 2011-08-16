@@ -19,6 +19,8 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Query\Builder,
     ezp\Persistence\ValueObject,
     ezp\Persistence\Content as ContentValue,
+    ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator;
 
@@ -33,13 +35,34 @@ class Service extends BaseService
      *
      * @param Content $content
      * @return Content The newly created content
-     * @throws Exception\Validation If a validation problem has been found for $content
+     * @throws \ezp\Base\Exception\InvalidArgumentType If $content already has an id
+     * @todo If/when we have some sort of object storage, use that to check if object is persisted instead of just id
      */
     public function create( Content $content )
     {
-        // @todo : Do any necessary actions to insert $content in the content repository
-        // go through all locations to create or update them
-        return $content;
+        if ( $content->id )
+            throw new InvalidArgumentType( '$content->id', 'false' );
+
+        $struct = new CreateStruct();
+        $this->fillStruct( $struct, $content, array( 'parentLocations', 'fields' ) );
+        foreach ( $content->locations as $location )
+        {
+            // @todo: Generate pathIdentificationString?
+            // @todo set sort order and fields based on settings in type
+            $struct->parentLocations[] = $this->fillStruct( new LocationCreateStruct( array(
+                                                                'pathIdentificationString' => '',
+                                                                'sortField' => Location::SORT_FIELD_PUBLISHED,
+                                                                'sortOrder' => Location::SORT_ORDER_DESC,
+                                                            ) ),
+                                                            $location,
+                                                            array( 'contentId', 'contentVersion', 'mainLocationId' ) );
+        }
+        foreach ( $content->fields as $fields )
+        {
+            $struct->fields[] = $fields->getState( 'properties' );
+        }
+        $vo = $this->handler->contentHandler()->create( $struct  );
+        return $this->buildDomainObject( $vo );
     }
 
     /**
