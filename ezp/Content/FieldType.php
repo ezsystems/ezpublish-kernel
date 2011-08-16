@@ -245,4 +245,30 @@ abstract class FieldType
      * @return void
      */
     abstract public function setFieldValue( FieldValue $valueStruct );
+
+    /**
+     * Returns information for FieldValue->$sortKey relevant to the field type.
+     *
+     * @abstract
+     * @return array
+     */
+    abstract protected function getSortInfo();
+
+    /**
+     * Returns the value of the field type in a format suitable for packing it
+     * in a FieldValue.
+     *
+     * @abstract
+     * @return array
+     */
+    abstract protected function getValueData();
+
+    /**
+     * Returns stored validation data in format suitable for packing it in a
+     * FieldValue
+     *
+     * @abstract
+     * @return array
+     */
+    abstract protected function getValidationData();
 }
