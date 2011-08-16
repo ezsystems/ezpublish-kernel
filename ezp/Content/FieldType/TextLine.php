@@ -56,7 +56,7 @@ class TextLine extends FieldType
      */
     public function setValue( $inputValue )
     {
-        $this->inputValue = $this->canParseValue( $inputValue );
+        $this->value = $this->canParseValue( $inputValue );
     }
 
     /**
