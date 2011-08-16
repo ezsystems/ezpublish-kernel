@@ -15,8 +15,10 @@ use ezp\Content\Tests\BaseServiceTest,
     ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\Criterion\ContentId,
     ezp\Content\Location,
-    ezp\Content\Proxy;
+    ezp\Content\Proxy,
+    ezp\Content\Section;
 
 /**
  * Test case for Location service
@@ -511,5 +513,29 @@ class ServiceTest extends BaseServiceTest
         // Reload location from backend
         $newLocation = $this->service->load( $newLocation->id );
         self::assertSame( $newLocation->id, $newLocation->mainLocationId );
+    }
+
+    /**
+     * @group locationService
+     */
+    public function testAssignSection()
+    {
+        $this->insertSubtree();
+        $startIndex = 5;
+
+        // Create the new section
+        $section = new Section;
+        $section->identifier = 'myNewSection';
+        $section->name = 'My new Section';
+        $this->repository->getSectionService()->create( $section );
+
+        // Assign the section to subtree
+        $this->service->assignSection( $this->insertedLocations[$startIndex], $section );
+
+        foreach ( array_splice( $this->insertedLocations, $startIndex ) as $location )
+        {
+            $content = $this->contentHandler->findSingle( new ContentId( $location->contentId ) );
+            self::assertSame( $section->id, $content->sectionId );
+        }
     }
 }

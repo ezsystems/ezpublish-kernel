@@ -150,7 +150,8 @@ interface Handler
     public function untrashLocation( $locationId, $newParentId = null );
 
     /**
-     * Set section on all content objects in the subtree
+     * Set section on all content objects in the subtree.
+     * Only main locations will be updated
      *
      * @param mixed $locationId
      * @param mixed $sectionId

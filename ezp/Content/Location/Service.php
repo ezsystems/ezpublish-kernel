@@ -228,16 +228,18 @@ class Service extends BaseService
     }
 
     /**
-     * Assigns $section to the contents hold by $startingPoint location and
-     * all contents hold by descendants location of $startingPoint
+     * Assigns $section to the contents held by $startingPoint location and
+     * all contents held by descendants location of $startingPoint
      *
      * @param \ezp\Content\Location $startingPoint
-     * @param Section $section
+     * @param \ezp\Content\Section $section
      * @return void
      * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
      */
     public function assignSection( Location $startingPoint, Section $section )
     {
+        $this->handler->locationHandler()->setSectionForSubtree( $startingPoint->id, $section->id );
+        $this->refreshDomainObject( $startingPoint );
     }
 
     /**
