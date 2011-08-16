@@ -15,6 +15,7 @@ use ezp\Content,
     ezp\Base\Locale,
     ezp\Base\Exception\NotFound,
     ezp\Persistence\Content\Location as LocationValue,
+    ezp\Persistence\Content as ContentValue,
     ezp\Persistence\Content\Criterion\ContentId,
     \ReflectionObject;
 
@@ -168,8 +169,13 @@ class ServiceTest extends BaseServiceTest
     public function testDeleteNotExisting()
     {
         $content = new Content( new Type, new Locale( "eng-GB" ) );
-        $refContent = new ReflectionObject( $content );
-        $refContent->getProperty( "properties" )->id = 42;
+        $contentValue = new ContentValue;
+        $contentValue->id = 42;
+        $content->setState(
+            array(
+                "properties" => $contentValue,
+            )
+        );
         $this->service->delete( $content );
     }
 
