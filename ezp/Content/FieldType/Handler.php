@@ -18,4 +18,21 @@ namespace ezp\Content\FieldType;
  */
 interface Handler
 {
+    /**
+     * Populates the field type handler with data from a field type.
+     *
+     * @abstract
+     * @param mixed $value
+     * @return void
+     */
+    public function initWithFieldTypeValue( $value );
+
+    /**
+     * Return a compatible value to store in a field type after manipulation
+     * in the handler.
+     *
+     * @abstract
+     * @return mixed
+     */
+    public function getFieldTypeValue();
 }
