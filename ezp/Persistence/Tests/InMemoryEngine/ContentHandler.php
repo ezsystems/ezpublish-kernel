@@ -16,6 +16,7 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
     ezp\Content\Version,
+    ezp\Base\Exception\NotFound,
     RuntimeException;
 
 /**
@@ -230,10 +231,16 @@ class ContentHandler implements ContentHandlerInterface
 
     /**
      * @see ezp\Persistence\Content\Handler
+     * @throws \ezp\Base\Exception\NotFound If no version found
      */
     public function listVersions( $contentId )
     {
-        return $this->backend->find( 'Content\\Version', array( 'contentId' => $contentId ) );
+        $versions = $this->backend->find( "Content\\Version", array( "contentId" => $contentId ) );
+
+        if ( empty( $versions ) )
+            throw new NotFound( "Content\\Version", "contentId: $contentId" );
+
+        return $versions;
     }
 }
 ?>

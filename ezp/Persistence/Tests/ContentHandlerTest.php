@@ -165,7 +165,14 @@ class ContentHandlerTest extends HandlerTest
         {
         }
 
-        $this->assertEquals( 0, count( $contentHandler->listVersions( $this->content->id ) ) );
+        try
+        {
+            $contentHandler->listVersions( $this->content->id );
+            $this->fail( "No version should have been returned but a NotFound exception!" );
+        }
+        catch ( NotFound $e )
+        {
+        }
     }
 
     /**
