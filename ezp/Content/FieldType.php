@@ -80,26 +80,11 @@ abstract class FieldType
     protected $allowedSettings = array();
 
     /**
-     * Internal value of field type.
-     *
-     * This value is the value which can be passed on to the persistence layer.
-     * Ultimately the field value is packaged inside a {@link ezp\Persistence\Content\FieldValue}
-     * for persistence purposes.
+     * Value of field type.
      *
      * @var mixed
      */
     protected $value;
-
-    /**
-     * Value set by user to field type.
-     *
-     * This is converted to the internal {@link $value}, but allows for original
-     * user input to be retained, which is useful, when it must be returned due
-     * to an invalid input error, or a validation error.
-     *
-     * @var mixed
-     */
-    protected $inputValue;
 
     /**
      * Constructs field type object, initializing internal data structures.
