@@ -1,6 +1,6 @@
 {
     "Content": [
-        {"id": 1, "name": "eZ Publish", "typeId": 1, "sectionId": 1, "ownerId": 14}
+        {"id": 1, "name": "eZ Publish", "typeId": 1, "sectionId": 1, "ownerId": 14, "currentVersionNo": 1}
     ],
     "Content\\Field": [],
     "Content\\Location" : [

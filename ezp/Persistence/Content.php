@@ -40,6 +40,19 @@ class Content extends ValueObject
     public $ownerId;
 
     /**
+     * Current Version number
+     *
+     * Contains the current version number of the published version.
+     * If no published version exists, last draft is used, and if published version is removed, current version is
+     * set to latest modified version.
+     *
+     * Eg: When creating a new Content object current version will point to version 1 even if it is a draft.
+     *
+     * @var int
+     */
+    public $currentVersionNo;
+
+    /**
      * The loaded version
      *
      * The Version, containing version information and all
