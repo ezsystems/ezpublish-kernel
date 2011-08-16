@@ -9,7 +9,8 @@
 
 namespace ezp\Content\FieldType;
 use ezp\Content\FieldType,
-    ezp\Base\Exception\BadFieldTypeInput;
+    ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Persistence\Content\FieldValue;
 
 /**
  * The TextLine field type.
@@ -70,13 +71,16 @@ class TextLine extends FieldType
     }
 
     /**
-     * This field type does not have a handler object.
+     * Method to populate the FieldValue struct for field types
      *
+     * @internal
+     * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
      * @return void
      */
-    public function getHandler()
+    public function setFieldValue( FieldValue $valueStruct )
     {
-        return;
+        $valueStruct->data = $this->getFieldTypeSettings() + $this->getValueData() + $this->getValidationData();
+        $valueStruct->sortKey = $this->getSortInfo();
     }
 
     /**
