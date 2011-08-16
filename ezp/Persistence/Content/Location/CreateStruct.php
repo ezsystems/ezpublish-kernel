@@ -96,4 +96,10 @@ class CreateStruct extends ValueObject
      * @var mixed
      */
     public $sortOrder;
+
+    /**
+     * Parent location's Id
+     * @var int
+     */
+    public $parentId;
 }

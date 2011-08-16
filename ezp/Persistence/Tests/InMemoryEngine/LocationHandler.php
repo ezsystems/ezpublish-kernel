@@ -214,8 +214,9 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Location\Handler
      */
-    public function createLocation( CreateStruct $locationStruct, $parentId )
+    public function createLocation( CreateStruct $locationStruct )
     {
+        $parentId = $locationStruct->parentId;
         $parent = $this->load( $parentId );
         $params = (array)$locationStruct;
         $params['parentId'] = $parentId;
