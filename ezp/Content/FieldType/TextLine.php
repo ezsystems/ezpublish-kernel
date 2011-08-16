@@ -79,7 +79,7 @@ class TextLine extends FieldType
      */
     public function setFieldValue( FieldValue $valueStruct )
     {
-        $valueStruct->data = $this->getFieldTypeSettings() + $this->getValueData() + $this->getValidationData();
+        $valueStruct->data = $this->getFieldTypeSettings() + $this->getValueData();
         $valueStruct->sortKey = $this->getSortInfo();
     }
 
