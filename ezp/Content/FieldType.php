@@ -133,7 +133,7 @@ abstract class FieldType
      *
      * @return string
      */
-    public function fieldTypeIdentifier()
+    public function type()
     {
         return $this->fieldTypeString;
     }
