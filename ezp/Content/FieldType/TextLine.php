@@ -86,6 +86,7 @@ class TextLine extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
+     * @todo String normalization should occur here.
      * @return array
      */
     protected function getSortInfo()
