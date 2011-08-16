@@ -37,7 +37,7 @@ class CreateStruct extends ValueObject
     public $ownerId;
 
     /**
-     * @var int[]
+     * @var \ezp\Persistence\Content\Location\CreateStruct[]
      */
     public $parentLocations = array();
 
