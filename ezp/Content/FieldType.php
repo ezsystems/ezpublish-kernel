@@ -185,18 +185,16 @@ abstract class FieldType
     }
 
     /**
-     * Parses value given to field type.
+     * Checks if value can be parsed.
      *
-     * This method will read input data, and convert it to the internal format.
-     *
-     * This method will throw an exception if the input data is not recognized.
+     * If the value actually can be parsed, the value is returned.
      *
      * @abstract
      * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
      * @param mixed $inputValue
      * @return mixed
      */
-    abstract protected function parseValue( $inputValue );
+    abstract protected function canParseValue( $inputValue );
 
     /**
      * Sets the value of a field type.

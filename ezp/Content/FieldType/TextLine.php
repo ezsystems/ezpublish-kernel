@@ -31,17 +31,15 @@ class TextLine extends FieldType
     }
 
     /**
-     * Parses value given to field type.
+     * Checks if value can be parsed.
      *
-     * This method will read input data, and convert it to the internal format.
-     *
-     * This method will throw an exception if the input data is not recognized.
+     * If the value actually can be parsed, the value is returned.
      *
      * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
      * @param mixed $inputValue
      * @return mixed
      */
-    protected function parseValue( $inputValue )
+    protected function canParseValue( $inputValue )
     {
         if ( ! is_string( $inputValue ) )
         {
@@ -58,7 +56,7 @@ class TextLine extends FieldType
      */
     public function setValue( $inputValue )
     {
-        $this->inputValue = $this->parseValue( $inputValue );
+        $this->inputValue = $this->canParseValue( $inputValue );
     }
 
     /**
