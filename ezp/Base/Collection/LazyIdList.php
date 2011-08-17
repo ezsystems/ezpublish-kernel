@@ -140,6 +140,3 @@ class LazyIdList extends ArrayObject implements Collection
         return parent::exchangeArray( $input );
     }
 }
-
-
-?>

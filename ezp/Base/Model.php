@@ -291,7 +291,7 @@ abstract class Model implements Observable, ModelInterface
      */
     public function fromHash( array $properties )
     {
-        foreach ( $this->readWriteProperties as $property => $writable)
+        foreach ( $this->readWriteProperties as $property => $writable )
         {
             if ( !$writable || !isset( $properties[$property] ) )
                 continue;

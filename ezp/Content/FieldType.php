@@ -233,7 +233,6 @@ abstract class FieldType
      */
     abstract public function setValue( $inputValue );
 
-
     /**
      * Returns the value of a field type.
      *

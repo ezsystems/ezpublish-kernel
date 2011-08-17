@@ -19,8 +19,13 @@ class Integer extends FieldType
     protected $isTranslateable = false;
     protected $isSearchable = true;
 
-    protected $allowedValidators = array( 'IntegerValidator' => array( 'minValue' => null,
-                                                                       'maxValue' => null ) );
+    protected $allowedValidators = array(
+        "IntegerValidator" => array(
+            "minValue" => null,
+            "maxValue" => null
+        )
+    );
+
     /**
      * Checks if value can be parsed.
      *

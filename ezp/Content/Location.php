@@ -75,7 +75,6 @@ class Location extends Model
         'depth' => false,
         'sortField' => true,
         'sortOrder' => true,
-
     );
 
     /**

@@ -115,8 +115,10 @@ class Service extends BaseService
     {
         if ( $this->countAssignedContents( $sectionId ) > 0 )
         {
-            throw new Logic( "delete( {$sectionId} )",
-                             'section can not be deleted as its assigned to content objects.' );
+            throw new Logic(
+                "delete( {$sectionId} )",
+                "section can not be deleted as its assigned to content objects."
+            );
         }
         $this->handler->sectionHandler()->delete( $sectionId );
     }
@@ -130,7 +132,7 @@ class Service extends BaseService
     protected function buildDomainObject( ValueObject $vo )
     {
         $section = new SectionObject();
-        return $section->setState( array( 'properties' =>  $vo ) );
+        return $section->setState( array( 'properties' => $vo ) );
     }
 }
 ?>

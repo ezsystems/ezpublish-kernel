@@ -153,6 +153,3 @@ class Lazy extends TypeCollection
         return parent::count();
     }
 }
-
-
-?>

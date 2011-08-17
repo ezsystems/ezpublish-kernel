@@ -66,11 +66,13 @@ class Field extends Model
     {
         $this->version = $contentVersion;
         $this->fieldDefinition = $fieldDefinition;
-        $this->properties = new FieldVO( array(
-                                               'type' => $fieldDefinition->fieldType,
-                                               'fieldDefinitionId' => $fieldDefinition->id,
-                                               'value' => $fieldDefinition->defaultValue,
-                                           ) );
+        $this->properties = new FieldVO(
+            array(
+                "type" => $fieldDefinition->fieldType,
+                "fieldDefinitionId" => $fieldDefinition->id,
+                "value" => $fieldDefinition->defaultValue,
+            )
+        );
     }
 
     /**

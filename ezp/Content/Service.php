@@ -50,13 +50,17 @@ class Service extends BaseService
         {
             // @todo: Generate pathIdentificationString?
             // @todo set sort order and fields based on settings in type
-            $struct->parentLocations[] = $this->fillStruct( new LocationCreateStruct( array(
-                                                                'pathIdentificationString' => '',
-                                                                'sortField' => Location::SORT_FIELD_PUBLISHED,
-                                                                'sortOrder' => Location::SORT_ORDER_DESC,
-                                                            ) ),
-                                                            $location,
-                                                            array( 'contentId', 'contentVersion', 'mainLocationId' ) );
+            $struct->parentLocations[] = $this->fillStruct(
+                new LocationCreateStruct(
+                    array(
+                        "pathIdentificationString" => "",
+                        "sortField" => Location::SORT_FIELD_PUBLISHED,
+                        "sortOrder" => Location::SORT_ORDER_DESC,
+                    )
+                ),
+                $location,
+                array( "contentId", "contentVersion", "mainLocationId" )
+            );
         }
         foreach ( $content->fields as $fields )
         {
@@ -189,15 +193,18 @@ class Service extends BaseService
         foreach ( $vo->locations as $locationValue )
         {
             $content->locations[] = $location = new Location( $content );
-            $location->setState( array( 'properties' => $locationValue,
-                                        'parent' => new Proxy( $locationHandler, $locationValue->parentId ),
-                                        'children' => new Lazy(
-                                            'ezp\\Content\\Location',
-                                            $locationHandler,
-                                            $location, // api seems to use location to be able to get out sort info as well
-                                            'children' // Not implemented yet so this collection will return empty array atm
-                                        ) ) );
-
+            $location->setState(
+                array(
+                    "properties" => $locationValue,
+                    "parent" => new Proxy( $locationHandler, $locationValue->parentId ),
+                    "children" => new Lazy(
+                        "ezp\\Content\\Location",
+                        $locationHandler,
+                        $location, // api seems to use location to be able to get out sort info as well
+                        "children" // Not implemented yet so this collection will return empty array atm
+                    )
+                )
+            );
         }
 
         return $content;

@@ -7,7 +7,6 @@
  * @version //autogentag//
  */
 
-
 namespace ezp\Content\FieldType;
 
 /**

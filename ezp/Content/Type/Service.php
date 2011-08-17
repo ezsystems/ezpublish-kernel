@@ -243,9 +243,11 @@ class Service extends BaseService
         if ( $field->id )
             throw new InvalidArgumentType( '$field->id', 'false' );
 
-        $this->handler->contentTypeHandler()->addFieldDefinition( $type->id,
-                                                                  $type->status,
-                                                                  $field->getState( 'properties' ) );
+        $this->handler->contentTypeHandler()->addFieldDefinition(
+            $type->id,
+            $type->status,
+            $field->getState( "properties" )
+        );
     }
 
     /**
@@ -257,9 +259,11 @@ class Service extends BaseService
      */
     public function removeFieldDefinition( Type $type, FieldDefinition $field  )
     {
-        $this->handler->contentTypeHandler()->removeFieldDefinition( $type->id,
-                                                                     $type->status,
-                                                                     $field->id );
+        $this->handler->contentTypeHandler()->removeFieldDefinition(
+            $type->id,
+            $type->status,
+            $field->id
+        );
     }
 
     /**
@@ -271,9 +275,11 @@ class Service extends BaseService
      */
     public function updateFieldDefinition( Type $type, FieldDefinition $field  )
     {
-        $this->handler->contentTypeHandler()->updateFieldDefinition( $type->id,
-                                                                     $type->status,
-                                                                     $field->getState( 'properties' ) );
+        $this->handler->contentTypeHandler()->updateFieldDefinition(
+            $type->id,
+            $type->status,
+            $field->getState( "properties" )
+        );
     }
 
     /**
@@ -288,12 +294,17 @@ class Service extends BaseService
             $fieldDefinition = new FieldDefinition( $type, $fieldDefinitionVo->fieldType );
             $type->fields[] = $fieldDefinition->setState( array( 'properties' => $fieldDefinitionVo ) );
         }
-        $type->setState( array( 'properties' => $vo,
-                                'groups' => new LazyIdList( 'ezp\\Content\\Type\\Group',
-                                                            $vo->groupIds,
-                                                            $this,
-                                                            'loadGroup' )
-                         ) );
+        $type->setState(
+            array(
+                "properties" => $vo,
+                "groups" => new LazyIdList(
+                    "ezp\\Content\\Type\\Group",
+                    $vo->groupIds,
+                    $this,
+                    "loadGroup"
+                )
+            )
+        );
         return $type;
     }
 
@@ -304,11 +315,17 @@ class Service extends BaseService
     protected function buildGroup( GroupValue $vo )
     {
         $group = new Group();
-        $group->setState( array( 'properties' => $vo,
-                                 'types' => new Lazy( 'ezp\\Content\\Type',
-                                                      $this,
-                                                      $vo->id,
-                                                      'loadByGroupId' ) ) );
+        $group->setState(
+            array(
+                "properties" => $vo,
+                "types" => new Lazy(
+                    "ezp\\Content\\Type",
+                    $this,
+                    $vo->id,
+                    "loadByGroupId"
+                )
+            )
+        );
         return $group;
     }
 }
