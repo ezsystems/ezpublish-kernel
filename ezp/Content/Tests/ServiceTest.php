@@ -182,13 +182,7 @@ class ServiceTest extends BaseServiceTest
     public function testListVersionsNotExisting()
     {
         $content = new Content( new Type, new Locale( "eng-GB" ) );
-        $contentValue = new ContentValue;
-        $contentValue->id = 42;
-        $content->setState(
-            array(
-                "properties" => $contentValue,
-            )
-        );
+        $content->getState( "properties" )->id = 42;
         $versions = $this->service->listVersions( $content );
     }
 
@@ -227,13 +221,7 @@ class ServiceTest extends BaseServiceTest
     public function testDeleteNotExisting()
     {
         $content = new Content( new Type, new Locale( "eng-GB" ) );
-        $contentValue = new ContentValue;
-        $contentValue->id = 42;
-        $content->setState(
-            array(
-                "properties" => $contentValue,
-            )
-        );
+        $content->getState( "properties" )->id = 42;
         $this->service->delete( $content );
     }
 
