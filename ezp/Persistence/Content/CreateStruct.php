@@ -16,8 +16,7 @@ use ezp\Persistence\ValueObject;
 class CreateStruct extends ValueObject
 {
     /**
-     * @todo Language?
-     * @var string
+     * @var string[] Eg. array( 'eng-GB' => "New Article" )
      */
     public $name;
 

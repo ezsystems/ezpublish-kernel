@@ -26,7 +26,13 @@ class UpdateStruct extends ValueObject
     public $versionNo;
 
     /**
-     * @var int
+     * @var string[] Eg. array( 'eng-GB' => "New Article" )
+     */
+    public $name;
+
+    /**
+     * @var int Creator of the version
+     * @todo Rename to creatorId to be consistent
      */
     public $userId;
 
