@@ -120,6 +120,27 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
+     * @group contentService
+     * @covers \ezp\Content\Service::update
+     */
+    public function testUpdate()
+    {
+        // @todo Test with change to fields!
+
+        $content = $this->service->load( 1 );
+        $content->name = array( "eng-GB" => "New name");
+        $content->ownerId = 10;
+        $content = $this->service->update( $content );
+
+        self::assertInstanceOf( "ezp\\Content", $content );
+        self::assertEquals( 1, $content->id, "ID not correctly set" );
+        self::assertEquals( array( "eng-GB" => "New name" ), $content->name, "Name not correctly set" );
+        self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
+        self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
+        self::assertEquals( Content::STATUS_DRAFT, $content->status, "Status not correctly set" );
+    }
+
+    /**
      * Test the Content Service load operation
      *
      * @group contentService

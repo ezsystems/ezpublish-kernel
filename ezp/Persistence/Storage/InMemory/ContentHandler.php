@@ -235,7 +235,19 @@ class ContentHandler implements ContentHandlerInterface
     public function update( UpdateStruct $content )
     {
         // @todo Assume the attached version to Content is the one that should be updated
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->update(
+            "Content",
+            $content->id,
+            array(
+                "ownerId" => $content->userId,
+                "currentVersionNo" => $content->versionNo,
+                "name" => $content->name,
+            )
+        );
+
+        // @todo update fields
+
+        return $this->backend->load( "Content", $content->id );
     }
 
     /**

@@ -21,6 +21,7 @@ use ezp\Base\Service as BaseService,
     ezp\Persistence\ValueObject,
     ezp\Persistence\Content as ContentValue,
     ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator;
@@ -81,7 +82,20 @@ class Service extends BaseService
     {
         // @todo : Do any necessary actions to update $content in the content repository
         // go through all locations to create or update them
-        return $content;
+
+        $struct = new UpdateStruct();
+        $this->fillStruct( $struct, $content, array( "versionNo", "userId", "fields" ) );
+        $struct->userId = $content->ownerId;
+        $struct->versionNo = $content->currentVersionNo;
+
+        foreach ( $content->fields as $fields )
+        {
+            $struct->fields[] = $fields->getState( "properties" );
+        }
+
+        return $this->buildDomainObject(
+            $this->handler->contentHandler()->update( $struct  )
+        );
     }
 
     /**

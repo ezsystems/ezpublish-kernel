@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Tests;
 use ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Base\Exception\NotFound,
@@ -266,5 +267,35 @@ class ContentHandlerTest extends HandlerTest
         $this->assertGreaterThanOrEqual( $time, $versions[1]->modified );
         $this->assertGreaterThanOrEqual( $time, $versions[0]->created );
         $this->assertGreaterThanOrEqual( $time, $versions[1]->created );
+    }
+
+    /**
+     * Test update function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::update
+     */
+    public function testUpdate()
+    {
+        $struct = new UpdateStruct;
+        $struct->id = $this->contentId;
+        $struct->versionNo = 2;
+        $struct->name = array( "eng-GB" => "New name", "fre-FR" => "Nouveau nom" );
+        $struct->userId = 10;
+        $struct->fields[] = new Field(
+            array(
+                "type" => "ezstring",
+                // @todo Use FieldValue object
+                "value" => "Welcome2",
+                "language" => "eng-GB",
+            )
+        );
+
+        $content = $this->repositoryHandler->contentHandler()->update( $struct );
+        $this->assertTrue( $content instanceof Content );
+        $this->assertEquals( $this->contentId, $content->id );
+        $this->assertEquals( 10, $content->ownerId );
+        $this->assertEquals( array( "eng-GB" => "New name", "fre-FR" => "Nouveau nom" ), $content->name );
+
+        // @todo Test fields!
     }
 }
