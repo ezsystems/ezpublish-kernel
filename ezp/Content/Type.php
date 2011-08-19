@@ -80,7 +80,7 @@ class Type extends Model
      */
     public function __construct()
     {
-        $this->properties = new TypeValue( array( 'status' => TypeValue::STATUS_DRAFT ) );
+        $this->properties = new TypeValue();
         $this->fields = new TypeCollection( 'ezp\\Content\\Type\\FieldDefinition' );
         $this->groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
     }
