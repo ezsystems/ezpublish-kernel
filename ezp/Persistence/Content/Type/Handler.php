@@ -85,6 +85,8 @@ interface Handler
     /**
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @todo does this method throw an exception if the status is DEFINED and there are content objects left?
+     * @todo if this methods would remove content objects it should be deferrable
      */
     public function delete( $contentTypeId, $status );
 
@@ -120,6 +122,7 @@ interface Handler
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @throws \ezp\Base\Exception\NotFound If group or type with provided status is not found
      * @throws \ezp\Base\Exception\BadRequest If type is not part of group or group is last on type (delete type instead)
+     * @todo unlink should delete a content type if group is last on type and the type has no objects?
      */
     public function unlink( $groupId, $contentTypeId, $status );
 
