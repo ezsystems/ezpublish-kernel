@@ -24,7 +24,7 @@ use ezp\Base\Model,
  * @property-read \ezp\Content $content
  * @property int $creatorId
  * @property int $created
- * @property int $modifiedppppppppppppppppppppppp
+ * @property int $modified
  * @property-read ContentField[] $fields An hash structure of fields
  */
 class Version extends Model
