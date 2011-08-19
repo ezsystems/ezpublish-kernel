@@ -9,11 +9,13 @@
 
 namespace ezp\Content\Tests;
 use ezp\Content,
+    ezp\Content\Location,
     ezp\Content\Type,
+    ezp\Content\Version,
     ezp\Content\Tests\BaseServiceTest,
-    ezp\Base\Locale,
     ezp\Base\Exception\NotFound,
-    ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Location as LocationValue,
+    ezp\Persistence\Content as ContentValue,
     ezp\Persistence\Content\Criterion\ContentId,
     \ReflectionObject;
 
@@ -86,7 +88,36 @@ class ServiceTest extends BaseServiceTest
         $refService = new ReflectionObject( $this->service );
         $refMethod = $refService->getMethod( "buildDomainObject" );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $this->service, new Location );
+        $refMethod->invoke( $this->service, new LocationValue );
+    }
+
+    /**
+     * @group contentService
+     * @covers \ezp\Content\Service::create
+     */
+    public function testCreate()
+    {
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $location = $this->repository->getLocationService()->load( 2 );
+        $section = $this->repository->getSectionService()->load( 1 );
+        $content = new Content( $type );
+        $content->addParent( $location );
+        $content->name = "New object";
+        $content->ownerId = 10;
+        $content->section = $section;
+
+        $content = $this->service->create( $content );
+        // @todo: Deal with field value when that is ready for manipulation
+        self::assertInstanceOf( "ezp\\Content", $content );
+        self::assertEquals( 2, $content->id, "ID not correctly set" );
+        self::assertEquals( "New object", $content->name, "Name not correctly set" );
+        self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
+        self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
+        self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
+        self::assertEquals( Content::STATUS_DRAFT, $content->status, "Status not correctly set" );
+        self::assertEquals( 1, count( $content->locations ), "Location count is wrong" );
+        self::assertEquals( 3, $content->locations[0]->id, "Location id is not correct" );
+        self::assertEquals( 3, $content->locations[0]->mainLocationId, "Location id is not correct" );
     }
 
     /**
@@ -98,14 +129,65 @@ class ServiceTest extends BaseServiceTest
     {
         $content = $this->service->load( 1 );
         self::assertInstanceOf( "ezp\\Content", $content );
-        self::assertEquals( 1 , $content->id, "ID not correctly set" );
-        self::assertEquals( "eZ Publish" , $content->name, "Name not correctly set" );
+        self::assertEquals( 1, $content->id, "ID not correctly set" );
+        self::assertEquals( "eZ Publish", $content->name, "Name not correctly set" );
         self::assertEquals( 14, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
     }
 
     /**
+     * Test the Content Service listVersions operation
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::listVersions
+     */
+    public function testListVersions()
+    {
+        $content = $this->service->load( 1 );
+        $versions = $this->service->listVersions( $content );
+        $this->assertEquals( 2, count( $versions ) );
+        $foundVersions = array();
+        foreach ( $versions as $version )
+        {
+            $foundVersions[$version->id] = true;
+            $this->assertEquals( 1, $version->contentId );
+            $this->assertEquals( 14, $version->creatorId );
+            $this->assertEquals( $version->id, $version->versionNo );
+
+            if ( $version->id == 1 )
+            {
+                $this->assertEquals( 1310792400, $version->modified );
+                $this->assertEquals( 1310792400, $version->created );
+                $this->assertEquals( 1, $version->state );
+            }
+            else if ( $version->id == 2 )
+            {
+                $this->assertEquals( 1310793400, $version->modified );
+                $this->assertEquals( 1310793400, $version->created );
+                $this->assertEquals( 0, $version->state );
+            }
+        }
+        $this->assertEquals( array( 1 => true, 2 => true ), $foundVersions, "The versions returned is not correct" );
+    }
+
+    /**
+     * Test the Content Service listVersions operation
+     * with a wrong Content argument
+     *
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @group contentService
+     * @covers \ezp\Content\Service::listVersions
+     */
+    public function testListVersionsNotExisting()
+    {
+        $content = new Content( new Type );
+        $content->getState( "properties" )->id = 42;
+        $versions = $this->service->listVersions( $content );
+    }
+
+    /**
      * Test the Content Service delete operation
+     *
      * @group contentService
      * @covers \ezp\Content\Service::delete
      */
@@ -135,11 +217,10 @@ class ServiceTest extends BaseServiceTest
      * @group contentService
      * @covers \ezp\Content\Service::delete
      */
-    public function testDeleteNotExistant()
+    public function testDeleteNotExisting()
     {
-        $content = new Content( new Type, new Locale( "eng-GB" ) );
-        $refContent = new ReflectionObject( $content );
-        $refContent->getProperty( "properties" )->id = 42;
+        $content = new Content( new Type );
+        $content->getState( "properties" )->id = 42;
         $this->service->delete( $content );
     }
 
@@ -148,7 +229,7 @@ class ServiceTest extends BaseServiceTest
      * @group contentService
      * @covers \ezp\Content\Service::load
      */
-    public function testLoadNonExistent()
+    public function testLoadNotExisting()
     {
         $this->service->load( 0 );
     }

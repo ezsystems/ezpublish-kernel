@@ -11,8 +11,7 @@ namespace ezp\Content\Tests;
 use ezp\Content\Location,
     ezp\Content,
     ezp\Content\Section,
-    ezp\Content\Type,
-    ezp\Base\Locale;
+    ezp\Content\Type;
 
 /**
  * Test case for Location class
@@ -30,7 +29,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $contentType = new Type();
         $contentType->identifier = 'article';
 
-        $this->content = new Content( $contentType, new Locale( 'eng-GB' ) );
+        $this->content = new Content( $contentType );
     }
 
     /**

@@ -214,8 +214,9 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Location\Handler
      */
-    public function createLocation( CreateStruct $locationStruct, $parentId )
+    public function createLocation( CreateStruct $locationStruct )
     {
+        $parentId = $locationStruct->parentId;
         $parent = $this->load( $parentId );
         $params = (array)$locationStruct;
         $params['parentId'] = $parentId;
@@ -286,6 +287,23 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function setSectionForSubtree( $locationId, $sectionId )
     {
+        $location = $this->load( $locationId );
+        $aContentIds = array( $location->contentId );
+        $children = $this->backend->find( 'Content\\Location', array( 'pathString' => "$location->pathString%" ) );
+        foreach ( $children as $child )
+        {
+            // Only get main locations
+            if ( $child->mainLocationId == $child->id )
+            {
+                $aContentIds[] = $child->contentId;
+            }
+        }
+
+        $this->backend->updateByMatch(
+            'Content',
+            array( 'id' => $aContentIds ),
+            array( 'sectionId' => $sectionId )
+        );
     }
 
     /**

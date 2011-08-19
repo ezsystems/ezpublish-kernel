@@ -66,5 +66,14 @@ class RestrictedVersion extends ValueObject
      * @var mixed
      */
     public $contentId;
+
+    /**
+     * List of languages (id's) in this version
+     *
+     * Reflects which languages fields exists in for this version.
+     *
+     * @var mixed[]
+     */
+    public $languageIds = array();
 }
 ?>

@@ -5,7 +5,6 @@
 namespace ezp\Content;
 use ezp\Base\Configuration,
     ezp\Base\Autoloader,
-    ezp\Base\Locale,
     ezp\Content,
     ezp\Content\Type\FieldDefinition;
 
@@ -47,7 +46,7 @@ $section->identifier = 'standard';
 $section->name = "Standard";
 
 // Create Content object
-$content = new Content( $contentType, new Locale( 'eng-GB' ) );
+$content = new Content( $contentType );
 $content->ownerId = 10;
 $content->section = $section;
 

@@ -18,10 +18,10 @@ use ezp\Base\Exception,
  */
 class BadFieldTypeInput extends InvalidArgumentException implements Exception
 {
-    public function __construct( $valueName, $value, $fieldClass = null, PhpException $previous = null )
+    public function __construct( $value, $fieldClass = null, PhpException $previous = null )
     {
         parent::__construct(
-            "The field type" . ( $fieldClass !== null ? " '{$fieldClass}'": "" ) ." did not understand the value, '{$valueName}': " . var_export( $value, true ),
+            "The field type" . ( $fieldClass !== null ? " '{$fieldClass}'": "" ) ." did not understand the value: " . var_export( $value, true ),
             0,
             $previous
         );

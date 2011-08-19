@@ -10,10 +10,10 @@
 namespace ezp;
 use ezp\Base\Model,
     ezp\Base\Observable,
-    ezp\Base\Locale,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Content\Translation,
     ezp\Content\Type,
+    ezp\Content\Location,
     ezp\Content\Section,
     ezp\Content\Proxy,
     ezp\Content\Version,
@@ -27,9 +27,9 @@ use ezp\Base\Model,
  * It is used for both input and output manipulation.
  *
  * @property-read int $id The Content's ID, automatically assigned by the persistence layer
- * @property-read int $currentVersion The Content's current version
+ * @property-read int $currentVersionNo The Content's current version
  * @property-read string $remoteId The Content's remote identifier (custom identifier for the object)
- * @property-read string $name The Content's name
+ * @property string[] $name The Content's name
  * @property-read bool $alwaysAvailable The Content's always available flag
  * @property-read int status The Content's status, as one of the ezp\Content::STATUS_* constants
  * @property-read \ezp\Content\Type contentType The Content's type
@@ -80,9 +80,9 @@ class Content extends Model
      */
     protected $readWriteProperties = array(
         'id' => false,
-        'currentVersion' => false,
+        'currentVersionNo' => false,
         'status' => false,
-        'name' => false,
+        'name' => true, // @todo: Make readOnly and generate on store event from attributes based on type nameScheme
         'ownerId' => true,
         'relations' => false,
         'reversedRelations' => false,
@@ -90,6 +90,7 @@ class Content extends Model
         'locations' => true,
         'alwaysAvailable' => true,
         'remoteId' => true,
+        'sectionId' => false,
     );
 
     /**
@@ -99,7 +100,6 @@ class Content extends Model
         'creationDate' => false,
         'mainLocation' => false,
         'section' => false,
-        'sectionId' => false,
         'fields' => true,
         'contentType' => false,
         'versions' => false,
@@ -114,6 +114,7 @@ class Content extends Model
 
     /**
      * The Content's status, as one of the ezp\Content::STATUS_* constants
+     * @todo Move to VO!
      *
      * @var int
      */
@@ -148,20 +149,6 @@ class Content extends Model
     protected $reversedRelations;
 
     /**
-     * Translations collection
-     *
-     * @var \ezp\Content\Translation[]
-     */
-    protected $translations;
-
-    /**
-     * \ezp\Base\Locale
-     *
-     * @var \ezp\Base\Locale
-     */
-    protected $mainLocale;
-
-    /**
      * Versions
      *
      * @var \ezp\Content\Version[]
@@ -172,23 +159,18 @@ class Content extends Model
      * Create content based on content type object
      *
      * @param \ezp\Content\Type $contentType
-     * @param \ezp\Base\Locale $mainLocale
      */
-    public function __construct( Type $contentType, Locale $mainLocale )
+    public function __construct( Type $contentType )
     {
-        $this->properties = new ContentValue;
+        $this->properties = new ContentValue( array( 'typeId' => $contentType->id ) );
         /*
-        @FIXME where is this property going to be stored?
-        $this->creationDate = new DateTime();
+        @TODO Make sure all dynamic properties writes to value object if scalar value (creationDate (int)-> properties->created )
         */
-        $this->mainLocale = $mainLocale;
-        $this->versions = new TypeCollection( 'ezp\\Content\\Version' );
+        $this->contentType = $contentType;
         $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
         $this->relations = new TypeCollection( 'ezp\\Content' );
         $this->reversedRelations = new TypeCollection( 'ezp\\Content' );
-        $this->translations = new TypeCollection( 'ezp\\Content\\Translation' );
-        $this->contentType = $contentType;
-        $this->addTranslation( $mainLocale );
+        $this->versions = new TypeCollection( 'ezp\\Content\\Version', array( new Version( $this ) ) );
     }
 
     /**
@@ -208,12 +190,7 @@ class Content extends Model
      */
     protected function getVersions()
     {
-        $resultArray = array();
-        foreach ( $this->translations as $tr )
-        {
-            $resultArray = array_merge( $resultArray, (array)$tr->versions );
-        }
-        return new TypeCollection( 'ezp\\Content\\Version', $resultArray );
+        return $this->versions;
     }
 
     /**
@@ -223,9 +200,9 @@ class Content extends Model
      */
     protected function getCurrentVersion()
     {
-        foreach ( $this->translations[$this->mainLocale->code]->versions as $contentVersion )
+        foreach ( $this->versions as $contentVersion )
         {
-            if ( $this->currentVersion == $contentVersion->version )
+            if ( $this->properties->currentVersionNo == $contentVersion->versionNo )
                 return $contentVersion;
         }
         return null;
@@ -263,6 +240,7 @@ class Content extends Model
     protected function setSection( Section $section )
     {
         $this->section = $section;
+        $this->properties->sectionId = $section->id;
     }
 
     /**
@@ -277,76 +255,6 @@ class Content extends Model
             $this->section = $this->section->load();
         }
         return $this->section;
-    }
-
-    /**
-     * Returns the section's id
-     *
-     * @return int
-     */
-    protected function getSectionId()
-    {
-        if ( $this->section instanceof Proxy || $this->section instanceof Section )
-        {
-            return $this->section->id;
-        }
-        return 0;
-    }
-
-    /**
-     * Adds a Translation in $locale optionally based on existing
-     * translation in $base.
-     *
-     * @param \ezp\Base\Locale $locale
-     * @param \ezp\Content\Version $base
-     * @return \ezp\Content\Translation
-     * @throw InvalidArgumentException if translation in $base does not exist.
-     */
-    public function addTranslation( Locale $locale, Version $base = null )
-    {
-        if ( isset( $this->translations[$locale->code] ) )
-        {
-            throw new InvalidArgumentException( "Translation {$locale->code} already exists" );
-        }
-
-        $tr = new Translation( $locale, $this );
-        $this->translations[$locale->code] = $tr;
-
-        $newVersion = null;
-        if ( $base !== null )
-        {
-            $newVersion = clone $base;
-            $newVersion->locale = $locale;
-        }
-        if ( $newVersion === null )
-        {
-            $newVersion = new Version( $this, $locale );
-        }
-        $tr->versions[] = $newVersion;
-        return $tr;
-    }
-
-    /**
-     * Remove the translation in $locale
-     *
-     * @param \ezp\Base\Locale $locale
-     * @throw InvalidArgumentException if the main locale is the one in
-     *          argument or if there's not translation
-     *          in this locale @todo Use Base exceptions
-     */
-    public function removeTranslation( Locale $locale )
-    {
-        if ( $locale->code === $this->mainLocale->code )
-        {
-            throw new InvalidArgumentException( "Transation {$locale->code} is the main locale of this Content so it cannot be removed" );
-        }
-        if ( !isset( $this->translations[$locale->code] ) )
-        {
-            throw new InvalidArgumentException( "Transation {$locale->code} does not exist so it cannot be removed" );
-        }
-        unset( $this->translations[$locale->code] );
-        // @todo ? remove on each versions in $this->translations[$locale->code]
-        //foreach ( $this->translations[$locale->code]->versions as $version )
     }
 
     /**
@@ -367,7 +275,7 @@ class Content extends Model
      */
     public function __clone()
     {
-        $this->id = false;
+        $this->properties->id = false;
         $this->status = self::STATUS_DRAFT;
 
         // Get the location's, so that new content will be the old one's sibling
@@ -377,14 +285,6 @@ class Content extends Model
         {
             $this->addParent( $location->parent );
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->name;
     }
 }
 ?>

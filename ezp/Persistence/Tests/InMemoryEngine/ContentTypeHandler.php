@@ -25,6 +25,7 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
  * @see ezp\Persistence\Content\Type\Handler
  *
  * @status //autogentag//
+ * @todo Validate $status arguments
  */
 class ContentTypeHandler implements ContentTypeHandlerInterface
 {
@@ -102,7 +103,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @param int $groupId
+     * @param mixed $groupId
      * @return \ezp\Persistence\Content\Type\Group
      */
     public function loadGroup( $groupId )
@@ -123,7 +124,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type[]
      */
-    public function loadContentTypes( $groupId, $status = 0 )
+    public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED )
     {
         return $this->backend->find(
             'Content\\Type',
@@ -136,13 +137,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * Load a content type by id and version
+     * Load a content type by id and status
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
      */
-    public function load( $contentTypeId, $status = 0 )
+    public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
         $type = $this->backend->find(
             'Content\\Type',
@@ -154,7 +156,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         );
 
         if ( !$type )
-            return null;
+            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
 
         return $type[0];
     }
@@ -181,7 +183,6 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
 
     /**
      * @param mixed $typeId
-     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
      */
     public function update( $typeId, UpdateStruct $contentType )
@@ -214,11 +215,32 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * Copy a Type incl fields and group-relations from a given status to a new Type with status {@link Type::STATUS_DRAFT}
+     *
+     * New Content Type will have $userId as creator / modifier, created / modified should be updated, new remoteId
+     * and identifier should be appended with '_' and new remoteId or another unique number.
+     *
+     * @param mixed $userId
+     * @param mixed $contentTypeId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
+     * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
      */
     public function copy( $userId, $contentTypeId, $status )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $type = $this->load( $contentTypeId, $status );
+
+        // @todo Validate $userId
+        $struct = new CreateStruct();
+        foreach ( $struct as $property => $value )
+        {
+            $struct->$property = $type->$property;
+        }
+        $struct->created = $struct->modified = time();
+        $struct->creatorId = $struct->modifierId = $userId;
+        $struct->status = Type::STATUS_DRAFT;
+        $struct->identifier .= '_' . ( $struct->remoteId = md5( uniqid( get_class( $struct ), true ) ) );
+        return $this->create( $struct );
     }
 
     /**
@@ -288,11 +310,20 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $contentTypeId
      * @param FieldDefinition $fieldDefinition
-     * @return void
+     * @return FieldDefinition
+     * @throws \ezp\Base\Exception\NotFound If type is not found
      */
     public function addFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'status' => Type::STATUS_DRAFT ) );
+        if ( !isset( $list[0] ) )
+            throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '" . Type::STATUS_DRAFT . "'" );
+
+        $fieldDefinitionArr = (array) $fieldDefinition;
+        $fieldDefinitionArr['_typeId'] = $contentTypeId;
+        $fieldDefinitionArr['_status'] = Type::STATUS_DRAFT ;
+
+        return $this->backend->create( 'Content\\Type\\FieldDefinition', $fieldDefinitionArr );
     }
 
     /**
@@ -304,11 +335,16 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $contentTypeId
      * @param mixed $fieldDefinitionId
-     * @return boolean
+     * @return void
+     * @throws \ezp\Base\Exception\NotFound If field is not found
      */
     public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->deleteByMatch( 'Content\\Type\\FieldDefinition', array(
+                                                                           '_typeId' => $contentTypeId,
+                                                                           '_status' => Type::STATUS_DRAFT ,
+                                                                           'id' => $fieldDefinitionId,
+                                                                         ) );
     }
 
     /**
@@ -320,10 +356,18 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $contentTypeId
      * @param FieldDefinition $fieldDefinition
      * @return void
+     * @throws \ezp\Base\Exception\NotFound If field is not found
      */
     public function updateFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $fieldDefinitionArr = (array) $fieldDefinition;
+        $updated = $this->backend->updateByMatch( 'Content\\Type\\FieldDefinition', array(
+                                                                           '_typeId' => $contentTypeId,
+                                                                           '_status' => Type::STATUS_DRAFT ,
+                                                                           'id' => $fieldDefinition->id,
+                                                                         ), $fieldDefinitionArr );
+        if ( !$updated )
+            throw new NotFound( 'Content\\Type\\FieldDefinition', $fieldDefinition->id );
     }
 
     /**

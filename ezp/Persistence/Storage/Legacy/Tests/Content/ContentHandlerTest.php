@@ -14,6 +14,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\Mapper,
@@ -513,6 +514,83 @@ class ContentHandlerTest extends TestCase
             $this->assertEquals( 23, $field->id );
             $this->assertEquals( 5, $field->versionNo );
         }
+    }
+
+    public function testUpdateContent()
+    {
+        // Build up basic mocks
+        $mapper = new Mapper(
+            $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
+        );
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->any() )
+            ->method( 'toStorage' )
+            ->will( $this->returnValue( new StorageFieldValue() ) );
+
+        $registry
+            ->expects( $this->any() )
+            ->method( 'getConverter' )
+            ->will( $this->returnValue( $converter ) );
+
+        $locationMock   = $this->getLocationHandlerMock();
+        $gatewayMock    = $this->getGatewayMock();
+        $storageRegMock = $this->getStorageRegistryMock();
+        $storageMock    = $this->getMock(
+            'ezp\\Persistence\\Fields\\Storage'
+        );
+
+        $handler = new Handler( $gatewayMock, $locationMock, $mapper, $storageRegMock );
+
+        // Ensure the external storage handler is called properly.
+        $storageRegMock->expects( $this->exactly( 2 ) )
+            ->method( 'getStorage' )
+            ->will(
+                $this->returnValue( $storageMock )
+            );
+
+        $storageMock->expects( $this->exactly( 2 ) )
+            ->method( 'storeFieldData' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content\\FieldValue'
+                )
+            );
+
+        // These are the actually important expectations -- ensuring the
+        // correct methods are called on the mapper.
+        $gatewayMock->expects( $this->once() )
+            ->method( 'updateVersion' )
+            ->with( 14, 4, 14 );
+
+        $gatewayMock->expects( $this->exactly( 2 ) )
+            ->method( 'updateField' )
+            ->with(
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ),
+                $this->isInstanceOf( 'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue' )
+            );
+
+        $result = $handler->update( new UpdateStruct( array(
+            'id' => 14,
+            'versionNo' => 4,
+            'userId' => 14,
+            'fields' => array(
+                new Field( array(
+                    'id' => 23,
+                    'fieldDefinitionId' => 42,
+                    'type' => 'some-type',
+                    'value' => new FieldValue(),
+                ) ),
+                new Field( array(
+                    'id' => 23,
+                    'fieldDefinitionId' => 43,
+                    'type' => 'some-type',
+                    'value' => new FieldValue(),
+                ) ),
+            )
+        ) ) );
     }
 
     /**

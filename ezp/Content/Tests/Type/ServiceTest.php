@@ -45,6 +45,7 @@ class ServiceTest extends BaseServiceTest
         $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $do );
         $this->assertEquals( 0, count( $do->types ) );
         $this->assertEquals( array( 'eng-GB' => "Test" ), $do->name );
+        $this->assertEquals( 2, $do->id );
     }
 
     /**
@@ -267,22 +268,65 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
+     * @covers ezp\Content\Type\Service::copy
+     */
+    public function testCopy()
+    {
+        $type = $this->service->copy( 10, 1 );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
+        $this->assertStringStartsWith( 'folder_', $type->identifier );
+        $this->assertEquals( 1, count( $type->fields ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
+        // lazy collection tests
+        $this->assertEquals( 1, count( $type->groups ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $type->groups[0] );
+        $this->assertEquals( 1, count( $type->groups[0]->types ) );
+        // newly created type should be draft
+        $drafts = $this->service->loadByGroupId( $type->groups[0]->id, 1 );
+        $this->assertEquals( 1, count( $drafts ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $drafts[0] );
+        $this->assertEquals( $type->id, $drafts[0]->id );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::copy
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testCopyInValidTypeId()
+    {
+        $this->service->copy( 10, 22 );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::copy
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testCopyInValidStatus()
+    {
+        $this->service->copy( 10, 1, 1 );
+    }
+
+    /**
+     * @group contentTypeService
      * @covers ezp\Content\Type\Service::link
      */
     public function testLink()
     {
-        $do = new Group();
-        $do->created = $do->modified = time();
-        $do->creatorId = $do->modifierId = 14;
-        $do->name = $do->description = array( 'eng-GB' => 'Test' );
-        $do->identifier = 'test';
-        $do = $this->service->createGroup( $do );
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+        $newGroup = $this->service->createGroup( $newGroup );
+        $type = $this->service->load( 1, 0 );
 
-        $this->service->link( $do->id, 1, 0 );
+        $this->service->link( $type, $newGroup );
 
         $type = $this->service->load( 1, 0 );
         $this->assertEquals( 2, count( $type->groups ) );
-        $this->assertEquals( $do->id, $type->groups[1]->id );
+        $this->assertEquals( $newGroup->id, $type->groups[1]->id );
         $this->assertEquals( array( 'eng-GB' => 'Test' ), $type->groups[1]->name );
         $this->assertEquals( 'test', $type->groups[1]->identifier );
     }
@@ -294,7 +338,14 @@ class ServiceTest extends BaseServiceTest
      */
     public function testLinkGroupNotFound()
     {
-        $this->service->link( 64, 1, 0 );
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+
+        $type = $this->service->load( 1, 0 );
+        $this->service->link( $type, $newGroup );
     }
 
     /**
@@ -304,7 +355,10 @@ class ServiceTest extends BaseServiceTest
      */
     public function testLinkTypeNotFound()
     {
-        $this->service->link( 1, 2, 0 );
+        $type = $this->service->load( 1, 0 );
+        $existingGroup = $this->service->loadGroup( 1 );
+        $this->service->delete( 1, 0 );
+        $this->service->link( $type, $existingGroup );
     }
 
     /**
@@ -314,7 +368,9 @@ class ServiceTest extends BaseServiceTest
      */
     public function testLinkTypeAlreadyPartOfGroup()
     {
-        $this->service->link( 1, 1, 0 );
+        $type = $this->service->load( 1, 0 );
+        $existingGroup = $this->service->loadGroup( 1 );
+        $this->service->link( $type, $existingGroup );
     }
 
     /**
@@ -323,19 +379,22 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUnLink()
     {
-        $do = new Group();
-        $do->created = $do->modified = time();
-        $do->creatorId = $do->modifierId = 14;
-        $do->name = $do->description = array( 'eng-GB' => 'Test' );
-        $do->identifier = 'test';
-        $do = $this->service->createGroup( $do );
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+        $newGroup = $this->service->createGroup( $newGroup );
 
-        $this->service->link( $do->id, 1, 0 );
-        $this->service->unlink( 1, 1, 0 );
+        $type = $this->service->load( 1, 0 );
+        $existingGroup = $this->service->loadGroup( 1 );
+
+        $this->service->link( $type, $newGroup );
+        $this->service->unlink( $type, $existingGroup );
 
         $type = $this->service->load( 1, 0 );
         $this->assertEquals( 1, count( $type->groups ) );
-        $this->assertEquals( $do->id, $type->groups[0]->id );
+        $this->assertEquals( $newGroup->id, $type->groups[0]->id );
     }
 
     /**
@@ -345,7 +404,10 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUnLinkTypeNotFound()
     {
-        $this->service->unlink( 1, 2, 0 );
+        $type = $this->service->load( 1, 0 );
+        $existingGroup = $this->service->loadGroup( 1 );
+        $this->service->delete( 1, 0 );
+        $this->service->unlink( $type, $existingGroup );
     }
 
     /**
@@ -355,7 +417,15 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUnLinkTypeNotPartOfGroup()
     {
-        $this->service->unlink( 2, 1, 0 );
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+        $newGroup = $this->service->createGroup( $newGroup );
+
+        $type = $this->service->load( 1, 0 );
+        $this->service->unlink( $type, $newGroup );
     }
 
     /**
@@ -365,6 +435,135 @@ class ServiceTest extends BaseServiceTest
      */
     public function testUnLinkLastGroup()
     {
-        $this->service->unlink( 1, 1, 0 );
+        $type = $this->service->load( 1, 0 );
+        $existingGroup = $this->service->loadGroup( 1 );
+        $this->service->unlink( $type, $existingGroup );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::addFieldDefinition
+     */
+    public function testAddFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $field = new FieldDefinition( $type, 'ezstring' );
+        $field->name = $field->description = array( 'eng-GB' => 'Test' );
+        $field->defaultValue = $field->fieldGroup = '';
+        $field->identifier = 'test';
+        $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
+        $this->service->addFieldDefinition( $type, $field );
+
+        $type = $this->service->load( 1, 0 );
+        $this->assertEquals( 2, count( $type->fields ) );
+        $this->assertEquals( 'test', $type->fields[1]->identifier );
+        $this->assertEquals( 2, $type->fields[1]->id );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::addFieldDefinition
+     * @expectedException \ezp\Base\Exception\InvalidArgumentType
+     */
+    public function testAddFieldDefinitionWithExistingFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $this->service->addFieldDefinition( $type, $type->fields[0] );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::addFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testAddFieldDefinitionWithUnExistingType()
+    {
+        $type = $this->service->load( 1, 0 );
+        $this->service->delete( $type->id, $type->status );
+
+        $field = new FieldDefinition( $type, 'ezstring' );
+        $field->name = $field->description = array( 'eng-GB' => 'Test' );
+        $field->defaultValue = $field->fieldGroup = '';
+        $field->identifier = 'test';
+        $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
+        $this->service->addFieldDefinition( $type, $field );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::removeFieldDefinition
+     */
+    public function testRemoveFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+
+        $type = $this->service->load( 1, 0 );
+        $this->assertEquals( 0, count( $type->fields ) );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::removeFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testRemoveFieldDefinitionWithUnExistingFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::removeFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testRemoveFieldDefinitionWithUnExistingType()
+    {
+        $type = $this->service->load( 1, 0 );
+        $this->service->delete( $type->id, $type->status );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::updateFieldDefinition
+     */
+    public function testUpdateFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $type->fields[0]->name = array( 'eng-GB' => 'New name' );
+        $this->service->updateFieldDefinition( $type, $type->fields[0] );
+
+        $type = $this->service->load( 1, 0 );
+        $this->assertEquals( 1, count( $type->fields ) );
+        $this->assertEquals( array( 'eng-GB' => 'New name' ), $type->fields[0]->name );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::updateFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUpdateFieldDefinitionWithUnExistingFieldDefinition()
+    {
+        $type = $this->service->load( 1, 0 );
+        $type->fields[0]->name = array( 'eng-GB' => 'New name' );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+        $this->service->updateFieldDefinition( $type, $type->fields[0] );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::updateFieldDefinition
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUpdateFieldDefinitionWithUnExistingType()
+    {
+        $type = $this->service->load( 1, 0 );
+        $type->fields[0]->name = array( 'eng-GB' => 'New name' );
+        $this->service->delete( $type->id, $type->status );
+        $this->service->updateFieldDefinition( $type, $type->fields[0] );
     }
 }

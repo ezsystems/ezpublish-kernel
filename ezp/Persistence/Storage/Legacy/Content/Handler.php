@@ -253,7 +253,21 @@ class Handler implements BaseContentHandler
      */
     public function update( UpdateStruct $content )
     {
-        throw new Exception( "Not implemented yet." );
+        $this->contentGateway->updateVersion(
+            $content->id, $content->versionNo, $content->userId
+        );
+
+        foreach ( $content->fields as $field )
+        {
+            $field->versionNo = $content->versionNo;
+            $this->contentGateway->updateField(
+                $field,
+                $this->mapper->convertToStorageValue( $field )
+            );
+            $this->storageRegistry->getStorage( $field->type )
+                ->storeFieldData( $field->id, $field->value );
+            $version->fields[] = $field;
+        }
     }
 
     /**

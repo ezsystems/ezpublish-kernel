@@ -191,15 +191,14 @@ class Handler implements BaseLocationHandler
     }
 
     /**
-     * Creates a new location for $contentId rooted at $parentId.
+     * Creates a new location rooted at $location->parentId.
      *
      * @param \ezp\Persistence\Content\Location\CreateStruct $contentId
-     * @param mixed $parentId
      * @return \ezp\Persistence\Content\Location
      */
-    public function createLocation( CreateStruct $locationStruct, $parentId )
+    public function createLocation( CreateStruct $locationStruct )
     {
-        $parentNodeData = $this->locationGateway->getBasicNodeData( $parentId );
+        $parentNodeData = $this->locationGateway->getBasicNodeData( $locationStruct->parentId );
         $this->locationGateway->createLocation( $locationStruct, $parentNodeData );
     }
 

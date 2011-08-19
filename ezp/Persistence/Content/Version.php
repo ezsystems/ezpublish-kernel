@@ -65,6 +65,15 @@ class Version extends ValueObject
     public $contentId;
 
     /**
+     * List of languages (id's) in this version
+     *
+     * Reflects which languages fields exists in for this version.
+     *
+     * @var mixed[]
+     */
+    public $languageIds = array();
+
+    /**
      * Loaded content fields in this version.
      *
      * Contains all fields for all languages of this version. Fields which are

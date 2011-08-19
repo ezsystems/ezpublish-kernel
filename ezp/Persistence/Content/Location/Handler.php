@@ -102,13 +102,12 @@ interface Handler
     public function updateLocation( UpdateStruct $location, $locationId );
 
     /**
-     * Creates a new location rooted at $parentId.
+     * Creates a new location rooted at $location->parentId.
      *
      * @param \ezp\Persistence\Content\Location\CreateStruct $location
-     * @param mixed $parentId
      * @return \ezp\Persistence\Content\Location
      */
-    public function createLocation( CreateStruct $location, $parentId );
+    public function createLocation( CreateStruct $location );
 
     /**
      * Removes all Locations under and including $locationId.
@@ -150,7 +149,8 @@ interface Handler
     public function untrashLocation( $locationId, $newParentId = null );
 
     /**
-     * Set section on all content objects in the subtree
+     * Set section on all content objects in the subtree.
+     * Only main locations will be updated
      *
      * @param mixed $locationId
      * @param mixed $sectionId

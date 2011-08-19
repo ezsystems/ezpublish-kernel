@@ -38,7 +38,7 @@ interface Handler
     public function deleteGroup( $groupId );
 
     /**
-     * @param int $groupId
+     * @param mixed $groupId
      * @return \ezp\Persistence\Content\Type\Group
      */
     public function loadGroup( $groupId );
@@ -58,9 +58,10 @@ interface Handler
     /**
      * Load a content type by id and status
      *
-     * @param int $contentTypeId
+     * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If type with provided status is not found
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED );
 
@@ -98,14 +99,16 @@ interface Handler
     public function createVersion( $userId, $contentTypeId, $fromStatus );
 
     /**
-     * Copy a Type incl fields and groups from a given status to a new Type with status {@link Type::STATUS_DRAFT}
+     * Copy a Type incl fields and group-relations from a given status to a new Type with status {@link Type::STATUS_DRAFT}
      *
-     * New Content Type will have $userId as creator / modifier as well as updated created / modified timestamps.
+     * New Content Type will have $userId as creator / modifier, created / modified should be updated, new remoteId
+     * and identifier should be appended with '_' and new remoteId or another unique number.
      *
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @return Type
+     * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
      */
     public function copy( $userId, $contentTypeId, $status );
 
@@ -140,7 +143,9 @@ interface Handler
      *
      * @param mixed $contentTypeId
      * @param FieldDefinition $fieldDefinition
-     * @return void
+     * @return FieldDefinition
+     * @throws \ezp\Base\Exception\NotFound If type is not found
+     * @todo Add FieldDefintion\CreateStruct?
      */
     public function addFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition );
 
@@ -153,7 +158,9 @@ interface Handler
      *
      * @param mixed $contentTypeId
      * @param mixed $fieldDefinitionId
-     * @return boolean
+     * @return void
+     * @throws \ezp\Base\Exception\NotFound If field is not found
+     * @todo Add FieldDefintion\UpdateStruct?
      */
     public function removeFieldDefinition( $contentTypeId, $fieldDefinitionId );
 
@@ -166,6 +173,7 @@ interface Handler
      * @param mixed $contentTypeId
      * @param FieldDefinition $fieldDefinition
      * @return void
+     * @throws \ezp\Base\Exception\NotFound If field is not found
      */
     public function updateFieldDefinition( $contentTypeId, FieldDefinition $fieldDefinition );
 

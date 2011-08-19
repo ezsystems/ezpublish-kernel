@@ -12,13 +12,15 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Collection\Lazy,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
-    ezp\Base\Locale,
     ezp\Content,
     ezp\Content\Location,
+    ezp\Content\Version,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
     ezp\Persistence\ValueObject,
     ezp\Persistence\Content as ContentValue,
+    ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator;
 
@@ -33,13 +35,38 @@ class Service extends BaseService
      *
      * @param Content $content
      * @return Content The newly created content
-     * @throws Exception\Validation If a validation problem has been found for $content
+     * @throws \ezp\Base\Exception\InvalidArgumentType If $content already has an id
+     * @todo If/when we have some sort of object storage, use that to check if object is persisted instead of just id
      */
     public function create( Content $content )
     {
-        // @todo : Do any necessary actions to insert $content in the content repository
-        // go through all locations to create or update them
-        return $content;
+        if ( $content->id )
+            throw new InvalidArgumentType( '$content->id', 'false' );
+
+        $struct = new CreateStruct();
+        $this->fillStruct( $struct, $content, array( 'parentLocations', 'fields' ) );
+        foreach ( $content->locations as $location )
+        {
+            // @todo: Generate pathIdentificationString?
+            // @todo set sort order and fields based on settings in type
+            $struct->parentLocations[] = $this->fillStruct(
+                new LocationCreateStruct(
+                    array(
+                        "pathIdentificationString" => "",
+                        "sortField" => Location::SORT_FIELD_PUBLISHED,
+                        "sortOrder" => Location::SORT_ORDER_DESC,
+                    )
+                ),
+                $location,
+                array( "contentId", "contentVersion", "mainLocationId" )
+            );
+        }
+        foreach ( $content->fields as $fields )
+        {
+            $struct->fields[] = $fields->getState( 'properties' );
+        }
+        $vo = $this->handler->contentHandler()->create( $struct  );
+        return $this->buildDomainObject( $vo );
     }
 
     /**
@@ -95,6 +122,33 @@ class Service extends BaseService
     }
 
     /**
+     * List versions of a $content
+     *
+     * @param Content $content
+     * @return \ezp\Content\Version[]
+     */
+    public function listVersions( Content $content )
+    {
+        // @FIXME: should the return be an array or some sort of collection?
+        $list = array();
+
+        foreach ( $this->handler->contentHandler()->listVersions( $content->id ) as $versionVO )
+        {
+            $version = new Version( $content );
+            $version->setState(
+                array(
+                    "properties" => $versionVO,
+                    // @FIXME: should probably be a collection
+                    "fields" => array(),
+                )
+            );
+            $list[] = $version;
+        }
+
+        return $list;
+    }
+
+    /**
      * Sends $content to trash
      *
      * @param Content $content
@@ -125,7 +179,7 @@ class Service extends BaseService
 
     protected function buildDomainObject( ContentValue $vo )
     {
-        $content = new Content( new Type, new Locale( "eng-GB" ) );
+        $content = new Content( new Type );
         $content->setState(
             array(
                 "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
@@ -138,15 +192,18 @@ class Service extends BaseService
         foreach ( $vo->locations as $locationValue )
         {
             $content->locations[] = $location = new Location( $content );
-            $location->setState( array( 'properties' => $locationValue,
-                                        'parent' => new Proxy( $locationHandler, $locationValue->parentId ),
-                                        'children' => new Lazy(
-                                            'ezp\\Content\\Location',
-                                            $locationHandler,
-                                            $location, // api seems to use location to be able to get out sort info as well
-                                            'children' // Not implemented yet so this collection will return empty array atm
-                                        ) ) );
-
+            $location->setState(
+                array(
+                    "properties" => $locationValue,
+                    "parent" => new Proxy( $locationHandler, $locationValue->parentId ),
+                    "children" => new Lazy(
+                        "ezp\\Content\\Location",
+                        $locationHandler,
+                        $location, // api seems to use location to be able to get out sort info as well
+                        "children" // Not implemented yet so this collection will return empty array atm
+                    )
+                )
+            );
         }
 
         return $content;

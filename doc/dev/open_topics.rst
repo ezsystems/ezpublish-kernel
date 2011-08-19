@@ -51,6 +51,7 @@ Conclusion
 ~~~~~~~~~~
 
 
+
 Return type boolean vs. Exceptions
 ----------------------------------
 
@@ -64,12 +65,27 @@ Conclusion
 Initial feeling is that Exceptions should be defined for these methods.
 
 
-ezp\Persistence\Content->name
------------------------------
+
+
+Languages
+---------
 
 Summary
 ~~~~~~~
-Does not follow same format as other name/description fields that have several languages.
+Need API to deal with languages to be able to map language id's to languageCode
+
+Conclusion
+~~~~~~~~~~
+
+
+
+Translations
+------------
+
+Summary
+~~~~~~~
+Need translation support in Content in DO and some changes to ContentHandler api to reflect
+translation needs and workflow(s).
 
 Conclusion
 ~~~~~~~~~~

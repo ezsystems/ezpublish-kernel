@@ -92,7 +92,7 @@ class SectionTest extends \PHPUnit_Framework_TestCase
         $section->name = 'Test';
 
         $service = $this->getService();
-        $section = $service->create( $section );    
+        $section = $service->create( $section );
         $service->delete( $section->id );
         $service->load( $section->id );
     }

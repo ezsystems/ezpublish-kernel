@@ -42,7 +42,7 @@ class Type extends ValueObject
      *
      * @var int One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
-    public $status;
+    public $status = self::STATUS_DRAFT;
 
     /**
      * Human readable name of the content type
@@ -66,7 +66,7 @@ class Type extends ValueObject
      *
      * @var string[]
      */
-    public $description;
+    public $description = array();
 
     /**
      * String identifier of a type

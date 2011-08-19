@@ -11,6 +11,7 @@
 namespace ezp\Persistence\Storage\Legacy\Content;
 use ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content,
+    ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Content\Field;
 
@@ -36,6 +37,16 @@ abstract class Gateway
     abstract public function insertVersion( Version $version );
 
     /**
+     * Updates an existing version
+     *
+     * @param int|string $version
+     * @param int $versionNo
+     * @param int|string $userId
+     * @return void
+     */
+    abstract public function updateVersion( $version, $versionNo, $userId );
+
+    /**
      * Inserts a new field.
      *
      * Only used when a new content object is created. After that, field IDs
@@ -47,4 +58,13 @@ abstract class Gateway
      * @return int ID
      */
     abstract public function insertNewField( Content $content, Field $field, StorageFieldValue $value );
+
+    /**
+     * Updates an existing field
+     *
+     * @param Field $field
+     * @param StorageFieldValue $value
+     * @return void
+     */
+    abstract public function updateField( Field $field, StorageFieldValue $value );
 }

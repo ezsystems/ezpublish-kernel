@@ -16,6 +16,7 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
     ezp\Content\Version,
+    ezp\Base\Exception\NotFound,
     RuntimeException;
 
 /**
@@ -58,6 +59,7 @@ class ContentHandler implements ContentHandlerInterface
                 'typeId' => $content->typeId,
                 'sectionId' => $content->sectionId,
                 'ownerId' => $content->ownerId,
+                'currentVersionNo' => 1,
             )
         );
         $version = $this->backend->create(
@@ -80,9 +82,11 @@ class ContentHandler implements ContentHandlerInterface
         $contentObj->version = $version;
 
         $locationHandler = $this->handler->locationHandler();
-        foreach ( $content->parentLocations as $parentLocationId )
+        foreach ( $content->parentLocations as $locationStruct )
         {
-            $contentObj->locations[] = $locationHandler->createLocation( $contentObj->id, $parentLocationId );
+            $locationStruct->contentId = $contentObj->id;
+            $locationStruct->contentVersion = $contentObj->currentVersionNo;
+            $contentObj->locations[] = $locationHandler->createLocation( $locationStruct );
         }
         return $contentObj;
     }
@@ -227,10 +231,16 @@ class ContentHandler implements ContentHandlerInterface
 
     /**
      * @see ezp\Persistence\Content\Handler
+     * @throws \ezp\Base\Exception\NotFound If no version found
      */
     public function listVersions( $contentId )
     {
-        return $this->backend->find( 'Content\\Version', array( 'contentId' => $contentId ) );
+        $versions = $this->backend->find( "Content\\Version", array( "contentId" => $contentId ) );
+
+        if ( empty( $versions ) )
+            throw new NotFound( "Content\\Version", "contentId: $contentId" );
+
+        return $versions;
     }
 }
 ?>

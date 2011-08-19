@@ -15,8 +15,10 @@ use ezp\Content\Tests\BaseServiceTest,
     ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\Criterion\ContentId,
     ezp\Content\Location,
-    ezp\Content\Proxy;
+    ezp\Content\Proxy,
+    ezp\Content\Section;
 
 /**
  * Test case for Location service
@@ -226,7 +228,7 @@ class ServiceTest extends BaseServiceTest
      */
     public function testCreate()
     {
-        $remoteId = md5(microtime());
+        $remoteId = md5( microtime() );
         $parent = $this->service->load( 2 );
         $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
         $location->parent = $parent;
@@ -284,7 +286,7 @@ class ServiceTest extends BaseServiceTest
         $this->locationToDelete[] = $locationForTestContent;
 
         $hiddenLocation = $this->service->hide( $this->topLocation );
-        self::assertInstanceOf( 'ezp\\Content\\Location' , $hiddenLocation );
+        self::assertInstanceOf( 'ezp\\Content\\Location', $hiddenLocation );
         self::assertTrue( $hiddenLocation->hidden );
         self::assertTrue( $locationForTestContent->invisible );
         unset( $locationForTestContent );
@@ -330,11 +332,13 @@ class ServiceTest extends BaseServiceTest
 
         // Now test
         $parentMadeVisible = $this->service->unhide( $this->topLocation );
-        self::assertInstanceOf( 'ezp\\Content\\Location' , $parentMadeVisible );
+        self::assertInstanceOf( 'ezp\\Content\\Location', $parentMadeVisible );
         self::assertFalse( $this->location->invisible );
         self::assertFalse( $this->location->hidden );
-        self::assertTrue( $locationShouldStayHidden->hidden && $locationShouldStayHidden->invisible,
-                          'A hidden location should not be made visible by superior location' );
+        self::assertTrue(
+            $locationShouldStayHidden->hidden && $locationShouldStayHidden->invisible,
+            "A hidden location should not be made visible by superior location"
+        );
         self::assertTrue( $locationShouldStayInvisible->invisible );
         self::assertGreaterThanOrEqual( $time, $this->locationHandler->load( $this->topLocation->id )->modifiedSubLocation );
     }
@@ -479,7 +483,6 @@ class ServiceTest extends BaseServiceTest
         $startIndex = 5;
         $this->service->delete( $this->insertedLocations[$startIndex] );
 
-
         foreach ( array_splice( $this->insertedLocations, $startIndex ) as $key => $location )
         {
             try
@@ -487,7 +490,7 @@ class ServiceTest extends BaseServiceTest
                 $this->service->load( $location->id );
                 $this->fail( "Location #{$location->id} has not been properly removed" );
             }
-            catch( NotFound $e )
+            catch ( NotFound $e )
             {
             }
 
@@ -496,7 +499,7 @@ class ServiceTest extends BaseServiceTest
                 $this->contentHandler->load( $location->contentId, 1 );
                 $this->fail( "Content #{$location->contentId} has not been properly removed" );
             }
-            catch( NotFound $e )
+            catch ( NotFound $e )
             {
             }
         }
@@ -511,5 +514,29 @@ class ServiceTest extends BaseServiceTest
         // Reload location from backend
         $newLocation = $this->service->load( $newLocation->id );
         self::assertSame( $newLocation->id, $newLocation->mainLocationId );
+    }
+
+    /**
+     * @group locationService
+     */
+    public function testAssignSection()
+    {
+        $this->insertSubtree();
+        $startIndex = 5;
+
+        // Create the new section
+        $section = new Section;
+        $section->identifier = 'myNewSection';
+        $section->name = 'My new Section';
+        $this->repository->getSectionService()->create( $section );
+
+        // Assign the section to subtree
+        $this->service->assignSection( $this->insertedLocations[$startIndex], $section );
+
+        foreach ( array_splice( $this->insertedLocations, $startIndex ) as $location )
+        {
+            $content = $this->contentHandler->findSingle( new ContentId( $location->contentId ) );
+            self::assertSame( $section->id, $content->sectionId );
+        }
     }
 }

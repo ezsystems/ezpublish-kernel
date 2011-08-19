@@ -9,23 +9,25 @@
 
 namespace ezp\Content;
 use ezp\Base\Model,
-    ezp\Base\Locale,
-    ezp\Base\Observer,
-    ezp\Base\Observable,
     ezp\Content,
-    ezp\Content\Field\Collection;
+    ezp\Content\Field\Collection,
+    ezp\Persistence\Content\Version as VersionValue;
 
 /**
  * This class represents a Content Version
  *
  *
  * @property-read int $id
- * @property-read int $version
- * @property int $userId
+ * @property-read int $versionNo
+ * @property-read mixed $contentId
+ * @property-read int $state
+ * @property-read \ezp\Content $content
  * @property int $creatorId
+ * @property int $created
+ * @property int $modified
  * @property-read ContentField[] $fields An hash structure of fields
  */
-class Version extends Model implements Observer
+class Version extends Model
 {
     /**
      * @todo taken from eZContentObjectVersion, to be redefined
@@ -44,57 +46,21 @@ class Version extends Model implements Observer
      */
     protected $readWriteProperties = array(
         'id' => false,
-        'version' => false,
-        'userId' => true,
+        'versionNo' => false,
         'creatorId' => true,
         'created' => true,
         'modified' => true,
-        'locale' => true,
-        'fields' => false,
+        "state" => false,
         'content' => false,
+        "contentId" => false,
     );
 
     /**
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'locale' => false,
+        'fields' => true,
     );
-
-    /**
-     * @var int
-     */
-    protected $id = 0;
-
-    /**
-     * @var int
-     */
-    protected $version = 0;
-
-    /**
-     * @var int
-     */
-    protected $userId = 0;
-
-    /**
-     * @var int
-     */
-    protected $creatorId = 0;
-
-    /**
-     * @var int
-     */
-    protected $created = 0;
-
-    /**
-     * @var int
-     */
-    protected $modified = 0;
-
-    /**
-     * @var int
-     */
-    protected $status = 0;
 
     /**
      * @var Field[]
@@ -109,56 +75,25 @@ class Version extends Model implements Observer
     protected $content;
 
     /**
-     * Locale
-     *
-     * @var Locale
-     */
-    protected $locale;
-
-    /**
      * Create content version based on content and content type fields objects
      *
      * @param Content $content
      */
-    public function __construct( Content $content, Locale $locale )
+    public function __construct( Content $content )
     {
+        $this->properties = new VersionValue( array( 'contentId' => $content->id ) );
         $this->content = $content;
-        $this->locale = $locale;
         $this->fields = new Collection( $this );
     }
 
     /**
-     * Called when subject has been updated
+     * Get fields of current version
      *
-     * @param Observable $subject
-     * @param string $event
-     * @return Version
+     * @return \ezp\Content\Field[]
      */
-    public function update( Observable $subject, $event = 'update' )
+    protected function getFields()
     {
-        if ( $subject instanceof Content )
-        {
-            return $this->notify( $event );
-        }
-        return $this;
-    }
-
-    /**
-     * Sets the locale of the version
-     *
-     * @param Locale $locale
-     */
-    protected function setLocale( Locale $locale )
-    {
-        $this->locale = $locale;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->id . ' ('  . $this->version . ')';
+        return $this->fields;
     }
 
     /**
@@ -168,7 +103,7 @@ class Version extends Model implements Observer
      */
     public function __clone()
     {
-        $this->id = false;
+        $this->properties->id = false;
     }
 }
 ?>

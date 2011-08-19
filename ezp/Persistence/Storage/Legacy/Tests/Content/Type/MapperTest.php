@@ -46,7 +46,7 @@ class MapperTest extends TestCase
                     'always-available' => 'eng-GB',
                     'eng-GB' => 'Media',
                 ),
-                'description' => null,
+                'description' => array(),
                 'identifier' => 'Media',
                 'created' => 1032009743,
                 'modified' => 1033922120,

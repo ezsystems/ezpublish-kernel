@@ -55,6 +55,7 @@ class CreateStruct extends ValueObject
 
     /**
      * version of the corresponding {@link Content}.
+     * @todo Rename to $contentVersionNo (should that be Nu?)
      *
      * @var int Content version.
      */
@@ -74,8 +75,10 @@ class CreateStruct extends ValueObject
      *
      * If the content object in this location has multiple locations,
      * $mainLocationId will point to the main one.
+     * This is allowed to be set to true, this will mean this should become main location
+     * (@todo Find a better way to deal with being able to create the main location)
      *
-     * @var mixed
+     * @var mixed|true
      */
     public $mainLocationId;
 
@@ -96,4 +99,10 @@ class CreateStruct extends ValueObject
      * @var mixed
      */
     public $sortOrder;
+
+    /**
+     * Parent location's Id
+     * @var int
+     */
+    public $parentId;
 }

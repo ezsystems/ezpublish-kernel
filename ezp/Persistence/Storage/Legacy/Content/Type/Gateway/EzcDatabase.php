@@ -226,8 +226,8 @@ class EzcDatabase extends Gateway
     protected function insertTypeNameData( Type $type )
     {
         $alwaysAvailable = null;
-        $languages       = $type->name;
-        $mapping         = $this->getLanguageMapping();
+        $languages = $type->name;
+        $mapping = $this->getLanguageMapping();
         if ( isset( $languages['always-available'] ) )
         {
             $alwaysAvailable = $languages['always-available'];
@@ -336,19 +336,20 @@ class EzcDatabase extends Gateway
         $group = $this->loadGroupData( $groupId );
 
         $q = $this->dbHandler->createInsertQuery();
-        $q->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' ) )
-            ->set(
-                $this->dbHandler->quoteColumn( 'contentclass_id' ),
-                $q->bindValue( $typeId, null, \PDO::PARAM_INT )
-            )->set(
-                $this->dbHandler->quoteColumn( 'contentclass_version' ),
-                $q->bindValue( $status, null, \PDO::PARAM_INT )
-            )->set(
-                $this->dbHandler->quoteColumn( 'group_id' ),
-                $q->bindValue( $groupId, null, \PDO::PARAM_INT )
-            )->set(
-                $this->dbHandler->quoteColumn( 'group_name' ),
-                $q->bindValue( $group['name'] )
+        $q->insertInto(
+            $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'contentclass_id' ),
+            $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'contentclass_version' ),
+            $q->bindValue( $status, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'group_id' ),
+            $q->bindValue( $groupId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'group_name' ),
+            $q->bindValue( $group['name'] )
         );
 
         $stmt = $q->prepare();
@@ -366,22 +367,23 @@ class EzcDatabase extends Gateway
     public function deleteGroupAssignement( $groupId, $typeId, $status )
     {
         $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom( $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' ) )
-            ->where(
-                $q->expr->lAnd(
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentclass_id' ),
-                        $q->bindValue( $typeId, null, \PDO::PARAM_INT )
-                    ),
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentclass_version' ),
-                        $q->bindValue( $status, null, \PDO::PARAM_INT )
-                    ),
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'group_id' ),
-                        $q->bindValue( $groupId, null, \PDO::PARAM_INT )
-                    )
+        $q->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclass_id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclass_version' ),
+                    $q->bindValue( $status, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'group_id' ),
+                    $q->bindValue( $groupId, null, \PDO::PARAM_INT )
                 )
+            )
         );
         $stmt = $q->prepare();
         $stmt->execute();
@@ -694,18 +696,19 @@ class EzcDatabase extends Gateway
     public function deleteFieldDefinitionsForType( $typeId, $status )
     {
         $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom( $this->dbHandler->quoteTable( 'ezcontentclass_attribute' ) )
-            ->where(
-                $q->expr->lAnd(
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentclass_id' ),
-                        $q->bindValue( $typeId, null, \PDO::PARAM_INT )
-                    ),
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'version' ),
-                        $q->bindValue( $status, null, \PDO::PARAM_INT )
-                    )
+        $q->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezcontentclass_attribute' )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclass_id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $q->bindValue( $status, null, \PDO::PARAM_INT )
                 )
+            )
         );
         $stmt = $q->prepare();
         $stmt->execute();
@@ -722,18 +725,19 @@ class EzcDatabase extends Gateway
     public function deleteType( $typeId, $status )
     {
         $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom( $this->dbHandler->quoteTable( 'ezcontentclass' ) )
-            ->where(
-                $q->expr->lAnd(
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'id' ),
-                        $q->bindValue( $typeId, null, \PDO::PARAM_INT )
-                    ),
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'version' ),
-                        $q->bindValue( $status, null, \PDO::PARAM_INT )
-                    )
+        $q->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezcontentclass' )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $q->bindValue( $status, null, \PDO::PARAM_INT )
                 )
+            )
         );
         $stmt = $q->prepare();
         $stmt->execute();
@@ -748,18 +752,19 @@ class EzcDatabase extends Gateway
     public function deleteGroupAssignementsForType( $typeId, $status )
     {
         $q = $this->dbHandler->createDeleteQuery();
-        $q->deleteFrom( $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' ) )
-            ->where(
-                $q->expr->lAnd(
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentclass_id' ),
-                        $q->bindValue( $typeId, null, \PDO::PARAM_INT )
-                    ),
-                    $q->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentclass_version' ),
-                        $q->bindValue( $status, null, \PDO::PARAM_INT )
-                    )
+        $q->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclass_id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclass_version' ),
+                    $q->bindValue( $status, null, \PDO::PARAM_INT )
                 )
+            )
         );
         $stmt = $q->prepare();
         $stmt->execute();
