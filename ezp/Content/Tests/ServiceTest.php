@@ -13,7 +13,6 @@ use ezp\Content,
     ezp\Content\Type,
     ezp\Content\Version,
     ezp\Content\Tests\BaseServiceTest,
-    ezp\Base\Locale,
     ezp\Base\Exception\NotFound,
     ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content as ContentValue,
@@ -101,7 +100,7 @@ class ServiceTest extends BaseServiceTest
         $type = $this->repository->getContentTypeService()->load( 1 );
         $location = $this->repository->getLocationService()->load( 2 );
         $section = $this->repository->getSectionService()->load( 1 );
-        $content = new Content( $type, new Locale( 'eng-GB' ) );
+        $content = new Content( $type );
         $content->addParent( $location );
         $content->name = "New object";
         $content->ownerId = 10;
@@ -181,7 +180,7 @@ class ServiceTest extends BaseServiceTest
      */
     public function testListVersionsNotExisting()
     {
-        $content = new Content( new Type, new Locale( "eng-GB" ) );
+        $content = new Content( new Type );
         $content->getState( "properties" )->id = 42;
         $versions = $this->service->listVersions( $content );
     }
@@ -220,7 +219,7 @@ class ServiceTest extends BaseServiceTest
      */
     public function testDeleteNotExisting()
     {
-        $content = new Content( new Type, new Locale( "eng-GB" ) );
+        $content = new Content( new Type );
         $content->getState( "properties" )->id = 42;
         $this->service->delete( $content );
     }

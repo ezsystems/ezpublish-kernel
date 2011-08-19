@@ -10,7 +10,6 @@
 namespace ezp;
 use ezp\Base\Model,
     ezp\Base\Observable,
-    ezp\Base\Locale,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Content\Translation,
     ezp\Content\Type,
@@ -91,6 +90,7 @@ class Content extends Model
         'locations' => true,
         'alwaysAvailable' => true,
         'remoteId' => true,
+        'sectionId' => false,
     );
 
     /**
@@ -100,7 +100,6 @@ class Content extends Model
         'creationDate' => false,
         'mainLocation' => false,
         'section' => false,
-        'sectionId' => false,
         'fields' => true,
         'contentType' => false,
         'versions' => false,
@@ -150,20 +149,6 @@ class Content extends Model
     protected $reversedRelations;
 
     /**
-     * Translations collection
-     *
-     * @var \ezp\Content\Translation[]
-     */
-    protected $translations;
-
-    /**
-     * \ezp\Base\Locale
-     *
-     * @var \ezp\Base\Locale
-     */
-    protected $mainLocale;
-
-    /**
      * Versions
      *
      * @var \ezp\Content\Version[]
@@ -174,22 +159,18 @@ class Content extends Model
      * Create content based on content type object
      *
      * @param \ezp\Content\Type $contentType
-     * @param \ezp\Base\Locale $mainLocale
      */
-    public function __construct( Type $contentType, Locale $mainLocale )
+    public function __construct( Type $contentType )
     {
         $this->properties = new ContentValue( array( 'typeId' => $contentType->id ) );
         /*
         @TODO Make sure all dynamic properties writes to value object if scalar value (creationDate (int)-> properties->created )
         */
-        $this->mainLocale = $mainLocale;
-        $this->versions = new TypeCollection( 'ezp\\Content\\Version' );
+        $this->contentType = $contentType;
         $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
         $this->relations = new TypeCollection( 'ezp\\Content' );
         $this->reversedRelations = new TypeCollection( 'ezp\\Content' );
-        $this->translations = new TypeCollection( 'ezp\\Content\\Translation' );
-        $this->contentType = $contentType;
-        $this->addTranslation( $mainLocale );
+        $this->versions = new TypeCollection( 'ezp\\Content\\Version', array( new Version( $this ) ) );
     }
 
     /**
@@ -209,12 +190,7 @@ class Content extends Model
      */
     protected function getVersions()
     {
-        $resultArray = array();
-        foreach ( $this->translations as $tr )
-        {
-            $resultArray = array_merge( $resultArray, (array)$tr->versions );
-        }
-        return new TypeCollection( 'ezp\\Content\\Version', $resultArray );
+        return $this->versions;
     }
 
     /**
@@ -224,7 +200,7 @@ class Content extends Model
      */
     protected function getCurrentVersion()
     {
-        foreach ( $this->translations[$this->mainLocale->code]->versions as $contentVersion )
+        foreach ( $this->versions as $contentVersion )
         {
             if ( $this->properties->currentVersionNo == $contentVersion->versionNo )
                 return $contentVersion;
@@ -282,76 +258,6 @@ class Content extends Model
     }
 
     /**
-     * Returns the section's id
-     *
-     * @return int
-     */
-    protected function getSectionId()
-    {
-        if ( $this->section instanceof Proxy || $this->section instanceof Section )
-        {
-            return $this->section->id;
-        }
-        return 0;
-    }
-
-    /**
-     * Adds a Translation in $locale optionally based on existing
-     * translation in $base.
-     *
-     * @param \ezp\Base\Locale $locale
-     * @param \ezp\Content\Version $base
-     * @return \ezp\Content\Translation
-     * @throw InvalidArgumentException if translation in $base does not exist.
-     */
-    public function addTranslation( Locale $locale, Version $base = null )
-    {
-        if ( isset( $this->translations[$locale->code] ) )
-        {
-            throw new InvalidArgumentException( "Translation {$locale->code} already exists" );
-        }
-
-        $tr = new Translation( $locale, $this );
-        $this->translations[$locale->code] = $tr;
-
-        $newVersion = null;
-        if ( $base !== null )
-        {
-            $newVersion = clone $base;
-            $newVersion->locale = $locale;
-        }
-        if ( $newVersion === null )
-        {
-            $newVersion = new Version( $this, $locale );
-        }
-        $tr->versions[] = $newVersion;
-        return $tr;
-    }
-
-    /**
-     * Remove the translation in $locale
-     *
-     * @param \ezp\Base\Locale $locale
-     * @throw InvalidArgumentException if the main locale is the one in
-     *          argument or if there's not translation
-     *          in this locale @todo Use Base exceptions
-     */
-    public function removeTranslation( Locale $locale )
-    {
-        if ( $locale->code === $this->mainLocale->code )
-        {
-            throw new InvalidArgumentException( "Transation {$locale->code} is the main locale of this Content so it cannot be removed" );
-        }
-        if ( !isset( $this->translations[$locale->code] ) )
-        {
-            throw new InvalidArgumentException( "Transation {$locale->code} does not exist so it cannot be removed" );
-        }
-        unset( $this->translations[$locale->code] );
-        // @todo ? remove on each versions in $this->translations[$locale->code]
-        //foreach ( $this->translations[$locale->code]->versions as $version )
-    }
-
-    /**
      * Adds a new location to content under an existing one.
      *
      * @param \ezp\Content\Location $parentLocation
@@ -369,7 +275,7 @@ class Content extends Model
      */
     public function __clone()
     {
-        $this->id = false;
+        $this->properties->id = false;
         $this->status = self::STATUS_DRAFT;
 
         // Get the location's, so that new content will be the old one's sibling
@@ -379,14 +285,6 @@ class Content extends Model
         {
             $this->addParent( $location->parent );
         }
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->name;
     }
 }
 ?>

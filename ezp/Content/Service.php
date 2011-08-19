@@ -12,7 +12,6 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Collection\Lazy,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
-    ezp\Base\Locale,
     ezp\Content,
     ezp\Content\Location,
     ezp\Content\Version,
@@ -135,7 +134,7 @@ class Service extends BaseService
 
         foreach ( $this->handler->contentHandler()->listVersions( $content->id ) as $versionVO )
         {
-            $version = new Version( $content, new Locale( "eng-GB" ) );
+            $version = new Version( $content );
             $version->setState(
                 array(
                     "properties" => $versionVO,
@@ -180,7 +179,7 @@ class Service extends BaseService
 
     protected function buildDomainObject( ContentValue $vo )
     {
-        $content = new Content( new Type, new Locale( "eng-GB" ) );
+        $content = new Content( new Type );
         $content->setState(
             array(
                 "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
