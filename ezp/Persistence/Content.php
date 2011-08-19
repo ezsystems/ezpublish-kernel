@@ -20,7 +20,7 @@ class Content extends ValueObject
     public $id;
 
     /**
-     * @var string
+     * @var string[]
      */
     public $name;
 
