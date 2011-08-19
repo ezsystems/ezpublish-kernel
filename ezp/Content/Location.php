@@ -9,9 +9,7 @@
 
 namespace ezp\Content;
 use ezp\Base\Model,
-    ezp\Base\Observer,
     ezp\Base\Collection\Type as TypeCollection,
-    ezp\Base\Observable,
     ezp\Content,
     ezp\Persistence\Content\Location as LocationValue,
     ezp\Base\Exception\InvalidArgumentType;
