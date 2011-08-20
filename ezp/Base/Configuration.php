@@ -123,7 +123,7 @@ class Configuration extends Override
     /**
      * List of instances pr settings type (array key).
      *
-     * @var array
+     * @var Configuration[]
      */
     protected static $instance = array();
 
@@ -201,19 +201,11 @@ class Configuration extends Override
     }
 
     /**
-     * Signal that cache needs to be reloaded ( compares has of override paths with has of currently loaded configuration cache )
-     */
-    protected function needsReload()
-    {
-        return !isset( $this->raw['hash'] ) || $this->raw['hash'] !== $this->pathsHash();
-    }
-
-    /**
      * Reload cache data conditionally if path hash has changed on current instance
      */
     public function reload()
     {
-        if ( $this->needsReload() )
+        if ( !isset( $this->raw['hash'] ) || $this->raw['hash'] !== $this->pathsHash() )
             $this->load();
     }
 
@@ -224,8 +216,7 @@ class Configuration extends Override
     {
         foreach ( self::$instance as $instance )
         {
-            if ( $instance->needsReload() )
-                $instance->load();
+            $instance->reload();
         }
     }
 
@@ -237,18 +228,6 @@ class Configuration extends Override
     public static function getGlobalConfigurationData()
     {
         return self::$globalConfigurationData;
-    }
-
-    /**
-     * Get instance configuration data (make sure it has been loaded first)
-     *
-     * @todo Currently used for testing, remove when there is proper unit test for parsers!
-     * @internal
-     * @return array
-     */
-    public function getConfigurationData()
-    {
-        return $this->raw['data'];
     }
 
     /**
@@ -292,8 +271,8 @@ class Configuration extends Override
         if ( !$hasCache )
         {
             $sourceFiles = array();
-            $configurationData = self::parse( $this->moduleName, $this->paths, $sourceFiles );
-            $this->raw = self::generateRawData( $this->pathsHash(), $configurationData, $sourceFiles, $this->paths );
+            $configurationData = self::parse( $this->moduleName, $this->getDirs(), $sourceFiles );
+            $this->raw = self::generateRawData( $this->pathsHash(), $configurationData, $sourceFiles, $this->getDirs() );
 
             if ( $useCache )
             {
@@ -415,7 +394,7 @@ class Configuration extends Override
      * @return array Data structure for parsed ini files
      * @throws ezp\Base\Exception\BadConfiguration If no parser have been defined
      */
-    public static function parse( $moduleName, array $configurationPaths, array &$sourceFiles )
+    protected static function parse( $moduleName, array $configurationPaths, array &$sourceFiles )
     {
         if ( empty( self::$globalConfigurationData['base']['configuration']['parsers'] ) )
         {

@@ -43,7 +43,7 @@ abstract class Override
      *
      * @var array
      */
-    protected $paths = null;
+    private $paths = array();
 
     /**
      * The instance configuration path array md5 hash, for use in cache names.
@@ -51,7 +51,7 @@ abstract class Override
      *
      * @var string
      */
-    protected $pathsHash = '';
+    private $pathsHash = '';
 
     /**
      * Init paths by ref or copy
@@ -59,7 +59,7 @@ abstract class Override
      * @param bool $byRef Tells function to assign global paths by reference or not, if true then changes to global paths will affect
      *             paths on this object directly
      */
-    public function initPaths( $byRef = false )
+    protected function initPaths( $byRef = false )
     {
         if ( $byRef )
         {
@@ -71,52 +71,6 @@ abstract class Override
             $this->paths = static::$globalPaths;
             $this->pathsHash = static::$globalPathsHash;
         }
-    }
-
-    /**
-     * Append a path string to instance override path list.
-     *
-     * @deprecated Forcing use of setDirs() as it is a more efficient way of setting dirs
-     * @throws InvalidArgumentValue If scope has wrong value
-     * @param string $dir
-     * @param string $scope See {@link $globalPaths} for scope values (first level keys)
-     * @return bool Return true if cache hash was cleared, indicating reload is needed
-     */
-    public function appendDir( $dir, $scope )
-    {
-        if ( !isset( $this->paths[$scope] ) )
-            throw new InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
-
-        $this->paths[$scope][] = $dir;
-        if ( $this->pathsHash !== '' )
-        {
-            $this->pathsHash = '';
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Prepend a path string to instance override path list.
-     *
-     * @deprecated Forcing use of setDirs() as it is a more efficient way of setting dirs
-     * @throws InvalidArgumentValue If scope has wrong value
-     * @param string $dir
-     * @param string $scope See {@link $globalPaths} for scope values (first level keys)
-     * @return bool Return true if cache hash was cleared, indicating reload is needed
-     */
-    public function prependDir( $dir, $scope )
-    {
-        if ( !isset( $this->paths[$scope] ) )
-            throw new InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
-
-        $this->paths[$scope] = array_merge( array( $dir ), $this->paths[$scope] );
-        if ( $this->pathsHash !== '' )
-        {
-            $this->pathsHash = '';
-            return true;
-        }
-        return false;
     }
 
     /**
@@ -219,7 +173,7 @@ abstract class Override
      *
      * @return string md5 hash
      */
-    public function pathsHash()
+    protected function pathsHash()
     {
         if ( $this->pathsHash === '' )
         {
