@@ -47,12 +47,5 @@ class User extends ValueObject
      * @var string
      */
     public $hashAlgorithm;
-
-    /**
-     * User Groups user is assigned to
-     *
-     * @var int[]
-     */
-    public $groupIds = array();
 }
 ?>
