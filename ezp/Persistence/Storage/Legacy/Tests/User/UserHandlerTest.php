@@ -369,7 +369,7 @@ class UserHandlerTest extends TestCase
             'Foo' => array( 'Bar' ),
         ) );
 
-        $handler->removeRole( $user->id, $role->id );
+        $handler->unAssignRole( $user->id, $role->id );
 
         $this->assertQueryResult(
             array(),

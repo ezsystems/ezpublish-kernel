@@ -110,7 +110,7 @@ interface Handler
     public function getPermissions( $userId );
 
     /**
-     * Assign role to user with given limitation
+     * Assign role to user[group] with given limitation
      *
      * The limitation array may look like:
      * <code>
@@ -144,6 +144,6 @@ interface Handler
      * @param mixed $userId
      * @param mixed $roleId
      */
-    public function removeRole( $userId, $roleId );
+    public function unAssignRole( $userId, $roleId );
 }
 ?>

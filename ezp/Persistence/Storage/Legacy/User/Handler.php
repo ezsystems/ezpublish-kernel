@@ -213,7 +213,7 @@ class Handler implements BaseUserHandler
      * @param mixed $userId
      * @param mixed $roleId
      */
-    public function removeRole( $userId, $roleId )
+    public function unAssignRole( $userId, $roleId )
     {
         $this->userGateway->removeRole( $userId, $roleId );
     }
