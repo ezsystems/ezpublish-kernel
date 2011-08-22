@@ -26,7 +26,8 @@ interface Handler
      * The User struct used to create the user will contain an ID which is used
      * to reference the user.
      *
-     * @param User $user
+     * @param \ezp\Persistence\User $user
+     * @return \ezp\Persistence\User
      */
     public function createUser( User $user );
 
@@ -40,22 +41,22 @@ interface Handler
     /**
      * Update the user information specified by the user struct
      *
-     * @param User $user
+     * @param \ezp\Persistence\User $user
      */
     public function updateUser( User $user );
 
     /**
      * Create new role
      *
-     * @param Role $role
-     * @return Role
+     * @param \ezp\Persistence\User\Role $role
+     * @return \ezp\Persistence\User\Role
      */
     public function createRole( Role $role );
 
     /**
      * Update role
      *
-     * @param RoleUpdateStruct $role
+     * @param \ezp\Persistence\User\RoleUpdateStruct $role
      */
     public function updateRole( RoleUpdateStruct $role );
 
@@ -70,8 +71,8 @@ interface Handler
      * Adds a policy to a role
      *
      * @param mixed $roleId
-     * @param Policy $policy
-     * @return void
+     * @param \ezp\Persistence\User\Policy $policy
+     * @return \ezp\Persistence\User\Policy
      */
     public function addPolicy( $roleId, Policy $policy );
 
@@ -88,7 +89,7 @@ interface Handler
      * Returns the user policies associated with the user
      *
      * @param mixed $userId
-     * @return UserPolicy[]
+     * @return \ezp\Persistence\User\Policy[]
      */
     public function getPermissions( $userId );
 
@@ -110,6 +111,9 @@ interface Handler
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
+     * @todo It has been discussed to not support assigning roles with limitations, as it is kind of flawed in eZ Publish
+     *       Hence you would simplify the design and reduce future bugs by forcing use of policy limitations instead.
+     * @todo It has been decided to only allow assigning roles to user groups to be aligned with systems like ldap.
      * @param mixed $userId
      * @param mixed $roleId
      * @param array $limitation
@@ -117,6 +121,9 @@ interface Handler
     public function assignRole( $userId, $roleId, array $limitation = null );
 
     /**
+     * Un-assign a role
+     *
+     * @todo Rename to not confuse with deleteRole?
      * @param mixed $userId
      * @param mixed $roleId
      */
