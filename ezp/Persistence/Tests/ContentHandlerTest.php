@@ -187,4 +187,98 @@ class ContentHandlerTest extends HandlerTest
             "This test has not been implemented yet."
         );
     }
+
+    /**
+     * Test copy function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::copy
+     */
+    public function testCopyVersion1()
+    {
+        // To be updated if new tests data is created
+        $newContentId = 3;
+
+        $contentHandler = $this->repositoryHandler->contentHandler();
+        $time = time();
+        $copy = $contentHandler->copy( 1, 1 );
+        $this->assertEquals( $newContentId, $copy->id );
+        $this->assertEquals( "eZ Publish", $copy->name );
+        $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
+        $this->assertEquals( 1, $copy->typeId, "Type ID does not match" );
+        $this->assertEquals( 14, $copy->ownerId, "Owner ID does not match" );
+        $this->assertEquals( 1, $copy->currentVersionNo, "Current version no does not match" );
+        $this->assertEmpty( $copy->locations, "Locations must be empty" );
+
+        $versions = $contentHandler->listVersions( $newContentId );
+        $this->assertEquals( 1, count( $versions ) );
+        $this->assertEquals( 1, $versions[0]->versionNo );
+        $this->assertEquals( 14, $versions[0]->creatorId );
+        $this->assertEquals( $newContentId, $versions[0]->contentId );
+        $this->assertGreaterThanOrEqual( $newContentId, $versions[0]->modified );
+        $this->assertGreaterThanOrEqual( $newContentId, $versions[0]->created );
+    }
+
+    /**
+     * Test copy function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::copy
+     */
+    public function testCopyVersion2()
+    {
+        // To be updated if new tests data is created
+        $newContentId = 3;
+
+        $contentHandler = $this->repositoryHandler->contentHandler();
+        $time = time();
+        $copy = $contentHandler->copy( 1, 2 );
+        $this->assertEquals( $newContentId, $copy->id );
+        $this->assertEquals( "eZ Publish", $copy->name );
+        $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
+        $this->assertEquals( 1, $copy->typeId, "Type ID does not match" );
+        $this->assertEquals( 14, $copy->ownerId, "Owner ID does not match" );
+        $this->assertEquals( 1, $copy->currentVersionNo, "Current version no does not match" );
+        $this->assertEmpty( $copy->locations, "Locations must be empty" );
+
+        $versions = $contentHandler->listVersions( $newContentId );
+        $this->assertEquals( 1, count( $versions ) );
+        $this->assertEquals( 2, $versions[0]->versionNo );
+        $this->assertEquals( 14, $versions[0]->creatorId );
+        $this->assertEquals( $newContentId, $versions[0]->contentId );
+        $this->assertGreaterThanOrEqual( $newContentId, $versions[0]->modified );
+        $this->assertGreaterThanOrEqual( $newContentId, $versions[0]->created );
+    }
+
+    /**
+     * Test copy function
+     *
+     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::copy
+     */
+    public function testCopyAllVersions()
+    {
+        // To be updated if new tests data is created
+        $newContentId = 3;
+
+        $contentHandler = $this->repositoryHandler->contentHandler();
+        $copy = $contentHandler->copy( 1, false );
+        $this->assertEquals( $newContentId, $copy->id );
+        $this->assertEquals( "eZ Publish", $copy->name );
+        $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
+        $this->assertEquals( 1, $copy->typeId, "Type ID does not match" );
+        $this->assertEquals( 14, $copy->ownerId, "Owner ID does not match" );
+        $this->assertEquals( 1, $copy->currentVersionNo, "Current version no does not match" );
+        $this->assertEmpty( $copy->locations, "Locations must be empty" );
+
+        $versions = $contentHandler->listVersions( $newContentId );
+        $this->assertEquals( 2, count( $versions ) );
+        $this->assertEquals( 1, $versions[0]->versionNo );
+        $this->assertEquals( 2, $versions[1]->versionNo );
+        $this->assertEquals( 14, $versions[0]->creatorId );
+        $this->assertEquals( 14, $versions[1]->creatorId );
+        $this->assertEquals( $newContentId, $versions[0]->contentId );
+        $this->assertEquals( $newContentId, $versions[1]->contentId );
+        $this->assertGreaterThanOrEqual( $newContentId, $versions[0]->modified );
+        $this->assertGreaterThanOrEqual( $newContentId, $versions[1]->modified );
+        $this->assertGreaterThanOrEqual( $newContentId, $versions[0]->created );
+        $this->assertGreaterThanOrEqual( $newContentId, $versions[1]->created );
+    }
 }

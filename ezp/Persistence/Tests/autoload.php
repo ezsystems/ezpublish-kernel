@@ -2,6 +2,7 @@
 
 namespace ezp;
 
+/*
 if ( ( $fp = @fopen( 'Base/base.php', 'r', true ) ) !== false )
 {
     fclose( $fp );
@@ -16,6 +17,7 @@ else
 {
     require_once 'Base/src/base.php';
 }
+*/
 
 spl_autoload_register(
     function ( $class )

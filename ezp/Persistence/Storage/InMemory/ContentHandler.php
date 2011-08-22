@@ -100,6 +100,59 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
+     * Copy Content with Fields and Versions from $contentId in $version.
+     *
+     * Copies all fields from $contentId in $version (or all versions if false)
+     * to a new object which is returned.
+     *
+     * @param int $contentId
+     * @param int|false $version Copy all versions if left false
+     * @return \ezp\Persistence\Content
+     * @throws \ezp\Base\Exception\NotFound If content or version is not found
+     */
+    public function copy( $contentId, $version )
+    {
+        $content = $this->backend->load( "Content", $contentId );
+        if ( !$content )
+            throw new NotFound( "Content", "contentId: $contentId" );
+
+        $contentObj = $this->backend->create(
+            "Content", array(
+                "name" => $content->name,
+                "typeId" => $content->typeId,
+                "sectionId" => $content->sectionId,
+                "ownerId" => $content->ownerId,
+                "currentVersionNo" => 1, // @todo use correct number
+            )
+        );
+
+        foreach (
+            $this->backend->find(
+                "Content\\Version",
+                $version === false ?
+                array( "contentId" => $content->id ) :
+                array( "contentId" => $content->id, "versionNo" => $version )
+            ) as $version )
+        {
+            $this->backend->create(
+                "Content\\Version",
+                array(
+                    "versionNo" => $version->versionNo,
+                    "modified" => time(),
+                    "creatorId" => $version->creatorId,
+                    "created" => time(),
+                    "contentId" => $contentObj->id,
+                    "state" => $version->state,
+                )
+            );
+        }
+
+        // @todo Copy fields!
+
+        return $contentObj;
+    }
+
+    /**
      * @see ezp\Persistence\Content\Handler
      */
     public function load( $id, $version, $translations = null )
