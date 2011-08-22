@@ -103,7 +103,7 @@ class ContentHandler implements ContentHandlerInterface
      * Copy Content with Fields and Versions from $contentId in $version.
      *
      * Copies all fields from $contentId in $version (or all versions if false)
-     * to a new object which is returned.
+     * to a new object which is returned. Version number is always reset (starts on 1).
      *
      * @param int $contentId
      * @param int|false $version Copy all versions if left false
