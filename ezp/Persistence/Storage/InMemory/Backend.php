@@ -256,7 +256,7 @@ class Backend
             throw new InvalidArgumentValue( 'type', $type );
 
         $items = array();
-        foreach ( $this->data[$type] as $key => $item )
+        foreach ( $this->data[$type] as $item )
         {
             foreach ( $joinInfo as $joinProperty => $joinItem )
             {
@@ -292,6 +292,8 @@ class Backend
 
             if ( is_array( $item[$matchProperty] ) )
             {
+                // sub match. When $matchValue is array, assume it's a joined
+                // list of value objects
                 if ( is_array( $matchValue ) )
                 {
                     foreach ( $item[$matchProperty] as $subItem )
@@ -300,6 +302,7 @@ class Backend
                             return false;
                     }
                 }
+                // otherwise check if match value is part of array
                 else if ( !in_array( $matchValue, $item[$matchProperty] ) )
                 {
                     return false;
@@ -324,6 +327,7 @@ class Backend
                 if ( $pos !== 0 )
                     return false;
             }
+            // plain equal match
             else if ( $item[$matchProperty] != $matchValue )
             {
                 return false;
@@ -382,7 +386,7 @@ class Backend
     {
         foreach ( $joinInfo as $property => $info )
         {
-            foreach ( $item->$property as $key => &$joinItem )
+            foreach ( $item->$property as &$joinItem )
             {
                 $joinItem = $this->toValue( $info['type'],
                                         $joinItem,
