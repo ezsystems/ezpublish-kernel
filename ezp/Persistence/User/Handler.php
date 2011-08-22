@@ -129,21 +129,20 @@ interface Handler
      *
      * @todo It has been discussed to not support assigning roles with limitations, as it is kind of flawed in eZ Publish
      *       Hence you would simplify the design and reduce future bugs by forcing use of policy limitations instead.
-     * @todo It has been decided to only allow assigning roles to user groups to be aligned with systems like ldap.
-     * @param mixed $userId
+     * @param mixed $groupId The group Id to assign the role to.
+     *                       In Legacy storage engine this is the content object id of the group to assign to.
+     *                       Assigning to a user is not supported, only un-assigning is supported for bc.
      * @param mixed $roleId
      * @param array $limitation
      */
-    public function assignRole( $userId, $roleId, array $limitation = null );
+    public function assignRole( $groupId, $roleId, array $limitation = null );
 
     /**
      * Un-assign a role
      *
-     * @todo Rename to not confuse with deleteRole?
-     * @see todo's on {@link assignRole()}
-     * @param mixed $userId
+     * @param mixed $groupId The group / user Id to un-assign a role from
      * @param mixed $roleId
      */
-    public function unAssignRole( $userId, $roleId );
+    public function unAssignRole( $groupId, $roleId );
 }
 ?>

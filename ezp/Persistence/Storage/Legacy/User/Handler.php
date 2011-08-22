@@ -199,23 +199,23 @@ class Handler implements BaseUserHandler
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @param mixed $userId
+     * @param mixed $groupId
      * @param mixed $roleId
      * @param array $limitation
      */
-    public function assignRole( $userId, $roleId, array $limitation = null )
+    public function assignRole( $groupId, $roleId, array $limitation = null )
     {
         $limitation = $limitation ?: array( '' => array( '' ) );
-        $this->userGateway->assignRole( $userId, $roleId, $limitation );
+        $this->userGateway->assignRole( $groupId, $roleId, $limitation );
     }
 
     /**
-     * @param mixed $userId
+     * @param mixed $groupId
      * @param mixed $roleId
      */
-    public function unAssignRole( $userId, $roleId )
+    public function unAssignRole( $groupId, $roleId )
     {
-        $this->userGateway->removeRole( $userId, $roleId );
+        $this->userGateway->removeRole( $groupId, $roleId );
     }
 }
 ?>
