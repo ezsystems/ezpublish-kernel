@@ -24,6 +24,8 @@ class Policy extends ValueObject
     /**
      * Name of module, associated with the Policy
      *
+     * Eg: content
+     *
      * @var string
      */
     public $module;
@@ -31,12 +33,29 @@ class Policy extends ValueObject
     /**
      * Name of the module function
      *
+     * Eg: read
+     *
      * @var string
      */
     public $moduleFunction;
 
     /**
      * Array of policy limitations, which is just a random hash map.
+     *
+     * The limitation array may look like:
+     * <code>
+     *  array(
+     *      'Subtree' => array(
+     *          '/1/2/',
+     *          '/1/4/',
+     *      ),
+     *      'Foo' => array( 'Bar' ),
+     *      …
+     *  )
+     * </code>
+     *
+     * Where the keys are the limitation identifiers, and the respective values
+     * are an array of limitation values
      *
      * @var array|string If string, then only the value '*' is allowed, meaning all limitations.
      */
