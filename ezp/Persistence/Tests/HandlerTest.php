@@ -32,7 +32,7 @@ class HandlerTest extends PHPUnit_Framework_TestCase
         // Get in memory RepositoryHandler instance
         $serviceContainer = new Container(
             array(
-                '@repository_handler' => new \ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler()
+                '@repository_handler' => new \ezp\Persistence\Storage\InMemory\RepositoryHandler()
             )
         );
         $this->repositoryHandler = $serviceContainer->get( 'repository_handler' );

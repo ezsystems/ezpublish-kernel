@@ -24,7 +24,7 @@ class SectionTest extends \PHPUnit_Framework_TestCase
     {
         $serviceContainer = new Container(
             array(
-                '@repository_handler' => new \ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler()
+                '@repository_handler' => new \ezp\Persistence\Storage\InMemory\RepositoryHandler()
             )
         );
         return $serviceContainer->getRepository()->getSectionService();

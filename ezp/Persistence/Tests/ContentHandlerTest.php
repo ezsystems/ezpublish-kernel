@@ -90,7 +90,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test findSingle function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::findSingle
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::findSingle
      */
     public function testFindSingle()
     {
@@ -105,7 +105,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::create
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::create
      */
     public function testCreate()
     {
@@ -149,7 +149,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test delete function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::delete
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::delete
      */
     public function testDelete()
     {
@@ -178,7 +178,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test find function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::find
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::find
      */
     public function testFind()
     {

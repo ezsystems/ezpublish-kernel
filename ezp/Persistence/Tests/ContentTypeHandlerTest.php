@@ -26,7 +26,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test create group function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::createGroup
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::createGroup
      */
     public function testCreateGroup()
     {
@@ -39,7 +39,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test update group function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::updateGroup
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::updateGroup
      */
     public function testUpdateGroup()
     {
@@ -59,7 +59,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test delete group function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::deleteGroup
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::deleteGroup
      */
     public function testDeleteGroup()
     {
@@ -83,7 +83,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test load group function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::loadGroup
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::loadGroup
      */
     public function testLoadGroup()
     {
@@ -96,7 +96,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test load all groups function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::loadAllGroups
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::loadAllGroups
      */
     public function testLoadAllGroups()
     {
@@ -110,7 +110,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::loadContentTypes
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::loadContentTypes
      */
     public function testLoadByGroup()
     {
@@ -127,7 +127,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::load
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::load
      */
     public function testLoad()
     {
@@ -142,7 +142,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::load
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::load
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadUnExistingTypeId()
@@ -153,7 +153,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::load
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::load
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadUnExistingStatus()
@@ -164,7 +164,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::create
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::create
      */
     public function testCreate()
     {
@@ -180,7 +180,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::create
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::create
      */
     public function testCreateWithFieldDefinition()
     {
@@ -200,7 +200,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test update function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::update
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::update
      */
     public function testUpdate()
     {
@@ -217,7 +217,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test delete function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::delete
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::delete
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDelete()
@@ -230,7 +230,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test copy function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::copy
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::copy
      */
     public function testCopy()
     {
@@ -250,7 +250,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test copy function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::copy
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::copy
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testCopyNonExistingTypeId()
@@ -261,7 +261,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test copy function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::copy
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::copy
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testCopyNonExistingStatus()
@@ -272,7 +272,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test link function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::link
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::link
      */
     public function testLink()
     {
@@ -287,7 +287,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test link function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::link
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::link
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLinkMissingGroup()
@@ -298,7 +298,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test link function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::link
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::link
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLinkMissingType()
@@ -309,7 +309,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test link function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::link
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::link
      * @expectedException \ezp\Base\Exception\BadRequest
      */
     public function testLinkExistingGroupLink()
@@ -320,7 +320,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test unlink function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::unlink
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::unlink
      */
     public function testUnLink()
     {
@@ -336,7 +336,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test unlink function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::unlink
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::unlink
      * @expectedException \ezp\Base\Exception\NotFound
      * @todo Will have to insert broken data to be able to test this (a group type is part of that does not exist)
      */
@@ -348,7 +348,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test unlink function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::unlink
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::unlink
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testUnLinkMissingType()
@@ -359,7 +359,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test unlink function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::unlink
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::unlink
      * @expectedException \ezp\Base\Exception\BadRequest
      */
     public function testUnLinkNotInGroup()
@@ -370,7 +370,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test unlink function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::unlink
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::unlink
      * @expectedException \ezp\Base\Exception\BadRequest
      */
     public function testUnLinkLastGroup()
@@ -381,7 +381,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test addFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::addFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::addFieldDefinition
      */
     public function testAddFieldDefinition()
     {
@@ -396,7 +396,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test addFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::addFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::addFieldDefinition
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testAddFieldDefinitionInvalidTypeId()
@@ -409,7 +409,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test addFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::addFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::addFieldDefinition
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testAddFieldDefinitionInvalidStatus()
@@ -422,7 +422,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test removeFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::removeFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::removeFieldDefinition
      */
     public function testRemoveFieldDefinitionDefinition()
     {
@@ -435,7 +435,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test removeFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::removeFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::removeFieldDefinition
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testRemoveFieldDefinitionInvalidTypeId()
@@ -447,7 +447,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test removeFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::removeFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::removeFieldDefinition
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testRemoveFieldDefinitionInvalidStatus()
@@ -459,7 +459,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test removeFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::removeFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::removeFieldDefinition
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testRemoveFieldDefinitionInvalidFieldId()
@@ -471,7 +471,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test updateFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::updateFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::updateFieldDefinition
      */
     public function testUpdateFieldDefinitionDefinition()
     {
@@ -488,7 +488,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test updateFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::updateFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::updateFieldDefinition
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testUpdateFieldDefinitionDefinitionInvalidTypeId()
@@ -503,7 +503,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test updateFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::updateFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::updateFieldDefinition
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testUpdateFieldDefinitionDefinitionInvalidStatus()
@@ -518,7 +518,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * Test updateFieldDefinition function
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentTypeHandler::updateFieldDefinition
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::updateFieldDefinition
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testUpdateFieldDefinitionDefinitionInvalidFieldDefinitionId()

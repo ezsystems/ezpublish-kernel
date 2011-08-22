@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests\InMemoryEngine;
+namespace ezp\Persistence\Storage\InMemory;
 use ezp\Persistence\Repository\Handler as BaseRepositoryHandler,
     ezp\Base\Exception\MissingClass,
     RuntimeException;
@@ -28,7 +28,7 @@ class RepositoryHandler implements BaseRepositoryHandler
     /**
      * Instance of in-memory backend that reads data from js files into memory and writes to memory
      *
-     * @var \ezp\Persistence\Tests\InMemoryEngine\Backend
+     * @var \ezp\Persistence\Storage\InMemory\Backend
      */
     protected $backend;
 
@@ -45,7 +45,7 @@ class RepositoryHandler implements BaseRepositoryHandler
      */
     public function contentHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Tests\\InMemoryEngine\\ContentHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\ContentHandler' );
     }
 
     /**
@@ -53,7 +53,7 @@ class RepositoryHandler implements BaseRepositoryHandler
      */
     public function contentTypeHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Tests\\InMemoryEngine\\ContentTypeHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\ContentTypeHandler' );
     }
 
     /**
@@ -61,7 +61,7 @@ class RepositoryHandler implements BaseRepositoryHandler
      */
     public function locationHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Tests\\InMemoryEngine\\LocationHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\LocationHandler' );
     }
 
     /**
@@ -69,7 +69,7 @@ class RepositoryHandler implements BaseRepositoryHandler
      */
     public function userHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Tests\\InMemoryEngine\\UserHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\UserHandler' );
     }
 
     /**
@@ -77,7 +77,7 @@ class RepositoryHandler implements BaseRepositoryHandler
      */
     public function sectionHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Tests\\InMemoryEngine\\SectionHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\SectionHandler' );
     }
 
     /**

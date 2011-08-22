@@ -18,35 +18,35 @@ class RepositoryHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\RepositoryHandler::__construct
+     * @covers ezp\Persistence\Storage\InMemory\RepositoryHandler::__construct
      */
     public function testHandler()
     {
         $this->assertInstanceOf( 'ezp\\Persistence\\Repository\\Handler', $this->repositoryHandler );
-        $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\RepositoryHandler', $this->repositoryHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\RepositoryHandler', $this->repositoryHandler );
     }
 
     /**
      * Test that instance is of correct type
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\ContentHandler::__construct
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::__construct
      */
     public function testContentHandler()
     {
         $contentHandler = $this->repositoryHandler->contentHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Handler', $contentHandler );
-        $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\ContentHandler', $contentHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\ContentHandler', $contentHandler );
     }
 
     /**
      * Test that instance is of correct type
      *
-     * @covers ezp\Persistence\Tests\InMemoryEngine\SectionHandler::__construct
+     * @covers ezp\Persistence\Storage\InMemory\SectionHandler::__construct
      */
     public function testSectionHandler()
     {
         $sectionHandler = $this->repositoryHandler->sectionHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Section\\Handler', $sectionHandler );
-        $this->assertInstanceOf( 'ezp\\Persistence\\Tests\\InMemoryEngine\\SectionHandler', $sectionHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\SectionHandler', $sectionHandler );
     }
 }

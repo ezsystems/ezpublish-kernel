@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence\Tests\InMemoryEngine;
+namespace ezp\Persistence\Storage\InMemory;
 use ezp\Persistence\Content\Location\Handler as LocationHandlerInterface,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\Location\UpdateStruct,

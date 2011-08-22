@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence\Tests\InMemoryEngine;
+namespace ezp\Persistence\Storage\InMemory;
 use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\CreateStruct,
