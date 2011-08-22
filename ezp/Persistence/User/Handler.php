@@ -29,21 +29,29 @@ interface Handler
      * @param \ezp\Persistence\User $user
      * @return \ezp\Persistence\User
      */
-    public function createUser( User $user );
+    public function create( User $user );
 
     /**
-     * Delete user with the given ID.
+     * Load user with user ID.
      *
      * @param mixed $userId
+     * @return \ezp\Persistence\User
      */
-    public function deleteUser( $userId );
+    public function load( $userId );
 
     /**
      * Update the user information specified by the user struct
      *
      * @param \ezp\Persistence\User $user
      */
-    public function updateUser( User $user );
+    public function update( User $user );
+
+    /**
+     * Delete user with the given ID.
+     *
+     * @param mixed $userId
+     */
+    public function delete( $userId );
 
     /**
      * Create new role
@@ -52,6 +60,14 @@ interface Handler
      * @return \ezp\Persistence\User\Role
      */
     public function createRole( Role $role );
+
+    /**
+     * Load a specified role by id
+     *
+     * @param mixed $roleId
+     * @return \ezp\Persistence\User\Role
+     */
+    public function loadRole( $roleId );
 
     /**
      * Update role
@@ -124,9 +140,10 @@ interface Handler
      * Un-assign a role
      *
      * @todo Rename to not confuse with deleteRole?
+     * @see todo's on {@link assignRole()}
      * @param mixed $userId
      * @param mixed $roleId
      */
-    public function removeRole(  $userId, $roleId );
+    public function removeRole( $userId, $roleId );
 }
 ?>

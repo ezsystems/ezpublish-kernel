@@ -54,11 +54,34 @@ class Handler implements BaseUserHandler
      * The User struct used to create the user will contain an ID which is used
      * to reference the user.
      *
-     * @param User $user
+     * @param \ezp\Persistence\User $user
+     * @return \ezp\Persistence\User
      */
-    public function createUser( User $user )
+    public function create( User $user )
     {
         $this->userGateway->createUser( $user );
+        return $user;
+    }
+
+    /**
+     * Load user with user ID.
+     *
+     * @param mixed $userId
+     * @return \ezp\Persistence\User
+     */
+    public function load( $userId )
+    {
+        throw new RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
+     * Update the user information specified by the user struct
+     *
+     * @param \ezp\Persistence\User $user
+     */
+    public function update( User $user )
+    {
+        $this->userGateway->updateUser( $user );
     }
 
     /**
@@ -66,26 +89,16 @@ class Handler implements BaseUserHandler
      *
      * @param mixed $userId
      */
-    public function deleteUser( $userId )
+    public function delete( $userId )
     {
         $this->userGateway->deleteUser( $userId );
     }
 
     /**
-     * Update the user information specified by the user struct
-     *
-     * @param User $user
-     */
-    public function updateUser( User $user )
-    {
-        $this->userGateway->updateUser( $user );
-    }
-
-    /**
      * Create new role
      *
-     * @param Role $role
-     * @return Role
+     * @param \ezp\Persistence\User\Role $role
+     * @return \ezp\Persistence\User\Role
      */
     public function createRole( Role $role )
     {
@@ -100,9 +113,20 @@ class Handler implements BaseUserHandler
     }
 
     /**
+     * Load a specified role by id
+     *
+     * @param mixed $roleId
+     * @return \ezp\Persistence\User\Role
+     */
+    public function loadRole( $roleId )
+    {
+        throw new RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
      * Update role
      *
-     * @param RoleUpdateStruct $role
+     * @param \ezp\Persistence\User\RoleUpdateStruct $role
      */
     public function updateRole( RoleUpdateStruct $role )
     {
@@ -123,8 +147,8 @@ class Handler implements BaseUserHandler
      * Adds a policy to a role
      *
      * @param mixed $roleId
-     * @param Policy $policy
-     * @return void
+     * @param \ezp\Persistence\User\Policy $policy
+     * @return \ezp\Persistence\User\Policy
      */
     public function addPolicy( $roleId, Policy $policy )
     {
@@ -149,7 +173,7 @@ class Handler implements BaseUserHandler
      * Returns the user policies associated with the user
      *
      * @param mixed $userId
-     * @return UserPolicy[]
+     * @return \ezp\Persistence\User\Policy[]
      */
     public function getPermissions( $userId )
     {
