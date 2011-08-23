@@ -223,6 +223,12 @@ class EzcDatabase extends Gateway
         $stmt->execute();
     }
 
+    /**
+     * Inserts data into contentclass_name.
+     *
+     * @param Type $type
+     * @return void
+     */
     protected function insertTypeNameData( Type $type )
     {
         $alwaysAvailable = null;
