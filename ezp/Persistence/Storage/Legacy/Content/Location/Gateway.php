@@ -168,9 +168,9 @@ abstract class Gateway
     /**
      * Set section on all content objects in the subtree
      *
-     * @param mixed $locationId
+     * @param mixed $pathString
      * @param mixed $sectionId
      * @return boolean
      */
-    abstract public function setSectionForSubtree( $locationId, $sectionId );
+    abstract public function setSectionForSubtree( $pathString, $sectionId );
 }

@@ -602,11 +602,11 @@ class EzcDatabase extends Gateway
     /**
      * Set section on all content objects in the subtree
      *
-     * @param mixed $locationId
+     * @param mixed $pathString
      * @param mixed $sectionId
      * @return boolean
      */
-    public function setSectionForSubtree( $locationId, $sectionId )
+    public function setSectionForSubtree( $pathString, $sectionId )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }

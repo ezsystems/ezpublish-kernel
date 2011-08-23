@@ -261,7 +261,9 @@ class Handler implements BaseLocationHandler
      */
     public function setSectionForSubtree( $locationId, $sectionId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $nodeData = $this->locationGateway->getBasicNodeData( $locationId );
+
+        $this->locationGateway->setSectionForSubtree( $nodeData['path_string'], $sectionId );
     }
 
     /**
