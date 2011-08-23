@@ -51,6 +51,14 @@ abstract class Gateway
     abstract public function deleteGroup( $groupId );
 
     /**
+     * Returns an array with data about the Group with $groupId.
+     *
+     * @param int $groupId
+     * @return array
+     */
+    abstract public function loadGroupData( $groupId );
+
+    /**
      * Inserts a new conten type.
      *
      * @param Type $createStruct

@@ -219,6 +219,31 @@ class MapperTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractGroupsFromRows
+     */
+    public function testExtractGroupsFromRows()
+    {
+        $rows = $this->getLoadGroupFixture();
+
+        $mapper = new Mapper();
+        $groups = $mapper->extractGroupsFromRows( $rows );
+
+        $groupFixture = new Group();
+        $groupFixture->created    = 1032009743;
+        $groupFixture->creatorId  = 14;
+        $groupFixture->id         = 3;
+        $groupFixture->modified   = 1033922120;
+        $groupFixture->modifierId = 14;
+        $groupFixture->identifier = 'Media';
+
+        $this->assertEquals(
+            array( $groupFixture ),
+            $groups
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractTypesFromRows
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractTypeFromRow
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractFieldFromRow
@@ -291,5 +316,15 @@ class MapperTest extends TestCase
     protected function getLoadTypeFixture()
     {
         return require __DIR__ . '/_fixtures/map_load_type.php';
+    }
+
+    /**
+     * Returns fixture for {@link testExtractGroupsFromRows()}
+     *
+     * @return array
+     */
+    protected function getLoadGroupFixture()
+    {
+        return require __DIR__ . '/_fixtures/map_load_group.php';
     }
 }

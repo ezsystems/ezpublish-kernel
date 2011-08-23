@@ -238,6 +238,34 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadGroupData
+     * @return void
+     */
+    public function testLoadGroupData()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_groups.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $data = $gateway->loadGroupData( 2 );
+
+        $this->assertSame(
+            array(
+                array(
+                    'created' => '1031216941',
+                    'creator_id' => '14',
+                    'id' => '2',
+                    'modified' => '1033922113',
+                    'modifier_id' => '14',
+                    'name' => 'Users',
+                )
+            ),
+            $data
+        );
+    }
+
+    /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns

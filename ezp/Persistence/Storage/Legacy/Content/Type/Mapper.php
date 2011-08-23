@@ -48,6 +48,32 @@ class Mapper
     }
 
     /**
+     * Extracts Group objects from theb given $rows.
+     *
+     * @param array $rows
+     * @return ezp\Persistence\Content\Type\Group[]
+     */
+    public function extractGroupsFromRows( array $rows )
+    {
+        $groups = array();
+
+        foreach ( $rows as $row )
+        {
+            $group             = new Group();
+            $group->id         = (int) $row['id'];
+            $group->created    = (int) $row['created'];
+            $group->creatorId  = (int) $row['creator_id'];
+            $group->modified   = (int) $row['modified'];
+            $group->modifierId = (int) $row['modifier_id'];
+            $group->identifier = $row['name'];
+
+            $groups[] = $group;
+        }
+
+        return $groups;
+    }
+
+    /**
      * Extracts types and related data from the given $rows.
      *
      * @param array $rows

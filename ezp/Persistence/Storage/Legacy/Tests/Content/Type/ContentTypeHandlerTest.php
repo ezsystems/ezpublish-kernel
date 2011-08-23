@@ -185,6 +185,36 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadGroup
+     */
+    public function testLoadGroup()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadGroupData' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Mapper',
+            array( 'extractGroupsFromRows' )
+        );
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractGroupsFromRows' )
+            ->with( $this->equalTo( array() ) )
+            ->will( $this->returnValue( array( new Group() ) ) );
+
+        $handler = new Handler( $gatewayMock, $mapperMock );
+        $res = $handler->loadGroup( 23 );
+
+        $this->assertEquals(
+            new Group(),
+            $res
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::load
      */
     public function testLoad()

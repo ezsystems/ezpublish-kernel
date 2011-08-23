@@ -389,7 +389,8 @@ class EzcDatabase extends Gateway
      */
     public function insertGroupAssignement( $groupId, $typeId, $status )
     {
-        $group = $this->loadGroupData( $groupId );
+        $groups = $this->loadGroupData( $groupId );
+        $group = $groups[0];
 
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
@@ -449,9 +450,9 @@ class EzcDatabase extends Gateway
      * Loads data about Group with $groupId.
      *
      * @param mixed $groupId
-     * @return string[]
+     * @return string[][]
      */
-    protected function loadGroupData( $groupId )
+    public function loadGroupData( $groupId )
     {
         $q = $this->dbHandler->createSelectQuery();
         $q->select(
@@ -473,7 +474,7 @@ class EzcDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return $stmt->fetch( \PDO::FETCH_ASSOC );
+        return $stmt->fetchAll( \PDO::FETCH_ASSOC );
     }
 
     /**
