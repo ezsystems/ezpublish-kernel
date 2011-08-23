@@ -377,9 +377,14 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * Removes a location from its $locationId (but not its descendants)
+     * Content which looses its main Location will get the first
+     * of its other Locations assigned as the new main Location.
+     * If content has no location left, it's removed from backend
+     *
+     * @param mixed $locationId
      */
-    public function delete( $locationId )
+    private function delete( $locationId )
     {
         $location = $this->load( $locationId );
         $this->backend->delete( 'Content\\Location', $locationId );

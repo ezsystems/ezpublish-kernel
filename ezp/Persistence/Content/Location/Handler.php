@@ -157,14 +157,4 @@ interface Handler
      * @return boolean
      */
     public function setSectionForSubtree( $locationId, $sectionId );
-
-    /**
-     * Removes a location from its $locationId.
-     * Content which looses its main Location will get the first
-     * of its other Locations assigned as the new main Location.
-     *
-     * @param mixed $locationId
-     */
-    public function delete( $locationId );
 }
-?>
