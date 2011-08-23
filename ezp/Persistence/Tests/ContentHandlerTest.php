@@ -211,8 +211,8 @@ class ContentHandlerTest extends HandlerTest
 
         $versions = $contentHandler->listVersions( $newContentId );
         $this->assertEquals( 1, count( $versions ) );
-        $this->assertEquals( 1, $versions[0]->versionNo );
-        $this->assertEquals( 14, $versions[0]->creatorId );
+        $this->assertEquals( 1, $versions[0]->versionNo, "Version number does not match" );
+        $this->assertEquals( 14, $versions[0]->creatorId, "Creator ID does not match" );
         $this->assertEquals( $newContentId, $versions[0]->contentId );
         $this->assertGreaterThanOrEqual( $newContentId, $versions[0]->modified );
         $this->assertGreaterThanOrEqual( $newContentId, $versions[0]->created );
@@ -241,8 +241,8 @@ class ContentHandlerTest extends HandlerTest
 
         $versions = $contentHandler->listVersions( $newContentId );
         $this->assertEquals( 1, count( $versions ) );
-        $this->assertEquals( 2, $versions[0]->versionNo );
-        $this->assertEquals( 14, $versions[0]->creatorId );
+        $this->assertEquals( 2, $versions[0]->versionNo, "Version number does not match" );
+        $this->assertEquals( 14, $versions[0]->creatorId, "Creator ID does not match" );
         $this->assertEquals( $newContentId, $versions[0]->contentId );
         $this->assertGreaterThanOrEqual( $newContentId, $versions[0]->modified );
         $this->assertGreaterThanOrEqual( $newContentId, $versions[0]->created );
