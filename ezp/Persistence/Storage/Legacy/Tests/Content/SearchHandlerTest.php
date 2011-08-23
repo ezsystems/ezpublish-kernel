@@ -95,7 +95,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 4, 10 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -120,7 +120,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 4 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -145,7 +145,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 4, 10, 12 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -172,7 +172,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 4 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -194,7 +194,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 67, 68, 69, 70, 71, 72, 73, 74 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -214,7 +214,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 67, 68, 69, 70, 71, 72, 73, 74 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -234,7 +234,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 10, 14 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -254,7 +254,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 4, 11, 12, 13, 42, 225, 10, 14 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -276,7 +276,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 11, 225 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -298,7 +298,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 11, 14, 225 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -320,7 +320,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 11, 14, 225 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -342,7 +342,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 11, 14, 225 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -364,7 +364,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 131, 66, 225 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -384,7 +384,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 4, 65 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -404,7 +404,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 4, 41, 45, 56, 65 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -424,7 +424,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 4, 10 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -444,7 +444,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -464,7 +464,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -484,7 +484,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 191 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -504,7 +504,7 @@ class ContentSearchHandlerTest extends TestCase
             array( 191 ),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -526,7 +526,7 @@ class ContentSearchHandlerTest extends TestCase
             array(),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -546,7 +546,7 @@ class ContentSearchHandlerTest extends TestCase
             array(),
             array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             )
         );
     }
@@ -568,7 +568,7 @@ class ContentSearchHandlerTest extends TestCase
             10,
             count( array_map(
                 function ( $content ) { return $content->id; },
-                $result
+                $result->content
             ) )
         );
     }

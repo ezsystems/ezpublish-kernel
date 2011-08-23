@@ -27,5 +27,5 @@ class Result extends ValueObject
      *
      * @var array(ezp\Persistence\Content)
      */
-    public $content;
+    public $content = array();
 }

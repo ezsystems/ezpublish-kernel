@@ -11,6 +11,7 @@ namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Content,
+    ezp\Persistence\Content\Search,
     ezp\Persistence\Content\Criterion;
 
 /**
@@ -55,26 +56,40 @@ class EzcDatabase extends Gateway
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null )
     {
+        $result    = new Search\Result();
+
+        // Get full object count
         $query = $this->handler->createSelectQuery();
+        $condition = $this->converter->convertCriteria( $query, $criterion );
+
+        $query
+            ->select( 'COUNT( * )' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
+            ->where( $condition );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $count         = $statement->fetchAll( \PDO::FETCH_COLUMN, 0 );
+        $result->count = (int) reset( $count );
+
+        // Fetch actual content objects
+        $query->reset();
         $query
             ->select( $this->handler->quoteColumn( 'id' ) )
             ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
-            ->where(
-                $this->converter->convertCriteria( $query, $criterion )
-            )
+            ->where( $condition )
             ->limit( $limit, $offset );
 
         $statement = $query->prepare();
         $statement->execute();
-        $objects = array();
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
             $content = new \ezp\Persistence\Content();
             $content->id = $row['id'];
-            $objects[] = $content;
+            $result->content[] = $content;
         }
 
-        return $objects;
+        return $result;
     }
 }
 
