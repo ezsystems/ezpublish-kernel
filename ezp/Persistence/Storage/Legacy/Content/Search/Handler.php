@@ -11,7 +11,8 @@ namespace ezp\Persistence\Storage\Legacy\Content\Search;
 
 use ezp\Persistence\Content,
     ezp\Persistence\Content\Search\Handler as BaseSearchHandler,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Storage\Legacy\Exception;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -91,7 +92,14 @@ class Handler extends BaseSearchHandler
      */
     public function findSingle( Criterion $criterion, $translations = null )
     {
-        throw new \Exception( "Not implemented yet." );
+        $result = $this->find( $criterion, 0, 1, null, $translations );
+
+        if ( $result->count !== 1 )
+        {
+            throw new Exception\InvalidObjectCount( 'Expected exactly one object to be found -- found ' . $result->count . '.' );
+        }
+
+        return reset( $result->content );
     }
 
     /**

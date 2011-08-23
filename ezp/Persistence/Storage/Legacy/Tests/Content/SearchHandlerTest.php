@@ -80,6 +80,33 @@ class ContentSearchHandlerTest extends TestCase
         );
     }
 
+    public function testFindSingle()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $content = $locator->findSingle( new Criterion\ContentId( 10 ) );
+
+        $this->assertEquals( 10, $content->id );
+    }
+
+    /**
+     * @expectedException ezp\Persistence\Storage\Legacy\Exception\InvalidObjectCount
+     */
+    public function testFindSingleTooMany()
+    {
+        $locator = $this->getContentSearchHandler();
+        $locator->findSingle( new Criterion\ContentId( array( 4, 10, 12, 23 ) ) );
+    }
+
+    /**
+     * @expectedException ezp\Persistence\Storage\Legacy\Exception\InvalidObjectCount
+     */
+    public function testFindSingleZero()
+    {
+        $locator = $this->getContentSearchHandler();
+        $locator->findSingle( new Criterion\ContentId( 0 ) );
+    }
+
     public function testContentIdFilter()
     {
         $locator = $this->getContentSearchHandler();
