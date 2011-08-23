@@ -201,6 +201,7 @@ class LocationHandler implements LocationHandlerInterface
 
     /**
      * @see ezp\Persistence\Content\Location\Handler
+     * @todo Rename to update
      */
     public function updateLocation( UpdateStruct $location, $locationId )
     {
@@ -213,6 +214,7 @@ class LocationHandler implements LocationHandlerInterface
 
     /**
      * @see ezp\Persistence\Content\Location\Handler
+     * @todo Rename to create
      */
     public function createLocation( CreateStruct $locationStruct )
     {
