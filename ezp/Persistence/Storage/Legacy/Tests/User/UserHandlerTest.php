@@ -220,7 +220,7 @@ class UserHandlerTest extends TestCase
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
-        $policy->moduleFunction = 'bar';
+        $policy->function = 'bar';
 
         $handler->addPolicy( $role->id, $policy );
 
@@ -241,7 +241,7 @@ class UserHandlerTest extends TestCase
 
         $policy = new Persistence\User\Policy();
         $policy->module = 'foo';
-        $policy->moduleFunction = 'bar';
+        $policy->function = 'bar';
 
         $policy = $handler->addPolicy( $role->id, $policy );
 
@@ -254,11 +254,11 @@ class UserHandlerTest extends TestCase
 
         $policy1 = new Persistence\User\Policy();
         $policy1->module = 'foo';
-        $policy1->moduleFunction = 'bar';
+        $policy1->function = 'bar';
 
         $policy2 = new Persistence\User\Policy();
         $policy2->module = 'foo';
-        $policy2->moduleFunction = 'blubb';
+        $policy2->function = 'blubb';
 
         $role = new Persistence\User\Role();
         $role->name = 'Test';

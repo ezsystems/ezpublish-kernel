@@ -31,13 +31,13 @@ class Policy extends ValueObject
     public $module;
 
     /**
-     * Name of the module function
+     * Name of the module function Or all functions with '*'
      *
      * Eg: read
      *
      * @var string
      */
-    public $moduleFunction;
+    public $function;
 
     /**
      * Array of policy limitations, which is just a random hash map.

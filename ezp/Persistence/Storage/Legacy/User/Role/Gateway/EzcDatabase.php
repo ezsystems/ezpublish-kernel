@@ -117,7 +117,7 @@ class EzcDatabase extends Gateway
             ->insertInto( $this->handler->quoteTable( 'ezpolicy' ) )
             ->set(
                 $this->handler->quoteColumn( 'function_name' ),
-                $query->bindValue( $policy->moduleFunction )
+                $query->bindValue( $policy->function )
             )->set(
                 $this->handler->quoteColumn( 'module_name' ),
                 $query->bindValue( $policy->module )
