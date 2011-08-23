@@ -257,7 +257,6 @@ class LocationHandler implements LocationHandlerInterface
     public function removeSubtree( $locationId )
     {
         $location = $this->load( $locationId );
-        $this->delete( $locationId );
 
         // Begin recursive call on children, if any
         $directChildren = $this->backend->find( 'Content\\Location', array( 'parentId' => $locationId ) );
@@ -268,6 +267,8 @@ class LocationHandler implements LocationHandlerInterface
                 $this->removeSubtree( $child->id );
             }
         }
+
+        $this->delete( $locationId );
     }
 
     /**
