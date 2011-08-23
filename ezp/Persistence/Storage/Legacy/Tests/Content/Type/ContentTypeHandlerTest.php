@@ -102,7 +102,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testUpdateGroup()
     {
-        $createStruct = new GroupUpdateStruct();
+        $updateStruct = new GroupUpdateStruct();
+        $updateStruct->id = 23;
 
         $mapperMock = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Mapper',
@@ -118,13 +119,25 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-        $handler = new Handler( $gatewayMock, $mapperMock );
-        $res = $handler->updateGroup(
-            new GroupUpdateStruct()
+        $handlerMock = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
+            array( 'loadGroup' ),
+            array( $gatewayMock, $mapperMock )
+        );
+        $handlerMock->expects( $this->once() )
+            ->method( 'loadGroup' )
+            ->with(
+                $this->equalTo( 23 )
+            )->will(
+                $this->returnValue( new Group() )
+            );
+
+        $res = $handlerMock->updateGroup(
+            $updateStruct
         );
 
-        $this->assertSame(
-            true,
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content\\Type\\Group',
             $res
         );
     }

@@ -65,18 +65,15 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
-     * @return bool
-     * @todo Should we return the Group here? Would require an additional
-     *       SELECT, though.
+     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $struct
+     * @return \ezp\Persistence\Content\Type\Group
      */
     public function updateGroup( GroupUpdateStruct $struct )
     {
         $this->contentTypeGateway->updateGroup(
             $struct
         );
-        // FIXME: Determine if Group should be returned instead
-        return true;
+        return $this->loadGroup( $struct->id );
     }
 
     /**
