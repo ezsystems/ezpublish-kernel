@@ -100,6 +100,20 @@ class ContentSearchHandlerTest extends TestCase
         );
     }
 
+    public function testContentIdFilterCount()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\ContentId(
+                array( 1, 4, 10 )
+            ),
+            0, 10, null
+        );
+
+        $this->assertSame( 2, $result->count );
+    }
+
     public function testContentAndCombinatorFilter()
     {
         $locator = $this->getContentSearchHandler();
