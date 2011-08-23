@@ -35,6 +35,22 @@ abstract class Gateway
     abstract public function updateGroup( GroupUpdateStruct $group );
 
     /**
+     * Returns the number of types in a certain group.
+     *
+     * @param int $groupId
+     * @return int
+     */
+    abstract public function countTypesInGroup( $groupId );
+
+    /**
+     * Deletes the Group with the given $groupId.
+     *
+     * @param int $groupId
+     * @return void
+     */
+    abstract public function deleteGroup( $groupId );
+
+    /**
      * Inserts a new conten type.
      *
      * @param Type $createStruct

@@ -17,6 +17,8 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
 
+    ezp\Persistence\Storage\Legacy\Exception,
+
     ezp\Persistence\Storage\Legacy\Content\Type\Handler,
     ezp\Persistence\Storage\Legacy\Content\Type\Mapper,
     ezp\Persistence\Storage\Legacy\Content\Type\Gateway;
@@ -140,6 +142,45 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             'ezp\\Persistence\\Content\\Type\\Group',
             $res
         );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::deleteGroup
+     */
+    public function testDeleteGroupSuccess()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'countTypesInGroup' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( 0 ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteGroup' )
+            ->with( $this->equalTo( 23 ) );
+
+        $handler = new Handler( $gatewayMock, new Mapper() );
+        $handler->deleteGroup( 23 );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::deleteGroup
+     * @expectedException ezp\Persistence\Storage\Legacy\Exception\GroupNotEmpty
+     * @expectedExceptionMessage Group with ID "23" is not empty.
+     */
+    public function testDeleteGroupFailure()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'countTypesInGroup' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( 42 ) );
+        $gatewayMock->expects( $this->never() )
+            ->method( 'deleteGroup' );
+
+        $handler = new Handler( $gatewayMock, new Mapper() );
+        $handler->deleteGroup( 23 );
     }
 
     /**

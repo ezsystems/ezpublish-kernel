@@ -15,7 +15,8 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\Group,
     ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    ezp\Persistence\Storage\Legacy\Exception;
 
 /**
  */
@@ -78,15 +79,16 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param mixed $groupId
-     * @todo Is cascading (Group -> Type -> Content) intended?
+     * @throws \ezp\Persistence\Storage\Legacy\Exception\GroupNotEmpty
+     *         if a non-empty group is to be deleted.
      */
     public function deleteGroup( $groupId )
     {
-        // Load type-status combinations which are not in any other group
-        // Delete group assignement
-        // Delete all types that have no more groups
-        //   Delete all content objects of these types
-        throw new \RuntimeException( "Not implemented, yet." );
+        if ( $this->contentTypeGateway->countTypesInGroup( $groupId ) !== 0 )
+        {
+            throw new Exception\GroupNotEmpty( $groupId );
+        }
+        $this->contentTypeGateway->deleteGroup( $groupId );
     }
 
     /**

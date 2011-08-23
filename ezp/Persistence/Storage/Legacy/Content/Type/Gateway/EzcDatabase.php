@@ -224,6 +224,28 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Returns the number of types in a certain group.
+     *
+     * @param int $groupId
+     * @return int
+     */
+    public function countTypesInGroup( $groupId )
+    {
+        throw new RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
+     * Deletes the Group with the given $groupId.
+     *
+     * @param int $groupId
+     * @return void
+     */
+    public function deleteGroup( $groupId )
+    {
+        throw new RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Inserts data into contentclass_name.
      *
      * @param Type $type
