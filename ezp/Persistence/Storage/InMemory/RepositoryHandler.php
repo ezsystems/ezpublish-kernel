@@ -49,6 +49,14 @@ class RepositoryHandler implements BaseRepositoryHandler
     }
 
     /**
+     * @return \ezp\Persistence\Content\Search\Handler
+     */
+    public function searchHandler()
+    {
+        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\SearchHandler' );
+    }
+
+    /**
      * @return \ezp\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler()

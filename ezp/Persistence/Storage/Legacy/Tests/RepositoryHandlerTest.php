@@ -108,6 +108,39 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
+     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::searchHandler
+     * @return void
+     */
+    public function testSearchHandler()
+    {
+        $handler = $this->getRepositoryHandlerFixture();
+        $searchHandler = $handler->searchHandler();
+
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content\\Search\\Handler',
+            $searchHandler
+        );
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Search\\Handler',
+            $searchHandler
+        );
+    }
+
+    /**
+     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::searchHandler
+     * @return void
+     */
+    public function testSearchHandlerTwice()
+    {
+        $handler = $this->getRepositoryHandlerFixture();
+
+        $this->assertSame(
+            $handler->searchHandler(),
+            $handler->searchHandler()
+        );
+    }
+
+    /**
      * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::contentTypeHandler
      * @return void
      */

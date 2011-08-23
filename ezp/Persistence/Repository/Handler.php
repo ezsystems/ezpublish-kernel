@@ -21,6 +21,11 @@ interface Handler
     public function contentHandler();
 
     /**
+     * @return \ezp\Persistence\Content\Search\Handler
+     */
+    public function searchHandler();
+
+    /**
      * @return \ezp\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler();
