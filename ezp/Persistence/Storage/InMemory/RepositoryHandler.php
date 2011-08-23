@@ -89,6 +89,14 @@ class RepositoryHandler implements BaseRepositoryHandler
     }
 
     /**
+     * @return \ezp\Persistence\Content\Location\Trash\Handler
+     */
+    public function trashHandler()
+    {
+        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\TrashHandler' );
+    }
+
+    /**
      */
     public function beginTransaction()
     {

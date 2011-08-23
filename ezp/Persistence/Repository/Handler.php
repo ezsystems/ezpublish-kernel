@@ -36,6 +36,11 @@ interface Handler
     public function locationHandler();
 
     /**
+     * @return \ezp\Persistence\Content\Location\Trash\Handler
+     */
+    public function trashHandler();
+
+    /**
      * @return \ezp\Persistence\User\Handler
      */
     public function userHandler();

@@ -110,6 +110,19 @@ class Repository
     }
 
     /**
+     * Get Trash service
+     *
+     * Trash service allows to perform operations related to location trash
+     * (trash/untrash, load/list from trash...)
+     *
+     * @return type \ezp\Content\Location\Trash\Service
+     */
+    public function getTrashService()
+    {
+        return $this->service( 'ezp\\Content\\Location\\Trash\\Service' );
+    }
+
+    /**
      * Get User Service
      *
      *

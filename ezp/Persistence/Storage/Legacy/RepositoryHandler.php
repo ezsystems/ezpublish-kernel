@@ -234,7 +234,15 @@ class RepositoryHandler implements HandlerInterface
      */
     public function sectionHandler()
     {
-        throw new RuntimeException( 'Not implemented, yet.' );
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
+     * @return \ezp\Persistence\Content\Location\Trash\Handler
+     */
+    public function trashHandler()
+    {
+        throw new \RuntimeException( 'Not implemented yet' );
     }
 
     /**
