@@ -468,5 +468,21 @@ class EzpDatabaseTest extends TestCase
                 ->from( 'ezcontentobject_trash' )
         );
     }
+
+    public function testSetSectionForSubtree()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/../../_fixtures/contentobjects.php' );
+        $handler = $this->getLocationGateway();
+        $handler->setSectionForSubtree( '/1/2/69/70/', 23 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 68 ), array( 69 ) ),
+            $query
+                ->select( 'id' )
+                ->from( 'ezcontentobject' )
+                ->where( $query->expr->eq( 'section_id', 23 ) )
+        );
+    }
 }
 
