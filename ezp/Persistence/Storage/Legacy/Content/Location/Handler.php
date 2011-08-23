@@ -249,7 +249,7 @@ class Handler implements BaseLocationHandler
      */
     public function untrashLocation( $locationId, $newParentId = null )
     {
-        throw new \RuntimeException( '@TODO: Discussion pending…' );
+        $this->locationGateway->untrashLocation( $locationId, $newParentId );
     }
 
     /**

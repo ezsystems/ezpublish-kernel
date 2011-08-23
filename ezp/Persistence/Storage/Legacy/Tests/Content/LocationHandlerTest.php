@@ -278,6 +278,18 @@ class LocationHandlerTest extends TestCase
         $handler->trashSubtree( 69 );
     }
 
+    public function testUntrashLocation()
+    {
+        $handler = $this->getLocationHandler();
+
+        $this->locationGateway
+            ->expects( $this->at( 0 ) )
+            ->method( 'untrashLocation' )
+            ->with( 69, 23 );
+
+        $handler->untrashLocation( 69, 23 );
+    }
+
     public function testSetSectionForSubtree()
     {
         $handler = $this->getLocationHandler();
