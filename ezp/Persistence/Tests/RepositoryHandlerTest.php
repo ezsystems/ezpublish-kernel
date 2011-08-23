@@ -41,6 +41,30 @@ class RepositoryHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type
      *
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::__construct
+     */
+    public function testContentTypeHandler()
+    {
+        $contentHandler = $this->repositoryHandler->contentTypeHandler();
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\Handler', $contentHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\ContentTypeHandler', $contentHandler );
+    }
+
+    /**
+     * Test that instance is of correct type
+     *
+     * @covers ezp\Persistence\Storage\InMemory\LocationHandler::__construct
+     */
+    public function testContentLocationHandler()
+    {
+        $contentHandler = $this->repositoryHandler->locationHandler();
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Location\\Handler', $contentHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\LocationHandler', $contentHandler );
+    }
+
+    /**
+     * Test that instance is of correct type
+     *
      * @covers ezp\Persistence\Storage\InMemory\SectionHandler::__construct
      */
     public function testSectionHandler()
@@ -48,5 +72,17 @@ class RepositoryHandlerTest extends HandlerTest
         $sectionHandler = $this->repositoryHandler->sectionHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Section\\Handler', $sectionHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\SectionHandler', $sectionHandler );
+    }
+
+    /**
+     * Test that instance is of correct type
+     *
+     * @covers ezp\Persistence\Storage\InMemory\SectionHandler::__construct
+     */
+    public function testUserHandler()
+    {
+        $sectionHandler = $this->repositoryHandler->userHandler();
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Handler', $sectionHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\UserHandler', $sectionHandler );
     }
 }

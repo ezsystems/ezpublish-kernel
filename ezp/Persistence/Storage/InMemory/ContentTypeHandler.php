@@ -19,6 +19,8 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
     ezp\Persistence\Content\Type\Group,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\BadRequest,
+    ezp\Persistence\Storage\InMemory\RepositoryHandler,
+    ezp\Persistence\Storage\InMemory\Backend,
     RuntimeException;
 
 /**
