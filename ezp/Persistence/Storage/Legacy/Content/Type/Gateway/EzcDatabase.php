@@ -231,7 +231,26 @@ class EzcDatabase extends Gateway
      */
     public function countTypesInGroup( $groupId )
     {
-        throw new RuntimeException( 'Not implemented, yet.' );
+        $q = $this->dbHandler->createSelectQuery();
+        $q->select(
+            $q->alias(
+                $q->expr->count(
+                    $this->dbHandler->quoteColumn( 'contentclass_id' )
+                ),
+                'count'
+            )
+        )->from( $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' ) )
+        ->where(
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'group_id' ),
+                $q->bindValue( $groupId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return (int) $stmt->fetchColumn();
     }
 
     /**
@@ -242,7 +261,16 @@ class EzcDatabase extends Gateway
      */
     public function deleteGroup( $groupId )
     {
-        throw new RuntimeException( 'Not implemented, yet.' );
+        $q = $this->dbHandler->createDeleteQuery();
+        $q->deleteFrom( $this->dbHandler->quoteTable( 'ezcontentclassgroup' ) )
+            ->where(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $q->bindValue( $groupId, null, \PDO::PARAM_INT )
+                )
+            );
+        $stmt = $q->prepare();
+        $stmt->execute();
     }
 
     /**

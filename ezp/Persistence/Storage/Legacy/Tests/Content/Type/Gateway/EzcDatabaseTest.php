@@ -191,6 +191,54 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::countTypesInGroup
+     */
+    public function testCountTypesInGroup()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $this->assertEquals(
+            3,
+            $gateway->countTypesInGroup( 1 )
+        );
+        $this->assertEquals(
+            0,
+            $gateway->countTypesInGroup( 23 )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroup
+     */
+    public function testDeleteGroup()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_groups.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $gateway->deleteGroup( 2 );
+
+        $this->assertQueryResult(
+            array(
+                array( '1' ),
+                array( '3' ),
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( 'id' )
+                ->from( 'ezcontentclassgroup' )
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns
      */
