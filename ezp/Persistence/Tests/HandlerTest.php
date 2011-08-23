@@ -15,7 +15,7 @@ use ezp\Base\Service\Container,
  * Test case for Handler using in memory storage.
  *
  */
-class HandlerTest extends PHPUnit_Framework_TestCase
+abstract class HandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Repository\Handler
@@ -36,10 +36,5 @@ class HandlerTest extends PHPUnit_Framework_TestCase
             )
         );
         $this->repositoryHandler = $serviceContainer->get( 'repository_handler' );
-    }
-
-    public function testStub()
-    {
-        $this->markTestIncomplete( '@TODO: Add tests.' );
     }
 }
