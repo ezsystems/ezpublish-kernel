@@ -227,14 +227,14 @@ class UserHandlerTest extends HandlerTest
         $id = $obj->id;
 
         //assignRole( $groupId, $roleId, array $limitation = null )
-        $this->markTestIncomplete( '@todo: Add data.json content for user groups' );
+        $handler->assignRole( 42, $id );// 42: Anonymous Users
     }
 
     /**
      * Test assignRole function
      *
      * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
-     * @expectedException \ezp\Base\Exception\BadContentType
+     * @expectedException \ezp\Base\Exception\NotFoundWithType
      */
     public function testAssignRoleWrongGroupType()
     {
@@ -255,7 +255,7 @@ class UserHandlerTest extends HandlerTest
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $id = $obj->id;
-        $handler->assignRole( 22, $id );
+        $handler->assignRole( 999, $id );
     }
 
     /**
@@ -267,8 +267,7 @@ class UserHandlerTest extends HandlerTest
     public function testAssignRoleRoleNotFound()
     {
         $handler = $this->repositoryHandler->userHandler();
-        $this->markTestIncomplete( '@todo: Add data.json content for user groups' );
-        $handler->assignRole( 11, 22 );
+        $handler->assignRole( 42, 999 );
     }
 
     /**
