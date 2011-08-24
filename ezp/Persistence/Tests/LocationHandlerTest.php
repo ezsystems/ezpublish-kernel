@@ -53,9 +53,18 @@ class LocationHandlerTest extends HandlerTest
     protected $lastContentId;
 
     /**
+     * Locations which should be removed in tearDown
+     *
      * @var \ezp\Content\Location[]
      */
     protected $locationToDelete = array();
+
+    /**
+     * Contents which should be removed in tearDown
+     *
+     * @var \ezp\Content[]
+     */
+    protected $contentToDelete = array();
 
     /**
      * Setup the HandlerTest.
@@ -107,6 +116,7 @@ class LocationHandlerTest extends HandlerTest
         }
 
         $this->locationToDelete = $this->locations;
+        $this->contentToDelete = $this->contents;
     }
 
     /**
@@ -116,18 +126,31 @@ class LocationHandlerTest extends HandlerTest
     {
         $locationHandler = $this->repositoryHandler->locationHandler();
 
-        try
+        // Removing default objects as well as those created by tests
+        foreach ( $this->locationToDelete as $location )
         {
-            // Removing default objects as well as those created by tests
-            foreach ( $this->locationToDelete as $location )
+            try
             {
-                $locationHandler->delete( $location->id );
+                $locationHandler->removeSubtree( $location->id );
+            }
+            catch ( NotFound $e )
+            {
             }
         }
-        catch ( NotFound $e )
+
+        $contentHandler = $this->repositoryHandler->contentHandler();
+        foreach ( $this->contentToDelete as $content )
         {
+            try
+            {
+                $contentHandler->delete( $content->id );
+            }
+            catch ( NotFound $e )
+            {
+            }
         }
-        unset( $this->lastLocationId );
+
+        unset( $this->lastLocationId, $this->lastContentId );
         parent::tearDown();
     }
 
