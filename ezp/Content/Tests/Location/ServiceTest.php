@@ -447,7 +447,7 @@ class ServiceTest extends BaseServiceTest
 
         $parentId = $locationToMove->id;
         $parentPathString = $locationToMove->pathString;
-        foreach ( array_splice( $this->insertedLocations, $startIndex + 1 ) as $key => $location )
+        foreach ( array_slice( $this->insertedLocations, $startIndex + 1 ) as $key => $location )
         {
             $location = $this->service->load( $location->id );
             self::assertEquals( $parentId, $location->parentId );
@@ -468,7 +468,7 @@ class ServiceTest extends BaseServiceTest
         $startIndex = 5;
         $this->service->delete( $this->insertedLocations[$startIndex] );
 
-        foreach ( array_splice( $this->insertedLocations, $startIndex ) as $key => $location )
+        foreach ( array_slice( $this->insertedLocations, $startIndex ) as $key => $location )
         {
             try
             {
@@ -519,7 +519,7 @@ class ServiceTest extends BaseServiceTest
         // Assign the section to subtree
         $this->service->assignSection( $this->insertedLocations[$startIndex], $section );
 
-        foreach ( array_splice( $this->insertedLocations, $startIndex ) as $location )
+        foreach ( array_slice( $this->insertedLocations, $startIndex ) as $location )
         {
             $content = $this->repository->getContentService()->load( $location->contentId );
             self::assertSame( $section->id, $content->sectionId );
