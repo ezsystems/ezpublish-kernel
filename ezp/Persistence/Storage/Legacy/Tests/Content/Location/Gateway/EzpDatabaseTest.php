@@ -510,6 +510,24 @@ class EzpDatabaseTest extends TestCase
         );
     }
 
+    public function testUntrashLocationNewParent()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69/' );
+
+        $handler->untrashLocation( 69, 1 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( '228', '1', '/1/228/' ) ),
+            $query
+                ->select( 'node_id', 'parent_node_id', 'path_string' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->in( 'contentobject_id', array( 67 ) ) )
+        );
+    }
+
     public function testSetSectionForSubtree()
     {
         $this->insertDatabaseFixture( __DIR__ . '/../../_fixtures/contentobjects.php' );
