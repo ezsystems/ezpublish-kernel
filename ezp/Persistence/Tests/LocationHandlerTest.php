@@ -11,6 +11,7 @@ namespace ezp\Persistence\Tests;
 use ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\CreateStruct as ContentCreateStruct,
+    ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Field,
     ezp\Base\Exception\NotFound,
     ezp\Content\Location;
@@ -239,5 +240,74 @@ class LocationHandlerTest extends HandlerTest
         catch ( NotFound $e )
         {
         }
+    }
+
+    /**
+     * Test copySubtree function with no children
+     *
+     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::copySubtree
+     */
+    public function testCopySubtreeNoChildren()
+    {
+        // Copy the last location created in setUp
+        $newLocation = $this->repositoryHandler->locationHandler()->copySubtree( $this->lastLocationId, 1 );
+        $this->assertTrue( $newLocation instanceof LocationValue );
+        $this->assertEquals( $this->lastLocationId + 1 , $newLocation->id );
+        $this->assertEquals( $this->lastContentId + 1, $newLocation->contentId );
+        $this->assertEquals( 1, $newLocation->depth );
+        $this->assertEquals( Location::SORT_FIELD_NAME, $newLocation->sortField );
+        $this->assertEquals( Location::SORT_ORDER_ASC, $newLocation->sortOrder );
+
+        $this->assertEquals(
+            $this->repositoryHandler->contentHandler()->findSingle(
+                new ContentId( $newLocation->contentId )
+            )->locations[0],
+            $newLocation,
+            "Location does not match"
+        );
+    }
+
+    /**
+     * Test copySubtree function with children
+     *
+     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::copySubtree
+     */
+    public function testCopySubtreeChildren()
+    {
+        // Copy the grand parent of the last location created in setUp
+        $newLocation = $this->repositoryHandler->locationHandler()->copySubtree( $this->lastLocationId - 2, 1 );
+        $this->assertTrue( $newLocation instanceof LocationValue );
+        $this->assertEquals( $this->lastLocationId + 1 , $newLocation->id );
+        $this->assertEquals( $this->lastContentId + 1, $newLocation->contentId );
+        $this->assertEquals( 1, $newLocation->depth );
+        $this->assertEquals( Location::SORT_FIELD_NAME, $newLocation->sortField );
+        $this->assertEquals( Location::SORT_ORDER_ASC, $newLocation->sortOrder );
+
+        // Verifying the deepest child is present
+        $this->assertEquals(
+            $this->repositoryHandler->contentHandler()->findSingle(
+                new ContentId( $newLocation->contentId )
+            )->locations[0],
+            $newLocation,
+            "Location does not match"
+        );
+
+        // Verifying the direct child is present
+        $this->assertEquals(
+            $this->repositoryHandler->contentHandler()->findSingle(
+                new ContentId( $newLocation->contentId - 1 )
+            )->locations[0],
+            $this->repositoryHandler->locationHandler()->load( $newLocation->id - 1 ),
+            "Location does not match"
+        );
+
+        // Verifying the top most copied location (the grand parent) is present
+        $this->assertEquals(
+            $this->repositoryHandler->contentHandler()->findSingle(
+                new ContentId( $newLocation->contentId - 2 )
+            )->locations[0],
+            $this->repositoryHandler->locationHandler()->load( $newLocation->id - 2 ),
+            "Location does not match"
+        );
     }
 }

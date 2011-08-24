@@ -61,6 +61,28 @@ class LocationHandler implements LocationHandlerInterface
      */
     public function copySubtree( $sourceId, $destinationParentId )
     {
+        $location = $this->load( $sourceId );
+        $contentCopy = $this->handler->contentHandler()->copy( $location->contentId, false );
+
+        $newLocation = $this->createLocation(
+            new CreateStruct(
+                array(
+                    "contentId" => $contentCopy->id,
+                    "contentVersion" => $contentCopy->currentVersionNo,
+                    "sortField" => $location->sortField,
+                    "sortOrder" => $location->sortOrder,
+                    "parentId" => $destinationParentId,
+                )
+            )
+        );
+
+        // Begin recursive call on children, if any
+        foreach ( $this->backend->find( "Content\\Location", array( "parentId" => $sourceId ) ) as $child )
+        {
+            $this->copySubtree( $child->id, $newLocation->id );
+        }
+
+        return $newLocation;
     }
 
     /**
