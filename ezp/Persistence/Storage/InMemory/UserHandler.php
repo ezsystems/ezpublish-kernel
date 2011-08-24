@@ -14,6 +14,7 @@ use ezp\Persistence\User\Handler as UserHandlerInterface,
     ezp\Persistence\User\RoleUpdateStruct,
     ezp\Persistence\User\Policy,
     ezp\Base\Exception\NotFound,
+    ezp\Base\Exception\BadContentType,
     ezp\Persistence\Storage\InMemory\RepositoryHandler,
     ezp\Persistence\Storage\InMemory\Backend;
 
@@ -116,6 +117,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $roleId
      * @return \ezp\Persistence\User\Role
+     * @throws \ezp\Base\Exception\NotFound If role is not found
      */
     public function loadRole( $roleId )
     {
@@ -211,9 +213,23 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $groupId
      * @param mixed $roleId
-     * @param array $limitation
+     * @param array $limitation @todo Remove or implement
+     * @throws \ezp\Base\Exception\NotFound If role or group is not found
      */
-    public function assignRole( $groupId, $roleId, array $limitation = null ){}
+    public function assignRole( $groupId, $roleId, array $limitation = null )
+    {
+        $content = (array) $this->backend->load( 'Content', $groupId );
+        if ( !$content )
+            throw new NotFound( 'User Group', $groupId );
+
+        // @todo Use eZ Publish settings for this, and maybe a better exception
+        if ( $content['typeId'] != 3 )
+             throw new BadContentType( 3, $content['typeId'] );
+
+        $role = $this->loadRole( $roleId );
+        $content['_roleIds'][] = $role->id;
+        $this->backend->update( 'Content', $groupId, $content );
+    }
 
     /**
      * Un-assign a role

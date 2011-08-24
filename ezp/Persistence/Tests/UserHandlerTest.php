@@ -28,7 +28,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoad()
     {
-        $obj = $this->repositoryHandler->UserHandler()->load( 10 );
+        $obj = $this->repositoryHandler->userHandler()->load( 10 );
         $this->assertInstanceOf( 'ezp\\Persistence\\User', $obj );
         $this->assertEquals( 10, $obj->id );
         $this->assertEquals( 'nospam@ez.no', $obj->email );
@@ -43,7 +43,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadUnExistingUserId()
     {
-        $this->repositoryHandler->UserHandler()->load( 22 );
+        $this->repositoryHandler->userHandler()->load( 22 );
     }
 
     /**
@@ -53,7 +53,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testCreate()
     {
-        $handler = $this->repositoryHandler->UserHandler();
+        $handler = $this->repositoryHandler->userHandler();
         $obj = new User();
         $obj->email = 'unit@ez.no';
         $obj->hashAlgorithm = 2;
@@ -75,7 +75,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testUpdate()
     {
-        $handler = $this->repositoryHandler->UserHandler();
+        $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->load( 10 );
         $obj->email = 'unit@ez.no';
         $handler->update( $obj );
@@ -95,7 +95,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
-        $handler = $this->repositoryHandler->UserHandler();
+        $handler = $this->repositoryHandler->userHandler();
         $handler->delete( 10 );
         $this->assertNull( $handler->load( 10 ) );
         $this->repositoryHandler->ContentHandler()->load( 10, 1 );//exception
@@ -108,7 +108,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testCreateRole()
     {
-        $handler = $this->repositoryHandler->UserHandler();
+        $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 1, $obj->id );
@@ -124,7 +124,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadRoleNotFound()
     {
-        $handler = $this->repositoryHandler->UserHandler();
+        $handler = $this->repositoryHandler->userHandler();
         $handler->loadRole( 1 );//exception
     }
 
@@ -135,7 +135,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testUpdateRole()
     {
-        $handler = $this->repositoryHandler->UserHandler();
+        $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $id = $obj->id;
@@ -159,7 +159,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testDeleteRole()
     {
-        $handler = $this->repositoryHandler->UserHandler();
+        $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
 
@@ -176,7 +176,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testAddPolicy()
     {
-        $handler = $this->repositoryHandler->UserHandler();
+        $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
@@ -203,7 +203,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testRemovePolicy()
     {
-        $handler = $this->repositoryHandler->UserHandler();
+        $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
@@ -213,6 +213,62 @@ class UserHandlerTest extends HandlerTest
         $obj = $handler->loadRole( $id );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 2, count( $obj->policies ) );
+    }
+
+    /**
+     * Test assignRole function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
+     */
+    public function testAssignRole()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $id = $obj->id;
+
+        //assignRole( $groupId, $roleId, array $limitation = null )
+        $this->markTestIncomplete( '@todo: Add data.json content for user groups' );
+    }
+
+    /**
+     * Test assignRole function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
+     * @expectedException \ezp\Base\Exception\BadContentType
+     */
+    public function testAssignRoleWrongGroupType()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $id = $obj->id;
+        $handler->assignRole( 1, $id );
+    }
+
+    /**
+     * Test assignRole function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testAssignRoleGroupNotFound()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $id = $obj->id;
+        $handler->assignRole( 22, $id );
+    }
+
+    /**
+     * Test assignRole function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testAssignRoleRoleNotFound()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $this->markTestIncomplete( '@todo: Add data.json content for user groups' );
+        $handler->assignRole( 11, 22 );
     }
 
     /**
