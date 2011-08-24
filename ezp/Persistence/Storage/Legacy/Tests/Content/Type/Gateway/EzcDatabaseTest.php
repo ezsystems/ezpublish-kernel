@@ -211,6 +211,24 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    public function testCountGroupsForType()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $this->assertEquals(
+            1,
+            $gateway->countGroupsForType( 1, 1 )
+        );
+        $this->assertEquals(
+            0,
+            $gateway->countGroupsForType( 23, 0 )
+        );
+    }
+
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroup

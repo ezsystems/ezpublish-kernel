@@ -262,7 +262,34 @@ class EzcDatabase extends Gateway
      */
     public function countGroupsForType( $typeId, $status )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $q = $this->dbHandler->createSelectQuery();
+        $q->select(
+            $q->alias(
+                $q->expr->count(
+                    $this->dbHandler->quoteColumn( 'group_id' )
+                ),
+                'count'
+            )
+        )->from( $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' ) )
+        ->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclass_id' ),
+                    $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+                )
+            ),
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclass_version' ),
+                    $q->bindValue( $status, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return (int) $stmt->fetchColumn();
     }
 
     /**
