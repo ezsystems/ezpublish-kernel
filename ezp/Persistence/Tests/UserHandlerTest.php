@@ -423,6 +423,29 @@ class UserHandlerTest extends HandlerTest
         $this->assertEquals( 3, count( $list ) );
     }
 
+
+    /**
+     * Test getPermissions function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testGetPermissionsNotFound()
+    {
+        $this->repositoryHandler->userHandler()->getPermissions( 999 );
+    }
+
+    /**
+     * Test getPermissions function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     * @expectedException \ezp\Base\Exception\NotFoundWithType
+     */
+    public function testGetPermissionsNotFoundWithType()
+    {
+        $this->repositoryHandler->userHandler()->getPermissions( 42 );// 42: Anonymous Users (user group)
+    }
+
     /**
      *  Create Role with content/write/SubTree:/1/2/, content/read/* and user/*\/* policy
      *

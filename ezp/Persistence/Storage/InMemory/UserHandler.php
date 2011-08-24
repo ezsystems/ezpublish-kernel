@@ -220,6 +220,7 @@ class UserHandler implements UserHandlerInterface
 
     /**
      * @throws \ezp\Base\Exception\NotFoundWithType
+     * @throws \ezp\Base\Exception\Logic
      * @param \ezp\Persistence\Content $content
      * @param array $policies
      * @return void
