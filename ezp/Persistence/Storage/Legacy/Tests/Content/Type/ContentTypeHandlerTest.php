@@ -166,6 +166,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::deleteGroup
+     * @covers ezp\Persistence\Storage\Legacy\Exception\GroupNotEmpty
      * @expectedException ezp\Persistence\Storage\Legacy\Exception\GroupNotEmpty
      * @expectedExceptionMessage Group with ID "23" is not empty.
      */
@@ -622,6 +623,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::unlink
+     * @covers ezp\Persistence\Storage\Legacy\Exception\RemoveLastGroupFromType
      * @expectedException ezp\Persistence\Storage\Legacy\Exception\RemoveLastGroupFromType
      * @expectedExceptionMessage Type with ID "23" in status "1" cannot be unlinked from its last group.
      */
