@@ -293,14 +293,17 @@ class Backend
             if ( is_array( $item[$matchProperty] ) )
             {
                 // sub match. When $matchValue is array, assume it's a joined
-                // list of value objects
+                // list of value objects and look if one of them matches
                 if ( is_array( $matchValue ) )
                 {
+                    $hasSubMatch = false;
                     foreach ( $item[$matchProperty] as $subItem )
                     {
-                        if ( !$this->match( $subItem, $matchValue ) )
-                            return false;
+                        if ( $this->match( $subItem, $matchValue ) )
+                            $hasSubMatch = true;
                     }
+                    if ( !$hasSubMatch )
+                        return false;
                 }
                 // otherwise check if match value is part of array
                 else if ( !in_array( $matchValue, $item[$matchProperty] ) )

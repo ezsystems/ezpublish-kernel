@@ -13,6 +13,7 @@ use PHPUnit_Framework_TestCase,
     ezp\Base\Exception\NotFound,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     ezp\Persistence\Storage\InMemory\Backend;
 
 /**
@@ -22,7 +23,7 @@ use PHPUnit_Framework_TestCase,
 class BackendDataTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var Backend
+     * @var \ezp\Persistence\Storage\InMemory\Backend
      */
     protected $backend;
 
@@ -290,6 +291,49 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             {
                 $this->assertTrue( $location instanceof Location );
                 $this->assertEquals( 2, $location->id );
+                $this->assertEquals( 1, $location->contentId );
+            }
+        }
+    }
+
+    /**
+     * Test finding content with results using join and deep matching where there are several sub elements
+     *
+     * @covers ezp\Persistence\Storage\InMemory\Backend::find
+     * @group inMemoryBackend
+     */
+    public function testFindJoinDeepMatchWithSeveral()
+    {
+        // Create a new location on content object 1 so it has 2
+        $location = new LocationCreateStruct();
+        $location->contentId = 1;
+        $location->contentVersion = 1;
+        $location->parentId = 1;
+        $location->mainLocationId = 2;
+        $location->remoteId = 'string';
+        $location->pathIdentificationString = '/1/3/';
+        $location->sortField = Location::SORT_FIELD_MODIFIED;
+        $location->sortOrder = Location::SORT_ORDER_DESC;
+        $this->backend->create( 'Content\\Location', (array) $location );
+        /**
+         * @var \ezp\Persistence\Content[] $list
+         */
+        $list = $this->backend->find( "Content",
+                                      array( "locations" => array( 'id' => 2 ) ),
+                                      array( 'locations' => array(
+                                          'type' => 'Content\\Location',
+                                          'match' => array( 'contentId' => 'id' ) )
+                                      ));
+        $this->assertEquals( 1, count( $list ) );
+        foreach ( $list as $content )
+        {
+            $this->assertTrue( $content instanceof Content );
+            $this->assertEquals( 1, $content->id );
+            $this->assertEquals( 'eZ Publish', $content->name );
+            $this->assertEquals( 2, count( $content->locations ) );
+            foreach ( $content->locations as $location )
+            {
+                $this->assertTrue( $location instanceof Location );
                 $this->assertEquals( 1, $location->contentId );
             }
         }
