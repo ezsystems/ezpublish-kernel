@@ -58,7 +58,13 @@ class EzcDatabase extends Gateway
             ) );
         $statement = $query->prepare();
         $statement->execute();
-        return $statement->fetch( \PDO::FETCH_ASSOC );
+
+        if ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            return $row;
+        }
+
+        throw new \ezp\Base\Exception\NotFound( 'location', $nodeId );
     }
 
     /**
@@ -615,7 +621,7 @@ class EzcDatabase extends Gateway
         $nodeIds = array();
         if ( !( $row = $statement->fetch( \PDO::FETCH_ASSOC ) ) )
         {
-            throw Exception( "Not found" );
+            throw new \ezp\Base\Exception\NotFound( 'trashed location', $locationId );
         }
 
         $newParentId = $newParentId ?: $row['parent_node_id'];

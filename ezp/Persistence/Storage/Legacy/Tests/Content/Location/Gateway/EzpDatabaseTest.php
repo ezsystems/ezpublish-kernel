@@ -528,6 +528,42 @@ class EzpDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUntrashInvalidLocation()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+
+        $handler->untrashLocation( 23 );
+    }
+
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUntrashLocationInvalidParent()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69/' );
+
+        $handler->untrashLocation( 69, 1337 );
+    }
+
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUntrashLocationInvalidOldParent()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69/' );
+
+        $handler->untrashLocation( 69 );
+        $handler->untrashLocation( 70 );
+    }
+
     public function testSetSectionForSubtree()
     {
         $this->insertDatabaseFixture( __DIR__ . '/../../_fixtures/contentobjects.php' );
