@@ -23,8 +23,8 @@ class NotFound extends Http
      * Generates: Could not find '{$what}' with identifier '{$identifier}'
      *
      * @param string $what
-     * @param string|int $identifier
-     * @param PHPException|null $previous
+     * @param mixed $identifier
+     * @param \Exception|null $previous
      */
     public function __construct( $what, $identifier, PHPException $previous = null )
     {
