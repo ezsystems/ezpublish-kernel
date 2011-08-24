@@ -199,7 +199,7 @@ class Handler implements BaseLocationHandler
     public function create( CreateStruct $locationStruct )
     {
         $parentNodeData = $this->locationGateway->getBasicNodeData( $locationStruct->parentId );
-        $this->locationGateway->create( $locationStruct, $parentNodeData );
+        return $this->locationGateway->create( $locationStruct, $parentNodeData );
     }
 
     /**

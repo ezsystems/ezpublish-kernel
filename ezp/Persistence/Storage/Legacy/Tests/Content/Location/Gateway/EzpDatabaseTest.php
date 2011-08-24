@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Storage\Legacy\Tests\Content\Location\Gateway;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content,
+    ezp\Persistence\Content\Location,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase,
     ezp\Persistence;
@@ -372,6 +373,60 @@ class EzpDatabaseTest extends TestCase
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->eq( 'node_id', 228 ) )
         );
+    }
+
+    public static function getCreateLocationReturnValues()
+    {
+        return array(
+            array( 'id', 228 ),
+            array( 'priority', 1 ),
+            array( 'hidden', false ),
+            array( 'invisible', false ),
+            array( 'remoteId', 'some_id' ),
+            array( 'contentId', '68' ),
+            array( 'parentId', '77' ),
+            array( 'pathIdentificationString', '' ),
+            array( 'pathString', '' ),
+            array( 'mainLocationId', 228 ),
+            array( 'depth', 3 ),
+            array( 'sortField', 1 ),
+            array( 'sortOrder', 1 ),
+        );
+    }
+
+    /**
+     * @depends testCreateLocation
+     * @dataProvider getCreateLocationReturnValues
+     */
+    public function testCreateLocationReturnValues( $field, $value )
+    {
+        if ( $value === null )
+        {
+            $this->markTestIncomplete( 'Proper value setting yet unknown.' );
+        }
+
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $location = $handler->create(
+            new CreateStruct( array(
+                'contentId'      => 68,
+                'contentVersion' => 1,
+                'remoteId'       => 'some_id',
+                'mainLocationId' => true,
+                'priority'       => 1,
+                'remoteId'       => 'some_id',
+                'sortField'      => 1,
+                'sortOrder'      => 1,
+            ) ),
+            array(
+                'node_id' => '77',
+                'depth' => '2',
+                'path_string' => '/1/2/77/',
+            )
+        );
+
+        $this->assertTrue( $location instanceof Location );
+        $this->assertEquals( $value, $location->$field );
     }
 
     public static function getNodeAssignmentValues()
