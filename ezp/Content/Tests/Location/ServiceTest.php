@@ -423,6 +423,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers \ezp\Content\Location\Service::move
      */
     public function testMove()
     {
@@ -452,6 +453,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers \ezp\Content\Location\Service::delete
      */
     public function testDelete()
     {
@@ -494,6 +496,7 @@ class ServiceTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers \ezp\Content\Location\Service::assignSection
      */
     public function testAssignSection()
     {
