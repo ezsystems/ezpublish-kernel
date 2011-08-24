@@ -228,9 +228,8 @@ class LocationHandler implements LocationHandlerInterface
 
     /**
      * @see ezp\Persistence\Content\Location\Handler
-     * @todo Rename to update
      */
-    public function updateLocation( UpdateStruct $location, $locationId )
+    public function update( UpdateStruct $location, $locationId )
     {
         return $this->backend->update(
             'Content\\Location',

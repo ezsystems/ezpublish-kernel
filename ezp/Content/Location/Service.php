@@ -112,7 +112,7 @@ class Service extends BaseService
             }
         }
 
-        if ( !$this->handler->locationHandler()->updateLocation( $struct, $location->id ) )
+        if ( !$this->handler->locationHandler()->update( $struct, $location->id ) )
         {
             throw new Logic( "Location #{$location->id}", 'Could not be updated' );
         }

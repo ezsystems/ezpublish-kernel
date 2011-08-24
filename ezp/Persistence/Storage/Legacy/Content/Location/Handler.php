@@ -185,7 +185,7 @@ class Handler implements BaseLocationHandler
      * @param int $locationId
      * @return boolean
      */
-    public function updateLocation( UpdateStruct $location, $locationId )
+    public function update( UpdateStruct $location, $locationId )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }

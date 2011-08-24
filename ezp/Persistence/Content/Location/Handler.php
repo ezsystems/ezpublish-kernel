@@ -99,7 +99,7 @@ interface Handler
      * @param int $locationId
      * @return boolean
      */
-    public function updateLocation( UpdateStruct $location, $locationId );
+    public function update( UpdateStruct $location, $locationId );
 
     /**
      * Creates a new location rooted at $location->parentId.
