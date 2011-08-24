@@ -12,7 +12,6 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\Criterion\ContentId,
-    ezp\Persistence\Content\Criterion\Operator,
     ezp\Base\Exception\NotFound,
     ezp\Content\Version;
 
