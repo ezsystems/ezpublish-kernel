@@ -13,9 +13,11 @@ use ezp\Persistence\User\Handler as UserHandlerInterface,
     ezp\Persistence\User\Role,
     ezp\Persistence\User\RoleUpdateStruct,
     ezp\Persistence\User\Policy,
+    ezp\Persistence\Content,
+    ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\Logic,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\NotFoundWithType,
-    ezp\Base\Exception\InvalidArgumentValue,
     ezp\Persistence\Storage\InMemory\RepositoryHandler,
     ezp\Persistence\Storage\InMemory\Backend;
 
@@ -191,8 +193,80 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $userId
      * @return \ezp\Persistence\User\Policy[]
+     * @throws \ezp\Base\Exception\NotFound If user (it's content object atm) is not found
+     * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
      */
-    public function getPermissions( $userId ){}
+    public function getPermissions( $userId )
+    {
+        $list = $this->backend->find(
+            'Content',
+            array( 'id' => $userId ),
+            array( 'locations' => array(
+                'type' => 'Content\\Location',
+                'match' => array( 'contentId' => 'id' ) )
+            )
+        );
+
+        if ( !$list )
+            throw new NotFound( 'User', $userId );
+
+        if ( $list[0]->typeId != 4 )
+             throw new NotFoundWithType( 4, $userId );
+
+        $policies = array();
+        $this->getPermissionsWalkUserGroups( $list[0], $policies );
+        return $policies;
+    }
+
+    /**
+     * @throws \ezp\Base\Exception\NotFoundWithType
+     * @param \ezp\Persistence\Content $content
+     * @param array $policies
+     * @return void
+     * @todo Merge policies with same values (but wait until decision on role assignment limitations)
+     */
+    protected function getPermissionsWalkUserGroups( Content $content, array &$policies )
+    {
+        // Allow User(4) for BC
+        if ( $content->typeId != 3 && $content->typeId != 4 )
+             throw new NotFoundWithType( "3 or 4", $content->id );
+
+        // fetch possible roles assigned to this object
+        $list = $this->backend->find(
+            'User\\Role',
+            array( 'groupIds' => $content->id ),
+            array( 'policies' => array(
+                'type' => 'User\\Policy',
+                'match' => array( '_roleId' => 'id' ) )
+            )
+        );
+
+        // merge policies
+        if ( $list )
+        {
+            foreach ( $list as $role )
+            {
+                $policies = array_merge( $policies, $role->policies );
+            }
+        }
+
+        // crawl up to root
+        foreach ( $content->locations as $location )
+        {
+            $list = $this->backend->find(
+                'Content',
+                array( 'locations' => array( 'id' => $location->parentId ) ),
+                array( 'locations' => array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' ) )
+                )
+            );
+            if ( isset( $list[1] ) )
+                throw new Logic( 'content tree', 'getPermissionsWalkUserGroups to fail' );
+            else if ( $list )
+                $this->getPermissionsWalkUserGroups( $list[0], $policies );
+        }
+    }
 
     /**
      * Assign role to user with given limitation
@@ -217,20 +291,24 @@ class UserHandler implements UserHandlerInterface
      * @param array $limitation @todo Remove or implement
      * @throws \ezp\Base\Exception\NotFound If group or role is not found
      * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If group is already assigned role
      */
     public function assignRole( $groupId, $roleId, array $limitation = null )
     {
-        $content = (array) $this->backend->load( 'Content', $groupId );
+        $content = $this->backend->load( 'Content', $groupId );
         if ( !$content )
             throw new NotFound( 'User Group', $groupId );
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
-        if ( $content['typeId'] != 3 )
+        if ( $content->typeId != 3 )
              throw new NotFoundWithType( 3, $groupId );
 
         $role = $this->loadRole( $roleId );
-        $content['_roleIds'][] = $role->id;
-        $this->backend->update( 'Content', $groupId, $content );
+        if ( in_array( $groupId, $role->groupIds ) )
+            throw new InvalidArgumentValue( '$roleId', $roleId );
+
+        $role->groupIds[] = $groupId;
+        $this->backend->update( 'User\\Role', $roleId, (array) $role );
     }
 
     /**
@@ -238,7 +316,26 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $groupId
      * @param mixed $roleId
+     * @throws \ezp\Base\Exception\NotFound If group or role is not found
+     * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If group does not contain role
      */
-    public function unAssignRole( $groupId, $roleId ){}
+    public function unAssignRole( $groupId, $roleId )
+    {
+        $content = $this->backend->load( 'Content', $groupId );
+        if ( !$content )
+            throw new NotFound( 'User Group', $groupId );
+
+        // @todo Use eZ Publish settings for this, and maybe a better exception
+        if ( $content->typeId != 3 )
+             throw new NotFoundWithType( 3, $groupId );
+
+        $role = $this->loadRole( $roleId );
+        if ( !in_array( $groupId, $role->groupIds ) )
+            throw new InvalidArgumentValue( '$roleId', $roleId );
+
+        $role->groupIds = array_values( array_diff( $role->groupIds, array( $groupId ) ) );
+        $this->backend->update( 'User\\Role', $roleId, (array) $role );
+    }
 }
 ?>

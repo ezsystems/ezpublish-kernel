@@ -34,5 +34,12 @@ class Role extends ValueObject
      * @var Policy[]
      */
     public $policies = array();
+
+    /**
+     * Contains an array of group IDs that has this role assigned.
+     *
+     * @var mixed[] In current implementation, id's are contentId's
+     */
+    public $groupIds = array();
 }
 ?>

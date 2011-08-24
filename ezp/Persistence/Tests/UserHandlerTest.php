@@ -189,7 +189,6 @@ class UserHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 4, count( $obj->policies ) );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $obj->policies[3] );
-        $this->assertEquals( 4, $obj->policies[3]->id );
         $this->assertEquals( 'Foo', $obj->policies[3]->module );
         $this->assertEquals( 'Bar', $obj->policies[3]->function );
         $this->assertEquals( 1, count( $obj->policies[3]->limitations ) );
@@ -224,10 +223,10 @@ class UserHandlerTest extends HandlerTest
     {
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
-        $id = $obj->id;
-
-        //assignRole( $groupId, $roleId, array $limitation = null )
-        $handler->assignRole( 42, $id );// 42: Anonymous Users
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+        $obj = $handler->loadRole( $obj->id );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertTrue( in_array( 42, $obj->groupIds ), 'Role was not properly assigned to User Group with id: 42' );
     }
 
     /**
@@ -240,8 +239,7 @@ class UserHandlerTest extends HandlerTest
     {
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
-        $id = $obj->id;
-        $handler->assignRole( 1, $id );
+        $handler->assignRole( 1, $obj->id );
     }
 
     /**
@@ -254,8 +252,7 @@ class UserHandlerTest extends HandlerTest
     {
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
-        $id = $obj->id;
-        $handler->assignRole( 999, $id );
+        $handler->assignRole( 999, $obj->id );
     }
 
     /**
@@ -268,6 +265,145 @@ class UserHandlerTest extends HandlerTest
     {
         $handler = $this->repositoryHandler->userHandler();
         $handler->assignRole( 42, 999 );
+    }
+
+    /**
+     * Test assignRole function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     */
+    public function testAssignRoleAlreadyAssigned()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+        $handler->assignRole( 42, $obj->id );
+    }
+
+    /**
+     * Test unAssignRole function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::unAssignRole
+     */
+    public function testUnAssignRole()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+
+        $obj = $handler->loadRole( $obj->id );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertTrue( in_array( 42, $obj->groupIds ), 'Role was not properly assigned to User Group with id: 42' );
+
+        $handler->unAssignRole( 42, $obj->id );// 42: Anonymous Users
+        $obj = $handler->loadRole( $obj->id );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertFalse( in_array( 42, $obj->groupIds ), 'Role was not properly assigned to User Group with id: 42' );
+    }
+
+    /**
+     * Test unAssignRole function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::unAssignRole
+     * @expectedException \ezp\Base\Exception\NotFoundWithType
+     */
+    public function testUnAssignRoleWrongGroupType()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->unAssignRole( 1, $obj->id );
+    }
+
+    /**
+     * Test unAssignRole function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::unAssignRole
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUnAssignRoleGroupNotFound()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->unAssignRole( 999, $obj->id );
+    }
+
+    /**
+     * Test unAssignRole function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::unAssignRole
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testUnAssignRoleRoleNotFound()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $handler->unAssignRole( 42, 999 );
+    }
+
+    /**
+     * Test unAssignRole function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::unAssignRole
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     */
+    public function testUnAssignRoleNotAssigned()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->unAssignRole( 42, $obj->id );// 42: Anonymous Users
+    }
+
+    /**
+     * Test getPermissions function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     */
+    public function testGetPermissions()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+
+        $list = $handler->getPermissions( 10 );// 10: Anonymous User
+        $this->assertEquals( 3, count( $list ) );
+
+        // add a policy and check that it is part of returned permission after re fetch
+        $handler->addPolicy( $obj->id, new Policy( array( 'module' => 'Foo',
+                                                     'function' => 'Bar',
+                                                     'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
+        $list = $handler->getPermissions( 10 );
+        $this->assertEquals( 4, count( $list ) );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $list[3] );
+        $this->assertEquals( 'Foo', $list[3]->module );
+        $this->assertEquals( 'Bar', $list[3]->function );
+        $this->assertEquals( array( 'Test' ), $list[3]->limitations['Limit'] );
+    }
+
+    /**
+     * Test getPermissions function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     */
+    public function testGetPermissionsDeep()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+
+        $role = new Role();
+        $role->name = 'test2';
+        $role->policies = array(
+            new Policy( array( 'module' => 'tag', 'function' => '*', 'limitations' => '*' ) ),
+        );
+        $obj = $handler->createRole( $role );
+        $handler->assignRole( 4, $obj->id );// 4: Users
+
+        $list = $handler->getPermissions( 10 );// 10: Anonymous User
+        $this->assertEquals( 4, count( $list ) );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $list[3] );
+        $this->assertEquals( 'tag', $list[3]->module );
+        $this->assertEquals( '*', $list[3]->function );
+        $this->assertEquals( '*', $list[3]->limitations );
     }
 
     /**
