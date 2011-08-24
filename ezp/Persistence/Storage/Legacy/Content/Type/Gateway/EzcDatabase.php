@@ -254,6 +254,18 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Returns the number of Groups the type is assigned to.
+     *
+     * @param int $typeId
+     * @param int $status
+     * @return int
+     */
+    public function countGroupsForType( $typeId, $status )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Deletes the Group with the given $groupId.
      *
      * @param int $groupId

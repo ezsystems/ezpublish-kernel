@@ -591,11 +591,18 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::unlink
      */
-    public function testUnlink()
+    public function testUnlinkSuccess()
     {
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects( $this->once() )
-            ->method( 'DeleteGroupAssignement' )
+            ->method( 'countGroupsForType' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 )
+            )->will( $this->returnValue( 2 ) );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteGroupAssignement' )
             ->with(
                 $this->equalTo( 3 ),
                 $this->equalTo( 23 ),
@@ -610,6 +617,31 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $res = $handler->unlink( 3, 23, 1 );
 
         $this->assertTrue( $res );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::unlink
+     * @expectedException ezp\Persistence\Storage\Legacy\Exception\RemoveLastGroupFromType
+     * @expectedExceptionMessage Type with ID "23" in status "1" cannot be unlinked from its last group.
+     */
+    public function testUnlinkFailure()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'countGroupsForType' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 )
+            // Only 1 group assigned
+            )->will( $this->returnValue( 1 ) );
+
+        $mapperMock = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Mapper'
+        );
+
+        $handler = new Handler( $gatewayMock, $mapperMock );
+        $res = $handler->unlink( 3, 23, 1 );
     }
 
     /**

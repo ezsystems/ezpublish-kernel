@@ -43,6 +43,15 @@ abstract class Gateway
     abstract public function countTypesInGroup( $groupId );
 
     /**
+     * Returns the number of Groups the type is assigned to.
+     *
+     * @param int $typeId
+     * @param int $status
+     * @return int
+     */
+    abstract public function countGroupsForType( $typeId, $status );
+
+    /**
      * Deletes the Group with the given $groupId.
      *
      * @param int $groupId

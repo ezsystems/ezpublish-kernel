@@ -253,10 +253,19 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $groupId
      * @param mixed $contentTypeId
      * @param int $status
-     * @todo Check if content type is in another group, otherwise delete?
      */
     public function unlink( $groupId, $contentTypeId, $status )
     {
+        $groupCount = $this->contentTypeGateway->countGroupsForType(
+            $contentTypeId, $status
+        );
+        if ( $groupCount < 2 )
+        {
+            throw new Exception\RemoveLastGroupFromType(
+                $contentTypeId, $status
+            );
+        }
+
         $this->contentTypeGateway->deleteGroupAssignement(
             $groupId, $contentTypeId, $status
         );
