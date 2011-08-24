@@ -43,6 +43,17 @@ abstract class BaseServiceTest extends PHPUnit_Framework_TestCase
      */
     protected static function getRepository()
     {
+        /*
+         * For legacy storage engine it will be some thing like bellow.
+         * BUT: Scheme & data will have to be inserted and data needs to be synced with data.json in InMemory SE
+         *
+         *   $dns = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
+         *   $sc = new Container(
+         *       array(
+         *           '@repository_handler' => new RepositoryHandler( $dns )
+         *       )
+         *   );
+         */
         $sc = new Container;
         return $sc->getRepository();
     }
