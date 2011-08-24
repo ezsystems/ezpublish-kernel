@@ -407,6 +407,23 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
+     * Test getPermissions function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     */
+    public function testGetPermissionsDuplicates()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+
+        $handler->assignRole( 4, $obj->id );// 4: Users
+
+        $list = $handler->getPermissions( 10 );// 10: Anonymous User
+        $this->assertEquals( 3, count( $list ) );
+    }
+
+    /**
      *  Create Role with content/write/SubTree:/1/2/, content/read/* and user/*\/* policy
      *
      * @return \ezp\Persistence\User\Role

@@ -215,7 +215,7 @@ class UserHandler implements UserHandlerInterface
 
         $policies = array();
         $this->getPermissionsWalkUserGroups( $list[0], $policies );
-        return $policies;
+        return array_values( $policies );
     }
 
     /**
@@ -242,11 +242,12 @@ class UserHandler implements UserHandlerInterface
         );
 
         // merge policies
-        if ( $list )
+        foreach ( $list as $role )
         {
-            foreach ( $list as $role )
+            foreach ( $role->policies as $policy )
             {
-                $policies = array_merge( $policies, $role->policies );
+                if ( !isset( $policies[$policy->id] ) )
+                    $policies[$policy->id] = $policy;
             }
         }
 
