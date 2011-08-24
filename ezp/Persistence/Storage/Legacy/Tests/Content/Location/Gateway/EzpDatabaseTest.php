@@ -71,6 +71,16 @@ class EzpDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadInvalidLocation()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $data = $handler->getBasicNodeData( 1337 );
+    }
+
     public function testMoveSubtreePathUpdate()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
