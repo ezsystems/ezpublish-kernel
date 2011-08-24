@@ -411,7 +411,7 @@ class EzcDatabase extends Gateway
      * @param array $parentNode
      * @return \ezp\Persistence\Content\Location
      */
-    public function create( CreateStruct $createStruct, array $parentNode )
+    public function create( CreateStruct $createStruct, array $parentNode, $published = false )
     {
         $query = $this->handler->createInsertQuery();
         $query
@@ -421,7 +421,7 @@ class EzcDatabase extends Gateway
                  $query->bindValue( $createStruct->contentId )
             )->set(
                 $this->handler->quoteColumn( 'contentobject_is_published' ),
-                 $query->bindValue( 0 ) // Will be set to 1, once the contentt object has been published
+                 $query->bindValue( (int) $published ) // Will be set to 1, once the contentt object has been published
             )->set(
                 $this->handler->quoteColumn( 'contentobject_version' ),
                  $query->bindValue( $createStruct->contentVersion )
@@ -434,9 +434,6 @@ class EzcDatabase extends Gateway
             )->set(
                 $this->handler->quoteColumn( 'is_invisible' ),
                  $query->bindValue( $createStruct->invisible )
-            )->set(
-                $this->handler->quoteColumn( 'main_node_id' ),
-                 $query->bindValue( $createStruct->mainLocationId )
             )->set(
                 $this->handler->quoteColumn( 'modified_subnode' ),
                  $query->bindValue( time() )
@@ -474,6 +471,10 @@ class EzcDatabase extends Gateway
             ->set(
                 $this->handler->quoteColumn( 'path_string' ),
                 $query->bindValue( $parentNode['path_string'] . $newNodeId . '/' )
+            )
+            ->set(
+                $this->handler->quoteColumn( 'main_node_id' ),
+                $query->bindValue( $createStruct->mainLocationId === true ? $newNodeId : $createStruct->mainLocationId )
             )
             ->where( $query->expr->eq(
                 $this->handler->quoteColumn( 'node_id' ),
@@ -600,6 +601,54 @@ class EzcDatabase extends Gateway
      */
     public function untrashLocation( $locationId, $newParentId = null )
     {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( '*' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_trash' ) )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'node_id' ),
+                $query->bindValue( $locationId )
+            ) );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $nodeIds = array();
+        if ( !( $row = $statement->fetch( \PDO::FETCH_ASSOC ) ) )
+        {
+            throw Exception( "Not found" );
+        }
+
+        $newParentId = $newParentId ?: $row['parent_node_id'];
+        $parentData  = $this->getBasicNodeData( $newParentId );
+
+        if ( $row['main_node_id'] === $row['node_id'] )
+        {
+            $row['main_node_id'] = true;
+        }
+
+        $this->create( new CreateStruct( array(
+                'priority'       => $row['priority'],
+                'hidden'         => $row['is_hidden'],
+                'invisible'      => $row['is_invisible'],
+                'remoteId'       => $row['remote_id'],
+                'contentId'      => $row['contentobject_id'],
+                'contentVersion' => $row['contentobject_version'],
+                'mainLocationId' => $row['main_node_id'],
+                'sortField'      => $row['sort_field'],
+                'sortOrder'      => $row['sort_order'],
+            ) ),
+            $parentData,
+            true
+        );
+
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( 'ezcontentobject_trash' )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'node_id' ),
+                $locationId
+            ) );
+        $query->prepare()->execute();
     }
 
 

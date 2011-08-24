@@ -469,6 +469,47 @@ class EzpDatabaseTest extends TestCase
         );
     }
 
+    public static function getUntrashedLocationValues()
+    {
+        return array(
+            array( 'contentobject_is_published', 1 ),
+            array( 'contentobject_version', 1 ),
+            array( 'depth', 2 ),
+            array( 'is_hidden', 0 ),
+            array( 'is_invisible', 0 ),
+            array( 'main_node_id', 228 ),
+            array( 'node_id', 228 ),
+            array( 'parent_node_id', 2 ),
+            array( 'path_identification_string', '' ),
+            array( 'path_string', '/1/2/228/' ),
+            array( 'priority', 0 ),
+            array( 'remote_id', '9cec85d730eec7578190ee95ce5a36f5' ),
+            array( 'sort_field', 2 ),
+            array( 'sort_order', 1 ),
+        );
+    }
+
+    /**
+     * @dataProvider getUntrashedLocationValues
+     */
+    public function testUntrashLocationDefault( $property, $value )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69/' );
+
+        $handler->untrashLocation( 69 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( $value ) ),
+            $query
+                ->select( $property )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->in( 'contentobject_id', array( 67 ) ) )
+        );
+    }
+
     public function testSetSectionForSubtree()
     {
         $this->insertDatabaseFixture( __DIR__ . '/../../_fixtures/contentobjects.php' );
