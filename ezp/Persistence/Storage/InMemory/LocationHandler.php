@@ -143,9 +143,11 @@ class LocationHandler implements LocationHandlerInterface
         $this->backend->update( 'Content\\Location' , $id, array( 'hidden' => true, 'invisible' => true ) );
 
         $locationVO = $this->backend->load( 'Content\\Location', $id );
-        $this->backend->updateByMatch( 'Content\\Location',
-                                       array( 'pathString' => "{$locationVO->pathString}%" ),
-                                       array( 'invisible' => true ) );
+        $this->backend->updateByMatch(
+            "Content\\Location",
+            array( "pathString" => "{$locationVO->pathString}%" ),
+            array( "invisible" => true )
+        );
 
        $this->updateSubtreeModificationTime( $this->getParentPathString( $locationVO->pathString ) );
     }
@@ -158,19 +160,22 @@ class LocationHandler implements LocationHandlerInterface
         $this->backend->update( 'Content\\Location', $id, array( 'hidden' => false, 'invisible' => false ) );
 
         $locationVO = $this->backend->load( 'Content\\Location', $id );
-        $hiddenLocations = $this->backend->find( 'Content\\Location',
-                                                 array(
-                                                     'pathString' => "{$locationVO->pathString}%",
-                                                     'hidden' => true
-                                                 )
-                                               );
+        $hiddenLocations = $this->backend->find(
+            "Content\\Location",
+            array(
+                "pathString" => "{$locationVO->pathString}%",
+                "hidden" => true
+            )
+        );
 
-        $invisibleLocations = $this->backend->find( 'Content\\Location',
-                                                    array(
-                                                        'pathString' => "{$locationVO->pathString}%",
-                                                        'invisible' => true,
-                                                        'hidden' => false
-                                                    ));
+        $invisibleLocations = $this->backend->find(
+            "Content\\Location",
+            array(
+                "pathString" => "{$locationVO->pathString}%",
+                "invisible" => true,
+                "hidden" => false
+            )
+        );
 
         $locationsToUnhide = array();
         // Loop against all invisible locations and figure out
