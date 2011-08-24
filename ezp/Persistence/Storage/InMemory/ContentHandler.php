@@ -257,12 +257,12 @@ class ContentHandler implements ContentHandlerInterface
             $this->backend->delete( 'Content\\Version', $version->id );
         }
 
-        // @todo Deleting Locations by content object id should be possible using handler API.
+        // @todo Deleting Locations by content object id should be possible using handler API?
         $locationHandler = $this->handler->locationHandler();
         $locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $contentId ) );
         foreach ( $locations as $location )
         {
-            $locationHandler->delete( $location->id );
+            $locationHandler->removeSubtree( $location->id );
         }
     }
 
