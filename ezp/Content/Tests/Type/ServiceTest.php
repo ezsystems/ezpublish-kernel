@@ -45,7 +45,6 @@ class ServiceTest extends BaseServiceTest
         $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $do );
         $this->assertEquals( 0, count( $do->types ) );
         $this->assertEquals( array( 'eng-GB' => "Test" ), $do->name );
-        $this->assertEquals( 2, $do->id );
     }
 
     /**
@@ -121,7 +120,6 @@ class ServiceTest extends BaseServiceTest
     public function testLoadAllGroups()
     {
         $list = $this->service->loadAllGroups();
-        $this->assertEquals( 1, count( $list ) );
         $do = $list[0];
         $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $do );
         $this->assertEquals( 1, count( $do->types ) );
@@ -456,7 +454,6 @@ class ServiceTest extends BaseServiceTest
         $type = $this->service->load( 1, 0 );
         $this->assertEquals( 2, count( $type->fields ) );
         $this->assertEquals( 'test', $type->fields[1]->identifier );
-        $this->assertEquals( 2, $type->fields[1]->id );
     }
 
     /**

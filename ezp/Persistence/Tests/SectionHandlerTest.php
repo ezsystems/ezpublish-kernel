@@ -72,7 +72,7 @@ class SectionHandlerTest extends HandlerTest
     {
         $section = $this->repositoryHandler->sectionHandler()->create( 'Test2', 'test2' );
         $this->assertTrue( $section instanceof Section );
-        $this->assertEquals( 3, $section->id );
+        $this->assertEquals( $this->section->id +1, $section->id );
         $this->assertEquals( 'Test2', $section->name );
         $this->assertEquals( 'test2', $section->identifier );
     }
@@ -89,7 +89,7 @@ class SectionHandlerTest extends HandlerTest
         $this->assertTrue( $sectionHandler->update( $this->section->id, 'Change', 'change' ) );
 
         $section = $sectionHandler->load( $this->section->id );
-        $this->assertEquals( 2, $section->id );
+        $this->assertEquals( $this->section->id, $section->id );
         $this->assertEquals( 'Change', $section->name );
         $this->assertEquals( 'change', $section->identifier );
     }

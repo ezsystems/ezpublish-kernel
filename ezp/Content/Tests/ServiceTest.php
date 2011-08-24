@@ -109,15 +109,13 @@ class ServiceTest extends BaseServiceTest
         $content = $this->service->create( $content );
         // @todo: Deal with field value when that is ready for manipulation
         self::assertInstanceOf( "ezp\\Content", $content );
-        self::assertEquals( 2, $content->id, "ID not correctly set" );
         self::assertEquals( "New object", $content->name, "Name not correctly set" );
         self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
         self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
         self::assertEquals( Content::STATUS_DRAFT, $content->status, "Status not correctly set" );
         self::assertEquals( 1, count( $content->locations ), "Location count is wrong" );
-        self::assertEquals( 3, $content->locations[0]->id, "Location id is not correct" );
-        self::assertEquals( 3, $content->locations[0]->mainLocationId, "Location id is not correct" );
+        self::assertEquals( $content->locations[0]->id, $content->locations[0]->mainLocationId, "Main Location id is not correct" );
     }
 
     /**
@@ -181,7 +179,7 @@ class ServiceTest extends BaseServiceTest
     public function testListVersionsNotExisting()
     {
         $content = new Content( new Type );
-        $content->getState( "properties" )->id = 42;
+        $content->getState( "properties" )->id = 999;
         $versions = $this->service->listVersions( $content );
     }
 
@@ -220,7 +218,7 @@ class ServiceTest extends BaseServiceTest
     public function testDeleteNotExisting()
     {
         $content = new Content( new Type );
-        $content->getState( "properties" )->id = 42;
+        $content->getState( "properties" )->id = 999;
         $this->service->delete( $content );
     }
 
