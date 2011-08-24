@@ -64,7 +64,7 @@ class LocationHandler implements LocationHandlerInterface
         $location = $this->load( $sourceId );
         $contentCopy = $this->handler->contentHandler()->copy( $location->contentId, false );
 
-        $newLocation = $this->createLocation(
+        $newLocation = $this->create(
             new CreateStruct(
                 array(
                     "contentId" => $contentCopy->id,
@@ -240,9 +240,8 @@ class LocationHandler implements LocationHandlerInterface
 
     /**
      * @see ezp\Persistence\Content\Location\Handler
-     * @todo Rename to create
      */
-    public function createLocation( CreateStruct $locationStruct )
+    public function create( CreateStruct $locationStruct )
     {
         $parentId = $locationStruct->parentId;
         $parent = $this->load( $parentId );

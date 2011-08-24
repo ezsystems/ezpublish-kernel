@@ -86,7 +86,7 @@ class ContentHandler implements ContentHandlerInterface
         {
             $locationStruct->contentId = $contentObj->id;
             $locationStruct->contentVersion = $contentObj->currentVersionNo;
-            $contentObj->locations[] = $locationHandler->createLocation( $locationStruct );
+            $contentObj->locations[] = $locationHandler->create( $locationStruct );
         }
         return $contentObj;
     }

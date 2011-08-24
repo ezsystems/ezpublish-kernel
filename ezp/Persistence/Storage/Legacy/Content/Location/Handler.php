@@ -196,10 +196,10 @@ class Handler implements BaseLocationHandler
      * @param \ezp\Persistence\Content\Location\CreateStruct $contentId
      * @return \ezp\Persistence\Content\Location
      */
-    public function createLocation( CreateStruct $locationStruct )
+    public function create( CreateStruct $locationStruct )
     {
         $parentNodeData = $this->locationGateway->getBasicNodeData( $locationStruct->parentId );
-        $this->locationGateway->createLocation( $locationStruct, $parentNodeData );
+        $this->locationGateway->create( $locationStruct, $parentNodeData );
     }
 
     /**

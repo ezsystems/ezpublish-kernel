@@ -278,7 +278,7 @@ class EzpDatabaseTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->createLocation(
+        $handler->create(
             new CreateStruct( array(
                 'contentId' => 68,
                 'remoteId'  => 'some_id',
@@ -336,7 +336,7 @@ class EzpDatabaseTest extends TestCase
 
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->createLocation(
+        $handler->create(
             new CreateStruct( array(
                 'contentId'      => 68,
                 'contentVersion' => 1,
@@ -393,7 +393,7 @@ class EzpDatabaseTest extends TestCase
 
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->createLocation(
+        $handler->create(
             new CreateStruct( array(
                 'contentId'      => 68,
                 'contentVersion' => 1,

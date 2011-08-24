@@ -107,7 +107,7 @@ interface Handler
      * @param \ezp\Persistence\Content\Location\CreateStruct $location
      * @return \ezp\Persistence\Content\Location
      */
-    public function createLocation( CreateStruct $location );
+    public function create( CreateStruct $location );
 
     /**
      * Removes all Locations under and including $locationId.

@@ -162,7 +162,7 @@ class ContentHandlerTest extends TestCase
             );
 
         $locationMock->expects( $this->once() )
-            ->method( 'createLocation' )
+            ->method( 'create' )
             ->with(
                 $this->isInstanceOf(
                     'ezp\\Persistence\\Content\\Location\\CreateStruct'
@@ -655,7 +655,7 @@ class ContentHandlerTest extends TestCase
     {
         return $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Handler',
-            array( 'createLocation' ),
+            array( 'create' ),
             array(),
             '',
             false

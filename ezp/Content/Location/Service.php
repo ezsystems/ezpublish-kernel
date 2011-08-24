@@ -87,7 +87,7 @@ class Service extends BaseService
         $struct->invisible = ( $location->parent->invisible == true ) || ( $location->parent->hidden == true );
         $struct->contentId = $location->contentId;
 
-        $vo = $this->handler->locationHandler()->createLocation( $struct );
+        $vo = $this->handler->locationHandler()->create( $struct );
         $location->setState( array( 'properties' => $vo ) );
 
         // repo/storage stuff

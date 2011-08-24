@@ -90,7 +90,7 @@ class LocationHandlerTest extends HandlerTest
             
             $this->lastContentId = $content->id;
 
-            $this->locations[] = $location = $this->repositoryHandler->locationHandler()->createLocation(
+            $this->locations[] = $location = $this->repositoryHandler->locationHandler()->create(
                 new CreateStruct(
                     array(
                         "contentId" => $this->lastContentId,
@@ -154,11 +154,11 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::createLocation
+     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::create
      */
     public function testCreate()
     {
-        $location = $this->repositoryHandler->locationHandler()->createLocation(
+        $location = $this->repositoryHandler->locationHandler()->create(
             new CreateStruct(
                 array(
                     "contentId" => 1,

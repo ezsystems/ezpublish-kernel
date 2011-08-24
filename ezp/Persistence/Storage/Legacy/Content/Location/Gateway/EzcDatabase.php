@@ -411,7 +411,7 @@ class EzcDatabase extends Gateway
      * @param array $parentNode
      * @return \ezp\Persistence\Content\Location
      */
-    public function createLocation( CreateStruct $createStruct, array $parentNode )
+    public function create( CreateStruct $createStruct, array $parentNode )
     {
         $query = $this->handler->createInsertQuery();
         $query

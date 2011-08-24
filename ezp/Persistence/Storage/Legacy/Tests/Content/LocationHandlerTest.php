@@ -246,10 +246,10 @@ class LocationHandlerTest extends TestCase
 
         $this->locationGateway
             ->expects( $this->once() )
-            ->method( 'createLocation' )
+            ->method( 'create' )
             ->with( $createStruct, $parentInfo );
 
-        $handler->createLocation( $createStruct );
+        $handler->create( $createStruct );
     }
 
     public function testTrashSubtree()

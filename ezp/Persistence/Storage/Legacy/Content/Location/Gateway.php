@@ -128,7 +128,7 @@ abstract class Gateway
      * @param array $parentNode
      * @return \ezp\Persistence\Content\Location
      */
-    abstract public function createLocation( CreateStruct $createStruct, array $parentNode );
+    abstract public function create( CreateStruct $createStruct, array $parentNode );
 
     /**
      * Removes all Locations under and includin $locationId.
