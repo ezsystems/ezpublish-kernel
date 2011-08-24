@@ -44,7 +44,7 @@ class ServiceTest extends BaseServiceTest
      */
     public function testBuildDomainObject()
     {
-        $vo = $this->repositoryHandler->contentHandler()->findSingle( new ContentId( 1 ) );
+        $vo = $this->service->load( 1 )->getState( 'properties' );
 
         $refService = new ReflectionObject( $this->service );
         $refMethod = $refService->getMethod( "buildDomainObject" );

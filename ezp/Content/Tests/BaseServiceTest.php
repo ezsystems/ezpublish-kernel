@@ -31,8 +31,19 @@ abstract class BaseServiceTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
+        $this->repository = static::getRepository();
+    }
+
+    /**
+     * Generate \ezp\Base\Repository
+     *
+     * Makes it possible to inject different repository handlers
+     *
+     * @return \ezp\Base\Repository
+     */
+    protected static function getRepository()
+    {
         $sc = new Container;
-        $this->repository = $sc->getRepository();
-        $this->repositoryHandler = $sc->get( 'repository_handler' );
+        return $sc->getRepository();
     }
 }

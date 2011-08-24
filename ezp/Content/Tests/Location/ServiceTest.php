@@ -12,10 +12,8 @@ use ezp\Content\Tests\BaseServiceTest,
     ezp\Content\Location\Service,
     ezp\Base\Exception\NotFound,
     \ReflectionObject,
-    ezp\Persistence\Content,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\Criterion\ContentId,
+    ezp\Content,
+    ezp\Content\Type,
     ezp\Content\Location,
     ezp\Content\Proxy,
     ezp\Content\Section;
@@ -56,16 +54,6 @@ class ServiceTest extends BaseServiceTest
     protected $locationToDelete = array();
 
     /**
-     * @var \ezp\Persistence\Content\Location\Handler
-     */
-    protected $locationHandler;
-
-    /**
-     * @var \ezp\Persistence\Content\Handler
-     */
-    protected $contentHandler;
-
-    /**
      * Locations that have been created by insertSubtree()
      * @var \ezp\Content\Location[]
      */
@@ -75,24 +63,16 @@ class ServiceTest extends BaseServiceTest
     {
         parent::setUp();
         $this->service = $this->repository->getLocationService();
-        $this->locationHandler = $this->repositoryHandler->locationHandler();
-        $this->contentHandler = $this->repositoryHandler->contentHandler();
 
-        $struct = new CreateStruct();
-        $struct->name = "test";
-        $struct->ownerId = 14;
-        $struct->sectionId = 1;
-        $struct->typeId = 2;
-        $struct->fields[] = new Field(
-            array(
-                'type' => 'ezstring',
-                // @todo Use FieldValue object
-                'value' => 'Welcome',
-                'language' => 'eng-GB',
-            )
-        );
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $section = $this->repository->getSectionService()->load( 1 );
+        $content = new Content( $type );
+        $content->name = "test";
+        $content->ownerId = 14;
+        $content->section = $section;
+        $content->fields['name'] = 'Welcome';
 
-        $this->content = $this->contentHandler->create( $struct );
+        $this->content = $this->repository->getContentService()->create( $content );
         $this->contentToDelete[] = $this->content;
 
         // Now creating location for content
@@ -113,13 +93,13 @@ class ServiceTest extends BaseServiceTest
             // Removing default objects as well as those created by tests
             foreach ( $this->contentToDelete as $content )
             {
-                $this->contentHandler->delete( $content->id );
+                $this->repository->getContentService()->delete( $content );
             }
-        $this->contentToDelete = array();
+            $this->contentToDelete = array();
 
             foreach ( $this->locationToDelete as $location )
             {
-                $this->locationHandler->delete( $location->id );
+                $this->service->delete( $location );
             }
         }
         catch ( NotFound $e )
@@ -137,25 +117,21 @@ class ServiceTest extends BaseServiceTest
     private function insertSubtree()
     {
         $parentId = $this->topLocation->id;
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $section = $this->repository->getSectionService()->load( 1 );
         for ( $i = 0; $i < 10; $i++ )
         {
-            $struct = new CreateStruct();
-            $struct->name = "foo$i";
-            $struct->ownerId = 14;
-            $struct->sectionId = 1;
-            $struct->typeId = 2;
-            $struct->fields[] = new Field(
-                array(
-                    'type' => 'ezstring',
-                    // @todo Use FieldValue object
-                    'value' => "bar$i",
-                    'language' => 'eng-GB',
-                )
-            );
-            $contentVO = $this->contentHandler->create( $struct );
-            $this->contentToDelete[] = $contentVO;
 
-            $location = new Location( new Proxy( $this->repository->getContentService(), $contentVO->id ) );
+            $content = new Content( $type );
+            $content->name = "foo$i";
+            $content->ownerId = 14;
+            $content->section = $section;
+            $content->fields['name'] = "bar$i";
+
+            $content = $this->repository->getContentService()->create( $content );
+            $this->contentToDelete[] = $content;
+
+            $location = new Location( $content );
             $location->parent = $this->service->load( $parentId );
             $location = $this->service->create( $location );
             $this->locationToDelete[] = $location;
@@ -173,7 +149,7 @@ class ServiceTest extends BaseServiceTest
      */
     public function testBuildDomainObject()
     {
-        $vo = $this->repositoryHandler->locationHandler()->load( 2 );
+        $vo = $this->service->load( 2 )->getState( 'properties' );
 
         $refService = new ReflectionObject( $this->service );
         $refMethod = $refService->getMethod( 'buildDomainObject' );
@@ -290,7 +266,7 @@ class ServiceTest extends BaseServiceTest
         self::assertTrue( $hiddenLocation->hidden );
         self::assertTrue( $locationForTestContent->invisible );
         unset( $locationForTestContent );
-        self::assertGreaterThanOrEqual( $time, $this->locationHandler->load( 2 )->modifiedSubLocation );
+        self::assertGreaterThanOrEqual( $time, $this->service->load( 2 )->modifiedSubLocation );
 
         // Try to create a new location under a hidden one.
         // Newly created location should be invisible
@@ -340,7 +316,7 @@ class ServiceTest extends BaseServiceTest
             "A hidden location should not be made visible by superior location"
         );
         self::assertTrue( $locationShouldStayInvisible->invisible );
-        self::assertGreaterThanOrEqual( $time, $this->locationHandler->load( $this->topLocation->id )->modifiedSubLocation );
+        self::assertGreaterThanOrEqual( $time, $this->service->load( $this->topLocation->id )->modifiedSubLocation );
     }
 
     /**
@@ -496,7 +472,7 @@ class ServiceTest extends BaseServiceTest
 
             try
             {
-                $this->contentHandler->load( $location->contentId, 1 );
+                $this->repository->getContentService()->load( $location->contentId, 1 );
                 $this->fail( "Content #{$location->contentId} has not been properly removed" );
             }
             catch ( NotFound $e )
@@ -535,7 +511,7 @@ class ServiceTest extends BaseServiceTest
 
         foreach ( array_splice( $this->insertedLocations, $startIndex ) as $location )
         {
-            $content = $this->contentHandler->findSingle( new ContentId( $location->contentId ) );
+            $content = $this->repository->getContentService()->load( $location->contentId );
             self::assertSame( $section->id, $content->sectionId );
         }
     }
