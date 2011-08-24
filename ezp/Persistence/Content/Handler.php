@@ -55,7 +55,7 @@ interface Handler
      * Copy Content with Fields and Versions from $contentId in $version.
      *
      * Copies all fields from $contentId in $version (or all versions if false)
-     * to a new object which is returned. Version number is always reset (starts on 1).
+     * to a new object which is returned. Version numbers are maintained.
      *
      * @param int $contentId
      * @param int|false $version Copy all versions if left false
