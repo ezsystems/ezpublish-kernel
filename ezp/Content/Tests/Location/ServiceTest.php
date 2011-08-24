@@ -88,23 +88,30 @@ class ServiceTest extends BaseServiceTest
      */
     protected function tearDown()
     {
-        try
+        // Removing default objects as well as those created by tests
+        foreach ( $this->contentToDelete as $content )
         {
-            // Removing default objects as well as those created by tests
-            foreach ( $this->contentToDelete as $content )
+            try
             {
                 $this->repository->getContentService()->delete( $content );
             }
-            $this->contentToDelete = array();
+            catch ( NotFound $e )
+            {
+            }
+        }
+        $this->contentToDelete = array();
 
-            foreach ( $this->locationToDelete as $location )
+        foreach ( $this->locationToDelete as $location )
+        {
+            try
             {
                 $this->service->delete( $location );
             }
+            catch ( NotFound $e )
+            {
+            }
         }
-        catch ( NotFound $e )
-        {
-        }
+
         $this->locationToDelete = array();
         $this->insertedLocations = array();
 
