@@ -15,11 +15,10 @@ use ezp\Base\Model,
 /**
  * Type class ( Content Class )
  *
- *
  * @property-read mixed $id
  * @property-read int $status
- * @property string $name
- * @property string $description
+ * @property string[] $name
+ * @property string[] $description
  * @property string $identifier
  * @property mixed $created
  * @property int $creatorId
@@ -31,8 +30,8 @@ use ezp\Base\Model,
  * @property bool $isContainer
  * @property int $initialLanguageId
  * @property-read int[] $groupIds
- * @property-read Type\FieldDefinition[] $fields
- * @property-read Type\Group[] $groups
+ * @property Type\FieldDefinition[] $fields Appending items after it has been created has no effect, use TypeService->addFieldDefinition()
+ * @property-read Type\Group[] $groups Appended items will not be stored, use TypeService->link()
  */
 class Type extends Model
 {
