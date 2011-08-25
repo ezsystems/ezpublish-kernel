@@ -544,6 +544,18 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads data for all Types in $status in $groupId.
+     *
+     * @param mixed $groupId
+     * @param int $status
+     * @return string[][]
+     */
+    public function loadTypesDataForGroup( $groupId, $status )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Inserts a $fieldDefinition for $typeId.
      *
      * @param mixed $typeId

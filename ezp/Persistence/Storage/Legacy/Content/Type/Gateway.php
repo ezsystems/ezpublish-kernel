@@ -75,6 +75,15 @@ abstract class Gateway
     abstract public function loadAllGroupsData();
 
     /**
+     * Loads data for all Types in $status in $groupId.
+     *
+     * @param mixed $groupId
+     * @param int $status
+     * @return string[][]
+     */
+    abstract public function loadTypesDataForGroup( $groupId, $status );
+
+    /**
      * Inserts a new conten type.
      *
      * @param Type $createStruct

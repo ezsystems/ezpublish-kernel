@@ -114,11 +114,13 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param mixed $groupId
+     * @param int $status
      * @return Type[]
      */
     public function loadContentTypes( $groupId, $status = 0 )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $rows = $this->contentTypeGateway->loadTypesDataForGroup( $groupId, $status );
+        return $this->mapper->extractTypesFromRows( $rows );
     }
 
     /**
