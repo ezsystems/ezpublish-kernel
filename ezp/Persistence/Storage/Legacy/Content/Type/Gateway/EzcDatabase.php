@@ -493,17 +493,8 @@ class EzcDatabase extends Gateway
      */
     public function loadGroupData( $groupId )
     {
-        $q = $this->dbHandler->createSelectQuery();
-        $q->select(
-            $this->dbHandler->quoteColumn( 'created' ),
-            $this->dbHandler->quoteColumn( 'creator_id' ),
-            $this->dbHandler->quoteColumn( 'id' ),
-            $this->dbHandler->quoteColumn( 'modified' ),
-            $this->dbHandler->quoteColumn( 'modifier_id' ),
-            $this->dbHandler->quoteColumn( 'name' )
-        )->from(
-            $this->dbHandler->quoteTable( 'ezcontentclassgroup' )
-        )->where(
+        $q = $this->createGroupLoadQuery();
+        $q->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
                 $q->bindValue( $groupId, null, \PDO::PARAM_INT )
@@ -519,11 +510,37 @@ class EzcDatabase extends Gateway
     /**
      * Returns an array with data about all Group objects.
      *
-     * @return array
+     * @return string[][]
      */
     public function loadAllGroupsData()
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $q = $this->createGroupLoadQuery();
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Creates the basic query to load Group data.
+     *
+     * @return ezcQuerySelect
+     */
+    protected function createGroupLoadQuery()
+    {
+        $q = $this->dbHandler->createSelectQuery();
+        $q->select(
+            $this->dbHandler->quoteColumn( 'created' ),
+            $this->dbHandler->quoteColumn( 'creator_id' ),
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->quoteColumn( 'modified' ),
+            $this->dbHandler->quoteColumn( 'modifier_id' ),
+            $this->dbHandler->quoteColumn( 'name' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentclassgroup' )
+        );
+        return $q;
     }
 
     /**

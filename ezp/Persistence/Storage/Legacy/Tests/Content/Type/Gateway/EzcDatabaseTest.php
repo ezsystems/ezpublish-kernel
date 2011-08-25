@@ -257,6 +257,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadGroupData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
      * @return void
      */
     public function testLoadGroupData()
@@ -280,6 +281,38 @@ class EzcDatabaseTest extends TestCase
                 )
             ),
             $data
+        );
+    }
+
+    /**
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadAllGroupsData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
+     * @return void
+     */
+    public function testLoadAllGroupsData()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_groups.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $data = $gateway->loadAllGroupsData();
+
+        $this->assertEquals(
+            3,
+            count( $data )
+        );
+
+        $this->assertSame(
+            array(
+                'created' => '1031216941',
+                'creator_id' => '14',
+                'id' => '2',
+                'modified' => '1033922113',
+                'modifier_id' => '14',
+                'name' => 'Users',
+            ),
+            $data[1]
         );
     }
 
