@@ -9,15 +9,14 @@
 
 namespace ezp\Content\Location;
 use ezp\Base\Exception,
+    ezp\Base\Exception\NotFound,
+    ezp\Base\Exception\Logic,
     ezp\Base\Service as BaseService,
+    ezp\Base\Collection\Lazy,
     ezp\Content\Location,
     ezp\Content\Proxy,
     ezp\Content\Section,
-    ezp\Base\Exception\NotFound,
-    ezp\Base\Exception\InvalidArgumentType,
-    ezp\Base\Exception\Logic,
     ezp\Persistence\Content\Location as LocationValue,
-    ezp\Persistence\ValueObject,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\Location\UpdateStruct;
 
