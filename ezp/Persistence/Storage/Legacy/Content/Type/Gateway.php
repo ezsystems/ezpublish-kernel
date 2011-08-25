@@ -161,6 +161,15 @@ abstract class Gateway
     abstract public function loadTypeData( $typeId, $version );
 
     /**
+     * Counts the number of instances that exists of the identified type.
+     *
+     * @param int $typeId
+     * @param int $version
+     * @return int
+     */
+    abstract public function countInstancesOfType( $typeId, $version );
+
+    /**
      * Deletes all field definitions of a Type.
      *
      * @param mixed $typeId

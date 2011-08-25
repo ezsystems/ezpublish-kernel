@@ -859,6 +859,18 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Counts the number of instances that exists of the identified type.
+     *
+     * @param int $typeId
+     * @param int $version
+     * @return int
+     */
+    public function countInstancesOfType( $typeId, $version )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Deletes all field definitions of a Type.
      *
      * @param mixed $typeId

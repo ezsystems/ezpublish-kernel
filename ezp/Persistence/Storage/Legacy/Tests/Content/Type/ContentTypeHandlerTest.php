@@ -462,9 +462,13 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::delete
      */
-    public function testDelete()
+    public function testDeleteSuccess()
     {
         $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'countInstancesOfType' )
+            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
+            ->will( $this->returnValue( 0 ) );
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteGroupAssignementsForType' )
             ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) );
@@ -483,6 +487,35 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $res = $handler->delete( 23, 0 );
 
         $this->assertTrue( $res );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::delete
+     * @expectedException ezp\Persistence\Storage\Legacy\Exception\TypeStillHasContent
+     * @expectedExceptionMessage Type with ID "23" in status "0" still has content instances and can therefore not be deleted.
+     */
+    public function testDeleteFailure()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'countInstancesOfType' )
+            ->with( $this->equalTo( 23 ), $this->equalTo( 0 ) )
+            // An instance of this type exists
+            ->will( $this->returnValue( 1 ) );
+        $gatewayMock->expects( $this->never() )
+            ->method( 'deleteGroupAssignementsForType' );
+        $gatewayMock->expects( $this->never() )
+            ->method( 'deleteFieldDefinitionsForType' );
+        $gatewayMock->expects( $this->never() )
+            ->method( 'deleteType' );
+
+        $mapperMock = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Mapper'
+        );
+
+        $handler = new Handler( $gatewayMock, $mapperMock );
+        $res = $handler->delete( 23, 0 );
     }
 
     /**

@@ -197,6 +197,14 @@ class Handler implements BaseContentTypeHandler
      */
     public function delete( $contentTypeId, $status )
     {
+        $count = $this->contentTypeGateway->countInstancesOfType(
+            $contentTypeId, $status
+        );
+        if ( $count > 0 )
+        {
+            throw new Exception\TypeStillHasContent( $contentTypeId, $status );
+        }
+
         $this->contentTypeGateway->deleteGroupAssignementsForType(
             $contentTypeId, $status
         );
