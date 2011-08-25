@@ -389,29 +389,6 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Updates an existing location priority.
-     *
-     * @param int $locationId
-     * @param int $priority
-     * @return boolean
-     */
-    public function updatePriority( $locationId, $priority )
-    {
-        $query = $this->handler->createUpdateQuery();
-        $query
-            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
-            ->set(
-                $this->handler->quoteColumn( 'priority' ),
-                $query->bindValue( $priority )
-            )
-            ->where( $query->expr->eq(
-                $this->handler->quoteColumn( 'node_id' ),
-                $query->bindValue( $locationId )
-            ) );
-        $query->prepare()->execute();
-    }
-
-    /**
      * Creates a new location in given $parentNode
      *
      * @param \ezp\Persistence\Content\Location\CreateStruct $createStruct

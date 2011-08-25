@@ -264,27 +264,6 @@ class EzpDatabaseTest extends TestCase
         );
     }
 
-    public function testUpdatePriority()
-    {
-        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
-        $handler = $this->getLocationGateway();
-        $handler->updatePriority( 70, 23 );
-
-        $query = $this->handler->createSelectQuery();
-        $this->assertQueryResult(
-            array(
-                array( 1, 0 ),
-                array( 2, 0 ),
-                array( 69, 0 ),
-                array( 70, 23 ),
-            ),
-            $query
-                ->select( 'node_id', 'priority' )
-                ->from( 'ezcontentobject_tree' )
-                ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70 ) ) )
-        );
-    }
-
     public function testCreateLocation()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );

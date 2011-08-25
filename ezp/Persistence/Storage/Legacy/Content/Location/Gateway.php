@@ -113,15 +113,6 @@ abstract class Gateway
     abstract public function swap( $locationId1, $locationId2 );
 
     /**
-     * Updates an existing location priority.
-     *
-     * @param int $locationId
-     * @param int $priority
-     * @return boolean
-     */
-    abstract public function updatePriority( $locationId, $priority );
-
-    /**
      * Creates a new location in given $parentNode
      *
      * @param \ezp\Persistence\Content\Location\CreateStruct $createStruct
