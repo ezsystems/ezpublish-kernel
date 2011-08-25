@@ -195,7 +195,7 @@ class UserHandler implements UserHandlerInterface
      * @throws \ezp\Base\Exception\NotFound If user (it's content object atm) is not found
      * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
      */
-    public function getPermissions( $userId )
+    public function loadPoliciesByUserId( $userId )
     {
         $list = $this->backend->find(
             'Content',

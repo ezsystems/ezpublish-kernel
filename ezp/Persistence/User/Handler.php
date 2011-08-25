@@ -106,12 +106,12 @@ interface Handler
     public function removePolicy( $roleId, $policyId );
 
     /**
-     * Returns the user policies associated with the user
+     * Returns the policies associated with a user/group (including inherited policies)
      *
      * @param mixed $userId
      * @return \ezp\Persistence\User\Policy[]
      */
-    public function getPermissions( $userId );
+    public function loadPoliciesByUserId( $userId );
 
     /**
      * Assign role to user[group] with given limitation

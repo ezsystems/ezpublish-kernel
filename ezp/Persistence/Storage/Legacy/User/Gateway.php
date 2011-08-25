@@ -43,7 +43,7 @@ abstract class Gateway
      * @param mixed $userId
      * @return UserPolicy[]
      */
-    abstract public function getPermissions( $userId );
+    abstract public function loadPoliciesByUserId( $userId );
 
     /**
      * Assign role to user with given limitation

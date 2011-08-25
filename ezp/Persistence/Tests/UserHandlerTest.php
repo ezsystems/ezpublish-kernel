@@ -354,24 +354,24 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test getPermissions function
+     * Test loadPoliciesByUserId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
      */
-    public function testGetPermissions()
+    public function testLoadPoliciesByUserId()
     {
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
-        $list = $handler->getPermissions( 10 );// 10: Anonymous User
+        $list = $handler->loadPoliciesByUserId( 10 );// 10: Anonymous User
         $this->assertEquals( 3, count( $list ) );
 
         // add a policy and check that it is part of returned permission after re fetch
         $handler->addPolicy( $obj->id, new Policy( array( 'module' => 'Foo',
                                                      'function' => 'Bar',
                                                      'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
-        $list = $handler->getPermissions( 10 );
+        $list = $handler->loadPoliciesByUserId( 10 );
         $this->assertEquals( 4, count( $list ) );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $list[3] );
         $this->assertEquals( 'Foo', $list[3]->module );
@@ -380,11 +380,11 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test getPermissions function
+     * Test loadPoliciesByUserId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
      */
-    public function testGetPermissionsDeep()
+    public function testLoadPoliciesByUserIdDeep()
     {
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
@@ -398,7 +398,7 @@ class UserHandlerTest extends HandlerTest
         $obj = $handler->createRole( $role );
         $handler->assignRole( 4, $obj->id );// 4: Users
 
-        $list = $handler->getPermissions( 10 );// 10: Anonymous User
+        $list = $handler->loadPoliciesByUserId( 10 );// 10: Anonymous User
         $this->assertEquals( 4, count( $list ) );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $list[3] );
         $this->assertEquals( 'tag', $list[3]->module );
@@ -407,11 +407,11 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
-     * Test getPermissions function
+     * Test loadPoliciesByUserId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
      */
-    public function testGetPermissionsDuplicates()
+    public function testLoadPoliciesByUserIdDuplicates()
     {
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
@@ -419,41 +419,41 @@ class UserHandlerTest extends HandlerTest
 
         $handler->assignRole( 4, $obj->id );// 4: Users
 
-        $list = $handler->getPermissions( 10 );// 10: Anonymous User
+        $list = $handler->loadPoliciesByUserId( 10 );// 10: Anonymous User
         $this->assertEquals( 3, count( $list ) );
     }
 
 
     /**
-     * Test getPermissions function
+     * Test loadPoliciesByUserId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
      * @expectedException \ezp\Base\Exception\NotFound
      */
-    public function testGetPermissionsNotFound()
+    public function testLoadPoliciesByUserIdNotFound()
     {
-        $this->repositoryHandler->userHandler()->getPermissions( 999 );
+        $this->repositoryHandler->userHandler()->loadPoliciesByUserId( 999 );
     }
 
     /**
-     * Test getPermissions function
+     * Test loadPoliciesByUserId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
      * @expectedException \ezp\Base\Exception\NotFoundWithType
      */
-    public function testGetPermissionsNotFoundWithType()
+    public function testLoadPoliciesByUserIdNotFoundWithType()
     {
-        $this->repositoryHandler->userHandler()->getPermissions( 42 );// 42: Anonymous Users (user group)
+        $this->repositoryHandler->userHandler()->loadPoliciesByUserId( 42 );// 42: Anonymous Users (user group)
     }
 
     /**
-     * Test getPermissions function
+     * Test loadPoliciesByUserId function
      *
      * Make sure several policies that have same values are not merged (when not same entity)
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
      */
-    public function testGetPermissionsWithSameValuePolicies()
+    public function testLoadPoliciesByUserIdWithSameValuePolicies()
     {
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
@@ -469,7 +469,7 @@ class UserHandlerTest extends HandlerTest
         $obj = $handler->createRole( $role );
         $handler->assignRole( 4, $obj->id );// 4: Users
 
-        $list = $handler->getPermissions( 10 );// 10: Anonymous User
+        $list = $handler->loadPoliciesByUserId( 10 );// 10: Anonymous User
         $this->assertEquals( 4, count( $list ) );
     }
 

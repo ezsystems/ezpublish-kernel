@@ -117,7 +117,7 @@ class EzcDatabase extends Gateway
      * @param mixed $userId
      * @return UserPolicy[]
      */
-    public function getPermissions( $userId )
+    public function loadPoliciesByUserId( $userId )
     {
 
     }

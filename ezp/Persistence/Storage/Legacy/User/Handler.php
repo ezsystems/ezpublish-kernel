@@ -175,7 +175,7 @@ class Handler implements BaseUserHandler
      * @param mixed $userId
      * @return \ezp\Persistence\User\Policy[]
      */
-    public function getPermissions( $userId )
+    public function loadPoliciesByUserId( $userId )
     {
         // @TODO: Specification of how this works is pending by eZ.
         throw new RuntimeException( '@TODO: Implement' );
