@@ -54,7 +54,8 @@ class ServiceTest extends BaseServiceTest
     protected $locationToDelete = array();
 
     /**
-     * Locations that have been created by insertSubtree()
+     * Locations that have been created by setUp() and tests
+     *
      * @var \ezp\Content\Location[]
      */
     protected $insertedLocations = array();
@@ -81,6 +82,27 @@ class ServiceTest extends BaseServiceTest
         $this->location->parent = $this->topLocation;
         $this->location = $this->service->create( $this->location );
         $this->locationToDelete[] = $this->location;
+
+        $parentId = $this->topLocation->id;
+        for ( $i = 0; $i < 10; ++$i )
+        {
+
+            $content = new Content( $type );
+            $content->name = "foo$i";
+            $content->ownerId = 14;
+            $content->section = $section;
+            $content->fields['name'] = "bar$i";
+
+            $content = $this->repository->getContentService()->create( $content );
+            $this->contentToDelete[] = $content;
+
+            $location = new Location( $content );
+            $location->parent = $this->service->load( $parentId );
+            $location = $this->service->create( $location );
+            $this->locationToDelete[] = $location;
+            $this->insertedLocations[] = $location;
+            $parentId = $location->id;
+        }
     }
 
     /**
@@ -116,35 +138,6 @@ class ServiceTest extends BaseServiceTest
         $this->insertedLocations = array();
 
         parent::tearDown();
-    }
-
-    /**
-     * Inserts a deep basic subtree
-     */
-    private function insertSubtree()
-    {
-        $parentId = $this->topLocation->id;
-        $type = $this->repository->getContentTypeService()->load( 1 );
-        $section = $this->repository->getSectionService()->load( 1 );
-        for ( $i = 0; $i < 10; $i++ )
-        {
-
-            $content = new Content( $type );
-            $content->name = "foo$i";
-            $content->ownerId = 14;
-            $content->section = $section;
-            $content->fields['name'] = "bar$i";
-
-            $content = $this->repository->getContentService()->create( $content );
-            $this->contentToDelete[] = $content;
-
-            $location = new Location( $content );
-            $location->parent = $this->service->load( $parentId );
-            $location = $this->service->create( $location );
-            $this->locationToDelete[] = $location;
-            $this->insertedLocations[] = $location;
-            $parentId = $location->id;
-        }
     }
 
     /**
@@ -434,7 +427,6 @@ class ServiceTest extends BaseServiceTest
      */
     public function testMove()
     {
-        $this->insertSubtree();
         $startIndex = 5;
         $locationToMove = $this->insertedLocations[$startIndex];
         $this->service->move( $locationToMove, $this->topLocation );
@@ -464,7 +456,6 @@ class ServiceTest extends BaseServiceTest
      */
     public function testDelete()
     {
-        $this->insertSubtree();
         $startIndex = 5;
         $this->service->delete( $this->insertedLocations[$startIndex] );
 
@@ -507,7 +498,6 @@ class ServiceTest extends BaseServiceTest
      */
     public function testAssignSection()
     {
-        $this->insertSubtree();
         $startIndex = 5;
 
         // Create the new section
@@ -534,8 +524,6 @@ class ServiceTest extends BaseServiceTest
      */
     public function testCopySubtree()
     {
-        $this->insertSubtree();
-
         $newSubtree = $this->service->copySubtree( $this->insertedLocations[5], $this->topLocation );
 
         // @todo Need to check the subtree is correctly copied but since we have no
