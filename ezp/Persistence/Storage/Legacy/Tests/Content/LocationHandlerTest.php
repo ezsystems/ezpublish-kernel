@@ -12,6 +12,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Content,
     ezp\Persistence\Storage\Legacy\Content\Location\Handler,
     ezp\Persistence,
+    ezp\Persistence\Content\Location\UpdateStruct,
     ezp\Persistence\Content\Location\CreateStruct;
 
 /**
@@ -250,6 +251,21 @@ class LocationHandlerTest extends TestCase
             ->with( $createStruct, $parentInfo );
 
         $handler->create( $createStruct );
+    }
+
+    public function testUpdateLocation()
+    {
+        $handler = $this->getLocationHandler();
+
+        $updateStruct = new UpdateStruct();
+        $updateStruct->priority = 77;
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'update' )
+            ->with( $updateStruct, 23 );
+
+        $handler->update( $updateStruct, 23 );
     }
 
     public function testTrashSubtree()

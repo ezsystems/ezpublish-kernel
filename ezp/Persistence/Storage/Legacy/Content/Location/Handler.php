@@ -187,7 +187,7 @@ class Handler implements BaseLocationHandler
      */
     public function update( UpdateStruct $location, $locationId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->locationGateway->update( $location, $locationId );
     }
 
     /**
