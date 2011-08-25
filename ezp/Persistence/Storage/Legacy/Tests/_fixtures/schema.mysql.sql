@@ -487,9 +487,6 @@ CREATE TABLE ezuser (
 ) ENGINE=InnoDB;
 
 
-
-
-
 DROP TABLE IF EXISTS ezuser_role;
 CREATE TABLE ezuser_role (
   contentobject_id int(11) default NULL,
@@ -503,9 +500,6 @@ CREATE TABLE ezuser_role (
 ) ENGINE=InnoDB;
 
 
-
-
-
 DROP TABLE IF EXISTS ezuser_setting;
 CREATE TABLE ezuser_setting (
   is_enabled int(11) NOT NULL default '0',
@@ -513,3 +507,60 @@ CREATE TABLE ezuser_setting (
   user_id int(11) NOT NULL default '0',
   PRIMARY KEY  (user_id)
 ) ENGINE=InnoDB;
+
+
+DROP TABLE IF EXISTS `ezsearch_object_word_link`;
+CREATE TABLE `ezsearch_object_word_link` (
+  `contentclass_attribute_id` int(11) NOT NULL DEFAULT '0',
+  `contentclass_id` int(11) NOT NULL DEFAULT '0',
+  `contentobject_id` int(11) NOT NULL DEFAULT '0',
+  `frequency` float NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `identifier` varchar(255) NOT NULL DEFAULT '',
+  `integer_value` int(11) NOT NULL DEFAULT '0',
+  `next_word_id` int(11) NOT NULL DEFAULT '0',
+  `placement` int(11) NOT NULL DEFAULT '0',
+  `prev_word_id` int(11) NOT NULL DEFAULT '0',
+  `published` int(11) NOT NULL DEFAULT '0',
+  `section_id` int(11) NOT NULL DEFAULT '0',
+  `word_id` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `ezsearch_object_word_link_frequency` (`frequency`),
+  KEY `ezsearch_object_word_link_identifier` (`identifier`),
+  KEY `ezsearch_object_word_link_integer_value` (`integer_value`),
+  KEY `ezsearch_object_word_link_object` (`contentobject_id`),
+  KEY `ezsearch_object_word_link_word` (`word_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17279 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ezsearch_return_count`;
+CREATE TABLE `ezsearch_return_count` (
+  `count` int(11) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `phrase_id` int(11) NOT NULL DEFAULT '0',
+  `time` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `ezsearch_return_cnt_ph_id_cnt` (`phrase_id`,`count`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `ezsearch_search_phrase`;
+CREATE TABLE `ezsearch_search_phrase` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `phrase` varchar(250) DEFAULT NULL,
+  `phrase_count` int(11) DEFAULT '0',
+  `result_count` int(11) DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `ezsearch_search_phrase_phrase` (`phrase`),
+  KEY `ezsearch_search_phrase_count` (`phrase_count`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+
+DROP TABLE IF EXISTS `ezsearch_word`;
+CREATE TABLE `ezsearch_word` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `object_count` int(11) NOT NULL DEFAULT '0',
+  `word` varchar(150) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `ezsearch_word_obj_count` (`object_count`),
+  KEY `ezsearch_word_word_i` (`word`)
+) ENGINE=InnoDB AUTO_INCREMENT=2523 DEFAULT CHARSET=utf8;
