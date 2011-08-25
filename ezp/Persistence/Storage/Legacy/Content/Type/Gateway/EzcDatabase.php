@@ -785,6 +785,11 @@ class EzcDatabase extends Gateway
         return $stmt->fetchAll( \PDO::FETCH_ASSOC );
     }
 
+    /**
+     * Returns a basic query to retrieve Type data.
+     *
+     * @return ezcQuerySelect
+     */
     protected function getLoadTypeQuery()
     {
         $q = $this->dbHandler->createSelectQuery();
