@@ -108,7 +108,8 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadAllGroups()
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $rows = $this->contentTypeGateway->loadAllGroupsData();
+        return $this->mapper->extractGroupsFromRows( $rows );
     }
 
     /**

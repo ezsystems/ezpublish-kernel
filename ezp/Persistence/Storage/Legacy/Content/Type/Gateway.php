@@ -68,6 +68,13 @@ abstract class Gateway
     abstract public function loadGroupData( $groupId );
 
     /**
+     * Returns an array with data about all Group objects.
+     *
+     * @return array
+     */
+    abstract public function loadAllGroupsData();
+
+    /**
      * Inserts a new conten type.
      *
      * @param Type $createStruct

@@ -517,6 +517,16 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Returns an array with data about all Group objects.
+     *
+     * @return array
+     */
+    public function loadAllGroupsData()
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Inserts a $fieldDefinition for $typeId.
      *
      * @param mixed $typeId
