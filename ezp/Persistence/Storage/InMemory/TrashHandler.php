@@ -18,7 +18,7 @@ use ezp\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface,
  *
  * @version //autogentag//
  */
-class LocationHandler implements TrashHandlerInterface
+class TrashHandler implements TrashHandlerInterface
 {
     /**
      * @var RepositoryHandler
