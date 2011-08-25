@@ -415,6 +415,28 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
+     * Returns locations given a parent $locationId.
+     *
+     * @todo Requires approbation
+     * @param mixed $locationId
+     * @return \ezp\Persistence\Content\Location[]
+     */
+    public function loadByParentId( $locationId )
+    {
+        $result = $this->backend->find( "Content\\Location", array( "parentId" => $locationId ) );
+
+        // If no result is found this might be caused by an unexisting location ID.
+        // We call load() to trigger a NotFound exception in such case for consistencies
+        // across the API.
+        if ( empty( $result ) )
+        {
+            $this->load( $locationId );
+        }
+
+        return $result;
+    }
+
+    /**
      * Updates subtree modification time for all locations starting from $startPathString
      * @param string $startPathString
      */

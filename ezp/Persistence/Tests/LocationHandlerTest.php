@@ -333,4 +333,38 @@ class LocationHandlerTest extends HandlerTest
             "Location does not match"
         );
     }
+
+    /**
+     * Tests loadByParentId function with no children
+     *
+     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::loadByParentId
+     */
+    public function testLoadByParentIdNoChildren()
+    {
+        $this->assertEmpty( $this->repositoryHandler->locationHandler()->loadByParentId( $this->lastLocationId ) );
+    }
+
+    /**
+     * Tests loadByParentId function with children
+     *
+     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::loadByParentId
+     */
+    public function testLoadByParentIdChildren()
+    {
+        $this->assertEquals(
+            array( end( $this->locations ) ),
+            $this->repositoryHandler->locationHandler()->loadByParentId( $this->lastLocationId - 1 )
+        );
+    }
+
+    /**
+     * Tests loadByParentId function on unexisting id
+     *
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::loadByParentId
+     */
+    public function testLoadByParentIdNotExisting()
+    {
+        $this->repositoryHandler->locationHandler()->loadByParentId( 123456 );
+    }
 }

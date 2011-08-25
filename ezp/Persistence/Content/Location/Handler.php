@@ -157,4 +157,13 @@ interface Handler
      * @return boolean
      */
     public function setSectionForSubtree( $locationId, $sectionId );
+
+    /**
+     * Returns locations given a parent $locationId.
+     *
+     * @todo Requires approbation
+     * @param mixed $locationId
+     * @return \ezp\Persistence\Content\Location[]
+     */
+    //public function loadByParentId( $locationId );
 }
