@@ -408,6 +408,42 @@ class EzpDatabaseTest extends TestCase
         $this->assertEquals( $value, $location->$field );
     }
 
+    public static function getUpdateLocationData()
+    {
+        return array(
+            array( 'priority', 23 ),
+            array( 'remote_id', 'someNewHash' ),
+            array( 'sort_field', 4 ),
+            array( 'sort_order', 4 ),
+        );
+    }
+
+    /**
+     * @dataProvider getUpdateLocationData
+     */
+    public function testUpdateLocation( $field, $value )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->update( new Location\UpdateStruct( array(
+                'priority'  => 23,
+                'remoteId'  => 'someNewHash',
+                'sortField' => 4,
+                'sortOrder' => 4,
+            ) ),
+            70
+        );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( $value ) ),
+            $query
+                ->select( $field )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->in( 'node_id', array( 70 ) ) )
+        );
+    }
+
     public static function getNodeAssignmentValues()
     {
         return array(

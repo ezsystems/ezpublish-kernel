@@ -12,6 +12,7 @@ use ezp\Persistence\Storage\Legacy\Content\Location\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Location\UpdateStruct,
     ezp\Persistence\Content\Location\CreateStruct;
 
 /**
@@ -508,6 +509,42 @@ class EzcDatabase extends Gateway
         $query->prepare()->execute();
 
         return $location;
+    }
+
+    /**
+     * Updates an existing location.
+     *
+     * @param \ezp\Persistence\Content\Location\UpdateStruct $location
+     * @param int $locationId
+     * @return boolean
+     */
+    public function update( UpdateStruct $location, $locationId )
+    {
+        $query = $this->handler->createUpdateQuery();
+
+        $query
+            ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->set(
+                $this->handler->quoteColumn( 'priority' ),
+                $query->bindValue( $location->priority )
+            )
+            ->set(
+                $this->handler->quoteColumn( 'remote_id' ),
+                $query->bindValue( $location->remoteId )
+            )
+            ->set(
+                $this->handler->quoteColumn( 'sort_order' ),
+                $query->bindValue( $location->sortOrder )
+            )
+            ->set(
+                $this->handler->quoteColumn( 'sort_field' ),
+                $query->bindValue( $location->sortField )
+            )
+            ->where( $query->expr->eq(
+                $this->handler->quoteColumn( 'node_id' ),
+                $locationId
+            ) );
+        $query->prepare()->execute();
     }
 
     /**

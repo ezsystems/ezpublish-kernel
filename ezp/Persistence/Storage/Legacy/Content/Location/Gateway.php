@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Location;
 use ezp\Persistence\Content,
+    ezp\Persistence\Content\Location\UpdateStruct,
     ezp\Persistence\Content\Location\CreateStruct;
 
 /**
@@ -120,6 +121,15 @@ abstract class Gateway
      * @return \ezp\Persistence\Content\Location
      */
     abstract public function create( CreateStruct $createStruct, array $parentNode );
+
+    /**
+     * Updates an existing location.
+     *
+     * @param \ezp\Persistence\Content\Location\UpdateStruct $location
+     * @param int $locationId
+     * @return boolean
+     */
+    abstract public function update( UpdateStruct $location, $locationId );
 
     /**
      * Removes all Locations under and includin $locationId.
