@@ -12,6 +12,7 @@ namespace ezp\Persistence\Storage\Legacy\Content\FieldValue;
 
 use ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
+    ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
 
 /**
@@ -39,16 +40,16 @@ abstract class Converter
     /**
      * Converts field definition data to a StorageFieldDefinition
      *
-     * @param mixed $fieldDef
+     * @param FieldDefinition $fieldDef
      * @return StorageFieldDefinition
      */
-    abstract public function toStorageFieldDefinition( $fieldDef );
+    abstract public function toStorageFieldDefinition( FieldDefinition $fieldDef );
 
     /**
      * Converts a StorageFieldDefinition to field definition data
      *
      * @param StorageFieldDefinition $storageDef
-     * @return mixed
+     * @return FieldDefinition
      */
     abstract public function toFieldDefinition( StorageFieldDefinition $storageDef );
 
