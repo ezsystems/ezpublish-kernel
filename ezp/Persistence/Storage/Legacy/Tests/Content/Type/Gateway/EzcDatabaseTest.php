@@ -316,6 +316,21 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    public function testLoadTypesDataForGroup()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $rows = $gateway->loadTypesDataForGroup( 1, 0 );
+
+        $this->assertEquals(
+            6,
+            count( $rows )
+        );
+    }
+
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData

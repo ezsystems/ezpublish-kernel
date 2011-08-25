@@ -552,7 +552,30 @@ class EzcDatabase extends Gateway
      */
     public function loadTypesDataForGroup( $groupId, $status )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $q = $this->getLoadTypeQuery();
+        $q->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn(
+                        'group_id',
+                        'ezcontentclass_classgroup'
+                    ),
+                    $q->bindValue( $groupId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn(
+                        'version',
+                        'ezcontentclass'
+                    ),
+                    $q->bindValue( $status, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $stmt->fetchAll( \PDO::FETCH_ASSOC );
     }
 
     /**
@@ -743,6 +766,27 @@ class EzcDatabase extends Gateway
      */
     public function loadTypeData( $typeId, $status )
     {
+        $q = $this->getLoadTypeQuery();
+        $q->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id', 'ezcontentclass' ),
+                    $q->bindValue( $typeId )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentclass' ),
+                    $q->bindValue( $status )
+                )
+            )
+        );
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    protected function getLoadTypeQuery()
+    {
         $q = $this->dbHandler->createSelectQuery();
 
         $this->selectColumns( $q, 'ezcontentclass' );
@@ -804,22 +848,9 @@ class EzcDatabase extends Gateway
                     )
                 )
             )
-        )->where(
-            $q->expr->lAnd(
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id', 'ezcontentclass' ),
-                    $q->bindValue( $typeId )
-                ),
-                $q->expr->eq(
-                    $this->dbHandler->quoteColumn( 'version', 'ezcontentclass' ),
-                    $q->bindValue( $status )
-                )
-            )
         );
-        $stmt = $q->prepare();
-        $stmt->execute();
 
-        return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+        return $q;
     }
 
     /**
