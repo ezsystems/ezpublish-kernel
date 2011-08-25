@@ -50,6 +50,7 @@ interface Handler
      * Delete user with the given ID.
      *
      * @param mixed $userId
+     * @todo Throw on missing user?
      */
     public function delete( $userId );
 
@@ -66,6 +67,7 @@ interface Handler
      *
      * @param mixed $roleId
      * @return \ezp\Persistence\User\Role
+     * @throws \ezp\Base\Exception\NotFound If role is not found
      */
     public function loadRole( $roleId );
 
@@ -89,6 +91,7 @@ interface Handler
      * @param mixed $roleId
      * @param \ezp\Persistence\User\Policy $policy
      * @return \ezp\Persistence\User\Policy
+     * @todo Throw on invalid Role Id?
      */
     public function addPolicy( $roleId, Policy $policy );
 
@@ -98,6 +101,7 @@ interface Handler
      * @param mixed $roleId
      * @param mixed $policyId
      * @return void
+     * @todo Throw exception on missing role / policy?
      */
     public function removePolicy( $roleId, $policyId );
 

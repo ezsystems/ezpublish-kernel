@@ -158,7 +158,6 @@ class UserHandler implements UserHandlerInterface
     {
         $this->backend->delete( 'User\\Role', $roleId );
         $this->backend->deleteByMatch( 'User\\Policy', array( '_roleId' => $roleId ) );
-        // @todo Deal with role assignments
     }
 
     /**
@@ -167,7 +166,7 @@ class UserHandler implements UserHandlerInterface
      * @param mixed $roleId
      * @param \ezp\Persistence\User\Policy $policy
      * @return \ezp\Persistence\User\Policy
-     * @todo Validate Role Id?
+     * @todo Throw on invalid Role Id?
      */
     public function addPolicy( $roleId, Policy $policy )
     {
@@ -181,7 +180,7 @@ class UserHandler implements UserHandlerInterface
      * @param mixed $roleId
      * @param mixed $policyId
      * @return void
-     * @todo Throw exception on missing policy?
+     * @todo Throw exception on missing role / policy?
      */
     public function removePolicy( $roleId, $policyId )
     {
@@ -319,7 +318,7 @@ class UserHandler implements UserHandlerInterface
      * @param mixed $groupId
      * @param mixed $roleId
      * @throws \ezp\Base\Exception\NotFound If group or role is not found
-     * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
+     * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user[_group] Content Type
      * @throws \ezp\Base\Exception\InvalidArgumentValue If group does not contain role
      */
     public function unAssignRole( $groupId, $roleId )
@@ -329,8 +328,8 @@ class UserHandler implements UserHandlerInterface
             throw new NotFound( 'User Group', $groupId );
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
-        if ( $content->typeId != 3 )
-             throw new NotFoundWithType( 3, $groupId );
+        if ( $content->typeId != 3 && $content->typeId != 4 )
+             throw new NotFoundWithType( "3 or 4", $groupId );
 
         $role = $this->loadRole( $roleId );
         if ( !in_array( $groupId, $role->groupIds ) )

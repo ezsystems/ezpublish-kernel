@@ -447,6 +447,33 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
+     * Test getPermissions function
+     *
+     * Make sure several policies that have same values are not merged (when not same entity)
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::getPermissions
+     */
+    public function testGetPermissionsWithSameValuePolicies()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+
+        $role = new Role();
+        $role->name = 'test2';
+        $role->policies = array(
+            new Policy( array( 'module' => $obj->policies[2]->module,
+                               'function' => $obj->policies[2]->function,
+                               'limitations' => $obj->policies[2]->limitations, ) ),
+        );
+        $obj = $handler->createRole( $role );
+        $handler->assignRole( 4, $obj->id );// 4: Users
+
+        $list = $handler->getPermissions( 10 );// 10: Anonymous User
+        $this->assertEquals( 4, count( $list ) );
+    }
+
+    /**
      *  Create Role with content/write/SubTree:/1/2/, content/read/* and user/*\/* policy
      *
      * @return \ezp\Persistence\User\Role
