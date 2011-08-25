@@ -9,7 +9,6 @@
 
 namespace ezp;
 use ezp\Base\Model,
-    ezp\Base\Observable,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Content\Translation,
     ezp\Content\Type,
