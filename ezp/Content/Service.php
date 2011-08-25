@@ -188,17 +188,17 @@ class Service extends BaseService
             )
         );
 
-        $locationHandler = $this->repository->getLocationService();
+        $locationService = $this->repository->getLocationService();
         foreach ( $vo->locations as $locationValue )
         {
             $content->locations[] = $location = new Location( $content );
             $location->setState(
                 array(
                     "properties" => $locationValue,
-                    "parent" => new Proxy( $locationHandler, $locationValue->parentId ),
+                    "parent" => new Proxy( $locationService, $locationValue->parentId ),
                     "children" => new Lazy(
                         "ezp\\Content\\Location",
-                        $locationHandler,
+                        $locationService,
                         $location, // api seems to use location to be able to get out sort info as well
                         "children" // Not implemented yet so this collection will return empty array atm
                     )
