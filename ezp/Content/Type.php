@@ -21,9 +21,9 @@ use ezp\Base\Model,
  * @property string[] $description
  * @property string $identifier
  * @property mixed $created
- * @property int $creatorId
+ * @property mixed $creatorId
  * @property mixed $modified
- * @property int $modifierId
+ * @property mixed $modifierId
  * @property-read string $remoteId
  * @property string $urlAliasSchema
  * @property string $nameSchema

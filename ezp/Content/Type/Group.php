@@ -17,14 +17,14 @@ use ezp\Base\Model,
  *
  *
  * @property-read int $id
- * @property string $name
- * @property string $description
+ * @property string[] $name
+ * @property string[] $description
  * @property string $identifier
  * @property mixed $created
- * @property string $creatorId
+ * @property mixed $creatorId
  * @property mixed $modified
- * @property string $modifierId
- * @property-read \ezp\Content\Type[] $types
+ * @property mixed $modifierId
+ * @property-read \ezp\Content\Type[] $types Appended items will not be stored, use TypeService->link()
  */
 class Group extends Model
 {
