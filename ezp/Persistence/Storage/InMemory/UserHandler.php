@@ -139,6 +139,24 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
+     * Load roles assigned to a user/group
+     *
+     * @param mixed $groupId
+     * @return \ezp\Persistence\User\Role[]
+     */
+    public function loadRolesByGroupId( $groupId )
+    {
+        return $this->backend->find(
+            'User\\Role',
+            array( 'groupIds' => $groupId ),
+            array( 'policies' => array(
+                'type' => 'User\\Policy',
+                'match' => array( '_roleId' => 'id' ) )
+            )
+        );
+    }
+
+    /**
      * Update role
      *
      * @param \ezp\Persistence\User\RoleUpdateStruct $role

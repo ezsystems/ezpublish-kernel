@@ -111,7 +111,21 @@ class UserHandlerTest extends HandlerTest
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
-        $this->assertEquals( 1, $obj->id );
+        $this->assertEquals( 'test', $obj->name );
+        $this->assertEquals( 3, count( $obj->policies ) );
+    }
+
+    /**
+     * Test load function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadRole
+     */
+    public function testLoadRole()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $obj = $handler->loadRole( $obj->id );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 'test', $obj->name );
         $this->assertEquals( 3, count( $obj->policies ) );
     }
@@ -126,6 +140,42 @@ class UserHandlerTest extends HandlerTest
     {
         $handler = $this->repositoryHandler->userHandler();
         $handler->loadRole( 1 );//exception
+    }
+
+    /**
+     * Test loadRolesByGroupId function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadRolesByGroupId
+     */
+    public function testLoadRolesByGroupId()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+
+        // add a policy and check that it is part of returned permission after re fetch
+        $handler->addPolicy( $obj->id, new Policy( array( 'module' => 'Foo',
+                                                     'function' => 'Bar',
+                                                     'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
+        $list = $handler->loadRolesByGroupId( 42 );
+        $this->assertEquals( 1, count( $list ) );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $list[0] );
+        $role = $list[0];
+        $this->assertEquals( 'Foo', $role->policies[3]->module );
+        $this->assertEquals( 'Bar', $role->policies[3]->function );
+        $this->assertEquals( array( 'Test' ), $role->policies[3]->limitations['Limit'] );
+    }
+
+    /**
+     * Test loadRolesByGroupId function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadRolesByGroupId
+     */
+    public function testLoadRolesByGroupIdEmpty()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $list = $handler->loadRolesByGroupId( 42 );
+        $this->assertEquals( array(), $list  );
     }
 
     /**

@@ -124,6 +124,17 @@ class Handler implements BaseUserHandler
     }
 
     /**
+     * Load roles assigned to a user/group (not including inherited roles)
+     *
+     * @param mixed $groupId
+     * @return \ezp\Persistence\User\Role[]
+     */
+    public function loadRolesByGroupId( $groupId )
+    {
+        throw new RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
      * Update role
      *
      * @param \ezp\Persistence\User\RoleUpdateStruct $role
@@ -170,7 +181,7 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Returns the user policies associated with the user
+     * Returns the policies associated with a user/group (including inherited policies)
      *
      * @param mixed $userId
      * @return \ezp\Persistence\User\Policy[]

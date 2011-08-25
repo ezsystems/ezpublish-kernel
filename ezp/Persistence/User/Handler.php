@@ -72,6 +72,14 @@ interface Handler
     public function loadRole( $roleId );
 
     /**
+     * Load roles assigned to a user/group
+     *
+     * @param mixed $groupId
+     * @return \ezp\Persistence\User\Role[]
+     */
+    public function loadRolesByGroupId( $groupId );
+
+    /**
      * Update role
      *
      * @param \ezp\Persistence\User\RoleUpdateStruct $role
