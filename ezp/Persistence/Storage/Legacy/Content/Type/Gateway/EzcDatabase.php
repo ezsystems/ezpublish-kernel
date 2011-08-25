@@ -867,7 +867,27 @@ class EzcDatabase extends Gateway
      */
     public function countInstancesOfType( $typeId, $version )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $q = $this->dbHandler->createSelectQuery();
+        $q->select(
+            $q->alias(
+                $q->expr->count(
+                    $this->dbHandler->quoteColumn( 'id' )
+                ),
+                'count'
+            )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject' )
+        )->where(
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentclass_id' ),
+                $q->bindValue( $typeId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return (int) $stmt->fetchColumn();
     }
 
     /**

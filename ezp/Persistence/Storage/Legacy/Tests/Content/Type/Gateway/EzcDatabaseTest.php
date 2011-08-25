@@ -762,6 +762,46 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::countInstancesOfType
+     * @return void
+     */
+    public function testCountInstancesOfTypeExist()
+    {
+        $this->insertDatabaseFixture(
+            // Fixture for content objects
+            __DIR__ . '/../../_fixtures/contentobjects.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $res = $gateway->countInstancesOfType( 3, 0 );
+
+        $this->assertEquals(
+            6,
+            $res
+        );
+    }
+
+    /**
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::countInstancesOfType
+     * @return void
+     */
+    public function testCountInstancesOfTypeNotExist()
+    {
+        $this->insertDatabaseFixture(
+            // Fixture for content objects
+            __DIR__ . '/../../_fixtures/contentobjects.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $res = $gateway->countInstancesOfType( 23422342, 1 );
+
+        $this->assertEquals(
+            0,
+            $res
+        );
+    }
+
+    /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinitionsForType
      */
