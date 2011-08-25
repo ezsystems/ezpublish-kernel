@@ -84,8 +84,17 @@ Translations
 
 Summary
 ~~~~~~~
-Need translation support in Content in DO and some changes to ContentHandler api to reflect
-translation needs and workflow(s).
+Content DO:
+  Need translation support and some changes to ContentHandler api to reflect
+  translation needs and workflow(s).
+
+Properties in several languages (->name / -> description):
+  Need a more sexy api to not have to deal with raw array structures in DO.
+  Options: add a ->setLanguage( $langCode ) api or change properties in favour of api's with ->setName( $name, $langCode );
+
+  Either way this means that there should be logic that gets default language from settings if not defined, and there
+  should also be transparent handling of fallback languages based on settings as well.
+
 
 Conclusion
 ~~~~~~~~~~
