@@ -34,8 +34,9 @@ class Service extends BaseService
      *
      * @return \ezp\Content\Location The newly created subtree
      */
-    public function copy( Location $subtree, Location $targetLocation )
+    public function copySubtree( Location $subtree, Location $targetLocation )
     {
+        return $this->buildDomainObject( $this->handler->locationHandler()->copySubtree( $subtree->id, $targetLocation->id ) );
     }
 
     /**

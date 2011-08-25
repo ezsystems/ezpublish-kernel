@@ -525,4 +525,21 @@ class ServiceTest extends BaseServiceTest
             self::assertSame( $section->id, $content->sectionId );
         }
     }
+
+    /**
+     * Tests the copySubtree operation
+     *
+     * @group locationService
+     * @covers \ezp\Content\Location\Service::copySubtree
+     */
+    public function testCopySubtree()
+    {
+        $this->insertSubtree();
+
+        $newSubtree = $this->service->copySubtree( $this->insertedLocations[5], $this->topLocation );
+
+        // @todo Need to check the subtree is correctly copied but since we have no
+        // easy way to get children locations, postponing that.
+        $this->markTestIncomplete();
+    }
 }
