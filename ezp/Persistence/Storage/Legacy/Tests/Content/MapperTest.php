@@ -171,10 +171,13 @@ class MapperTest extends TestCase
             'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
         );
         $convMock->expects( $this->once() )
-            ->method( 'toStorage' )
+            ->method( 'toStorageValue' )
             ->with(
                 $this->isInstanceOf(
                     'ezp\\Persistence\\Content\\FieldValue'
+                ),
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue'
                 )
             )->will( $this->returnValue( new StorageFieldValue() ) );
 

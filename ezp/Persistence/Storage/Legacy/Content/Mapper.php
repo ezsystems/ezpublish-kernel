@@ -12,6 +12,7 @@ namespace ezp\Persistence\Storage\Legacy\Content;
 use ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Content\RestrictedVersion,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry;
@@ -107,9 +108,12 @@ class Mapper
         $converter = $this->converterRegistry->getConverter(
             $field->type
         );
-        return $converter->toStorage(
-            $field->value
+        $storageValue = new StorageFieldValue();
+        $converter->toStorageValue(
+            $field->value,
+            $storageValue
         );
+        return $storageValue;
     }
 
     /**
@@ -251,8 +255,12 @@ class Mapper
         $storageValue->sortKeyInt    = (int) $row['ezcontentobject_attribute_sort_key_int'];
         $storageValue->sortKeyString = $row['ezcontentobject_attribute_sort_key_string'];
 
+        $fieldValue = new FieldValue();
+
         $converter = $this->converterRegistry->getConverter( $type );
-        return $converter->toFieldValue( $storageValue );
+        $converter->toFieldValue( $storageValue, $fieldValue );
+
+        return $fieldValue;
     }
 
     /**

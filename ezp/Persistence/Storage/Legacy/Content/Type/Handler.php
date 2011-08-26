@@ -127,6 +127,7 @@ class Handler implements BaseContentTypeHandler
      * @param int $contentTypeId
      * @param int $status
      * @todo Use constant for $status?
+     * @todo Handle field definition conversion.
      */
     public function load( $contentTypeId, $status = 0 )
     {
@@ -143,6 +144,7 @@ class Handler implements BaseContentTypeHandler
      * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
      * @return Type
      * @todo Maintain contentclass_name
+     * @todo Handle field definition conversion.
      */
     public function create( CreateStruct $createStruct )
     {
@@ -179,6 +181,7 @@ class Handler implements BaseContentTypeHandler
      * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
      * @return Type
      * @todo Maintain contentclass_name
+     * @todo Handle field definition conversion.
      */
     public function update( $typeId, $status, UpdateStruct $contentType )
     {
@@ -309,6 +312,7 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $contentTypeId
      * @param FieldDefinition $fieldDefinition
      * @return void
+     * @todo Handle field definition conversion.
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {

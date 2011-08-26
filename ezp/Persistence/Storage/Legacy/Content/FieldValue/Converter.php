@@ -21,37 +21,36 @@ use ezp\Persistence\Content\FieldValue,
 abstract class Converter
 {
     /**
-     * Converts $value to a StorageFieldValue
+     * Converts data from $value to $storageFieldValue
      *
      * @param FieldValue $value
-     * @return StorageFieldValue
-     * @todo Rename toStorageValue()
+     * @param StorageFieldValue
      */
-    abstract public function toStorage( FieldValue $value );
+    abstract public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue );
 
     /**
-     * Converts $value to a FieldValue
+     * Converts data from $value to $fieldValue
      *
      * @param StorageFieldValue $value
-     * @return FieldValue
+     * @param FieldValue $fieldValue
      */
-    abstract public function toFieldValue( StorageFieldValue $value );
+    abstract public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue );
 
     /**
-     * Converts field definition data to a StorageFieldDefinition
+     * Converts field definition data in $fieldDef into $storageFieldDef
      *
      * @param FieldDefinition $fieldDef
-     * @return StorageFieldDefinition
+     * @param StorageFieldDefinition $storageDef
      */
-    abstract public function toStorageFieldDefinition( FieldDefinition $fieldDef );
+    abstract public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef );
 
     /**
-     * Converts a StorageFieldDefinition to field definition data
+     * Converts field definition data in $storageDef into $fieldDef
      *
      * @param StorageFieldDefinition $storageDef
-     * @return FieldDefinition
+     * @param FieldDefinition $fieldDef
      */
-    abstract public function toFieldDefinition( StorageFieldDefinition $storageDef );
+    abstract public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef );
 
     /**
      * Returns the name of the index column in the attribute table

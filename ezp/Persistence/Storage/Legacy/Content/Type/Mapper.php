@@ -146,6 +146,7 @@ class Mapper
      *
      * @param array $row
      * @return FieldDefinition
+     * @todo Handle field definition conversion.
      */
     protected function extractFieldFromRow( array $row )
     {
