@@ -25,12 +25,14 @@ use ezp\Base\Model,
  *
  * It is used for both input and output manipulation.
  *
- * @property-read int $id The Content's ID, automatically assigned by the persistence layer
+ * @property-read mixed $id The Content's ID, automatically assigned by the persistence layer
  * @property-read int $currentVersionNo The Content's current version
- * @property-read string $remoteId The Content's remote identifier (custom identifier for the object)
+ * @property-read int $status The Content's status, as one of the ezp\Content::STATUS_* constants
  * @property string[] $name The Content's name
+ * @property-read mixed $ownerId Id of the user object that owns the content
  * @property-read bool $alwaysAvailable The Content's always available flag
- * @property-read int status The Content's status, as one of the ezp\Content::STATUS_* constants
+ * @property-read string $remoteId The Content's remote identifier (custom identifier for the object)
+ * @property-read mixed $sectionId Read property for section id, use with object $section to change
  * @property-read \ezp\Content\Type contentType The Content's type
  * @property-read \ezp\Content\Version[] $versions
  *                Iterable collection of versions for content. Array-accessible :;
@@ -47,7 +49,7 @@ use ezp\Base\Model,
  *                $locationById = $content->locations->byId( 60 );
  *                </code>
  * @property-read DateTime $creationDate The date the object was created
- * @property-read \ezp\Content\Section $section The Section the content belongs to
+ * @property \ezp\Content\Section $section The Section the content belongs to
  * @property \ezp\Content[] $relations Collection of ezp\Content objects, related to the current one
  * @property \ezp\Content[] $reverseRelations Collection of ezp\Content objects, reverse-related to the current one
  * @property \ezp\Content\Translation[] $translations
@@ -82,13 +84,9 @@ class Content extends Model
         'currentVersionNo' => false,
         'status' => false,
         'name' => true, // @todo: Make readOnly and generate on store event from attributes based on type nameScheme
-        'ownerId' => true,
-        'relations' => false,
-        'reversedRelations' => false,
-        'translations' => true,
-        'locations' => true,
+        'ownerId' => true,// @todo make read only by providing interface that takes User as input
         'alwaysAvailable' => true,
-        'remoteId' => true,
+        'remoteId' => true,// @todo Make readonly and deal with this internally (in all DO's)
         'sectionId' => false,
     );
 
@@ -102,6 +100,10 @@ class Content extends Model
         'fields' => true,
         'contentType' => false,
         'versions' => false,
+        'locations' => true,
+        //'translations' => true,
+        'relations' => false,
+        'reversedRelations' => false,
     );
 
     /**
@@ -267,6 +269,36 @@ class Content extends Model
         $newLocation = new Location( $this );
         $newLocation->parent = $parentLocation;
         return $newLocation;
+    }
+
+    /**
+     * Gets locations
+     *
+     * @return \ezp\Content\Location[]
+     */
+    protected function getLocations()
+    {
+        return $this->locations;
+    }
+
+    /**
+     * Gets Content relations
+     *
+     * @return \ezp\Content[]
+     */
+    protected function getRelations()
+    {
+        return $this->relations;
+    }
+
+    /**
+     * Gets Content reverse relations
+     *
+     * @return \ezp\Content[]
+     */
+    protected function getReverseRelations()
+    {
+        return $this->reverseRelations;
     }
 
     /**
