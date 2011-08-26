@@ -117,12 +117,18 @@ class EzcDatabase extends Gateway
         $oldParentLocation = implode( '/', array_slice( explode( '/', $fromPathString ), 0, -2 ) ) . '/';
         foreach ( $rows as $row )
         {
+            $newLocation = str_replace( $oldParentLocation, $toPathString, $row['path_string'] );
+
             $query = $this->handler->createUpdateQuery();
             $query
                 ->update( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
                 ->set(
                     $this->handler->quoteColumn( 'path_string' ),
-                    $query->bindValue( str_replace( $oldParentLocation, $toPathString, $row['path_string'] ) )
+                    $query->bindValue( $newLocation )
+                )
+                ->set(
+                    $this->handler->quoteColumn( 'depth' ),
+                    $query->bindValue( substr_count( $newLocation, '/' ) - 2 )
                 )
                 ->where( $query->expr->eq(
                     $this->handler->quoteColumn( 'node_id' ),

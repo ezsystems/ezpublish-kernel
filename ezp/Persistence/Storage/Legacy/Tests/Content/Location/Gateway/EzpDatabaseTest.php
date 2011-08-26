@@ -91,14 +91,14 @@ class EzpDatabaseTest extends TestCase
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
             array(
-                array( 65, '/1/2/' ),
-                array( 67, '/1/2/77/69/' ),
-                array( 69, '/1/2/77/69/70/71/' ),
-                array( 73, '/1/2/77/69/72/75/' ),
-                array( 75, '/1/2/77/' ),
+                array( 65, '/1/2/', 1 ),
+                array( 67, '/1/2/77/69/', 3 ),
+                array( 69, '/1/2/77/69/70/71/', 5 ),
+                array( 73, '/1/2/77/69/72/75/', 5 ),
+                array( 75, '/1/2/77/', 2 ),
             ),
             $query
-                ->select( 'contentobject_id', 'path_string' )
+                ->select( 'contentobject_id', 'path_string', 'depth' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 69, 71, 75, 77, 2 ) ) )
         );
