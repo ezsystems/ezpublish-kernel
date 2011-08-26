@@ -136,10 +136,11 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
-     * Test the Content Service load operation
+     * Test the getVersions() method after having loaded the content with the service
      *
      * @group contentService
-     * @covers \ezp\Content\Service::getVersions
+     * @covers \ezp\Content\Service::load
+     * @covers \ezp\Content::getVersions
      */
     public function testGetVersions()
     {
