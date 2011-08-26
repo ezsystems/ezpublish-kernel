@@ -54,15 +54,21 @@ class Backend
      *
      * @param string $type
      * @param array $data
+     * @param bool $autoIncrement
      * @return object
      * @throws InvalidArgumentValue On invalid $type
+     * @throws Logic If $autoIncrement is false but $data does not include an id
      */
-    public function create( $type, array $data )
+    public function create( $type, array $data, $autoIncrement = true )
     {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
-        $data['id'] = $this->getNextId( $type );
+        if ( $autoIncrement )
+            $data['id'] = $this->getNextId( $type );
+        else if ( !$data['id'] )
+          throw new Logic( 'create', '$autoIncrement is false but no id is provided in $data' );
+
         $this->data[$type][] = $data;
         return $this->toValue( $type, $data );
     }
