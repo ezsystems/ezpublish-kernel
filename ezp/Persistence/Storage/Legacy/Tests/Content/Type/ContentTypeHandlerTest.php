@@ -492,6 +492,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::delete
+     * @covers ezp\Persistence\Storage\Legacy\Exception\TypeStillHasContent
      * @expectedException ezp\Persistence\Storage\Legacy\Exception\TypeStillHasContent
      * @expectedExceptionMessage Type with ID "23" in status "0" still has content instances and can therefore not be deleted.
      */

@@ -154,6 +154,10 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::updateVersion
+     * @return void
+     */
     public function testUpdateVersion()
     {
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
@@ -198,6 +202,10 @@ class EzcDatabaseTest extends TestCase
         return $version;
     }
 
+    /**
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::insertNewField
+     * @return void
+     */
     public function testInsertNewField()
     {
         $content = $this->getContentFixture();
@@ -250,6 +258,10 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::updateField
+     * @return void
+     */
     public function testUpdateField()
     {
         $content = $this->getContentFixture();

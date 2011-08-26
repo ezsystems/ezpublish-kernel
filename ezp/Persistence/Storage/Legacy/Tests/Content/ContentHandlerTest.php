@@ -250,6 +250,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @dataProvider getLoadedContentBaseData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
      */
     public function testLoadContentBaseData( $property, $value )
     {
@@ -276,6 +277,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @dataProvider getLoadedContentVersionData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
      */
     public function testLoadContentVersionData( $property, $value )
     {
@@ -287,6 +289,10 @@ class ContentHandlerTest extends TestCase
         $this->assertEquals( $content->version->$property, $value );
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
+     */
     public function testLoadContentFieldDataFiledTypes()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
@@ -354,6 +360,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @dataProvider getLoadedContentFieldData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
      */
     public function testLoadContentFieldData( $property, $value )
     {
@@ -365,6 +372,10 @@ class ContentHandlerTest extends TestCase
         $this->assertEquals( $content->version->fields[0]->$property, $value );
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
+     */
     public function testLoadContentLocations()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
@@ -471,6 +482,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @dataProvider getCreateDraftFromVersionProperties
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createDraftFromVersion
      */
     public function testCreateDraftFromVersion( $property, $expectation )
     {
@@ -495,6 +507,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @dataProvider getCreateDraftFromVersionVersionProperties
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createDraftFromVersion
      */
     public function testCreateDraftFromVersionVersionProperties( $property, $expectation )
     {
@@ -506,6 +519,10 @@ class ContentHandlerTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createDraftFromVersion
+     */
     public function testCreateDraftFromVersionFields()
     {
         $content = $this->getTestCreateDraftFromVersion();
@@ -517,6 +534,10 @@ class ContentHandlerTest extends TestCase
         }
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::update
+     */
     public function testUpdateContent()
     {
         // Build up basic mocks

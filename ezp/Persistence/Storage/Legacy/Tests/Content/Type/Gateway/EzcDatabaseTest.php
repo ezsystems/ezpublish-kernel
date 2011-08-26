@@ -391,6 +391,9 @@ class EzcDatabaseTest extends TestCase
      * @dataProvider getTypeCreationExpectations
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertType
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertTypeNameData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::getLanguageMapping
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::getLanguageMask
      */
     public function testInsertType( $column, $expectation )
     {
