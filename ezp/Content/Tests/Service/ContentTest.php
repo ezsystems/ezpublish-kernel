@@ -120,6 +120,7 @@ class ContentTest extends BaseServiceTest
 
     /**
      * Test the Content Service load operation
+     *
      * @group contentService
      * @covers \ezp\Content\Service::load
      */

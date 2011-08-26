@@ -123,6 +123,12 @@ class Service extends BaseService
 
     /**
      * List versions of a $content
+     * @todo Clarify the reason why there is two ways to retrieve versions of a content:
+     *       1. Using "Service->listVersions( $content )"
+     *       2. Using "$content->versions"
+     *       Is it because "2." accesses a Lazy collection configured with "1."
+     *       Would it be possible to have 2. without 1.?
+     *       Modify/remove this note at the same time than ezp\Content::getVersions()'s one
      *
      * @param Content $content
      * @return \ezp\Content\Version[]
