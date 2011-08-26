@@ -337,4 +337,15 @@ class EzcDatabase extends Gateway
 
         return $rows;
     }
+
+    /**
+     * Returns all version data for the given $contentId
+     *
+     * @param mixed $contentId
+     * @return string[][]
+     */
+    public function listVersions( $contentId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
 }

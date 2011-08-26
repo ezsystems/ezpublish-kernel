@@ -15,7 +15,8 @@ use ezp\Persistence\Storage\Legacy\Content\Gateway,
 use ezp\Persistence\Content\Handler as BaseContentHandler,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\RestrictedVersion;
 
 /**
  * The Content Handler stores Content and ContentType objects.
@@ -288,11 +289,12 @@ class Handler implements BaseContentHandler
      * Return the versions for $contentId
      *
      * @param int $contentId
-     * @return array(Version)
+     * @return ezp\Persistence\Content\RestrictedVersion[]
      */
     public function listVersions( $contentId )
     {
-        throw new Exception( "Not implemented yet." );
+        $rows = $this->contentGateway->listVersions( $contentId );
+        return $this->mapper->extractVersionListFromRows( $rows );
     }
 }
 ?>

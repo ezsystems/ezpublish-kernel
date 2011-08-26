@@ -13,6 +13,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Version,
+    ezp\Persistence\Content\RestrictedVersion,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
@@ -615,6 +616,37 @@ class ContentHandlerTest extends TestCase
         $struct->parentLocations = array( 42 );
 
         return $struct;
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::listVersions
+     */
+    public function testListVersions()
+    {
+        $handler = new Handler(
+            ( $gatewayMock = $this->getGatewayMock() ),
+            $this->getLocationHandlerMock(),
+            ( $mapperMock = $this->getMapperMock() ),
+            $this->getStorageRegistryMock()
+        );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'listVersions' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractVersionListFromRows' )
+            ->with( $this->equalTo( array() ) )
+            ->will( $this->returnValue( array( new RestrictedVersion() ) ) );
+
+        $res = $handler->listVersions( 23 );
+
+        $this->assertEquals(
+            array( new RestrictedVersion() ),
+            $res
+        );
     }
 
     /**

@@ -67,4 +67,12 @@ abstract class Gateway
      * @return void
      */
     abstract public function updateField( Field $field, StorageFieldValue $value );
+
+    /**
+     * Returns all version data for the given $contentId
+     *
+     * @param mixed $contentId
+     * @return string[][]
+     */
+    abstract public function listVersions( $contentId );
 }

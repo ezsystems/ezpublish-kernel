@@ -242,4 +242,15 @@ class Mapper
         $converter = $this->converterRegistry->getConverter( $type );
         return $converter->toFieldValue( $storageValue );
     }
+
+    /**
+     * Extracts a list of RestrictedVersion objects from $rows
+     *
+     * @param string[][] $rows
+     * @return RestrictedVersion[]
+     */
+    public function extractVersionListFromRows( array $rows )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
 }
