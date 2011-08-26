@@ -338,10 +338,12 @@ class EzcDatabaseTest extends TestCase
             $res[1]['ezcontentobject_version_id']
         );
 
+        /*
         $this->storeFixture(
             __DIR__ . '/../_fixtures/restricted_version_rows.php',
             $res
         );
+        */
     }
 
     protected function storeFixture( $file, $fixture )
