@@ -591,6 +591,40 @@ class ContentSearchHandlerTest extends TestCase
         );
     }
 
+    public function testFieldFilterBetween()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->once() )
+            ->method( 'getIndexColumn' )
+            ->will( $this->returnValue( 'sort_key_int' ) );
+
+        $this->fieldRegistry
+            ->expects( $this->once() )
+            ->method( 'getConverter' )
+            ->with( 'ezprice' )
+            ->will( $this->returnValue( $converter ) );
+
+        $result = $locator->find(
+            new Criterion\Field(
+                new Criterion\FieldIdentifierStruct( 'product', 'price' ),
+                Criterion\Operator::BETWEEN,
+                array( 10000, 1000000 )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 69, 71 ,72 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result->content
+            )
+        );
+    }
+
     public function testFullTextFilter()
     {
         $locator = $this->getContentSearchHandler();
