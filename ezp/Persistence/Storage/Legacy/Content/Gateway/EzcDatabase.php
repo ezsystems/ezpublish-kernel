@@ -346,6 +346,45 @@ class EzcDatabase extends Gateway
      */
     public function listVersions( $contentId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+                $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'modified', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'creator_id', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'created', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_version' ),
+                $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject_version' ),
+                // Language IDs
+                $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' )
+            )->from(
+                $this->dbHandler->quoteTable( 'ezcontentobject_version' )
+            )->leftJoin(
+                $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ),
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
+                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_attribute' )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
+                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' )
+                    )
+                )
+            )->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                )
+            )->groupBy(
+                $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' ),
+                $this->dbHandler->quoteColumn( 'language_code', 'ezcontentobject_attribute' )
+            );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 }

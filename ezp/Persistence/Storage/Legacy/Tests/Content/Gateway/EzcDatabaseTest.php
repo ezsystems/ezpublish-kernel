@@ -307,6 +307,51 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    public function testListVersions()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $res = $gateway->listVersions( 226 );
+
+        $this->assertEquals(
+            2,
+            count( $res )
+        );
+
+        foreach ( $res as $row )
+        {
+            $this->assertEquals(
+                9,
+                count( $row )
+            );
+        }
+
+        $this->assertEquals(
+            675,
+            $res[0]['ezcontentobject_version_id']
+        );
+        $this->assertEquals(
+            676,
+            $res[1]['ezcontentobject_version_id']
+        );
+
+        $this->storeFixture(
+            __DIR__ . '/../_fixtures/restricted_version_rows.php',
+            $res
+        );
+    }
+
+    protected function storeFixture( $file, $fixture )
+    {
+        file_put_contents(
+            $file,
+            "<?php\n\nreturn " . var_export( $fixture, true ) . ";\n"
+        );
+    }
+
     /**
      * Returns a Field fixture
      *
