@@ -19,96 +19,96 @@ class StorageFieldDefinition extends ValueObject
      *
      * @var float
      */
-    protected $dataFloat1;
+    public $dataFloat1;
 
     /**
      * Data float 2
      *
      * @var float
      */
-    protected $dataFloat2;
+    public $dataFloat2;
 
     /**
      * Data float 3
      *
      * @var float
      */
-    protected $dataFloat3;
+    public $dataFloat3;
 
     /**
      * Data float 4
      *
      * @var float
      */
-    protected $dataFloat4;
+    public $dataFloat4;
 
     /**
      * Data int 1
      *
      * @var int
      */
-    protected $dataInt1;
+    public $dataInt1;
 
     /**
      * Data int 2
      *
      * @var int
      */
-    protected $dataInt2;
+    public $dataInt2;
 
     /**
      * Data int 3
      *
      * @var int
      */
-    protected $dataInt3;
+    public $dataInt3;
 
     /**
      * Data int 4
      *
      * @var int
      */
-    protected $dataInt4;
+    public $dataInt4;
 
     /**
      * Data text 1
      *
      * @var string
      */
-    protected $dataText1;
+    public $dataText1;
 
     /**
      * Data text 2
      *
      * @var string
      */
-    protected $dataText2;
+    public $dataText2;
 
     /**
      * Data text 3
      *
      * @var string
      */
-    protected $dataText3;
+    public $dataText3;
 
     /**
      * Data text 4
      *
      * @var string
      */
-    protected $dataText4;
+    public $dataText4;
 
     /**
      * Data text 5
      *
      * @var string
      */
-    protected $dataText5;
+    public $dataText5;
 
     /**
      * Data text I18n
      *
      * @var string[]
      */
-    protected $serializedDataText;
+    public $serializedDataText;
 }
