@@ -9,8 +9,11 @@
 
 namespace ezp\User;
 use ezp\Base\Service as BaseService,
-    InvalidArgumentException,
-    ezp\Persistence\ValueObject;
+    ezp\Base\Exception\NotFound,
+    ezp\User,
+    ezp\Persistence\User as UserValueObject,
+    ezp\Persistence\User\Role as RoleValueObject,
+    ezp\Persistence\User\Policy as PolicyValueObject;
 
 /**
  * User Service, extends repository with user specific operations
@@ -19,23 +22,62 @@ use ezp\Base\Service as BaseService,
 class Service extends BaseService
 {
     /**
+     * Crate a Content Type Group object
+     *
+     * @param \ezp\User $group
+     * @return \ezp\User
+     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
+     */
+    public function create( User $user )
+    {
+        $struct = new UserValueObject();
+        $this->fillStruct( $struct, $user );
+        $vo = $this->handler->userHandler()->create( $struct );
+        return $this->buildUser( $vo );
+    }
+
+    /**
      * Get an User object by id
      *
-     * @param int $id
-     * @return User
-     * @throws InvalidArgumentException
+     * @param mixed $id
+     * @return \ezp\User
+     * @throws \ezp\Base\Exception\NotFound If user is not found
      */
     public function load( $id )
     {
-        $user = $this->handler->userHandler()->load( (int)$id );
-        // @FIXME: Shouldn't this be a NotFound exception instead?
-        if ( !$user )
-            throw new InvalidArgumentException( "Could not find 'User' with id: {$id}" );
-        return $user;
+        return $this->buildUser( $this->handler->userHandler()->load( $id ) );
     }
 
-    protected function buildDomainObject( ValueObject $vo )
+    /**
+     * @param \ezp\Persistence\User $vo
+     * @return \ezp\User
+     */
+    protected function buildUser( UserValueObject $vo )
     {
-
+        $do = new User();
+        $do->setState(
+            array(
+                "properties" => $vo,
+                /*"groups" => new Lazy(
+                    "ezp\\User\\Group",
+                    $this,
+                    $vo->id,
+                    "loadGroupsByUserId"
+                ),
+                "roles" => new Lazy(
+                    "ezp\\User\\Group",
+                    $this,
+                    $vo->id,
+                    "loadRolesByUserId"
+                ),
+                "groups" => new Lazy(
+                    "ezp\\User\\Group",
+                    $this,
+                    $vo->id,
+                    "loadPoliciesByUserId"
+                ),*/
+            )
+        );
+        return $do;
     }
 }

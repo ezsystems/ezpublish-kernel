@@ -19,6 +19,9 @@
     <testsuite name="ezp\Persistence\Storage\Legacy">
       <directory>ezp/Persistence/Storage/Legacy/Tests</directory>
     </testsuite>
+    <testsuite name="ezp\User">
+      <directory>ezp/User/Tests</directory>
+    </testsuite>
   </testsuites>
   <filter>
     <whitelist>
