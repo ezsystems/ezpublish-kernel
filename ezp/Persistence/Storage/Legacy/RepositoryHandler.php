@@ -178,6 +178,10 @@ class RepositoryHandler implements HandlerInterface
                         new Content\Search\Gateway\CriterionHandler\SectionId(),
                         new Content\Search\Gateway\CriterionHandler\Status(),
                         new Content\Search\Gateway\CriterionHandler\FullText(),
+                        new Content\Search\Gateway\CriterionHandler\Field(
+                            $this->dbHandler,
+                            $this->getFieldValueConverterRegistry()
+                        ),
                     ) )
                 )
             );
