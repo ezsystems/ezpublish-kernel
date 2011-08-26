@@ -14,8 +14,9 @@ use ezp\Content,
     ezp\Content\Version,
     ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Base\Exception\NotFound,
-    ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content as ContentValue,
+    ezp\Persistence\Content\Location as LocationValue,
+    ezp\Persistence\Content\Version as VersionValue,
     ezp\Persistence\Content\Criterion\ContentId,
     \ReflectionObject;
 
@@ -132,6 +133,59 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( "eZ Publish", $content->name, "Name not correctly set" );
         self::assertEquals( 14, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
+    }
+
+    /**
+     * Test the Content Service load operation
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::getVersions
+     */
+    public function testGetVersions()
+    {
+        $content = $this->service->load( 1 );
+        $this->assertInstanceOf( "ezp\\Base\\Collection\\Type", $content->versions );
+        $this->assertEquals( 2, count( $content->versions ) );
+        $this->assertInstanceOf( "ezp\\Content\\Version", $content->versions[0] );
+        $this->assertInstanceOf( "ezp\\Content\\Version", $content->versions[1] );
+
+        $version = new Version( $content );
+        $version->setState(
+            array(
+                "properties" => new VersionValue(
+                    array(
+                        "id" => 1,
+                        "contentId" => 1,
+                        "versionNo" => 1,
+                        "modified" => 1310792400,
+                        "created" => 1310792400,
+                        "creatorId" => 14,
+                        "state" => 1,
+                    )
+                ),
+                "fields" => array(),
+            )
+        );
+        $this->assertEquals( $version, $content->versions[0] );
+
+        $version = new Version( $content );
+        $version->setState(
+            array(
+                "properties" => new VersionValue(
+                    array(
+                        "id" => 2,
+                        "contentId" => 1,
+                        "versionNo" => 2,
+                        "modified" => 1310793400,
+                        "created" => 1310793400,
+                        "creatorId" => 14,
+                        "state" => 0,
+                    )
+                ),
+                "fields" => array(),
+            )
+        );
+        $this->assertEquals( $version, $content->versions[1] );
     }
 
     /**
