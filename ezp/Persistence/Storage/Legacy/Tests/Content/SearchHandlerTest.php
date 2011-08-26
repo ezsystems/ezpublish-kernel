@@ -557,6 +557,40 @@ class ContentSearchHandlerTest extends TestCase
         );
     }
 
+    public function testFieldFilterIn()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->once() )
+            ->method( 'getIndexColumn' )
+            ->will( $this->returnValue( 'sort_key_string' ) );
+
+        $this->fieldRegistry
+            ->expects( $this->once() )
+            ->method( 'getConverter' )
+            ->with( 'ezstring' )
+            ->will( $this->returnValue( $converter ) );
+
+        $result = $locator->find(
+            new Criterion\Field(
+                new Criterion\FieldIdentifierStruct( 'user_group', 'name' ),
+                Criterion\Operator::IN,
+                array( 'members', 'anonymous users' )
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 11, 42 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result->content
+            )
+        );
+    }
+
     public function testFullTextFilter()
     {
         $locator = $this->getContentSearchHandler();
