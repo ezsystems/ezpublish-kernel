@@ -127,24 +127,23 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \ezp\Content::getLocations
      * @expectedException ezp\Base\Exception\InvalidArgumentType
-     * @FIXME Use "@covers"
      */
     public function testLocationWrongClass()
     {
-        $this->markTestIncomplete( '@TODO: Re impl' );
-        $content = new Content( $this->contentType, new Locale( 'eng-GB' ) );
+        $content = new Content( $this->contentType );
         $content->locations[] = new Section();
     }
 
     /**
      * Test that foreign side of relation is updated for Location -> Content when Location is created
-     * @FIXME Use "@covers"
+     *
+     * @covers \ezp\Content::getLocations
      */
     public function testContentLocationWhenLocationIsCreated()
     {
-        $this->markTestIncomplete( '@TODO: Re impl' );
-        $content = new Content( $this->contentType, new Locale( 'eng-GB' ) );
+        $content = new Content( $this->contentType );
         $location = new Location( $content );
         $this->assertEquals( $content->locations[0], $location, 'Location on Content is not correctly updated when Location is created with content in constructor!' );
         $content->locations[] = $location;

@@ -54,7 +54,7 @@ class SectionTest extends BaseServiceTest
 
     /**
      * Test service function for loading sections
-     * @covers \ezp\Content\Section\Service::delete
+     * @covers \ezp\Content\Section\Service::load
      */
     public function testLoad()
     {
