@@ -21,6 +21,13 @@ class ContentSearchHandlerTest extends TestCase
     protected static $setUp = false;
 
     /**
+     * Field registry mock
+     *
+     * @var \ezp\Persistence\Content\FieldValue\Converter\Registry
+     */
+    protected $fieldRegistry;
+
+    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
@@ -74,6 +81,12 @@ class ContentSearchHandlerTest extends TestCase
                     new Content\Search\Gateway\CriterionHandler\Status(),
                     new Content\Search\Gateway\CriterionHandler\FullText(
                         $fullTextSearchConfiguration
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\Field(
+                        $this->getDatabaseHandler(),
+                        $this->fieldRegistry = $this->getMock(
+                            '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+                        )
                     ),
                 ) )
             )
@@ -503,6 +516,40 @@ class ContentSearchHandlerTest extends TestCase
 
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 41, 42, 45, 49 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result->content
+            )
+        );
+    }
+
+    public function testFieldFilter()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->once() )
+            ->method( 'getIndexColumn' )
+            ->will( $this->returnValue( 'sort_key_string' ) );
+
+        $this->fieldRegistry
+            ->expects( $this->once() )
+            ->method( 'getConverter' )
+            ->with( 'ezstring' )
+            ->will( $this->returnValue( $converter ) );
+
+        $result = $locator->find(
+            new Criterion\Field(
+                new Criterion\FieldIdentifierStruct( 'user_group', 'name' ),
+                Criterion\Operator::EQ,
+                'members'
+            ),
+            0, 10, null
+        );
+
+        $this->assertEquals(
+            array( 11 ),
             array_map(
                 function ( $content ) { return $content->id; },
                 $result->content
