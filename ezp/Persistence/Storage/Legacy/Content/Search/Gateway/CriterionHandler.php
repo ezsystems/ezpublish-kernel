@@ -17,7 +17,7 @@ use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
 abstract class CriterionHandler
 {
     /**
-     * Map of criterion operators to the respective function names in the zeta 
+     * Map of criterion operators to the respective function names in the zeta
      * Database abstraction layer.
      *
      * @var array
