@@ -236,7 +236,7 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function update( UpdateStruct $content )
     {
-        // @todo Will need version number to be able to know which version to update.
+        // @todo Assume the attached version to Content is the one that should be updated
         throw new RuntimeException( '@TODO: Implement' );
     }
 
