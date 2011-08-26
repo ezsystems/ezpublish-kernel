@@ -16,6 +16,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue,
+    ezp\Persistence\Content\RestrictedVersion,
     ezp\Persistence\Content\CreateStruct;
 
 /**
@@ -229,6 +230,24 @@ class MapperTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractVersionListFromRows
+     */
+    public function testExtractVersionListFromRows()
+    {
+        $mapper = new Mapper( new Registry() );
+
+        $rows = $this->getRestrictedVersionExtractFixture();
+
+        $res = $mapper->extractVersionListFromRows( $rows );
+
+        $this->assertEquals(
+            $this->getRestrictedVersionExtractReference(),
+            $res
+        );
+    }
+
+    /**
      * Returns a fixture of database rows for content extraction
      *
      * Fixture is stored in _fixtures/extract_content_from_rows.php
@@ -250,6 +269,52 @@ class MapperTest extends TestCase
     protected function getContentExtractReference()
     {
         return require __DIR__ . '/_fixtures/extract_content_from_rows_result.php';
+    }
+
+    /**
+     * Returns a fixture for mapping RestrictedVersion objects
+     *
+     * @return string[][]
+     */
+    protected function getRestrictedVersionExtractFixture()
+    {
+        return require __DIR__ . '/_fixtures/restricted_version_rows.php';
+    }
+
+    /**
+     * Returns a reference result for mapping RestrictedVersion objects
+     *
+     * @return RestrictedVersion[]
+     */
+    protected function getRestrictedVersionExtractReference()
+    {
+        $versions = array();
+
+        $version = new RestrictedVersion();
+        $version->id = 675;
+        $version->versionNo = 1;
+        $version->modified = 1313047907;
+        $version->creatorId = 14;
+        $version->created = 1313047865;
+        $version->state = 3;
+        $version->contentId = 226;
+        $version->languageIds = array( 'eng-US' );
+
+        $versions[] = $version;
+
+        $version = new RestrictedVersion();
+        $version->id = 676;
+        $version->versionNo = 2;
+        $version->modified = 1313061404;
+        $version->creatorId = 14;
+        $version->created = 1313061317;
+        $version->state = 1;
+        $version->contentId = 226;
+        $version->languageIds = array( 'eng-US' );
+
+        $versions[] = $version;
+
+        return $versions;
     }
 
     /**

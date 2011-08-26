@@ -13,6 +13,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\Version,
+    ezp\Persistence\Content\RestrictedVersion,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry;
 
 /**
@@ -187,7 +188,21 @@ class Mapper
     protected function extractVersionFromRow( array $row )
     {
         $version = new Version();
+        $this->mapCommonVersionFields( $row, $version );
+        $version->fields    = array();
 
+        return $version;
+    }
+
+    /**
+     * Maps fields from $row to $version
+     *
+     * @param array $row
+     * @param Version|RestrictedVersion $version
+     * @return void
+     */
+    protected function mapCommonVersionFields( array $row, $version )
+    {
         $version->id        = (int) $row['ezcontentobject_version_id'];
         $version->versionNo = (int) $row['ezcontentobject_version_version'];
         $version->modified  = (int) $row['ezcontentobject_version_modified'];
@@ -195,9 +210,6 @@ class Mapper
         $version->created   = (int) $row['ezcontentobject_version_created'];
         $version->state     = (int) $row['ezcontentobject_version_status'];
         $version->contentId = (int) $row['ezcontentobject_version_contentobject_id'];
-        $version->fields    = array();
-
-        return $version;
     }
 
     /**
@@ -248,9 +260,32 @@ class Mapper
      *
      * @param string[][] $rows
      * @return RestrictedVersion[]
+     * @todo This method works on language codes for now.
      */
     public function extractVersionListFromRows( array $rows )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $versionList = array();
+        foreach ( $rows as $row )
+        {
+            $versionId = (int) $row['ezcontentobject_version_id'];
+            if ( !isset( $versionList[$versionId] ) )
+            {
+                $version = new RestrictedVersion();
+                $this->mapCommonVersionFields( $row, $version );
+                $version->languageIds = array();
+
+                $versionList[$versionId] = $version;
+            }
+
+            if ( !in_array(
+                $row['ezcontentobject_attribute_language_code'],
+                $versionList[$versionId]->languageIds
+                ) )
+            {
+                $versionList[$versionId]->languageIds[] =
+                    $row['ezcontentobject_attribute_language_code'];
+            }
+        }
+        return array_values( $versionList );
     }
 }
