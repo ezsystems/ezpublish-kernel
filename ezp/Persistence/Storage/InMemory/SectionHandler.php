@@ -14,8 +14,6 @@ use ezp\Persistence\Content\Section\Handler as SectionHandlerInterface,
 
 /**
  * @see ezp\Persistence\Content\Section\Handler
- *
- * @version //autogentag//
  */
 class SectionHandler implements SectionHandlerInterface
 {

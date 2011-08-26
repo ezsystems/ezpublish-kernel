@@ -17,8 +17,6 @@ use ezp\Persistence\Content\Location\Handler as LocationHandlerInterface,
 
 /**
  * @see ezp\Persistence\Content\Location\Handler
- *
- * @version //autogentag//
  */
 class LocationHandler implements LocationHandlerInterface
 {

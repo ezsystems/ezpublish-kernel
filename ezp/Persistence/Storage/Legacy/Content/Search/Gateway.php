@@ -15,8 +15,6 @@ use ezp\Persistence\Content,
 /**
  * The Content Search Gateway provides the implementation for one database to
  * retrieve the desired content objects.
- *
- * @version //autogentag//
  */
 abstract class Gateway
 {

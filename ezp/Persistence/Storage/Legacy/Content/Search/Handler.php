@@ -34,8 +34,6 @@ use ezp\Persistence\Content,
  * 4) Additionally we might need a post-query filtering step, which filters
  * content objects based on criteria, which could not be convertedd in to
  * database statements.
- *
- * @version //autogentag//
  */
 class Handler extends BaseSearchHandler
 {

@@ -15,8 +15,6 @@ use ezp\Persistence\Content,
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
  * set of criteria.
- *
- * @version //autogentag//
  */
 abstract class Handler
 {

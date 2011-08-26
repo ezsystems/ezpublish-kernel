@@ -14,8 +14,6 @@ use ezp\Persistence\Content\Location;
 
 /**
  * Struct containing accessible properties on TrashedLocation entities.
- *
- * @version //autogentag//
  */
 class Trashed extends Location
 {

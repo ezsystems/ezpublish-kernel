@@ -13,8 +13,6 @@ use ezp\Persistence\ValueObject;
 
 /**
  * Struct containing accessible properties on Location entities.
- *
- * @version //autogentag//
  */
 class Location extends ValueObject
 {

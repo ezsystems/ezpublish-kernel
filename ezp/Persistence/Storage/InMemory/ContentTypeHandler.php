@@ -26,7 +26,6 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
 /**
  * @see ezp\Persistence\Content\Type\Handler
  *
- * @status //autogentag//
  * @todo Validate $status arguments
  */
 class ContentTypeHandler implements ContentTypeHandlerInterface

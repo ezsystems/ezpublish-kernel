@@ -15,8 +15,6 @@ namespace ezp\Persistence\Storage\Legacy;
  * additional utility functions.
  *
  * Functions as a full proxy to the zeta components database class.
- *
- * @version //autogentag//
  */
 class EzcDbHandler
 {

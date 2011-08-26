@@ -21,8 +21,6 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
 
 /**
  * @see ezp\Persistence\Content\Handler
- *
- * @version //autogentag//
  */
 class ContentHandler implements ContentHandlerInterface
 {

@@ -21,8 +21,6 @@ use ezp\Persistence\Content\CreateStruct,
  * The basic operations which are performed on content objects are collected in
  * this interface. Typically this interface would be used by a service managing
  * business logic for content objects.
- *
- * @version //autogentag//
  */
 interface Handler
 {

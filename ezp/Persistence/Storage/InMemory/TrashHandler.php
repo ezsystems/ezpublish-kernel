@@ -15,8 +15,6 @@ use ezp\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface,
 
 /**
  * @see ezp\Persistence\Content\Location\Trash\Handler
- *
- * @version //autogentag//
  */
 class TrashHandler implements TrashHandlerInterface
 {

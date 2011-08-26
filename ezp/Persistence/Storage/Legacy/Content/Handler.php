@@ -20,8 +20,6 @@ use ezp\Persistence\Content\Handler as BaseContentHandler,
 
 /**
  * The Content Handler stores Content and ContentType objects.
- *
- * @version //autogentag//
  */
 class Handler implements BaseContentHandler
 {
