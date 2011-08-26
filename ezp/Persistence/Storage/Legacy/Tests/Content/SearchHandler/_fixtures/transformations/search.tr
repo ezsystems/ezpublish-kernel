@@ -1,0 +1,38 @@
+# Search normalization rules
+#
+# See basic.tr for formatting options
+#
+# The rest of search handling is done in the various larger alphabet groups
+# e.g latin.tr and cyrillic.tr
+# They will have rules called <identifier>_search_cleanup
+
+endline_search_normalize:
+# Turns endlines \n, \r and \r\n into a space
+U+000A = U+0020
+U+000D = U+0020
+
+tab_search_normalize:
+# Turns tabs \t into a space
+U+0008 = U+0020
+
+specialwords_search_normalize:
+U+00AA = "a"  # feminine ordinal indicator (spanish)
+U+00BA = "o"  # masculine ordinal indicator (spanish)
+
+punctuation_normalize:
+# Turn some symbols which are considered punctuations marks into
+# the ASCII punctuation U+002E
+U+0021 = U+002E # exclamation mark !
+U+003F = U+002E # question mark ?
+U+002C = U+002E # comma ,
+
+latin_search_decompose:
+U+00B1 = "+-"    # Plus/minus sign
+U+00B2 = "2"     # Superscript two
+U+00B3 = "3"     # Superscript three
+U+00B9 = "1"     # Superscript one
+U+00BA = "1"     # Superscript one
+U+00BC = "1/4"   # Vulgar fraction one quarter
+U+00BD = "1/2"   # Vulgar fraction one half
+U+00BE = "3/4"   # Vulgar fraction three quarter
+

@@ -1,0 +1,1528 @@
+<?php
+
+return array (
+  'cyrillic_uppercase' => 
+  array (
+    0 => 
+    array (
+      'type' => 13,
+      'data' => 
+      array (
+        'srcStart' => 'U+0450',
+        'srcEnd' => 'U+045F',
+        'op' => '-',
+        'dest' => 'U+0050',
+      ),
+    ),
+    1 => 
+    array (
+      'type' => 13,
+      'data' => 
+      array (
+        'srcStart' => 'U+0430',
+        'srcEnd' => 'U+044F',
+        'op' => '-',
+        'dest' => 'U+0020',
+      ),
+    ),
+    2 => 
+    array (
+      'type' => 14,
+      'data' => 
+      array (
+        'srcStart' => 'U+0461',
+        'srcEnd' => 'U+0481',
+        'modulo' => '02',
+        'op' => '-',
+        'dest' => 'U+0001',
+      ),
+    ),
+    3 => 
+    array (
+      'type' => 14,
+      'data' => 
+      array (
+        'srcStart' => 'U+048B',
+        'srcEnd' => 'U+04BF',
+        'modulo' => '02',
+        'op' => '-',
+        'dest' => 'U+0001',
+      ),
+    ),
+    4 => 
+    array (
+      'type' => 14,
+      'data' => 
+      array (
+        'srcStart' => 'U+04C2',
+        'srcEnd' => 'U+04CC',
+        'modulo' => '02',
+        'op' => '-',
+        'dest' => 'U+0001',
+      ),
+    ),
+    5 => 
+    array (
+      'type' => 14,
+      'data' => 
+      array (
+        'srcStart' => 'U+04D1',
+        'srcEnd' => 'U+04F5',
+        'modulo' => '02',
+        'op' => '-',
+        'dest' => 'U+0001',
+      ),
+    ),
+    6 => 
+    array (
+      'type' => 14,
+      'data' => 
+      array (
+        'srcStart' => 'U+0501',
+        'srcEnd' => 'U+050F',
+        'modulo' => '02',
+        'op' => '-',
+        'dest' => 'U+0001',
+      ),
+    ),
+  ),
+  'cyrillic_lowercase' => 
+  array (
+    0 => 
+    array (
+      'type' => 13,
+      'data' => 
+      array (
+        'srcStart' => 'U+0400',
+        'srcEnd' => 'U+040F',
+        'op' => '+',
+        'dest' => 'U+0050',
+      ),
+    ),
+    1 => 
+    array (
+      'type' => 13,
+      'data' => 
+      array (
+        'srcStart' => 'U+0410',
+        'srcEnd' => 'U+042F',
+        'op' => '+',
+        'dest' => 'U+0020',
+      ),
+    ),
+    2 => 
+    array (
+      'type' => 14,
+      'data' => 
+      array (
+        'srcStart' => 'U+0460',
+        'srcEnd' => 'U+0480',
+        'modulo' => '02',
+        'op' => '+',
+        'dest' => 'U+0001',
+      ),
+    ),
+    3 => 
+    array (
+      'type' => 14,
+      'data' => 
+      array (
+        'srcStart' => 'U+048A',
+        'srcEnd' => 'U+04BE',
+        'modulo' => '02',
+        'op' => '+',
+        'dest' => 'U+0001',
+      ),
+    ),
+    4 => 
+    array (
+      'type' => 14,
+      'data' => 
+      array (
+        'srcStart' => 'U+04C1',
+        'srcEnd' => 'U+04CD',
+        'modulo' => '02',
+        'op' => '+',
+        'dest' => 'U+0001',
+      ),
+    ),
+    5 => 
+    array (
+      'type' => 14,
+      'data' => 
+      array (
+        'srcStart' => 'U+04D0',
+        'srcEnd' => 'U+04F4',
+        'modulo' => '02',
+        'op' => '+',
+        'dest' => 'U+0001',
+      ),
+    ),
+    6 => 
+    array (
+      'type' => 14,
+      'data' => 
+      array (
+        'srcStart' => 'U+0500',
+        'srcEnd' => 'U+050E',
+        'modulo' => '02',
+        'op' => '+',
+        'dest' => 'U+0001',
+      ),
+    ),
+  ),
+  'cyrillic_diacritical' => 
+  array (
+    0 => 
+    array (
+      'type' => 12,
+      'data' => 
+      array (
+        'srcStart' => 'U+0400',
+        'srcEnd' => 'U+0401',
+        'dest' => 'U+0415',
+      ),
+    ),
+    1 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0403',
+        'dest' => 'U+0413',
+      ),
+    ),
+    2 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0407',
+        'dest' => 'U+0406',
+      ),
+    ),
+    3 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+040C',
+        'dest' => 'U+041A',
+      ),
+    ),
+    4 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+040D',
+        'dest' => 'U+0418',
+      ),
+    ),
+    5 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+040E',
+        'dest' => 'U+0423',
+      ),
+    ),
+    6 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0419',
+        'dest' => 'U+0418',
+      ),
+    ),
+    7 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0439',
+        'dest' => 'U+0438',
+      ),
+    ),
+    8 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0450',
+        'dest' => 'U+0435',
+      ),
+    ),
+    9 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0451',
+        'dest' => 'U+0435',
+      ),
+    ),
+    10 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0453',
+        'dest' => 'U+0433',
+      ),
+    ),
+    11 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0457',
+        'dest' => 'U+0456',
+      ),
+    ),
+    12 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+045C',
+        'dest' => 'U+043A',
+      ),
+    ),
+    13 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+045D',
+        'dest' => 'U+0438',
+      ),
+    ),
+    14 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+045E',
+        'dest' => 'U+0443',
+      ),
+    ),
+    15 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0476',
+        'dest' => 'U+0474',
+      ),
+    ),
+    16 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0477',
+        'dest' => 'U+0475',
+      ),
+    ),
+    17 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04C1',
+        'dest' => 'U+0416',
+      ),
+    ),
+    18 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04C2',
+        'dest' => 'U+0436',
+      ),
+    ),
+    19 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04D0',
+        'dest' => 'U+0410',
+      ),
+    ),
+    20 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04D1',
+        'dest' => 'U+0430',
+      ),
+    ),
+    21 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04D2',
+        'dest' => 'U+0410',
+      ),
+    ),
+    22 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04D3',
+        'dest' => 'U+0430',
+      ),
+    ),
+    23 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04D6',
+        'dest' => 'U+0415',
+      ),
+    ),
+    24 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04D7',
+        'dest' => 'U+0435',
+      ),
+    ),
+    25 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04DA',
+        'dest' => 'U+04D8',
+      ),
+    ),
+    26 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04DB',
+        'dest' => 'U+04D9',
+      ),
+    ),
+    27 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04DC',
+        'dest' => 'U+0416',
+      ),
+    ),
+    28 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04DD',
+        'dest' => 'U+0436',
+      ),
+    ),
+    29 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04DE',
+        'dest' => 'U+0417',
+      ),
+    ),
+    30 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04DF',
+        'dest' => 'U+0437',
+      ),
+    ),
+    31 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04E2',
+        'dest' => 'U+0418',
+      ),
+    ),
+    32 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04E3',
+        'dest' => 'U+0438',
+      ),
+    ),
+    33 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04E4',
+        'dest' => 'U+0418',
+      ),
+    ),
+    34 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04E5',
+        'dest' => 'U+0438',
+      ),
+    ),
+    35 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04E6',
+        'dest' => 'U+041E',
+      ),
+    ),
+    36 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04E7',
+        'dest' => 'U+043E',
+      ),
+    ),
+    37 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04EA',
+        'dest' => 'U+04E8',
+      ),
+    ),
+    38 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04EB',
+        'dest' => 'U+04E9',
+      ),
+    ),
+    39 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04EC',
+        'dest' => 'U+042D',
+      ),
+    ),
+    40 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04ED',
+        'dest' => 'U+044D',
+      ),
+    ),
+    41 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04EE',
+        'dest' => 'U+0423',
+      ),
+    ),
+    42 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04EF',
+        'dest' => 'U+0443',
+      ),
+    ),
+    43 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04F0',
+        'dest' => 'U+0423',
+      ),
+    ),
+    44 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04F1',
+        'dest' => 'U+0443',
+      ),
+    ),
+    45 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04F2',
+        'dest' => 'U+0423',
+      ),
+    ),
+    46 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04F3',
+        'dest' => 'U+0443',
+      ),
+    ),
+    47 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04F4',
+        'dest' => 'U+0427',
+      ),
+    ),
+    48 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04F5',
+        'dest' => 'U+0447',
+      ),
+    ),
+    49 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04F8',
+        'dest' => 'U+042B',
+      ),
+    ),
+    50 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+04F9',
+        'dest' => 'U+044B',
+      ),
+    ),
+  ),
+  'cyrillic_transliterate_ascii' => 
+  array (
+    0 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0400',
+        'dest' => '"IE"',
+      ),
+    ),
+    1 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0401',
+        'dest' => '"IO"',
+      ),
+    ),
+    2 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0402',
+        'dest' => '"D"',
+      ),
+    ),
+    3 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0403',
+        'dest' => '"G"',
+      ),
+    ),
+    4 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0404',
+        'dest' => '"IE"',
+      ),
+    ),
+    5 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0405',
+        'dest' => '"DS"',
+      ),
+    ),
+    6 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0406',
+        'dest' => '"II"',
+      ),
+    ),
+    7 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0407',
+        'dest' => '"YI"',
+      ),
+    ),
+    8 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0408',
+        'dest' => '"J"',
+      ),
+    ),
+    9 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0409',
+        'dest' => '"LJ"',
+      ),
+    ),
+    10 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+040A',
+        'dest' => '"NJ"',
+      ),
+    ),
+    11 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+040B',
+        'dest' => '"Ts"',
+      ),
+    ),
+    12 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+040C',
+        'dest' => '"KJ"',
+      ),
+    ),
+    13 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+040D',
+        'dest' => '"I"',
+      ),
+    ),
+    14 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+040E',
+        'dest' => '"V"',
+      ),
+    ),
+    15 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+040F',
+        'dest' => '"DZ"',
+      ),
+    ),
+    16 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0410',
+        'dest' => '"A"',
+      ),
+    ),
+    17 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0411',
+        'dest' => '"B"',
+      ),
+    ),
+    18 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0412',
+        'dest' => '"V"',
+      ),
+    ),
+    19 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0413',
+        'dest' => '"G"',
+      ),
+    ),
+    20 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0414',
+        'dest' => '"D"',
+      ),
+    ),
+    21 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0415',
+        'dest' => '"E"',
+      ),
+    ),
+    22 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0416',
+        'dest' => '"ZH"',
+      ),
+    ),
+    23 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0417',
+        'dest' => '"Z"',
+      ),
+    ),
+    24 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0418',
+        'dest' => '"I"',
+      ),
+    ),
+    25 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0419',
+        'dest' => '"J"',
+      ),
+    ),
+    26 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+041A',
+        'dest' => '"K"',
+      ),
+    ),
+    27 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+041B',
+        'dest' => '"L"',
+      ),
+    ),
+    28 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+041C',
+        'dest' => '"M"',
+      ),
+    ),
+    29 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+041D',
+        'dest' => '"N"',
+      ),
+    ),
+    30 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+041E',
+        'dest' => '"O"',
+      ),
+    ),
+    31 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+041F',
+        'dest' => '"P"',
+      ),
+    ),
+    32 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0420',
+        'dest' => '"R"',
+      ),
+    ),
+    33 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0421',
+        'dest' => '"S"',
+      ),
+    ),
+    34 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0422',
+        'dest' => '"T"',
+      ),
+    ),
+    35 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0423',
+        'dest' => '"U"',
+      ),
+    ),
+    36 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0424',
+        'dest' => '"F"',
+      ),
+    ),
+    37 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0425',
+        'dest' => '"H"',
+      ),
+    ),
+    38 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0426',
+        'dest' => '"C"',
+      ),
+    ),
+    39 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0427',
+        'dest' => '"CH"',
+      ),
+    ),
+    40 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0428',
+        'dest' => '"SH"',
+      ),
+    ),
+    41 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0429',
+        'dest' => '"SCH"',
+      ),
+    ),
+    42 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+042A',
+        'dest' => '"\\\'"',
+      ),
+    ),
+    43 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+042B',
+        'dest' => '"Y"',
+      ),
+    ),
+    44 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+042C',
+        'dest' => '"\\\'"',
+      ),
+    ),
+    45 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+042D',
+        'dest' => '"E"',
+      ),
+    ),
+    46 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+042E',
+        'dest' => '"YU"',
+      ),
+    ),
+    47 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+042F',
+        'dest' => '"YA"',
+      ),
+    ),
+    48 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0430',
+        'dest' => '"a"',
+      ),
+    ),
+    49 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0431',
+        'dest' => '"b"',
+      ),
+    ),
+    50 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0432',
+        'dest' => '"v"',
+      ),
+    ),
+    51 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0433',
+        'dest' => '"g"',
+      ),
+    ),
+    52 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0434',
+        'dest' => '"d"',
+      ),
+    ),
+    53 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0435',
+        'dest' => '"e"',
+      ),
+    ),
+    54 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0436',
+        'dest' => '"zh"',
+      ),
+    ),
+    55 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0437',
+        'dest' => '"z"',
+      ),
+    ),
+    56 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0438',
+        'dest' => '"i"',
+      ),
+    ),
+    57 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0439',
+        'dest' => '"j"',
+      ),
+    ),
+    58 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+043A',
+        'dest' => '"k"',
+      ),
+    ),
+    59 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+043B',
+        'dest' => '"l"',
+      ),
+    ),
+    60 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+043C',
+        'dest' => '"m"',
+      ),
+    ),
+    61 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+043D',
+        'dest' => '"n"',
+      ),
+    ),
+    62 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+043E',
+        'dest' => '"o"',
+      ),
+    ),
+    63 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+043F',
+        'dest' => '"p"',
+      ),
+    ),
+    64 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0440',
+        'dest' => '"r"',
+      ),
+    ),
+    65 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0441',
+        'dest' => '"s"',
+      ),
+    ),
+    66 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0442',
+        'dest' => '"t"',
+      ),
+    ),
+    67 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0443',
+        'dest' => '"u"',
+      ),
+    ),
+    68 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0444',
+        'dest' => '"f"',
+      ),
+    ),
+    69 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0445',
+        'dest' => '"h"',
+      ),
+    ),
+    70 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0446',
+        'dest' => '"c"',
+      ),
+    ),
+    71 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0447',
+        'dest' => '"ch"',
+      ),
+    ),
+    72 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0448',
+        'dest' => '"sh"',
+      ),
+    ),
+    73 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0449',
+        'dest' => '"sch"',
+      ),
+    ),
+    74 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+044A',
+        'dest' => '"\\\'"',
+      ),
+    ),
+    75 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+044B',
+        'dest' => '"y"',
+      ),
+    ),
+    76 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+044C',
+        'dest' => '"\\\'"',
+      ),
+    ),
+    77 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+044D',
+        'dest' => '"e"',
+      ),
+    ),
+    78 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+044E',
+        'dest' => '"yu"',
+      ),
+    ),
+    79 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+044F',
+        'dest' => '"ya"',
+      ),
+    ),
+    80 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0450',
+        'dest' => '"ie"',
+      ),
+    ),
+    81 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0451',
+        'dest' => '"io"',
+      ),
+    ),
+    82 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0452',
+        'dest' => '"dj"',
+      ),
+    ),
+    83 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0453',
+        'dest' => '"g"',
+      ),
+    ),
+    84 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0454',
+        'dest' => '"e"',
+      ),
+    ),
+    85 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0455',
+        'dest' => '"z"',
+      ),
+    ),
+    86 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0456',
+        'dest' => '"i"',
+      ),
+    ),
+    87 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0457',
+        'dest' => '"yi"',
+      ),
+    ),
+    88 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0458',
+        'dest' => '"j"',
+      ),
+    ),
+    89 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+0459',
+        'dest' => '"lj"',
+      ),
+    ),
+    90 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+045A',
+        'dest' => '"nj"',
+      ),
+    ),
+    91 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+045B',
+        'dest' => '"c"',
+      ),
+    ),
+    92 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+045C',
+        'dest' => '"kj"',
+      ),
+    ),
+    93 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+045D',
+        'dest' => '"i"',
+      ),
+    ),
+    94 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+045E',
+        'dest' => '"v"',
+      ),
+    ),
+    95 => 
+    array (
+      'type' => 11,
+      'data' => 
+      array (
+        'src' => 'U+045F',
+        'dest' => '"dz"',
+      ),
+    ),
+  ),
+  'cyrillic_search_cleanup' => 
+  array (
+    0 => 
+    array (
+      'type' => 12,
+      'data' => 
+      array (
+        'srcStart' => 'U+0482',
+        'srcEnd' => 'U+0486',
+        'dest' => 'U+0020',
+      ),
+    ),
+    1 => 
+    array (
+      'type' => 12,
+      'data' => 
+      array (
+        'srcStart' => 'U+0488',
+        'srcEnd' => 'U+0489',
+        'dest' => 'U+0020',
+      ),
+    ),
+  ),
+);
+
