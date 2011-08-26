@@ -65,9 +65,21 @@ class Backend
             throw new InvalidArgumentValue( 'type', $type );
 
         if ( $autoIncrement )
+        {
             $data['id'] = $this->getNextId( $type );
+        }
         else if ( !$data['id'] )
-          throw new Logic( 'create', '$autoIncrement is false but no id is provided in $data' );
+        {
+          throw new Logic( 'create', '$autoIncrement is false but no id is provided' );
+        }
+        else
+        {
+            foreach ( $this->data[$type] as $item )
+            {
+                if ( $item['id'] == $data['id'] )
+                    throw new Logic( 'create', 'provided id already exist' );
+            }
+        }
 
         $this->data[$type][] = $data;
         return $this->toValue( $type, $data );
@@ -89,7 +101,7 @@ class Backend
 
         $return = null;
         $found = false;
-        foreach ( $this->data[$type] as $key => $item )
+        foreach ( $this->data[$type] as $item )
         {
             if ( $item['id'] != $id )
                 continue;

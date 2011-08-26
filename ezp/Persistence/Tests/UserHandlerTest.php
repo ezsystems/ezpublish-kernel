@@ -70,6 +70,41 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
+     * Test create function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::create
+     * @expectedException \ezp\Base\Exception\Logic
+     */
+    public function testCreateMissingId()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = new User();
+        $obj->email = 'unit@ez.no';
+        $obj->hashAlgorithm = 2;
+        $obj->login = 'unit';
+        $obj->password = 'SomeRandomStuffShouldHaveBeenHash';
+        $handler->create( $obj );
+    }
+
+    /**
+     * Test create function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::create
+     * @expectedException \ezp\Base\Exception\Logic
+     */
+    public function testCreateExistingId()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = new User();
+        $obj->id = 14;
+        $obj->email = 'unit@ez.no';
+        $obj->hashAlgorithm = 2;
+        $obj->login = 'unit';
+        $obj->password = 'SomeRandomStuffShouldHaveBeenHash';
+        $handler->create( $obj );
+    }
+
+    /**
      * Test update function
      *
      * @covers ezp\Persistence\Storage\InMemory\UserHandler::update

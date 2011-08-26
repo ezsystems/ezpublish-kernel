@@ -57,6 +57,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param \ezp\Persistence\User $user
      * @return \ezp\Persistence\User
+     * @throws \ezp\Base\Exception\Logic If no id was provided or if it already exists
      */
     public function create( User $user )
     {
