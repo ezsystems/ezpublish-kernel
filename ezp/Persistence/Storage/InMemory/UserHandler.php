@@ -61,7 +61,7 @@ class UserHandler implements UserHandlerInterface
     public function create( User $user )
     {
         $userArr = (array) $user;
-        return $this->backend->create( 'User', $userArr );
+        return $this->backend->create( 'User', $userArr, false );
     }
 
     /**

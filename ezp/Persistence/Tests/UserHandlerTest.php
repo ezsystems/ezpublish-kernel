@@ -55,13 +55,14 @@ class UserHandlerTest extends HandlerTest
     {
         $handler = $this->repositoryHandler->userHandler();
         $obj = new User();
+        $obj->id = 1;
         $obj->email = 'unit@ez.no';
         $obj->hashAlgorithm = 2;
         $obj->login = 'unit';
         $obj->password = 'SomeRandomStuffShouldHaveBeenHash';
         $obj = $handler->create( $obj );
         $this->assertInstanceOf( 'ezp\\Persistence\\User', $obj );
-        $this->assertEquals( 15, $obj->id );
+        $this->assertEquals( 1, $obj->id );
         $this->assertEquals( 'unit@ez.no', $obj->email );
         $this->assertEquals( 2, $obj->hashAlgorithm );
         $this->assertEquals( 'unit', $obj->login );
