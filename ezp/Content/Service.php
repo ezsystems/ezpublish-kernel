@@ -190,6 +190,7 @@ class Service extends BaseService
             array(
                 "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
                 "contentType" => new Proxy( $this->repository->getContentTypeService(), $vo->typeId ),
+                "versions" => new Lazy( "ezp\\Content\\Version", $this, $content, "listVersions" ),
                 "properties" => $vo
             )
         );
