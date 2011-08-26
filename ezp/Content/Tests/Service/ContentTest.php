@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests;
+namespace ezp\Content\Tests\Service;
 use ezp\Content,
     ezp\Content\Location,
     ezp\Content\Type,
     ezp\Content\Version,
-    ezp\Content\Tests\BaseServiceTest,
+    ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Base\Exception\NotFound,
     ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content as ContentValue,
@@ -22,7 +22,7 @@ use ezp\Content,
 /**
  * Test case for Content service
  */
-class ServiceTest extends BaseServiceTest
+class ContentTest extends BaseServiceTest
 {
     /**
      * @var \ezp\Content\Service

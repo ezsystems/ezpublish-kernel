@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests;
+namespace ezp\Content\Tests\Service;
 use PHPUnit_Framework_TestCase,
     ezp\Base\Service\Container;
 
@@ -15,22 +15,17 @@ use PHPUnit_Framework_TestCase,
  * Base test case for tests on services
  * Initializes repository
  */
-abstract class BaseServiceTest extends PHPUnit_Framework_TestCase
+abstract class Base extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Base\Repository
      */
     protected $repository;
 
-    /**
-     * @var \ezp\Persistence\Repository\Handler
-     */
-    protected $repositoryHandler;
 
     protected function setUp()
     {
         parent::setUp();
-
         $this->repository = static::getRepository();
     }
 

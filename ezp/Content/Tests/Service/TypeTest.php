@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\Type;
-use ezp\Content\Tests\BaseServiceTest,
+namespace ezp\Content\Tests\Service;
+use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Content\Type\Service,
     ezp\Content\Type,
     ezp\Content\Type\FieldDefinition,
@@ -17,7 +17,7 @@ use ezp\Content\Tests\BaseServiceTest,
 /**
  * Test case for Type service
  */
-class ServiceTest extends BaseServiceTest
+class TypeTest extends BaseServiceTest
 {
     /**
      * @var \ezp\Content\Type\Service

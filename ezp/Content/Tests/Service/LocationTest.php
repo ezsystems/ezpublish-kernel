@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\Location;
-use ezp\Content\Tests\BaseServiceTest,
+namespace ezp\Content\Tests\Service;
+use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Content\Location\Service,
     ezp\Base\Exception\NotFound,
     \ReflectionObject,
@@ -21,7 +21,7 @@ use ezp\Content\Tests\BaseServiceTest,
 /**
  * Test case for Location service
  */
-class ServiceTest extends BaseServiceTest
+class LocationTest extends BaseServiceTest
 {
     /**
      * @var \ezp\Content\Location\Service

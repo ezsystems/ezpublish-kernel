@@ -18,19 +18,6 @@ use ezp\Content\Section,
 class SectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @return \ezp\Content\Section\Service
-     */
-    protected function getService()
-    {
-        $serviceContainer = new Container(
-            array(
-                '@repository_handler' => new \ezp\Persistence\Storage\InMemory\RepositoryHandler()
-            )
-        );
-        return $serviceContainer->getRepository()->getSectionService();
-    }
-
-    /**
      * Test a new class and default values on properties
      * @covers \ezp\Content\Section::__construct
      */
@@ -54,77 +41,11 @@ class SectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\PropertyPermission
-     * @FIXME Use "@covers"
+     * @covers \ezp\Content\Section::__set
      */
     public function testReadOnlyProperty()
     {
         $section = new Section();
         $section->id = 22;
-    }
-
-    /**
-     * Test service function for creating sections
-     * @covers \ezp\Content\Section\Service::create
-     */
-    public function testCreate()
-    {
-        $section = new Section();
-        $section->identifier = 'test';
-        $section->name = 'Test';
-
-        $service = $this->getService();
-        $newSection = $service->create( $section );
-        //self::assertEquals( $newSection->id, 2 );
-        self::assertEquals( $newSection->identifier, $section->identifier );
-        self::assertEquals( $newSection->name, $section->name );
-    }
-
-    /**
-     * Test service function for deleting sections
-     *
-     * @expectedException \ezp\Base\Exception\NotFound
-     * @covers \ezp\Content\Section\Service::delete
-     */
-    public function testDelete()
-    {
-        $section = new Section();
-        $section->identifier = 'test';
-        $section->name = 'Test';
-
-        $service = $this->getService();
-        $section = $service->create( $section );
-        $service->delete( $section->id );
-        $service->load( $section->id );
-    }
-
-    /**
-     * Test service function for loading sections
-     * @covers \ezp\Content\Section\Service::delete
-     */
-    public function testLoad()
-    {
-        $section = new Section();
-        $section->identifier = 'test';
-        $section->name = 'Test';
-
-        $service = $this->getService();
-        $section = $service->create( $section );
-        $newSection = $service->load( $section->id );
-        //self::assertEquals( $newSection->id, 2 );
-        self::assertEquals( $newSection->identifier, $section->identifier );
-        self::assertEquals( $newSection->name, $section->name );
-
-    }
-
-    /**
-     * Test service function for loading sections
-     *
-     * @expectedException \ezp\Base\Exception\NotFound
-     * @covers \ezp\Content\Section\Service::load
-     */
-    public function testLoadNotFound()
-    {
-        $service = $this->getService();
-        $service->load( 42 );
     }
 }
