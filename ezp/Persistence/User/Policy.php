@@ -17,9 +17,16 @@ class Policy extends ValueObject
     /**
      * ID of the policy
      *
-     * @var int|string
+     * @var mixed
      */
     public $id;
+
+    /**
+     * Foreign ID of the role
+     *
+     * @var mixed
+     */
+    public $roleId;
 
     /**
      * Name of module, associated with the Policy
