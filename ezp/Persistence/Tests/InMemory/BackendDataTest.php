@@ -621,6 +621,6 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     public function testDeleteNotFound()
     {
         $this->insertCustomContent();
-        $this->backend->delete( "Content", 42 );
+        $this->backend->delete( "Content", 999 );
     }
 }

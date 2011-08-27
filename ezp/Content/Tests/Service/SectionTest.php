@@ -80,6 +80,6 @@ class SectionTest extends BaseServiceTest
     public function testLoadNotFound()
     {
         $service = $this->repository->getSectionService();
-        $service->load( 42 );
+        $service->load( 999 );
     }
 }
