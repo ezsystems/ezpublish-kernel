@@ -149,6 +149,7 @@ class UserHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 'test', $obj->name );
         $this->assertEquals( 3, count( $obj->policies ) );
+        $this->assertEquals( $obj->id, $obj->policies[0]->roleId );
     }
 
     /**
@@ -276,6 +277,7 @@ class UserHandlerTest extends HandlerTest
         $this->assertEquals( 4, count( $obj->policies ) );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $obj->policies[3] );
         $this->assertEquals( 'Foo', $obj->policies[3]->module );
+        $this->assertEquals( $id, $obj->policies[3]->roleId );
         $this->assertEquals( 'Bar', $obj->policies[3]->function );
         $this->assertEquals( 1, count( $obj->policies[3]->limitations ) );
         $this->assertEquals( array( 'Test' ), $obj->policies[3]->limitations['Limit'] );

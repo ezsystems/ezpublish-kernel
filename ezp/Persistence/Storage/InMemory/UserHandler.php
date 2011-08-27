@@ -130,7 +130,7 @@ class UserHandler implements UserHandlerInterface
             array( 'id' => $roleId ),
             array( 'policies' => array(
                 'type' => 'User\\Policy',
-                'match' => array( '_roleId' => 'id' ) )
+                'match' => array( 'roleId' => 'id' ) )
             )
         );
         if ( !$list )
@@ -152,7 +152,7 @@ class UserHandler implements UserHandlerInterface
             array( 'groupIds' => $groupId ),
             array( 'policies' => array(
                 'type' => 'User\\Policy',
-                'match' => array( '_roleId' => 'id' ) )
+                'match' => array( 'roleId' => 'id' ) )
             )
         );
     }
@@ -176,7 +176,7 @@ class UserHandler implements UserHandlerInterface
     public function deleteRole( $roleId )
     {
         $this->backend->delete( 'User\\Role', $roleId );
-        $this->backend->deleteByMatch( 'User\\Policy', array( '_roleId' => $roleId ) );
+        $this->backend->deleteByMatch( 'User\\Policy', array( 'roleId' => $roleId ) );
     }
 
     /**
@@ -189,7 +189,7 @@ class UserHandler implements UserHandlerInterface
      */
     public function addPolicy( $roleId, Policy $policy )
     {
-        $policyArr = array( '_roleId' => $roleId ) + ( (array) $policy );
+        $policyArr = array( 'roleId' => $roleId ) + ( (array) $policy );
         return $this->backend->create( 'User\\Policy', $policyArr );
     }
 
@@ -203,7 +203,7 @@ class UserHandler implements UserHandlerInterface
      */
     public function removePolicy( $roleId, $policyId )
     {
-        $this->backend->deleteByMatch( 'User\\Policy', array( 'id' => $policyId, '_roleId' => $roleId ) );
+        $this->backend->deleteByMatch( 'User\\Policy', array( 'id' => $policyId, 'roleId' => $roleId ) );
     }
 
     /**
@@ -256,7 +256,7 @@ class UserHandler implements UserHandlerInterface
             array( 'groupIds' => $content->id ),
             array( 'policies' => array(
                 'type' => 'User\\Policy',
-                'match' => array( '_roleId' => 'id' ) )
+                'match' => array( 'roleId' => 'id' ) )
             )
         );
 
