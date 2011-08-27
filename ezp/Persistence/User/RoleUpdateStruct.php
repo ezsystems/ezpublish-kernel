@@ -15,17 +15,17 @@ use ezp\Persistence\ValueObject;
 class RoleUpdateStruct extends ValueObject
 {
     /**
-     * Name of the role
-     *
-     * @var string
-     */
-    public $name;
-
-    /**
      * ID of the user rule
      *
      * @var mixed
      */
     public $id;
+
+    /**
+     * Name of the role
+     *
+     * @var string
+     */
+    public $name;
 }
 ?>

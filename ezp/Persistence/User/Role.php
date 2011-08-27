@@ -15,18 +15,18 @@ use ezp\Persistence\ValueObject;
 class Role extends ValueObject
 {
     /**
-     * Name of the role
-     *
-     * @var string
-     */
-    public $name;
-
-    /**
      * ID of the user rule
      *
      * @var mixed
      */
     public $id;
+
+    /**
+     * Name of the role
+     *
+     * @var string
+     */
+    public $name;
 
     /**
      * Policies associated with the role
