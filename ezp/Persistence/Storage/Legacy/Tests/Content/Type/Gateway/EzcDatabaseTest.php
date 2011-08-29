@@ -211,6 +211,10 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::countGroupsForType
+     */
     public function testCountGroupsForType()
     {
         $this->insertDatabaseFixture(
