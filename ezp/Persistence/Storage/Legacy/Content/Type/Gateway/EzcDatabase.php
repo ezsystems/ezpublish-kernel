@@ -587,7 +587,6 @@ class EzcDatabase extends Gateway
      * @param FieldDefinition $fieldDefinition
      * @param StorageFieldDefinition $storageFieldDef
      * @return mixed Field definition ID
-     * @TODO Handle StorageFieldDefinition
      */
     public function insertFieldDefinition(
         $typeId, $status, FieldDefinition $fieldDefinition,
@@ -603,7 +602,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $status, null, \PDO::PARAM_INT )
         );
-        $this->setCommonFieldColumns( $q, $fieldDefinition );
+        $this->setCommonFieldColumns( $q, $fieldDefinition, $storageFieldDef );
 
         $stmt = $q->prepare();
         $stmt->execute();
@@ -618,7 +617,10 @@ class EzcDatabase extends Gateway
      * @param FieldDefinition $fieldDefinition
      * @return void
      */
-    protected function setCommonFieldColumns( \ezcQuery $q, FieldDefinition $fieldDefinition )
+    protected function setCommonFieldColumns(
+        \ezcQuery $q, FieldDefinition $fieldDefinition,
+        StorageFieldDefinition $storageFieldDef
+    )
     {
         $q->set(
             $this->dbHandler->quoteColumn( 'serialized_name_list' ),
@@ -647,16 +649,48 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'is_information_collector' ),
             $q->bindValue( ( $fieldDefinition->isInfoCollector ? 1 : 0 ), null, \PDO::PARAM_INT )
-        /*
-         * fieldTypeConstraints?
         )->set(
-            $this->dbHandler->quoteIdentifier( '' ),
-            $q->bindValue( $fieldDefinition-> )
-        */
+            $this->dbHandler->quoteColumn( 'data_float1' ),
+            $q->bindValue( $storageFieldDef->dataFloat1 )
         )->set(
-            // @todo: Correct?
+            $this->dbHandler->quoteColumn( 'data_float2' ),
+            $q->bindValue( $storageFieldDef->dataFloat2 )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_float3' ),
+            $q->bindValue( $storageFieldDef->dataFloat3 )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_float4' ),
+            $q->bindValue( $storageFieldDef->dataFloat4 )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_int1' ),
+            $q->bindValue( $storageFieldDef->dataInt1, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_int2' ),
+            $q->bindValue( $storageFieldDef->dataInt2, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_int3' ),
+            $q->bindValue( $storageFieldDef->dataInt3, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_int4' ),
+            $q->bindValue( $storageFieldDef->dataInt4, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_text1' ),
+            $q->bindValue( $storageFieldDef->dataText1 )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_text2' ),
+            $q->bindValue( $storageFieldDef->dataText2 )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_text3' ),
+            $q->bindValue( $storageFieldDef->dataText3 )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_text4' ),
+            $q->bindValue( $storageFieldDef->dataText4 )
+        )->set(
+            $this->dbHandler->quoteColumn( 'data_text5' ),
+            $q->bindValue( $storageFieldDef->dataText5 )
+        )->set(
             $this->dbHandler->quoteColumn( 'serialized_data_text' ),
-            $q->bindValue( serialize( $fieldDefinition->defaultValue ) )
+            $q->bindValue( serialize( $storageFieldDef->serializedDataText ) )
         );
     }
 
@@ -729,7 +763,7 @@ class EzcDatabase extends Gateway
                     $q->bindValue( $typeId, null, \PDO::PARAM_INT )
                 )
             );
-        $this->setCommonFieldColumns( $q, $fieldDefinition );
+        $this->setCommonFieldColumns( $q, $fieldDefinition, $storageFieldDef );
 
         $stmt = $q->prepare();
         $stmt->execute();

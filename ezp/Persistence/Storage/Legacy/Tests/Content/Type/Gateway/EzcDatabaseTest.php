@@ -540,7 +540,7 @@ class EzcDatabaseTest extends TestCase
                     'data_text3' => 'c',
                     'data_text4' => 'd',
                     'data_text5' => 'e',
-                    'serialized_data_text' => ''
+                    'serialized_data_text' => 'a:2:{i:0;s:3:"foo";i:1;s:3:"bar";}'
                 ),
             ),
             $this->getDatabaseHandler()
@@ -710,7 +710,7 @@ class EzcDatabaseTest extends TestCase
                     'data_text3' => 'c',
                     'data_text4' => 'd',
                     'data_text5' => 'e',
-                    'serialized_data_text' => ''
+                    'serialized_data_text' => 'a:2:{i:0;s:3:"foo";i:1;s:3:"bar";}'
                 ),
             ),
             $this->getDatabaseHandler()
