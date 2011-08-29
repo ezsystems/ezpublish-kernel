@@ -27,15 +27,32 @@ class Service extends BaseService
     /**
      * Loads a trashed location object from its $id
      * @param integer $id
-     * @return \ezp\Content\Location\Trash
-     * @throws \ezp\Base\Exception\NotFound if no location is available with $locationId
+     * @return \ezp\Content\Location\Trashed
+     * @throws \ezp\Base\Exception\NotFound if no trashed location is available with $id
      */
     public function load( $id )
     {
-        $trashedLocationVO = $this->handler->locationHandler()->load( $id );
-        if ( !$trashedLocationVO instanceof LocationValue )
+        $trashedLocationVO = $this->handler->trashHandler()->load( $id );
+        if ( !$trashedLocationVO instanceof TrashedLocationValue )
         {
             throw new NotFound( 'TrashedLocation', $id );
+        }
+
+        return $this->buildDomainObject( $trashedLocationVO );
+    }
+
+    /**
+     * Loads a trashed location object from original $locationId
+     * @param integer $locationId
+     * @return \ezp\Content\Location\Trashed
+     * @throws \ezp\Base\Exception\NotFound if no trashed location is available with $locationId
+     */
+    public function loadByLocationId( $locationId )
+    {
+        $trashedLocationVO = $this->handler->trashHandler()->loadFromLocationId( $locationId );
+        if ( !$trashedLocationVO instanceof TrashedLocationValue )
+        {
+            throw new NotFound( 'TrashedLocation', $locationId );
         }
 
         return $this->buildDomainObject( $trashedLocationVO );
@@ -45,17 +62,43 @@ class Service extends BaseService
      * Sends $location and all its children to trash and returns trashed location object
      * Content is left untouched.
      * @param \ezp\Content\Location $location
-     * @return \ezp\Content\TrashedLocation
+     * @return \ezp\Content\Location\Trashed
+     * @todo Refresh $location (with an Identity map ?)
      */
     public function trash( Location $location )
     {
-        $trashedLocationVo = $this->handler->locationHandler()->trashSubtree( $location->id );
-        $this->refreshDomainObject( $location );
+        $trashedLocationVo = $this->handler->trashHandler()->trashSubtree( $location->id );
         return $this->buildDomainObject( $trashedLocationVo );
     }
 
+    /**
+     * Restores $location at its original place if possible.
+     * Will throw an exception if original place is not available any more.
+     *
+     * @param \ezp\Content\LocationLocation $location
+     * @throws \ezp\Base\Exception\Logic
+     */
     public function untrash( Location $location )
     {
+        throw new \RuntimeException( 'Not implemented yet' );
+    }
+
+    /**
+     * Empties trash.
+     * All location/content contained in the trash will be removed
+     */
+    public function emptyTrash()
+    {
+        $this->handler->trashHandler()->emptyTrash();
+    }
+
+    /**
+     * Deletes $trashedLocation from trash
+     * Content will be removed
+     */
+    public function emptyOne( Trashed $trashedLocation )
+    {
+        $this->handler->trashHandler()->emptyOne( $trashedLocation->id );
     }
 
     /**

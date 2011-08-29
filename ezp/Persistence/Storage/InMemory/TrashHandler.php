@@ -53,7 +53,10 @@ class TrashHandler implements TrashHandlerInterface
      */
     public function loadFromLocationId( $locationId )
     {
-        return $this->backend->find( 'Content\\Location\\Trashed', array( 'locationId' => $locationId ) );
+        $aTrashed = $this->backend->find( 'Content\\Location\\Trashed', array( 'locationId' => $locationId ) );
+        if ( empty( $aTrashed ) )
+            return;
+        return $aTrashed[0];
     }
 
     /**
@@ -104,7 +107,7 @@ class TrashHandler implements TrashHandlerInterface
         $params['locationId'] = $locationId;
         // Be sure to not overlap id
         unset( $params['id'] );
-        return $this->backend->create( 'Content\\TrashedLocation', $params );
+        return $this->backend->create( 'Content\\Location\\Trashed', $params );
     }
 
     /**
@@ -123,6 +126,30 @@ class TrashHandler implements TrashHandlerInterface
     public function listTrashed( $offset = 0, $limit = null )
     {
         throw new \RuntimeException( 'Not implemented yet' );
+    }
+
+    /**
+     * @see ezp\Persistence\Content\Location\Trash\Handler
+     * @todo
+     */
+    public function emptyTrash()
+    {
+        $trashedIds = array();
+        foreach ( $this->backend->find( 'Content\\Location\\Trashed' ) as $trashed )
+        {
+            $trashedIds[] = $trashed->id;
+        }
+
+        if ( !empty( $trashedIds ) )
+            $this->backend->deleteByMatch( 'Content\\Location\\Trashed', array( 'id' => $trashedIds ) );
+    }
+
+    /**
+     * @see ezp\Persistence\Content\Location\Trash\Handler
+     */
+    public function emptyOne( $trashedLocationId )
+    {
+        $this->backend->delete( 'Content\\Location\\Trashed' , $trashedLocationId );
     }
 
     /**

@@ -68,4 +68,18 @@ interface Handler
      * @return \ezp\Persistence\Content\Location\Trashed[]
      */
     public function listTrashed( $offset = 0, $limit = null );
+
+    /**
+     * Empties the trash
+     * Everything contained in the trash must be removed
+     */
+    public function emptyTrash();
+
+    /**
+     * Removes a trashed location identified by $trashedLocationId from trash
+     * Associated content has to be deleted
+     *
+     * @param int $trashedLocationId
+     */
+    public function emptyOne( $trashedLocationId );
 }
