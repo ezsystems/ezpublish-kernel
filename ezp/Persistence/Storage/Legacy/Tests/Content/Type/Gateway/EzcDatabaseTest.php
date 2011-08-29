@@ -372,6 +372,11 @@ class EzcDatabaseTest extends TestCase
          */
     }
 
+    /**
+     * Returns the expected data from creating a type.
+     *
+     * @return string[][]
+     */
     public static function getTypeCreationExpectations()
     {
         return array(
@@ -420,6 +425,11 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * Returns the data expected to be inserted in ezcontentclass_name.
+     *
+     * @return string[][]
+     */
     public static function getTypeCreationContentClassNameExpectations()
     {
         return array(
