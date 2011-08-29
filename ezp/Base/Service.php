@@ -109,7 +109,7 @@ abstract class Service
                 break;
             case 'creatorId':
             case 'modifierId':
-                $struct->$property = 14;// @todo Use user object when that is made part of repository/services
+                $struct->$property = $this->repository->getCurrentUser()->id;
                 break;
             default:
                 return false;

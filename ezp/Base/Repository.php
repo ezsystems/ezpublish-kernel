@@ -10,7 +10,12 @@
 namespace ezp\Base;
 use ezp\Persistence\Repository\Handler,
     RuntimeException,
-    DomainException;
+    DomainException,
+    ezp\Base\Configuration,
+    ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Proxy,
+    ezp\Base\ProxyInterface,
+    ezp\User;
 
 /**
  * Repository class
@@ -28,7 +33,7 @@ class Repository
     /**
      * Currently logged in user object for permission purposes
      *
-     * @var \ezp\User
+     * @var \ezp\User|\ezp\Base\ProxyInterface
      */
     protected $user;
 
@@ -45,11 +50,46 @@ class Repository
      * Construct repository object with provided storage engine
      *
      * @param \ezp\Persistence\Repository\Handler $handler
+     * @param \ezp\User|null $user
      */
-    public function __construct( Handler $handler/*, ezp\User $user*/ )
+    public function __construct( Handler $handler, User $user = null )
     {
         $this->handler = $handler;
-        //$this->user = $user;
+
+        if ( $user !== null )
+            $this->setCurrentUser( $user );
+        else
+            $this->user = new Proxy( $this->getUserService(),
+                                     Configuration::getInstance( 'site' )->get( 'UserSettings', 'AnonymousUserID', 10 )  );
+
+    }
+
+    /**
+     * Get currently logged in user
+     *
+     * @return \ezp\User
+     */
+    function getCurrentUser()
+    {
+        if ( $this->user instanceof ProxyInterface )
+            $this->user = $this->user->load();
+
+        return $this->user;
+    }
+
+    /**
+     * Set currently logged in user
+     *
+     * @param \ezp\User $user
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If provided user does not have a valid id value
+     * @todo throw something if $user is not persisted to backend (not stored)
+     */
+    function setCurrentUser( User $user )
+    {
+        if ( !$user->id )
+            throw new InvalidArgumentValue( '$user->id', $user->id );
+
+        $this->user = $user;
     }
 
     /**
