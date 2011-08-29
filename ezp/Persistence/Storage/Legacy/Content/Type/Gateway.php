@@ -12,7 +12,8 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
 
 /**
  * Base class for content type gateways.
@@ -117,9 +118,13 @@ abstract class Gateway
      * @param mixed $typeId
      * @param int $version
      * @param FieldDefinition $fieldDefinition
+     * @param StorageFieldDefinition $storageFieldDef
      * @return mixed Field definition ID
      */
-    abstract public function insertFieldDefinition( $typeId, $version, FieldDefinition $fieldDefinition );
+    abstract public function insertFieldDefinition(
+        $typeId, $version, FieldDefinition $fieldDefinition,
+        StorageFieldDefinition $storageFieldDef
+    );
 
     /**
      * Deletes a field definition.
@@ -137,9 +142,13 @@ abstract class Gateway
      * @param mixed $typeId
      * @param int $version
      * @param FieldDefinition $fieldDefinition
+     * @param StorageFieldDefinition $storageFieldDef
      * @return void
      */
-    abstract public function updateFieldDefinition( $typeId, $version, FieldDefinition $fieldDefinition );
+    abstract public function updateFieldDefinition(
+        $typeId, $version, FieldDefinition $fieldDefinition,
+        StorageFieldDefinition $storageFieldDef
+    );
 
     /**
      * Update a type with $updateStruct.

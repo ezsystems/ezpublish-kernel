@@ -198,7 +198,7 @@ class RepositoryHandler implements HandlerInterface
         {
             $this->contentTypeHandler = new Type\Handler(
                 new Type\Gateway\EzcDatabase( $this->dbHandler ),
-                new Type\Mapper()
+                new Type\Mapper( $this->getFieldValueConverterRegistry() )
             );
         }
         return $this->contentTypeHandler;

@@ -16,7 +16,8 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
 
 /**
  * Test case for ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase.
@@ -506,8 +507,9 @@ class EzcDatabaseTest extends TestCase
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
 
         $field = $this->getFieldDefinitionFixture();
+        $storageField = $this->getStorageFieldDefinitionFixture();
 
-        $gateway->insertFieldDefinition( 23, 1, $field );
+        $gateway->insertFieldDefinition( 23, 1, $field, $storageField );
 
         $this->assertQueryResult(
             array(
@@ -524,6 +526,21 @@ class EzcDatabaseTest extends TestCase
                     'is_information_collector' => '1',
                     'serialized_data_text' => 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}',
                     'version' => '1',
+
+                    'data_float1' => '0.1',
+                    'data_float2' => '0.2',
+                    'data_float3' => '0.3',
+                    'data_float4' => '0.4',
+                    'data_int1' => '1',
+                    'data_int2' => '2',
+                    'data_int3' => '3',
+                    'data_int4' => '4',
+                    'data_text1' => 'a',
+                    'data_text2' => 'b',
+                    'data_text3' => 'c',
+                    'data_text4' => 'd',
+                    'data_text5' => 'e',
+                    'serialized_data_text' => ''
                 ),
             ),
             $this->getDatabaseHandler()
@@ -540,7 +557,22 @@ class EzcDatabaseTest extends TestCase
                     'is_required',
                     'is_information_collector',
                     'serialized_data_text',
-                    'version'
+                    'version',
+
+                    'data_float1',
+                    'data_float2',
+                    'data_float3',
+                    'data_float4',
+                    'data_int1',
+                    'data_int2',
+                    'data_int3',
+                    'data_int4',
+                    'data_text1',
+                    'data_text2',
+                    'data_text3',
+                    'data_text4',
+                    'data_text5',
+                    'serialized_data_text'
                 )
                 ->from( 'ezcontentclass_attribute' ),
             'FieldDefinition not inserted correctly'
@@ -581,6 +613,38 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * Returns a StorageFieldDefinition fixture
+     *
+     * @return StorageFieldDefinition
+     */
+    protected function getStorageFieldDefinitionFixture()
+    {
+        $fieldDef = new StorageFieldDefinition();
+
+        $fieldDef->dataFloat1 = 0.1;
+        $fieldDef->dataFloat2 = 0.2;
+        $fieldDef->dataFloat3 = 0.3;
+        $fieldDef->dataFloat4 = 0.4;
+
+        $fieldDef->dataInt1 = 1;
+        $fieldDef->dataInt2 = 2;
+        $fieldDef->dataInt3 = 3;
+        $fieldDef->dataInt4 = 4;
+
+        $fieldDef->dataText1 = 'a';
+        $fieldDef->dataText2 = 'b';
+        $fieldDef->dataText3 = 'c';
+        $fieldDef->dataText4 = 'd';
+        $fieldDef->dataText5 = 'e';
+
+        $fieldDef->serializedDataText = array(
+            'foo', 'bar'
+        );
+
+        return $fieldDef;
+    }
+
+    /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinition
      */
@@ -615,9 +679,10 @@ class EzcDatabaseTest extends TestCase
         );
         $fieldDefinitionFixture = $this->getFieldDefinitionFixture();
         $fieldDefinitionFixture->id = 160;
+        $storageFieldDefinitionFixture = $this->getStorageFieldDefinitionFixture();
 
         $gateway = new EzcDatabase( $this->getDatabaseHandler() );
-        $gateway->updateFieldDefinition( 2, 0, $fieldDefinitionFixture );
+        $gateway->updateFieldDefinition( 2, 0, $fieldDefinitionFixture, $storageFieldDefinitionFixture );
 
         $this->assertQueryResult(
             array(
@@ -631,6 +696,21 @@ class EzcDatabaseTest extends TestCase
                     'is_information_collector' => '1',
                     'placement' => '4',
                     'serialized_description_list' => 'a:2:{s:16:"always-available";s:6:"eng-GB";s:6:"eng-GB";s:16:"Some description";}',
+
+                    'data_float1' => '0.1',
+                    'data_float2' => '0.2',
+                    'data_float3' => '0.3',
+                    'data_float4' => '0.4',
+                    'data_int1' => '1',
+                    'data_int2' => '2',
+                    'data_int3' => '3',
+                    'data_int4' => '4',
+                    'data_text1' => 'a',
+                    'data_text2' => 'b',
+                    'data_text3' => 'c',
+                    'data_text4' => 'd',
+                    'data_text5' => 'e',
+                    'serialized_data_text' => ''
                 ),
             ),
             $this->getDatabaseHandler()
@@ -643,7 +723,22 @@ class EzcDatabaseTest extends TestCase
                     'identifier',
                     'is_information_collector',
                     'placement',
-                    'serialized_description_list'
+                    'serialized_description_list',
+
+                    'data_float1',
+                    'data_float2',
+                    'data_float3',
+                    'data_float4',
+                    'data_int1',
+                    'data_int2',
+                    'data_int3',
+                    'data_int4',
+                    'data_text1',
+                    'data_text2',
+                    'data_text3',
+                    'data_text4',
+                    'data_text5',
+                    'serialized_data_text'
                 )
                 ->from( 'ezcontentclass_attribute' )
                 ->where( 'id = 160' ),

@@ -127,7 +127,6 @@ class Handler implements BaseContentTypeHandler
      * @param int $contentTypeId
      * @param int $status
      * @todo Use constant for $status?
-     * @todo Handle field definition conversion.
      */
     public function load( $contentTypeId, $status = 0 )
     {
@@ -144,7 +143,6 @@ class Handler implements BaseContentTypeHandler
      * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
      * @return Type
      * @todo Maintain contentclass_name
-     * @todo Handle field definition conversion.
      */
     public function create( CreateStruct $createStruct )
     {
@@ -166,10 +164,12 @@ class Handler implements BaseContentTypeHandler
         }
         foreach ( $contentType->fieldDefinitions as $fieldDef )
         {
+            $storageFieldDef = $this->mapper->toStorageFieldDefinition( $fieldDef );
             $fieldDef->id = $this->contentTypeGateway->insertFieldDefinition(
                 $contentType->id,
                 $contentType->status,
-                $fieldDef
+                $fieldDef,
+                $storageFieldDef
             );
         }
         return $contentType;
@@ -181,7 +181,6 @@ class Handler implements BaseContentTypeHandler
      * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
      * @return Type
      * @todo Maintain contentclass_name
-     * @todo Handle field definition conversion.
      */
     public function update( $typeId, $status, UpdateStruct $contentType )
     {
@@ -316,8 +315,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
+        $storageFieldDef = $this->mapper->toStorageFieldDefinition( $fieldDefinition );
         $fieldDefinition->id = $this->contentTypeGateway->insertFieldDefinition(
-            $contentTypeId, $status, $fieldDefinition
+            $contentTypeId, $status, $fieldDefinition, $storageFieldDef
         );
     }
 
@@ -355,8 +355,9 @@ class Handler implements BaseContentTypeHandler
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
+        $storageFieldDef = $this->mapper->toStorageFieldDefinition( $fieldDefinition );
         $this->contentTypeGateway->updateFieldDefinition(
-            $contentTypeId, $status, $fieldDefinition
+            $contentTypeId, $status, $fieldDefinition, $storageFieldDef
         );
     }
 

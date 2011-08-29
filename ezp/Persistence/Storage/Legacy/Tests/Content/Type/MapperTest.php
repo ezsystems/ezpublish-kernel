@@ -31,7 +31,7 @@ class MapperTest extends TestCase
     {
         $createStruct = $this->getGroupCreateStructFixture();
 
-        $mapper = new Mapper();
+        $mapper = new Mapper( $this->getConverterRegistryMock() );
 
         $group = $mapper->createGroupFromCreateStruct( $createStruct );
 
@@ -91,7 +91,7 @@ class MapperTest extends TestCase
     {
         $struct = $this->getContenTypeCreateStructFixture();
 
-        $mapper = new Mapper();
+        $mapper = new Mapper( $this->getConverterRegistryMock() );
         $type = $mapper->createTypeFromCreateStruct( $struct );
 
         foreach ( $struct as $propName => $propVal )
@@ -156,7 +156,7 @@ class MapperTest extends TestCase
     {
         $type = $this->getContenTypeFixture();
 
-        $mapper = new Mapper();
+        $mapper = new Mapper( $this->getConverterRegistryMock() );
         $struct = $mapper->createCreateStructFromType( $type );
 
         // Iterate through struct, since it has fewer props
@@ -225,7 +225,7 @@ class MapperTest extends TestCase
     {
         $rows = $this->getLoadGroupFixture();
 
-        $mapper = new Mapper();
+        $mapper = new Mapper( $this->getConverterRegistryMock() );
         $groups = $mapper->extractGroupsFromRows( $rows );
 
         $groupFixture = new Group();
@@ -252,7 +252,7 @@ class MapperTest extends TestCase
     {
         $rows = $this->getLoadTypeFixture();
 
-        $mapper = new Mapper();
+        $mapper = $this->getNonConvertingMapper();
         $types = $mapper->extractTypesFromRows( $rows );
 
         $this->assertEquals(
@@ -305,6 +305,48 @@ class MapperTest extends TestCase
                 'isRequired' => false,
             ),
             $types[0]->fieldDefinitions[2]
+        );
+    }
+
+    /**
+     * Returns a Mapper with conversion methods mocked
+     *
+     * @return Mapper
+     */
+    protected function getNonConvertingMapper()
+    {
+        $mapper = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Mapper',
+            array( 'toFieldDefinition' ),
+            array( $this->getConverterRegistryMock() )
+        );
+        // Dedicatedly tested test
+        $mapper->expects( $this->atLeastOnce() )
+            ->method( 'toFieldDefinition' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
+                )
+            )->will(
+                $this->returnCallback(
+                    function ()
+                    {
+                        return new FieldDefinition();
+                    }
+                )
+            );
+        return $mapper;
+    }
+
+    /**
+     * Returns a converter registry mock
+     *
+     * @return ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     */
+    protected function getConverterRegistryMock()
+    {
+        return $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
         );
     }
 

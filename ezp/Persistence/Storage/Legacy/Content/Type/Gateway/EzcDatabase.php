@@ -14,7 +14,8 @@ use ezp\Persistence\Storage\Legacy\Content\Type\Gateway,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct;
+    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
 
 /**
  * Zeta Component Database based content type gateway.
@@ -582,12 +583,16 @@ class EzcDatabase extends Gateway
      * Inserts a $fieldDefinition for $typeId.
      *
      * @param mixed $typeId
+     * @param int $status
      * @param FieldDefinition $fieldDefinition
+     * @param StorageFieldDefinition $storageFieldDef
      * @return mixed Field definition ID
-     * @todo What about fieldTypeConstraints and defaultValue?
-     * @todo PDO->lastInsertId() might require a seq name (Oracle?).
+     * @TODO Handle StorageFieldDefinition
      */
-    public function insertFieldDefinition( $typeId, $status, FieldDefinition $fieldDefinition )
+    public function insertFieldDefinition(
+        $typeId, $status, FieldDefinition $fieldDefinition,
+        StorageFieldDefinition $storageFieldDef
+    )
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass_attribute' ) );
@@ -696,9 +701,14 @@ class EzcDatabase extends Gateway
      * @param mixed $typeId
      * @param int $status
      * @param FieldDefinition $fieldDefinition
+     * @param StorageFieldDefinition $storageFieldDef
      * @return void
+     * @TODO Handle StorageFieldDefinition
      */
-    public function updateFieldDefinition( $typeId, $status, FieldDefinition $fieldDefinition )
+    public function updateFieldDefinition(
+        $typeId, $status, FieldDefinition $fieldDefinition,
+        StorageFieldDefinition $storageFieldDef
+    )
     {
         $q = $this->dbHandler->createUpdateQuery();
         $q

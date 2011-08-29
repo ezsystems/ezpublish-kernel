@@ -13,7 +13,9 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
+    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry as ConverterRegistry;
 
 /**
  * Mapper for Content Type Handler.
@@ -22,6 +24,23 @@ use ezp\Persistence\Content\Type,
  */
 class Mapper
 {
+    /**
+     * Converter registry
+     *
+     * @var ezp\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     */
+    protected $converterRegistry;
+
+    /**
+     * Creates a new content type mapper
+     *
+     * @param ConverterRegistry $converterRegistry
+     */
+    public function __construct( ConverterRegistry $converterRegistry )
+    {
+        $this->converterRegistry = $converterRegistry;
+    }
+
     /**
      * Creates a Group from its create struct.
      *
@@ -150,7 +169,9 @@ class Mapper
      */
     protected function extractFieldFromRow( array $row )
     {
-        $field = new FieldDefinition();
+        $storageFieldDef = $this->extractStorageFieldFromRow( $row );
+
+        $field = $this->toFieldDefinition( $storageFieldDef );
 
         $field->id = (int)$row['ezcontentclass_attribute_id'];
         $field->name = unserialize( $row['ezcontentclass_attribute_serialized_name_list'] );
@@ -161,11 +182,37 @@ class Mapper
         $field->isTranslatable = ( $row['ezcontentclass_attribute_can_translate'] == 1 );
         $field->isRequired = $row['ezcontentclass_attribute_is_required'] == 1;
         $field->isInfoCollector = $row['ezcontentclass_attribute_is_information_collector'] == 1;
-        // $field->fieldTypeConstraint ?
         $field->defaultValue = unserialize( $row['ezcontentclass_attribute_serialized_data_text'] );
-        // Correct ^?
 
         return $field;
+    }
+
+    /**
+     * Extracts a StorageFieldDefinition from $row
+     *
+     * @param array $row
+     * @return StorageFieldDefinition
+     */
+    protected function extractStorageFieldFromRow( array $row )
+    {
+        $storageFieldDef = new StorageFieldDefinition();
+
+        $storageFieldDef->dataFloat1 = (float) $row['ezcontentclass_attribute_data_float1'];
+        $storageFieldDef->dataFloat2 = (float) $row['ezcontentclass_attribute_data_float2'];
+        $storageFieldDef->dataFloat3 = (float) $row['ezcontentclass_attribute_data_float3'];
+        $storageFieldDef->dataFloat4 = (float) $row['ezcontentclass_attribute_data_float4'];
+        $storageFieldDef->dataInt1 = (int) $row['ezcontentclass_attribute_data_int1'];
+        $storageFieldDef->dataInt2 = (int) $row['ezcontentclass_attribute_data_int2'];
+        $storageFieldDef->dataInt3 = (int) $row['ezcontentclass_attribute_data_int3'];
+        $storageFieldDef->dataInt4 = (int) $row['ezcontentclass_attribute_data_int4'];
+        $storageFieldDef->dataText1 = $row['ezcontentclass_attribute_data_text1'];
+        $storageFieldDef->dataText2 = $row['ezcontentclass_attribute_data_text2'];
+        $storageFieldDef->dataText3 = $row['ezcontentclass_attribute_data_text3'];
+        $storageFieldDef->dataText4 = $row['ezcontentclass_attribute_data_text4'];
+        $storageFieldDef->dataText5 = $row['ezcontentclass_attribute_data_text5'];
+        $storageFieldDef->serializedDataText = $row['ezcontentclass_attribute_serialized_data_text'];
+
+        return $storageFieldDef;
     }
 
     /**
@@ -225,5 +272,27 @@ class Mapper
         $createStruct->fieldDefinitions = $type->fieldDefinitions;
 
         return $createStruct;
+    }
+
+    /**
+     * Maps $fieldDef to the legacy storage specific StorageFieldDefinition
+     *
+     * @param FieldDefinition $fieldDef
+     * @return StorageFieldDefinition
+     */
+    public function toStorageFieldDefinition( FieldDefinition $fieldDef )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
+     * Maps a FieldDefinition from the given $storageFieldDef
+     *
+     * @param StorageFieldDefinition $storageFieldDef
+     * @return FieldDefinition
+     */
+    public function toFieldDefinition( StorageFieldDefinition $storageFieldDef )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
     }
 }
