@@ -10,6 +10,7 @@
 namespace ezp\Content;
 use ezp\Base\Model,
     ezp\Base\Collection\Type as TypeCollection,
+    ezp\Base\Proxy,
     ezp\Content,
     ezp\Persistence\Content\Location as LocationValue,
     ezp\Base\Exception\InvalidArgumentType;
@@ -92,27 +93,27 @@ class Location extends Model
 
     /**
      * Content for current location
-     * @var \ezp\Content|\ezp\Content\Proxy
+     * @var \ezp\Content|\ezp\Base\Proxy
      */
     protected $content;
 
     /**
      * Current location's parent
-     * @var \ezp\Content\Location|\ezp\Content\Proxy
+     * @var \ezp\Content\Location|\ezp\Base\Proxy
      */
     protected $parent;
 
     /**
      * Setups empty children collection and attaches $content
      *
-     * @param \ezp\Content|\ezp\Content\Proxy $content
+     * @param \ezp\Content|\ezp\Base\Proxy $content
      * @throws \ezp\Base\Exception\InvalidArgumentType
      */
     public function __construct( $content )
     {
         if ( !$content instanceof Content && !$content instanceof Proxy )
         {
-            throw new InvalidArgumentType( '$content', 'ezp\\Content, ezp\\Content\\Proxy', $content );
+            throw new InvalidArgumentType( '$content', 'ezp\\Content, ezp\\Base\\Proxy', $content );
         }
 
         $this->properties = new LocationValue;

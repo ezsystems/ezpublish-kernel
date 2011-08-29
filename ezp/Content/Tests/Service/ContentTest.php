@@ -60,13 +60,13 @@ class ContentTest extends BaseServiceTest
         $refSection = $refDo->getProperty( "section" );
         $refSection->setAccessible( true );
         $section = $refSection->getValue( $do );
-        self::assertInstanceOf( "ezp\\Content\\Proxy", $section, "Section must be a valid Proxy object after init by service" );
+        self::assertInstanceOf( "ezp\\Base\\Proxy", $section, "Section must be a valid Proxy object after init by service" );
         self::assertEquals( $vo->sectionId, $section->id );
 
         $refContentType = $refDo->getProperty( "contentType" );
         $refContentType->setAccessible( true );
         $contentType = $refContentType->getValue( $do );
-        self::assertInstanceOf( "ezp\\Content\\Proxy", $contentType, "Content Type must be a valid Proxy object after init by service" );
+        self::assertInstanceOf( "ezp\\Base\\Proxy", $contentType, "Content Type must be a valid Proxy object after init by service" );
         self::assertEquals( $vo->typeId, $contentType->id );
 
         self::assertEquals( 14, $do->ownerId, "Owner ID must be the one of Administrator" );

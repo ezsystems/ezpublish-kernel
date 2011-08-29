@@ -15,7 +15,7 @@ use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Content,
     ezp\Content\Type,
     ezp\Content\Location,
-    ezp\Content\Proxy,
+    ezp\Base\Proxy,
     ezp\Content\Section;
 
 /**
@@ -165,13 +165,13 @@ class LocationTest extends BaseServiceTest
         $refParent = $refDo->getProperty( 'parent' );
         $refParent->setAccessible( true );
         $parent = $refParent->getValue( $do );
-        self::assertInstanceOf( 'ezp\\Content\\Proxy', $parent, 'Parent location must be a valid Proxy object after init by service' );
+        self::assertInstanceOf( 'ezp\\Base\\Proxy', $parent, 'Parent location must be a valid Proxy object after init by service' );
         self::assertEquals( $vo->parentId, $parent->id );
 
         $refContent = $refDo->getProperty( 'content' );
         $refContent->setAccessible( true );
         $content = $refContent->getValue( $do );
-        self::assertInstanceOf( 'ezp\\Content\\Proxy', $content, 'Content must be a valid Proxy object after init by service' );
+        self::assertInstanceOf( 'ezp\\Base\\Proxy', $content, 'Content must be a valid Proxy object after init by service' );
         self::assertEquals( $vo->contentId, $content->id );
 
         self::assertEquals( $do->sortField, $vo->sortField );
