@@ -516,7 +516,7 @@ class EzcDatabaseTest extends TestCase
                     'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:11:"Description";}',
                     'serialized_description_list' => 'a:2:{s:16:"always-available";s:6:"eng-GB";s:6:"eng-GB";s:16:"Some description";}',
                     'identifier' => 'description',
-                    'category' => '',
+                    'category' => 'meta',
                     'placement' => '4',
                     'data_type_string' => 'ezxmltext',
                     'can_translate' => '1',
@@ -565,7 +565,7 @@ class EzcDatabaseTest extends TestCase
             'eng-GB' => 'Some description',
         );
         $field->identifier = 'description';
-        $field->fieldGroup = '';
+        $field->fieldGroup = 'meta';
         $field->position = 4;
         $field->fieldType = 'ezxmltext';
         $field->isTranslatable = true;
@@ -623,7 +623,7 @@ class EzcDatabaseTest extends TestCase
             array(
                 // "random" sample
                 array(
-                    'category' => '',
+                    'category' => 'meta',
                     'contentclass_id' => '2',
                     'version' => '0',
                     'data_type_string' => 'ezxmltext',
