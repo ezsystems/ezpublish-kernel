@@ -320,6 +320,10 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadTypesDataForGroup
+     */
     public function testLoadTypesDataForGroup()
     {
         $this->insertDatabaseFixture(
