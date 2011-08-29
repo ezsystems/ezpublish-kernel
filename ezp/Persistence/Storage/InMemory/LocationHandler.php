@@ -297,20 +297,6 @@ class LocationHandler implements LocationHandlerInterface
     /**
      * @see ezp\Persistence\Content\Location\Handler
      */
-    public function trashSubtree( $locationId )
-    {
-    }
-
-    /**
-     * @see ezp\Persistence\Content\Location\Handler
-     */
-    public function untrashLocation( $locationId, $newParentId = null )
-    {
-    }
-
-    /**
-     * @see ezp\Persistence\Content\Location\Handler
-     */
     public function setSectionForSubtree( $locationId, $sectionId )
     {
         $location = $this->load( $locationId );
@@ -382,7 +368,7 @@ class LocationHandler implements LocationHandlerInterface
      *
      * @param mixed $locationId
      */
-    private function delete( $locationId )
+    public function delete( $locationId )
     {
         $location = $this->load( $locationId );
         $this->backend->delete( 'Content\\Location', $locationId );

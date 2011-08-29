@@ -124,31 +124,6 @@ interface Handler
     public function removeSubtree( $locationId );
 
     /**
-     * Sends a subtree to the trash
-     *
-     * Moves all locations in the subtree to the Trash. The associated content
-     * objects are left untouched.
-     *
-     * @param mixed $locationId
-     * @return boolean
-     */
-    public function trashSubtree( $locationId );
-
-    /**
-     * Returns a trashed location to normal state.
-     *
-     * Recreates the originally trashed location in the new position. If no new
-     * position has been specified, it will be tried to re-create the location
-     * at the old position. If this is not possible ( because the old location
-     * does not exist any more) and exception is thrown.
-     *
-     * @param mixed $locationId
-     * @param mixed $newParentId
-     * @return boolean
-     */
-    public function untrashLocation( $locationId, $newParentId = null );
-
-    /**
      * Set section on all content objects in the subtree.
      * Only main locations will be updated
      *

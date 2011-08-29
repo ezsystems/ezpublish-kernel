@@ -113,7 +113,7 @@ class TrashHandler implements TrashHandlerInterface
      */
     public function untrashLocation( $locationId, $newParentId = null )
     {
-        throw new \RuntimeException( '@TODO' );
+        throw new \RuntimeException( 'Not implemented yet' );
     }
 
     /**
@@ -122,7 +122,7 @@ class TrashHandler implements TrashHandlerInterface
      */
     public function listTrashed( $offset = 0, $limit = null )
     {
-        throw new \RuntimeException( '@TODO' );
+        throw new \RuntimeException( 'Not implemented yet' );
     }
 
     /**
