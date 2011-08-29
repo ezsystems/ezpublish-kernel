@@ -375,14 +375,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $mapperMock->expects( $this->exactly( 2 ) )
             ->method( 'toStorageFieldDefinition' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type\\FieldDefinition' )
-            )->will(
-                $this->returnCallback(
-                    function ()
-                    {
-                        return new StorageFieldDefinition();
-                    }
-                )
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type\\FieldDefinition' ),
+                $this->isInstanceOf( 'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition' )
             );
 
         $handler = new Handler( $gatewayMock, $mapperMock );
@@ -737,9 +731,10 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->isInstanceOf(
                     'ezp\\Persistence\\Content\\Type\\FieldDefinition'
+                ),
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
                 )
-            )->will(
-                $this->returnValue( new StorageFieldDefinition() )
             );
 
         $gatewayMock = $this->getGatewayMock();
@@ -804,9 +799,10 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->isInstanceOf(
                     'ezp\\Persistence\\Content\\Type\\FieldDefinition'
+                ),
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
                 )
-            )->will(
-                $this->returnValue( new StorageFieldDefinition() )
             );
 
         $gatewayMock = $this->getGatewayMock();

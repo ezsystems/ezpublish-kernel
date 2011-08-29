@@ -171,7 +171,7 @@ class Mapper
     {
         $storageFieldDef = $this->extractStorageFieldFromRow( $row );
 
-        $field = $this->toFieldDefinition( $storageFieldDef );
+        $field = new FieldDefinition();
 
         $field->id = (int)$row['ezcontentclass_attribute_id'];
         $field->name = unserialize( $row['ezcontentclass_attribute_serialized_name_list'] );
@@ -183,6 +183,8 @@ class Mapper
         $field->isRequired = $row['ezcontentclass_attribute_is_required'] == 1;
         $field->isInfoCollector = $row['ezcontentclass_attribute_is_information_collector'] == 1;
         $field->defaultValue = unserialize( $row['ezcontentclass_attribute_serialized_data_text'] );
+
+        $this->toFieldDefinition( $storageFieldDef, $field );
 
         return $field;
     }
@@ -278,21 +280,37 @@ class Mapper
      * Maps $fieldDef to the legacy storage specific StorageFieldDefinition
      *
      * @param FieldDefinition $fieldDef
-     * @return StorageFieldDefinition
+     * @param StorageFieldDefinition $storageFieldDef
+     * @return void
      */
-    public function toStorageFieldDefinition( FieldDefinition $fieldDef )
+    public function toStorageFieldDefinition(
+        FieldDefinition $fieldDef, StorageFieldDefinition $storageFieldDef )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $converter = $this->converterRegistry->getConverter(
+            $fieldDef->fieldType
+        );
+        $converter->toStorageFieldDefinition(
+            $fieldDef,
+            $storageFieldDef
+        );
     }
 
     /**
      * Maps a FieldDefinition from the given $storageFieldDef
      *
      * @param StorageFieldDefinition $storageFieldDef
-     * @return FieldDefinition
+     * @param FieldDefinition $fieldDef
+     * @return void
      */
-    public function toFieldDefinition( StorageFieldDefinition $storageFieldDef )
+    public function toFieldDefinition(
+        StorageFieldDefinition $storageFieldDef, FieldDefinition $fieldDef )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $converter = $this->converterRegistry->getConverter(
+            $fieldDef->fieldType
+        );
+        $converter->toFieldDefinition(
+            $storageFieldDef,
+            $fieldDef
+        );
     }
 }

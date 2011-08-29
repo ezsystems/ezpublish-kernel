@@ -10,6 +10,8 @@
 namespace ezp\Persistence\Storage\Legacy\Tests\Content\Type;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Content\Type\Mapper,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
 
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\CreateStruct,
@@ -306,6 +308,72 @@ class MapperTest extends TestCase
             ),
             $types[0]->fieldDefinitions[2]
         );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::toStorageFieldDefinition
+     */
+    public function testToStorageFieldDefinition()
+    {
+        $converterMock = $this->getMockForAbstractClass(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+        );
+        $converterMock->expects( $this->once() )
+            ->method( 'toStorageFieldDefinition' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content\\Type\\FieldDefinition'
+                ),
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
+                )
+            );
+
+        $converterRegistry = new Converter\Registry();
+        $converterRegistry->register( 'some_type', $converterMock );
+
+        $mapper = new Mapper( $converterRegistry );
+
+        $fieldDef = new FieldDefinition();
+        $fieldDef->fieldType = 'some_type';
+
+        $storageFieldDef = new StorageFieldDefinition();
+
+        $mapper->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::toFieldDefinition
+     */
+    public function testToFieldDefinition()
+    {
+        $converterMock = $this->getMockForAbstractClass(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+        );
+        $converterMock->expects( $this->once() )
+            ->method( 'toFieldDefinition' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
+                ),
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content\\Type\\FieldDefinition'
+                )
+            );
+
+        $converterRegistry = new Converter\Registry();
+        $converterRegistry->register( 'some_type', $converterMock );
+
+        $mapper = new Mapper( $converterRegistry );
+
+        $storageFieldDef = new StorageFieldDefinition();
+
+        $fieldDef = new FieldDefinition();
+        $fieldDef->fieldType = 'some_type';
+
+        $mapper->toFieldDefinition( $storageFieldDef, $fieldDef );
     }
 
     /**

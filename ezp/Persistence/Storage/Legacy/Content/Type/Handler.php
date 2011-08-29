@@ -16,6 +16,7 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\Group,
     ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Exception;
 
 /**
@@ -164,7 +165,8 @@ class Handler implements BaseContentTypeHandler
         }
         foreach ( $contentType->fieldDefinitions as $fieldDef )
         {
-            $storageFieldDef = $this->mapper->toStorageFieldDefinition( $fieldDef );
+            $storageFieldDef = new StorageFieldDefinition();
+            $this->mapper->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
             $fieldDef->id = $this->contentTypeGateway->insertFieldDefinition(
                 $contentType->id,
                 $contentType->status,
@@ -315,7 +317,10 @@ class Handler implements BaseContentTypeHandler
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
-        $storageFieldDef = $this->mapper->toStorageFieldDefinition( $fieldDefinition );
+        $storageFieldDef = new StorageFieldDefinition();
+        $this->mapper->toStorageFieldDefinition(
+            $fieldDefinition, $storageFieldDef
+        );
         $fieldDefinition->id = $this->contentTypeGateway->insertFieldDefinition(
             $contentTypeId, $status, $fieldDefinition, $storageFieldDef
         );
@@ -355,7 +360,10 @@ class Handler implements BaseContentTypeHandler
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
-        $storageFieldDef = $this->mapper->toStorageFieldDefinition( $fieldDefinition );
+        $storageFieldDef = new StorageFieldDefinition();
+        $this->mapper->toStorageFieldDefinition(
+            $fieldDefinition, $storageFieldDef
+        );
         $this->contentTypeGateway->updateFieldDefinition(
             $contentTypeId, $status, $fieldDefinition, $storageFieldDef
         );
