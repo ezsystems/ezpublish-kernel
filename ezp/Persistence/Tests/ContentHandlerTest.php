@@ -195,7 +195,7 @@ class ContentHandlerTest extends HandlerTest
         $time = time();
         $contentHandler = $this->repositoryHandler->contentHandler();
         $copy = $contentHandler->copy( 1, 1 );
-        $this->assertEquals( "eZ Publish", $copy->name );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $copy->name );
         $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
         $this->assertEquals( 1, $copy->typeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->ownerId, "Owner ID does not match" );
@@ -221,7 +221,7 @@ class ContentHandlerTest extends HandlerTest
         $time = time();
         $contentHandler = $this->repositoryHandler->contentHandler();
         $copy = $contentHandler->copy( 1, 2 );
-        $this->assertEquals( "eZ Publish", $copy->name );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $copy->name );
         $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
         $this->assertEquals( 1, $copy->typeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->ownerId, "Owner ID does not match" );
@@ -247,7 +247,7 @@ class ContentHandlerTest extends HandlerTest
         $time = time();
         $contentHandler = $this->repositoryHandler->contentHandler();
         $copy = $contentHandler->copy( 1, false );
-        $this->assertEquals( "eZ Publish", $copy->name );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $copy->name );
         $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
         $this->assertEquals( 1, $copy->typeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->ownerId, "Owner ID does not match" );

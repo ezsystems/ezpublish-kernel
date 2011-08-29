@@ -60,7 +60,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             $this->backend->create(
                 "Content",
                 array(
-                    "name" => "bar{$i}",
+                    "name" => array( "eng-GB" => "bar{$i}" ),
                     "ownerId" => 42
                 )
             );
@@ -69,7 +69,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             $this->backend->create(
                 "Content",
                 array(
-                    "name" => "foo{$i}",
+                    "name" => array( "eng-GB" => "foo{$i}" ),
                 )
             );
     }
@@ -120,7 +120,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         foreach ( $list as $key => $content )
         {
             $this->assertEquals( $result[$key]['id'], $content->id );
-            $this->assertEquals( $result[$key]['name'], $content->name );
+            $this->assertEquals( array( "eng-GB" => $result[$key]['name'] ), $content->name );
         }
     }
 
@@ -252,7 +252,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         {
             $this->assertTrue( $content instanceof Content );
             $this->assertEquals( 1, $content->id );
-            $this->assertEquals( 'eZ Publish', $content->name );
+            $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $content->name );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -285,7 +285,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         {
             $this->assertTrue( $content instanceof Content );
             $this->assertEquals( 1, $content->id );
-            $this->assertEquals( 'eZ Publish', $content->name );
+            $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $content->name );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -329,7 +329,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         {
             $this->assertTrue( $content instanceof Content );
             $this->assertEquals( 1, $content->id );
-            $this->assertEquals( 'eZ Publish', $content->name );
+            $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $content->name );
             $this->assertEquals( 2, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -497,7 +497,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 1,
                 array(
                     "id" => 1,
-                    "name" => "bar0",
+                    "name" => array( "eng-GB" => "bar0" ),
                     "ownerId" => 42,
                 )
             ),
@@ -505,7 +505,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 "1",
                 array(
                     "id" => 1,
-                    "name" => "bar0",
+                    "name" => array( "eng-GB" => "bar0" ),
                     "ownerId" => 42,
                 )
             ),
@@ -513,7 +513,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 2,
                 array(
                     "id" => 2,
-                    "name" => "bar1",
+                    "name" => array( "eng-GB" => "bar1" ),
                     "ownerId" => 42,
                 )
             ),
@@ -521,7 +521,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 11,
                 array(
                     "id" => 11,
-                    "name" => "foo0",
+                    "name" => array( "eng-GB" => "foo0" ),
                     "ownerId" => null,
                 )
             ),
@@ -555,7 +555,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         );
         $content = $this->backend->load( "Content", 1 );
         $this->assertEquals( 1, $content->id );
-        $this->assertEquals( 'bar0', $content->name );
+        $this->assertEquals( array( "eng-GB" => "bar0" ), $content->name );
         $this->assertEquals( 5, $content->ownerId );
     }
 
@@ -569,10 +569,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
     {
         $this->insertCustomContent();
         $this->assertTrue(
-            $this->backend->update( "Content", 2, array( "name" => 'Testing' ) )
+            $this->backend->update( "Content", 2, array( "name" => array( "eng-GB" => "Testing" ) ) )
         );
         $content = $this->backend->load( "Content", 2 );
-        $this->assertEquals( 'Testing', $content->name );
+        $this->assertEquals( array( "eng-GB" => "Testing" ), $content->name );
     }
 
     /**

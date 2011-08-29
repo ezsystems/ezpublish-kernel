@@ -472,7 +472,8 @@ class LocationHandler implements LocationHandlerInterface
      */
     private function getStrippedContentName( LocationValue $vo )
     {
-        $contentName = $this->backend->load( 'Content', $vo->contentId )->name;
+        // @todo Remove hardcoding of eng-GB
+        $contentName = $this->backend->load( 'Content', $vo->contentId )->name["eng-GB"];
         $strippedName = strtolower( trim( strtr( $contentName, self::CHARS_ACCENT, self::CHARS_NOACCENT ) ) );
         $strippedName = preg_replace( '`[^a-z0-9_]`i', '_', $strippedName );
         return $strippedName;

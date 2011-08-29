@@ -74,7 +74,7 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( 1, $do->id, "Content ID not correctly set" );
         self::assertInstanceOf( "ezp\\Content\\Type", $do->contentType, "Content type not correctly set" );
         self::assertEquals( 1, $do->contentType->id, "Content type retrieved is not the good one" );
-        self::assertEquals( "eZ Publish", $do->name, "Content name not correctly set" );
+        self::assertEquals( array( "eng-GB" => "eZ Publish" ), $do->name, "Content name not correctly set" );
     }
 
     /**
@@ -103,14 +103,14 @@ class ContentTest extends BaseServiceTest
         $section = $this->repository->getSectionService()->load( 1 );
         $content = new Content( $type );
         $content->addParent( $location );
-        $content->name = "New object";
+        $content->name = array( "eng-GB" => "New object" );
         $content->ownerId = 10;
         $content->section = $section;
 
         $content = $this->service->create( $content );
         // @todo: Deal with field value when that is ready for manipulation
         self::assertInstanceOf( "ezp\\Content", $content );
-        self::assertEquals( "New object", $content->name, "Name not correctly set" );
+        self::assertEquals( array( "eng-GB" => "New object" ), $content->name, "Name not correctly set" );
         self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
         self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
@@ -130,7 +130,7 @@ class ContentTest extends BaseServiceTest
         $content = $this->service->load( 1 );
         self::assertInstanceOf( "ezp\\Content", $content );
         self::assertEquals( 1, $content->id, "ID not correctly set" );
-        self::assertEquals( "eZ Publish", $content->name, "Name not correctly set" );
+        self::assertEquals( array( "eng-GB" => "eZ Publish" ), $content->name, "Name not correctly set" );
         self::assertEquals( 14, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
     }

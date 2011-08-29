@@ -68,7 +68,7 @@ class LocationTest extends BaseServiceTest
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );
         $content = new Content( $type );
-        $content->name = "test";
+        $content->name = array( "eng-GB" => "test" );
         $content->ownerId = 14;
         $content->section = $section;
         $content->fields['name'] = 'Welcome';
@@ -88,7 +88,7 @@ class LocationTest extends BaseServiceTest
         {
 
             $content = new Content( $type );
-            $content->name = "foo$i";
+            $content->name = array( "eng-GB" => "foo$i" );
             $content->ownerId = 14;
             $content->section = $section;
             $content->fields['name'] = "bar$i";

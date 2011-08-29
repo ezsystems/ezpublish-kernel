@@ -1,11 +1,11 @@
 {
     "Content": [
-        {"id": 1,  "typeId": 1, "sectionId": 1, "ownerId": 14, "currentVersionNo": 1, "name": "eZ Publish"},
-        {"id": 4,  "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": "Users"},
-        {"id": 12, "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": "Administrator users"},
-        {"id": 14, "typeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": "Administrator user"},
-        {"id": 42, "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": "Anonymous Users"},
-        {"id": 10, "typeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": "Anonymous User"}
+        {"id": 1,  "typeId": 1, "sectionId": 1, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "eZ Publish"}},
+        {"id": 4,  "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Users"}},
+        {"id": 12, "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Administrator users"}},
+        {"id": 14, "typeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Administrator user"}},
+        {"id": 42, "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Anonymous Users"}},
+        {"id": 10, "typeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Anonymous User"}}
     ],
     "Content\\Field": [],
     "Content\\Location" : [

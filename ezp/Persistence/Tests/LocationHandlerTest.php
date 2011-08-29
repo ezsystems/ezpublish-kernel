@@ -79,7 +79,7 @@ class LocationHandlerTest extends HandlerTest
             $this->contents[] = $content = $this->repositoryHandler->contentHandler()->create(
                 new ContentCreateStruct(
                     array(
-                        "name" => "test_$i",
+                        "name" => array( "eng-GB" => "test_$i" ),
                         "ownerId" => 14,
                         "sectionId" => 1,
                         "typeId" => 2,
