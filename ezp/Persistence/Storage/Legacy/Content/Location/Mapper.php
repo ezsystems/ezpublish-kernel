@@ -10,6 +10,9 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Location;
 use ezp\Persistence\Content\Location;
 
+/**
+ * Mapper for Location objects
+ */
 class Mapper
 {
     /**

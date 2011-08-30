@@ -212,7 +212,8 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->locationHandler ) )
         {
             $this->locationHandler = new LocationHandler(
-                new Content\Location\Gateway\EzcDatabase( $this->dbHandler )
+                new Content\Location\Gateway\EzcDatabase( $this->dbHandler ),
+                new Content\Location\Mapper()
             );
         }
         return $this->locationHandler;

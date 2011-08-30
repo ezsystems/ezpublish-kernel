@@ -210,7 +210,8 @@ class ContentHandlerTest extends TestCase
         $handler = new Handler(
             new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
             new Location\Handler(
-                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() )
+                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+                new Location\Mapper()
             ),
             new Mapper(
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
@@ -297,7 +298,8 @@ class ContentHandlerTest extends TestCase
         $handler = new Handler(
             new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
             new Location\Handler(
-                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() )
+                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+                new Location\Mapper()
             ),
             new Mapper(
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )

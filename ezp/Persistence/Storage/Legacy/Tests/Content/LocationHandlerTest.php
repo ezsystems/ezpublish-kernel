@@ -21,13 +21,6 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
 class LocationHandlerTest extends TestCase
 {
     /**
-     * Mocked content handler instance
-     *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Handler
-     */
-    protected $contentHandler;
-
-    /**
      * Mocked location gateway instance
      *
      * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
@@ -60,29 +53,7 @@ class LocationHandlerTest extends TestCase
         );
     }
 
-    public static function getLoadLocationValues()
-    {
-        return array(
-            array( 'id', 77 ),
-            array( 'priority', 0 ),
-            array( 'hidden', 0 ),
-            array( 'invisible', 0 ),
-            array( 'remoteId', 'dbc2f3c8716c12f32c379dbf0b1cb133' ),
-            array( 'contentId', 75 ),
-            array( 'parentId', 2 ),
-            array( 'pathIdentificationString', 'solutions' ),
-            array( 'pathString', '/1/2/77/' ),
-            array( 'modifiedSubLocation', 1311065017 ),
-            array( 'mainLocationId', 77 ),
-            array( 'depth', 2 ),
-            array( 'sortField', 2 ),
-            array( 'sortOrder', 1 ),
-        );
-    }
-
-    /**
-     */
-    public function testLoadLocation( $field, $value )
+    public function testLoadLocation()
     {
         $handler = $this->getLocationHandler();
 
@@ -94,19 +65,6 @@ class LocationHandlerTest extends TestCase
                 $this->returnValue(
                     array(
                         'node_id' => 77,
-                        'priority' => 0,
-                        'is_hidden' => 0,
-                        'is_invisible' => 0,
-                        'remote_id' => 'dbc2f3c8716c12f32c379dbf0b1cb133',
-                        'contentobject_id' => 75,
-                        'parent_node_id' => 2,
-                        'path_identification_string' => 'solutions',
-                        'path_string' => '/1/2/77/',
-                        'modified_subnode' => 1311065017,
-                        'main_node_id' => 77,
-                        'depth' => 2,
-                        'sort_field' => 2,
-                        'sort_order' => 1,
                     )
                 )
             );
@@ -115,7 +73,7 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->once() )
             ->method( 'createLocationFromRow' )
             ->with( array( 'node_id' => 77 ) )
-            ->will( $this->returnValue( new Location() ) );
+            ->will( $this->returnValue( new \ezp\Persistence\Content\Location() ) );
 
         $location = $handler->load( 77 );
 

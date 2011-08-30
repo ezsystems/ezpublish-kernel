@@ -67,7 +67,7 @@ class Handler implements BaseLocationHandler
     public function load( $locationId )
     {
         $data = $this->locationGateway->getBasicNodeData( $locationId );
-        return $this->mapper->createLocationsFromRow( $data );
+        return $this->mapper->createLocationFromRow( $data );
     }
 
     /**
