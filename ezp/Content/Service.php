@@ -124,22 +124,18 @@ class Service extends BaseService
 
     /**
      * List versions of a $content
-     * @todo Clarify the reason why there is two ways to retrieve versions of a content:
-     *       1. Using "Service->listVersions( $content )"
-     *       2. Using "$content->versions"
-     *       Is it because "2." accesses a Lazy collection configured with "1."
-     *       Would it be possible to have 2. without 1.?
-     *       Modify/remove this note at the same time than ezp\Content::getVersions()'s one
      *
-     * @param Content $content
+     * @param int $contentId
      * @return \ezp\Content\Version[]
      */
-    public function listVersions( Content $content )
+    public function listVersions( $contentId )
     {
         // @FIXME: should the return be an array or some sort of collection?
         $list = array();
+        $contentHandler = $this->handler->contentHandler();
+        $content = $this->load( $contentId );
 
-        foreach ( $this->handler->contentHandler()->listVersions( $content->id ) as $versionVO )
+        foreach ( $contentHandler->listVersions( $contentId ) as $versionVO )
         {
             $version = new Version( $content );
             $version->setState(
@@ -191,7 +187,7 @@ class Service extends BaseService
             array(
                 "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
                 "contentType" => new Proxy( $this->repository->getContentTypeService(), $vo->typeId ),
-                "versions" => new Lazy( "ezp\\Content\\Version", $this, $content, "listVersions" ),
+                "versions" => new Lazy( "ezp\\Content\\Version", $this, $vo->id, "listVersions" ),
                 "properties" => $vo
             )
         );

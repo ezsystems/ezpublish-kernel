@@ -175,8 +175,7 @@ class ContentTest extends BaseServiceTest
      */
     public function testListVersions()
     {
-        $content = $this->service->load( 1 );
-        $versions = $this->service->listVersions( $content );
+        $versions = $this->service->listVersions( 1 );
         $this->assertEquals( 2, count( $versions ) );
         $foundVersions = array();
         foreach ( $versions as $version )
@@ -212,9 +211,7 @@ class ContentTest extends BaseServiceTest
      */
     public function testListVersionsNotExisting()
     {
-        $content = new Content( new Type );
-        $content->getState( "properties" )->id = 999;
-        $versions = $this->service->listVersions( $content );
+        $versions = $this->service->listVersions( 999 );
     }
 
     /**

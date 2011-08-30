@@ -186,12 +186,6 @@ class Content extends Model
 
     /**
      * Return a collection containing all available versions of the Content
-     * @todo Clarify the reason why there is two ways to retrieve versions of a content:
-     *       1. Using "Service->listVersions( $content )"
-     *       2. Using "$content->versions"
-     *       Is it because "2." accesses a Lazy collection configured with "1."
-     *       Would it be possible to have 2. without 1.?
-     *       Modify/remove this note at the same time than ezp\Content\Service::listVersions()'s one
      *
      * @return \ezp\Content\Version[]
      */
