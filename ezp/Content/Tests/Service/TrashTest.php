@@ -224,18 +224,18 @@ class ServiceTest extends Base
      * returned by repository handler
      *
      * @group trashService
-     * @covers ezp\Content\Location\Service::buildDomainObject
+     * @covers ezp\Content\Location\Trash\Service::buildDomainObject
      */
     public function testBuildDomainObject()
     {
-        $this->markTestIncomplete();
-
-        $vo = $this->repositoryHandler->locationHandler()->load( 2 );
+        $vo = $this->service->trash( $this->location )->getState( 'properties' );
 
         $refService = new ReflectionObject( $this->service );
         $refMethod = $refService->getMethod( 'buildDomainObject' );
         $refMethod->setAccessible( true );
         $do = $refMethod->invoke( $this->service, $vo );
+        self::assertInstanceOf( 'ezp\\Content\\Location\\Trashed', $do );
+        $this->compareTrashedAndLocation( $do, $this->location );
 
         $refDo = new ReflectionObject( $do );
         $doRefProperties = $refDo->getProperty( 'properties' );
@@ -246,13 +246,13 @@ class ServiceTest extends Base
         $refParent = $refDo->getProperty( 'parent' );
         $refParent->setAccessible( true );
         $parent = $refParent->getValue( $do );
-        self::assertInstanceOf( 'ezp\\Content\\Proxy', $parent, 'Parent location must be a valid Proxy object after init by service' );
+        self::assertInstanceOf( 'ezp\\Base\\Proxy', $parent, 'Parent location must be a valid Proxy object after init by service' );
         self::assertEquals( $vo->parentId, $parent->id );
 
         $refContent = $refDo->getProperty( 'content' );
         $refContent->setAccessible( true );
         $content = $refContent->getValue( $do );
-        self::assertInstanceOf( 'ezp\\Content\\Proxy', $content, 'Content must be a valid Proxy object after init by service' );
+        self::assertInstanceOf( 'ezp\\Base\\Proxy', $content, 'Content must be a valid Proxy object after init by service' );
         self::assertEquals( $vo->contentId, $content->id );
 
         self::assertEquals( $do->sortField, $vo->sortField );
@@ -315,50 +315,5 @@ class ServiceTest extends Base
     {
         $this->markTestIncomplete();
     }
-
-    /**
-     * @group trashService
-     * @covers \ezp\Content\Location\Service::refreshDomainObject
-     */
-    public function testRefreshDomainObjectWithoutArg()
-    {
-        $this->markTestIncomplete();
-
-        $refService = new ReflectionObject( $this->service );
-        $refMethod = $refService->getMethod( 'refreshDomainObject' );
-        $refMethod->setAccessible( true );
-
-        $stateBeforeEdit = $this->service->load( 2 )->getState();
-        $voBeforeEdit = (array)$stateBeforeEdit['properties'];
-
-        $this->topLocation->remoteId = 'anotherRemoteId';
-        $this->topLocation->priority = 357;
-        $refreshedLocation = $refMethod->invoke( $this->service, $this->topLocation );
-        $newState = $refreshedLocation->getState();
-        self::assertSame( $voBeforeEdit, (array)$newState['properties'] );
-    }
-
-    /**
-     * Test LocationService::refreshDomainObject() by injecting a different VO
-     *
-     * @group trashService
-     * @covers \ezp\Content\Location\Service::refreshDomainObject
-     */
-    public function testRefreshDomainObjectWithArg()
-    {
-        $this->markTestIncomplete();
-
-        $refService = new ReflectionObject( $this->service );
-        $refMethod = $refService->getMethod( 'refreshDomainObject' );
-        $refMethod->setAccessible( true );
-
-        $stateDifferentLocation = $this->location->getState();
-        $voDifferentLocation = $stateDifferentLocation['properties'];
-
-        $refreshedLocation = $refMethod->invoke( $this->service, $this->topLocation, $voDifferentLocation );
-        $newState = $refreshedLocation->getState();
-        self::assertSame( (array)$voDifferentLocation, (array)$newState['properties'] );
-    }
-
 }
 
