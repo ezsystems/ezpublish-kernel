@@ -61,10 +61,9 @@ class Mapper
      * Creates a Location\CreateStruct for the given $content
      *
      * @param \ezp\Persistence\Content $content
-     * @param \ezp\Persistence\Content\CreateStruct $struct
      * @return Content\Location\CreateStruct
      */
-    public function createLocationCreateStruct( Content $content, CreateStruct $struct )
+    public function createLocationCreateStruct( Content $content )
     {
         $location = new Content\Location\CreateStruct();
 

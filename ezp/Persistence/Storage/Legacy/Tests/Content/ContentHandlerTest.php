@@ -118,9 +118,6 @@ class ContentHandlerTest extends TestCase
             ->with(
                 $this->isInstanceOf(
                     'ezp\\Persistence\\Content'
-                ),
-                $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\CreateStruct'
                 )
             )->will(
                 $this->returnValue( new \ezp\Persistence\Content\Location\CreateStruct() )

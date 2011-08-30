@@ -111,7 +111,7 @@ class Handler implements BaseContentHandler
         foreach ( $struct->parentLocations as $location )
         {
             $this->locationHandler->create(
-                $this->mapper->createLocationCreateStruct( $content, $struct ),
+                $this->mapper->createLocationCreateStruct( $content ),
                 $location
             );
         }
