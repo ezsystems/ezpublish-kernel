@@ -282,7 +282,7 @@ class LocationHandlerTest extends HandlerTest
         $this->assertEquals( Location::SORT_ORDER_ASC, $newLocation->sortOrder );
 
         $this->assertEquals(
-            $this->repositoryHandler->contentHandler()->findSingle(
+            $this->repositoryHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId )
             )->locations[0],
             $newLocation,
@@ -308,7 +308,7 @@ class LocationHandlerTest extends HandlerTest
 
         // Verifying the deepest child is present
         $this->assertEquals(
-            $this->repositoryHandler->contentHandler()->findSingle(
+            $this->repositoryHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId )
             )->locations[0],
             $newLocation,
@@ -317,7 +317,7 @@ class LocationHandlerTest extends HandlerTest
 
         // Verifying the direct child is present
         $this->assertEquals(
-            $this->repositoryHandler->contentHandler()->findSingle(
+            $this->repositoryHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId - 1 )
             )->locations[0],
             $this->repositoryHandler->locationHandler()->load( $newLocation->id - 1 ),
@@ -326,7 +326,7 @@ class LocationHandlerTest extends HandlerTest
 
         // Verifying the top most copied location (the grand parent) is present
         $this->assertEquals(
-            $this->repositoryHandler->contentHandler()->findSingle(
+            $this->repositoryHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId - 2 )
             )->locations[0],
             $this->repositoryHandler->locationHandler()->load( $newLocation->id - 2 ),

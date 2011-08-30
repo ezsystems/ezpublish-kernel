@@ -88,21 +88,6 @@ class ContentHandlerTest extends HandlerTest
     }
 
     /**
-     * Test findSingle function
-     *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::findSingle
-     */
-    public function testFindSingle()
-    {
-        $content = $this->repositoryHandler->contentHandler()->findSingle( new ContentId( $this->content->id ) );
-        $this->assertTrue( $content instanceof Content );
-        $this->assertEquals( $this->contentId, $content->id );
-        $this->assertEquals( 14, $content->ownerId );
-        $this->assertEquals( 'test', $content->name );
-        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
-    }
-
-    /**
      * Test create function
      *
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::create
@@ -156,7 +141,7 @@ class ContentHandlerTest extends HandlerTest
 
         try
         {
-            $contentHandler->findSingle( new ContentId( $this->content->id ) );
+            $this->repositoryHandler->searchHandler()->findSingle( new ContentId( $this->content->id ) );
             $this->fail( "Content not removed correctly" );
         }
         catch ( NotFound $e )
@@ -171,19 +156,6 @@ class ContentHandlerTest extends HandlerTest
         catch ( NotFound $e )
         {
         }
-    }
-
-    /**
-     * Test find function
-     *
-     * @covers \ezp\Persistence\Storage\InMemory\ContentHandler::find
-     */
-    public function testFind()
-    {
-        $contentHandler = $this->repositoryHandler->contentHandler();
-        $this->markTestIncomplete(
-            "This test has not been implemented yet."
-        );
     }
 
     /**

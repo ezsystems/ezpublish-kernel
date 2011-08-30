@@ -169,43 +169,6 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * Returns a list of object satisfying the $criterion.
-     *
-     * @param Criterion $criterion
-     * @param int $offset
-     * @param int|null $limit
-     * @param $sort
-     * @return array(ezp\Persistence\Content) Content value object.
-     */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null )
-    {
-        throw new RuntimeException( '@TODO: Implement' );
-    }
-
-    /**
-     * @see ezp\Persistence\Content\Handler
-     */
-    public function findSingle( Criterion $criterion )
-    {
-        // Using "Coding by exception" anti pattern since it has been decided
-        // not to implement search functionalities in InMemoryEngine
-        if ( $criterion instanceof ContentId && $criterion->operator === Operator::EQ )
-        {
-            $content = $this->backend->load( "Content", $criterion->value[0] );
-
-            $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id ) );
-            $versions[0]->fields = $this->backend->find( 'Content\\Field', array( 'versionNo' => $versions[0]->id ) );
-
-            $content->version = $versions[0];
-
-            // @todo Loading locations by content object id should be possible using handler API.
-            $content->locations = $this->backend->find( "Content\\Location", array( "contentId" => $content->id  ) );
-            return $content;
-        }
-        throw new RuntimeException( "@TODO: Implement" );
-    }
-
-    /**
      * @see ezp\Persistence\Content\Handler
      */
     public function setState( $contentId, $state, $version )

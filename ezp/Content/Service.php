@@ -107,7 +107,7 @@ class Service extends BaseService
      */
     public function load( $contentId )
     {
-        $contentVO = $this->handler->contentHandler()->findSingle( new ContentId( $contentId ) );
+        $contentVO = $this->handler->searchHandler()->findSingle( new ContentId( $contentId ) );
         if ( !$contentVO instanceof ContentValue )
             throw new NotFound( 'Content', $contentId );
 
