@@ -35,6 +35,13 @@ class LocationHandlerTest extends TestCase
     protected $locationGateway;
 
     /**
+     * Mocked location mapper instance
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     */
+    protected $locationMapper;
+
+    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
@@ -48,7 +55,8 @@ class LocationHandlerTest extends TestCase
     {
         $dbHandler = $this->getDatabaseHandler();
         return new Handler(
-            $this->locationGateway = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Gateway' )
+            $this->locationGateway = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Gateway' ),
+            $this->locationMapper = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' )
         );
     }
 
@@ -73,7 +81,6 @@ class LocationHandlerTest extends TestCase
     }
 
     /**
-     * @dataProvider getLoadLocationValues
      */
     public function testLoadLocation( $field, $value )
     {
@@ -104,14 +111,15 @@ class LocationHandlerTest extends TestCase
                 )
             );
 
+        $this->locationMapper
+            ->expects( $this->once() )
+            ->method( 'createLocationFromRow' )
+            ->with( array( 'node_id' => 77 ) )
+            ->will( $this->returnValue( new Location() ) );
+
         $location = $handler->load( 77 );
 
         $this->assertTrue( $location instanceof \ezp\Persistence\Content\Location );
-        $this->assertEquals(
-            $value,
-            $location->$field,
-            "Value in property $field not as expected."
-        );
     }
 
     public function testMoveSubtree()

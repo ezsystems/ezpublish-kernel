@@ -13,7 +13,8 @@ use ezp\Persistence\Content\Location,
     ezp\Persistence\Content\Location\UpdateStruct,
     ezp\Persistence\Content\Location\Handler as BaseLocationHandler,
     ezp\Persistence\Storage\Legacy\Content\Handler as ContentHandler,
-    ezp\Persistence\Storage\Legacy\Content\Location\Gateway as LocationGateway;
+    ezp\Persistence\Storage\Legacy\Content\Location\Gateway as LocationGateway,
+    ezp\Persistence\Storage\Legacy\Content\Location\Mapper as LocationMapper;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
@@ -28,14 +29,22 @@ class Handler implements BaseLocationHandler
     protected $locationGateway;
 
     /**
+     * Location mapper
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper $mapper
+     */
+    protected $mapper;
+
+    /**
      * Construct from userGateway
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\Location\Gateway $locationGateway
      * @return void
      */
-    public function __construct( LocationGateway $locationGateway )
+    public function __construct( LocationGateway $locationGateway, LocationMapper $mapper )
     {
         $this->locationGateway = $locationGateway;
+        $this->mapper          = $mapper;
     }
 
     /**
@@ -58,24 +67,7 @@ class Handler implements BaseLocationHandler
     public function load( $locationId )
     {
         $data = $this->locationGateway->getBasicNodeData( $locationId );
-        $location = new Location();
-
-        $location->id = $data['node_id'];
-        $location->priority = $data['priority'];
-        $location->hidden = $data['is_hidden'];
-        $location->invisible = $data['is_invisible'];
-        $location->remoteId = $data['remote_id'];
-        $location->contentId = $data['contentobject_id'];
-        $location->parentId = $data['parent_node_id'];
-        $location->pathIdentificationString = $data['path_identification_string'];
-        $location->pathString = $data['path_string'];
-        $location->modifiedSubLocation = $data['modified_subnode'];
-        $location->mainLocationId = $data['main_node_id'];
-        $location->depth = $data['depth'];
-        $location->sortField = $data['sort_field'];
-        $location->sortOrder = $data['sort_order'];
-
-        return $location;
+        return $this->mapper->createLocationsFromRow( $data );
     }
 
     /**
