@@ -15,6 +15,20 @@ namespace ezp\Io;
  */
 class ContentType
 {
+    public function __construct( $type, $subType )
+    {
+        $this->type = $type;
+        $this->subType = $subType;
+    }
+
+    /**
+     * Returns the ContentType's string representation: type/subtype
+     */
+    public function __toString()
+    {
+        return "$this->type/$this->subType";
+    }
+
     /**
      * The type (audio, video, text, image)
      * @var string

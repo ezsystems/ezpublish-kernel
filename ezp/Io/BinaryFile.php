@@ -9,15 +9,13 @@
 
 namespace ezp\Io;
 
-use ezp\Base\Model;
-
 /**
  * This class provides an abstract access to binary files.
  *
  * It allows reading & writing of files in a unified way
  */
 
-class BinaryFile extends Model
+class BinaryFile
 {
     /**
      * Relative path to the file
