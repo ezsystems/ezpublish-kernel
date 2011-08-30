@@ -79,7 +79,7 @@ interface Handler
      * Removes a trashed location identified by $trashedLocationId from trash
      * Associated content has to be deleted
      *
-     * @param int $trashedLocationId
+     * @param int $trashedId
      */
-    public function emptyOne( $trashedLocationId );
+    public function emptyOne( $trashedId );
 }
