@@ -130,18 +130,28 @@ class TrashHandler implements TrashHandlerInterface
 
     /**
      * @see ezp\Persistence\Content\Location\Trash\Handler
-     * @todo
      */
     public function emptyTrash()
     {
         $trashedIds = array();
+        $contentIds = array();
         foreach ( $this->backend->find( 'Content\\Location\\Trashed' ) as $trashed )
         {
             $trashedIds[] = $trashed->id;
+            $contentIds[] = $trashed->contentId;
         }
 
         if ( !empty( $trashedIds ) )
+        {
+            // Remove associated content for trashed locations
+            foreach ( $contentIds as $contentId )
+            {
+                $this->handler->contentHandler()->delete( $contentId );
+            }
+
+            // Remove trashed locations
             $this->backend->deleteByMatch( 'Content\\Location\\Trashed', array( 'id' => $trashedIds ) );
+        }
     }
 
     /**

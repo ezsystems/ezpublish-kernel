@@ -155,7 +155,13 @@ class ServiceTest extends Base
             }
         }
 
-        $this->service->emptyTrash();
+        try
+        {
+            $this->service->emptyTrash();
+        }
+        catch ( NotFound $e )
+        {
+        }
 
         $this->locationToDelete = array();
         $this->insertedLocations = array();
@@ -183,6 +189,7 @@ class ServiceTest extends Base
 
     /**
      * @group trashService
+     * @covers ezp\Content\Location\Trash\Service::trash
      */
     public function testTrashOne()
     {
@@ -196,6 +203,7 @@ class ServiceTest extends Base
 
     /**
      * @group trashService
+     * @covers ezp\Content\Location\Trash\Service::trash
      */
     public function testTrashSubtree()
     {
@@ -262,6 +270,7 @@ class ServiceTest extends Base
 
     /**
      * @group trashService
+     * @covers ezp\Content\Location\Trash\Service::load
      */
     public function testLoad()
     {
@@ -274,6 +283,7 @@ class ServiceTest extends Base
     /**
      * @expectedException \ezp\Base\Exception\NotFound
      * @group trashService
+     * @covers ezp\Content\Location\Trash\Service::load
      */
     public function testLoadNonExistent()
     {
@@ -282,6 +292,7 @@ class ServiceTest extends Base
 
     /**
      * @group trashService
+     * @covers ezp\Content\Location\Trash\Service::load
      */
     public function testLoadByLocationId()
     {
@@ -294,6 +305,7 @@ class ServiceTest extends Base
     /**
      * @group trashService
      * @expectedException \ezp\Base\Exception\NotFound
+     * @covers ezp\Content\Location\Trash\Service::load
      */
     public function testLoadByLocationIdNonExistent()
     {
@@ -302,14 +314,29 @@ class ServiceTest extends Base
 
     /**
      * @group trashService
+     * @covers ezp\Content\Location\Trash\Service::emptyTrash
      */
     public function testEmptyTrash()
     {
-        $this->markTestIncomplete();
+        $trashed = $this->service->trash( $this->insertedLocations[0] );
+
+        $this->service->emptyTrash();
+        foreach ( $this->insertedLocations as $location )
+        {
+            try
+            {
+                $this->service->loadByLocationId( $location->id );
+                $this->fail( 'Emptying the trash should remove ALL trashed locations' );
+            }
+            catch ( NotFound $e )
+            {
+            }
+        }
     }
 
     /**
      * @group trashService
+     * @covers ezp\Content\Location\Trash\Service::emptyOne
      */
     public function testEmptyOne()
     {
