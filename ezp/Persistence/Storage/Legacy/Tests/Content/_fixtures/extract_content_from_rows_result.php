@@ -3,6 +3,7 @@
 use ezp\Persistence\Content,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue,
+    ezp\Persistence\Content\Location,
     ezp\Persistence\Content\Version;
 
 $content                  = new Content();
@@ -12,7 +13,7 @@ $content->typeId          = 20;
 $content->sectionId       = 1;
 $content->ownerId         = 14;
 $content->remoteId        = '0d5109156ee806da8e86c8cea8004434';
-$content->locations       = array( 23 );
+$content->locations       = array( new Location() );
 $content->alwaysAvailable = true;
 
 $version            = new Version();

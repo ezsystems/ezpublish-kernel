@@ -25,6 +25,20 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
 class MapperTest extends TestCase
 {
     /**
+     * Location mapper mock
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     */
+    protected $locationMapperMock;
+
+    /**
+     * Value converter registry mock
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     */
+    protected $valueConverterRegistryMock;
+
+    /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::__construct
      */
@@ -32,7 +46,7 @@ class MapperTest extends TestCase
     {
         $regMock = $this->getValueConverterRegistryMock();
 
-        $mapper = new Mapper( $regMock );
+        $mapper = $this->getMapper();
 
         $this->assertAttributeSame(
             $regMock,
@@ -49,7 +63,7 @@ class MapperTest extends TestCase
     {
         $struct = $this->getCreateStructFixture();
 
-        $mapper = new Mapper( $this->getValueConverterRegistryMock() );
+        $mapper = $this->getMapper();
         $content = $mapper->createContentFromCreateStruct( $struct );
 
         $this->assertStructsEqual(
@@ -86,7 +100,7 @@ class MapperTest extends TestCase
     {
         $content = $this->getContentFixture();
 
-        $mapper = new Mapper( $this->getValueConverterRegistryMock() );
+        $mapper = $this->getMapper();
         $version = $mapper->createVersionForContent( $content, 1 );
 
         $this->assertPropertiesCorrect(
@@ -115,7 +129,7 @@ class MapperTest extends TestCase
 
     public function testCreateLocationFromContent()
     {
-        $mapper = new Mapper( $this->getValueConverterRegistryMock() );
+        $mapper = $this->getMapper();
         $location = $mapper->createLocationCreateStruct(
             $content = $this->getFullContentFixture(),
             $struct = $this->getCreateStructFixture()
@@ -188,7 +202,7 @@ class MapperTest extends TestCase
         $field->type = 'some-type';
         $field->value = new FieldValue();
 
-        $mapper = new Mapper( $reg );
+        $mapper = new Mapper( $this->getLocationMapperMock(), $reg );
         $res = $mapper->convertToStorageValue( $field );
 
         $this->assertInstanceOf(
@@ -203,6 +217,12 @@ class MapperTest extends TestCase
      */
     public function testExtractContentFromRows()
     {
+        $locationMapperMock = $this->getLocationMapperMock();
+        $locationMapperMock->expects( $this->once() )
+            ->method( 'createLocationFromRow' )
+            ->with( $this->isType( 'array' ) )
+            ->will( $this->returnValue( new Content\Location() ) );
+
         $convMock = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
         );
@@ -221,7 +241,7 @@ class MapperTest extends TestCase
 
         $rowsFixture = $this->getContentExtractFixture();
 
-        $mapper = new Mapper( $reg );
+        $mapper = new Mapper( $locationMapperMock, $reg );
         $result = $mapper->extractContentFromRows( $rowsFixture );
 
         $this->assertEquals(
@@ -238,7 +258,7 @@ class MapperTest extends TestCase
      */
     public function testExtractVersionListFromRows()
     {
-        $mapper = new Mapper( new Registry() );
+        $mapper = $this->getMapper();
 
         $rows = $this->getRestrictedVersionExtractFixture();
 
@@ -321,15 +341,52 @@ class MapperTest extends TestCase
     }
 
     /**
+     * Returns a Mapper
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Mapper
+     */
+    protected function getMapper( $locationMapper = null, $valueConverter = null )
+    {
+        return new Mapper(
+            $this->getLocationMapperMock(),
+            $this->getValueConverterRegistryMock()
+        );
+    }
+
+    /**
+     * Returns a location mapper mock
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     */
+    protected function getLocationMapperMock()
+    {
+        if ( !isset( $this->locationMapperMock ) )
+        {
+            $this->locationMapperMock = $this->getMock(
+                'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->locationMapperMock;
+    }
+
+    /**
      * Returns a FieldValue converter registry mock
      *
      * @return \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
      */
     protected function getValueConverterRegistryMock()
     {
-        return $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
-        );
+        if ( !isset( $this->valueConverterRegistryMock ) )
+        {
+            $this->valueConverterRegistryMock = $this->getMock(
+                'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+            );
+        }
+        return $this->valueConverterRegistryMock;
     }
 
     /**

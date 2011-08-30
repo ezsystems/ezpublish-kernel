@@ -15,6 +15,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Content\RestrictedVersion,
+    ezp\Persistence\Storage\Legacy\Content\Location\Mapper as LocationMapper,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry;
 
 /**
@@ -30,13 +31,21 @@ class Mapper
     protected $converterRegistry;
 
     /**
+     * Location mapper
+     *
+     * @var \ezp\Persistence\Storage\Persistence\Converter\Location\Mapper
+     */
+    protected $locationMapper;
+
+    /**
      * Creates a new mapper.
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
      */
-    public function __construct( Registry $converterRegistry )
+    public function __construct( LocationMapper $locationMapper, Registry $converterRegistry )
     {
         $this->converterRegistry = $converterRegistry;
+        $this->locationMapper    = $locationMapper;
     }
 
     /**
@@ -149,14 +158,21 @@ class Mapper
                 $versions[$contentId]->fields[$field] = $this->extractFieldFromRow( $row );
             }
 
-            $contentObjs[$contentId]->locations[(int) $row['ezcontentobject_tree_node_id']] = true;
+            $locationId = (int) $row['ezcontentobject_tree_node_id'];
+            if ( !isset( $contentObjs[$contentId]->locations[$locationId] ) )
+            {
+                $contentObjs[$contentId]->locations[$locationId] =
+                    $this->locationMapper->createLocationFromRow(
+                        $row, 'ezcontentobject_tree_'
+                );
+            }
         }
 
         foreach ( $contentObjs as $content )
         {
             $content->version         = $versions[$content->id];
             $content->version->fields = array_values( $content->version->fields );
-            $content->locations       = array_keys( $content->locations );
+            $content->locations       = array_values( $content->locations );
         }
         return array_values( $contentObjs );
     }

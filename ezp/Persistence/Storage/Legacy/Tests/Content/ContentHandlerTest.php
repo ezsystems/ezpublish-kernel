@@ -211,9 +211,10 @@ class ContentHandlerTest extends TestCase
             new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
             new Location\Handler(
                 new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
-                new Location\Mapper()
+                ( $locationMapper = new Location\Mapper() )
             ),
             new Mapper(
+                $locationMapper,
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
             ),
             new StorageRegistry()
@@ -302,6 +303,7 @@ class ContentHandlerTest extends TestCase
                 new Location\Mapper()
             ),
             new Mapper(
+                $locationMapperMock = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
             ),
             new StorageRegistry()
@@ -383,8 +385,16 @@ class ContentHandlerTest extends TestCase
         $content = $handler->load( 14, 4 );
 
         $this->assertEquals(
-            array( 15 ),
-            $content->locations
+            1,
+            count( $content->locations )
+        );
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content\\Location',
+            $content->locations[0]
+        );
+        $this->assertEquals(
+            15,
+            $content->locations[0]->id
         );
     }
 
@@ -396,6 +406,7 @@ class ContentHandlerTest extends TestCase
 
         // Build up basic mocks
         $mapper = new Mapper(
+            $locationMapperMock = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
             $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
         );
 
@@ -473,7 +484,6 @@ class ContentHandlerTest extends TestCase
             array( 'typeId', 4 ),
             array( 'sectionId', 2 ),
             array( 'ownerId', 14 ),
-            array( 'locations', array( 15 ) ),
             array( 'alwaysAvailable', true ),
             array( 'remoteId', '1bb4fe25487f05527efa8bfd394cecc7' ),
         );
@@ -522,6 +532,28 @@ class ContentHandlerTest extends TestCase
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createDraftFromVersion
      */
+    public function testCreateDraftFromVersionLocation()
+    {
+        $content = $this->getTestCreateDraftFromVersion();
+
+        $this->assertEquals(
+            1,
+            count( $content->locations )
+        );
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content\\Location',
+            $content->locations[0]
+        );
+        $this->assertEquals(
+            15,
+            $content->locations[0]->id
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createDraftFromVersion
+     */
     public function testCreateDraftFromVersionFields()
     {
         $content = $this->getTestCreateDraftFromVersion();
@@ -541,6 +573,7 @@ class ContentHandlerTest extends TestCase
     {
         // Build up basic mocks
         $mapper = new Mapper(
+            $locationMapperMock = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
             $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
         );
 

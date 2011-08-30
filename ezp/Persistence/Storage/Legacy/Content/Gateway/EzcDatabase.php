@@ -280,7 +280,22 @@ class EzcDatabase extends Gateway
                 $this->dbHandler->aliasedColumn( $query, 'sort_key_int', 'ezcontentobject_attribute' ),
                 $this->dbHandler->aliasedColumn( $query, 'sort_key_string', 'ezcontentobject_attribute' ),
                 // Content object locations
-                $this->dbHandler->aliasedColumn( $query, 'node_id', 'ezcontentobject_tree' )
+                $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'contentobject_is_published', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'contentobject_version', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'depth', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'is_hidden', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'is_invisible', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'main_node_id', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'modified_subnode', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'node_id', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'parent_node_id', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'path_identification_string', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'path_string', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'priority', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'remote_id', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'sort_field', 'ezcontentobject_tree' ),
+                $this->dbHandler->aliasedColumn( $query, 'sort_order', 'ezcontentobject_tree' )
             )
             ->from( $this->dbHandler->quoteTable( 'ezcontentobject' ) )
             ->leftJoin(
