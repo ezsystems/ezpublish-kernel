@@ -111,7 +111,7 @@ class LocationHandlerTest extends TestCase
         $mapper = new Mapper();
 
         $location = $mapper->createLocationFromRow(
-            $data
+            $data, $prefix
         );
 
         $this->assertEquals(

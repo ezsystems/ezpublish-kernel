@@ -20,26 +20,25 @@ class Mapper
      * @param array $rows
      * @param string $prefix
      * @return \ezp\Persistence\Content\Location
-     * @todo Make use of $prefix
      */
     public function createLocationFromRow( array $data, $prefix = '' )
     {
         $location = new Location();
 
-        $location->id = $data['node_id'];
-        $location->priority = $data['priority'];
-        $location->hidden = $data['is_hidden'];
-        $location->invisible = $data['is_invisible'];
-        $location->remoteId = $data['remote_id'];
-        $location->contentId = $data['contentobject_id'];
-        $location->parentId = $data['parent_node_id'];
-        $location->pathIdentificationString = $data['path_identification_string'];
-        $location->pathString = $data['path_string'];
-        $location->modifiedSubLocation = $data['modified_subnode'];
-        $location->mainLocationId = $data['main_node_id'];
-        $location->depth = $data['depth'];
-        $location->sortField = $data['sort_field'];
-        $location->sortOrder = $data['sort_order'];
+        $location->id = $data[$prefix . 'node_id'];
+        $location->priority = $data[$prefix . 'priority'];
+        $location->hidden = $data[$prefix . 'is_hidden'];
+        $location->invisible = $data[$prefix . 'is_invisible'];
+        $location->remoteId = $data[$prefix . 'remote_id'];
+        $location->contentId = $data[$prefix . 'contentobject_id'];
+        $location->parentId = $data[$prefix . 'parent_node_id'];
+        $location->pathIdentificationString = $data[$prefix . 'path_identification_string'];
+        $location->pathString = $data[$prefix . 'path_string'];
+        $location->modifiedSubLocation = $data[$prefix . 'modified_subnode'];
+        $location->mainLocationId = $data[$prefix . 'main_node_id'];
+        $location->depth = $data[$prefix . 'depth'];
+        $location->sortField = $data[$prefix . 'sort_field'];
+        $location->sortOrder = $data[$prefix . 'sort_order'];
 
         return $location;
     }
