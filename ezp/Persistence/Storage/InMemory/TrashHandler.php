@@ -11,7 +11,10 @@
 namespace ezp\Persistence\Storage\InMemory;
 use ezp\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface,
     ezp\Persistence\Content\Location\Trashed as TrashedValue,
-    ezp\Base\Exception\NotFound;
+    ezp\Persistence\Content\Location\CreateStruct,
+    ezp\Persistence\Content\Location as LocationValue,
+    ezp\Base\Exception\NotFound,
+    ezp\Content\Location\Exception\ParentNotFound;
 
 /**
  * @see ezp\Persistence\Content\Location\Trash\Handler
@@ -112,11 +115,31 @@ class TrashHandler implements TrashHandlerInterface
 
     /**
      * @see ezp\Persistence\Content\Location\Trash\Handler
-     * @todo
      */
-    public function untrashLocation( $locationId, $newParentId = null )
+    public function untrashLocation( $trashedId, $newParentId )
     {
-        throw new \RuntimeException( 'Not implemented yet' );
+        $trashedLocation = $this->load( $trashedId );
+        try
+        {
+            $newParent = $this->handler->locationHandler()->load( $newParentId );
+        }
+        catch ( NotFound $e )
+        {
+            throw new ParentNotFound( $trashedLocation->locationId, $newParentId, $e );
+        }
+
+        // Restore location under $newParent
+        $struct = new CreateStruct;
+        foreach ( $struct as $property => $value )
+        {
+            if ( isset( $trashedLocation->$property ) )
+            {
+                $struct->$property = $trashedLocation->$property;
+            }
+        }
+
+        $struct->parentId = $newParentId;
+        return $this->handler->locationHandler()->create( $struct )->id;
     }
 
     /**

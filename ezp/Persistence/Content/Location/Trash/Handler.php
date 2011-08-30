@@ -49,16 +49,18 @@ interface Handler
     /**
      * Returns a trashed location to normal state.
      *
-     * Recreates the originally trashed location in the new position. If no new
-     * position has been specified, it will be tried to re-create the location
-     * at the old position. If this is not possible ( because the old location
-     * does not exist any more) and exception is thrown.
+     * Recreates the originally trashed location in the new position.
+     * If this is not possible (because the old location does not exist any more),
+     * a ParentNotFound exception is thrown.
+     *
+     * Returns newly restored location Id.
      *
      * @param mixed $locationId
      * @param mixed $newParentId
-     * @return boolean
+     * @return int Newly restored location id
+     * @throws \ezp\Content\Location\Exception\ParentNotFound
      */
-    public function untrashLocation( $trashedId, $newParentId = null );
+    public function untrashLocation( $trashedId, $newParentId );
 
     /**
      * Returns an array of all trashed locations

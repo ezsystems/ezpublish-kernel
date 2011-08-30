@@ -354,5 +354,129 @@ class ServiceTest extends Base
         $this->setExpectedException( 'ezp\\Base\\Exception\\NotFound' );
         $this->service->loadByLocationId( $this->location->id );
     }
-}
 
+    /**
+     * @group trashService
+     * @covers ezp\Content\Location\Trash\Service::untrash
+     */
+    public function testUntrashOriginalLocation()
+    {
+        $trashed = $this->service->trash( $this->location );
+        $restored = $this->service->untrash( $trashed );
+        self::assertInstanceOf( 'ezp\\Content\\Location', $restored );
+
+        $restoredVo = $restored->getState( 'properties' );
+        foreach ( $this->location->getState( 'properties' ) as $property => $value )
+        {
+            switch ( $property )
+            {
+                case 'id':
+                    self::assertGreaterThan( $value, $restoredVo->$property );
+                    break;
+
+                case 'remoteId':
+                case 'contentId':
+                case 'parentId':
+                case 'priority':
+                case 'hidden':
+                case 'invisible':
+                case 'sortField':
+                case 'sortOrder':
+                    self::assertSame( $value, $restoredVo->$property, "$property on restored location must be the same than old location" );
+                    break;
+
+                case 'pathString':
+                    self::assertSame( "{$this->location->parent->pathString}{$restoredVo->id}/", $restoredVo->pathString );
+                    break;
+
+                case 'depth':
+                    self::assertSame( $this->location->parent->depth + 1, $restoredVo->depth );
+                    break;
+
+                case 'mainLocationId':
+                    self::assertSame( $restoredVo->mainLocationId, $restoredVo->id );
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Trash a location, then its parent.
+     * Trying to restore the location should throw a ParentNotFound exception
+     *
+     * @group trashService
+     * @covers ezp\Content\Location\Trash\Service::untrash
+     * @expectedException \ezp\Content\Location\Exception\ParentNotFound
+     */
+    public function testUntrashOriginalLocationUnavailable()
+    {
+        $trashed = $this->service->trash( $this->insertedLocations[1] );
+        $parentTrashed = $this->service->trash( $this->insertedLocations[0] );
+        $restored = $this->service->untrash( $trashed );
+    }
+
+    /**
+     * @group trashService
+     * @covers ezp\Content\Location\Trash\Service::untrash
+     */
+    public function testUntrashDifferentLocation()
+    {
+        $trashed = $this->service->trash( $this->location );
+        $restored = $this->service->untrash( $trashed, $this->insertedLocations[0] );
+        self::assertInstanceOf( 'ezp\\Content\\Location', $restored );
+
+        $restoredVo = $restored->getState( 'properties' );
+        foreach ( $this->location->getState( 'properties' ) as $property => $value )
+        {
+            switch ( $property )
+            {
+                case 'id':
+                    self::assertGreaterThan( $value, $restoredVo->$property );
+                    break;
+
+                case 'parentId':
+                    self::assertSame(
+                        $this->insertedLocations[0]->id,
+                        $restoredVo->$property,
+                        "Restored location's parentId should equal to the new one (#{$this->insertedLocations[0]->id})"
+                    );
+                    break;
+
+                case 'remoteId':
+                case 'contentId':
+                case 'priority':
+                case 'hidden':
+                case 'invisible':
+                case 'sortField':
+                case 'sortOrder':
+                    self::assertSame( $value, $restoredVo->$property, "$property on restored location must be the same than old location" );
+                    break;
+
+                case 'pathString':
+                    self::assertSame( "{$this->insertedLocations[0]->pathString}{$restoredVo->id}/", $restoredVo->pathString );
+                    break;
+
+                case 'depth':
+                    self::assertSame( $this->insertedLocations[0]->depth + 1, $restoredVo->depth );
+                    break;
+
+                case 'mainLocationId':
+                    self::assertSame( $restoredVo->mainLocationId, $restoredVo->id );
+                    break;
+            }
+        }
+    }
+
+    /**
+     * @group trashService
+     * @covers \ezp\Content\Location\Trash\Service::untrash
+     * @expectedException \ezp\Content\Location\Exception\ParentNotFound
+     */
+    public function testUntrashDifferentUnavailableLocation()
+    {
+        // Remove future parent
+        $this->locationService->delete( $this->insertedLocations[0] );
+        $trashed = $this->service->trash( $this->location );
+        $restored = $this->service->untrash( $trashed, $this->insertedLocations[0] );
+    }
+}

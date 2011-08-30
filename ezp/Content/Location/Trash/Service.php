@@ -72,15 +72,22 @@ class Service extends BaseService
     }
 
     /**
-     * Restores $location at its original place if possible.
-     * Will throw an exception if original place is not available any more.
+     * Restores $trashedLocation at its original place if possible.
+     * If $newParentLocation is provided, $trashedLocation will be restored under it.
+     * Will throw an exception if new/original parent is not available any more.
      *
-     * @param \ezp\Content\LocationLocation $location
-     * @throws \ezp\Base\Exception\Logic
+     * @param \ezp\Content\Location\Trashed $trashedLocation
+     * @return \ezp\Content\Location
+     * @throws \ezp\Content\Location\Exception\ParentNotFound
      */
-    public function untrash( Location $location )
+    public function untrash( Trashed $trashedLocation, Location $newParentLocation = null )
     {
-        throw new \RuntimeException( 'Not implemented yet' );
+        $newParentId = $trashedLocation->parentId;
+        if ( isset( $newParentLocation ) )
+            $newParentId = $newParentLocation->id;
+
+        $locationId = $this->handler->trashHandler()->untrashLocation( $trashedLocation->id, $newParentId );
+        return $this->repository->getLocationService()->load( $locationId );
     }
 
     /**
