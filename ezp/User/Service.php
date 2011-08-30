@@ -9,6 +9,8 @@
 
 namespace ezp\User;
 use ezp\Base\Service as BaseService,
+    ezp\Base\Proxy,
+    ezp\Base\Collection\Lazy,
     ezp\Base\Exception\NotFound,
     ezp\User,
     ezp\User\Role,
@@ -77,7 +79,7 @@ class Service extends BaseService
     /**
      * Crate a Role object
      *
-     * @param \ezp\User\Role $user
+     * @param \ezp\User\Role $role
      * @return \ezp\User\Role
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
      */
@@ -102,9 +104,23 @@ class Service extends BaseService
     }
 
     /**
+     * Load list of Roles assigned to a certain user [group] by id
+     *
+     * @param mixed $id The user [group] id that returned roles are assigned to
+     * @return \ezp\User\Role[]
+     */
+    public function loadRolesByGroupId( $id )
+    {
+        $roles = $this->handler->userHandler()->loadRolesByGroupId( $id );
+        foreach ( $roles as &$value )
+            $value = $this->buildRole( $value );
+        return $roles;
+    }
+
+    /**
      * Update a Role object
      *
-     * @param \ezp\User\Role $user
+     * @param \ezp\User\Role $role
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
      */
     public function updateRole( Role $role )
@@ -125,6 +141,44 @@ class Service extends BaseService
     }
 
     /**
+     * Add a policy to a persisted role
+     *
+     * @param Role $role
+     * @param Policy $policy
+     */
+    public function addPolicy( Role $role, Policy $policy )
+    {
+        $this->handler->userHandler()->addPolicy( $role->id, $policy->getState('properties') );
+        $role->addPolicy( $policy );
+    }
+
+    /**
+     * Remove a policy from a persisted role
+     *
+     * @param Role $role
+     * @param Policy $policy
+     */
+    public function removePolicy( Role $role, Policy $policy )
+    {
+        $this->handler->userHandler()->removePolicy( $role->id, $policy->id );
+        $role->removePolicy( $policy );
+    }
+
+    /**
+     * Load list of Policies assigned and inherited on a user [group]
+     *
+     * @param mixed $id The user [group] id that returned roles are assigned to
+     * @return \ezp\User\Policy[]
+     */
+    public function loadPoliciesByUserId( $id )
+    {
+        $policies = $this->handler->userHandler()->loadPoliciesByUserId( $id );
+        foreach ( $policies as &$value )
+            $value = $this->buildPolicy( $value, new Proxy( $this, $vo->roleId, 'loadRole' ) );
+        return $policies;
+    }
+
+    /**
      * @param \ezp\Persistence\User $vo
      * @return \ezp\User
      */
@@ -139,19 +193,19 @@ class Service extends BaseService
                     $this,
                     $vo->id,
                     "loadGroupsByUserId"
-                ),
+                ),*/
                 "roles" => new Lazy(
-                    "ezp\\User\\Group",
+                    "ezp\\User\\Role",
                     $this,
                     $vo->id,
-                    "loadRolesByUserId"
+                    "loadRolesByGroupId"
                 ),
                 "policies" => new Lazy(
                     "ezp\\User\\Policy",
                     $this,
                     $vo->id,
                     "loadPoliciesByUserId"
-                ),*/
+                ),
             )
         );
         return $do;
@@ -180,10 +234,10 @@ class Service extends BaseService
 
     /**
      * @param \ezp\Persistence\User\Policy $vo
-     * @param \ezp\User\Role $role
+     * @param \ezp\User\Role|\ezp\Base\Proxy $role
      * @return \ezp\User\Policy
      */
-    protected function buildPolicy( PolicyValueObject $vo, Role $role )
+    protected function buildPolicy( PolicyValueObject $vo, $role )
     {
         $do = new Policy( $role );
         $do->setState(

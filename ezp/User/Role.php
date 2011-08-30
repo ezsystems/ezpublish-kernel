@@ -37,7 +37,6 @@ class Role extends Model
     protected $dynamicProperties = array(
         //'groups' => false,
         'policies' => true,
-        //'roles' => false,
     );
 
     /**
@@ -62,13 +61,31 @@ class Role extends Model
     }
 
     /**
+     * @internal Use {@link \ezp\User\Service::addPolicy()}
      * @param Policy $policy
      * @return void
      */
     public function addPolicy( Policy $policy )
     {
+        if ( in_array( $policy, $this->policies, true ) )
+            return;
+
         $this->policies[] = $policy;
         $this->properties->policies[] = $policy->getState( 'properties' );
     }
+
+    /**
+     * @internal Use {@link \ezp\User\Service::removePolicy()}
+     * @param Policy $policy
+     * @return void
+     */
+    public function removePolicy( Policy $policy )
+    {
+        $key = array_search( $policy, $this->policies, true );
+        if ( $key === false )
+            return;
+
+        unset( $this->policies[$key] );
+        unset( $this->properties->policies[$key] );//order should be same, so reusing key
+    }
 }
-?>

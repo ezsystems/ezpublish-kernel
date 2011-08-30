@@ -208,6 +208,19 @@ class ServiceTest extends BaseServiceTest
     }
 
     /**
+     * Test service function for loading roles
+     *
+     * @covers \ezp\User\Service::loadRolesByGroupId
+     */
+    public function testLoadRolesByGroupIdNotFound()
+    {
+        $service = $this->repository->getUserService();
+        self::assertEquals( array(), $service->loadRolesByGroupId( 999 ) );
+        self::assertEquals( array(), $service->loadRolesByGroupId( 14 ) );
+        self::assertEquals( array(), $service->loadRolesByGroupId( 10 ) );
+    }
+
+    /**
      * Test service function for updating role
      *
      * @covers \ezp\User\Service::updateRole
@@ -257,6 +270,73 @@ class ServiceTest extends BaseServiceTest
     {
         $service = $this->repository->getUserService();
         $service->deleteRole( 999 );
+    }
+
+    /**
+     * Test service function for adding policy on a role
+     *
+     * @covers \ezp\User\Service::addPolicy
+     */
+    public function testAddPolicy()
+    {
+        $service = $this->repository->getUserService();
+        $do = $service->createRole( $this->getRole() );
+
+        $policy = new Policy( $do );
+        $policy->module = 'Foo';
+        $policy->function = 'Bar';
+        $policy->limitations = array( 'Limit' => array( 'Test' ) );
+
+        $service->addPolicy( $do, $policy );
+        self::assertEquals( 4, count( $do->policies ) );
+        self::assertEquals( 'Foo', $do->policies[3]->module );
+        self::assertEquals( 'Bar', $do->policies[3]->function );
+        self::assertEquals( array( 'Limit' => array( 'Test' ) ), $do->policies[3]->limitations );
+        self::assertEquals( $do->id, $do->policies[3]->roleId );
+
+        $do = $service->loadRole( $do->id );
+        self::assertEquals( 4, count( $do->policies ) );
+        self::assertEquals( 'Foo', $do->policies[3]->module );
+        self::assertEquals( 'Bar', $do->policies[3]->function );
+        self::assertEquals( array( 'Limit' => array( 'Test' ) ), $do->policies[3]->limitations );
+        self::assertEquals( $do->id, $do->policies[3]->roleId );
+    }
+
+    /**
+     * Test service function for removing policy on a role
+     *
+     * @covers \ezp\User\Service::removePolicy
+     */
+    public function testRemovePolicy()
+    {
+        $service = $this->repository->getUserService();
+        $do = $service->createRole( $this->getRole() );
+
+        $service->removePolicy( $do, $do->policies[2] );
+        self::assertEquals( 2, count( $do->policies ) );
+        self::assertEquals( 'content', $do->policies[1]->module );
+        self::assertEquals( 'read', $do->policies[1]->function );
+        self::assertEquals( '*', $do->policies[1]->limitations );
+        self::assertEquals( $do->id, $do->policies[1]->roleId );
+
+        $do = $service->loadRole( $do->id );
+        self::assertEquals( 2, count( $do->policies ) );
+        self::assertEquals( 'content', $do->policies[1]->module );
+        self::assertEquals( 'read', $do->policies[1]->function );
+        self::assertEquals( '*', $do->policies[1]->limitations );
+        self::assertEquals( $do->id, $do->policies[1]->roleId );
+    }
+
+    /**
+     * Test service function for loading policies by user id
+     *
+     * @covers \ezp\User\Service::loadPoliciesByUserId
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadPoliciesByUserIdNotFound()
+    {
+        $service = $this->repository->getUserService();
+        self::assertEquals( array(), $service->loadPoliciesByUserId( 999 ) );
     }
 
     /**

@@ -20,6 +20,8 @@ use ezp\Base\Model,
  * @property string $email
  * @property string $password
  * @property int $hashAlgorithm
+ * @property \ezp\User\Role[] $roles
+ * @property \ezp\User\Policy[] $policies
  */
 class User extends Model
 {
@@ -39,9 +41,23 @@ class User extends Model
      */
     protected $dynamicProperties = array(
         //'groups' => false,
-        //'policies' => false,
-        //'roles' => false,
+        'roles' => false,
+        'policies' => false,
     );
+
+    /**
+     * Assigned Roles
+     *
+     * @var \ezp\User\Role[]
+     */
+    protected $roles = array();
+
+    /**
+     * Assigned and inherited policies (via assigned and inherited roles)
+     *
+     * @var \ezp\User\Policy[]
+     */
+    protected $policies = array();
 
     /**
      * Creates and setups User object
@@ -50,5 +66,24 @@ class User extends Model
     {
         $this->properties = new UserValue();
     }
+
+    /**
+     * List of assigned Roles
+     *
+     * @return array|User\Role[]
+     */
+    protected function getRoles()
+    {
+        return $this->roles;
+    }
+
+    /**
+     * List of assigned and inherited policies (via assigned and inherited roles)
+     *
+     * @return array|User\Policy[]
+     */
+    protected function getPolicies()
+    {
+        return $this->policies;
+    }
 }
-?>
