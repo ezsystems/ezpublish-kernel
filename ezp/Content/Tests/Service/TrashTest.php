@@ -180,7 +180,7 @@ class ServiceTest extends Base
             {
                 self::assertSame( $value, $vo->locationId );
             }
-            else
+            else if ( $property != 'modifiedSubLocation' )
             {
                 self::assertSame( $value, $vo->$property );
             }
@@ -340,7 +340,19 @@ class ServiceTest extends Base
      */
     public function testEmptyOne()
     {
-        $this->markTestIncomplete();
+        $trashedTop = $this->service->trash( $this->insertedLocations[0] );
+        $trashed = $this->service->trash( $this->location );
+
+        $this->service->emptyOne( $trashed );
+        // Check that trashed inserted locations has not been emptied
+        foreach ( $this->insertedLocations as $location )
+        {
+            self::assertInstanceOf( 'ezp\\Content\\Location\\Trashed', $this->service->loadByLocationId( $location->id ) );
+        }
+
+        // We should not be able to reload emptied trashed location
+        $this->setExpectedException( 'ezp\\Base\\Exception\\NotFound' );
+        $this->service->loadByLocationId( $this->location->id );
     }
 }
 

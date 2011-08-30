@@ -157,9 +157,11 @@ class TrashHandler implements TrashHandlerInterface
     /**
      * @see ezp\Persistence\Content\Location\Trash\Handler
      */
-    public function emptyOne( $trashedLocationId )
+    public function emptyOne( $trashedId )
     {
-        $this->backend->delete( 'Content\\Location\\Trashed' , $trashedLocationId );
+        $vo = $this->load( $trashedId );
+        $this->handler->contentHandler()->delete( $vo->contentId );
+        $this->backend->delete( 'Content\\Location\\Trashed' , $trashedId );
     }
 
     /**
