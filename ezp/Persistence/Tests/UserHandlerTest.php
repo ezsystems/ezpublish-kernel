@@ -216,6 +216,18 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
+     * Test loadRolesByGroupId function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadRolesByGroupId
+     */
+    public function testLoadRolesByGroupIdNotFound()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $list = $handler->loadRolesByGroupId( 999 );
+        $this->assertEquals( array(), $list  );
+    }
+
+    /**
      * Test update function
      *
      * @covers ezp\Persistence\Storage\InMemory\UserHandler::updateRole
