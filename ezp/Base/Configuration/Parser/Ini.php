@@ -67,6 +67,7 @@ class Ini implements Parser
         // if it failed, fallback to ezc ini parser for compatibility
         if ( $configurationData === false )
         {
+            trigger_error( "parse_ini_string( {$this->file} ) failed, see warning for line number. Falling back to ezcConfigurationIniReader", E_USER_NOTICE );
             $configurationData = $this->parseFileEzc( $fileContent );
         }
         return $configurationData;
@@ -90,30 +91,32 @@ class Ini implements Parser
             array( ';', "\n", "\n", "=" . self::TEMP_INI_TRUE_VAR . "\n", "=" . self::TEMP_INI_FALSE_VAR . "\n" ),
             $fileContent . "\n"
         );
-        $fileContent = self::parserClearArraySupport( $fileContent );
+        $fileContent = $this->parserClearArraySupport( $fileContent );
 
         // Parse string
         $configurationData = parse_ini_string( $fileContent, true );
 
         // Post processing to turn en/disabled back to bool values (like ezc parser does for true/false strings)
         // cast numeric values and unset array self::TEMP_INI_UNSET_VAR values as set in {@link self::parserClearArraySupport()}
-        if ( $configurationData !== false )
+        if ( $configurationData === false )
         {
-            foreach ( $configurationData as $section => $sectionArray )
+            return $configurationData;
+        }
+
+        foreach ( $configurationData as $section => $sectionArray )
+        {
+            foreach ( $sectionArray as $setting => $settingValue )
             {
-                foreach ( $sectionArray as $setting => $settingValue )
+                if ( is_array( $settingValue ) )
                 {
-                    if ( is_array( $settingValue ) )
+                    foreach ( $settingValue as $key => $keyValue )
                     {
-                        foreach ( $settingValue as $key => $keyValue )
-                        {
-                            $configurationData[$section][$setting][$key] = self::parseFilePhpPostFilter( $keyValue );
-                        }
+                        $configurationData[$section][$setting][$key] = self::parseFilePhpPostFilter( $keyValue );
                     }
-                    else
-                    {
-                        $configurationData[$section][$setting] = self::parseFilePhpPostFilter( $settingValue );
-                    }
+                }
+                else
+                {
+                    $configurationData[$section][$setting] = self::parseFilePhpPostFilter( $settingValue );
                 }
             }
         }
@@ -132,7 +135,7 @@ class Ini implements Parser
         // First some pre processing to normalize result with parse_ini_string result
         $fileContent = str_replace( array( "\r\n", "\r" ), "\n", $fileContent . "\n" );
         $fileContent = preg_replace( array( '/^<\?php[^\/]\/\*\s*/', '/\*\/[^\?]\?>/' ), '', $fileContent );
-        $fileContent = self::parserClearArraySupport( $fileContent );
+        $fileContent = $this->parserClearArraySupport( $fileContent );
 
         // Create ini dir if it does not exist
         if ( !file_exists( Configuration::CONFIG_CACHE_DIR ) )
@@ -223,21 +226,10 @@ class Ini implements Parser
      * @param string $fileContent
      * @return string
      */
-    protected static function parserClearArraySupport( $fileContent )
+    protected function parserClearArraySupport( $fileContent )
     {
-        if ( preg_match_all( "/\n([\w_-]+)\[\]\n/", $fileContent, $valueArray ) )
+        if ( preg_match_all( "/^([\w_-]+)\[\]$/m", $fileContent, $valueArray ) )
         {
-            foreach ( $valueArray[1] as $variableArrayClearing )
-            {
-                $variableArrayClearing .= '[]';
-                $fileContent = str_replace( "\n$variableArrayClearing\n", "\n$variableArrayClearing=" . Configuration::TEMP_INI_UNSET_VAR . "\n", $fileContent );
-            }
-        }
-
-        // For some reason this needs to be done twice to get them all
-        if ( preg_match_all( "#\n([\w_-]+)\[\]\n#", $fileContent, $valueArray ) )
-        {
-            trigger_error( __METHOD__ . ": regex second round!", E_USER_NOTICE );
             foreach ( $valueArray[1] as $variableArrayClearing )
             {
                 $variableArrayClearing .= '[]';
