@@ -84,7 +84,7 @@ class Handler implements BaseLocationHandler
      */
     public function copySubtree( $sourceId, $destinationParentId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -208,7 +208,7 @@ class Handler implements BaseLocationHandler
      */
     public function removeSubtree( $locationId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( '@TODO: Implement' );
     }
 
     /**
@@ -265,7 +265,7 @@ class Handler implements BaseLocationHandler
      */
     public function delete( $locationId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( '@TODO: Implement' );
     }
 }
 ?>
