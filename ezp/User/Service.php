@@ -8,11 +8,18 @@
  */
 
 namespace ezp\User;
-use ezp\Base\Service as BaseService,
+use ezp\Base\Configuration,
+    ezp\Base\Service as BaseService,
     ezp\Base\Proxy,
     ezp\Base\Collection\Lazy,
+    ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\NotFound,
+    ezp\Base\Exception\NotFoundWithType,
+    ezp\Base\Exception\PropertyNotFound,
+    ezp\Content,
     ezp\User,
+    ezp\User\Group,
+    ezp\User\GroupLocation,
     ezp\User\Role,
     ezp\User\Policy,
     ezp\Persistence\User as UserValueObject,
@@ -32,13 +39,15 @@ class Service extends BaseService
      * @param \ezp\User $user
      * @return \ezp\User
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
+     * @throws \ezp\Base\Exception\NotFound If attached content object with same id does not exist
      */
     public function create( User $user )
     {
         $struct = new UserValueObject();
         $this->fillStruct( $struct, $user );
+        $content = $this->repository->getContentService()->load( $user->id );// before create() to validate ->id
         $vo = $this->handler->userHandler()->create( $struct );
-        return $this->buildUser( $vo );
+        return $this->buildUser( $vo, $content );
     }
 
     /**
@@ -50,7 +59,8 @@ class Service extends BaseService
      */
     public function load( $id )
     {
-        return $this->buildUser( $this->handler->userHandler()->load( $id ) );
+        $content = $this->repository->getContentService()->load( $id );
+        return $this->buildUser( $this->handler->userHandler()->load( $id ), $content );
     }
 
     /**
@@ -70,10 +80,64 @@ class Service extends BaseService
      * Delete a User object by id
      *
      * @param mixed $id
+     * @todo What about content object?
      */
     public function delete( $id )
     {
         $this->handler->userHandler()->delete( $id );
+    }
+
+    /**
+     * Crate a Group object
+     *
+     * @param \ezp\User\GroupLocation $parentGroupLocation
+     * @param string $name
+     * @param string $description
+     * @return \ezp\User\Group
+     * @throws \ezp\Base\Exception\PropertyNotFound If name or description properties (fields) are not found
+     */
+    public function createGroup( GroupLocation $parentGroupLocation, $name, $description = '' )
+    {
+        $typeId = Configuration::getInstance( 'site' )->get( 'UserSettings', 'UserGroupClassID', 3 );
+        $parentLocation = $parentGroupLocation->getState( 'location' );
+
+        $type = $this->repository->getContentTypeService()->load( $typeId );
+        if ( !$type )
+            throw new BadConfiguration( 'site.ini[UserSettings]UserGroupClassID', 'could not load type:' . $typeId );
+
+        $content = new Content( $type );
+        $content->addParent( $parentLocation );
+        $content->ownerId = $this->repository->getCurrentUser()->id;
+        $content->getState('properties')->sectionId = $parentLocation->content->sectionId;
+
+        if ( !isset( $content->fields['name'] ) )
+            throw new PropertyNotFound( 'name', get_class( $content ) );
+        elseif ( !isset( $content->fields['description'] ) )
+            throw new PropertyNotFound( 'description', get_class( $content ) );
+
+        $content->fields['name'] = $name;
+        $content->fields['description'] = $description;
+        $content->name = array( 'eng-GB' => $name );// @todo remove when name handler is in place
+
+        return new Group( $this->repository->getContentService()->create( $content ) );
+    }
+
+    /**
+     * Load a Group object by id
+     *
+     * @param mixed $id
+     * @return \ezp\User\Group
+     * @throws \ezp\Base\Exception\NotFound If group is not found
+     * @throws \ezp\Base\Exception\NotFound If group is not found
+     */
+    public function loadGroup( $id )
+    {
+        $typeId = Configuration::getInstance( 'site' )->get( 'UserSettings', 'UserGroupClassID', 3 );
+        $content = $this->repository->getContentService()->load( $id );
+        if ( $content->typeId != $typeId )
+            throw new NotFoundWithType( "User Group({$typeId})", $id );
+
+        return new Group( $content );
     }
 
     /**
@@ -182,12 +246,13 @@ class Service extends BaseService
      * @param \ezp\Persistence\User $vo
      * @return \ezp\User
      */
-    protected function buildUser( UserValueObject $vo )
+    protected function buildUser( UserValueObject $vo, Content $content )
     {
         $do = new User();
         $do->setState(
             array(
                 "properties" => $vo,
+                "content" => $content,
                 /*"groups" => new Lazy(
                     "ezp\\User\\Group",
                     $this,

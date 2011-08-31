@@ -56,9 +56,13 @@ class Service extends BaseService
         return $this->buildDomainObject( $locationVO );
     }
 
+    /**
+     * @param \ezp\Content\Location $location
+     * @return \ezp\Content\Location[]
+     */
     public function children( Location $location )
     {
-
+        return array();
     }
 
     /**

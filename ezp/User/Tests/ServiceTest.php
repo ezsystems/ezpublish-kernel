@@ -28,12 +28,12 @@ class ServiceTest extends BaseServiceTest
     public function testCreate()
     {
         $service = $this->repository->getUserService();
-        $do = new User();
-        $do->getState( 'properties' )->id = 1;
+        $do = new User( 1 );
         $do->login = $do->password ='test';
         $do->email = 'test@ez.no';
-        $do->getState( 'properties' )->hashAlgorithm = 2;
+        $do->hashAlgorithm = 2;
         $do = $service->create( $do );
+        self::assertInstanceOf( 'ezp\\User', $do );
         self::assertEquals( 1, $do->id );
         self::assertEquals( 'test', $do->login );
         self::assertEquals( 'test@ez.no', $do->email );
@@ -48,11 +48,10 @@ class ServiceTest extends BaseServiceTest
     public function testCreateExistingId()
     {
         $service = $this->repository->getUserService();
-        $do = new User();
-        $do->getState( 'properties' )->id = 14;
+        $do = new User( 14 );
         $do->login = $do->password ='test';
         $do->email = 'test@ez.no';
-        $do->getState( 'properties' )->hashAlgorithm = 2;
+        $do->hashAlgorithm = 2;
         $service->create( $do );
     }
 
@@ -68,7 +67,7 @@ class ServiceTest extends BaseServiceTest
         $do = new User();
         $do->login = $do->password ='test';
         $do->email = 'test@ez.no';
-        $do->getState( 'properties' )->hashAlgorithm = 2;
+        $do->hashAlgorithm = 2;
         $service->create( $do );
     }
 
@@ -81,6 +80,7 @@ class ServiceTest extends BaseServiceTest
     {
         $service = $this->repository->getUserService();
         $do = $service->load( 14 );
+        self::assertInstanceOf( 'ezp\\User', $do );
         self::assertEquals( 14, $do->id );
         self::assertEquals( 'admin', $do->login );
         self::assertEquals( 'spam@ez.no', $do->email );
@@ -160,6 +160,94 @@ class ServiceTest extends BaseServiceTest
     {
         $service = $this->repository->getUserService();
         $service->delete( 999 );
+    }
+
+    /**
+     * Test service function for creating group
+     *
+     * @covers \ezp\User\Service::createGroup
+     */
+    public function testCreateGroup()
+    {
+        $service = $this->repository->getUserService();
+        $parent = $service->loadGroup( 12 )->getLocations();
+
+        $do = $service->createGroup( $parent[0], 'New User Group' );
+        // @todo Test properties when field is stabilized
+        //self::assertEquals( '', $do->name );
+        //self::assertEquals( '', $do->description );
+
+        $groupLocations = $do->getLocations();
+        self::assertEquals( 1, count( $groupLocations ) );
+        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $groupLocations[0] );
+
+        $group = $groupLocations[0]->getGroup();
+        self::assertInstanceOf( 'ezp\\User\\Group', $group );
+        self::assertEquals( $do->id, $group->id );
+        self::assertTrue( $group === $do );
+
+        $parentGroupLocation = $groupLocations[0]->getParent();
+        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $parentGroupLocation );
+
+        $group = $parentGroupLocation->getGroup();
+        self::assertInstanceOf( 'ezp\\User\\Group', $group );
+        self::assertEquals( 12, $group->id );
+    }
+
+    /**
+     * Test service function for loading group
+     *
+     * @covers \ezp\User\Service::loadGroup
+     */
+    public function testLoadGroup()
+    {
+        $service = $this->repository->getUserService();
+        $do = $service->loadGroup( 12 );
+        self::assertInstanceOf( 'ezp\\User\\Group', $do );
+        self::assertEquals( 12, $do->id );
+        // @todo Test properties when field is stabilized and added to data.json
+        //self::assertEquals( '', $do->name );
+        //self::assertEquals( '', $do->description );
+
+        $groupLocations = $do->getLocations();
+        self::assertEquals( 1, count( $groupLocations ) );
+        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $groupLocations[0] );
+
+        $group = $groupLocations[0]->getGroup();
+        self::assertInstanceOf( 'ezp\\User\\Group', $group );
+        self::assertEquals( 12, $group->id );
+        self::assertTrue( $group === $do );
+
+        $parentGroupLocation = $groupLocations[0]->getParent();
+        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $parentGroupLocation );
+
+        $group = $parentGroupLocation->getGroup();
+        self::assertInstanceOf( 'ezp\\User\\Group', $group );
+        self::assertEquals( 4, $group->id );
+    }
+
+    /**
+     * Test service function for loading group
+     *
+     * @covers \ezp\User\Service::loadGroup
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadGroupNotFound()
+    {
+        $service = $this->repository->getUserService();
+        $service->loadGroup( 999 );
+    }
+
+    /**
+     * Test service function for loading group
+     *
+     * @covers \ezp\User\Service::loadGroup
+     * @expectedException \ezp\Base\Exception\NotFoundWithType
+     */
+    public function testLoadGroupNotFoundWithType()
+    {
+        $service = $this->repository->getUserService();
+        $service->loadGroup( 1 );
     }
 
     /**
