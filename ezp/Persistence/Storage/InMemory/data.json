@@ -58,6 +58,7 @@
         {"id": 1, "name": {"eng-GB": "Content"}, "description": {"eng-GB": "Content type group"}},
         {"id": 2, "name": {"eng-GB": "Users"}, "description": {"eng-GB": "User content type group"}}
     ],
+    "Content\\Relation": [],
     "User": [
         {"id": 14, "login": "admin", "email": "spam@ez.no", "password": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorithm": 2, "isEnabled": true, "maxLogin": 10},
         {"id": 10, "login": "anonymous", "email": "nospam@ez.no", "password": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorithm": 2, "isEnabled": true, "maxLogin": 1000}
