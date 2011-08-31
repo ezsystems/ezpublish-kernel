@@ -191,7 +191,7 @@ class Handler implements BaseContentHandler
             throw new \RuntimeException( 'Content object not found.' );
         }
 
-        // Extrernal field data is handled in mapper
+        // @TODO: Handle external field data.
 
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
         return $contentObjects[0];
