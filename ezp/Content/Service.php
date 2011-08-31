@@ -36,7 +36,7 @@ class Service extends BaseService
     /**
      * Creates the new $content in the content repository
      *
-     * @param Content $content
+     * @param \ezp\Content $content
      * @return Content The newly created content
      * @throws \ezp\Base\Exception\InvalidArgumentType If $content already has an id
      * @todo If/when we have some sort of object storage, use that to check if object is persisted instead of just id
@@ -75,7 +75,7 @@ class Service extends BaseService
     /**
      * Updates $content in the content repository
      *
-     * @param Content $content
+     * @param \ezp\Content $content
      * @return Content
      * @throws Exception\Validation If a validation problem has been found for $content
      */
@@ -129,7 +129,7 @@ class Service extends BaseService
     /**
      * Deletes a content from the repository
      *
-     * @param Content $content
+     * @param \ezp\Content $content
      * @throws \ezp\Base\Exception\NotFound if content could not be found
      */
     public function delete( Content $content )
@@ -169,7 +169,7 @@ class Service extends BaseService
     /**
      * Sends $content to trash
      *
-     * @param Content $content
+     * @param \ezp\Content $content
      */
     public function trash( Content $content )
     {
@@ -179,7 +179,7 @@ class Service extends BaseService
     /**
      * Restores $content from trash
      *
-     * @param Content $content
+     * @param \ezp\Content $content
      */
     public function unTrash( Content $content )
     {
