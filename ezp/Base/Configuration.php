@@ -426,7 +426,7 @@ class Configuration extends Override
         $configurationFileData = array();
         foreach ( $sourceFiles as $fileName => $suffix )
         {
-            $parser = new $parsers[$suffix]( $fileName );
+            $parser = new $parsers[$suffix]( $fileName, self::$globalConfigurationData );
             $configurationFileData[$fileName] = $parser->parse( file_get_contents( $fileName ) );
         }
 

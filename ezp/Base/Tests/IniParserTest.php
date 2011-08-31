@@ -22,7 +22,7 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->parser = new Ini( null );
+        $this->parser = new Ini( null, array() );
     }
 
     /**

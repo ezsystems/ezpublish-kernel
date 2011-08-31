@@ -19,8 +19,9 @@ interface Parser
      * Construct an instance for a specific file
      *
      * @param string $file A valid file name, will be overwritten if it exists by {@link write()}
+     * @param array $globalConfiguration
      */
-    public function __construct( $file );
+    public function __construct( $file, array $globalConfiguration );
 
     /**
      * Parse file and return raw configuration data

@@ -46,13 +46,23 @@ class Ini implements Parser
     protected $file;
 
     /**
+     * Defines if strict mode should be used (parse_ini_string), otherwise use ezcConfigurationIniReader
+     *
+     * @var bool
+     */
+    protected $strictMode = false;
+
+    /**
      * Construct an instance for a specific file
      *
      * @param string $file A valid file name, file must exist!
+     * @param array $globalConfiguration
      */
-    public function __construct( $file )
+    public function __construct( $file, array $globalConfiguration )
     {
         $this->file = $file;
+        if ( isset( $globalConfiguration['base']['configuration']['ini-parser']['strict'] ) )
+            $this->strictMode = $globalConfiguration['base']['configuration']['ini-parser']['strict'];
     }
 
     /**
@@ -63,12 +73,17 @@ class Ini implements Parser
      */
     public function parse( $fileContent )
     {
+        if ( !$this->strictMode )
+        {
+            return $this->parseFileEzc( $fileContent );
+        }
+
         $configurationData = $this->parseFilePhp( $fileContent );
-        // if it failed, fallback to ezc ini parser for compatibility
         if ( $configurationData === false )
         {
-            trigger_error( "parse_ini_string( {$this->file} ) failed, see warning for line number. Falling back to ezcConfigurationIniReader", E_USER_NOTICE );
-            $configurationData = $this->parseFileEzc( $fileContent );
+            trigger_error( "parse_ini_string( {$this->file} ) failed, see warning for line number. " .
+                           "Falling back to ezcConfigurationIniReader", E_USER_NOTICE );
+            return array();
         }
         return $configurationData;
     }
