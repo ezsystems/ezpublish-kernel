@@ -12,9 +12,11 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\Relation as RelationValue,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Base\Exception\NotFound,
-    ezp\Content\Version;
+    ezp\Content\Version,
+    ezp\Content\Relation;
 
 /**
  * Test case for ContentHandler using in memory storage.
@@ -334,5 +336,55 @@ class ContentHandlerTest extends HandlerTest
         $this->contentToDelete[] = $content;
 
         $fields = $contentHandler->loadFields( $content->id, $content->currentVersionNo );
+    }
+
+    /**
+     * Test addRelation function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::addRelation
+     */
+    public function testAddRelation1()
+    {
+        $relation = $this->repositoryHandler->contentHandler()->addRelation( 14, null, 10, Relation::COMMON );
+        $this->assertEquals( 1, $relation->id );
+        $this->assertEquals( 14, $relation->sourceContentId );
+        $this->assertNull( $relation->sourceContentVersion );
+        $this->assertEquals( 10, $relation->destinationContentId );
+    }
+
+    /**
+     * Test addRelation function with a version
+     *
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::addRelation
+     */
+    public function testAddRelation2()
+    {
+        $relation = $this->repositoryHandler->contentHandler()->addRelation( 14, 1, 10, Relation::COMMON );
+        $this->assertEquals( 1, $relation->id );
+        $this->assertEquals( 14, $relation->sourceContentId );
+        $this->assertEquals( 1, $relation->sourceContentVersion );
+        $this->assertEquals( 10, $relation->destinationContentId );
+    }
+
+    /**
+     * Test addRelation function with unexisting source content ID
+     *
+     * @expectedException ezp\Base\Exception\NotFound
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::addRelation
+     */
+    public function testAddRelationSourceDoesNotExist1()
+    {
+        $this->repositoryHandler->contentHandler()->addRelation( 123456, null, 10, Relation::COMMON );
+    }
+
+    /**
+     * Test addRelation function with unexisting source content version
+     *
+     * @expectedException ezp\Base\Exception\NotFound
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::addRelation
+     */
+    public function testAddRelationSourceDoesNotExist2()
+    {
+        $this->repositoryHandler->contentHandler()->addRelation( 14, 123456, 10, Relation::COMMON );
     }
 }

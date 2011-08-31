@@ -338,4 +338,50 @@ class ContentHandler implements ContentHandlerInterface
 
         return $fields;
     }
+
+    /**
+     * Creates a relation between $sourceContentId in $sourceContentVersion
+     * and $destinationContentId with a specific $type.
+     *
+     * @todo Handle Attribute relation
+     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
+     *
+     * @param int $sourceContentId Source Content ID
+     * @param int|null $sourceContentVersion Source Content Version, null if not specified
+     * @param int $destinationContentId Destination Content ID
+     * @param int $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     */
+    public function addRelation( $sourceContentId, $sourceContentVersion, $destinationContentId, $type )
+    {
+        // Ensure source content exists
+        $sourceContent = $this->backend->find( "Content", array( "id" => $sourceContentId ) );
+
+        if ( empty( $sourceContent ) )
+            throw new NotFound( "Content", "id: $sourceContentId" );
+
+        // Ensure source content exists if version is specified
+        if ( $sourceContentVersion !== null )
+        {
+            $version = $this->backend->find( "Content\\Version", array( "contentId" => $sourceContentId, "versionNo" => $sourceContentVersion ) );
+
+            if ( empty( $version ) )
+                throw new NotFound( "Content\\Version", "contentId: $sourceContentId, versionNo: $sourceContentVersion" );
+        }
+
+        // Ensure destination content exists
+        $destinationContent = $this->backend->find( "Content", array( "id" => $destinationContentId ) );
+
+        if ( empty( $destinationContent ) )
+            throw new NotFound( "Content", "id: $destinationContentId" );
+
+        return $this->backend->create(
+            "Content\\Relation", array(
+                "type" => $type,
+                "sourceContentId" => $sourceContentId,
+                "sourceContentVersion" => $sourceContentVersion,
+                "destinationContentId" => $destinationContentId,
+                "attributeId" => null,
+            )
+        );
+    }
 }
