@@ -346,6 +346,13 @@ class EzcDatabaseTest extends TestCase
         */
     }
 
+    /**
+     * Stores $fixture in $file to be required as a fixture
+     *
+     * @param string $file
+     * @param mixed $fixture
+     * @return void
+     */
     protected function storeFixture( $file, $fixture )
     {
         file_put_contents(
