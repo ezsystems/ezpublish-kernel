@@ -55,6 +55,19 @@ class Legacy implements Backend
     }
 
     /**
+     * Updates the file identified by $path with data from $updateFile
+     *
+     * @param string $path
+     * @param BinaryFileUpdateStruct $updateFile
+     *
+     * @return BinaryFile The updated BinaryFile
+     */
+    public function update( $path, BinaryFileUpdateStruct $updateFile )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Deletes the file $path
      * @param string $path
      * @throws \ezp\Base\Exception\InvalidArgumentType If the file doesn't exist
@@ -105,6 +118,16 @@ class Legacy implements Backend
         $file->contentType = new ContentType( $type, $subType );
 
         return $file;
+    }
+
+    /**
+     * Returns a file resource to the BinaryFile $file
+     * @param BinaryFile $file
+     * @return resource
+     */
+    public function getFileResource( BinaryFile $file )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
     }
 }
 ?>
