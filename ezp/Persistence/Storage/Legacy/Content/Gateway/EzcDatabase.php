@@ -413,7 +413,22 @@ class EzcDatabase extends Gateway
      */
     public function getAllLocationIds( $contentId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( 'node_id' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_tree' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_COLUMN );
     }
 
     /**
@@ -424,7 +439,24 @@ class EzcDatabase extends Gateway
      */
     public function deleteRelations( $contentId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezcontentobject_link' )
+        )->where(
+            $query->expr->lOr(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'from_contentobject_id' ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'to_contentobject_id' ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
     }
 
     /**
@@ -435,7 +467,17 @@ class EzcDatabase extends Gateway
      */
     public function deleteFields( $contentId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom( 'ezcontentobject_attribute' )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
     }
 
     /**
@@ -446,7 +488,17 @@ class EzcDatabase extends Gateway
      */
     public function deleteVersions( $contentId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom( 'ezcontentobject_version' )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
     }
 
     /**
@@ -457,6 +509,16 @@ class EzcDatabase extends Gateway
      */
     public function deleteContent( $contentId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom( 'ezcontentobject' )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
     }
 }

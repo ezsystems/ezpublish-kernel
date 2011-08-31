@@ -307,6 +307,10 @@ class EzcDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::listVersions
+     */
     public function testListVersions()
     {
         $this->insertDatabaseFixture(
@@ -344,6 +348,285 @@ class EzcDatabaseTest extends TestCase
             $res
         );
         */
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::getAllLocationIds
+     */
+    public function testGetAllLocationIds()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $this->assertEquals(
+            array( 228 ),
+            $gateway->getAllLocationIds( 226 )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteRelations
+     */
+    public function testDeleteRelationsTo()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentRelations(),
+            'from' => $this->countContentRelations( 149 ),
+            'to' => $this->countContentRelations( null, 149 )
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway->deleteRelations( 149 );
+
+        $this->assertEquals(
+            // yes, relates to itself!
+            array(
+                'all' => $beforeCount['all'] - 2,
+                'from' => $beforeCount['from'] - 1,
+                'to' => $beforeCount['to'] - 2,
+            ),
+            array(
+                'all' => $this->countContentRelations(),
+                'from' => $this->countContentRelations( 149 ),
+                'to' => $this->countContentRelations( null, 149 )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteRelations
+     */
+    public function testDeleteRelationsFrom()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentRelations(),
+            'from' => $this->countContentRelations( 75 ),
+            'to' => $this->countContentRelations( null, 75 )
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway->deleteRelations( 75 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 6,
+                'from' => $beforeCount['from'] - 6,
+                'to' => $beforeCount['to'],
+            ),
+            array(
+                'all' => $this->countContentRelations(),
+                'from' => $this->countContentRelations( 75 ),
+                'to' => $this->countContentRelations( null, 75 )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteFields
+     */
+    public function testDeleteFields()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentFields(),
+            'this' => $this->countContentFields( 4 ),
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway->deleteFields( 4 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 2,
+                'this' => 0
+            ),
+            array(
+                'all' => $this->countContentFields(),
+                'this' => $this->countContentFields( 4 ),
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteVersions
+     */
+    public function testDeleteVersions()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentVersions(),
+            'this' => $this->countContentVersions( 14 )
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway->deleteVersions( 14 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 2,
+                'this' => 0
+            ),
+            array(
+                'all' => $this->countContentVersions(),
+                'this' => $this->countContentVersions( 14 ),
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteContent
+     */
+    public function testDeleteContent()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = $this->countContent();
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway->deleteContent( 14 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount - 1,
+                'this' => 0
+            ),
+            array(
+                'all' => $this->countContent(),
+                'this' => $this->countContent( 14 )
+            )
+        );
+    }
+
+    /**
+     * Counts the number of relations in the database.
+     *
+     * @param int $fromId
+     * @param int $toId
+     * @return int
+     */
+    protected function countContentRelations( $fromId = null, $toId = null )
+    {
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $query->select( 'count(*)' )
+            ->from( 'ezcontentobject_link' );
+
+        if ( $fromId !== null )
+        {
+            $query->where(
+                'from_contentobject_id=' . $fromId
+            );
+        }
+        if ( $toId !== null )
+        {
+            $query->where(
+                'to_contentobject_id=' . $toId
+            );
+        }
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int) $statement->fetchColumn();
+    }
+
+    /**
+     * Counts the number of fields
+     *
+     * @param int $contentId
+     * @return int
+     */
+    protected function countContentFields( $contentId = null )
+    {
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $query->select( 'count(*)' )
+            ->from( 'ezcontentobject_attribute' );
+
+        if ( $contentId !== null )
+        {
+            $query->where(
+                'contentobject_id=' . $contentId
+            );
+        }
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int) $statement->fetchColumn();
+    }
+
+    /**
+     * Counts the number of versions
+     *
+     * @param int $contentId
+     * @return int
+     */
+    protected function countContentVersions( $contentId = null )
+    {
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $query->select( 'count(*)' )
+            ->from( 'ezcontentobject_version' );
+
+        if ( $contentId !== null )
+        {
+            $query->where(
+                'contentobject_id=' . $contentId
+            );
+        }
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int) $statement->fetchColumn();
+    }
+
+    /**
+     * Counts the number of content objects
+     *
+     * @param int $contentId
+     * @return int
+     */
+    protected function countContent( $contentId = null )
+    {
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $query->select( 'count(*)' )
+            ->from( 'ezcontentobject' );
+
+        if ( $contentId !== null )
+        {
+            $query->where(
+                'id=' . $contentId
+            );
+        }
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int) $statement->fetchColumn();
     }
 
     /**
