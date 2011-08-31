@@ -52,8 +52,8 @@ use ezp\Base\Model,
  *                </code>
  * @property-read DateTime $creationDate The date the object was created
  * @property \ezp\Content\Section $section The Section the content belongs to
- * @property \ezp\Content[] $relations Collection of ezp\Content objects, related to the current one
- * @property \ezp\Content[] $reverseRelations Collection of ezp\Content objects, reverse-related to the current one
+ * @property \ezp\Content\Relation[] $relations Collection of \ezp\Content\Relation objects, related to the current one
+ * @property \ezp\Content\Relation[] $reverseRelations Collection of \ezp\Content\Relation objects, reverse-related to the current one
  * @property \ezp\Content\Translation[] $translations
  *           Collection of content's translations, indexed by locale (ie. eng-GB)
  *           <code>
@@ -141,14 +141,14 @@ class Content extends Model
     /**
      * Relations collection
      *
-     * @var \ezp\Content[]
+     * @var \ezp\Content\Relation[]
      */
     protected $relations;
 
     /**
      * Reverse relation collection
      *
-     * @var \ezp\Content[]
+     * @var \ezp\Content\Relation[]
      */
     protected $reversedRelations;
 
@@ -172,8 +172,8 @@ class Content extends Model
         */
         $this->contentType = $contentType;
         $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
-        $this->relations = new TypeCollection( 'ezp\\Content' );
-        $this->reversedRelations = new TypeCollection( 'ezp\\Content' );
+        $this->relations = new TypeCollection( 'ezp\\Content\\Relation' );
+        $this->reversedRelations = new TypeCollection( 'ezp\\Content\\Relation' );
         $this->versions = new VersionCollection( array( new Version( $this ) ) );
     }
 
