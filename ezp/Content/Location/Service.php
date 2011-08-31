@@ -80,7 +80,7 @@ class Service extends BaseService
         }
 
         $struct = new CreateStruct();
-        foreach ( $location->properties() as $name => $value )
+        foreach ( $location->properties() as $name )
         {
             if ( property_exists( $struct, $name ) )
             {
@@ -109,7 +109,7 @@ class Service extends BaseService
     public function update( Location $location )
     {
         $struct = new UpdateStruct;
-        foreach ( $location->properties() as $name => $value )
+        foreach ( $location->properties() as $name )
         {
             if ( property_exists( $struct, $name ) )
             {

@@ -97,7 +97,7 @@ abstract class Model implements Observable, ModelInterface
      */
     public function properties()
     {
-        return $this->dynamicProperties + $this->readWriteProperties;
+        return array_keys( $this->dynamicProperties + $this->readWriteProperties );
     }
 
     /**
