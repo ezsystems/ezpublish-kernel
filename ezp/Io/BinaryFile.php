@@ -24,12 +24,6 @@ class BinaryFile
     public $path;
 
     /**
-     * Name (without dir) of the original file
-     * @var string
-     */
-    public $originalFile;
-
-    /**
      * File size, in bytes
      * @var int
      */

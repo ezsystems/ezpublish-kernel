@@ -9,6 +9,8 @@
 
 namespace ezp\Io;
 
+use finfo;
+
 /**
  * This struct describes a file content type, as described in RFC 2045, RFC 2046,
  * RFC 2047, RFC 4288, RFC 4289 and RFC 2049.
@@ -27,6 +29,20 @@ class ContentType
     public function __toString()
     {
         return "$this->type/$this->subType";
+    }
+
+    /**
+     * Returns a ContentType object from a file path, using fileinfo
+     * @param string $path
+     * @return ContentType
+     * @todo Remove hardcoded dependency on fileinfo, use injection
+     */
+    public static function getFromPath( $path )
+    {
+        $finfo = new finfo( FILEINFO_MIME_TYPE );
+        $mime = $finfo->file( $path );
+        $mimeParts = explode( '/', $mime );
+        return new self( $mimeParts[0], $mimeParts[1] );
     }
 
     /**

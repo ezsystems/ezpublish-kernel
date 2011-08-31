@@ -10,7 +10,7 @@
 namespace ezp\Base;
 use ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\BadConfiguration,
-    ezp\Io\BinaryFile, ezp\Io\BinaryFileUpdateStruct, ezp\Io\BinaryFileCreateStruct,
+    ezp\Io\BinaryFile, ezp\Io\BinaryFileUpdateStruct, ezp\Io\BinaryFileCreateStruct, ezp\Io\ContentType,
     DateTime;
 
 /**
@@ -94,6 +94,7 @@ class BinaryRepository
         $time = new DateTime;
         $file->ctime = $time;
         $file->mtime = $time;
+        $file->contentType = ContentType::getFromPath( $localFile );
 
         $inputStream = fopen( $localFile, 'rb' );
         $file->setInputStream( $inputStream );

@@ -96,6 +96,16 @@ class Container
     }
 
     /**
+     * @return BinaryRepository
+     */
+    public function getBinaryRepository()
+    {
+        if ( isset( $this->dependencies['@binary_repository'] ) )
+            return $this->dependencies['@binary_repository'];
+        return $this->get( 'binary_repository' );
+    }
+
+    /**
      * Get service by name
      *
      * @throws InvalidArgumentException

@@ -12,7 +12,9 @@ namespace ezp\Io\BinaryStorage;
 use ezp\Io\BinaryStorage\Backend,
     ezp\Io\BinaryFile, ezp\Io\BinaryFileCreateStruct, ezp\Io\BinaryFileUpdateStruct,
     ezp\Io\ContentType,
-    ezp\Base\Exception\InvalidArgumentValue;
+    ezp\Base\Exception\InvalidArgumentValue,
+    eZClusterFileHandler,
+    DateTime;
 
 /**
  * Legacy BinaryStorage handler, based on eZ Cluster
@@ -41,17 +43,20 @@ class Legacy implements Backend
     {
         if ( $this->exists( $file->path ) )
         {
-            throw new InvalidArgumentValue( 'file', $file, 'BinaryFileCreateStruct' );
+            throw new \Exception( "A binary file identified with $file->path already exists" );
         }
+
 
         // @todo Build a path / scope mapper
         $scope = 'todo';
-        $this->clusterHandler->storeContents(
+        $this->clusterHandler->fileStoreContents(
             $file->path,
             fread( $file->getInputStream(), $file->size ),
             (string)$file->contentType,
             $scope
         );
+
+        return $this->load( $file->path );
     }
 
     /**
@@ -83,13 +88,36 @@ class Legacy implements Backend
     }
 
     /**
+     * Updates the file identified by $path with data from $updateFile
+     *
+     * @param string $path
+     * @param BinaryFileUpdateStruct $updateFile
+     *
+     * @return BinaryFile The updated BinaryFile
+     */
+    public function update( $path, BinaryFileUpdateStruct $updateFile )
+    {
+
+    }
+
+    /**
+     * Returns a file resource to the BinaryFile $file
+     * @param BinaryFile $file
+     * @return resource
+     */
+    public function getFileResource( BinaryFile $file )
+    {
+
+    }
+
+    /**
      * Checks if a file with $path exists in the backend
      * @var string $path
      * @return bool
      */
     public function exists( $path )
     {
-        return $this->clusterFileHandler->fileExists( $path );
+        return $this->clusterHandler->fileExists( $path );
     }
 
     /**
@@ -100,22 +128,36 @@ class Legacy implements Backend
      */
     public function load( $path )
     {
-        $clusterFile = eZClusterFileHandler::instance( $path );
-
-        if ( !$clusterFile->exists() )
+        if ( !$this->exists( $path ) )
         {
             throw new InvalidArgumentValue( 'path', $path );
         }
 
+        $clusterFile = eZClusterFileHandler::instance( $path );
+
         $metaData = $clusterFile->metaData;
-        list( $type, $subType ) = explode( '/', $metaData['datatype'] );
 
         $file = new BinaryFile();
         $file->path = $path;
-        $file->ctime = false;
-        $file->mtime = $metaData['mtime'];
+
+        $file->mtime = new DateTime();
+        $file->mtime->setTimestamp( $metaData['mtime'] );
+
+        $file->ctime = $file->mtime;
+
         $file->size = $metaData['size'];
-        $file->contentType = new ContentType( $type, $subType );
+
+        // will only work with some ClusterFileHandlers (DB based ones, not with FS ones)
+        if ( isset( $metaData['datatype'] ) )
+        {
+            list( $type, $subType ) = explode( '/', $metaData['datatype'] );
+            $file->contentType = new ContentType( $type, $subType );
+        }
+        else
+        {
+            $file->contentType = ContentType::getFromPath( $path );
+        }
+
 
         return $file;
     }
