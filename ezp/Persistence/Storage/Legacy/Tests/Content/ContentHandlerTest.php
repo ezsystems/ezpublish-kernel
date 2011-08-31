@@ -786,6 +786,9 @@ class ContentHandlerTest extends TestCase
             ->method( 'deleteVersions' )
             ->with( $this->equalTo( 23 ) );
         $gatewayMock->expects( $this->once() )
+            ->method( 'deleteNames' )
+            ->with( $this->equalTo( 23 ) );
+        $gatewayMock->expects( $this->once() )
             ->method( 'deleteContent' )
             ->with( $this->equalTo( 23 ) );
 

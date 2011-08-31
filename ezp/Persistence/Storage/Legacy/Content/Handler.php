@@ -290,6 +290,7 @@ class Handler implements BaseContentHandler
         $this->contentGateway->deleteRelations( $contentId );
         $this->contentGateway->deleteFields( $contentId );
         $this->contentGateway->deleteVersions( $contentId );
+        $this->contentGateway->deleteNames( $contentId );
         $this->contentGateway->deleteContent( $contentId );
     }
 

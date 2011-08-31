@@ -497,6 +497,36 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteVersions
+     */
+    public function testDeleteNames()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = array(
+            'all' => $this->countContentNames(),
+            'this' => $this->countContentNames( 14 )
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway->deleteNames( 14 );
+
+        $this->assertEquals(
+            array(
+                'all' => $beforeCount['all'] - 2,
+                'this' => 0
+            ),
+            array(
+                'all' => $this->countContentNames(),
+                'this' => $this->countContentNames( 14 ),
+            )
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteContent
      */
     public function testDeleteContent()
@@ -590,6 +620,31 @@ class EzcDatabaseTest extends TestCase
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $query->select( 'count(*)' )
             ->from( 'ezcontentobject_version' );
+
+        if ( $contentId !== null )
+        {
+            $query->where(
+                'contentobject_id=' . $contentId
+            );
+        }
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int) $statement->fetchColumn();
+    }
+
+    /**
+     * Counts the number of content names
+     *
+     * @param int $contentId
+     * @return int
+     */
+    protected function countContentNames( $contentId = null )
+    {
+        $query = $this->getDatabaseHandler()->createSelectQuery();
+        $query->select( 'count(*)' )
+            ->from( 'ezcontentobject_name' );
 
         if ( $contentId !== null )
         {

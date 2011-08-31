@@ -111,6 +111,14 @@ abstract class Gateway
     abstract public function deleteVersions( $contentId );
 
     /**
+     * Deletes all names of $contentId
+     *
+     * @param int $contentId
+     * @return void
+     */
+    abstract public function deleteNames( $contentId );
+
+    /**
      * Deletes the actual content object referred to by $contentId
      *
      * @param int $contentId

@@ -502,6 +502,27 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Deletes all names of $contentId
+     *
+     * @param int $contentId
+     * @return void
+     */
+    public function deleteNames( $contentId )
+    {
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom( 'ezcontentobject_name' )
+            ->where(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+    }
+
+    /**
      * Deletes the actual content object referred to by $contentId
      *
      * @param int $contentId
