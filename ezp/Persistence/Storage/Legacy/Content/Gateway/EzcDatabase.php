@@ -402,4 +402,61 @@ class EzcDatabase extends Gateway
 
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
+
+    /**
+     * Returns all IDs for locations that refer to $contentId
+     *
+     * @param int $contentId
+     * @return int[]
+     * @TODO This method does hardly belong here. Maybe put it into 
+     *       Location\Handler? But that hinders inter-operability.
+     */
+    public function getAllLocationIds( $contentId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
+     * Deletes relations to and from $contentId
+     *
+     * @param int $contentId
+     * @return void
+     */
+    public function deleteRelations( $contentId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
+     * Deletes all fields of $contentId in all versions
+     *
+     * @param int $contentId
+     * @return void
+     */
+    public function deleteFields( $contentId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
+     * Deletes all versions of $contentId
+     *
+     * @param int $contentId
+     * @return void
+     */
+    public function deleteVersions( $contentId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
+     * Deletes the actual content object referred to by $contentId
+     *
+     * @param int $contentId
+     * @return void
+     */
+    public function deleteContent( $contentId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
 }

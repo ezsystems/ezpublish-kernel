@@ -75,4 +75,46 @@ abstract class Gateway
      * @return string[][]
      */
     abstract public function listVersions( $contentId );
+
+    /**
+     * Returns all IDs for locations that refer to $contentId
+     *
+     * @param int $contentId
+     * @return int[]
+     * @TODO This method does hardly belong here. Maybe put it into
+     *       Location\Handler? But that hinders inter-operability.
+     */
+    abstract public function getAllLocationIds( $contentId );
+
+    /**
+     * Deletes relations to and from $contentId
+     *
+     * @param int $contentId
+     * @return void
+     */
+    abstract public function deleteRelations( $contentId );
+
+    /**
+     * Deletes all fields of $contentId in all versions
+     *
+     * @param int $contentId
+     * @return void
+     */
+    abstract public function deleteFields( $contentId );
+
+    /**
+     * Deletes all versions of $contentId
+     *
+     * @param int $contentId
+     * @return void
+     */
+    abstract public function deleteVersions( $contentId );
+
+    /**
+     * Deletes the actual content object referred to by $contentId
+     *
+     * @param int $contentId
+     * @return void
+     */
+    abstract public function deleteContent( $contentId );
 }

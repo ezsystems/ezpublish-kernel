@@ -277,10 +277,20 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @return boolean
+     * @TODO Handle external data
      */
     public function delete( $contentId )
     {
-        throw new Exception( "Not implemented yet." );
+        $locationIds = $this->contentGateway->getAllLocationIds( $contentId );
+        foreach ( $locationIds as $locationId )
+        {
+            $this->locationHandler->removeSubtree( $locationId );
+        }
+
+        $this->contentGateway->deleteRelations( $contentId );
+        $this->contentGateway->deleteFields( $contentId );
+        $this->contentGateway->deleteVersions( $contentId );
+        $this->contentGateway->deleteContent( $contentId );
     }
 
     /**

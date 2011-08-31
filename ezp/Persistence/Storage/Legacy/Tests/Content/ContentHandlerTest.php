@@ -750,6 +750,49 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::delete
+     */
+    public function testDelete()
+    {
+        $handler = new Handler(
+            ( $gatewayMock = $this->getGatewayMock() ),
+            ( $locationHandlerMock = $this->getLocationHandlerMock() ),
+            $this->getMapperMock(),
+            $this->getStorageRegistryMock()
+        );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'getAllLocationIds' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( array( 42, 24 ) ) );
+
+        $locationHandlerMock->expects( $this->exactly( 2 ) )
+            ->method( 'removeSubtree' )
+            ->with(
+                $this->logicalOr(
+                    $this->equalTo( 42 ),
+                    $this->equalTo( 24 )
+                )
+            );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteRelations' )
+            ->with( $this->equalTo( 23 ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteFields' )
+            ->with( $this->equalTo( 23 ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteVersions' )
+            ->with( $this->equalTo( 23 ) );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteContent' )
+            ->with( $this->equalTo( 23 ) );
+
+        $handler->delete( 23 );
+    }
+
+    /**
      * Returns a StorageRegistry mock.
      *
      * @return StorageRegistry
@@ -787,7 +830,7 @@ class ContentHandlerTest extends TestCase
     {
         return $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Handler',
-            array( 'create' ),
+            array( 'create', 'removeSubtree' ),
             array(),
             '',
             false
