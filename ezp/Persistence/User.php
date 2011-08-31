@@ -44,7 +44,7 @@ class User extends ValueObject
     /**
      * Hash algorithm used to has the password
      *
-     * @var string
+     * @var int
      */
     public $hashAlgorithm;
 }
