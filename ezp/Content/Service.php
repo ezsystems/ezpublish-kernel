@@ -37,7 +37,7 @@ class Service extends BaseService
      * Creates the new $content in the content repository
      *
      * @param \ezp\Content $content
-     * @return Content The newly created content
+     * @return \ezp\Content The newly created content
      * @throws \ezp\Base\Exception\InvalidArgumentType If $content already has an id
      * @todo If/when we have some sort of object storage, use that to check if object is persisted instead of just id
      */
@@ -76,7 +76,7 @@ class Service extends BaseService
      * Updates $content in the content repository
      *
      * @param \ezp\Content $content
-     * @return Content
+     * @return \ezp\Content
      * @throws Exception\Validation If a validation problem has been found for $content
      */
     public function update( Content $content )
@@ -103,7 +103,7 @@ class Service extends BaseService
      * Loads a content from its id ($contentId)
      *
      * @param int $contentId
-     * @return Content
+     * @return \ezp\Content
      * @throws \ezp\Base\Exception\NotFound if content could not be found
      */
     public function load( $contentId )
@@ -118,8 +118,8 @@ class Service extends BaseService
     /**
      * Finds content using a $query
      *
-     * @param Query $query
-     * @return Content[]
+     * @param \ezp\Content\Query $query
+     * @return \ezp\Content[]
      */
     public function find( Query $query )
     {
