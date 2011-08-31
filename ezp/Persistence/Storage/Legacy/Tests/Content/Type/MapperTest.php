@@ -248,6 +248,7 @@ class MapperTest extends TestCase
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractTypesFromRows
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractTypeFromRow
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractStorageFieldFromRow
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractFieldFromRow
      */
     public function testExtractTypesFromRowsSingle()

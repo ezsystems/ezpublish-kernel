@@ -76,7 +76,7 @@ class LocationHandlerTest extends TestCase
     /**
      * @return void
      * @dataProvider getLoadLocationValues
-     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Mapper->createLocationFromRow
+     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateLocationFromRow( $field, $value )
     {
@@ -96,7 +96,7 @@ class LocationHandlerTest extends TestCase
     /**
      * @return void
      * @dataProvider getLoadLocationValues
-     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Mapper->createLocationFromRow
+     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateLocationFromRowWithPrefix( $field, $value )
     {

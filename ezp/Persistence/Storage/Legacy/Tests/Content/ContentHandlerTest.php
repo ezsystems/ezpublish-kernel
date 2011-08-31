@@ -205,6 +205,11 @@ class ContentHandlerTest extends TestCase
         }
     }
 
+    /**
+     * Returns a content handler with rather real instead of mock objects.
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Handler
+     */
     protected function getAlmostRealContentHandler()
     {
         $handler = new Handler(
@@ -234,6 +239,13 @@ class ContentHandlerTest extends TestCase
         return $handler;
     }
 
+    /**
+     * Returns base reference data for loaded content.
+     *
+     * Data provider for {@link testLoadContentBaseData()}.
+     *
+     * @return mixed[][]
+     */
     public static function getLoadedContentBaseData()
     {
         return array(
@@ -248,6 +260,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @return void
      * @dataProvider getLoadedContentBaseData
      * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
      */
@@ -261,6 +274,13 @@ class ContentHandlerTest extends TestCase
         $this->assertEquals( $content->$property, $value );
     }
 
+    /**
+     * Returns version reference data for loaded content
+     *
+     * Data provider for {@link testLoadContentVersionData()}.
+     *
+     * @return mixed[][]
+     */
     public static function getLoadedContentVersionData()
     {
         return array(
@@ -275,6 +295,7 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @return void
      * @dataProvider getLoadedContentVersionData
      * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
      */
@@ -348,6 +369,13 @@ class ContentHandlerTest extends TestCase
         $content = $handler->load( 14, 4 );
     }
 
+    /**
+     * Returns content field reference data for loaded content.
+     *
+     * Data provider for {@link testLoadContentFieldData()}.
+     *
+     * @return mixed[][]
+     */
     public static function getLoadedContentFieldData()
     {
         return array(
@@ -398,6 +426,11 @@ class ContentHandlerTest extends TestCase
         );
     }
 
+    /**
+     * Returns a result from creating a draft from a version.
+     *
+     * @return \ezp\Persistence\Content
+     */
     protected function getTestCreateDraftFromVersion()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
@@ -476,6 +509,13 @@ class ContentHandlerTest extends TestCase
         return $handler->createDraftFromVersion( 14, 4 );
     }
 
+    /**
+     * Returns base reference data for drafted content.
+     *
+     * Data provider for {@link testCreateDraftFromVersion()}.
+     *
+     * @return mixed[][]
+     */
     public static function getCreateDraftFromVersionProperties()
     {
         return array(
@@ -503,6 +543,13 @@ class ContentHandlerTest extends TestCase
         );
     }
 
+    /**
+     * Returns version reference data for drafted content.
+     *
+     * Data provider for {@link testCreateDraftFromVersionVersionProperties()}.
+     *
+     * @return mixed[][]
+     */
     public static function getCreateDraftFromVersionVersionProperties()
     {
         return array(
