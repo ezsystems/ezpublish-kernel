@@ -22,13 +22,20 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
 class EzcDatabaseTest extends TestCase
 {
     /**
+     * Database gateway to test.
+     *
+     * @var ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase
+     */
+    protected $databaseGateway;
+
+    /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::__construct
      */
     public function testCtor()
     {
         $handlerMock = $this->getDatabaseHandler();
-        $gateway = new EzcDatabase( $handlerMock );
+        $gateway = $this->getDatabaseGateway();
 
         $this->assertAttributeSame(
             $handlerMock,
@@ -46,7 +53,7 @@ class EzcDatabaseTest extends TestCase
     {
         $content = $this->getContentFixture();
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $gateway->insertContentObject( $content );
 
         $this->assertQueryResult(
@@ -113,7 +120,7 @@ class EzcDatabaseTest extends TestCase
     {
         $version = $this->getVersionFixture();
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $gateway->insertVersion( $version );
 
         $this->assertQueryResult(
@@ -160,7 +167,7 @@ class EzcDatabaseTest extends TestCase
      */
     public function testUpdateVersion()
     {
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
 
         $time        = time();
         $version     = $this->getVersionFixture();
@@ -214,7 +221,7 @@ class EzcDatabaseTest extends TestCase
         $field = $this->getFieldFixture();
         $value = $this->getStorageValueFixture();
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $gateway->insertNewField( $content, $field, $value );
 
         $this->assertQueryResult(
@@ -270,7 +277,7 @@ class EzcDatabaseTest extends TestCase
         $field = $this->getFieldFixture();
         $value = $this->getStorageValueFixture();
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $field->id = $gateway->insertNewField( $content, $field, $value );
 
         $newValue = new StorageFieldValue( array(
@@ -317,7 +324,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/../_fixtures/contentobjects.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $res = $gateway->listVersions( 226 );
 
         $this->assertEquals(
@@ -360,7 +367,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/../_fixtures/contentobjects.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
 
         $this->assertEquals(
             array( 228 ),
@@ -378,7 +385,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/../_fixtures/contentobjects.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
 
         $this->assertEquals(
             array(
@@ -407,7 +414,7 @@ class EzcDatabaseTest extends TestCase
             'to' => $this->countContentRelations( null, 149 )
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $gateway->deleteRelations( 149 );
 
         $this->assertEquals(
@@ -441,7 +448,7 @@ class EzcDatabaseTest extends TestCase
             'to' => $this->countContentRelations( null, 75 )
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $gateway->deleteRelations( 75 );
 
         $this->assertEquals(
@@ -473,7 +480,7 @@ class EzcDatabaseTest extends TestCase
             'this' => $this->countContentFields( 4 ),
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $gateway->deleteFields( 4 );
 
         $this->assertEquals(
@@ -503,7 +510,7 @@ class EzcDatabaseTest extends TestCase
             'this' => $this->countContentVersions( 14 )
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $gateway->deleteVersions( 14 );
 
         $this->assertEquals(
@@ -533,7 +540,7 @@ class EzcDatabaseTest extends TestCase
             'this' => $this->countContentNames( 14 )
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $gateway->deleteNames( 14 );
 
         $this->assertEquals(
@@ -560,7 +567,7 @@ class EzcDatabaseTest extends TestCase
 
         $beforeCount = $this->countContent();
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getDatabaseGateway();
         $gateway->deleteContent( 14 );
 
         $this->assertEquals(
@@ -755,6 +762,23 @@ class EzcDatabaseTest extends TestCase
         $value->sortKeyString = 'Test';
 
         return $value;
+    }
+
+    /**
+     * Returns a ready to test EzcDatabase gateway
+     *
+     * @return ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase
+     */
+    protected function getDatabaseGateway()
+    {
+        if ( !isset( $this->databaseGateway ) )
+        {
+            $this->databaseGateway = new EzcDatabase(
+                ( $dbHandler = $this->getDatabaseHandler() ),
+                new EzcDatabase\QueryBuilder( $dbHandler )
+            );
+        }
+        return $this->databaseGateway;
     }
 
     /**

@@ -213,7 +213,10 @@ class ContentHandlerTest extends TestCase
     protected function getAlmostRealContentHandler()
     {
         $handler = new Handler(
-            new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+            new Gateway\EzcDatabase(
+                $this->getDatabaseHandler(),
+                new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() )
+            ),
             new Location\Handler(
                 new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
                 ( $locationMapper = new Location\Mapper() )
@@ -318,7 +321,10 @@ class ContentHandlerTest extends TestCase
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
 
         $handler = new Handler(
-            new Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+            new Gateway\EzcDatabase(
+                $this->getDatabaseHandler(),
+                new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() )
+            ),
             new Location\Handler(
                 new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
                 new Location\Mapper()

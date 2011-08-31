@@ -122,7 +122,10 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->contentHandler ) )
         {
             $this->contentHandler = new Content\Handler(
-                new Content\Gateway\EzcDatabase( $this->dbHandler ),
+                new Content\Gateway\EzcDatabase(
+                    $this->dbHandler,
+                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler )
+                ),
                 $this->locationHandler(),
                 new Content\Mapper(
                     $this->getLocationMapper(),
