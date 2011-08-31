@@ -187,6 +187,20 @@ class Service extends BaseService
     }
 
     /**
+     * Copies $content in $version and returns the new copy.
+     * If no version is provided, all versions will be copied
+     *
+     * @param \ezp\Content $content
+     * @param \ezp\Content\Version $version
+     * @return \ezp\Content
+     */
+    public function copy( Content $content, Version $version = null )
+    {
+        $versionNo = isset( $version ) ? $version->versionNo : false;
+        return $this->buildDomainObject( $this->handler->contentHandler()->copy( $content->id , $versionNo ) );
+    }
+
+    /**
      * Creates a new criteria collection object in order to query the content repository
      * @return CriteriaCollection
      */
