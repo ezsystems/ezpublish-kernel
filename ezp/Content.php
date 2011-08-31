@@ -34,7 +34,8 @@ use ezp\Base\Model,
  * @property-read bool $alwaysAvailable The Content's always available flag
  * @property-read string $remoteId The Content's remote identifier (custom identifier for the object)
  * @property-read mixed $sectionId Read property for section id, use with object $section to change
- * @property-read \ezp\Content\Type contentType The Content's type
+ * @property-read mixed $typeId Read property for type id
+ * @property-read \ezp\Content\Type $contentType The Content's type
  * @property-read \ezp\Content\Version[] $versions
  *                Iterable collection of versions for content. Array-accessible :;
  *                <code>
@@ -89,6 +90,7 @@ class Content extends Model
         'alwaysAvailable' => true,
         'remoteId' => true,// @todo Make readonly and deal with this internally (in all DO's)
         'sectionId' => false,
+        'typeId' => false,
     );
 
     /**
