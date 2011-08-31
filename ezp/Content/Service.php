@@ -16,6 +16,7 @@ use ezp\Base\Service as BaseService,
     ezp\Content,
     ezp\Content\Location,
     ezp\Content\Version,
+    ezp\Content\Version\Collection as VersionCollection,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
     ezp\Persistence\ValueObject,
@@ -159,7 +160,7 @@ class Service extends BaseService
                     "fields" => array(),
                 )
             );
-            $list[] = $version;
+            $list[$versionVO->versionNo] = $version;
         }
 
         return $list;
@@ -201,7 +202,7 @@ class Service extends BaseService
             array(
                 "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
                 "contentType" => new Proxy( $this->repository->getContentTypeService(), $vo->typeId ),
-                "versions" => new Lazy( "ezp\\Content\\Version", $this, $vo->id, "listVersions" ),
+                "versions" => new VersionCollection( $vo->id ),
                 "properties" => $vo
             )
         );
@@ -227,4 +228,3 @@ class Service extends BaseService
         return $content;
     }
 }
-?>

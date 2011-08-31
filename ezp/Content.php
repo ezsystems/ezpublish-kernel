@@ -16,6 +16,7 @@ use ezp\Base\Model,
     ezp\Content\Section,
     ezp\Base\Proxy,
     ezp\Content\Version,
+    ezp\Content\Version\Collection as VersionCollection,
     ezp\Persistence\Content as ContentValue,
     DateTime,
     InvalidArgumentException;
@@ -171,7 +172,8 @@ class Content extends Model
         $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
         $this->relations = new TypeCollection( 'ezp\\Content' );
         $this->reversedRelations = new TypeCollection( 'ezp\\Content' );
-        $this->versions = new TypeCollection( 'ezp\\Content\\Version', array( new Version( $this ) ) );
+        $this->versions = new VersionCollection();
+        $this->versions[1] = new Version( $this );
     }
 
     /**

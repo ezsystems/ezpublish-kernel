@@ -168,24 +168,24 @@ class ContentTest extends BaseServiceTest
         $content = $this->service->load( 1 );
         $this->assertInstanceOf( "ezp\\Base\\Collection\\Type", $content->versions );
         $this->assertEquals( 2, count( $content->versions ) );
-        $this->assertInstanceOf( "ezp\\Content\\Version", $content->versions[0] );
         $this->assertInstanceOf( "ezp\\Content\\Version", $content->versions[1] );
+        $this->assertInstanceOf( "ezp\\Content\\Version", $content->versions[2] );
 
-        $this->assertEquals( 1, $content->versions[0]->id );
-        $this->assertEquals( 1, $content->versions[0]->contentId );
-        $this->assertEquals( 1, $content->versions[0]->versionNo );
-        $this->assertEquals( 1310792400, $content->versions[0]->modified );
-        $this->assertEquals( 1310792400, $content->versions[0]->created );
-        $this->assertEquals( 14, $content->versions[0]->creatorId );
-        $this->assertEquals( Content::STATUS_PUBLISHED, $content->versions[0]->state );
-
-        $this->assertEquals( 2, $content->versions[1]->id );
-        $this->assertEquals( 1, $content->versions[0]->contentId );
-        $this->assertEquals( 2, $content->versions[1]->versionNo );
-        $this->assertEquals( 1310793400, $content->versions[1]->modified );
-        $this->assertEquals( 1310793400, $content->versions[1]->created );
+        $this->assertEquals( 1, $content->versions[1]->id );
+        $this->assertEquals( 1, $content->versions[1]->contentId );
+        $this->assertEquals( 1, $content->versions[1]->versionNo );
+        $this->assertEquals( 1310792400, $content->versions[1]->modified );
+        $this->assertEquals( 1310792400, $content->versions[1]->created );
         $this->assertEquals( 14, $content->versions[1]->creatorId );
-        $this->assertEquals( Content::STATUS_DRAFT, $content->versions[1]->state );
+        $this->assertEquals( Content::STATUS_PUBLISHED, $content->versions[1]->state );
+
+        $this->assertEquals( 2, $content->versions[2]->id );
+        $this->assertEquals( 1, $content->versions[1]->contentId );
+        $this->assertEquals( 2, $content->versions[2]->versionNo );
+        $this->assertEquals( 1310793400, $content->versions[2]->modified );
+        $this->assertEquals( 1310793400, $content->versions[2]->created );
+        $this->assertEquals( 14, $content->versions[2]->creatorId );
+        $this->assertEquals( Content::STATUS_DRAFT, $content->versions[2]->state );
     }
 
     /**
