@@ -20,9 +20,10 @@ interface ModelInterface
      *
      * Key is property name and value is property value.
      *
-     * @internal
+     * @access private
      * @param array $state
-     * @return Model
+     * @return ModelInterface
+     * @throws \ezp\Base\Exception\PropertyNotFound If one of the properties in $state is not found
      */
     public function setState( array $state );
 
@@ -31,9 +32,10 @@ interface ModelInterface
      *
      * Key is property name and value is property value.
      *
-     * @internal
+     * @access private
      * @param string|null $property Optional, lets you specify to only return one property by name
-     * @return array|mixed Always returns array if $property is null, else value of property if found or null
+     * @return array|mixed Array if $property is null, else value of property
+     * @throws \ezp\Base\Exception\PropertyNotFound If $property is not found (when not null)
      */
     public function getState( $property = null );
 }
