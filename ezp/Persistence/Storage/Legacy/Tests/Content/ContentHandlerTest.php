@@ -759,8 +759,18 @@ class ContentHandlerTest extends TestCase
             ( $gatewayMock = $this->getGatewayMock() ),
             ( $locationHandlerMock = $this->getLocationHandlerMock() ),
             $this->getMapperMock(),
-            $this->getStorageRegistryMock()
+            ( $storageReg = new StorageRegistry() )
         );
+
+        $stringStorageMock = $this->getMock(
+            'ezp\\Persistence\\Fields\\Storage'
+        );
+        $userStorageMock = $this->getMock(
+            'ezp\\Persistence\\Fields\\Storage'
+        );
+
+        $storageReg->register( 'ezstring', $stringStorageMock );
+        $storageReg->register( 'ezuser', $userStorageMock );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'getAllLocationIds' )
@@ -775,6 +785,22 @@ class ContentHandlerTest extends TestCase
                     $this->equalTo( 24 )
                 )
             );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'getFieldIdsByType' )
+            ->with( $this->equalTo( 23 ) )
+            ->will(
+                $this->returnValue(
+                    array( 'ezstring' => array( 1, 2 ), 'ezuser' => array( 3 ) )
+                )
+            );
+
+        $stringStorageMock->expects( $this->once() )
+            ->method( 'deleteFieldData' )
+            ->with( $this->equalTo( array( 1, 2 ) ) );
+        $userStorageMock->expects( $this->once() )
+            ->method( 'deleteFieldData' )
+            ->with( $this->equalTo( array( 3 ) ) );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteRelations' )

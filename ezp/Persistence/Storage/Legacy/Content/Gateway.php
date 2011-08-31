@@ -87,6 +87,14 @@ abstract class Gateway
     abstract public function getAllLocationIds( $contentId );
 
     /**
+     * Returns all field IDs of $contentId grouped by their type
+     *
+     * @param int $contentId
+     * @return int[][]
+     */
+    abstract public function getFieldIdsByType( $contentId );
+
+    /**
      * Deletes relations to and from $contentId
      *
      * @param int $contentId

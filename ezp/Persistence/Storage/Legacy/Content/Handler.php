@@ -277,7 +277,6 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @return boolean
-     * @TODO Handle external data
      */
     public function delete( $contentId )
     {
@@ -285,6 +284,13 @@ class Handler implements BaseContentHandler
         foreach ( $locationIds as $locationId )
         {
             $this->locationHandler->removeSubtree( $locationId );
+        }
+
+        $fieldIds = $this->contentGateway->getFieldIdsByType( $contentId );
+        foreach ( $fieldIds as $fieldType => $ids )
+        {
+            $this->storageRegistry->getStorage( $fieldType )
+                ->deleteFieldData( $ids );
         }
 
         $this->contentGateway->deleteRelations( $contentId );

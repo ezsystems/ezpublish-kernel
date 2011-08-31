@@ -432,6 +432,42 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Returns all field IDs of $contentId grouped by their type
+     *
+     * @param int $contentId
+     * @return int[][]
+     */
+    public function getFieldIdsByType( $contentId )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->quoteColumn( 'data_type_string' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $result = array();
+        foreach ( $statement->fetchAll() as $row )
+        {
+            if ( !isset( $result[$row['data_type_string']] ) )
+            {
+                $result[$row['data_type_string']] = array();
+            }
+            $result[$row['data_type_string']][] = (int) $row['id'];
+        }
+        return $result;
+    }
+
+    /**
      * Deletes relations to and from $contentId
      *
      * @param int $contentId

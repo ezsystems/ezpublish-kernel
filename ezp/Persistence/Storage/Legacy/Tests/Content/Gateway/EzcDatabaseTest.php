@@ -370,6 +370,29 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::getFieldIdsByType
+     */
+    public function testGetFieldIdsByType()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $this->assertEquals(
+            array(
+                'ezstring' => array( 841, ),
+                'ezxmltext' => array( 842, ),
+                'ezimage' => array( 843, ),
+                'ezkeyword' => array( 844, )
+            ),
+            $gateway->getFieldIdsByType( 149 )
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteRelations
      */
     public function testDeleteRelationsTo()
