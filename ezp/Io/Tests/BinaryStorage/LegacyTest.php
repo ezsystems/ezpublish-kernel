@@ -47,15 +47,5 @@ class BinaryRepositoryLegacyTest extends \ezp\Io\Tests\BinaryRepositoryTest
     {
     }
 
-    public function testUpdate()
-    {
-        self::markTestIncomplete();
-    }
-
-    public function testGetFileResource()
-    {
-        self::markTestIncomplete();
-    }
-
 }
 ?>

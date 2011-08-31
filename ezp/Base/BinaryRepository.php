@@ -156,9 +156,14 @@ class BinaryRepository
         return $this->getBackend( $path )->load( $path );
     }
 
+    /**
+      * Returns a read (mode: rb) file resource to the binary file $file
+      * @param BinaryFile $file
+      * @return resource
+      */
     public function getFileResource( BinaryFile $file )
     {
-        return $this->getBackend( $file )->getFileResource( $file );
+        return $this->getBackend( $file->path )->getFileResource( $file );
     }
 
     /**

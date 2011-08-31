@@ -10,24 +10,22 @@
 namespace ezp\Io\BinaryStorage;
 
 use ezp\Io\BinaryStorage\Backend,
-    ezp\Io\BinaryFile, ezp\Io\BinaryFileCreateStruct, ezp\Io\BinaryFileUpdateStruct,
-    ezp\Io\ContentType,
+    ezp\Io\BinaryFile, ezp\Io\BinaryFileCreateStruct, ezp\Io\BinaryFileUpdateStruct, ezp\Io\ContentType,
+    ezp\Io\BinaryStorage\Legacy\FileResourceAdapter,
     ezp\Base\Exception\InvalidArgumentValue,
     eZClusterFileHandler,
     DateTime;
 
 /**
  * Legacy BinaryStorage handler, based on eZ Cluster
+ *
+ * Due to the legacy API, this handler has a few limitations:
+ * - ctime is not really supported, and will always have the same value as mtime
+ * - mtime can not be modified, and will always automatically be set depending on the server time upon each write operation
  */
 
 class Legacy implements Backend
 {
-    /**
-     * Cluster handler instance
-     * @var eZClusterFileHandlerInterface
-     */
-    protected $clusterHandler;
-
     public function __construct()
     {
         $this->clusterHandler = eZClusterFileHandler::instance();
@@ -60,28 +58,15 @@ class Legacy implements Backend
     }
 
     /**
-     * Updates the file identified by $path with data from $updateFile
-     *
-     * @param string $path
-     * @param BinaryFileUpdateStruct $updateFile
-     *
-     * @return BinaryFile The updated BinaryFile
-     */
-    public function update( $path, BinaryFileUpdateStruct $updateFile )
-    {
-        throw new \RuntimeException( 'Not implemented, yet.' );
-    }
-
-    /**
      * Deletes the file $path
      * @param string $path
      * @throws \ezp\Base\Exception\InvalidArgumentType If the file doesn't exist
      */
     public function delete( $path )
     {
-        if ( !$this->exists( $path ) )
+        if ( !$this->clusterHandler->fileExists( $path ) )
         {
-            throw new InvalidArgumentType( 'path', 'no such file', $path );
+            throw new \Exception( "No such file '$path'" );
         }
 
         $this->clusterHandler->fileDelete( $path );
@@ -97,7 +82,38 @@ class Legacy implements Backend
      */
     public function update( $path, BinaryFileUpdateStruct $updateFile )
     {
+        if ( !$this->clusterHandler->fileExists( $path ) )
+        {
+            throw new \Exception( "No such file '$path'" );
+        }
 
+        // path
+        if ( $updateFile->path !== null && $updateFile->path != $path )
+        {
+            if ( $this->clusterHandler->fileExists( $updateFile->path ) )
+            {
+                throw new \Exception( "Destination file '$updateFile->path' exists" );
+            }
+            $this->clusterHandler->fileMove( $path, $updateFile->path );
+        }
+
+        // update the path we are working on
+        $path = $updateFile->path;
+
+        $resource = $updateFile->getInputStream();
+        if ( $resource !== null )
+        {
+            $binaryUpdateData = fread( $resource, $updateFile->size );
+            $clusterFile = eZClusterFileHandler::instance( $path );
+            $metaData = $clusterFile->metaData;
+            $scope = isset( $metaData['scope'] ) ? $metaData['scope'] : false;
+            $datatype = isset( $metaData['datatype'] ) ? $metaData['datatype'] : false;
+            $clusterFile->storeContents( $binaryUpdateData, $scope, $datatype );
+        }
+
+        // mtime and ctime have no effect as mtime isn't modifiable, and ctime isn't really supported (=mtime)
+
+        return $this->load( $path );
     }
 
     /**
@@ -107,7 +123,7 @@ class Legacy implements Backend
      */
     public function getFileResource( BinaryFile $file )
     {
-
+        return $this->getFileResourceProvider()->getResource( $this->load( $file->path ) );
     }
 
     /**
@@ -163,13 +179,34 @@ class Legacy implements Backend
     }
 
     /**
-     * Returns a file resource to the BinaryFile $file
-     * @param BinaryFile $file
-     * @return resource
+     * Returns the appropriate FileResourceProvider depending on the cluster handler in use
+     * @return \ezp\Io\BinaryStorage\Legacy\FileResourceProvider
      */
-    public function getFileResource( BinaryFile $file )
+    private function getFileResourceProvider()
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        if ( !isset( $this->fileResourceProvider ) )
+        {
+            $class = __CLASS__ . '\\FileResourceProvider\\' . get_class( $this->clusterHandler );
+            if ( !class_exists( $class ) )
+            {
+                throw new \Exception( "FileResourceProvider $class couldn't be found" );
+            }
+            $this->fileResourceProvider = new $class;
+        }
+
+        return $this->fileResourceProvider;
     }
+
+    /**
+     * File resource provider
+     * @see getFileResourceProvider
+     */
+    private $fileResourceProvider = null;
+
+    /**
+     * Cluster handler instance
+     * @var eZClusterFileHandlerInterface
+     */
+    private $clusterHandler;
 }
 ?>

@@ -127,9 +127,10 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
 
         self::assertFalse( $this->binaryRepository->exists( $firstPath ), "$firstPath should not exist" );
         self::assertTrue( $this->binaryRepository->exists( $secondPath ), "$secondPath should exist" );
+        self::assertEquals( $updateStruct->size, $updatedFile->size );
         self::assertEquals(
             md5_file( $newFilePath ),
-            md5( fread( $this->binaryRepository->getFileResource( $updatedFile ), $updateStruct->size ) )
+            md5( fread( $this->binaryRepository->getFileResource( $updatedFile ), $updatedFile->size ) )
         );
     }
 
