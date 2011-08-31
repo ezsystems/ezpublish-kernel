@@ -11,6 +11,7 @@ namespace ezp\Content\Tests\Service;
 use ezp\Content,
     ezp\Content\Location,
     ezp\Content\Type,
+    ezp\Content\Relation,
     ezp\Content\Version,
     ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Base\Exception\NotFound,
@@ -439,5 +440,24 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( $copy->id, $copy->versions[$versionNoToCopy]->contentId );
         self::assertGreaterThanOrEqual( $time, $copy->versions[$versionNoToCopy]->modified );
         self::assertGreaterThanOrEqual( $time, $copy->versions[$versionNoToCopy]->created );
+    }
+
+    /**
+     * Tests the addRelation operation
+     *
+     * @covers \ezp\Content\Service::addRelation
+     */
+    public function testAddRelation()
+    {
+        $relation = $this->service->addRelation(
+            new Relation( Relation::COMMON, $this->service->load( 14 ) ),
+            $this->service->load( 10 )
+        );
+
+        $this->assertEquals( Relation::COMMON, $relation->type );
+        $this->assertEquals( 1, $relation->id );
+        $this->assertEquals( 10, $relation->sourceContentId );
+        $this->assertNull( $relation->sourceContentVersion );
+        $this->assertEquals( 14, $relation->destinationContentId );
     }
 }

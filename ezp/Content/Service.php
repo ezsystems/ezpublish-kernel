@@ -191,6 +191,27 @@ class Service extends BaseService
     }
 
     /**
+     * Adds a $relation to $content
+     *
+     * @param \ezp\Content\Relation $relation
+     * @param \ezp\Content $content
+     * @param int|null $version
+     */
+    public function addRelation( Relation $relation, Content $content, $version = null )
+    {
+        return $relation->setState(
+            array(
+                "properties" => $this->handler->contentHandler()->addRelation(
+                    $content->id,
+                    $version,
+                    $relation->destinationContentId,
+                    $relation->type
+                )
+            )
+        );
+    }
+
+    /**
      * Sends $content to trash
      *
      * @param \ezp\Content $content
