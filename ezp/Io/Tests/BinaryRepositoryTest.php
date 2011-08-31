@@ -25,9 +25,6 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         unset( $this->binaryRepository );
     }
 
-    /**
-     * Tests creation of a new file
-     */
     public function testCreate()
     {
         $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
@@ -40,7 +37,6 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         self::assertEquals( $binaryFileCreateStruct->size, $binaryFile->size );
         self::assertEquals( $binaryFileCreateStruct->mtime, $binaryFile->mtime );
         // self::assertEquals( $binaryFileCreateStruct->ctime, $binaryFile->ctime );
-        // self::assertEquals( $binaryFileCreateStruct->originalFile, $binaryFile->originalFile );
         self::assertEquals( $binaryFileCreateStruct->contentType, $binaryFile->contentType );
     }
 
@@ -72,6 +68,22 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         self::assertFalse( $this->binaryRepository->exists( $repositoryPath ) );
     }
 
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testDeleteNonExistingFile()
+    {
+        $this->binaryRepository->delete( 'var/test/storage/deleteNonExisting.gif' );
+    }
+
+    /**
+     * @expectedException ezp\Base\Exception\NotFound
+     */
+    public function testLoadNonExistinFile()
+    {
+        $this->binaryRepository->load( 'var/test/storage/loadNotFound.png' );
+    }
+
     public function testLoad()
     {
         $repositoryPath = 'var/test/storage/load.gif';
@@ -87,8 +99,15 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         self::assertEquals( 1928, $loadedFile->size );
         self::assertInstanceOf( '\DateTime', $loadedFile->mtime );
         self::assertInstanceOf( '\DateTime', $loadedFile->ctime );
-        // self::assertEquals( $this->testFile->originalFile, $loadedFile->originalFile );
         self::assertEquals( new ContentType( 'image', 'gif' ), $loadedFile->contentType );
+    }
+
+    /**
+     * @expectedException ezp\Base\Exception\NotFound
+     */
+    public function testGetFileResourceNonExistinFile()
+    {
+        $this->binaryRepository->getFileResource( 'var/test/testGetFileResourceNonExistinFile.png' );
     }
 
     public function testGetFileResource()
@@ -96,11 +115,22 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         $repositoryPath = 'var/test/storage/getfileresource.gif';
         $binaryFile = $this->createFileWithPath( $repositoryPath );
 
-        $resource = $this->binaryRepository->getFileResource( $binaryFile );
+        $resource = $this->binaryRepository->getFileResource( $repositoryPath );
 
         $storedDataSum = md5( fread( $resource, $binaryFile->size ) );
         $originalDataSum = md5( file_get_contents( $this->imageInputPath ) );
         self::assertEquals( $originalDataSum, $storedDataSum );
+    }
+
+    /**
+     * @expectedException ezp\Base\Exception\NotFound
+     */
+    public function testUpdateNonExistingSource()
+    {
+        $updateStruct = new BinaryFileUpdateStruct();
+        $updateStruct->path = 'var/test/testUpdateSourceNotFoundTarget.png';
+
+        $this->binaryRepository->update( 'var/test/testUpdateSourceNotFoundSource.png', $updateStruct );
     }
 
     public function testUpdate()
@@ -114,7 +144,7 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         self::assertFalse( $this->binaryRepository->exists( $secondPath ) );
         self::assertEquals(
             md5_file( $this->imageInputPath ),
-            md5( fread( $this->binaryRepository->getFileResource( $binaryFile ), $binaryFile->size ) )
+            md5( fread( $this->binaryRepository->getFileResource( $firstPath ), $binaryFile->size ) )
         );
 
         $newFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'ezplogo2.png';
@@ -130,8 +160,28 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         self::assertEquals( $updateStruct->size, $updatedFile->size );
         self::assertEquals(
             md5_file( $newFilePath ),
-            md5( fread( $this->binaryRepository->getFileResource( $updatedFile ), $updatedFile->size ) )
+            md5( fread( $this->binaryRepository->getFileResource( $secondPath ), $updatedFile->size ) )
         );
+    }
+
+    /**
+     * @expectedException ezp\Io\Exception\PathExists
+     */
+    public function testUpdateTargetExists()
+    {
+        $firstPath = 'var/test/testUpdateTargetExists-1.gif';
+        $secondPath = 'var/test/testUpdateTargetExists-2.png';
+
+        $binaryFile = $this->createFileWithPath( $firstPath );
+        $binaryFile = $this->createFileWithPath( $secondPath );
+
+        self::assertTrue( $this->binaryRepository->exists( $firstPath ) );
+        self::assertTrue( $this->binaryRepository->exists( $secondPath ) );
+
+        $updateStruct = new BinaryFileUpdateStruct();
+        $updateStruct->path = $secondPath;
+
+        $this->binaryRepository->update( $firstPath, $updateStruct );
     }
 
     /**

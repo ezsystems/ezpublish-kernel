@@ -14,7 +14,8 @@ use ezp\Io\BinaryStorage\Backend,
     ezp\Io\BinaryStorage\Legacy\FileResourceAdapter,
     ezp\Base\Exception\InvalidArgumentValue,
     eZClusterFileHandler,
-    DateTime;
+    DateTime,
+    ezp\Base\Exception\NotFound, ezp\Io\Exception\PathExists;
 
 /**
  * Legacy BinaryStorage handler, based on eZ Cluster
@@ -60,13 +61,13 @@ class Legacy implements Backend
     /**
      * Deletes the file $path
      * @param string $path
-     * @throws \ezp\Base\Exception\InvalidArgumentType If the file doesn't exist
+     * @throws \ezp\Base\Exception\NotFound If the file doesn't exist
      */
     public function delete( $path )
     {
         if ( !$this->clusterHandler->fileExists( $path ) )
         {
-            throw new \Exception( "No such file '$path'" );
+            throw new NotFound( 'BinaryFile', $path );
         }
 
         $this->clusterHandler->fileDelete( $path );
@@ -79,12 +80,15 @@ class Legacy implements Backend
      * @param BinaryFileUpdateStruct $updateFile
      *
      * @return BinaryFile The updated BinaryFile
+     *
+     * @throws \ezp\Base\Exception\NotFound If the source path doesn't exist
+     * @throws \ezp\Base\Exception\PathExists If the target path already exists
      */
     public function update( $path, BinaryFileUpdateStruct $updateFile )
     {
         if ( !$this->clusterHandler->fileExists( $path ) )
         {
-            throw new \Exception( "No such file '$path'" );
+            throw new NotFound( 'BinaryFile', $path );
         }
 
         // path
@@ -92,7 +96,7 @@ class Legacy implements Backend
         {
             if ( $this->clusterHandler->fileExists( $updateFile->path ) )
             {
-                throw new \Exception( "Destination file '$updateFile->path' exists" );
+                throw new PathExists( $updateFile->path );
             }
             $this->clusterHandler->fileMove( $path, $updateFile->path );
         }
@@ -117,13 +121,14 @@ class Legacy implements Backend
     }
 
     /**
-     * Returns a file resource to the BinaryFile $file
-     * @param BinaryFile $file
+     * Returns a file resource to the BinaryFile identified by $path
+     * @param string $path
      * @return resource
+     * @throws \ezp\Base\Exception\NotFound If the file doesn't exist
      */
-    public function getFileResource( BinaryFile $file )
+    public function getFileResource( $path )
     {
-        return $this->getFileResourceProvider()->getResource( $this->load( $file->path ) );
+        return $this->getFileResourceProvider()->getResource( $this->load( $path ) );
     }
 
     /**
@@ -140,13 +145,13 @@ class Legacy implements Backend
      * Loads the BinaryFile identified by $path
      * @param string $path
      * @return BinaryFile
-     * @throws InvalidArgumentValue When the requested $path doesn't exist
+     * @throws ezp\Base\Exception\NotFound When the requested $path doesn't exist
      */
     public function load( $path )
     {
         if ( !$this->exists( $path ) )
         {
-            throw new InvalidArgumentValue( 'path', $path );
+            throw new NotFound( 'BinaryFile', $path );
         }
 
         $clusterFile = eZClusterFileHandler::instance( $path );
@@ -173,6 +178,8 @@ class Legacy implements Backend
         {
             $file->contentType = ContentType::getFromPath( $path );
         }
+
+        $file->uri = $file->path;
 
 
         return $file;

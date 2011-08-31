@@ -9,7 +9,8 @@
 namespace ezp\Io\BinaryStorage;
 
 use ezp\Io\BinaryStorage\Backend,
-    ezp\Io\BinaryFile, ezp\Io\BinaryFileUpdateStruct, ezp\Io\BinaryFileCreateStruct;
+    ezp\Io\BinaryFile, ezp\Io\BinaryFileUpdateStruct, ezp\Io\BinaryFileCreateStruct,
+    ezp\Base\Exception\NotFound, ezp\Io\Exception\PathExists;
 
 /**
  * Backend interface for handling of binary files I/O
@@ -52,12 +53,17 @@ class InMemory implements Backend
     {
         if ( !isset( $this->storage[$path] ) )
         {
-            throw new Exception( "No such file $path" );
+            throw new NotFound( 'BinaryFile', $path );
         }
 
         // path
         if ( $updateFile->path !== null && $updateFile->path != $path )
         {
+            if ( isset( $this->storage[$updateFile->path] ) )
+            {
+                throw new PathExists( $updateFile->path );
+            }
+
             $oldPath = $path;
             $newPath = $updateFile->path;
 
@@ -102,11 +108,13 @@ class InMemory implements Backend
      */
     public function delete( $path )
     {
-        if ( isset( $this->storage[$path] ) )
+        if ( !isset( $this->storage[$path] ) )
         {
-            unset( $this->storage[$path] );
-            unset( $this->data[$path] );
+            throw new NotFound( 'BinaryFile', $path );
         }
+
+        unset( $this->storage[$path] );
+        unset( $this->data[$path] );
     }
 
     /**
@@ -122,24 +130,32 @@ class InMemory implements Backend
      * Loads the BinaryFile identified by $path
      * @param string $path
      * @return BinaryFile
+     * @throws ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function load( $path )
     {
-        if ( isset( $this->storage[$path] ) )
+        if ( !isset( $this->storage[$path] ) )
         {
-            return $this->storage[$path];
+            throw new NotFound( 'BinaryFile', $path );
         }
+        return $this->storage[$path];
     }
 
     /**
-     * Returns a file resource to the BinaryFile $file
-     * @param BinaryFile $file
+     * Returns a file resource to the BinaryFile identified by $path
+     * @param BinaryFile $path
      * @return resource
+     * @throws ezp\Base\Exception\NotFound If no file identified by $path exists
      */
-    public function getFileResource( BinaryFile $file )
+    public function getFileResource( $path )
     {
-        $this->resources[$file->path] = fopen( 'data://' . (string)$file->contentType . ';base64,' . $this->data[$file->path], 'rb' );
-        return $this->resources[$file->path];
+        if ( !isset( $this->storage[$path] ) )
+        {
+            throw new NotFound( 'BinaryFile', $path );
+        }
+        $uri = 'data://' . (string)$this->storage[$path]->contentType . ';base64,' . $this->data[$path];
+
+        return fopen( $uri, 'rb' );
     }
 
     /**

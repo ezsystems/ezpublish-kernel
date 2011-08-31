@@ -46,5 +46,11 @@ class BinaryFile
      * @var ContentType
      */
     public $contentType;
+
+    /**
+     * HTTP URI to the binary file
+     * @var string
+     */
+    public $uri;
 }
 ?>

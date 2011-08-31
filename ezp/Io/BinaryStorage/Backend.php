@@ -54,10 +54,10 @@ interface Backend
     public function load( $path );
 
     /**
-     * Returns a file resource to the BinaryFile $file
+     * Returns a file resource to the BinaryFile identified by $path
      * @param BinaryFile $file
      * @return resource
      */
-    public function getFileResource( BinaryFile $file );
+    public function getFileResource( $path );
 }
 ?>

@@ -63,7 +63,6 @@ class BinaryRepository
         }
 
         $file = new BinaryFile();
-        $file->originalFile = $uploadedFile['name'];
         $file->size = $uploadedFile['size'];
         $time = new DateTime;
         $file->ctime = $time;
@@ -157,13 +156,13 @@ class BinaryRepository
     }
 
     /**
-      * Returns a read (mode: rb) file resource to the binary file $file
-      * @param BinaryFile $file
+      * Returns a read (mode: rb) file resource to the binary file identified by $path
+      * @param string $path
       * @return resource
       */
-    public function getFileResource( BinaryFile $file )
+    public function getFileResource( $path )
     {
-        return $this->getBackend( $file->path )->getFileResource( $file );
+        return $this->getBackend( $path )->getFileResource( $path );
     }
 
     /**
