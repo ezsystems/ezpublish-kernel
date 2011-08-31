@@ -22,7 +22,7 @@ use ezp\Content\Location\Trash\Service,
 /**
  * Test case for Location service
  */
-class ServiceTest extends Base
+class TrashTest extends Base
 {
     /**
      * @var \ezp\Content\Location\Trash\Service
