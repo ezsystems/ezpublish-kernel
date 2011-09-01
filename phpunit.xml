@@ -30,6 +30,11 @@
     <whitelist>
       <directory suffix=".php">ezp</directory>
       <exclude>
+        <directory suffix=".php">ezp/Base/Tests</directory>
+        <directory suffix=".php">ezp/Content/Tests</directory>
+        <directory suffix=".php">ezp/Persistence/Tests</directory>
+        <directory suffix=".php">ezp/Users/Tests</directory>
+        <directory suffix=".php">ezp/Io/Tests</directory>
         <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests</directory>
         <directory suffix=".php">ezp/Stubs</directory>
         <file>ezp/index.php</file>
