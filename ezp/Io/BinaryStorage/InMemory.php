@@ -26,10 +26,18 @@ class InMemory implements Backend
     /**
      * Creates and stores a new BinaryFile based on the create data of $file
      * @param BinaryFileCreateStruct $file
+     *
      * @return BinaryFile The newly created BinaryFile object
+     *
+     * @throws \ezp\Base\Exception\PathExists If the target path already exists
      */
     public function create( BinaryFileCreateStruct $file )
     {
+        if ( isset( $this->storage[$file->path] ) )
+        {
+            throw new PathExists( $file->path );
+        }
+
         $this->data[$file->path] = base64_encode( fread( $file->getInputStream(), $file->size ) );
 
         $binaryFile = new BinaryFile();

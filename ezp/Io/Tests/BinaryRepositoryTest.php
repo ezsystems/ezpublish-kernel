@@ -40,6 +40,22 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         self::assertEquals( $binaryFileCreateStruct->contentType, $binaryFile->contentType );
     }
 
+    /**
+     * @expectedException ezp\Io\Exception\PathExists
+     */
+    public function testCreatePathExists()
+    {
+        $repositoryPath = 'var/test/storage/images/testCreateFileExists.gif';
+
+        $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
+        $binaryFileCreateStruct->path = $repositoryPath;
+        $binaryFile = $this->binaryRepository->create( $binaryFileCreateStruct );
+
+        $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
+        $binaryFileCreateStruct->path = $repositoryPath;
+        $binaryFile = $this->binaryRepository->create( $binaryFileCreateStruct );
+    }
+
     public function testExists()
     {
         $repositoryPath = 'var/test/storage/exists.gif';

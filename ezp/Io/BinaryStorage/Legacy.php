@@ -35,16 +35,17 @@ class Legacy implements Backend
     /**
      * Creates a new BinaryFile based on the BinaryFileCreateStruct $file
      * @param BinaryFileCreateStruct $file
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If a file with this path already exists
+     *
      * @return BinaryFile The created BinaryFile object
+     *
+     * @throws \ezp\Base\Exception\PathExists If the target path already exists
      */
     public function create( BinaryFileCreateStruct $file )
     {
         if ( $this->exists( $file->path ) )
         {
-            throw new \Exception( "A binary file identified with $file->path already exists" );
+            throw new PathExists( $file->path );
         }
-
 
         // @todo Build a path / scope mapper
         $scope = 'todo';
@@ -180,7 +181,6 @@ class Legacy implements Backend
         }
 
         $file->uri = $file->path;
-
 
         return $file;
     }
