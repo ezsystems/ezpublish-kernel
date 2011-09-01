@@ -251,6 +251,14 @@ class RepositoryHandler implements HandlerInterface
     }
 
     /**
+     * @return \ezp\Persistence\Content\Language\Handler
+     */
+    public function contentLanguageHandler()
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * @return \ezp\Persistence\Content\Location\Handler
      */
     public function locationHandler()

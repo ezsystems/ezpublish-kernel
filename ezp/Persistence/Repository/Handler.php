@@ -31,6 +31,11 @@ interface Handler
     public function contentTypeHandler();
 
     /**
+     * @return \ezp\Persistence\Content\Language\Handler
+     */
+    public function contentLanguageHandler();
+
+    /**
      * @return \ezp\Persistence\Content\Location\Handler
      */
     public function locationHandler();
