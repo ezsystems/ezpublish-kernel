@@ -16,10 +16,14 @@ use ezp\Base\Configuration,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\NotFoundWithType,
     ezp\Base\Exception\PropertyNotFound,
+    ezp\Base\Exception\Logic,
     ezp\Content,
     ezp\User,
     ezp\User\Group,
     ezp\User\GroupLocation,
+    ezp\User\LocatableInterface,
+    ezp\User\Location as AbstractUserLocation,
+    ezp\User\UserLocation,
     ezp\User\Role,
     ezp\User\Policy,
     ezp\Persistence\User as UserValueObject,
@@ -138,6 +142,31 @@ class Service extends BaseService
             throw new NotFoundWithType( "User Group({$typeId})", $id );
 
         return new Group( $content );
+    }
+
+    /**
+     * @param \ezp\User\GroupLocation $parent
+     * @param \ezp\User|\ezp\User\Group $object
+     * @return \ezp\User\UserLocation|\ezp\User\GroupLocation
+     * @throws \ezp\Base\Exception\Logic If $object has not been persisted yet
+     */
+    public function assignGroupLocation( GroupLocation $parent, LocatableInterface $object )
+    {
+        $content = $object->getState( 'content' );
+        if ( !$content instanceof Content  )
+            throw new Logic( 'assignGroup', 'can not assign group to non created (persisted) object' );
+
+        $newLocation = $content->addParent( $parent->getState( 'location' ) );
+        $newLocation = $this->repository->getLocationService()->create( $newLocation );
+
+        $locations = $object->getLocations();
+        if( $object instanceof User )
+            $locations[] = $newUserLocation = new UserLocation( $newLocation, $object );
+        else
+            $locations[] = $newUserLocation = new GroupLocation( $newLocation, $object );
+
+        $object->setState( array( 'locations' => $locations ) );
+        return $newUserLocation;
     }
 
     /**

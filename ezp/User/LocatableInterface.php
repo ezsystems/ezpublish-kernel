@@ -17,7 +17,7 @@ namespace ezp\User;
 interface LocatableInterface
 {
     /**
-     * @return \ezp\User\GroupLocation[]
+     * @return \ezp\User\Location[]
      */
     public function getLocations();
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing Group location class
+ * File contains Abstract Location
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,46 +10,84 @@
 namespace ezp\User;
 use ezp\Base\Exception\PropertyNotFound,
     ezp\Base\ModelInterface,
-    ezp\Content\Location as ContentLocation,
-    ezp\User\Group,
-    ezp\User\Location as UserLocationAbstract;
+    ezp\Base\Observable,
+    ezp\Base\Observer,
+    ezp\Content\Location as ContentLocation;
 
 /**
- * This class represents a Group location item
+ * User/Group Abstract Location
+ *
+ * A interface for classes that represent locations ( user & user group )
  */
-class GroupLocation extends UserLocationAbstract implements ModelInterface
+abstract class Location implements Observable, ModelInterface
 {
     /**
-     * @var \ezp\User\Group The Group assigned to this location
+     * @var \ezp\Content\Location The User Group Content Object
      */
-    protected $group;
+    protected $location;
+
+    /**
+     * @var \ezp\User\GroupLocation The parent GroupLocation of this location
+     */
+    protected $parent;
 
     /**
      * Creates and setups User object
      *
-     * @access private Use {@link \ezp\User\Service::assignGroupLocation()} to create objects of this type
-     * @param \ezp\Content\Location $location
-     * @param \ezp\User\Group|null $user
+     * @access private Use {@link \ezp\User\Service::createGroup()} to create objects of this type
      */
-    public function __construct( ContentLocation $location, Group $group = null )
+    public function __construct( ContentLocation $location )
     {
-        $this->group = $group;
-        parent::__construct( $location );
+        $this->location = $location;
     }
 
     /**
-     * Get group assigned to this location
+     * Get parent location of this location
      *
-     * @return \ezp\User\Group
+     * @return \ezp\User\GroupLocation
      */
-    public function getGroup()
+    public function getParent()
     {
-        if ( $this->group !== null )
-            return $this->group;
+        if ( $this->parent !== null )
+            return $this->parent;
 
-        return $this->group = new Group( $this->location->content );
+        return $this->parent = new GroupLocation( $this->location->parent );
     }
 
+    /**
+     * Attach a event listener to this subject
+     *
+     * @param \ezp\Base\Observer $observer
+     * @param string $event
+     * @return Model
+     */
+    public function attach( Observer $observer, $event = 'update' )
+    {
+        return $this->location->attach( $observer, $event );
+    }
+
+    /**
+     * Detach a event listener to this subject
+     *
+     * @param \ezp\Base\Observer $observer
+     * @param string $event
+     * @return Model
+     */
+    public function detach( Observer $observer, $event = 'update' )
+    {
+        return $this->location->detach( $observer, $event );
+    }
+
+    /**
+     * Notify listeners about certain events, by default $event is a plain 'update'
+     *
+     * @param string $event
+     * @return Model
+     */
+    public function notify( $event = 'update' )
+    {
+        return $this->location->notify( $event );
+    }
 
     /**
      * Sets internal variables on object from array

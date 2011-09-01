@@ -12,7 +12,7 @@ use ezp\Base\Model,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Persistence\User as UserValue,
     ezp\User\LocatableInterface,
-    ezp\User\GroupLocation;
+    ezp\User\UserLocation;
 
 /**
  * This class represents a User item
@@ -83,7 +83,7 @@ class User extends Model implements LocatableInterface
     }
 
     /**
-     * @return \ezp\User\GroupLocation[]
+     * @return \ezp\User\UserLocation[]
      */
     public function getLocations()
     {
@@ -92,7 +92,7 @@ class User extends Model implements LocatableInterface
 
         $this->locations = array();
         foreach ( $this->content->locations as $contentLocation )
-            $this->locations[] = new GroupLocation( $contentLocation, $this );
+            $this->locations[] = new UserLocation( $contentLocation, $this );
 
         return $this->locations;
     }

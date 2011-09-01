@@ -251,6 +251,78 @@ class ServiceTest extends BaseServiceTest
     }
 
     /**
+     * Test service function for assigning group location
+     *
+     * @covers \ezp\User\Service::assignGroupLocation
+     */
+    public function testAssignGroupLocationOnUser()
+    {
+        $service = $this->repository->getUserService();
+        $adminGroup = $service->loadGroup( 12 );
+        $anonymousUser = $service->load( 10 );
+        self::assertEquals( 1, count( $anonymousUser->getLocations() ) );
+
+        $adminGroupLocations = $adminGroup->getLocations();
+
+        $newLocation = $service->assignGroupLocation( $adminGroupLocations[0], $anonymousUser );
+        self::assertInstanceOf( 'ezp\\User\\UserLocation', $newLocation );
+
+        $user = $newLocation->getUser();
+        self::assertInstanceOf( 'ezp\\User', $user );
+        self::assertEquals( 10, $user->id );
+        self::assertTrue( $user === $anonymousUser );
+
+        $locations = $user->getLocations();
+        self::assertEquals( 2, count( $locations ) );
+        self::assertTrue( $newLocation === $locations[1] );
+
+        $parentLocation = $locations[1]->getParent();
+        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $parentLocation );
+        //self::assertTrue( $adminGroupLocations === $parentLocation ); Does not currently work
+
+        $parentGroup = $parentLocation->getGroup();
+        self::assertInstanceOf( 'ezp\\User\\Group', $parentGroup );
+        //self::assertTrue( $adminGroup === $parentGroup ); Does not currently work
+        self::assertEquals( 12, $parentGroup->id );
+    }
+
+    /**
+     * Test service function for assigning group location
+     *
+     * @covers \ezp\User\Service::assignGroupLocation
+     */
+    public function testAssignGroupLocationOnGroup()
+    {
+        $service = $this->repository->getUserService();
+        $adminGroup = $service->loadGroup( 12 );
+        $anonymousGroup = $service->loadGroup( 42 );
+        self::assertEquals( 1, count( $anonymousGroup->getLocations() ) );
+
+        $adminGroupLocations = $adminGroup->getLocations();
+
+        $newLocation = $service->assignGroupLocation( $adminGroupLocations[0], $anonymousGroup );
+        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $newLocation );
+
+        $group = $newLocation->getGroup();
+        self::assertInstanceOf( 'ezp\\User\\Group', $group );
+        self::assertEquals( 42, $group->id );
+        self::assertTrue( $group === $anonymousGroup );
+
+        $locations = $group->getLocations();
+        self::assertEquals( 2, count( $locations ) );
+        self::assertTrue( $newLocation === $locations[1] );
+
+        $parentLocation = $locations[1]->getParent();
+        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $parentLocation );
+        //self::assertTrue( $adminGroupLocations === $parentLocation ); Does not currently work
+
+        $parentGroup = $parentLocation->getGroup();
+        self::assertInstanceOf( 'ezp\\User\\Group', $parentGroup );
+        //self::assertTrue( $adminGroup === $parentGroup ); Does not currently work
+        self::assertEquals( 12, $parentGroup->id );
+    }
+
+    /**
      * Test service function for creating role
      *
      * @covers \ezp\User\Service::createRole
