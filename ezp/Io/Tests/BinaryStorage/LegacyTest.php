@@ -45,7 +45,26 @@ class BinaryRepositoryLegacyTest extends \ezp\Io\Tests\BinaryRepositoryTest
 
     public function tearDown()
     {
+        if ( file_exists( 'var/test' ) )
+        {
+            ezcBaseFile::removeRecursive( 'var/test' );
+        }
     }
 
+    /**
+     * Updating mtime isn't supported by the Legacy handler
+     */
+    public function testUpdateMtime()
+    {
+        self::markTestSkipped();
+    }
+
+    /**
+     * Updating ctime isn't supported by the Legacy handler
+     */
+    public function testUpdateCtime()
+    {
+        self::markTestSkipped();
+    }
 }
 ?>

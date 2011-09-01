@@ -100,10 +100,10 @@ class Legacy implements Backend
                 throw new PathExists( $updateFile->path );
             }
             $this->clusterHandler->fileMove( $path, $updateFile->path );
-        }
 
-        // update the path we are working on
-        $path = $updateFile->path;
+            // update the path we are working on
+            $path = $updateFile->path;
+        }
 
         $resource = $updateFile->getInputStream();
         if ( $resource !== null )

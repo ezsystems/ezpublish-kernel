@@ -10,7 +10,8 @@
 namespace ezp\Io\Tests;
 use ezp\Base\BinaryRepository,
     ezp\Io\BinaryFile, ezp\Io\BinaryFileCreateStruct, ezp\Io\BinaryFileUpdateStruct,
-    ezp\Io\ContentType;
+    ezp\Io\ContentType,
+    DateTime;
 
 class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
 {
@@ -178,6 +179,40 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
             md5_file( $newFilePath ),
             md5( fread( $this->binaryRepository->getFileResource( $secondPath ), $updatedFile->size ) )
         );
+    }
+
+    public function testUpdateMtime()
+    {
+        $path = 'var/test/updateMtime.gif';
+        $binaryFile = clone $this->createFileWithPath( $path );
+
+        $newMtime = new DateTime( 'last week' );
+        $updateStruct = new BinaryFileUpdateStruct();
+        $updateStruct->mtime = $newMtime;
+
+        $updatedBinaryFile = $this->binaryRepository->update( $path, $updateStruct );
+        self::assertEquals( $binaryFile->path, $updatedBinaryFile->path );
+        self::assertEquals( $binaryFile->ctime, $updatedBinaryFile->ctime );
+        self::assertEquals( $binaryFile->size, $updatedBinaryFile->size );
+
+        self::assertEquals( $newMtime, $updatedBinaryFile->mtime );
+    }
+
+    public function testUpdateCtime()
+    {
+        $path = 'var/test/updateMtime.gif';
+        $binaryFile = clone $this->createFileWithPath( $path );
+
+        $newCtime = new DateTime( 'last week' );
+        $updateStruct = new BinaryFileUpdateStruct();
+        $updateStruct->ctime = $newCtime;
+
+        $updatedBinaryFile = $this->binaryRepository->update( $path, $updateStruct );
+        self::assertEquals( $binaryFile->path, $updatedBinaryFile->path );
+        self::assertEquals( $binaryFile->mtime, $updatedBinaryFile->mtime );
+        self::assertEquals( $binaryFile->size, $updatedBinaryFile->size );
+
+        self::assertEquals( $newCtime, $updatedBinaryFile->ctime );
     }
 
     /**
