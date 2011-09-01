@@ -10,7 +10,8 @@
 namespace ezp\Io\Tests\BinaryStorage;
 use ezp\Base\BinaryRepository,
     ezp\Io\BinaryFile, ezp\Io\BinaryFileCreateStruct, ezp\Io\BinaryFileUpdateStruct,
-    eZClusterFileHandler;
+    eZClusterFileHandler,
+    ezcBaseFile;
 
 class BinaryRepositoryLegacyTest extends \ezp\Io\Tests\BinaryRepositoryTest
 {
