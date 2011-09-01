@@ -192,13 +192,14 @@ class ContentHandlerTest extends HandlerTest
     public function testCopyVersion2()
     {
         $time = time();
+        $versionNoToCopy = 2;
         $contentHandler = $this->repositoryHandler->contentHandler();
-        $copy = $contentHandler->copy( 1, 2 );
+        $copy = $contentHandler->copy( 1, $versionNoToCopy );
         $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $copy->name );
         $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
         $this->assertEquals( 1, $copy->typeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->ownerId, "Owner ID does not match" );
-        $this->assertEquals( 1, $copy->currentVersionNo, "Current version no does not match" );
+        $this->assertEquals( $versionNoToCopy, $copy->currentVersionNo, "Current version no does not match" );
         $this->assertEmpty( $copy->locations, "Locations must be empty" );
 
         $versions = $contentHandler->listVersions( $copy->id );
