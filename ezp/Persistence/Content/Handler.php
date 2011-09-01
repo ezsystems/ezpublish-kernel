@@ -148,7 +148,7 @@ interface Handler
     /**
      * Returns fields for $contentId in $version (version number)
      *
-     * @param int $contentId
+     * @param mixed $contentId
      * @param int $version Version number
      * @return \ezp\Persistence\Content\Field[]
      * @throws \ezp\Base\Exception\NotFound If content or version is not found
