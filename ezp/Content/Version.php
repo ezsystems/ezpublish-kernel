@@ -10,7 +10,7 @@
 namespace ezp\Content;
 use ezp\Base\Model,
     ezp\Content,
-    ezp\Content\Field\Collection,
+    ezp\Content\Field\StaticCollection as FieldCollection,
     ezp\Persistence\Content\Version as VersionValue;
 
 /**
@@ -83,7 +83,7 @@ class Version extends Model
     {
         $this->properties = new VersionValue( array( 'contentId' => $content->id ) );
         $this->content = $content;
-        $this->fields = new Collection( $this );
+        $this->fields = new FieldCollection( $this );
     }
 
     /**

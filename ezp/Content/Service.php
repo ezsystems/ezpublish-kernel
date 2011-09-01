@@ -17,6 +17,8 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Location,
     ezp\Content\Version,
     ezp\Content\Version\Collection as VersionCollection,
+    ezp\Content\Field,
+    ezp\Content\Field\Collection as FieldCollection,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
     ezp\Persistence\ValueObject,
@@ -156,14 +158,47 @@ class Service extends BaseService
             $version->setState(
                 array(
                     "properties" => $versionVO,
-                    // @FIXME: should probably be a collection
-                    "fields" => array(),
+                    "fields" => new FieldCollection( $this, $version )
                 )
             );
             $list[$versionVO->versionNo] = $version;
         }
 
         return $list;
+    }
+
+    /**
+     * List fields for a content $version.
+     *
+     * @param \ezp\Content\Version $version
+     * @return \ezp\Content\Field[]
+     * @todo Language support
+     */
+    public function loadFields( Version $version )
+    {
+        $fields = array();
+        $fieldsDef = array();
+        $fieldsVo = $this->handler->contentHandler()->loadFields( $version->contentId, $version->versionNo );
+
+        // First index fields definitions by id
+        foreach ( $version->content->contentType->fields as $fieldDefinition )
+        {
+            $fieldsDef[$fieldDefinition->id] = $fieldDefinition;
+        }
+
+        foreach ( $fieldsVo as $fieldVo )
+        {
+            if ( isset( $fieldsDef[$fieldVo->fieldDefinitionId] ) )
+            {
+                $identifier = $fieldsDef[$fieldVo->fieldDefinitionId]->identifier;
+                $fieldDo = new Field( $version, $fieldsDef[$fieldVo->fieldDefinitionId] );
+                $fieldDo->setState( array( 'properties' => $fieldVo ) );
+                $fields[$identifier] = $fieldDo;
+            }
+            // @todo: throw exception if not set ?
+        }
+
+        return $fields;
     }
 
     /**

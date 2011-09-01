@@ -7,7 +7,9 @@
         {"id": 42, "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Anonymous Users"}},
         {"id": 10, "typeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Anonymous User"}}
     ],
-    "Content\\Field": [],
+    "Content\\Field": [
+        {"id": 1, "fieldDefinitionId": 1, "type": "ezstring", "value": "eZ Publish NextGen", "language": null, "versionNo": 1, "_contentId": 1}
+    ],
     "Content\\Location" : [
         {"id": 1,  "remoteId": "remoteIDForLocation1", "contentId": 0,  "parentId": 0,  "pathIdentificationString": "", "mainLocationId": 1,  "depth": 0, "pathString": "/1/", "modifiedSubLocation": 1312473387, "priority": 0, "hidden": false, "invisible": false,  "sortField": 1, "sortOrder": 1},
         {"id": 2,  "remoteId": "remoteIDForLocation2", "contentId": 1,  "parentId": 1,  "pathIdentificationString": "", "mainLocationId": 2,  "depth": 1, "pathString": "/1/2/", "modifiedSubLocation": 1312473387, "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},

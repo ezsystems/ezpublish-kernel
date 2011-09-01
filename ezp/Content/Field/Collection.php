@@ -8,52 +8,24 @@
  */
 
 namespace ezp\Content\Field;
-use ezp\Base\Configuration,
-    ezp\Base\Exception\BadConfiguration,
-    ezp\Base\Exception\MissingClass,
-    ezp\Base\Exception\ReadOnly as ReadOnlyException,
-    ezp\Base\Collection\ReadOnly,
-    ezp\Content\Field,
-    ezp\Content\Version,
-    RuntimeException;
+use ezp\Base\Collection\Lazy,
+    ezp\Content\Service as ContentService,
+    ezp\Content\Version;
 
 /**
- * Field Collection class
- *
- * Readonly class that takes (Content) Version as input.
- *
+ * Field Collection class. Fields are indexed by field identifier
+ * This collection uses lazy loading mechanism.
  */
-class Collection extends ReadOnly
+class Collection extends Lazy
 {
     /**
-     * Constructor, sets up Collection based on contentType fields
+     * Constructor
      *
-     * @param Version $contentVersion
+     * @param \ezp\Content\Service $contentService Content service to be used for fetching versions
+     * @param \ezp\Content/Version $version Version this fields collection belongs to.
      */
-    public function __construct( Version $contentVersion )
+    public function __construct( ContentService $contentService, Version $version )
     {
-        $elements = array();
-        foreach ( $contentVersion->content->contentType->fields as $fieldDefinition )
-        {
-            $elements[ $fieldDefinition->identifier ] = new Field( $contentVersion, $fieldDefinition );
-        }
-        parent::__construct( $elements );
-    }
-
-    /**
-     * Set value on a offset in collection, only allowed on existing items where value is forwarded to ->type->value
-     *
-     * @internal
-     * @throws ezp\Base\Exception\ReadOnly When trying to set new values / append
-     * @param string|int $offset
-     * @param mixed $value
-     */
-    public function offsetSet( $offset, $value )
-    {
-        if ( $offset === null || !$this->offsetExists( $offset ) )
-            throw new ReadOnlyException( "Field\\Collection" );
-        $this->offsetGet( $offset )->value = $value;
+        parent::__construct( 'ezp\\Content\\Field', $contentService, $version, 'loadFields' );
     }
 }
-
-?>

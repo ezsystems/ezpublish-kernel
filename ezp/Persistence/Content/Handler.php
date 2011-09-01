@@ -144,4 +144,14 @@ interface Handler
      * @throws \ezp\Base\Exception\NotFound If content or version is not found
      */
     public function copy( $contentId, $version );
+
+    /**
+     * Returns fields for $contentId in $version (version number)
+     *
+     * @param int $contentId
+     * @param int $version Version number
+     * @return \ezp\Persistence\Content\Field[]
+     * @throws \ezp\Base\Exception\NotFound If content or version is not found
+     */
+    public function loadFields( $contentId, $version );
 }
