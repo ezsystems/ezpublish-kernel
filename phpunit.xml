@@ -22,6 +22,9 @@
     <testsuite name="ezp\User">
       <directory>ezp/User/Tests</directory>
     </testsuite>
+    <testsuite name="ezp\Io">
+      <directory>ezp/Io/Tests</directory>
+    </testsuite>
   </testsuites>
   <filter>
     <whitelist>
