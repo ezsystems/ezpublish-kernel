@@ -11,6 +11,8 @@ namespace ezp\Content\Type;
 use ezp\Base\Service as BaseService,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Exception\Logic,
+    ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Collection\LazyIdList,
     ezp\Base\Collection\Lazy,
     ezp\Base\Collection\Type as TypeCollection,
@@ -107,15 +109,34 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Type $type
      * @return \ezp\Content\Type
-     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
+     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a empty value
+     * @throws \ezp\Base\Exception\Logic If a group is _not_ persisted, or if type / fields is
      */
     public function create( Type $type )
     {
+        if ( $type->id )
+            throw new Logic( "Type\\Service->create()", '$type seems to already be persisted' );
+
         $struct = new CreateStruct();
-        $this->fillStruct( $struct, $type, array( 'fieldDefinitions' ) );
+        $this->fillStruct( $struct, $type, array( 'fieldDefinitions', 'groupIds' ) );
         foreach ( $type->fields as $field )
         {
+            if ( $field->id )
+                throw new Logic( "Type\\Service->create()", '->fields can not already be persisted' );
+
             $struct->fieldDefinitions[] = $field->getState( 'properties' );
+        }
+
+        if ( !isset( $type->groups[0] ) )
+            throw new PropertyNotFound( 'groups', get_class( $type ) );
+
+        // @todo Remove this if api is introduced on Type to add / remove fields / groups (but still verify values)
+        foreach ( $type->groups as $group )
+        {
+            if ( !$group->id )
+                throw new Logic( "Type\\Service->create()", '->groups needs to be persisted before adding it to type' );
+
+            $struct->groupIds[] = $group->id;
         }
         $vo = $this->handler->contentTypeHandler()->create( $struct );
         return $this->buildType( $vo );
