@@ -134,7 +134,6 @@ class Location extends ValueObject
      *
      * Valid values are found at {@link Location::SORT_FIELD_*}
      *
-     * @todo Decide if an array of sortFields should be allowed for future requirements.
      * @var mixed
      */
     public $sortField;
