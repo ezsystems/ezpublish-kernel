@@ -40,13 +40,21 @@ class ParentLocationId extends CriterionHandler
     {
         $subSelect = $query->subSelect();
         $subSelect
-            ->select( 'contentobject_id' )
-            ->from( 'ezcontentobject_tree' )
-            ->where(
-                $query->expr->in( 'parent_node_id', $criterion->value )
+            ->select(
+                $this->dbHandler->quoteColumn( 'contentobject_id' )
+            )->from(
+                $this->dbHandler->quoteTable( 'ezcontentobject_tree' )
+            )->where(
+                $query->expr->in(
+                    $this->dbHandler->quoteColumn( 'parent_node_id' ),
+                    $criterion->value
+                )
             );
 
-        return $query->expr->in( 'id', $subSelect );
+        return $query->expr->in(
+            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+            $subSelect
+        );
     }
 }
 

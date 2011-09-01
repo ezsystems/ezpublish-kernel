@@ -9,7 +9,9 @@
 
 namespace ezp\Persistence\Storage\Legacy\Tests\Content;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
+    ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     ezp\Persistence\Storage\Legacy\Content,
+    ezp\Persistence\Content as ContentObject,
     ezp\Persistence\Content\Criterion,
     ezp\Persistence;
 
@@ -66,20 +68,47 @@ class ContentSearchHandlerTest extends TestCase
             new Content\Search\Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
                 new Content\Search\Gateway\CriteriaConverter( array(
-                    new Content\Search\Gateway\CriterionHandler\ContentId(),
-                    new Content\Search\Gateway\CriterionHandler\LogicalNot(),
-                    new Content\Search\Gateway\CriterionHandler\LogicalAnd(),
-                    new Content\Search\Gateway\CriterionHandler\LogicalOr(),
-                    new Content\Search\Gateway\CriterionHandler\SubtreeId(),
-                    new Content\Search\Gateway\CriterionHandler\ContentTypeId(),
-                    new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(),
-                    new Content\Search\Gateway\CriterionHandler\DateMetadata(),
-                    new Content\Search\Gateway\CriterionHandler\LocationId(),
-                    new Content\Search\Gateway\CriterionHandler\ParentLocationId(),
-                    new Content\Search\Gateway\CriterionHandler\RemoteId(),
-                    new Content\Search\Gateway\CriterionHandler\SectionId(),
-                    new Content\Search\Gateway\CriterionHandler\Status(),
+                    new Content\Search\Gateway\CriterionHandler\ContentId(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\LogicalNot(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\LogicalAnd(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\LogicalOr(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\SubtreeId(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\ContentTypeId(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\DateMetadata(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\LocationId(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\ParentLocationId(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\RemoteId(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\SectionId(
+                        $this->getDatabaseHandler()
+                    ),
+                    new Content\Search\Gateway\CriterionHandler\Status(
+                        $this->getDatabaseHandler()
+                    ),
                     new Content\Search\Gateway\CriterionHandler\FullText(
+                        $this->getDatabaseHandler(),
                         $fullTextSearchConfiguration
                     ),
                     new Content\Search\Gateway\CriterionHandler\Field(
@@ -88,9 +117,49 @@ class ContentSearchHandlerTest extends TestCase
                             '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
                         )
                     ),
-                ) )
-            )
+                ) ),
+                new QueryBuilder( $this->getDatabaseHandler() )
+            ),
+            $this->getContentMapperMock()
         );
+    }
+
+    /**
+     * Returns a content mapper mock
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Mapper
+     */
+    protected function getContentMapperMock()
+    {
+        $mapperMock = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Mapper',
+            array( 'extractContentFromRows' ),
+            array(),
+            '',
+            false
+        );
+        $mapperMock->expects( $this->any() )
+            ->method( 'extractContentFromRows' )
+            ->with( $this->isType( 'array' ) )
+            ->will(
+                $this->returnCallback(
+                    function ( $rows )
+                    {
+                        $contentObjs = array();
+                        foreach ( $rows as $row )
+                        {
+                            $contentId = (int) $row['ezcontentobject_id'];
+                            if ( !isset( $contentObjs[$contentId] ) )
+                            {
+                                $contentObjs[$contentId] = new ContentObject();
+                                $contentObjs[$contentId]->id = $contentId;
+                            }
+                        }
+                        return array_values( $contentObjs );
+                    }
+                )
+            );
+        return $mapperMock;
     }
 
     public function testFindSingle()
@@ -305,7 +374,7 @@ class ContentSearchHandlerTest extends TestCase
         );
 
         $this->assertEquals(
-            array( 4, 11, 12, 13, 42, 225, 10, 14 ),
+            array( 4, 10, 11, 12, 13, 14, 42, 225 ),
             array_map(
                 function ( $content ) { return $content->id; },
                 $result->content
@@ -415,7 +484,7 @@ class ContentSearchHandlerTest extends TestCase
         );
 
         $this->assertEquals(
-            array( 131, 66, 225 ),
+            array( 66, 131, 225 ),
             array_map(
                 function ( $content ) { return $content->id; },
                 $result->content

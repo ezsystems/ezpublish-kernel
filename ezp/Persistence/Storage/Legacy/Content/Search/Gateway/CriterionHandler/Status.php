@@ -55,7 +55,10 @@ class Status extends CriterionHandler
             $status[] = $this->statusMap[$value];
         }
 
-        return $query->expr->in( 'status', $status );
+        return $query->expr->in(
+            $this->dbHandler->quoteColumn( 'status', 'ezcontentobject' ),
+            $status
+        );
     }
 }
 

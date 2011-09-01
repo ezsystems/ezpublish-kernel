@@ -38,7 +38,10 @@ class RemoteId extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
-        return $query->expr->in( 'remote_id', $criterion->value );
+        return $query->expr->in(
+            $this->dbHandler->quoteColumn( 'remote_id', 'ezcontentobject' ),#
+            $criterion->value
+        );
     }
 }
 

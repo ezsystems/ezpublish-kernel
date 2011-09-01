@@ -38,7 +38,10 @@ class SectionId extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
-        return $query->expr->in( 'section_id', $criterion->value );
+        return $query->expr->in(
+            $this->dbHandler->quoteColumn( 'section_id', 'ezcontentobject' ),
+            $criterion->value
+        );
     }
 }
 

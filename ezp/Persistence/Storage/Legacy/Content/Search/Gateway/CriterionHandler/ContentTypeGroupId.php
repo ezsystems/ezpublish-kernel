@@ -40,13 +40,21 @@ class ContentTypeGroupId extends CriterionHandler
     {
         $subSelect = $query->subSelect();
         $subSelect
-            ->select( 'contentclass_id' )
-            ->from( 'ezcontentclass_classgroup' )
-            ->where(
-                $query->expr->in( 'group_id', $criterion->value )
+            ->select(
+                $this->dbHandler->quoteColumn( 'contentclass_id' )
+            )->from(
+                $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' )
+            )->where(
+                $query->expr->in(
+                    $this->dbHandler->quoteColumn( 'group_id' ),
+                    $criterion->value
+                )
             );
 
-        return $query->expr->in( 'contentclass_id', $subSelect );
+        return $query->expr->in(
+            $this->dbHandler->quoteColumn( 'contentclass_id', 'ezcontentobject' ),
+            $subSelect
+        );
     }
 }
 

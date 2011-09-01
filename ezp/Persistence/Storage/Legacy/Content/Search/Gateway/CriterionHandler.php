@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
+    ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Content\Criterion;
 
 /**
@@ -29,6 +30,23 @@ abstract class CriterionHandler
         Criterion\Operator::LT      => "lt",
         Criterion\Operator::LTE     => "lte",
     );
+
+    /**
+     * Database handler
+     *
+     * @var ezp\Persistence\Storage\Legacy\EzcDbHandler
+     */
+    protected $dbHandler;
+
+    /**
+     * Creates a new criterion handler
+     *
+     * @param EzcDbHandler $dbHandler
+     */
+    public function __construct( EzcDbHandler $dbHandler )
+    {
+        $this->dbHandler = $dbHandler;
+    }
 
     /**
      * Check if this criterion handler accepts to handle the given criterion.

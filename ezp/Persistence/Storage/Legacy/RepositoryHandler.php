@@ -177,25 +177,58 @@ class RepositoryHandler implements HandlerInterface
                 new Content\Search\Gateway\EzcDatabase(
                     $this->dbHandler,
                     new Content\Search\Gateway\CriteriaConverter( array(
-                        new Content\Search\Gateway\CriterionHandler\ContentId(),
-                        new Content\Search\Gateway\CriterionHandler\LogicalNot(),
-                        new Content\Search\Gateway\CriterionHandler\LogicalAnd(),
-                        new Content\Search\Gateway\CriterionHandler\LogicalOr(),
-                        new Content\Search\Gateway\CriterionHandler\SubtreeId(),
-                        new Content\Search\Gateway\CriterionHandler\ContentTypeId(),
-                        new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(),
-                        new Content\Search\Gateway\CriterionHandler\DateMetadata(),
-                        new Content\Search\Gateway\CriterionHandler\LocationId(),
-                        new Content\Search\Gateway\CriterionHandler\ParentLocationId(),
-                        new Content\Search\Gateway\CriterionHandler\RemoteId(),
-                        new Content\Search\Gateway\CriterionHandler\SectionId(),
-                        new Content\Search\Gateway\CriterionHandler\Status(),
-                        new Content\Search\Gateway\CriterionHandler\FullText(),
+                        new Content\Search\Gateway\CriterionHandler\ContentId(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\LogicalNot(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\LogicalAnd(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\LogicalOr(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\SubtreeId(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\ContentTypeId(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\DateMetadata(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\LocationId(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\ParentLocationId(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\RemoteId(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\SectionId(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\Status(
+                            $this->dbHandler
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\FullText(
+                            $this->dbHandler
+                        ),
                         new Content\Search\Gateway\CriterionHandler\Field(
                             $this->dbHandler,
                             $this->getFieldValueConverterRegistry()
                         ),
-                    ) )
+                    ) ),
+                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler )
+                ),
+                new Content\Mapper(
+                    new Content\Location\Mapper(),
+                    $this->getFieldValueConverterRegistry()
                 )
             );
         }

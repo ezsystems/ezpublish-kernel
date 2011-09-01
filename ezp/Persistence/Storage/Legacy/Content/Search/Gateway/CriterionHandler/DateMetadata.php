@@ -38,12 +38,20 @@ class DateMetadata extends CriterionHandler
      */
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
-        $column = $criterion->target === Criterion\DateMetadata::MODIFIED ? 'modified' : 'published';
+        $column = $this->dbHandler->quoteColumn(
+            $criterion->target === Criterion\DateMetadata::MODIFIED
+                ? 'modified'
+                : 'published',
+            'ezcontentobject'
+        );
 
         switch ( $criterion->operator )
         {
             case Criterion\Operator::IN:
-                return $query->expr->in( $column, $criterion->value );
+                return $query->expr->in(
+                    $column,
+                    $criterion->value
+                );
 
             case Criterion\Operator::BETWEEN:
                 return $query->expr->between(

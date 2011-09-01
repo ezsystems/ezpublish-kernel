@@ -11,8 +11,10 @@ namespace ezp\Persistence\Storage\Legacy\Content\Search;
 
 use ezp\Persistence\Content,
     ezp\Persistence\Content\Search\Handler as BaseSearchHandler,
+    ezp\Persistence\Content\Search\Result,
     ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Storage\Legacy\Exception;
+    ezp\Persistence\Storage\Legacy\Exception,
+    ezp\Persistence\Storage\Legacy\Content\Mapper as ContentMapper;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -45,13 +47,22 @@ class Handler extends BaseSearchHandler
     protected $gateway;
 
     /**
+     * Content mapper
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Mapper
+     */
+    protected $contentMapper;
+
+    /**
      * Creates a new content handler.
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\Search\Gateway $gateway
+     * @param \ezp\Persistence\Storage\Legacy\Content\Mapper
      */
-    public function __construct( Gateway $gateway )
+    public function __construct( Gateway $gateway, ContentMapper $contentMapper )
     {
-        $this->gateway = $gateway;
+        $this->gateway       = $gateway;
+        $this->contentMapper = $contentMapper;
     }
 
     /**
@@ -70,7 +81,15 @@ class Handler extends BaseSearchHandler
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null, $translations = null )
     {
-        return $this->gateway->find( $criterion, $offset, $limit, $sort );
+        $data = $this->gateway->find( $criterion, $offset, $limit, $sort );
+
+        $result = new Result();
+        $result->count = $data['count'];
+        $result->content = $this->contentMapper->extractContentFromRows(
+            $data['rows']
+        );
+
+        return $result;
     }
 
     /**

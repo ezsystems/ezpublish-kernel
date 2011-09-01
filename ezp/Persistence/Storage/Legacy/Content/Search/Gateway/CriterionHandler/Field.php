@@ -123,17 +123,23 @@ class Field extends CriterionHandler
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
         $fieldInformation = $this->getFieldInformation( $criterion->target );
-        $column           = $fieldInformation['column'];
+        $column           = $this->dbHandler->quoteColumn( $fieldInformation['column'] );
 
         $subSelect = $query->subSelect();
         $subSelect
-            ->select( 'contentobject_id' )
-            ->from( 'ezcontentobject_attribute' );
+            ->select(
+                $this->dbHandler->quoteColumn( 'contentobject_id' )
+            )->from(
+                $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
+            );
 
         switch ( $criterion->operator )
         {
             case Criterion\Operator::IN:
-                $filter = $subSelect->expr->in( $column, $criterion->value );
+                $filter = $subSelect->expr->in(
+                    $column,
+                    $criterion->value
+                );
                 break;
 
             case Criterion\Operator::BETWEEN:
@@ -162,14 +168,16 @@ class Field extends CriterionHandler
 
         $subSelect->where( $subSelect->expr->lAnd(
             $subSelect->expr->eq(
-                'contentclassattribute_id',
+                $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
                 $subSelect->bindValue( $fieldInformation['id'] )
             ),
             $filter
         ) );
 
-        return $query->expr->in( 'id', $subSelect );
-
+        return $query->expr->in(
+            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+            $subSelect
+        );
     }
 }
 

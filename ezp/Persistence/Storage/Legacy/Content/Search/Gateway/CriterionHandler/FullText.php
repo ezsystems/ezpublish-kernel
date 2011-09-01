@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
     ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
+    ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Content\Criterion;
 
 /**
@@ -33,8 +34,9 @@ class FullText extends CriterionHandler
      * @param array $configuration
      * @return void
      */
-    public function __construct( array $configuration = array() )
+    public function __construct( EzcDbHandler $dbHandler, array $configuration = array() )
     {
+        parent::__construct( $dbHandler );
         $this->configuration = $configuration + $this->configuration;
     }
 
@@ -82,7 +84,7 @@ class FullText extends CriterionHandler
              $token[0] === '*' )
         {
             return $query->expr->like(
-                'word',
+                $this->dbHandler->quoteColumn( 'word' ),
                 $query->bindValue( '%' . substr( $token, 1 ) )
             );
         }
@@ -91,13 +93,13 @@ class FullText extends CriterionHandler
              $token[strlen( $token ) - 1] === '*' )
         {
             return $query->expr->like(
-                'word',
+                $this->dbHandler->quoteColumn( 'word' ),
                 $query->bindValue( substr( $token, 0, -1 ) . '%' )
             );
         }
 
         return $query->expr->eq(
-            'word',
+            $this->dbHandler->quoteColumn( 'word' ),
             $query->bindValue( $token )
         );
     }
@@ -119,11 +121,14 @@ class FullText extends CriterionHandler
         }
 
         $subQuery
-            ->select( 'id' )
-            ->from( 'ezsearch_word' )
+            ->select( $this->dbHandler->quoteColumn( 'id' ) )
+            ->from( $this->dbHandler->quoteTable( 'ezsearch_word' ) )
             ->where( $subQuery->expr->lAnd(
                 $subQuery->expr->lOr( $wordExpressions ),
-                $subQuery->expr->lt( 'object_count', $subQuery->bindValue( $this->configuration['searchThresholdValue'] ) )
+                $subQuery->expr->lt(
+                    $this->dbHandler->quoteColumn( 'object_count' ),
+                    $subQuery->bindValue( $this->configuration['searchThresholdValue'] )
+                )
             ) );
         return $subQuery;
     }
@@ -140,15 +145,20 @@ class FullText extends CriterionHandler
     {
         $subSelect = $query->subSelect();
         $subSelect
-            ->select( 'contentobject_id' )
-            ->from( 'ezsearch_object_word_link' )
-            ->where(
+            ->select(
+                $this->dbHandler->quoteColumn( 'contentobject_id' )
+            )->from(
+                $this->dbHandler->quoteTable( 'ezsearch_object_word_link' )
+            )->where(
                 $query->expr->in(
-                    'word_id',
+                    $this->dbHandler->quoteColumn( 'word_id' ),
                     $this->getWordIdSubquery( $subSelect, $criterion->value )
                 )
             );
-        return $query->expr->in( 'id', $subSelect );
+        return $query->expr->in(
+            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+            $subSelect
+        );
     }
 }
 
