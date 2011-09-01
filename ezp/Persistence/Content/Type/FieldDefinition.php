@@ -97,7 +97,7 @@ class FieldDefinition extends ValueObject
     /**
      * Default value of the field
      *
-     * @var mixed
+     * @var \ezp\Persistence\Content\FieldValue
      */
     public $defaultValue;
 }
