@@ -128,7 +128,7 @@ interface Handler
      * Return the versions for $contentId
      *
      * @param int $contentId
-     * @return array(RestrictedVersion)
+     * @return \ezp\Persistence\Content\RestrictedVersion[]
      */
     public function listVersions( $contentId );
 
