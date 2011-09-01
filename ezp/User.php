@@ -36,6 +36,8 @@ class User extends Model implements LocatableInterface
         'email' => true,
         'password' => true,
         'hashAlgorithm' => true,
+        'isEnabled' => true,
+        //'maxLogin' => true,
     );
 
     /**

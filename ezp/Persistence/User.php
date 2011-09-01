@@ -47,5 +47,24 @@ class User extends ValueObject
      * @var int
      */
     public $hashAlgorithm;
+
+    /**
+     * Flag to signal if user is enabled or not
+     *
+     * User can not login if false
+     *
+     * @var bool
+     */
+    public $isEnabled = false;
+
+    /**
+     * Max number of time user is allowed to login
+     *
+     * @todo: Not used in kernel, should probably be a number of login allowed before changing password.
+     *        But new users gets 0 before they activate, admin has 10, and anonymous has 1000 in clean data.
+     *
+     * @var int
+     */
+    public $maxLogin = 0;
 }
 ?>
