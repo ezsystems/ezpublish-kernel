@@ -109,32 +109,35 @@ class ContentHandler implements ContentHandlerInterface
      * to a new object which is returned. Version numbers are maintained.
      *
      * @param int $contentId
-     * @param int|false $version Copy all versions if left false
+     * @param int|false $versionNo Copy all versions if left false
      * @return \ezp\Persistence\Content
      * @throws \ezp\Base\Exception\NotFound If content or version is not found
+     * @todo Language support
      */
-    public function copy( $contentId, $version )
+    public function copy( $contentId, $versionNo )
     {
         $content = $this->backend->load( "Content", $contentId );
         if ( !$content )
             throw new NotFound( "Content", "contentId: $contentId" );
 
+        $currentVersionNo = $versionNo === false ? $content->currentVersionNo : $versionNo;
         $contentObj = $this->backend->create(
             "Content", array(
                 "name" => $content->name,
                 "typeId" => $content->typeId,
                 "sectionId" => $content->sectionId,
                 "ownerId" => $content->ownerId,
-                "currentVersionNo" => 1, // @todo use correct number
+                "currentVersionNo" => $currentVersionNo,
             )
         );
 
+        // Copy version(s)
         foreach (
             $this->backend->find(
                 "Content\\Version",
-                $version === false ?
+                $versionNo === false ?
                 array( "contentId" => $content->id ) :
-                array( "contentId" => $content->id, "versionNo" => $version )
+                array( "contentId" => $content->id, "versionNo" => $versionNo )
             ) as $version )
         {
             $this->backend->create(
@@ -150,7 +153,46 @@ class ContentHandler implements ContentHandlerInterface
             );
         }
 
-        // @todo Copy fields!
+        // Associate last version to content VO
+        $aVersion = $this->backend->find(
+            'Content\\Version',
+            array(
+                'contentId' => $contentObj->id,
+                'versionNo' => $currentVersionNo
+            )
+        );
+        if ( empty( $aVersion ) )
+            throw new NotFound( "Version", "contentId: $contentObj->id // versionNo: $currentVersionNo" );
+        $contentObj->version = $aVersion[0];
+
+        // Copy fields
+        // @todo: language support
+        foreach (
+            $this->backend->find(
+                "Content\\Field",
+                // Using internal _contentId since it's not directly exposed by Persistence
+                $versionNo === false ?
+                array( "_contentId" => $content->id ) :
+                array( "_contentId" => $content->id, "versionNo" => $versionNo )
+            ) as $field
+        )
+        {
+            $this->backend->create(
+                'Content\\Field',
+                array( '_contentId' => $contentObj->id ) + (array)$field
+            );
+        }
+
+        // Associate last version's fields
+        $aFields = $this->backend->find(
+            'Content\\Field',
+            array(
+                '_contentId' => $contentObj->id,
+                'versionNo' => $currentVersionNo
+            )
+        );
+        // @todo: Throw NotFound if no fields at all ?
+        $contentObj->version->fields = $aFields;
 
         return $contentObj;
     }
