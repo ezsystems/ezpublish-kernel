@@ -67,7 +67,7 @@ abstract class FieldType
      * @var FieldSettings Custom properties which are specific to the field
      *                      type. Typically these properties are used to
      *                      configure behaviour of field types and normally set
-     *                      in the FieldDefiniton on ContentTypes
+     *                      in the FieldDefinition on ContentTypes
      */
     protected $fieldSettings;
 
