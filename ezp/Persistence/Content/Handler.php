@@ -50,20 +50,6 @@ interface Handler
     public function createDraftFromVersion( $contentId, $srcVersion );
 
     /**
-     * Copy Content with Fields and Versions from $contentId in $version.
-     *
-     * Copies all fields from $contentId in $version (or all versions if false)
-     * to a new object which is returned. Version numbers are maintained.
-     *
-     * @param int $contentId
-     * @param int|false $version Copy all versions if left false
-     * @return \ezp\Persistence\Content\Content
-     * @todo Un comment when api is approved/voted/ok
-     * @throws \ezp\Base\Exception\NotFound If content or version is not found
-     */
-    //public function copy( $contentId, $version );
-
-    /**
      * Returns the raw data of a content object identified by $id, in a struct.
      *
      * A version to load must be specified. If you want to load the current
