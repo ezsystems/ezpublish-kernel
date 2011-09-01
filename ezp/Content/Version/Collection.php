@@ -10,7 +10,8 @@
 namespace ezp\Content\Version;
 use ezp\Base\Collection\Lazy,
     ezp\Base\Service\Container as ServiceContainer,
-    ezp\Content;
+    ezp\Content,
+    ezp\Content\Service as ContentService;
 
 /**
  * Version Collection class. Versions are indexed by version number
@@ -21,13 +22,11 @@ class Collection extends Lazy
     /**
      * Constructor
      *
-     * @throws InvalidArgumentType If elements contains item of wrong type
-     * @param int|false $contentId Id of content this version collection belongs to.
-     *                            false if it's for a new content
+     * @param \ezp\Content\Service $contentService Content service to be used for fetching versions
+     * @param int $contentId Id of content this version collection belongs to.
      */
-    public function __construct( $contentId = false )
+    public function __construct( ContentService $contentService, $contentId )
     {
-        $sc = new ServiceContainer();
-        parent::__construct( 'ezp\\Content\\Version', $sc->getRepository()->getContentService(), $contentId, 'listVersions' );
+        parent::__construct( 'ezp\\Content\\Version', $contentService, $contentId, 'listVersions' );
     }
 }

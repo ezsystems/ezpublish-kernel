@@ -216,7 +216,7 @@ class Service extends BaseService
             array(
                 "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
                 "contentType" => new Proxy( $this->repository->getContentTypeService(), $vo->typeId ),
-                "versions" => new VersionCollection( $vo->id ),
+                "versions" => new VersionCollection( $this, $vo->id ),
                 "properties" => $vo
             )
         );
