@@ -68,6 +68,7 @@ class ContentHandler implements ContentHandlerInterface
                 'created' => time(),
                 'contentId' => $contentObj->id,
                 'state' => Version::STATUS_DRAFT,
+                'versionNo' => 1
             )
         );
         foreach ( $content->fields as $field )
