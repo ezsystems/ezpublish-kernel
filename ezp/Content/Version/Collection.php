@@ -9,8 +9,6 @@
 
 namespace ezp\Content\Version;
 use ezp\Base\Collection\Lazy,
-    ezp\Base\Service\Container as ServiceContainer,
-    ezp\Content,
     ezp\Content\Service as ContentService;
 
 /**
