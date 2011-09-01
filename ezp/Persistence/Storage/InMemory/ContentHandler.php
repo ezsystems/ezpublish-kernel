@@ -74,7 +74,7 @@ class ContentHandler implements ContentHandlerInterface
         {
             $version->fields[] = $this->backend->create(
                 'Content\\Field',
-                array( 'versionNo' => $version->id ) + (array)$field // @todo versionNo should be version number
+                array( 'versionNo' => $version->versionNo ) + (array)$field // @todo versionNo should be version number
             );
         }
         $contentObj->version = $version;
