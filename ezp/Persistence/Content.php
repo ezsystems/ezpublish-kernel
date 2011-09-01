@@ -57,7 +57,7 @@ class Content extends ValueObject
      *
      * The Version, containing version information and all
      * {@link \ezp\Persistence\Content\Field}s in this version (in all languages).
-     * Non-translateable fields will only occur once!
+     * Non-translatable fields will only occur once!
      *
      * @var \ezp\Persistence\Content\Version
      */
