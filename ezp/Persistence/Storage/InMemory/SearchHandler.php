@@ -106,7 +106,8 @@ class SearchHandler extends Handler
             $content = $this->backend->load( "Content", $criterion->value[0] );
 
             $versions = $this->backend->find( "Content\\Version", array( "contentId" => $content->id ) );
-            $versions[0]->fields = $this->backend->find( "Content\\Field", array( "versionNo" => $versions[0]->id ) );
+            $versions[0]->fields = $this->backend->find( "Content\\Field", array( "_contentId" => $content->id,
+                                                                                  "versionNo" => $versions[0]->versionNo ) );
 
             $content->version = $versions[0];
 
