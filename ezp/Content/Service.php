@@ -64,9 +64,9 @@ class Service extends BaseService
                 array( "contentId", "contentVersion", "mainLocationId" )
             );
         }
-        foreach ( $content->fields as $fields )
+        foreach ( $content->fields as $field )
         {
-            $struct->fields[] = $fields->getState( 'properties' );
+            $struct->fields[] = $field->getState( 'properties' );
         }
         $vo = $this->handler->contentHandler()->create( $struct  );
         return $this->buildDomainObject( $vo );
