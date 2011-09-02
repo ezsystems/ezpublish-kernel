@@ -252,7 +252,7 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->load( 1 );
 
         $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
-        $this->assertEquals( 1, count( $type->fields ) );
+        $this->assertEquals( 2, count( $type->fields ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
         // lazy collection tests
         $this->assertEquals( 1, count( $type->groups ) );
@@ -273,7 +273,7 @@ class TypeTest extends BaseServiceTest
 
         $type = $list[0];
         $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
-        $this->assertEquals( 1, count( $type->fields ) );
+        $this->assertEquals( 2, count( $type->fields ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
         // lazy collection tests
         $this->assertEquals( 1, count( $type->groups ) );
@@ -292,7 +292,7 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->copy( 10, 1 );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
         $this->assertStringStartsWith( 'folder_', $type->identifier );
-        $this->assertEquals( 1, count( $type->fields ) );
+        $this->assertEquals( 2, count( $type->fields ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
         // lazy collection tests
         $this->assertEquals( 1, count( $type->groups ) );
@@ -472,8 +472,8 @@ class TypeTest extends BaseServiceTest
         $this->service->addFieldDefinition( $type, $field );
 
         $type = $this->service->load( 1, 0 );
-        $this->assertEquals( 2, count( $type->fields ) );
-        $this->assertEquals( 'test', $type->fields[1]->identifier );
+        $this->assertEquals( 3, count( $type->fields ) );
+        $this->assertEquals( 'test', $type->fields[2]->identifier );
     }
 
     /**
@@ -515,7 +515,7 @@ class TypeTest extends BaseServiceTest
         $this->service->removeFieldDefinition( $type, $type->fields[0] );
 
         $type = $this->service->load( 1, 0 );
-        $this->assertEquals( 0, count( $type->fields ) );
+        $this->assertEquals( 1, count( $type->fields ) );
     }
 
     /**
@@ -553,7 +553,7 @@ class TypeTest extends BaseServiceTest
         $this->service->updateFieldDefinition( $type, $type->fields[0] );
 
         $type = $this->service->load( 1, 0 );
-        $this->assertEquals( 1, count( $type->fields ) );
+        $this->assertEquals( 2, count( $type->fields ) );
         $this->assertEquals( array( 'eng-GB' => 'New name' ), $type->fields[0]->name );
     }
 

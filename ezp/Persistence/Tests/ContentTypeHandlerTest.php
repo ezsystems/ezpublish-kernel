@@ -236,7 +236,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->assertEquals( $userId, $obj->creatorId );
         $this->assertEquals( time(), $obj->created );//ehm
         $this->assertGreaterThan( $original->created, $obj->created );
-        $this->assertEquals( 1, count( $obj->fieldDefinitions ) );
+        $this->assertEquals( 2, count( $obj->fieldDefinitions ) );
         $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
     }
 
@@ -383,7 +383,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $vo = $handler->addFieldDefinition( 1, 0, $field );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\FieldDefinition', $vo );
         $type = $handler->load( 1, 0 );
-        $this->assertEquals( 2, count( $type->fieldDefinitions ) );
+        $this->assertEquals( 3, count( $type->fieldDefinitions ) );
     }
 
     /**
@@ -422,7 +422,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $handler = $this->repositoryHandler->ContentTypeHandler();
         $handler->removeFieldDefinition( 1, 0, 1 );
         $type = $handler->load( 1, 0 );
-        $this->assertEquals( 0, count( $type->fieldDefinitions ) );
+        $this->assertEquals( 1, count( $type->fieldDefinitions ) );
     }
 
     /**
@@ -474,7 +474,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $fieldDefinition->name = $fieldDefinition->name + array( 'nor-NB' => 'Navn' );
         $handler->updateFieldDefinition( 1, 0, $fieldDefinition );
         $type = $handler->load( 1, 0 );
-        $this->assertEquals( 1, count( $type->fieldDefinitions ) );
+        $this->assertEquals( 2, count( $type->fieldDefinitions ) );
         $this->assertEquals( array( 'eng-GB' => 'Name', 'nor-NB' => 'Navn' ), $type->fieldDefinitions[0]->name );
     }
 
