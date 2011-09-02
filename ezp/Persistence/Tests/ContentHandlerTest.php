@@ -271,4 +271,62 @@ class ContentHandlerTest extends HandlerTest
 
         // @todo Test fields!
     }
+
+    /**
+     * Tests loadFields function
+     *
+     * @group inMemoryContent
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadFields
+     */
+    public function testLoadFields()
+    {
+        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentId = 1;
+        $versionNo = 1;
+        $contentVo = $contentHandler->load( $contentId, $versionNo );
+
+        // Load fields and index them in an array by id
+        $indexedFields = array();
+        foreach ( $contentHandler->loadFields( $contentId, $versionNo ) as $field )
+        {
+            $indexedFields[$field->id] = $field;
+        }
+        self::assertNotEmpty( $indexedFields );
+
+        // Index content fields by id as well, so they can be compared to loaded fields
+        $indexedContentFields = array();
+        foreach ( $contentVo->version->fields as $contentField )
+        {
+            $indexedContentFields[$contentField->id] = $contentField;
+        }
+
+        foreach ( $indexedContentFields as $fieldId => $contentField )
+        {
+            self::assertTrue( isset( $indexedFields[$fieldId] ) );
+            foreach ( $contentField as $property => $value )
+            {
+                self::assertSame( $value, $indexedFields[$fieldId]->$property );
+            }
+        }
+    }
+
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @group inMemoryContent
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadFields
+     */
+    public function testLoadFieldsNoField()
+    {
+        $contentHandler = $this->repositoryHandler->contentHandler();
+
+        $struct = new CreateStruct();
+        $struct->name = "test";
+        $struct->ownerId = 14;
+        $struct->sectionId = 1;
+        $struct->typeId = 2;
+        $content = $contentHandler->create( $struct );
+        $this->contentToDelete[] = $content;
+
+        $fields = $contentHandler->loadFields( $content->id, $content->currentVersionNo );
+    }
 }
