@@ -118,17 +118,6 @@ class Service extends BaseService
     }
 
     /**
-     * Finds content using a $query
-     *
-     * @param \ezp\Content\Query $query
-     * @return \ezp\Content[]
-     */
-    public function find( Query $query )
-    {
-        return $this->handler->contentHandler()->find( $query->criteria );
-    }
-
-    /**
      * Deletes a content from the repository
      *
      * @param \ezp\Content $content
@@ -233,15 +222,6 @@ class Service extends BaseService
     {
         $versionNo = isset( $version ) ? $version->versionNo : false;
         return $this->buildDomainObject( $this->handler->contentHandler()->copy( $content->id , $versionNo ) );
-    }
-
-    /**
-     * Creates a new criteria collection object in order to query the content repository
-     * @return CriteriaCollection
-     */
-    public function getQueryBuilder()
-    {
-        return new Builder();
     }
 
     protected function buildDomainObject( ContentValue $vo )
