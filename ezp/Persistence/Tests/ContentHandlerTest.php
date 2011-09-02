@@ -91,6 +91,7 @@ class ContentHandlerTest extends HandlerTest
      * Test create function
      *
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::create
+     * @group inMemoryContent
      */
     public function testCreate()
     {
@@ -133,6 +134,7 @@ class ContentHandlerTest extends HandlerTest
      * Test delete function
      *
      * @covers \ezp\Persistence\Storage\InMemory\ContentHandler::delete
+     * @group inMemoryContent
      */
     public function testDelete()
     {
@@ -162,6 +164,7 @@ class ContentHandlerTest extends HandlerTest
      * Test copy function
      *
      * @covers \ezp\Persistence\Storage\InMemory\ContentHandler::copy
+     * @group inMemoryContent
      */
     public function testCopyVersion1()
     {
@@ -188,6 +191,7 @@ class ContentHandlerTest extends HandlerTest
      * Test copy function
      *
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::copy
+     * @group inMemoryContent
      */
     public function testCopyVersion2()
     {
@@ -215,6 +219,7 @@ class ContentHandlerTest extends HandlerTest
      * Test copy function
      *
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::copy
+     * @group inMemoryContent
      */
     public function testCopyAllVersions()
     {
@@ -246,6 +251,7 @@ class ContentHandlerTest extends HandlerTest
      * Test update function
      *
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::update
+     * @group inMemoryContent
      */
     public function testUpdate()
     {
