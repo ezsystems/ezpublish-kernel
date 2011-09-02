@@ -230,7 +230,7 @@ class ServiceTest extends BaseServiceTest
     /**
      * Test service function for assigning group location
      *
-     * @covers \ezp\User\Service::assignLocation
+     * @covers \ezp\User\Service::assignGroup
      */
     public function testAssignGroup()
     {
@@ -248,7 +248,7 @@ class ServiceTest extends BaseServiceTest
     /**
      * Test service function for assigning group location
      *
-     * @covers \ezp\User\Service::assignLocation
+     * @covers \ezp\User\Service::assignGroup
      * @expectedException \ezp\Base\Exception\Logic
      */
     public function testAssignGroupAlreadyAssigned()
@@ -262,6 +262,42 @@ class ServiceTest extends BaseServiceTest
         self::assertEquals( 2, count( $anonymousUser->getGroups() ) );
 
         $service->assignGroup( $adminGroup, $anonymousUser );
+    }
+
+    /**
+     * Test service function for un-assigning group
+     *
+     * @covers \ezp\User\Service::unAssignGroup
+     */
+    public function testUnAssignGroup()
+    {
+        $service = $this->repository->getUserService();
+        $adminGroup = $service->loadGroup( 12 );
+        $anonymousUser = $service->load( 10 );
+        self::assertEquals( 1, count( $anonymousUser->getGroups() ) );
+
+        $service->assignGroup( $adminGroup, $anonymousUser );
+        self::assertEquals( 2, count( $anonymousUser->getGroups() ) );
+
+        $service->unAssignGroup( $adminGroup, $anonymousUser );
+        self::assertEquals( 1, count( $anonymousUser->getGroups() ) );
+        // @todo Test that policies decrease
+    }
+
+    /**
+     * Test service function for un-assigning group
+     *
+     * @covers \ezp\User\Service::unAssignGroup
+     * @expectedException \ezp\Base\Exception\Logic
+     */
+    public function testUnAssignGroupNotAssigned()
+    {
+        $service = $this->repository->getUserService();
+        $adminGroup = $service->loadGroup( 12 );
+        $anonymousUser = $service->load( 10 );
+        self::assertEquals( 1, count( $anonymousUser->getGroups() ) );
+
+        $service->unAssignGroup( $adminGroup, $anonymousUser );
     }
 
     /**

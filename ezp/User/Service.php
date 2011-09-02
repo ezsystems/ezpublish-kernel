@@ -154,6 +154,7 @@ class Service extends BaseService
      *
      * @param mixed $id
      * @return \ezp\User\Group[]
+     * @throws \ezp\Base\Exception\InvalidArgumentType If $id does not belong to a user object
      * @throws \ezp\Base\Exception\NotFoundWithType If any of locations user is assigned to is not a user group
      */
     public function loadGroupsByUserId( $id )
@@ -184,14 +185,14 @@ class Service extends BaseService
      * Assign a Group to User
      *
      * @param \ezp\User\Group $group
-     * @param \ezp\User|\ezp\User\Group $object
+     * @param \ezp\User $object
      * @throws \ezp\Base\Exception\Logic If $object has not been persisted yet
      */
     public function assignGroup( Group $group, User $user )
     {
         $content = $user->getState( 'content' );
         if ( !$content instanceof Content  )
-            throw new Logic( 'assignLocation', 'can not assign $parent location to non created (persisted) $object' );
+            throw new Logic( 'assignGroup', 'can not assign $parent location to non created (persisted) $object' );
 
         $groups = $user->getGroups();
         if ( in_array( $group, (array) $groups, true ) )
@@ -205,39 +206,49 @@ class Service extends BaseService
     }
 
     /**
-     * Remove a User|Group Location from a User|Group
+     * Remove a Group assignment from a User
      *
-     * @param \ezp\User\UserLocation|\ezp\User\GroupLocation $parent
-     * @param \ezp\User|\ezp\User\Group $object
-     * @return \ezp\User\UserLocation|\ezp\User\GroupLocation
-     * @throws \ezp\Base\Exception\Logic If $object has not been persisted yet or if $location is not location on $object
+     * @param \ezp\User\Group $group
+     * @param \ezp\User $object
+     * @throws \ezp\Base\Exception\Logic If $object has not been persisted yet
      */
-    public function removeLocation( AbstractUserLocation $location, LocatableInterface $object )
+    public function unAssignGroup( Group $group, User $user )
     {
-        $content = $object->getState( 'content' );
+        $content = $user->getState( 'content' );
         if ( !$content instanceof Content  )
-            throw new Logic( 'removeLocation', 'can not remove $location to non created (persisted) $object' );
+            throw new Logic( 'unAssignGroup', 'can not remove $group to non created (persisted) $user' );
 
-        $userLocations = $object->getLocations();
-        $key = array_search( $location, $userLocations, true );
+        $groups = $user->getGroups();
+        $key = array_search( $group, (array) $groups, true );
         if ( $key === false )
-            throw new Logic( 'removeLocation', 'can not remove $location that is not part of $object->locations' );
+            throw new Logic( 'unAssignGroup', 'can not remove $group that is not part of $user->groups' );
 
-        $contentLocation = $location->getState( 'location' );
-        if ( !$contentLocation instanceof Location  )
-            throw new Logic( 'removeLocation', 'can not remove non created (persisted)$location on $object' );
+        if ( !count( $groups ) )
+            throw new Logic( 'unAssignGroup', 'can not remove $group, it seems to be last group on user' );
 
-        $contentKey = array_search( $contentLocation, $content->locations, true );
-        if ( $contentKey === false  )
-            throw new Logic( 'removeLocation', 'could not find provided content location among locations on $content' );
+        $groupLocation = $group->getState( 'content' )->mainLocation;
+        if ( !$groupLocation instanceof Location  )
+            throw new Logic( 'unAssignGroup', 'can not remove non created (persisted)$groupLocation on $group' );
 
-        $this->repository->getLocationService()->delete( $contentLocation->id );
+        $locationKey = false;
+        foreach ( $content->locations as $key => $location )
+        {
+            if ( $location->parentId == $groupLocation->id )
+            {
+                $locationKey = $key;
+                break;
+            }
+        }
+        if ( $locationKey === false  )
+            throw new Logic( 'unAssignGroup', 'could not find provided $groupLocation among locations on $user->content' );
 
-        unset( $content->locations[$contentKey] );
-        unset( $content->getState( 'properties' )->locations[$contentKey] );//order should be same, so reusing key
+        $this->repository->getLocationService()->delete( $location );
 
-        unset( $userLocations[$key] );
-        $object->setState( array( 'locations' => $userLocations ) );
+        unset( $content->locations[$locationKey] );
+        unset( $content->getState( 'properties' )->locations[$locationKey] );//order should be same, so reusing key
+
+        unset( $groups[$key] );
+        $user->setState( array( 'groups' => $groups ) );
     }
 
     /**
