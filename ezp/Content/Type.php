@@ -31,7 +31,7 @@ use ezp\Base\Model,
  * @property int $initialLanguageId
  * @property-read int[] $groupIds
  * @property Type\FieldDefinition[] $fields Appending items after it has been created has no effect, use TypeService->addFieldDefinition()
- * @property-read Type\Group[] $groups Appended items will not be stored, use TypeService->link()
+ * @property-read Type\Group[] $groups Appended items after it has been created has no effect, use TypeService->link()
  */
 class Type extends Model
 {
