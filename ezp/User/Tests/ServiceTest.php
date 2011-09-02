@@ -170,26 +170,15 @@ class ServiceTest extends BaseServiceTest
     public function testCreateGroup()
     {
         $service = $this->repository->getUserService();
-        $parent = $service->loadGroup( 12 )->getLocations();
+        $parent = $service->loadGroup( 12 );
 
-        $do = $service->createGroup( $parent[0], 'New User Group' );
+        $do = $service->createGroup( $parent, 'New User Group' );
+        self::assertInstanceOf( 'ezp\\User\\Group', $do );
         // @todo Test properties when field is stabilized
         //self::assertEquals( '', $do->name );
         //self::assertEquals( '', $do->description );
 
-        $groupLocations = $do->getLocations();
-        self::assertEquals( 1, count( $groupLocations ) );
-        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $groupLocations[0] );
-
-        $group = $groupLocations[0]->getGroup();
-        self::assertInstanceOf( 'ezp\\User\\Group', $group );
-        self::assertEquals( $do->id, $group->id );
-        self::assertTrue( $group === $do );
-
-        $parentGroupLocation = $groupLocations[0]->getParent();
-        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $parentGroupLocation );
-
-        $group = $parentGroupLocation->getGroup();
+        $group = $do->getParent();
         self::assertInstanceOf( 'ezp\\User\\Group', $group );
         self::assertEquals( 12, $group->id );
     }
@@ -209,19 +198,7 @@ class ServiceTest extends BaseServiceTest
         //self::assertEquals( '', $do->name );
         //self::assertEquals( '', $do->description );
 
-        $groupLocations = $do->getLocations();
-        self::assertEquals( 1, count( $groupLocations ) );
-        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $groupLocations[0] );
-
-        $group = $groupLocations[0]->getGroup();
-        self::assertInstanceOf( 'ezp\\User\\Group', $group );
-        self::assertEquals( 12, $group->id );
-        self::assertTrue( $group === $do );
-
-        $parentGroupLocation = $groupLocations[0]->getParent();
-        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $parentGroupLocation );
-
-        $group = $parentGroupLocation->getGroup();
+        $group = $do->getParent();
         self::assertInstanceOf( 'ezp\\User\\Group', $group );
         self::assertEquals( 4, $group->id );
     }
@@ -253,73 +230,38 @@ class ServiceTest extends BaseServiceTest
     /**
      * Test service function for assigning group location
      *
-     * @covers \ezp\User\Service::assignGroupLocation
+     * @covers \ezp\User\Service::assignLocation
      */
-    public function testAssignGroupLocationOnUser()
+    public function testAssignGroup()
     {
         $service = $this->repository->getUserService();
         $adminGroup = $service->loadGroup( 12 );
         $anonymousUser = $service->load( 10 );
-        self::assertEquals( 1, count( $anonymousUser->getLocations() ) );
+        self::assertEquals( 1, count( $anonymousUser->getGroups() ) );
 
-        $adminGroupLocations = $adminGroup->getLocations();
+        $service->assignGroup( $adminGroup, $anonymousUser );
+        self::assertEquals( 2, count( $anonymousUser->getGroups() ) );
 
-        $newLocation = $service->assignGroupLocation( $adminGroupLocations[0], $anonymousUser );
-        self::assertInstanceOf( 'ezp\\User\\UserLocation', $newLocation );
-
-        $user = $newLocation->getUser();
-        self::assertInstanceOf( 'ezp\\User', $user );
-        self::assertEquals( 10, $user->id );
-        self::assertTrue( $user === $anonymousUser );
-
-        $locations = $user->getLocations();
-        self::assertEquals( 2, count( $locations ) );
-        self::assertTrue( $newLocation === $locations[1] );
-
-        $parentLocation = $locations[1]->getParent();
-        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $parentLocation );
-        //self::assertTrue( $adminGroupLocations === $parentLocation ); Does not currently work
-
-        $parentGroup = $parentLocation->getGroup();
-        self::assertInstanceOf( 'ezp\\User\\Group', $parentGroup );
-        //self::assertTrue( $adminGroup === $parentGroup ); Does not currently work
-        self::assertEquals( 12, $parentGroup->id );
+        // @todo Test that policies increases
     }
 
     /**
      * Test service function for assigning group location
      *
-     * @covers \ezp\User\Service::assignGroupLocation
+     * @covers \ezp\User\Service::assignLocation
+     * @expectedException \ezp\Base\Exception\Logic
      */
-    public function testAssignGroupLocationOnGroup()
+    public function testAssignGroupAlreadyAssigned()
     {
         $service = $this->repository->getUserService();
         $adminGroup = $service->loadGroup( 12 );
-        $anonymousGroup = $service->loadGroup( 42 );
-        self::assertEquals( 1, count( $anonymousGroup->getLocations() ) );
+        $anonymousUser = $service->load( 10 );
+        self::assertEquals( 1, count( $anonymousUser->getGroups() ) );
 
-        $adminGroupLocations = $adminGroup->getLocations();
+        $service->assignGroup( $adminGroup, $anonymousUser );
+        self::assertEquals( 2, count( $anonymousUser->getGroups() ) );
 
-        $newLocation = $service->assignGroupLocation( $adminGroupLocations[0], $anonymousGroup );
-        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $newLocation );
-
-        $group = $newLocation->getGroup();
-        self::assertInstanceOf( 'ezp\\User\\Group', $group );
-        self::assertEquals( 42, $group->id );
-        self::assertTrue( $group === $anonymousGroup );
-
-        $locations = $group->getLocations();
-        self::assertEquals( 2, count( $locations ) );
-        self::assertTrue( $newLocation === $locations[1] );
-
-        $parentLocation = $locations[1]->getParent();
-        self::assertInstanceOf( 'ezp\\User\\GroupLocation', $parentLocation );
-        //self::assertTrue( $adminGroupLocations === $parentLocation ); Does not currently work
-
-        $parentGroup = $parentLocation->getGroup();
-        self::assertInstanceOf( 'ezp\\User\\Group', $parentGroup );
-        //self::assertTrue( $adminGroup === $parentGroup ); Does not currently work
-        self::assertEquals( 12, $parentGroup->id );
+        $service->assignGroup( $adminGroup, $anonymousUser );
     }
 
     /**

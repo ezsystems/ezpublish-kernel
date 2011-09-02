@@ -228,27 +228,45 @@ class UserHandler implements UserHandlerInterface
         if ( !$list )
             throw new NotFound( 'User', $userId );
 
-        if ( $list[0]->typeId != 4 )
-             throw new NotFoundWithType( 4, $userId );
-
         $policies = array();
-        $this->getPermissionsWalkUserGroups( $list[0], $policies );
+        $this->getPermissionsForObject( $content, 4, $policies );// @deprecated Roles assigned to user
+
+        // crawl up path on all locations
+        foreach ( $content->locations as $location )
+        {
+            $parentIds = array_reverse( explode( '/', trim( $location->pathString, '/' ) ) );
+            foreach ( $parentIds as $parentId )
+            {
+                if ( $parentId == $location->id )
+                    continue;
+
+                $list = $this->backend->find(
+                    'Content',
+                    array( 'locations' => array( 'id' => $parentId ) ),
+                    array( 'locations' => array(
+                        'type' => 'Content\\Location',
+                        'match' => array( 'contentId' => 'id' ) )
+                    )
+                );
+
+                if ( isset( $list[1] ) )
+                    throw new Logic( 'content tree', 'there is more then one item with parentId:' . $parentId );
+                else if ( $list )
+                    $this->getPermissionsForObject( $list[0], 3, $policies );
+            }
+        }
         return array_values( $policies );
     }
 
     /**
      * @throws \ezp\Base\Exception\NotFoundWithType
-     * @throws \ezp\Base\Exception\Logic
      * @param \ezp\Persistence\Content $content
      * @param array $policies
-     * @return void
-     * @todo Merge policies with same values (but wait until decision on role assignment limitations)
      */
-    protected function getPermissionsWalkUserGroups( Content $content, array &$policies )
+    protected function getPermissionsForObject( Content $content, $typeId, array &$policies )
     {
-        // Allow User(4) for BC
-        if ( $content->typeId != 3 && $content->typeId != 4 )
-             throw new NotFoundWithType( "3 or 4", $content->id );
+        if ( $content->typeId != $typeId )
+             throw new NotFoundWithType( "Content with TypeId:$typeId", $content->id );
 
         // fetch possible roles assigned to this object
         $list = $this->backend->find(
@@ -268,23 +286,6 @@ class UserHandler implements UserHandlerInterface
                 if ( !isset( $policies[$policy->id] ) )
                     $policies[$policy->id] = $policy;
             }
-        }
-
-        // crawl up to root
-        foreach ( $content->locations as $location )
-        {
-            $list = $this->backend->find(
-                'Content',
-                array( 'locations' => array( 'id' => $location->parentId ) ),
-                array( 'locations' => array(
-                    'type' => 'Content\\Location',
-                    'match' => array( 'contentId' => 'id' ) )
-                )
-            );
-            if ( isset( $list[1] ) )
-                throw new Logic( 'content tree', 'getPermissionsWalkUserGroups to fail' );
-            else if ( $list )
-                $this->getPermissionsWalkUserGroups( $list[0], $policies );
         }
     }
 

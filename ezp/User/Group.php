@@ -14,11 +14,11 @@ use ezp\Base\Configuration,
     ezp\Base\ModelInterface,
     ezp\Base\Observable,
     ezp\Base\Observer,
+    ezp\Base\Proxy,
     ezp\Content,
     ezp\Content\Type,
     ezp\Content\Type\FieldDefinition,
-    ezp\User\GroupLocation,
-    ezp\User\LocatableInterface;
+    ezp\User\GroupAbleInterface;
 
 /**
  * This class represents a Group item
@@ -29,9 +29,8 @@ use ezp\Base\Configuration,
  * @property-read mixed $id
  * @property string $name
  * @property string description
- * @property-read \ezp\User\Role[] $roles Use {@link \ezp\User\Service::assignRole} & {@link \ezp\User\Service::unassignRole}
  */
-class Group implements LocatableInterface, ModelInterface, Observable
+class Group implements GroupAbleInterface, ModelInterface, Observable
 {
     /**
      * @var array Readable of properties on this object (and writable if value is true)
@@ -49,36 +48,48 @@ class Group implements LocatableInterface, ModelInterface, Observable
     protected $content;
 
     /**
-     * @var \ezp\User\GroupLocation[] The User Group locations
+     * @var \ezp\User\Group|null The User Group locations
      */
-    protected $locations;
+    protected $parent;
+
+    /**
+     * @var \ezp\User\Group|null The Roles assigned to Group
+     */
+    protected $roles = array();
 
     /**
      * Creates and setups User object
      *
      * @access private Use {@link \ezp\User\Service::createGroup()} to create objects of this type
      * @param \ezp\Content $content
-     * @param \ezp\User\GroupLocation[]|null $locations
+     * @param \ezp\User\Group $locations
      */
-    public function __construct( Content $content, array $locations = null )
+    public function __construct( Content $content )
     {
         $this->content = $content;
-        $this->locations = $locations;
     }
 
     /**
-     * @return \ezp\User\GroupLocation[]
+     * @return \ezp\User\Group|null
      */
-    public function getLocations()
+    public function getParent()
     {
-        if ( $this->locations !== null )
-            return $this->locations;
+        if ( $this->parent instanceof Proxy )
+            $this->parent = $this->parent->load();
 
-        $this->locations = array();
-        foreach ( $this->content->locations as $contentLocation )
-            $this->locations[] = new GroupLocation( $contentLocation, $this );
+        return $this->parent;
+    }
 
-        return $this->locations;
+    /**
+     * Roles assigned to Group
+     *
+     * Use {@link \ezp\User\Service::assignRole} & {@link \ezp\User\Service::unassignRole} to change
+     *
+     * @return \ezp\User\Role[]
+     */
+    public function getRoles()
+    {
+        return $this->roles;
     }
 
     /**

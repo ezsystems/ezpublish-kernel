@@ -13,17 +13,16 @@ use ezp\Base\Configuration,
     ezp\Base\Proxy,
     ezp\Base\Collection\Lazy,
     ezp\Base\Exception\BadConfiguration,
+    ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\NotFoundWithType,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\Logic,
     ezp\Content,
+    ezp\Content\Location,
     ezp\User,
     ezp\User\Group,
-    ezp\User\GroupLocation,
-    ezp\User\LocatableInterface,
-    ezp\User\Location as AbstractUserLocation,
-    ezp\User\UserLocation,
+    ezp\User\GroupAbleInterface,
     ezp\User\Role,
     ezp\User\Policy,
     ezp\Persistence\User as UserValueObject,
@@ -94,16 +93,22 @@ class Service extends BaseService
     /**
      * Crate a Group object
      *
-     * @param \ezp\User\GroupLocation $parentGroupLocation
+     * @param \ezp\User\Group $parentGroup
      * @param string $name
      * @param string $description
      * @return \ezp\User\Group
      * @throws \ezp\Base\Exception\PropertyNotFound If name or description properties (fields) are not found
      */
-    public function createGroup( GroupLocation $parentGroupLocation, $name, $description = '' )
+    public function createGroup( Group $parentGroup, $name, $description = '' )
     {
         $typeId = Configuration::getInstance( 'site' )->get( 'UserSettings', 'UserGroupClassID', 3 );
-        $parentLocation = $parentGroupLocation->getState( 'location' );
+        $parentContent = $parentGroup->getState( 'content' );
+        if ( !$parentContent instanceof Content  )
+            throw new Logic( 'createGroup', 'can not create group when $parentGroup is not created (persisted)' );
+
+        $parentLocation = $parentContent->mainLocation;
+        if ( !$parentLocation instanceof Location  )
+            throw new Logic( 'createGroup', 'can not create group when $parentGroup is not created (persisted)' );
 
         $type = $this->repository->getContentTypeService()->load( $typeId );
         if ( !$type )
@@ -112,7 +117,7 @@ class Service extends BaseService
         $content = new Content( $type );
         $content->addParent( $parentLocation );
         $content->ownerId = $this->repository->getCurrentUser()->id;
-        $content->getState('properties')->sectionId = $parentLocation->content->sectionId;
+        $content->getState('properties')->sectionId = $parentContent->sectionId;
 
         if ( !isset( $content->fields['name'] ) )
             throw new PropertyNotFound( 'name', get_class( $content ) );
@@ -123,7 +128,7 @@ class Service extends BaseService
         $content->fields['description'] = $description;
         $content->name = array( 'eng-GB' => $name );// @todo remove when name handler is in place
 
-        return new Group( $this->repository->getContentService()->create( $content ) );
+        return $this->buildGroup( $this->repository->getContentService()->create( $content ) );
     }
 
     /**
@@ -132,7 +137,7 @@ class Service extends BaseService
      * @param mixed $id
      * @return \ezp\User\Group
      * @throws \ezp\Base\Exception\NotFound If group is not found
-     * @throws \ezp\Base\Exception\NotFound If group is not found
+     * @throws \ezp\Base\Exception\NotFoundWithType If content found with $id does not have correct typeId
      */
     public function loadGroup( $id )
     {
@@ -141,32 +146,98 @@ class Service extends BaseService
         if ( $content->typeId != $typeId )
             throw new NotFoundWithType( "User Group({$typeId})", $id );
 
-        return new Group( $content );
+        return $this->buildGroup( $content );
     }
 
     /**
-     * @param \ezp\User\GroupLocation $parent
+     * Load a Group object by user id
+     *
+     * @param mixed $id
+     * @return \ezp\User\Group[]
+     * @throws \ezp\Base\Exception\NotFoundWithType If any of locations user is assigned to is not a user group
+     */
+    public function loadGroupsByUserId( $id )
+    {
+        $configuration = Configuration::getInstance( 'site' );
+        $userTypeId = $configuration->get( 'UserSettings', 'UserClassID', 4 );
+        $groupTypeId = $configuration->get( 'UserSettings', 'UserGroupClassID', 3 );
+
+        // @todo Implement more efficiently when there is api for getting parent locations (incl content) directly
+        $contentUser = $this->repository->getContentService()->load( $id );
+        if ( $contentUser->typeId != $userTypeId )
+            throw new InvalidArgumentType( "id", 'id of user object, got typeId:' . $contentUser->typeId );
+
+        $groups = array();
+        foreach ( $contentUser->locations as $location )
+        {
+            $parentContent = $location->parent->content;
+            if ( $parentContent->typeId != $groupTypeId )
+                throw new NotFoundWithType( "User Group({$groupTypeId})", $parentContent->id );
+
+            $groups[] = $this->buildGroup( $parentContent );
+        }
+
+        return $groups;
+    }
+
+    /**
+     * Assign a Group to User
+     *
+     * @param \ezp\User\Group $group
      * @param \ezp\User|\ezp\User\Group $object
-     * @return \ezp\User\UserLocation|\ezp\User\GroupLocation
      * @throws \ezp\Base\Exception\Logic If $object has not been persisted yet
      */
-    public function assignGroupLocation( GroupLocation $parent, LocatableInterface $object )
+    public function assignGroup( Group $group, User $user )
+    {
+        $content = $user->getState( 'content' );
+        if ( !$content instanceof Content  )
+            throw new Logic( 'assignLocation', 'can not assign $parent location to non created (persisted) $object' );
+
+        $groups = $user->getGroups();
+        if ( in_array( $group, (array) $groups, true ) )
+            throw new Logic( 'assignGroup', 'can not assign group that is already assigned' );
+
+        $newLocation = $content->addParent( $group->getState( 'content' )->mainLocation );
+        $this->repository->getLocationService()->create( $newLocation );
+
+        $groups[] = $group;
+        $user->setState( array( 'groups' => $groups ) );
+    }
+
+    /**
+     * Remove a User|Group Location from a User|Group
+     *
+     * @param \ezp\User\UserLocation|\ezp\User\GroupLocation $parent
+     * @param \ezp\User|\ezp\User\Group $object
+     * @return \ezp\User\UserLocation|\ezp\User\GroupLocation
+     * @throws \ezp\Base\Exception\Logic If $object has not been persisted yet or if $location is not location on $object
+     */
+    public function removeLocation( AbstractUserLocation $location, LocatableInterface $object )
     {
         $content = $object->getState( 'content' );
         if ( !$content instanceof Content  )
-            throw new Logic( 'assignGroup', 'can not assign group to non created (persisted) object' );
+            throw new Logic( 'removeLocation', 'can not remove $location to non created (persisted) $object' );
 
-        $newLocation = $content->addParent( $parent->getState( 'location' ) );
-        $newLocation = $this->repository->getLocationService()->create( $newLocation );
+        $userLocations = $object->getLocations();
+        $key = array_search( $location, $userLocations, true );
+        if ( $key === false )
+            throw new Logic( 'removeLocation', 'can not remove $location that is not part of $object->locations' );
 
-        $locations = $object->getLocations();
-        if( $object instanceof User )
-            $locations[] = $newUserLocation = new UserLocation( $newLocation, $object );
-        else
-            $locations[] = $newUserLocation = new GroupLocation( $newLocation, $object );
+        $contentLocation = $location->getState( 'location' );
+        if ( !$contentLocation instanceof Location  )
+            throw new Logic( 'removeLocation', 'can not remove non created (persisted)$location on $object' );
 
-        $object->setState( array( 'locations' => $locations ) );
-        return $newUserLocation;
+        $contentKey = array_search( $contentLocation, $content->locations, true );
+        if ( $contentKey === false  )
+            throw new Logic( 'removeLocation', 'could not find provided content location among locations on $content' );
+
+        $this->repository->getLocationService()->delete( $contentLocation->id );
+
+        unset( $content->locations[$contentKey] );
+        unset( $content->getState( 'properties' )->locations[$contentKey] );//order should be same, so reusing key
+
+        unset( $userLocations[$key] );
+        $object->setState( array( 'locations' => $userLocations ) );
     }
 
     /**
@@ -282,12 +353,12 @@ class Service extends BaseService
             array(
                 "properties" => $vo,
                 "content" => $content,
-                /*"groups" => new Lazy(
+                "groups" => new Lazy(
                     "ezp\\User\\Group",
                     $this,
                     $vo->id,
                     "loadGroupsByUserId"
-                ),*/
+                ),
                 "roles" => new Lazy(
                     "ezp\\User\\Role",
                     $this,
@@ -299,6 +370,34 @@ class Service extends BaseService
                     $this,
                     $vo->id,
                     "loadPoliciesByUserId"
+                ),
+            )
+        );
+        return $do;
+    }
+
+    /**
+     * @param \ezp\Content $content
+     * @return \ezp\User\Group
+     */
+    protected function buildGroup( Content $content )
+    {
+        $parent = null;
+        if ( $content->mainLocation->parentId > 1 )
+        {
+            $parent = new Proxy( $this,
+                                 $content->mainLocation->parent->content->id,// not very lazy, callback / api?
+                                 'loadGroup' );
+        }
+        $do = new Group( $content );
+        $do->setState(
+            array(
+                "parent" => $parent,
+                "roles" => new Lazy(
+                    "ezp\\User\\Role",
+                    $this,
+                    $content->id,
+                    "loadRolesByGroupId"
                 ),
             )
         );

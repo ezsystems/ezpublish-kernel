@@ -11,8 +11,7 @@ namespace ezp;
 use ezp\Base\Model,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Persistence\User as UserValue,
-    ezp\User\LocatableInterface,
-    ezp\User\UserLocation;
+    ezp\User\GroupAbleInterface;
 
 /**
  * This class represents a User item
@@ -22,10 +21,11 @@ use ezp\Base\Model,
  * @property string $email
  * @property string $password
  * @property int $hashAlgorithm
+ * @property \ezp\User\Group[] $group
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
-class User extends Model implements LocatableInterface
+class User extends Model implements GroupAbleInterface
 {
     /**
      * @var array Readable of properties on this object
@@ -44,7 +44,7 @@ class User extends Model implements LocatableInterface
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        //'groups' => false,
+        'groups' => false,
         'roles' => false,
         'policies' => false,
     );
@@ -69,9 +69,9 @@ class User extends Model implements LocatableInterface
     protected $policies = array();
 
     /**
-     * @var \ezp\User\GroupLocation[] The User Group locations
+     * @var \ezp\User\Group[] The Groups user is assigned to
      */
-    protected $locations;
+    protected $groups = array();
 
     /**
      * Creates and setups User object
@@ -85,18 +85,13 @@ class User extends Model implements LocatableInterface
     }
 
     /**
-     * @return \ezp\User\UserLocation[]
+     * List of assigned groups
+     *
+     * @return \ezp\User\Group[]
      */
-    public function getLocations()
+    public function getGroups()
     {
-        if ( $this->locations !== null )
-            return $this->locations;
-
-        $this->locations = array();
-        foreach ( $this->content->locations as $contentLocation )
-            $this->locations[] = new UserLocation( $contentLocation, $this );
-
-        return $this->locations;
+        return $this->groups;
     }
 
     /**
