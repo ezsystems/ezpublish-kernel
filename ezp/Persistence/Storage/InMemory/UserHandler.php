@@ -232,7 +232,7 @@ class UserHandler implements UserHandlerInterface
         $this->getPermissionsForObject( $list[0], 4, $policies );// @deprecated Roles assigned to user
 
         // crawl up path on all locations
-        foreach ( $content->locations as $location )
+        foreach ( $list[0]->locations as $location )
         {
             $parentIds = array_reverse( explode( '/', trim( $location->pathString, '/' ) ) );
             foreach ( $parentIds as $parentId )
