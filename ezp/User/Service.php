@@ -93,6 +93,8 @@ class Service extends BaseService
     /**
      * Crate a Group object
      *
+     * Notice: Group related api currently deals with content in the background, see Readme.rst for info and constraints
+     *
      * @param \ezp\User\Group $parentGroup
      * @param string $name
      * @param string $description
@@ -134,6 +136,8 @@ class Service extends BaseService
     /**
      * Load a Group object by id
      *
+     * Notice: Group related api currently deals with content in the background, see Readme.rst for info and constraints
+     *
      * @param mixed $id
      * @return \ezp\User\Group
      * @throws \ezp\Base\Exception\NotFound If group is not found
@@ -151,6 +155,8 @@ class Service extends BaseService
 
     /**
      * Load a Group object by user id
+     *
+     * Notice: Group related api currently deals with content in the background, see Readme.rst for info and constraints
      *
      * @param mixed $id
      * @return \ezp\User\Group[]
@@ -184,8 +190,10 @@ class Service extends BaseService
     /**
      * Assign a Group to User
      *
+     * Notice: Group related api currently deals with content in the background, see Readme.rst for info and constraints
+     *
      * @param \ezp\User\Group $group
-     * @param \ezp\User $object
+     * @param \ezp\User $user
      * @throws \ezp\Base\Exception\Logic If $object has not been persisted yet
      */
     public function assignGroup( Group $group, User $user )
@@ -208,8 +216,12 @@ class Service extends BaseService
     /**
      * Remove a Group assignment from a User
      *
+     * Notice: Group related api currently deals with content in the background, see Readme.rst for info and constraints
+     *
+     * @todo: Either allow removing last group of a user or define which api should be used for deleting users + tree
+     *
      * @param \ezp\User\Group $group
-     * @param \ezp\User $object
+     * @param \ezp\User $user
      * @throws \ezp\Base\Exception\Logic If $object has not been persisted yet
      */
     public function unAssignGroup( Group $group, User $user )
