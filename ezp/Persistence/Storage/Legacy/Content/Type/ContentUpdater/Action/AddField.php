@@ -11,6 +11,7 @@ namespace ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action;
 use ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action,
     ezp\Persistence\Content,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\Gateway,
     ezp\Persistence\Content\Type\FieldDefinition;
 
@@ -57,6 +58,37 @@ class AddField extends Action
      */
     public function apply( Content $content )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $field = $this->createField( $content );
+
+        $storageValue = new StorageFieldValue();
+        $this->fieldValueConverter->toStorageValue(
+            $field->value,
+            $storageValue
+        );
+
+        $field->id = $this->contentGateway->insertNewField(
+            $content,
+            $field,
+            $storageValue
+        );
+
+        $content->version->fields[] = $field;
+    }
+
+    /**
+     * 
+     *
+     * @param Content $content
+     * @return void
+     */
+    protected function createField( Content $content )
+    {
+        $field                    = new Content\Field();
+        $field->fieldDefinitionId = $this->fieldDefinition->id;
+        $field->type              = $this->fieldDefinition->fieldType;
+        $field->value             = clone $this->fieldDefinition->defaultValue;
+        $field->versionNo         = $content->version->versionNo;
+        // $field->language  = ...;
+        return $field;
     }
 }
