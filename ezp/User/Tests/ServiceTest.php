@@ -172,11 +172,10 @@ class ServiceTest extends BaseServiceTest
         $service = $this->repository->getUserService();
         $parent = $service->loadGroup( 12 );
 
-        $do = $service->createGroup( $parent, 'New User Group' );
+        $do = $service->createGroup( $parent, 'New User Group', 'A new user group for testing' );
         self::assertInstanceOf( 'ezp\\User\\Group', $do );
-        // @todo Test properties when field is stabilized
-        //self::assertEquals( '', $do->name );
-        //self::assertEquals( '', $do->description );
+        self::assertEquals( 'New User Group', $do->name );
+        self::assertEquals( 'A new user group for testing', $do->description );
 
         $group = $do->getParent();
         self::assertInstanceOf( 'ezp\\User\\Group', $group );
@@ -194,9 +193,8 @@ class ServiceTest extends BaseServiceTest
         $do = $service->loadGroup( 12 );
         self::assertInstanceOf( 'ezp\\User\\Group', $do );
         self::assertEquals( 12, $do->id );
-        // @todo Test properties when field is stabilized and added to data.json
-        //self::assertEquals( '', $do->name );
-        //self::assertEquals( '', $do->description );
+        self::assertEquals( 'Administrator users', $do->name );
+        self::assertEquals( '', $do->description );
 
         $group = $do->getParent();
         self::assertInstanceOf( 'ezp\\User\\Group', $group );
