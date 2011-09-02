@@ -211,7 +211,7 @@ class ContentHandler implements ContentHandlerInterface
         $versions[0]->fields = $this->backend->find( 'Content\\Field', array( '_contentId' => $content->id,
                                                                               'versionNo' => $version ) );
 
-        $content->version = $version[0];
+        $content->version = $versions[0];
         // @todo Loading locations by content object id should be possible using handler API.
         $content->locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $content->id  ) );
         return $content;
