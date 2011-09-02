@@ -16,6 +16,10 @@
         {"id": 6, "fieldDefinitionId": 4, "type": "ezstring", "value": "", "language": null, "versionNo": 1, "_contentId": 12},
         {"id": 7, "fieldDefinitionId": 2, "type": "ezstring", "value": "Anonymous Users", "language": null, "versionNo": 1, "_contentId": 42},
         {"id": 8, "fieldDefinitionId": 4, "type": "ezstring", "value": "", "language": null, "versionNo": 1, "_contentId": 42}
+        {"id": 1, "fieldDefinitionId": 1, "type": "ezstring", "value": "eZ Publish NextGen", "language": null, "versionNo": 1, "_contentId": 1},
+        {"id": 2, "fieldDefinitionId": 5, "type": "eztext", "value": "This is a plain text description", "language": null, "versionNo": 1, "_contentId": 1},
+        {"id": 3, "fieldDefinitionId": 1, "type": "ezstring", "value": "eZ Publish NextGen, version 2", "language": null, "versionNo": 2, "_contentId": 1},
+        {"id": 4, "fieldDefinitionId": 5, "type": "eztext", "value": "This is a plain text description, version 2", "language": null, "versionNo": 2, "_contentId": 1}
     ],
     "Content\\Location" : [
         {"id": 1,  "remoteId": "remoteIDForLocation1", "contentId": 0,  "parentId": 0,  "pathIdentificationString": "", "mainLocationId": 1,  "depth": 0, "pathString": "/1/", "modifiedSubLocation": 1312473387, "priority": 0, "hidden": false, "invisible": false,  "sortField": 1, "sortOrder": 1},

@@ -218,6 +218,8 @@ class ContentTest extends BaseServiceTest
                 $this->assertEquals( 1310793400, $version->created );
                 $this->assertEquals( 0, $version->state );
             }
+
+            $this->assertInstanceOf( 'ezp\\Content\\Field\\Collection', $version->fields );
         }
         $this->assertEquals( array( 1 => true, 2 => true ), $foundVersions, "The versions returned is not correct" );
     }
@@ -282,5 +284,65 @@ class ContentTest extends BaseServiceTest
     public function testLoadNotExisting()
     {
         $this->service->load( 0 );
+    }
+
+    /**
+     * Tests the content service loadFields operation
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::loadFields
+     */
+    public function testLoadFields()
+    {
+        $content = $this->service->load( 1 );
+        $fieldsDef = array();
+
+        // First index fields definitions by id
+        foreach ( $content->contentType->fields as $fieldDefinition )
+        {
+            $fieldsDef[$fieldDefinition->id] = $fieldDefinition;
+        }
+
+        foreach ( $content->versions as $version )
+        {
+            $fields = $this->service->loadFields( $version );
+            self::assertInternalType( \PHPUnit_Framework_Constraint_IsType::TYPE_ARRAY, $fields );
+
+            foreach ( $fields as $identifier => $field )
+            {
+                $fieldVo = $field->getState( 'properties' );
+                self::assertInstanceOf( 'ezp\\Content\\Field', $field );
+                self::assertEquals(
+                    $identifier,
+                    $fieldsDef[$fieldVo->fieldDefinitionId]->identifier,
+                    'Fields should be indexed by field type identifier'
+                );
+            }
+        }
+    }
+
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @group contentService
+     * @covers \ezp\Content\Service::loadFields
+     */
+    public function testLoadFieldsNonExistingContent()
+    {
+        $content = new Content( new Type );
+        $content->getState( "properties" )->id = 999;
+        foreach ( $content->versions as $version )
+        {
+            $this->service->loadFields( $version );
+        }
+    }
+
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @group contentService
+     * @covers \ezp\Content\Service::loadFields
+     */
+    public function testLoadFieldsNonExisitingVersion()
+    {
+        $this->service->loadFields( new Version( $this->service->load( 1 ) ) );
     }
 }
