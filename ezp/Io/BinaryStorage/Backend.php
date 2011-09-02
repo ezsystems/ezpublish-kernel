@@ -59,5 +59,13 @@ interface Backend
      * @return resource
      */
     public function getFileResource( $path );
+
+    /**
+     * Returns the contents of the BinaryFile identified by $path
+     * @param string $path
+     * @return BinaryContents
+     * @throws ezp\Base\Exception\NotFound if the file couldn't be found
+     */
+    public function getFileContents( $path );
 }
 ?>

@@ -186,6 +186,22 @@ class Legacy implements Backend
     }
 
     /**
+     * Returns the contents of the BinaryFile identified by $path
+     * @param string $path
+     * @return BinaryContents
+     * @throws ezp\Base\Exception\NotFound if the file couldn't be found
+     */
+    public function getFileContents( $path )
+    {
+        if ( !$this->clusterHandler->fileExists( $path ) )
+        {
+            throw new NotFound( 'BinaryFile', $path );
+        }
+
+        return $this->clusterHandler->fileFetchContents( $path );
+    }
+
+    /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
      * @return \ezp\Io\BinaryStorage\Legacy\FileResourceProvider
      */

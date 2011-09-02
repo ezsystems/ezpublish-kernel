@@ -235,6 +235,22 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         $this->binaryRepository->update( $firstPath, $updateStruct );
     }
 
+    public function testGetFileContents()
+    {
+        $path = 'var/test/testGetFileContents.gif';
+        $this->createFileWithPath( $path );
+
+        self::assertEquals( file_get_contents( $this->imageInputPath ), $this->binaryRepository->getFileContents( $path ) );
+    }
+
+    /**
+     * @expectedException ezp\Base\Exception\NotFound
+     */
+    public function testGetFileContentsNonExistingFile()
+    {
+        $this->binaryRepository->getFileContents( 'var/test/testGetFileContentsNonExistingFile.gif' );
+    }
+
     /**
      * Creates a new BinaryFile on the repository using $this->inputImagePath as the source
      * @param string $path Path to create the file at on the repository

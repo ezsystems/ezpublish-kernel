@@ -167,6 +167,21 @@ class InMemory implements Backend
     }
 
     /**
+     * Returns the contents of the BinaryFile identified by $path
+     * @param string $path
+     * @return BinaryContents
+     * @throws ezp\Base\Exception\NotFound if the file couldn't be found
+     */
+    public function getFileContents( $path )
+    {
+        if ( !isset( $this->storage[$path] ) )
+        {
+            throw new NotFound( 'BinaryFile', $path );
+        }
+        return base64_decode( $this->data[$path] );
+    }
+
+    /**
      * Files storage
      * @var array
      */

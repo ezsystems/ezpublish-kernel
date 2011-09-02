@@ -166,6 +166,16 @@ class BinaryRepository
     }
 
     /**
+     * Returns the contents of the BinaryFile identified by $path
+     * @param string $path
+     * @return string Binary content
+     */
+    public function getFileContents( $path )
+    {
+        return $this->getBackend( $path )->getFileContents( $path );
+    }
+
+    /**
      * Returns the appropriate backend for $path
      * @param string $path
      * @return \ezp\Io\BinaryStorage\Backend
