@@ -59,8 +59,10 @@ class Repository
         if ( $user !== null )
             $this->setCurrentUser( $user );
         else
-            $this->user = new Proxy( $this->getUserService(),
-                                     Configuration::getInstance( 'site' )->get( 'UserSettings', 'AnonymousUserID', 10 )  );
+            $this->user = new Proxy(
+                $this->getUserService(),
+                Configuration::getInstance( 'site' )->get( 'UserSettings', 'AnonymousUserID', 10 )
+            );
 
     }
 

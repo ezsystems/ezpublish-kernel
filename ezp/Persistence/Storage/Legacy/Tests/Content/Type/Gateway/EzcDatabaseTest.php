@@ -417,7 +417,7 @@ class EzcDatabaseTest extends TestCase
         $gateway->insertType( $type );
 
         $this->assertQueryResult(
-            array( array($expectation ) ),
+            array( array( $expectation ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( $column )
@@ -455,7 +455,13 @@ class EzcDatabaseTest extends TestCase
         $gateway->insertType( $type );
 
         $this->assertQueryResult(
-            array_map( function( $value ) { return array( $value ); }, $expectation ),
+            array_map(
+                function( $value )
+                {
+                    return array( $value );
+                },
+                $expectation
+            ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( $column )

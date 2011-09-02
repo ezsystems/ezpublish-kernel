@@ -35,9 +35,9 @@ class ContentHandlerTest extends TestCase
      */
     public function testCtor()
     {
-        $gatewayMock         = $this->getGatewayMock();
-        $locationMock        = $this->getLocationHandlerMock();
-        $mapperMock          = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+        $locationMock = $this->getLocationHandlerMock();
+        $mapperMock = $this->getMapperMock();
         $storageRegistryMock = $this->getStorageRegistryMock();
 
         $handler = new Handler(
@@ -71,11 +71,11 @@ class ContentHandlerTest extends TestCase
      */
     public function testCreate()
     {
-        $mapperMock     = $this->getMapperMock();
-        $locationMock   = $this->getLocationHandlerMock();
-        $gatewayMock    = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+        $locationMock = $this->getLocationHandlerMock();
+        $gatewayMock = $this->getGatewayMock();
         $storageRegMock = $this->getStorageRegistryMock();
-        $storageMock    = $this->getMock(
+        $storageMock = $this->getMock(
             'ezp\\Persistence\\Fields\\Storage'
         );
 
@@ -460,14 +460,15 @@ class ContentHandlerTest extends TestCase
             ->method( 'getConverter' )
             ->will( $this->returnValue( $converter ) );
 
-        $locationMock   = $this->getLocationHandlerMock();
-        $gatewayMock    = $this->getGatewayMock();
+        $locationMock = $this->getLocationHandlerMock();
+        $gatewayMock = $this->getGatewayMock();
         $storageRegMock = $this->getStorageRegistryMock();
-        $storageMock    = $this->getMock(
+        $storageMock = $this->getMock(
             'ezp\\Persistence\\Fields\\Storage'
         );
 
-        $handler = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
+        $handler = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
             array( 'load' ),
             array( $gatewayMock, $locationMock, $mapper, $storageRegMock )
         );
@@ -641,10 +642,10 @@ class ContentHandlerTest extends TestCase
             ->method( 'getConverter' )
             ->will( $this->returnValue( $converter ) );
 
-        $locationMock   = $this->getLocationHandlerMock();
-        $gatewayMock    = $this->getGatewayMock();
+        $locationMock = $this->getLocationHandlerMock();
+        $gatewayMock = $this->getGatewayMock();
         $storageRegMock = $this->getStorageRegistryMock();
-        $storageMock    = $this->getMock(
+        $storageMock = $this->getMock(
             'ezp\\Persistence\\Fields\\Storage'
         );
 
@@ -679,25 +680,33 @@ class ContentHandlerTest extends TestCase
                 $this->isInstanceOf( 'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue' )
             );
 
-        $result = $handler->update( new UpdateStruct( array(
-            'id' => 14,
-            'versionNo' => 4,
-            'userId' => 14,
-            'fields' => array(
-                new Field( array(
-                    'id' => 23,
-                    'fieldDefinitionId' => 42,
-                    'type' => 'some-type',
-                    'value' => new FieldValue(),
-                ) ),
-                new Field( array(
-                    'id' => 23,
-                    'fieldDefinitionId' => 43,
-                    'type' => 'some-type',
-                    'value' => new FieldValue(),
-                ) ),
+        $result = $handler->update(
+            new UpdateStruct(
+                array(
+                    'id' => 14,
+                    'versionNo' => 4,
+                    'userId' => 14,
+                    'fields' => array(
+                        new Field(
+                            array(
+                                'id' => 23,
+                                'fieldDefinitionId' => 42,
+                                'type' => 'some-type',
+                                'value' => new FieldValue(),
+                            )
+                        ),
+                        new Field(
+                            array(
+                                'id' => 23,
+                                'fieldDefinitionId' => 43,
+                                'type' => 'some-type',
+                                'value' => new FieldValue(),
+                            )
+                        ),
+                    )
+                )
             )
-        ) ) );
+        );
     }
 
     /**
@@ -709,8 +718,8 @@ class ContentHandlerTest extends TestCase
     {
         $struct = new CreateStruct();
 
-        $firstField        = new Field();
-        $firstField->type  = 'some-type';
+        $firstField = new Field();
+        $firstField->type = 'some-type';
         $firstField->value = new FieldValue();
 
         $secondField = clone $firstField;

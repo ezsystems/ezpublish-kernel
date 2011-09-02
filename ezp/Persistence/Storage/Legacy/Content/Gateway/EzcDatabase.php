@@ -44,7 +44,7 @@ class EzcDatabase extends Gateway
      */
     public function __construct( EzcDbHandler $db, EzcDatabase\QueryBuilder $queryBuilder )
     {
-        $this->dbHandler    = $db;
+        $this->dbHandler = $db;
         $this->queryBuilder = $queryBuilder;
     }
 
@@ -143,10 +143,12 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'user_id' ),
             $q->bindValue( $userId, null, \PDO::PARAM_INT )
-        )->where( $q->expr->eq(
-            $this->dbHandler->quoteColumn( 'id' ),
-            $q->bindValue( $version )
-        ) );
+        )->where(
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $q->bindValue( $version )
+            )
+        );
         $q->prepare()->execute();
 
         return $this->dbHandler->lastInsertId();
@@ -234,16 +236,18 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'sort_key_string' ),
             $q->bindValue( $value->sortKeyString )
-        )->where( $q->expr->lAnd(
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn( 'id' ),
-                $q->bindValue( $field->id )
-            ),
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn( 'version' ),
-                $q->bindValue( $field->versionNo )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $q->bindValue( $field->id )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $q->bindValue( $field->versionNo )
+                )
             )
-        ) );
+        );
         $q->prepare()->execute();
     }
 
@@ -293,39 +297,39 @@ class EzcDatabase extends Gateway
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
-                $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
-                $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_version' ),
-                $this->dbHandler->aliasedColumn( $query, 'modified', 'ezcontentobject_version' ),
-                $this->dbHandler->aliasedColumn( $query, 'creator_id', 'ezcontentobject_version' ),
-                $this->dbHandler->aliasedColumn( $query, 'created', 'ezcontentobject_version' ),
-                $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject_version' ),
-                $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_version' ),
-                $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject_version' ),
-                // Language IDs
-                $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' )
-            )->from(
-                $this->dbHandler->quoteTable( 'ezcontentobject_version' )
-            )->leftJoin(
-                $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ),
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
-                        $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_attribute' )
-                    ),
-                    $query->expr->eq(
-                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
-                        $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' )
-                    )
-                )
-            )->where(
+            $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject_version' ),
+            $this->dbHandler->aliasedColumn( $query, 'version', 'ezcontentobject_version' ),
+            $this->dbHandler->aliasedColumn( $query, 'modified', 'ezcontentobject_version' ),
+            $this->dbHandler->aliasedColumn( $query, 'creator_id', 'ezcontentobject_version' ),
+            $this->dbHandler->aliasedColumn( $query, 'created', 'ezcontentobject_version' ),
+            $this->dbHandler->aliasedColumn( $query, 'status', 'ezcontentobject_version' ),
+            $this->dbHandler->aliasedColumn( $query, 'contentobject_id', 'ezcontentobject_version' ),
+            $this->dbHandler->aliasedColumn( $query, 'language_mask', 'ezcontentobject_version' ),
+            // Language IDs
+            $this->dbHandler->aliasedColumn( $query, 'language_code', 'ezcontentobject_attribute' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject_version' )
+        )->leftJoin(
+            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' ),
+            $query->expr->lAnd(
                 $query->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
-                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_attribute' )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_attribute' )
                 )
-            )->groupBy(
-                $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' ),
-                $this->dbHandler->quoteColumn( 'language_code', 'ezcontentobject_attribute' )
-            );
+            )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_id', 'ezcontentobject_version' ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        )->groupBy(
+            $this->dbHandler->quoteColumn( 'id', 'ezcontentobject_version' ),
+            $this->dbHandler->quoteColumn( 'language_code', 'ezcontentobject_attribute' )
+        );
 
         $statement = $query->prepare();
         $statement->execute();
@@ -392,7 +396,7 @@ class EzcDatabase extends Gateway
             {
                 $result[$row['data_type_string']] = array();
             }
-            $result[$row['data_type_string']][] = (int) $row['id'];
+            $result[$row['data_type_string']][] = (int)$row['id'];
         }
         return $result;
     }
@@ -440,7 +444,7 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( 'contentobject_id' ),
                     $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                 )
-        );
+            );
 
         $statement = $query->prepare();
         $statement->execute();
@@ -461,7 +465,7 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( 'contentobject_id' ),
                     $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                 )
-        );
+            );
 
         $statement = $query->prepare();
         $statement->execute();
@@ -482,7 +486,7 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( 'contentobject_id' ),
                     $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                 )
-        );
+            );
 
         $statement = $query->prepare();
         $statement->execute();
@@ -503,7 +507,7 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( 'id' ),
                     $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                 )
-        );
+            );
 
         $statement = $query->prepare();
         $statement->execute();

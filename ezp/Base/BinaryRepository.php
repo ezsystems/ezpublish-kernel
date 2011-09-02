@@ -210,8 +210,10 @@ class BinaryRepository
         }
         if ( !class_exists( $backendClass ) )
         {
-            throw new BadConfiguration( "io/backend_settings_{$identifier}/Class",
-                "The configured backend class couldn't be found" );
+            throw new BadConfiguration(
+                "io/backend_settings_{$identifier}/Class",
+                "The configured backend class couldn't be found"
+            );
         }
         $this->backends[$identifier] = new $backendClass;
     }

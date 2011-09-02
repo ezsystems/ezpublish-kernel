@@ -43,7 +43,7 @@ class Field extends CriterionHandler
      */
     public function __construct( EzcDbHandler $dbHandler, Converter\Registry $fieldConverterRegistry )
     {
-        $this->dbHandler              = $dbHandler;
+        $this->dbHandler = $dbHandler;
         $this->fieldConverterRegistry = $fieldConverterRegistry;
     }
 
@@ -104,10 +104,10 @@ class Field extends CriterionHandler
             throw new Exception\NotFound( 'Content type', $target->contentTypeIdentifier . '/' . $target->fieldIdentifier );
         }
 
-        $converter =  $this->fieldConverterRegistry->getConverter( $row['data_type_string'] );
+        $converter = $this->fieldConverterRegistry->getConverter( $row['data_type_string'] );
 
         return array(
-            'id'     => $row['id'],
+            'id' => $row['id'],
             'column' => $converter->getIndexColumn(),
         );
     }
@@ -123,7 +123,7 @@ class Field extends CriterionHandler
     public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
     {
         $fieldInformation = $this->getFieldInformation( $criterion->target );
-        $column           = $this->dbHandler->quoteColumn( $fieldInformation['column'] );
+        $column = $this->dbHandler->quoteColumn( $fieldInformation['column'] );
 
         $subSelect = $query->subSelect();
         $subSelect
@@ -166,13 +166,15 @@ class Field extends CriterionHandler
                 throw new \RuntimeException( 'Unknown operator.' );
         }
 
-        $subSelect->where( $subSelect->expr->lAnd(
-            $subSelect->expr->eq(
-                $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
-                $subSelect->bindValue( $fieldInformation['id'] )
-            ),
-            $filter
-        ) );
+        $subSelect->where(
+            $subSelect->expr->lAnd(
+                $subSelect->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
+                    $subSelect->bindValue( $fieldInformation['id'] )
+                ),
+                $filter
+            )
+        );
 
         return $query->expr->in(
             $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),

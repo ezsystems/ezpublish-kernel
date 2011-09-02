@@ -176,54 +176,56 @@ class RepositoryHandler implements HandlerInterface
             $this->searchHandler = new Content\Search\Handler(
                 new Content\Search\Gateway\EzcDatabase(
                     $this->dbHandler,
-                    new Content\Search\Gateway\CriteriaConverter( array(
-                        new Content\Search\Gateway\CriterionHandler\ContentId(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\LogicalNot(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\LogicalAnd(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\LogicalOr(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\SubtreeId(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\ContentTypeId(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\DateMetadata(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\LocationId(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\ParentLocationId(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\RemoteId(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\SectionId(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\Status(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\FullText(
-                            $this->dbHandler
-                        ),
-                        new Content\Search\Gateway\CriterionHandler\Field(
-                            $this->dbHandler,
-                            $this->getFieldValueConverterRegistry()
-                        ),
-                    ) ),
+                    new Content\Search\Gateway\CriteriaConverter(
+                        array(
+                            new Content\Search\Gateway\CriterionHandler\ContentId(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\LogicalNot(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\LogicalAnd(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\LogicalOr(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\SubtreeId(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\ContentTypeId(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\DateMetadata(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\LocationId(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\ParentLocationId(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\RemoteId(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\SectionId(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\Status(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\FullText(
+                                $this->dbHandler
+                            ),
+                            new Content\Search\Gateway\CriterionHandler\Field(
+                                $this->dbHandler,
+                                $this->getFieldValueConverterRegistry()
+                            ),
+                        )
+                    ),
                     new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler )
                 ),
                 new Content\Mapper(

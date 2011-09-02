@@ -131,7 +131,7 @@ class EzcDatabase extends Gateway
         $this->languageMapping = array();
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
-            $this->languageMapping[$row['locale']] = (int) $row['id'];
+            $this->languageMapping[$row['locale']] = (int)$row['id'];
         }
 
         return $this->languageMapping;
@@ -148,7 +148,7 @@ class EzcDatabase extends Gateway
      */
     protected function getLanguageMask( array $languages )
     {
-        $mask    = 0;
+        $mask = 0;
         if ( isset( $languages['always-available'] ) )
         {
             $mask |= $languages['always-available'] ? 1 : 0;
@@ -240,8 +240,9 @@ class EzcDatabase extends Gateway
                 ),
                 'count'
             )
-        )->from( $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' ) )
-        ->where(
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' )
+        )->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'group_id' ),
                 $q->bindValue( $groupId, null, \PDO::PARAM_INT )
@@ -251,7 +252,7 @@ class EzcDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return (int) $stmt->fetchColumn();
+        return (int)$stmt->fetchColumn();
     }
 
     /**
@@ -271,8 +272,9 @@ class EzcDatabase extends Gateway
                 ),
                 'count'
             )
-        )->from( $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' ) )
-        ->where(
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentclass_classgroup' )
+        )->where(
             $q->expr->lAnd(
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'contentclass_id' ),
@@ -290,7 +292,7 @@ class EzcDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return (int) $stmt->fetchColumn();
+        return (int)$stmt->fetchColumn();
     }
 
     /**
@@ -931,7 +933,7 @@ class EzcDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return (int) $stmt->fetchColumn();
+        return (int)$stmt->fetchColumn();
     }
 
     /**

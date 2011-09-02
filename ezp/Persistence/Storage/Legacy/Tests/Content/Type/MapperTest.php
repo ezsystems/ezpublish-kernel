@@ -231,10 +231,10 @@ class MapperTest extends TestCase
         $groups = $mapper->extractGroupsFromRows( $rows );
 
         $groupFixture = new Group();
-        $groupFixture->created    = 1032009743;
-        $groupFixture->creatorId  = 14;
-        $groupFixture->id         = 3;
-        $groupFixture->modified   = 1033922120;
+        $groupFixture->created = 1032009743;
+        $groupFixture->creatorId = 14;
+        $groupFixture->id = 3;
+        $groupFixture->modified = 1033922120;
         $groupFixture->modifierId = 14;
         $groupFixture->identifier = 'Media';
 
@@ -271,10 +271,10 @@ class MapperTest extends TestCase
                 'status' => 0,
                 'name' => array(
                     'always-available' => 'eng-US',
-                    'eng-US'           => 'Folder'
+                    'eng-US' => 'Folder'
                 ),
                 'description' => array(
-                    0                  => '',
+                    0 => '',
                     'always-available' => false,
                 ),
                 'created' => 1024392098,

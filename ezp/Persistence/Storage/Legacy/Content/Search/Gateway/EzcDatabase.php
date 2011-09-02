@@ -52,8 +52,8 @@ class EzcDatabase extends Gateway
         CriteriaConverter $converter,
         QueryBuilder $queryBuilder )
     {
-        $this->handler      = $handler;
-        $this->converter    = $converter;
+        $this->handler = $handler;
+        $this->converter = $converter;
         $this->queryBuilder = $queryBuilder;
     }
 
@@ -82,7 +82,7 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $count = (int) $statement->fetchColumn();
+        $count = (int)$statement->fetchColumn();
 
         if ( $count === 0 )
         {

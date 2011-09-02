@@ -98,7 +98,7 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadGroup( $groupId )
     {
-        $rows   = $this->contentTypeGateway->loadGroupData( $groupId );
+        $rows = $this->contentTypeGateway->loadGroupData( $groupId );
         $groups = $this->mapper->extractGroupsFromRows( $rows );
 
         return $groups[0];

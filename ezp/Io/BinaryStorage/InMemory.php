@@ -199,4 +199,3 @@ class InMemory implements Backend
      */
     private $resources = array();
 }
-?>

@@ -128,7 +128,7 @@ class ContentTest extends BaseServiceTest
         // @todo Test with change to fields!
 
         $content = $this->service->load( 1 );
-        $content->name = array( "eng-GB" => "New name");
+        $content->name = array( "eng-GB" => "New name" );
         $content->ownerId = 10;
         $content = $this->service->update( $content );
 

@@ -119,11 +119,11 @@ class Service extends BaseService
         $content = new Content( $type );
         $content->addParent( $parentLocation );
         $content->ownerId = $this->repository->getCurrentUser()->id;
-        $content->getState('properties')->sectionId = $parentContent->sectionId;
+        $content->getState( 'properties' )->sectionId = $parentContent->sectionId;
 
         if ( !isset( $content->fields['name'] ) )
             throw new PropertyNotFound( 'name', get_class( $content ) );
-        elseif ( !isset( $content->fields['description'] ) )
+        else if ( !isset( $content->fields['description'] ) )
             throw new PropertyNotFound( 'description', get_class( $content ) );
 
         $content->fields['name'] = $name;
@@ -335,7 +335,7 @@ class Service extends BaseService
      */
     public function addPolicy( Role $role, Policy $policy )
     {
-        $this->handler->userHandler()->addPolicy( $role->id, $policy->getState('properties') );
+        $this->handler->userHandler()->addPolicy( $role->id, $policy->getState( 'properties' ) );
         $role->addPolicy( $policy );
     }
 

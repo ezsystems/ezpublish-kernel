@@ -81,8 +81,11 @@ class Ini implements Parser
         $configurationData = $this->parseFilePhp( $fileContent );
         if ( $configurationData === false )
         {
-            trigger_error( "parse_ini_string( {$this->file} ) failed, see warning for line number. " .
-                           "Falling back to ezcConfigurationIniReader", E_USER_NOTICE );
+            trigger_error(
+                "parse_ini_string( {$this->file} ) failed, see warning for line number. " .
+                "Falling back to ezcConfigurationIniReader",
+                E_USER_NOTICE
+            );
             return array();
         }
         return $configurationData;

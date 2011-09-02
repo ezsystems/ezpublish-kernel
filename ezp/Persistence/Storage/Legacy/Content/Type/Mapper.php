@@ -78,12 +78,12 @@ class Mapper
 
         foreach ( $rows as $row )
         {
-            $group             = new Group();
-            $group->id         = (int) $row['id'];
-            $group->created    = (int) $row['created'];
-            $group->creatorId  = (int) $row['creator_id'];
-            $group->modified   = (int) $row['modified'];
-            $group->modifierId = (int) $row['modifier_id'];
+            $group = new Group();
+            $group->id = (int)$row['id'];
+            $group->created = (int)$row['created'];
+            $group->creatorId = (int)$row['creator_id'];
+            $group->modified = (int)$row['modified'];
+            $group->modifierId = (int)$row['modifier_id'];
             $group->identifier = $row['name'];
 
             $groups[] = $group;
@@ -199,14 +199,14 @@ class Mapper
     {
         $storageFieldDef = new StorageFieldDefinition();
 
-        $storageFieldDef->dataFloat1 = (float) $row['ezcontentclass_attribute_data_float1'];
-        $storageFieldDef->dataFloat2 = (float) $row['ezcontentclass_attribute_data_float2'];
-        $storageFieldDef->dataFloat3 = (float) $row['ezcontentclass_attribute_data_float3'];
-        $storageFieldDef->dataFloat4 = (float) $row['ezcontentclass_attribute_data_float4'];
-        $storageFieldDef->dataInt1 = (int) $row['ezcontentclass_attribute_data_int1'];
-        $storageFieldDef->dataInt2 = (int) $row['ezcontentclass_attribute_data_int2'];
-        $storageFieldDef->dataInt3 = (int) $row['ezcontentclass_attribute_data_int3'];
-        $storageFieldDef->dataInt4 = (int) $row['ezcontentclass_attribute_data_int4'];
+        $storageFieldDef->dataFloat1 = (float)$row['ezcontentclass_attribute_data_float1'];
+        $storageFieldDef->dataFloat2 = (float)$row['ezcontentclass_attribute_data_float2'];
+        $storageFieldDef->dataFloat3 = (float)$row['ezcontentclass_attribute_data_float3'];
+        $storageFieldDef->dataFloat4 = (float)$row['ezcontentclass_attribute_data_float4'];
+        $storageFieldDef->dataInt1 = (int)$row['ezcontentclass_attribute_data_int1'];
+        $storageFieldDef->dataInt2 = (int)$row['ezcontentclass_attribute_data_int2'];
+        $storageFieldDef->dataInt3 = (int)$row['ezcontentclass_attribute_data_int3'];
+        $storageFieldDef->dataInt4 = (int)$row['ezcontentclass_attribute_data_int4'];
         $storageFieldDef->dataText1 = $row['ezcontentclass_attribute_data_text1'];
         $storageFieldDef->dataText2 = $row['ezcontentclass_attribute_data_text2'];
         $storageFieldDef->dataText3 = $row['ezcontentclass_attribute_data_text3'];

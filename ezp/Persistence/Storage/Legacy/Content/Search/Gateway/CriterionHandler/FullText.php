@@ -25,7 +25,7 @@ class FullText extends CriterionHandler
      */
     protected $configuration = array(
         'searchThresholdValue' => 20,
-        'enableWildcards'      => true,
+        'enableWildcards' => true,
     );
 
     /**
@@ -112,8 +112,8 @@ class FullText extends CriterionHandler
      */
     protected function getWordIdSubquery( $query, $string )
     {
-        $subQuery        = $query->subSelect();
-        $tokens          = $this->tokenizeString( $string );
+        $subQuery = $query->subSelect();
+        $tokens = $this->tokenizeString( $string );
         $wordExpressions = array();
         foreach ( $tokens as $token )
         {
@@ -123,13 +123,15 @@ class FullText extends CriterionHandler
         $subQuery
             ->select( $this->dbHandler->quoteColumn( 'id' ) )
             ->from( $this->dbHandler->quoteTable( 'ezsearch_word' ) )
-            ->where( $subQuery->expr->lAnd(
-                $subQuery->expr->lOr( $wordExpressions ),
-                $subQuery->expr->lt(
-                    $this->dbHandler->quoteColumn( 'object_count' ),
-                    $subQuery->bindValue( $this->configuration['searchThresholdValue'] )
+            ->where(
+                $subQuery->expr->lAnd(
+                    $subQuery->expr->lOr( $wordExpressions ),
+                    $subQuery->expr->lt(
+                        $this->dbHandler->quoteColumn( 'object_count' ),
+                        $subQuery->bindValue( $this->configuration['searchThresholdValue'] )
+                    )
                 )
-            ) );
+            );
         return $subQuery;
     }
 

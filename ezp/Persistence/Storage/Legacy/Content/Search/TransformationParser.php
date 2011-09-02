@@ -35,12 +35,12 @@ use ezp\Persistence\Fields\Storage;
  */
 class TransformationParser
 {
-    const T_COMMENT          = 1;
-    const T_WHITESPACE       = 2;
-    const T_SECTION          = 10;
-    const T_MAP              = 11;
-    const T_REPLACE          = 12;
-    const T_TRANSPOSE        = 13;
+    const T_COMMENT = 1;
+    const T_WHITESPACE = 2;
+    const T_SECTION = 10;
+    const T_MAP = 11;
+    const T_REPLACE = 12;
+    const T_TRANSPOSE = 13;
     const T_TRANSPOSE_MODULO = 14;
 
     /**
@@ -63,14 +63,14 @@ class TransformationParser
         $character = '(?:U\\+[0-9a-fA-F]{4}|remove|keep|[0-9a-fA-F]+|"(?:[^\\\\"]+|\\\\\\\\|\\\\\'|\\\\")*?")';
 
         $this->tokenSpecifications = array(
-            self::T_COMMENT          => '(\\A#(?P<comment>.*)$)m',
-            self::T_WHITESPACE       => '(\\A\\s+)',
-            self::T_SECTION          => '(\\A(?P<section>[a-z0-9_-]+):\s*$)m',
-            self::T_MAP              => '(\\A(?P<src>' . $character . ')\\s*=\\s*(?P<dest>' .  $character . '))',
-            self::T_REPLACE          => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            self::T_COMMENT => '(\\A#(?P<comment>.*)$)m',
+            self::T_WHITESPACE => '(\\A\\s+)',
+            self::T_SECTION => '(\\A(?P<section>[a-z0-9_-]+):\s*$)m',
+            self::T_MAP => '(\\A(?P<src>' . $character . ')\\s*=\\s*(?P<dest>' .  $character . '))',
+            self::T_REPLACE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                                             '(?P<srcEnd>'   . $character . ')\\s*=\\s*' .
                                             '(?P<dest>'    .  $character . '))',
-            self::T_TRANSPOSE        => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
+            self::T_TRANSPOSE => '(\\A(?P<srcStart>' . $character . ')\\s*-\\s*' .
                                             '(?P<srcEnd>'   . $character . ')\\s*' .
                                             '(?P<op>[+-])\\s*' .
                                             '(?P<dest>' .     $character . '))',
@@ -101,7 +101,7 @@ class TransformationParser
             }
         );
 
-        $ast     = array();
+        $ast = array();
         $section = null;
         while ( $token = array_shift( $tokens ) )
         {
@@ -134,7 +134,7 @@ class TransformationParser
     {
         $string = preg_replace( '(\\r\\n|\\r)', "\n", file_get_contents( $file ) );
         $tokens = array();
-        $line   = 1;
+        $line = 1;
 
         while ( strlen( $string ) )
         {
@@ -147,7 +147,7 @@ class TransformationParser
 
                 // Remove matched string
                 $string = substr( $string, strlen( $matches[0] ) );
-                $line  += substr_count( $matches[0], "\n" );
+                $line += substr_count( $matches[0], "\n" );
 
                 // Append token to list
                 $tokens[] = array(

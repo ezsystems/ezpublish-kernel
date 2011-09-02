@@ -107,7 +107,6 @@ class TrashTest extends Base
         $parentId = $this->topLocation->id;
         for ( $i = 0; $i < 10; ++$i )
         {
-
             $content = new Content( $type );
             $content->name = "foo$i";
             $content->ownerId = 14;
@@ -221,7 +220,7 @@ class TrashTest extends Base
                 $this->locationService->load( $trashedLocation->locationId );
                 $this->fail( 'A trashed location has to be removed from tree and placed into the trash' );
             }
-            catch( NotFound $e )
+            catch ( NotFound $e )
             {
             }
         }
@@ -266,7 +265,6 @@ class TrashTest extends Base
         self::assertEquals( $do->sortField, $vo->sortField );
         self::assertEquals( $do->sortOrder, $vo->sortOrder );
     }
-
 
     /**
      * @group trashService

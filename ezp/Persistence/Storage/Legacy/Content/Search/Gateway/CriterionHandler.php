@@ -24,11 +24,11 @@ abstract class CriterionHandler
      * @var array
      */
     protected $comparatorMap = array(
-        Criterion\Operator::EQ      => "eq",
-        Criterion\Operator::GT      => "gt",
-        Criterion\Operator::GTE     => "gte",
-        Criterion\Operator::LT      => "lt",
-        Criterion\Operator::LTE     => "lte",
+        Criterion\Operator::EQ => "eq",
+        Criterion\Operator::GT => "gt",
+        Criterion\Operator::GTE => "gte",
+        Criterion\Operator::LT => "lt",
+        Criterion\Operator::LTE => "lte",
     );
 
     /**

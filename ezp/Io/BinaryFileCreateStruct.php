@@ -34,4 +34,3 @@ class BinaryFileCreateStruct extends BinaryFile
 
     private $inputStream;
 }
-?>

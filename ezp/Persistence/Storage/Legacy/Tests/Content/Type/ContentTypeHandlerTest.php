@@ -259,7 +259,6 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         );
     }
 
-
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::load
@@ -708,8 +707,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo( 23 ),
                 $this->equalTo( 1 )
+            )
             // Only 1 group assigned
-            )->will( $this->returnValue( 1 ) );
+            ->will( $this->returnValue( 1 ) );
 
         $mapperMock = $this->getMapperMock();
 

@@ -10,9 +10,8 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content;
 use ezp\Persistence\Storage\Legacy\Content\Gateway,
-    ezp\Persistence\Storage\Legacy\Content\Mapper;
-
-use ezp\Persistence\Content\Handler as BaseContentHandler,
+    ezp\Persistence\Storage\Legacy\Content\Mapper,
+    ezp\Persistence\Content\Handler as BaseContentHandler,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Criterion,
@@ -63,9 +62,9 @@ class Handler implements BaseContentHandler
         StorageRegistry $storageRegistry
     )
     {
-        $this->contentGateway  = $contentGateway;
+        $this->contentGateway = $contentGateway;
         $this->locationHandler = $locationHandler;
-        $this->mapper          = $mapper;
+        $this->mapper = $mapper;
         $this->storageRegistry = $storageRegistry;
     }
 
@@ -163,7 +162,6 @@ class Handler implements BaseContentHandler
         $content->version = $version;
         return $content;
     }
-
 
     /**
      * Returns the raw data of a content object identified by $id, in a struct.

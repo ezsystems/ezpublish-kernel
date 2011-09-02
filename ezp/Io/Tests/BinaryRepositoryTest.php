@@ -19,7 +19,7 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $this->binaryRepository = new BinaryRepository( 'inmemory' );
         $this->imageInputPath = __DIR__ . DIRECTORY_SEPARATOR . 'ezplogo.gif';
-   }
+    }
 
     public function tearDown()
     {

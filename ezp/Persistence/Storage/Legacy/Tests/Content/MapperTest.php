@@ -82,12 +82,12 @@ class MapperTest extends TestCase
     {
         $struct = new CreateStruct();
 
-        $struct->name            = 'Content name';
-        $struct->typeId          = 23;
-        $struct->sectionId       = 42;
-        $struct->ownerId         = 13;
+        $struct->name = 'Content name';
+        $struct->typeId = 23;
+        $struct->sectionId = 42;
+        $struct->ownerId = 13;
         $struct->parentLocations = array( 2, 3, 4, );
-        $struct->fields          = array( new Field(), );
+        $struct->fields = array( new Field(), );
 
         return $struct;
     }
@@ -105,12 +105,12 @@ class MapperTest extends TestCase
 
         $this->assertPropertiesCorrect(
             array(
-                'id'        => null,
+                'id' => null,
                 'versionNo' => 1,
                 'creatorId' => 13,
-                'state'     => 0,
+                'state' => 0,
                 'contentId' => 2342,
-                'fields'    => array(),
+                'fields' => array(),
             ),
             $version
         );
@@ -137,7 +137,7 @@ class MapperTest extends TestCase
 
         $this->assertPropertiesCorrect(
             array(
-                'contentId'      => $content->id,
+                'contentId' => $content->id,
                 'contentVersion' => 1,
             ),
             $location
@@ -153,12 +153,12 @@ class MapperTest extends TestCase
     {
         $struct = new Content();
 
-        $struct->id              = 2342;
-        $struct->name            = 'Content name';
-        $struct->typeId          = 23;
-        $struct->sectionId       = 42;
-        $struct->ownerId         = 13;
-        $struct->locations       = array();
+        $struct->id = 2342;
+        $struct->name = 'Content name';
+        $struct->typeId = 23;
+        $struct->sectionId = 42;
+        $struct->ownerId = 13;
+        $struct->locations = array();
 
         return $struct;
     }

@@ -81,7 +81,7 @@ class User extends Model implements GroupAbleInterface
     public function __construct( $id = null )
     {
         $this->properties = new UserValue( array( 'id' => $id ) );
-        $this->content = (object) array( 'locations' => array() );
+        $this->content = (object)array( 'locations' => array() );
     }
 
     /**

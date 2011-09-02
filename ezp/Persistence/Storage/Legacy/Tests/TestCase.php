@@ -60,7 +60,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     {
         if ( !$this->handler )
         {
-            $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler( 
+            $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler(
                 \ezcDbFactory::create( $this->getDsn() )
             );
         }
@@ -105,14 +105,14 @@ class TestCase extends \PHPUnit_Framework_TestCase
         {
             // We need this trigger for SQLite, because it does not support a multi
             // column key with one of them being set to auto-increment.
-            $handler->exec( '
-                CREATE TRIGGER my_ezcontentobject_attribute_increment
+            $handler->exec(
+                'CREATE TRIGGER my_ezcontentobject_attribute_increment
                 AFTER INSERT
                 ON ezcontentobject_attribute
                 BEGIN
                     UPDATE ezcontentobject_attribute SET id = (SELECT MAX(id) FROM ezcontentobject_attribute) + 1  WHERE rowid = new.rowid AND id = 0;
-                END;' );
-
+                END;'
+            );
         }
     }
 

@@ -29,7 +29,7 @@ class ServiceTest extends BaseServiceTest
     {
         $service = $this->repository->getUserService();
         $do = new User( 1 );
-        $do->login = $do->password ='test';
+        $do->login = $do->password = 'test';
         $do->email = 'test@ez.no';
         $do->hashAlgorithm = 2;
         $do = $service->create( $do );
@@ -49,7 +49,7 @@ class ServiceTest extends BaseServiceTest
     {
         $service = $this->repository->getUserService();
         $do = new User( 14 );
-        $do->login = $do->password ='test';
+        $do->login = $do->password = 'test';
         $do->email = 'test@ez.no';
         $do->hashAlgorithm = 2;
         $service->create( $do );
@@ -65,7 +65,7 @@ class ServiceTest extends BaseServiceTest
     {
         $service = $this->repository->getUserService();
         $do = new User();
-        $do->login = $do->password ='test';
+        $do->login = $do->password = 'test';
         $do->email = 'test@ez.no';
         $do->hashAlgorithm = 2;
         $service->create( $do );
@@ -107,7 +107,7 @@ class ServiceTest extends BaseServiceTest
     {
         $service = $this->repository->getUserService();
         $do = $service->load( 14 );
-        $do->login ='test';
+        $do->login = 'test';
         $service->update( $do );
         $do = $service->load( 14 );
         self::assertEquals( 14, $do->id );

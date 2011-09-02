@@ -39,7 +39,7 @@ class ContentUpdater
         Content\Type\Gateway $contentTypeGateway,
         Content\Gateway $contenGateway )
     {
-        $this->contenGateway      = $contenGateway;
+        $this->contenGateway = $contenGateway;
         $this->contentTypeGateway = $contentTypeGateway;
     }
 

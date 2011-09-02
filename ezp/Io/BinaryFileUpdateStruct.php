@@ -35,4 +35,3 @@ class BinaryFileUpdateStruct extends BinaryFile
 
     private $inputStream;
 }
-?>

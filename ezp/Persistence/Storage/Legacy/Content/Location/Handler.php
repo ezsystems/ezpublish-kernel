@@ -44,7 +44,7 @@ class Handler implements BaseLocationHandler
     public function __construct( LocationGateway $locationGateway, LocationMapper $mapper )
     {
         $this->locationGateway = $locationGateway;
-        $this->mapper          = $mapper;
+        $this->mapper = $mapper;
     }
 
     /**
@@ -125,7 +125,7 @@ class Handler implements BaseLocationHandler
      */
     public function markSubtreeModified( $locationId, $timeStamp = null )
     {
-        $nodeData  = $this->locationGateway->getBasicNodeData( $locationId );
+        $nodeData = $this->locationGateway->getBasicNodeData( $locationId );
         $timeStamp = $timeStamp ?: time();
         $this->locationGateway->updateSubtreeModificationTime( $nodeData['path_string'], $timeStamp );
     }

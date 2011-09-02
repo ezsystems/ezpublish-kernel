@@ -271,7 +271,7 @@ class EzpDatabaseTest extends TestCase
         $handler->create(
             new CreateStruct( array(
                 'contentId' => 68,
-                'remoteId'  => 'some_id',
+                'remoteId' => 'some_id',
             ) ),
             array(
                 'node_id' => '77',
@@ -328,14 +328,14 @@ class EzpDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->create(
             new CreateStruct( array(
-                'contentId'      => 68,
+                'contentId' => 68,
                 'contentVersion' => 1,
-                'remoteId'       => 'some_id',
+                'remoteId' => 'some_id',
                 'mainLocationId' => 42,
-                'priority'       => 1,
-                'remoteId'       => 'some_id',
-                'sortField'      => 1,
-                'sortOrder'      => 1,
+                'priority' => 1,
+                'remoteId' => 'some_id',
+                'sortField' => 1,
+                'sortOrder' => 1,
             ) ),
             array(
                 'node_id' => '77',
@@ -388,14 +388,14 @@ class EzpDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $location = $handler->create(
             new CreateStruct( array(
-                'contentId'      => 68,
+                'contentId' => 68,
                 'contentVersion' => 1,
-                'remoteId'       => 'some_id',
+                'remoteId' => 'some_id',
                 'mainLocationId' => true,
-                'priority'       => 1,
-                'remoteId'       => 'some_id',
-                'sortField'      => 1,
-                'sortOrder'      => 1,
+                'priority' => 1,
+                'remoteId' => 'some_id',
+                'sortField' => 1,
+                'sortOrder' => 1,
             ) ),
             array(
                 'node_id' => '77',
@@ -426,8 +426,8 @@ class EzpDatabaseTest extends TestCase
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
         $handler->update( new Location\UpdateStruct( array(
-                'priority'  => 23,
-                'remoteId'  => 'someNewHash',
+                'priority' => 23,
+                'remoteId' => 'someNewHash',
                 'sortField' => 4,
                 'sortOrder' => 4,
             ) ),
@@ -475,14 +475,14 @@ class EzpDatabaseTest extends TestCase
         $handler = $this->getLocationGateway();
         $handler->create(
             new CreateStruct( array(
-                'contentId'      => 68,
+                'contentId' => 68,
                 'contentVersion' => 1,
-                'remoteId'       => 'some_id',
+                'remoteId' => 'some_id',
                 'mainLocationId' => 1,
-                'priority'       => 1,
-                'remoteId'       => 'some_id',
-                'sortField'      => 1,
-                'sortOrder'      => 1,
+                'priority' => 1,
+                'remoteId' => 'some_id',
+                'sortField' => 1,
+                'sortOrder' => 1,
             ) ),
             array(
                 'node_id' => '77',

@@ -148,7 +148,7 @@ class ContentSearchHandlerTest extends TestCase
                         $contentObjs = array();
                         foreach ( $rows as $row )
                         {
-                            $contentId = (int) $row['ezcontentobject_id'];
+                            $contentId = (int)$row['ezcontentobject_id'];
                             if ( !isset( $contentObjs[$contentId] ) )
                             {
                                 $contentObjs[$contentId] = new ContentObject();

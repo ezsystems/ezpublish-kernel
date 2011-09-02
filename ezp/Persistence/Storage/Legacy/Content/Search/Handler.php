@@ -61,7 +61,7 @@ class Handler extends BaseSearchHandler
      */
     public function __construct( Gateway $gateway, ContentMapper $contentMapper )
     {
-        $this->gateway       = $gateway;
+        $this->gateway = $gateway;
         $this->contentMapper = $contentMapper;
     }
 

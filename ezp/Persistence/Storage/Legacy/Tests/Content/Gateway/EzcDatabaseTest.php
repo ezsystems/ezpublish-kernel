@@ -59,23 +59,23 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'contentclass_id'     => '23',
-                    'current_version'     => 1,
+                    'contentclass_id' => '23',
+                    'current_version' => 1,
                     // @FIXME
                     'initial_language_id' => 0,
                     // @FIXME
-                    'language_mask'       => 0,
+                    'language_mask' => 0,
                     // @FIXME
-                    'modified'            => 0,
-                    'name'                => 'Content name',
-                    'owner_id'            => '13',
+                    'modified' => 0,
+                    'name' => 'Content name',
+                    'owner_id' => '13',
                     // @FIXME
-                    'published'           => 0,
+                    'published' => 0,
                     // @FIXME
-                    'remote_id'           => null,
-                    'section_id'          => '42',
+                    'remote_id' => null,
+                    'section_id' => '42',
                     // @FIXME
-                    'status'              => 0,
+                    'status' => 0,
                 ),
             ),
             $this->getDatabaseHandler()
@@ -107,11 +107,11 @@ class EzcDatabaseTest extends TestCase
     {
         $struct = new Content();
 
-        $struct->name            = 'Content name';
-        $struct->typeId          = 23;
-        $struct->sectionId       = 42;
-        $struct->ownerId         = 13;
-        $struct->locations       = array();
+        $struct->name = 'Content name';
+        $struct->typeId = 23;
+        $struct->sectionId = 42;
+        $struct->ownerId = 13;
+        $struct->locations = array();
 
         return $struct;
     }
@@ -126,19 +126,19 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'contentobject_id'    => '2342',
-                    'created'             => '1312278322',
-                    'creator_id'          => '13',
+                    'contentobject_id' => '2342',
+                    'created' => '1312278322',
+                    'creator_id' => '13',
                     // @FIXME
                     'initial_language_id' => '0',
                     // @FIXME
-                    'language_mask'       => '0',
-                    'modified'            => '1312278323',
-                    'status'              => '0',
+                    'language_mask' => '0',
+                    'modified' => '1312278323',
+                    'status' => '0',
                     // @FIXME
-                    'user_id'             => '0',
-                    'version'             => '1',
-                    'workflow_event_pos'  => '0',
+                    'user_id' => '0',
+                    'version' => '1',
+                    'workflow_event_pos' => '0',
 
                 )
             ),
@@ -169,8 +169,8 @@ class EzcDatabaseTest extends TestCase
     {
         $gateway = $this->getDatabaseGateway();
 
-        $time        = time();
-        $version     = $this->getVersionFixture();
+        $time = time();
+        $version = $this->getVersionFixture();
         $version->id = $gateway->insertVersion( $version );
 
         $gateway->updateVersion( $version->id, 2, 14 );
@@ -197,14 +197,14 @@ class EzcDatabaseTest extends TestCase
     {
         $version = new Version();
 
-        $version->id        = null;
+        $version->id = null;
         $version->versionNo = 1;
         $version->creatorId = 13;
-        $version->state     = 0;
+        $version->state = 0;
         $version->contentId = 2342;
-        $version->fields    = array();
-        $version->created   = 1312278322;
-        $version->modified  = 1312278323;
+        $version->fields = array();
+        $version->created = 1312278322;
+        $version->modified = 1312278323;
 
         return $version;
     }
@@ -228,20 +228,20 @@ class EzcDatabaseTest extends TestCase
             array(
                 array(
                     // @FIXME
-                    'attribute_original_id'    => '0',
+                    'attribute_original_id' => '0',
                     'contentclassattribute_id' => '231',
-                    'contentobject_id'         => '2342',
-                    'data_float'               => '24.42',
-                    'data_int'                 => '42',
-                    'data_text'                => 'Test text',
-                    'data_type_string'         => 'ezstring',
+                    'contentobject_id' => '2342',
+                    'data_float' => '24.42',
+                    'data_int' => '42',
+                    'data_text' => 'Test text',
+                    'data_type_string' => 'ezstring',
                     // @FIXME Is language_code correct?
-                    'language_code'            => '31',
+                    'language_code' => '31',
                     // @FIXME
-                    'language_id'              => 0,
-                    'sort_key_int'             => '23',
-                    'sort_key_string'          => 'Test',
-                    'version'                  => '1',
+                    'language_id' => 0,
+                    'sort_key_int' => '23',
+                    'sort_key_string' => 'Test',
+                    'version' => '1',
                 )
             ),
             $this->getDatabaseHandler()
@@ -281,10 +281,10 @@ class EzcDatabaseTest extends TestCase
         $field->id = $gateway->insertNewField( $content, $field, $value );
 
         $newValue = new StorageFieldValue( array(
-            'dataFloat'     => 124.42,
-            'dataInt'       => 142,
-            'dataText'      => 'New text',
-            'sortKeyInt'    => 123,
+            'dataFloat' => 124.42,
+            'dataInt' => 142,
+            'dataText' => 'New text',
+            'sortKeyInt' => 123,
             'sortKeyString' => 'new_text',
         ) );
 
@@ -293,11 +293,11 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'data_float'               => '124.42',
-                    'data_int'                 => '142',
-                    'data_text'                => 'New text',
-                    'sort_key_int'             => '123',
-                    'sort_key_string'          => 'new_text',
+                    'data_float' => '124.42',
+                    'data_int' => '142',
+                    'data_text' => 'New text',
+                    'sort_key_int' => '123',
+                    'sort_key_string' => 'new_text',
                 )
             ),
             $this->getDatabaseHandler()
@@ -611,7 +611,7 @@ class EzcDatabaseTest extends TestCase
         $statement = $query->prepare();
         $statement->execute();
 
-        return (int) $statement->fetchColumn();
+        return (int)$statement->fetchColumn();
     }
 
     /**
@@ -636,7 +636,7 @@ class EzcDatabaseTest extends TestCase
         $statement = $query->prepare();
         $statement->execute();
 
-        return (int) $statement->fetchColumn();
+        return (int)$statement->fetchColumn();
     }
 
     /**
@@ -661,7 +661,7 @@ class EzcDatabaseTest extends TestCase
         $statement = $query->prepare();
         $statement->execute();
 
-        return (int) $statement->fetchColumn();
+        return (int)$statement->fetchColumn();
     }
 
     /**
@@ -686,7 +686,7 @@ class EzcDatabaseTest extends TestCase
         $statement = $query->prepare();
         $statement->execute();
 
-        return (int) $statement->fetchColumn();
+        return (int)$statement->fetchColumn();
     }
 
     /**
@@ -711,7 +711,7 @@ class EzcDatabaseTest extends TestCase
         $statement = $query->prepare();
         $statement->execute();
 
-        return (int) $statement->fetchColumn();
+        return (int)$statement->fetchColumn();
     }
 
     /**
@@ -739,9 +739,9 @@ class EzcDatabaseTest extends TestCase
         $field = new Field();
 
         $field->fieldDefinitionId = 231;
-        $field->type              = 'ezstring';
-        $field->language          = 31;
-        $field->versionNo         = 1;
+        $field->type = 'ezstring';
+        $field->language = 31;
+        $field->versionNo = 1;
 
         return $field;
     }
@@ -755,10 +755,10 @@ class EzcDatabaseTest extends TestCase
     {
         $value = new StorageFieldValue();
 
-        $value->dataFloat     = 24.42;
-        $value->dataInt       = 42;
-        $value->dataText      = 'Test text';
-        $value->sortKeyInt    = 23;
+        $value->dataFloat = 24.42;
+        $value->dataInt = 42;
+        $value->dataText = 'Test text';
+        $value->sortKeyInt = 23;
         $value->sortKeyString = 'Test';
 
         return $value;

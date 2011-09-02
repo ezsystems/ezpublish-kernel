@@ -23,9 +23,9 @@ class Status extends CriterionHandler
      * @var array
      */
     protected $statusMap = array(
-        Criterion\Status::STATUS_DRAFT     => 0,
+        Criterion\Status::STATUS_DRAFT => 0,
         Criterion\Status::STATUS_PUBLISHED => 1,
-        Criterion\Status::STATUS_ARCHIVED  => 2,
+        Criterion\Status::STATUS_ARCHIVED => 2,
     );
 
     /**
