@@ -345,4 +345,99 @@ class ContentTest extends BaseServiceTest
     {
         $this->service->loadFields( new Version( $this->service->load( 1 ) ) );
     }
+
+    /**
+     * Compares original content properties to its copy's
+     * @param \ezp\Content $content
+     * @param \ezp\Content $copy
+     */
+    private function compareCopyContentProperties( Content $content, Content $copy )
+    {
+        self::assertEquals( $content->name, $copy->name );
+        self::assertEquals( $content->sectionId, $copy->sectionId, "Section ID does not match" );
+        self::assertEquals( $content->typeId, $copy->typeId, "Type ID does not match" );
+        self::assertEquals( $content->ownerId, $copy->ownerId, "Owner ID does not match" );
+        self::assertEquals( $content->currentVersionNo, $copy->currentVersionNo, "Current version no does not match" );
+        self::assertEquals( 0, count( $copy->locations ), "Locations must be empty" );
+    }
+
+    /**
+     * Compares original content version to its copy
+     * @param \ezp\Content\Version $version
+     * @param \ezp\Content\Version $copyVersion
+     */
+    private function compareCopyContentVersions( Version $version, Version $copyVersion )
+    {
+        self::assertInstanceOf( 'ezp\\Content\\Version', $copyVersion );
+        self::assertEquals( $version->versionNo, $copyVersion->versionNo, "Version number does not match" );
+        self::assertEquals( $version->creatorId, $copyVersion->creatorId, "Creator ID does not match" );
+
+        // Compare Fields
+        foreach ( $version->fields as $identifier => $field )
+        {
+            self::assertTrue( isset( $copyVersion->fields[$identifier] ) );
+            self::assertInstanceOf( 'ezp\\Content\\Field', $copyVersion->fields[$identifier] );
+
+            $fieldVo = $field->getState( 'properties' );
+            $copyFieldVo = $copyVersion->fields[$identifier]->getState( 'properties' );
+            self::assertSame( $fieldVo->type, $copyFieldVo->type, "Field type must be the same for copy" );
+            self::assertSame( $fieldVo->value, $copyFieldVo->value, "Field value must be the same for copy" );
+            self::assertSame( $fieldVo->language, $copyFieldVo->language, "Field language must be the same for copy" );
+            self::assertSame( $fieldVo->versionNo, $copyFieldVo->versionNo, "Field version number must be the same for copy" );
+        }
+    }
+
+    /**
+     * Tests ContentService::copy() operation
+     * @group contentService
+     * @covers \ezp\Content\Service::copy
+     */
+    public function testCopyAllVersions()
+    {
+        $time = time();
+        $content = $this->service->load( 1 );
+        $copy = $this->service->copy( $content );
+
+        self::assertInstanceOf( 'ezp\\Content', $copy );
+        $this->compareCopyContentProperties( $content, $copy );
+
+        // Compare original and copy versions
+        self::assertEquals( count( $content->versions ), count( $copy->versions ), "Copy content must have same amount of versions" );
+        foreach ( $content->versions as $versionNo => $version )
+        {
+            self::assertTrue( isset( $copy->versions[$versionNo] ), "Version numbers should be maintained on content copy" );
+            $this->compareCopyContentVersions( $version, $copy->versions[$versionNo] );
+        }
+
+        // Copy versions
+        foreach ( $copy->versions as $versionNo => $version )
+        {
+            self::assertEquals( $copy->id, $version->contentId );
+            self::assertGreaterThanOrEqual( $time, $version->modified );
+            self::assertGreaterThanOrEqual( $time, $version->created );
+        }
+    }
+
+    /**
+     * @group contentService
+     * @covers \ezp\Content\Service::copy
+     */
+    public function testCopyVersion1()
+    {
+        $time = time();
+        $versionNoToCopy = 1;
+        $content = $this->service->load( 1 );
+        $version = $content->versions[$versionNoToCopy];
+        $copy = $this->service->copy( $content, $version );
+
+        self::assertInstanceOf( 'ezp\\Content', $copy );
+        $this->compareCopyContentProperties( $content, $copy );
+        self::assertEquals( 1, count( $copy->versions ), "Copying content in one version should only result one version" );
+        self::assertTrue( isset( $copy->versions[$versionNoToCopy] ), "Version number should be maintained on content copy" );
+        $this->compareCopyContentVersions( $version, $copy->versions[$versionNoToCopy] );
+
+        self::assertEquals( $copy->id, $copy->versions[$versionNoToCopy]->contentId );
+        self::assertGreaterThanOrEqual( $time, $copy->versions[$versionNoToCopy]->modified );
+        self::assertGreaterThanOrEqual( $time, $copy->versions[$versionNoToCopy]->created );
+    }
 }
