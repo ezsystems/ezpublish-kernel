@@ -129,6 +129,7 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testGetFileResource()
     {
+        $this->urlFopenPrecheck();
         $repositoryPath = 'var/test/storage/getfileresource.gif';
         $binaryFile = $this->createFileWithPath( $repositoryPath );
 
@@ -152,6 +153,7 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testUpdate()
     {
+        $this->urlFopenPrecheck();
         $firstPath = 'var/test/update-before.gif';
         $secondPath = 'var/test/update-after.png';
 
@@ -261,6 +263,12 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
         $binaryFileCreateStruct->path = $path;
         return $this->binaryRepository->create( $binaryFileCreateStruct );
+    }
+
+    private function urlFopenPrecheck()
+    {
+        if ( ini_get( "allow_url_fopen" ) != 1 )
+            $this->markTestSkipped( "allow_url_fopen must be 'On' for this test." );
     }
 
     /**
