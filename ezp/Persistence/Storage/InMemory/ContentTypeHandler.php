@@ -342,11 +342,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId )
     {
-        $this->backend->deleteByMatch( 'Content\\Type\\FieldDefinition', array(
-                                                                           '_typeId' => $contentTypeId,
-                                                                           '_status' => $status,
-                                                                           'id' => $fieldDefinitionId,
-                                                                         ) );
+        $this->backend->deleteByMatch(
+            'Content\\Type\\FieldDefinition',
+            array(
+                '_typeId' => $contentTypeId,
+                '_status' => $status,
+                'id' => $fieldDefinitionId,
+            )
+        );
     }
 
     /**

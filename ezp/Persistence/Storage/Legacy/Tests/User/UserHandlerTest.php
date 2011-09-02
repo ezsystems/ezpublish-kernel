@@ -321,9 +321,13 @@ class UserHandlerTest extends TestCase
         $role = $this->createRole();
         $handler->create( $user = $this->getValidUser() );
 
-        $handler->assignRole( $user->id, $role->id, array(
-            'Subtree' => array( '/1' ),
-        ) );
+        $handler->assignRole(
+            $user->id,
+            $role->id,
+            array(
+                'Subtree' => array( '/1' ),
+            )
+        );
 
         $this->assertQueryResult(
             array(
@@ -341,10 +345,14 @@ class UserHandlerTest extends TestCase
         $role = $this->createRole();
         $handler->create( $user = $this->getValidUser() );
 
-        $handler->assignRole( $user->id, $role->id, array(
-            'Subtree' => array( '/1', '/1/2' ),
-            'Foo' => array( 'Bar' ),
-        ) );
+        $handler->assignRole(
+            $user->id,
+            $role->id,
+            array(
+                'Subtree' => array( '/1', '/1/2' ),
+                'Foo' => array( 'Bar' ),
+            )
+        );
 
         $this->assertQueryResult(
             array(
@@ -364,10 +372,14 @@ class UserHandlerTest extends TestCase
         $role = $this->createRole();
         $handler->create( $user = $this->getValidUser() );
 
-        $handler->assignRole( $user->id, $role->id, array(
-            'Subtree' => array( '/1', '/1/2' ),
-            'Foo' => array( 'Bar' ),
-        ) );
+        $handler->assignRole(
+            $user->id,
+            $role->id,
+            array(
+                'Subtree' => array( '/1', '/1/2' ),
+                'Foo' => array( 'Bar' ),
+            )
+        );
 
         $handler->unAssignRole( $user->id, $role->id );
 

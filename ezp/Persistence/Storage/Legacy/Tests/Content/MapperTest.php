@@ -167,9 +167,11 @@ class MapperTest extends TestCase
     {
         $struct = $this->getContentFixture();
 
-        $struct->version = new Content\Version( array(
-            'id' => 1,
-        ) );
+        $struct->version = new Content\Version(
+            array(
+                'id' => 1,
+            )
+        );
 
         return $struct;
     }

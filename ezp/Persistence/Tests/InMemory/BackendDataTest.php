@@ -241,12 +241,14 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         /**
          * @var \ezp\Persistence\Content[] $list
          */
-        $list = $this->backend->find( "Content",
-                                      array( "id" => 1 ),
-                                      array( 'locations' => array(
-                                          'type' => 'Content\\Location',
-                                          'match' => array( 'contentId' => 'id' ) )
-                                      ));
+        $list = $this->backend->find(
+            "Content",
+            array( "id" => 1 ),
+            array( 'locations' => array(
+                'type' => 'Content\\Location',
+                'match' => array( 'contentId' => 'id' ) )
+            )
+        );
         $this->assertEquals( 1, count( $list ) );
         foreach ( $list as $key => $content )
         {
@@ -274,12 +276,15 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         /**
          * @var \ezp\Persistence\Content[] $list
          */
-        $list = $this->backend->find( "Content",
-                                      array( "locations" => array( 'id' => 2 ) ),
-                                      array( 'locations' => array(
-                                          'type' => 'Content\\Location',
-                                          'match' => array( 'contentId' => 'id' ) )
-                                      ));
+        $list = $this->backend->find(
+            "Content",
+            array( "locations" => array( 'id' => 2 ) ),
+            array( 'locations' => array(
+                'type' => 'Content\\Location',
+                'match' => array( 'contentId' => 'id' ) )
+            )
+        );
+
         $this->assertEquals( 1, count( $list ) );
         foreach ( $list as $content )
         {
@@ -318,12 +323,14 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         /**
          * @var \ezp\Persistence\Content[] $list
          */
-        $list = $this->backend->find( "Content",
-                                      array( "locations" => array( 'id' => 2 ) ),
-                                      array( 'locations' => array(
-                                          'type' => 'Content\\Location',
-                                          'match' => array( 'contentId' => 'id' ) )
-                                      ));
+        $list = $this->backend->find(
+            "Content",
+            array( "locations" => array( 'id' => 2 ) ),
+            array( 'locations' => array(
+                'type' => 'Content\\Location',
+                'match' => array( 'contentId' => 'id' ) )
+            )
+        );
         $this->assertEquals( 1, count( $list ) );
         foreach ( $list as $content )
         {
@@ -348,12 +355,16 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindJoinDeepMatchCollision()
     {
-        $this->backend->find( "Content",
-                                      array( "locations" => array( 'contentId' => 2 ) ),
-                                      array( 'locations' => array(
-                                          'type' => 'Content\\Location',
-                                          'match' => array( 'contentId' => 'id' ) )
-                                      ));
+        $this->backend->find(
+            "Content",
+            array( "locations" => array( 'contentId' => 2 ) ),
+            array( 'locations' =>
+                array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' )
+                )
+            )
+        );
     }
 
     /**
@@ -424,12 +435,19 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testCountJoinDeepMatch()
     {
-        $this->assertEquals( 1, $this->backend->count( "Content",
-                                      array( "locations" => array( 'id' => 2 ) ),
-                                      array( 'locations' => array(
-                                          'type' => 'Content\\Location',
-                                          'match' => array( 'contentId' => 'id' ) )
-                                      )) );
+        $this->assertEquals(
+            1,
+            $this->backend->count(
+                "Content",
+                array( "locations" => array( 'id' => 2 ) ),
+                array( 'locations' =>
+                    array(
+                        'type' => 'Content\\Location',
+                        'match' => array( 'contentId' => 'id' )
+                    )
+                )
+            )
+        );
     }
 
     /**
@@ -441,12 +459,16 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testCountJoinDeepMatchCollision()
     {
-        $this->backend->count( "Content",
-                                      array( "locations" => array( 'contentId' => 2 ) ),
-                                      array( 'locations' => array(
-                                          'type' => 'Content\\Location',
-                                          'match' => array( 'contentId' => 'id' ) )
-                                      ));
+        $this->backend->count(
+            "Content",
+            array( "locations" => array( 'contentId' => 2 ) ),
+            array( 'locations' =>
+                array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' )
+                )
+            )
+        );
     }
 
     /**

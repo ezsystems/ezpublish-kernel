@@ -67,57 +67,59 @@ class ContentSearchHandlerTest extends TestCase
         return new Content\Search\Handler(
             new Content\Search\Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
-                new Content\Search\Gateway\CriteriaConverter( array(
-                    new Content\Search\Gateway\CriterionHandler\ContentId(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\LogicalNot(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\LogicalAnd(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\LogicalOr(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\SubtreeId(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\ContentTypeId(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\DateMetadata(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\LocationId(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\ParentLocationId(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\RemoteId(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\SectionId(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\Status(
-                        $this->getDatabaseHandler()
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\FullText(
-                        $this->getDatabaseHandler(),
-                        $fullTextSearchConfiguration
-                    ),
-                    new Content\Search\Gateway\CriterionHandler\Field(
-                        $this->getDatabaseHandler(),
-                        $this->fieldRegistry = $this->getMock(
-                            '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
-                        )
-                    ),
-                ) ),
+                new Content\Search\Gateway\CriteriaConverter(
+                    array(
+                        new Content\Search\Gateway\CriterionHandler\ContentId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\LogicalNot(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\LogicalAnd(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\LogicalOr(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\SubtreeId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\ContentTypeId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\DateMetadata(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\LocationId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\ParentLocationId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\RemoteId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\SectionId(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\Status(
+                            $this->getDatabaseHandler()
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\FullText(
+                            $this->getDatabaseHandler(),
+                            $fullTextSearchConfiguration
+                        ),
+                        new Content\Search\Gateway\CriterionHandler\Field(
+                            $this->getDatabaseHandler(),
+                            $this->fieldRegistry = $this->getMock(
+                                '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+                            )
+                        ),
+                    )
+                ),
                 new QueryBuilder( $this->getDatabaseHandler() )
             ),
             $this->getContentMapperMock()
@@ -228,14 +230,16 @@ class ContentSearchHandlerTest extends TestCase
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
-            new Criterion\LogicalAnd( array(
-                new Criterion\ContentId(
-                    array( 1, 4, 10 )
-                ),
-                new Criterion\ContentId(
-                    array( 4, 12 )
-                ),
-            ) ),
+            new Criterion\LogicalAnd(
+                array(
+                    new Criterion\ContentId(
+                        array( 1, 4, 10 )
+                    ),
+                    new Criterion\ContentId(
+                        array( 4, 12 )
+                    ),
+                )
+            ),
             0, 10, null
         );
 
@@ -253,14 +257,16 @@ class ContentSearchHandlerTest extends TestCase
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
-            new Criterion\LogicalOr( array(
-                new Criterion\ContentId(
-                    array( 1, 4, 10 )
-                ),
-                new Criterion\ContentId(
-                    array( 4, 12 )
-                ),
-            ) ),
+            new Criterion\LogicalOr(
+                array(
+                    new Criterion\ContentId(
+                        array( 1, 4, 10 )
+                    ),
+                    new Criterion\ContentId(
+                        array( 4, 12 )
+                    ),
+                )
+            ),
             0, 10, null
         );
 
@@ -278,16 +284,20 @@ class ContentSearchHandlerTest extends TestCase
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
-            new Criterion\LogicalAnd( array(
-                new Criterion\ContentId(
-                    array( 1, 4, 10 )
-                ),
-                new Criterion\LogicalNot( array(
+            new Criterion\LogicalAnd(
+                array(
                     new Criterion\ContentId(
-                        array( 10, 12 )
+                        array( 1, 4, 10 )
                     ),
-                ) ),
-            ) ),
+                    new Criterion\LogicalNot(
+                        array(
+                            new Criterion\ContentId(
+                                array( 10, 12 )
+                            ),
+                        )
+                    ),
+                )
+            ),
             0, 10, null
         );
 
@@ -722,18 +732,20 @@ class ContentSearchHandlerTest extends TestCase
             ->will( $this->returnValue( $converter ) );
 
         $result = $locator->find(
-            new Criterion\LogicalOr( array(
-                new Criterion\Field(
-                    new Criterion\FieldIdentifierStruct( 'user_group', 'name' ),
-                    Criterion\Operator::EQ,
-                    'members'
-                ),
-                new Criterion\Field(
-                    new Criterion\FieldIdentifierStruct( 'product', 'price' ),
-                    Criterion\Operator::BETWEEN,
-                    array( 10000, 1000000 )
+            new Criterion\LogicalOr(
+                array(
+                    new Criterion\Field(
+                        new Criterion\FieldIdentifierStruct( 'user_group', 'name' ),
+                        Criterion\Operator::EQ,
+                        'members'
+                    ),
+                    new Criterion\Field(
+                        new Criterion\FieldIdentifierStruct( 'product', 'price' ),
+                        Criterion\Operator::BETWEEN,
+                        array( 10000, 1000000 )
+                    )
                 )
-            ) ),
+            ),
             0, 10, null
         );
 
@@ -788,9 +800,11 @@ class ContentSearchHandlerTest extends TestCase
 
     public function testFullTextDisabledWildcardFilter()
     {
-        $locator = $this->getContentSearchHandler( array(
-            'enableWildcards' => false,
-        ) );
+        $locator = $this->getContentSearchHandler(
+            array(
+                'enableWildcards' => false,
+            )
+        );
 
         $result = $locator->find(
             new Criterion\FullText(
@@ -830,9 +844,11 @@ class ContentSearchHandlerTest extends TestCase
 
     public function testFullTextFilterNoStopwordRemoval()
     {
-        $locator = $this->getContentSearchHandler( array(
-            'searchThresholdValue' => PHP_INT_MAX
-        ) );
+        $locator = $this->getContentSearchHandler(
+            array(
+                'searchThresholdValue' => PHP_INT_MAX
+            )
+        );
 
         $result = $locator->find(
             new Criterion\FullText(
@@ -843,10 +859,15 @@ class ContentSearchHandlerTest extends TestCase
 
         $this->assertEquals(
             10,
-            count( array_map(
-                function ( $content ) { return $content->id; },
-                $result->content
-            ) )
+            count(
+                array_map(
+                    function ( $content )
+                    {
+                        return $content->id;
+                    },
+                    $result->content
+                )
+            )
         );
     }
 }

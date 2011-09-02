@@ -75,10 +75,12 @@ class EzcDatabase extends Gateway
         $query = $this->handler->createDeleteQuery();
         $query
             ->deleteFrom( $this->handler->quoteTable( 'ezuser' ) )
-            ->where( $query->expr->eq(
-                $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $userId )
-            ) );
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $userId )
+                )
+            );
         $query->prepare()->execute();
     }
 
@@ -104,10 +106,12 @@ class EzcDatabase extends Gateway
             )->set(
                 $this->handler->quoteColumn( 'password_hash_type' ),
                 $query->bindValue( $user->hashAlgorithm )
-            )->where( $query->expr->eq(
-                $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $user->id )
-            ) );
+            )->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $user->id )
+                )
+            );
         $query->prepare()->execute();
     }
 
@@ -167,16 +171,18 @@ class EzcDatabase extends Gateway
         $query = $this->handler->createDeleteQuery();
         $query
             ->deleteFrom( $this->handler->quoteTable( 'ezuser_role' ) )
-            ->where( $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'contentobject_id' ),
-                    $query->bindValue( $userId )
-                ),
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'role_id' ),
-                    $query->bindValue( $roleId )
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'contentobject_id' ),
+                        $query->bindValue( $userId )
+                    ),
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'role_id' ),
+                        $query->bindValue( $roleId )
+                    )
                 )
-            ) );
+            );
         $query->prepare()->execute();
     }
 }

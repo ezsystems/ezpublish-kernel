@@ -181,10 +181,12 @@ class EzcDatabaseTest extends TestCase
             $query
                 ->select( array( 'version', 'user_id' ) )
                 ->from( 'ezcontentobject_version' )
-                ->where( $query->expr->lAnd(
-                    $query->expr->eq( 'id', $query->bindValue( $version->id ) ),
-                    $query->expr->gte( 'modified', $time )
-                ) )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'id', $query->bindValue( $version->id ) ),
+                        $query->expr->gte( 'modified', $time )
+                    )
+                )
         );
     }
 
@@ -280,13 +282,15 @@ class EzcDatabaseTest extends TestCase
         $gateway = $this->getDatabaseGateway();
         $field->id = $gateway->insertNewField( $content, $field, $value );
 
-        $newValue = new StorageFieldValue( array(
-            'dataFloat' => 124.42,
-            'dataInt' => 142,
-            'dataText' => 'New text',
-            'sortKeyInt' => 123,
-            'sortKeyString' => 'new_text',
-        ) );
+        $newValue = new StorageFieldValue(
+            array(
+                'dataFloat' => 124.42,
+                'dataInt' => 142,
+                'dataText' => 'New text',
+                'sortKeyInt' => 123,
+                'sortKeyString' => 'new_text',
+            )
+        );
 
         $gateway->updateField( $field, $newValue );
 
