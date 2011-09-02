@@ -8,7 +8,10 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Content\Type;
-use ezp\Persistence\Storage\Legacy\Content;
+use ezp\Persistence\Storage\Legacy\Content,
+    ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater,
+    ezp\Persistence\Content\Type,
+    ezp\Persistence\Content\Criterion;
 
 /**
  * Class to update content objects to a new type version
@@ -20,27 +23,36 @@ class ContentUpdater
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\Gateway
      */
-    protected $contenGateway;
+    protected $contentGateway;
 
     /**
-     * Content type gateway
+     * FieldValue converter registry
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
      */
-    protected $contentTypeGateway;
+    protected $converterRegistry;
+
+    /**
+     * Search handler
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Search\Handler
+     */
+    protected $searchHandler;
 
     /**
      * Creates a new content updater
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\Type\Gateway $contentTypeGateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contenGateway
+     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
      */
     public function __construct(
-        Content\Type\Gateway $contentTypeGateway,
-        Content\Gateway $contenGateway )
+        Content\Search\Handler $searchHandler,
+        Content\Gateway $contentGateway,
+        Content\FieldValue\Converter\Registry $converterRegistry )
     {
-        $this->contenGateway = $contenGateway;
-        $this->contentTypeGateway = $contentTypeGateway;
+        $this->searchHandler     = $searchHandler;
+        $this->contentGateway    = $contentGateway;
+        $this->converterRegistry = $converterRegistry;
     }
 
     /**
@@ -49,9 +61,54 @@ class ContentUpdater
      * @param mixed $contentTypeId
      * @return ContentUpdater\Action[]
      */
-    public function determineActions( $contentTypeId )
+    public function determineActions( Type $fromType, Type $toType )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $actions = array();
+        foreach ( $fromType->fieldDefinitions as $fieldDef )
+        {
+            if ( !$this->hasFieldDefinition( $toType, $fieldDef ) )
+            {
+                $actions[] = new ContentUpdater\Action\RemoveField(
+                    $this->contentGateway,
+                    $fieldDef
+                );
+            }
+        }
+        foreach ( $toType->fieldDefinitions as $fieldDef )
+        {
+            if ( !$this->hasFieldDefinition( $fromType, $fieldDef ) )
+            {
+                $actions[] = new ContentUpdater\Action\AddField(
+                    $this->contentGateway,
+                    $fieldDef,
+                    $this->converterRegistry->getConverter(
+                        $fieldDef->fieldType
+                    )
+                );
+            }
+        }
+        return $actions;
+    }
+
+    /**
+     * hasFieldDefinition
+     *
+     * @param Content\Type $type
+     * @param Content\Type\FieldDefinition $fieldDef
+     * @return void
+     */
+    protected function hasFieldDefinition(
+        Type $type,
+        Type\FieldDefinition $fieldDef )
+    {
+        foreach ( $type->fieldDefinitions as $existFieldDef )
+        {
+            if ( $existFieldDef->id == $fieldDef->id )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -63,7 +120,26 @@ class ContentUpdater
      */
     public function applyUpdates( $contentTypeId, array $actions )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $contentObjs = $this->loadContentObjects( $contentTypeId );
+        foreach ( $contentObjs as $content )
+        {
+            foreach ( $actions as $action )
+            {
+                $action->apply( $content );
+            }
+        }
+    }
+
+    /**
+     * Returns all content objects of $contentTypeId
+     *
+     * @param mixed $contentTypeId
+     * @return Content[]
+     */
+    protected function loadContentObjects( $contentTypeId )
+    {
+        $criterion = new Criterion\ContentTypeId( $contentTypeId );
+        return $this->searchHandler->find( $criterion );
     }
 
     /**

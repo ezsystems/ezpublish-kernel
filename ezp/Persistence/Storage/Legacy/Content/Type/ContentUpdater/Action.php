@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater;
-use ezp\Persistence\Storage\Legacy\Content;
+use ezp\Persistence\Content,
+    ezp\Persistence\Storage\Legacy\Content\Gatway as ContentGateway;
 
 /**
  * Updater action base class
@@ -27,7 +28,7 @@ abstract class Action
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
      */
-    public function __construct( Content\Gateway $contentGateway )
+    public function __construct( ContentGateway $contentGateway )
     {
         $this->contentGateway = $contentGateway;
     }

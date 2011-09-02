@@ -15,7 +15,7 @@ use ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater,
 /**
  * Test case for Content Type Updater.
  */
-class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
+class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Content gateway mock
@@ -30,6 +30,13 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $converterRegistryMock;
+
+    /**
+     * Search handler mock
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Search\Handler
+     */
+    protected $searchHandlerMock;
 
     /**
      * Content Updater to test
@@ -100,6 +107,53 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ),
             $actions
         );
+    }
+
+    public function testApplyUpdates()
+    {
+        $updater = $this->getContentUpdater();
+
+        $actionA = $this->getMockForAbstractClass(
+            '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\ContentUpdater\\Action',
+            array(),
+            '',
+            false
+        );
+        $actionA->expects( $this->exactly( 2 ) )
+            ->method( 'apply' )
+            ->with(
+                $this->isInstanceOf(
+                    '\\ezp\\Persistence\\Content'
+                )
+            );
+        $actionB = $this->getMockForAbstractClass(
+            '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\ContentUpdater\\Action',
+            array(),
+            '',
+            false
+        );
+        $actionB->expects( $this->exactly( 2 ) )
+            ->method( 'apply' )
+            ->with(
+                $this->isInstanceOf(
+                    '\\ezp\\Persistence\\Content'
+                )
+            );
+
+         $actions = array( $actionA, $actionB );
+
+         $content = new Content();
+
+         $this->getSearchHandlerMock()
+            ->expects( $this->once() )
+            ->method( 'find' )
+            ->with(
+                $this->equalTo( new Content\Criterion\ContentTypeId( 23 ) )
+            )->will(
+                $this->returnValue( array( $content, clone $content ) )
+            );
+
+        $updater->applyUpdates( 23, $actions );
     }
 
     /**
@@ -179,6 +233,26 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * Returns a Search Handler mock
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Search\Handler
+     */
+    protected function getSearchHandlerMock()
+    {
+        if ( !isset( $this->searchHandlerMock ) )
+        {
+            $this->searchHandlerMock = $this->getMock(
+                'ezp\\Persistence\\Storage\\Legacy\\Content\\Search\\Handler',
+                array(),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->searchHandlerMock;
+    }
+
+    /**
      * Returns the content updater to test
      *
      * @return \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater
@@ -188,6 +262,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         if ( !isset( $this->contentUpdater ) )
         {
             $this->contentUpdater = new ContentUpdater(
+                $this->getSearchHandlerMock(),
                 $this->getContentGatewayMock(),
                 $this->getConverterRegistryMock()
             );
