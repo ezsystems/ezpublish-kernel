@@ -229,7 +229,7 @@ class UserHandler implements UserHandlerInterface
             throw new NotFound( 'User', $userId );
 
         $policies = array();
-        $this->getPermissionsForObject( $content, 4, $policies );// @deprecated Roles assigned to user
+        $this->getPermissionsForObject( $list[0], 4, $policies );// @deprecated Roles assigned to user
 
         // crawl up path on all locations
         foreach ( $content->locations as $location )
