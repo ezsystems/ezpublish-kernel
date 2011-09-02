@@ -15,6 +15,24 @@ use ezp\Base\BinaryRepository,
 
 class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Binary Repository instance
+     * @var \ezp\Base\BinaryRepository
+     */
+    protected $binaryRepository;
+
+    /**
+     * Test image file
+     * @var string
+     */
+    protected $imageInputPath;
+
+    /**
+     * Repository file available for testing
+     * @var BinaryFile
+     */
+    protected $testFile;
+
     public function setUp()
     {
         $this->binaryRepository = new BinaryRepository( 'inmemory' );
@@ -270,23 +288,5 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         if ( ini_get( "allow_url_fopen" ) != 1 )
             $this->markTestSkipped( "allow_url_fopen must be 'On' for this test." );
     }
-
-    /**
-     * Binary Repository instance
-     * @var \ezp\Base\BinaryRepository
-     */
-    protected $binaryRepository;
-
-    /**
-     * Test image file
-     * @var string
-     */
-    protected $imageInputPath;
-
-    /**
-     * Repository file available for testing
-     * @var BinaryFile
-     */
-    protected $testFile;
 }
 ?>
