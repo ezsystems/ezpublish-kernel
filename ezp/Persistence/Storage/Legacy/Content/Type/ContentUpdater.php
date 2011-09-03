@@ -141,15 +141,4 @@ class ContentUpdater
         $criterion = new Criterion\ContentTypeId( $contentTypeId );
         return $this->searchHandler->find( $criterion );
     }
-
-    /**
-     * Publishes the content type in new version
-     *
-     * @param mixed $contentTypeId
-     * @return void
-     */
-    public function publish( $contentTypeId )
-    {
-        throw new \RuntimeException( 'Not implemented, yet.' );
-    }
 }
