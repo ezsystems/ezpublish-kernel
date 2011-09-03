@@ -384,4 +384,36 @@ class ContentHandler implements ContentHandlerInterface
             )
         );
     }
+
+    /**
+     * Loads relations from $contentId. Optionally, loads only those with $type.
+     *
+     * @param int $contentId Source Content ID
+     * @param int|null $contentVersion Source Content Version, null if not specified
+     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @return \ezp\Persistence\Content\Relation[]
+     */
+    public function loadRelations( $contentId, $contentVersion = null, $type = null )
+    {
+        $filter = array( "sourceContentId" => $contentId );
+        if ( $contentVersion !== null )
+            $filter["sourceContentVersion"] = $contentVersion;
+
+        $relations = $this->backend->find( "Content\\Relation", $filter );
+
+        if ( $type === null )
+            return $relations;
+
+        foreach ( $relations as $key => $relation )
+        {
+            // Is there a bit present in $type not appearing in $relation->type?
+            if ( ~$relation->type & $type )
+            {
+                // In such case, remove the result from the array
+                unset( $relations[$key] );
+            }
+        }
+
+        return $relations;
+    }
 }
