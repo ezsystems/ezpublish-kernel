@@ -55,6 +55,7 @@ class AddField extends Action
      *
      * @param Content $content
      * @return void
+     * @TODO Handle external field data
      */
     public function apply( Content $content )
     {

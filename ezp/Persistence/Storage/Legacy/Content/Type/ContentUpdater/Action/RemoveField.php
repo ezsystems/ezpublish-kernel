@@ -43,9 +43,18 @@ class RemoveField extends Action
      *
      * @param Content $content
      * @return void
+     * @TODO Handle external field data.
      */
     public function apply( Content $content )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        foreach ( $content->version->fields as $field )
+        {
+            if ( $field->fieldDefinitionId == $this->fieldDefinition->id )
+            {
+                $this->contentGateway->deleteField(
+                    $field->id, $field->versionNo
+                );
+            }
+        }
     }
 }

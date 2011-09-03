@@ -430,6 +430,18 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Deletes the field with the given $fieldId
+     *
+     * @param int $fieldId
+     * @param int $version
+     * @return void
+     */
+    public function deleteField( $fieldId, $version )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Deletes all fields of $contentId in all versions
      *
      * @param int $contentId

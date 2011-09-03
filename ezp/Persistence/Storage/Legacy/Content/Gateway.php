@@ -103,6 +103,15 @@ abstract class Gateway
     abstract public function deleteRelations( $contentId );
 
     /**
+     * Deletes the field with the given $fieldId
+     *
+     * @param int $fieldId
+     * @param int $version
+     * @return void
+     */
+    abstract public function deleteField( $fieldId, $version );
+
+    /**
      * Deletes all fields of $contentId in all versions
      *
      * @param int $contentId
