@@ -438,7 +438,24 @@ class EzcDatabase extends Gateway
      */
     public function deleteField( $fieldId, $version )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $query->bindValue( $fieldId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $query->bindValue( $version, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
     }
 
     /**

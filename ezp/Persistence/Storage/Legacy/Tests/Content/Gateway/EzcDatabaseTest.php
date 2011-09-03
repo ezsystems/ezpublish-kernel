@@ -467,6 +467,35 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteField
+     */
+    public function testDeleteField()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $beforeCount = $this->countContentFields();
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->deleteField( 8, 1 );
+
+        $this->assertEquals(
+            $beforeCount - 1,
+            $this->countContentFields()
+        );
+
+        $this->assertQueryResult(
+            array(),
+            $this->getDatabaseHandler()->createSelectQuery()
+                ->select( '*' )
+                ->from( 'ezcontentobject_attribute' )
+                ->where( 'id=8 AND version=1' )
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteFields
      */
     public function testDeleteFields()
