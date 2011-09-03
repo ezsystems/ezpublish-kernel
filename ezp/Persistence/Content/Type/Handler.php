@@ -181,7 +181,7 @@ interface Handler
     /**
      * Update content objects
      *
-     * Updates content objects, depending on the changed field definition.
+     * Updates content objects, depending on the changed field definitions.
      *
      * A content type has a state which tells if its content objects yet have
      * been adapted.
@@ -189,11 +189,8 @@ interface Handler
      * Flags the content type as updated.
      *
      * @param mixed $contentTypeId
-     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return void
-     * @todo Is it correct that this refers to a $fieldDefinitionId instead of 
-     *       a $typeId?
      */
-    public function updateContentObjects( $contentTypeId, $status, $fieldDefinitionId );
+    public function publish( $contentTypeId );
 }
 ?>

@@ -372,7 +372,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * Update content objects
      *
-     * Updates content objects, depending on the changed field definition.
+     * Updates content objects, depending on the changed field definitions.
      *
      * A content type has a state which tells if its content objects yet have
      * been adapted.
@@ -381,10 +381,8 @@ class Handler implements BaseContentTypeHandler
      *
      * @param mixed $contentTypeId
      * @return void
-     * @todo Is it correct that this refers to a $fieldDefinitionId instead of
-     *       a $typeId?
      */
-    public function updateContentObjects( $contentTypeId, $status, $fieldDefinitionId )
+    public function publish( $contentTypeId )
     {
         throw new \RuntimeException( "Not implemented, yet." );
     }
