@@ -212,6 +212,19 @@ class Service extends BaseService
     }
 
     /**
+     * Loads content relations from its id ($contentId)
+     *
+     * @todo Implement it (should be similar to listVersions())
+     *       and use it for $content->relations lazy collection
+     * @param int $contentId
+     * @param int|null $version
+     */
+    public function loadRelations( $contentId, $version = null )
+    {
+        //$this->handler->contentHandler()->loadRelations();
+    }
+
+    /**
      * Sends $content to trash
      *
      * @param \ezp\Content $content
