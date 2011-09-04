@@ -203,4 +203,14 @@ abstract class Gateway
      * @return void
      */
     abstract public function deleteGroupAssignementsForType( $typeId, $version );
+
+    /**
+     * Publishes the Type with $typeId from $sourceVersion to 0, including its
+     * fields
+     *
+     * @param int $typeId
+     * @param int $sourceVersion
+     * @return void
+     */
+    abstract public function publishTypeAndFields( $typeId, $sourceVersion );
 }

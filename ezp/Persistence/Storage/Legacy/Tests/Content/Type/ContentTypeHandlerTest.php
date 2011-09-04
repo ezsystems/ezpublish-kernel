@@ -30,6 +30,20 @@ use ezp\Persistence\Content\Type,
 class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 {
     /**
+     * Gateway mock
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     */
+    protected $gatewayMock;
+
+    /**
+     * Mapper mock
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Mapper
+     */
+    protected $mapperMock;
+
+    /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::__construct
      */
@@ -825,15 +839,51 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::publish
+     */
+    public function testPublish()
+    {
+        $handler = new Handler(
+            ($gatewayMock = $this->getGatewayMock() ),
+            $this->getMapperMock()
+        );
+
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteType' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 0 )
+            );
+        $gatewayMock->expects( $this->once() )
+            ->method( 'deleteFieldDefinitionsForType' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 0 )
+            );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'publishTypeAndFields' )
+            ->with( $this->equalTo( 23 ), $this->equalTo( 1 ) );
+
+        $handler->publish( 23 );
+    }
+
+    /**
      * Returns a gateway mock
      *
      * @return \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
      */
     protected function getGatewayMock()
     {
-        return $this->getMockForAbstractClass(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Gateway'
-        );
+        if ( !isset( $this->gatewayMock ) )
+        {
+            $this->gatewayMock = $this->getMockForAbstractClass(
+                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Gateway'
+            );
+        }
+        return $this->gatewayMock;
     }
 
     /**
@@ -843,13 +893,17 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      */
     protected function getMapperMock( $methods = array() )
     {
-        return $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Mapper',
-            $methods,
-            array(),
-            '',
-            false
-        );
+        if ( !isset( $this->mapperMock ) )
+        {
+            $this->mapperMock = $this->getMock(
+                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Mapper',
+                $methods,
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->mapperMock;
     }
 
     /**

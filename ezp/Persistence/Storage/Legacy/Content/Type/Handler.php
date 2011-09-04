@@ -384,7 +384,11 @@ class Handler implements BaseContentTypeHandler
      */
     public function publish( $contentTypeId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $this->contentTypeGateway->deleteType( $contentTypeId, 0 );
+        $this->contentTypeGateway->deleteFieldDefinitionsForType(
+            $contentTypeId, 0
+        );
+        $this->contentTypeGateway->publishTypeAndFields( $contentTypeId, 1 );
     }
 }
 ?>

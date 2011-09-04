@@ -1020,6 +1020,19 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Publishes the Type with $typeId from $sourceVersion to 0, including its
+     * fields
+     *
+     * @param int $typeId
+     * @param int $sourceVersion
+     * @return void
+     */
+    public function publishTypeAndFields( $typeId, $sourceVersion )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
+
+    /**
      * Creates an array of select columns for $tableName.
      *
      * @param string $tableName
