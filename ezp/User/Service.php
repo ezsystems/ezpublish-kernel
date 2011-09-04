@@ -329,10 +329,50 @@ class Service extends BaseService
     }
 
     /**
+     * @param \ezp\User\Group $group
+     * @param \ezp\User\Role $role
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If group is already contains role
+     */
+    public function assignRole( Group $group, Role $role )
+    {
+        $this->handler->userHandler()->assignRole( $group->id, $role->id );
+
+        $roles = $group->getRoles();
+        // Do not add if not loaded lazy loaded collection as it will duplicate object
+        if ( !$roles instanceof Lazy || $roles->isLoaded() )
+        {
+            $roles[] = $role;
+            $group->setState( array( 'roles' => $roles ) );
+        }
+
+        $role->getState( 'properties' )->groupIds[] = $group->id;
+    }
+
+    /**
+     * @param \ezp\User\Group $group
+     * @param \ezp\User\Role $role
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If group does not contain role
+     */
+    public function unAssignRole( Group $group, Role $role )
+    {
+        $this->handler->userHandler()->unAssignRole( $group->id, $role->id );
+
+        $roles = $group->getRoles();
+        // Do not remove if not loaded lazy loaded collection as it will duplicate object
+        if ( !$roles instanceof Lazy || $roles->isLoaded() )
+        {
+            unset( $roles[$roles->indexOf( $role )] );
+            $group->setState( array( 'roles' => $roles ) );
+        }
+
+        $role->getState( 'properties' )->groupIds = array_values( array_diff( $role->groupIds, array( $group->id ) ) );
+    }
+
+    /**
      * Add a policy to a persisted role
      *
-     * @param Role $role
-     * @param Policy $policy
+     * @param \ezp\User\Role $role
+     * @param \ezp\User\Policy $policy
      */
     public function addPolicy( Role $role, Policy $policy )
     {
@@ -343,8 +383,8 @@ class Service extends BaseService
     /**
      * Remove a policy from a persisted role
      *
-     * @param Role $role
-     * @param Policy $policy
+     * @param \ezp\User\Role $role
+     * @param \ezp\User\Policy $policy
      */
     public function removePolicy( Role $role, Policy $policy )
     {
@@ -368,6 +408,7 @@ class Service extends BaseService
 
     /**
      * @param \ezp\Persistence\User $vo
+     * @param \ezp\Content $content
      * @return \ezp\User
      */
     protected function buildUser( UserValueObject $vo, Content $content )

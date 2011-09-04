@@ -405,6 +405,72 @@ class ServiceTest extends BaseServiceTest
     }
 
     /**
+     * Test service function for assigning role
+     *
+     * @covers \ezp\User\Service::assignRole
+     */
+    public function testAssignRole()
+    {
+        $service = $this->repository->getUserService();
+        $group = $service->loadGroup( 12 );//Administrator users
+
+        $do = $service->createRole( $this->getRole() );
+        $service->assignRole( $group, $do );
+
+        self::assertEquals( array( 12 ), $do->groupIds );
+        self::assertEquals( 1, count( $group->getRoles() ) );
+    }
+
+    /**
+     * Test service function for assigning role
+     *
+     * @covers \ezp\User\Service::assignRole
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     */
+    public function testAssignRoleExistingRole()
+    {
+        $service = $this->repository->getUserService();
+        $group = $service->loadGroup( 12 );//Administrator users
+
+        $do = $service->createRole( $this->getRole() );
+        $service->assignRole( $group, $do );
+        $service->assignRole( $group, $do );
+    }
+
+    /**
+     * Test service function for assigning role
+     *
+     * @covers \ezp\User\Service::unAssignRole
+     */
+    public function testUnAssignRole()
+    {
+        $service = $this->repository->getUserService();
+        $group = $service->loadGroup( 12 );//Administrator users
+
+        $do = $service->createRole( $this->getRole() );
+        $service->assignRole( $group, $do );
+        $service->unAssignRole( $group, $do );
+
+        self::assertEquals( array(), $do->groupIds );
+        self::assertEquals( 0, count( $group->getRoles() ) );
+    }
+
+    /**
+     * Test service function for assigning role
+     *
+     * @covers \ezp\User\Service::unAssignRole
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     */
+    public function testUnAssignRoleExistingRole()
+    {
+        $service = $this->repository->getUserService();
+        $group = $service->loadGroup( 12 );//Administrator users
+
+        $do = $service->createRole( $this->getRole() );
+        $service->unAssignRole( $group, $do );
+    }
+
+    /**
      * Test service function for adding policy on a role
      *
      * @covers \ezp\User\Service::addPolicy
