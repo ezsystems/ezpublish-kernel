@@ -1029,7 +1029,49 @@ class EzcDatabase extends Gateway
      */
     public function publishTypeAndFields( $typeId, $sourceVersion )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createUpdateQuery();
+        $query->update(
+            $this->dbHandler->quoteTable( 'ezcontentclass' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'version' ),
+            $query->bindValue( 0, null, \PDO::PARAM_INT )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $query->bindValue( $typeId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $query->bindValue( $sourceVersion, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        $query = $this->dbHandler->createUpdateQuery();
+        $query->update(
+            $this->dbHandler->quoteTable( 'ezcontentclass_attribute' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'version' ),
+            $query->bindValue( 0, null, \PDO::PARAM_INT )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclass_id' ),
+                    $query->bindValue( $typeId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $query->bindValue( $sourceVersion, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $stmt = $query->prepare();
+        $stmt->execute();
     }
 
     /**

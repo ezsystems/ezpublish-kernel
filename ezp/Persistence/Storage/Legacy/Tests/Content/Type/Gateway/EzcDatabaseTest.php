@@ -1091,6 +1091,36 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::publishTypeAndFields
+     */
+    public function testPublishTypeAndFields()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/type_to_publish.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway->publishTypeAndFields( 1, 1 );
+
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $this->getDatabaseHandler()->createSelectQuery()
+                ->select( 'COUNT( * )' )
+                ->from( 'ezcontentclass' )
+                ->where( 'id = 1 AND version = 0' )
+        );
+
+        $this->assertQueryResult(
+            array( array( 5 ) ),
+            $this->getDatabaseHandler()->createSelectQuery()
+                ->select( 'COUNT( * )' )
+                ->from( 'ezcontentclass_attribute' )
+                ->where( 'contentclass_id = 1 AND version = 0' )
+        );
+    }
+
+    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
