@@ -52,7 +52,7 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater::apply
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
      */
     public function testApply()
     {
