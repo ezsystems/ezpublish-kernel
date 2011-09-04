@@ -376,11 +376,21 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * Update content objects
+     *
+     * Updates content objects, depending on the changed field definitions.
+     *
+     * A content type has a state which tells if its content objects yet have
+     * been adapted.
+     *
+     * Flags the content type as updated.
+     *
+     * @todo Implementing it
+     * @param mixed $contentTypeId
+     * @return void
      */
-    public function updateContentObjects( $contentTypeId, $status, $fieldDefinitionId )
+    public function publish( $contentTypeId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( "Not implemented, yet." );
     }
 }
-?>
