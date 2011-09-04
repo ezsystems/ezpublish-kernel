@@ -44,7 +44,6 @@ return array(
         ),
     ),
     'ezcontentclass_attribute' => array(
-        // loaded
         array(
             'id' => 4,
             'contentclass_id' => 1,

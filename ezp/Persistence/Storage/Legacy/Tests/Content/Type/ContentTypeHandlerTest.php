@@ -853,7 +853,38 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testPublish()
     {
-        $handler = $this->getHandler();
+        $handler = $this->getPartlyMockedHandler( array( 'load' ) );
+
+        $handler->expects( $this->exactly( 2 ) )
+            ->method( 'load' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->logicalOr(
+                    $this->equalTo( 0 ),
+                    $this->equalTo( 1 )
+                )
+            )->will(
+                $this->returnValue( new Type() )
+            );
+
+        $updater = $this->getContentUpdaterMock();
+        $updater->expects( $this->once() )
+            ->method( 'determineActions' )
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content\\Type'
+                ),
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content\\Type'
+                )
+            )->will( $this->returnValue( array() ) );
+
+        $updater->expects( $this->once() )
+            ->method( 'applyUpdates' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( array() )
+            );
 
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects( $this->once() )
@@ -887,6 +918,25 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             $this->getGatewayMock(),
             $this->getMapperMock(),
             $this->getContentUpdaterMock()
+        );
+    }
+
+    /**
+     * Returns a handler to test with $methods mocked
+     *
+     * @param array $methods
+     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Handler
+     */
+    protected function getPartlyMockedHandler( array $methods )
+    {
+        return $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
+            $methods,
+            array(
+                $this->getGatewayMock(),
+                $this->getMapperMock(),
+                $this->getContentUpdaterMock()
+            )
         );
     }
 

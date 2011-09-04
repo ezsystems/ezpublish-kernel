@@ -397,6 +397,12 @@ class Handler implements BaseContentTypeHandler
      */
     public function publish( $contentTypeId )
     {
+        $fromType = $this->load( $contentTypeId, 0 );
+        $toType   = $this->load( $contentTypeId, 1 );
+
+        $actions = $this->contentUpdater->determineActions( $fromType, $toType );
+        $this->contentUpdater->applyUpdates( $contentTypeId, $actions  );
+
         $this->contentTypeGateway->deleteType( $contentTypeId, 0 );
         $this->contentTypeGateway->deleteFieldDefinitionsForType(
             $contentTypeId, 0
