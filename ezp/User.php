@@ -59,19 +59,19 @@ class User extends Model implements GroupAbleInterface
      *
      * @var \ezp\User\Role[]
      */
-    protected $roles = array();
+    protected $roles;
 
     /**
      * Assigned and inherited policies (via assigned and inherited roles)
      *
      * @var \ezp\User\Policy[]
      */
-    protected $policies = array();
+    protected $policies;
 
     /**
      * @var \ezp\User\Group[] The Groups user is assigned to
      */
-    protected $groups = array();
+    protected $groups;
 
     /**
      * Creates and setups User object
@@ -82,6 +82,9 @@ class User extends Model implements GroupAbleInterface
     {
         $this->properties = new UserValue( array( 'id' => $id ) );
         $this->content = (object)array( 'locations' => array() );
+        $this->roles = new TypeCollection( 'ezp\\User\\Role' );
+        $this->policies = new TypeCollection( 'ezp\\User\\Policy' );
+        $this->groups = new TypeCollection( 'ezp\\User\\Group' );
     }
 
     /**

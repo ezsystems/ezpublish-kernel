@@ -235,7 +235,6 @@ class ServiceTest extends BaseServiceTest
         $service = $this->repository->getUserService();
         $adminGroup = $service->loadGroup( 12 );
         $anonymousUser = $service->load( 10 );
-        self::assertEquals( 1, count( $anonymousUser->getGroups() ) );
 
         $service->assignGroup( $adminGroup, $anonymousUser );
         self::assertEquals( 2, count( $anonymousUser->getGroups() ) );
@@ -254,7 +253,6 @@ class ServiceTest extends BaseServiceTest
         $service = $this->repository->getUserService();
         $adminGroup = $service->loadGroup( 12 );
         $anonymousUser = $service->load( 10 );
-        self::assertEquals( 1, count( $anonymousUser->getGroups() ) );
 
         $service->assignGroup( $adminGroup, $anonymousUser );
         self::assertEquals( 2, count( $anonymousUser->getGroups() ) );
@@ -272,7 +270,6 @@ class ServiceTest extends BaseServiceTest
         $service = $this->repository->getUserService();
         $adminGroup = $service->loadGroup( 12 );
         $anonymousUser = $service->load( 10 );
-        self::assertEquals( 1, count( $anonymousUser->getGroups() ) );
 
         $service->assignGroup( $adminGroup, $anonymousUser );
         self::assertEquals( 2, count( $anonymousUser->getGroups() ) );
@@ -293,7 +290,6 @@ class ServiceTest extends BaseServiceTest
         $service = $this->repository->getUserService();
         $adminGroup = $service->loadGroup( 12 );
         $anonymousUser = $service->load( 10 );
-        self::assertEquals( 1, count( $anonymousUser->getGroups() ) );
 
         $service->unAssignGroup( $adminGroup, $anonymousUser );
     }

@@ -8,7 +8,8 @@
  */
 
 namespace ezp\User;
-use ezp\Base\Configuration,
+use ezp\Base\Collection\Type as TypeCollection,
+    ezp\Base\Configuration,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
     ezp\Base\ModelInterface,
@@ -55,7 +56,7 @@ class Group implements GroupAbleInterface, ModelInterface, Observable
     /**
      * @var \ezp\User\Group|null The Roles assigned to Group
      */
-    protected $roles = array();
+    protected $roles;
 
     /**
      * Creates and setups User object
@@ -67,6 +68,7 @@ class Group implements GroupAbleInterface, ModelInterface, Observable
     public function __construct( Content $content )
     {
         $this->content = $content;
+        $this->roles = new TypeCollection( 'ezp\\User\\Role' );
     }
 
     /**

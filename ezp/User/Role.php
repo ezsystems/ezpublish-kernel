@@ -42,7 +42,7 @@ class Role extends Model
     /**
      * @var \ezp\User\Policy[]
      */
-    protected $policies = array();
+    protected $policies;
 
     /**
      * Creates and setups User object
@@ -50,6 +50,7 @@ class Role extends Model
     public function __construct()
     {
         $this->properties = new RoleValue();
+        $this->policies = new TypeCollection( 'ezp\\User\\Policy' );
     }
 
     /**
@@ -67,7 +68,7 @@ class Role extends Model
      */
     public function addPolicy( Policy $policy )
     {
-        if ( in_array( $policy, $this->policies, true ) )
+        if ( $this->policies->indexOf( $policy ) !== false )
             return;
 
         $this->policies[] = $policy;
@@ -81,7 +82,7 @@ class Role extends Model
      */
     public function removePolicy( Policy $policy )
     {
-        $key = array_search( $policy, $this->policies, true );
+        $key = $this->policies->indexOf( $policy );
         if ( $key === false )
             return;
 

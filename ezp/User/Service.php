@@ -12,6 +12,7 @@ use ezp\Base\Configuration,
     ezp\Base\Service as BaseService,
     ezp\Base\Proxy,
     ezp\Base\Collection\Lazy,
+    ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\NotFound,
@@ -203,7 +204,7 @@ class Service extends BaseService
             throw new Logic( 'assignGroup', 'can not assign $parent location to non created (persisted) $object' );
 
         $groups = $user->getGroups();
-        if ( in_array( $group, (array) $groups, true ) )
+        if ( $groups->indexOf( $group ) !== false )
             throw new Logic( 'assignGroup', 'can not assign group that is already assigned' );
 
         $newLocation = $content->addParent( $group->getState( 'content' )->mainLocation );
@@ -231,7 +232,7 @@ class Service extends BaseService
             throw new Logic( 'unAssignGroup', 'can not remove $group to non created (persisted) $user' );
 
         $groups = $user->getGroups();
-        $key = array_search( $group, (array) $groups, true );
+        $key = $groups->indexOf( $group );
         if ( $key === false )
             throw new Logic( 'unAssignGroup', 'can not remove $group that is not part of $user->groups' );
 
@@ -442,7 +443,7 @@ class Service extends BaseService
         $do->setState(
             array(
                 "properties" => $vo,
-                "policies" => $policies,
+                "policies" => new TypeCollection( 'ezp\\User\\Policy', $policies ),
             )
         );
         return $do;
