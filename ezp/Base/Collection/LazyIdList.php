@@ -83,6 +83,22 @@ class LazyIdList extends ArrayObject implements Collection
     }
 
     /**
+     * Returns the first index at which a given element can be found in the array, or false if it is not present.
+     *
+     * Uses strict comparison.
+     *
+     * @param mixed $item
+     * @return int|string|false False if nothing was found
+     */
+    public function indexOf( $item )
+    {
+        foreach ( $this as $key => $value )
+            if ( $value === $item )
+                return $key;
+        return false;
+    }
+
+    /**
      * Overrides offsetGet to lazy load item
      *
      * @internal
