@@ -17,6 +17,7 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+    ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater,
     ezp\Persistence\Storage\Legacy\Exception;
 
 /**
@@ -38,15 +39,27 @@ class Handler implements BaseContentTypeHandler
     protected $mapper;
 
     /**
+     * Content updater
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater
+     */
+    protected $contentUpdater;
+
+    /**
      * Creates a new content type handler.
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\Type\Gateway $contentTypeGateway
-     * @param Mapper $mapper
+     * @param \ezp\Persistence\Storage\Legacy\Content\Type\Mapper $mapper
+     * @param \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater $contentUpdater
      */
-    public function __construct( Gateway $contentTypeGateway, Mapper $mapper )
+    public function __construct(
+        Gateway $contentTypeGateway,
+        Mapper $mapper,
+        ContentUpdater $contentUpdater )
     {
         $this->contentTypeGateway = $contentTypeGateway;
         $this->mapper = $mapper;
+        $this->contentUpdater = $contentUpdater;
     }
 
     /**

@@ -87,6 +87,13 @@ class RepositoryHandler implements HandlerInterface
     protected $sectionHandler;
 
     /**
+     * Content gateway
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
+     */
+    protected $contentGateway;
+
+    /**
      * Creates a new repository handler.
      *
      * The $dsn is a data source name as expected by the Zeta Components
@@ -122,10 +129,7 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->contentHandler ) )
         {
             $this->contentHandler = new Content\Handler(
-                new Content\Gateway\EzcDatabase(
-                    $this->dbHandler,
-                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler )
-                ),
+                $this->getContentGateway(),
                 $this->locationHandler(),
                 new Content\Mapper(
                     $this->getLocationMapper(),
@@ -135,6 +139,23 @@ class RepositoryHandler implements HandlerInterface
             );
         }
         return $this->contentHandler;
+    }
+
+    /**
+     * Returns a content gateway
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Gateway
+     */
+    protected function getContentGateway()
+    {
+        if ( !isset( $this->contentGateway ) )
+        {
+            $this->contentGateway = new Content\Gateway\EzcDatabase(
+                $this->dbHandler,
+                new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler )
+            );
+        }
+        return $this->contentGateway;
     }
 
     /**
@@ -246,7 +267,12 @@ class RepositoryHandler implements HandlerInterface
         {
             $this->contentTypeHandler = new Type\Handler(
                 new Type\Gateway\EzcDatabase( $this->dbHandler ),
-                new Type\Mapper( $this->getFieldValueConverterRegistry() )
+                new Type\Mapper( $this->getFieldValueConverterRegistry() ),
+                new Type\ContentUpdater(
+                    $this->searchHandler(),
+                    $this->getContentGateway(),
+                    $this->getFieldValueConverterRegistry()
+                )
             );
         }
         return $this->contentTypeHandler;
