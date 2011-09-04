@@ -30,7 +30,6 @@ class ContentHandlerRelationTest extends HandlerTest
     protected $content;
 
     /**
-     *
      * @var int
      */
     protected $contentId;
@@ -39,6 +38,11 @@ class ContentHandlerRelationTest extends HandlerTest
      * @var \ezp\Content[]
      */
     protected $contentToDelete = array();
+
+    /**
+     * @var int
+     */
+    protected $lastRelationId;
 
     /**
      * Setup the HandlerTest.
@@ -65,7 +69,14 @@ class ContentHandlerRelationTest extends HandlerTest
         $this->contentToDelete[] = $this->content;
         $this->contentId = $this->content->id;
 
-        $this->repositoryHandler->contentHandler()->addRelation( 1, null, $this->contentId, Relation::COMMON | Relation::EMBED );
+        $this->lastRelationId = $this->repositoryHandler
+            ->contentHandler()
+            ->addRelation(
+                1,
+                null,
+                $this->contentId,
+                Relation::COMMON | Relation::EMBED
+            )->id;
     }
 
     /**
@@ -98,7 +109,7 @@ class ContentHandlerRelationTest extends HandlerTest
     public function testAddRelation1()
     {
         $relation = $this->repositoryHandler->contentHandler()->addRelation( 14, null, 10, Relation::COMMON );
-        $this->assertEquals( 1, $relation->id );
+        $this->assertEquals( $this->lastRelationId + 1, $relation->id );
         $this->assertEquals( 14, $relation->sourceContentId );
         $this->assertNull( $relation->sourceContentVersion );
         $this->assertEquals( 10, $relation->destinationContentId );
@@ -112,7 +123,7 @@ class ContentHandlerRelationTest extends HandlerTest
     public function testAddRelation2()
     {
         $relation = $this->repositoryHandler->contentHandler()->addRelation( 14, 1, 10, Relation::COMMON );
-        $this->assertEquals( 1, $relation->id );
+        $this->assertEquals( $this->lastRelationId + 1, $relation->id );
         $this->assertEquals( 14, $relation->sourceContentId );
         $this->assertEquals( 1, $relation->sourceContentVersion );
         $this->assertEquals( 10, $relation->destinationContentId );
