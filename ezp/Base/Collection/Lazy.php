@@ -64,6 +64,20 @@ class Lazy extends TypeCollection
     }
 
     /**
+     * Hint to know if collection has been loaded (including partly loaded)
+     *
+     * Useful for lazy collection to signal that a collection has not been loaded thus
+     * skipping updating a collection as it will be correct the moment it is loaded anyway.
+     *
+     * @access private This is private api for use in service layer!
+     * @return bool
+     */
+    public function isLoaded()
+    {
+        return $this->primary === false;
+    }
+
+    /**
      * Load the objects this proxy object represent
      *
      * @return \ezp\Base\Model
