@@ -56,7 +56,7 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
      */
     public function testApply()
     {
-        $action  = $this->getRemoveFieldAction();
+        $action = $this->getRemoveFieldAction();
         $content = $this->getContentFixture();
 
         $this->getContentGatewayMock()->expects( $this->once() )
@@ -77,13 +77,13 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     protected function getContentFixture()
     {
         $fieldNoRemove = new Content\Field();
-        $fieldNoRemove->id                = 2;
-        $fieldNoRemove->versionNo         = 13;
+        $fieldNoRemove->id = 2;
+        $fieldNoRemove->versionNo = 13;
         $fieldNoRemove->fieldDefinitionId = 23;
 
         $fieldRemove = new Content\Field();
-        $fieldRemove->id                = 3;
-        $fieldRemove->versionNo         = 13;
+        $fieldRemove->id = 3;
+        $fieldRemove->versionNo = 13;
         $fieldRemove->fieldDefinitionId = 42;
 
         $content = new Content();
@@ -119,9 +119,9 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFieldDefinitionFixture()
     {
-        $fieldDef               = new Content\Type\FieldDefinition();
-        $fieldDef->id           = 42;
-        $fieldDef->fieldType    = 'ezstring';
+        $fieldDef = new Content\Type\FieldDefinition();
+        $fieldDef->id = 42;
+        $fieldDef->fieldType = 'ezstring';
         $fieldDef->defaultValue = new Content\FieldValue();
         return $fieldDef;
     }

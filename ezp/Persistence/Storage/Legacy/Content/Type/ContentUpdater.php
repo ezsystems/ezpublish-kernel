@@ -50,8 +50,8 @@ class ContentUpdater
         Content\Gateway $contentGateway,
         Content\FieldValue\Converter\Registry $converterRegistry )
     {
-        $this->searchHandler     = $searchHandler;
-        $this->contentGateway    = $contentGateway;
+        $this->searchHandler = $searchHandler;
+        $this->contentGateway = $contentGateway;
         $this->converterRegistry = $converterRegistry;
     }
 

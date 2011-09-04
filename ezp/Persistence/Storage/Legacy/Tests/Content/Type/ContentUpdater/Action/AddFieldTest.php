@@ -69,7 +69,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
      */
     public function testApply()
     {
-        $action  = $this->getAddFieldAction();
+        $action = $this->getAddFieldAction();
         $content = $this->getContentFixture();
 
         $this->getFieldValueConverterMock()
@@ -158,9 +158,9 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
      */
     protected function getFieldDefinitionFixture()
     {
-        $fieldDef               = new Content\Type\FieldDefinition();
-        $fieldDef->id           = 42;
-        $fieldDef->fieldType    = 'ezstring';
+        $fieldDef = new Content\Type\FieldDefinition();
+        $fieldDef->id = 42;
+        $fieldDef->fieldType = 'ezstring';
         $fieldDef->defaultValue = new Content\FieldValue();
         return $fieldDef;
     }
@@ -172,11 +172,11 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
      */
     public function getFieldReference()
     {
-        $field                    = new Content\Field();
+        $field = new Content\Field();
         $field->fieldDefinitionId = 42;
-        $field->type              = 'ezstring';
-        $field->value             = new Content\FieldValue();
-        $field->versionNo         = 3;
+        $field->type = 'ezstring';
+        $field->value = new Content\FieldValue();
+        $field->versionNo = 3;
         return $field;
     }
 

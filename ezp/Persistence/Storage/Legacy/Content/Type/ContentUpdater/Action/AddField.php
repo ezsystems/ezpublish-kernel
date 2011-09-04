@@ -45,8 +45,8 @@ class AddField extends Action
         FieldDefinition $fieldDef,
         Converter $converter )
     {
-        $this->contentGateway      = $contentGateway;
-        $this->fieldDefinition     = $fieldDef;
+        $this->contentGateway = $contentGateway;
+        $this->fieldDefinition = $fieldDef;
         $this->fieldValueConverter = $converter;
     }
 
@@ -84,12 +84,12 @@ class AddField extends Action
      */
     protected function createField( Content $content )
     {
-        $field                    = new Content\Field();
+        $field = new Content\Field();
         $field->fieldDefinitionId = $this->fieldDefinition->id;
-        $field->type              = $this->fieldDefinition->fieldType;
-        $field->value             = clone $this->fieldDefinition->defaultValue;
-        $field->versionNo         = $content->version->versionNo;
-        // $field->language  = ...;
+        $field->type = $this->fieldDefinition->fieldType;
+        $field->value = clone $this->fieldDefinition->defaultValue;
+        $field->versionNo = $content->version->versionNo;
+        // $field->language = ...;
         return $field;
     }
 }

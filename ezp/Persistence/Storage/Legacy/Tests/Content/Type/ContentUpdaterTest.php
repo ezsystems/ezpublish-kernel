@@ -73,7 +73,7 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     public function testDetermineActions()
     {
         $fromType = $this->getFromTypeFixture();
-        $toType   = $this->getToTypeFixture();
+        $toType = $this->getToTypeFixture();
 
         $converterRegMock = $this->getConverterRegistryMock();
         $converterRegMock->expects( $this->once() )
@@ -140,11 +140,11 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
                 )
             );
 
-         $actions = array( $actionA, $actionB );
+        $actions = array( $actionA, $actionB );
 
-         $content = new Content();
+        $content = new Content();
 
-         $this->getSearchHandlerMock()
+        $this->getSearchHandlerMock()
             ->expects( $this->once() )
             ->method( 'find' )
             ->with(
@@ -165,12 +165,12 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     {
         $type = new Type();
 
-        $fieldA            = new Type\FieldDefinition();
-        $fieldA->id        = 1;
+        $fieldA = new Type\FieldDefinition();
+        $fieldA->id = 1;
         $fieldA->fieldType = 'ezstring';
 
-        $fieldB            = new Type\FieldDefinition();
-        $fieldB->id        = 2;
+        $fieldB = new Type\FieldDefinition();
+        $fieldB->id = 2;
         $fieldB->fieldType = 'ezstring';
 
         $type->fieldDefinitions = array(
@@ -191,8 +191,8 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
 
         unset( $type->fieldDefinitions[0] );
 
-        $fieldC            = new Type\FieldDefinition();
-        $fieldC->id        = 3;
+        $fieldC = new Type\FieldDefinition();
+        $fieldC->id = 3;
         $fieldC->fieldType = 'ezstring';
 
         $type->fieldDefinitions[] = $fieldC;
