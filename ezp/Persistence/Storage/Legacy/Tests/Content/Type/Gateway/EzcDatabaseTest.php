@@ -149,12 +149,17 @@ class EzcDatabaseTest extends TestCase
                 'modifier_id',
                 'name'
             )
-            ->from( 'ezcontentclassgroup' )
-            ->where(
-                $q->expr->eq( 'id', 2 )
-            );
+            ->from( 'ezcontentclassgroup' );
         $this->assertQueryResult(
             array(
+                array(
+                    'id' => 1,
+                    'created' => 1031216928,
+                    'creator_id' => 14,
+                    'modified' => 1033922106,
+                    'modifier_id' => 14,
+                    'name' => 'Content',
+                ),
                 array(
                     'id' => 2,
                     'created' => 1031216941,
@@ -162,6 +167,14 @@ class EzcDatabaseTest extends TestCase
                     'modified' => 1311454096,
                     'modifier_id' => 23,
                     'name' => 'UpdatedGroup',
+                ),
+                array(
+                    'id' => 3,
+                    'created' => 1032009743,
+                    'creator_id' => 14,
+                    'modified' => 1033922120,
+                    'modifier_id' => 14,
+                    'name' => 'Media',
                 ),
             ),
             $q

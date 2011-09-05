@@ -168,7 +168,6 @@ class EzcDatabase extends Gateway
      * Inserts the given $group.
      *
      * @return mixed Group ID
-     * @todo PDO->lastInsertId() might require a seq name (Oracle?).
      */
     public function insertGroup( Group $group )
     {
@@ -202,7 +201,6 @@ class EzcDatabase extends Gateway
      *
      * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
      * @return void
-     * @FIXME: Group update updates all Groups due to missing WHERE clause
      */
     public function updateGroup( GroupUpdateStruct $group )
     {
@@ -218,6 +216,11 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'name' ),
             $q->bindValue( $group->identifier )
+        )->where(
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $q->bindValue( $group->id, null, \PDO::PARAM_INT )
+            )
         );
 
         $stmt = $q->prepare();
