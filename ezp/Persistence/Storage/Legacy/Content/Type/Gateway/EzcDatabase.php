@@ -342,7 +342,9 @@ class EzcDatabase extends Gateway
                 ->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass_name' ) )
                 ->set( 'contentclass_id', $query->bindValue( $type->id ) )
                 ->set( 'contentclass_version', $query->bindValue( $type->status ) )
-                ->set( 'language_id', $query->bindValue( $mapping[$language] | ( $alwaysAvailable === $language ? 1 : 0 ) ) )
+                ->set( 'language_id', $query->bindValue(
+                    $mapping[$language] | ( $alwaysAvailable === $language ? 1 : 0 )
+                ) )
                 ->set( 'language_locale', $query->bindValue( $language ) )
                 ->set( 'name', $query->bindValue( $name ) );
             $query->prepare()->execute();
