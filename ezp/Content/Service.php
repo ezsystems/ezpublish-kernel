@@ -28,7 +28,8 @@ use ezp\Base\Service as BaseService,
     ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
-    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
+    ezp\Persistence\Content\Version as VersionValue;
 
 /**
  * Content service, used for Content operations
@@ -144,13 +145,7 @@ class Service extends BaseService
 
         foreach ( $contentHandler->listVersions( $contentId ) as $versionVO )
         {
-            $version = new Version( $content );
-            $version->setState(
-                array(
-                    "properties" => $versionVO,
-                    "fields" => new FieldCollection( $this, $version )
-                )
-            );
+            $version = $this->buildVersionDomainObject( $content, $versionVO );
             $list[$versionVO->versionNo] = $version;
         }
 
@@ -212,7 +207,7 @@ class Service extends BaseService
         return $relation->setState(
             array(
                 "properties" => $this->handler->contentHandler()->addRelation( $struct )
-            )
+                )
         );
     }
 
@@ -264,6 +259,30 @@ class Service extends BaseService
     }
 
     /**
+     * Creates a new draft version from $content in $srcVersion.
+     *
+     * Copies all fields from $content in $srcVersion and creates a new
+     * version of the referred Content from it.
+     * If $srcVersion (default value) is null, last version from $content will be taken
+     *
+     * @param \ezp\Content $content
+     * @param \ezp\Content\Version $srcVersion
+     * @return \ezp\Persistence\Content\Version
+     * @todo Language support
+     * @todo User support
+     */
+    public function createDraftFromVersion( Content $content, Version $srcVersion = null )
+    {
+        if ( !isset( $srcVersion ) )
+            $srcVersion = $content->currentVersion;
+
+        $newVersionVo = $this->handler->contentHandler()->createDraftFromVersion( $content->id, $srcVersion->versionNo );
+        $version = $this->buildVersionDomainObject( $content, $newVersionVo );
+        $content->versions[$newVersionVo->versionNo] = $version;
+        return $version;
+    }
+
+    /**
      * Build a content Domain Object from a content Value object returned by Persistence
      * @param \ezp\Persistence\Content $vo
      * @return \ezp\Content
@@ -299,5 +318,25 @@ class Service extends BaseService
         }
 
         return $content;
+    }
+
+    /**
+     * Builds a version Domain Object from its value object returned by persistence
+     *
+     * @param \ezp\Content $content
+     * @param \ezp\Persistence\Content\Version $versionVo
+     * @return \ezp\Content\Version
+     */
+    protected function buildVersionDomainObject( Content $content, VersionValue $versionVo )
+    {
+        $version = new Version( $content );
+        $version->setState(
+            array(
+                'properties' => $versionVo,
+                'fields' => new FieldCollection( $this, $version )
+            )
+        );
+
+        return $version;
     }
 }

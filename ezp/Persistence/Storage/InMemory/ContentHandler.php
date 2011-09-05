@@ -98,9 +98,50 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see ezp\Persistence\Content\Handler
      */
-    public function createDraftFromVersion( $contentId, $srcVersion = false )
+    public function createDraftFromVersion( $contentId, $srcVersion )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $aVersion = $this->backend->find(
+            'Content\\Version',
+            array(
+                'contentId' => $contentId,
+                'versionNo' => $srcVersion
+            )
+        );
+        if ( empty( $aVersion ) )
+            throw new NotFound( "Version", "contentId: $contentId // versionNo: $srcVersion" );
+
+        // Create new version
+        $newVersionNo = $this->getLastVersionNumber( $contentId ) + 1;
+        $newVersion = $this->backend->create(
+            'Content\\Version',
+            array(
+                'modified' => time(),
+                // @todo: implement real user
+                'creatorId' => $aVersion[0]->creatorId,
+                'created' => time(),
+                'contentId' => $contentId,
+                'state' => Version::STATUS_DRAFT,
+                'versionNo' => $newVersionNo
+            )
+        );
+
+        // Duplicate fields
+        // @todo: language support
+        foreach (
+            $this->backend->find(
+                'Content\\Field',
+                // Using internal _contentId since it's not directly exposed by Persistence
+                array( '_contentId' => $contentId, 'versionNo' => $srcVersion )
+            ) as $field
+        )
+        {
+            $newVersion->fields[] = $this->backend->create(
+                'Content\\Field',
+                array( 'versionNo' => $newVersionNo, '_contentId' => $contentId ) + (array)$field
+            );
+        }
+
+        return $newVersion;
     }
 
     /**
@@ -431,5 +472,32 @@ class ContentHandler implements ContentHandlerInterface
     public function loadReverseRelations( $destinationContentId, $type = null )
     {
         throw new \Exception( "@TODO: Not implemented yet." );
+    }
+
+    /**
+     * Returns last version number for content identified by $contentId
+     *
+     * @param int $contentId
+     * @return int
+     */
+    private function getLastVersionNumber( $contentId )
+    {
+        $versionNumbers = array();
+        $allVersions = $this->backend->find(
+            'Content\\Version',
+            array(
+                'contentId' => $contentId
+            )
+        );
+
+        if ( empty( $allVersions ) )
+            throw new NotFound( "Version", "contentId: $contentId" );
+
+        foreach ( $allVersions as $version )
+        {
+            $versionNumbers[] = $version->versionNo;
+        }
+
+        return max( $versionNumbers );
     }
 }

@@ -42,6 +42,7 @@ use ezp\Base\Model,
  *                $myFirstVersion = $content->versions[1];
  *                $myThirdVersion = $content->versions[3];
  *                </code>
+ * @property-read \ezp\Content\Version $currentVersion Current version of content
  * @property-read \ezp\Content\Location[] $locations
  *                Locations for content. Iterable, countable and Array-accessible (with numeric indexes)
  *                First location referenced in the collection represents the main location for content
@@ -107,6 +108,7 @@ class Content extends Model
         //'translations' => true,
         'relations' => false,
         'reversedRelations' => false,
+        'currentVersion' => false
     );
 
     /**

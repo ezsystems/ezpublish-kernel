@@ -39,14 +39,14 @@ interface Handler
     public function create( CreateStruct $content );
 
     /**
-     * Creates a new draft version from $contentId in $version.
+     * Creates a new draft version from $contentId in $srcVersion number.
      *
      * Copies all fields from $contentId in $srcVersion and creates a new
      * version of the referred Content from it.
      *
-     * @param int $contentId
-     * @param int|bool $srcVersion
-     * @return \ezp\Persistence\Content\Content
+     * @param mixed $contentId
+     * @param int $srcVersion
+     * @return \ezp\Persistence\Content\Version
      */
     public function createDraftFromVersion( $contentId, $srcVersion );
 

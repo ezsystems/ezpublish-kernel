@@ -94,6 +94,26 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
+     * This tests ensures that version domain object is properly built with version value object
+     * returned by repository handler
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::buildVersionDomainObject
+     */
+    public function testBuildVersionDomainObject()
+    {
+        $content = $this->service->load( 1 );
+        $versionVo = $content->versions[1]->getState( 'properties' );
+
+        $refService = new ReflectionObject( $this->service );
+        $refMethod = $refService->getMethod( 'buildVersionDomainObject' );
+        $refMethod->setAccessible( true );
+        $do = $refMethod->invoke( $this->service, $content, $versionVo );
+        self::assertSame( $versionVo, $do->getState( 'properties' ) );
+        self::assertInstanceOf( 'ezp\\Content\\Field\\Collection', $do->fields );
+    }
+
+    /**
      * @group contentService
      * @covers \ezp\Content\Service::create
      */
@@ -445,6 +465,7 @@ class ContentTest extends BaseServiceTest
     /**
      * Tests the addRelation operation
      *
+     * @group contentService
      * @covers \ezp\Content\Service::addRelation
      */
     public function testAddRelation()
@@ -459,5 +480,72 @@ class ContentTest extends BaseServiceTest
         $this->assertEquals( 10, $relation->sourceContentId );
         $this->assertNull( $relation->sourceContentVersion );
         $this->assertEquals( 14, $relation->destinationContentId );
+    }
+
+    /**
+     * Tests the createDraftFromVersion operation
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::createDraftFromVersion
+     */
+    public function testCreateDraftFromVersion()
+    {
+        $content = $this->service->load( 1 );
+        $srcVersion = $content->currentVersion;
+
+        // Get current max version number (not necessaribly $content->currentVersionNo
+        // since content may have drafts
+        $aVersionNo = array();
+        foreach ( $content->versions as $version )
+        {
+            $aVersionNo[] = $version->versionNo;
+        }
+        $maxVersionNo = max( $aVersionNo );
+
+        // Try first without argument (current version)
+        $draft = $this->service->createDraftFromVersion( $content );
+        self::assertEquals( $maxVersionNo + 1, $draft->versionNo );
+        self::assertSame( Content::STATUS_DRAFT, $draft->state );
+        self::assertSame( count( $srcVersion->fields ), count( $draft->fields ) );
+        foreach ( $srcVersion->fields as $identifier => $field )
+        {
+            self::assertTrue( isset( $draft->fields[$identifier] ) );
+            self::assertSame(
+                $maxVersionNo + 1,
+                $draft->fields[$identifier]->versionNo,
+                'Created draft fields version number must have been incremented from original version'
+            );
+            self::assertSame( $field->type, $draft->fields[$identifier]->type );
+            self::assertEquals(
+                $field->value,
+                $draft->fields[$identifier]->value,
+                'Created draft fields must have same value as origin'
+            );
+            self::assertEquals( $field->fieldDefinition->id, $draft->fields[$identifier]->fieldDefinition->id );
+        }
+
+        // Now try to create a new draft from newly created draft
+        $maxVersionNo = $draft->versionNo;
+        $srcVersion = $draft;
+        $draft = $this->service->createDraftFromVersion( $content, $srcVersion );
+        self::assertEquals( $maxVersionNo + 1, $draft->versionNo );
+        self::assertSame( Content::STATUS_DRAFT, $draft->state );
+        self::assertSame( count( $srcVersion->fields ), count( $draft->fields ) );
+        foreach ( $srcVersion->fields as $identifier => $field )
+        {
+            self::assertTrue( isset( $draft->fields[$identifier] ) );
+            self::assertSame(
+                $maxVersionNo + 1,
+                $draft->fields[$identifier]->versionNo,
+                'Created draft fields version number must have been incremented from original version'
+            );
+            self::assertSame( $field->type, $draft->fields[$identifier]->type );
+            self::assertEquals(
+                $field->value,
+                $draft->fields[$identifier]->value,
+                'Created draft fields must have same value as origin'
+            );
+            self::assertEquals( $field->fieldDefinition->id, $draft->fields[$identifier]->fieldDefinition->id );
+        }
     }
 }
