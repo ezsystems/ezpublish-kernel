@@ -344,12 +344,46 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::loadRolesByGroupId
      */
+    public function testLoadRolesByGroupId()
+    {
+        $service = $this->repository->getUserService();
+        self::assertEquals( array(), $service->loadRolesByGroupId( 4 ) );
+
+        $group = $service->loadGroup( 4 );//Users
+
+        $do = $service->createRole( $this->getRole() );
+        $service->assignRole( $group, $do );
+
+        self::assertEquals( array( 4 ), $do->groupIds );
+        self::assertEquals( 1, count( $group->getRoles() ) );
+
+        $roles = $service->loadRolesByGroupId( 4 );
+        self::assertEquals( 1, count( $roles ) );
+        self::assertEquals( $do->id, $roles[0]->id );
+    }
+
+    /**
+     * Test service function for loading roles
+     *
+     * @covers \ezp\User\Service::loadRolesByGroupId
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
     public function testLoadRolesByGroupIdNotFound()
     {
         $service = $this->repository->getUserService();
         self::assertEquals( array(), $service->loadRolesByGroupId( 999 ) );
+    }
+
+    /**
+     * Test service function for loading roles
+     *
+     * @covers \ezp\User\Service::loadRolesByGroupId
+     * @expectedException \ezp\Base\Exception\NotFoundWithType
+     */
+    public function testLoadRolesByGroupIdNotFoundWithType()
+    {
+        $service = $this->repository->getUserService();
         self::assertEquals( array(), $service->loadRolesByGroupId( 14 ) );
-        self::assertEquals( array(), $service->loadRolesByGroupId( 10 ) );
     }
 
     /**
@@ -463,12 +497,47 @@ class ServiceTest extends BaseServiceTest
      * Test service function for loading policies by user id
      *
      * @covers \ezp\User\Service::loadPoliciesByUserId
+     */
+    public function testLoadPoliciesByUserId()
+    {
+        $service = $this->repository->getUserService();
+        self::assertEquals( array(), $service->loadPoliciesByUserId( 10 ) );
+
+        $group = $service->loadGroup( 4 );//Users
+
+        $do = $service->createRole( $this->getRole() );
+        $service->assignRole( $group, $do );
+
+        self::assertEquals( array( 4 ), $do->groupIds );
+        self::assertEquals( 1, count( $group->getRoles() ) );
+
+        $policies = $service->loadPoliciesByUserId( 10 );
+        self::assertEquals( 3, count( $policies ) );
+        self::assertEquals( $do->id, $policies[0]->roleId );
+    }
+
+    /**
+     * Test service function for loading policies by user id
+     *
+     * @covers \ezp\User\Service::loadPoliciesByUserId
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadPoliciesByUserIdNotFound()
     {
         $service = $this->repository->getUserService();
-        self::assertEquals( array(), $service->loadPoliciesByUserId( 999 ) );
+        $service->loadPoliciesByUserId( 999 );
+    }
+
+    /**
+     * Test service function for loading policies by user id
+     *
+     * @covers \ezp\User\Service::loadPoliciesByUserId
+     * @expectedException \ezp\Base\Exception\NotFoundWithType
+     */
+    public function testLoadPoliciesByUserIdNotFoundWithType()
+    {
+        $service = $this->repository->getUserService();
+        $service->loadPoliciesByUserId( 42 );
     }
 
     /**
@@ -500,7 +569,14 @@ class ServiceTest extends BaseServiceTest
         $group = $service->loadGroup( 12 );//Administrator users
 
         $do = $service->createRole( $this->getRole() );
-        $service->assignRole( $group, $do );
+        try
+        {
+            $service->assignRole( $group, $do );
+        }
+        catch ( \Exception $e )
+        {
+            self::assertTrue( false, 'Did not except an exception here, got:' . $e->getMessage() );
+        }
         $service->assignRole( $group, $do );
     }
 

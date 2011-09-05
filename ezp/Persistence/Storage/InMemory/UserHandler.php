@@ -144,9 +144,18 @@ class UserHandler implements UserHandlerInterface
      *
      * @param mixed $groupId
      * @return \ezp\Persistence\User\Role[]
+     * @throws \ezp\Base\Exception\NotFound If user (it's content object atm) is not found
+     * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
      */
     public function loadRolesByGroupId( $groupId )
     {
+        $content = $this->backend->load( 'Content', $groupId );
+
+        if ( !$content )
+            throw new NotFound( 'Group', $groupId );
+        if ( $content->typeId != 3 )
+             throw new NotFoundWithType( "Content with TypeId:3", $groupId );
+
         return $this->backend->find(
             'User\\Role',
             array( 'groupIds' => $groupId ),
@@ -212,7 +221,7 @@ class UserHandler implements UserHandlerInterface
      * @param mixed $userId
      * @return \ezp\Persistence\User\Policy[]
      * @throws \ezp\Base\Exception\NotFound If user (it's content object atm) is not found
-     * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
+     * @throws \ezp\Base\Exception\NotFoundWithType If user is not of user Content Type
      */
     public function loadPoliciesByUserId( $userId )
     {
@@ -262,6 +271,7 @@ class UserHandler implements UserHandlerInterface
      * @throws \ezp\Base\Exception\NotFoundWithType
      * @param \ezp\Persistence\Content $content
      * @param array $policies
+     * @throws \ezp\Base\Exception\NotFoundWithType If $content is not of user_group Content Type
      */
     protected function getPermissionsForObject( Content $content, $typeId, array &$policies )
     {

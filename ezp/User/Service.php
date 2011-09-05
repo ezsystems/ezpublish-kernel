@@ -295,6 +295,7 @@ class Service extends BaseService
      *
      * @param mixed $id The user [group] id that returned roles are assigned to
      * @return \ezp\User\Role[]
+     * @throws \ezp\Base\Exception\NotFound If role is not found
      */
     public function loadRolesByGroupId( $id )
     {
@@ -356,12 +357,13 @@ class Service extends BaseService
      *
      * @param mixed $id The user [group] id that returned roles are assigned to
      * @return \ezp\User\Policy[]
+     * @throws \ezp\Base\Exception\NotFound If user is not found
      */
     public function loadPoliciesByUserId( $id )
     {
         $policies = $this->handler->userHandler()->loadPoliciesByUserId( $id );
         foreach ( $policies as &$value )
-            $value = $this->buildPolicy( $value, new Proxy( $this, $vo->roleId, 'loadRole' ) );
+            $value = $this->buildPolicy( $value, new Proxy( $this, $value->roleId, 'loadRole' ) );
         return $policies;
     }
 
