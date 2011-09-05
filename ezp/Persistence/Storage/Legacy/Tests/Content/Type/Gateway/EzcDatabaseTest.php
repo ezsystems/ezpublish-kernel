@@ -161,7 +161,7 @@ class EzcDatabaseTest extends TestCase
                     'creator_id' => 14,
                     'modified' => 1311454096,
                     'modifier_id' => 23,
-                    'name' => 'UpdatedGroupName',
+                    'name' => 'UpdatedGroup',
                 ),
             ),
             $q
