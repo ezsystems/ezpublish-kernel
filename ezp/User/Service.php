@@ -84,7 +84,6 @@ class Service extends BaseService
      * Delete a User object by id
      *
      * @param mixed $id
-     * @todo What about content object?
      */
     public function delete( $id )
     {
@@ -329,46 +328,6 @@ class Service extends BaseService
     }
 
     /**
-     * @param \ezp\User\Group $group
-     * @param \ezp\User\Role $role
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If group is already contains role
-     */
-    public function assignRole( Group $group, Role $role )
-    {
-        $this->handler->userHandler()->assignRole( $group->id, $role->id );
-
-        $roles = $group->getRoles();
-        // Do not add if not loaded lazy loaded collection as it will duplicate object
-        if ( !$roles instanceof Lazy || $roles->isLoaded() )
-        {
-            $roles[] = $role;
-            $group->setState( array( 'roles' => $roles ) );
-        }
-
-        $role->getState( 'properties' )->groupIds[] = $group->id;
-    }
-
-    /**
-     * @param \ezp\User\Group $group
-     * @param \ezp\User\Role $role
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If group does not contain role
-     */
-    public function unAssignRole( Group $group, Role $role )
-    {
-        $this->handler->userHandler()->unAssignRole( $group->id, $role->id );
-
-        $roles = $group->getRoles();
-        // Do not remove if not loaded lazy loaded collection as it will duplicate object
-        if ( !$roles instanceof Lazy || $roles->isLoaded() )
-        {
-            unset( $roles[$roles->indexOf( $role )] );
-            $group->setState( array( 'roles' => $roles ) );
-        }
-
-        $role->getState( 'properties' )->groupIds = array_values( array_diff( $role->groupIds, array( $group->id ) ) );
-    }
-
-    /**
      * Add a policy to a persisted role
      *
      * @param \ezp\User\Role $role
@@ -404,6 +363,46 @@ class Service extends BaseService
         foreach ( $policies as &$value )
             $value = $this->buildPolicy( $value, new Proxy( $this, $vo->roleId, 'loadRole' ) );
         return $policies;
+    }
+
+    /**
+     * @param \ezp\User\Group $group
+     * @param \ezp\User\Role $role
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If group is already contains role
+     */
+    public function assignRole( Group $group, Role $role )
+    {
+        $this->handler->userHandler()->assignRole( $group->id, $role->id );
+
+        $roles = $group->getRoles();
+        // Do not add if not loaded lazy loaded collection as it will duplicate object
+        if ( !$roles instanceof Lazy || $roles->isLoaded() )
+        {
+            $roles[] = $role;
+            $group->setState( array( 'roles' => $roles ) );
+        }
+
+        $role->getState( 'properties' )->groupIds[] = $group->id;
+    }
+
+    /**
+     * @param \ezp\User\Group $group Can also take instance of user atm
+     * @param \ezp\User\Role $role
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If group does not contain role
+     */
+    public function unAssignRole( GroupAbleInterface $group, Role $role )
+    {
+        $this->handler->userHandler()->unAssignRole( $group->id, $role->id );
+
+        $roles = $group->getRoles();
+        // Do not remove if not loaded lazy loaded collection as it will duplicate object
+        if ( !$roles instanceof Lazy || $roles->isLoaded() )
+        {
+            unset( $roles[$roles->indexOf( $role )] );
+            $group->setState( array( 'roles' => $roles ) );
+        }
+
+        $role->getState( 'properties' )->groupIds = array_values( array_diff( $role->groupIds, array( $group->id ) ) );
     }
 
     /**
