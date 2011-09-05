@@ -219,4 +219,13 @@ return array(
             'version' => 0
         ),
     ),
+    'ezcontentclass_name' => array(
+         array(
+            'contentclass_id' => 1,
+            'contentclass_version' => 1,
+            'language_id' => 3,
+            'language_locale' => 'eng-US',
+            'name' => 'Folder'
+        )
+    ),
 );

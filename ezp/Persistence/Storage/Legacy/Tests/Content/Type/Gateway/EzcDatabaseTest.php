@@ -1202,6 +1202,14 @@ class EzcDatabaseTest extends TestCase
                 ->from( 'ezcontentclass_attribute' )
                 ->where( 'contentclass_id = 1 AND version = 0' )
         );
+
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $this->getDatabaseHandler()->createSelectQuery()
+                ->select( 'COUNT( * )' )
+                ->from( 'ezcontentclass_name' )
+                ->where( 'contentclass_id = 1 AND contentclass_version = 0' )
+        );
     }
 
     /**

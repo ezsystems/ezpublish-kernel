@@ -1118,6 +1118,28 @@ class EzcDatabase extends Gateway
 
         $stmt = $query->prepare();
         $stmt->execute();
+
+        $query = $this->dbHandler->createUpdateQuery();
+        $query->update(
+            $this->dbHandler->quoteTable( 'ezcontentclass_name' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'contentclass_version' ),
+            $query->bindValue( 0, null, \PDO::PARAM_INT )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclass_id' ),
+                    $query->bindValue( $typeId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentclass_version' ),
+                    $query->bindValue( $sourceVersion, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $stmt = $query->prepare();
+        $stmt->execute();
     }
 
     /**
