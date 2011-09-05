@@ -17,7 +17,8 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\Criterion\Operator,
     ezp\Content\Version,
     ezp\Base\Exception\NotFound,
-    RuntimeException;
+    RuntimeException,
+    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * @see ezp\Persistence\Content\Handler
@@ -343,61 +344,62 @@ class ContentHandler implements ContentHandlerInterface
      * Creates a relation between $sourceContentId in $sourceContentVersion
      * and $destinationContentId with a specific $type.
      *
-     * @todo Handle Attribute relation
      * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
      *
-     * @param int $sourceContentId Source Content ID
-     * @param int|null $sourceContentVersion Source Content Version, null if not specified
-     * @param int $destinationContentId Destination Content ID
-     * @param int $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @param  \ezp\Persistence\Content\Relation\CreateStruct $relation
+     * @return \ezp\Persistence\Content\Relation
      */
-    public function addRelation( $sourceContentId, $sourceContentVersion, $destinationContentId, $type )
+    public function addRelation( RelationCreateStruct $relation )
     {
         // Ensure source content exists
-        $sourceContent = $this->backend->find( "Content", array( "id" => $sourceContentId ) );
+        $sourceContent = $this->backend->find( "Content", array( "id" => $relation->sourceContentId ) );
 
         if ( empty( $sourceContent ) )
-            throw new NotFound( "Content", "id: $sourceContentId" );
+            throw new NotFound( "Content", "id: {$relation->sourceContentId}" );
 
         // Ensure source content exists if version is specified
-        if ( $sourceContentVersion !== null )
+        if ( $relation->sourceContentVersion !== null )
         {
-            $version = $this->backend->find( "Content\\Version", array( "contentId" => $sourceContentId, "versionNo" => $sourceContentVersion ) );
+            $version = $this->backend->find( "Content\\Version", array( "contentId" => $relation->sourceContentId, "versionNo" => $relation->sourceContentVersion ) );
 
             if ( empty( $version ) )
-                throw new NotFound( "Content\\Version", "contentId: $sourceContentId, versionNo: $sourceContentVersion" );
+                throw new NotFound( "Content\\Version", "contentId: {$relation->sourceContentId}, versionNo: {$relation->sourceContentVersion}" );
         }
 
         // Ensure destination content exists
-        $destinationContent = $this->backend->find( "Content", array( "id" => $destinationContentId ) );
+        $destinationContent = $this->backend->find( "Content", array( "id" => $relation->destinationContentId ) );
 
         if ( empty( $destinationContent ) )
-            throw new NotFound( "Content", "id: $destinationContentId" );
+            throw new NotFound( "Content", "id: {$relation->destinationContentId}" );
 
-        return $this->backend->create(
-            "Content\\Relation", array(
-                "type" => $type,
-                "sourceContentId" => $sourceContentId,
-                "sourceContentVersion" => $sourceContentVersion,
-                "destinationContentId" => $destinationContentId,
-                "attributeId" => null,
-            )
-        );
+        return $this->backend->create( "Content\\Relation", (array) $relation );
     }
 
     /**
-     * Loads relations from $contentId. Optionally, loads only those with $type.
+     * Removes a relation by relation Id.
      *
-     * @param int $contentId Source Content ID
-     * @param int|null $contentVersion Source Content Version, null if not specified
+     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
+     *
+     * @param mixed $relationId
+     */
+    public function removeRelation( $relationId )
+    {
+        throw new \Exception( "@TODO: Not implemented yet." );
+    }
+
+    /**
+     * Loads relations from $sourceContentId. Optionally, loads only those with $type and $sourceContentVersion.
+     *
+     * @param mixed $sourceContentId Source Content ID
+     * @param mixed|null $sourceContentVersion Source Content Version, null if not specified
      * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
      * @return \ezp\Persistence\Content\Relation[]
      */
-    public function loadRelations( $contentId, $contentVersion = null, $type = null )
+    public function loadRelations( $sourceContentId, $sourceContentVersion = null, $type = null )
     {
-        $filter = array( "sourceContentId" => $contentId );
-        if ( $contentVersion !== null )
-            $filter["sourceContentVersion"] = $contentVersion;
+        $filter = array( "sourceContentId" => $sourceContentId );
+        if ( $sourceContentVersion !== null )
+            $filter["sourceContentVersion"] = $sourceContentVersion;
 
         $relations = $this->backend->find( "Content\\Relation", $filter );
 
@@ -415,5 +417,19 @@ class ContentHandler implements ContentHandlerInterface
         }
 
         return $relations;
+    }
+
+    /**
+     * Loads relations from $contentId. Optionally, loads only those with $type.
+     *
+     * Only loads relations against published versions.
+     *
+     * @param mixed $destinationContentId Destination Content ID
+     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @return \ezp\Persistence\Content\Relation[]
+     */
+    public function loadReverseRelations( $destinationContentId, $type = null )
+    {
+        throw new \Exception( "@TODO: Not implemented yet." );
     }
 }

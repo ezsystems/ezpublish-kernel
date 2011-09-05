@@ -13,7 +13,8 @@ use ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
     ezp\Persistence\Content\Criterion as AbstractCriterion,
-    ezp\Persistence\Content\RestrictedVersion;
+    ezp\Persistence\Content\RestrictedVersion,
+    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * The Content Handler interface defines content operations on the storage engine.
@@ -154,4 +155,45 @@ interface Handler
      * @throws \ezp\Base\Exception\NotFound If content or version is not found
      */
     public function loadFields( $contentId, $version );
+
+    /**
+     * Creates a relation between $sourceContentId in $sourceContentVersion
+     * and $destinationContentId with a specific $type.
+     *
+     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
+     *
+     * @param  \ezp\Persistence\Content\Relation\CreateStruct $relation
+     * @return \ezp\Persistence\Content\Relation
+     */
+    public function addRelation( RelationCreateStruct $relation );
+
+    /**
+     * Removes a relation by relation Id.
+     *
+     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
+     *
+     * @param mixed $relationId
+     */
+    public function removeRelation( $relationId );
+
+    /**
+     * Loads relations from $sourceContentId. Optionally, loads only those with $type and $sourceContentVersion.
+     *
+     * @param mixed $sourceContentId Source Content ID
+     * @param mixed|null $sourceContentVersion Source Content Version, null if not specified
+     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @return \ezp\Persistence\Content\Relation[]
+     */
+    public function loadRelations( $sourceContentId, $sourceContentVersion = null, $type = null );
+
+    /**
+     * Loads relations from $contentId. Optionally, loads only those with $type.
+     *
+     * Only loads relations against published versions.
+     *
+     * @param mixed $destinationContentId Destination Content ID
+     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @return \ezp\Persistence\Content\Relation[]
+     */
+    public function loadReverseRelations( $destinationContentId, $type = null );
 }

@@ -27,7 +27,8 @@ use ezp\Base\Service as BaseService,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     ezp\Persistence\Content\Criterion\ContentId,
-    ezp\Persistence\Content\Criterion\Operator;
+    ezp\Persistence\Content\Criterion\Operator,
+    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Content service, used for Content operations
@@ -199,14 +200,18 @@ class Service extends BaseService
      */
     public function addRelation( Relation $relation, Content $content, $version = null )
     {
+        $struct = $this->fillStruct( new RelationCreateStruct( array(
+                                                                   'sourceContentId' => $content->id,
+                                                                   'sourceContentVersion' => $version
+                                                               ) ),
+                                                               $relation,
+                                                               array(
+                                                                   'sourceContentVersion',
+                                                                   'sourceFieldDefinitionId'
+                                                               ) );
         return $relation->setState(
             array(
-                "properties" => $this->handler->contentHandler()->addRelation(
-                    $content->id,
-                    $version,
-                    $relation->destinationContentId,
-                    $relation->type
-                )
+                "properties" => $this->handler->contentHandler()->addRelation( $struct )
             )
         );
     }

@@ -15,7 +15,8 @@ use ezp\Persistence\Storage\Legacy\Content\Gateway,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\RestrictedVersion;
+    ezp\Persistence\Content\RestrictedVersion,
+    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * The Content Handler stores Content and ContentType objects.
@@ -208,7 +209,7 @@ class Handler implements BaseContentHandler
      */
     public function setState( $contentId, $state, $version )
     {
-        throw new Exception( "Not implemented yet." );
+        throw new \Exception( "@TODO: Not implemented yet." );
     }
 
     /**
@@ -224,7 +225,7 @@ class Handler implements BaseContentHandler
      */
     public function setObjectState( $contentId, $stateGroup, $state )
     {
-        throw new Exception( "Not implemented yet." );
+        throw new \Exception( "@TODO: Not implemented yet." );
     }
 
     /**
@@ -239,7 +240,7 @@ class Handler implements BaseContentHandler
      */
     public function getObjectState( $contentId, $stateGroup )
     {
-        throw new Exception( "Not implemented yet." );
+        throw new \Exception( "@TODO: Not implemented yet." );
     }
 
     /**
@@ -323,7 +324,7 @@ class Handler implements BaseContentHandler
      */
     public function copy( $contentId, $version )
     {
-        throw new Exception( "Not implemented yet." );
+        throw new \Exception( "@TODO: Not implemented yet." );
     }
 
     /**
@@ -336,7 +337,60 @@ class Handler implements BaseContentHandler
      */
     public function loadFields( $contentId, $version )
     {
-        throw new Exception( "Not implemented yet." );
+        throw new \Exception( "@TODO: Not implemented yet." );
+    }
+
+    /**
+     * Creates a relation between $sourceContentId in $sourceContentVersion
+     * and $destinationContentId with a specific $type.
+     *
+     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
+     *
+     * @param  \ezp\Persistence\Content\Relation\CreateStruct $relation
+     * @return \ezp\Persistence\Content\Relation
+     */
+    public function addRelation( RelationCreateStruct $relation )
+    {
+        throw new \Exception( "@TODO: Not implemented yet." );
+    }
+
+    /**
+     * Removes a relation by relation Id.
+     *
+     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
+     *
+     * @param mixed $relationId
+     */
+    public function removeRelation( $relationId )
+    {
+        throw new \Exception( "@TODO: Not implemented yet." );
+    }
+
+    /**
+     * Loads relations from $sourceContentId. Optionally, loads only those with $type and $sourceContentVersion.
+     *
+     * @param mixed $sourceContentId Source Content ID
+     * @param mixed|null $sourceContentVersion Source Content Version, null if not specified
+     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @return \ezp\Persistence\Content\Relation[]
+     */
+    public function loadRelations( $sourceContentId, $sourceContentVersion = null, $type = null )
+    {
+        throw new \Exception( "@TODO: Not implemented yet." );
+    }
+
+    /**
+     * Loads relations from $contentId. Optionally, loads only those with $type.
+     *
+     * Only loads relations against published versions.
+     *
+     * @param mixed $destinationContentId Destination Content ID
+     * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
+     * @return \ezp\Persistence\Content\Relation[]
+     */
+    public function loadReverseRelations( $destinationContentId, $type = null )
+    {
+        throw new \Exception( "@TODO: Not implemented yet." );
     }
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Relation class
+ * File containing the Relation CreateStruct class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,21 +8,14 @@
  *
  */
 
-namespace ezp\Persistence\Content;
+namespace ezp\Persistence\Content\Relation;
 use ezp\Persistence\ValueObject;
 
 /**
- * Class representing a relation between content.
+ * CreateStruct representing a relation between content.
  */
-class Relation extends ValueObject
+class CreateStruct extends ValueObject
 {
-    /**
-     * Id of the relation
-     *
-     * @var mixed
-     */
-    public $id;
-
     /**
      * Source Content ID
      *

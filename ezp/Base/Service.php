@@ -47,37 +47,38 @@ abstract class Service
      *
      * @param \ezp\Persistence\ValueObject $struct
      * @param \ezp\Base\Model $do
-     * @param array $skipProperties List of properties that should be skipped
+     * @param array $optionalProperties List of properties that is optional
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing, has a value of null
      *                                              and {@link setPropertyByConvention()} returns false.
      * @uses setPropertyByConvention()
      */
-    protected function fillStruct( ValueObject $struct, Model $do, array $skipProperties = array() )
+    protected function fillStruct( ValueObject $struct, Model $do, array $optionalProperties = array() )
     {
         $vo = $do->getState( 'properties' );
         foreach ( $struct as $property => $value )
         {
-            // skip property if mentioned in $skipProperties
-            if ( in_array( $property, $skipProperties ) )
-            {
-                continue;
-            }
             // set property value if there is one
-            else if ( isset( $vo->$property ) )
+            if ( isset( $vo->$property ) )
             {
                 $struct->$property = $vo->$property;
                 continue;
             }
+            // Struct contains default value
             else if ( $struct->$property !== null )
             {
-                continue;// Struct contains default value
+                continue;
             }
-
             // Try to set by convention, if not throw PropertyNotFound exception
-            if ( !$this->setPropertyByConvention( $struct, $property ) )
+            else if ( $this->setPropertyByConvention( $struct, $property ) )
             {
-                throw new PropertyNotFound( $property, get_class( $do ) );
+                continue;
             }
+            // continue if property was optional
+            else if ( in_array( $property, $optionalProperties ) )
+            {
+                continue;
+            }
+            throw new PropertyNotFound( $property, get_class( $do ) );
         }
         return $struct;
     }

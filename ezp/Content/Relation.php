@@ -16,10 +16,11 @@ use ezp\Content,
 /**
  * This class represents a Content Relation
  *
- * @property-read int $id
- * @property-read int $sourceContentId
- * @property-read int $sourceContentVersion
- * @property-read int $destinationContentId
+ * @property-read mixed $id
+ * @property-read mixed $sourceContentId
+ * @property-read id $sourceContentVersion
+ * @property-read mixed $sourceFieldDefinitionId
+ * @property-read mixed $destinationContentId
  * @property-read int $type Bitmask
  * @property-read \ezp\Content $content Associated Content object
  */
@@ -38,8 +39,15 @@ class Relation extends Model
         "id" => false,
         "sourceContentId" => true,
         "sourceContentVersion" => true,
+        "sourceFieldDefinitionId" => true,
         "destinationContentId" => false,
         "type" => false,
+    );
+
+    /**
+     * @var array List of dynamic properties on this object
+     */
+    protected $dynamicProperties = array(
         "content" => false,
     );
 
@@ -49,13 +57,6 @@ class Relation extends Model
      * @var \ezp\Content
      */
     protected $content;
-
-    /**
-     * Type bitmask
-     *
-     * @var int
-     */
-    protected $type;
 
     /**
      * Setups a Relation object
@@ -70,7 +71,7 @@ class Relation extends Model
 
         $this->properties = new RelationValue;
         $this->properties->destinationContentId = $content->id;
-        $this->type = $type;
+        $this->properties->type = $type;
         $this->content = $content;
     }
 
