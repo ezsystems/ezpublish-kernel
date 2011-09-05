@@ -418,6 +418,15 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'initial_language_id' ),
             $q->bindValue( $type->initialLanguageId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'sort_field' ),
+            $q->bindValue( $type->sortField, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'sort_order' ),
+            $q->bindValue( $type->sortOrder, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'always_available' ),
+            $q->bindValue( (int) $type->defaultAlwaysAvailable, null, \PDO::PARAM_INT )
         );
     }
 

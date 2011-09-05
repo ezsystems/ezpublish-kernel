@@ -13,6 +13,9 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
 
+    // Needed for $sortOrder and $sortField properties
+    ezp\Persistence\Content\Location,
+
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\CreateStruct,
     ezp\Persistence\Content\Type\FieldDefinition,
@@ -134,6 +137,10 @@ class MapperTest extends TestCase
         $struct->nameSchema = '<short_name|name>';
         $struct->isContainer = true;
         $struct->initialLanguageId = 2;
+        $struct->sortField = Location::SORT_FIELD_MODIFIED_SUBNODE;
+        $struct->sortOrder = Location::SORT_ORDER_ASC;
+        $struct->defaultAlwaysAvailable = true;
+
         $struct->groupIds = array(
             1,
         );
@@ -201,6 +208,9 @@ class MapperTest extends TestCase
         $type->nameSchema = '<short_name|name>';
         $type->isContainer = true;
         $type->initialLanguageId = 2;
+        $type->sortField = Location::SORT_FIELD_MODIFIED_SUBNODE;
+        $type->sortOrder = Location::SORT_ORDER_ASC;
+        $type->defaultAlwaysAvailable = true;
         $type->groupIds = array(
             1,
         );
@@ -265,7 +275,6 @@ class MapperTest extends TestCase
         );
 
         $this->assertPropertiesCorrect(
-            // "random" sample
             array(
                 'id' => 1,
                 'status' => 0,
@@ -288,6 +297,9 @@ class MapperTest extends TestCase
                 'isContainer' => true,
                 'initialLanguageId' => 2,
                 'groupIds' => array( 1 ),
+                'sortField' => 1,
+                'sortOrder' => 1,
+                'defaultAlwaysAvailable' => true,
             ),
             $types[0]
         );

@@ -154,6 +154,10 @@ class Mapper
         $type->nameSchema = $row['ezcontentclass_contentobject_name'];
         $type->isContainer = ( $row['ezcontentclass_is_container'] == 1 );
         $type->initialLanguageId = (int)$row['ezcontentclass_initial_language_id'];
+        $type->defaultAlwaysAvailable = ( $row['ezcontentclass_always_available'] == 1 );
+        $type->sortField = (int)$row['ezcontentclass_sort_field'];
+        $type->sortOrder = (int)$row['ezcontentclass_sort_order'];
+
         $type->groupIds = array();
         $type->fieldDefinitions = array();
 
@@ -243,6 +247,9 @@ class Mapper
         $type->initialLanguageId = $createStruct->initialLanguageId;
         $type->groupIds = $createStruct->groupIds;
         $type->fieldDefinitions = $createStruct->fieldDefinitions;
+        $type->defaultAlwaysAvailable = $createStruct->defaultAlwaysAvailable;
+        $type->sortField = $createStruct->sortField;
+        $type->sortOrder = $createStruct->sortOrder;
 
         return $type;
     }
@@ -272,6 +279,9 @@ class Mapper
         $createStruct->initialLanguageId = $type->initialLanguageId;
         $createStruct->groupIds = $type->groupIds;
         $createStruct->fieldDefinitions = $type->fieldDefinitions;
+        $createStruct->defaultAlwaysAvailable = $type->defaultAlwaysAvailable;
+        $createStruct->sortField = $type->sortField;
+        $createStruct->sortOrder = $type->sortOrder;
 
         return $createStruct;
     }

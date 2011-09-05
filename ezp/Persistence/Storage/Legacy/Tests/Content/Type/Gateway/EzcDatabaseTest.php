@@ -12,6 +12,9 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Tests\Content\Type\Gateway,
     ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase,
 
+    // For SORT_ORDER_* constants
+    ezp\Persistence\Content\Location,
+
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\UpdateStruct,
@@ -394,7 +397,7 @@ class EzcDatabaseTest extends TestCase
             array( 'remote_id', 'a3d405b81be900468eb153d774f4f0d2' ),
             array( 'serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}' ),
             array( 'serialized_name_list', 'a:3:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:6:"Folder";s:6:"eng-GB";s:11:"Folder (GB)";}' ),
-            array( 'sort_field', 1 ),
+            array( 'sort_field', 7 ),
             array( 'sort_order', 1 ),
             array( 'url_alias_name', '' ),
             array( 'version', '0' ),
@@ -499,6 +502,8 @@ class EzcDatabaseTest extends TestCase
         $type->nameSchema = '<short_name|name>';
         $type->isContainer = true;
         $type->initialLanguageId = 2;
+        $type->sortField = Location::SORT_FIELD_CLASS_NAME;
+        $type->sortOrder = Location::SORT_ORDER_ASC;
 
         return $type;
     }
@@ -817,8 +822,9 @@ class EzcDatabaseTest extends TestCase
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::updateType
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
+     * @dataProvider getTypeUpdateExpectations
      */
-    public function testUpdateType()
+    public function testUpdateType( $fieldName, $expectedValue )
     {
         $this->insertDatabaseFixture(
             __DIR__ . '/_fixtures/existing_types.php'
@@ -833,25 +839,43 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    // "random" sample
-                    'serialized_name_list' => 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"New Folder";}',
-                    'created' => '1024392098',
-                    'modifier_id' => '42',
-                    'remote_id' => 'foobar',
+                    $fieldName => $expectedValue
                 )
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select(
-                    'serialized_name_list',
-                    'created',
-                    'modifier_id',
-                    'remote_id'
+                    $fieldName
                 )->from( 'ezcontentclass' )
                 ->where( 'id = 1 AND version = 0' ),
-            'Inserted Type data incorrect'
+            "Incorrect value stored for '{$fieldName}'."
         );
+    }
 
+    /**
+     * Returns expected data after update
+     *
+     * Data provider for {@link testUpdateType()}.
+     *
+     * @return string[][]
+     */
+    public static function getTypeUpdateExpectations()
+    {
+        return array(
+            array( 'serialized_name_list', 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"New Folder";}' ),
+            array( 'serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}' ),
+            array( 'identifier', 'new_folder' ),
+            array( 'modified', '1311621548' ),
+            array( 'modifier_id', '42' ),
+            array( 'remote_id', 'foobar' ),
+            array( 'url_alias_name', 'some scheke' ),
+            array( 'contentobject_name', '<short_name>' ),
+            array( 'is_container', '0' ),
+            array( 'initial_language_id', '23' ),
+            array( 'sort_field', '3' ),
+            array( 'sort_order', '0' ),
+            array( 'always_available', '1' ),
+        );
     }
 
     /**
@@ -879,6 +903,9 @@ class EzcDatabaseTest extends TestCase
         $struct->nameSchema = '<short_name>';
         $struct->isContainer = false;
         $struct->initialLanguageId = 23;
+        $struct->sortField = 3;
+        $struct->sortOrder = Location::SORT_ORDER_DESC;
+        $struct->defaultAlwaysAvailable = true;
 
         return $struct;
     }

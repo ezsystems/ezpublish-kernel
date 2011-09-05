@@ -151,6 +151,13 @@ class CreateStruct extends ValueObject
     public $fieldDefinitions = array();
 
     /**
+     * TODO: Document.
+     *
+     * @var bool
+     */
+    public $defaultAlwaysAvailable;
+
+    /**
      * Performs a deep cloning.
      *
      * @return void
