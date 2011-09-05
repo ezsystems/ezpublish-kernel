@@ -29,6 +29,7 @@ use ezp\Base\Model,
  * @property string $nameSchema
  * @property bool $isContainer
  * @property int $initialLanguageId
+ * @property bool $defaultAlwaysAvailable
  * @property-read int[] $groupIds
  * @property Type\FieldDefinition[] $fields Appending items after it has been created has no effect, use TypeService->addFieldDefinition()
  * @property-read Type\Group[] $groups Appended items after it has been created has no effect, use TypeService->link()
@@ -54,6 +55,7 @@ class Type extends Model
         'isContainer' => true,
         'initialLanguageId' => true,
         'groupIds' => false,
+        'defaultAlwaysAvailable' => true,
     );
 
     /**

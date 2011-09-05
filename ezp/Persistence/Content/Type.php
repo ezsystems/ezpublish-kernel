@@ -177,6 +177,6 @@ class Type extends ValueObject
      *
      * @var bool
      */
-    public $defaultAlwaysAvailable;
+    public $defaultAlwaysAvailable = false;
 }
 ?>

@@ -155,7 +155,7 @@ class CreateStruct extends ValueObject
      *
      * @var bool
      */
-    public $defaultAlwaysAvailable;
+    public $defaultAlwaysAvailable = false;
 
     /**
      * Performs a deep cloning.
