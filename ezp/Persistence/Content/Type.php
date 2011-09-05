@@ -171,5 +171,12 @@ class Type extends ValueObject
      * @var \ezp\Persistence\Content\Type\FieldDefinition[]
      */
     public $fieldDefinitions = array();
+
+    /**
+     * TODO: Document.
+     *
+     * @var bool
+     */
+    public $defaultAlwaysAvailable;
 }
 ?>
