@@ -139,7 +139,7 @@ interface Handler
      * Copies all fields from $contentId in $version (or all versions if false)
      * to a new object which is returned. Version numbers are maintained.
      *
-     * @param int $contentId
+     * @param mixed $contentId
      * @param int|false $version Copy all versions if left false
      * @return \ezp\Persistence\Content
      * @throws \ezp\Base\Exception\NotFound If content or version is not found
