@@ -12,7 +12,6 @@ use ezp\Persistence\ValueObject;
 
 /**
  * @todo Do we need a FieldDefitinitionCreateStruct?
- * @todo What about the field "is_searchable" in the legacy storage?
  * @todo What about the "serialized_data_text" field in legacy storage?
  */
 class FieldDefinition extends ValueObject
@@ -100,5 +99,12 @@ class FieldDefinition extends ValueObject
      * @var \ezp\Persistence\Content\FieldValue
      */
     public $defaultValue;
+
+    /**
+     * TODO: Document
+     *
+     * @var bool
+     */
+    public $isSearchable;
 }
 ?>
