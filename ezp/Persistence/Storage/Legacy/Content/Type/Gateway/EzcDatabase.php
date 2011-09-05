@@ -321,13 +321,14 @@ class EzcDatabase extends Gateway
     /**
      * Inserts data into contentclass_name.
      *
-     * @param Type $type
+     * @param int $typeId
+     * @param int $typeStatus
+     * @param string[] $languages
      * @return void
      */
-    protected function insertTypeNameData( Type $type )
+    protected function insertTypeNameData( $typeId, $typeStatus, array $languages )
     {
         $alwaysAvailable = null;
-        $languages = $type->name;
         $mapping = $this->getLanguageMapping();
         if ( isset( $languages['always-available'] ) )
         {
@@ -340,8 +341,8 @@ class EzcDatabase extends Gateway
             $query = $this->dbHandler->createInsertQuery();
             $query
                 ->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass_name' ) )
-                ->set( 'contentclass_id', $query->bindValue( $type->id ) )
-                ->set( 'contentclass_version', $query->bindValue( $type->status ) )
+                ->set( 'contentclass_id', $query->bindValue( $typeId ) )
+                ->set( 'contentclass_version', $query->bindValue( $typeStatus ) )
                 ->set( 'language_id', $query->bindValue(
                     $mapping[$language] | ( $alwaysAvailable === $language ? 1 : 0 )
                 ) )
@@ -356,7 +357,6 @@ class EzcDatabase extends Gateway
      *
      * @param Type $createStruct
      * @return mixed Type ID
-     * @todo PDO->lastInsertId() might require a seq name (Oracle?).
      */
     public function insertType( Type $type )
     {
@@ -376,7 +376,7 @@ class EzcDatabase extends Gateway
         $q->prepare()->execute();
 
         $type->id = $this->dbHandler->lastInsertId();
-        $this->insertTypeNameData( $type );
+        $this->insertTypeNameData( $type->id, $type->status, $type->name );
 
         return $type->id;
     }
