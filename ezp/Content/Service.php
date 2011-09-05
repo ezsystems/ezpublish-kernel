@@ -263,6 +263,11 @@ class Service extends BaseService
         return $this->buildDomainObject( $this->handler->contentHandler()->copy( $content->id , $versionNo ) );
     }
 
+    /**
+     * Build a content Domain Object from a content Value object returned by Persistence
+     * @param \ezp\Persistence\Content $vo
+     * @return \ezp\Content
+     */
     protected function buildDomainObject( ContentValue $vo )
     {
         $content = new Content( new Type );
