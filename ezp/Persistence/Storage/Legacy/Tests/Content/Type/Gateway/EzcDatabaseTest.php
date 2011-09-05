@@ -866,6 +866,49 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteTypeNameData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertTypeNameData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::updateType
+     */
+    public function testUpdateTypeName()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+
+        $updateStruct = $this->getTypeUpdateFixture();
+
+        $gateway->updateType( 1, 0, $updateStruct );
+
+        $this->assertQueryResult(
+            array(
+                array(
+                    'contentclass_id' => 1,
+                    'contentclass_version' => 0,
+                    'language_id' => 3,
+                    'language_locale' => 'eng-US',
+                    'name' => 'New Folder'
+                ),
+                array(
+                    'contentclass_id' => 1,
+                    'contentclass_version' => 0,
+                    'language_id' => 4,
+                    'language_locale' => 'eng-GB',
+                    'name' => 'New Folder for you'
+                )
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( '*' )
+                ->from( 'ezcontentclass_name' )
+                ->where( 'contentclass_id = 1 AND contentclass_version = 0' )
+        );
+    }
+
+    /**
      * Returns expected data after update
      *
      * Data provider for {@link testUpdateType()}.
@@ -875,7 +918,7 @@ class EzcDatabaseTest extends TestCase
     public static function getTypeUpdateExpectations()
     {
         return array(
-            array( 'serialized_name_list', 'a:2:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"New Folder";}' ),
+            array( 'serialized_name_list', 'a:3:{s:16:"always-available";s:6:"eng-US";s:6:"eng-US";s:10:"New Folder";s:6:"eng-GB";s:18:"New Folder for you";}' ),
             array( 'serialized_description_list', 'a:2:{i:0;s:0:"";s:16:"always-available";b:0;}' ),
             array( 'identifier', 'new_folder' ),
             array( 'modified', '1311621548' ),
@@ -903,6 +946,7 @@ class EzcDatabaseTest extends TestCase
         $struct->name = array(
             'always-available' => 'eng-US',
             'eng-US' => 'New Folder',
+            'eng-GB' => 'New Folder for you',
         );
         $struct->description = array(
             0 => '',

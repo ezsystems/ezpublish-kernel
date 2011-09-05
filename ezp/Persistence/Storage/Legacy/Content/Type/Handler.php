@@ -140,9 +140,8 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param int $contentTypeId
      * @param int $status
-     * @todo Use constant for $status?
      */
-    public function load( $contentTypeId, $status = 0 )
+    public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
         $rows = $this->contentTypeGateway->loadTypeData(
             $contentTypeId, $status
@@ -156,7 +155,6 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
      * @return Type
-     * @todo Maintain contentclass_name
      */
     public function create( CreateStruct $createStruct )
     {

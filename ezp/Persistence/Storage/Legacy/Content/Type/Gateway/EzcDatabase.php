@@ -789,6 +789,32 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Deletes all name data for $typeId in $version.
+     *
+     * @param int $typeId
+     * @param int $typeStatus
+     * @return void
+     */
+    protected function deleteTypeNameData( $typeId, $typeStatus )
+    {
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom( 'ezcontentclass_name' )
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentclass_id' ),
+                        $query->bindValue( $typeId, null, \PDO::PARAM_INT )
+                    ),
+                    $query->expr->eq(
+                        $this->dbHandler->quoteColumn( 'contentclass_version' ),
+                        $query->bindValue( $typeStatus, null, \PDO::PARAM_INT )
+                    )
+                )
+            );
+        $query->prepare()->execute();
+    }
+
+    /**
      * Update a type with $updateStruct.
      *
      * @param mixed $typeId
@@ -818,6 +844,9 @@ class EzcDatabase extends Gateway
 
         $stmt = $q->prepare();
         $stmt->execute();
+
+        $this->deleteTypeNameData( $typeId, $status );
+        $this->insertTypeNameData( $typeId, $status, $updateStruct->name );
     }
 
     /**

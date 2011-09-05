@@ -276,4 +276,15 @@ return array(
             'group_name' => 'Content'
         ),
     ),
+    'ezcontentclass_name' => array(
+         array(
+            'contentclass_id' => 1,
+            'contentclass_version' => 0,
+            'language_id' => 3,
+            'language_locale' => 'eng-US',
+            'name' => 'Folder'
+        )
+    ),
+    'ezcontent_language' => array(
+    )
 );
