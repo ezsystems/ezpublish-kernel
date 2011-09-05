@@ -304,20 +304,30 @@ class MapperTest extends TestCase
             $types[0]
         );
 
-        // "random" sample
         $this->assertEquals(
             5,
             count( $types[0]->fieldDefinitions ),
             'Incorrect number of field definitions'
         );
         $this->assertPropertiesCorrect(
-            // "random" sample
             array(
                 'id' => 155,
-                'fieldType' => 'ezstring',
+                'name' => array(
+                    'always-available' => 'eng-US',
+                    'eng-US' => 'Short name',
+                ),
+                'description' => array(
+                    0 => '',
+                    'always-available' => false,
+                ),
                 'identifier' => 'short_name',
-                'isInfoCollector' => false,
+                'fieldGroup' => '',
+                'fieldType' => 'ezstring',
+                'isTranslatable' => true,
                 'isRequired' => false,
+                'isInfoCollector' => false,
+                'isSearchable' => true,
+                'position' => 2,
             ),
             $types[0]->fieldDefinitions[2]
         );

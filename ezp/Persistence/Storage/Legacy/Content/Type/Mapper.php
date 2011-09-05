@@ -186,7 +186,9 @@ class Mapper
         $field->isTranslatable = ( $row['ezcontentclass_attribute_can_translate'] == 1 );
         $field->isRequired = $row['ezcontentclass_attribute_is_required'] == 1;
         $field->isInfoCollector = $row['ezcontentclass_attribute_is_information_collector'] == 1;
-        $field->defaultValue = unserialize( $row['ezcontentclass_attribute_serialized_data_text'] );
+
+        $field->isSearchable = (bool) $row['ezcontentclass_attribute_is_searchable'];
+        $field->position = (int) $row['ezcontentclass_attribute_placement'];
 
         $this->toFieldDefinition( $storageFieldDef, $field );
 

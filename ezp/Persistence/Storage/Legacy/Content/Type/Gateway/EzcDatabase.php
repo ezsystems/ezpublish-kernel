@@ -702,6 +702,9 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'serialized_data_text' ),
             $q->bindValue( serialize( $storageFieldDef->serializedDataText ) )
+        )->set(
+            $this->dbHandler->quoteColumn( 'is_searchable' ),
+            $q->bindValue( ( $fieldDefinition->isSearchable ? 1 : 0 ), null, \PDO::PARAM_INT )
         );
     }
 
