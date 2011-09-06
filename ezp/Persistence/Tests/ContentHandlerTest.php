@@ -93,7 +93,7 @@ class ContentHandlerTest extends HandlerTest
      * Test create function
      *
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::create
-     * @group inMemoryContent
+     * @group contentHandler
      */
     public function testCreate()
     {
@@ -136,7 +136,7 @@ class ContentHandlerTest extends HandlerTest
      * Test delete function
      *
      * @covers \ezp\Persistence\Storage\InMemory\ContentHandler::delete
-     * @group inMemoryContent
+     * @group contentHandler
      */
     public function testDelete()
     {
@@ -166,7 +166,7 @@ class ContentHandlerTest extends HandlerTest
      * Test copy function
      *
      * @covers \ezp\Persistence\Storage\InMemory\ContentHandler::copy
-     * @group inMemoryContent
+     * @group contentHandler
      */
     public function testCopyVersion1()
     {
@@ -193,7 +193,7 @@ class ContentHandlerTest extends HandlerTest
      * Test copy function
      *
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::copy
-     * @group inMemoryContent
+     * @group contentHandler
      */
     public function testCopyVersion2()
     {
@@ -221,7 +221,7 @@ class ContentHandlerTest extends HandlerTest
      * Test copy function
      *
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::copy
-     * @group inMemoryContent
+     * @group contentHandler
      */
     public function testCopyAllVersions()
     {
@@ -253,7 +253,7 @@ class ContentHandlerTest extends HandlerTest
      * Test update function
      *
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::update
-     * @group inMemoryContent
+     * @group contentHandler
      */
     public function testUpdate()
     {
@@ -283,7 +283,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Tests loadFields function
      *
-     * @group inMemoryContent
+     * @group contentHandler
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadFields
      */
     public function testLoadFields()
@@ -320,7 +320,7 @@ class ContentHandlerTest extends HandlerTest
 
     /**
      * @expectedException \ezp\Base\Exception\NotFound
-     * @group inMemoryContent
+     * @group contentHandler
      * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadFields
      */
     public function testLoadFieldsNoField()
