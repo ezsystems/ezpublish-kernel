@@ -192,7 +192,6 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'data_type_string' ),
             $q->bindValue( $field->type )
         )->set(
-            // @FIXME: Is language code correct?
             $this->dbHandler->quoteColumn( 'language_code' ),
             $q->bindValue( $field->language )
         )->set(

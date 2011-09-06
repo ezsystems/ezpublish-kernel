@@ -232,6 +232,7 @@ class EzcDatabaseTest extends TestCase
     {
         $content = $this->getContentFixture();
         $content->id = 2342;
+        // $content->version->versionNo = 3;
 
         $field = $this->getFieldFixture();
         $value = $this->getStorageValueFixture();
@@ -242,28 +243,24 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    // @FIXME
-                    'attribute_original_id' => '0',
                     'contentclassattribute_id' => '231',
                     'contentobject_id' => '2342',
                     'data_float' => '24.42',
                     'data_int' => '42',
                     'data_text' => 'Test text',
                     'data_type_string' => 'ezstring',
-                    // @FIXME Is language_code correct?
                     'language_code' => '31',
-                    // @FIXME
-                    'language_id' => 0,
                     'sort_key_int' => '23',
                     'sort_key_string' => 'Test',
                     'version' => '1',
+                    // @FIXME
+                    'language_id' => 0,
                 )
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select(
                     array(
-                        'attribute_original_id',
                         'contentclassattribute_id',
                         'contentobject_id',
                         'data_float',
@@ -271,10 +268,10 @@ class EzcDatabaseTest extends TestCase
                         'data_text',
                         'data_type_string',
                         'language_code',
-                        'language_id',
                         'sort_key_int',
                         'sort_key_string',
                         'version',
+                        'language_id',
                     )
                 )->from( 'ezcontentobject_attribute' )
         );
