@@ -36,15 +36,15 @@ abstract class Gateway
      */
     abstract public function insertVersion( Version $version );
 
+
     /**
      * Updates an existing version
      *
-     * @param int|string $version
+     * @param int $version
      * @param int $versionNo
-     * @param int|string $userId
      * @return void
      */
-    abstract public function updateVersion( $version, $versionNo, $userId );
+    abstract public function updateVersion( $version, $versionNo );
 
     /**
      * Inserts a new field.

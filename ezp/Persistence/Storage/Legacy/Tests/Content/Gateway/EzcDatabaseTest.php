@@ -126,6 +126,10 @@ class EzcDatabaseTest extends TestCase
         return $struct;
     }
 
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::insertVersion
+     */
     public function testInsertVersion()
     {
         $version = $this->getVersionFixture();
@@ -139,16 +143,16 @@ class EzcDatabaseTest extends TestCase
                     'contentobject_id' => '2342',
                     'created' => '1312278322',
                     'creator_id' => '13',
+                    'modified' => '1312278323',
+                    'status' => '0',
+                    'workflow_event_pos' => '0',
+                    'version' => '1',
                     // @FIXME
                     'initial_language_id' => '0',
                     // @FIXME
                     'language_mask' => '0',
-                    'modified' => '1312278323',
-                    'status' => '0',
-                    // @FIXME
-                    'user_id' => '0',
-                    'version' => '1',
-                    'workflow_event_pos' => '0',
+                    // Not needed, according to field mapping document
+                    // 'user_id',
 
                 )
             ),
@@ -159,13 +163,12 @@ class EzcDatabaseTest extends TestCase
                         'contentobject_id',
                         'created',
                         'creator_id',
-                        'initial_language_id',
-                        'language_mask',
                         'modified',
                         'status',
-                        'user_id',
-                        'version',
                         'workflow_event_pos',
+                        'version',
+                        'language_mask',
+                        'initial_language_id',
                     )
                 )->from( 'ezcontentobject_version' )
         );
@@ -183,13 +186,13 @@ class EzcDatabaseTest extends TestCase
         $version = $this->getVersionFixture();
         $version->id = $gateway->insertVersion( $version );
 
-        $gateway->updateVersion( $version->id, 2, 14 );
+        $gateway->updateVersion( $version->id, 2 );
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
-            array( array( 2, 14 ) ),
+            array( array( 2 ) ),
             $query
-                ->select( array( 'version', 'user_id' ) )
+                ->select( array( 'version' ) )
                 ->from( 'ezcontentobject_version' )
                 ->where(
                     $query->expr->lAnd(

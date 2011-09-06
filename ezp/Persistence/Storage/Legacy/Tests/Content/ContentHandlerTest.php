@@ -671,7 +671,7 @@ class ContentHandlerTest extends TestCase
         // correct methods are called on the mapper.
         $gatewayMock->expects( $this->once() )
             ->method( 'updateVersion' )
-            ->with( 14, 4, 14 );
+            ->with( 14, 4 );
 
         $gatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'updateField' )

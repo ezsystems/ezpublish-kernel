@@ -127,6 +127,10 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
             $q->bindValue( $version->contentId, null, \PDO::PARAM_INT )
+        )->set(
+            // As described in field mapping document
+            $this->dbHandler->quoteColumn( 'workflow_event_pos' ),
+            $q->bindValue( 0, null, \PDO::PARAM_INT )
         );
 
         $stmt = $q->prepare();
@@ -138,12 +142,11 @@ class EzcDatabase extends Gateway
     /**
      * Updates an existing version
      *
-     * @param int|string $version
+     * @param int $version
      * @param int $versionNo
-     * @param int|string $userId
      * @return void
      */
-    public function updateVersion( $version, $versionNo, $userId )
+    public function updateVersion( $version, $versionNo )
     {
         $q = $this->dbHandler->createUpdateQuery();
         $q->update(
@@ -154,9 +157,6 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'modified' ),
             $q->bindValue( time(), null, \PDO::PARAM_INT )
-        )->set(
-            $this->dbHandler->quoteColumn( 'user_id' ),
-            $q->bindValue( $userId, null, \PDO::PARAM_INT )
         )->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
@@ -164,8 +164,6 @@ class EzcDatabase extends Gateway
             )
         );
         $q->prepare()->execute();
-
-        return $this->dbHandler->lastInsertId();
     }
 
     /**

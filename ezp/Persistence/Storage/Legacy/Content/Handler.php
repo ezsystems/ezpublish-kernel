@@ -252,7 +252,7 @@ class Handler implements BaseContentHandler
     public function update( UpdateStruct $content )
     {
         $this->contentGateway->updateVersion(
-            $content->id, $content->versionNo, $content->userId
+            $content->id, $content->versionNo
         );
 
         foreach ( $content->fields as $field )
