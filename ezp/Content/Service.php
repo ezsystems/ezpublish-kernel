@@ -225,26 +225,6 @@ class Service extends BaseService
     }
 
     /**
-     * Sends $content to trash
-     *
-     * @param \ezp\Content $content
-     */
-    public function trash( Content $content )
-    {
-
-    }
-
-    /**
-     * Restores $content from trash
-     *
-     * @param \ezp\Content $content
-     */
-    public function unTrash( Content $content )
-    {
-
-    }
-
-    /**
      * Copies $content in $version and returns the new copy.
      * If no version is provided, all versions will be copied
      *
