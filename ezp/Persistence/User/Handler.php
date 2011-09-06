@@ -104,6 +104,15 @@ interface Handler
     public function addPolicy( $roleId, Policy $policy );
 
     /**
+     * Update a policy
+     *
+     * Replaces limitations values with new values.
+     *
+     * @param \ezp\Persistence\User\Policy $policy
+     */
+    //public function updatePolicy( Policy $policy );
+
+    /**
      * Removes a policy from a role
      *
      * @param mixed $roleId
