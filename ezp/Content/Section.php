@@ -9,6 +9,10 @@
 
 namespace ezp\Content;
 use ezp\Base\Model,
+    ezp\Base\ModelDefinition,
+    ezp\Base\Repository,
+    ezp\Base\Exception\Logic,
+    ezp\Content,
     ezp\Persistence\Content\Section as SectionValue;
 
 /**
@@ -21,7 +25,7 @@ use ezp\Base\Model,
  * @property string $name
  *                Human readable name of the section (preferably short for gui's)
  */
-class Section extends Model
+class Section extends Model implements ModelDefinition
 {
     /**
      * @inherit-doc
@@ -41,6 +45,57 @@ class Section extends Model
         $this->properties = new SectionValue();
     }
 
+    /**
+     * Returns definition of the role object, atm: permissions
+     *
+     * @access private
+     * @return array
+     */
+    public function definition()
+    {
+        return array(
+            'module' => 'section',
+            'functions' => array(
+                'assign' => array(
+                    'Class' => array(
+                        'compare' => function( Section $newSection, array $limitationsValues, Repository $repository, Content $content )
+                        {
+                            return in_array( $content->typeId, $limitationsValues );
+                        },
+                    ),
+                    'Section' => array(
+                        'compare' => function( Section $newSection, array $limitationsValues, Repository $repository, Content $content )
+                        {
+                            return in_array( $content->sectionId, $limitationsValues );
+                        },
+                    ),
+                    'Owner' => array(
+                        'options' => function( Repository $repository )
+                        {
+                            return array( '1' => 'Self' );
+                        },
+                        'compare' => function( Section $newSection, array $limitationsValues, Repository $repository, Content $content )
+                        {
+                            if ( $limitationsValues !== array( '1' ) )
+                                throw new Logic(
+                                    'Policy module:section function:assign limitation:Owner',
+                                    'expected value: array( 0 => \'1\' ), got : ' . var_export( $limitationsValues, true )
+                                );
+                            return $content->ownerId === $repository->getUser()->id;
+                        },
+                    ),
+                    'NewSection' => array(
+                        'compare' => function( Section $newSection, array $limitationsValues )
+                        {
+                            return in_array( $newSection->id, $limitationsValues );
+                        },
+                    ),
+                ),
+                'edit' => array(),
+                'view' => array(),
+            ),
+        );
+    }
 }
 
 ?>

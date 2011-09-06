@@ -12,7 +12,10 @@ use ezp\Persistence\Repository\Handler,
     RuntimeException,
     DomainException,
     ezp\Base\Configuration,
+    ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\Logic,
+    ezp\Base\ModelDefinition,
     ezp\Base\Proxy,
     ezp\Base\ProxyInterface,
     ezp\User;
@@ -57,7 +60,7 @@ class Repository
         $this->handler = $handler;
 
         if ( $user !== null )
-            $this->setCurrentUser( $user );
+            $this->setUser( $user );
         else
             $this->user = new Proxy(
                 $this->getUserService(),
@@ -67,11 +70,11 @@ class Repository
     }
 
     /**
-     * Get currently logged in user
+     * Get current user
      *
      * @return \ezp\User
      */
-    function getCurrentUser()
+    function getUser()
     {
         if ( $this->user instanceof ProxyInterface )
             $this->user = $this->user->load();
@@ -80,18 +83,87 @@ class Repository
     }
 
     /**
-     * Set currently logged in user
+     * Set current user
      *
      * @param \ezp\User $user
      * @throws \ezp\Base\Exception\InvalidArgumentValue If provided user does not have a valid id value
      * @todo throw something if $user is not persisted to backend (not stored)
      */
-    function setCurrentUser( User $user )
+    function setUser( User $user )
     {
         if ( !$user->id )
             throw new InvalidArgumentValue( '$user->id', $user->id );
 
         $this->user = $user;
+    }
+
+    /**
+     * Check if current user has access to a certain function on a model
+     *
+     * @param string $function Eg: read, move, create
+     * @param \ezp\Base\ModelDefinition $module An model instance
+     * @param \ezp\Base\Model $additionalModel An additional model instance in cases like 'assign' and so on
+     * @return bool
+     * @throws \ezp\Base\Exception\InvalidArgumentValue On invalid $function value
+     * @throws \ezp\Base\Exception\BadConfiguration On missing __module__ in $model::defintion()
+     * @throws \ezp\Base\Exception\Logic On limitation used in policies but not in $model::defintion()
+     */
+    public function canUser( $function, ModelDefinition $model, Model $additionalModel = null )
+    {
+        $definition = $model->definition();
+        $className = get_class( $model );
+
+        if ( !isset( $definition['module'] ) )
+        {
+            throw new BadConfiguration( "{$className}::definition()", 'missing module key with name of module' );
+        }
+        else if ( !empty( $definition['functions'] ) && !isset( $definition['functions'][$function] ) )
+        {
+            throw new InvalidArgumentValue( '$function', $function, $className );
+        }
+
+        $access = $this->getUser()->hasAccessTo( $definition['module'], $function );
+        if ( $access === false || $access === true )
+        {
+            return $access;
+        }
+        else if ( empty( $definition['functions'][$function] ) )
+        {
+            throw new BadConfiguration(
+                "{$className}::definition()",
+                "function limitations returned for '{$function}', but none defined in definition()"
+            );
+        }
+
+        foreach ( $access as $limitations )
+        {
+            foreach ( $limitations as $limitationKey => $limitationValues )
+            {
+                //if ( isset( $definition[$function][$limitationKey]['alias'] ) )
+                    //$limitationKey = $definition[$function][$limitationKey]['alias'];
+
+                if ( !isset( $definition['functions'][$function][$limitationKey]['compare'] ) )
+                {
+                    throw new Logic(
+                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
+                        "could not find limitation compare function on {$className}::definition()"
+                    );
+                }
+
+                $limitationCompareFn = $definition['functions'][$function][$limitationKey]['compare'];
+                if ( !is_callable( $limitationCompareFn ) )
+                {
+                    throw new Logic(
+                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
+                        "compare function from {$className}::definition() is not callable"
+                    );
+                }
+
+                if ( !$limitationCompareFn( $model, $limitationValues, $this, $additionalModel ) )
+                    return false;
+            }
+        }
+        return true;
     }
 
     /**

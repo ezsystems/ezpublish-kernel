@@ -549,12 +549,13 @@ class ServiceTest extends BaseServiceTest
     {
         $service = $this->repository->getUserService();
         $group = $service->loadGroup( 12 );//Administrator users
+        $groupCount = count( $group->getRoles() );
 
         $do = $service->createRole( $this->getRole() );
         $service->assignRole( $group, $do );
 
         self::assertEquals( array( 12 ), $do->groupIds );
-        self::assertEquals( 1, count( $group->getRoles() ) );
+        self::assertEquals( $groupCount + 1, count( $group->getRoles() ) );
     }
 
     /**
@@ -589,13 +590,14 @@ class ServiceTest extends BaseServiceTest
     {
         $service = $this->repository->getUserService();
         $group = $service->loadGroup( 12 );//Administrator users
+        $groupCount = count( $group->getRoles() );
 
         $do = $service->createRole( $this->getRole() );
         $service->assignRole( $group, $do );
         $service->unAssignRole( $group, $do );
 
         self::assertEquals( array(), $do->groupIds );
-        self::assertEquals( 0, count( $group->getRoles() ) );
+        self::assertEquals( $groupCount, count( $group->getRoles() ) );
     }
 
     /**

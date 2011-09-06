@@ -110,7 +110,7 @@ abstract class Service
                 break;
             case 'creatorId':
             case 'modifierId':
-                $struct->$property = $this->repository->getCurrentUser()->id;
+                $struct->$property = $this->repository->getUser()->id;
                 break;
             default:
                 return false;

@@ -9,6 +9,7 @@
 
 namespace ezp\User;
 use ezp\Base\Model,
+    ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Persistence\User\Role as RoleValue;
 
@@ -20,7 +21,7 @@ use ezp\Base\Model,
  * @property-read mixed[] $groupIds Use {@link \ezp\User\Service::addGroup} & {@link \ezp\User\Service::removeGroup}
  * @property-read \ezp\User\Policy[] $policies Use {@link \ezp\User\Service::addPolicy} & {@link \ezp\User\Service::removePolicy}
  */
-class Role extends Model
+class Role extends Model implements ModelDefinition
 {
     /**
      * @var array Readable of properties on this object
@@ -51,6 +52,19 @@ class Role extends Model
     {
         $this->properties = new RoleValue();
         $this->policies = new TypeCollection( 'ezp\\User\\Policy' );
+    }
+
+    /**
+     * Returns definition of the role object, atm: permissions
+     *
+     * @access private
+     * @return array
+     */
+    public function definition()
+    {
+        return array(
+            'module' => 'user',
+        );
     }
 
     /**

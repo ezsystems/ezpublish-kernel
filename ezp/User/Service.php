@@ -118,7 +118,7 @@ class Service extends BaseService
 
         $content = new Content( $type );
         $content->addParent( $parentLocation );
-        $content->ownerId = $this->repository->getCurrentUser()->id;
+        $content->ownerId = $this->repository->getUser()->id;
         $content->getState( 'properties' )->sectionId = $parentContent->sectionId;
 
         if ( !isset( $content->fields['name'] ) )

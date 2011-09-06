@@ -116,4 +116,43 @@ class User extends Model implements GroupAbleInterface
     {
         return $this->policies;
     }
+
+    /**
+     * Checks if user has access to a specific module/function
+     *
+     * Return array of limitations if user has access to a certain function
+     * but limited by the returned limitations.
+     * If you have the model instance you want to check permissions against, then
+     * use {@link \ezp\Base\Repository::canUser()}.
+     *
+     * @param string $module
+     * @param string $function
+     * @return array|bool
+     */
+    public function hasAccessTo( $module, $function )
+    {
+        $limitations = array();
+        foreach ( $this->getPolicies() as $policy )
+        {
+            if ( $policy->module === '*' )
+                return true;
+
+            if ( $policy->module !== $module )
+                continue;
+
+            if ( $policy->function === '*' )
+                return true;
+
+            if ( $policy->function !== $function )
+                continue;
+
+            if ( $policy->limitations === '*' )
+                return true;
+
+            $limitations[] = $policy->limitations;
+        }
+        if ( !empty( $limitations ) )
+            return $limitations;
+        return false;
+    }
 }

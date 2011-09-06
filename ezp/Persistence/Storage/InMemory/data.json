@@ -63,6 +63,10 @@
         {"id": 14, "login": "admin", "email": "spam@ez.no", "password": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorithm": 2, "isEnabled": true, "maxLogin": 10},
         {"id": 10, "login": "anonymous", "email": "nospam@ez.no", "password": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorithm": 2, "isEnabled": true, "maxLogin": 1000}
     ],
-    "User\\Role" : [],
-    "User\\Policy" : []
+    "User\\Role" : [
+        {"id": 2, "name": "Administrator", "groupIds": [ 12 ] }
+    ],
+    "User\\Policy" : [
+        {"id": 1, "roleId": 2, "module": "*", "function": "*", "limitations": "*" }
+    ]
 }
