@@ -47,6 +47,7 @@ interface Handler
      * @param mixed $contentId
      * @param int $srcVersion
      * @return \ezp\Persistence\Content\Version
+     * @throws \ezp\Base\Exception\NotFound Thrown if $contentId and/or $srcVersion are invalid
      */
     public function createDraftFromVersion( $contentId, $srcVersion );
 
