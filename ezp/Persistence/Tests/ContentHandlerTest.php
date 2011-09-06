@@ -337,4 +337,48 @@ class ContentHandlerTest extends HandlerTest
 
         $fields = $contentHandler->loadFields( $content->id, $content->currentVersionNo );
     }
+
+    /**
+     * Tests creatDraftFromVersion()
+     *
+     * @group contentHandler
+     * @covers \ezp\Persistence\Content\Handler::createDraftFromVersion
+     */
+    public function testCreateDraftFromVersion()
+    {
+        $time = time();
+        $contentHandler = $this->repositoryHandler->contentHandler();
+        $content = $contentHandler->copy( 1, 1 );
+        $this->contentToDelete[] = $content;
+
+        $draft = $contentHandler->createDraftFromVersion( $content->id, 1 );
+        self::assertSame( $content->currentVersionNo + 1, $draft->versionNo );
+        self::assertGreaterThanOrEqual( $time, $draft->created );
+        self::assertGreaterThanOrEqual( $time, $draft->modified );
+        self::assertSame( Version::STATUS_DRAFT, $draft->state, 'Created version must be a draft' );
+        self::assertSame( $content->id, $draft->contentId );
+
+        // Indexing fields by defition id to be able to compare them
+        $aOriginalIndexedFields = array();
+        $aIndexedFields = array();
+        foreach ( $content->version->fields as $field )
+        {
+            $aOriginalIndexedFields[$field->fieldDefinitionId] = $field;
+        }
+
+        foreach ( $draft->fields as $field )
+        {
+            $aIndexedFields[$field->fieldDefinitionId] = $field;
+        }
+
+        // Now comparing original version vs new draft
+        foreach ( $aOriginalIndexedFields as $definitionId => $field )
+        {
+            self::assertTrue( isset( $aIndexedFields[$definitionId] ), 'Created version must have the same fields as original version' );
+            self::assertSame( $field->type, $aIndexedFields[$definitionId]->type, 'Fields must have the same type' );
+            self::assertEquals( $field->value, $aIndexedFields[$definitionId]->value, 'Fields must have the same value' );
+            self::assertEquals( $field->language, $aIndexedFields[$definitionId]->language, 'Fields language must be equal' );
+            self::assertSame( $field->versionNo + 1, $aIndexedFields[$definitionId]->versionNo, 'Field version number must be incremented' );
+        }
+    }
 }
