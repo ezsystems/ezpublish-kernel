@@ -77,5 +77,12 @@ class Content extends ValueObject
      * @var string Remote identifier used as a custom identifier for the object
      */
     public $remoteId;
+
+    /**
+     * TODO: Document
+     *
+     * @var mixed
+     */
+    public $initialLanguageId;
 }
 ?>

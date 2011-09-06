@@ -59,40 +59,39 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'contentclass_id' => '23',
-                    'current_version' => 1,
-                    // @FIXME
-                    'initial_language_id' => 0,
-                    // @FIXME
-                    'language_mask' => 0,
-                    // @FIXME
-                    'modified' => 0,
                     'name' => 'Content name',
-                    'owner_id' => '13',
-                    // @FIXME
-                    'published' => 0,
-                    // @FIXME
-                    'remote_id' => null,
+                    'contentclass_id' => '23',
                     'section_id' => '42',
+                    'owner_id' => '13',
+                    'current_version' => '2',
+                    'initial_language_id' => '1',
+                    'remote_id' => 'some_remote_id',
                     // @FIXME
-                    'status' => 0,
+                    // 'language_mask' => 0,
+                    // 'modified' => 0,
+                    // 'published' => 0,
+                    // 'status' => 0,
                 ),
             ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select(
                     array(
+                        'name',
                         'contentclass_id',
+                        'section_id',
+                        'owner_id',
                         'current_version',
                         'initial_language_id',
-                        'language_mask',
-                        'modified',
-                        'name',
-                        'owner_id',
-                        'published',
                         'remote_id',
-                        'section_id',
-                        'status',
+                        // FIXME: Needs implementation
+                        // 'language_mask',
+                        // FIXME: Not defined
+                        // 'modified',
+                        // FIXME: Not defined
+                        // 'published',
+                        // FIXME: Not defined
+                        // 'status',
                     )
                 )->from( 'ezcontentobject' )
         );
@@ -107,10 +106,21 @@ class EzcDatabaseTest extends TestCase
     {
         $struct = new Content();
 
-        $struct->name = 'Content name';
+        $struct->name = array(
+            'always-available' => 'eng-US',
+            'eng-US' => 'Content name',
+        );
         $struct->typeId = 23;
         $struct->sectionId = 42;
         $struct->ownerId = 13;
+        $struct->currentVersionNo = 2;
+        $struct->initialLanguageId = 1;
+        $struct->remoteId = 'some_remote_id';
+
+        // FIXME: Implement calculation (1st bit of language_mask)
+        $struct->alwaysAvailable = true;
+
+        $struct->version = new Version();
         $struct->locations = array();
 
         return $struct;

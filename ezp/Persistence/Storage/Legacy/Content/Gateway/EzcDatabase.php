@@ -57,16 +57,24 @@ class EzcDatabase extends Gateway
      */
     public function insertContentObject( Content $content )
     {
+        if ( is_array( $content->name ) && isset( $content->name['always-available'] ) )
+        {
+            $name = $content->name[$content->name['always-available']];
+        }
+        else
+        {
+            $name = '';
+        }
+
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject' )
         )->set(
-            // @FIXME: Determine version?
             $this->dbHandler->quoteColumn( 'current_version' ),
-            $q->bindValue( 1, null, \PDO::PARAM_INT )
+            $q->bindValue( $content->currentVersionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'name' ),
-            $q->bindValue( $content->name )
+            $q->bindValue( $name )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclass_id' ),
             $q->bindValue( $content->typeId, null, \PDO::PARAM_INT )
@@ -76,6 +84,12 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'owner_id' ),
             $q->bindValue( $content->ownerId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'initial_language_id' ),
+            $q->bindValue( $content->initialLanguageId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'remote_id' ),
+            $q->bindValue( $content->remoteId )
         );
 
         $stmt = $q->prepare();
