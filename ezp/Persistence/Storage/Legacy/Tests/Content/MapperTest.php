@@ -256,6 +256,58 @@ class MapperTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::extractContentFromRows
+     */
+    public function testExtractContentFromRowsMultipleVersions()
+    {
+        $locationMapperMock = $this->getLocationMapperMock();
+        $locationMapperMock->expects( $this->any() )
+            ->method( 'createLocationFromRow' )
+            ->will( $this->returnValue( new Content\Location() ) );
+
+        $convMock = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+        );
+        $convMock->expects( $this->any() )
+            ->method( 'toFieldValue' )
+            ->will( $this->returnValue( new FieldValue() ) );
+
+        $reg = new Registry();
+        $reg->register( 'ezstring', $convMock );
+        $reg->register( 'ezxmltext', $convMock );
+        $reg->register( 'ezdatetime', $convMock );
+
+        $rowsFixture = $this->getMultipleVersionsExtractFixture();
+
+        $mapper = new Mapper( $locationMapperMock, $reg );
+        $result = $mapper->extractContentFromRows( $rowsFixture );
+
+        $this->assertEquals(
+            2,
+            count( $result )
+        );
+
+        $this->assertEquals(
+            11,
+            $result[0]->id
+        );
+        $this->assertEquals(
+            11,
+            $result[1]->id
+        );
+
+        $this->assertEquals(
+            1,
+            $result[0]->version->versionNo
+        );
+        $this->assertEquals(
+            2,
+            $result[1]->version->versionNo
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractVersionListFromRows
      */
     public function testExtractVersionListFromRows()
@@ -304,6 +356,16 @@ class MapperTest extends TestCase
     protected function getRestrictedVersionExtractFixture()
     {
         return require __DIR__ . '/_fixtures/restricted_version_rows.php';
+    }
+
+    /**
+     * Returns a fixture for mapping multiple versions of a content object
+     *
+     * @return string[][]
+     */
+    protected function getMultipleVersionsExtractFixture()
+    {
+        return require __DIR__ . '/_fixtures/extract_content_from_rows_multiple_versions.php';
     }
 
     /**

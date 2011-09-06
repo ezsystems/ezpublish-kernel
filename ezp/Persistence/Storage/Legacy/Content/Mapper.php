@@ -138,6 +138,8 @@ class Mapper
     public function extractContentFromRows( array $rows )
     {
         $contentObjs = array();
+        $versions    = array();
+        $locations   = array();
 
         foreach ( $rows as $row )
         {
@@ -146,35 +148,59 @@ class Mapper
             {
                 $contentObjs[$contentId] = $this->extractContentFromRow( $row );
             }
-
             if ( !isset( $versions[$contentId] ) )
             {
-                $versions[$contentId] = $this->extractVersionFromRow( $row );
+                $versions[$contentId] = array();
+            }
+            if ( !isset( $locations[$contentId] ) )
+            {
+                $locations[$contentId] = array();
+            }
+
+            $versionId = (int)$row['ezcontentobject_version_id'];
+            if ( !isset( $versions[$contentId][$versionId] ) )
+            {
+                $versions[$contentId][$versionId]
+                    = $this->extractVersionFromRow( $row );
+            }
+            if ( !isset( $locations[$contentId][$versionId] ) )
+            {
+                $locations[$contentId][$versionId] = array();
             }
 
             $field = (int)$row['ezcontentobject_attribute_id'];
-            if ( !isset( $versions[$contentId]->fields[$field] ) )
+            if ( !isset( $versions[$contentId][$versionId]->fields[$field] ) )
             {
-                $versions[$contentId]->fields[$field] = $this->extractFieldFromRow( $row );
+                $versions[$contentId][$versionId]->fields[$field]
+                    = $this->extractFieldFromRow( $row );
             }
 
             $locationId = (int)$row['ezcontentobject_tree_node_id'];
-            if ( !isset( $contentObjs[$contentId]->locations[$locationId] ) )
+            if ( !isset( $locations[$contentId][$versionId][$locationId] ) )
             {
-                $contentObjs[$contentId]->locations[$locationId] =
+                $locations[$contentId][$versionId][$locationId] =
                     $this->locationMapper->createLocationFromRow(
                         $row, 'ezcontentobject_tree_'
                     );
             }
         }
 
-        foreach ( $contentObjs as $content )
+        $results = array();
+        foreach ( $contentObjs as $contentId => $content )
         {
-            $content->version = $versions[$content->id];
-            $content->version->fields = array_values( $content->version->fields );
-            $content->locations = array_values( $content->locations );
+            foreach ( $versions[$contentId] as $versionId => $version )
+            {
+                $version->fields = array_values( $version->fields );
+
+                $newContent = clone $content;
+                $newContent->version = $version;
+                $newContent->locations = array_values(
+                    $locations[$contentId][$versionId]
+                );
+                $results[] = $newContent;
+            }
         }
-        return array_values( $contentObjs );
+        return $results;
     }
 
     /**
