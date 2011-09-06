@@ -548,4 +548,15 @@ class ContentTest extends BaseServiceTest
             self::assertEquals( $field->fieldDefinition->id, $draft->fields[$identifier]->fieldDefinition->id );
         }
     }
+
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @group contentService
+     * @covers \ezp\Content\Service::createDraftFromVersion
+     */
+    public function testCreateDraftFromInvalidVersion()
+    {
+        $content = $this->service->load( 1 );
+        $draft = $this->service->createDraftFromVersion( $content, new Version( $content ) );
+    }
 }

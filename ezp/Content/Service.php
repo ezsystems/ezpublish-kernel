@@ -268,6 +268,7 @@ class Service extends BaseService
      * @param \ezp\Content $content
      * @param \ezp\Content\Version $srcVersion
      * @return \ezp\Persistence\Content\Version
+     * @throws \ezp\Base\Exception\NotFound
      * @todo Language support
      * @todo User support
      */
