@@ -16,7 +16,6 @@ class Integer extends FieldType
 {
     protected $fieldTypeString = 'ezinteger';
     protected $defaultValue = 0;
-    protected $isTranslateable = false;
     protected $isSearchable = true;
 
     protected $allowedValidators = array(

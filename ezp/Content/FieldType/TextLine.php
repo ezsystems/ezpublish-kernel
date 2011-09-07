@@ -22,7 +22,6 @@ class TextLine extends FieldType
     protected $fieldTypeString = 'ezstring';
     protected $defaultValue = '';
     protected $isSearchable = true;
-    protected $isTranslateable = true;
 
     protected $allowedValidators = array( 'StringValidator' => array( 'maxStringLength' => null ) );
 

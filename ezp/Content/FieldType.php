@@ -44,11 +44,6 @@ abstract class FieldType
     protected $defaultValue;
 
     /**
-     * @var boolean Flag telling whether or not the data is applicable for translation.
-     */
-    protected $isTranslatable = false;
-
-    /**
      * @var boolean Flag telling whether search index extraction is applicable.
      */
     protected $isSearchable = false;
@@ -111,16 +106,6 @@ abstract class FieldType
     {
         $this->fieldSettings = new FieldSettings( $this->allowedSettings );
         $this->validatorData = new FieldSettings( $this->allowedValidators );
-    }
-
-    /**
-     * Does the field type supports translation of its data.
-     *
-     * @return boolean
-     */
-    public function supportsTranslation()
-    {
-        return $this->isTranslatable;
     }
 
     /**

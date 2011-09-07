@@ -16,7 +16,6 @@ class TextBlock extends TextLine
 {
     protected $fieldTypeString = 'eztext';
     protected $defaultValue = '';
-    protected $isTranslatable = true;
     protected $isSearchable = true;
 
     protected $allowedSettings = array( 'textColumns' => null );
