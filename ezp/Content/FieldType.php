@@ -48,16 +48,6 @@ abstract class FieldType
      */
     protected $isSearchable = false;
 
-    /*
-     * This flag is disabled for now. Information collection will probably be
-     * carried with dedicated functionality, which will not require the need
-     * fields to be configured specifically for this purpose.
-     *
-     * @var Flag deciding whether the field type can be used as an information collector.
-     *
-    protected $isInformationCollector;
-    */
-
     /**
      * @var FieldSettings Custom properties which are specific to the field
      *                      type. Typically these properties are used to
