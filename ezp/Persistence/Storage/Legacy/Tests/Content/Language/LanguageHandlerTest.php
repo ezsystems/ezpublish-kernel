@@ -42,7 +42,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Content\Language\Handler::create
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::create
      */
     public function testCreate()
     {
@@ -92,7 +92,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Content\Language\Handler::create
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::create
      */
     public function testUpdate()
     {
