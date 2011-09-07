@@ -207,7 +207,6 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param mixed $contentTypeId
-     * @todo Needs to delete all content objects of that type, too.
      * @todo Maintain contentclass_name
      */
     public function delete( $contentTypeId, $status )
@@ -324,7 +323,6 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $contentTypeId
      * @param FieldDefinition $fieldDefinition
      * @return void
-     * @todo Handle field definition conversion.
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {

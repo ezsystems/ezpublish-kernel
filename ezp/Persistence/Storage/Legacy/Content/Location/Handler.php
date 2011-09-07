@@ -257,15 +257,5 @@ class Handler implements BaseLocationHandler
 
         $this->locationGateway->setSectionForSubtree( $nodeData['path_string'], $sectionId );
     }
-
-    /**
-     * Removes a location from its $locationId
-     *
-     * @param mixed $locationId
-     */
-    public function delete( $locationId )
-    {
-        throw new \RuntimeException( '@TODO: Implement' );
-    }
 }
 ?>
