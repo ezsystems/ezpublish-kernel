@@ -198,17 +198,21 @@ class Builder
     {
         $query = new Query;
 
-        // group all the criteria with a LogicalAnd
-        if ( count( $this->criteria ) > 1 )
+        if ( count( $this->criteria ) > 0 )
         {
-            $query->criterion = call_user_func_array(
-                array( $this, 'and' ),
-                $this->criteria
-            );
-        }
-        else
-        {
-            $query->criterion = $this->criteria[0];
+            // group all the criteria with a LogicalAnd
+            if ( count( $this->criteria ) > 1 )
+            {
+                $query->criterion = call_user_func_array(
+                    array( $this, 'and' ),
+                    $this->criteria
+                );
+            }
+            // directly inject the criterion
+            else
+            {
+                $query->criterion = $this->criteria[0];
+            }
         }
 
         $query->sortClauses = $this->sortClauses;

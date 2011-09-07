@@ -126,8 +126,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
 
     public function testSorting()
     {
-        $this->qb->addCriteria( $this->qb->contentTypeId->eq( 1 ) )
-                 ->addSortClause( $this->qb->sort->dateModified() );
+        $this->qb->addSortClause( $this->qb->sort->dateModified() );
 
         $query = $this->qb->getQuery();
 
