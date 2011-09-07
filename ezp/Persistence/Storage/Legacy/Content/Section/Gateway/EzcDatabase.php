@@ -43,7 +43,21 @@ class EzcDatabase extends Gateway
      */
     public function insertSection( $name, $identifier )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createInsertQuery();
+        $query->insertInto(
+            $this->dbHandler->quoteTable( 'ezsection' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'name' ),
+            $query->bindValue( $name )
+        )->set(
+            $this->dbHandler->quoteColumn( 'identifier' ),
+            $query->bindValue( $identifier )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $this->dbHandler->lastInsertId();
     }
 
     /**
@@ -56,7 +70,24 @@ class EzcDatabase extends Gateway
      */
     public function updateSection( $id, $name, $identifier )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createUpdateQuery();
+        $query->update(
+            $this->dbHandler->quoteTable( 'ezsection' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'name' ),
+            $query->bindValue( $name )
+        )->set(
+            $this->dbHandler->quoteColumn( 'identifier' ),
+            $query->bindValue( $identifier )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $query->bindValue( $id, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
     }
 
     /**
@@ -67,7 +98,24 @@ class EzcDatabase extends Gateway
      */
     public function loadSectionData( $id )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->quoteColumn( 'identifier' ),
+            $this->dbHandler->quoteColumn( 'name' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezsection' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $query->bindValue( $id, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 
     /**
@@ -78,7 +126,27 @@ class EzcDatabase extends Gateway
      */
     public function countContentObjectsInSection( $id )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $query->alias(
+                $query->expr->count(
+                    $this->dbHandler->quoteColumn( 'id' )
+                ),
+                'content_count'
+            )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentobject' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'section_id' ),
+                $query->bindValue( $id, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return (int)$statement->fetchColumn();
     }
 
     /**
@@ -89,7 +157,18 @@ class EzcDatabase extends Gateway
      */
     public function deleteSection( $id )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createDeleteQuery();
+        $query->deleteFrom(
+            $this->dbHandler->quoteTable( 'ezsection' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $query->bindValue( $id, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
     }
 
     /**
@@ -101,6 +180,20 @@ class EzcDatabase extends Gateway
      */
     public function assignSectionToContent( $sectionId, $contentId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $query = $this->dbHandler->createUpdateQuery();
+        $query->update(
+            $this->dbHandler->quoteTable( 'ezcontentobject' )
+        )->set(
+                $this->dbHandler->quoteColumn( 'section_id' ),
+                $query->bindValue( $sectionId, null, \PDO::PARAM_INT )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
     }
 }
