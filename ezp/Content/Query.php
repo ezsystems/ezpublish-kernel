@@ -19,14 +19,22 @@ class Query
     public $criterion;
 
     /**
-     * Not implemented yet
+     * Query sorting clauses
+     * @var \ezp\Persistence\Content\Query\SortClause[]
      */
     public $sortClauses;
 
     /**
-     * Not implemented yet
+     * Query offset
+     * @var integer
      */
     public $offset;
+
+    /**
+     * Query limit
+     * @var integer
+     */
+    public $limit;
 
     const SORT_ASC = 'ascending';
 
