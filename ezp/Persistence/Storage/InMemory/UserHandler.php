@@ -229,7 +229,7 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Returns the user policies associated with the user
+     * Returns the user policies associated with the user (including inherited policies from user groups)
      *
      * @param mixed $userId
      * @return \ezp\Persistence\User\Policy[]
@@ -313,7 +313,7 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
-     * Assign role to user with given limitation
+     * Assign role to user group with given limitation
      *
      * The limitation array may look like:
      * <code>
@@ -330,7 +330,9 @@ class UserHandler implements UserHandlerInterface
      * Where the keys are the limitation identifiers, and the respective values
      * are an array of limitation values. The limitation parameter is optional.
      *
-     * @param mixed $groupId
+     * @param mixed $groupId The group Id to assign the role to.
+     *                       In Legacy storage engine this is the content object id of the group to assign to.
+     *                       Assigning to a user is not supported, only un-assigning is supported for bc.
      * @param mixed $roleId
      * @param array $limitation @todo Remove or implement
      * @throws \ezp\Base\Exception\NotFound If group or role is not found
@@ -358,7 +360,7 @@ class UserHandler implements UserHandlerInterface
     /**
      * Un-assign a role
      *
-     * @param mixed $groupId
+     * @param mixed $groupId The group / user Id to un-assign a role from
      * @param mixed $roleId
      * @throws \ezp\Base\Exception\NotFound If group or role is not found
      * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user[_group] Content Type

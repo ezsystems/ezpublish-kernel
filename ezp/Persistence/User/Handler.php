@@ -72,7 +72,7 @@ interface Handler
     public function loadRole( $roleId );
 
     /**
-     * Load roles assigned to a user/group
+     * Load roles assigned to a user/group (not including inherited roles)
      *
      * @param mixed $groupId
      * @return \ezp\Persistence\User\Role[]
@@ -123,7 +123,7 @@ interface Handler
     public function removePolicy( $roleId, $policyId );
 
     /**
-     * Returns the policies associated with a user/group (including inherited policies)
+     * Returns the user policies associated with the user (including inherited policies from user groups)
      *
      * @param mixed $userId
      * @return \ezp\Persistence\User\Policy[]
@@ -131,7 +131,7 @@ interface Handler
     public function loadPoliciesByUserId( $userId );
 
     /**
-     * Assign role to user[group] with given limitation
+     * Assign role to user group with given limitation
      *
      * The limitation array may look like:
      * <code>

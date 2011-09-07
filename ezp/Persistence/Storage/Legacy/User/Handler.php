@@ -118,6 +118,7 @@ class Handler implements BaseUserHandler
      *
      * @param mixed $roleId
      * @return \ezp\Persistence\User\Role
+     * @throws \ezp\Base\Exception\NotFound If role is not found
      */
     public function loadRole( $roleId )
     {
@@ -194,7 +195,7 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Returns the policies associated with a user/group (including inherited policies)
+     * Returns the user policies associated with the user (including inherited policies from user groups)
      *
      * @param mixed $userId
      * @return \ezp\Persistence\User\Policy[]
@@ -206,7 +207,7 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * Assign role to user with given limitation
+     * Assign role to user group with given limitation
      *
      * The limitation array may look like:
      * <code>
@@ -234,7 +235,9 @@ class Handler implements BaseUserHandler
     }
 
     /**
-     * @param mixed $groupId
+     * Un-assign a role
+     *
+     * @param mixed $groupId The group / user Id to un-assign a role from
      * @param mixed $roleId
      */
     public function unAssignRole( $groupId, $roleId )
