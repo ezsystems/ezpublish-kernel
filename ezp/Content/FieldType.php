@@ -163,7 +163,7 @@ abstract class FieldType
      */
     public function allowedValidators()
     {
-        return array_keys( $this->allowedValidators );
+        return $this->allowedValidators;
     }
 
     /**
