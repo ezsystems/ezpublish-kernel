@@ -240,6 +240,39 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
+     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::sectionHandler
+     * @return void
+     */
+    public function testSectionHandler()
+    {
+        $handler = $this->getRepositoryHandlerFixture();
+        $sectionHandler = $handler->sectionHandler();
+
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content\\Section\\Handler',
+            $sectionHandler
+        );
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Section\\Handler',
+            $sectionHandler
+        );
+    }
+
+    /**
+     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::sectionHandler
+     * @return void
+     */
+    public function testSectionHandlerTwice()
+    {
+        $handler = $this->getRepositoryHandlerFixture();
+
+        $this->assertSame(
+            $handler->sectionHandler(),
+            $handler->sectionHandler()
+        );
+    }
+
+    /**
      * Returns the RepositoryHandler
      *
      * @return RepositoryHandler
