@@ -23,7 +23,7 @@ class TextLine extends FieldType
     protected $defaultValue = '';
     protected $isSearchable = true;
 
-    protected $allowedValidators = array( 'StringValidator' => array( 'maxStringLength' => null ) );
+    protected $allowedValidators = array( 'StringValidator' );
 
     public function __construct()
     {
