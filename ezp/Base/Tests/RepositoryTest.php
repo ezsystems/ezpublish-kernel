@@ -68,6 +68,38 @@ class RepositoryTest extends BaseServiceTest
     /**
      * @covers \ezp\Base\Repository::canUser
      */
+    public function testCanUserManageRoleWithPolicies()
+    {
+        // This fails unless user is refreshed in the bottom (policies are not updated by operations bellow)
+        //$role = $this->repository->getUserService()->loadRole( 2 );
+        //$this->assertFalse( $this->repository->canUser( 'edit', $role ) );
+        //$this->assertFalse( $this->repository->canUser( '*', $role ) );
+
+        $service = $this->repository->getUserService();
+        $contentService = $this->repository->getContentService();
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
+        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+            $contentService->load( 10 )->locations[0],
+            $contentService->load( $userGroup->id )->locations[0]
+        );
+
+        $role = new Role();
+        $role->name = 'Role manager';
+        $role->addPolicy( $policy = new Policy( $role ) );
+        $policy->module = 'role';
+        $policy->function = '*';
+        $policy->limitations = '*';
+        $role = $service->createRole( $role );
+        $service->assignRole( $userGroup, $role );
+
+        $role = $this->repository->getUserService()->loadRole( 2 );
+        $this->assertTrue( $this->repository->canUser( 'edit', $role ) );
+        $this->assertTrue( $this->repository->canUser( '*', $role ) );
+    }
+
+    /**
+     * @covers \ezp\Base\Repository::canUser
+     */
     public function testCanUserAssignSection()
     {
         $section = $this->repository->getSectionService()->load( 2 );
@@ -87,15 +119,10 @@ class RepositoryTest extends BaseServiceTest
         // setup (create new group, move user:10 to it and apply roles to that group)
         $service = $this->repository->getUserService();
         $contentService = $this->repository->getContentService();
-
-        $parentUserGroup = $service->loadGroup( 4 );
-        $userGroup = $service->createGroup( $parentUserGroup, 'Editors' );// Users/Editors
-
-        $userContent =  $contentService->load( 10 );
-        $groupContent =  $contentService->load( $userGroup->id );
-        $this->repository->getLocationService()->move(
-            $userContent->locations[0],
-            $groupContent->locations[0]
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
+        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+            $contentService->load( 10 )->locations[0],
+            $contentService->load( $userGroup->id )->locations[0]
         );
 
         $role = new Role();

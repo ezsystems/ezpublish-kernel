@@ -63,7 +63,8 @@ class Role extends Model implements ModelDefinition
     public function definition()
     {
         return array(
-            'module' => 'user',
+            'module' => 'role',
+            // @todo Add functions (with group limitations?)
         );
     }
 
