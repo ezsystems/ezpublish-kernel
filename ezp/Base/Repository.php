@@ -102,13 +102,13 @@ class Repository
      *
      * @param string $function Eg: read, move, create
      * @param \ezp\Base\ModelDefinition $module An model instance
-     * @param \ezp\Base\Model $additionalModel An additional model instance in cases like 'assign' and so on
+     * @param \ezp\Base\Model $assignment An additional model instance in cases like 'assign' and so on
      * @return bool
      * @throws \ezp\Base\Exception\InvalidArgumentValue On invalid $function value
      * @throws \ezp\Base\Exception\BadConfiguration On missing __module__ in $model::defintion()
      * @throws \ezp\Base\Exception\Logic On limitation used in policies but not in $model::defintion()
      */
-    public function canUser( $function, ModelDefinition $model, Model $additionalModel = null )
+    public function canUser( $function, ModelDefinition $model, Model $assignment = null )
     {
         $definition = $model->definition();
         $className = get_class( $model );
@@ -159,7 +159,7 @@ class Repository
                     );
                 }
 
-                if ( !$limitationCompareFn( $model, $limitationValues, $this, $additionalModel ) )
+                if ( !$limitationCompareFn( $model, $limitationValues, $this, $assignment ) )
                     return false;
             }
         }

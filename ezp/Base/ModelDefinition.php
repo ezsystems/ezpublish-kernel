@@ -28,9 +28,9 @@ interface ModelDefinition
      *                 {
      *                     return $repository->getContentTypeService()->loadAll( $idNamePair = true );
      *                 },
-     *                 'compare' => function( Content $model, array $limitationsValues[, Repository $repository[, Model $model2 = null]] )
+     *                 'compare' => function( Model $content, array $limitationsValues[, Repository $repository[, Model $assignment = null]] )
      *                 {
-     *                     return in_array( $model->typeId, $limitationsValues );
+     *                     return in_array( $content->typeId, $limitationsValues );
      *                 },
      *                 'query' => function( Criterion $criterion, array $limitationsValues[, Repository $repository] )
      *                 {
@@ -49,8 +49,8 @@ interface ModelDefinition
      *
      * Where 'read' is function and 'Class' is limitation identifier.
      *
-     * Bellow that are three possible keys: 'options', a callback returning a list of options
-     * or a list of options, where key is scalar value identifying limitation and value is human readable name.
+     * Bellow that are three possible keys: 'options', a callback returning a list of options,
+     * where key is scalar value identifying limitation and value is human readable name.
      * The second key is 'compare', a callback comparing instance of an object against limitation values.
      * The third possible key is 'query', a callback that modifies criterion object to include filtering rules
      * for the limitation.
