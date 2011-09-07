@@ -14,4 +14,47 @@ namespace ezp\Persistence\Storage\Legacy\Content\Section;
  */
 abstract class Gateway
 {
+    /**
+     * Inserts a new section with $name and $identifier
+     *
+     * @param string $name
+     * @param string $identifier
+     * @return int The ID of the new section
+     */
+    abstract public function insertSection( $name, $identifier );
+
+    /**
+     * Updates section with $id to have $name and $identifier
+     *
+     * @param int $id
+     * @param string $name
+     * @param string $identifier
+     * @return void
+     */
+    abstract public function updateSection( $id, $name, $identifier );
+
+    /**
+     * Loads data for section with $id
+     *
+     * @param int $id
+     * @return string[][]
+     */
+    abstract public function loadSectionData( $id );
+
+    /**
+     * Counts the number of content objects assigned to section with $id
+     *
+     * @param int $id
+     * @return int
+     */
+    abstract public function countContentObjectsInSection( $id );
+
+    /**
+     * Inserts the assignment of $contentId to $sectionId
+     *
+     * @param int $sectionId
+     * @param int $contentId
+     * @return void
+     */
+    abstract public function assignSectionToContent( $sectionId, $contentId );
 }
