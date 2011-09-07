@@ -54,11 +54,11 @@ class RestrictedVersion extends ValueObject
     public $created;
 
     /**
-     * DRAFT, PUBLISHED, ARCHIVED.
+     * One of Version::STATUS_DRAFT, Version::STATUS_PUBLISHED, Version::STATUS_ARCHIVED
      *
      * @var int Constant.
      */
-    public $state;
+    public $status;
 
     /**
      * Content ID.

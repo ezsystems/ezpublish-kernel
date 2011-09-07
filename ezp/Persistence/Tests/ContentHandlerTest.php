@@ -15,6 +15,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\Relation as RelationValue,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Base\Exception\NotFound,
+    ezp\Content as ContentDomainObject,
     ezp\Content\Version,
     ezp\Content\Relation;
 
@@ -117,10 +118,11 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( $this->contentId + 1, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( 'test', $content->name );
+        $this->assertEquals( ContentDomainObject::STATUS_DRAFT, $content->status );
 
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
         $this->assertEquals( 14, $content->version->creatorId );
-        $this->assertEquals( Version::STATUS_DRAFT, $content->version->state );
+        $this->assertEquals( Version::STATUS_DRAFT, $content->version->status );
         $this->assertEquals( $content->id, $content->version->contentId );
         $this->assertEquals( 1, count( $content->version->fields ) );
 
@@ -274,6 +276,7 @@ class ContentHandlerTest extends HandlerTest
         $content = $this->repositoryHandler->contentHandler()->update( $struct );
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId, $content->id );
+        $this->assertEquals( ContentDomainObject::STATUS_DRAFT, $content->status );
         $this->assertEquals( 10, $content->ownerId );
         $this->assertEquals( array( "eng-GB" => "New name", "fre-FR" => "Nouveau nom" ), $content->name );
 
@@ -355,7 +358,7 @@ class ContentHandlerTest extends HandlerTest
         self::assertSame( $content->currentVersionNo + 1, $draft->versionNo );
         self::assertGreaterThanOrEqual( $time, $draft->created );
         self::assertGreaterThanOrEqual( $time, $draft->modified );
-        self::assertSame( Version::STATUS_DRAFT, $draft->state, 'Created version must be a draft' );
+        self::assertSame( Version::STATUS_DRAFT, $draft->status, 'Created version must be a draft' );
         self::assertSame( $content->id, $draft->contentId );
 
         // Indexing fields by defition id to be able to compare them

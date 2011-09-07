@@ -215,7 +215,7 @@ class EzcDatabaseTest extends TestCase
         $version->id = null;
         $version->versionNo = 1;
         $version->creatorId = 13;
-        $version->state = 0;
+        $version->status = 0;
         $version->contentId = 2342;
         $version->fields = array();
         $version->created = 1312278322;

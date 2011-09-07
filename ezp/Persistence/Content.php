@@ -20,6 +20,13 @@ class Content extends ValueObject
     public $id;
 
     /**
+     * One of Content::STATUS_DRAFT, Content::STATUS_PUBLISHED, Content::STATUS_ARCHIVED
+     *
+     * @var int Constant.
+     */
+    public $status;
+
+    /**
      * @var string[]
      */
     public $name;

@@ -199,15 +199,16 @@ class Handler implements BaseContentHandler
     /**
      * Sets the state of object identified by $contentId and $version to $state.
      *
-     * The $state can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED.
+     * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
+     * @todo Is this supposed to be constants from Content or Version? They differ..
      *
      * @param int $contentId
-     * @param int $state
+     * @param int $status
      * @param int $version
      * @see ezp\Content
      * @return boolean
      */
-    public function setState( $contentId, $state, $version )
+    public function setStatus( $contentId, $status, $version )
     {
         throw new \Exception( "@TODO: Not implemented yet." );
     }

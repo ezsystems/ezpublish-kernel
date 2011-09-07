@@ -292,7 +292,7 @@ class ContentHandlerTest extends TestCase
             array( 'modified', 1311154214 ),
             array( 'creatorId', 14 ),
             array( 'created', 1311154214 ),
-            array( 'state', 1 ),
+            array( 'status', 1 ),
             array( 'contentId', 14 ),
         );
     }
@@ -563,7 +563,7 @@ class ContentHandlerTest extends TestCase
             array( 'id', 2 ),
             array( 'versionNo', 5 ),
             array( 'creatorId', 14 ),
-            array( 'state', 0 ),
+            array( 'status', 0 ),
             array( 'contentId', 14 ),
         );
     }

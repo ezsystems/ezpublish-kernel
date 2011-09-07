@@ -108,7 +108,7 @@ class MapperTest extends TestCase
                 'id' => null,
                 'versionNo' => 1,
                 'creatorId' => 13,
-                'state' => 0,
+                'status' => 0,
                 'contentId' => 2342,
                 'fields' => array(),
             ),
@@ -383,7 +383,7 @@ class MapperTest extends TestCase
         $version->modified = 1313047907;
         $version->creatorId = 14;
         $version->created = 1313047865;
-        $version->state = 3;
+        $version->status = 3;
         $version->contentId = 226;
         $version->languageIds = array( 'eng-US' );
 
@@ -395,7 +395,7 @@ class MapperTest extends TestCase
         $version->modified = 1313061404;
         $version->creatorId = 14;
         $version->created = 1313061317;
-        $version->state = 1;
+        $version->status = 1;
         $version->contentId = 226;
         $version->languageIds = array( 'eng-US' );
 

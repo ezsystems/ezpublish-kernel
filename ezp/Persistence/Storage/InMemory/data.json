@@ -1,11 +1,11 @@
 {
     "Content": [
-        {"id": 1,  "typeId": 1, "sectionId": 1, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "eZ Publish"}},
-        {"id": 4,  "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Users"}},
-        {"id": 12, "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Administrator users"}},
-        {"id": 14, "typeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Administrator user"}},
-        {"id": 42, "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Anonymous Users"}},
-        {"id": 10, "typeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "name": {"eng-GB": "Anonymous User"}}
+        {"id": 1,  "typeId": 1, "sectionId": 1, "ownerId": 14, "currentVersionNo": 1, "status": 1, "name": {"eng-GB": "eZ Publish"}},
+        {"id": 4,  "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "name": {"eng-GB": "Users"}},
+        {"id": 12, "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "name": {"eng-GB": "Administrator users"}},
+        {"id": 14, "typeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "name": {"eng-GB": "Administrator user"}},
+        {"id": 42, "typeId": 3, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "name": {"eng-GB": "Anonymous Users"}},
+        {"id": 10, "typeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "name": {"eng-GB": "Anonymous User"}}
     ],
     "Content\\Field": [
         {"id": 1, "fieldDefinitionId": 1, "type": "ezstring", "value": "eZ Publish NextGen", "language": null, "versionNo": 1, "_contentId": 1},
@@ -30,13 +30,13 @@
     ],
     "Content\\Location\\Trashed" : [],
     "Content\\Version" : [
-        {"id": 1, "contentId": 1,  "versionNo" : 1, "modified": 1310792400, "created": 1310792400,  "creatorId": 14, "state": 1 },
-        {"id": 2, "contentId": 1,  "versionNo" : 2, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "state": 0 },
-        {"id": 3, "contentId": 4,  "versionNo" : 1, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "state": 1 },
-        {"id": 4, "contentId": 12, "versionNo" : 1, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "state": 1 },
-        {"id": 5, "contentId": 14, "versionNo" : 1, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "state": 1 },
-        {"id": 6, "contentId": 42, "versionNo" : 1, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "state": 1 },
-        {"id": 7, "contentId": 10, "versionNo" : 1, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "state": 1 }
+        {"id": 1, "contentId": 1,  "versionNo" : 1, "modified": 1310792400, "created": 1310792400,  "creatorId": 14, "status": 1 },
+        {"id": 2, "contentId": 1,  "versionNo" : 2, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "status": 0 },
+        {"id": 3, "contentId": 4,  "versionNo" : 1, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "status": 1 },
+        {"id": 4, "contentId": 12, "versionNo" : 1, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "status": 1 },
+        {"id": 5, "contentId": 14, "versionNo" : 1, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "status": 1 },
+        {"id": 6, "contentId": 42, "versionNo" : 1, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "status": 1 },
+        {"id": 7, "contentId": 10, "versionNo" : 1, "modified": 1310793400, "created": 1310793400,  "creatorId": 14, "status": 1 }
     ],
     "Content\\Section" : [
         {"id": 1, "identifier": "standard", "name": "Standard"},

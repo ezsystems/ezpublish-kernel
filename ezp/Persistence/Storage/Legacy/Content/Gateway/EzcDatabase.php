@@ -123,7 +123,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $version->created, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'status' ),
-            $q->bindValue( $version->state, null, \PDO::PARAM_INT )
+            $q->bindValue( $version->status, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
             $q->bindValue( $version->contentId, null, \PDO::PARAM_INT )

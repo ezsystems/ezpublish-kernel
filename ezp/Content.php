@@ -119,14 +119,6 @@ class Content extends Model
     protected $section;
 
     /**
-     * The Content's status, as one of the ezp\Content::STATUS_* constants
-     * @todo Move to VO!
-     *
-     * @var int
-     */
-    protected $status = self::STATUS_DRAFT;
-
-    /**
      * Locations collection
      *
      * @var \ezp\Content\Location[]
@@ -168,7 +160,10 @@ class Content extends Model
      */
     public function __construct( Type $contentType )
     {
-        $this->properties = new ContentValue( array( 'typeId' => $contentType->id ) );
+        $this->properties = new ContentValue( array(
+            'typeId' => $contentType->id,
+            'status' => self::STATUS_DRAFT
+        ) );
         /*
         @TODO Make sure all dynamic properties writes to value object if scalar value (creationDate (int)-> properties->created )
         */
@@ -312,8 +307,10 @@ class Content extends Model
      */
     public function __clone()
     {
+        $this->properties = clone $this->properties;
         $this->properties->id = false;
-        $this->status = self::STATUS_DRAFT;
+        $this->properties->status = self::STATUS_DRAFT;
+        // @todo make sure everything is cloned (versions / fields...) or remove these clone functions
 
         // Get the location's, so that new content will be the old one's sibling
         $oldLocations = $this->locations;

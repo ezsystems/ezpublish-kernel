@@ -15,6 +15,7 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
+    ezp\Content,
     ezp\Content\Version,
     ezp\Base\Exception\NotFound,
     RuntimeException,
@@ -58,6 +59,7 @@ class ContentHandler implements ContentHandlerInterface
                 'typeId' => $content->typeId,
                 'sectionId' => $content->sectionId,
                 'ownerId' => $content->ownerId,
+                'status' => Content::STATUS_DRAFT,
                 'currentVersionNo' => 1,
             )
         );
@@ -68,7 +70,7 @@ class ContentHandler implements ContentHandlerInterface
                 'creatorId' => $content->ownerId,
                 'created' => time(),
                 'contentId' => $contentObj->id,
-                'state' => Version::STATUS_DRAFT,
+                'status' => Version::STATUS_DRAFT,
                 'versionNo' => 1
             )
         );
@@ -120,7 +122,7 @@ class ContentHandler implements ContentHandlerInterface
                 'creatorId' => $aVersion[0]->creatorId,
                 'created' => time(),
                 'contentId' => $contentId,
-                'state' => Version::STATUS_DRAFT,
+                'status' => Version::STATUS_DRAFT,
                 'versionNo' => $newVersionNo
             )
         );
@@ -169,6 +171,7 @@ class ContentHandler implements ContentHandlerInterface
                 "typeId" => $content->typeId,
                 "sectionId" => $content->sectionId,
                 "ownerId" => $content->ownerId,
+                "status" => $content->status,
                 "currentVersionNo" => $currentVersionNo,
             )
         );
@@ -190,7 +193,7 @@ class ContentHandler implements ContentHandlerInterface
                     "creatorId" => $version->creatorId,
                     "created" => time(),
                     "contentId" => $contentObj->id,
-                    "state" => $version->state,
+                    "status" => $version->status,
                 )
             );
         }
@@ -262,7 +265,7 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * @see ezp\Persistence\Content\Handler
      */
-    public function setState( $contentId, $state, $version )
+    public function setStatus( $contentId, $status, $version )
     {
         throw new RuntimeException( '@TODO: Implement' );
     }

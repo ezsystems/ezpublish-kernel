@@ -50,7 +50,7 @@ class Version extends Model
         'creatorId' => true,
         'created' => true,
         'modified' => true,
-        "state" => false,
+        "status" => false,
         'content' => false,
         "contentId" => false,
     );
@@ -81,7 +81,10 @@ class Version extends Model
      */
     public function __construct( Content $content )
     {
-        $this->properties = new VersionValue( array( 'contentId' => $content->id ) );
+        $this->properties = new VersionValue( array(
+            'contentId' => $content->id,
+            'status' => self::STATUS_DRAFT,
+        ) );
         $this->content = $content;
         $this->fields = new FieldCollection( $this );
     }

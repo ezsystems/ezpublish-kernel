@@ -158,7 +158,7 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( array( "eng-GB" => "New name" ), $content->name, "Name not correctly set" );
         self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
-        self::assertEquals( Content::STATUS_DRAFT, $content->status, "Status not correctly set" );
+        self::assertEquals( Content::STATUS_PUBLISHED, $content->status, "Status not correctly set" );
     }
 
     /**
@@ -198,7 +198,7 @@ class ContentTest extends BaseServiceTest
         $this->assertEquals( 1310792400, $content->versions[1]->modified );
         $this->assertEquals( 1310792400, $content->versions[1]->created );
         $this->assertEquals( 14, $content->versions[1]->creatorId );
-        $this->assertEquals( Content::STATUS_PUBLISHED, $content->versions[1]->state );
+        $this->assertEquals( Version::STATUS_PUBLISHED, $content->versions[1]->status );
 
         $this->assertEquals( 2, $content->versions[2]->id );
         $this->assertEquals( 1, $content->versions[1]->contentId );
@@ -206,7 +206,7 @@ class ContentTest extends BaseServiceTest
         $this->assertEquals( 1310793400, $content->versions[2]->modified );
         $this->assertEquals( 1310793400, $content->versions[2]->created );
         $this->assertEquals( 14, $content->versions[2]->creatorId );
-        $this->assertEquals( Content::STATUS_DRAFT, $content->versions[2]->state );
+        $this->assertEquals( Version::STATUS_DRAFT, $content->versions[2]->status );
     }
 
     /**
@@ -231,13 +231,13 @@ class ContentTest extends BaseServiceTest
             {
                 $this->assertEquals( 1310792400, $version->modified );
                 $this->assertEquals( 1310792400, $version->created );
-                $this->assertEquals( 1, $version->state );
+                $this->assertEquals( 1, $version->status );
             }
             else if ( $version->id == 2 )
             {
                 $this->assertEquals( 1310793400, $version->modified );
                 $this->assertEquals( 1310793400, $version->created );
-                $this->assertEquals( 0, $version->state );
+                $this->assertEquals( 0, $version->status );
             }
 
             $this->assertInstanceOf( 'ezp\\Content\\Field\\Collection', $version->fields );
@@ -505,7 +505,7 @@ class ContentTest extends BaseServiceTest
         // Try first without argument (current version)
         $draft = $this->service->createDraftFromVersion( $content );
         self::assertEquals( $maxVersionNo + 1, $draft->versionNo );
-        self::assertSame( Content::STATUS_DRAFT, $draft->state );
+        self::assertSame( Content::STATUS_DRAFT, $draft->status );
         self::assertSame( count( $srcVersion->fields ), count( $draft->fields ) );
         foreach ( $srcVersion->fields as $identifier => $field )
         {
@@ -529,7 +529,7 @@ class ContentTest extends BaseServiceTest
         $srcVersion = $draft;
         $draft = $this->service->createDraftFromVersion( $content, $srcVersion );
         self::assertEquals( $maxVersionNo + 1, $draft->versionNo );
-        self::assertSame( Content::STATUS_DRAFT, $draft->state );
+        self::assertSame( Content::STATUS_DRAFT, $draft->status );
         self::assertSame( count( $srcVersion->fields ), count( $draft->fields ) );
         foreach ( $srcVersion->fields as $identifier => $field )
         {

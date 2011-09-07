@@ -22,7 +22,7 @@ $version->versionNo = 4;
 $version->modified = 1312373715;
 $version->creatorId = 14;
 $version->created = 1312373690;
-$version->state = 1;
+$version->status = 1;
 $version->contentId = 226;
 $version->fields = array();
 

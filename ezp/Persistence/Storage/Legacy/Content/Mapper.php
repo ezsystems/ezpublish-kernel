@@ -100,7 +100,7 @@ class Mapper
         $version->modified = $version->created;
         $version->creatorId = $content->ownerId;
         // @todo: Is draft version correct?
-        $version->state = 0;
+        $version->status = 0;
         $version->contentId = $content->id;
 
         return $version;
@@ -254,7 +254,7 @@ class Mapper
         $version->modified = (int)$row['ezcontentobject_version_modified'];
         $version->creatorId = (int)$row['ezcontentobject_version_creator_id'];
         $version->created = (int)$row['ezcontentobject_version_created'];
-        $version->state = (int)$row['ezcontentobject_version_status'];
+        $version->status = (int)$row['ezcontentobject_version_status'];
         $version->contentId = (int)$row['ezcontentobject_version_contentobject_id'];
     }
 
