@@ -9,6 +9,7 @@
 
 namespace ezp;
 use ezp\Base\Model,
+    ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Persistence\User as UserValue,
     ezp\User\GroupAbleInterface;
@@ -25,7 +26,7 @@ use ezp\Base\Model,
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
-class User extends Model implements GroupAbleInterface
+class User extends Model implements GroupAbleInterface, ModelDefinition
 {
     /**
      * @var array Readable of properties on this object
@@ -85,6 +86,34 @@ class User extends Model implements GroupAbleInterface
         $this->roles = new TypeCollection( 'ezp\\User\\Role' );
         $this->policies = new TypeCollection( 'ezp\\User\\Policy' );
         $this->groups = new TypeCollection( 'ezp\\User\\Group' );
+    }
+
+    /**
+     * Returns definition of the role object, atm: permissions
+     *
+     * @access private
+     * @return array
+     */
+    public function definition()
+    {
+        return array(
+            'module' => 'user',
+            'functions' => array(
+                'login' => array(
+                    'SiteAccess' => array(
+                        'compare' => function( User $user, array $limitationsValues )
+                        {
+                            return true;// @todo Use current siteaccess when it becomes part of API
+                        },
+                    ),
+                ),
+                'password' => array(),
+                'preferences' => array(),
+                'register' => array(),
+                'selfedit' => array(),// @todo If this was a limitation somewhere, then logic could have been on limitation
+                                      // instead of having to be inline in the code with specific calls to selfedit + logic
+            ),
+        );
     }
 
     /**
@@ -153,6 +182,7 @@ class User extends Model implements GroupAbleInterface
         }
         if ( !empty( $limitations ) )
             return $limitations;
+
         return false;
     }
 }

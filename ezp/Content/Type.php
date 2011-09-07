@@ -9,6 +9,7 @@
 
 namespace ezp\Content;
 use ezp\Base\Model,
+    ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Persistence\Content\Type as TypeValue;
 
@@ -34,7 +35,7 @@ use ezp\Base\Model,
  * @property Type\FieldDefinition[] $fields Appending items after it has been created has no effect, use TypeService->addFieldDefinition()
  * @property-read Type\Group[] $groups Appended items after it has been created has no effect, use TypeService->link()
  */
-class Type extends Model
+class Type extends Model implements ModelDefinition
 {
     /**
      * @var array List of VO properties on this object
@@ -84,6 +85,20 @@ class Type extends Model
         $this->properties = new TypeValue();
         $this->fields = new TypeCollection( 'ezp\\Content\\Type\\FieldDefinition' );
         $this->groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
+    }
+
+    /**
+     * Returns definition of the role object, atm: permissions
+     *
+     * @access private
+     * @return array
+     */
+    public function definition()
+    {
+        return array(
+            'module' => 'class',
+            // @todo Add functions with group limitations
+        );
     }
 
     /**
