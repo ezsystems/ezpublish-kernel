@@ -39,13 +39,11 @@ class SectionHandlerTest extends TestCase
      */
     public function testCreate()
     {
-        $this->markTestIncomplete();
-
         $handler     = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expect( $this->once() )
+        $gatewayMock->expects( $this->once() )
             ->method( 'insertSection' )
             ->with(
                 $this->equalTo( 'New Section' ),
@@ -71,13 +69,11 @@ class SectionHandlerTest extends TestCase
      */
     public function testUpdate()
     {
-        $this->markTestIncomplete();
-
         $handler     = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expect( $this->once() )
+        $gatewayMock->expects( $this->once() )
             ->method( 'updateSection' )
             ->with(
                 $this->equalTo( 23 ),
@@ -101,25 +97,26 @@ class SectionHandlerTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::load
+     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::createSectionFromArray
      */
     public function testLoad()
     {
-        $this->markTestIncomplete();
-
         $handler     = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expect( $this->once() )
+        $gatewayMock->expects( $this->once() )
             ->method( 'loadSectionData' )
             ->with(
                 $this->equalTo( 23 )
             )->will(
                 $this->returnValue(
                     array(
-                        'id'         => '23',
-                        'identifier' => 'new_section',
-                        'name'       => 'New Section',
+                        array(
+                            'id'         => '23',
+                            'identifier' => 'new_section',
+                            'name'       => 'New Section',
+                        ),
                     )
                 )
             );
@@ -143,24 +140,22 @@ class SectionHandlerTest extends TestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete();
-
         $handler     = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expect( $this->once() )
+        $gatewayMock->expects( $this->once() )
             ->method( 'countContentObjectsInSection' )
             ->with( $this->equalTo( 23 ) )
             ->will( $this->returnValue( 0 ) );
 
-        $gatewayMock->expect( $this->once() )
+        $gatewayMock->expects( $this->once() )
             ->method( 'deleteSection' )
             ->with(
                 $this->equalTo( 23 )
             );
 
-        $result = $handler->load( 23 );
+        $result = $handler->delete( 23 );
     }
 
     /**
@@ -170,21 +165,19 @@ class SectionHandlerTest extends TestCase
      */
     public function testDeleteFailure()
     {
-        $this->markTestIncomplete();
-
         $handler     = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expect( $this->once() )
+        $gatewayMock->expects( $this->once() )
             ->method( 'countContentObjectsInSection' )
             ->with( $this->equalTo( 23 ) )
             ->will( $this->returnValue( 2 ) );
 
-        $gatewayMock->expect( $this->never() )
+        $gatewayMock->expects( $this->never() )
             ->method( 'deleteSection' );
 
-        $result = $handler->load( 23 );
+        $result = $handler->delete( 23 );
     }
 
     /**
@@ -193,20 +186,18 @@ class SectionHandlerTest extends TestCase
      */
     public function testAssign()
     {
-        $this->markTestIncomplete();
-
         $handler     = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
-        $gatewayMock->expect( $this->once() )
+        $gatewayMock->expects( $this->once() )
             ->method( 'assignSectionToContent' )
             ->with(
                 $this->equalTo( 23 ),
                 $this->equalTo( 42 )
             );
 
-        $result = $handler->assign( 23 );
+        $result = $handler->assign( 23, 42 );
     }
 
     /**
@@ -219,7 +210,7 @@ class SectionHandlerTest extends TestCase
         if ( !isset( $this->sectionHandler ) )
         {
             $this->sectionHandler = new Handler(
-                // $this->getGatewayMock()
+                $this->getGatewayMock()
             );
         }
         return $this->sectionHandler;

@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Content\Section;
-use ezp\Persistence\Content\Handler\Section as BaseSectionHandler,
+use ezp\Persistence\Content\Section\Handler as BaseSectionHandler,
     ezp\Persistence\Content\Section;
 
 /**
@@ -16,6 +16,23 @@ use ezp\Persistence\Content\Handler\Section as BaseSectionHandler,
  */
 class Handler implements BaseSectionHandler
 {
+    /**
+     * Section Gateway
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Section\Gateway $sectionGateway
+     */
+    protected $sectionGateway;
+
+    /**
+     * Creates a new Section Handler
+     *
+     * @param \ezp\Persistence\Storage\Legacy\Content\Section\Gateway $sectionGateway
+     */
+    public function __construct( Gateway $sectionGateway  )
+    {
+        $this->sectionGateway = $sectionGateway;
+    }
+
     /**
      * Creat a new section
      *
@@ -25,7 +42,14 @@ class Handler implements BaseSectionHandler
      */
     public function create( $name, $identifier )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $section = new Section();
+
+        $section->name = $name;
+        $section->identifier = $identifier;
+
+        $section->id = $this->sectionGateway->insertSection( $name, $identifier );
+
+        return $section;
     }
 
     /**
@@ -37,7 +61,14 @@ class Handler implements BaseSectionHandler
      */
     public function update( $id, $name, $identifier )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $this->sectionGateway->updateSection( $id, $name, $identifier );
+
+        $section = new Section();
+        $section->id = $id;
+        $section->name = $name;
+        $section->identifier = $identifier;
+
+        return $section;
     }
 
     /**
@@ -48,7 +79,30 @@ class Handler implements BaseSectionHandler
      */
     public function load( $id )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $rows = $this->sectionGateway->loadSectionData( $id );
+
+        if ( count( $rows ) < 1 )
+        {
+            throw new \RuntimeException( "Section with ID '{$id}' not found." );
+        }
+        return $this->createSectionFromArray( reset( $rows ) );
+    }
+
+    /**
+     * Creates a Section from the given $data
+     *
+     * @param array $data
+     * @return \ezp\Persistence\Content\Section
+     */
+    protected function createSectionFromArray( array $data )
+    {
+        $section = new Section();
+
+        $section->id = (int)$data['id'];
+        $section->name = $data['name'];
+        $section->identifier = $data['identifier'];
+
+        return $section;
     }
 
     /**
@@ -62,7 +116,15 @@ class Handler implements BaseSectionHandler
      */
     public function delete( $id )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $contentCount = $this->sectionGateway->countContentObjectsInSection( $id );
+
+        if ( $contentCount > 0 )
+        {
+            throw new \RuntimeException(
+               "Section with ID '{$id}' still has content assigned."
+            );
+        }
+        $this->sectionGateway->deleteSection( $id );
     }
 
     /**
@@ -73,7 +135,7 @@ class Handler implements BaseSectionHandler
      */
     public function assign( $sectionId, $contentId )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $this->sectionGateway->assignSectionToContent( $sectionId, $contentId );
     }
 }
 ?>

@@ -50,6 +50,14 @@ abstract class Gateway
     abstract public function countContentObjectsInSection( $id );
 
     /**
+     * Deletes the Section with $id
+     *
+     * @param int $id
+     * @return void
+     */
+    abstract public function deleteSection( $id );
+
+    /**
      * Inserts the assignment of $contentId to $sectionId
      *
      * @param int $sectionId
