@@ -13,6 +13,7 @@ class Query
 {
     /**
      * The Query criterion
+     * Can contain multiple criterion, as items of a logical one (by default AND)
      * @var Criterion
      */
     public $criterion;
@@ -20,11 +21,15 @@ class Query
     /**
      * Not implemented yet
      */
-    public $sortBy;
+    public $sortClauses;
 
     /**
      * Not implemented yet
      */
     public $offset;
+
+    const SORT_ASC = 'ascending';
+
+    const SORT_DESC = 'descending';
 }
 ?>

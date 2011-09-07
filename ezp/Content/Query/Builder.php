@@ -9,6 +9,7 @@
 
 namespace ezp\Content\Query;
 use ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Query\SortClause,
     ezp\Base\Exception\PropertyNotFound,
     InvalidArgumentException,
     ezp\Content\CriterionFactory,
@@ -51,6 +52,11 @@ use ezp\Persistence\Content\Criterion,
  */
 class Builder
 {
+    public function __construct()
+    {
+        $this->sort = new SortClauseBuilder();
+    }
+
     /**
      * Magic getter.
      * Gives access to criteria classes by means of their class name:
@@ -76,7 +82,9 @@ class Builder
      * The given criteria will be added with a logical AND, meaning that they must all match.
      * To handle OR criteria, the {@see or}/{@see lOr} methods must be used.
      *
-     * @param Criterion $c
+     * @param \ezp\Persistence\Content\Criterion..$ $c
+     *
+     * @return \ezp\Content\Query\Builder
      */
     public function addCriteria( Criterion $c )
     {
@@ -88,6 +96,8 @@ class Builder
             }
             $this->criteria[] = $arg;
         }
+
+        return $this;
     }
 
     /**
@@ -160,18 +170,48 @@ class Builder
     }
 
     /**
+     * Adds new sorting clause objects to the query. One to many objects can be provided.
+     *
+     * @param \ezp\Persistence\Content\SortClause..$ $sortClause
+     *
+     * @return \ezp\Content\Query\Builder Self
+     */
+    public function addSortClause( SortClause $sortClause )
+    {
+        foreach ( func_get_args() as $arg )
+        {
+            if ( !$arg instanceof SortClause )
+            {
+                throw new InvalidArgumentException( "All arguments must be instances of ezp\Persistence\Content\Query\SortClause" );
+            }
+            $this->sortClauses[] = $arg;
+        }
+
+        return $this;
+    }
+
+    /**
      * Returns the query
-     * @return Query
+     * @return \ezp\Content\Query
      */
     public function getQuery()
     {
         $query = new Query;
 
         // group all the criteria with a LogicalAnd
-        $query->criteria = call_user_func_array(
-            array( $this, 'and' ),
-            $this->criteria
-        );
+        if ( count( $this->criteria ) > 1 )
+        {
+            $query->criterion = call_user_func_array(
+                array( $this, 'and' ),
+                $this->criteria
+            );
+        }
+        else
+        {
+            $query->criterion = $this->criteria[0];
+        }
+
+        $query->sortClauses = $this->sortClauses;
 
         return $query;
     }
@@ -181,5 +221,17 @@ class Builder
      * @var Criterion[]
      */
     private $criteria = array();
+
+    /**
+     * SortClause objects array
+     * @var \ezp\Persistence\Content\Query\SortClause[]
+     */
+    private $sortClauses = array();
+
+    /**
+     * Sort clause builder
+     * @var \ezp\Content\Query\SortClauseBuilder
+     */
+    public $sort;
 }
 ?>

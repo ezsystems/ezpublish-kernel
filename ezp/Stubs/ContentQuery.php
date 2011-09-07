@@ -9,10 +9,10 @@
  */
 
 use ezp\Base\Repository,
-    ezp\Content;
+    ezp\Content,
+    ezp\Content\Query;
 
-$contentService = Repository::get()->getContentService();
-$qb = $contentService->getQueryBuilder();
+$qb = new ezp\Content\Query\Builder;
 
 // a full criteria
 $qb->addCriteria(
@@ -20,6 +20,9 @@ $qb->addCriteria(
     $qb->urlAlias->like( '/cms/amazing/*' ),
     $qb->contentType->eq( 'blog_post' ),
     $qb->field->eq( 'author', 'community@ez.no' )
+)->addSortClause(
+    $qb->sort->field( 'blog_post', 'title', Query::SORT_ASC ),
+    $qb->sort->dateCreated( Query::SORT_DESC )
 );
 $contentList = $contentService->find( $qb->getQuery() );
 
