@@ -157,12 +157,13 @@ class Backend
      * @param string $type
      * @param int|string $id
      * @param array $data
+     * @param bool $union Specifies if data should be merged with existing data or not
      * @return bool False if data does not exist and can not be updated
      * @uses updateByMatch()
      */
-    public function update( $type, $id, array $data )
+    public function update( $type, $id, array $data, $union = true )
     {
-        return $this->updateByMatch( $type, array( 'id' => $id ), $data );
+        return $this->updateByMatch( $type, array( 'id' => $id ), $data, $union );
     }
 
     /**
@@ -174,10 +175,11 @@ class Backend
      * @param string $type
      * @param array $match A flat array with property => value to match against
      * @param array $data
+     * @param bool $union Specifies if data should be merged with existing data or not
      * @return bool False if data does not exist and can not be updated
      * @throws InvalidArgumentValue On invalid $type
      */
-    public function updateByMatch( $type, array $match, array $data )
+    public function updateByMatch( $type, array $match, array $data, $union = true )
     {
         if ( !is_scalar($type) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
@@ -190,7 +192,10 @@ class Backend
         {
             if ( $this->match( $item, $match ) )
             {
-                $this->data[$type][$key] = $data + $this->data[$type][$key];
+                if ( $union )
+                    $this->data[$type][$key] = $data + $this->data[$type][$key];
+                else
+                    $this->data[$type][$key] = $data;
                 $return = true;
             }
         }
