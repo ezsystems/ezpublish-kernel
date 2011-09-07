@@ -25,14 +25,14 @@ abstract class Handler
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
-     * @param Criterion $criterion
+     * @param \ezp\Persistence\Content\Criterion $criterion
      * @param int $offset
      * @param int|null $limit
-     * @param $sort
+     * @param \ezp\Persistence\Content\Query\SortClause[] $sort
      * @param string[] $translations
-     * @return ezp\Persistence\Content\Search\Result
+     * @return \ezp\Persistence\Content\Search\Result
      */
-    abstract public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null, $translations = null );
+    abstract public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, $translations = null );
 
     /**
      * Returns a single Content object found.

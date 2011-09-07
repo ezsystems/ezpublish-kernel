@@ -63,13 +63,13 @@ class EzcDatabase extends Gateway
      * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit
-     * @param $sort
+     * @param \ezp\Persistence\Content\Query\SortClause[] $sort
      * @return mixed[][]
      * @TODO This method now uses 3 querys (counting, ID fetching, loading) to
      *       enable proper use of $offset and $limit. Do we find a way to
      *       reduce this query count?
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null )
+    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null )
     {
         // Get full object count
         $query = $this->handler->createSelectQuery();

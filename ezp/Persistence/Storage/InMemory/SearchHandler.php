@@ -64,7 +64,7 @@ class SearchHandler extends Handler
     /**
      * @see \ezp\Persistence\Content\Search\Handler
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null, $translations = null )
+    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, $translations = null )
     {
         throw new Exception( "Not implemented yet." );
     }
