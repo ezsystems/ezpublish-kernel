@@ -564,3 +564,13 @@ CREATE TABLE `ezsearch_word` (
   KEY `ezsearch_word_obj_count` (`object_count`),
   KEY `ezsearch_word_word_i` (`word`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2523 DEFAULT CHARSET=utf8;
+
+DROP TABLE IF EXISTS `ezsection`;
+CREATE TABLE `ezsection` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `identifier` varchar(255) DEFAULT NULL,
+  `locale` varchar(255) DEFAULT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `navigation_part_identifier` varchar(100) DEFAULT 'ezcontentnavigationpart',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

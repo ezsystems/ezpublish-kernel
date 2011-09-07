@@ -293,6 +293,13 @@ CREATE TABLE 'ezsearch_word' (
       'object_count' integer NOT NULL DEFAULT '0',
       'word' text(150) DEFAULT NULL
 );
+CREATE TABLE 'ezsection' (
+  'id' integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+  'identifier' text(255) DEFAULT NULL,
+  'locale' text(255) DEFAULT NULL,
+  'name' text(255) DEFAULT NULL,
+  'navigation_part_identifier' text(100) DEFAULT 'ezcontentnavigationpart'
+);
 CREATE UNIQUE INDEX 'ezbinaryfile_pri' ON 'ezbinaryfile' ( 'contentobject_attribute_id', 'version' );
 CREATE INDEX 'ezco_link_from' ON 'ezcontentobject_link' ( 'from_contentobject_id', 'from_contentobject_version', 'contentclassattribute_id' );
 CREATE INDEX 'ezco_link_to_co_id' ON 'ezcontentobject_link' ( 'to_contentobject_id' );
