@@ -110,7 +110,7 @@ interface Handler
      *
      * @param \ezp\Persistence\User\Policy $policy
      */
-    //public function updatePolicy( Policy $policy );
+    public function updatePolicy( Policy $policy );
 
     /**
      * Removes a policy from a role

@@ -170,6 +170,18 @@ class Handler implements BaseUserHandler
     }
 
     /**
+     * Update a policy
+     *
+     * Replaces limitations values with new values.
+     *
+     * @param \ezp\Persistence\User\Policy $policy
+     */
+    public function updatePolicy( Policy $policy )
+    {
+        throw new RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
      * Removes a policy from a role
      *
      * @param mixed $roleId

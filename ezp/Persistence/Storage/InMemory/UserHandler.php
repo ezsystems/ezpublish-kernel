@@ -203,6 +203,19 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
+     * Update a policy
+     *
+     * Replaces limitations values with new values.
+     *
+     * @param \ezp\Persistence\User\Policy $policy
+     */
+    public function updatePolicy( Policy $policy )
+    {
+        $policyArr = (array) $policy;
+        $this->backend->update( 'User\\Policy', $policyArr['id'], $policyArr, false );
+    }
+
+    /**
      * Removes a policy from a role
      *
      * @param mixed $roleId

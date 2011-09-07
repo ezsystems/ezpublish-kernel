@@ -308,6 +308,35 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
+     * Test updatePolicy function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::updatePolicy
+     */
+    public function testUpdatePolicy()
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $obj = $handler->createRole( self::getRole() );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertEquals( 3, count( $obj->policies ) );
+        $this->assertEquals( 'content', $obj->policies[0]->module );
+        $this->assertEquals( 'write', $obj->policies[0]->function );
+        $this->assertEquals( array( 'SubTree' => array( '/1/2/' ) ), $obj->policies[0]->limitations );
+
+        $id = $obj->id;
+        $policy = $obj->policies[0];
+        $policy->limitations = array( 'Node' => array( 2, 45 ) );
+        $handler->updatePolicy( $policy );
+
+        $obj = $handler->loadRole( $id );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertEquals( 3, count( $obj->policies ) );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $obj->policies[0] );
+        $this->assertEquals( 'content', $obj->policies[0]->module );
+        $this->assertEquals( 'write', $obj->policies[0]->function );
+        $this->assertEquals( array( 'Node' => array( 2, 45 ) ), $obj->policies[0]->limitations );
+    }
+
+    /**
      * Test removePolicy function
      *
      * @covers ezp\Persistence\Storage\InMemory\UserHandler::removePolicy
