@@ -9,13 +9,31 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Section\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Section\Gateway,
-    ezp\Persistence\Content\Section;
+    ezp\Persistence\Content\Section,
+    ezp\Persistence\Storage\Legacy\EzcDbHandler;
 
 /**
  * Section Handler
  */
 class EzcDatabase extends Gateway
 {
+    /**
+     * Database handler
+     *
+     * @param ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     */
+    protected $dbHandler;
+
+    /**
+     * Creates a new EzcDatabase Section Gateway
+     *
+     * @param ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     */
+    public function __construct ( EzcDbHandler $dbHandler )
+    {
+        $this->dbHandler = $dbHandler;
+    }
+
     /**
      * Inserts a new section with $name and $identifier
      *
