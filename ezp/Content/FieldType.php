@@ -57,13 +57,6 @@ abstract class FieldType
     protected $fieldSettings;
 
     /**
-     * Values for usage in validators.
-     *
-     * @var FieldSettings
-     */
-    protected $validatorData;
-
-    /**
      * The setting keys which are available on this field type.
      *
      * The key is the setting name, and the value is the default value for given
@@ -95,7 +88,6 @@ abstract class FieldType
     public function __construct()
     {
         $this->fieldSettings = new FieldSettings( $this->allowedSettings );
-        $this->validatorData = new FieldSettings( $this->allowedValidators );
     }
 
     /**
@@ -162,19 +154,6 @@ abstract class FieldType
     public function allowedSettings()
     {
         return array_keys( $this->allowedSettings );
-    }
-
-    /**
-     * Sets the constraint, $setting, associated with $validator, to $value.
-     *
-     * @param string $validator
-     * @param string $setting
-     * @param mixed $value
-     * @return void
-     */
-    public function setValidatorSetting( $validator, $setting, $value )
-    {
-        $this->validatorData[$validator][$setting] = $value;
     }
 
     /**
