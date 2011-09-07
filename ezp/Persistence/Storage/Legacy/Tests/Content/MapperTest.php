@@ -256,7 +256,7 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::extractContentFromRows
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractContentFromRows
      */
     public function testExtractContentFromRowsMultipleVersions()
     {
