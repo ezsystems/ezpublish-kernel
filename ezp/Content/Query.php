@@ -14,7 +14,7 @@ class Query
     /**
      * The Query criterion
      * Can contain multiple criterion, as items of a logical one (by default AND)
-     * @var Criterion
+     * @var \ezp\Persistence\Content\Criterion
      */
     public $criterion;
 

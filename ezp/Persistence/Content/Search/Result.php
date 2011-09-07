@@ -25,7 +25,7 @@ class Result extends ValueObject
     /**
      * Content objects returned by the search
      *
-     * @var array(ezp\Persistence\Content)
+     * @var \ezp\Persistence\Content[]
      */
     public $content = array();
 }

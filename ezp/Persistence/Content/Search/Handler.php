@@ -45,7 +45,7 @@ abstract class Handler
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
-     * @param Criterion $criterion
+     * @param \ezp\Persistence\Content\Criterion $criterion
      * @param string[] $translations
      * @return \ezp\Persistence\Content
      */
@@ -54,11 +54,8 @@ abstract class Handler
     /**
      * Indexes a content object
      *
-     * @param ezp\Persistence\Content $content
+     * @param \ezp\Persistence\Content $content
      * @return void
      */
     abstract public function indexContent( Content $content );
 }
-
-
-

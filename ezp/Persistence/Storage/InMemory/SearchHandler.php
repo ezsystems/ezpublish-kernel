@@ -62,19 +62,7 @@ class SearchHandler extends Handler
     }
 
     /**
-     * Returns a list of object satisfying the $criterion.
-     *
-     * Optionally a translation filter may be specified. If specified only the
-     * translations with the listed language codes will be retrieved. If not,
-     * all translations will be retrieved.
-     *
-     * @todo Finish implementation
-     * @param Criterion $criterion
-     * @param int $offset
-     * @param int|null $limit
-     * @param $sort
-     * @param string[] $translations
-     * @return ezp\Persistence\Content\Search\Result
+     * @see \ezp\Persistence\Content\Search\Handler
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, $sort = null, $translations = null )
     {
@@ -82,20 +70,7 @@ class SearchHandler extends Handler
     }
 
     /**
-     * Returns a single Content object found.
-     *
-     * Performs a {@link find()} query to find a single object. You need to
-     * ensure, that your $criterion ensure that only a single object can be
-     * retrieved.
-     *
-     * Optionally a translation filter may be specified. If specified only the
-     * translations with the listed language codes will be retrieved. If not,
-     * all translations will be retrieved.
-     *
-     * @todo Finish implementation
-     * @param Criterion $criterion
-     * @param string[] $translations
-     * @return \ezp\Persistence\Content
+     * @see \ezp\Persistence\Content\Search\Handler
      */
     public function findSingle( Criterion $criterion, $translations = null )
     {
@@ -120,11 +95,7 @@ class SearchHandler extends Handler
     }
 
     /**
-     * Indexes a content object
-     *
-     * @todo Finish implementation
-     * @param ezp\Persistence\Content $content
-     * @return void
+     * @see \ezp\Persistence\Content\Search\Handler
      */
     public function indexContent( Content $content )
     {
