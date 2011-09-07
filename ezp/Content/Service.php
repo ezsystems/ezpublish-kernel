@@ -21,6 +21,7 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Field\Collection as FieldCollection,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
+    ezp\Content\Search\Result,
     ezp\Persistence\ValueObject,
     ezp\Persistence\Content as ContentValue,
     ezp\Persistence\Content\CreateStruct,
@@ -261,6 +262,66 @@ class Service extends BaseService
         $version = $this->buildVersionDomainObject( $content, $newVersionVo );
         $content->versions[$newVersionVo->versionNo] = $version;
         return $version;
+    }
+
+    /**
+     * Triggers a content search against $query.
+     * $query should have been built using {@link \ezp\Content\Query\Builder} interface:
+     * <code>
+     * $queryBuilder = new ezp\Content\Query\Builder();
+     * $qb->addCriteria(
+     *     $qb->fulltext->like( 'eZ Publish' ),
+     *     $qb->urlAlias->like( '/cms/amazing/*' ),
+     *     $qb->contentType->eq( 'blog_post' ),
+     *     $qb->field->eq( 'author', 'community@ez.no' )
+     * );
+     * $contentList = $contentService->find( $qb->getQuery() );
+     * </code>
+     *
+     * @param \ezp\Content\Query $query
+     * @return \ezp\Content[]
+     * @todo User permissions
+     * @todo Translation filter
+     */
+    public function find( Query $query )
+    {
+        // TODO: handle $translations with $query object (not implemented yet)
+        $translations = null;
+        $result = $this->handler->searchHandler()->find(
+            $query->criterion,
+            $query->offset,
+            $query->limit,
+            $query->sortClauses,
+            $translations
+        );
+
+        $aContent = array();
+        foreach ( $result->content as $contentVo )
+        {
+            $aContent[] = $this->buildDomainObject( $contentVo );
+        }
+
+        return new Result( $aContent );
+    }
+
+    /**
+     * Triggers a content search against $query and returns only one content object
+     *
+     * @param \ezp\Content\Query $query
+     * @return \ezp\Content
+     * @todo User permissions
+     * @todo Translation filter
+     */
+    public function findSingle( Query $query )
+    {
+        // TODO: handle $translations with $query object (not implemented yet)
+        $translations = null;
+        $contentVo = $this->handler->searchHandler()->findSingle(
+            $query->criterion,
+            $translations
+        );
+
+        return $this->buildDomainObject( $contentVo );
     }
 
     /**
