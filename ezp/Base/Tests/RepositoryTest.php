@@ -101,6 +101,53 @@ class RepositoryTest extends BaseServiceTest
     /**
      * @covers \ezp\Base\Repository::canUser
      */
+    public function testCanUserManageType()
+    {
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $this->assertFalse( $this->repository->canUser( 'edit', $type ) );
+        $this->assertFalse( $this->repository->canUser( '*', $type ) );
+
+        $admin = $this->repository->getUserService()->load( 14 );
+        $this->repository->setUser( $admin );
+        $this->assertTrue( $this->repository->canUser( 'edit', $type ) );
+        $this->assertTrue( $this->repository->canUser( '*', $type ) );
+    }
+
+    /**
+     * @covers \ezp\Base\Repository::canUser
+     */
+    public function testCanUserManageTypeWithPolicies()
+    {
+        // This fails unless user is refreshed in the bottom (policies are not updated by operations bellow)
+        //$type = $this->repository->getContentTypeService()->load( 1 );
+        //$this->assertFalse( $this->repository->canUser( 'edit', $type ) );
+        //$this->assertFalse( $this->repository->canUser( '*', $type ) );
+
+        $service = $this->repository->getUserService();
+        $contentService = $this->repository->getContentService();
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
+        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+            $contentService->load( 10 )->locations[0],
+            $contentService->load( $userGroup->id )->locations[0]
+        );
+
+        $role = new Role();
+        $role->name = 'Type (Class) manager';
+        $role->addPolicy( $policy = new Policy( $role ) );
+        $policy->module = 'class';
+        $policy->function = '*';
+        $policy->limitations = '*';
+        $role = $service->createRole( $role );
+        $service->assignRole( $userGroup, $role );
+
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $this->assertTrue( $this->repository->canUser( 'edit', $type ) );
+        $this->assertTrue( $this->repository->canUser( '*', $type ) );
+    }
+
+    /**
+     * @covers \ezp\Base\Repository::canUser
+     */
     public function testCanUserCreateContent()
     {
         $section = $this->repository->getSectionService()->load( 1 );
