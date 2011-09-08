@@ -24,7 +24,13 @@ class Mapper
      */
     public function createLanguageFromCreateStruct( CreateStruct $struct )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $language = new Language();
+
+        $language->locale    = $struct->locale;
+        $language->name      = $struct->name;
+        $language->isEnabled = $struct->isEnabled;
+
+        return $language;
     }
 
     /**
@@ -35,6 +41,20 @@ class Mapper
      */
     public function extractLanguagesFromRows( array $rows )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $languages = array();
+
+        foreach ( $rows as $row )
+        {
+            $language = new Language();
+
+            $language->id        = (int)$row['id'];
+            $language->locale    = $row['locale'];
+            $language->name      = $row['name'];
+            $language->isEnabled = !( (int)$row['disabled'] );
+
+            $languages[] = $language;
+        }
+
+        return $languages;
     }
 }
