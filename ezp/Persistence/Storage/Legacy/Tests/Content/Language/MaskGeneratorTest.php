@@ -40,7 +40,7 @@ class MaskGeneratorTest extends TestCase
     /**
      * Returns test data for {@link testGenerateLanguageMask()}
      *
-     * @return arra
+     * @return array
      */
     public static function getLanguageMaskData()
     {
@@ -64,6 +64,46 @@ class MaskGeneratorTest extends TestCase
             'full' => array(
                 array( 'always-available' => 'eng-US', 'eng-US' => true, 'eng-GB' => true ),
                 7,
+            ),
+        );
+    }
+
+    /**
+     * @param string $locale
+     * @param bool $alwaysAvailable
+     * @param int $expectedIndicator
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator::generateLanguageIndicator
+     * @dataProvider getLanguageIndicatorData
+     */
+    public function testGenerateLanguageIndicator(
+        $locale, $alwaysAvailable, $expectedIndicator )
+    {
+        $generator = $this->getMaskGenerator();
+
+        $this->assertSame(
+            $expectedIndicator,
+            $generator->generateLanguageIndicator( $locale, $alwaysAvailable )
+        );
+    }
+
+    /**
+     * Returns test data for {@link testGenerateLanguageIndicator()}
+     *
+     * @return array
+     */
+    public static function getLanguageIndicatorData()
+    {
+        return array(
+            'not_available' => array(
+                'eng-GB',
+                false,
+                4,
+            ),
+            'always_available' => array(
+                'eng-US',
+                true,
+                3,
             ),
         );
     }

@@ -54,4 +54,17 @@ class MaskGenerator
         return $mask;
     }
 
+    /**
+     * Generates a language indicator from $locale and $alwaysAvailable
+     *
+     * @param string $locale
+     * @param bool $alwaysAvailable
+     * @return int
+     */
+    public function generateLanguageIndicator( $locale, $alwaysAvailable )
+    {
+        return $this->languageCache->getByLocale( $locale )->id
+            | ( $alwaysAvailable ? 1 : 0 );
+    }
+
 }
