@@ -27,6 +27,13 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
  */
 class EzcDatabaseTest extends TestCase
 {
+    /**
+     * The EzcDatabase gateway to test
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase
+     */
+    protected $gateway;
+
     public function setUp()
     {
         parent::setUp();
@@ -41,7 +48,7 @@ class EzcDatabaseTest extends TestCase
     public function testCtor()
     {
         $handlerMock = $this->getDatabaseHandler();
-        $gateway = new EzcDatabase( $handlerMock );
+        $gateway = $this->getGateway();
 
         $this->assertAttributeSame(
             $handlerMock,
@@ -56,7 +63,7 @@ class EzcDatabaseTest extends TestCase
      */
     public function testInsertGroup()
     {
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $group = $this->getGroupFixture();
 
@@ -123,7 +130,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_groups.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $struct = $this->getGroupUpdateStructFixture();
 
@@ -216,7 +223,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $this->assertEquals(
             3,
@@ -238,7 +245,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $this->assertEquals(
             1,
@@ -260,7 +267,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_groups.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $gateway->deleteGroup( 2 );
 
@@ -287,7 +294,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_groups.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
         $data = $gateway->loadGroupData( 2 );
 
         $this->assertSame(
@@ -316,7 +323,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_groups.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
         $data = $gateway->loadAllGroupsData();
 
         $this->assertEquals(
@@ -347,7 +354,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
         $rows = $gateway->loadTypesDataForGroup( 1, 0 );
 
         $this->assertEquals(
@@ -367,7 +374,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
         $rows = $gateway->loadTypeData( 1, 0 );
 
         $this->assertEquals(
@@ -427,7 +434,7 @@ class EzcDatabaseTest extends TestCase
      */
     public function testInsertType( $column, $expectation )
     {
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
         $type = $this->getTypeFixture();
 
         $gateway->insertType( $type );
@@ -465,7 +472,7 @@ class EzcDatabaseTest extends TestCase
      */
     public function testInsertTypeContentClassName( $column, $expectation )
     {
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
         $type = $this->getTypeFixture();
 
         $gateway->insertType( $type );
@@ -528,7 +535,7 @@ class EzcDatabaseTest extends TestCase
      */
     public function testInsertFieldDefinition()
     {
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $field = $this->getFieldDefinitionFixture();
         $storageField = $this->getStorageFieldDefinitionFixture();
@@ -678,7 +685,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $gateway->deleteFieldDefinition( 1, 0, 119 );
 
@@ -705,7 +712,7 @@ class EzcDatabaseTest extends TestCase
         $fieldDefinitionFixture->id = 160;
         $storageFieldDefinitionFixture = $this->getStorageFieldDefinitionFixture();
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
         $gateway->updateFieldDefinition( 2, 0, $fieldDefinitionFixture, $storageFieldDefinitionFixture );
 
         $this->assertQueryResult(
@@ -782,7 +789,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_groups.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $gateway->insertGroupAssignement( 3, 42, 1 );
 
@@ -816,7 +823,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $gateway->deleteGroupAssignement( 1, 1, 0 );
 
@@ -843,7 +850,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $updateStruct = $this->getTypeUpdateFixture();
 
@@ -877,7 +884,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $updateStruct = $this->getTypeUpdateFixture();
 
@@ -978,7 +985,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/../../_fixtures/contentobjects.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
         $res = $gateway->countInstancesOfType( 3, 0 );
 
         $this->assertEquals(
@@ -998,7 +1005,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/../../_fixtures/contentobjects.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
         $res = $gateway->countInstancesOfType( 23422342, 1 );
 
         $this->assertEquals(
@@ -1017,7 +1024,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $gateway->deleteFieldDefinitionsForType( 1, 0 );
 
@@ -1059,7 +1066,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $gateway->deleteFieldDefinitionsForType( 23, 1 );
 
@@ -1084,7 +1091,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $gateway->deleteGroupAssignementsForType( 1, 0 );
 
@@ -1109,7 +1116,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $gateway->deleteType( 23, 1 );
 
@@ -1134,7 +1141,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $gateway->deleteType( 1, 0 );
 
@@ -1159,7 +1166,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/existing_types.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
 
         $gateway->deleteType( 23, 1 );
 
@@ -1184,7 +1191,7 @@ class EzcDatabaseTest extends TestCase
             __DIR__ . '/_fixtures/type_to_publish.php'
         );
 
-        $gateway = new EzcDatabase( $this->getDatabaseHandler() );
+        $gateway = $this->getGateway();
         $gateway->publishTypeAndFields( 1, 1 );
 
         $this->assertQueryResult(
@@ -1210,6 +1217,22 @@ class EzcDatabaseTest extends TestCase
                 ->from( 'ezcontentclass_name' )
                 ->where( 'contentclass_id = 1 AND contentclass_version = 0' )
         );
+    }
+
+    /**
+     * Returns the EzcDatabase gateway to test
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase
+     */
+    protected function getGateway()
+    {
+        if ( !isset( $this->gateway ) )
+        {
+            $this->gateway = new EzcDatabase(
+                $this->getDatabaseHandler()
+            );
+        }
+        return $this->gateway;
     }
 
     /**
