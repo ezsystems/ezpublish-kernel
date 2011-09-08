@@ -268,13 +268,16 @@ class Service extends BaseService
      * Triggers a content search against $query.
      * $query should have been built using {@link \ezp\Content\Query\Builder} interface:
      * <code>
-     * $queryBuilder = new ezp\Content\Query\Builder();
+     * $qb = new ezp\Content\Query\Builder();
      * $qb->addCriteria(
      *     $qb->fulltext->like( 'eZ Publish' ),
      *     $qb->urlAlias->like( '/cms/amazing/*' ),
-     *     $qb->contentType->eq( 'blog_post' ),
+     *     $qb->contentTypeId->eq( 'folder' ),
      *     $qb->field->eq( 'author', 'community@ez.no' )
-     * );
+     * )->addSortClause(
+     *     $qb->sort->field( 'folder', 'name', Query::SORT_ASC ),
+     *     $qb->sort->dateCreated( Query::SORT_DESC )
+     * )->setOffset( 5 )->setLimit( 15 );
      * $contentList = $contentService->find( $qb->getQuery() );
      * </code>
      *
