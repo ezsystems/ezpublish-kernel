@@ -10,13 +10,40 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Language;
 use ezp\Persistence\Content\Language,
     ezp\Persistence\Content\Language\Handler as BaseLanguageHandler,
-    ezp\Persistence\Content\Language\CreateStruct;
+    ezp\Persistence\Content\Language\CreateStruct,
+    ezp\Base\Exception;
 
 /**
  * Language Handler
  */
 class Handler implements BaseLanguageHandler
 {
+    /**
+     * Language Gateway
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Gateway $languageGateway
+     */
+    protected $languageGateway;
+
+    /**
+     * Language Mapper
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Mapper $languageMapper
+     */
+    protected $languageMapper;
+
+    /**
+     * Creates a new Language Handler
+     *
+     * @param \ezp\Persistence\Storage\Legacy\Content\Language\Gateway $languageGateway
+     * @param \ezp\Persistence\Storage\Legacy\Content\Language\Mapper $languageMapper
+     */
+    public function __construct( Gateway $languageGateway, Mapper $languageMapper )
+    {
+        $this->languageGateway = $languageGateway;
+        $this->languageMapper  = $languageMapper;
+    }
+
     /**
      * Create a new language
      *
@@ -25,17 +52,21 @@ class Handler implements BaseLanguageHandler
      */
     public function create( CreateStruct $struct )
     {
-        throw new \RuntimeException( "Not implemented, yet" );
+        $language = $this->languageMapper->createLanguageFromCreateStruct(
+            $struct
+        );
+        $language->id = $this->languageGateway->insertLanguage( $language );
+        return $language;
     }
 
     /**
      * Update language
      *
-     * @param \ezp\Persistence\Content\Language $struct
+     * @param \ezp\Persistence\Content\Language $language
      */
-    public function update( Language $struct )
+    public function update( Language $language )
     {
-        throw new \RuntimeException( "Not implemented, yet" );
+        $this->languageGateway->updateLanguage( $language );
     }
 
     /**
@@ -47,7 +78,14 @@ class Handler implements BaseLanguageHandler
      */
     public function load( $id )
     {
-        throw new \RuntimeException( "Not implemented, yet" );
+        $rows = $this->languageGateway->loadLanguageData( $id );
+        $languages = $this->languageMapper->extractLanguagesFromRows( $rows );
+
+        if ( count( $languages ) < 1 )
+        {
+            throw new Exception\NotFound( 'Language', $id );
+        }
+        return reset( $languages );
     }
 
     /**
@@ -57,19 +95,21 @@ class Handler implements BaseLanguageHandler
      */
     public function loadAll()
     {
-        throw new \RuntimeException( "Not implemented, yet" );
+        $rows = $this->languageGateway->loadAllLanguagesData();
+        return $this->languageMapper->extractLanguagesFromRows( $rows );
     }
 
     /**
      * Delete a language
      *
-     * @todo Might throw an exception if the language is still associated with some content / types / (...) ?
+     * @todo Might throw an exception if the language is still associated with
+     *       some content / types / (...) ?
      *
      * @param mixed $id
      */
     public function delete( $id )
     {
-        throw new \RuntimeException( "Not implemented, yet" );
+        $this->languageGateway->deleteLanguage( $id );
     }
 }
 ?>

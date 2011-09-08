@@ -46,8 +46,6 @@ class LanguageHandlerTest extends TestCase
      */
     public function testCreate()
     {
-        $this->markTestIncomplete( 'Not implemented, yet.' );
-
         $handler = $this->getLanguageHandler();
 
         $mapperMock = $this->getMapperMock();
@@ -98,8 +96,6 @@ class LanguageHandlerTest extends TestCase
      */
     public function testUpdate()
     {
-        $this->markTestIncomplete( 'Not implemented, yet.' );
-
         $handler = $this->getLanguageHandler();
 
         $gatewayMock = $this->getGatewayMock();
@@ -126,8 +122,6 @@ class LanguageHandlerTest extends TestCase
      */
     public function testLoad()
     {
-        $this->markTestIncomplete( 'Not implemented, yet.' );
-
         $handler     = $this->getLanguageHandler();
         $mapperMock  = $this->getMapperMock();
         $gatewayMock = $this->getGatewayMock();
@@ -152,12 +146,35 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
+     * @covers \ezp\Persistence\Storage\Content\Language\Handler::load
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadFailure()
+    {
+        $handler     = $this->getLanguageHandler();
+        $mapperMock  = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadLanguageData' )
+            ->with( $this->equalTo( 2 ) )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractLanguagesFromRows' )
+            ->with( $this->equalTo( array() ) )
+            // No language extracted
+            ->will( $this->returnValue( array() ) );
+
+        $result = $handler->load( 2 );
+    }
+
+    /**
+     * @return void
      * @covers \ezp\Persistence\Storage\Content\Language\Handler::loadAll
      */
     public function testLoadAll()
     {
-        $this->markTestIncomplete( 'Not implemented, yet.' );
-
         $handler     = $this->getLanguageHandler();
         $mapperMock  = $this->getMapperMock();
         $gatewayMock = $this->getGatewayMock();
@@ -185,13 +202,11 @@ class LanguageHandlerTest extends TestCase
      */
     public function testDelete()
     {
-        $this->markTestIncomplete( 'Not implemented, yet.' );
-
         $handler     = $this->getLanguageHandler();
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects( $this->once() )
-            ->method( 'delete' )
+            ->method( 'deleteLanguage' )
             ->with( $this->equalTo( 2 ) );
 
         $result = $handler->delete( 2 );
@@ -207,7 +222,8 @@ class LanguageHandlerTest extends TestCase
         if ( !isset( $this->languageHandler ) )
         {
             $this->languageHandler = new Handler(
-                // $this->getGatewayMock()
+                $this->getGatewayMock(),
+                $this->getMapperMock()
             );
         }
         return $this->languageHandler;
