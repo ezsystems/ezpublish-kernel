@@ -21,7 +21,8 @@ use ezp\Content\Location\Trash\Service,
     ezp\Content\Section,
     ezp\Content\Query,
     ezp\Content\Query\Builder as QueryBuilder,
-    ezp\Persistence\Content\Location\Trashed as TrashedValue;
+    ezp\Persistence\Content\Location\Trashed as TrashedValue,
+    ezp\User;
 
 /**
  * Test case for Location service
@@ -92,7 +93,7 @@ class TrashTest extends Base
 
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );
-        $content = new Content( $type );
+        $content = new Content( $type, new User( 10 ) );
         $content->name = "test";
         $content->ownerId = 14;
         $content->section = $section;
@@ -111,7 +112,7 @@ class TrashTest extends Base
         $parentId = $this->topLocation->id;
         for ( $i = 0; $i < 10; ++$i )
         {
-            $content = new Content( $type );
+            $content = new Content( $type, new User( 10 ) );
             $content->name = "foo$i";
             $content->ownerId = 14;
             $content->section = $section;

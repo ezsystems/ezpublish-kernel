@@ -6,7 +6,8 @@ namespace ezp\Content;
 use ezp\Base\Configuration,
     ezp\Base\Autoloader,
     ezp\Content,
-    ezp\Content\Type\FieldDefinition;
+    ezp\Content\Type\FieldDefinition,
+    ezp\User;
 
 chdir( '../' );
 require 'config.php';
@@ -46,7 +47,7 @@ $section->identifier = 'standard';
 $section->name = "Standard";
 
 // Create Content object
-$content = new Content( $contentType );
+$content = new Content( $contentType, new User( 10 ) );
 $content->ownerId = 10;
 $content->section = $section;
 

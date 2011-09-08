@@ -9,6 +9,7 @@
 
 namespace ezp;
 use ezp\Base\Model,
+    ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Content\Translation,
     ezp\Content\Type,
@@ -43,6 +44,7 @@ use ezp\Base\Model,
  *                $myThirdVersion = $content->versions[3];
  *                </code>
  * @property-read \ezp\Content\Version $currentVersion Current version of content
+ * @property-read \ezp\Content\Location $mainLocation
  * @property-read \ezp\Content\Location[] $locations
  *                Locations for content. Iterable, countable and Array-accessible (with numeric indexes)
  *                First location referenced in the collection represents the main location for content
@@ -69,7 +71,7 @@ use ezp\Base\Model,
  *           </code>
  * @property int $ownerId Owner identifier
  */
-class Content extends Model
+class Content extends Model implements ModelDefinition
 {
     /**
      * Publication status constants
@@ -101,6 +103,7 @@ class Content extends Model
         'creationDate' => false,
         'mainLocation' => false,
         'section' => false,
+        'owner' => false,
         'fields' => true,
         'contentType' => false,
         'versions' => false,
@@ -154,24 +157,237 @@ class Content extends Model
     protected $versions;
 
     /**
+     * Owner ( User )
+     *
+     * @var \ezp\User
+     */
+    protected $owner;
+
+    /**
      * Create content based on content type object
      *
      * @param \ezp\Content\Type $contentType
+     * @param \ezp\User $owner
      */
-    public function __construct( Type $contentType )
+    public function __construct( Type $contentType, User $owner )
     {
         $this->properties = new ContentValue( array(
             'typeId' => $contentType->id,
-            'status' => self::STATUS_DRAFT
+            'status' => self::STATUS_DRAFT,
+            'ownerId' => $owner->id
         ) );
         /*
         @TODO Make sure all dynamic properties writes to value object if scalar value (creationDate (int)-> properties->created )
         */
         $this->contentType = $contentType;
+        $this->owner = $owner;
         $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
         $this->relations = new TypeCollection( 'ezp\\Content\\Relation' );
         $this->reversedRelations = new TypeCollection( 'ezp\\Content\\Relation' );
         $this->versions = new VersionCollection( array( new Version( $this ) ) );
+    }
+
+    /**
+     * Returns definition of the content object, atm: permissions
+     *
+     * @access private
+     * @return array
+     */
+    public function definition()
+    {
+        $def = array(
+            'module' => 'content',
+            'functions' => array(
+                // Note: Functions skipped in api: bookmark, dashboard, tipafriend and pdf
+                // @todo Add StateLimitations on functions that need them when object states exists in public api
+                'create' => array(
+                    // Note: Limitations 'Class' & 'Section' is copied from 'read' function further bellow
+                    'ParentOwner' => array(
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
+                        {
+                            return $parent && in_array( $parent->content->ownerId, $limitationsValues, true );
+                        },
+                    ),
+                    'ParentGroup' => array(
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
+                        {
+                            if ( !$parent )
+                                return false;
+
+                            foreach ( $parent->content->owner->getGroups() as $group )
+                            {
+                                if ( in_array( $group->id, $limitationsValues, true ) )
+                                    return true;
+                            }
+
+                            return false;
+                        },
+                    ),
+                    'ParentClass' => array(
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
+                        {
+                            return $parent && in_array( $parent->content->typeId, $limitationsValues, true );
+                        },
+                    ),
+                    'ParentDepth' => array(
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
+                        {
+                            return $parent && in_array( $parent->depth, $limitationsValues, true );
+                        },
+                    ),
+                    'Node' => array(
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
+                        {
+                            return $parent && in_array( $parent->id, $limitationsValues, true );
+                        },
+                    ),
+                    'Subtree' => array(
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
+                        {
+                            if ( !$parent )
+                                return false;
+
+                            foreach ( $limitationsValues as $limitationPathString )
+                            {
+                                if ( strpos( $parent->pathString, $limitationPathString ) === 0 )
+                                    return true;
+                            }
+
+                            return false;
+                        },
+                    ),
+                    'Language' => array(
+                        'compare' => function( Content $content, array $limitationsValues )
+                        {
+                            // Note: Copied to other functions further down
+                            // @todo: $limitationsValues is a list of languageCodes, so it needs to be matched against
+                            //        language of content somehow when that api is in place
+                            return false;
+                        },
+                    ),
+                ),
+                'read' => array(
+                    // Note: All limitations copied to other functions further bellow
+                    'Class' => array(
+                        'compare' => function( Content $content, array $limitationsValues )
+                        {
+                            return in_array( $content->typeId, $limitationsValues, true );
+                        },
+                    ),
+                    'Section' => array(
+                        'compare' => function( Content $content, array $limitationsValues )
+                        {
+                            return in_array( $content->sectionId, $limitationsValues, true );
+                        },
+                    ),
+                    'Owner' => array(
+                        'compare' => function( Content $content, array $limitationsValues )
+                        {
+                            return in_array( $content->ownerId, $limitationsValues, true );
+                        },
+                    ),
+                    'Group' => array(
+                        'compare' => function( Content $content, array $limitationsValues )
+                        {
+                            foreach ( $content->owner->getGroups() as $group )
+                            {
+                                if ( in_array( $group->id, $limitationsValues, true ) )
+                                    return true;
+                            }
+
+                            return false;
+                        },
+                    ),
+                    'Node' => array(
+                        'compare' => function( Content $content, array $limitationsValues )
+                        {
+                            foreach ( $content->locations as $location )
+                            {
+                                if ( in_array( $location->id, $limitationsValues, true ) )
+                                    return true;
+                            }
+
+                            return false;
+                        },
+                    ),
+                    'Subtree' => array(
+                        'compare' => function( Content $content, array $limitationsValues )
+                        {
+                            foreach ( $content->locations as $location )
+                            {
+                                foreach ( $limitationsValues as $limitationPathString )
+                                {
+                                    if ( strpos( $location->pathString, $limitationPathString ) === 0 )
+                                        return true;
+                                }
+                            }
+
+                            return false;
+                        },
+                    ),
+                ),
+                'edit' => array(
+                    // Note: Limitations copied over from 'read' + 'Language' from 'create'
+                ),
+                'remove' => array(
+                    // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
+                ),
+                'move' => array(),
+                'versionread' => array(
+                    // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
+                ),
+                'versionremove' => array(
+                    // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
+                ),
+                'view_embed' => array(
+                    // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
+                ),
+                'diff' => array(
+                    // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
+                ),
+                'translations' => array(),
+                'reverserelatedlist' => array(),
+                'translate' => array(
+                    // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
+                    // 'Language' is copied from 'create'
+                ),
+                'urltranslator' => array(),
+                'pendinglist' => array(),
+                'manage_locations' => array(
+                    // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
+                ),
+                'hide' => array(
+                    // Note: Limitations copied over from 'read' further down
+                    // 'Language' is copied from 'create'
+                ),
+                'restore' => array(),
+                'cleantrash' => array(),
+            ),
+        );
+
+        //// Limitations are copied to reduce duplication (never copied to 'read' as it requires 'query' support)
+
+        // Create: Copy 'Class' & 'Section' from 'read'
+        $def['functions']['create']['Class'] = $def['functions']['read']['Class'];
+        $def['functions']['create']['Class'] = $def['functions']['read']['Class'];
+
+        // Edit: Copy 'Language' from 'creat'
+        $def['functions']['edit']['Language'] = $def['functions']['create']['Language'];
+        $def['functions']['translate']['Language'] = $def['functions']['create']['Language'];
+        $def['functions']['hide']['Language'] = $def['functions']['create']['Language'];
+
+        // Union duplicate code from 'read'
+        $def['functions']['edit'] = $def['functions']['edit'] + $def['functions']['read'];
+        $def['functions']['remove'] = $def['functions']['remove'] + $def['functions']['read'];
+        $def['functions']['versionread'] = $def['functions']['versionread'] + $def['functions']['read'];
+        $def['functions']['versionremove'] = $def['functions']['versionremove'] + $def['functions']['read'];
+        $def['functions']['view_embed'] = $def['functions']['view_embed'] + $def['functions']['read'];
+        $def['functions']['diff'] = $def['functions']['diff'] + $def['functions']['read'];
+        $def['functions']['translate'] = $def['functions']['translate'] + $def['functions']['read'];
+        $def['functions']['manage_locations'] = $def['functions']['manage_locations'] + $def['functions']['read'];
+        $def['functions']['hide'] = $def['functions']['hide'] + $def['functions']['read'];
+
+        return $def;
     }
 
     /**
@@ -257,6 +473,20 @@ class Content extends Model
             $this->section = $this->section->load();
         }
         return $this->section;
+    }
+
+    /**
+     * Returns the User the Content is owned by
+     *
+     * @return \ezp\User
+     */
+    protected function getOwner()
+    {
+        if ( $this->owner instanceof Proxy )
+        {
+            $this->owner = $this->owner->load();
+        }
+        return $this->owner;
     }
 
     /**

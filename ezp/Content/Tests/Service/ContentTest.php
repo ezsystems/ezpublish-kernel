@@ -19,7 +19,8 @@ use ezp\Content,
     ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content\Version as VersionValue,
     ezp\Persistence\Content\Criterion\ContentId,
-    \ReflectionObject;
+    \ReflectionObject,
+    ezp\User;
 
 /**
  * Test case for Content service
@@ -122,7 +123,7 @@ class ContentTest extends BaseServiceTest
         $type = $this->repository->getContentTypeService()->load( 1 );
         $location = $this->repository->getLocationService()->load( 2 );
         $section = $this->repository->getSectionService()->load( 1 );
-        $content = new Content( $type );
+        $content = new Content( $type, new User( 10 ) );
         $content->addParent( $location );
         $content->name = array( "eng-GB" => "New object" );
         $content->ownerId = 10;
@@ -292,7 +293,7 @@ class ContentTest extends BaseServiceTest
      */
     public function testDeleteNotExisting()
     {
-        $content = new Content( new Type );
+        $content = new Content( new Type, new User( 10 ) );
         $content->getState( "properties" )->id = 999;
         $this->service->delete( $content );
     }
@@ -349,7 +350,7 @@ class ContentTest extends BaseServiceTest
      */
     public function testLoadFieldsNonExistingContent()
     {
-        $content = new Content( new Type );
+        $content = new Content( new Type, new User( 10 ) );
         $content->getState( "properties" )->id = 999;
         foreach ( $content->versions as $version )
         {

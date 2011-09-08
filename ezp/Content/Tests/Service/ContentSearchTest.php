@@ -18,7 +18,8 @@ use ezp\Content,
     ezp\Persistence\Content as ContentValue,
     ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content\Search\Result as ResultValue,
-    \ReflectionObject;
+    \ReflectionObject,
+    ezp\User;
 
 /**
  * Test case for Content service
@@ -90,7 +91,7 @@ class ContentSearchTest extends BaseServiceTest
         $this->expectedContentVo = array();
         for ( $i = 0; $i < 10; ++$i )
         {
-            $content = new Content( $type );
+            $content = new Content( $type, new User( 10 ) );
             $content->name = array( "eng-GB" => "foo$i" );
             $content->ownerId = 14;
             $content->section = $section;

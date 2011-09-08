@@ -12,7 +12,8 @@ use ezp\Content,
     ezp\Content\Type,
     ezp\Content\Relation,
     ezp\Persistence\Content\Relation as RelationValue,
-    PHPUnit_Framework_TestCase;
+    PHPUnit_Framework_TestCase,
+    ezp\User;
 
 /**
  * Test case for Relation class
@@ -33,7 +34,7 @@ class RelationTest extends PHPUnit_Framework_TestCase
         $contentType = new Type();
         $contentType->identifier = "article";
 
-        $this->content = new Content( $contentType );
+        $this->content = new Content( $contentType, new User( 10 ) );
         $this->content->setState(
             array(
                 "properties" => new RelationValue(

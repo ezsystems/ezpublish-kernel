@@ -22,7 +22,7 @@ use ezp\Base\Model,
  * @property string $email
  * @property string $password
  * @property int $hashAlgorithm
- * @property \ezp\User\Group[] $group
+ * @property \ezp\User\Group[] $groups
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
@@ -89,7 +89,7 @@ class User extends Model implements GroupAbleInterface, ModelDefinition
     }
 
     /**
-     * Returns definition of the role object, atm: permissions
+     * Returns definition of the user object, atm: permissions
      *
      * @access private
      * @return array

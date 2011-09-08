@@ -16,7 +16,8 @@ use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Content\Type,
     ezp\Content\Location,
     ezp\Base\Proxy,
-    ezp\Content\Section;
+    ezp\Content\Section,
+    ezp\User;
 
 /**
  * Test case for Location service
@@ -67,7 +68,7 @@ class LocationTest extends BaseServiceTest
 
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );
-        $content = new Content( $type );
+        $content = new Content( $type, new User( 10 ) );
         $content->name = array( "eng-GB" => "test" );
         $content->ownerId = 14;
         $content->section = $section;
@@ -87,7 +88,7 @@ class LocationTest extends BaseServiceTest
         for ( $i = 0; $i < 10; ++$i )
         {
 
-            $content = new Content( $type );
+            $content = new Content( $type, new User( 10 ) );
             $content->name = array( "eng-GB" => "foo$i" );
             $content->ownerId = 14;
             $content->section = $section;

@@ -9,6 +9,7 @@
 
 namespace ezp\Base\Tests;
 use ezp\Content\Tests\Service\Base as BaseServiceTest,
+    ezp\Content,
     ezp\User\Role,
     ezp\User\Policy;
 
@@ -95,6 +96,38 @@ class RepositoryTest extends BaseServiceTest
         $role = $this->repository->getUserService()->loadRole( 2 );
         $this->assertTrue( $this->repository->canUser( 'edit', $role ) );
         $this->assertTrue( $this->repository->canUser( '*', $role ) );
+    }
+
+    /**
+     * @covers \ezp\Base\Repository::canUser
+     */
+    public function testCanUserCreateContent()
+    {
+        $section = $this->repository->getSectionService()->load( 1 );
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $parent = $this->repository->getLocationService()->load( 2 );
+        $content = new Content( $type, $this->repository->getUser() );
+        $content->section = $section;
+        $this->assertFalse( $this->repository->canUser( 'create', $content, $parent ) );
+
+        $admin = $this->repository->getUserService()->load( 14 );
+        $this->repository->setUser( $admin );
+        $this->assertTrue( $this->repository->canUser( 'create', $content, $parent ) );
+        // @todo Test using User with limitations
+    }
+
+    /**
+     * @covers \ezp\Base\Repository::canUser
+     */
+    public function testCanUserEditContent()
+    {
+        $content = $this->repository->getContentService()->load( 1 );
+        $this->assertFalse( $this->repository->canUser( 'edit', $content ) );
+
+        $admin = $this->repository->getUserService()->load( 14 );
+        $this->repository->setUser( $admin );
+        $this->assertTrue( $this->repository->canUser( 'edit', $content ) );
+        // @todo Test using User with limitations
     }
 
     /**

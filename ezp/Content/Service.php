@@ -30,7 +30,8 @@ use ezp\Base\Service as BaseService,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
     ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
-    ezp\Persistence\Content\Version as VersionValue;
+    ezp\Persistence\Content\Version as VersionValue,
+    ezp\User;
 
 /**
  * Content service, used for Content operations
@@ -334,12 +335,13 @@ class Service extends BaseService
      */
     protected function buildDomainObject( ContentValue $vo )
     {
-        $content = new Content( new Type );
+        $content = new Content( new Type, new User( $vo->ownerId ) );
         $content->setState(
             array(
                 "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
                 "contentType" => new Proxy( $this->repository->getContentTypeService(), $vo->typeId ),
                 "versions" => new VersionCollection( $this, $vo->id ),
+                "owner" => new Proxy( $this->repository->getUserService(), $vo->ownerId ),
                 "properties" => $vo
             )
         );

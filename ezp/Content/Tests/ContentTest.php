@@ -12,7 +12,8 @@ use ezp\Content,
     ezp\Content\Location,
     ezp\Content\Section,
     ezp\Content\Type,
-    ezp\Content\Type\FieldDefinition;
+    ezp\Content\Type\FieldDefinition,
+    ezp\User;
 
 /**
  * Test case for Content class
@@ -132,7 +133,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testLocationWrongClass()
     {
-        $content = new Content( $this->contentType );
+        $content = new Content( $this->contentType, new User( 10 ) );
         $content->locations[] = new Section();
     }
 
@@ -143,7 +144,7 @@ class ContentTest extends \PHPUnit_Framework_TestCase
      */
     public function testContentLocationWhenLocationIsCreated()
     {
-        $content = new Content( $this->contentType );
+        $content = new Content( $this->contentType, new User( 10 ) );
         $location = new Location( $content );
         $this->assertEquals( $content->locations[0], $location, 'Location on Content is not correctly updated when Location is created with content in constructor!' );
         $content->locations[] = $location;

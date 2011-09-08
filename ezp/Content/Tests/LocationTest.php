@@ -11,7 +11,8 @@ namespace ezp\Content\Tests;
 use ezp\Content\Location,
     ezp\Content,
     ezp\Content\Section,
-    ezp\Content\Type;
+    ezp\Content\Type,
+    ezp\User;
 
 /**
  * Test case for Location class
@@ -29,7 +30,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         $contentType = new Type();
         $contentType->identifier = 'article';
 
-        $this->content = new Content( $contentType );
+        $this->content = new Content( $contentType, new User( 10 ) );
     }
 
     /**

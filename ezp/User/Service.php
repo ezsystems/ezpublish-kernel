@@ -116,7 +116,7 @@ class Service extends BaseService
         if ( !$type )
             throw new BadConfiguration( 'site.ini[UserSettings]UserGroupClassID', 'could not load type:' . $typeId );
 
-        $content = new Content( $type );
+        $content = new Content( $type, $this->repository->getUser() );
         $content->addParent( $parentLocation );
         $content->ownerId = $this->repository->getUser()->id;
         $content->getState( 'properties' )->sectionId = $parentContent->sectionId;
