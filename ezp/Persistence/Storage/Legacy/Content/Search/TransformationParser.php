@@ -90,7 +90,18 @@ class TransformationParser
      */
     public function parse( $file )
     {
-        $tokens = $this->tokenize( $file );
+        return $this->parseString( file_get_contents( $file ) );
+    }
+
+    /**
+     * Parse the given string into an AST
+     *
+     * @param string $string
+     * @return array
+     */
+    public function parseString( $string )
+    {
+        $tokens = $this->tokenize( $string );
 
         $tokens = array_filter(
             $tokens,
@@ -127,12 +138,12 @@ class TransformationParser
      *
      * Returns an array of tokens
      *
-     * @param string $file
+     * @param string $string
      * @return array
      */
-    protected function tokenize( $file )
+    protected function tokenize( $string )
     {
-        $string = preg_replace( '(\\r\\n|\\r)', "\n", file_get_contents( $file ) );
+        $string = preg_replace( '(\\r\\n|\\r)', "\n", $string );
         $tokens = array();
         $line = 1;
 
