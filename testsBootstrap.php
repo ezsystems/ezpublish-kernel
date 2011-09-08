@@ -20,9 +20,9 @@ spl_autoload_register( array( new Autoloader( $settings['base']['autoload'] ), '
 
 // setup configuration
 $paths = array();
-foreach ( $settings['base']['autoload']['repositories'] as $ns => $path )
+foreach ( $settings['base']['autoload']['repositories'] as $ns => $nsPath )
 {
-    foreach ( glob( "{$path}/*", GLOB_ONLYDIR ) as $path )//@todo Take from configuration
+    foreach ( glob( "{$nsPath}/*", GLOB_ONLYDIR ) as $path )//@todo Take from configuration
     {
         $paths[] = "{$path}/settings/";
     }
