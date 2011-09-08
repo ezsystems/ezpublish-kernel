@@ -78,7 +78,7 @@ class TransformationPcreCompiler
     protected function compileMap( array $rule )
     {
         return array(
-            'regexp'   => '(' . $this->compileCharacter( $rule['data']['src'] ) . ')us',
+            'regexp'   => '(' . preg_quote( $this->compileCharacter( $rule['data']['src'] ) ) . ')us',
             'callback' => $this->compileTargetCharacter( $rule['data']['dest'] ),
         );
     }
@@ -93,8 +93,8 @@ class TransformationPcreCompiler
     {
         return array(
             'regexp'   => '([' .
-                $this->compileCharacter( $rule['data']['srcStart'] ) . '-' .
-                $this->compileCharacter( $rule['data']['srcEnd'] ) .
+                preg_quote( $this->compileCharacter( $rule['data']['srcStart'] ) ) . '-' .
+                preg_quote( $this->compileCharacter( $rule['data']['srcEnd'] ) ) .
                 '])us',
             'callback' => $this->compileTargetCharacter( $rule['data']['dest'] ),
         );
@@ -110,8 +110,8 @@ class TransformationPcreCompiler
     {
         return array(
             'regexp'   => '([' .
-                $this->compileCharacter( $rule['data']['srcStart'] ) . '-' .
-                $this->compileCharacter( $rule['data']['srcEnd'] ) .
+                preg_quote( $this->compileCharacter( $rule['data']['srcStart'] ) ) . '-' .
+                preg_quote( $this->compileCharacter( $rule['data']['srcEnd'] ) ) .
                 '])us',
             'callback' => $this->getTransposeClosure( $rule['data']['op'], $rule['data']['dest'] ),
         );
@@ -127,11 +127,11 @@ class TransformationPcreCompiler
     {
         return array(
             'regexp'   => '([' .
-                $this->getModuloCharRange(
+                preg_quote( $this->getModuloCharRange(
                     $this->compileCharacter( $rule['data']['srcStart'] ),
                     $this->compileCharacter( $rule['data']['srcEnd'] ),
                     $rule['data']['modulo']
-                ) .
+                ) ) .
                 '])us',
             'callback' => $this->getTransposeClosure( $rule['data']['op'], $rule['data']['dest'] ),
         );
