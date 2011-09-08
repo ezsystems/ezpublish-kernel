@@ -53,5 +53,77 @@ class TransformationPcreCompilerTest extends TestCase
             $this->applyTransformations( $rules, 'äöü' )
         );
     }
+
+    public function testCompileMapRemove()
+    {
+        $parser   = new Search\TransformationParser();
+        $compiler = new Search\TransformationPcreCompiler();
+
+        $rules = $compiler->compile(
+            $parser->parseString(
+                "map_test:\n" .
+                "U+00e4 = remove"
+            )
+        );
+
+        $this->assertSame(
+            'öü',
+            $this->applyTransformations( $rules, 'äöü' )
+        );
+    }
+
+    public function testCompileMapKeep()
+    {
+        $parser   = new Search\TransformationParser();
+        $compiler = new Search\TransformationPcreCompiler();
+
+        $rules = $compiler->compile(
+            $parser->parseString(
+                "map_test:\n" .
+                "U+00e4 = keep"
+            )
+        );
+
+        $this->assertSame(
+            'äöü',
+            $this->applyTransformations( $rules, 'äöü' )
+        );
+    }
+
+    public function testCompileMapAscii()
+    {
+        $parser   = new Search\TransformationParser();
+        $compiler = new Search\TransformationPcreCompiler();
+
+        $rules = $compiler->compile(
+            $parser->parseString(
+                "map_test:\n" .
+                "U+00e4 = 41"
+            )
+        );
+
+        $this->assertSame(
+            'Aöü',
+            $this->applyTransformations( $rules, 'äöü' )
+        );
+    }
+
+    public function testCompileMapUnicode()
+    {
+        $parser   = new Search\TransformationParser();
+        $compiler = new Search\TransformationPcreCompiler();
+
+        $rules = $compiler->compile(
+            $parser->parseString(
+                "map_test:\n" .
+                "U+00e4 = U+00e5"
+            )
+        );
+
+        $this->assertSame(
+            'åöü',
+            $this->applyTransformations( $rules, 'äöü' )
+        );
+    }
 }
 
