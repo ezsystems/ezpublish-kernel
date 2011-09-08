@@ -177,6 +177,23 @@ class ContentSearchHandlerTest extends TestCase
         return $mapperMock;
     }
 
+    /**
+     * Bug #81
+     * @return void
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\
+     */
+    public function testFindWithoutOffsetLimit()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find( new Criterion\ContentId( 10 ) );
+
+        $this->assertEquals(
+            1,
+            $result->count
+        );
+    }
+
     public function testFindSingle()
     {
         $locator = $this->getContentSearchHandler();
