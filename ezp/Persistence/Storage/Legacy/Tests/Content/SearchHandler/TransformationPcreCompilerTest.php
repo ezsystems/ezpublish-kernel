@@ -179,5 +179,23 @@ class TransformationPcreCompilerTest extends TestCase
             $this->applyTransformations( $rules, 'àáâãäåæçè' )
         );
     }
+
+    public function testCompileModuloTranspose()
+    {
+        $parser   = new Search\TransformationParser();
+        $compiler = new Search\TransformationPcreCompiler();
+
+        $rules = $compiler->compile(
+            $parser->parseString(
+                "transpose_modulo_test:\n" .
+                "U+00e0 - U+00e6 % 02 - 01"
+            )
+        );
+
+        $this->assertSame(
+            'ßááããååçè',
+            $this->applyTransformations( $rules, 'àáâãäåæçè' )
+        );
+    }
 }
 

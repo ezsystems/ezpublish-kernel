@@ -118,6 +118,72 @@ class TransformationPcreCompiler
     }
 
     /**
+     * Compile transpose modulo rule
+     *
+     * @param array $rule
+     * @return array
+     */
+    protected function compileTransposeModulo( array $rule )
+    {
+        return array(
+            'regexp'   => '([' .
+                $this->getModuloCharRange(
+                    $this->compileCharacter( $rule['data']['srcStart'] ),
+                    $this->compileCharacter( $rule['data']['srcEnd'] ),
+                    $rule['data']['modulo']
+                ) .
+                '])us',
+            'callback' => $this->getTransposeClosure( $rule['data']['op'], $rule['data']['dest'] ),
+        );
+    }
+
+    /**
+     * Get string with all characters defined by parameters
+     *
+     * Returns a string containing all UTF-8 characters starting with the
+     * specified $start character up to the $end character with the step size
+     * defined in $modulo.
+     *
+     * @param string $start
+     * @param string $end
+     * @param string $modulo
+     * @return string
+     */
+    protected function getModuloCharRange( $start, $end, $modulo )
+    {
+        $start  = $this->getDecimalCodeForUtf8Character( $start );
+        $end    = $this->getDecimalCodeForUtf8Character( $end );
+        $modulo = hexdec( $modulo );
+
+        $chars = '';
+        for ( $start; $start <= $end; $start += $modulo )
+        {
+            $chars .= html_entity_decode( '&#' . $start . ';', ENT_QUOTES, 'UTF-8' );
+        }
+
+        return $chars;
+    }
+
+    /**
+     * Get decimal code for UTF-8 character
+     *
+     * @param string $char
+     * @return int
+     */
+    protected function getDecimalCodeForUtf8Character( $char )
+    {
+        $decimal = 0;
+        for ( $i = 0; $i < strlen( $char ); ++$i )
+        {
+            $decimal *= 64;
+            $decimal += ( $i === 0 ? 15 : 63 ) &
+                ord( $char[$i] );
+        }
+
+        return $decimal;
+    }
+
+    /**
      * Return a closure which modifies the provided character by the given
      * value
      *
