@@ -15,9 +15,13 @@ use ezp\Content\Location\Trash\Service,
     ezp\Content,
     ezp\Content\Type,
     ezp\Content\Location,
+    ezp\Content\Location\Collection,
     ezp\Content\Location\Trashed,
     ezp\Base\Proxy,
-    ezp\Content\Section;
+    ezp\Content\Section,
+    ezp\Content\Query,
+    ezp\Content\Query\Builder as QueryBuilder,
+    ezp\Persistence\Content\Location\Trashed as TrashedValue;
 
 /**
  * Test case for Location service
@@ -476,5 +480,84 @@ class TrashTest extends Base
         $this->locationService->delete( $this->insertedLocations[0] );
         $trashed = $this->service->trash( $this->location );
         $restored = $this->service->untrash( $trashed, $this->insertedLocations[0] );
+    }
+
+    /**
+     * Returns mock object for trash handler and inject it in repository handler
+     * @return \PHPUnit_Framework_MockObject_MockObject
+     */
+    private function getMockForTrash()
+    {
+        $refRepository = new ReflectionObject( $this->repository );
+        $refHandlerProp = $refRepository->getProperty( 'handler' );
+        $refHandlerProp->setAccessible( true );
+        $repositoryHandler = $refHandlerProp->getValue( $this->repository );
+        $refHandler = new ReflectionObject( $repositoryHandler );
+        $refBackend = $refHandler->getProperty( 'backend' );
+        $refBackend->setAccessible( true );
+        $trashHandler = $this->getMockBuilder( 'ezp\\Persistence\\Storage\\InMemory\\TrashHandler' )
+                                    ->setConstructorArgs(
+                                        array(
+                                            $repositoryHandler,
+                                            $refBackend->getValue( $repositoryHandler )
+                                        )
+                                    )
+                                    ->getMock();
+        $refServiceHandlersProp = $refHandler->getProperty( 'serviceHandlers' );
+        $refServiceHandlersProp->setAccessible( true );
+        $refServiceHandlersProp->setValue(
+            $repositoryHandler,
+            array(
+                'ezp\\Persistence\\Storage\\InMemory\\TrashHandler' => $trashHandler
+            ) + $refServiceHandlersProp->getValue( $repositoryHandler )
+        );
+
+        return $trashHandler;
+    }
+
+    /**
+     * @group trashService
+     * @covers \ezp\Content\Location\Trash\Service::getList
+     */
+    public function testGetList()
+    {
+        $trashHandler = $this->getMockForTrash();
+        $limit = 7;
+        $expectedResult = array();
+        for ( $i = 0; $i < $limit; $i++ )
+        {
+            $expectedResult[] = new TrashedValue(
+                array(
+                    'id' => $i + 1,
+                    'contentId' => $i + 1,
+                    'locationId' => $i + 10,
+                )
+            );
+        }
+
+        $qb = new QueryBuilder;
+        $qb->addCriteria(
+            $qb->fullText->like( 'foo*' )
+        )
+        ->addSortClause(
+            $qb->sort->field( 'folder', 'name', Query::SORT_ASC ),
+            $qb->sort->dateCreated( Query::SORT_DESC )
+        )
+        ->setOffset( 3 )->setLimit( $limit );
+        $query = $qb->getQuery();
+
+        $trashHandler->expects( $this->once() )
+                     ->method( 'listTrashed' )
+                     ->with(
+                         $query->criterion,
+                         $query->offset,
+                         $query->limit,
+                         $query->sortClauses
+                     )
+                     ->will( $this->returnValue( $expectedResult ) );
+
+        $result = $this->service->getList( $query );
+        self::assertInstanceOf( 'ezp\\Content\\Location\\Collection' , $result );
+        self::assertEquals( $limit, count( $result ) );
     }
 }

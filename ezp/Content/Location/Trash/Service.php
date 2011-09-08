@@ -12,6 +12,8 @@ use ezp\Base\Exception,
     ezp\Base\Service as BaseService,
     ezp\Content\Location,
     ezp\Content\Location\Trashed,
+    ezp\Content\Location\Collection,
+    ezp\Content\Query,
     ezp\Base\Proxy,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
@@ -108,6 +110,41 @@ class Service extends BaseService
     public function emptyOne( Trashed $trashedLocation )
     {
         $this->handler->trashHandler()->emptyOne( $trashedLocation->id );
+    }
+
+    /**
+     * Returns a collection of Trashed locations contained in the trash.
+     * $query allows to filter/sort the elements to be contained in the collection.
+     * <code>
+     * $qb = new ezp\Content\Query\Builder();
+     * $qb->addCriteria(
+     *     $qb->contentTypeId->eq( 'blog_post' ),
+     *     $qb->field->eq( 'author', 'community@ez.no' )
+     * )->addSortClause(
+     *     $qb->sort->dateCreated( Query::SORT_DESC )
+     * )->setOffset( 0 )->setLimit( 15 );
+     * $trashList = $trashService->getList( $qb->getQuery() );
+     * </code>
+     *
+     * @param \ezp\Content\Query $query
+     * @return \ezp\Content\Location\Collection
+     */
+    public function getList( Query $query )
+    {
+        $result = $this->handler->trashHandler()->listTrashed(
+            $query->criterion,
+            $query->offset,
+            $query->limit,
+            $query->sortClauses
+        );
+
+        $aTrashed = array();
+        foreach ( $result as $trashedVo )
+        {
+            $aTrashed[] = $this->buildDomainObject( $trashedVo );
+        }
+
+        return new Collection( $aTrashed );
     }
 
     /**
