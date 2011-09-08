@@ -260,7 +260,13 @@ abstract class FieldType
      * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */
-     abstract public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, $validator );
+     public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, $validator )
+     {
+         if ( in_array( $validator->name(), $this->allowedValidators() ) )
+         {
+             $fieldDefinition->fieldTypeConstraints = array_merge( $fieldDefinition->fieldTypeConstraints, $validator->getValidatorConstraints() );
+         }
+     }
 
     /**
      * Factory method for creating field type object based on identifiers.

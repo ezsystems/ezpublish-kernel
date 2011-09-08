@@ -104,24 +104,4 @@ class TextLine extends FieldType
     {
         return array( 'value' => $this->value );
     }
-
-    /**
-     * Used by the FieldDefinition to populate the fieldConstraints field.
-     *
-     * If validator is not allowed for a given field type, no data from that
-     * validator is populated to $constraints.
-     *
-     * @internal
-     * @param \ezp\Content\Type\FieldDefinition $fieldDefinition
-     * @param \ezp\Content\FieldType\Validator $validator
-     * @return void
-     */
-    public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, $validator )
-    {
-        if ( in_array( $validator->name(), $this->allowedValidators ) )
-        {
-            $fieldDefinition->fieldTypeConstraints = array_merge( $fieldDefinition->fieldTypeConstraints, $validator->getValidatorConstraints() );
-        }
-    }
-
 }
