@@ -118,7 +118,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Content\Language\Handler::load
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::load
      */
     public function testLoad()
     {
@@ -146,7 +146,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Content\Language\Handler::load
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::load
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadFailure()
@@ -171,7 +171,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Content\Language\Handler::loadAll
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::loadAll
      */
     public function testLoadAll()
     {
@@ -198,7 +198,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Content\Language\Handler::delete
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::delete
      */
     public function testDelete()
     {
