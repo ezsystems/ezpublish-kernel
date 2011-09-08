@@ -9,7 +9,8 @@
 
 namespace ezp\Content;
 use ezp\Content\FieldType\FieldSettings,
-    ezp\Persistence\Content\FieldValue;
+    ezp\Persistence\Content\FieldValue,
+    ezp\Content\Type\FieldDefinition;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -244,11 +245,16 @@ abstract class FieldType
     abstract protected function getValueData();
 
     /**
-     * Returns stored validation data in format suitable for packing it in a
-     * FieldValue
+     * Used by the FieldDefinition to populate the fieldConstraints field.
+     *
+     * If validator is not allowed for a given field type, no data from that
+     * validator is populated to $constraints.
      *
      * @abstract
-     * @return array
+     * @internal
+     * @param $constraints
+     * @param $validator
+     * @return void
      */
-    abstract protected function getValidationData();
+     abstract public function fillConstraintsFromValidator( $constraints, $validator );
 }
