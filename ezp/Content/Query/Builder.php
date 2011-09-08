@@ -203,6 +203,8 @@ class Builder
             throw new InvalidArgumentValue( 'offset', $offset );
         }
         $this->offset = $offset;
+
+        return $this;
     }
 
     /**
@@ -220,6 +222,8 @@ class Builder
             throw new InvalidArgumentValue( 'limit', $limit );
         }
         $this->limit = $limit;
+
+        return $this;
     }
 
     /**
