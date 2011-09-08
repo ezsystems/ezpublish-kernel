@@ -101,6 +101,49 @@ class TransformationPcreCompiler
     }
 
     /**
+     * Compile transpose rule
+     *
+     * @param array $rule
+     * @return array
+     */
+    protected function compileTranspose( array $rule )
+    {
+        return array(
+            'regexp'   => '([' .
+                $this->compileCharacter( $rule['data']['srcStart'] ) . '-' .
+                $this->compileCharacter( $rule['data']['srcEnd'] ) .
+                '])us',
+            'callback' => $this->getTransposeClosure( $rule['data']['op'], $rule['data']['dest'] ),
+        );
+    }
+
+    /**
+     * Return a closure which modifies the provided character by the given
+     * value
+     *
+     * @param string $operator
+     * @param string $value
+     * @return callback
+     */
+    protected function getTransposeClosure( $operator, $value )
+    {
+        $value = hexdec( $value ) * ( $operator === '-' ? -1 : 1 );
+        return function ( $matches ) use ( $value )
+        {
+            $char = 0;
+            for ( $i = 0; $i < strlen( $matches[0] ); ++$i )
+            {
+                $char *= 64;
+                $char += ( $i === 0 ? 15 : 63 ) &
+                    ord( $matches[0][$i] );
+            }
+
+            $char += $value;
+            return html_entity_decode( '&#' . $char . ';', ENT_QUOTES, 'UTF-8' );
+        };
+    }
+
+    /**
      * Compile target into a closure, which can be used by
      * preg_replace_callback
      *
