@@ -12,6 +12,11 @@ use ezp\Content\FieldType,
     ezp\Content\FieldType\TextLine,
     ezp\Persistence\Content\FieldValue;
 
+/**
+ * The TextBlock field type.
+ *
+ * Represents a larger body of text, such as text areas.
+ */
 class TextBlock extends TextLine
 {
     protected $fieldTypeString = 'eztext';
