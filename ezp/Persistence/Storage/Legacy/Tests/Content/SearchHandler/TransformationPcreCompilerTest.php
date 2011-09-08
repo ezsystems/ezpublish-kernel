@@ -29,7 +29,7 @@ class TransformationPcreCompilerTest extends TestCase
         {
             foreach ( $rules as $rule )
             {
-                $string = preg_replace_callback( $rule['src'], $rule['dest'], $string );
+                $string = preg_replace_callback( $rule['regexp'], $rule['callback'], $string );
             }
         }
 
@@ -123,6 +123,24 @@ class TransformationPcreCompilerTest extends TestCase
         $this->assertSame(
             'åöü',
             $this->applyTransformations( $rules, 'äöü' )
+        );
+    }
+
+    public function testCompileReplace()
+    {
+        $parser   = new Search\TransformationParser();
+        $compiler = new Search\TransformationPcreCompiler();
+
+        $rules = $compiler->compile(
+            $parser->parseString(
+                "replace_test:\n" .
+                "U+00e0 - U+00e6 = \"a\""
+            )
+        );
+
+        $this->assertSame(
+            'aaaaaaaçè',
+            $this->applyTransformations( $rules, 'àáâãäåæçè' )
         );
     }
 }

@@ -73,13 +73,30 @@ class TransformationPcreCompiler
      * Compile map rule
      *
      * @param array $rule
-     * @return void
+     * @return array
      */
     protected function compileMap( array $rule )
     {
         return array(
-            'src'  => '(' . $this->compileCharacter( $rule['data']['src'] ) . ')Us',
-            'dest' => $this->compileTargetCharacter( $rule['data']['dest'] ),
+            'regexp'   => '(' . $this->compileCharacter( $rule['data']['src'] ) . ')us',
+            'callback' => $this->compileTargetCharacter( $rule['data']['dest'] ),
+        );
+    }
+
+    /**
+     * Compile replace rule
+     *
+     * @param array $rule
+     * @return array
+     */
+    protected function compileReplace( array $rule )
+    {
+        return array(
+            'regexp'   => '([' .
+                $this->compileCharacter( $rule['data']['srcStart'] ) . '-' .
+                $this->compileCharacter( $rule['data']['srcEnd'] ) .
+                '])us',
+            'callback' => $this->compileTargetCharacter( $rule['data']['dest'] ),
         );
     }
 
