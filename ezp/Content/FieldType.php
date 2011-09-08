@@ -10,7 +10,9 @@
 namespace ezp\Content;
 use ezp\Content\FieldType\FieldSettings,
     ezp\Persistence\Content\FieldValue,
-    ezp\Content\Type\FieldDefinition;
+    ezp\Content\Type\FieldDefinition,
+    ezp\Base\Configuration,
+    ezp\Base\Exception\MissingClass;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -257,4 +259,14 @@ abstract class FieldType
      * @return void
      */
      abstract public function fillConstraintsFromValidator( $constraints, $validator );
+
+    public static function create( $type )
+    {
+        $fieldTypeMap = Configuration::getInstance( 'content' )->get( 'fields', 'Type' );
+        if ( !isset( $fieldTypeMap[$type] ) )
+        {
+            throw new MissingClass( $type, 'FieldType' );
+        }
+        return new $fieldTypeMap[$type];
+    }
 }
