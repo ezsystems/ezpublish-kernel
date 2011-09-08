@@ -260,6 +260,14 @@ abstract class FieldType
      */
      abstract public function fillConstraintsFromValidator( $constraints, $validator );
 
+    /**
+     * Factory method for creating field type object based on identifiers.
+     *
+     * @static
+     * @throws \ezp\Base\Exception\MissingClass
+     * @param string $type
+     * @return \ezp\Content\FieldType
+     */
     public static function create( $type )
     {
         $fieldTypeMap = Configuration::getInstance( 'content' )->get( 'fields', 'Type' );
