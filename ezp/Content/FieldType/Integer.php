@@ -96,15 +96,4 @@ class Integer extends FieldType
     {
         return array( 'value' => $this->value );
     }
-
-    /**
-     * Returns stored validation data in format suitable for packing it in a
-     * FieldValue
-     *
-     * @return array
-     */
-    protected function getValidationData()
-    {
-    }
-
 }
