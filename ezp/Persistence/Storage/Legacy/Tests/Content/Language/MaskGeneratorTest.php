@@ -109,6 +109,62 @@ class MaskGeneratorTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
+     */
+    public function testIsLanguageAlwaysAvailable()
+    {
+        $generator = $this->getMaskGenerator();
+
+        $this->assertTrue(
+            $generator->isLanguageAlwaysAvailable(
+                'eng-GB',
+                array(
+                    'always-available' => 'eng-GB',
+                    'eng-GB' => 'lala'
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
+     */
+    public function testIsLanguageAlwaysAvailableOtherLanguage()
+    {
+        $generator = $this->getMaskGenerator();
+
+        $this->assertFalse(
+            $generator->isLanguageAlwaysAvailable(
+                'eng-GB',
+                array(
+                    'always-available' => 'eng-US',
+                    'eng-GB' => 'lala'
+                )
+            )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
+     */
+    public function testIsLanguageAlwaysAvailableNoDefault()
+    {
+        $generator = $this->getMaskGenerator();
+
+        $this->assertFalse(
+            $generator->isLanguageAlwaysAvailable(
+                'eng-GB',
+                array(
+                    'eng-GB' => 'lala'
+                )
+            )
+        );
+    }
+
+    /**
      * Returns the mask generator to test
      *
      * @return \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator

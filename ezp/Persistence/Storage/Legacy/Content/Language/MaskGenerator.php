@@ -67,4 +67,18 @@ class MaskGenerator
             | ( $alwaysAvailable ? 1 : 0 );
     }
 
+    /**
+     * Checks if $language is always available in $languages;
+     *
+     * @param string $language
+     * @param array $languages
+     * @return bool
+     */
+    public function isLanguageAlwaysAvailable( $language, array $languages )
+    {
+        return ( isset( $languages['always-available'] )
+           && ( $languages['always-available'] == $language )
+        );
+    }
+
 }
