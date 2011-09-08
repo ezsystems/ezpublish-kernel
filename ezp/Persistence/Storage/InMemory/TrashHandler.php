@@ -13,6 +13,7 @@ use ezp\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface,
     ezp\Persistence\Content\Location\Trashed as TrashedValue,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\Location as LocationValue,
+    ezp\Persistence\Content\Criterion,
     ezp\Base\Exception\NotFound,
     ezp\Content\Location\Exception\ParentNotFound;
 
@@ -143,12 +144,19 @@ class TrashHandler implements TrashHandlerInterface
     }
 
     /**
+     * Limited implementation (no criterion/sort support).
+     * Will return all trashed locations, regardless criterion filter or sort clauses provided.
+     * Offset/Limit is however supported
+     *
      * @see ezp\Persistence\Content\Location\Trash\Handler
-     * @todo
      */
-    public function listTrashed( $offset = 0, $limit = null )
+    public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
     {
-        throw new \RuntimeException( 'Not implemented yet' );
+        return array_splice(
+            $this->backend->find( 'Content\\Location\\Trashed' ),
+            $offset,
+            $limit
+        );
     }
 
     /**
