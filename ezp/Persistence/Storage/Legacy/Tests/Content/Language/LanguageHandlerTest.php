@@ -92,7 +92,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::create
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::update
      */
     public function testUpdate()
     {

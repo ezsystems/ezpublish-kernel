@@ -58,6 +58,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::insertLanguage
+     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::setCommonLanguageColumns
      */
     public function testInsertLanguage()
     {
@@ -100,6 +101,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::updateLanguage
+     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::setCommonLanguageColumns
      */
     public function testUpdateLanguage()
     {
@@ -130,6 +132,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::loadLanguageData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::createFindQuery
      */
     public function testLoadLanguageData()
     {
@@ -153,6 +156,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::loadAllLanguagesData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::createFindQuery
      */
     public function testLoadAllLanguagesData()
     {
