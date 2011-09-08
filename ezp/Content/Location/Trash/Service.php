@@ -102,6 +102,8 @@ class Service extends BaseService
     /**
      * Deletes $trashedLocation from trash
      * Content will be removed
+     *
+     * @param \ezp\Content\Location\Trashed Trashed location to delete from trash
      */
     public function emptyOne( Trashed $trashedLocation )
     {
