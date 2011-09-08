@@ -252,13 +252,15 @@ abstract class FieldType
      * If validator is not allowed for a given field type, no data from that
      * validator is populated to $constraints.
      *
+     * @todo Consider separating out the fieldTypeConstraints into a sepsrate object, so that it could be passed, and not the whole FieldDefinition object.
+     *
      * @abstract
      * @internal
-     * @param $constraints
-     * @param $validator
+     * @param FieldDefinition $fieldDefinition
+     * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */
-     abstract public function fillConstraintsFromValidator( $constraints, $validator );
+     abstract public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, $validator );
 
     /**
      * Factory method for creating field type object based on identifiers.

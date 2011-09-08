@@ -24,7 +24,7 @@ class TextLine extends FieldType
     protected $defaultValue = '';
     protected $isSearchable = true;
 
-    protected $allowedValidators = array( 'StringValidator' );
+    protected $allowedValidators = array( 'StringLengthValidator' );
 
     public function __construct()
     {
@@ -112,14 +112,16 @@ class TextLine extends FieldType
      * validator is populated to $constraints.
      *
      * @internal
-     * @param $constraints
-     * @param $validator
+     * @param \ezp\Content\Type\FieldDefinition $fieldDefinition
+     * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */
-    public function fillConstraintsFromValidator( $constraints, $validator )
+    public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, $validator )
     {
-        // TODO: Implement fillConstraintsFromValidator() method.
+        if ( in_array( $validator->name(), $this->allowedValidators ) )
+        {
+            $fieldDefinition->fieldTypeConstraints = array_merge( $fieldDefinition->fieldTypeConstraints, $validator->getValidatorConstraints() );
+        }
     }
-
 
 }
