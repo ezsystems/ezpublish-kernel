@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Type\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Type\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
+    ezp\Persistence\Storage\Legacy\Content\Language,
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\UpdateStruct,
@@ -86,82 +87,23 @@ class EzcDatabase extends Gateway
     protected $dbHandler;
 
     /**
-     * Cache for language mapping information
+     * Language mask generator
      *
-     * @var array
+     * @var \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
      */
-    protected $languageMapping;
+    protected $languageMaskGenerator;
 
     /**
      * Creates a new gateway based on $db
      *
      * @param EzcDbHandler $db
      */
-    public function __construct( EzcDbHandler $db )
+    public function __construct(
+        EzcDbHandler $db,
+        Language\MaskGenerator $languageMaskGenerator )
     {
         $this->dbHandler = $db;
-    }
-
-    /**
-     * Get language mapping
-     *
-     * Get mapping of languages to their respective IDs in the database.
-     *
-     * @return array
-     */
-    protected function getLanguageMapping()
-    {
-        if ( $this->languageMapping )
-        {
-            return $this->languageMapping;
-        }
-
-        $query = $this->dbHandler->createSelectQuery();
-        $query
-            ->select(
-                $this->dbHandler->quoteColumn( 'id' ),
-                $this->dbHandler->quoteColumn( 'locale' )
-            )->from(
-                $this->dbHandler->quoteTable( 'ezcontent_language' )
-            );
-
-        $statement = $query->prepare();
-        $statement->execute();
-
-        $this->languageMapping = array();
-        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
-        {
-            $this->languageMapping[$row['locale']] = (int)$row['id'];
-        }
-
-        return $this->languageMapping;
-    }
-
-    /**
-     * Get language mask
-     *
-     * Return the language mask for a common array of language specifications
-     * for a type name or description.
-     *
-     * @param array $languages
-     * @return int
-     */
-    protected function getLanguageMask( array $languages )
-    {
-        $mask = 0;
-        if ( isset( $languages['always-available'] ) )
-        {
-            $mask |= $languages['always-available'] ? 1 : 0;
-            unset( $languages['always-available'] );
-        }
-
-        $mapping = $this->getLanguageMapping();
-        foreach ( $languages as $language => $value )
-        {
-            $mask |= $mapping[$language];
-        }
-
-        return $mask;
+        $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
     /**
@@ -328,15 +270,13 @@ class EzcDatabase extends Gateway
      */
     protected function insertTypeNameData( $typeId, $typeStatus, array $languages )
     {
-        $alwaysAvailable = null;
-        $mapping = $this->getLanguageMapping();
-        if ( isset( $languages['always-available'] ) )
+        $tmpLanguages = $languages;
+        if ( isset( $tmpLanguages['always-available'] ) )
         {
-            $alwaysAvailable = $languages['always-available'];
-            unset( $languages['always-available'] );
+            unset( $tmpLanguages['always-available'] );
         }
 
-        foreach ( $languages as $language => $name )
+        foreach ( $tmpLanguages as $language => $name )
         {
             $query = $this->dbHandler->createInsertQuery();
             $query
@@ -344,7 +284,13 @@ class EzcDatabase extends Gateway
                 ->set( 'contentclass_id', $query->bindValue( $typeId ) )
                 ->set( 'contentclass_version', $query->bindValue( $typeStatus ) )
                 ->set( 'language_id', $query->bindValue(
-                    $mapping[$language] | ( $alwaysAvailable === $language ? 1 : 0 )
+                    $this->languageMaskGenerator->generateLanguageIndicator(
+                        $language,
+                        $this->languageMaskGenerator->isLanguageAlwaysAvailable(
+                            $language,
+                            $languages
+                        )
+                    )
                 ) )
                 ->set( 'language_locale', $query->bindValue( $language ) )
                 ->set( 'name', $query->bindValue( $name ) );
@@ -419,7 +365,11 @@ class EzcDatabase extends Gateway
             $q->bindValue( $type->isContainer ? 1 : 0, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'language_mask' ),
-            $q->bindValue( $this->getLanguageMask( $type->name ), null, \PDO::PARAM_INT )
+            $q->bindValue(
+                $this->languageMaskGenerator->generateLanguageMask( $type->name ),
+                null,
+                \PDO::PARAM_INT
+            )
         )->set(
             $this->dbHandler->quoteColumn( 'initial_language_id' ),
             $q->bindValue( $type->initialLanguageId, null, \PDO::PARAM_INT )

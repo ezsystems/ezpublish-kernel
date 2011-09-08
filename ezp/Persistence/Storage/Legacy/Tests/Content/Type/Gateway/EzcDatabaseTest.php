@@ -11,9 +11,12 @@ namespace ezp\Persistence\Storage\Legacy\Tests\Content\Type\Gateway;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Tests\Content\Type\Gateway,
     ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase,
+    ezp\Persistence\Storage\Legacy\Content\Language\Cache as LanguageCache,
+    ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
 
     // For SORT_ORDER_* constants
     ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Language,
 
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
@@ -1229,10 +1232,33 @@ class EzcDatabaseTest extends TestCase
         if ( !isset( $this->gateway ) )
         {
             $this->gateway = new EzcDatabase(
-                $this->getDatabaseHandler()
+                $this->getDatabaseHandler(),
+                $this->getLanguageMaskGenerator()
             );
         }
         return $this->gateway;
+    }
+
+    /**
+     * Returns a Language MaskGenerator
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     */
+    protected function getLanguageMaskGenerator()
+    {
+        $languageUs = new Language();
+        $languageUs->id = 2;
+        $languageUs->locale = 'eng-US';
+
+        $languageGb = new Language();
+        $languageGb->id = 4;
+        $languageGb->locale = 'eng-GB';
+
+        $cache = new LanguageCache();
+        $cache->store( $languageUs );
+        $cache->store( $languageGb );
+
+        return new LanguageMaskGenerator( $cache );
     }
 
     /**
