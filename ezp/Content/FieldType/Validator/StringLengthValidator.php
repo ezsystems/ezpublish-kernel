@@ -53,7 +53,7 @@ class StringLengthValidator extends Validator
 
         if ( $this->maxStringLength !== null && strlen( $value ) > $this->maxStringLength )
         {
-            $this->errors[] = "The string can not excceed {$this->maxStringLength} characters.";
+            $this->errors[] = "The string can not exceed {$this->maxStringLength} characters.";
             $isValid = false;
         }
 
