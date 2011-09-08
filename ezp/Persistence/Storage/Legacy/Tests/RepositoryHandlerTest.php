@@ -160,6 +160,26 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
+     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::contentLanguageHandler
+     * @return void
+     */
+    public function testContentLanguageHandler()
+    {
+        $this->markTestSkipped( 'Not testable due to broken DI.' );
+        $handler = $this->getRepositoryHandlerFixture();
+        $contentLanguageHandler = $handler->contentLanguageHandler();
+
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content\\Language\\Handler',
+            $contentLanguageHandler
+        );
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Language\\CachingHandler',
+            $contentLanguageHandler
+        );
+    }
+
+    /**
      * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::contentTypeHandler
      * @return void
      */

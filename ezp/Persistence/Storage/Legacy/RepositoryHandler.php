@@ -94,6 +94,20 @@ class RepositoryHandler implements HandlerInterface
     protected $contentGateway;
 
     /**
+     * Language handler
+     *
+     * @var \ezp\Persistence\Content\Language\Handler
+     */
+    protected $languageHandler;
+
+    /**
+     * Language cache
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     */
+    protected $languageCache;
+
+    /**
      * Creates a new repository handler.
      *
      * The $dsn is a data source name as expected by the Zeta Components
@@ -310,7 +324,31 @@ class RepositoryHandler implements HandlerInterface
      */
     public function contentLanguageHandler()
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        if ( !isset( $this->languageHandler ) )
+        {
+            $this->languageHandler = new Content\Language\CachingHandler(
+                new Content\Language\Handler(
+                    new Content\Language\Gateway\EzcDatabase( $this->dbHandler ),
+                    new Content\Language\Mapper()
+                ),
+                $this->getLanguageCache()
+            );
+        }
+        return $this->languageHandler;
+    }
+
+    /**
+     * Returns a Language cache
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     */
+    protected function getLanguageCache()
+    {
+        if ( !isset( $this->languageCache ) )
+        {
+            $this->languageCache = new Content\Language\Cache();
+        }
+        return $this->languageCache;
     }
 
     /**
