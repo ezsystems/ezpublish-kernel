@@ -11,6 +11,7 @@ namespace ezp\Content\Query;
 use ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Query\SortClause,
     ezp\Base\Exception\PropertyNotFound,
+    ezp\Base\Exception\InvalidArgumentValue,
     InvalidArgumentException,
     ezp\Content\CriterionFactory,
     ezp\Content\Query;
@@ -190,6 +191,38 @@ class Builder
     }
 
     /**
+     * Sets the query offset to $offset
+     * @param int $offset
+     * @return \ezp\Content\Query\Builder Self
+     * @throws \ezp\Base\Exception\InvalidArgumentValue if $limit isn't an integer >= 0
+     */
+    public function setOffset( $offset )
+    {
+        if ( intval( $offset ) != $offset || $offset < 0 )
+        {
+            throw new InvalidArgumentValue( 'offset', $offset );
+        }
+        $this->offset = $offset;
+    }
+
+    /**
+     * Sets the query offset to $limit.
+     * A limit of 0 means no limit.
+     *
+     * @param int $offset
+     * @return \ezp\Content\Query\Builder Self
+     * @throws \ezp\Base\Exception\InvalidArgumentValue if $limit isn't an integer >= 0
+     */
+    public function setLimit( $limit )
+    {
+        if ( intval( $limit ) != $limit || $limit < 0 )
+        {
+            throw new InvalidArgumentValue( 'limit', $limit );
+        }
+        $this->limit = $limit;
+    }
+
+    /**
      * Returns the query
      * @return \ezp\Content\Query
      */
@@ -215,6 +248,8 @@ class Builder
         }
 
         $query->sortClauses = $this->sortClauses;
+        $query->limit = $this->limit;
+        $query->offset = $this->offset;
 
         return $query;
     }
@@ -236,5 +271,17 @@ class Builder
      * @var \ezp\Content\Query\SortClauseBuilder
      */
     public $sort;
+
+    /**
+     * Query offset, starting from 0
+     * @var int
+     */
+    public $offset = 0;
+
+    /**
+     * Query limit, as a number of items
+     * @var int
+     */
+    public $limit = 0;
 }
 ?>
