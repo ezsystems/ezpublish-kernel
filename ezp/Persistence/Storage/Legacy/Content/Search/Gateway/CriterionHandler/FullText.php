@@ -10,6 +10,7 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
     ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
+    ezp\Persistence\Storage\Legacy\Content\Search\TransformationProcessor,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Content\Criterion;
 
@@ -26,7 +27,48 @@ class FullText extends CriterionHandler
     protected $configuration = array(
         'searchThresholdValue' => 20,
         'enableWildcards' => true,
+        'commands' => array(
+            'apostrophe_normalize',
+            'apostrophe_to_doublequote',
+            'ascii_lowercase',
+            'ascii_search_cleanup',
+            'cyrillic_diacritical',
+            'cyrillic_lowercase',
+            'cyrillic_search_cleanup',
+            'cyrillic_transliterate_ascii',
+            'doublequote_normalize',
+            'endline_search_normalize',
+            'greek_diacritical',
+            'greek_lowercase',
+            'greek_normalize',
+            'greek_transliterate_ascii',
+            'hebrew_transliterate_ascii',
+            'hyphen_normalize',
+            'inverted_to_normal',
+            'latin1_diacritical',
+            'latin1_lowercase',
+            'latin1_transliterate_ascii',
+            'latin-exta_diacritical',
+            'latin-exta_lowercase',
+            'latin-exta_transliterate_ascii',
+            'latin_lowercase',
+            'latin_search_cleanup',
+            'latin_search_decompose',
+            'math_to_ascii',
+            'punctuation_normalize',
+            'space_normalize',
+            'special_decompose',
+            'specialwords_search_normalize',
+            'tab_search_normalize',
+        )
     );
+
+    /**
+     * Transformation processor to normalize search strings
+     *
+     * @var TransformationProcessor
+     */
+    protected $processor;
 
     /**
      * Construct from full text search configuration
@@ -34,10 +76,12 @@ class FullText extends CriterionHandler
      * @param array $configuration
      * @return void
      */
-    public function __construct( EzcDbHandler $dbHandler, array $configuration = array() )
+    public function __construct( EzcDbHandler $dbHandler, TransformationProcessor $processor, array $configuration = array() )
     {
         parent::__construct( $dbHandler );
+
         $this->configuration = $configuration + $this->configuration;
+        $this->processor     = $processor;
     }
 
     /**
@@ -113,7 +157,9 @@ class FullText extends CriterionHandler
     protected function getWordIdSubquery( $query, $string )
     {
         $subQuery = $query->subSelect();
-        $tokens = $this->tokenizeString( $string );
+        $tokens = $this->tokenizeString(
+            $this->processor->transform( $string, $this->configuration['commands'] )
+        );
         $wordExpressions = array();
         foreach ( $tokens as $token )
         {

@@ -64,6 +64,18 @@ class ContentSearchHandlerTest extends TestCase
 
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
+        $processor = new Content\Search\TransformationProcessor(
+            new Content\Search\TransformationParser(),
+            new Content\Search\TransformationPcreCompiler(
+                new Content\Search\Utf8Converter()
+            )
+        );
+
+        foreach ( glob( __DIR__ . '/SearchHandler/_fixtures/transformations/*.tr' ) as $file )
+        {
+            $processor->loadRules( $file );
+        }
+
         return new Content\Search\Handler(
             new Content\Search\Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
@@ -110,6 +122,7 @@ class ContentSearchHandlerTest extends TestCase
                         ),
                         new Content\Search\Gateway\CriterionHandler\FullText(
                             $this->getDatabaseHandler(),
+                            $processor,
                             $fullTextSearchConfiguration
                         ),
                         new Content\Search\Gateway\CriterionHandler\Field(
