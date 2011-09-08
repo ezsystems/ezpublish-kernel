@@ -188,12 +188,38 @@ class RepositoryHandler implements HandlerInterface
     }
 
     /**
+     * Get a transformation processor for full text search normalization
+     *
+     * @return TransformationProcessor
+     */
+    protected function getTransformationProcessor()
+    {
+        $processor = new Content\Search\TransformationProcessor(
+            new Content\Search\TransformationParser(),
+            new Content\Search\TransformationPcreCompiler(
+                new Content\Search\Utf8Converter()
+            )
+        );
+
+        // @TODO: How do we get the path to the currently used transformation
+        // files?
+        $path = '.';
+        foreach ( glob( $path . '/*.tr' ) as $file )
+        {
+            $processor->loadRules( $file );
+        }
+
+        return $processor;
+    }
+
+    /**
      * @return \ezp\Persistence\Content\Search\Handler
      */
     public function searchHandler()
     {
         if ( !isset( $this->searchHandler ) )
         {
+
             $this->searchHandler = new Content\Search\Handler(
                 new Content\Search\Gateway\EzcDatabase(
                     $this->dbHandler,
@@ -239,7 +265,8 @@ class RepositoryHandler implements HandlerInterface
                                 $this->dbHandler
                             ),
                             new Content\Search\Gateway\CriterionHandler\FullText(
-                                $this->dbHandler
+                                $this->dbHandler,
+                                $this->getTransformationProcessor()
                             ),
                             new Content\Search\Gateway\CriterionHandler\Field(
                                 $this->dbHandler,
