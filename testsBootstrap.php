@@ -17,11 +17,15 @@ spl_autoload_register( array( new Autoloader( $settings['base']['autoload'] ), '
 
 //require_once 'PHPUnit/Autoload.php';
 
+
 // setup configuration
 $paths = array();
-foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )//@todo Take from configuration
+foreach ( $settings['base']['autoload']['repositories'] as $ns => $path )
 {
-    $paths[] = "{$path}/settings/";
+    foreach ( glob( "{$path}/*", GLOB_ONLYDIR ) as $path )//@todo Take from configuration
+    {
+        $paths[] = "{$path}/settings/";
+    }
 }
 Configuration::setGlobalConfigurationData( $settings );
 Configuration::setGlobalDirs( $paths, 'modules' );
