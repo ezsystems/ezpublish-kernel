@@ -96,7 +96,7 @@ class LocationHandlerTest extends HandlerTest
                     )
                 )
             );
-            
+
             $this->lastContentId = $content->id;
 
             $this->locations[] = $location = $this->repositoryHandler->locationHandler()->create(
@@ -158,6 +158,7 @@ class LocationHandlerTest extends HandlerTest
      * Test load function
      *
      * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::load
+     * @group locationHandler
      */
     public function testLoad()
     {
@@ -178,6 +179,7 @@ class LocationHandlerTest extends HandlerTest
      * Test create function
      *
      * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::create
+     * @group locationHandler
      */
     public function testCreate()
     {
@@ -211,6 +213,7 @@ class LocationHandlerTest extends HandlerTest
      * Test removeSubtree function with no children
      *
      * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::removeSubtree
+     * @group locationHandler
      */
     public function testRemoveSubtreeNoChildren()
     {
@@ -231,6 +234,7 @@ class LocationHandlerTest extends HandlerTest
      * Test removeSubtree function with children
      *
      * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::removeSubtree
+     * @group locationHandler
      */
     public function testRemoveSubtreeChildren()
     {
@@ -269,6 +273,7 @@ class LocationHandlerTest extends HandlerTest
      * Test copySubtree function with no children
      *
      * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::copySubtree
+     * @group locationHandler
      */
     public function testCopySubtreeNoChildren()
     {
@@ -294,6 +299,7 @@ class LocationHandlerTest extends HandlerTest
      * Test copySubtree function with children
      *
      * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::copySubtree
+     * @group locationHandler
      */
     public function testCopySubtreeChildren()
     {
@@ -307,37 +313,68 @@ class LocationHandlerTest extends HandlerTest
         $this->assertEquals( Location::SORT_ORDER_ASC, $newLocation->sortOrder );
 
         // Verifying the deepest child is present
-        $this->assertEquals(
+        foreach (
             $this->repositoryHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId )
-            )->locations[0],
-            $newLocation,
-            "Location does not match"
-        );
+            )->locations[0] as $property => $value
+        )
+        {
+            switch ( $property )
+            {
+                case 'modifiedSubLocation' :
+                    self::assertGreaterThanOrEqual( $newLocation->$property, $value, "Location does not match" );
+                    break;
+
+                default:
+                    self::assertEquals( $newLocation->$property, $value, "Location does not match" );
+            }
+        }
 
         // Verifying the direct child is present
-        $this->assertEquals(
+        $loc = $this->repositoryHandler->locationHandler()->load( $newLocation->id - 1 );
+        foreach (
             $this->repositoryHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId - 1 )
-            )->locations[0],
-            $this->repositoryHandler->locationHandler()->load( $newLocation->id - 1 ),
-            "Location does not match"
-        );
+            )->locations[0] as $property => $value
+        )
+        {
+            switch ( $property )
+            {
+                case 'modifiedSubLocation' :
+                    self::assertGreaterThanOrEqual( $loc->$property, $value, "Location does not match" );
+                    break;
+
+                default:
+                    self::assertEquals( $loc->$property, $value, "Location does not match" );
+            }
+        }
+        unset( $loc );
 
         // Verifying the top most copied location (the grand parent) is present
-        $this->assertEquals(
+        $loc = $this->repositoryHandler->locationHandler()->load( $newLocation->id - 2 );
+        foreach (
             $this->repositoryHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId - 2 )
-            )->locations[0],
-            $this->repositoryHandler->locationHandler()->load( $newLocation->id - 2 ),
-            "Location does not match"
-        );
+            )->locations[0] as $property => $value
+        )
+        {
+            switch ( $property )
+            {
+                case 'modifiedSubLocation' :
+                    self::assertGreaterThanOrEqual( $loc->$property, $value, "Location does not match" );
+                    break;
+
+                default:
+                    self::assertEquals( $loc->$property, $value, "Location does not match" );
+            }
+        }
     }
 
     /**
      * Tests loadByParentId function with no children
      *
      * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::loadByParentId
+     * @group locationHandler
      */
     public function testLoadByParentIdNoChildren()
     {
@@ -348,6 +385,7 @@ class LocationHandlerTest extends HandlerTest
      * Tests loadByParentId function with children
      *
      * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::loadByParentId
+     * @group locationHandler
      */
     public function testLoadByParentIdChildren()
     {
@@ -362,6 +400,7 @@ class LocationHandlerTest extends HandlerTest
      *
      * @expectedException \ezp\Base\Exception\NotFound
      * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::loadByParentId
+     * @group locationHandler
      */
     public function testLoadByParentIdNotExisting()
     {
