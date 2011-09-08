@@ -10,7 +10,9 @@
 namespace ezp\Content\Type;
 use ezp\Base\Model,
     ezp\Content\Type,
-    ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue;
+    ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
+    ezp\Content\FieldType,
+    ezp\Content\FieldType\Validator;
 
 /**
  * Content Type Field (content class attribute) class
@@ -81,5 +83,21 @@ class FieldDefinition extends Model
     protected function getType()
     {
         return $this->type;
+    }
+
+    /**
+     * Adds a validator to for this field.
+     *
+     * @param \ezp\Content\FieldType\Validator $validator
+     * @return void
+     */
+    public function addValidator( Validator $validator )
+    {
+        // We'll initialize the map with constraints if it does not already exist.
+        if ( empty( $this->fieldTypeConstraints ) )
+        {
+            $this->fieldTypeConstraints = array();
+        }
+        FieldType::create( $this->fieldType )->fillConstraintsFromValidator( $this, $validator );
     }
 }
