@@ -39,7 +39,7 @@ class TransformationPcreCompilerTest extends TestCase
     public function testCompileMap()
     {
         $parser   = new Search\TransformationParser();
-        $compiler = new Search\TransformationPcreCompiler();
+        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -57,7 +57,7 @@ class TransformationPcreCompilerTest extends TestCase
     public function testCompileMapRemove()
     {
         $parser   = new Search\TransformationParser();
-        $compiler = new Search\TransformationPcreCompiler();
+        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -75,7 +75,7 @@ class TransformationPcreCompilerTest extends TestCase
     public function testCompileMapKeep()
     {
         $parser   = new Search\TransformationParser();
-        $compiler = new Search\TransformationPcreCompiler();
+        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -93,7 +93,7 @@ class TransformationPcreCompilerTest extends TestCase
     public function testCompileMapAscii()
     {
         $parser   = new Search\TransformationParser();
-        $compiler = new Search\TransformationPcreCompiler();
+        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -111,7 +111,7 @@ class TransformationPcreCompilerTest extends TestCase
     public function testCompileMapUnicode()
     {
         $parser   = new Search\TransformationParser();
-        $compiler = new Search\TransformationPcreCompiler();
+        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -129,7 +129,7 @@ class TransformationPcreCompilerTest extends TestCase
     public function testCompileReplace()
     {
         $parser   = new Search\TransformationParser();
-        $compiler = new Search\TransformationPcreCompiler();
+        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -147,7 +147,7 @@ class TransformationPcreCompilerTest extends TestCase
     public function testCompileTranspose()
     {
         $parser   = new Search\TransformationParser();
-        $compiler = new Search\TransformationPcreCompiler();
+        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -162,10 +162,28 @@ class TransformationPcreCompilerTest extends TestCase
         );
     }
 
+    public function testCompileTransposeAsciiLowercase()
+    {
+        $parser   = new Search\TransformationParser();
+        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
+
+        $rules = $compiler->compile(
+            $parser->parseString(
+                "ascii_lowercase:\n" .
+                "U+0041 - U+005A + 20"
+            )
+        );
+
+        $this->assertSame(
+            'hello world',
+            $this->applyTransformations( $rules, 'Hello World' )
+        );
+    }
+
     public function testCompileTransposePlus()
     {
         $parser   = new Search\TransformationParser();
-        $compiler = new Search\TransformationPcreCompiler();
+        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(
@@ -183,7 +201,7 @@ class TransformationPcreCompilerTest extends TestCase
     public function testCompileModuloTranspose()
     {
         $parser   = new Search\TransformationParser();
-        $compiler = new Search\TransformationPcreCompiler();
+        $compiler = new Search\TransformationPcreCompiler( new Search\Utf8Converter() );
 
         $rules = $compiler->compile(
             $parser->parseString(

@@ -18,6 +18,24 @@ use ezp\Persistence\Fields\Storage;
 class TransformationPcreCompiler
 {
     /**
+     * Class for converting UTF-8 characters
+     *
+     * @var Utf8Converter
+     */
+    protected $converter;
+
+    /**
+     * Construct from UTF8Converter
+     *
+     * @param Utf8Converter $converter
+     * @return void
+     */
+    public function __construct( Utf8Converter $converter )
+    {
+        $this->converter = $converter;
+    }
+
+    /**
      * Compile AST into a set of regular expressions
      *
      * The returned array contains a set of regular expressions and their
@@ -151,36 +169,17 @@ class TransformationPcreCompiler
      */
     protected function getModuloCharRange( $start, $end, $modulo )
     {
-        $start  = $this->getDecimalCodeForUtf8Character( $start );
-        $end    = $this->getDecimalCodeForUtf8Character( $end );
+        $start  = $this->converter->toUnicodeCodepoint( $start );
+        $end    = $this->converter->toUnicodeCodepoint( $end );
         $modulo = hexdec( $modulo );
 
         $chars = '';
         for ( $start; $start <= $end; $start += $modulo )
         {
-            $chars .= html_entity_decode( '&#' . $start . ';', ENT_QUOTES, 'UTF-8' );
+            $chars .= $this->converter->toUTF8Character( $start );
         }
 
         return $chars;
-    }
-
-    /**
-     * Get decimal code for UTF-8 character
-     *
-     * @param string $char
-     * @return int
-     */
-    protected function getDecimalCodeForUtf8Character( $char )
-    {
-        $decimal = 0;
-        for ( $i = 0; $i < strlen( $char ); ++$i )
-        {
-            $decimal *= 64;
-            $decimal += ( $i === 0 ? 15 : 63 ) &
-                ord( $char[$i] );
-        }
-
-        return $decimal;
     }
 
     /**
@@ -193,19 +192,13 @@ class TransformationPcreCompiler
      */
     protected function getTransposeClosure( $operator, $value )
     {
-        $value = hexdec( $value ) * ( $operator === '-' ? -1 : 1 );
-        return function ( $matches ) use ( $value )
+        $value     = hexdec( $value ) * ( $operator === '-' ? -1 : 1 );
+        $converter = $this->converter;
+        return function ( $matches ) use ( $value, $converter )
         {
-            $char = 0;
-            for ( $i = 0; $i < strlen( $matches[0] ); ++$i )
-            {
-                $char *= 64;
-                $char += ( $i === 0 ? 15 : 63 ) &
-                    ord( $matches[0][$i] );
-            }
-
-            $char += $value;
-            return html_entity_decode( '&#' . $char . ';', ENT_QUOTES, 'UTF-8' );
+            return $converter->toUTF8Character(
+                $converter->toUnicodeCodepoint( $matches[0] ) + $value
+            );
         };
     }
 
@@ -268,7 +261,7 @@ class TransformationPcreCompiler
         switch ( true )
         {
             case preg_match( '(^U\\+[0-9a-fA-F]{4}$)', $char ):
-                return $this->compileUnicodeCharacter( substr( $char, 2 ) );
+                return $this->converter->toUTF8Character( hexdec( substr( $char, 2 ) ) );
 
             case preg_match( '(^[0-9a-fA-F]{2}$)', $char ):
                 return chr( hexdec( $char ) );
@@ -276,17 +269,6 @@ class TransformationPcreCompiler
             default:
                 throw new \RuntimeException( "Invalid character definition: $char" );
         }
-    }
-
-    /**
-     * Ompile hexadecimal unicode character definition into a UTF-8 character
-     *
-     * @param string $char
-     * @return string
-     */
-    protected function compileUnicodeCharacter( $char )
-    {
-        return html_entity_decode( '&#x' . $char . ';', ENT_QUOTES, 'UTF-8' );
     }
 }
 
