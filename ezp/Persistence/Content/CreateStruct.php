@@ -65,5 +65,17 @@ class CreateStruct extends ValueObject
      * @var string Remote identifier used as a custom identifier for the object
      */
     public $remoteId;
+
+    /**
+     * Creation date
+     * @var int
+     */
+    public $created;
+
+    /**
+     * Modification date
+     * @var int
+     */
+    public $modified;
 }
 ?>

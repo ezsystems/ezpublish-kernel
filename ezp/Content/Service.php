@@ -330,6 +330,47 @@ class Service extends BaseService
     }
 
     /**
+     * Deletes $version
+     * @param \ezp\Content\Version
+     */
+    public function deleteVersion( Version $version )
+    {
+        $this->handler->contentHandler()->deleteVersion( $version->id );
+    }
+
+    /**
+     * Publishes $version of $content
+     * @param \ezp\Content $content
+     * @param \ezp\Content\Version $version
+     */
+    public function publish( Content $content, Version $version )
+    {
+        // Only drafts can be published
+        if ( $version->state !== Version::STATUS_DRAFT )
+        {
+            throw new Logic( '$version->state', 'Version should be in Version::STATUS_DRAFT state' );
+        }
+
+        // The version should belong to the given content
+        if ( $version->contentId !== $content->id )
+        {
+            throw new Logic( '$version->contentId', 'Content/Version arguments mismatch' );
+        }
+
+        // Check excess versions
+        // 1. Load max version # for object(s) (MaxVersionCount)
+        // 2. Check how many versions with status published/archived the object has (ContentVersionCount)
+        // 3. if ( ContentVersionCount > MaxVersionCount ) delete the oldest version
+
+
+        // Mark previously published version as archived
+
+        // Mark published version as published
+
+        // Search engine indexing
+    }
+
+    /**
      * Build a content Domain Object from a content Value object returned by Persistence
      * @param \ezp\Persistence\Content $vo
      * @return \ezp\Content

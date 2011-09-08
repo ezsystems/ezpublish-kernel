@@ -42,5 +42,17 @@ class UpdateStruct extends ValueObject
      * @var array(Field)
      */
     public $fields = array();
+
+    /**
+     * Creation date
+     * @var int
+     */
+    public $created;
+
+    /**
+     * Modification date
+     * @var int
+     */
+    public $modified;
 }
 ?>
