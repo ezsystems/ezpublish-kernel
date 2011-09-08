@@ -10,6 +10,9 @@
 namespace ezp\Content\FieldType\Validator;
 use ezp\Content\FieldType\Validator;
 
+/**
+ * Validate ranges of integer value.
+ */
 class IntegerValueValidator extends Validator
 {
     /**
