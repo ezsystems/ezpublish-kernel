@@ -51,7 +51,10 @@ class TextLine extends Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        // TODO: Implement toStorageFieldDefinition() method.
+        if ( isset( $fieldDef->fieldTypeConstraints['StringLengthValidator']['maxStringLength'] ) )
+        {
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints['StringLengthValidator']['maxStringLength'];
+        }
     }
 
     /**
@@ -62,7 +65,10 @@ class TextLine extends Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        // TODO: Implement toFieldDefinition() method.
+        if ( !empty( $storageDef->dataInt1 ) )
+        {
+            $fieldDef->fieldTypeConstraints = array( 'StringLengthValidator' => array( 'maxStringLength' => $storageDef->dataInt1 ) );
+        }
     }
 
     /**
