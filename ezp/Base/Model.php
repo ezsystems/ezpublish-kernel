@@ -144,9 +144,10 @@ abstract class Model implements Observable, ModelInterface
      * Notify listeners about certain events, by default $event is a plain 'update'
      *
      * @param string $event
+     * @param array|null $arguments
      * @return Model
      */
-    public function notify( $event = 'update' )
+    public function notify( $event = 'update', array $arguments = null )
     {
         if ( !empty( $this->observers[$event] ) )
         {

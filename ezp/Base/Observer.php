@@ -21,7 +21,8 @@ interface Observer// extends \SplObserver
      *
      * @param Observable $subject
      * @param string $event
+     * @param array|null $arguments
      * @return Observer
      */
-    public function update( Observable $subject, $event = 'update' );
+    public function update( Observable $subject, $event = 'update', array $arguments = null );
 }

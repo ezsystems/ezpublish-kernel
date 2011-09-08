@@ -37,7 +37,8 @@ interface Observable// extends \SplSubject
      * Notify listeners about certain events, by default a 'update' event
      *
      * @param string $event
+     * @param array|null $arguments
      * @return Observable
      */
-    public function notify( $event = 'update' );
+    public function notify( $event = 'update', array $arguments = null );
 }

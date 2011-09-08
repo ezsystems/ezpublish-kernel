@@ -132,9 +132,10 @@ class Group implements GroupAbleInterface, ModelInterface, Observable
      * Notify listeners about certain events, by default $event is a plain 'update'
      *
      * @param string $event
+     * @param array|null $arguments
      * @return Model
      */
-    public function notify( $event = 'update' )
+    public function notify( $event = 'update', array $arguments = null )
     {
         return $this->content->notify( $event );
     }
