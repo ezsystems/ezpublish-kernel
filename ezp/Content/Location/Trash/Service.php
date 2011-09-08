@@ -157,36 +157,12 @@ class Service extends BaseService
     protected function buildDomainObject( TrashedLocationValue $vo )
     {
         $trashedLocation = new Trashed( new Proxy( $this->repository->getContentService(), $vo->contentId ) );
-
-        return $this->refreshDomainObject( $trashedLocation, $vo );
-    }
-
-    /**
-     * Refreshes provided $trashedLocation. Useful if backend data has changed
-     *
-     * @param \ezp\Content\Location\Trashed $trashedLocation Trashed location to refresh
-     * @param \ezp\Persistence\Location\Trashed $vo Trashed location value object.
-     *                                              If provided, $trashedLocation will be updated with $vo's data
-     * @return \ezp\Content\Location\Trashed
-     * @throws \ezp\Base\Exception\InvalidArgumentType
-     */
-    protected function refreshDomainObject( Trashed $trashedLocation, TrashedLocationValue $vo = null )
-    {
-        if ( $vo === null )
-        {
-            $vo = $this->handler->trashHandler()->load( $trashedLocation->id );
-        }
-
-        $newState = array(
-            'parent' => new Proxy( $this, $vo->parentId ),
-            'properties' => $vo
+        $trashedLocation->setState(
+            array(
+                'parent' => new Proxy( $this, $vo->parentId ),
+                'properties' => $vo
+            )
         );
-        // Check if associated content also needs to be refreshed
-        if ( $vo->contentId != $trashedLocation->contentId )
-        {
-            $newState['content'] = new Proxy( $this->repository->getContentService(), $vo->contentId );
-        }
-        $trashedLocation->setState( $newState );
 
         return $trashedLocation;
     }
