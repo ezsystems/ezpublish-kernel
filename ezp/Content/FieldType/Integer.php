@@ -12,6 +12,11 @@ use ezp\Content\FieldType,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Persistence\Content\FieldValue;
 
+/**
+ * Integer field types
+ *
+ * Represents integers.
+ */
 class Integer extends FieldType
 {
     protected $fieldTypeString = 'ezinteger';
