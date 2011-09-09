@@ -13,9 +13,9 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Content;
 
 /**
- * Test case for Repository Handler
+ * Test case for Configurator
  */
-class RepositoryHandlerTest extends TestCase
+class ConfiguratorTest extends TestCase
 {
     /**
      * @return void
