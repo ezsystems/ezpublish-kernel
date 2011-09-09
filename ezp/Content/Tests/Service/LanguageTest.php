@@ -68,6 +68,27 @@ class LanguageTest extends BaseServiceTest
 
     /**
      * Test service function for loading sections
+     * @covers \ezp\Content\Language\Service::loadAll
+     */
+    public function testLoadAll()
+    {
+        $service = $this->repository->getContentLanguageService();
+        foreach ( $service->loadAll() as $item )
+        {
+            $service->delete( $item );
+        }
+ 
+        $service->create( 'eng-GB', 'English (United Kingdom)' );
+        $service->create( 'eng-US', 'English (American)' );
+        $languages = $service->loadAll();
+        self::assertEquals( 2, count( $languages ) );
+        self::assertEquals( $languages[0]->id +1, $languages[1]->id );
+        self::assertEquals( 'eng-GB', $languages[0]->locale );
+        self::assertEquals( 'eng-US', $languages[1]->locale );
+    }
+
+    /**
+     * Test service function for loading sections
      *
      * @expectedException \ezp\Base\Exception\NotFound
      * @covers \ezp\Content\Language\Service::load

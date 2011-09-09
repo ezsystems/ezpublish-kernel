@@ -71,7 +71,7 @@ class Service extends BaseService
      */
     public function loadAll()
     {
-        $list = $this->handler->contentLanguageHandler()->load( $languageId );
+        $list = $this->handler->contentLanguageHandler()->loadAll();
         foreach ( $list as $key => $item )
             $list[$key] = $this->buildDomainObject( $item );
         return $list;
