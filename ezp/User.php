@@ -178,8 +178,15 @@ class User extends Model implements GroupAbleInterface, ModelDefinition
             if ( $policy->limitations === '*' )
                 return true;
 
-            $limitations[] = $policy->limitations;
+            foreach ( $policy->limitations as $key => $values )
+            {
+                if ( empty( $limitations[$key] ) )
+                    $limitations[$key] = $values;
+                else
+                    $limitations[$key] = $values + $limitations[$key];
+            }
         }
+
         if ( !empty( $limitations ) )
             return $limitations;
 

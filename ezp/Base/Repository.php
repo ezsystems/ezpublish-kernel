@@ -122,10 +122,10 @@ class Repository
             throw new InvalidArgumentValue( '$function', $function, $className );
         }
 
-        $access = $this->getUser()->hasAccessTo( $definition['module'], $function );
-        if ( $access === false || $access === true )
+        $limitations = $this->getUser()->hasAccessTo( $definition['module'], $function );
+        if ( $limitations === false || $limitations === true )
         {
-            return $access;
+            return $limitations;
         }
         else if ( empty( $definition['functions'][$function] ) )
         {
@@ -135,33 +135,30 @@ class Repository
             );
         }
 
-        foreach ( $access as $limitations )
+        foreach ( $limitations as $limitationKey => $limitationValues )
         {
-            foreach ( $limitations as $limitationKey => $limitationValues )
+            //if ( isset( $definition[$function][$limitationKey]['alias'] ) )
+                //$limitationKey = $definition[$function][$limitationKey]['alias'];
+
+            if ( !isset( $definition['functions'][$function][$limitationKey]['compare'] ) )
             {
-                //if ( isset( $definition[$function][$limitationKey]['alias'] ) )
-                    //$limitationKey = $definition[$function][$limitationKey]['alias'];
-
-                if ( !isset( $definition['functions'][$function][$limitationKey]['compare'] ) )
-                {
-                    throw new Logic(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
-                        "could not find limitation compare function on {$className}::definition()"
-                    );
-                }
-
-                $limitationCompareFn = $definition['functions'][$function][$limitationKey]['compare'];
-                if ( !is_callable( $limitationCompareFn ) )
-                {
-                    throw new Logic(
-                        "\$definition[functions][{$function}][{$limitationKey}][compare]",
-                        "compare function from {$className}::definition() is not callable"
-                    );
-                }
-
-                if ( !$limitationCompareFn( $model, $limitationValues, $this, $assignment ) )
-                    return false;
+                throw new Logic(
+                    "\$definition[functions][{$function}][{$limitationKey}][compare]",
+                    "could not find limitation compare function on {$className}::definition()"
+                );
             }
+
+            $limitationCompareFn = $definition['functions'][$function][$limitationKey]['compare'];
+            if ( !is_callable( $limitationCompareFn ) )
+            {
+                throw new Logic(
+                    "\$definition[functions][{$function}][{$limitationKey}][compare]",
+                    "compare function from {$className}::definition() is not callable"
+                );
+            }
+
+            if ( !$limitationCompareFn( $model, $limitationValues, $this, $assignment ) )
+                return false;
         }
         return true;
     }
