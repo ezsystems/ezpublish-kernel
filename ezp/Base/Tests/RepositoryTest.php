@@ -260,6 +260,17 @@ class RepositoryTest extends BaseServiceTest
     }
 
     /**
+     * @covers \ezp\Base\Repository::getContentLanguageService
+     */
+    public function testGetContentLanguageService()
+    {
+        $this->assertInstanceOf(
+            '\\ezp\\Content\\Language\\Service',
+            $this->repository->getContentLanguageService()
+        );
+    }
+
+    /**
      * @covers \ezp\Base\Repository::getContentTypeService
      */
     public function testGetContentTypeService()

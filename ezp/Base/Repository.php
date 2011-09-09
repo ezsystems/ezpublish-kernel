@@ -195,6 +195,18 @@ class Repository
     }
 
     /**
+     * Get Content Language Service
+     *
+     * Get service object to perform several operations on Content language objects
+     *
+     * @return \ezp\Content\Language\Service
+     */
+    public function getContentLanguageService()
+    {
+        return $this->service( 'ezp\\Content\\Language\\Service' );
+    }
+
+    /**
      * Get Content Type Service
      *
      * Get service object to perform several operations on Content Type objects and it's aggregate members.

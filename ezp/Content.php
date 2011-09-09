@@ -345,7 +345,6 @@ class Content extends Model implements ModelDefinition
                 'diff' => array(
                     // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
                 ),
-                'translations' => array(),
                 'reverserelatedlist' => array(),
                 'translate' => array(
                     // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
