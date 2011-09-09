@@ -71,7 +71,11 @@ class EzcDatabase extends Gateway
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null )
     {
-        $limit = $limit ?: PHP_INT_MAX;
+        $limit = $limit !== null ? $limit : PHP_INT_MAX;
+        if ( $limit === 0 )#
+        {
+            return array( 'count' => 0, 'rows' => array() );
+        }
 
         // Get full object count
         $query = $this->handler->createSelectQuery();

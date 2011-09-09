@@ -187,7 +187,7 @@ class ContentSearchHandlerTest extends TestCase
     }
 
     /**
-     * Bug #81
+     * Bug #80
      * @return void
      * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase::find
      * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::find
@@ -200,6 +200,24 @@ class ContentSearchHandlerTest extends TestCase
 
         $this->assertEquals(
             1,
+            $result->count
+        );
+    }
+
+    /**
+     * Bug #81
+     * @return void
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase::find
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::find
+     */
+    public function testFindWithZeroLimit()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find( new Criterion\ContentId( 10 ), 0, 0 );
+
+        $this->assertEquals(
+            0,
             $result->count
         );
     }
