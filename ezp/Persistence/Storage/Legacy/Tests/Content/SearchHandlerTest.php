@@ -205,7 +205,7 @@ class ContentSearchHandlerTest extends TestCase
     }
 
     /**
-     * Bug #81
+     * Bug #81, bug #82
      * @return void
      * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase::find
      * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::find
@@ -217,8 +217,12 @@ class ContentSearchHandlerTest extends TestCase
         $result = $locator->find( new Criterion\ContentId( 10 ), 0, 0 );
 
         $this->assertEquals(
-            0,
+            1,
             $result->count
+        );
+        $this->assertEquals(
+            array(),
+            $result->content
         );
     }
 
