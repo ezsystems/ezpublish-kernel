@@ -13,6 +13,7 @@ use ezp\Persistence\Storage\Legacy\Content\Gateway,
     ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
+    ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     ezp\Persistence\Content,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Version,
@@ -38,14 +39,27 @@ class EzcDatabase extends Gateway
     protected $queryBuilder;
 
     /**
+     * Language mask generator
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     */
+    protected $languageMaskGenerator;
+
+    /**
      * Creates a new gateway based on $db
      *
      * @param EzcDbHandler $db
+     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder $queryBuilder
+     * @param \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
-    public function __construct( EzcDbHandler $db, EzcDatabase\QueryBuilder $queryBuilder )
+    public function __construct(
+        EzcDbHandler $db,
+        EzcDatabase\QueryBuilder $queryBuilder,
+        LanguageMaskGenerator $languageMaskGenerator )
     {
-        $this->dbHandler = $db;
-        $this->queryBuilder = $queryBuilder;
+        $this->dbHandler             = $db;
+        $this->queryBuilder          = $queryBuilder;
+        $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
     /**
@@ -90,6 +104,13 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'remote_id' ),
             $q->bindValue( $content->remoteId )
+        )->set(
+            $this->dbHandler->quoteColumn( 'language_mask' ),
+            $q->bindValue(
+                $this->languageMaskGenerator->generateLanguageMask( $content->name ),
+                null,
+                \PDO::PARAM_INT
+            )
         );
 
         $stmt = $q->prepare();

@@ -108,6 +108,13 @@ class RepositoryHandler implements HandlerInterface
     protected $languageCache;
 
     /**
+     * Language mask generator
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     */
+    protected $languageMaskGenerator;
+
+    /**
      * Creates a new repository handler.
      *
      * The $dsn is a data source name as expected by the Zeta Components
@@ -166,10 +173,27 @@ class RepositoryHandler implements HandlerInterface
         {
             $this->contentGateway = new Content\Gateway\EzcDatabase(
                 $this->dbHandler,
-                new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler )
+                new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler ),
+                $this->getLanguageMaskGenerator()
             );
         }
         return $this->contentGateway;
+    }
+
+    /**
+     * Returns a language mask generator
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     */
+    protected function getLanguageMaskGenerator()
+    {
+        if ( !isset( $this->languageMaskGenerator ) )
+        {
+            $this->languageMaskGenerator = new Content\Language\MaskGenerator(
+                $this->getLanguageCache()
+            );
+        }
+        return $this->languageMaskGenerator;
     }
 
     /**
@@ -309,7 +333,7 @@ class RepositoryHandler implements HandlerInterface
             $this->contentTypeHandler = new Type\Handler(
                 new Type\Gateway\EzcDatabase(
                     $this->dbHandler,
-                    new Content\Language\MaskGenerator( $this->getLanguageCache() )
+                    $this->getLanguageMaskGenerator()
                 ),
                 new Type\Mapper( $this->getFieldValueConverterRegistry() ),
                 new Type\ContentUpdater(

@@ -215,7 +215,8 @@ class ContentHandlerTest extends TestCase
         $handler = new Handler(
             new Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
-                new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() )
+                new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() ),
+                $this->getLanguageMaskGeneratorMock()
             ),
             new Location\Handler(
                 new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
@@ -240,6 +241,27 @@ class ContentHandlerTest extends TestCase
             ->will( $this->returnValue( $converter ) );
 
         return $handler;
+    }
+
+    /**
+     * Returns a language mask generator mock
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     */
+    protected function getLanguageMaskGeneratorMock()
+    {
+        $mock = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Language\\MaskGenerator',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $mock->expects( $this->any() )
+            ->method( 'generateLanguageMask' )
+            ->will( $this->returnValue( 3 ) );
+
+        return $mock;
     }
 
     /**
@@ -323,7 +345,8 @@ class ContentHandlerTest extends TestCase
         $handler = new Handler(
             new Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
-                new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() )
+                new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() ),
+                $this->getLanguageMaskGeneratorMock()
             ),
             new Location\Handler(
                 new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),

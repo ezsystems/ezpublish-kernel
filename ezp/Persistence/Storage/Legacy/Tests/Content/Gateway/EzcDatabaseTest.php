@@ -11,8 +11,10 @@ namespace ezp\Persistence\Storage\Legacy\Tests\Content\Gateway;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
+    ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
 
     ezp\Persistence\Content,
+    ezp\Persistence\Content\Language,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\Version;
 
@@ -27,6 +29,13 @@ class EzcDatabaseTest extends TestCase
      * @var ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase
      */
     protected $databaseGateway;
+
+    /**
+     * Language mask generator
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     */
+    protected $languageMaskGenerator;
 
     /**
      * @return void
@@ -818,10 +827,51 @@ class EzcDatabaseTest extends TestCase
         {
             $this->databaseGateway = new EzcDatabase(
                 ( $dbHandler = $this->getDatabaseHandler() ),
-                new EzcDatabase\QueryBuilder( $dbHandler )
+                new EzcDatabase\QueryBuilder( $dbHandler ),
+                $this->getLanguageMaskGenerator()
             );
         }
         return $this->databaseGateway;
+    }
+
+    /**
+     * Returns a language mask generator
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     */
+    protected function getLanguageMaskGenerator()
+    {
+        if ( !isset( $this->languageMaskGenerator ) )
+        {
+            $this->languageMaskGenerator = new LanguageMaskGenerator(
+                $this->getLanguageCacheMock()
+            );
+        }
+        return $this->languageMaskGenerator;
+    }
+
+    /**
+     * Returns a language cache mock
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     */
+    protected function getLanguageCacheMock()
+    {
+        $language = new Language();
+        $language->id = 4;
+
+        $languageCache = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Language\\Cache',
+            array(),
+            array(),
+            '',
+            false
+        );
+        $languageCache->expects( $this->any() )
+            ->method( 'getByLocale' )
+            ->will( $this->returnValue( $language ) );
+
+        return $languageCache;
     }
 
     /**
