@@ -85,4 +85,56 @@ interface Handler
       */
      public function getPath( $locationId, $language );
 
+
+    /**
+     * Runs filters which are defined to be run on url aliases in the legacy engine,
+     * and returns the modified $urlText for the path element representing $locationId.
+     *
+     * See ezpublish/doc/features/3.10/multilingual_support_for_urlalias.txt,
+     * "Filtering of alias text" for details, on the Legacy implementation this should connect to.
+     *
+     * Relevant settings:
+     * site.ini.[URLTranslator].FilterClasses
+     *
+     * This method is an abstraction for the functionality of eZURLAliasFilter::processFilters(…)
+     *
+     * @abstract
+     * @param string $urlText
+     * @param mixed $locationId
+     * @param string $language
+     * @return string
+     */
+    public function runUrlFilters( $urlText, $locationId, $language );
+
+    /**
+     * Returns $urlText transformed according to the selected URL transformation settings.
+     *
+     * Relevant settings:
+     * site.ini.[URLTranslator].TransformationGroup
+     *
+     * This method is an abstraction of the functionality of eZURLAliasML::convertToAlias(…)
+     *
+     * @abstract
+     * @param string $urlText
+     * @param string $fallBackValue
+     * @return string
+     */
+    public function convertToUrlAlias( $urlText, $fallBackValue );
+
+    /**
+     * Converts $urlText to a unique value for the placement of Location, $locationId.
+     *
+     * If the url being created for Location $locationId has moved,
+     * $locationHasMoved should be set to true, as name conflicts needs to be
+     * checked in the new destination.
+     *
+     * This method represents an abstraction of the functionality of eZContentObjectTreeNode::adjustPathElement(…)
+     *
+     * @abstract
+     * @param string $urlText
+     * @param int $locationId
+     * @param bool $locationHasMoved
+     * @return string
+     */
+    public function adjustToUniqueUrlText( $urlText, $locationId, $locationHasMoved = false );
 }
