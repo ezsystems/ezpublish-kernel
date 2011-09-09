@@ -20,6 +20,18 @@ use Exception as PHPException;
 class NotFound extends Http
 {
     /**
+     * What was not found
+     * @var string
+     */
+    public $what;
+
+    /**
+     * Identifier of what was not found
+     * @var mixed
+     */
+    public $identifier;
+
+    /**
      * Generates: Could not find '{$what}' with identifier '{$identifier}'
      *
      * @param string $what
@@ -28,6 +40,8 @@ class NotFound extends Http
      */
     public function __construct( $what, $identifier, PHPException $previous = null )
     {
-        parent::__construct( "Could not find '{$what}' with identifier '" . var_export( $identifier, true ) . "'", self::NOT_FOUND, $previous );
+        $this->what = $what;
+        $this->identifier = var_export( $identifier, true );
+        parent::__construct( "Could not find '{$what}' with identifier '" . $this->identifier . "'", self::NOT_FOUND, $previous );
     }
 }
