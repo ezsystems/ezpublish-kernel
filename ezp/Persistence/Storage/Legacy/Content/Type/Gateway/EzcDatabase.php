@@ -1016,21 +1016,22 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Publishes the Type with $typeId from $sourceVersion to 0, including its
-     * fields
+     * Publishes the Type with $typeId from $sourceVersion to $targetVersion,
+     * including its fields
      *
      * @param int $typeId
      * @param int $sourceVersion
+     * @param int $targetVersion
      * @return void
      */
-    public function publishTypeAndFields( $typeId, $sourceVersion )
+    public function publishTypeAndFields( $typeId, $sourceVersion, $targetVersion )
     {
         $query = $this->dbHandler->createUpdateQuery();
         $query->update(
             $this->dbHandler->quoteTable( 'ezcontentclass' )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
-            $query->bindValue( 0, null, \PDO::PARAM_INT )
+            $query->bindValue( $targetVersion, null, \PDO::PARAM_INT )
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
@@ -1052,7 +1053,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteTable( 'ezcontentclass_attribute' )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
-            $query->bindValue( 0, null, \PDO::PARAM_INT )
+            $query->bindValue( $targetVersion, null, \PDO::PARAM_INT )
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(
@@ -1074,7 +1075,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteTable( 'ezcontentclass_name' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclass_version' ),
-            $query->bindValue( 0, null, \PDO::PARAM_INT )
+            $query->bindValue( $targetVersion, null, \PDO::PARAM_INT )
         )->where(
             $query->expr->lAnd(
                 $query->expr->eq(

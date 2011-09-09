@@ -1193,7 +1193,7 @@ class EzcDatabaseTest extends TestCase
         );
 
         $gateway = $this->getGateway();
-        $gateway->publishTypeAndFields( 1, 1 );
+        $gateway->publishTypeAndFields( 1, 1, 0 );
 
         $this->assertQueryResult(
             array( array( 1 ) ),

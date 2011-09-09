@@ -403,7 +403,7 @@ class Handler implements BaseContentTypeHandler
         $this->contentTypeGateway->deleteFieldDefinitionsForType(
             $contentTypeId, 0
         );
-        $this->contentTypeGateway->publishTypeAndFields( $contentTypeId, 1 );
+        $this->contentTypeGateway->publishTypeAndFields( $contentTypeId, 1, 0 );
     }
 }
 ?>
