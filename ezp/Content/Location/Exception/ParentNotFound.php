@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Location\Exception;
 use Exception as PHPException,
-    ezp\Base\Exception\NotFound;
+    ezp\Base\Exception\NotFound as BaseNotFound;
 
 /**
  * ParentNotFound exception implementation
@@ -24,7 +24,7 @@ use Exception as PHPException,
  * throw new ParentNotFound( $location->id, $location->parentId );
  * </code>
  */
-class ParentNotFound extends NotFound
+class ParentNotFound extends BaseNotFound
 {
     /**
      * Constructor
