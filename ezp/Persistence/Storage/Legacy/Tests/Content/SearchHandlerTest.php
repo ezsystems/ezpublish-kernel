@@ -180,7 +180,7 @@ class ContentSearchHandlerTest extends TestCase
     /**
      * Bug #81
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase::find
      */
     public function testFindWithoutOffsetLimit()
     {
