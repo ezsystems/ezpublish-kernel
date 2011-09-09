@@ -45,7 +45,7 @@ interface Handler
      * objects are left untouched.
      *
      * @param mixed $locationId
-     * @return boolean
+     * @return \ezp\Persistence\Content\Location\Trashed
      */
     public function trashSubtree( $locationId );
 
