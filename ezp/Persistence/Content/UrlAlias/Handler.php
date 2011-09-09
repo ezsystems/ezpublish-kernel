@@ -79,6 +79,13 @@ interface Handler
      /**
       * Returns the full url alias to $locationId from /.
       *
+      * For best performance, a full path string should be used, and then the
+      * abstraction of eZURLAliasML::fetchPathByActionList(…) is preferred to be used.
+      *
+      * Secondly the recursive eZURLAliasML::getPath(…) shouold be used.
+      * This is also required if a path is to be fetched in another $language,
+      * than what is currently the most prioritized language in the context of eZURLAliasML.
+      *
       * @param $locationId
       * @param $language
       * @return string
