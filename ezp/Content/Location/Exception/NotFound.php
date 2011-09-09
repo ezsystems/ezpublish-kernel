@@ -1,6 +1,6 @@
 <?php
 /**
- * Contains ParentNotFound Exception implementation
+ * Contains NotFound Exception implementation
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -33,6 +33,6 @@ class NotFound extends BaseNotFound
      */
     public function __construct( $locationId, PHPException $previous = null )
     {
-        parent::__construct( "Location #{$locationId}", $locationId, $previous );
+        parent::__construct( "Location", $locationId, $previous );
     }
 }
