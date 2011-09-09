@@ -12,8 +12,7 @@ use ezp\Persistence\Repository\Handler as HandlerInterface,
     ezp\Persistence\Storage\Legacy\Content,
     ezp\Persistence\Storage\Legacy\Content\Type,
     ezp\Persistence\Storage\Legacy\Content\Location\Handler as LocationHandler,
-    ezp\Persistence\Storage\Legacy\User,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry;
+    ezp\Persistence\Storage\Legacy\User;
 
 /**
  * The repository handler for the legacy storage engine
@@ -115,31 +114,103 @@ class RepositoryHandler implements HandlerInterface
     protected $languageMaskGenerator;
 
     /**
+     * Configurator
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Configurator
+     */
+    protected $configurator;
+
+    /**
      * Creates a new repository handler.
      *
-     * The $dsn is a data source name as expected by the Zeta Components
-     * database component. The format is:
+     * The $config parameter expects an array of configuration values as
+     * follows:
      *
-     *     <database>://<user>:<password>@<host>/<database>
+     * <code>
+     * array(
+     *  'dsn' =>'<database_type>://<user>:<password>@<host>/<database_name>',
+     *  'defer_type_update' => <true|false>,
+     *  'external_storages' => array(
+     *      '<type_name1>' => '<storage_class_1>',
+     *      '<type_name2>' => '<storage_class_2>',
+     *      // ...
+     *  ),
+     *  'field_converters' => array(
+     *      '<type_name1>' => '<converter_class_1>',
+     *      '<type_name2>' => '<converter_class_2>',
+     *      // ...
+     *  ),
+     *  'transformation_rule_files' => array(
+     *      '<full_file_path_1>',
+     *      '<full_file_path_2>',
+     *      // ...
+     *  )
+     * )
+     * </code>
      *
-     * For example
+     * The DSN (data source name) defines which database to use. It's format is 
+     * defined by the Apache Zeta Components Database component. Examples are:
      *
-     *     mysql://root:secret@localhost/ezp
+     * - mysql://root:secret@localhost/ezp
+     *   for the MySQL database "ezp" on localhost, which will be accessed
+     *   using user "root" with password "secret"
+     * - sqlite://:memory:
+     *   for a SQLite in memory database (used e.g. for unit tests)
      *
-     * for a MySQL database connection or
-     *
-     *    sqlite://:memory:
-     *
-     * for an SQLite in-memory database.
-     *
-     * For further information refer to
+     * For further information on the database setup, please refer to
      * {@see http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html#handler-usage}
      *
-     * @param string $dsn
+     * The flag 'defer_type_update' defines if content types should be
+     * published immediatly (false), when the
+     * {@link \ezp\Persistence\Content\Type\Handler::publish()} method is
+     * called, or if a background process should be triggered (true), which is
+     * then executed by the old eZ Publish core.
+     *
+     * In 'external_storages' a mapping of field type names to classes is
+     * expected. The referred class is instantiated and the resulting object is 
+     * used to store/restore/delete/… data in external storages (e.g. another
+     * database or a web service). The classes must comply to the
+     * {@link \ezp\Persistence\Fields\Storage} interface. Note that due to the
+     * configuration mechanism and missing proper DI, the classes may not
+     * expect any constructor parameters!
+     *
+     * The 'field_converter' configuration array consists of another mapping of 
+     * field type names to classes. Each of the classes is instantiated and
+     * used to convert content fields and content type field definitions to the 
+     * legacy storage engine. The given class names must derive the
+     * {@link \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter}
+     * class. As for 'external_storage' classes, none of the classes may expect 
+     * parameters in its constructor, due to missing proper DI.
+     *
+     * Through the 'transformation_rule_files' array, a list of files with
+     * full text transformation rules is given. These files are read by an
+     * instance of
+     * {@link \ezp\Persistence\Storage\Legacy\Converter\Search\TransformationProcessor}
+     * and then used for normalization in the full text search.
+     *
+     * @param array $config
      */
-    public function __construct( $dsn )
+    public function __construct( array $config )
     {
-        $this->dbHandler = new EzcDbHandler( \ezcDbFactory::create( $dsn ) );
+        $this->configurator = new Configurator( $config );
+    }
+
+    /**
+     * Returns the Zeta Database handler
+     *
+     * @return \ezp\Persistence\Storage\Legacy\EzcDbHandler
+     */
+    protected function getDatabase()
+    {
+        if ( !isset( $this->dbHandler ) )
+        {
+            $this->dbHandler = new EzcDbHandler(
+                \ezcDbFactory::create(
+                    $this->configurator->getDsn()
+                )
+            );
+        }
+        return $this->dbHandler;
     }
 
     /**
@@ -172,8 +243,8 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->contentGateway ) )
         {
             $this->contentGateway = new Content\Gateway\EzcDatabase(
-                $this->dbHandler,
-                new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler ),
+                $this->getDatabase(),
+                new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() ),
                 $this->getLanguageMaskGenerator()
             );
         }
@@ -206,7 +277,10 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->fieldValueConverterRegistry ) )
         {
             $this->fieldValueConverterRegistry =
-                new Registry();
+                new Content\FieldValue\Converter\Registry();
+            $this->configurator->configureFieldConverter(
+                $this->fieldValueConverterRegistry
+            );
         }
         return $this->fieldValueConverterRegistry;
     }
@@ -221,6 +295,9 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->storageRegistry ) )
         {
             $this->storageRegistry = new Content\StorageRegistry();
+            $this->configurator->configureExternalStorages(
+                $this->storageRegistry
+            );
         }
         return $this->storageRegistry;
     }
@@ -260,59 +337,59 @@ class RepositoryHandler implements HandlerInterface
 
             $this->searchHandler = new Content\Search\Handler(
                 new Content\Search\Gateway\EzcDatabase(
-                    $this->dbHandler,
+                    $this->getDatabase(),
                     new Content\Search\Gateway\CriteriaConverter(
                         array(
                             new Content\Search\Gateway\CriterionHandler\ContentId(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\LogicalNot(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\LogicalAnd(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\LogicalOr(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\SubtreeId(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\ContentTypeId(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\DateMetadata(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\LocationId(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\ParentLocationId(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\RemoteId(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\SectionId(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\Status(
-                                $this->dbHandler
+                                $this->getDatabase()
                             ),
                             new Content\Search\Gateway\CriterionHandler\FullText(
-                                $this->dbHandler,
+                                $this->getDatabase(),
                                 $this->getTransformationProcessor()
                             ),
                             new Content\Search\Gateway\CriterionHandler\Field(
-                                $this->dbHandler,
+                                $this->getDatabase(),
                                 $this->getFieldValueConverterRegistry()
                             ),
                         )
                     ),
-                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->dbHandler )
+                    new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() )
                 ),
                 new Content\Mapper(
                     new Content\Location\Mapper(),
@@ -332,7 +409,7 @@ class RepositoryHandler implements HandlerInterface
         {
             $this->contentTypeHandler = new Type\Handler(
                 $gateway = ( new Type\Gateway\EzcDatabase(
-                    $this->dbHandler,
+                    $this->getDatabase(),
                     $this->getLanguageMaskGenerator()
                 ) ),
                 new Type\Mapper( $this->getFieldValueConverterRegistry() ),
@@ -358,7 +435,7 @@ class RepositoryHandler implements HandlerInterface
         {
             $this->languageHandler = new Content\Language\CachingHandler(
                 new Content\Language\Handler(
-                    new Content\Language\Gateway\EzcDatabase( $this->dbHandler ),
+                    new Content\Language\Gateway\EzcDatabase( $this->getDatabase() ),
                     new Content\Language\Mapper()
                 ),
                 $this->getLanguageCache()
@@ -389,7 +466,7 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->locationHandler ) )
         {
             $this->locationHandler = new LocationHandler(
-                new Content\Location\Gateway\EzcDatabase( $this->dbHandler ),
+                new Content\Location\Gateway\EzcDatabase( $this->getDatabase() ),
                 $this->getLocationMapper()
             );
         }
@@ -418,8 +495,8 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->userHandler ) )
         {
             $this->userHandler = new User\Handler(
-                new User\Gateway\EzcDatabase( $this->dbHandler ),
-                new User\Role\Gateway\EzcDatabase( $this->dbHandler )
+                new User\Gateway\EzcDatabase( $this->getDatabase() ),
+                new User\Role\Gateway\EzcDatabase( $this->getDatabase() )
             );
         }
         return $this->userHandler;
@@ -433,7 +510,7 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->sectionHandler ) )
         {
             $this->sectionHandler = new Content\Section\Handler(
-                new Content\Section\Gateway\EzcDatabase( $this->dbHandler )
+                new Content\Section\Gateway\EzcDatabase( $this->getDatabase() )
             );
         }
         return $this->sectionHandler;
@@ -451,21 +528,21 @@ class RepositoryHandler implements HandlerInterface
      */
     public function beginTransaction()
     {
-        $this->dbHandler->beginTransaction();
+        $this->getDatabase()->beginTransaction();
     }
 
     /**
      */
     public function commit()
     {
-        $this->dbHandler->commit();
+        $this->getDatabase()->commit();
     }
 
     /**
      */
     public function rollback()
     {
-        $this->dbHandler->rollback();
+        $this->getDatabase()->rollback();
     }
 }
 ?>

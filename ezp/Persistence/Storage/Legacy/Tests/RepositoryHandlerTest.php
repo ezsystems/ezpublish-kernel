@@ -299,7 +299,11 @@ class RepositoryHandlerTest extends TestCase
      */
     protected function getRepositoryHandlerFixture()
     {
-        return new RepositoryHandler( $this->getDsn() );
+        return new RepositoryHandler(
+            array(
+                'dsn' => $this->getDsn(),
+            )
+        );
     }
 
     /**
