@@ -189,7 +189,7 @@ class LocationTest extends BaseServiceTest
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \ezp\Content\Location\Exception\NotFound
      * @group locationService
      * @covers ezp\Content\Location\Service::load
      */
@@ -530,5 +530,31 @@ class LocationTest extends BaseServiceTest
         // @todo Need to check the subtree is correctly copied but since we have no
         // easy way to get children locations, postponing that.
         $this->markTestIncomplete();
+    }
+
+    /**
+     * @group locationService
+     * @covers \ezp\Content\Location\Service::copySubtree
+     * @expectedException \ezp\Content\Location\Exception\NotFound
+     */
+    public function testCopySubtreeInvalidSource()
+    {
+        $newSubtree = $this->service->copySubtree(
+            new Location( new Proxy( $this->repository->getContentService(), 1 ) ),
+            $this->topLocation
+        );
+    }
+
+    /**
+     * @group locationService
+     * @covers \ezp\Content\Location\Service::copySubtree
+     * @expectedException \ezp\Content\Location\Exception\NotFound
+     */
+    public function testCopySubtreeInvalidTarget()
+    {
+        $newSubtree = $this->service->copySubtree(
+            $this->insertedLocations[5],
+            new Location( new Proxy( $this->repository->getContentService(), 1 ) )
+        );
     }
 }
