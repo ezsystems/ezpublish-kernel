@@ -193,7 +193,7 @@ class Content extends Model implements ModelDefinition
      * @access private
      * @return array
      */
-    public function definition()
+    public static function definition()
     {
         $def = array(
             'module' => 'content',

@@ -60,7 +60,7 @@ class Role extends Model implements ModelDefinition
      * @access private
      * @return array
      */
-    public function definition()
+    public static function definition()
     {
         return array(
             'module' => 'role',

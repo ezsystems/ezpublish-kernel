@@ -94,7 +94,7 @@ class User extends Model implements GroupAbleInterface, ModelDefinition
      * @access private
      * @return array
      */
-    public function definition()
+    public static function definition()
     {
         return array(
             'module' => 'user',
