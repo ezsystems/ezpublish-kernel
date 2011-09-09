@@ -44,11 +44,11 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     protected $mapperMock;
 
     /**
-     * ContentUpdater mock
+     * Update\Handler mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler
      */
-    protected $contentUpdaterMock;
+    protected $updateHandlerMock;
 
     /**
      * @return void
@@ -69,8 +69,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             $handler
         );
         $this->assertAttributeSame(
-            $this->getContentUpdaterMock(),
-            'contentUpdater',
+            $this->getUpdateHandlerMock(),
+            'updateHandler',
             $handler
         );
     }
@@ -143,7 +143,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $handlerMock = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
             array( 'loadGroup' ),
-            array( $gatewayMock, $mapperMock, $this->getContentUpdaterMock() )
+            array( $gatewayMock, $mapperMock, $this->getUpdateHandlerMock() )
         );
         $handlerMock->expects( $this->once() )
             ->method( 'loadGroup' )
@@ -453,7 +453,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $handlerMock = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
             array( 'load' ),
-            array( $gatewayMock, $this->getMapperMock(), $this->getContentUpdaterMock() )
+            array( $gatewayMock, $this->getMapperMock(), $this->getUpdateHandlerMock() )
         );
         $handlerMock->expects( $this->once() )
             ->method( 'load' )
@@ -551,7 +551,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $handlerMock = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
             array( 'load', 'create' ),
-            array( $gatewayMock, $mapperMock, $this->getContentUpdaterMock() )
+            array( $gatewayMock, $mapperMock, $this->getUpdateHandlerMock() )
         );
         $handlerMock->expects( $this->once() )
             ->method( 'load' )
@@ -614,7 +614,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $handlerMock = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
             array( 'load', 'create' ),
-            array( $gatewayMock, $mapperMock, $this->getContentUpdaterMock() )
+            array( $gatewayMock, $mapperMock, $this->getUpdateHandlerMock() )
         );
         $handlerMock->expects( $this->once() )
             ->method( 'load' )
@@ -854,6 +854,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     public function testPublish()
     {
         $handler = $this->getPartlyMockedHandler( array( 'load' ) );
+        $updateHandlerMock = $this->getUpdateHandlerMock();
 
         $handler->expects( $this->exactly( 2 ) )
             ->method( 'load' )
@@ -867,42 +868,12 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue( new Type() )
             );
 
-        $updater = $this->getContentUpdaterMock();
-        $updater->expects( $this->once() )
-            ->method( 'determineActions' )
+        $updateHandlerMock->expects( $this->once() )
+            ->method( 'performUpdate' )
             ->with(
-                $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type'
-                ),
-                $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type'
-                )
-            )->will( $this->returnValue( array() ) );
-
-        $updater->expects( $this->once() )
-            ->method( 'applyUpdates' )
-            ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( array() )
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' ),
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' )
             );
-
-        $gatewayMock = $this->getGatewayMock();
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteType' )
-            ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( 0 )
-            );
-        $gatewayMock->expects( $this->once() )
-            ->method( 'deleteFieldDefinitionsForType' )
-            ->with(
-                $this->equalTo( 23 ),
-                $this->equalTo( 0 )
-            );
-
-        $gatewayMock->expects( $this->once() )
-            ->method( 'publishTypeAndFields' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 1 ) );
 
         $handler->publish( 23 );
     }
@@ -917,7 +888,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         return new Handler(
             $this->getGatewayMock(),
             $this->getMapperMock(),
-            $this->getContentUpdaterMock()
+            $this->getUpdateHandlerMock()
         );
     }
 
@@ -935,7 +906,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             array(
                 $this->getGatewayMock(),
                 $this->getMapperMock(),
-                $this->getContentUpdaterMock()
+                $this->getUpdateHandlerMock()
             )
         );
     }
@@ -977,23 +948,23 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns a ContentUpdater mock
+     * Returns a Update\Handler mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater
+     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler
      */
-    public function getContentUpdaterMock()
+    public function getUpdateHandlerMock()
     {
-        if ( !isset( $this->contentUpdaterMock ) )
+        if ( !isset( $this->updateHandlerMock ) )
         {
-            $this->contentUpdaterMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\ContentUpdater',
+            $this->updateHandlerMock = $this->getMock(
+                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Update\\Handler',
                 array(),
                 array(),
                 '',
                 false
             );
         }
-        return $this->contentUpdaterMock;
+        return $this->updateHandlerMock;
     }
 
     /**

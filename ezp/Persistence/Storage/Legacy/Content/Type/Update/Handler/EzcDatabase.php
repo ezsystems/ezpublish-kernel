@@ -8,7 +8,9 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler;
-use ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler;
+use ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler,
+    ezp\Persistence\Storage\Legacy\Content\Type\Gateway,
+    ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater;
 
 /**
  * EzcDatabase based type update handler
@@ -16,14 +18,51 @@ use ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler;
 class EzcDatabase extends Handler
 {
     /**
+     * ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     *
+     * @var mixed
+     */
+    protected $contentTypeGateway;
+
+    /**
+     * Content updater
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater
+     */
+    protected $contentUpdater;
+
+    /**
+     * Creates a new content type update handler
+     *
+     * @param \ezp\Persistence\Storage\Legacy\Content\Type\Gateway $contentTypeGateway
+     * @param \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater $contentUpdater
+     */
+    public function __construct( Gateway $contentTypeGateway, ContentUpdater $contentUpdater )
+    {
+        $this->contentTypeGateway = $contentTypeGateway;
+        $this->contentUpdater     = $contentUpdater;
+    }
+
+    /**
      * Performs the update of $contentTypeId from $srcVersion
      *
-     * @param int $contentTypeId
-     * @param int $srcVersion
+     * @param \ezp\Persistence\Content\Type $fromType
+     * @param \ezp\Persistence\Content\Type $toType
      * @return void
      */
-    public function performUpdate( $contentTypeId, $srcVersion )
+    public function performUpdate( $fromType, $toType )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $actions = $this->contentUpdater->determineActions( $fromType, $toType );
+        $this->contentUpdater->applyUpdates( $fromType->id, $actions  );
+
+        $this->contentTypeGateway->deleteType( $fromType->id, $fromType->status );
+        $this->contentTypeGateway->deleteFieldDefinitionsForType(
+            $fromType->id, $fromType->status
+        );
+        $this->contentTypeGateway->publishTypeAndFields(
+            $fromType->id,
+            $toType->status,
+            $fromType->status
+        );
     }
 }

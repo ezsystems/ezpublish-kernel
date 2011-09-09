@@ -331,15 +331,18 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->contentTypeHandler ) )
         {
             $this->contentTypeHandler = new Type\Handler(
-                new Type\Gateway\EzcDatabase(
+                $gateway = ( new Type\Gateway\EzcDatabase(
                     $this->dbHandler,
                     $this->getLanguageMaskGenerator()
-                ),
+                ) ),
                 new Type\Mapper( $this->getFieldValueConverterRegistry() ),
-                new Type\ContentUpdater(
-                    $this->searchHandler(),
-                    $this->getContentGateway(),
-                    $this->getFieldValueConverterRegistry()
+                new Type\Update\Handler\EzcDatabase(
+                    $gateway,
+                    new Type\ContentUpdater(
+                        $this->searchHandler(),
+                        $this->getContentGateway(),
+                        $this->getFieldValueConverterRegistry()
+                    )
                 )
             );
         }

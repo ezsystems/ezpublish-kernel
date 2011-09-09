@@ -17,7 +17,7 @@ use ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater,
+    ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler as UpdateHandler,
     ezp\Persistence\Storage\Legacy\Exception;
 
 /**
@@ -39,27 +39,27 @@ class Handler implements BaseContentTypeHandler
     protected $mapper;
 
     /**
-     * Content updater
+     * Content Type update handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler
      */
-    protected $contentUpdater;
+    protected $updateHandler;
 
     /**
      * Creates a new content type handler.
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\Type\Gateway $contentTypeGateway
      * @param \ezp\Persistence\Storage\Legacy\Content\Type\Mapper $mapper
-     * @param \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater $contentUpdater
+     * @param \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler $updateHandler
      */
     public function __construct(
         Gateway $contentTypeGateway,
         Mapper $mapper,
-        ContentUpdater $contentUpdater )
+        UpdateHandler $updateHandler )
     {
         $this->contentTypeGateway = $contentTypeGateway;
         $this->mapper = $mapper;
-        $this->contentUpdater = $contentUpdater;
+        $this->updateHandler = $updateHandler;
     }
 
     /**
@@ -395,15 +395,7 @@ class Handler implements BaseContentTypeHandler
     {
         $fromType = $this->load( $contentTypeId, 0 );
         $toType   = $this->load( $contentTypeId, 1 );
-
-        $actions = $this->contentUpdater->determineActions( $fromType, $toType );
-        $this->contentUpdater->applyUpdates( $contentTypeId, $actions  );
-
-        $this->contentTypeGateway->deleteType( $contentTypeId, 0 );
-        $this->contentTypeGateway->deleteFieldDefinitionsForType(
-            $contentTypeId, 0
-        );
-        $this->contentTypeGateway->publishTypeAndFields( $contentTypeId, 1, 0 );
+        $this->updateHandler->performUpdate( $fromType, $toType );
     }
 }
 ?>
