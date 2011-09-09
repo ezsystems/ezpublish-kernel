@@ -31,6 +31,7 @@ use ezp\Base\Service as BaseService,
     ezp\Persistence\Content\Criterion\Operator,
     ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     ezp\Persistence\Content\Version as VersionValue,
+    ezp\Persistence\Content\RestrictedVersion as RestrictedVersionValue,
     ezp\User;
 
 /**
@@ -371,11 +372,14 @@ class Service extends BaseService
      * Builds a version Domain Object from its value object returned by persistence
      *
      * @param \ezp\Content $content
-     * @param \ezp\Persistence\Content\Version $versionVo
+     * @param \ezp\Persistence\Content\Version|\ezp\Persistence\Content\RestrictedVersion $versionVo
      * @return \ezp\Content\Version
      */
-    protected function buildVersionDomainObject( Content $content, VersionValue $versionVo )
+    protected function buildVersionDomainObject( Content $content, $versionVo )
     {
+        if ( !$versionVo instanceof VersionValue && !$versionVo instanceof RestrictedVersionValue )
+            throw new InvalidArgumentType( '$versionVo', 'Version or RestrictedVersion', $versionVo );
+
         $version = new Version( $content );
         $version->setState(
             array(
