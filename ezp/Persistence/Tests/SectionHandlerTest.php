@@ -86,7 +86,7 @@ class SectionHandlerTest extends HandlerTest
     {
         $sectionHandler = $this->repositoryHandler->sectionHandler();
 
-        $this->assertTrue( $sectionHandler->update( $this->section->id, 'Change', 'change' ) );
+        $sectionHandler->update( $this->section->id, 'Change', 'change' );
 
         $section = $sectionHandler->load( $this->section->id );
         $this->assertEquals( $this->section->id, $section->id );
