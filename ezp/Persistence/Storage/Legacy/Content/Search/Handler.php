@@ -113,7 +113,9 @@ class Handler extends BaseSearchHandler
 
         if ( $result->count !== 1 )
         {
-            throw new Exception\InvalidObjectCount( 'Expected exactly one object to be found -- found ' . $result->count . '.' );
+            throw new Exception\InvalidObjectCount(
+                'Expected exactly one object to be found -- found ' . $result->count . '.'
+            );
         }
 
         return reset( $result->content );
