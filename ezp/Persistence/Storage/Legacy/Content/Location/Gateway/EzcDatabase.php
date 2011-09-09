@@ -720,6 +720,35 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Load trash data specified by location ID
+     *
+     * @param mixed $locationId
+     * @return array
+     */
+    public function loadTrashByLocation( $locationId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( '*' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_trash' ) )
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'node_id' ),
+                    $query->bindValue( $locationId )
+                )
+            );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        if ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            return $row;
+        }
+
+        throw new \ezp\Base\Exception\NotFound( 'trash', $locationId );
+    }
+
+    /**
      * Set section on all content objects in the subtree
      *
      * @param mixed $pathString

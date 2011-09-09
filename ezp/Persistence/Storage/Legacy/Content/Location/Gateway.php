@@ -171,6 +171,14 @@ abstract class Gateway
     abstract public function untrashLocation( $locationId, $newParentId = null );
 
     /**
+     * Load trash data specified by location ID
+     *
+     * @param mixed $locationId
+     * @return array
+     */
+    abstract public function loadTrashByLocation( $locationId );
+
+    /**
      * Set section on all content objects in the subtree
      *
      * @param mixed $pathString

@@ -9,6 +9,7 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Location\Trash;
 use ezp\Persistence\Content\Location\Trash,
+    ezp\Persistence\Content\Location\Trashed,
     ezp\Persistence\Content\Location\Trash\CreateStruct,
     ezp\Persistence\Content\Location\Trash\UpdateStruct,
     ezp\Persistence\Content\Location\Trash\Handler as BaseTrashHandler,
@@ -56,7 +57,7 @@ class Handler implements BaseTrashHandler
      */
     public function load( $id )
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        throw new \RuntimeException( '@TODO: There is no such thing as a trash ID -- pending clarification.' );
     }
 
     /**
@@ -68,7 +69,8 @@ class Handler implements BaseTrashHandler
      */
     public function loadFromLocationId( $locationId )
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        $data = $this->locationGateway->loadTrashByLocation( $locationId );
+        return $this->locationMapper->createLocationFromRow( $data, null, new Trashed() );
     }
 
     /**

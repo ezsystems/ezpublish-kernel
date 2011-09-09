@@ -12,8 +12,9 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Content,
     ezp\Persistence\Storage\Legacy\Content\Location\Trash\Handler,
     ezp\Persistence,
-    ezp\Persistence\Content\Trash\Trash\UpdateStruct,
-    ezp\Persistence\Content\Trash\Trash\CreateStruct;
+    ezp\Persistence\Content\Location\Trashed,
+    ezp\Persistence\Content\Location\Trash\UpdateStruct,
+    ezp\Persistence\Content\Location\Trash\CreateStruct;
 
 /**
  * Test case for TrashHandlerTest
@@ -89,5 +90,23 @@ class TrashHandlerTest extends TestCase
             ->with( 69, 23 );
 
         $handler->untrashLocation( 69, 23 );
+    }
+
+    public function testLoad()
+    {
+        $handler = $this->getTrashHandler();
+
+        $this->locationGateway
+            ->expects( $this->at( 0 ) )
+            ->method( 'loadTrashByLocation' )
+            ->with( 69 )
+            ->will( $this->returnValue( $array = array( 'data…' ) ) );
+
+        $this->locationMapper
+            ->expects( $this->at( 0 ) )
+            ->method( 'createLocationFromRow' )
+            ->with( $array, null, new Trashed() );
+
+        $handler->loadFromLocationId( 69 );
     }
 }
