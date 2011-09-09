@@ -18,15 +18,18 @@ class Mapper
     /**
      * Creates a Location from a $data row
      *
-     * $prefix can be used to define a table prefix for the location table
+     * $prefix can be used to define a table prefix for the location table.
+     *
+     * Optionally pass a Location object, which will be filled with the values.
      *
      * @param array $rows
      * @param string $prefix
+     * @param Location $location
      * @return \ezp\Persistence\Content\Location
      */
-    public function createLocationFromRow( array $data, $prefix = '' )
+    public function createLocationFromRow( array $data, $prefix = '', Location $location = null )
     {
-        $location = new Location();
+        $location = $location ?: new Location();
 
         $location->id = $data[$prefix . 'node_id'];
         $location->priority = $data[$prefix . 'priority'];

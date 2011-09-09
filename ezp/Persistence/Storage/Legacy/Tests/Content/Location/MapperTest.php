@@ -9,7 +9,8 @@
 
 namespace ezp\Persistence\Storage\Legacy\Tests\Content\Location;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\Location\Mapper;
+    ezp\Persistence\Storage\Legacy\Content\Location\Mapper,
+    ezp\Persistence\Content\Location\Trashed;
 
 /**
  * Test case for Location\Mapper
@@ -74,7 +75,6 @@ class LocationHandlerTest extends TestCase
     }
 
     /**
-     * @return void
      * @dataProvider getLoadLocationValues
      * @covers ezp\Persistence\Storage\Legacy\Content\Location\Mapper::createLocationFromRow
      */
@@ -86,6 +86,28 @@ class LocationHandlerTest extends TestCase
             $this->locationData
         );
 
+        $this->assertEquals(
+            $value,
+            $location->$field,
+            "Property \\$$field not set correctly"
+        );
+    }
+
+    /**
+     * @dataProvider getLoadLocationValues
+     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Mapper::createLocationFromRow
+     */
+    public function testCreateTrashedFromRow( $field, $value )
+    {
+        $mapper = new Mapper();
+
+        $location = $mapper->createLocationFromRow(
+            $this->locationData,
+            null,
+            new Trashed()
+        );
+
+        $this->assertTrue( $location instanceof Trashed );
         $this->assertEquals(
             $value,
             $location->$field,
