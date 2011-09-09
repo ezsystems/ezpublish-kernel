@@ -19,6 +19,9 @@
         {"id": 9, "fieldDefinitionId": 2, "type": "ezstring", "value": "Anonymous Users", "language": null, "versionNo": 1, "_contentId": 42},
         {"id": 10, "fieldDefinitionId": 4, "type": "ezstring", "value": "", "language": null, "versionNo": 1, "_contentId": 42}
     ],
+    "Content\\Language" : [
+        {"id": 2, "locale": "eng-GB", "isEnabled": true, "name": "English (United Kingdom)" }
+    ],
     "Content\\Location" : [
         {"id": 1,  "remoteId": "remoteIDForLocation1", "contentId": 0,  "parentId": 0,  "pathIdentificationString": "", "mainLocationId": 1,  "depth": 0, "pathString": "/1/", "modifiedSubLocation": 1312473387, "priority": 0, "hidden": false, "invisible": false,  "sortField": 1, "sortOrder": 1},
         {"id": 2,  "remoteId": "remoteIDForLocation2", "contentId": 1,  "parentId": 1,  "pathIdentificationString": "", "mainLocationId": 2,  "depth": 1, "pathString": "/1/2/", "modifiedSubLocation": 1312473387, "priority": 0, "hidden": false, "invisible": false,  "sortField": 8, "sortOrder": 1},

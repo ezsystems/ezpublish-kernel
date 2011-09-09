@@ -41,6 +41,18 @@ class RepositoryHandlerTest extends HandlerTest
     /**
      * Test that instance is of correct type
      *
+     * @covers ezp\Persistence\Storage\InMemory\LanguageHandler::__construct
+     */
+    public function testLanguageHandler()
+    {
+        $handler = $this->repositoryHandler->contentLanguageHandler();
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Language\\Handler', $handler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\LanguageHandler', $handler );
+    }
+
+    /**
+     * Test that instance is of correct type
+     *
      * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::__construct
      */
     public function testContentTypeHandler()

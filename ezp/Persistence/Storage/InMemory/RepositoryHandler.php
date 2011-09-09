@@ -69,7 +69,7 @@ class RepositoryHandler implements BaseRepositoryHandler
      */
     public function contentLanguageHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\ContentLanguageHandler' );
+        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\LanguageHandler' );
     }
 
     /**
