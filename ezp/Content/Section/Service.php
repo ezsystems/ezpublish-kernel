@@ -104,23 +104,23 @@ class Service extends BaseService
     /**
      * Deletes $section from content repository
      *
-     * @param int $sectionId
+     * @param \ezp\Content\Section $section
      * @return void
      * @throws \ezp\Base\Exception\Logic
      *         if section can not be deleted
      *         because it is still assigned to some contents.
      * @throws \ezp\Base\Exception\NotFound If the specified section is not found
      */
-    public function delete( $sectionId )
+    public function delete( SectionObject $section )
     {
-        if ( $this->countAssignedContents( $sectionId ) > 0 )
+        if ( $this->countAssignedContents( $section->id ) > 0 )
         {
             throw new Logic(
-                "delete( {$sectionId} )",
+                "delete( {$section->id} )",
                 "section can not be deleted as its assigned to content objects."
             );
         }
-        $this->handler->sectionHandler()->delete( $sectionId );
+        $this->handler->sectionHandler()->delete( $section->id );
     }
 
     /**

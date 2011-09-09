@@ -12,6 +12,7 @@ use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\User,
     ezp\User\Role,
     ezp\User\Policy,
+    ezp\Base\Exception\NotFound,
     Exception;
 
 /**
@@ -133,21 +134,29 @@ class ServiceTest extends BaseServiceTest
      * Test service function for deleting user
      *
      * @covers \ezp\User\Service::delete
-     * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDelete()
     {
         $service = $this->repository->getUserService();
+        $user = $service->load( 14 );
         try
         {
-            $service->delete( 14 );
+            $service->delete( $user );
         }
         catch ( Exception $e )
         {
             self::assertTrue( false, "Did not except any exceptions here, got: " . $e );
         }
 
-        $service->load( 14 );
+        try
+        {
+            $service->load( 14 );
+            self::assertTrue( false, "Except an exception here, as the object is deleted" );
+        }
+        catch ( NotFound $e )
+        {
+            self::assertTrue( true );
+        }
     }
 
     /**
@@ -159,7 +168,7 @@ class ServiceTest extends BaseServiceTest
     public function testDeleteNotFound()
     {
         $service = $this->repository->getUserService();
-        $service->delete( 999 );
+        $service->delete( new User( 999 ) );
     }
 
     /**
@@ -416,7 +425,7 @@ class ServiceTest extends BaseServiceTest
         try
         {
             $do = $service->createRole( $this->getRole() );
-            $service->deleteRole( $do->id );
+            $service->deleteRole( $do );
         }
         catch ( Exception $e )
         {
@@ -435,7 +444,9 @@ class ServiceTest extends BaseServiceTest
     public function testDeleteRoleNotFound()
     {
         $service = $this->repository->getUserService();
-        $service->deleteRole( 999 );
+        $role = new Role();
+        $role->getState( 'properties' )->id = 999;
+        $service->deleteRole( $role );
     }
 
     /**

@@ -41,16 +41,13 @@ class LanguageTest extends BaseServiceTest
     {
         $service = $this->repository->getContentLanguageService();
         $newLanguage = $service->create( 'test-TEST', 'test' );
-        $service->delete( $newLanguage->id );
+        $service->delete( $newLanguage );
         try
         {
             $service->load( $newLanguage->id );
-            self::assertTrue( false, 'Language is still returned after being deleted' );
+            self::fail( 'Language is still returned after being deleted' );
         }
-        catch ( NotFound $e )
-        {
-            self::assertTrue( true );
-        }
+        catch ( NotFound $e ){}
     }
 
     /**
@@ -67,7 +64,6 @@ class LanguageTest extends BaseServiceTest
         self::assertEquals( $newLanguage->locale, $language->locale );
         self::assertEquals( $newLanguage->name, $language->name );
         self::assertEquals( $newLanguage->isEnabled, $language->isEnabled );
-
     }
 
     /**

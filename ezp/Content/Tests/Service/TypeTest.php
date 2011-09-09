@@ -12,7 +12,9 @@ use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Content\Type\Service,
     ezp\Content\Type,
     ezp\Content\Type\FieldDefinition,
-    ezp\Content\Type\Group;
+    ezp\Content\Type\Group,
+    ezp\Base\Exception\NotFound,
+    Exception;
 
 /**
  * Test case for Type service
@@ -92,12 +94,18 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::deleteGroup
-     * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDeleteGroup()
     {
-        $this->service->deleteGroup( 1 );
-        $this->service->loadGroup( 1 );
+        $group = $this->service->loadGroup( 1 );
+        $this->service->deleteGroup( $group );
+        try
+        {
+            $this->service->loadGroup( 1 );
+            $this->fail( "Expected exception as group being loaded has been deleted" );
+
+        }
+        catch ( NotFound $e ){}
     }
 
     /**
@@ -236,13 +244,20 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::delete
-     * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDelete()
     {
-        $this->service->delete( 1 );
-        $this->service->load( 1 );
+        $type = $this->service->load( 1 );
+        $this->service->delete( $type );
+
+        try
+        {
+            $this->service->load( 1 );
+            $this->fail( "Expected exception as type being loaded has been deleted" );
+        }
+        catch ( NotFound $e ){}
     }
+
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::load
@@ -374,7 +389,7 @@ class TypeTest extends BaseServiceTest
     {
         $type = $this->service->load( 1, 0 );
         $existingGroup = $this->service->loadGroup( 1 );
-        $this->service->delete( 1, 0 );
+        $this->service->delete( $type );
         $this->service->link( $type, $existingGroup );
     }
 
@@ -423,7 +438,7 @@ class TypeTest extends BaseServiceTest
     {
         $type = $this->service->load( 1, 0 );
         $existingGroup = $this->service->loadGroup( 1 );
-        $this->service->delete( 1, 0 );
+        $this->service->delete( $type );
         $this->service->unlink( $type, $existingGroup );
     }
 
@@ -495,7 +510,7 @@ class TypeTest extends BaseServiceTest
     public function testAddFieldDefinitionWithUnExistingType()
     {
         $type = $this->service->load( 1, 0 );
-        $this->service->delete( $type->id, $type->status );
+        $this->service->delete( $type );
 
         $field = new FieldDefinition( $type, 'ezstring' );
         $field->name = $field->description = array( 'eng-GB' => 'Test' );
@@ -538,7 +553,7 @@ class TypeTest extends BaseServiceTest
     public function testRemoveFieldDefinitionWithUnExistingType()
     {
         $type = $this->service->load( 1, 0 );
-        $this->service->delete( $type->id, $type->status );
+        $this->service->delete( $type );
         $this->service->removeFieldDefinition( $type, $type->fields[0] );
     }
 
@@ -577,9 +592,16 @@ class TypeTest extends BaseServiceTest
      */
     public function testUpdateFieldDefinitionWithUnExistingType()
     {
-        $type = $this->service->load( 1, 0 );
-        $type->fields[0]->name = array( 'eng-GB' => 'New name' );
-        $this->service->delete( $type->id, $type->status );
+        try
+        {
+            $type = $this->service->load( 1, 0 );
+            $type->fields[0]->name = array( 'eng-GB' => 'New name' );
+            $this->service->delete( $type );
+        }
+        catch ( Exception $e )
+        {
+            self::fail( "Did not expect any exception here, but got:" . $e );
+        }
         $this->service->updateFieldDefinition( $type, $type->fields[0] );
     }
 }

@@ -9,7 +9,8 @@
 
 namespace ezp\Content\Tests\Service;
 use ezp\Content\Tests\Service\Base as BaseServiceTest,
-    ezp\Content\Section;
+    ezp\Content\Section,
+    ezp\Base\Exception\NotFound;
 
 /**
  * Test case for Location class
@@ -37,7 +38,6 @@ class SectionTest extends BaseServiceTest
     /**
      * Test service function for deleting sections
      *
-     * @expectedException \ezp\Base\Exception\NotFound
      * @covers \ezp\Content\Section\Service::delete
      */
     public function testDelete()
@@ -48,8 +48,14 @@ class SectionTest extends BaseServiceTest
 
         $service = $this->repository->getSectionService();
         $section = $service->create( $section );
-        $service->delete( $section->id );
-        $service->load( $section->id );
+        $service->delete( $section );
+
+        try
+        {
+            $service->load( $section->id );
+            self::fail( 'Section is still returned after being deleted' );
+        }
+        catch ( NotFound $e ){}
     }
 
     /**

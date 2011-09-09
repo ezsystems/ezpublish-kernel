@@ -83,11 +83,11 @@ class Service extends BaseService
     /**
      * Delete a User object by id
      *
-     * @param mixed $id
+     * @param \ezp\User $user
      */
-    public function delete( $id )
+    public function delete( User $user )
     {
-        $this->handler->userHandler()->delete( $id );
+        $this->handler->userHandler()->delete( $user->id );
     }
 
     /**
@@ -321,11 +321,11 @@ class Service extends BaseService
     /**
      * Delete a Role object by id
      *
-     * @param mixed $id
+     * @param \ezp\User\Role $role
      */
-    public function deleteRole( $id )
+    public function deleteRole( Role $role )
     {
-        $this->handler->userHandler()->deleteRole( $id );
+        $this->handler->userHandler()->deleteRole( $role->id );
     }
 
     /**

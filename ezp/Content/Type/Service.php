@@ -96,12 +96,12 @@ class Service extends BaseService
     /**
      * Update a Content Type Group object
      *
-     * @param mixed $groupId
+     * @param \ezp\Content\Type\Group $group
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
-    public function deleteGroup( $groupId )
+    public function deleteGroup( Group $group )
     {
-        $this->handler->contentTypeHandler()->deleteGroup( $groupId );
+        $this->handler->contentTypeHandler()->deleteGroup( $group->id );
     }
 
     /**
@@ -200,13 +200,12 @@ class Service extends BaseService
     /**
      * Delete a Content Type object
      *
-     * @param int $typeId
-     * @param int $status
+     * @param \ezp\Content\Type $type
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      */
-    public function delete( $typeId, $status = TypeValue::STATUS_DEFINED )
+    public function delete( Type $type )
     {
-        $this->handler->contentTypeHandler()->delete( $typeId, $status );
+        $this->handler->contentTypeHandler()->delete( $type->id, $type->status );
     }
 
     /**

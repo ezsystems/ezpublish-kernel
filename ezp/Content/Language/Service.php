@@ -80,16 +80,16 @@ class Service extends BaseService
     /**
      * Deletes $language from content repository
      *
-     * @param int $languageId
+     * @param \ezp\Content\Language $language
      * @throws \ezp\Base\Exception\Logic
      *         if language can not be deleted
      *         because it is still assigned to some content / type / (...).
      * @throws \ezp\Base\Exception\NotFound If the specified language is not found
      * @todo Add exception if still assigned to some content (needs handler support)
      */
-    public function delete( $languageId )
+    public function delete( Language $language )
     {
-        $this->handler->contentLanguageHandler()->delete( $languageId );
+        $this->handler->contentLanguageHandler()->delete( $language->id );
     }
 
     /**
