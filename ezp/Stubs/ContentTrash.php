@@ -5,14 +5,33 @@
 use ezp\Base\Service\Container;
 
 $sc = new Container();
-$contentService = $sc->getRepository()->getContentService();
-$content = $contentService->load( 60 );
+$locationService = $sc->getRepository()->getLocationService();
+$trashService = $sc->getRepository()->getTrashService();
+$location = $locationService->load( 60 );
 
-echo "Now Trashing content\n";
-$contentService->trash( $content );
-echo "Now Content is no longer publicly available\n";
+echo "Now Trashing subtree\n";
+// TrashService::trash() returns a TrashedLocation object, based on original Location object
+$trashedLocation = $trashService->trash( $location );
+echo "Now location and associated content is no longer publicly available, so as for location children\n";
 
-echo "Restoring content from trash\n";
-$contentService->untrash( $content );
+echo "Restoring location from trash under original parent\n";
+$restoredLocation = $trashService->untrash( $trashedLocation );
+// Possible to restore under another location :
+// $restoredLocation = $trashService->untrash( $trashedLocation, $newParentLocation );
+
+echo "Listing elements in the trash\n";
+$qb = new ezp\Content\Query\Builder();
+$qb->addCriteria(
+    $qb->contentTypeId->eq( 'blog_post' ),
+    $qb->field->eq( 'author', 'community@ez.no' )
+)->addSortClause(
+    $qb->sort->dateCreated( Query::SORT_DESC )
+)->setOffset( 0 )->setLimit( 15 );
+$trashList = $trashService->getList( $qb->getQuery() );
+
+echo "Emptying trash\n";
+$trashService->emptyTrash();
+// Possible to remove only one element in the trash:
+// $trashService->emptyOne( $trashedLocation );
 
 ?>

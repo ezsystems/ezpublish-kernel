@@ -12,7 +12,7 @@ try
 {
     $location = $locationService->load( $locationId );
     $target = $locationService->load( $targetLocationId );
-    $locationService->copy( $location, $target );
+    $copy = $locationService->copySubtree( $location, $target );
 }
 catch ( ezp\Base\Exception\Forbidden $e )
 {

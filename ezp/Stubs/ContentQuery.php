@@ -12,7 +12,9 @@ use ezp\Base\Repository,
     ezp\Content,
     ezp\Content\Query;
 
+$sc = new ezp\Base\Service\Container;
 $qb = new ezp\Content\Query\Builder;
+$contentService = $sc->getRepository()->getContentService();
 
 // a full criteria
 $qb->addCriteria(
@@ -23,7 +25,7 @@ $qb->addCriteria(
 )->addSortClause(
     $qb->sort->field( 'blog_post', 'title', Query::SORT_ASC ),
     $qb->sort->dateCreated( Query::SORT_DESC )
-);
+)->setOffset( 0 )->setLimit( 10 );
 $contentList = $contentService->find( $qb->getQuery() );
 
 // Other criteria examples

@@ -12,16 +12,14 @@ $parentLocationId = 2;
 try
 {
     $content = $contentService->load( $contentId );
+    // Copies all versions
+    $copy = $contentService->copy( $content );
+    // Copies only version 3
+    $copyInVersion3 = $contentService->copy( $content, $content->versions[3] );
 
-    /*
-     * Duplicates content with native clone command
-     * __clone() method will be called to reset appropriate metadata
-     * like ID, creationDate, owner, ...
-     */
-    $newContent = clone $content;
     $parentLocation = $locationService->load( $parentLocationId );
-    $newContent->addParent( $parentLocation );
-    $contentService->create( $newContent );
+    $location = $copy->addParent( $parentLocation );
+    $location = $locationService->create( $location );
 }
 catch ( ezp\Base\Exception\Forbidden $e )
 {
