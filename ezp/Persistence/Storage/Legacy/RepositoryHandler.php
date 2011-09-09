@@ -58,6 +58,20 @@ class RepositoryHandler implements HandlerInterface
     protected $contentTypeHandler;
 
     /**
+     * Content Type gateway
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     */
+    protected $contentTypeGateway;
+
+    /**
+     * Content Type update handler
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler
+     */
+    protected $typeUpdateHandler;
+
+    /**
      * Location handler
      *
      * @var \ezp\Persistence\Storage\Legacy\Content\Location\Handler
@@ -408,22 +422,59 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->contentTypeHandler ) )
         {
             $this->contentTypeHandler = new Type\Handler(
-                $gateway = ( new Type\Gateway\EzcDatabase(
-                    $this->getDatabase(),
-                    $this->getLanguageMaskGenerator()
-                ) ),
+                $this->getContentTypeGateway(),
                 new Type\Mapper( $this->getFieldValueConverterRegistry() ),
-                new Type\Update\Handler\EzcDatabase(
-                    $gateway,
+                $this->getTypeUpdateHandler()
+            );
+        }
+        return $this->contentTypeHandler;
+    }
+
+    /**
+     * Returns a Content Type update handler
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler
+     */
+    protected function getTypeUpdateHandler()
+    {
+        if ( !isset( $this->typeUpdateHandler ) )
+        {
+            if ( $this->configurator->shouldDeferTypeUpdates() )
+            {
+                $this->typeUpdateHandler = new Type\Update\Handler\DeferredLegacy(
+                    $this->getContentGateway()
+                );
+            }
+            else
+            {
+                $this->typeUpdateHandler = new Type\Update\Handler\EzcDatabase(
+                    $this->getContentTypeGateway(),
                     new Type\ContentUpdater(
                         $this->searchHandler(),
                         $this->getContentGateway(),
                         $this->getFieldValueConverterRegistry()
                     )
-                )
+                );
+            }
+        }
+        return $this->typeUpdateHandler;
+    }
+
+    /**
+     * Returns the content type gateway
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     */
+    protected function getContentTypeGateway()
+    {
+        if ( !isset( $this->contentTypeGateway ) )
+        {
+            $this->contentTypeGateway = new Content\Type\Gateway\EzcDatabase(
+                $this->getDatabase(),
+                $this->getLanguageMaskGenerator()
             );
         }
-        return $this->contentTypeHandler;
+        return $this->contentTypeGateway;
     }
 
     /**
