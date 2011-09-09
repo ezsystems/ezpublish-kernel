@@ -13,6 +13,7 @@ use ezp\Base\Exception,
     ezp\Content\Location,
     ezp\Content\Location\Trashed,
     ezp\Content\Location\Collection,
+    ezp\Content\Location\Trash\Exception\NotFound as TrashedLocationNotFound,
     ezp\Content\Query,
     ezp\Base\Proxy,
     ezp\Base\Exception\NotFound,
@@ -30,34 +31,38 @@ class Service extends BaseService
      * Loads a trashed location object from its $id
      * @param integer $id
      * @return \ezp\Content\Location\Trashed
-     * @throws \ezp\Base\Exception\NotFound if no trashed location is available with $id
+     * @throws \ezp\Content\Location\Trash\Exception\NotFound if no trashed location is available with $id
      */
     public function load( $id )
     {
-        $trashedLocationVO = $this->handler->trashHandler()->load( $id );
-        if ( !$trashedLocationVO instanceof TrashedLocationValue )
+        try
         {
-            throw new NotFound( 'TrashedLocation', $id );
+            return $this->buildDomainObject( $this->handler->trashHandler()->load( $id ) );
         }
-
-        return $this->buildDomainObject( $trashedLocationVO );
+        catch ( NotFound $e )
+        {
+            throw new TrashedLocationNotFound( $id, $e );
+        }
     }
 
     /**
      * Loads a trashed location object from original $locationId
      * @param integer $locationId
      * @return \ezp\Content\Location\Trashed
-     * @throws \ezp\Base\Exception\NotFound if no trashed location is available with $locationId
+     * @throws \ezp\Content\Location\Trash\Exception\NotFound if no trashed location is available with $locationId
      */
     public function loadByLocationId( $locationId )
     {
-        $trashedLocationVO = $this->handler->trashHandler()->loadFromLocationId( $locationId );
-        if ( !$trashedLocationVO instanceof TrashedLocationValue )
+        try
         {
-            throw new NotFound( 'TrashedLocation', $locationId );
+            return $this->buildDomainObject(
+                $this->handler->trashHandler()->loadFromLocationId( $locationId )
+            );
         }
-
-        return $this->buildDomainObject( $trashedLocationVO );
+        catch ( NotFound $e )
+        {
+            throw new TrashedLocationNotFound( $e->identifier, $e );
+        }
     }
 
     /**

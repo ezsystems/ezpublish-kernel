@@ -284,7 +284,7 @@ class TrashTest extends Base
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \ezp\Content\Location\Trash\Exception\NotFound
      * @group trashService
      * @covers ezp\Content\Location\Trash\Service::load
      */
@@ -295,7 +295,7 @@ class TrashTest extends Base
 
     /**
      * @group trashService
-     * @covers ezp\Content\Location\Trash\Service::load
+     * @covers ezp\Content\Location\Trash\Service::loadByLocationId
      */
     public function testLoadByLocationId()
     {
@@ -307,8 +307,8 @@ class TrashTest extends Base
 
     /**
      * @group trashService
-     * @expectedException \ezp\Base\Exception\NotFound
-     * @covers ezp\Content\Location\Trash\Service::load
+     * @expectedException \ezp\Content\Location\Trash\Exception\NotFound
+     * @covers ezp\Content\Location\Trash\Service::loadByLocationId
      */
     public function testLoadByLocationIdNonExistent()
     {
