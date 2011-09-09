@@ -32,9 +32,10 @@ abstract class Gateway
      * Inserts a new version.
      *
      * @param Version $version
+     * @param bool $alwaysAvailable
      * @return int ID
      */
-    abstract public function insertVersion( Version $version );
+    abstract public function insertVersion( Version $version, $alwaysAvailable );
 
 
     /**

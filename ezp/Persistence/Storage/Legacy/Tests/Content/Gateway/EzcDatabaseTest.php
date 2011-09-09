@@ -75,8 +75,8 @@ class EzcDatabaseTest extends TestCase
                     'current_version' => '2',
                     'initial_language_id' => '1',
                     'remote_id' => 'some_remote_id',
+                    'language_mask' => '1',
                     // @FIXME
-                    // 'language_mask' => 0,
                     // 'modified' => 0,
                     // 'published' => 0,
                     // 'status' => 0,
@@ -93,8 +93,7 @@ class EzcDatabaseTest extends TestCase
                         'current_version',
                         'initial_language_id',
                         'remote_id',
-                        // FIXME: Needs implementation
-                        // 'language_mask',
+                        'language_mask',
                         // FIXME: Not defined
                         // 'modified',
                         // FIXME: Not defined
@@ -144,7 +143,7 @@ class EzcDatabaseTest extends TestCase
         $version = $this->getVersionFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertVersion( $version );
+        $gateway->insertVersion( $version, true );
 
         $this->assertQueryResult(
             array(
@@ -156,10 +155,9 @@ class EzcDatabaseTest extends TestCase
                     'status' => '0',
                     'workflow_event_pos' => '0',
                     'version' => '1',
+                    'language_mask' => '1',
                     // @FIXME
                     'initial_language_id' => '0',
-                    // @FIXME
-                    'language_mask' => '0',
                     // Not needed, according to field mapping document
                     // 'user_id',
 
@@ -193,7 +191,7 @@ class EzcDatabaseTest extends TestCase
 
         $time = time();
         $version = $this->getVersionFixture();
-        $version->id = $gateway->insertVersion( $version );
+        $version->id = $gateway->insertVersion( $version, true );
 
         $gateway->updateVersion( $version->id, 2 );
 
@@ -258,12 +256,11 @@ class EzcDatabaseTest extends TestCase
                     'data_int' => '42',
                     'data_text' => 'Test text',
                     'data_type_string' => 'ezstring',
-                    'language_code' => '31',
+                    'language_code' => 'eng-GB',
                     'sort_key_int' => '23',
                     'sort_key_string' => 'Test',
                     'version' => '1',
-                    // @FIXME
-                    'language_id' => 0,
+                    'language_id' => '5',
                 )
             ),
             $this->getDatabaseHandler()
@@ -792,7 +789,7 @@ class EzcDatabaseTest extends TestCase
 
         $field->fieldDefinitionId = 231;
         $field->type = 'ezstring';
-        $field->language = 31;
+        $field->language = 'eng-GB';
         $field->versionNo = 1;
 
         return $field;

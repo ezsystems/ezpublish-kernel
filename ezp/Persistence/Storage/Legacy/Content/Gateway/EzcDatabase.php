@@ -107,7 +107,9 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
-                $this->languageMaskGenerator->generateLanguageMask( $content->name ),
+                $this->generateLanguageMask(
+                    $content->version, $content->alwaysAvailable
+                ),
                 null,
                 \PDO::PARAM_INT
             )
@@ -120,12 +122,36 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Generates a language mask for $version
+     *
+     * @param \ezp\Persistence\Content\Version $version
+     * @param bool $alwaysAvailable
+     * @return int
+     */
+    protected function generateLanguageMask( Version $version, $alwaysAvailable )
+    {
+        $languages = array_map(
+            function ( Field $field )
+            {
+                return $field->language;
+            },
+            $version->fields
+        );
+        if ( $alwaysAvailable )
+        {
+            $languages['always-available'] = true;
+        }
+        return $this->languageMaskGenerator->generateLanguageMask( $languages );
+    }
+
+    /**
      * Inserts a new version.
      *
      * @param Version $version
+     * @param bool $alwaysAvailable
      * @return int ID
      */
-    public function insertVersion( Version $version )
+    public function insertVersion( Version $version, $alwaysAvailable )
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
@@ -152,6 +178,15 @@ class EzcDatabase extends Gateway
             // As described in field mapping document
             $this->dbHandler->quoteColumn( 'workflow_event_pos' ),
             $q->bindValue( 0, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'language_mask' ),
+            $q->bindValue(
+                $this->generateLanguageMask(
+                    $version, $alwaysAvailable
+                ),
+                null,
+                \PDO::PARAM_INT
+            )
         );
 
         $stmt = $q->prepare();
@@ -233,6 +268,16 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'sort_key_string' ),
             $q->bindValue( $value->sortKeyString )
+        )->set(
+            $this->dbHandler->quoteColumn( 'language_id' ),
+            $q->bindValue(
+                $this->languageMaskGenerator->generateLanguageIndicator(
+                    $field->language,
+                    $content->alwaysAvailable
+                ),
+                null,
+                \PDO::PARAM_INT
+            )
         );
 
         $stmt = $q->prepare();
@@ -246,10 +291,13 @@ class EzcDatabase extends Gateway
      *
      * @param Field $field
      * @param StorageFieldValue $value
+     * @param bool $alwaysAvailable
      * @return void
      */
     public function updateField( Field $field, StorageFieldValue $value )
     {
+        // Note, no need to care for language_id here, since Content->$alwaysAvailable 
+        // cannot change on update
         $q = $this->dbHandler->createUpdateQuery();
         $q->update(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
