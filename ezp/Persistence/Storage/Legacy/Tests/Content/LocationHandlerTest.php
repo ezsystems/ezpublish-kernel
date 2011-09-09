@@ -234,44 +234,6 @@ class LocationHandlerTest extends TestCase
         $handler->update( $updateStruct, 23 );
     }
 
-    public function testTrashSubtree()
-    {
-        $handler = $this->getLocationHandler();
-
-        $this->locationGateway
-            ->expects( $this->at( 0 ) )
-            ->method( 'getBasicNodeData' )
-            ->with( 69 )
-            ->will(
-                $this->returnValue(
-                    array(
-                        'node_id' => 69,
-                        'path_string' => '/1/2/69/',
-                        'contentobject_id' => 67,
-                    )
-                )
-            );
-
-        $this->locationGateway
-            ->expects( $this->once() )
-            ->method( 'trashSubtree' )
-            ->with( '/1/2/69/' );
-
-        $handler->trashSubtree( 69 );
-    }
-
-    public function testUntrashLocation()
-    {
-        $handler = $this->getLocationHandler();
-
-        $this->locationGateway
-            ->expects( $this->at( 0 ) )
-            ->method( 'untrashLocation' )
-            ->with( 69, 23 );
-
-        $handler->untrashLocation( 69, 23 );
-    }
-
     public function testSetSectionForSubtree()
     {
         $handler = $this->getLocationHandler();
