@@ -24,6 +24,7 @@ interface Handler
      *
      * @param int $id
      * @return \ezp\Persistence\Content\Location\Trashed
+     * @throws \ezp\Base\Exception\NotFound
      */
     public function load( $id );
 
@@ -33,6 +34,7 @@ interface Handler
      *
      * @param int $locationId
      * @return \ezp\Persistence\Content\Location\Trashed
+     * @throws \ezp\Base\Exception\NotFound
      */
     public function loadFromLocationId( $locationId );
 

@@ -59,7 +59,7 @@ class TrashHandler implements TrashHandlerInterface
     {
         $aTrashed = $this->backend->find( 'Content\\Location\\Trashed', array( 'locationId' => $locationId ) );
         if ( empty( $aTrashed ) )
-            return;
+            throw new NotFound( 'Trashed location from locationId', $locationId );
         return $aTrashed[0];
     }
 
