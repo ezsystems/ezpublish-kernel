@@ -68,7 +68,6 @@ class TrashHandler implements TrashHandlerInterface
      */
     public function trashSubtree( $locationId )
     {
-        $location = $this->loadFromLocationId( $locationId );
         $trashedLocation = $this->trash( $locationId );
 
         // Begin recursive call on children, if any
