@@ -29,6 +29,13 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected $handler;
 
     /**
+     * Property which holds the state if this is the initial test run, so that
+     * we should set up the database, or if this is any of the following test
+     * runs, where it is sufficient to reset the database.
+     */
+    protected static $initial = true;
+
+    /**
      * Get data source name
      *
      * The database connection string is read from an optional environment
@@ -93,9 +100,12 @@ class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         $database = preg_replace( '(^([a-z]+).*)', '\\1', $this->getDsn() );
-        $schema = __DIR__ . '/_fixtures/schema.' . $database . '.sql';
+        $schema   = __DIR__ . '/_fixtures/schema.' . $database . '.sql';
+        $reset    = __DIR__ . '/_fixtures/reset.' . $database . '.sql';
 
-        $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schema ) ) );
+        $sqlFile  = !self::$initial && is_file( $reset ) ? $reset : $schema;
+
+        $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $sqlFile ) ) );
         foreach ( $queries as $query )
         {
             $handler->exec( $query );
@@ -114,6 +124,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
                 END;'
             );
         }
+
+        // Set "global" static var, that we are behind the initial run
+        self::$initial = false;
     }
 
     public function tearDown()
