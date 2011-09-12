@@ -180,11 +180,7 @@ class TrashTest extends Base
         // Trashed VO properties should be the same than original location properties
         foreach ( $location->getState( 'properties' ) as $property => $value )
         {
-            if ( $property == 'id' )
-            {
-                self::assertSame( $value, $vo->locationId );
-            }
-            else if ( $property != 'modifiedSubLocation' )
+            if ( $property != 'modifiedSubLocation' )
             {
                 self::assertSame( $value, $vo->$property );
             }
@@ -202,7 +198,7 @@ class TrashTest extends Base
 
         $this->compareTrashedAndLocation( $trashed, $this->location );
         $this->setExpectedException( 'ezp\\Base\\Exception\\NotFound' );
-        $this->locationService->load( $trashed->locationId );
+        $this->locationService->load( $trashed->id );
     }
 
     /**
@@ -216,13 +212,13 @@ class TrashTest extends Base
 
         foreach ( $this->insertedLocations as $location )
         {
-            $trashedLocation = $this->service->loadByLocationId( $location->id );
+            $trashedLocation = $this->service->load( $location->id );
             self::assertInstanceOf( 'ezp\\Content\\Location\\Trashed', $trashedLocation );
             $this->compareTrashedAndLocation( $trashedLocation, $location );
 
             try
             {
-                $this->locationService->load( $trashedLocation->locationId );
+                $this->locationService->load( $trashedLocation->id );
                 $this->fail( 'A trashed location has to be removed from tree and placed into the trash' );
             }
             catch ( NotFound $e )
@@ -295,28 +291,6 @@ class TrashTest extends Base
 
     /**
      * @group trashService
-     * @covers ezp\Content\Location\Trash\Service::loadByLocationId
-     */
-    public function testLoadByLocationId()
-    {
-        $trashed = $this->service->trash( $this->location );
-        $trashedLoaded = $this->service->loadByLocationId( $this->location->id );
-        self::assertInstanceOf( 'ezp\\Content\\Location\\Trashed', $trashedLoaded );
-        $this->compareTrashedAndLocation( $trashedLoaded, $this->location );
-    }
-
-    /**
-     * @group trashService
-     * @expectedException \ezp\Content\Location\Trash\Exception\NotFound
-     * @covers ezp\Content\Location\Trash\Service::loadByLocationId
-     */
-    public function testLoadByLocationIdNonExistent()
-    {
-        $this->service->loadByLocationId( 0 );
-    }
-
-    /**
-     * @group trashService
      * @covers ezp\Content\Location\Trash\Service::emptyTrash
      */
     public function testEmptyTrash()
@@ -328,7 +302,7 @@ class TrashTest extends Base
         {
             try
             {
-                $this->service->loadByLocationId( $location->id );
+                $this->service->load( $location->id );
                 $this->fail( 'Emptying the trash should remove ALL trashed locations' );
             }
             catch ( NotFound $e )
@@ -350,12 +324,12 @@ class TrashTest extends Base
         // Check that trashed inserted locations has not been emptied
         foreach ( $this->insertedLocations as $location )
         {
-            self::assertInstanceOf( 'ezp\\Content\\Location\\Trashed', $this->service->loadByLocationId( $location->id ) );
+            self::assertInstanceOf( 'ezp\\Content\\Location\\Trashed', $this->service->load( $location->id ) );
         }
 
         // We should not be able to reload emptied trashed location
         $this->setExpectedException( 'ezp\\Base\\Exception\\NotFound' );
-        $this->service->loadByLocationId( $this->location->id );
+        $this->service->load( $this->location->id );
     }
 
     /**
@@ -531,7 +505,6 @@ class TrashTest extends Base
                 array(
                     'id' => $i + 1,
                     'contentId' => $i + 1,
-                    'locationId' => $i + 10,
                 )
             );
         }

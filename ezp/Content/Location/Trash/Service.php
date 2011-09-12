@@ -28,7 +28,8 @@ use ezp\Base\Exception,
 class Service extends BaseService
 {
     /**
-     * Loads a trashed location object from its $id
+     * Loads a trashed location object from its $id.
+     * Note that $id is identical to original location, which has been previously trashed
      * @param integer $id
      * @return \ezp\Content\Location\Trashed
      * @throws \ezp\Content\Location\Trash\Exception\NotFound if no trashed location is available with $id
@@ -42,26 +43,6 @@ class Service extends BaseService
         catch ( NotFound $e )
         {
             throw new TrashedLocationNotFound( $id, $e );
-        }
-    }
-
-    /**
-     * Loads a trashed location object from original $locationId
-     * @param integer $locationId
-     * @return \ezp\Content\Location\Trashed
-     * @throws \ezp\Content\Location\Trash\Exception\NotFound if no trashed location is available with $locationId
-     */
-    public function loadByLocationId( $locationId )
-    {
-        try
-        {
-            return $this->buildDomainObject(
-                $this->handler->trashHandler()->loadFromLocationId( $locationId )
-            );
-        }
-        catch ( NotFound $e )
-        {
-            throw new TrashedLocationNotFound( $e->identifier, $e );
         }
     }
 

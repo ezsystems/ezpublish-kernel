@@ -55,17 +55,6 @@ class TrashHandler implements TrashHandlerInterface
     /**
      * @see ezp\Persistence\Content\Location\Trash\Handler
      */
-    public function loadFromLocationId( $locationId )
-    {
-        $aTrashed = $this->backend->find( 'Content\\Location\\Trashed', array( 'locationId' => $locationId ) );
-        if ( empty( $aTrashed ) )
-            throw new NotFound( 'Trashed location from locationId', $locationId );
-        return $aTrashed[0];
-    }
-
-    /**
-     * @see ezp\Persistence\Content\Location\Trash\Handler
-     */
     public function trashSubtree( $locationId )
     {
         $trashedLocation = $this->trash( $locationId );
@@ -107,10 +96,7 @@ class TrashHandler implements TrashHandlerInterface
 
         // Create new trashed location and return it
         $params = (array)$location;
-        $params['locationId'] = $locationId;
-        // Be sure to not overlap id
-        unset( $params['id'] );
-        return $this->backend->create( 'Content\\Location\\Trashed', $params );
+        return $this->backend->create( 'Content\\Location\\Trashed', $params, false );
     }
 
     /**
@@ -125,7 +111,7 @@ class TrashHandler implements TrashHandlerInterface
         }
         catch ( NotFound $e )
         {
-            throw new ParentNotFound( $trashedLocation->locationId, $newParentId, $e );
+            throw new ParentNotFound( $trashedLocation->id, $newParentId, $e );
         }
 
         // Restore location under $newParent

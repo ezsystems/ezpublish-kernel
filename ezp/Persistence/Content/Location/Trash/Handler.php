@@ -21,22 +21,13 @@ interface Handler
 {
     /**
      * Loads the data for the trashed location identified by $id.
+     * $id is the same as original location (which has been previously trashed)
      *
      * @param int $id
      * @return \ezp\Persistence\Content\Location\Trashed
      * @throws \ezp\Base\Exception\NotFound
      */
     public function load( $id );
-
-    /**
-     * Loads the data for the trashed location identified by $locationId.
-     * $locationId is the original Id for trashed location
-     *
-     * @param int $locationId
-     * @return \ezp\Persistence\Content\Location\Trashed
-     * @throws \ezp\Base\Exception\NotFound
-     */
-    public function loadFromLocationId( $locationId );
 
     /**
      * Sends a subtree to the trash

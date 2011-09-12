@@ -20,7 +20,6 @@ class Trashed extends Location
      */
     protected $readWriteProperties = array(
         'id' => false,
-        'locationId' => false,
         'priority' => false,
         'hidden' => false,
         'invisible' => false,

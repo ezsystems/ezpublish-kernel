@@ -17,10 +17,5 @@ use ezp\Persistence\Content\Location;
  */
 class Trashed extends Location
 {
-    /**
-     * Previous Location Id (before it was trashed)
-     * @param int
-     */
-    public $locationId;
 }
 
