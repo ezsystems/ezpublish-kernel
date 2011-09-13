@@ -293,13 +293,14 @@ class EzpDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array( 70, '/1/2/69/70/' ),
-                array( 228, '/1/2/77/228/' ),
                 array( 77, '/1/2/77/' ),
+                array( 228, '/1/2/77/228/' ),
             ),
             $query
                 ->select( 'node_id', 'path_string' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'contentobject_id', array( 68, 75 ) ) )
+                ->orderBy( 'node_id' )
         );
     }
 
@@ -310,8 +311,8 @@ class EzpDatabaseTest extends TestCase
             array( 'contentobject_is_published', 0 ),
             array( 'contentobject_version', 1 ),
             array( 'depth', 3 ),
-            array( 'is_hidden', false ),
-            array( 'is_invisible', false ),
+            array( 'is_hidden', 0 ),
+            array( 'is_invisible', 0 ),
             array( 'main_node_id', 42 ),
             array( 'parent_node_id', 77 ),
             array( 'path_identification_string', '' ),

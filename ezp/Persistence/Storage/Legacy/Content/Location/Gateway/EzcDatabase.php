@@ -432,31 +432,31 @@ class EzcDatabase extends Gateway
             ->insertInto( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
             ->set(
                 $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $location->contentId = $createStruct->contentId )
+                $query->bindValue( $location->contentId = $createStruct->contentId, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'contentobject_is_published' ),
-                $query->bindValue( (int)$published ) // Will be set to 1, once the contentt object has been published
+                $query->bindValue( (int) $published, null, \PDO::PARAM_INT ) // Will be set to 1, once the contentt object has been published
             )->set(
                 $this->handler->quoteColumn( 'contentobject_version' ),
-                $query->bindValue( $createStruct->contentVersion )
+                $query->bindValue( $createStruct->contentVersion, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'depth' ),
-                $query->bindValue( $location->depth = $parentNode['depth'] + 1 )
+                $query->bindValue( $location->depth = $parentNode['depth'] + 1, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'is_hidden' ),
-                $query->bindValue( $location->hidden = $createStruct->hidden )
+                $query->bindValue( $location->hidden = $createStruct->hidden, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'is_invisible' ),
-                $query->bindValue( $location->invisible = $createStruct->invisible )
+                $query->bindValue( $location->invisible = $createStruct->invisible, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'modified_subnode' ),
-                $query->bindValue( $location->modifiedSubLocation = time() )
+                $query->bindValue( $location->modifiedSubLocation = time(), null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'node_id' ),
-                $query->bindValue( null ) // Auto increment
+                $this->handler->getAutoIncrementValue( 'ezcontentobject_tree', 'node_id' )
             )->set(
                 $this->handler->quoteColumn( 'parent_node_id' ),
-                $query->bindValue( $location->parentId = $parentNode['node_id'] )
+                $query->bindValue( $location->parentId = $parentNode['node_id'], null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'path_identification_string' ),
                 $query->bindValue( null ) // Set later by the publishing operation
@@ -465,20 +465,20 @@ class EzcDatabase extends Gateway
                 $query->bindValue( 'dummy' ) // Set later
             )->set(
                 $this->handler->quoteColumn( 'priority' ),
-                $query->bindValue( $location->priority = $createStruct->priority )
+                $query->bindValue( $location->priority = $createStruct->priority, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'remote_id' ),
                 $query->bindValue( $location->remoteId = $createStruct->remoteId )
             )->set(
                 $this->handler->quoteColumn( 'sort_field' ),
-                $query->bindValue( $location->sortField = $createStruct->sortField )
+                $query->bindValue( $location->sortField = $createStruct->sortField, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'sort_order' ),
-                $query->bindValue( $location->sortOrder = $createStruct->sortOrder )
+                $query->bindValue( $location->sortOrder = $createStruct->sortOrder, null, \PDO::PARAM_INT )
             );
         $query->prepare()->execute();
 
-        $location->id = $this->handler->lastInsertId();
+        $location->id = $this->handler->lastInsertId( $this->handler->getSequenceName( 'ezcontentobject_tree', 'node_id' ) );
         $location->mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
         $query = $this->handler->createUpdateQuery();
         $query
@@ -489,12 +489,12 @@ class EzcDatabase extends Gateway
             )
             ->set(
                 $this->handler->quoteColumn( 'main_node_id' ),
-                $query->bindValue( $location->mainLocationId )
+                $query->bindValue( $location->mainLocationId, null, \PDO::PARAM_INT )
             )
             ->where(
                 $query->expr->eq(
                     $this->handler->quoteColumn( 'node_id' ),
-                    $query->bindValue( $location->id )
+                    $query->bindValue( $location->id, null, \PDO::PARAM_INT )
                 )
             );
         $query->prepare()->execute();
@@ -504,37 +504,37 @@ class EzcDatabase extends Gateway
             ->insertInto( $this->handler->quoteTable( 'eznode_assignment' ) )
             ->set(
                 $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $createStruct->contentId )
+                $query->bindValue( $createStruct->contentId, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'contentobject_version' ),
-                $query->bindValue( $createStruct->contentVersion )
+                $query->bindValue( $createStruct->contentVersion, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'from_node_id' ),
-                $query->bindValue( 0 ) // unused field
+                $query->bindValue( 0, null, \PDO::PARAM_INT ) // unused field
             )->set(
                 $this->handler->quoteColumn( 'id' ),
-                $query->bindValue( null ) // auto increment
+                $this->handler->getAutoIncrementValue( 'eznode_assignment', 'id' )
             )->set(
                 $this->handler->quoteColumn( 'is_main' ),
-                $query->bindValue( 0 ) // Changed by the business layer, later
+                $query->bindValue( 0, null, \PDO::PARAM_INT ) // Changed by the business layer, later
             )->set(
                 $this->handler->quoteColumn( 'op_code' ),
-                $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP )
+                $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'parent_node' ),
-                $query->bindValue( $parentNode['node_id'] )
+                $query->bindValue( $parentNode['node_id'], null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'parent_remote_id' ),
                 $query->bindValue( '' )
             )->set(
                 $this->handler->quoteColumn( 'remote_id' ),
-                $query->bindValue( 0 )
+                $query->bindValue( 0, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'sort_field' ),
-                $query->bindValue( 2 ) // eZContentObjectTreeNode::SORT_FIELD_PUBLISHED
+                $query->bindValue( 2, null, \PDO::PARAM_INT ) // eZContentObjectTreeNode::SORT_FIELD_PUBLISHED
             )->set(
                 $this->handler->quoteColumn( 'sort_order' ),
-                $query->bindValue( 0 ) // eZContentObjectTreeNode::SORT_ORDER_DESC
+                $query->bindValue( 0, null, \PDO::PARAM_INT ) // eZContentObjectTreeNode::SORT_ORDER_DESC
             );
         $query->prepare()->execute();
 
