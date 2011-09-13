@@ -41,7 +41,7 @@ class Author extends FieldType
         $dom = new DOMDocument( '1.0', 'utf-8' );
         if ( !$dom->loadXML( $inputValue ) )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
+            throw new BadFieldTypeInput( $inputValue, __CLASS__ );
         }
         return $inputValue;
     }

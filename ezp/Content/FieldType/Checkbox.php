@@ -34,9 +34,9 @@ class Checkbox extends FieldType
      */
     protected function canParseValue( $inputValue )
     {
-        if ( !is_bool(( $inputValue ) ) )
+        if ( !is_bool( $inputValue ) )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
+            throw new BadFieldTypeInput( $inputValue, __CLASS__ );
         }
         return $inputValue;
     }

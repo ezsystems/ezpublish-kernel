@@ -34,7 +34,7 @@ class Float extends FieldType
     {
         if ( !is_float( $inputValue ) )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
+            throw new BadFieldTypeInput( $inputValue, __CLASS__ );
         }
         return $inputValue;
     }
