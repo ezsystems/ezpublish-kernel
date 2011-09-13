@@ -281,8 +281,8 @@ class EzcDatabase extends Gateway
             $query = $this->dbHandler->createInsertQuery();
             $query
                 ->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass_name' ) )
-                ->set( 'contentclass_id', $query->bindValue( $typeId ) )
-                ->set( 'contentclass_version', $query->bindValue( $typeStatus ) )
+                ->set( 'contentclass_id', $query->bindValue( $typeId, null, \PDO::PARAM_INT ) )
+                ->set( 'contentclass_version', $query->bindValue( $typeStatus, null, \PDO::PARAM_INT ) )
                 ->set( 'language_id', $query->bindValue(
                     $this->languageMaskGenerator->generateLanguageIndicator(
                         $language,
@@ -290,10 +290,10 @@ class EzcDatabase extends Gateway
                             $language,
                             $languages
                         )
-                    )
+                    ), null, \PDO::PARAM_INT
                 ) )
                 ->set( 'language_locale', $query->bindValue( $language ) )
-                ->set( 'name', $query->bindValue( $name ) );
+                ->set( 'name', $query->bindValue( $name, null, \PDO::PARAM_INT ) );
             $query->prepare()->execute();
         }
     }
@@ -467,7 +467,6 @@ class EzcDatabase extends Gateway
                 $q->bindValue( $groupId, null, \PDO::PARAM_INT )
             )
         );
-
         $stmt = $q->prepare();
         $stmt->execute();
 
