@@ -108,7 +108,7 @@ class EzcDbHandler
      */
     public function getAutoIncrementValue( $table, $column )
     {
-        return null;
+        return "null";
     }
 
     /**
