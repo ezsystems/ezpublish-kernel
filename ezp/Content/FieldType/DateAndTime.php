@@ -17,7 +17,7 @@ class DateAndTime extends FieldType
 {
     protected $fieldTypeString = 'ezdatetime';
     protected $defaultValue = null;
-    protected $isSearable = true;
+    protected $isSearchable = true;
 
     /**
      * Checks if value can be parsed.
