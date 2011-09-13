@@ -101,6 +101,7 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'contentobject_id', 'path_string', 'depth' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 69, 71, 75, 77, 2 ) ) )
+                ->orderBy( 'contentobject_id' )
         );
     }
 
@@ -140,6 +141,7 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'path_string' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->gte( 'modified_subnode', $time ) )
+                ->orderBy( 'path_string' )
         );
     }
 
@@ -161,6 +163,7 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'node_id', 'is_hidden', 'is_invisible' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 75 ) ) )
+                ->orderBy( 'node_id' )
         );
     }
 
@@ -186,6 +189,7 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'node_id', 'is_hidden', 'is_invisible' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 75 ) ) )
+                ->orderBy( 'node_id' )
         );
     }
 
@@ -214,6 +218,7 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'node_id', 'is_hidden', 'is_invisible' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70, 71, 75 ) ) )
+                ->orderBy( 'node_id' )
         );
     }
 
@@ -242,6 +247,7 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'node_id', 'is_hidden', 'is_invisible' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 1, 2, 69, 70, 71, 75 ) ) )
+                ->orderBy( 'node_id' )
         );
     }
 
@@ -261,6 +267,7 @@ class EzpDatabaseTest extends TestCase
                 ->select( 'node_id', 'contentobject_id' )
                 ->from( 'ezcontentobject_tree' )
                 ->where( $query->expr->in( 'node_id', array( 70, 78 ) ) )
+                ->orderBy( 'node_id' )
         );
     }
 
