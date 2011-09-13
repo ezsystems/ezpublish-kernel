@@ -108,11 +108,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
         }
 
         $schema   = __DIR__ . '/_fixtures/schema.' . $this->db . '.sql';
-        $reset    = __DIR__ . '/_fixtures/reset.' . $this->db . '.sql';
 
-        $sqlFile  = !self::$initial && is_file( $reset ) ? $reset : $schema;
-
-        $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $sqlFile ) ) );
+        $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schema ) ) );
         foreach ( $queries as $query )
         {
             $handler->exec( $query );
@@ -131,6 +128,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
                 END;'
             );
         }
+
+        $this->resetSequences();
 
         // Set "global" static var, that we are behind the initial run
         self::$initial = false;
@@ -220,6 +219,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
             }
         }
 
+        $this->resetSequences();
+    }
+
+    /**
+     * Reset DB sequences
+     *
+     * @return void
+     */
+    public function resetSequences()
+    {
         switch ( $this->db )
         {
             case 'pgsql':
