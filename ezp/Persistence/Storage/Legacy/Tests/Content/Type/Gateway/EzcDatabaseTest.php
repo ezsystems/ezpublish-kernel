@@ -159,7 +159,8 @@ class EzcDatabaseTest extends TestCase
                 'modifier_id',
                 'name'
             )
-            ->from( 'ezcontentclassgroup' );
+            ->from( 'ezcontentclassgroup' )
+            ->orderBy( 'id' );
         $this->assertQueryResult(
             array(
                 array(
@@ -300,7 +301,7 @@ class EzcDatabaseTest extends TestCase
         $gateway = $this->getGateway();
         $data = $gateway->loadGroupData( 2 );
 
-        $this->assertSame(
+        $this->assertEquals(
             array(
                 array(
                     'created' => '1031216941',
@@ -334,7 +335,7 @@ class EzcDatabaseTest extends TestCase
             count( $data )
         );
 
-        $this->assertSame(
+        $this->assertEquals(
             array(
                 'created' => '1031216941',
                 'creator_id' => '14',
