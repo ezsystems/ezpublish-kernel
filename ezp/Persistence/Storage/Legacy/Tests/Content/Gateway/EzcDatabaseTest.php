@@ -203,8 +203,8 @@ class EzcDatabaseTest extends TestCase
                 ->from( 'ezcontentobject_version' )
                 ->where(
                     $query->expr->lAnd(
-                        $query->expr->eq( 'id', $query->bindValue( $version->id ) ),
-                        $query->expr->gte( 'modified', $time )
+                        $query->expr->eq( 'id', $query->bindValue( $version->id, null, \PDO::PARAM_INT ) ),
+                        $query->expr->gte( 'modified', $query->bindValue( $time, null, \PDO::PARAM_INT ) )
                     )
                 )
         );

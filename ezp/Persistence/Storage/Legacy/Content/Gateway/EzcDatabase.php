@@ -157,6 +157,9 @@ class EzcDatabase extends Gateway
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject_version' )
         )->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_version', 'id' )
+        )->set(
             $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $version->versionNo )
         )->set(
@@ -192,7 +195,7 @@ class EzcDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return $this->dbHandler->lastInsertId();
+        return $this->dbHandler->lastInsertId( $this->dbHandler->getSequenceName( 'ezcontentobject_version', 'id' ) );
     }
 
     /**
@@ -209,14 +212,14 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteTable( 'ezcontentobject_version' )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
-            $q->bindValue( $versionNo )
+            $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'modified' ),
             $q->bindValue( time(), null, \PDO::PARAM_INT )
         )->where(
             $q->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
-                $q->bindValue( $version )
+                $q->bindValue( $version, null, \PDO::PARAM_INT )
             )
         );
         $q->prepare()->execute();
@@ -238,6 +241,9 @@ class EzcDatabase extends Gateway
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_attribute', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
             $q->bindValue( $content->id, null, \PDO::PARAM_INT )
@@ -283,7 +289,9 @@ class EzcDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return $this->dbHandler->lastInsertId();
+        return $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcontentobject_attribute', 'id' )
+        );
     }
 
     /**
@@ -306,13 +314,13 @@ class EzcDatabase extends Gateway
             $q->bindValue( $value->dataFloat )
         )->set(
             $this->dbHandler->quoteColumn( 'data_int' ),
-            $q->bindValue( $value->dataInt )
+            $q->bindValue( $value->dataInt, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'data_text' ),
             $q->bindValue( $value->dataText )
         )->set(
             $this->dbHandler->quoteColumn( 'sort_key_int' ),
-            $q->bindValue( $value->sortKeyInt )
+            $q->bindValue( $value->sortKeyInt, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'sort_key_string' ),
             $q->bindValue( $value->sortKeyString )
@@ -320,11 +328,11 @@ class EzcDatabase extends Gateway
             $q->expr->lAnd(
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'id' ),
-                    $q->bindValue( $field->id )
+                    $q->bindValue( $field->id, null, \PDO::PARAM_INT )
                 ),
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'version' ),
-                    $q->bindValue( $field->versionNo )
+                    $q->bindValue( $field->versionNo, null, \PDO::PARAM_INT )
                 )
             )
         );
