@@ -70,7 +70,7 @@ interface Handler
     public function load( $id, $version, $translations = null );
 
     /**
-     * Sets the state of object identified by $contentId and $version to $state.
+     * Sets the state of object identified by $contentId and $version to $status.
      *
      * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
      * @todo Is this supposed to be constants from Content or Version? They differ..

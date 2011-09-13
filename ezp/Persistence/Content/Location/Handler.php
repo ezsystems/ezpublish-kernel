@@ -134,4 +134,13 @@ interface Handler
      * @return boolean
      */
     public function setSectionForSubtree( $locationId, $sectionId );
+
+    /**
+     * Performs publishing operations for Locations attached to the version with id $versionId.
+     *
+     * @param int $versionId
+     *
+     * @return \ezp\Persistence\Content\Location[] The list of updated location objects
+     */
+    public function publishForContentVersion( $versionId );
 }

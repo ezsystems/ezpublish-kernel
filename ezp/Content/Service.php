@@ -342,6 +342,8 @@ class Service extends BaseService
      * Publishes $version of $content
      * @param \ezp\Content $content
      * @param \ezp\Content\Version $version
+     * @throws \ezp\Base\Exception\Logic if $version doesn't have the DRAFT status
+     * @throws \ezp\Base\Exception\Logic if $version and $content don't match
      */
     public function publish( Content $content, Version $version )
     {
@@ -357,17 +359,49 @@ class Service extends BaseService
             throw new Logic( '$version->contentId', 'Content/Version arguments mismatch' );
         }
 
-        // Check excess versions
-        // 1. Load max version # for object(s) (MaxVersionCount)
-        // 2. Check how many versions with status published/archived the object has (ContentVersionCount)
-        // 3. if ( ContentVersionCount > MaxVersionCount ) delete the oldest version
+        $this->handler->beginTransaction();
+
+        // STEP: Set version pending + asynchronous publishing
+        // Note: it can't be done that way currently, as it implies that every subsequent operation is done asynchronously
+
+        // STEP: copy-translations
+        // Is it required with the current API ? Analyze
+
+        // STEP: set-version-archived
+        $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_ARCHIVED, $content->currentVersion->versionNo );
 
 
-        // Mark previously published version as archived
+        $this->handler->locationHandler()->publishForContentVersion( $version->id );
 
-        // Mark published version as published
+        // STEP: set-version-published
+        $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_PUBLISHED, $version->versionNo );
+
+        // STEP: set-object-published
+        // - Set object to published if it isn't marked as such yet
+        //   Published object = object with at least one published location... right ?
+        // - Set the modified/published timestamps if they haven't been assigned an explicit value yet
+        // - Set object names
+        // - Set always available
+        // - link location to published version
+        $this->handler->contentHandler()->publish( $content->id );
+
+        // STEP: attribute-publish-action
+        // Call onPublish handler on each attribute of the published version
+
+        // STEP:: update-non-translatable-attributes
+        // Copy content from original language for non translatable attributes (only valid for new Content)
+
+        // Check excess versions @todo To match the old system, this should be done when creating the new version
+        // Legacy: done in eZContentObject::createNewVersion() with $versionCheck = true (default)
+        // $maxVersionCount = Configuration::getInstance( 'content' )->get( 'VersionManagement', 'DefaultVersionHistoryLimit' );
+        // if ( count( $content->versions ) > $maxVersionCount )
+        // {
+            // Delete the oldest version
+        // }
 
         // Search engine indexing
+
+        $this->handler->commit();
     }
 
     /**
