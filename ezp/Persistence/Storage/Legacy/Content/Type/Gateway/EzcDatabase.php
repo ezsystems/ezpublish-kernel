@@ -293,7 +293,7 @@ class EzcDatabase extends Gateway
                     ), null, \PDO::PARAM_INT
                 ) )
                 ->set( 'language_locale', $query->bindValue( $language ) )
-                ->set( 'name', $query->bindValue( $name, null, \PDO::PARAM_INT ) );
+                ->set( 'name', $query->bindValue( $name ) );
             $query->prepare()->execute();
         }
     }
