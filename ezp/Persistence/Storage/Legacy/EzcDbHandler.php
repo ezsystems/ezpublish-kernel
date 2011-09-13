@@ -96,5 +96,31 @@ class EzcDbHandler
         // their shortened variants here.
         return $this->ezcDbHandler->quoteIdentifier( $tableName );
     }
+
+    /**
+     * Get auto increment value
+     *
+     * Returns the value used for autoincrement tables. Usually this will just
+     * be null. In case for sequence based RDBMS this method can return a
+     * proper value for the given column.
+     *
+     * @return mixed
+     */
+    public function getAutoIncrementValue( $table, $column )
+    {
+        return null;
+    }
+
+    /**
+     * Return the name of the affected sequence
+     *
+     * @param string $table
+     * @param string $column
+     * @return string
+     */
+    public function getSequenceName( $table, $column )
+    {
+        return null;
+    }
 }
 
