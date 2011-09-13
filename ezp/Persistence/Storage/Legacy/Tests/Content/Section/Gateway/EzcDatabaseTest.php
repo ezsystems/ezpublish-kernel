@@ -64,6 +64,7 @@ class EzcDatabaseTest extends TestCase
         $gateway = $this->getDatabaseGateway();
 
         $gateway->insertSection( 'New Section', 'new_section' );
+        $query = $this->getDatabaseHandler()->createSelectQuery();
 
         $this->assertQueryResult(
             array(
@@ -74,10 +75,10 @@ class EzcDatabaseTest extends TestCase
                     'locale' => '',
                 )
             ),
-            $this->getDatabaseHandler()->createSelectQuery()
+            $query
                 ->select( 'id', 'identifier', 'name', 'locale' )
                 ->from( 'ezsection' )
-                ->where( 'identifier="new_section"' )
+                ->where( $query->expr->eq( 'identifier', $query->bindValue( "new_section" ) ) )
         );
     }
 
