@@ -42,7 +42,7 @@ class TextLine extends FieldType
      */
     protected function canParseValue( $inputValue )
     {
-        if ( ! is_string( $inputValue ) )
+        if ( !is_string( $inputValue ) )
         {
             throw new BadFieldTypeInput( $inputValue, __CLASS__ );
         }
