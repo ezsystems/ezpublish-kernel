@@ -48,6 +48,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         if ( !$this->dsn )
         {
             $this->dsn = @$_ENV['DATABASE'] ?: 'sqlite://:memory:';
+            $this->db  = preg_replace( '(^([a-z]+).*)', '\\1', $this->dsn );
         }
 
         return $this->dsn;
@@ -65,11 +66,18 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function getDatabaseHandler()
     {
+        $connection = \ezcDbFactory::create( $this->getDsn() );
         if ( !$this->handler )
         {
-            $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler(
-                \ezcDbFactory::create( $this->getDsn() )
-            );
+            switch ( $this->db )
+            {
+                case 'pgsql':
+                    $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler\Pgsql( $connection );
+                    break;
+
+                default:
+                    $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler( $connection );
+            }
         }
 
         return $this->handler;
@@ -99,9 +107,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $database = preg_replace( '(^([a-z]+).*)', '\\1', $this->getDsn() );
-        $schema   = __DIR__ . '/_fixtures/schema.' . $database . '.sql';
-        $reset    = __DIR__ . '/_fixtures/reset.' . $database . '.sql';
+        $schema   = __DIR__ . '/_fixtures/schema.' . $this->db . '.sql';
+        $reset    = __DIR__ . '/_fixtures/reset.' . $this->db . '.sql';
 
         $sqlFile  = !self::$initial && is_file( $reset ) ? $reset : $schema;
 
@@ -111,7 +118,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             $handler->exec( $query );
         }
 
-        if ( strpos( $this->getDsn(), 'sqlite://' ) === 0 )
+        if ( $this->db === 'sqlite' )
         {
             // We need this trigger for SQLite, because it does not support a multi
             // column key with one of them being set to auto-increment.
@@ -211,6 +218,19 @@ class TestCase extends \PHPUnit_Framework_TestCase
                     throw $e;
                 }
             }
+        }
+
+        switch ( $this->db )
+        {
+            case 'pgsql':
+                // Update PostgreSQL sequences
+                $handler = $this->getDatabaseHandler();
+
+                $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( __DIR__ . '/_fixtures/setval.pgsql.sql' ) ) );
+                foreach ( $queries as $query )
+                {
+                    $handler->exec( $query );
+                }
         }
     }
 
