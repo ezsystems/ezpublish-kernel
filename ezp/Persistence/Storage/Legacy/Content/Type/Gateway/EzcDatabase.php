@@ -309,6 +309,9 @@ class EzcDatabase extends Gateway
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass' ) );
         $q->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcontentclass', 'contentclass_id' )
+        )->set(
             $this->dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $type->status, null, \PDO::PARAM_INT )
         )->set(
@@ -321,7 +324,7 @@ class EzcDatabase extends Gateway
         $this->setCommonTypeColumns( $q, $type );
         $q->prepare()->execute();
 
-        $type->id = $this->dbHandler->lastInsertId();
+        $type->id = $this->dbHandler->lastInsertId( $this->dbHandler->getSequenceName( 'ezcontentclass', 'id' ) );
         $this->insertTypeNameData( $type->id, $type->status, $type->name );
 
         return $type->id;
