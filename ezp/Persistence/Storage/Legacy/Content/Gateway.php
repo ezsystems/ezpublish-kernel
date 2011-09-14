@@ -21,6 +21,13 @@ use ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
 abstract class Gateway
 {
     /**
+     * Get context definition for external storage layers
+     *
+     * @return array
+     */
+    abstract public function getContext();
+
+    /**
      * Inserts a new content object.
      *
      * @param Content $content

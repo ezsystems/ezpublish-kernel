@@ -102,7 +102,7 @@ class Handler implements BaseContentHandler
                 $this->mapper->convertToStorageValue( $field )
             );
             $this->storageRegistry->getStorage( $field->type )
-                ->storeFieldData( $field->id, $field->value );
+                ->storeFieldData( $field->id, $field->value, $this->contentGateway->getContext() );
             $version->fields[] = $field;
         }
 
@@ -156,7 +156,7 @@ class Handler implements BaseContentHandler
                 $this->mapper->convertToStorageValue( $field )
             );
             $this->storageRegistry->getStorage( $field->type )
-                ->storeFieldData( $field->id, $field->value );
+                ->storeFieldData( $field->id, $field->value, $this->contentGateway->getContext() );
             $version->fields[] = $field;
         }
 
@@ -264,7 +264,7 @@ class Handler implements BaseContentHandler
                 $this->mapper->convertToStorageValue( $field )
             );
             $this->storageRegistry->getStorage( $field->type )
-                ->storeFieldData( $field->id, $field->value );
+                ->storeFieldData( $field->id, $field->value, $this->contentGateway->getContext() );
             $version->fields[] = $field;
         }
     }

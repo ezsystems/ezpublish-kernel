@@ -63,6 +63,19 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Get context definition for external storage layers
+     *
+     * @return array
+     */
+    public function getContext()
+    {
+        return array(
+            'identifier' => 'LegacyStorage',
+            'connection' => $this->dbHandler,
+        );
+    }
+
+    /**
      * Inserts a new content object.
      *
      * @param Content $content

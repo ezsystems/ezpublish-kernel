@@ -28,12 +28,17 @@ interface Storage
      * database back end on create, before the external data source may be
      * called from storing).
      *
+     * The context array provides some context for the field handler about the
+     * currently used database engine. The array should at least define some
+     * identifier and additionally pass some kind of connection handler.
+     *
      * @param int $fieldId
      * @param FieldValue $value
+     * @param array $context
      * @return bool
      *
      */
-    public function storeFieldData( $fieldId, FieldValue $value );
+    public function storeFieldData( $fieldId, FieldValue $value, array $context );
 
     /**
      * @param int $fieldId
