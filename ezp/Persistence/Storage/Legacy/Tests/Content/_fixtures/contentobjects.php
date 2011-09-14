@@ -20396,6 +20396,22 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'sort_key_string' => '',
       'version' => '2',
     ),
+    1243 => 
+    array (
+      'attribute_original_id' => '0',
+      'contentclassattribute_id' => '194',
+      'contentobject_id' => '226',
+      'data_float' => '0',
+      'data_int' => NULL,
+      'data_text' => '',
+      'data_type_string' => 'ezsrrating',
+      'id' => '4000',
+      'language_code' => 'eng-GB',
+      'language_id' => '2',
+      'sort_key_int' => '0',
+      'sort_key_string' => '',
+      'version' => '2',
+    ),
   ),
   'ezcontentobject_version' => 
   array (

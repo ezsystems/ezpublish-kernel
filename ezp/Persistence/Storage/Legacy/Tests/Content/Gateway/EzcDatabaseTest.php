@@ -385,7 +385,7 @@ class EzcDatabaseTest extends TestCase
         $res = $gateway->listVersions( 226 );
 
         $this->assertEquals(
-            2,
+            3,
             count( $res )
         );
 
@@ -404,6 +404,10 @@ class EzcDatabaseTest extends TestCase
         $this->assertEquals(
             676,
             $res[1]['ezcontentobject_version_id']
+        );
+        $this->assertEquals(
+            676,
+            $res[2]['ezcontentobject_version_id']
         );
 
         /*
