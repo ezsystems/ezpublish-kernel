@@ -75,6 +75,10 @@ class TestCase extends \PHPUnit_Framework_TestCase
                     $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler\Pgsql( $connection );
                     break;
 
+                case 'sqlite':
+                    $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler\Sqlite( $connection );
+                    break;
+
                 default:
                     $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler( $connection );
             }
