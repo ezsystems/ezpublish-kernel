@@ -49,6 +49,9 @@ class EzcDatabase extends Gateway
         $query
             ->insertInto( $this->handler->quoteTable( 'ezrole' ) )
             ->set(
+                $this->handler->quoteColumn( 'id' ),
+                $this->handler->getAutoIncrementValue( 'ezrole', 'id' )
+            )->set(
                 $this->handler->quoteColumn( 'is_new' ),
                 0
             )->set(
@@ -63,7 +66,9 @@ class EzcDatabase extends Gateway
             );
         $query->prepare()->execute();
 
-        $role->id = $this->handler->lastInsertId();
+        $role->id = $this->handler->lastInsertId(
+            $this->handler->getSequenceName( 'ezrole', 'id' )
+        );
     }
 
     /**
@@ -82,7 +87,7 @@ class EzcDatabase extends Gateway
             )->where(
                 $query->expr->eq(
                     $this->handler->quoteColumn( 'id' ),
-                    $query->bindValue( $role->id )
+                    $query->bindValue( $role->id, null, \PDO::PARAM_INT )
                 )
             );
         $query->prepare()->execute();
@@ -101,7 +106,7 @@ class EzcDatabase extends Gateway
             ->where(
                 $query->expr->eq(
                     $this->handler->quoteColumn( 'id' ),
-                    $query->bindValue( $roleId )
+                    $query->bindValue( $roleId, null, \PDO::PARAM_INT )
                 )
             );
         $query->prepare()->execute();
@@ -120,6 +125,9 @@ class EzcDatabase extends Gateway
         $query
             ->insertInto( $this->handler->quoteTable( 'ezpolicy' ) )
             ->set(
+                $this->handler->quoteColumn( 'id' ),
+                $this->handler->getAutoIncrementValue( 'ezpolicy', 'id' )
+            )->set(
                 $this->handler->quoteColumn( 'function_name' ),
                 $query->bindValue( $policy->function )
             )->set(
@@ -130,11 +138,13 @@ class EzcDatabase extends Gateway
                 0
             )->set(
                 $this->handler->quoteColumn( 'role_id' ),
-                $query->bindValue( $roleId )
+                $query->bindValue( $roleId, null, \PDO::PARAM_INT )
             );
         $query->prepare()->execute();
 
-        $policy->id = $this->handler->lastInsertId();
+        $policy->id = $this->handler->lastInsertId(
+            $this->handler->getSequenceName( 'ezpolicy', 'id' )
+        );
 
         // @TODO: Handle limitations -- this still has to be documented by eZ.
     }
@@ -155,11 +165,11 @@ class EzcDatabase extends Gateway
                 $query->expr->lAnd(
                     $query->expr->eq(
                         $this->handler->quoteColumn( 'id' ),
-                        $query->bindValue( $policyId )
+                        $query->bindValue( $policyId, null, \PDO::PARAM_INT )
                     ),
                     $query->expr->eq(
                         $this->handler->quoteColumn( 'role_id' ),
-                        $query->bindValue( $roleId )
+                        $query->bindValue( $roleId, null, \PDO::PARAM_INT )
                     )
                 )
             );

@@ -48,7 +48,7 @@ class EzcDatabase extends Gateway
             ->insertInto( $this->handler->quoteTable( 'ezuser' ) )
             ->set(
                 $this->handler->quoteColumn( 'contentobject_id' ),
-                $query->bindValue( $user->id )
+                $query->bindValue( $user->id, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'login' ),
                 $query->bindValue( $user->login )
@@ -60,7 +60,7 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $user->password )
             )->set(
                 $this->handler->quoteColumn( 'password_hash_type' ),
-                $query->bindValue( $user->hashAlgorithm )
+                $query->bindValue( $user->hashAlgorithm, null, \PDO::PARAM_INT )
             );
         $query->prepare()->execute();
     }
@@ -78,7 +78,7 @@ class EzcDatabase extends Gateway
             ->where(
                 $query->expr->eq(
                     $this->handler->quoteColumn( 'contentobject_id' ),
-                    $query->bindValue( $userId )
+                    $query->bindValue( $userId, null, \PDO::PARAM_INT )
                 )
             );
         $query->prepare()->execute();
@@ -109,7 +109,7 @@ class EzcDatabase extends Gateway
             )->where(
                 $query->expr->eq(
                     $this->handler->quoteColumn( 'contentobject_id' ),
-                    $query->bindValue( $user->id )
+                    $query->bindValue( $user->id, null, \PDO::PARAM_INT )
                 )
             );
         $query->prepare()->execute();
@@ -144,10 +144,10 @@ class EzcDatabase extends Gateway
                     ->insertInto( $this->handler->quoteTable( 'ezuser_role' ) )
                     ->set(
                         $this->handler->quoteColumn( 'contentobject_id' ),
-                        $query->bindValue( $userId )
+                        $query->bindValue( $userId, null, \PDO::PARAM_INT )
                     )->set(
                         $this->handler->quoteColumn( 'role_id' ),
-                        $query->bindValue( $roleId )
+                        $query->bindValue( $roleId, null, \PDO::PARAM_INT )
                     )->set(
                         $this->handler->quoteColumn( 'limit_identifier' ),
                         $query->bindValue( $identifier )
@@ -175,11 +175,11 @@ class EzcDatabase extends Gateway
                 $query->expr->lAnd(
                     $query->expr->eq(
                         $this->handler->quoteColumn( 'contentobject_id' ),
-                        $query->bindValue( $userId )
+                        $query->bindValue( $userId, null, \PDO::PARAM_INT )
                     ),
                     $query->expr->eq(
                         $this->handler->quoteColumn( 'role_id' ),
-                        $query->bindValue( $roleId )
+                        $query->bindValue( $roleId, null, \PDO::PARAM_INT )
                     )
                 )
             );

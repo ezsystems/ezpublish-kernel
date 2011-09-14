@@ -43,7 +43,7 @@ class UserHandlerTest extends TestCase
         $user->login = 'kore';
         $user->email = 'kore@example.org';
         $user->password = '1234567890';
-        $user->hashAlgorithm = 'md5';
+        $user->hashAlgorithm = 2;
 
         return $user;
     }
@@ -107,7 +107,7 @@ class UserHandlerTest extends TestCase
     {
         $handler = $this->getUserHandler();
 
-        $handler->delete( 'not_existing' );
+        $handler->delete( 1337 );
         $this->assertQueryResult(
             array( array( 0 ) ),
             $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
@@ -125,7 +125,7 @@ class UserHandlerTest extends TestCase
         $handler->update( $user );
 
         $this->assertQueryResult(
-            array( array( 42, 'kore@example.org', 'new_login', 1234567890, 'md5' ) ),
+            array( array( 42, 'kore@example.org', 'new_login', 1234567890, '2' ) ),
             $this->handler->createSelectQuery()->select( '*' )->from( 'ezuser' ),
             'Expected user data to be updated.'
         );
