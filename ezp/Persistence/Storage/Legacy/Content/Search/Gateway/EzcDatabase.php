@@ -64,12 +64,13 @@ class EzcDatabase extends Gateway
      * @param int $offset
      * @param int|null $limit
      * @param \ezp\Persistence\Content\Query\SortClause[] $sort
+     * @param string[] $translations
      * @return mixed[][]
      * @TODO This method now uses 3 querys (counting, ID fetching, loading) to
      *       enable proper use of $offset and $limit. Do we find a way to
      *       reduce this query count?
      */
-    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null )
+    public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, array $translations = null )
     {
         $limit = $limit !== null ? $limit : PHP_INT_MAX;
 
@@ -77,10 +78,33 @@ class EzcDatabase extends Gateway
         $query = $this->handler->createSelectQuery();
         $condition = $this->converter->convertCriteria( $query, $criterion );
 
+        if ( $translations !== null )
+        {
+            $translationQuery = $query->subSelect();
+            $translationQuery->select(
+                $this->handler->quoteColumn( 'contentobject_id' )
+            )->from(
+                $this->handler->quoteTable( 'ezcontentobject_attribute' )
+            )->where(
+                $translationQuery->expr->in(
+                    $this->handler->quoteColumn( 'language_code' ),
+                    $translations
+                )
+            );
+            $condition = $query->expr->lAnd(
+                $condition,
+                $query->expr->in(
+                    $this->handler->quoteColumn( 'id' ),
+                    $translationQuery
+                )
+            );
+        }
+
         $query
             ->select( 'COUNT( * )' )
             ->from( $this->handler->quoteTable( 'ezcontentobject' ) )
             ->where( $condition );
+
         $statement = $query->prepare();
         $statement->execute();
 
@@ -106,7 +130,7 @@ class EzcDatabase extends Gateway
         $contentIds = $statement->fetchAll( \PDO::FETCH_COLUMN );
 
         // Load content itself
-        $loadQuery = $this->queryBuilder->createFindQuery();
+        $loadQuery = $this->queryBuilder->createFindQuery( $translations );
         $loadQuery->where(
             $loadQuery->expr->in(
                 $this->handler->quoteColumn( 'id', 'ezcontentobject' ),

@@ -228,6 +228,52 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase::find
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::find
+     */
+    public function testFindWithExistingLanguageFields()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\ContentId( 11 ),
+            0,
+            null,
+            null,
+            array( 'eng-US' )
+        );
+
+        $this->assertEquals(
+            1,
+            $result->count
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase::find
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::find
+     */
+    public function testFindWithMissingLanguageFields()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\ContentId( 4 ),
+            0,
+            null,
+            null,
+            array( 'eng-GB' )
+        );
+
+        $this->assertEquals(
+            0,
+            $result->count
+        );
+    }
+
+    /**
+     * @return void
      * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::findSingle
      * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter
      * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler

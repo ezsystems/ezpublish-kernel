@@ -81,7 +81,7 @@ class Handler extends BaseSearchHandler
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, $translations = null )
     {
-        $data = $this->gateway->find( $criterion, $offset, $limit, $sort );
+        $data = $this->gateway->find( $criterion, $offset, $limit, $sort, $translations );
 
         $result = new Result();
         $result->count = $data['count'];
