@@ -33,6 +33,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
      * been made.
      *
      * @group fieldType
+     * @covers ezp\Content\FieldType\Factory::build
      */
     public function testFactory()
     {
@@ -45,6 +46,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @covers ezp\Content\FieldType::supportsSearch
      */
     public function testTextLineSupportsSearch()
     {
@@ -59,6 +61,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @covers ezp\Content\FieldType::allowedValidators
      */
     public function testTextLineSupportedValidators()
     {
@@ -67,6 +70,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers ezp\Content\FieldType::setValue
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
      */
@@ -79,6 +83,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @covers ezp\Content\FieldType::getValue
      */
     public function testValidFormat()
     {
@@ -101,6 +106,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @covers ezp\Content\FieldType\TextLine::setFieldValue
      */
     public function testSetFieldValue()
     {
