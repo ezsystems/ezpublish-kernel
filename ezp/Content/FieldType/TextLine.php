@@ -44,7 +44,7 @@ class TextLine extends FieldType
     {
         if ( !is_string( $inputValue ) )
         {
-            throw new BadFieldTypeInput( $inputValue, __CLASS__ );
+            throw new BadFieldTypeInput( $inputValue, get_class() );
         }
         return $inputValue;
     }
