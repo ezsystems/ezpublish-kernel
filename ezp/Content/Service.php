@@ -272,7 +272,7 @@ class Service extends BaseService
      * <code>
      * $qb = new ezp\Content\Query\Builder();
      * $qb->addCriteria(
-     *     $qb->fulltext->like( 'eZ Publish' ),
+     *     $qb->fullText->like( 'eZ Publish' ),
      *     $qb->urlAlias->like( '/cms/amazing/*' ),
      *     $qb->contentTypeId->eq( 'folder' ),
      *     $qb->field->eq( 'author', 'community@ez.no' )

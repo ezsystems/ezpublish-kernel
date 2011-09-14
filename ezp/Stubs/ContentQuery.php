@@ -18,7 +18,7 @@ $contentService = $sc->getRepository()->getContentService();
 
 // a full criteria
 $qb->addCriteria(
-    $qb->fulltext->like( 'eZ Publish' ),
+    $qb->fullText->like( 'eZ Publish' ),
     $qb->urlAlias->like( '/cms/amazing/*' ),
     $qb->contentType->eq( 'blog_post' ),
     $qb->field->eq( 'author', 'community@ez.no' )
