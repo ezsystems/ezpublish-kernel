@@ -267,22 +267,4 @@ abstract class FieldType
              $fieldDefinition->fieldTypeConstraints = array_merge( $fieldDefinition->fieldTypeConstraints, $validator->getValidatorConstraints() );
          }
      }
-
-    /**
-     * Factory method for creating field type object based on identifiers.
-     *
-     * @static
-     * @throws \ezp\Base\Exception\MissingClass
-     * @param string $type
-     * @return \ezp\Content\FieldType
-     */
-    public static function create( $type )
-    {
-        $fieldTypeMap = Configuration::getInstance( 'content' )->get( 'fields', 'Type' );
-        if ( !isset( $fieldTypeMap[$type] ) )
-        {
-            throw new MissingClass( $type, 'FieldType' );
-        }
-        return new $fieldTypeMap[$type];
-    }
 }

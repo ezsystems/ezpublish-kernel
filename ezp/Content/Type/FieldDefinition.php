@@ -11,7 +11,7 @@ namespace ezp\Content\Type;
 use ezp\Base\Model,
     ezp\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
-    ezp\Content\FieldType,
+    ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Validator;
 
 /**
@@ -98,6 +98,6 @@ class FieldDefinition extends Model
         {
             $this->fieldTypeConstraints = array();
         }
-        FieldType::create( $this->fieldType )->fillConstraintsFromValidator( $this, $validator );
+        Factory::build( $this->fieldType )->fillConstraintsFromValidator( $this, $validator );
     }
 }

@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Tests\FieldType;
 use PHPUnit_Framework_TestCase,
-    ezp\Content\FieldType,
+    ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\TextLine,
     ReflectionClass,
     ezp\Base\Exception\BadFieldTypeInput,
@@ -31,8 +31,11 @@ class TextLineTest extends PHPUnit_Framework_TestCase
      */
     public function testFactory()
     {
-        $text = FieldType::create( 'ezstring' );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\TextLine', $text, "TextLine object not returned for 'ezstring', incorrect mapping? " );
+        self::assertInstanceOf(
+            "ezp\\Content\\FieldType\\TextLine",
+            Factory::build( "ezstring" ),
+            "TextLine object not returned for 'ezstring', incorrect mapping? "
+        );
     }
 
     public function testTextLineSupportsSearch()
