@@ -218,11 +218,22 @@ class RepositoryHandler implements HandlerInterface
     {
         if ( !isset( $this->dbHandler ) )
         {
-            $this->dbHandler = new EzcDbHandler(
-                \ezcDbFactory::create(
-                    $this->configurator->getDsn()
-                )
-            );
+            $connection = \ezcDbFactory::create( $this->configurator->getDsn() );
+            $database   = preg_replace( '(^([a-z]+).*)', '\\1', $this->configurator->getDsn() );
+
+            switch ( $database )
+            {
+                case 'pgsql':
+                    $this->dbHandler = new EzcDbHandler\Pgsql( $connection );
+                    break;
+
+                case 'sqlite':
+                    $this->dbHandler = new EzcDbHandler\Sqlite( $connection );
+                    break;
+
+                default:
+                    $this->dbHandler = new EzcDbHandler( $connection );
+            }
         }
         return $this->dbHandler;
     }

@@ -307,6 +307,24 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
+     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::getDatabase
+     * @return void
+     */
+    public function testDatabaseInstance()
+    {
+        $method = new \ReflectionMethod(
+            'ezp\\Persistence\\Storage\\Legacy\\RepositoryHandler',
+            'getDatabase'
+        );
+        $method->setAccessible( true );
+
+        $dbHandler = $method->invoke( $this->getRepositoryHandlerFixture() );
+        $className = get_class( $this->getDatabaseHandler() );
+
+        $this->assertTrue( $dbHandler instanceof $className, get_class( $dbHandler ) . " not of type $className." );
+    }
+
+    /**
      * Returns the test suite with all tests declared in this class.
      *
      * @return \PHPUnit_Framework_TestSuite
