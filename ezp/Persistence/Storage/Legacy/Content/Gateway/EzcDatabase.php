@@ -233,6 +233,21 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Sets the state of object identified by $contentId and $version to $state.
+     *
+     * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
+     *
+     * @param int $contentId
+     * @param int $version
+     * @param int $status
+     * @return boolean
+     */
+    public function setStatus( $contentId, $version, $status )
+    {
+        throw new \RuntimeException( '@TODO: Implement.' );
+    }
+
+    /**
      * Inserts a new field.
      *
      * Only used when a new content object is created. After that, field IDs

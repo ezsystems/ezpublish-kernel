@@ -860,6 +860,29 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::setStatus
+     */
+    public function testSetStatus()
+    {
+        $handler = new Handler(
+            ( $gatewayMock = $this->getGatewayMock() ),
+            $this->getLocationHandlerMock(),
+            ( $mapperMock = $this->getMapperMock() ),
+            $this->getStorageRegistryMock()
+        );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'setStatus' )
+            ->with( 23, 5, 2 )
+            ->will( $this->returnValue( true ) );
+
+        $this->assertTrue(
+            $handler->setStatus( 23, 2, 5 )
+        );
+    }
+
+    /**
      * Returns a StorageRegistry mock.
      *
      * @return StorageRegistry

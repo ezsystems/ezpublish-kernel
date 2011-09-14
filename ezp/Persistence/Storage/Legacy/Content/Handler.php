@@ -210,7 +210,7 @@ class Handler implements BaseContentHandler
      */
     public function setStatus( $contentId, $status, $version )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        return $this->contentGateway->setStatus( $contentId, $version, $status );
     }
 
     /**
