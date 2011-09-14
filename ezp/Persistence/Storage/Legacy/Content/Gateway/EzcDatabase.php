@@ -84,6 +84,9 @@ class EzcDatabase extends Gateway
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject' )
         )->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcontentobject', 'id' )
+        )->set(
             $this->dbHandler->quoteColumn( 'current_version' ),
             $q->bindValue( $content->currentVersionNo, null, \PDO::PARAM_INT )
         )->set(
@@ -118,7 +121,9 @@ class EzcDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return $this->dbHandler->lastInsertId();
+        return $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcontentobject', 'id' )
+        );
     }
 
     /**
@@ -195,7 +200,9 @@ class EzcDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return $this->dbHandler->lastInsertId( $this->dbHandler->getSequenceName( 'ezcontentobject_version', 'id' ) );
+        return $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcontentobject_version', 'id' )
+        );
     }
 
     /**

@@ -47,6 +47,9 @@ class EzcDatabase extends Gateway
         $query->insertInto(
             $this->dbHandler->quoteTable( 'ezsection' )
         )->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezsection', 'id' )
+        )->set(
             $this->dbHandler->quoteColumn( 'name' ),
             $query->bindValue( $name )
         )->set(
@@ -57,7 +60,9 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        return $this->dbHandler->lastInsertId();
+        return $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezsection', 'id' )
+        );
     }
 
     /**

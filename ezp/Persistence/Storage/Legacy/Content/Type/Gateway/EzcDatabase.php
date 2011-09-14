@@ -117,6 +117,9 @@ class EzcDatabase extends Gateway
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentclassgroup' )
         )->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcontentclassgroup', 'id' )
+        )->set(
             $this->dbHandler->quoteColumn( 'created' ),
             $q->bindValue( $group->created, null, \PDO::PARAM_INT )
         )->set(
@@ -135,7 +138,9 @@ class EzcDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return $this->dbHandler->lastInsertId();
+        return $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcontentclassgroup', 'id' )
+        );
     }
 
     /**
@@ -324,7 +329,9 @@ class EzcDatabase extends Gateway
         $this->setCommonTypeColumns( $q, $type );
         $q->prepare()->execute();
 
-        $type->id = $this->dbHandler->lastInsertId( $this->dbHandler->getSequenceName( 'ezcontentclass', 'id' ) );
+        $type->id = $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcontentclass', 'id' )
+        );
         $this->insertTypeNameData( $type->id, $type->status, $type->name );
 
         return $type->id;
@@ -564,6 +571,9 @@ class EzcDatabase extends Gateway
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass_attribute' ) );
         $q->set(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->getAutoIncrementValue( 'ezcontentclass_attribute', 'id' )
+        )->set(
             $this->dbHandler->quoteColumn( 'contentclass_id' ),
             $q->bindValue( $typeId, null, \PDO::PARAM_INT )
         )->set(
@@ -575,7 +585,9 @@ class EzcDatabase extends Gateway
         $stmt = $q->prepare();
         $stmt->execute();
 
-        return $this->dbHandler->lastInsertId();
+        return $this->dbHandler->lastInsertId(
+            $this->dbHandler->getSequenceName( 'ezcontentclass_attribute', 'id' )
+        );
     }
 
     /**
