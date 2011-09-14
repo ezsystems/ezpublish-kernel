@@ -560,4 +560,30 @@ class ContentTest extends BaseServiceTest
         $content = $this->service->load( 1 );
         $draft = $this->service->createDraftFromVersion( $content, new Version( $content ) );
     }
+
+    /**
+     * @expectedException \ezp\Base\Exception\Logic
+     */
+    public function testPublishNonDraft()
+    {
+        $content = $this->service->load( 1 );
+        $version = $content->currentVersion;
+        $this->service->publish( $content, $version );
+    }
+
+    /**
+     * @expectedException \ezp\Base\Exception\Logic
+     */
+    public function testPublishContentVersionMismatch()
+    {
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $location = $this->repository->getLocationService()->load( 2 );
+        $section = $this->repository->getSectionService()->load( 1 );
+        $newContent = new Content( $type, new User( 10 ) );
+
+        $content = $this->service->load( 1 );
+        $version = $content->currentVersion;
+
+        $this->service->publish( $newContent, $version );
+    }
 }

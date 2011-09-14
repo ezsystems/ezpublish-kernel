@@ -10,6 +10,7 @@
 namespace ezp\Content;
 use ezp\Base\Service as BaseService,
     ezp\Base\Collection\Lazy,
+    ezp\Base\Exception\Logic,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Proxy,
