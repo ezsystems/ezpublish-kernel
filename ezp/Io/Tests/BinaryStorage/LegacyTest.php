@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the QueryBuilderTest class
+ * File containing the ezp\Io\Tests\BinaryStorage\BinaryRepositoryLegacyTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,11 +9,18 @@
 
 namespace ezp\Io\Tests\BinaryStorage;
 use ezp\Base\BinaryRepository,
-    ezp\Io\BinaryFile, ezp\Io\BinaryFileCreateStruct, ezp\Io\BinaryFileUpdateStruct,
+    ezp\Io\BinaryFile,
+    ezp\Io\BinaryFileCreateStruct,
+    ezp\Io\BinaryFileUpdateStruct,
+    ezp\Io\Tests\BinaryRepositoryTest,
     eZClusterFileHandler,
     ezcBaseFile;
 
-class BinaryRepositoryLegacyTest extends \ezp\Io\Tests\BinaryRepositoryTest
+/**
+ * @fixme This class should be named LegacyTest according to the file name or
+ *        the file name must be adapted.
+ */
+class BinaryRepositoryLegacyTest extends BinaryRepositoryTest
 {
     public function setUp()
     {
@@ -33,11 +40,11 @@ class BinaryRepositoryLegacyTest extends \ezp\Io\Tests\BinaryRepositoryTest
             include $dependenciesPath  . 'ezdebug.php';
             include $dependenciesPath  . 'ezini.php';
 
-            include( 'ezpublish/lib/ezfile/classes/ezfile.php' );
-            include( 'ezpublish/lib/ezfile/classes/ezdir.php' );
-            include( 'ezpublish/lib/ezfile/classes/ezfilehandler.php' );
-            include( 'ezpublish/kernel/classes/ezclusterfilehandler.php' );
-            include( 'ezpublish/kernel/classes/clusterfilehandlers/ezfsfilehandler.php' );
+            include 'ezpublish/lib/ezfile/classes/ezfile.php';
+            include 'ezpublish/lib/ezfile/classes/ezdir.php';
+            include 'ezpublish/lib/ezfile/classes/ezfilehandler.php';
+            include 'ezpublish/kernel/classes/ezclusterfilehandler.php';
+            include 'ezpublish/kernel/classes/clusterfilehandlers/ezfsfilehandler.php';
         }
 
         $this->binaryRepository = new BinaryRepository( 'legacy' );
@@ -68,4 +75,3 @@ class BinaryRepositoryLegacyTest extends \ezp\Io\Tests\BinaryRepositoryTest
         self::markTestSkipped();
     }
 }
-?>
