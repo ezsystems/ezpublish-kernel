@@ -244,7 +244,29 @@ class EzcDatabase extends Gateway
      */
     public function setStatus( $contentId, $version, $status )
     {
-        throw new \RuntimeException( '@TODO: Implement.' );
+        $q = $this->dbHandler->createUpdateQuery();
+        $q->update(
+            $this->dbHandler->quoteTable( 'ezcontentobject_version' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'status' ),
+            $q->bindValue( $status, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'modified' ),
+            $q->bindValue( time(), null, \PDO::PARAM_INT )
+        )->where( $q->expr->lAnd(
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+            ),
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'version' ),
+                $q->bindValue( $version, null, \PDO::PARAM_INT )
+            )
+        ) );
+        $statement = $q->prepare();
+        $statement->execute();
+
+        return (bool) $statement->rowCount();
     }
 
     /**

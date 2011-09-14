@@ -182,6 +182,43 @@ class EzcDatabaseTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::setStatus
+     */
+    public function testSetStatus()
+    {
+        $version = $this->getVersionFixture();
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->insertVersion( $version, true );
+
+        $this->assertTrue(
+            $gateway->setStatus( $version->contentId, $version->versionNo, 2 )
+        );
+
+        $this->assertQueryResult(
+            array( array( '2' ) ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( 'status' )
+                ->from( 'ezcontentobject_version' )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::setStatus
+     */
+    public function testSetStatusUnknownVersion()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        $this->assertFalse(
+            $gateway->setStatus( 23, 42, 2 )
+        );
+    }
+
+    /**
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::updateVersion
      * @return void
      */
