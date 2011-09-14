@@ -21,7 +21,7 @@ use ezp\Content\FieldType,
  * Field type representing a list of authors, consisting of author name, and
  * author email.
  */
-class Author extends FieldType
+class Author extends Complex
 {
     protected $fieldTypeString = 'ezauthor';
     protected $defaultValue = null;

@@ -9,8 +9,10 @@
 
 namespace ezp\Content\FieldType;
 use ezp\Content\FieldType,
+    ezp\Content\FieldType\Value,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue,
+    ezp\Persistence\Content\PersistenceFieldValue,
     ezp\Content\Type\FieldDefinition;
 
 /**
@@ -21,26 +23,33 @@ use ezp\Content\FieldType,
 class TextLine extends FieldType
 {
     protected $fieldTypeString = 'ezstring';
-    protected $defaultValue = '';
     protected $isSearchable = true;
+
+    /**
+     * Default value
+     * @var \ezp\Content\FieldType\TextLine\Value
+     */
+    protected $defaultValue;
 
     protected $allowedValidators = array( 'StringLengthValidator' );
 
     public function __construct()
     {
         parent::__construct();
+        $this->defaultValue = new TextLineValue;
     }
 
     /**
-     * Checks if value can be parsed.
+     * Checks if $inputValue can be parsed.
+     * If the $inputValue actually can be parsed, the value is returned.
+     * Otherwise, an \ezp\Base\Exception\BadFieldTypeInput exception is thrown
      *
-     * If the value actually can be parsed, the value is returned.
-     *
-     * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param mixed $inputValue
-     * @return mixed
+     * @abstract
+     * @throws \ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
+     * @param \ezp\Content\FieldType\Value $inputValue
+     * @return \ezp\Content\FieldType\Value
      */
-    protected function canParseValue( $inputValue )
+    protected function canParseValue( Value $inputValue )
     {
         if ( !is_string( $inputValue ) )
         {
@@ -50,37 +59,15 @@ class TextLine extends FieldType
     }
 
     /**
-     * Sets the value of a field type.
+     * Injects the value of a field in the field type.
      *
-     * @param string $inputValue
+     * @abstract
+     * @param \ezp\Content\FieldType\Value $inputValue
      * @return void
      */
-    public function setValue( $inputValue )
+    public function setValue( Value $inputValue )
     {
         $this->value = $this->canParseValue( $inputValue );
-    }
-
-    /**
-     * This field type does not have a handler object.
-     *
-     * @return void
-     */
-    public function getHandler()
-    {
-        return;
-    }
-
-    /**
-     * Method to populate the FieldValue struct for field types
-     *
-     * @internal
-     * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
-     * @return void
-     */
-    public function setFieldValue( FieldValue $valueStruct )
-    {
-        $valueStruct->data = $this->getValueData();
-        $valueStruct->sortKey = $this->getSortInfo();
     }
 
     /**
@@ -91,7 +78,7 @@ class TextLine extends FieldType
      */
     protected function getSortInfo()
     {
-         return array( 'sort_key_string' => $this->value );
+         return array( 'sort_key_string' => $this->value->text );
     }
 
     /**
@@ -102,6 +89,6 @@ class TextLine extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value );
+        return array( 'value' => $this->value->text );
     }
 }

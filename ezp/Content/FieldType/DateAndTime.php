@@ -52,17 +52,6 @@ class DateAndTime extends FieldType
     }
 
     /**
-     * Returns a handler, aka. a helper object which aids in the manipulation of
-     * complex field type values.
-     *
-     * @return void|ezp\Content\FieldType\Handler
-     */
-    public function getHandler()
-    {
-        return;
-    }
-
-    /**
      * Method to populate the FieldValue struct for field types.
      *
      * This method is used by the business layer to populate the value object

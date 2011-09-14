@@ -9,7 +9,8 @@
 
 namespace ezp\Content;
 use ezp\Content\FieldType\FieldSettings,
-    ezp\Persistence\Content\FieldValue,
+    ezp\Content\FieldType\Value,
+    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
     ezp\Content\Type\FieldDefinition,
     ezp\Base\Configuration,
     ezp\Base\Exception\MissingClass;
@@ -41,8 +42,8 @@ abstract class FieldType
     protected $fieldTypeString;
 
     /**
-     * @var mixed Fallback default value of field type when no such default
-     * value is provided in the field definition in content types.
+     * @var \ezp\Content\FieldType\Value Fallback default value of field type when no such default
+     *                                   value is provided in the field definition in content types.
      */
     protected $defaultValue;
 
@@ -81,7 +82,7 @@ abstract class FieldType
     /**
      * Value of field type.
      *
-     * @var mixed
+     * @var \ezp\Content\FieldType\Value
      */
     protected $value;
 
@@ -97,6 +98,8 @@ abstract class FieldType
      * Does the field type support search.
      *
      * @return boolean
+     * @todo Shouldn't searchable feature part of a Searchable interface to be implemented
+     *       by field types, with appropriate methods like metadata() ?
      */
     public function supportsSearch()
     {
@@ -170,33 +173,33 @@ abstract class FieldType
     }
 
     /**
-     * Checks if value can be parsed.
-     *
-     * If the value actually can be parsed, the value is returned.
+     * Checks if $inputValue can be parsed.
+     * If the $inputValue actually can be parsed, the value is returned.
+     * Otherwise, an \ezp\Base\Exception\BadFieldTypeInput exception is thrown
      *
      * @abstract
-     * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param mixed $inputValue
-     * @return mixed
+     * @throws \ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
+     * @param \ezp\Content\FieldType\Value $inputValue
+     * @return \ezp\Content\FieldType\Value
      */
-    abstract protected function canParseValue( $inputValue );
+    abstract protected function canParseValue( Value $inputValue );
 
     /**
-     * Sets the value of a field type.
+     * Injects the value of a field in the field type.
      *
      * @abstract
-     * @param $inputValue
+     * @param \ezp\Content\FieldType\Value $inputValue
      * @return void
      */
-    abstract public function setValue( $inputValue );
+    abstract public function setValue( Value $inputValue );
 
     /**
-     * Returns the value of a field type.
+     * Returns the value of associated field.
      *
      * If no value has yet been set, the default value of that field type is
      * returned.
      *
-     * @return mixed
+     * @return \ezp\Content\FieldType\Value|null
      */
     public function getValue()
     {
@@ -208,29 +211,35 @@ abstract class FieldType
     }
 
     /**
-     * Returns a handler, aka. a helper object which aids in the manipulation of
-     * complex field type values.
-     *
-     * @abstract
-     * @return void|ezp\Content\FieldType\Handler
-     */
-    abstract public function getHandler();
-
-    /**
-     * Method to populate the FieldValue struct for field types.
-     *
-     * This method is used by the business layer to populate the value object
-     * for field type data.
+     * Method to populate the FieldValue struct for field types
      *
      * @internal
-     * @abstract
      * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
      * @return void
      */
-    abstract public function setFieldValue( FieldValue $valueStruct );
+    public function setFieldValue( PersistenceFieldValue $valueStruct )
+    {
+        $valueStruct->data = $this->getValueData();
+        $valueStruct->sortKey = $this->getSortInfo();
+    }
 
     /**
-     * Returns information for FieldValue->$sortKey relevant to the field type.
+     * Returns information for PersistenceFieldValue->$sortKey relevant to the field type.
+     * Return value is an array where key is the sort type, value is field value to be used for sorting.
+     * Sort type can be :
+     *  - sort_key_string (sorting will be made with a string algorythm)
+     *  - sort_key_int (sorting will be made with an integer algorythm)
+     *
+     * <code>
+     * protected function getSortInfo()
+     * {
+     *     // Example for a text line type:
+     *     return array( 'sort_key_string' => $this->value->text );
+     *
+     *     // Example for an int:
+     *     // return array( 'sort_key_int' => 123 );
+     * }
+     * </code>
      *
      * @abstract
      * @return array
