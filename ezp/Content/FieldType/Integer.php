@@ -23,7 +23,7 @@ class Integer extends FieldType
     protected $defaultValue = 0;
     protected $isSearchable = true;
 
-    protected $allowedValidators = array( "IntegerValidator" );
+    protected $allowedValidators = array( "IntegerValueValidator" );
 
     /**
      * Checks if value can be parsed.
