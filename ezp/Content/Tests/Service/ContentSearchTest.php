@@ -112,7 +112,7 @@ class ContentSearchTest extends BaseServiceTest
     {
         $qb = new QueryBuilder;
         $qb->addCriteria(
-            $qb->fulltext->like( 'foo*' )
+            $qb->fullText->like( 'foo*' )
         )->addSortClause(
             $qb->sort->field( 'folder', 'name', Query::SORT_ASC ),
             $qb->sort->dateCreated( Query::SORT_DESC )
