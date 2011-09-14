@@ -67,12 +67,18 @@ class TrashHandlerTest extends HandlerTest
     protected $contentToDelete = array();
 
     /**
+     * @var \ezp\Persistence\Content\Location\Trash\Handler
+     */
+    protected $trashHandler;
+
+    /**
      * Setup the HandlerTest.
      */
     protected function setUp()
     {
         parent::setUp();
 
+        $this->trashHandler = $this->repositoryHandler->trashHandler();
         $this->lastLocationId = 2;
         for ( $i = 0 ; $i < $this->entriesGenerated; ++$i )
         {
@@ -124,6 +130,8 @@ class TrashHandlerTest extends HandlerTest
      */
     protected function tearDown()
     {
+        $this->trashHandler->emptyTrash();
+        $this->trashHandler = null;
         $locationHandler = $this->repositoryHandler->locationHandler();
 
         // Removing default objects as well as those created by tests
@@ -162,7 +170,16 @@ class TrashHandlerTest extends HandlerTest
      */
     public function testLoad()
     {
-        $this->markTestIncomplete();
+        $trashed = $this->trashHandler->trashSubtree( $this->locations[0]->id );
+        $trashedId = $trashed->id;
+        unset( $trashed );
+
+        $trashed = $this->trashHandler->load( $trashedId );
+        self::assertInstanceOf( 'ezp\\Persistence\\Content\\Location\\Trashed', $trashed );
+        foreach ( $this->locations[0] as $property => $value )
+        {
+            self::assertEquals( $value, $trashed->$property );
+        }
     }
 
     /**
@@ -172,27 +189,9 @@ class TrashHandlerTest extends HandlerTest
      */
     public function testLoadNonExistent()
     {
-        $this->markTestIncomplete();
+        $this->trashHandler->load( 0 );
     }
 
-    /**
-     * @group trashHandler
-     * @covers \ezp\Persistence\Storage\InMemory\TrashHandler::loadFromLocationId
-     */
-    public function testLoadFromLocationId()
-    {
-        $this->markTestIncomplete();
-    }
-
-    /**
-     * @expectedException \ezp\Base\Exception\NotFound
-     * @covers \ezp\Persistence\Storage\InMemory\TrashHandler::loadByLocationId
-     * @group trashHandler
-     */
-    public function testLoadByLocationIdNonExistent()
-    {
-        $this->markTestIncomplete();
-    }
 
     /**
      * @group trashHandler
