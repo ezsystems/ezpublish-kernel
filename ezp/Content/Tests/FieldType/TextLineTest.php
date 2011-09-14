@@ -51,10 +51,10 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $ft = new TextLine();
         self::assertTrue( $ft->supportsSearch(), "TextLine should report support for search." );
 
-        $ref = new ReflectionClass( 'ezp\\Content\FieldType\\TextLine' );
+        $ref = new ReflectionClass( 'ezp\\Content\\FieldType\\TextLine' );
         $searchProperty = $ref->getProperty( 'isSearchable' );
         $searchProperty->setAccessible( true );
-        self::assertTrue ( $searchProperty->getValue( $ft ), "The internal search attribute is not set correctly." );
+        self::assertTrue( $searchProperty->getValue( $ft ), "The internal search attribute is not set correctly." );
     }
 
     /**
