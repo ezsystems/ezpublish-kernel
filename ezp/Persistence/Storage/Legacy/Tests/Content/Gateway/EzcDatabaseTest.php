@@ -420,6 +420,102 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::load
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     */
+    public function testLoadWithAllTranslations()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $res = $gateway->load( 226, 2 );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_attribute_language_code',
+            array( 'eng-US', 'eng-GB' ),
+            $res
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::load
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     */
+    public function testLoadWithSingleTranslation()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $res = $gateway->load( 226, 2, array( 'eng-GB' ) );
+
+        $this->assertValuesInRows(
+            'ezcontentobject_attribute_language_code',
+            array( 'eng-GB' ),
+            $res
+        );
+        $this->assertEquals(
+            1,
+            count( $res )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::load
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     */
+    public function testLoadNonExistentTranslation()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $res = $gateway->load( 226, 2, array( 'de-DE' ) );
+
+        $this->assertEquals(
+            0,
+            count( $res )
+        );
+    }
+
+    /**
+     * Asserts that $columnKey in $actualRows exactly contains $expectedValues
+     *
+     * @param string $columnKey
+     * @param string[] $expectedValues
+     * @param string[][] $actualRows
+     * @return void
+     */
+    protected function assertValuesInRows( $columnKey, array $expectedValues, array $actualRows )
+    {
+        $expectedValues = array_fill_keys(
+            array_values( $expectedValues ),
+            true
+        );
+        $containedValues = array();
+
+        foreach ( $actualRows as $row )
+        {
+            if ( isset( $row[$columnKey] ) )
+            {
+                $containedValues[$row[$columnKey]] = true;
+            }
+        }
+
+        $this->assertEquals(
+            $expectedValues,
+            $containedValues
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::getAllLocationIds
      */
     public function testGetAllLocationIds()

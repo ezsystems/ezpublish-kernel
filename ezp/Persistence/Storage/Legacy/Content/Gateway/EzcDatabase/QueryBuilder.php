@@ -36,9 +36,10 @@ class QueryBuilder
      * Creates a select query with all necessary joins to fetch a complete
      * content object. Does not apply any WHERE conditions.
      *
+     * @param string[] $translations
      * @return ezcQuerySelect
      */
-    public function createFindQuery()
+    public function createFindQuery( array $translations = null )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query->select(
@@ -120,6 +121,16 @@ class QueryBuilder
                 )
             )
         );
+
+        if ( $translations !== null )
+        {
+            $query->where(
+                $query->expr->in(
+                    $this->dbHandler->quoteColumn( 'language_code', 'ezcontentobject_attribute' ),
+                    $translations
+                )
+            );
+        }
 
         return $query;
     }

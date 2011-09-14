@@ -403,11 +403,12 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $contentId
      * @param mixed $version
+     * @param string[] $translations
      * @return array
      */
-    public function load( $contentId, $version )
+    public function load( $contentId, $version, $translations = null )
     {
-        $query = $this->queryBuilder->createFindQuery();
+        $query = $this->queryBuilder->createFindQuery( $translations );
         $query->where(
             $query->expr->lAnd(
                 $query->expr->eq(

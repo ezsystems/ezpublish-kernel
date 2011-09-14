@@ -182,7 +182,7 @@ class Handler implements BaseContentHandler
      */
     public function load( $id, $version, $translations = null )
     {
-        $rows = $this->contentGateway->load( $id, $version );
+        $rows = $this->contentGateway->load( $id, $version, $translations );
 
         if ( !count( $rows ) )
         {

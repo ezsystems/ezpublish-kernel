@@ -89,6 +89,18 @@ abstract class Gateway
     abstract public function updateField( Field $field, StorageFieldValue $value );
 
     /**
+     * Load data for a content object
+     *
+     * Returns an array with the relevant data.
+     *
+     * @param mixed $contentId
+     * @param mixed $version
+     * @param string[] $translations
+     * @return array
+     */
+    abstract public function load( $contentId, $version, $translations = null );
+
+    /**
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId
