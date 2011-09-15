@@ -11,14 +11,15 @@ namespace ezp\Content;
 use ezp\Base\Model,
     ezp\Content\Version,
     ezp\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Field as FieldVO;
+    ezp\Persistence\Content\Field as FieldVO,
+    ezp\Content\FieldType\Value as FieldValue;
 
 /**
  * This class represents a Content's field
  *
  * @property-read mixed $id
  * @property-ready string $type
- * @property-read FieldValue $value
+ * @property \ezp\Content\FieldType\Value $value Value for current field
  * @property string $type
  * @property mixed $language
  * @property-read int $versionNo
@@ -33,7 +34,6 @@ class Field extends Model
     protected $readWriteProperties = array(
         'id' => false,
         'type' => false,
-        'value' => true,
         'language' => true,
         'versionNo' => false,
     );
@@ -44,6 +44,7 @@ class Field extends Model
     protected $dynamicProperties = array(
         'version' => false,
         'fieldDefinition' => false,
+        'value' => true
     );
 
     /**
@@ -55,6 +56,11 @@ class Field extends Model
      * @var \ezp\Content\Type\FieldDefinition
      */
     protected $fieldDefinition;
+
+    /**
+     * @var \ezp\Content\FieldType\Value
+     */
+    protected $value;
 
     /**
      * Constructor, sets up properties
@@ -70,9 +76,10 @@ class Field extends Model
             array(
                 "type" => $fieldDefinition->fieldType,
                 "fieldDefinitionId" => $fieldDefinition->id,
-                "value" => $fieldDefinition->defaultValue,
+                //"value" => $fieldDefinition->defaultValue,
             )
         );
+        $this->value = $fieldDefinition->defaultValue;
     }
 
     /**
@@ -94,6 +101,25 @@ class Field extends Model
     {
         return $this->fieldDefinition;
     }
-}
 
-?>
+    /**
+     * Returns current field value as FieldValue object
+     *
+     * @return \ezp\Content\FieldType\Value
+     */
+    protected function getValue()
+    {
+        return $this->value;
+    }
+
+    /**
+     * Assigns FieldValue object $inputValue to current field
+     *
+     * @param \ezp\Content\FieldType\Value $inputValue
+     */
+    protected function setValue( FieldValue $inputValue )
+    {
+        $this->value = $inputValue;
+        $this->fieldDefinition->type->setValue( $inputValue );
+    }
+}
