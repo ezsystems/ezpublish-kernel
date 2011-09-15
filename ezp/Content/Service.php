@@ -298,7 +298,7 @@ class Service extends BaseService
      * </code>
      *
      * @param \ezp\Content\Query $query
-     * @return \ezp\Content[]
+     * @return \ezp\Content\Result
      * @todo User permissions
      * @todo Translation filter
      */

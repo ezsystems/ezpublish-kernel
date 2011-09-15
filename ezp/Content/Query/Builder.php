@@ -284,8 +284,8 @@ class Builder
 
     /**
      * Query limit, as a number of items
-     * @var int
+     * @var int|null
      */
-    public $limit = 0;
+    public $limit;
 }
 ?>
