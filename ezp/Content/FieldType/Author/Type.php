@@ -79,7 +79,7 @@ class Type extends Complex
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value );
+        return array( 'value' => $this->getValue() );
     }
 
     /**

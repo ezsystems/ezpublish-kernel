@@ -74,7 +74,7 @@ abstract class FieldType
      *
      * @var \ezp\Content\FieldType\Value
      */
-    protected $value;
+    private $value;
 
     /**
      * Constructs field type object, initializing internal data structures.
@@ -205,7 +205,7 @@ abstract class FieldType
      * protected function getSortInfo()
      * {
      *     // Example for a text line type:
-     *     return array( 'sort_key_string' => $this->value->text );
+     *     return array( 'sort_key_string' => $this->getValue()->text );
      *
      *     // Example for an int:
      *     // return array( 'sort_key_int' => 123 );
@@ -220,6 +220,17 @@ abstract class FieldType
     /**
      * Returns the value of the field type in a format suitable for packing it
      * in a FieldValue.
+     * Return value is a hash where key is 'value' and value is current field value to be stored.
+     * Here some serialization/format can be done in order to store complex values
+     * (through XML, php serialize, or whatever solution that can be stored as string)
+     *
+     * <code>
+     * protected function getValueData()
+     * {
+     *     // Example for a text line type:
+     *     return array( 'value' => $this->getValue()->text );
+     * }
+     * </code>
      *
      * @abstract
      * @return array

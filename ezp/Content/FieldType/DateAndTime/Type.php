@@ -49,7 +49,7 @@ class Type extends FieldType
      */
     protected function getSortInfo()
     {
-        return array( 'sort_key_int' => $this->value->getTimestamp() );
+        return array( 'sort_key_int' => $this->getValue()->getTimestamp() );
     }
 
     /**
@@ -60,7 +60,7 @@ class Type extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value->getTimestamp() );
+        return array( 'value' => $this->getValue()->getTimestamp() );
     }
 
 

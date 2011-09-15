@@ -65,7 +65,7 @@ class Type extends FieldType
      */
     protected function getSortInfo()
     {
-         return array( 'sort_key_string' => $this->value->text );
+         return array( 'sort_key_string' => $this->getValue()->text );
     }
 
     /**
@@ -76,6 +76,6 @@ class Type extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value->text );
+        return array( 'value' => $this->getValue()->text );
     }
 }

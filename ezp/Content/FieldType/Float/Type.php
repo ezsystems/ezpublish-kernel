@@ -62,7 +62,7 @@ class Type extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value );
+        return array( 'value' => $this->getValue() );
     }
 
 }
