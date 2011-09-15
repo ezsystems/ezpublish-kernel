@@ -242,7 +242,7 @@ class Service extends BaseService
     /**
      * Un-Link a content type from a group ( remove a group from a type )
      *
-     * @param Type $type
+     * @param \ezp\Content\Type $type
      * @param Group $group
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
      * @throws \ezp\Base\Exception\BadRequest If $groupId is not an group on type or is the last one
@@ -255,7 +255,7 @@ class Service extends BaseService
     /**
      * Link a content type to a group ( add a group to a type )
      *
-     * @param Type $type
+     * @param \ezp\Content\Type $type
      * @param Group $group
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
      */
@@ -267,7 +267,7 @@ class Service extends BaseService
     /**
      * Adds a new field definition to an existing Type.
      *
-     * @param Type $type
+     * @param \ezp\Content\Type $type
      * @param FieldDefinition $field
      * @throws \ezp\Base\Exception\InvalidArgumentType If field has id already
      * @throws \ezp\Base\Exception\NotFound If type is not found
@@ -287,7 +287,7 @@ class Service extends BaseService
     /**
      * Remove a field definition from an existing Type.
      *
-     * @param Type $type
+     * @param \ezp\Content\Type $type
      * @param FieldDefinition $field
      * @throws \ezp\Base\Exception\NotFound If field/type is not found
      */
@@ -303,7 +303,7 @@ class Service extends BaseService
     /**
      * Remove a field definition from an existing Type.
      *
-     * @param Type $type
+     * @param \ezp\Content\Type $type
      * @param FieldDefinition $field
      * @throws \ezp\Base\Exception\NotFound If field/type is not found
      */
@@ -314,6 +314,19 @@ class Service extends BaseService
             $type->status,
             $field->getState( "properties" )
         );
+    }
+
+    /**
+     * Publish Type and update content objects.
+     *
+     * Updates content objects, depending on the changed field definitions.
+     *
+     * @param \ezp\Content\Type $type The type draft to publish
+     * @throws \ezp\Base\Exception\NotFound If type with Type::STATUS_DRAFT is not found
+     */
+    public function publish( Type $type  )
+    {
+        $this->handler->contentTypeHandler()->publish( $type->id );
     }
 
     /**

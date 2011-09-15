@@ -405,7 +405,7 @@ class TypeTest extends BaseServiceTest
      * @covers ezp\Content\Type\Service::copy
      * @expectedException \ezp\Base\Exception\NotFound
      */
-    public function testCopyInValidTypeId()
+    public function testCopyInvalidTypeId()
     {
         $this->service->copy( 10, 22 );
     }
@@ -415,7 +415,7 @@ class TypeTest extends BaseServiceTest
      * @covers ezp\Content\Type\Service::copy
      * @expectedException \ezp\Base\Exception\NotFound
      */
-    public function testCopyInValidStatus()
+    public function testCopyInvalidStatus()
     {
         $this->service->copy( 10, 1, 1 );
     }
@@ -683,5 +683,84 @@ class TypeTest extends BaseServiceTest
             self::fail( "Did not expect any exception here, but got:" . $e );
         }
         $this->service->updateFieldDefinition( $type, $type->fields[0] );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::publish
+     */
+    public function testPublish()
+    {
+        $do = new Type();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do->nameSchema = $do->urlAliasSchema = "<>";
+        $do->isContainer = true;
+        $do->initialLanguageId = 1;
+        $do->groups[] = $this->service->loadGroup( 1 );
+        $do = $this->service->create( $do );
+        $this->service->publish( $do );
+        $published = $this->service->load( $do->id );
+
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $published );
+        $this->assertEquals( TypeValue::STATUS_DEFINED, $published->status );
+        $this->assertEquals( count( $do->groups ), count( $published->groups ) );
+        $this->assertEquals( count( $do->fields ), count( $published->fields ) );
+        $this->assertEquals( $do->name, $published->name );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::publish
+     */
+    public function testPublishWithFields()
+    {
+        $do = new Type();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do->nameSchema = $do->urlAliasSchema = "<>";
+        $do->isContainer = true;
+        $do->initialLanguageId = 1;
+        $do->groups[] = $this->service->loadGroup( 1 );
+        $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
+        $field->identifier = 'title';
+        $field->defaultValue = 'New Test';
+        $do = $this->service->create( $do );
+        $this->service->publish( $do );
+        $published = $this->service->load( $do->id );
+
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $published );
+        $this->assertEquals( TypeValue::STATUS_DEFINED, $published->status );
+        $this->assertEquals( count( $do->groups ), count( $published->groups ) );
+        $this->assertEquals( count( $do->fields ), count( $published->fields ) );
+        $this->assertEquals( $do->name, $published->name );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::publish
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testPublishInvalidTypeId()
+    {
+        $type = new Type();
+        $struct = $type->getState( 'properties' );
+        $struct->id = 999;
+        $this->service->publish( $type );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::publish
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testPublishInvalidStatus()
+    {
+        $type = $this->service->load( 1 );
+        $this->service->publish( $type );
     }
 }
