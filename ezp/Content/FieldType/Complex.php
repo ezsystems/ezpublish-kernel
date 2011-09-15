@@ -47,7 +47,8 @@ abstract class Complex extends FieldType
      */
     public function setFieldValue( PersistenceFieldValue $valueStruct )
     {
-        parent::setFieldValue( $valueStruct );
+        $valueStruct = parent::setFieldValue( $valueStruct );
         $valueStruct->externalData = $this->getValueExternalData();
+        return $valueStruct;
     }
 }

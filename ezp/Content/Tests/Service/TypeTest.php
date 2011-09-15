@@ -14,7 +14,9 @@ use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Content\Type\FieldDefinition,
     ezp\Content\Type\Group,
     ezp\Base\Exception\NotFound,
-    Exception;
+    Exception,
+    ezp\Content\FieldType\Value,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for Type service
@@ -173,7 +175,7 @@ class TypeTest extends BaseServiceTest
         $do->groups[] = $this->service->loadGroup( 1 );
         $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
         $field->identifier = 'title';
-        $field->defaultValue = 'New Test';
+        $field->defaultValue = new TextLineValue( 'New Test' );
         $do = $this->service->create( $do );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
         $this->assertEquals( 1, count( $do->groups ) );
@@ -481,7 +483,8 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->load( 1, 0 );
         $field = new FieldDefinition( $type, 'ezstring' );
         $field->name = $field->description = array( 'eng-GB' => 'Test' );
-        $field->defaultValue = $field->fieldGroup = '';
+        $field->defaultValue = new TextLineValue;
+        $field->fieldGroup = '';
         $field->identifier = 'test';
         $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
         $this->service->addFieldDefinition( $type, $field );
@@ -514,7 +517,8 @@ class TypeTest extends BaseServiceTest
 
         $field = new FieldDefinition( $type, 'ezstring' );
         $field->name = $field->description = array( 'eng-GB' => 'Test' );
-        $field->defaultValue = $field->fieldGroup = '';
+        $field->defaultValue = new TextLineValue;
+        $field->fieldGroup = '';
         $field->identifier = 'test';
         $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
         $this->service->addFieldDefinition( $type, $field );

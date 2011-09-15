@@ -191,6 +191,7 @@ abstract class FieldType
     {
         $valueStruct->data = $this->getValueData();
         $valueStruct->sortKey = $this->getSortInfo();
+        return $valueStruct;
     }
 
     /**

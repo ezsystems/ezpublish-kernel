@@ -13,7 +13,10 @@ use ezp\Content,
     ezp\Content\Section,
     ezp\Content\Type,
     ezp\Content\Type\FieldDefinition,
-    ezp\User;
+    ezp\User,
+    ezp\Content\FieldType\Value as FieldValue,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue,
+    ezp\Content\FieldType\Keyword\Value as KeywordValue;
 
 /**
  * Test case for Content class
@@ -36,8 +39,8 @@ class ContentTest extends \PHPUnit_Framework_TestCase
 
         // Add some fields
         $fields = array(
-            'title' => array( 'ezstring', 'New Article' ),
-            'tags' => array( 'ezkeyword', '' )
+            'title' => array( 'ezstring', new TextLineValue( 'New Article' ) ),
+            'tags' => array( 'ezkeyword', new KeywordValue() )
         );
         foreach ( $fields as $identifier => $data )
         {
