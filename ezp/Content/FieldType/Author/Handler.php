@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType\Handler;
-use ezp\Content\FieldType\Handler,
+namespace ezp\Content\FieldType\Author;
+use ezp\Content\FieldType\Handler as HandlerInterface,
     DOMDocument;
 
-class Author implements Handler
+class Handler implements HandlerInterface
 {
     protected $authors = array();
     protected $authorCount = 0;

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\TextLine;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
@@ -20,7 +20,7 @@ use ezp\Content\FieldType,
  *
  * This field type represents a simple string.
  */
-class TextLine extends FieldType
+class Type extends FieldType
 {
     protected $fieldTypeString = 'ezstring';
     protected $isSearchable = true;

@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\TextBlock;
 use ezp\Content\FieldType,
-    ezp\Content\FieldType\TextLine,
+    ezp\Content\FieldType\TextLine\Type as TextLine,
     ezp\Persistence\Content\FieldValue;
 
 /**
@@ -17,7 +17,7 @@ use ezp\Content\FieldType,
  *
  * Represents a larger body of text, such as text areas.
  */
-class TextBlock extends TextLine
+class Type extends TextLine
 {
     protected $fieldTypeString = 'eztext';
     protected $defaultValue = '';

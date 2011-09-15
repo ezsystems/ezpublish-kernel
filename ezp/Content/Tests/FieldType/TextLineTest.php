@@ -10,7 +10,7 @@
 namespace ezp\Content\Tests\FieldType;
 use PHPUnit_Framework_TestCase,
     ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\TextLine,
+    ezp\Content\FieldType\TextLine\Type as TextLine,
     ReflectionClass,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Persistence\Content\FieldValue,

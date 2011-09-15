@@ -1,31 +1,29 @@
 <?php
 /**
- * File containing the Author class
+ * File containing the Integer field type
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\Integer;
 use ezp\Content\FieldType,
-    \ezp\Base\Exception\BadFieldTypeInput,
-    \ezp\Persistence\Content\FieldValue,
-    \ezp\Content\FieldType\Handler\Author as AuthorHandler,
-    DOMDocument;
+    ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Persistence\Content\FieldValue;
 
 /**
- * Author field type.
+ * Integer field types
  *
- * Field type representing a list of authors, consisting of author name, and
- * author email.
+ * Represents integers.
  */
-class Author extends Complex
+class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezauthor';
-    protected $defaultValue = null;
+    protected $fieldTypeString = 'ezinteger';
+    protected $defaultValue = 0;
     protected $isSearchable = true;
+
+    protected $allowedValidators = array( "IntegerValueValidator" );
 
     /**
      * Checks if value can be parsed.
@@ -38,10 +36,9 @@ class Author extends Complex
      */
     protected function canParseValue( Value $inputValue )
     {
-        $dom = new DOMDocument( '1.0', 'utf-8' );
-        if ( !$dom->loadXML( $inputValue ) )
+        if ( !is_integer( $inputValue ) )
         {
-            throw new BadFieldTypeInput( $inputValue, __CLASS__ );
+            throw new BadFieldTypeInput( $inputValue, get_class() );
         }
         return $inputValue;
     }
@@ -58,17 +55,6 @@ class Author extends Complex
     }
 
     /**
-     * Returns a handler, aka. a helper object which aids in the manipulation of
-     * complex field type values.
-     *
-     * @return void|ezp\Content\FieldType\Handler
-     */
-    public function getHandler()
-    {
-        return new AuthorHandler();
-    }
-
-    /**
      * Method to populate the FieldValue struct for field types.
      *
      * This method is used by the business layer to populate the value object
@@ -80,7 +66,7 @@ class Author extends Complex
      */
     public function setFieldValue( FieldValue $valueStruct )
     {
-        $valueStruct->data = $this->getValueData();
+        $valueStruct->data = $this->getFieldTypeSettings() + $this->getValueData();
         $valueStruct->sortKey = $this->getSortInfo();
     }
 
@@ -91,10 +77,7 @@ class Author extends Complex
      */
     protected function getSortInfo()
     {
-        return array(
-            'sort_key_string' => '',
-            'sort_key_int' => 0
-        );
+        return array( 'sort_key_int' => $this->value );
     }
 
     /**
@@ -106,17 +89,5 @@ class Author extends Complex
     protected function getValueData()
     {
         return array( 'value' => $this->value );
-    }
-
-    /**
-     * Returns the external value of the field type in a format suitable for packing it
-     * in a FieldValue.
-     *
-     * @abstract
-     * @return null|array
-     * @todo Shouldn't it return a struct with appropriate properties instead of an array ?
-     */
-    public function getValueExternalData()
-    {
     }
 }

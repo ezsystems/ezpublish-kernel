@@ -1,25 +1,23 @@
 <?php
 /**
- * File containing the Float class
+ * File containing the DateTime class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\DateAndTime;
 use ezp\Content\FieldType,
-    ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Content\Type\FieldDefinition;
+    \ezp\Base\Exception\BadFieldTypeInput,
+    \ezp\Persistence\Content\FieldValue,
+    DateTime;
 
-class Float extends FieldType
+class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezfloat';
-    protected $defaultValue = 0.0;
-    protected $isSearchable = false;
-
-    protected $allowedValidators = array( 'FloatValueValidator' );
+    protected $fieldTypeString = 'ezdatetime';
+    protected $defaultValue = null;
+    protected $isSearchable = true;
 
     /**
      * Checks if value can be parsed.
@@ -32,11 +30,14 @@ class Float extends FieldType
      */
     protected function canParseValue( Value $inputValue )
     {
-        if ( !is_float( $inputValue ) )
+        $value = new DateTime( $inputValue );
+
+        if ( !$value instanceof DateTime )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
-        return $inputValue;
+        return $value;
+
     }
 
     /**
@@ -73,10 +74,7 @@ class Float extends FieldType
      */
     protected function getSortInfo()
     {
-        return array(
-            'sort_key_string' => '',
-            'sort_key_int' => 0
-        );
+        return array( 'sort_key_int' => $this->value->getTimestamp() );
     }
 
     /**
@@ -87,7 +85,8 @@ class Float extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value );
+        return array( 'value' => $this->value->getTimestamp() );
     }
+
 
 }

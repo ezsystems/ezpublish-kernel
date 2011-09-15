@@ -1,22 +1,26 @@
 <?php
 /**
- * File containing the DateTime class
+ * File containing the Checkbox class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\Checkbox;
 use ezp\Content\FieldType,
     \ezp\Base\Exception\BadFieldTypeInput,
-    \ezp\Persistence\Content\FieldValue,
-    DateTime;
+    \ezp\Persistence\Content\FieldValue;
 
-class DateAndTime extends FieldType
+/**
+ * Checkbox field type.
+ *
+ * Represent boolean values.
+ */
+class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezdatetime';
-    protected $defaultValue = null;
+    protected $fieldTypeString = 'ezboolean';
+    protected $defaultValue = false;
     protected $isSearchable = true;
 
     /**
@@ -30,14 +34,11 @@ class DateAndTime extends FieldType
      */
     protected function canParseValue( Value $inputValue )
     {
-        $value = new DateTime( $inputValue );
-
-        if ( !$value instanceof DateTime )
+        if ( !is_bool( $inputValue ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
-        return $value;
-
+        return $inputValue;
     }
 
     /**
@@ -74,7 +75,7 @@ class DateAndTime extends FieldType
      */
     protected function getSortInfo()
     {
-        return array( 'sort_key_int' => $this->value->getTimestamp() );
+        return array( 'sort_key_int' => $this->value ? 1 : 0 );
     }
 
     /**
@@ -85,8 +86,6 @@ class DateAndTime extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value->getTimestamp() );
+        return array( 'value' => $this->value ? 1 : 0 );
     }
-
-
 }

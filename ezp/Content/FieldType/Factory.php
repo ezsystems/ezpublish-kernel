@@ -20,16 +20,41 @@ abstract class Factory
      * Factory method for building field type object based on $identifier.
      *
      * @throws \ezp\Base\Exception\MissingClass
-     * @param string $identifier
+     * @param string $fieldTypeString
      * @return \ezp\Content\FieldType
      */
-    public static function build( $identifier )
+    public static function build( $fieldTypeString )
     {
         $fieldTypeMap = Configuration::getInstance( "content" )->get( "fields", "Type" );
-        if ( !isset( $fieldTypeMap[$identifier] ) )
+        if ( !isset( $fieldTypeMap[$fieldTypeString] ) )
         {
-            throw new MissingClass( $identifier, "FieldType" );
+            throw new MissingClass( $fieldTypeString, "FieldType" );
         }
-        return new $fieldTypeMap[$identifier];
+
+        $fieldTypeClass = "{$fieldTypeMap[$fieldTypeString]}\\Type";
+        if ( class_exists( $fieldTypeClass ) )
+        {
+            return new $fieldTypeClass;
+        }
+
+        throw new MissingClass( $fieldTypeString, "FieldType" );
+    }
+
+    /**
+     * Builds a field value object for a field type, identified by $fieldTypeString, based on $stringValue.
+     *
+     * @param string $fieldTypeString
+     * @param string $stringValue
+     * @return \ezp\Content\FieldType\Value
+     */
+    public static function buildValueFromString( $fieldTypeString, $stringValue )
+    {
+        $fieldTypeMap = Configuration::getInstance( "content" )->get( "fields", "Type" );
+        if ( !isset( $fieldTypeMap[$fieldTypeString] ) )
+        {
+            throw new MissingClass( $fieldTypeString, "FieldType" );
+        }
+        $fieldValueClass = "$fieldTypeMap[$fieldTypeString]\\Value";
+        return $fieldValueClass::fromString( $stringValue );
     }
 }

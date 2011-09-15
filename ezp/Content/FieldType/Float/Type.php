@@ -1,27 +1,25 @@
 <?php
 /**
- * File containing the Checkbox class
+ * File containing the Float class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\Float;
 use ezp\Content\FieldType,
-    \ezp\Base\Exception\BadFieldTypeInput,
-    \ezp\Persistence\Content\FieldValue;
+    ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Persistence\Content\FieldValue,
+    ezp\Content\Type\FieldDefinition;
 
-/**
- * Checkbox field type.
- *
- * Represent boolean values.
- */
-class Checkbox extends FieldType
+class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezboolean';
-    protected $defaultValue = false;
-    protected $isSearchable = true;
+    protected $fieldTypeString = 'ezfloat';
+    protected $defaultValue = 0.0;
+    protected $isSearchable = false;
+
+    protected $allowedValidators = array( 'FloatValueValidator' );
 
     /**
      * Checks if value can be parsed.
@@ -34,7 +32,7 @@ class Checkbox extends FieldType
      */
     protected function canParseValue( Value $inputValue )
     {
-        if ( !is_bool( $inputValue ) )
+        if ( !is_float( $inputValue ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
@@ -75,7 +73,10 @@ class Checkbox extends FieldType
      */
     protected function getSortInfo()
     {
-        return array( 'sort_key_int' => $this->value ? 1 : 0 );
+        return array(
+            'sort_key_string' => '',
+            'sort_key_int' => 0
+        );
     }
 
     /**
@@ -86,6 +87,7 @@ class Checkbox extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value ? 1 : 0 );
+        return array( 'value' => $this->value );
     }
+
 }
