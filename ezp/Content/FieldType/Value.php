@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Value class
+ * File containing the Value interface
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -10,7 +10,8 @@
 namespace ezp\Content\FieldType;
 
 /**
- * Description of Value
+ * Interface for all field value classes.
+ * A field value object is to be understood with associated field type
  */
 interface Value
 {
