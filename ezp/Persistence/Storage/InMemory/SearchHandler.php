@@ -79,16 +79,7 @@ class SearchHandler extends Handler
         if ( $criterion instanceof ContentId && $criterion->operator === Operator::EQ )
         {
             $content = $this->backend->load( "Content", $criterion->value[0] );
-
-            $versions = $this->backend->find( "Content\\Version", array( "contentId" => $content->id ) );
-            $versions[0]->fields = $this->backend->find( "Content\\Field", array( "_contentId" => $content->id,
-                                                                                  "versionNo" => $versions[0]->versionNo ) );
-
-            $content->version = $versions[0];
-
-            // @todo Loading locations by content object id should be possible using handler API.
-            $content->locations = $this->backend->find( "Content\\Location", array( "contentId" => $content->id  ) );
-            return $content;
+            return $this->handler->contentHandler()->load( $content->id, $content->currentVersionNo );
         }
 
         throw new Exception( "Not implemented yet." );
