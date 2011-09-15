@@ -28,7 +28,7 @@ class DateAndTime extends FieldType
      * @param mixed $inputValue
      * @return mixed
      */
-    protected function canParseValue( $inputValue )
+    protected function canParseValue( Value $inputValue )
     {
         $value = new DateTime( $inputValue );
 
@@ -46,7 +46,7 @@ class DateAndTime extends FieldType
      * @param $inputValue
      * @return void
      */
-    public function setValue( $inputValue )
+    public function setValue( Value $inputValue )
     {
         $this->value = $this->canParseValue( $inputValue );
     }
