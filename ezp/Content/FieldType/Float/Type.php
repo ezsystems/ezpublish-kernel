@@ -42,22 +42,6 @@ class Type extends FieldType
     }
 
     /**
-     * Method to populate the FieldValue struct for field types.
-     *
-     * This method is used by the business layer to populate the value object
-     * for field type data.
-     *
-     * @internal
-     * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
-     * @return void
-     */
-    public function setFieldValue( FieldValue $valueStruct )
-    {
-        $valueStruct->data = $this->getValueData();
-        $valueStruct->sortKey = $this->getSortInfo();
-    }
-
-    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @return array
