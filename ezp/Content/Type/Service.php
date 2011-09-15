@@ -143,6 +143,20 @@ class Service extends BaseService
     }
 
     /**
+     * Create a Content Type object and publish in one operation
+     *
+     * @param \ezp\Content\Type $type
+     * @return \ezp\Content\Type
+     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a empty value
+     * @throws \ezp\Base\Exception\Logic If a group is _not_ persisted, or if type / fields is
+     */
+    public function createAndPublish( Type $type )
+    {
+        $type->getState( 'properties' )->status = TypeValue::STATUS_DEFINED;
+        return $this->create( $type );
+    }
+
+    /**
      * Get a Content Type object by id
      *
      * @param int $typeId
