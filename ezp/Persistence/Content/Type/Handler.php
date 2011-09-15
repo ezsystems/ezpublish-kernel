@@ -72,11 +72,11 @@ interface Handler
     public function create( CreateStruct $contentType );
 
     /**
-     * @param mixed $typeId
+     * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
      */
-    public function update( $typeId, $status, UpdateStruct $contentType );
+    public function update( $contentTypeId, $status, UpdateStruct $contentType );
 
     /**
      * @param mixed $contentTypeId
