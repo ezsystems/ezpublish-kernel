@@ -229,12 +229,14 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testCopy()
     {
         $userId = 10;
-        $obj = $this->repositoryHandler->ContentTypeHandler()->copy( $userId, 1, 0 );
-        $original = $this->repositoryHandler->ContentTypeHandler()->load( 1, 0 );
+        $time = time();
+        $obj = $this->repositoryHandler->ContentTypeHandler()->copy( $userId, 1, Type::STATUS_DEFINED );
+        $original = $this->repositoryHandler->ContentTypeHandler()->load( 1, Type::STATUS_DEFINED );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
         $this->assertStringStartsWith( 'folder_', $obj->identifier );
         $this->assertEquals( $userId, $obj->creatorId );
-        $this->assertEquals( time(), $obj->created );//ehm
+        $this->assertEquals( $time, $obj->created );//ehm
+        $this->assertEquals( Type::STATUS_DRAFT, $obj->status );
         $this->assertGreaterThan( $original->created, $obj->created );
         $this->assertEquals( 2, count( $obj->fieldDefinitions ) );
         $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
