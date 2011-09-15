@@ -109,7 +109,7 @@ class TrashTest extends Base
         $this->location = $this->locationService->create( $this->location );
         $this->locationToDelete[] = $this->location;
 
-        $parentId = $this->topLocation->id;
+        $parent = $this->topLocation;
         for ( $i = 0; $i < 10; ++$i )
         {
             $content = new Content( $type, new User( 10 ) );
@@ -122,11 +122,11 @@ class TrashTest extends Base
             $this->contentToDelete[] = $content;
 
             $location = new Location( $content );
-            $location->parent = $this->locationService->load( $parentId );
+            $location->parent = $parent;
             $location = $this->locationService->create( $location );
             $this->locationToDelete[] = $location;
             $this->insertedLocations[] = $location;
-            $parentId = $location->id;
+            $parent = $location;
         }
     }
 

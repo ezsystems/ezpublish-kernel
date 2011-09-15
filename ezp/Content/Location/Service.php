@@ -17,6 +17,8 @@ use ezp\Base\Exception,
     ezp\Content\Location\Exception\NotFound as LocationNotFound,
     ezp\Base\Proxy,
     ezp\Content\Section,
+    ezp\Content\Query,
+    ezp\Content\Query\Builder,
     ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\Location\UpdateStruct;
@@ -73,12 +75,68 @@ class Service extends BaseService
     }
 
     /**
+     * Load children of a location object sorted by sortField and sortOrder
+     *
+     * @access private Used internally by $location->children
      * @param \ezp\Content\Location $location
      * @return \ezp\Content\Location[]
      */
     public function children( Location $location )
     {
-        return array();
+        // reuses contentService->find() for permissions and other reasons
+        if ( $location->sortOrder === Location::SORT_ORDER_ASC )
+            $order = Query::SORT_ASC;
+        else
+            $order = Query::SORT_DESC;
+
+        $qb = new Builder();
+        $qb->addCriteria( $qb->parentLocationId->eq( $location->id ) );
+
+        switch ( $location->sortField )
+        {
+            case Location::SORT_FIELD_SECTION:
+                $qb->addSortClause( $qb->sort->sectionName( $order ) );
+                break;
+            case Location::SORT_FIELD_PRIORITY:
+                $qb->addSortClause( $qb->sort->locationPriority( $order ) );
+                break;
+            case Location::SORT_FIELD_PATH:
+                $qb->addSortClause( $qb->sort->locationPathString( $order ) );
+                break;
+            case Location::SORT_FIELD_DEPTH:
+                $qb->addSortClause( $qb->sort->locationDepth( $order ) );
+                break;
+            case Location::SORT_FIELD_MODIFIED:
+                $qb->addSortClause( $qb->sort->dateModified( $order ) );
+                break;
+            case Location::SORT_FIELD_NAME:
+                $qb->addSortClause( $qb->sort->contentName( $order ) );
+                break;
+            default:
+                throw new Logic(
+                    "\$location->sortField:'{$location->sortField}'",
+                    "does mot currently have a corresponding SortClause"
+                );
+        }
+
+        $children = array();
+        $result = $this->repository->getContentService()->find( $qb->getQuery() );
+        foreach ( $result as $childContent )
+        {
+            foreach ( $childContent->locations as $child )
+            {
+                if ( $child->parentId == $location->id )
+                {
+                    $children[] = $child;
+                    continue 2;
+                }
+            }
+            throw new Logic(
+                __METHOD__,
+                "One of the returned content objects did not contain locations that where children of \$location"
+            );
+        }
+        return $children;
     }
 
     /**
@@ -293,8 +351,14 @@ class Service extends BaseService
         }
 
         $newState = array(
+            'properties' => $vo,
             'parent' => new Proxy( $this, $vo->parentId ),
-            'properties' => $vo
+            'children' => new Lazy(
+                'ezp\\Content\\Location',
+                $this,
+                $location,// api uses location to be able to use sort info
+                'children'
+            )
         );
         // Check if associated content also needs to be refreshed
         if ( $vo->contentId != $location->contentId )

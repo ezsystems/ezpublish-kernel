@@ -418,8 +418,8 @@ class Service extends BaseService
                     "children" => new Lazy(
                         "ezp\\Content\\Location",
                         $locationService,
-                        $location, // api seems to use location to be able to get out sort info as well
-                        "children" // Not implemented yet so this collection will return empty array atm
+                        $location, // api uses location to be able to use sort info
+                        'children'
                     )
                 )
             );

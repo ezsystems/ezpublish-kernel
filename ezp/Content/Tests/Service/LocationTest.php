@@ -84,7 +84,7 @@ class LocationTest extends BaseServiceTest
         $this->location = $this->service->create( $this->location );
         $this->locationToDelete[] = $this->location;
 
-        $parentId = $this->topLocation->id;
+        $parent = $this->topLocation;
         for ( $i = 0; $i < 10; ++$i )
         {
 
@@ -98,11 +98,11 @@ class LocationTest extends BaseServiceTest
             $this->contentToDelete[] = $content;
 
             $location = new Location( $content );
-            $location->parent = $this->service->load( $parentId );
+            $location->parent = $parent;
             $location = $this->service->create( $location );
             $this->locationToDelete[] = $location;
             $this->insertedLocations[] = $location;
-            $parentId = $location->id;
+            $parent = $location;
         }
     }
 
@@ -186,6 +186,17 @@ class LocationTest extends BaseServiceTest
     public function testLoad()
     {
         self::assertInstanceOf( 'ezp\\Content\\Location', $this->service->load( 2 ) );
+    }
+
+    /**
+     * @group locationService
+     * @covers ezp\Content\Location\Service::load
+     */
+    public function testChildren()
+    {
+        $location = $this->service->load( 2 );
+        self::assertInstanceOf( 'ezp\\Content\\Location', $location );
+        self::assertEquals( 2, count( $location->children ) );
     }
 
     /**
