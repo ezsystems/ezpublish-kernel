@@ -362,45 +362,16 @@ class Service extends BaseService
 
         $this->handler->beginTransaction();
 
-        // STEP: Set version pending + asynchronous publishing
-        // Note: it can't be done that way currently, as it implies that every subsequent operation is done asynchronously
-
-        // STEP: copy-translations
-        // Is it required with the current API ? Analyze
-
-        // STEP: set-version-archived
         $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_ARCHIVED, $content->currentVersion->versionNo );
-
-
-        $this->handler->locationHandler()->publishForContentVersion( $version->id );
-
-        // STEP: set-version-published
         $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_PUBLISHED, $version->versionNo );
 
-        // STEP: set-object-published
-        // - Set object to published if it isn't marked as such yet
-        //   Published object = object with at least one published location... right ?
-        // - Set the modified/published timestamps if they haven't been assigned an explicit value yet
-        // - Set object names
-        // - Set always available
-        // - link location to published version
-        $this->handler->contentHandler()->publish( $content->id );
+        $struct = new UpdateStruct();
+        $struct->id = $content->id;
+        $struct->userId = $version->creatorId;
+        $struct->versionNo = $version->versionNo;
+        // $struct->name = ... // @todo Get names using the appropriate call
 
-        // STEP: attribute-publish-action
-        // Call onPublish handler on each attribute of the published version
-
-        // STEP:: update-non-translatable-attributes
-        // Copy content from original language for non translatable attributes (only valid for new Content)
-
-        // Check excess versions @todo To match the old system, this should be done when creating the new version
-        // Legacy: done in eZContentObject::createNewVersion() with $versionCheck = true (default)
-        // $maxVersionCount = Configuration::getInstance( 'content' )->get( 'VersionManagement', 'DefaultVersionHistoryLimit' );
-        // if ( count( $content->versions ) > $maxVersionCount )
-        // {
-            // Delete the oldest version
-        // }
-
-        // Search engine indexing
+        $this->handler->contentHandler()->publish( $updateStruct );
 
         $this->handler->commit();
     }
