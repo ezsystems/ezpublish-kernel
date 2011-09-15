@@ -146,7 +146,7 @@ class CreateStruct extends ValueObject
     /**
      * Content fields in this type
      *
-     * @var Type\FieldDefinition[]
+     * @var \ezp\Persistence\Content\Type\FieldDefinition[]
      */
     public $fieldDefinitions = array();
 
