@@ -13,7 +13,10 @@ use ezp\Content\FieldType\FieldSettings,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
     ezp\Content\Type\FieldDefinition,
     ezp\Base\Configuration,
-    ezp\Base\Exception\MissingClass;
+    ezp\Base\Exception\MissingClass,
+    ezp\Base\Observer,
+    ezp\Base\Observable,
+    ezp\Base\Exception\InvalidArgumentValue;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -34,7 +37,7 @@ use ezp\Content\FieldType\FieldSettings,
  *
  * @todo Merge and optimize concepts for settings, validator data and field type properties.
  */
-abstract class FieldType
+abstract class FieldType implements Observer
 {
     /**
      * @var \ezp\Content\FieldType\Value Fallback default value of field type when no such default
@@ -256,6 +259,28 @@ abstract class FieldType
          if ( in_array( $validator->name(), $this->allowedValidators() ) )
          {
              $fieldDefinition->fieldTypeConstraints = array_merge( $fieldDefinition->fieldTypeConstraints, $validator->getValidatorConstraints() );
+         }
+     }
+
+     /**
+      * Called when subject has been updated
+      * Supported events:
+      *   - field/setValue Should be triggered when a field has been set a value. Will inject the value in the field type
+      *
+      * @param \ezp\Base\Observable $subject
+      * @param string $event
+      * @param array $arguments
+      */
+     public function update( Observable $subject, $event = 'update', array $arguments = null )
+     {
+         switch ( $event )
+         {
+             case 'field/setValue':
+                 if ( $arguments === null || !isset( $arguments['value'] ) )
+                     throw new InvalidArgumentValue( 'arguments', $arguments, get_class() );
+
+                 $this->setValue( $arguments['value'] );
+                 break;
          }
      }
 }

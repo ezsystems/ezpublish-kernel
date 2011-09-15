@@ -89,6 +89,7 @@ class FieldDefinition extends Model
         $this->properties = new FieldDefinitionValue( array( 'fieldType' => $fieldType ) );
         $this->type = FieldTypeFactory::build( $fieldType );
         $this->defaultValue = $this->type->getValue();
+        $this->attach( $this->type, 'field/setValue' );
     }
 
     /**
@@ -145,7 +146,7 @@ class FieldDefinition extends Model
     protected function setDefaultValue( FieldValue $value )
     {
         $this->defaultValue = $value;
-        $this->type->setValue( $value );
+        $this->notify( 'field/setValue', array( 'value' => $value ) );
         $this->properties->defaultValue = new PersistenceFieldValue;
         $this->type->setFieldValue( $this->properties->defaultValue );
     }

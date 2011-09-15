@@ -73,6 +73,7 @@ class Field extends Model
     {
         $this->version = $contentVersion;
         $this->fieldDefinition = $fieldDefinition;
+        $this->attach( $this->fieldDefinition->type, 'field/setValue' );
         $this->properties = new FieldVO(
             array(
                 "type" => $fieldDefinition->fieldType,
@@ -80,6 +81,7 @@ class Field extends Model
             )
         );
         $this->value = $fieldDefinition->defaultValue;
+        $this->notify( 'field/setValue', array( 'value' => $this->value ) );
     }
 
     /**
@@ -120,6 +122,6 @@ class Field extends Model
     protected function setValue( FieldValue $inputValue )
     {
         $this->value = $inputValue;
-        $this->fieldDefinition->type->setValue( $inputValue );
+        $this->notify( 'field/setValue', array( 'value' => $inputValue ) );
     }
 }
