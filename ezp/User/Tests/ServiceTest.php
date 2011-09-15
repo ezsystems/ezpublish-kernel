@@ -184,16 +184,19 @@ class ServiceTest extends BaseServiceTest
      * Test service function for creating group
      *
      * @covers \ezp\User\Service::createGroup
+     * @group userService
      */
     public function testCreateGroup()
     {
         $service = $this->repository->getUserService();
         $parent = $service->loadGroup( 12 );
 
-        $do = $service->createGroup( $parent, 'New User Group', 'A new user group for testing' );
+        $groupName = 'A new group of users';
+        $groupDescription = 'A new user group for testing';
+        $do = $service->createGroup( $parent, $groupName, $groupDescription );
         self::assertInstanceOf( 'ezp\\User\\Group', $do );
-        self::assertEquals( 'New User Group', $do->name );
-        self::assertEquals( 'A new user group for testing', $do->description );
+        self::assertEquals( $groupName, $do->name );
+        self::assertEquals( $groupDescription, $do->description );
 
         $group = $do->getParent();
         self::assertInstanceOf( 'ezp\\User\\Group', $group );
