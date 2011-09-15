@@ -58,7 +58,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function createGroup( GroupCreateStruct $group )
     {
-        $groupArr = (array) $group;
+        $groupArr = (array)$group;
         return $this->backend->create( 'Content\\Type\\Group', $groupArr );
     }
 
@@ -67,7 +67,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function updateGroup( GroupUpdateStruct $group )
     {
-        $groupArr = (array) $group;
+        $groupArr = (array)$group;
         $this->backend->update( 'Content\\Type\\Group', $groupArr['id'], $groupArr );
     }
 
@@ -168,14 +168,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function create( CreateStruct $contentType )
     {
-        $contentTypeArr = (array) $contentType;
+        $contentTypeArr = (array)$contentType;
         unset( $contentTypeArr['fieldDefinitions'] );
         $contentTypeObj = $this->backend->create( 'Content\\Type', $contentTypeArr );
         foreach ( $contentType->fieldDefinitions as $field )
         {
             $contentTypeObj->fieldDefinitions[] = $this->backend->create(
                 'Content\\Type\\FieldDefinition',
-                array( '_typeId' => $contentTypeObj->id, '_status' => $contentTypeObj->status ) + (array) $field
+                array( '_typeId' => $contentTypeObj->id, '_status' => $contentTypeObj->status ) + (array)$field
             );
         }
         return $contentTypeObj;
@@ -188,7 +188,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function update( $typeId, $status, UpdateStruct $contentType )
     {
-        $contentTypeArr = (array) $contentType;
+        $contentTypeArr = (array)$contentType;
         $this->backend->updateByMatch( 'Content\\Type',
                                        array( 'id' => $typeId, 'status' => $status ),
                                        $contentTypeArr );
@@ -320,7 +320,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         if ( !isset( $list[0] ) )
             throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
 
-        $fieldDefinitionArr = (array) $fieldDefinition;
+        $fieldDefinitionArr = (array)$fieldDefinition;
         $fieldDefinitionArr['_typeId'] = $contentTypeId;
         $fieldDefinitionArr['_status'] = $status;
 
@@ -368,7 +368,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
-        $fieldDefinitionArr = (array) $fieldDefinition;
+        $fieldDefinitionArr = (array)$fieldDefinition;
         $updated = $this->backend->updateByMatch( 'Content\\Type\\FieldDefinition', array(
                                                                            '_typeId' => $contentTypeId,
                                                                            '_status' => $status,
