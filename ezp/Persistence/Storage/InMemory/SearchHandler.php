@@ -13,7 +13,15 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\Search\Handler,
     ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\ContentId,
+    ezp\Persistence\Content\Criterion\ContentTypeId,
+    ezp\Persistence\Content\Criterion\LocationId,
+    ezp\Persistence\Content\Criterion\RemoteId,
+    ezp\Persistence\Content\Criterion\SectionId,
+    ezp\Persistence\Content\Criterion\UserMetadata,
+    ezp\Persistence\Content\Criterion\ParentLocationId,
+    ezp\Persistence\Content\Criterion\LogicalAnd,
     ezp\Persistence\Content\Criterion\Operator,
+    ezp\Base\Exception\NotFound,
     Exception;
 
 /**
@@ -66,7 +74,36 @@ class SearchHandler extends Handler
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, $translations = null )
     {
-        throw new Exception( "Not implemented yet." );
+        // Only some criteria are supported as getting full support for all in InMemory engine is not a priority
+        $match = array();
+        self::generateMatchByCriteria( array( $criterion ), $match );
+
+        if ( empty( $match ) )
+        {
+            throw new Exception( "Logical error: \$match is empty" );
+        }
+
+        return $this->backend->find(
+            'Content',
+            $match,
+            array(
+                'locations' => array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' )
+                ),
+                'version' => array(
+                    'type' => 'Content\\Version',
+                    'single' => true,
+                    'match' => array( 'contentId' => 'id', 'versionNo' => 'currentVersionNo' ),
+                    'sub' => array(
+                        'fields' => array(
+                            'type' => 'Content\\Field',
+                            'match' => array( '_contentId' => 'contentId', 'versionNo' => 'versionNo' ),
+                        )
+                    )
+                ),
+            )
+        );
     }
 
     /**
@@ -74,15 +111,11 @@ class SearchHandler extends Handler
      */
     public function findSingle( Criterion $criterion, $translations = null )
     {
-        // Using "Coding by exception" anti pattern since it has been decided
-        // not to implement search functionalities in InMemoryEngine
-        if ( $criterion instanceof ContentId && $criterion->operator === Operator::EQ )
-        {
-            $content = $this->backend->load( "Content", $criterion->value[0] );
-            return $this->handler->contentHandler()->load( $content->id, $content->currentVersionNo );
-        }
+        $list = $this->find( $criterion, 0, 1, null, $translations );
+        if ( empty( $list ) )
+            throw new NotFound( 'Content', $criterion );
 
-        throw new Exception( "Not implemented yet." );
+        return $list[0];
     }
 
     /**
@@ -91,5 +124,60 @@ class SearchHandler extends Handler
     public function indexContent( Content $content )
     {
         throw new Exception( "Not implemented yet." );
+    }
+
+    /**
+     * Generate match array for use with Backend based on criteria
+     *
+     * @param array $criteria
+     * @param array $match
+     * @return void
+     */
+    protected static function generateMatchByCriteria( array $criteria, array &$match )
+    {
+        foreach ( $criteria as $criterion )
+        {
+            if ( $criterion instanceof LogicalAnd )
+            {
+                self::generateMatchByCriteria( $criterion->criteria, $match );
+            }
+            else if ( $criterion instanceof ContentId && !isset( $match['id'] ) )
+            {
+                $match['id'] = $criterion->value[0];
+            }
+            else if ( $criterion instanceof ContentTypeId && !isset( $match['typeId'] ) )
+            {
+                $match['typeId'] = $criterion->value[0];
+            }
+            else if ( $criterion instanceof LocationId && !isset( $match['locations']['id'] ) )
+            {
+                $match['locations']['id'] = $criterion->value[0];
+            }
+            else if ( $criterion instanceof RemoteId && !isset( $match['remoteId'] ) )
+            {
+                $match['remoteId'] = $criterion->value[0];
+            }
+            else if ( $criterion instanceof SectionId && !isset( $match['sectionId'] ) )
+            {
+                $match['sectionId'] = $criterion->value[0];
+            }
+            else if ( $criterion instanceof ParentLocationId && !isset( $match['locations']['parentId'] ) )
+            {
+                $match['locations']['parentId'] = $criterion->value[0];
+            }
+            else
+            {
+                if ( $criterion instanceof UserMetadata )
+                {
+                    if ( $criterion->target === $criterion::OWNER && !isset( $match['ownerId'] ) )
+                        $match['ownerId'] = $criterion->value[0];
+                    elseif ( $criterion->target === $criterion::CREATOR && !isset( $match['version']['creatorId'] ) )
+                        $match['version']['creatorId'] = $criterion->value[0];
+                    //elseif ( $criterion->target === $criterion::MODIFIER && !isset( $match['version']['creatorId'] ) )
+                        //$match['version']['creatorId'] = $criterion->value[0];
+                }
+                throw new Exception( "Support for provided criterion not supported or used more then once: " . $criterion );
+            }
+        }
     }
 }
