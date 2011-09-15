@@ -7,7 +7,8 @@
  * @version //autogentag//
  */
 namespace ezp\Content\Search;
-use ezp\Base\Collection\Type as TypeCollection;
+use ezp\Base\Collection\Type as TypeCollection,
+    ezp\Content\Query;
 
 /**
  * Result collection class
@@ -16,11 +17,26 @@ use ezp\Base\Collection\Type as TypeCollection;
 class Result extends TypeCollection
 {
     /**
-     * Constructor
-     * @param \ezp\Content[] $elements
+     * @var int Total count of result (might differ from collection count if offset and/or limit is used in query)
      */
-    public function __construct( array $elements )
+    public $totalCount = 0;
+
+    /**
+     * @var \ezp\Content\Query Used to generate this result
+     */
+    public $query;
+
+    /**
+     * Constructor
+     *
+     * @param \ezp\Content[] $elements
+     * @param int $totalCount
+     * @param \ezp\Content\Query $query
+     */
+    public function __construct( array $elements, $totalCount, Query $query )
     {
         parent::__construct( 'ezp\\Content', $elements );
+        $this->totalCount = $totalCount;
+        $this->query = $query;
     }
 }

@@ -320,7 +320,7 @@ class Service extends BaseService
             $aContent[] = $this->buildDomainObject( $contentVo );
         }
 
-        return new Result( $aContent );
+        return new Result( $aContent, $result->count, $query );
     }
 
     /**
