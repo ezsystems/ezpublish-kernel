@@ -375,7 +375,51 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindSubJoin()
     {
-        $this->markTestIncomplete("Pending Content\\Version and Content\\Field data in data.json");
+        /**
+         * @var \ezp\Persistence\Content[] $list
+         */
+        $list = $this->backend->find(
+            "Content",
+            array( "locations" => array( 'id' => 2 ) ),
+            array(
+                'locations' => array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' )
+                ),
+                'version' => array(
+                    'type' => 'Content\\Version',
+                    'single' => true,
+                    'match' => array( 'contentId' => 'id', 'versionNo' => 'currentVersionNo' ),
+                    'sub' => array(
+                        'fields' => array(
+                            'type' => 'Content\\Field',
+                            'match' => array( '_contentId' => 'contentId', 'versionNo' => 'versionNo' ),
+                        )
+                    )
+                ),
+            )
+        );
+        $this->assertEquals( 1, count( $list ) );
+        foreach ( $list as $content )
+        {
+            $this->assertInstanceOf( 'ezp\\Persistence\\Content', $content );
+            $this->assertEquals( 1, $content->id );
+            $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $content->name );
+            $this->assertEquals( 1, count( $content->locations ) );
+            foreach ( $content->locations as $location )
+            {
+                $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Location', $location );
+                $this->assertEquals( 2, $location->id );
+                $this->assertEquals( 1, $location->contentId );
+            }
+            $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
+            $this->assertEquals( 2, count( $content->version->fields ) );
+            foreach ( $content->version->fields as $field )
+            {
+                $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Field', $field );
+                $this->assertEquals( $content->currentVersionNo, $field->versionNo );
+            }
+        }
     }
 
     /**

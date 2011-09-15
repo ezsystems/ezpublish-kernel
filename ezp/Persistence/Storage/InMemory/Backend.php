@@ -412,11 +412,21 @@ class Backend
     {
         foreach ( $joinInfo as $property => $info )
         {
+            if ( isset( $info['single'] ) && $info['single'] )
+            {
+                $value =& $item->$property;
+                $value = $this->toValue( $info['type'],
+                                        $value[0],
+                                        ( isset( $info['sub'] ) ? $info['sub'] : array() ) );
+                continue;
+            }
+
             foreach ( $item->$property as &$joinItem )
             {
                 $joinItem = $this->toValue( $info['type'],
                                         $joinItem,
                                         ( isset( $info['sub'] ) ? $info['sub'] : array() ) );
+
             }
         }
         return $item;
