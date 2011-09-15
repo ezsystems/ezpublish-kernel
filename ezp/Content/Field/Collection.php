@@ -46,9 +46,19 @@ class Collection extends Lazy
         $this->load();
         if ( !$this->offsetExists( $identifier ) )
             throw new LogicException( 'FieldCollection', "Field with identifier '$identifier' doesn't exist in this collection" );
-        else if ( !$value instanceof FieldValue )
-            throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\Value', $value );
 
-        $this->offsetGet( $identifier )->value = $value;
+        $field = $this->offsetGet( $identifier );
+        if ( !$value instanceof FieldValue )
+        {
+            if ( !is_scalar( $value ) )
+                throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\Value or scalar', $value );
+
+            $value = FieldTypeFactory::buildValueFromString(
+                $field->fieldDefinition->fieldType,
+                (string)$value
+            );
+        }
+
+        $field->value = $value;
     }
 }
