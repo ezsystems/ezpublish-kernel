@@ -11,7 +11,7 @@ namespace ezp\Content\Type;
 use ezp\Base\Model,
     ezp\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
-    ezp\Content\FieldType\Factory,
+    ezp\Content\FieldType\Factory as FieldTypeFactory,
     ezp\Content\FieldType\Validator;
 
 /**
@@ -29,7 +29,8 @@ use ezp\Base\Model,
  * @property bool $isInfoCollector
  * @property array $fieldTypeConstraints
  * @property mixed $defaultValue
- * @property-read \ezp\Content\Type $type
+ * @property-read \ezp\Content\Type $contentType ContentType object
+ * @property-read \ezp\Content\FieldType $type FieldType object
  */
 class FieldDefinition extends Model
 {
@@ -55,11 +56,17 @@ class FieldDefinition extends Model
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
+        'contentType' => false,
         'type' => false,
     );
 
     /**
      * @var \ezp\Content\Type
+     */
+    protected $contentType;
+
+    /**
+     * @var \ezp\Content\FieldType
      */
     protected $type;
 
@@ -73,12 +80,23 @@ class FieldDefinition extends Model
     {
         $this->type = $contentType;
         $this->properties = new FieldDefinitionValue( array( 'fieldType' => $fieldType ) );
+        $this->type = FieldTypeFactory::build( $fieldType );
     }
 
     /**
      * Return content type object
      *
      * @return \ezp\Content\Type
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
+    }
+
+    /**
+     * Return field type object
+     *
+     * @return \ezp\Content\FieldType
      */
     protected function getType()
     {
@@ -98,6 +116,6 @@ class FieldDefinition extends Model
         {
             $this->fieldTypeConstraints = array();
         }
-        Factory::build( $this->fieldType )->fillConstraintsFromValidator( $this, $validator );
+        $this->type->fillConstraintsFromValidator( $this, $validator );
     }
 }
