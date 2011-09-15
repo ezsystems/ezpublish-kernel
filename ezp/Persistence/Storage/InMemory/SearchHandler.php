@@ -11,6 +11,7 @@ namespace ezp\Persistence\Storage\InMemory;
 
 use ezp\Persistence\Content,
     ezp\Persistence\Content\Search\Handler,
+    ezp\Persistence\Content\Search\Result,
     ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\ContentTypeId,
@@ -83,7 +84,8 @@ class SearchHandler extends Handler
             throw new Exception( "Logical error: \$match is empty" );
         }
 
-        return $this->backend->find(
+
+        $list = $this->backend->find(
             'Content',
             $match,
             array(
@@ -104,6 +106,17 @@ class SearchHandler extends Handler
                 ),
             )
         );
+        $result = new Result();
+        $result->count = count( $list );
+
+        if ( $limit === null && $offset === 0 )
+            $result->content = $list;
+        else if ( $limit === null )
+             $result->content = array_slice( $list, $offset );
+        else
+            $result->content = array_slice( $list, $offset, $limit );
+
+        return $result;
     }
 
     /**
@@ -112,10 +125,10 @@ class SearchHandler extends Handler
     public function findSingle( Criterion $criterion, $translations = null )
     {
         $list = $this->find( $criterion, 0, 1, null, $translations );
-        if ( empty( $list ) )
+        if ( !$list->count )
             throw new NotFound( 'Content', $criterion );
 
-        return $list[0];
+        return $list->content[0];
     }
 
     /**
