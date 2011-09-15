@@ -59,18 +59,6 @@ class TextLine extends FieldType
     }
 
     /**
-     * Injects the value of a field in the field type.
-     *
-     * @abstract
-     * @param \ezp\Content\FieldType\Value $inputValue
-     * @return void
-     */
-    public function setValue( Value $inputValue )
-    {
-        $this->value = $this->canParseValue( $inputValue );
-    }
-
-    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @todo String normalization should occur here.

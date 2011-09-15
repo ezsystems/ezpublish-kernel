@@ -187,11 +187,13 @@ abstract class FieldType
     /**
      * Injects the value of a field in the field type.
      *
-     * @abstract
      * @param \ezp\Content\FieldType\Value $inputValue
      * @return void
      */
-    abstract public function setValue( Value $inputValue );
+    public function setValue( Value $inputValue )
+    {
+        $this->value = $this->canParseValue( $inputValue );
+    }
 
     /**
      * Returns the value of associated field.
