@@ -451,7 +451,7 @@ class Service extends BaseService
                 }
 
             }
-            throw new Logic( 'field:' . $identifier, 'could not find this fields in returned Version value data'  );
+            throw new Logic( 'field:' . $identifier, 'could not find this field in returned Version value data'  );
         }
 
         return $version;
