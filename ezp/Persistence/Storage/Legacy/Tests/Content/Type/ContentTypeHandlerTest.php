@@ -583,8 +583,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->returnValue( new Type() )
             );
 
-        $res = $handlerMock->createVersion(
-            42, 23, 0, 1
+        $res = $handlerMock->createDraft(
+            42, 23
         );
 
         $this->assertInstanceOf(

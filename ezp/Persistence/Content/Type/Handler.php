@@ -85,14 +85,17 @@ interface Handler
     public function delete( $contentTypeId, $status );
 
     /**
-     * @param mixed $userId
+     * Creates a draft of existing defined content type
+     *
+     * Updates modified date, sets $modifierId and status to Type::STATUS_DRAFT on the new returned draft.
+     *
+     * @param mixed $modifierId
      * @param mixed $contentTypeId
-     * @param int $fromStatus One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @param int $toStatus One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @todo What does this method do? Create a new version of the content type 
-     *       from $status? Is it then expected to return the Type object?
+     * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
+     * @todo Should user be validated? And should it throw if there is an existing draft of content type??
      */
-    public function createVersion( $userId, $contentTypeId, $fromStatus, $toStatus );
+    public function createDraft( $modifierId, $contentTypeId );
 
     /**
      * Copy a Type incl fields and group-relations from a given status to a new Type with status {@link Type::STATUS_DRAFT}

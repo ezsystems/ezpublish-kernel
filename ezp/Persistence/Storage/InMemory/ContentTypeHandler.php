@@ -207,11 +207,35 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Type\Handler
+     * Creates a draft of existing defined content type
+     *
+     * Updates modified date, sets $modifierId and status to Type::STATUS_DRAFT on the new returned draft.
+     *
+     * @param mixed $modifierId
+     * @param mixed $contentTypeId
+     * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
+     * @todo Should user be validated? And should it throw if there is an existing draft of content type??
      */
-    public function createVersion( $userId, $contentTypeId, $fromVersion, $toVersion )
+    public function createDraft( $modifierId, $contentTypeId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $contentType = $this->load( $contentTypeId );
+        $contentType->modified = time();
+        $contentType->modifierId = $modifierId;
+        $contentType->status = Type::STATUS_DRAFT;
+
+        $contentTypeArr = (array)$contentType;
+        unset( $contentTypeArr['fieldDefinitions'] );
+
+        $contentTypeObj = $this->backend->create( 'Content\\Type', $contentTypeArr );
+        foreach ( $contentType->fieldDefinitions as $field )
+        {
+            $contentTypeObj->fieldDefinitions[] = $this->backend->create(
+                'Content\\Type\\FieldDefinition',
+                array( '_typeId' => $contentTypeObj->id, '_status' => $contentTypeObj->status ) + (array)$field
+            );
+        }
+        return $contentTypeObj;
     }
 
     /**

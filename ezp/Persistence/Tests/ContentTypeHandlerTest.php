@@ -222,6 +222,51 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
+     * Test createDraft function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::createDraft
+     */
+    public function testCreateDraft()
+    {
+        $userId = 10;
+        $time = time();
+        $obj = $this->repositoryHandler->ContentTypeHandler()->createDraft( $userId, 1 );
+        $original = $this->repositoryHandler->ContentTypeHandler()->load( 1, Type::STATUS_DEFINED );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
+        $this->assertEquals( $original->creatorId, $obj->creatorId );
+        $this->assertEquals( $original->created, $obj->created );//ehm
+        $this->assertEquals( $userId, $obj->modifierId );
+        $this->assertEquals( $time, $obj->modified );//ehm
+        $this->assertEquals( Type::STATUS_DRAFT, $obj->status );
+        $this->assertEquals( 2, count( $obj->fieldDefinitions ) );
+        $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
+    }
+
+    /**
+     * Test createDraft function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::createDraft
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testCreateDraftNonExistingTypeId()
+    {
+        $this->repositoryHandler->ContentTypeHandler()->createDraft( 10, 999 );
+    }
+
+    /**
+     * Test createDraft function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::createDraft
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testCreateDraftNonExistingDefinedType()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $obj = $handler->create( $this->getTypeCreateStruct( Type::STATUS_DRAFT ) );
+        $obj2 = $handler->createDraft( 10, $obj->id );
+    }
+
+    /**
      * Test copy function
      *
      * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::copy
@@ -235,7 +280,9 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
         $this->assertStringStartsWith( 'folder_', $obj->identifier );
         $this->assertEquals( $userId, $obj->creatorId );
+        $this->assertEquals( $userId, $obj->modifierId );
         $this->assertEquals( $time, $obj->created );//ehm
+        $this->assertEquals( $time, $obj->modified );//ehm
         $this->assertEquals( Type::STATUS_DRAFT, $obj->status );
         $this->assertGreaterThan( $original->created, $obj->created );
         $this->assertEquals( 2, count( $obj->fieldDefinitions ) );
@@ -584,7 +631,7 @@ class ContentTypeHandlerTest extends HandlerTest
     /**
      * @return \ezp\Persistence\Content\Type\CreateStruct
      */
-    private function getTypeCreateStruct()
+    private function getTypeCreateStruct( $status = Type::STATUS_DEFINED )
     {
         $struct = new CreateStruct();
         $struct->created = $struct->modified = time();
@@ -593,7 +640,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $struct->description = array( 'eng-GB' => 'Article content type' );
         $struct->identifier = 'article';
         $struct->isContainer = true;
-        $struct->status = 0;
+        $struct->status = $status;
         $struct->initialLanguageId = 2;
         $struct->nameSchema = "<short_title|title>";
         $struct->fieldDefinitions = array();

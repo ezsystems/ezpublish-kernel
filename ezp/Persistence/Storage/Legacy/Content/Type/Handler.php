@@ -234,20 +234,24 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * @param mixed $userId
+     * Creates a draft of existing defined content type
+     *
+     * Updates modified date, sets $modifierId and status to Type::STATUS_DRAFT on the new returned draft.
+     *
+     * @param mixed $modifierId
      * @param mixed $contentTypeId
-     * @param int $status
+     * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
      * @todo Can be optimized in gateway?
-     * @todo $userId becomes only $modifierId or also $creatorId?
-     * @todo What about $modified and $created?
+     * @todo Should user be validated? And should it throw if there is an existing draft of content type??
      */
-    public function createVersion( $userId, $contentTypeId, $fromVersion, $toVersion )
+    public function createDraft( $modifierId, $contentTypeId )
     {
         $createStruct = $this->mapper->createCreateStructFromType(
-            $this->load( $contentTypeId, $fromVersion )
+            $this->load( $contentTypeId, Type::STATUS_DEFINED )
         );
-        $createStruct->status = $toVersion;
-        $createStruct->modifierId = $userId;
+        $createStruct->status = Type::STATUS_DRAFT;
+        $createStruct->modifierId = $modifierId;
         $createStruct->modified = time();
 
         return $this->create( $createStruct );
