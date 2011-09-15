@@ -23,7 +23,8 @@ use ezp\Content\FieldType,
  */
 class Type extends Complex
 {
-    protected $fieldTypeString = 'ezauthor';
+    const FIELD_TYPE_IDENTIFIER = "ezauthor";
+
     protected $defaultValue = null;
     protected $isSearchable = true;
 

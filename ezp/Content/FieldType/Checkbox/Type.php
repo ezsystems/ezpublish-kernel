@@ -20,7 +20,8 @@ use ezp\Content\FieldType,
  */
 class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezboolean';
+    const FIELD_TYPE_IDENTIFIER = "ezboolean";
+
     protected $defaultValue = false;
     protected $isSearchable = true;
 

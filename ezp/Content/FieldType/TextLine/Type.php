@@ -22,7 +22,8 @@ use ezp\Content\FieldType,
  */
 class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezstring';
+    const FIELD_TYPE_IDENTIFIER = "ezstring";
+
     protected $isSearchable = true;
 
     /**

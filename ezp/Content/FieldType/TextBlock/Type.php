@@ -19,7 +19,8 @@ use ezp\Content\FieldType,
  */
 class Type extends TextLine
 {
-    protected $fieldTypeString = 'eztext';
+    const FIELD_TYPE_IDENTIFIER = "eztext";
+
     protected $defaultValue = '';
     protected $isSearchable = true;
 

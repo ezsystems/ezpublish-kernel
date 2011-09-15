@@ -20,7 +20,8 @@ use ezp\Content\FieldType,
  */
 class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezinteger';
+    const FIELD_TYPE_IDENTIFIER = "ezinteger";
+
     protected $defaultValue = 0;
     protected $isSearchable = true;
 

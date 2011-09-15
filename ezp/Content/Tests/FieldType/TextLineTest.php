@@ -22,15 +22,6 @@ use PHPUnit_Framework_TestCase,
 class TextLineTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @group fieldType
-     */
-    public function testTypeString()
-    {
-        $ft = new TextLine();
-        self::assertEquals( 'ezstring', $ft->type() );
-    }
-
-    /**
      * This test will make sure a correct mapping for the field type string has
      * been made.
      *

@@ -37,11 +37,6 @@ use ezp\Content\FieldType\FieldSettings,
 abstract class FieldType
 {
     /**
-     * @var string The textual identifier of the field type.
-     */
-    protected $fieldTypeString;
-
-    /**
      * @var \ezp\Content\FieldType\Value Fallback default value of field type when no such default
      *                                   value is provided in the field definition in content types.
      */
@@ -104,16 +99,6 @@ abstract class FieldType
     public function supportsSearch()
     {
         return $this->isSearchable;
-    }
-
-    /**
-     * Returns the field type identifier.
-     *
-     * @return string
-     */
-    public function type()
-    {
-        return $this->fieldTypeString;
     }
 
     /**

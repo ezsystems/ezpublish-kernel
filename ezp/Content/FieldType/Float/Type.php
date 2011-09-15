@@ -16,7 +16,8 @@ use ezp\Content\FieldType,
 
 class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezfloat';
+    const FIELD_TYPE_IDENTIFIER = "ezfloat";
+
     protected $defaultValue = 0.0;
     protected $isSearchable = false;
 
