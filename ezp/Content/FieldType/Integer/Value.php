@@ -1,35 +1,36 @@
 <?php
 /**
- * File containing the TextLine Value class
+ * File containing the Integer Value class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType\TextLine;
+namespace ezp\Content\FieldType\Integer;
 use ezp\Content\FieldType\Value as ValueInterface;
 
 /**
- * Value for TextLine field type
+ * Value for Integer field type
  */
 class Value implements ValueInterface
 {
     /**
-     * Text content
+     * Content of the value
      *
-     * @var string
+     * @var int
      */
-    public $text;
+    public $value = 0;
 
     /**
-     * Construct a new Value object and initialize it $text
+     * Construct a new Value object and initialize with $value
      *
-     * @param string $text
+     * @param int $value
      */
-    public function __construct( $text = '' )
+    public function __construct( $value = null )
     {
-        $this->text = $text;
+        if ( $value !== null )
+            $this->value = (int)$value;
     }
 
     /**
@@ -45,6 +46,6 @@ class Value implements ValueInterface
      */
     public function __toString()
     {
-        return $this->text;
+        return (string)$this->value;
     }
 }
