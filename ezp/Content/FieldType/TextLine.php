@@ -44,14 +44,13 @@ class TextLine extends FieldType
      * If the $inputValue actually can be parsed, the value is returned.
      * Otherwise, an \ezp\Base\Exception\BadFieldTypeInput exception is thrown
      *
-     * @abstract
      * @throws \ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param \ezp\Content\FieldType\Value $inputValue
-     * @return \ezp\Content\FieldType\Value
+     * @param \ezp\Content\FieldType\TextLine\Value $inputValue
+     * @return \ezp\Content\FieldType\TextLine\Value
      */
     protected function canParseValue( Value $inputValue )
     {
-        if ( !is_string( $inputValue ) )
+        if ( !$inputValue instanceof TextLineValue || !is_string( $inputValue->text ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
