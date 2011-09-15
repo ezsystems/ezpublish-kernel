@@ -12,6 +12,7 @@ namespace ezp\Persistence\Storage\InMemory;
 use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
+    ezp\Persistence\Content\RestrictedVersion,
     ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
@@ -360,6 +361,17 @@ class ContentHandler implements ContentHandlerInterface
 
         if ( empty( $versions ) )
             throw new NotFound( "Content\\Version", "contentId: $contentId" );
+
+        // cast to RestrictedVersion
+        foreach ( $versions as $key => $vo )
+        {
+            $restricted = new RestrictedVersion();
+            foreach ( $restricted as $property => $value )
+            {
+                $restricted->$property = $vo->$property;
+            }
+            $versions[$key] = $restricted;
+        }
 
         return $versions;
     }
