@@ -38,7 +38,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     public function testFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\TextLine",
+            "ezp\\Content\\FieldType\\TextLine\\Type",
             Factory::build( "ezstring" ),
             "TextLine object not returned for 'ezstring', incorrect mapping? "
         );
@@ -53,7 +53,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $ft = new TextLine();
         self::assertTrue( $ft->supportsSearch(), "TextLine should report support for search." );
 
-        $ref = new ReflectionClass( 'ezp\\Content\\FieldType\\TextLine' );
+        $ref = new ReflectionClass( 'ezp\\Content\\FieldType\\TextLine\\Type' );
         $searchProperty = $ref->getProperty( 'isSearchable' );
         $searchProperty->setAccessible( true );
         self::assertTrue( $searchProperty->getValue( $ft ), "The internal search attribute is not set correctly." );
