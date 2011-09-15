@@ -11,7 +11,9 @@ namespace ezp\Content\Tests\FieldType;
 use PHPUnit_Framework_TestCase,
     ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\TextLine\Type as TextLine,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ReflectionClass,
+    ReflectionObject,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Persistence\Content\FieldValue,
     ezp\Content\Type\FieldDefinition,
@@ -33,7 +35,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
      * been made.
      *
      * @group fieldType
-     * @covers ezp\Content\FieldType\Factory::build
+     * @covers \ezp\Content\FieldType\Factory::build
      */
     public function testFactory()
     {
@@ -46,7 +48,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers ezp\Content\FieldType::supportsSearch
+     * @covers \ezp\Content\FieldType::supportsSearch
      */
     public function testTextLineSupportsSearch()
     {
@@ -61,7 +63,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers ezp\Content\FieldType::allowedValidators
+     * @covers \ezp\Content\FieldType::allowedValidators
      */
     public function testTextLineSupportedValidators()
     {
@@ -70,55 +72,99 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ezp\Content\FieldType::setValue
+     * @covers \ezp\Content\FieldType\TextLine\Type::canParseValue
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
      */
-    public function testInvalidFormat()
+    public function testCanParseValueInvalidFormat()
     {
-        $this->markTestSkipped( 'This test must be adapted' );
         $ft = new TextLine();
-        $ft->setValue( 42 );
+        $ref = new ReflectionObject( $ft );
+        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod->setAccessible( true );
+        $refMethod->invoke( $ft, new TextLineValue( 42 ) );
     }
 
     /**
      * @group fieldType
-     * @covers ezp\Content\FieldType::getValue
+     * @covers \ezp\Content\FieldType\TextLine\Type::canParseValue
      */
-    public function testValidFormat()
+    public function testCanParseValueValidFormat()
     {
-        $this->markTestSkipped( 'This test must be adapted' );
         $ft = new TextLine();
-        $value = 'Strings works just fine.';
-        $ft->setValue( 'Strings works just fine.' );
-        self::assertEquals( $value, $ft->getValue() );
+        $ref = new ReflectionObject( $ft );
+        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod->setAccessible( true );
+
+        $value = new TextLineValue( 'Strings works just fine.' );
+        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
     }
 
     /**
      * @group fieldType
-     */
-    public function testHandlerIsAsExpected()
-    {
-        $this->markTestSkipped( 'This test must be adapted' );
-        $ft = new TextLine();
-        self::assertNull( $ft->getHandler(), "TextLine shouldn't have a handler" );
-    }
-
-    /**
-     * @group fieldType
-     * @covers ezp\Content\FieldType\TextLine::setFieldValue
+     * @covers \ezp\Content\FieldType\TextLine\Type::setFieldValue
      */
     public function testSetFieldValue()
     {
-        $this->markTestSkipped( 'This test must be adapted' );
+        $string = 'Test of FieldValue';
         $ft = new TextLine();
-        $ft->setValue( 'Test of FieldValue' );
+        $ft->setValue( new TextLineValue( $string ) );
 
         $fieldValue = new FieldValue();
         $ft->setFieldValue( $fieldValue );
 
-        self::assertSame( array( 'value' => 'Test of FieldValue' ), $fieldValue->data );
+        self::assertSame( array( 'value' => $string ), $fieldValue->data );
         self::assertNull( $fieldValue->externalData );
-        self::assertSame( array( 'sort_key_string' => 'Test of FieldValue' ), $fieldValue->sortKey );
+        self::assertSame( array( 'sort_key_string' => $string ), $fieldValue->sortKey );
+    }
+
+    /**
+     * @group fieldType
+     * @covers \ezp\Content\FieldType\TextLine\Value::__construct
+     */
+    public function testBuildFieldValueWithParam()
+    {
+        $text = 'According to developers, strings are good for women health.';
+        $value = new TextLineValue( $text );
+        self::assertSame( $text, $value->text );
+    }
+
+    /**
+     * @group fieldType
+     * @covers \ezp\Content\FieldType\TextLine\Value::__construct
+     */
+    public function testBuildFieldValueWithoutParam()
+    {
+        $value = new TextLineValue;
+        self::assertSame( '', $value->text );
+    }
+
+    /**
+     * @group fieldType
+     * @covers \ezp\Content\FieldType\TextLine\Value::fromString
+     */
+    public function testBuildFieldValueFromString()
+    {
+        $string = "Most programmers don't wear strings. Most...";
+        $value = TextLineValue::fromString( $string );
+        self::assertInstanceOf( 'ezp\\Content\\FieldType\\TextLine\\Value', $value );
+        self::assertSame( $string, $value->text );
+    }
+
+    /**
+     * @group fieldType
+     * @covers \ezp\Content\FieldType\TextLine\Value::__toString
+     */
+    public function testFieldValueToString()
+    {
+        $string = "Believe it or not, but most geeks find strings very comfortable to work with";
+        $value = TextLineValue::fromString( $string );
+        self::assertSame( $string, (string)$value );
+
+        self::assertSame(
+            $string,
+            TextLineValue::fromString( (string)$value )->text,
+            'fromString() and __toString() must be compatible'
+        );
     }
 }
