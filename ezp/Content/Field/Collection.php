@@ -11,6 +11,7 @@ namespace ezp\Content\Field;
 use ezp\Base\Collection\Lazy,
     ezp\Content\Service as ContentService,
     ezp\Content\Version,
+    ezp\Content\FieldType\Factory as FieldTypeFactory,
     ezp\Base\Exception\Logic as LogicException,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Content\FieldType\Value as FieldValue;
