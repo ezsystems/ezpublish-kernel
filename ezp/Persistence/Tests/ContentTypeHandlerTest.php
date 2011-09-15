@@ -525,6 +525,61 @@ class ContentTypeHandlerTest extends HandlerTest
     }
 
     /**
+     * Test publish function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::publish
+     */
+    public function testPublish()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $type = $handler->copy( 10, 1, Type::STATUS_DEFINED );
+        $handler->publish( $type->id );
+        try {
+            $handler->load( $type->id, Type::STATUS_DRAFT );
+            $this->fail( "Draft of Type still exists after publish()" );
+        }
+        catch ( \Exception $e ){}
+        $type = $handler->load( $type->id, Type::STATUS_DEFINED );
+
+        $this->assertEquals( 10, $type->creatorId );
+        $this->assertEquals( 10, $type->modifierId );
+        $this->assertEquals( array( 'eng-GB' => 'Folder' ), $type->name );
+        $this->assertEquals( 2, count( $type->fieldDefinitions ) );
+        $this->assertEquals( array( 'eng-GB' => 'Name' ), $type->fieldDefinitions[0]->name );
+
+        $org = $handler->load( 1, Type::STATUS_DEFINED );
+        $this->assertNotEquals( $org->id, $type->id );
+        $this->assertNotEquals( $org->remoteId, $type->remoteId );
+        $this->assertNotEquals( $org->identifier, $type->identifier );
+        $this->assertGreaterThan( $org->created, $type->created );
+        $this->assertGreaterThan( $org->modified, $type->modified );
+    }
+
+    /**
+     * Test publish function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::publish
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testPublishInvalidTypeId()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler->publish( 999 );
+    }
+
+    /**
+     * Test publish function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\ContentTypeHandler::publish
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testPublishNoDraft()
+    {
+        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler->publish( 1 );
+    }
+
+    /**
      * @return \ezp\Persistence\Content\Type\CreateStruct
      */
     private function getTypeCreateStruct()

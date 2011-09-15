@@ -388,12 +388,48 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * Flags the content type as updated.
      *
-     * @todo Implementing it
      * @param mixed $contentTypeId
      * @return void
+     * @throws \ezp\Base\Exception\NotFound If type with $contentTypeId and Type::STATUS_DRAFT is not found
      */
     public function publish( $contentTypeId )
     {
-        throw new \RuntimeException( "Not implemented, yet." );
+        $draftType = $this->load( $contentTypeId, Type::STATUS_DRAFT );
+        try
+        {
+            $publishedType = $this->load( $contentTypeId );
+        }
+        catch ( NotFound $e )
+        {
+            // No published version of type, jump to last section where draft is promoted to defined
+            GOTO updateType;
+        }
+
+        // @todo update content based on new type data change (field/scheme changes from $publishedType to $draftType)
+        $this->backend->deleteByMatch(
+            'Content\\Type',
+            array( 'id' => $contentTypeId, 'status' => Type::STATUS_DEFINED )
+        );
+        $this->backend->deleteByMatch(
+            'Content\\Type\\FieldDefinition',
+            array( '_typeId' => $contentTypeId, '_status' => Type::STATUS_DEFINED )
+        );
+
+        updateType:
+        {
+            $this->backend->updateByMatch(
+                'Content\\Type',
+                array( 'id' => $contentTypeId, 'status' => Type::STATUS_DRAFT ),
+                array( 'status' => Type::STATUS_DEFINED )
+            );
+            $this->backend->updateByMatch(
+                'Content\\Type\\FieldDefinition',
+                array(
+                    '_typeId' => $contentTypeId,
+                    '_status' => Type::STATUS_DRAFT,
+                ),
+                array( '_status' => Type::STATUS_DEFINED )
+            );
+        }
     }
 }

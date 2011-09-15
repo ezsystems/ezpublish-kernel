@@ -190,6 +190,7 @@ interface Handler
      *
      * @param mixed $contentTypeId
      * @return void
+     * @throws \ezp\Base\Exception\NotFound If type with $contentTypeId and Type::STATUS_DRAFT is not found
      */
     public function publish( $contentTypeId );
 }
