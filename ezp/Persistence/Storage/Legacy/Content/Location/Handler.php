@@ -257,19 +257,5 @@ class Handler implements BaseLocationHandler
 
         $this->locationGateway->setSectionForSubtree( $nodeData['path_string'], $sectionId );
     }
-
-    /**
-     * Performs publishing operations for Locations attached to the version with id $versionId.
-     * For the legacy engine, it has to look for eZNodeAssignment objects with a _EXECUTE matching op_codes,
-     * and apply the operation for those.
-     *
-     * @param int $versionId
-     *
-     * @return \ezp\Persistence\Content\Location[] The list of updated location objects
-     */
-    public function publishForContentVersion( $versionId )
-    {
-        throw new \RuntimeException( '@TODO: Implement' );
-    }
 }
 ?>

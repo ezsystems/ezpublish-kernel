@@ -478,4 +478,5 @@ class LocationHandler implements LocationHandlerInterface
         $strippedName = preg_replace( '`[^a-z0-9_]`i', '_', $strippedName );
         return $strippedName;
     }
+
 }
