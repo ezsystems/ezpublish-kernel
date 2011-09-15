@@ -27,11 +27,22 @@ class Value implements ValueInterface
      */
     public function __construct( $text = '' )
     {
-        $this->text = (string)$text;
+        $this->text = $text;
     }
 
-    public function __set_state( array $state )
+    /**
+     * @see \ezp\Content\FieldType\Value
+     */
+    public static function fromString( $stringValue )
     {
-        $this->text = $state['text'];
+        return new static( $stringValue );
+    }
+
+    /**
+     * @see \ezp\Content\FieldType\Value
+     */
+    public function __toString()
+    {
+        return $this->text;
     }
 }
