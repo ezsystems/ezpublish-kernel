@@ -36,7 +36,7 @@ class Author extends Complex
      * @param mixed $inputValue
      * @return mixed
      */
-    protected function canParseValue( $inputValue )
+    protected function canParseValue( Value $inputValue )
     {
         $dom = new DOMDocument( '1.0', 'utf-8' );
         if ( !$dom->loadXML( $inputValue ) )
@@ -52,7 +52,7 @@ class Author extends Complex
      * @param $inputValue
      * @return void
      */
-    public function setValue( $inputValue )
+    public function setValue( Value $inputValue )
     {
         $this->value = $this->canParseValue( $inputValue );
     }
@@ -108,5 +108,15 @@ class Author extends Complex
         return array( 'value' => $this->value );
     }
 
-
+    /**
+     * Returns the external value of the field type in a format suitable for packing it
+     * in a FieldValue.
+     *
+     * @abstract
+     * @return null|array
+     * @todo Shouldn't it return a struct with appropriate properties instead of an array ?
+     */
+    public function getValueExternalData()
+    {
+    }
 }

@@ -32,7 +32,7 @@ class Checkbox extends FieldType
      * @param mixed $inputValue
      * @return mixed
      */
-    protected function canParseValue( $inputValue )
+    protected function canParseValue( Value $inputValue )
     {
         if ( !is_bool( $inputValue ) )
         {
@@ -47,7 +47,7 @@ class Checkbox extends FieldType
      * @param $inputValue
      * @return void
      */
-    public function setValue( $inputValue )
+    public function setValue( Value $inputValue )
     {
         $this->value = $this->canParseValue( $inputValue );
     }
