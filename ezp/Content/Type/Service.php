@@ -160,25 +160,50 @@ class Service extends BaseService
      * Get a Content Type object by id
      *
      * @param int $typeId
-     * @param int $status
      * @return \ezp\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If object can not be found
+     * @throws \ezp\Base\Exception\NotFound If type can not be found
      */
-    public function load( $typeId, $status = TypeValue::STATUS_DEFINED )
+    public function load( $typeId )
     {
-        return $this->buildType( $this->handler->contentTypeHandler()->load( $typeId, $status ) );
+        return $this->buildType( $this->handler->contentTypeHandler()->load( $typeId, TypeValue::STATUS_DEFINED ) );
+    }
+
+    /**
+     * Get a Content Type object draft by id
+     *
+     * @param int $typeId
+     * @return \ezp\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If type draft can not be found
+     */
+    public function loadDraft( $typeId )
+    {
+        return $this->buildType( $this->handler->contentTypeHandler()->load( $typeId, TypeValue::STATUS_DRAFT ) );
     }
 
     /**
      * Get Content Type objects by group Id
      *
      * @param int $groupId
-     * @param int $status
      * @return \ezp\Content\Type[]
      */
-    public function loadByGroupId( $groupId, $status = TypeValue::STATUS_DEFINED )
+    public function loadByGroupId( $groupId )
     {
-        $list = $this->handler->contentTypeHandler()->loadContentTypes( $groupId, $status );
+        $list = $this->handler->contentTypeHandler()->loadContentTypes( $groupId, TypeValue::STATUS_DEFINED );
+        foreach ( $list as $key => $vo )
+            $list[$key] = $this->buildType( $vo );
+
+        return $list;
+    }
+
+    /**
+     * Get Content Type draft objects by group Id
+     *
+     * @param int $groupId
+     * @return \ezp\Content\Type[]
+     */
+    public function loadDraftsByGroupId( $groupId )
+    {
+        $list = $this->handler->contentTypeHandler()->loadContentTypes( $groupId, TypeValue::STATUS_DRAFT );
         foreach ( $list as $key => $vo )
             $list[$key] = $this->buildType( $vo );
 
@@ -223,20 +248,19 @@ class Service extends BaseService
     }
 
     /**
-     * Copy Type incl fields and groupIds from a given status to a new Type with status {@link TypeValue::STATUS_DRAFT}
+     * Copy Type incl fields and groupIds to a new Type object
      *
      * New Type will have $userId as creator / modifier, created / modified should be updated with current time,
      * updated remoteId and identifier should be appended with '_' + unique string.
      *
      * @param mixed $userId
      * @param mixed $typeId
-     * @param int $status
      * @return \ezp\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
+     * @throws \ezp\Base\Exception\NotFound If user or published type is not found
      */
-    public function copy( $userId, $typeId, $status = TypeValue::STATUS_DEFINED )
+    public function copy( $userId, $typeId )
     {
-        return $this->buildType( $this->handler->contentTypeHandler()->copy( $userId, $typeId, $status ) );
+        return $this->buildType( $this->handler->contentTypeHandler()->copy( $userId, $typeId, TypeValue::STATUS_DEFINED ) );
     }
 
     /**
@@ -322,7 +346,7 @@ class Service extends BaseService
      * Updates content objects, depending on the changed field definitions.
      *
      * @param \ezp\Content\Type $type The type draft to publish
-     * @throws \ezp\Base\Exception\NotFound If type with Type::STATUS_DRAFT is not found
+     * @throws \ezp\Base\Exception\NotFound If type draft is not found
      */
     public function publish( Type $type  )
     {
