@@ -46,17 +46,6 @@ class Type extends FieldType
     }
 
     /**
-     * Sets the value of a field type.
-     *
-     * @param $inputValue
-     * @return void
-     */
-    public function setValue( BaseValue $inputValue )
-    {
-        $this->value = $this->canParseValue( $inputValue );
-    }
-
-    /**
      * Method to populate the FieldValue struct for field types.
      *
      * This method is used by the business layer to populate the value object

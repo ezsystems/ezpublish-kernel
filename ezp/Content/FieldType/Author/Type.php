@@ -48,17 +48,6 @@ class Type extends Complex
     }
 
     /**
-     * Sets the value of a field type.
-     *
-     * @param $inputValue
-     * @return void
-     */
-    public function setValue( BaseValue $inputValue )
-    {
-        $this->value = $this->canParseValue( $inputValue );
-    }
-
-    /**
      * Returns a handler, aka. a helper object which aids in the manipulation of
      * complex field type values.
      *
