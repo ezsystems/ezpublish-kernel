@@ -10,6 +10,7 @@
 
 namespace ezp\Content\FieldType\Author;
 use ezp\Content\FieldType,
+    ezp\Content\FieldType\Value as BaseValue,
     \ezp\Base\Exception\BadFieldTypeInput,
     \ezp\Persistence\Content\FieldValue,
     DOMDocument;
@@ -35,7 +36,7 @@ class Type extends Complex
      * @param mixed $inputValue
      * @return mixed
      */
-    protected function canParseValue( Value $inputValue )
+    protected function canParseValue( BaseValue $inputValue )
     {
         $dom = new DOMDocument( '1.0', 'utf-8' );
         if ( !$dom->loadXML( $inputValue ) )
@@ -51,7 +52,7 @@ class Type extends Complex
      * @param $inputValue
      * @return void
      */
-    public function setValue( Value $inputValue )
+    public function setValue( BaseValue $inputValue )
     {
         $this->value = $this->canParseValue( $inputValue );
     }

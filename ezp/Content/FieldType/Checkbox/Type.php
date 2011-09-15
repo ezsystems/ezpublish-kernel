@@ -9,6 +9,7 @@
 
 namespace ezp\Content\FieldType\Checkbox;
 use ezp\Content\FieldType,
+    ezp\Content\FieldType\Value as BaseValue,
     \ezp\Base\Exception\BadFieldTypeInput,
     \ezp\Persistence\Content\FieldValue;
 
@@ -32,7 +33,7 @@ class Type extends FieldType
      * @param mixed $inputValue
      * @return mixed
      */
-    protected function canParseValue( Value $inputValue )
+    protected function canParseValue( BaseValue $inputValue )
     {
         if ( !is_bool( $inputValue ) )
         {
@@ -47,7 +48,7 @@ class Type extends FieldType
      * @param $inputValue
      * @return void
      */
-    public function setValue( Value $inputValue )
+    public function setValue( BaseValue $inputValue )
     {
         $this->value = $this->canParseValue( $inputValue );
     }
