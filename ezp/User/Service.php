@@ -235,7 +235,7 @@ class Service extends BaseService
         if ( $key === false )
             throw new Logic( 'unAssignGroup', 'can not remove $group that is not part of $user->groups' );
 
-        if ( !count( $groups ) )
+        if ( !count( $groups ) )// $groups is collection so need to use count()
             throw new Logic( 'unAssignGroup', 'can not remove $group, it seems to be last group on user' );
 
         $groupLocation = $group->getState( 'content' )->mainLocation;
