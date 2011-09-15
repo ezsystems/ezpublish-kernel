@@ -76,7 +76,7 @@ class Location extends ValueObject
     public $remoteId;
 
     /**
-     * ID of the corresponding {@link Content}.
+     * ID of the corresponding {@link \ezp\Persistence\Content}.
      *
      * @var mixed Content ID.
      */
