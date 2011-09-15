@@ -256,6 +256,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param mixed $userId
      * @param mixed $contentTypeId
+     * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return Type
      * @todo Can be optimized in gateway?
      */

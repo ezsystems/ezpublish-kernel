@@ -143,7 +143,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return \ezp\Persistence\Content\Type
-     * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
+     * @throws \ezp\Base\Exception\NotFound If type with provided status is not found
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
@@ -240,7 +240,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $struct->creatorId = $struct->modifierId = $userId;
         $struct->status = Type::STATUS_DRAFT;
         $struct->identifier .= '_' . ( $struct->remoteId = md5( uniqid( get_class( $struct ), true ) ) );
-        return $this->create( $struct );
+        return $this->create( $struct );// this takes care of resetting _typeId and _status on fields
     }
 
     /**
@@ -313,6 +313,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param FieldDefinition $fieldDefinition
      * @return FieldDefinition
      * @throws \ezp\Base\Exception\NotFound If type is not found
+     * @todo Add FieldDefintion\CreateStruct?
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
@@ -339,6 +340,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $fieldDefinitionId
      * @return void
      * @throws \ezp\Base\Exception\NotFound If field is not found
+     * @todo Add FieldDefintion\UpdateStruct?
      */
     public function removeFieldDefinition( $contentTypeId, $status, $fieldDefinitionId )
     {
