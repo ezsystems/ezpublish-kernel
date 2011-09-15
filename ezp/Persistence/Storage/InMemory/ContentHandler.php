@@ -377,26 +377,6 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
-     * @throws \ezp\Base\Exception\NotFound If no fields can be found
-     */
-    public function loadFields( $contentId, $version )
-    {
-        $fields = $this->backend->find(
-            'Content\\Field',
-            array(
-                '_contentId' => $contentId,
-                'versionNo' => $version
-            )
-        );
-
-        if ( empty( $fields ) )
-            throw new NotFound( "Content\\Field", "contentId: $contentId // versionNo: $version" );
-
-        return $fields;
-    }
-
-    /**
      * Creates a relation between $sourceContentId in $sourceContentVersion
      * and $destinationContentId with a specific $type.
      *

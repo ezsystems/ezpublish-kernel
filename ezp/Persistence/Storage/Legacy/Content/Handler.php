@@ -329,19 +329,6 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Returns fields for $contentId in $version (version number)
-     *
-     * @param int $contentId
-     * @param int $version Version number
-     * @return \ezp\Persistence\Content\Field[]
-     * @throws \ezp\Base\Exception\NotFound If content or version is not found
-     */
-    public function loadFields( $contentId, $version )
-    {
-        throw new \Exception( "@TODO: Not implemented yet." );
-    }
-
-    /**
      * Creates a relation between $sourceContentId in $sourceContentVersion
      * and $destinationContentId with a specific $type.
      *

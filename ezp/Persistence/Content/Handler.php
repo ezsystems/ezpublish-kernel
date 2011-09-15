@@ -149,16 +149,6 @@ interface Handler
     public function copy( $contentId, $version );
 
     /**
-     * Returns fields for $contentId in $version (version number)
-     *
-     * @param mixed $contentId
-     * @param int $version Version number
-     * @return \ezp\Persistence\Content\Field[]
-     * @throws \ezp\Base\Exception\NotFound If content or version is not found
-     */
-    public function loadFields( $contentId, $version );
-
-    /**
      * Creates a relation between $sourceContentId in $sourceContentVersion
      * and $destinationContentId with a specific $type.
      *

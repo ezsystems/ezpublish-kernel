@@ -170,32 +170,33 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Version $version
      * @return \ezp\Content\Field[]
-     * @todo Language support
+     * @throws \ezp\Base\Exception\NotFound If version can not be found
      */
     public function loadFields( Version $version )
     {
+        if ( !$version->versionNo )
+            throw new NotFound( 'Version', $version->versionNo );
+
+        $content = $this->load( $version->contentId, $version->versionNo );
+        $versionVo = $content->getState( 'properties' )->version;
+
+        $version->setState( array( 'properties' => $versionVo ) );
+        $defaultFields = new StaticFieldCollection( $version );
         $fields = array();
-        $fieldsDef = array();
-        $fieldsVo = $this->handler->contentHandler()->loadFields( $version->contentId, $version->versionNo );
-
-        // First index fields definitions by id
-        foreach ( $version->content->contentType->fields as $fieldDefinition )
+        // @todo Deal with translations
+        foreach ( $defaultFields as $identifier => $field )
         {
-            $fieldsDef[$fieldDefinition->id] = $fieldDefinition;
-        }
-
-        foreach ( $fieldsVo as $fieldVo )
-        {
-            if ( isset( $fieldsDef[$fieldVo->fieldDefinitionId] ) )
+            foreach ( $versionVo->fields as $voField )
             {
-                $identifier = $fieldsDef[$fieldVo->fieldDefinitionId]->identifier;
-                $fieldDo = new Field( $version, $fieldsDef[$fieldVo->fieldDefinitionId] );
-                $fieldDo->setState( array( 'properties' => $fieldVo ) );
-                $fields[$identifier] = $fieldDo;
-            }
-            // @todo: throw exception if not set ?
-        }
+                if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
+                {
+                    $fields[$identifier] = $field->setState( array( 'properties' => $voField ) );
+                    continue 2;
+                }
 
+            }
+            throw new Logic( 'field:' . $identifier, 'could not find this field in returned Version value data'  );
+        }
         return $fields;
     }
 
@@ -461,7 +462,6 @@ class Service extends BaseService
             }
             throw new Logic( 'field:' . $identifier, 'could not find this field in returned Version value data'  );
         }
-
         return $version;
     }
 }
