@@ -111,13 +111,21 @@ class Service extends BaseService
     /**
      * Loads a content from its id ($contentId)
      *
-     * @param int $contentId
+     * @param mixed $contentId
+     * @param int $version
      * @return \ezp\Content
      * @throws \ezp\Base\Exception\NotFound if content could not be found
      */
-    public function load( $contentId )
+    public function load( $contentId, $version = null )
     {
-        $contentVO = $this->handler->searchHandler()->findSingle( new ContentId( $contentId ) );
+        if ( !$contentId )
+            throw new NotFound( 'Content', $contentId );
+
+        if ( $version === null )
+            $contentVO = $this->handler->searchHandler()->findSingle( new ContentId( $contentId ) );
+        else
+            $contentVO = $this->handler->contentHandler()->load( $contentId, $version );
+
         if ( !$contentVO instanceof ContentValue )
             throw new NotFound( 'Content', $contentId );
 
