@@ -20,7 +20,7 @@ use ezp\Base\Model,
  * @property-read int $id
  * @property-read int $versionNo
  * @property-read mixed $contentId
- * @property-read int $state
+ * @property-read int $status One of the STATUS_* constants
  * @property-read \ezp\Content $content
  * @property int $creatorId
  * @property int $created

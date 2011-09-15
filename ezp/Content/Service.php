@@ -349,9 +349,9 @@ class Service extends BaseService
     public function publish( Content $content, Version $version )
     {
         // Only drafts can be published
-        if ( $version->state !== Version::STATUS_DRAFT )
+        if ( $version->status !== Version::STATUS_DRAFT )
         {
-            throw new Logic( '$version->state', 'Version should be in Version::STATUS_DRAFT state' );
+            throw new Logic( '$version->status', 'Version should be in Version::STATUS_DRAFT state' );
         }
 
         // The version should belong to the given content
