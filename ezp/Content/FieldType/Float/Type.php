@@ -17,9 +17,9 @@ use ezp\Content\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezfloat";
+    const IS_SEARCHABLE = false;
 
     protected $defaultValue = 0.0;
-    protected $isSearchable = false;
 
     protected $allowedValidators = array( 'FloatValueValidator' );
 

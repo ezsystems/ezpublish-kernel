@@ -20,9 +20,9 @@ use ezp\Content\FieldType,
 class Type extends TextLine
 {
     const FIELD_TYPE_IDENTIFIER = "eztext";
+    const IS_SEARCHABLE = true;
 
     protected $defaultValue = '';
-    protected $isSearchable = true;
 
     protected $allowedSettings = array( 'textColumns' => null );
     protected $allowedValidators = array();

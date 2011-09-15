@@ -21,9 +21,9 @@ use ezp\Content\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezboolean";
+    const IS_SEARCHABLE = true;
 
     protected $defaultValue = false;
-    protected $isSearchable = true;
 
     /**
      * Checks if value can be parsed.

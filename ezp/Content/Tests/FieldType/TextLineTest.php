@@ -39,21 +39,6 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::supportsSearch
-     */
-    public function testTextLineSupportsSearch()
-    {
-        $ft = new TextLine();
-        self::assertTrue( $ft->supportsSearch(), "TextLine should report support for search." );
-
-        $ref = new ReflectionClass( 'ezp\\Content\\FieldType\\TextLine\\Type' );
-        $searchProperty = $ref->getProperty( 'isSearchable' );
-        $searchProperty->setAccessible( true );
-        self::assertTrue( $searchProperty->getValue( $ft ), "The internal search attribute is not set correctly." );
-    }
-
-    /**
-     * @group fieldType
      * @covers \ezp\Content\FieldType::allowedValidators
      */
     public function testTextLineSupportedValidators()

@@ -23,8 +23,7 @@ use ezp\Content\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezstring";
-
-    protected $isSearchable = true;
+    const IS_SEARCHABLE = true;
 
     /**
      * Default value

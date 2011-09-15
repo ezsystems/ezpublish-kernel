@@ -43,11 +43,6 @@ abstract class FieldType
     protected $defaultValue;
 
     /**
-     * @var boolean Flag telling whether search index extraction is applicable.
-     */
-    protected $isSearchable = false;
-
-    /**
      * @var FieldSettings Custom properties which are specific to the field
      *                      type. Typically these properties are used to
      *                      configure behaviour of field types and normally set
@@ -87,18 +82,6 @@ abstract class FieldType
     public function __construct()
     {
         $this->fieldSettings = new FieldSettings( $this->allowedSettings );
-    }
-
-    /**
-     * Does the field type support search.
-     *
-     * @return boolean
-     * @todo Shouldn't searchable feature part of a Searchable interface to be implemented
-     *       by field types, with appropriate methods like metadata() ?
-     */
-    public function supportsSearch()
-    {
-        return $this->isSearchable;
     }
 
     /**

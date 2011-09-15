@@ -17,9 +17,9 @@ use ezp\Content\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezdatetime";
+    const IS_SEARCHABLE = true;
 
     protected $defaultValue = null;
-    protected $isSearchable = true;
 
     /**
      * Checks if value can be parsed.

@@ -24,9 +24,9 @@ use ezp\Content\FieldType,
 class Type extends Complex
 {
     const FIELD_TYPE_IDENTIFIER = "ezauthor";
+    const IS_SEARCHABLE = true;
 
     protected $defaultValue = null;
-    protected $isSearchable = true;
 
     /**
      * Checks if value can be parsed.

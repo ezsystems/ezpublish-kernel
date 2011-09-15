@@ -21,9 +21,9 @@ use ezp\Content\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezinteger";
+    const IS_SEARCHABLE = true;
 
     protected $defaultValue = 0;
-    protected $isSearchable = true;
 
     protected $allowedValidators = array( "IntegerValueValidator" );
 
