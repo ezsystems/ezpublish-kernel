@@ -22,6 +22,7 @@ use ezp\Base\Model,
  * @property string $type
  * @property mixed $language
  * @property-read int $versionNo
+ * @property-read mixed $fieldDefinitionId
  * @property-read \ezp\Content\Version $version
  * @property-read \ezp\Content\Type\FieldDefinition $fieldDefinition
  */
@@ -36,6 +37,7 @@ class Field extends Model
         'value' => true,
         'language' => true,
         'versionNo' => false,
+        'fieldDefinitionId' => false,
     );
 
     /**

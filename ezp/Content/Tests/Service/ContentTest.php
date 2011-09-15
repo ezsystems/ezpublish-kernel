@@ -111,7 +111,7 @@ class ContentTest extends BaseServiceTest
         $refMethod->setAccessible( true );
         $do = $refMethod->invoke( $this->service, $content, $versionVo );
         self::assertSame( $versionVo, $do->getState( 'properties' ) );
-        self::assertInstanceOf( 'ezp\\Content\\Field\\Collection', $do->fields );
+        self::assertInstanceOf( 'ezp\\Base\\Collection', $do->fields );
     }
 
     /**
@@ -188,7 +188,7 @@ class ContentTest extends BaseServiceTest
     public function testGetVersions()
     {
         $content = $this->service->load( 1 );
-        $this->assertInstanceOf( "ezp\\Base\\Collection\\Type", $content->versions );
+        $this->assertInstanceOf( "ezp\\Base\\Collection", $content->versions );
         $this->assertEquals( 2, count( $content->versions ) );
         $this->assertInstanceOf( "ezp\\Content\\Version", $content->versions[1] );
         $this->assertInstanceOf( "ezp\\Content\\Version", $content->versions[2] );
@@ -241,7 +241,7 @@ class ContentTest extends BaseServiceTest
                 $this->assertEquals( 0, $version->status );
             }
 
-            $this->assertInstanceOf( 'ezp\\Content\\Field\\Collection', $version->fields );
+            $this->assertInstanceOf( 'ezp\\Base\\Collection', $version->fields );
         }
         $this->assertEquals( array( 1 => true, 2 => true ), $foundVersions, "The versions returned is not correct" );
     }

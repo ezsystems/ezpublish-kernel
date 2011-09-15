@@ -15,7 +15,7 @@ use ezp\Base\Collection\Lazy,
  * Version Collection class. Versions are indexed by version number
  * This collection uses lazy loading mechanism.
  */
-class Collection extends Lazy
+class LazyCollection extends Lazy
 {
     /**
      * Constructor

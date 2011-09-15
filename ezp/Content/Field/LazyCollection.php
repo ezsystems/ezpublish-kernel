@@ -16,7 +16,7 @@ use ezp\Base\Collection\Lazy,
  * Field Collection class. Fields are indexed by field identifier
  * This collection uses lazy loading mechanism.
  */
-class Collection extends Lazy
+class LazyCollection extends Lazy
 {
     /**
      * Constructor

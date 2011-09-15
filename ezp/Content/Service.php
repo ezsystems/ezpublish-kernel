@@ -10,16 +10,17 @@
 namespace ezp\Content;
 use ezp\Base\Service as BaseService,
     ezp\Base\Collection\Lazy,
-    ezp\Base\Exception\Logic,
     ezp\Base\Exception\NotFound,
+    ezp\Base\Exception\Logic,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Proxy,
     ezp\Content,
     ezp\Content\Location,
     ezp\Content\Version,
-    ezp\Content\Version\Collection as VersionCollection,
+    ezp\Content\Version\LazyCollection as LazyVersionCollection,
     ezp\Content\Field,
-    ezp\Content\Field\Collection as FieldCollection,
+    ezp\Content\Field\LazyCollection as LazyFieldCollection,
+    ezp\Content\Field\StaticCollection as StaticFieldCollection,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
     ezp\Content\Search\Result,
@@ -388,7 +389,7 @@ class Service extends BaseService
             array(
                 "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
                 "contentType" => new Proxy( $this->repository->getContentTypeService(), $vo->typeId ),
-                "versions" => new VersionCollection( $this, $vo->id ),
+                "versions" => new LazyVersionCollection( $this, $vo->id ),//@todo Avoid throwing away version info on $vo
                 "owner" => new Proxy( $this->repository->getUserService(), $vo->ownerId ),
                 "properties" => $vo
             )
@@ -422,18 +423,36 @@ class Service extends BaseService
      * @param \ezp\Persistence\Content\Version|\ezp\Persistence\Content\RestrictedVersion $versionVo
      * @return \ezp\Content\Version
      */
-    protected function buildVersionDomainObject( Content $content, $versionVo )
+    protected function buildVersionDomainObject( Content $content, $vo )
     {
-        if ( !$versionVo instanceof VersionValue && !$versionVo instanceof RestrictedVersionValue )
-            throw new InvalidArgumentType( '$versionVo', 'Version or RestrictedVersion', $versionVo );
+        if ( !$vo instanceof VersionValue && !$vo instanceof RestrictedVersionValue )
+            throw new InvalidArgumentType( '$versionVo', 'Version or RestrictedVersion', $vo );
 
         $version = new Version( $content );
-        $version->setState(
-            array(
-                'properties' => $versionVo,
-                'fields' => new FieldCollection( $this, $version )
-            )
-        );
+        $version->setState( array( 'properties' => $vo ) );
+
+        // lazy load fields if Version does not contain fields
+        if ( $vo instanceof RestrictedVersionValue )
+        {
+            $version->setState( array( 'fields' => new LazyFieldCollection( $this, $version ) ) );
+            return $version;
+        }
+
+        $version->setState( array( 'fields' => new StaticFieldCollection( $version ) ) );
+        // @todo Deal with translations
+        foreach ( $version->fields as $identifier => $field )
+        {
+            foreach ( $vo->fields as $voField )
+            {
+                if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
+                {
+                    $field->setState( array( 'properties' => $voField ) );
+                    continue 2;
+                }
+
+            }
+            throw new Logic( 'field:' . $identifier, 'could not find this fields in returned Version value data'  );
+        }
 
         return $version;
     }
