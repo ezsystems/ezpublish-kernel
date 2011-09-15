@@ -91,7 +91,7 @@ class Service extends BaseService
     public function update( Content $content )
     {
         // @todo : Do any necessary actions to update $content in the content repository
-        // go through all locations to create or update them
+        // go through all locations to create or update them?
 
         $struct = new UpdateStruct();
         $this->fillStruct( $struct, $content, array( "versionNo", "userId", "fields" ) );
@@ -146,12 +146,13 @@ class Service extends BaseService
     /**
      * List versions of a $content
      *
+     * @access private For use in $content->versions, hence why it returns native array
      * @param int $contentId
      * @return \ezp\Content\Version[]
+     * @todo Since this is internal it can just as well take Content as input to avoid extra load
      */
     public function listVersions( $contentId )
     {
-        // @FIXME: should the return be an array or some sort of collection?
         $list = array();
         $contentHandler = $this->handler->contentHandler();
         $content = $this->load( $contentId );
@@ -168,9 +169,11 @@ class Service extends BaseService
     /**
      * List fields for a content $version.
      *
+     * @access private For use in $version->fields when lazy loaded, hence why it returns native array
      * @param \ezp\Content\Version $version
      * @return \ezp\Content\Field[]
      * @throws \ezp\Base\Exception\NotFound If version can not be found
+     * @todo Deal with translations
      */
     public function loadFields( Version $version )
     {
@@ -183,7 +186,6 @@ class Service extends BaseService
         $version->setState( array( 'properties' => $versionVo ) );
         $defaultFields = new StaticFieldCollection( $version );
         $fields = array();
-        // @todo Deal with translations
         foreach ( $defaultFields as $identifier => $field )
         {
             foreach ( $versionVo->fields as $voField )
@@ -230,6 +232,7 @@ class Service extends BaseService
      *
      * @todo Implement it (should be similar to listVersions())
      *       and use it for $content->relations lazy collection
+     *       So should likewise be marked as private and take Version is argument?
      * @param int $contentId
      * @param int|null $version
      */
