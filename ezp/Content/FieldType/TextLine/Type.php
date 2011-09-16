@@ -24,18 +24,17 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezstring";
     const IS_SEARCHABLE = true;
 
-    /**
-     * Default value
-     * @var \ezp\Content\FieldType\TextLine\Value
-     */
-    protected $defaultValue;
-
     protected $allowedValidators = array( 'StringLengthValidator' );
 
-    public function __construct()
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\TextLine\Value
+     */
+    protected function getDefaultValue()
     {
-        parent::__construct();
-        $this->defaultValue = new TextLineValue( "" );
+        return new Value( "" );
     }
 
     /**

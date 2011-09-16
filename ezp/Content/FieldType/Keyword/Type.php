@@ -23,9 +23,18 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezkeyword";
     const IS_SEARCHABLE = true;
 
-    protected $defaultValue = "";
-
     protected $allowedValidators = array();
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\Keyword\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( array() );
+    }
 
     /**
      * Checks if value can be parsed.

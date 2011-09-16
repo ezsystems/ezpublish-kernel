@@ -7,7 +7,6 @@
  * @version //autogentag//
  */
 
-
 namespace ezp\Content\FieldType\Author;
 use ezp\Content\FieldType\Complex,
     ezp\Content\FieldType\Value as BaseValue,
@@ -25,7 +24,16 @@ class Type extends Complex
     const FIELD_TYPE_IDENTIFIER = "ezauthor";
     const IS_SEARCHABLE = true;
 
-    protected $defaultValue = null;
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\Author\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( array() );
+    }
 
     /**
      * Checks if value can be parsed.

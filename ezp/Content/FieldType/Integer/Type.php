@@ -23,9 +23,18 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezinteger";
     const IS_SEARCHABLE = true;
 
-    protected $defaultValue = 0;
-
     protected $allowedValidators = array( "IntegerValueValidator" );
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\Integer\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( 0 );
+    }
 
     /**
      * Checks if value can be parsed.

@@ -22,10 +22,19 @@ class Type extends TextLine
     const FIELD_TYPE_IDENTIFIER = "eztext";
     const IS_SEARCHABLE = true;
 
-    protected $defaultValue = '';
-
     protected $allowedSettings = array( 'textColumns' => null );
     protected $allowedValidators = array();
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\TextBlock\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( "" );
+    }
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.

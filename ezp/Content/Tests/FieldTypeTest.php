@@ -164,22 +164,6 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::getValue
-     */
-    public function testGetValueIsStillDefault()
-    {
-        $mockDefaultValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
-        $mockDefaultValue->bountyHunter = 'Yet another space wimp';
-        $mockDefaultValue->jediMaster = 'Jedi order is supposed to have been erased from galaxy';
-
-        $refDefault = $this->refStub->getProperty( 'defaultValue' );
-        $refDefault->setAccessible( true );
-        $refDefault->setValue( $this->stub, $mockDefaultValue );
-        self::assertEquals( $mockDefaultValue, $this->stub->getValue() );
-    }
-
-    /**
-     * @group fieldType
      * @covers \ezp\Content\FieldType::setFieldValue
      */
     public function testSetFieldValue()

@@ -40,12 +40,6 @@ use ezp\Content\FieldType\FieldSettings,
 abstract class FieldType implements Observer
 {
     /**
-     * @var \ezp\Content\FieldType\Value Fallback default value of field type when no such default
-     *                                   value is provided in the field definition in content types.
-     */
-    protected $defaultValue;
-
-    /**
      * @var FieldSettings Custom properties which are specific to the field
      *                      type. Typically these properties are used to
      *                      configure behaviour of field types and normally set
@@ -176,12 +170,16 @@ abstract class FieldType implements Observer
      */
     public function getValue()
     {
-        if ( $this->value === null )
-        {
-            return $this->defaultValue;
-        }
-        return $this->value;
+        return $this->value ?: $this->getDefaultValue();
     }
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\Value
+     */
+    abstract protected function getDefaultValue();
 
     /**
      * Method to populate the FieldValue struct for field types

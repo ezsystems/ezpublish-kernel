@@ -19,7 +19,16 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezdatetime";
     const IS_SEARCHABLE = true;
 
-    protected $defaultValue = null;
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\DateAndTime\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( new DateTime );
+    }
 
     /**
      * Checks if value can be parsed.

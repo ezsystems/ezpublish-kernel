@@ -10,8 +10,7 @@
 namespace ezp\Content\FieldType\Checkbox;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    \ezp\Base\Exception\BadFieldTypeInput,
-    \ezp\Persistence\Content\FieldValue;
+    ezp\Base\Exception\BadFieldTypeInput;
 
 /**
  * Checkbox field type.
@@ -23,7 +22,16 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezboolean";
     const IS_SEARCHABLE = true;
 
-    protected $defaultValue = false;
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\Float\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( false );
+    }
 
     /**
      * Checks if value can be parsed.

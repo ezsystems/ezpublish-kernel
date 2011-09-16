@@ -23,9 +23,18 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezfloat";
     const IS_SEARCHABLE = false;
 
-    protected $defaultValue = 0.0;
-
     protected $allowedValidators = array( 'FloatValueValidator' );
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\Float\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( 0.0 );
+    }
 
     /**
      * Checks if value can be parsed.
