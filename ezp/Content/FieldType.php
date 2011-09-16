@@ -246,7 +246,7 @@ abstract class FieldType implements Observer
      * If validator is not allowed for a given field type, no data from that
      * validator is populated to $constraints.
      *
-     * @todo Consider separating out the fieldTypeConstraints into a sepsrate object, so that it could be passed, and not the whole FieldDefinition object.
+     * @todo Consider separating out the fieldTypeConstraints into a separate object, so that it could be passed, and not the whole FieldDefinition object.
      *
      * @abstract
      * @internal

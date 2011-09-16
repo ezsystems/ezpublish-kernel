@@ -39,7 +39,7 @@ class Field extends ValueObject
     /**
      * Value of the field
      *
-     * @var FieldValue
+     * @var \ezp\Persistence\Content\FieldValue
      */
     public $value;
 
