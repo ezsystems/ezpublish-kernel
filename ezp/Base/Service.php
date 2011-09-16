@@ -106,6 +106,7 @@ abstract class Service
                 break;
             case 'created':
             case 'modified':
+            case 'published':
                 $struct->$property = time();
                 break;
             case 'creatorId':

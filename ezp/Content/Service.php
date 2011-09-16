@@ -221,16 +221,16 @@ class Service extends BaseService
         $struct = $this->fillStruct( new RelationCreateStruct( array(
                                                                    'sourceContentId' => $content->id,
                                                                    'sourceContentVersion' => $version
-                                                               ) ),
-                                                               $relation,
-                                                               array(
-                                                                   'sourceContentVersion',
-                                                                   'sourceFieldDefinitionId'
-                                                               ) );
+                                     ) ),
+                                     $relation,
+                                     array(
+                                         'sourceContentVersion',
+                                         'sourceFieldDefinitionId'
+                                     ) );
         return $relation->setState(
             array(
                 "properties" => $this->handler->contentHandler()->addRelation( $struct )
-                )
+            )
         );
     }
 

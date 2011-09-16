@@ -47,13 +47,13 @@ class UpdateStruct extends ValueObject
      * Publication date
      * @var int Unix timestamp
      */
-    public $published = false;
+    public $published;
 
     /**
      * Modification date
      * @var int Unix timestamp
      */
-    public $modified = false;
+    public $modified;
 
     /**
      * TODO: Document
