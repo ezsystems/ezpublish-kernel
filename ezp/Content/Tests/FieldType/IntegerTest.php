@@ -11,10 +11,8 @@ namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Integer\Type as Integer,
     ezp\Content\FieldType\Integer\Value as IntegerValue,
-    ezp\Content\FieldType\Validator\StringLengthValidator,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Persistence\Content\FieldValue,
-    ezp\Content\Type\FieldDefinition,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
