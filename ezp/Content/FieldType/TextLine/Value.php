@@ -38,7 +38,7 @@ class Value implements ValueInterface
      */
     public static function build( PersistenceFieldValue $vo )
     {
-        return new static( $vo->data );
+        return new static( $vo->data['value'] );
     }
 
     /**

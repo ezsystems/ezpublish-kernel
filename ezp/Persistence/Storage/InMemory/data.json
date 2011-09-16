@@ -8,16 +8,16 @@
         {"id": 10, "typeId": 4, "sectionId": 2, "ownerId": 14, "currentVersionNo": 1, "status": 1, "name": {"eng-GB": "Anonymous User"}}
     ],
     "Content\\Field": [
-        {"id": 1, "fieldDefinitionId": 1, "type": "ezstring", "value": "eZ Publish NextGen", "language": null, "versionNo": 1, "_contentId": 1},
-        {"id": 2, "fieldDefinitionId": 5, "type": "eztext", "value": "This is a plain text description", "language": null, "versionNo": 1, "_contentId": 1},
-        {"id": 3, "fieldDefinitionId": 1, "type": "ezstring", "value": "eZ Publish NextGen Draft", "language": null, "versionNo": 2, "_contentId": 1},
-        {"id": 4, "fieldDefinitionId": 5, "type": "eztext", "value": "This is a plain text description, in a draft", "language": null, "versionNo": 2, "_contentId": 1},
-        {"id": 5, "fieldDefinitionId": 2, "type": "ezstring", "value": "Users", "language": null, "versionNo": 1, "_contentId": 4},
-        {"id": 6, "fieldDefinitionId": 4, "type": "ezstring", "value": "", "language": null, "versionNo": 1, "_contentId": 4},
-        {"id": 7, "fieldDefinitionId": 2, "type": "ezstring", "value": "Administrator users", "language": null, "versionNo": 1, "_contentId": 12},
-        {"id": 8, "fieldDefinitionId": 4, "type": "ezstring", "value": "", "language": null, "versionNo": 1, "_contentId": 12},
-        {"id": 9, "fieldDefinitionId": 2, "type": "ezstring", "value": "Anonymous Users", "language": null, "versionNo": 1, "_contentId": 42},
-        {"id": 10, "fieldDefinitionId": 4, "type": "ezstring", "value": "", "language": null, "versionNo": 1, "_contentId": 42}
+        {"id": 1, "fieldDefinitionId": 1, "type": "ezstring", "value": {"value": "eZ Publish NextGen"}, "language": null, "versionNo": 1, "_contentId": 1},
+        {"id": 2, "fieldDefinitionId": 5, "type": "eztext", "value": {"value": "This is a plain text description"}, "language": null, "versionNo": 1, "_contentId": 1},
+        {"id": 3, "fieldDefinitionId": 1, "type": "ezstring", "value": {"value": "eZ Publish NextGen Draft"}, "language": null, "versionNo": 2, "_contentId": 1},
+        {"id": 4, "fieldDefinitionId": 5, "type": "eztext", "value": {"value": "This is a plain text description, in a draft"}, "language": null, "versionNo": 2, "_contentId": 1},
+        {"id": 5, "fieldDefinitionId": 2, "type": "ezstring", "value": {"value": "Users"}, "language": null, "versionNo": 1, "_contentId": 4},
+        {"id": 6, "fieldDefinitionId": 4, "type": "ezstring", "value": {"value": ""}, "language": null, "versionNo": 1, "_contentId": 4},
+        {"id": 7, "fieldDefinitionId": 2, "type": "ezstring", "value": {"value": "Administrator users"}, "language": null, "versionNo": 1, "_contentId": 12},
+        {"id": 8, "fieldDefinitionId": 4, "type": "ezstring", "value": {"value": ""}, "language": null, "versionNo": 1, "_contentId": 12},
+        {"id": 9, "fieldDefinitionId": 2, "type": "ezstring", "value": {"value": "Anonymous Users"}, "language": null, "versionNo": 1, "_contentId": 42},
+        {"id": 10, "fieldDefinitionId": 4, "type": "ezstring", "value": {"value": ""}, "language": null, "versionNo": 1, "_contentId": 42}
     ],
     "Content\\Language" : [
         {"id": 2, "locale": "eng-GB", "isEnabled": true, "name": "English (United Kingdom)" }
