@@ -13,6 +13,7 @@ use ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content\CreateStruct as ContentCreateStruct,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\FieldValue,
     ezp\Base\Exception\NotFound,
     ezp\Content\Location;
 
@@ -87,8 +88,12 @@ class LocationHandlerTest extends HandlerTest
                             new Field(
                                 array(
                                     "type" => "ezstring",
-                                    // @todo Use FieldValue object
-                                    "value" => "Welcome $i",
+                                    // FieldValue object compatible with ezstring
+                                    "value" => new FieldValue(
+                                        array(
+                                            'data' => array( 'value' => "Welcome $i" )
+                                        )
+                                    ),
                                     "language" => "eng-GB",
                                 )
                             )

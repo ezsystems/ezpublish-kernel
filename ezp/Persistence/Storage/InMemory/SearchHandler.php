@@ -14,6 +14,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
+    ezp\Persistence\Content\FieldValue,
     Exception;
 
 /**
@@ -67,6 +68,28 @@ class SearchHandler extends Handler
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, $translations = null )
     {
         throw new Exception( "Not implemented yet." );
+
+        // Fix field values
+        foreach ( $list as $content )
+        {
+            foreach ( $content->version->fields as $field )
+            {
+                $fieldValue = new FieldValue( array( 'data' => $field->value ) );
+                $field->value = $fieldValue;
+            }
+        }
+
+        $result = new Result();
+        $result->count = count( $list );
+
+        if ( $limit === null && $offset === 0 )
+            $result->content = $list;
+        else if ( $limit === null )
+             $result->content = array_slice( $list, $offset );
+        else
+            $result->content = array_slice( $list, $offset, $limit );
+
+        return $result;
     }
 
     /**

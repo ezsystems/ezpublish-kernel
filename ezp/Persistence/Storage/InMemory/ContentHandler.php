@@ -91,7 +91,7 @@ class ContentHandler implements ContentHandlerInterface
             $fieldVo->value = new FieldValue(
                 array(
                     'data' => $fieldVo->value,
-                    'sortKey' => $field->value->sortKey
+                    'sortKey' => array( 'sort_key_string' => $field->value->sortKey )
                 )
             );
             $version->fields[] = $fieldVo;
@@ -266,6 +266,12 @@ class ContentHandler implements ContentHandlerInterface
         $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id, 'versionNo' => $version ) );
         $versions[0]->fields = $this->backend->find( 'Content\\Field', array( '_contentId' => $content->id,
                                                                               'versionNo' => $version ) );
+
+        foreach ( $versions[0]->fields as $field )
+        {
+            $fieldVo = new FieldValue( array( 'data' => $field->value ) );
+            $field->value = $fieldVo;
+        }
 
         $content->version = $versions[0];
         // @todo Loading locations by content object id should be possible using handler API.

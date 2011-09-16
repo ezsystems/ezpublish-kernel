@@ -12,6 +12,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Relation as RelationValue,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Base\Exception\NotFound,
@@ -56,8 +57,12 @@ class ContentHandlerTest extends HandlerTest
         $struct->fields[] = new Field(
             array(
                 'type' => 'ezstring',
-                // @todo Use FieldValue object
-                'value' => 'Welcome',
+                // FieldValue object compatible with ezstring
+                'value' => new FieldValue(
+                    array(
+                        'data' => array( 'value' => 'Welcome' )
+                    )
+                ),
                 'language' => 'eng-GB',
             )
         );
@@ -106,8 +111,12 @@ class ContentHandlerTest extends HandlerTest
         $struct->fields[] = new Field(
             array(
                 'type' => 'ezstring',
-                // @todo Use FieldValue object
-                'value' => 'Welcome',
+                // FieldValue object compatible with ezstring
+                "value" => new FieldValue(
+                    array(
+                        "data" => array( "value" => "Welcome" )
+                    )
+                ),
                 'language' => 'eng-GB',
             )
         );
@@ -130,7 +139,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Field', $field );
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->language );
-        $this->assertEquals( 'Welcome', $field->value );
+        $this->assertEquals( 'Welcome', $field->value->data['value'] );
         $this->assertEquals( $content->version->versionNo, $field->versionNo );
     }
 

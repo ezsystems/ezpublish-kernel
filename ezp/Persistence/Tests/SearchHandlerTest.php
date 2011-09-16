@@ -11,6 +11,7 @@ namespace ezp\Persistence\Tests;
 use ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Base\Exception\NotFound;
 
@@ -51,8 +52,12 @@ class SearchHandlerTest extends HandlerTest
         $struct->fields[] = new Field(
             array(
                 "type" => "ezstring",
-                // @todo Use FieldValue object
-                "value" => "Welcome",
+                // FieldValue object compatible with ezstring
+                "value" => new FieldValue(
+                    array(
+                        "data" => array( "value" => "Welcome" )
+                    )
+                ),
                 "language" => "eng-GB",
             )
         );
