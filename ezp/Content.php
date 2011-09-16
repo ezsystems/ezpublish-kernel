@@ -15,6 +15,7 @@ use ezp\Base\Model,
     ezp\Content\Type,
     ezp\Content\Location,
     ezp\Content\Section,
+    ezp\Content\Language,
     ezp\Base\Proxy,
     ezp\Content\Version,
     ezp\Content\Version\StaticCollection as VersionCollection,
@@ -70,6 +71,10 @@ use ezp\Base\Model,
  *           $myTitle = $content->fields->title; // Where "title" is the field identifier
  *           </code>
  * @property int $ownerId Owner identifier
+ * @property-read mixed $initialLanguageId
+ *                The id of the language the Content was initially created in. Set using {@see setInitialLanguage()}
+ * @property \ezp\Content\Language $initialLanguage
+ *           The language the Content was initially created in
  */
 class Content extends Model implements ModelDefinition
 {
@@ -94,6 +99,8 @@ class Content extends Model implements ModelDefinition
         'remoteId' => true,// @todo Make readonly and deal with this internally (in all DO's)
         'sectionId' => false,
         'typeId' => false,
+        'modified' => true,
+        'published' => true,
     );
 
     /**
@@ -111,7 +118,8 @@ class Content extends Model implements ModelDefinition
         //'translations' => true,
         'relations' => false,
         'reversedRelations' => false,
-        'currentVersion' => false
+        'currentVersion' => false,
+        'initialLanguageId' => true,
     );
 
     /**
@@ -162,6 +170,12 @@ class Content extends Model implements ModelDefinition
      * @var \ezp\User
      */
     protected $owner;
+
+    /**
+     * Initial content language
+     * @var \ezp\Content\Language
+     */
+    protected $initialLanguage;
 
     /**
      * Create content based on content type object
@@ -529,6 +543,34 @@ class Content extends Model implements ModelDefinition
     protected function getReverseRelations()
     {
         return $this->reverseRelations;
+    }
+
+    /**
+     * Gets the initial language Id
+     * @return mixed
+     */
+    protected function getInitialLanguageId()
+    {
+        return $this->initialLanguage->id;
+    }
+
+    /**
+     * Sets the initial language
+     * @param \ezp\Content\Language
+     */
+    protected function setInitialLanguage( Language $initialLanguage )
+    {
+        $this->initialLanguage = $initialLanguage;
+        $this->properties->initialLanguageId = $initialLanguage->id;
+    }
+
+    /**
+     * Gets the initial language
+     * @return \ezp\Content\Language
+     */
+    protected function getInitialLanguage()
+    {
+        return $this->initialLanguage;
     }
 
     /**

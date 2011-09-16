@@ -44,15 +44,22 @@ class UpdateStruct extends ValueObject
     public $fields = array();
 
     /**
-     * Creation date
-     * @var int
+     * Publication date
+     * @var int Unix timestamp
      */
-    public $created;
+    public $published = false;
 
     /**
      * Modification date
-     * @var int
+     * @var int Unix timestamp
      */
-    public $modified;
+    public $modified = false;
+
+    /**
+     * TODO: Document
+     *
+     * @var mixed
+     */
+    public $initialLanguageId = false;
 }
 ?>

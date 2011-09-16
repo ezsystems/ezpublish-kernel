@@ -65,6 +65,13 @@ class Version extends ValueObject
     public $contentId;
 
     /**
+     * TODO: Document
+     *
+     * @var mixed
+     */
+    public $initialLanguageId;
+
+    /**
      * List of languages (id's) in this version
      *
      * Reflects which languages fields exists in for this version.

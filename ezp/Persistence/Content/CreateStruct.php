@@ -66,16 +66,24 @@ class CreateStruct extends ValueObject
      */
     public $remoteId;
 
+
+    /**
+      * TODO: Document
+      *
+      * @var mixed
+      */
+    public $initialLanguageId = false;
+
     /**
      * Creation date
      * @var int
      */
-    public $created;
+    public $published = false;
 
     /**
      * Modification date
      * @var int
      */
-    public $modified;
+    public $modified = false;
 }
 ?>

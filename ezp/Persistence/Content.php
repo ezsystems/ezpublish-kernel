@@ -47,6 +47,18 @@ class Content extends ValueObject
     public $ownerId;
 
     /**
+     * Content modification date
+     * @var int Unix timestamp
+     */
+    public $modified;
+
+    /**
+     * Content publication date
+     * @var int Unix timestamp
+     */
+    public $published;
+
+    /**
      * Current Version number
      *
      * Contains the current version number of the published version.
@@ -81,13 +93,13 @@ class Content extends ValueObject
     public $alwaysAvailable;
 
     /**
-     * @var string Remote identifier used as a custom identifier for the object
+     * Remote identifier used as a custom identifier for the object
+     * @var string
      */
     public $remoteId;
 
     /**
-     * TODO: Document
-     *
+     * Language id the content was initially created in
      * @var mixed
      */
     public $initialLanguageId;
