@@ -35,7 +35,7 @@ class Type extends FieldType
     public function __construct()
     {
         parent::__construct();
-        $this->defaultValue = new TextLineValue;
+        $this->defaultValue = new TextLineValue( "" );
     }
 
     /**

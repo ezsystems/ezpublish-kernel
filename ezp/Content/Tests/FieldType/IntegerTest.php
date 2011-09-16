@@ -103,16 +103,6 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Integer\Value::__construct
-     */
-    public function testBuildFieldValueWithoutParam()
-    {
-        $value = new IntegerValue;
-        self::assertSame( 0, $value->value );
-    }
-
-    /**
-     * @group fieldType
      * @covers \ezp\Content\FieldType\Integer\Value::fromString
      */
     public function testBuildFieldValueFromString()

@@ -20,17 +20,16 @@ class Value implements ValueInterface
      *
      * @var float
      */
-    public $value = 0.0;
+    public $value;
 
     /**
      * Construct a new Value object and initialize with $value
      *
      * @param float $value
      */
-    public function __construct( $value = null )
+    public function __construct( $value )
     {
-        if ( $value !== null )
-            $this->value = $value;
+        $this->value = $value;
     }
 
     /**

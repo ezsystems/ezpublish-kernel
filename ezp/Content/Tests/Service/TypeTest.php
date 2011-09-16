@@ -483,7 +483,7 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->load( 1, 0 );
         $field = new FieldDefinition( $type, 'ezstring' );
         $field->name = $field->description = array( 'eng-GB' => 'Test' );
-        $field->defaultValue = new TextLineValue;
+        $field->defaultValue = new TextLineValue( "" );
         $field->fieldGroup = '';
         $field->identifier = 'test';
         $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
@@ -517,7 +517,7 @@ class TypeTest extends BaseServiceTest
 
         $field = new FieldDefinition( $type, 'ezstring' );
         $field->name = $field->description = array( 'eng-GB' => 'Test' );
-        $field->defaultValue = new TextLineValue;
+        $field->defaultValue = new TextLineValue( "" );
         $field->fieldGroup = '';
         $field->identifier = 'test';
         $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;

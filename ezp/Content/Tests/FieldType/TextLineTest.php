@@ -104,16 +104,6 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\TextLine\Value::__construct
-     */
-    public function testBuildFieldValueWithoutParam()
-    {
-        $value = new TextLineValue;
-        self::assertSame( '', $value->text );
-    }
-
-    /**
-     * @group fieldType
      * @covers \ezp\Content\FieldType\TextLine\Value::fromString
      */
     public function testBuildFieldValueFromString()

@@ -28,10 +28,9 @@ class Value implements ValueInterface
      *
      * @param \DateTime $dateTime
      */
-    public function __construct( DateTime $dateTime = null )
+    public function __construct( DateTime $dateTime )
     {
-        if ( $dateTime !== null )
-            $this->value = $dateTime;
+        $this->value = $dateTime;
     }
 
     /**
