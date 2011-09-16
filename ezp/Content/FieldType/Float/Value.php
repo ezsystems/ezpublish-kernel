@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\FieldType\Float;
-use ezp\Content\FieldType\Value as ValueInterface;
+use ezp\Content\FieldType\Value as ValueInterface,
+    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
  * Value for Float field type
@@ -30,6 +31,14 @@ class Value implements ValueInterface
     public function __construct( $value )
     {
         $this->value = $value;
+    }
+
+    /**
+     * @see \ezp\Content\FieldType\Value
+     */
+    public static function build( PersistenceFieldValue $vo )
+    {
+        return new static( $vo->data );
     }
 
     /**

@@ -9,7 +9,8 @@
 
 namespace ezp\Content\FieldType\DateAndTime;
 use ezp\Content\FieldType\Value as ValueInterface,
-    DateTime;
+    DateTime,
+    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
  * Value for DateAndTime field type
@@ -31,6 +32,16 @@ class Value implements ValueInterface
     public function __construct( DateTime $dateTime )
     {
         $this->value = $dateTime;
+    }
+
+    /**
+     * @see \ezp\Content\FieldType\Value
+     */
+    public static function build( PersistenceFieldValue $vo )
+    {
+        $date = new DateTime;
+        $date->setTimestamp( $vo->data );
+        return new static( $date );
     }
 
     /**

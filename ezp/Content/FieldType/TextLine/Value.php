@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\FieldType\TextLine;
-use ezp\Content\FieldType\Value as ValueInterface;
+use ezp\Content\FieldType\Value as ValueInterface,
+    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
  * Value for TextLine field type
@@ -30,6 +31,14 @@ class Value implements ValueInterface
     public function __construct( $text )
     {
         $this->text = $text;
+    }
+
+    /**
+     * @see \ezp\Content\FieldType\Value
+     */
+    public static function build( PersistenceFieldValue $vo )
+    {
+        return new static( $vo->data );
     }
 
     /**

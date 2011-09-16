@@ -387,6 +387,7 @@ class Service extends BaseService
                 'fields' => new FieldCollection( $this, $version )
             )
         );
+        $field->value = FieldTypeFactory::buildValue( $voField->type, $voField->value );
 
         return $version;
     }

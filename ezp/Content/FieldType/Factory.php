@@ -9,7 +9,8 @@
 
 namespace ezp\Content\FieldType;
 use ezp\Base\Configuration,
-    ezp\Base\Exception\MissingClass;
+    ezp\Base\Exception\MissingClass,
+    ezp\Persistence\Content\FieldValue;
 
 /**
  * FieldType Factory class
@@ -20,41 +21,83 @@ abstract class Factory
      * Factory method for building field type object based on $identifier.
      *
      * @throws \ezp\Base\Exception\MissingClass
-     * @param string $fieldTypeString
+     * @param string $fieldTypeIdentifier
      * @return \ezp\Content\FieldType
      */
-    public static function build( $fieldTypeString )
+    public static function build( $fieldTypeIdentifier )
     {
-        $fieldTypeMap = Configuration::getInstance( "content" )->get( "fields", "Type" );
-        if ( !isset( $fieldTypeMap[$fieldTypeString] ) )
-        {
-            throw new MissingClass( $fieldTypeString, "FieldType" );
-        }
+        $fieldTypeNS = self::getFieldTypeNamespace( $fieldTypeIdentifier );
 
-        $fieldTypeClass = "{$fieldTypeMap[$fieldTypeString]}\\Type";
+        $fieldTypeClass = "$fieldTypeNS\\Type";
         if ( class_exists( $fieldTypeClass ) )
         {
             return new $fieldTypeClass;
         }
 
-        throw new MissingClass( $fieldTypeString, "FieldType" );
+        throw new MissingClass( $fieldTypeIdentifier, "FieldType" );
     }
 
     /**
-     * Builds a field value object for a field type, identified by $fieldTypeString, based on $stringValue.
+     * Builds a field value object for a field type from $stringValue.
+     * Field type is identified by $fieldTypeIdentifier (e.g. "ezstring").
+     * String format for $stringValue is entirely up to the field type value object.
      *
-     * @param string $fieldTypeString
+     * @param string $fieldTypeIdentifier
      * @param string $stringValue
      * @return \ezp\Content\FieldType\Value
      */
-    public static function buildValueFromString( $fieldTypeString, $stringValue )
+    public static function buildValueFromString( $fieldTypeIdentifier, $stringValue )
+    {
+        $fieldTypeNS = self::getFieldTypeNamespace( $fieldTypeIdentifier );
+        $fieldValueClass = "$fieldTypeNS\\Value";
+        return $fieldValueClass::fromString( $stringValue );
+    }
+
+    /**
+     * Builds a field value object from a {@link \ezp\Persistence\Content\FieldValue} object, returned by persistence layer.
+     * Field type is identified by $fieldTypeIdentifier (e.g. "ezstring").
+     *
+     * @param string $fieldTypeIdentifier
+     * @param \ezp\Persistence\ContentFieldValue $vo
+     * @return \ezp\Content\FieldType\Value
+     */
+    public static function buildValue( $fieldTypeIdentifier, FieldValue $vo )
+    {
+        $fieldTypeNS = self::getFieldTypeNamespace( $fieldTypeIdentifier );
+        $fieldValueClass = "$fieldTypeNS\\Value";
+        return $fieldValueClass::build( $vo );
+    }
+
+    /**
+     * Returns field type namespace.
+     * Field type is identified by $fiedTypeIdentifier.
+     * Will throw a MissingClass exception if $fieldTypeIdentifier cannot be identified as a valid field type.
+     * <code>
+     * use ezp\Content\FieldType\Factory as FieldTypeFactory,
+     *     ezp\Base\Exception\MissingClass;
+     *
+     * try
+     * {
+     *     // Will return "ezp\Content\FieldType\TextLine"
+     *     $fieldTypeIdentifier = "ezstring";
+     *     $fieldTypeNS = FieldTypeFactory::getFiedTypeNamespace( $fieldTypeIdentifier );
+     * }
+     * catch ( MissingClass $e )
+     * {
+     *     echo "Oops, seems that field type '$fieldTypeIdentifier' is invalid :-/";
+     * }
+     * </code>
+     *
+     * @param string $fieldTypeIdentifier Field type identifier
+     * @return string
+     * @throws \ezp\Base\Exception\MissingClass
+     */
+    public static function getFieldTypeNamespace( $fieldTypeIdentifier )
     {
         $fieldTypeMap = Configuration::getInstance( "content" )->get( "fields", "Type" );
-        if ( !isset( $fieldTypeMap[$fieldTypeString] ) )
-        {
-            throw new MissingClass( $fieldTypeString, "FieldType" );
-        }
-        $fieldValueClass = "$fieldTypeMap[$fieldTypeString]\\Value";
-        return $fieldValueClass::fromString( $stringValue );
+        if ( !isset( $fieldTypeMap[$fieldTypeIdentifier] ) )
+            throw new MissingClass( $fieldTypeIdentifier, "FieldType" );
+
+        return $fieldTypeMap[$fieldTypeIdentifier];
     }
 }

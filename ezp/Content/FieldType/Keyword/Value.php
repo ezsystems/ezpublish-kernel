@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\FieldType\Keyword;
-use ezp\Content\FieldType\Value as ValueInterface;
+use ezp\Content\FieldType\Value as ValueInterface,
+    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
  * Value for Keyword field type
@@ -31,6 +32,14 @@ class Value implements ValueInterface
     {
         if ( $values !== null )
             $this->values = $values;
+    }
+
+    /**
+     * @see \ezp\Content\FieldType\Value
+     */
+    public static function build( PersistenceFieldValue $vo )
+    {
+        throw new RuntimeException( "@TODO: Implement" );
     }
 
     /**

@@ -9,7 +9,8 @@
 
 namespace ezp\Content\FieldType\Author;
 use ezp\Content\FieldType\Value as ValueInterface,
-    RuntimeException;
+    RuntimeException,
+    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
  * Value for Author field type
@@ -32,6 +33,14 @@ class Value implements ValueInterface
     {
         if ( $authors !== null )
             $this->authors = $authors;
+    }
+
+    /**
+     * @see \ezp\Content\FieldType\Value
+     */
+    public static function build( PersistenceFieldValue $vo )
+    {
+        throw new RuntimeException( "@TODO: Implement" );
     }
 
     /**

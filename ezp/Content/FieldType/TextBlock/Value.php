@@ -13,6 +13,6 @@ use ezp\Content\FieldType\TextLine\Value as TextLineValue;
 /**
  * Value for TextBlock field type
  */
-class Value implements TextLineValue
+class Value extends TextLineValue
 {
 }
