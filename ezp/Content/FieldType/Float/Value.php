@@ -20,7 +20,7 @@ class Value implements ValueInterface
      *
      * @var float
      */
-    public $value;
+    public $value = 0.0;
 
     /**
      * Construct a new Value object and initialize with $value
@@ -30,7 +30,7 @@ class Value implements ValueInterface
     public function __construct( $value = null )
     {
         if ( $value !== null )
-            $this->value = (float)$value;
+            $this->value = $value;
     }
 
     /**

@@ -11,9 +11,13 @@ namespace ezp\Content\FieldType\Float;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Content\Type\FieldDefinition;
+    ezp\Persistence\Content\FieldValue;
 
+/**
+ * Float field types
+ *
+ * Represents floats.
+ */
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezfloat";
@@ -34,7 +38,7 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !is_float( $inputValue ) )
+        if ( !is_float( $inputValue->value ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
@@ -62,7 +66,7 @@ class Type extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->getValue() );
+        return array( 'value' => $this->getValue()->value );
     }
 
 }
