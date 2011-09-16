@@ -202,30 +202,17 @@ abstract class Model implements Observable, ModelInterface
      */
     public function __set( $property, $value )
     {
-        if ( !isset( $this->dynamicProperties[$property] ) )
+        if ( !isset( $this->readWriteProperties[$property] ) )
         {
-            if ( !isset( $this->readWriteProperties[$property] ) )
-            {
-                throw new PropertyNotFound( $property, get_class( $this ) );
-            }
-            else if ( $this->readWriteProperties[$property] )
-            {
-                $this->properties->$property = $value;
-                return;
-            }
-
-            throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
+            throw new PropertyNotFound( $property, get_class( $this ) );
+        }
+        else if ( $this->readWriteProperties[$property] )
+        {
+            $this->properties->$property = $value;
+            return;
         }
 
-        $method = "set{$property}";
-        if ( method_exists( $this, $method ) )
-        {
-            $this->$method( $value );
-        }
-        else
-        {
-            throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
-        }
+        throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
     }
 
     /**

@@ -127,7 +127,7 @@ class ContentTest extends BaseServiceTest
         $content->addParent( $location );
         $content->name = array( "eng-GB" => "New object" );
         $content->ownerId = 10;
-        $content->section = $section;
+        $content->setSection( $section );
 
         $content = $this->service->create( $content );
         // @todo: Deal with field value when that is ready for manipulation

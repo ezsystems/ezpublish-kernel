@@ -96,7 +96,7 @@ class TrashTest extends Base
         $content = new Content( $type, new User( 10 ) );
         $content->name = "test";
         $content->ownerId = 14;
-        $content->section = $section;
+        $content->setSection( $section );
         $content->fields['name'] = 'Welcome';
 
         $this->content = $this->repository->getContentService()->create( $content );
@@ -105,7 +105,7 @@ class TrashTest extends Base
         // Now creating location for content
         $this->topLocation = $this->locationService->load( 2 );
         $this->location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
-        $this->location->parent = $this->topLocation;
+        $this->location->setParent( $this->topLocation );
         $this->location = $this->locationService->create( $this->location );
         $this->locationToDelete[] = $this->location;
 
@@ -115,14 +115,14 @@ class TrashTest extends Base
             $content = new Content( $type, new User( 10 ) );
             $content->name = "foo$i";
             $content->ownerId = 14;
-            $content->section = $section;
+            $content->setSection( $section );
             $content->fields['name'] = "bar$i";
 
             $content = $this->repository->getContentService()->create( $content );
             $this->contentToDelete[] = $content;
 
             $location = new Location( $content );
-            $location->parent = $parent;
+            $location->setParent( $parent );
             $location = $this->locationService->create( $location );
             $this->locationToDelete[] = $location;
             $this->insertedLocations[] = $location;

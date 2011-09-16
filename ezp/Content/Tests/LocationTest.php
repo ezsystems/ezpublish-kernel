@@ -50,7 +50,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     public function testParentWrongClass()
     {
         $location = new Location( $this->content );
-        $location->parent = new Section();
+        $location->setParent( new Section() );
     }
 
     /**
@@ -61,7 +61,7 @@ class LocationTest extends \PHPUnit_Framework_TestCase
     {
         $location = new Location( $this->content );
         $location2 = new Location( $this->content );
-        $location2->parent = $location;
+        $location2->setParent( $location );
         $this->assertEquals( $location->children[0], $location2, 'Children on inverse side was not correctly updated when assigned as parent!' );
         $this->assertNotEquals( $location->children[0], new Location( $this->content ), 'Equal function miss-behaves, this should not be equal!' );
     }

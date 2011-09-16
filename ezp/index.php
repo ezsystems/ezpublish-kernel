@@ -49,7 +49,7 @@ $section->name = "Standard";
 // Create Content object
 $content = new Content( $contentType, new User( 10 ) );
 $content->ownerId = 10;
-$content->section = $section;
+$content->setSection( $section );
 
 $content->fields['tags'] = 'ezpublish, demo, public, api';
 //$content->fields['title'] = 'My new Article';

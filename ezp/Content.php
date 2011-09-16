@@ -468,7 +468,7 @@ class Content extends Model implements ModelDefinition
      *
      * @param \ezp\Content\Section $section
      */
-    protected function setSection( Section $section )
+    public function setSection( Section $section )
     {
         $this->section = $section;
         $this->properties->sectionId = $section->id;
@@ -511,7 +511,7 @@ class Content extends Model implements ModelDefinition
     public function addParent( Location $parentLocation )
     {
         $newLocation = new Location( $this );
-        $newLocation->parent = $parentLocation;
+        $newLocation->setParent( $parentLocation );
         return $newLocation;
     }
 

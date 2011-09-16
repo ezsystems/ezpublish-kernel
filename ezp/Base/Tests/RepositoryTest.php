@@ -154,7 +154,7 @@ class RepositoryTest extends BaseServiceTest
         $type = $this->repository->getContentTypeService()->load( 1 );
         $parent = $this->repository->getLocationService()->load( 2 );
         $content = new Content( $type, $this->repository->getUser() );
-        $content->section = $section;
+        $content->setSection( $section );
         $this->assertFalse( $this->repository->canUser( 'create', $content, $parent ) );
 
         $admin = $this->repository->getUserService()->load( 14 );

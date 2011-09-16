@@ -71,7 +71,7 @@ class LocationTest extends BaseServiceTest
         $content = new Content( $type, new User( 10 ) );
         $content->name = array( "eng-GB" => "test" );
         $content->ownerId = 14;
-        $content->section = $section;
+        $content->setSection( $section );
         $content->fields['name'] = 'Welcome';
 
         $this->content = $this->repository->getContentService()->create( $content );
@@ -80,7 +80,7 @@ class LocationTest extends BaseServiceTest
         // Now creating location for content
         $this->topLocation = $this->service->load( 2 );
         $this->location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
-        $this->location->parent = $this->topLocation;
+        $this->location->setParent( $this->topLocation );
         $this->location = $this->service->create( $this->location );
         $this->locationToDelete[] = $this->location;
 
@@ -91,14 +91,14 @@ class LocationTest extends BaseServiceTest
             $content = new Content( $type, new User( 10 ) );
             $content->name = array( "eng-GB" => "foo$i" );
             $content->ownerId = 14;
-            $content->section = $section;
+            $content->setSection( $section );
             $content->fields['name'] = "bar$i";
 
             $content = $this->repository->getContentService()->create( $content );
             $this->contentToDelete[] = $content;
 
             $location = new Location( $content );
-            $location->parent = $parent;
+            $location->setParent( $parent );
             $location = $this->service->create( $location );
             $this->locationToDelete[] = $location;
             $this->insertedLocations[] = $location;
@@ -219,7 +219,7 @@ class LocationTest extends BaseServiceTest
         $remoteId = md5( microtime() );
         $parent = $this->service->load( 2 );
         $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
-        $location->parent = $parent;
+        $location->setParent( $parent );
         $location->remoteId = $remoteId;
         $location->sortField = Location::SORT_FIELD_PRIORITY;
         $location->sortOrder = Location::SORT_ORDER_DESC;
@@ -269,7 +269,7 @@ class LocationTest extends BaseServiceTest
         $time = time();
         // Setup a location for test content and delete local variable
         $locationForTestContent = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
-        $locationForTestContent->parent = $this->topLocation;
+        $locationForTestContent->setParent( $this->topLocation );
         $locationForTestContent = $this->service->create( $locationForTestContent );
         $this->locationToDelete[] = $locationForTestContent;
 
@@ -283,14 +283,14 @@ class LocationTest extends BaseServiceTest
         // Try to create a new location under a hidden one.
         // Newly created location should be invisible
         $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
-        $location->parent = $this->topLocation;
+        $location->setParent( $this->topLocation );
         self::assertTrue( $this->service->create( $location )->invisible );
         $this->locationToDelete[] = $location;
 
         // Create a new location under an invisible one
         // New location should also be invisible
         $anotherLocation4AnotherContent = new Location( new Proxy( $this->repository->getContentService(), 1 ) );
-        $anotherLocation4AnotherContent->parent = $location;
+        $anotherLocation4AnotherContent->setParent( $location );
         self::assertTrue( $this->service->create( $anotherLocation4AnotherContent )->invisible );
         $this->locationToDelete[] = $anotherLocation4AnotherContent;
     }
@@ -308,14 +308,14 @@ class LocationTest extends BaseServiceTest
 
         // Create a new location that will be hidden
         $locationShouldStayHidden = new Location( new Proxy( $this->repository->getContentService(), 1 ) );
-        $locationShouldStayHidden->parent = $this->location;
+        $locationShouldStayHidden->setParent( $this->location );
         $this->service->create( $locationShouldStayHidden );
         $this->locationToDelete[] = $locationShouldStayHidden;
         $this->service->hide( $locationShouldStayHidden );
 
         // Create again a new location, under the last hidden one
         $locationShouldStayInvisible = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
-        $locationShouldStayInvisible->parent = $locationShouldStayHidden;
+        $locationShouldStayInvisible->setParent( $locationShouldStayHidden );
         $locationShouldStayInvisible = $this->service->create( $locationShouldStayInvisible );
 
         // Now test
@@ -496,7 +496,7 @@ class LocationTest extends BaseServiceTest
         // Delete the previous one and check if only location has been removed
         $startIndex--;
         $newLocation = new Location( new Proxy( $this->repository->getContentService(), $this->insertedLocations[$startIndex]->contentId ) );
-        $newLocation->parent = $this->topLocation;
+        $newLocation->setParent( $this->topLocation );
         $newLocation = $this->service->create( $newLocation );
         $this->service->delete( $this->insertedLocations[$startIndex] );
         // Reload location from backend

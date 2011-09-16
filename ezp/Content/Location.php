@@ -151,7 +151,7 @@ class Location extends Model
      *
      * @param \ezp\Content\Location $parent
      */
-    protected function setParent( Location $parent )
+    public function setParent( Location $parent )
     {
         $this->parent = $parent;
         $this->properties->parentId = $parent->id;
@@ -177,7 +177,7 @@ class Location extends Model
      *
      * @param \ezp\Content $content
      */
-    protected function setContent( Content $content )
+    public function setContent( Content $content )
     {
         $this->content = $content;
         $this->properties->contentId = $content->id;

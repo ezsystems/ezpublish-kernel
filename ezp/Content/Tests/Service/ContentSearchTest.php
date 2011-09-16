@@ -94,7 +94,7 @@ class ContentSearchTest extends BaseServiceTest
             $content = new Content( $type, new User( 10 ) );
             $content->name = array( "eng-GB" => "foo$i" );
             $content->ownerId = 14;
-            $content->section = $section;
+            $content->setSection( $section );
             $content->fields['name'] = "bar$i";
             $content = $this->service->create( $content );
             $this->expectedContent[] = $content;
