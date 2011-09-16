@@ -89,8 +89,8 @@ class IntegerTest extends PHPUnit_Framework_TestCase
         $ft->setFieldValue( $fieldValue );
 
         self::assertSame( array( "value" => $integer ), $fieldValue->data );
-        /*self::assertNull( $fieldValue->externalData );
-        self::assertSame( array( "sort_key_string" => $integer ), $fieldValue->sortKey );*/
+        self::assertNull( $fieldValue->externalData );
+        self::assertSame( array( "sort_key_int" => $integer ), $fieldValue->sortKey );
     }
 
     /**
