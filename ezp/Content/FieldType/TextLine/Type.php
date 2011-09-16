@@ -12,7 +12,6 @@ use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\PersistenceFieldValue,
     ezp\Content\Type\FieldDefinition;
 
 /**
@@ -65,7 +64,7 @@ class Type extends FieldType
      */
     protected function getSortInfo()
     {
-         return array( 'sort_key_string' => $this->getValue()->text );
+        return array( 'sort_key_string' => $this->getValue()->text );
     }
 
     /**

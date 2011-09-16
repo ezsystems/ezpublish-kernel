@@ -30,7 +30,7 @@ class Value implements ValueInterface
     public function __construct( $value = null )
     {
         if ( $value !== null )
-            $this->value = (int)$value;
+            $this->value = $value;
     }
 
     /**

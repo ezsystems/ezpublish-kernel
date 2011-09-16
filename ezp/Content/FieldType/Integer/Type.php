@@ -38,7 +38,7 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !is_integer( $inputValue ) )
+        if ( !is_integer( $inputValue->value ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
@@ -79,6 +79,6 @@ class Type extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->getValue() );
+        return array( 'value' => $this->getValue()->value );
     }
 }
