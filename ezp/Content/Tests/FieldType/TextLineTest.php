@@ -8,16 +8,15 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use PHPUnit_Framework_TestCase,
-    ezp\Content\FieldType\Factory,
+use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\TextLine\Type as TextLine,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
-    ReflectionClass,
-    ReflectionObject,
+    ezp\Content\FieldType\Validator\StringLengthValidator,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Persistence\Content\FieldValue,
     ezp\Content\Type\FieldDefinition,
-    ezp\Content\FieldType\Validator\StringLengthValidator;
+    PHPUnit_Framework_TestCase,
+    ReflectionObject;
 
 class TextLineTest extends PHPUnit_Framework_TestCase
 {
