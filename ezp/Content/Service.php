@@ -178,6 +178,7 @@ class Service extends BaseService
         foreach ( $version->content->contentType->fields as $fieldDefinition )
         {
             $fieldsDef[$fieldDefinition->id] = $fieldDefinition;
+            $fields[$identifier]->value = FieldTypeFactory::buildValue( $voField->type, $voField->value );
         }
 
         foreach ( $fieldsVo as $fieldVo )

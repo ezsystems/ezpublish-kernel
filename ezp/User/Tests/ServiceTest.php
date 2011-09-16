@@ -195,8 +195,8 @@ class ServiceTest extends BaseServiceTest
         $groupDescription = 'A new user group for testing';
         $do = $service->createGroup( $parent, $groupName, $groupDescription );
         self::assertInstanceOf( 'ezp\\User\\Group', $do );
-        self::assertEquals( $groupName, $do->name );
-        self::assertEquals( $groupDescription, $do->description );
+        self::assertEquals( $groupName, (string)$do->name );
+        self::assertEquals( $groupDescription, (string)$do->description );
 
         $group = $do->getParent();
         self::assertInstanceOf( 'ezp\\User\\Group', $group );
@@ -215,8 +215,8 @@ class ServiceTest extends BaseServiceTest
         $do = $service->loadGroup( 12 );
         self::assertInstanceOf( 'ezp\\User\\Group', $do );
         self::assertEquals( 12, $do->id );
-        self::assertEquals( 'Administrator users', $do->name );
-        self::assertEquals( '', $do->description );
+        self::assertEquals( 'Administrator users', (string)$do->name );
+        self::assertEquals( '', (string)$do->description );
 
         $group = $do->getParent();
         self::assertInstanceOf( 'ezp\\User\\Group', $group );
