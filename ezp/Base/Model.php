@@ -170,16 +170,15 @@ abstract class Model implements Observable, ModelInterface
     {
         if ( isset( $this->readWriteProperties[$property] ) )
         {
-            if ( property_exists( $this, $property ) )
-            {
-                return $this->$property;
-            }
-            else if ( property_exists( $this->properties, $property ) )
+            if ( property_exists( $this->properties, $property ) )
             {
                 return $this->properties->$property;
             }
 
-            throw new Logic( '$readWriteProperties', "property '{$property}' could not be found." );
+            throw new Logic(
+                '$readWriteProperties',
+                "property '{$property}' could not be found on " . get_class( $this )
+            );
         }
 
         if ( isset( $this->dynamicProperties[$property] ) )

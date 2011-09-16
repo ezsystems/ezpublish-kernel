@@ -51,7 +51,6 @@ class Version extends Model
         'created' => true,
         'modified' => true,
         "status" => false,
-        'content' => false,
         "contentId" => false,
     );
 
@@ -60,6 +59,7 @@ class Version extends Model
      */
     protected $dynamicProperties = array(
         'fields' => true,
+        'content' => false,
     );
 
     /**
@@ -97,6 +97,16 @@ class Version extends Model
     protected function getFields()
     {
         return $this->fields;
+    }
+
+    /**
+     * Get content that this version is attached to
+     *
+     * @return \ezp\Content
+     */
+    protected function getContent()
+    {
+        return $this->content;
     }
 
     /**
