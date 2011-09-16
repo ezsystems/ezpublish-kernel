@@ -15,6 +15,7 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
+    ezp\Persistence\Content\FieldValue,
     ezp\Content,
     ezp\Content\Version,
     ezp\Base\Exception\NotFound,
@@ -76,14 +77,24 @@ class ContentHandler implements ContentHandlerInterface
         );
         foreach ( $content->fields as $field )
         {
-            $version->fields[] = $this->backend->create(
+            $fieldVo = $this->backend->create(
                 'Content\\Field',
                 array(
                     'versionNo' => $version->versionNo,
                     // Using internal _contentId since it's not directly exposed by Persistence
-                    '_contentId' => $contentObj->id
+                    '_contentId' => $contentObj->id,
+                    'value' => $field->value->data
                 ) + (array)$field
             );
+
+            // Fix value in $fieldVo as it must be a FieldValue object
+            $fieldVo->value = new FieldValue(
+                array(
+                    'data' => $fieldVo->value,
+                    'sortKey' => $field->value->sortKey
+                )
+            );
+            $version->fields[] = $fieldVo;
         }
         $contentObj->version = $version;
 

@@ -19,11 +19,13 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Version\Collection as VersionCollection,
     ezp\Content\Field,
     ezp\Content\Field\Collection as FieldCollection,
+    ezp\Content\FieldType\Factory as FieldTypeFactory,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
     ezp\Content\Search\Result,
     ezp\Persistence\ValueObject,
     ezp\Persistence\Content as ContentValue,
+    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
@@ -73,9 +75,11 @@ class Service extends BaseService
         }
         foreach ( $content->fields as $field )
         {
-            $struct->fields[] = $field->getState( 'properties' );
+            $fieldStruct = $field->getState( 'properties' );
+            $fieldStruct->value = $field->fieldDefinition->type->setFieldValue( new FieldValue );
+            $struct->fields[] = $fieldStruct;
         }
-        $vo = $this->handler->contentHandler()->create( $struct  );
+        $vo = $this->handler->contentHandler()->create( $struct );
         return $this->buildDomainObject( $vo );
     }
 
@@ -96,9 +100,11 @@ class Service extends BaseService
         $struct->userId = $content->ownerId;
         $struct->versionNo = $content->currentVersionNo;
 
-        foreach ( $content->fields as $fields )
+        foreach ( $content->fields as $field )
         {
-            $struct->fields[] = $fields->getState( "properties" );
+            $fieldStruct = $field->getState( 'properties' );
+            $fieldStruct->value = $field->fieldDefinition->type->setFieldValue( new FieldValue );
+            $struct->fields[] = $fieldStruct;
         }
 
         return $this->buildDomainObject(
