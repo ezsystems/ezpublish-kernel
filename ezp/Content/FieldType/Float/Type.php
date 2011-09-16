@@ -57,6 +57,7 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
+     * @todo Sort seems to not be supported by this FieldType, is this handled correctly?
      * @return array
      */
     protected function getSortInfo()
