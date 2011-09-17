@@ -241,13 +241,21 @@ class ContentHandler implements ContentHandlerInterface
         }
 
         // Associate last version's fields
-        $aFields = $this->backend->find(
+        $aFields = array();
+        foreach ( $this->backend->find(
             'Content\\Field',
             array(
                 '_contentId' => $contentObj->id,
                 'versionNo' => $currentVersionNo
             )
-        );
+        ) as $fieldVo )
+        {
+            // Fix value in $fieldVo as it must be a FieldValue object
+            $fieldVo->value = new FieldValue(
+                array( 'data' => $fieldVo->value )
+            );
+            $aFields[] = $fieldVo;
+        }
         // @todo: Throw NotFound if no fields at all ?
         $contentObj->version->fields = $aFields;
 
