@@ -148,10 +148,15 @@ class ContentHandler implements ContentHandlerInterface
             ) as $field
         )
         {
-            $newVersion->fields[] = $this->backend->create(
+            $fieldVo = $this->backend->create(
                 'Content\\Field',
                 array( 'versionNo' => $newVersionNo, '_contentId' => $contentId ) + (array)$field
             );
+            // Fix value in $fieldVo as it must be a FieldValue object
+            $fieldVo->value = new FieldValue(
+                array( 'data' => $fieldVo->value )
+            );
+            $newVersion->fields[] = $fieldVo;
         }
 
         return $newVersion;
