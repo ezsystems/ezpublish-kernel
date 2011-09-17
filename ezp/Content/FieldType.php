@@ -250,7 +250,7 @@ abstract class FieldType implements Observer
      *
      * @abstract
      * @internal
-     * @param FieldDefinition $fieldDefinition
+     * @param \ezp\Content\FieldDefinition $fieldDefinition
      * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */
@@ -270,6 +270,7 @@ abstract class FieldType implements Observer
       * @param \ezp\Base\Observable $subject
       * @param string $event
       * @param array $arguments
+      * @throws \ezp\Base\Exception\InvalidArgumentValue
       */
      public function update( Observable $subject, $event = 'update', array $arguments = null )
      {
