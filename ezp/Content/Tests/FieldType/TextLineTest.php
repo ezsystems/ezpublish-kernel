@@ -23,9 +23,10 @@ class TextLineTest extends PHPUnit_Framework_TestCase
      * been made.
      *
      * @group fieldType
+     * @group textLine
      * @covers \ezp\Content\FieldType\Factory::build
      */
-    public function testFactory()
+    public function testBuildFactory()
     {
         self::assertInstanceOf(
             "ezp\\Content\\FieldType\\TextLine\\Type",
@@ -36,6 +37,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @group textLine
      * @covers \ezp\Content\FieldType::allowedValidators
      */
     public function testTextLineSupportedValidators()
@@ -48,6 +50,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
      * @covers \ezp\Content\FieldType\TextLine\Type::canParseValue
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
+     * @group textLine
      */
     public function testCanParseValueInvalidFormat()
     {
@@ -60,6 +63,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @group textLine
      * @covers \ezp\Content\FieldType\TextLine\Type::canParseValue
      */
     public function testCanParseValueValidFormat()
@@ -75,6 +79,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @group textLine
      * @covers \ezp\Content\FieldType\TextLine\Type::setFieldValue
      */
     public function testSetFieldValue()
@@ -93,6 +98,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @group textLine
      * @covers \ezp\Content\FieldType\TextLine\Value::__construct
      */
     public function testBuildFieldValueWithParam()
@@ -102,8 +108,29 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         self::assertSame( $text, $value->text );
     }
 
+
     /**
      * @group fieldType
+     * @group textLine
+     * @covers \ezp\Content\FieldType\TextLine\Value::build
+     */
+    public function testBuildValue()
+    {
+        self::assertInstanceOf(
+            'ezp\\Content\\FieldType\\TextLine\\Value',
+            TextLineValue::build(
+                new FieldValue(
+                    array(
+                        'data' => array( 'value' => 'With a knick-knack, paddy whack, Give a dog a bone, This old man came rolling home.' )
+                    )
+                )
+            )
+        );
+    }
+
+    /**
+     * @group fieldType
+     * @group textLine
      * @covers \ezp\Content\FieldType\TextLine\Value::fromString
      */
     public function testBuildFieldValueFromString()
@@ -116,6 +143,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @group textLine
      * @covers \ezp\Content\FieldType\TextLine\Value::__toString
      */
     public function testFieldValueToString()
