@@ -11,8 +11,10 @@ namespace ezp\Content\Type;
 use ezp\Base\Model,
     ezp\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
-    ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Validator;
+    ezp\Content\FieldType\Factory as FieldTypeFactory,
+    ezp\Content\FieldType\Validator,
+    ezp\Content\FieldType\Value as FieldValue,
+    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
  * Content Type Field (content class attribute) class
@@ -28,8 +30,9 @@ use ezp\Base\Model,
  * @property bool $isRequired
  * @property bool $isInfoCollector
  * @property array $fieldTypeConstraints
- * @property mixed $defaultValue
- * @property-read \ezp\Content\Type $type
+ * @property \ezp\Content\FieldType\Value $defaultValue
+ * @property-read \ezp\Content\Type $contentType ContentType object
+ * @property-read \ezp\Content\FieldType $type FieldType object
  */
 class FieldDefinition extends Model
 {
@@ -48,20 +51,31 @@ class FieldDefinition extends Model
         'isRequired' => true,
         'isInfoCollector' => true,
         'fieldTypeConstraints' => true,
-        'defaultValue' => true,
     );
 
     /**
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
+        'contentType' => false,
         'type' => false,
+        'defaultValue' => true
     );
 
     /**
      * @var \ezp\Content\Type
      */
+    protected $contentType;
+
+    /**
+     * @var \ezp\Content\FieldType
+     */
     protected $type;
+
+    /**
+     * @var \ezp\Content\FieldType\Value
+     */
+    protected $defaultValue;
 
     /**
      * Constructor, sets up value object, fieldType string and attach $contentType
@@ -73,12 +87,25 @@ class FieldDefinition extends Model
     {
         $this->type = $contentType;
         $this->properties = new FieldDefinitionValue( array( 'fieldType' => $fieldType ) );
+        $this->type = FieldTypeFactory::build( $fieldType );
+        $this->defaultValue = $this->type->getValue();
+        $this->attach( $this->type, 'field/setValue' );
     }
 
     /**
      * Return content type object
      *
      * @return \ezp\Content\Type
+     */
+    public function getContentType()
+    {
+        return $this->contentType;
+    }
+
+    /**
+     * Return field type object
+     *
+     * @return \ezp\Content\FieldType
      */
     protected function getType()
     {
@@ -98,6 +125,29 @@ class FieldDefinition extends Model
         {
             $this->fieldTypeConstraints = array();
         }
-        Factory::build( $this->fieldType )->fillConstraintsFromValidator( $this, $validator );
+        $this->type->fillConstraintsFromValidator( $this, $validator );
+    }
+
+    /**
+     * Returns default value for current field definition
+     *
+     * @return \ezp\Content\FieldType\Value
+     */
+    protected function getDefaultValue()
+    {
+        return $this->defaultValue;
+    }
+
+    /**
+     * Sets a new default value for current field definition
+     *
+     * @param \ezp\Content\FieldType\Value $value
+     */
+    protected function setDefaultValue( FieldValue $value )
+    {
+        $this->defaultValue = $value;
+        $this->notify( 'field/setValue', array( 'value' => $value ) );
+        $this->properties->defaultValue = new PersistenceFieldValue;
+        $this->type->setFieldValue( $this->properties->defaultValue );
     }
 }

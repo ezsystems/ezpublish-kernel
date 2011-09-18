@@ -9,28 +9,69 @@
 
 namespace ezp\Content\Tests;
 use PHPUnit_Framework_TestCase,
-    ezp\Content\FieldType\Factory;
+    ezp\Content\FieldType\Factory,
+    ezp\Persistence\Content\FieldValue,
+    ezp\Base\Configuration;
 
 class FieldTypeFactoryTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @expectedException ezp\Base\Exception\MissingClass
-     * @covers ezp\Content\FieldType\Factory::build
+     * @group fieldType
+     * @covers \ezp\Content\FieldType\Factory::getFieldTypeNamespace
      */
-    public function testBuildUnknownType()
+    public function testGetFieldTypeNSKnownType()
     {
-        Factory::build( "eztestdoesnotexist" );
+        $fieldTypeMap = Configuration::getInstance( "content" )->get( "fields", "Type" );
+        self::assertSame( $fieldTypeMap["ezstring"], Factory::getFieldTypeNamespace( "ezstring" ) );
     }
 
     /**
-     * @covers ezp\Content\FieldType\Factory::build
+     * @expectedException \ezp\Base\Exception\MissingClass
+     * @group fieldType
+     * @covers \ezp\Content\FieldType\Factory::getFieldTypeNamespace
      */
-    public function testBuildKnownType()
+    public function testGetFieldTypeNSUnknownType()
+    {
+        Factory::getFieldTypeNamespace( "eztestdoesnotexist" );
+    }
+
+    /**
+     * @group fieldType
+     * @covers \ezp\Content\FieldType\Factory::build
+     */
+    public function testBuild()
     {
         self::assertInstanceOf(
             "ezp\\Content\\FieldType",
             Factory::build( "ezstring" ),
             "Factory did not build a class of kind FieldType."
+        );
+    }
+
+    /**
+     * @group fieldType
+     * @covers \ezp\Content\FieldType\Factory::buildValue
+     */
+    public function testBuildValue()
+    {
+        $data = array( "value" => "Working test" );
+        self::assertInstanceOf(
+            "ezp\\Content\\FieldType\\Value",
+            Factory::buildValue( "ezstring", new FieldValue( array( 'data' => $data ) ) ),
+            "Factory did not build a class of kind FieldType\\Value"
+        );
+    }
+
+    /**
+     * @group fieldType
+     * @covers \ezp\Content\FieldType\Factory::buildValueFromString
+     */
+    public function testBuildValueFromStringKnownType()
+    {
+        self::assertInstanceOf(
+            "ezp\\Content\\FieldType\\Value",
+            Factory::buildValueFromString( "ezstring", "Working test" ),
+            "Factory did not build a class of kind FieldType\\Value"
         );
     }
 }

@@ -25,6 +25,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for creating user
      *
      * @covers \ezp\User\Service::create
+     * @group userService
      */
     public function testCreate()
     {
@@ -45,6 +46,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::create
      * @expectedException \ezp\Base\Exception\Logic
+     * @group userService
      */
     public function testCreateExistingId()
     {
@@ -61,6 +63,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::create
      * @expectedException \ezp\Base\Exception\PropertyNotFound
+     * @group userService
      */
     public function testCreateMissingId()
     {
@@ -76,6 +79,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for loading user
      *
      * @covers \ezp\User\Service::load
+     * @group userService
      */
     public function testLoad()
     {
@@ -92,6 +96,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::load
      * @expectedException \ezp\Base\Exception\NotFound
+     * @group userService
      */
     public function testLoadNotFound()
     {
@@ -103,6 +108,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for updating user
      *
      * @covers \ezp\User\Service::update
+     * @group userService
      */
     public function testUpdate()
     {
@@ -121,6 +127,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::update
      * @expectedException \ezp\Base\Exception\PropertyNotFound
+     * @group userService
      */
     public function testUpdateMissingId()
     {
@@ -134,6 +141,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for deleting user
      *
      * @covers \ezp\User\Service::delete
+     * @group userService
      */
     public function testDelete()
     {
@@ -164,6 +172,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::delete
      * @expectedException \ezp\Base\Exception\NotFound
+     * @group userService
      */
     public function testDeleteNotFound()
     {
@@ -175,16 +184,19 @@ class ServiceTest extends BaseServiceTest
      * Test service function for creating group
      *
      * @covers \ezp\User\Service::createGroup
+     * @group userService
      */
     public function testCreateGroup()
     {
         $service = $this->repository->getUserService();
         $parent = $service->loadGroup( 12 );
 
-        $do = $service->createGroup( $parent, 'New User Group', 'A new user group for testing' );
+        $groupName = 'A new group of users';
+        $groupDescription = 'A new user group for testing';
+        $do = $service->createGroup( $parent, $groupName, $groupDescription );
         self::assertInstanceOf( 'ezp\\User\\Group', $do );
-        self::assertEquals( 'New User Group', $do->name );
-        self::assertEquals( 'A new user group for testing', $do->description );
+        self::assertEquals( $groupName, (string)$do->name );
+        self::assertEquals( $groupDescription, (string)$do->description );
 
         $group = $do->getParent();
         self::assertInstanceOf( 'ezp\\User\\Group', $group );
@@ -195,6 +207,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for loading group
      *
      * @covers \ezp\User\Service::loadGroup
+     * @group userService
      */
     public function testLoadGroup()
     {
@@ -202,8 +215,8 @@ class ServiceTest extends BaseServiceTest
         $do = $service->loadGroup( 12 );
         self::assertInstanceOf( 'ezp\\User\\Group', $do );
         self::assertEquals( 12, $do->id );
-        self::assertEquals( 'Administrator users', $do->name );
-        self::assertEquals( '', $do->description );
+        self::assertEquals( 'Administrator users', (string)$do->name );
+        self::assertEquals( '', (string)$do->description );
 
         $group = $do->getParent();
         self::assertInstanceOf( 'ezp\\User\\Group', $group );
@@ -215,6 +228,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::loadGroup
      * @expectedException \ezp\Base\Exception\NotFound
+     * @group userService
      */
     public function testLoadGroupNotFound()
     {
@@ -227,6 +241,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::loadGroup
      * @expectedException \ezp\Base\Exception\NotFoundWithType
+     * @group userService
      */
     public function testLoadGroupNotFoundWithType()
     {
@@ -238,6 +253,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for assigning group location
      *
      * @covers \ezp\User\Service::assignGroup
+     * @group userService
      */
     public function testAssignGroup()
     {
@@ -256,6 +272,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::assignGroup
      * @expectedException \ezp\Base\Exception\Logic
+     * @group userService
      */
     public function testAssignGroupAlreadyAssigned()
     {
@@ -273,6 +290,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for un-assigning group
      *
      * @covers \ezp\User\Service::unAssignGroup
+     * @group userService
      */
     public function testUnAssignGroup()
     {
@@ -293,6 +311,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::unAssignGroup
      * @expectedException \ezp\Base\Exception\Logic
+     * @group userService
      */
     public function testUnAssignGroupNotAssigned()
     {
@@ -307,6 +326,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for creating role
      *
      * @covers \ezp\User\Service::createRole
+     * @group userService
      */
     public function testCreateRole()
     {
@@ -325,6 +345,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for loading role
      *
      * @covers \ezp\User\Service::loadRole
+     * @group userService
      */
     public function testLoadRole()
     {
@@ -341,6 +362,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::loadRole
      * @expectedException \ezp\Base\Exception\NotFound
+     * @group userService
      */
     public function testLoadRoleNotFound()
     {
@@ -352,6 +374,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for loading roles
      *
      * @covers \ezp\User\Service::loadRolesByGroupId
+     * @group userService
      */
     public function testLoadRolesByGroupId()
     {
@@ -376,6 +399,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::loadRolesByGroupId
      * @expectedException \ezp\Base\Exception\NotFound
+     * @group userService
      */
     public function testLoadRolesByGroupIdNotFound()
     {
@@ -388,6 +412,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::loadRolesByGroupId
      * @expectedException \ezp\Base\Exception\NotFoundWithType
+     * @group userService
      */
     public function testLoadRolesByGroupIdNotFoundWithType()
     {
@@ -399,6 +424,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for updating role
      *
      * @covers \ezp\User\Service::updateRole
+     * @group userService
      */
     public function testUpdateRole()
     {
@@ -418,6 +444,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::delete
      * @expectedException \ezp\Base\Exception\NotFound
+     * @group userService
      */
     public function testDeleteRole()
     {
@@ -440,6 +467,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::deleteRole
      * @expectedException \ezp\Base\Exception\NotFound
+     * @group userService
      */
     public function testDeleteRoleNotFound()
     {
@@ -453,6 +481,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for adding policy on a role
      *
      * @covers \ezp\User\Service::addPolicy
+     * @group userService
      */
     public function testAddPolicy()
     {
@@ -483,6 +512,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for removing policy on a role
      *
      * @covers \ezp\User\Service::removePolicy
+     * @group userService
      */
     public function testRemovePolicy()
     {
@@ -508,6 +538,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for loading policies by user id
      *
      * @covers \ezp\User\Service::loadPoliciesByUserId
+     * @group userService
      */
     public function testLoadPoliciesByUserId()
     {
@@ -532,6 +563,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::loadPoliciesByUserId
      * @expectedException \ezp\Base\Exception\NotFound
+     * @group userService
      */
     public function testLoadPoliciesByUserIdNotFound()
     {
@@ -544,6 +576,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::loadPoliciesByUserId
      * @expectedException \ezp\Base\Exception\NotFoundWithType
+     * @group userService
      */
     public function testLoadPoliciesByUserIdNotFoundWithType()
     {
@@ -555,6 +588,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for assigning role
      *
      * @covers \ezp\User\Service::assignRole
+     * @group userService
      */
     public function testAssignRole()
     {
@@ -574,6 +608,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::assignRole
      * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     * @group userService
      */
     public function testAssignRoleExistingRole()
     {
@@ -596,6 +631,7 @@ class ServiceTest extends BaseServiceTest
      * Test service function for assigning role
      *
      * @covers \ezp\User\Service::unAssignRole
+     * @group userService
      */
     public function testUnAssignRole()
     {
@@ -616,6 +652,7 @@ class ServiceTest extends BaseServiceTest
      *
      * @covers \ezp\User\Service::unAssignRole
      * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     * @group userService
      */
     public function testUnAssignRoleExistingRole()
     {

@@ -1,21 +1,29 @@
 <?php
 /**
- * File containing the TextLine Value class
+ * File containing the Url Value class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType\TextLine;
+namespace ezp\Content\FieldType\Url;
 use ezp\Content\FieldType\Value as ValueInterface,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
+    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
+    RuntimeException;
 
 /**
- * Value for TextLine field type
+ * Value for Url field type
  */
 class Value implements ValueInterface
 {
+    /**
+     * Link content
+     *
+     * @var string
+     */
+    public $link;
+
     /**
      * Text content
      *
@@ -24,13 +32,17 @@ class Value implements ValueInterface
     public $text;
 
     /**
-     * Construct a new Value object and initialize it $text
+     * Construct a new Value object and initialize it with its $link and optional $text
      *
+     * @param string $link
      * @param string $text
      */
-    public function __construct( $text )
+    public function __construct( $link, $text = null )
     {
-        $this->text = $text;
+        $this->link = $link;
+
+        if ( $text !== null )
+            $this->text = $text;
     }
 
     /**
@@ -38,7 +50,7 @@ class Value implements ValueInterface
      */
     public static function build( PersistenceFieldValue $vo )
     {
-        return new static( $vo->data['value'] );
+        throw new RuntimeException( "@TODO: Implement" );
     }
 
     /**
@@ -54,6 +66,6 @@ class Value implements ValueInterface
      */
     public function __toString()
     {
-        return $this->text;
+        return $this->link;
     }
 }

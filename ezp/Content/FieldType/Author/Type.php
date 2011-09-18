@@ -7,12 +7,10 @@
  * @version //autogentag//
  */
 
-
-namespace ezp\Content\FieldType;
-use ezp\Content\FieldType,
-    \ezp\Base\Exception\BadFieldTypeInput,
-    \ezp\Persistence\Content\FieldValue,
-    \ezp\Content\FieldType\Handler\Author as AuthorHandler,
+namespace ezp\Content\FieldType\Author;
+use ezp\Content\FieldType\Complex,
+    ezp\Content\FieldType\Value as BaseValue,
+    ezp\Base\Exception\BadFieldTypeInput,
     DOMDocument;
 
 /**
@@ -21,11 +19,21 @@ use ezp\Content\FieldType,
  * Field type representing a list of authors, consisting of author name, and
  * author email.
  */
-class Author extends Complex
+class Type extends Complex
 {
-    protected $fieldTypeString = 'ezauthor';
-    protected $defaultValue = null;
-    protected $isSearchable = true;
+    const FIELD_TYPE_IDENTIFIER = "ezauthor";
+    const IS_SEARCHABLE = true;
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\Author\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( array() );
+    }
 
     /**
      * Checks if value can be parsed.
@@ -36,7 +44,7 @@ class Author extends Complex
      * @param mixed $inputValue
      * @return mixed
      */
-    protected function canParseValue( Value $inputValue )
+    protected function canParseValue( BaseValue $inputValue )
     {
         $dom = new DOMDocument( '1.0', 'utf-8' );
         if ( !$dom->loadXML( $inputValue ) )
@@ -47,17 +55,6 @@ class Author extends Complex
     }
 
     /**
-     * Sets the value of a field type.
-     *
-     * @param $inputValue
-     * @return void
-     */
-    public function setValue( Value $inputValue )
-    {
-        $this->value = $this->canParseValue( $inputValue );
-    }
-
-    /**
      * Returns a handler, aka. a helper object which aids in the manipulation of
      * complex field type values.
      *
@@ -65,23 +62,7 @@ class Author extends Complex
      */
     public function getHandler()
     {
-        return new AuthorHandler();
-    }
-
-    /**
-     * Method to populate the FieldValue struct for field types.
-     *
-     * This method is used by the business layer to populate the value object
-     * for field type data.
-     *
-     * @internal
-     * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
-     * @return void
-     */
-    public function setFieldValue( FieldValue $valueStruct )
-    {
-        $valueStruct->data = $this->getValueData();
-        $valueStruct->sortKey = $this->getSortInfo();
+        return new Handler();
     }
 
     /**
@@ -105,7 +86,7 @@ class Author extends Complex
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value );
+        return array( 'value' => $this->getValue() );
     }
 
     /**

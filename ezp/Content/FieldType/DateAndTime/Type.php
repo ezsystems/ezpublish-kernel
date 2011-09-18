@@ -7,17 +7,28 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\DateAndTime;
 use ezp\Content\FieldType,
+    ezp\Content\FieldType\Value as BaseValue,
     \ezp\Base\Exception\BadFieldTypeInput,
     \ezp\Persistence\Content\FieldValue,
     DateTime;
 
-class DateAndTime extends FieldType
+class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezdatetime';
-    protected $defaultValue = null;
-    protected $isSearchable = true;
+    const FIELD_TYPE_IDENTIFIER = "ezdatetime";
+    const IS_SEARCHABLE = true;
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\DateAndTime\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( new DateTime );
+    }
 
     /**
      * Checks if value can be parsed.
@@ -28,7 +39,7 @@ class DateAndTime extends FieldType
      * @param mixed $inputValue
      * @return mixed
      */
-    protected function canParseValue( Value $inputValue )
+    protected function canParseValue( BaseValue $inputValue )
     {
         $value = new DateTime( $inputValue );
 
@@ -41,40 +52,13 @@ class DateAndTime extends FieldType
     }
 
     /**
-     * Sets the value of a field type.
-     *
-     * @param $inputValue
-     * @return void
-     */
-    public function setValue( Value $inputValue )
-    {
-        $this->value = $this->canParseValue( $inputValue );
-    }
-
-    /**
-     * Method to populate the FieldValue struct for field types.
-     *
-     * This method is used by the business layer to populate the value object
-     * for field type data.
-     *
-     * @internal
-     * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
-     * @return void
-     */
-    public function setFieldValue( FieldValue $valueStruct )
-    {
-        $valueStruct->data = $this->getValueData();
-        $valueStruct->sortKey = $this->getSortInfo();
-    }
-
-    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @return array
      */
     protected function getSortInfo()
     {
-        return array( 'sort_key_int' => $this->value->getTimestamp() );
+        return array( 'sort_key_int' => $this->getValue()->getTimestamp() );
     }
 
     /**
@@ -85,7 +69,7 @@ class DateAndTime extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value->getTimestamp() );
+        return array( 'value' => $this->getValue()->getTimestamp() );
     }
 
 

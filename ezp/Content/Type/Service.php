@@ -26,6 +26,7 @@ use ezp\Base\Service as BaseService,
     ezp\Persistence\Content\Type\Group as GroupValue,
     ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\ValueObject;
 
 /**
@@ -119,12 +120,14 @@ class Service extends BaseService
 
         $struct = new CreateStruct();
         $this->fillStruct( $struct, $type, array( 'fieldDefinitions', 'groupIds' ) );
-        foreach ( $type->fields as $field )
+        foreach ( $type->fields as $fieldDefinition )
         {
-            if ( $field->id )
+            if ( $fieldDefinition->id )
                 throw new Logic( "Type\\Service->create()", '->fields can not already be persisted' );
 
-            $struct->fieldDefinitions[] = $field->getState( 'properties' );
+            $fieldDefStruct = $fieldDefinition->getState( 'properties' );
+            $fieldDefStruct->defaultValue = $fieldDefinition->type->setFieldValue( new FieldValue );
+            $struct->fieldDefinitions[] = $fieldDefStruct;
         }
 
         if ( !isset( $type->groups[0] ) )
@@ -301,10 +304,12 @@ class Service extends BaseService
         if ( $field->id )
             throw new InvalidArgumentType( '$field->id', 'false' );
 
+        $fieldDefStruct = $field->getState( 'properties' );
+        $fieldDefStruct->defaultValue = $field->type->setFieldValue( new FieldValue );
         $this->handler->contentTypeHandler()->addFieldDefinition(
             $type->id,
             $type->status,
-            $field->getState( "properties" )
+            $fieldDefStruct
         );
     }
 
@@ -333,10 +338,12 @@ class Service extends BaseService
      */
     public function updateFieldDefinition( Type $type, FieldDefinition $field  )
     {
+        $fieldDefStruct = $field->getState( 'properties' );
+        $fieldDefStruct->defaultValue = $field->type->setFieldValue( new FieldValue );
         $this->handler->contentTypeHandler()->updateFieldDefinition(
             $type->id,
             $type->status,
-            $field->getState( "properties" )
+            $fieldDefStruct
         );
     }
 

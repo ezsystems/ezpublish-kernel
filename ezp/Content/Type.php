@@ -68,12 +68,12 @@ class Type extends Model implements ModelDefinition
     );
 
     /**
-     * @var Type\FieldDefinition[]
+     * @var ezp\Content\Type\FieldDefinition[]
      */
     protected $fields;
 
     /**
-     * @var Type\Group[]
+     * @var ezp\Content\Type\Group[]
      */
     protected $groups;
 
@@ -102,7 +102,7 @@ class Type extends Model implements ModelDefinition
     }
 
     /**
-     * @return Type\FieldDefinition[]
+     * @return ezp\Content\Type\FieldDefinition[]
      */
     public function getFields()
     {
@@ -110,7 +110,7 @@ class Type extends Model implements ModelDefinition
     }
 
     /**
-     * @return Type\Group[]
+     * @return ezp\Content\Type\Group[]
      */
     public function getGroups()
     {

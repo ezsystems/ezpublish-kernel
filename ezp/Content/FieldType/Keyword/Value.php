@@ -1,36 +1,37 @@
 <?php
 /**
- * File containing the TextLine Value class
+ * File containing the Keyword Value class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType\TextLine;
+namespace ezp\Content\FieldType\Keyword;
 use ezp\Content\FieldType\Value as ValueInterface,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
- * Value for TextLine field type
+ * Value for Keyword field type
  */
 class Value implements ValueInterface
 {
     /**
-     * Text content
+     * Content of the value
      *
-     * @var string
+     * @var string[]
      */
-    public $text;
+    public $values = array();
 
     /**
-     * Construct a new Value object and initialize it $text
+     * Construct a new Value object and initialize with $values
      *
-     * @param string $text
+     * @param string[] $values
      */
-    public function __construct( $text )
+    public function __construct( array $values = null )
     {
-        $this->text = $text;
+        if ( $values !== null )
+            $this->values = $values;
     }
 
     /**
@@ -38,7 +39,7 @@ class Value implements ValueInterface
      */
     public static function build( PersistenceFieldValue $vo )
     {
-        return new static( $vo->data['value'] );
+        throw new RuntimeException( "@TODO: Implement" );
     }
 
     /**
@@ -46,6 +47,7 @@ class Value implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
+        throw new RuntimeException( "@TODO: Implement" );
         return new static( $stringValue );
     }
 
@@ -54,6 +56,7 @@ class Value implements ValueInterface
      */
     public function __toString()
     {
-        return $this->text;
+        throw new RuntimeException( "@TODO: Implement" );
+        return (string)$this->values;
     }
 }

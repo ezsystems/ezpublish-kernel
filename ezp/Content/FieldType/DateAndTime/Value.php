@@ -1,36 +1,37 @@
 <?php
 /**
- * File containing the TextLine Value class
+ * File containing the DateAndTime Value class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType\TextLine;
+namespace ezp\Content\FieldType\DateAndTime;
 use ezp\Content\FieldType\Value as ValueInterface,
+    DateTime,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
- * Value for TextLine field type
+ * Value for DateAndTime field type
  */
 class Value implements ValueInterface
 {
     /**
-     * Text content
+     * Date content
      *
-     * @var string
+     * @var DateTime
      */
-    public $text;
+    public $value;
 
     /**
-     * Construct a new Value object and initialize it $text
+     * Construct a new Value object and initialize with $dateTime
      *
-     * @param string $text
+     * @param \DateTime $dateTime
      */
-    public function __construct( $text )
+    public function __construct( DateTime $dateTime )
     {
-        $this->text = $text;
+        $this->value = $dateTime;
     }
 
     /**
@@ -38,7 +39,9 @@ class Value implements ValueInterface
      */
     public static function build( PersistenceFieldValue $vo )
     {
-        return new static( $vo->data['value'] );
+        $date = new DateTime;
+        $date->setTimestamp( $vo->data );
+        return new static( $date );
     }
 
     /**
@@ -46,6 +49,7 @@ class Value implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
+        throw new RuntimeException( "@TODO: Implement" );
         return new static( $stringValue );
     }
 
@@ -54,6 +58,7 @@ class Value implements ValueInterface
      */
     public function __toString()
     {
-        return $this->text;
+        throw new RuntimeException( "@TODO: Implement" );
+        return $this->value;
     }
 }

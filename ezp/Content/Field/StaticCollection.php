@@ -11,10 +11,13 @@ namespace ezp\Content\Field;
 use ezp\Base\Configuration,
     ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\MissingClass,
-    ezp\Base\Exception\ReadOnly as ReadOnlyException,
+    ezp\Base\Exception\Logic as LogicException,
+    ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Collection\ReadOnly,
     ezp\Content\Field,
     ezp\Content\Version,
+    ezp\Content\FieldType\Factory as FieldTypeFactory,
     RuntimeException;
 
 /**
@@ -23,7 +26,7 @@ use ezp\Base\Configuration,
  * Readonly class that takes (Content) Version as input.
  *
  */
-class StaticCollection extends ReadOnly
+class StaticCollection extends TypeCollection
 {
     /**
      * Constructor, sets up Collection based on contentType fields
@@ -37,21 +40,35 @@ class StaticCollection extends ReadOnly
         {
             $elements[ $fieldDefinition->identifier ] = new Field( $contentVersion, $fieldDefinition );
         }
-        parent::__construct( $elements );
+        parent::__construct( 'ezp\\Content\\Field', $elements );
     }
 
     /**
-     * Set value on a offset in collection, only allowed on existing items where value is forwarded to ->type->value
+     * Tries to assign $value as field value to a Field object identified by $identifier
      *
-     * @internal
-     * @throws ezp\Base\Exception\ReadOnly When trying to set new values / append
-     * @param string|int $offset
-     * @param mixed $value
+     * @param string $identifier Field identifier
+     * @param \ezp\Content\FieldType\Value $value Field value object
+     * @throws \ezp\Base\Exception\Logic If any field identified by $identifier doesn't exist in the collection
+     * @throws \ezp\Base\Exception\InvalidArgumentType If $value is not a field value object
+     * @todo Direct string assignation ? If we decide to implement this, magic should be done here
      */
-    public function offsetSet( $offset, $value )
+    public function offsetSet( $identifier, $value )
     {
-        if ( $offset === null || !$this->offsetExists( $offset ) )
-            throw new ReadOnlyException( "Field\\Collection" );
-        $this->offsetGet( $offset )->value = $value;
+        if ( !$this->offsetExists( $identifier ) )
+            throw new LogicException( 'FieldCollection', "Field with identifier '$identifier' doesn't exist in this collection" );
+
+        $field = $this->offsetGet( $identifier );
+        if ( !$value instanceof FieldValue )
+        {
+            if ( !is_scalar( $value ) )
+                throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\Value or scalar', $value );
+
+            $value = FieldTypeFactory::buildValueFromString(
+                $field->fieldDefinition->fieldType,
+                (string)$value
+            );
+        }
+
+        $field->value = $value;
     }
 }

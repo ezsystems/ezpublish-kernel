@@ -7,8 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\Integer;
 use ezp\Content\FieldType,
+    ezp\Content\FieldType\Value as BaseValue,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Persistence\Content\FieldValue;
 
@@ -17,13 +18,23 @@ use ezp\Content\FieldType,
  *
  * Represents integers.
  */
-class Integer extends FieldType
+class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezinteger';
-    protected $defaultValue = 0;
-    protected $isSearchable = true;
+    const FIELD_TYPE_IDENTIFIER = "ezinteger";
+    const IS_SEARCHABLE = true;
 
     protected $allowedValidators = array( "IntegerValueValidator" );
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\Integer\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( 0 );
+    }
 
     /**
      * Checks if value can be parsed.
@@ -34,24 +45,13 @@ class Integer extends FieldType
      * @param mixed $inputValue
      * @return mixed
      */
-    protected function canParseValue( Value $inputValue )
+    protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !is_integer( $inputValue ) )
+        if ( !is_integer( $inputValue->value ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
         return $inputValue;
-    }
-
-    /**
-     * Sets the value of a field type.
-     *
-     * @param $inputValue
-     * @return void
-     */
-    public function setValue( Value $inputValue )
-    {
-        $this->value = $this->canParseValue( $inputValue );
     }
 
     /**
@@ -77,7 +77,7 @@ class Integer extends FieldType
      */
     protected function getSortInfo()
     {
-        return array( 'sort_key_int' => $this->value );
+        return array( 'sort_key_int' => $this->getValue()->value );
     }
 
     /**
@@ -88,6 +88,6 @@ class Integer extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value );
+        return array( 'value' => $this->getValue()->value );
     }
 }

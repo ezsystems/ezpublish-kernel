@@ -16,6 +16,7 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\Criterion,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
+    ezp\Persistence\Content\FieldValue,
     ezp\Content,
     ezp\Content\Version,
     ezp\Base\Exception\NotFound,
@@ -77,14 +78,24 @@ class ContentHandler implements ContentHandlerInterface
         );
         foreach ( $content->fields as $field )
         {
-            $version->fields[] = $this->backend->create(
+            $fieldVo = $this->backend->create(
                 'Content\\Field',
                 array(
                     'versionNo' => $version->versionNo,
                     // Using internal _contentId since it's not directly exposed by Persistence
-                    '_contentId' => $contentObj->id
+                    '_contentId' => $contentObj->id,
+                    'value' => $field->value->data
                 ) + (array)$field
             );
+
+            // Fix value in $fieldVo as it must be a FieldValue object
+            $fieldVo->value = new FieldValue(
+                array(
+                    'data' => $fieldVo->value,
+                    'sortKey' => array( 'sort_key_string' => $field->value->sortKey )
+                )
+            );
+            $version->fields[] = $fieldVo;
         }
         $contentObj->version = $version;
 
@@ -138,10 +149,15 @@ class ContentHandler implements ContentHandlerInterface
             ) as $field
         )
         {
-            $newVersion->fields[] = $this->backend->create(
+            $fieldVo = $this->backend->create(
                 'Content\\Field',
                 array( 'versionNo' => $newVersionNo, '_contentId' => $contentId ) + (array)$field
             );
+            // Fix value in $fieldVo as it must be a FieldValue object
+            $fieldVo->value = new FieldValue(
+                array( 'data' => $fieldVo->value )
+            );
+            $newVersion->fields[] = $fieldVo;
         }
 
         return $newVersion;
@@ -231,13 +247,21 @@ class ContentHandler implements ContentHandlerInterface
         }
 
         // Associate last version's fields
-        $aFields = $this->backend->find(
+        $aFields = array();
+        foreach ( $this->backend->find(
             'Content\\Field',
             array(
                 '_contentId' => $contentObj->id,
                 'versionNo' => $currentVersionNo
             )
-        );
+        ) as $fieldVo )
+        {
+            // Fix value in $fieldVo as it must be a FieldValue object
+            $fieldVo->value = new FieldValue(
+                array( 'data' => $fieldVo->value )
+            );
+            $aFields[] = $fieldVo;
+        }
         // @todo: Throw NotFound if no fields at all ?
         $contentObj->version->fields = $aFields;
 
@@ -256,6 +280,12 @@ class ContentHandler implements ContentHandlerInterface
         $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id, 'versionNo' => $version ) );
         $versions[0]->fields = $this->backend->find( 'Content\\Field', array( '_contentId' => $content->id,
                                                                               'versionNo' => $version ) );
+
+        foreach ( $versions[0]->fields as $field )
+        {
+            $fieldVo = new FieldValue( array( 'data' => $field->value ) );
+            $field->value = $fieldVo;
+        }
 
         $content->version = $versions[0];
         $content->locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $content->id  ) );

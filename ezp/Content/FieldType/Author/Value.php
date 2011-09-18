@@ -1,36 +1,38 @@
 <?php
 /**
- * File containing the TextLine Value class
+ * File containing the Author Value class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType\TextLine;
+namespace ezp\Content\FieldType\Author;
 use ezp\Content\FieldType\Value as ValueInterface,
+    RuntimeException,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
- * Value for TextLine field type
+ * Value for Author field type
  */
 class Value implements ValueInterface
 {
     /**
-     * Text content
+     * List of authors
      *
-     * @var string
+     * @var array
      */
-    public $text;
+    public $authors;
 
     /**
-     * Construct a new Value object and initialize it $text
+     * Construct a new Value object and initialize with $authors
      *
-     * @param string $text
+     * @param array $authors
      */
-    public function __construct( $text )
+    public function __construct( $authors = null )
     {
-        $this->text = $text;
+        if ( $authors !== null )
+            $this->authors = $authors;
     }
 
     /**
@@ -38,7 +40,7 @@ class Value implements ValueInterface
      */
     public static function build( PersistenceFieldValue $vo )
     {
-        return new static( $vo->data['value'] );
+        throw new RuntimeException( "@TODO: Implement" );
     }
 
     /**
@@ -46,6 +48,7 @@ class Value implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
+        throw new RuntimeException( "@TODO: Implement" );
         return new static( $stringValue );
     }
 
@@ -54,6 +57,7 @@ class Value implements ValueInterface
      */
     public function __toString()
     {
-        return $this->text;
+        throw new RuntimeException( "@TODO: Implement" );
+        return $this->authors;
     }
 }

@@ -13,7 +13,10 @@ use ezp\Content\FieldType\FieldSettings,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
     ezp\Content\Type\FieldDefinition,
     ezp\Base\Configuration,
-    ezp\Base\Exception\MissingClass;
+    ezp\Base\Exception\MissingClass,
+    ezp\Base\Observer,
+    ezp\Base\Observable,
+    ezp\Base\Exception\InvalidArgumentValue;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -34,24 +37,8 @@ use ezp\Content\FieldType\FieldSettings,
  *
  * @todo Merge and optimize concepts for settings, validator data and field type properties.
  */
-abstract class FieldType
+abstract class FieldType implements Observer
 {
-    /**
-     * @var string The textual identifier of the field type.
-     */
-    protected $fieldTypeString;
-
-    /**
-     * @var \ezp\Content\FieldType\Value Fallback default value of field type when no such default
-     *                                   value is provided in the field definition in content types.
-     */
-    protected $defaultValue;
-
-    /**
-     * @var boolean Flag telling whether search index extraction is applicable.
-     */
-    protected $isSearchable = false;
-
     /**
      * @var FieldSettings Custom properties which are specific to the field
      *                      type. Typically these properties are used to
@@ -84,7 +71,7 @@ abstract class FieldType
      *
      * @var \ezp\Content\FieldType\Value
      */
-    protected $value;
+    private $value;
 
     /**
      * Constructs field type object, initializing internal data structures.
@@ -92,28 +79,6 @@ abstract class FieldType
     public function __construct()
     {
         $this->fieldSettings = new FieldSettings( $this->allowedSettings );
-    }
-
-    /**
-     * Does the field type support search.
-     *
-     * @return boolean
-     * @todo Shouldn't searchable feature part of a Searchable interface to be implemented
-     *       by field types, with appropriate methods like metadata() ?
-     */
-    public function supportsSearch()
-    {
-        return $this->isSearchable;
-    }
-
-    /**
-     * Returns the field type identifier.
-     *
-     * @return string
-     */
-    public function type()
-    {
-        return $this->fieldTypeString;
     }
 
     /**
@@ -187,11 +152,13 @@ abstract class FieldType
     /**
      * Injects the value of a field in the field type.
      *
-     * @abstract
      * @param \ezp\Content\FieldType\Value $inputValue
      * @return void
      */
-    abstract public function setValue( Value $inputValue );
+    public function setValue( Value $inputValue )
+    {
+        $this->value = $this->canParseValue( $inputValue );
+    }
 
     /**
      * Returns the value of associated field.
@@ -203,12 +170,16 @@ abstract class FieldType
      */
     public function getValue()
     {
-        if ( $this->value === null )
-        {
-            return $this->defaultValue;
-        }
-        return $this->value;
+        return $this->value ?: $this->getDefaultValue();
     }
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\Value
+     */
+    abstract protected function getDefaultValue();
 
     /**
      * Method to populate the FieldValue struct for field types
@@ -221,6 +192,7 @@ abstract class FieldType
     {
         $valueStruct->data = $this->getValueData();
         $valueStruct->sortKey = $this->getSortInfo();
+        return $valueStruct;
     }
 
     /**
@@ -234,7 +206,7 @@ abstract class FieldType
      * protected function getSortInfo()
      * {
      *     // Example for a text line type:
-     *     return array( 'sort_key_string' => $this->value->text );
+     *     return array( 'sort_key_string' => $this->getValue()->text );
      *
      *     // Example for an int:
      *     // return array( 'sort_key_int' => 123 );
@@ -249,6 +221,17 @@ abstract class FieldType
     /**
      * Returns the value of the field type in a format suitable for packing it
      * in a FieldValue.
+     * Return value is a hash where key is 'value' and value is current field value to be stored.
+     * Here some serialization/format can be done in order to store complex values
+     * (through XML, php serialize, or whatever solution that can be stored as string)
+     *
+     * <code>
+     * protected function getValueData()
+     * {
+     *     // Example for a text line type:
+     *     return array( 'value' => $this->getValue()->text );
+     * }
+     * </code>
      *
      * @abstract
      * @return array
@@ -261,11 +244,11 @@ abstract class FieldType
      * If validator is not allowed for a given field type, no data from that
      * validator is populated to $constraints.
      *
-     * @todo Consider separating out the fieldTypeConstraints into a sepsrate object, so that it could be passed, and not the whole FieldDefinition object.
+     * @todo Consider separating out the fieldTypeConstraints into a separate object, so that it could be passed, and not the whole FieldDefinition object.
      *
      * @abstract
      * @internal
-     * @param FieldDefinition $fieldDefinition
+     * @param \ezp\Content\FieldDefinition $fieldDefinition
      * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */
@@ -274,6 +257,29 @@ abstract class FieldType
          if ( in_array( $validator->name(), $this->allowedValidators() ) )
          {
              $fieldDefinition->fieldTypeConstraints = array_merge( $fieldDefinition->fieldTypeConstraints, $validator->getValidatorConstraints() );
+         }
+     }
+
+     /**
+      * Called when subject has been updated
+      * Supported events:
+      *   - field/setValue Should be triggered when a field has been set a value. Will inject the value in the field type
+      *
+      * @param \ezp\Base\Observable $subject
+      * @param string $event
+      * @param array $arguments
+      * @throws \ezp\Base\Exception\InvalidArgumentValue
+      */
+     public function update( Observable $subject, $event = 'update', array $arguments = null )
+     {
+         switch ( $event )
+         {
+             case 'field/setValue':
+                 if ( $arguments === null || !isset( $arguments['value'] ) )
+                     throw new InvalidArgumentValue( 'arguments', $arguments, get_class() );
+
+                 $this->setValue( $arguments['value'] );
+                 break;
          }
      }
 }

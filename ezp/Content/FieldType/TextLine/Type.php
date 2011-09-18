@@ -7,12 +7,11 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\TextLine;
 use ezp\Content\FieldType,
-    ezp\Content\FieldType\Value,
+    ezp\Content\FieldType\Value as BaseValue,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\PersistenceFieldValue,
     ezp\Content\Type\FieldDefinition;
 
 /**
@@ -20,23 +19,22 @@ use ezp\Content\FieldType,
  *
  * This field type represents a simple string.
  */
-class TextLine extends FieldType
+class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezstring';
-    protected $isSearchable = true;
-
-    /**
-     * Default value
-     * @var \ezp\Content\FieldType\TextLine\Value
-     */
-    protected $defaultValue;
+    const FIELD_TYPE_IDENTIFIER = "ezstring";
+    const IS_SEARCHABLE = true;
 
     protected $allowedValidators = array( 'StringLengthValidator' );
 
-    public function __construct()
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\TextLine\Value
+     */
+    protected function getDefaultValue()
     {
-        parent::__construct();
-        $this->defaultValue = new TextLineValue;
+        return new Value( "" );
     }
 
     /**
@@ -44,30 +42,17 @@ class TextLine extends FieldType
      * If the $inputValue actually can be parsed, the value is returned.
      * Otherwise, an \ezp\Base\Exception\BadFieldTypeInput exception is thrown
      *
-     * @abstract
      * @throws \ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param \ezp\Content\FieldType\Value $inputValue
-     * @return \ezp\Content\FieldType\Value
+     * @param \ezp\Content\FieldType\TextLine\Value $inputValue
+     * @return \ezp\Content\FieldType\TextLine\Value
      */
-    protected function canParseValue( Value $inputValue )
+    protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !is_string( $inputValue ) )
+        if ( !$inputValue instanceof TextLineValue || !is_string( $inputValue->text ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
         return $inputValue;
-    }
-
-    /**
-     * Injects the value of a field in the field type.
-     *
-     * @abstract
-     * @param \ezp\Content\FieldType\Value $inputValue
-     * @return void
-     */
-    public function setValue( Value $inputValue )
-    {
-        $this->value = $this->canParseValue( $inputValue );
     }
 
     /**
@@ -78,7 +63,7 @@ class TextLine extends FieldType
      */
     protected function getSortInfo()
     {
-         return array( 'sort_key_string' => $this->value->text );
+        return array( 'sort_key_string' => $this->getValue()->text );
     }
 
     /**
@@ -89,6 +74,6 @@ class TextLine extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value->text );
+        return array( 'value' => $this->getValue()->text );
     }
 }

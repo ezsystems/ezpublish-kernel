@@ -153,7 +153,7 @@ abstract class Model implements Observable, ModelInterface
         {
             foreach ( $this->observers[$event] as $obj )
             {
-                $obj->update( $this, $event );
+                $obj->update( $this, $event, $arguments );
             }
         }
         return $this;

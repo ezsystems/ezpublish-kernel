@@ -7,19 +7,34 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\Float;
 use ezp\Content\FieldType,
+    ezp\Content\FieldType\Value as BaseValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Content\Type\FieldDefinition;
+    ezp\Persistence\Content\FieldValue;
 
-class Float extends FieldType
+/**
+ * Float field types
+ *
+ * Represents floats.
+ */
+class Type extends FieldType
 {
-    protected $fieldTypeString = 'ezfloat';
-    protected $defaultValue = 0.0;
-    protected $isSearchable = false;
+    const FIELD_TYPE_IDENTIFIER = "ezfloat";
+    const IS_SEARCHABLE = false;
 
     protected $allowedValidators = array( 'FloatValueValidator' );
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\Float\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( 0.0 );
+    }
 
     /**
      * Checks if value can be parsed.
@@ -30,9 +45,9 @@ class Float extends FieldType
      * @param mixed $inputValue
      * @return mixed
      */
-    protected function canParseValue( Value $inputValue )
+    protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !is_float( $inputValue ) )
+        if ( !is_float( $inputValue->value ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
@@ -40,35 +55,9 @@ class Float extends FieldType
     }
 
     /**
-     * Sets the value of a field type.
-     *
-     * @param $inputValue
-     * @return void
-     */
-    public function setValue( Value $inputValue )
-    {
-        $this->value = $this->canParseValue( $inputValue );
-    }
-
-    /**
-     * Method to populate the FieldValue struct for field types.
-     *
-     * This method is used by the business layer to populate the value object
-     * for field type data.
-     *
-     * @internal
-     * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
-     * @return void
-     */
-    public function setFieldValue( FieldValue $valueStruct )
-    {
-        $valueStruct->data = $this->getValueData();
-        $valueStruct->sortKey = $this->getSortInfo();
-    }
-
-    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
+     * @todo Sort seems to not be supported by this FieldType, is this handled correctly?
      * @return array
      */
     protected function getSortInfo()
@@ -87,7 +76,7 @@ class Float extends FieldType
      */
     protected function getValueData()
     {
-        return array( 'value' => $this->value );
+        return array( 'value' => $this->getValue()->value );
     }
 
 }

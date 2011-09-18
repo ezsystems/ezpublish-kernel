@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType;
+namespace ezp\Content\FieldType\TextBlock;
 use ezp\Content\FieldType,
-    ezp\Content\FieldType\TextLine,
+    ezp\Content\FieldType\TextLine\Type as TextLine,
     ezp\Persistence\Content\FieldValue;
 
 /**
@@ -17,14 +17,24 @@ use ezp\Content\FieldType,
  *
  * Represents a larger body of text, such as text areas.
  */
-class TextBlock extends TextLine
+class Type extends TextLine
 {
-    protected $fieldTypeString = 'eztext';
-    protected $defaultValue = '';
-    protected $isSearchable = true;
+    const FIELD_TYPE_IDENTIFIER = "eztext";
+    const IS_SEARCHABLE = true;
 
     protected $allowedSettings = array( 'textColumns' => null );
     protected $allowedValidators = array();
+
+    /**
+     * Returns the fallback default value of field type when no such default
+     * value is provided in the field definition in content types.
+     *
+     * @return \ezp\Content\FieldType\TextBlock\Value
+     */
+    protected function getDefaultValue()
+    {
+        return new Value( "" );
+    }
 
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
