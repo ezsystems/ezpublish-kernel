@@ -188,7 +188,6 @@ class Service extends BaseService
 
         $content = $this->load( $version->contentId, $version->versionNo );
         $versionVo = $content->getState( 'properties' )->version;
-            $fields[$identifier]->value = FieldTypeFactory::buildValue( $voField->type, $voField->value );
 
         $version->setState( array( 'properties' => $versionVo ) );
         $defaultFields = new StaticFieldCollection( $version );
@@ -200,6 +199,7 @@ class Service extends BaseService
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
                     $fields[$identifier] = $field->setState( array( 'properties' => $voField ) );
+                    $fields[$identifier]->value = FieldTypeFactory::buildValue( $voField->type, $voField->value );
                     continue 2;
                 }
 
@@ -449,7 +449,6 @@ class Service extends BaseService
 
         $version = new Version( $content );
         $version->setState( array( 'properties' => $vo ) );
-        $field->value = FieldTypeFactory::buildValue( $voField->type, $voField->value );
 
         // lazy load fields if Version does not contain fields
         if ( $vo instanceof RestrictedVersionValue )
@@ -467,6 +466,7 @@ class Service extends BaseService
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
                     $field->setState( array( 'properties' => $voField ) );
+                    $field->value = FieldTypeFactory::buildValue( $voField->type, $voField->value );
                     continue 2;
                 }
 
