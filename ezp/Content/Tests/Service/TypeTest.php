@@ -255,7 +255,7 @@ class TypeTest extends BaseServiceTest
         $do->groups[] = $this->service->loadGroup( 1 );
         $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
         $field->identifier = 'title';
-        $field->defaultValue = 'New Test';
+        $field->defaultValue = new TextLineValue( 'New Test' );
         $do = $this->service->createAndPublish( $do );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
         $this->assertEquals( 1, count( $do->groups ) );
@@ -794,7 +794,7 @@ class TypeTest extends BaseServiceTest
         $do->groups[] = $this->service->loadGroup( 1 );
         $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
         $field->identifier = 'title';
-        $field->defaultValue = 'New Test';
+        $field->defaultValue = new TextLineValue( 'New Test' );
         $do = $this->service->create( $do );
         $this->service->publish( $do );
         $published = $this->service->load( $do->id );
