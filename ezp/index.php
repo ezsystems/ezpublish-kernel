@@ -10,19 +10,7 @@ use ezp\Base\Configuration,
     ezp\User;
 
 chdir( '../' );
-require 'config.php';
-require 'ezp/Base/Autoloader.php';
-spl_autoload_register( array( new Autoloader( $settings['base']['autoload'] ), 'load' ) );
-
-$paths = array();
-//@todo Take from configuration
-foreach ( glob( '{ezp,ezx}/*', GLOB_BRACE | GLOB_ONLYDIR ) as $path )
-{
-    $paths[] = "{$path}/settings/";
-}
-
-Configuration::setGlobalConfigurationData( $settings );
-Configuration::setGlobalDirs( $paths, 'modules' );
+require 'testsBootstrap.php';
 
 // Create Type manually for test
 $contentType = new Type();
@@ -54,8 +42,6 @@ $content->setSection( $section );
 $content->fields['tags'] = 'ezpublish, demo, public, api';
 //$content->fields['title'] = 'My new Article';
 // shortcut for: $content->fields['title']->value = 'My new Article';
-
-$content->notify( 'store' );// Needed to make sure changes in fieldtypes trickle down to field
 
 echo "Content id: {$content->id}<br />";
 
