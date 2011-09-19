@@ -76,6 +76,8 @@ interface Handler
      * Load roles assigned to a user/group (not including inherited roles)
      *
      * @param mixed $groupId
+     *              In legacy storage engine this is the content object id a role is assigned to.
+     *              By the nature of legacy storage engine, it is therefor possible to use $userId as well here.
      * @return \ezp\Persistence\User\Role[]
      */
     public function loadRolesByGroupId( $groupId );
@@ -127,6 +129,8 @@ interface Handler
      * Returns the user policies associated with the user (including inherited policies from user groups)
      *
      * @param mixed $userId
+     *              In legacy storage engine this is the content object id roles are assigned to.
+     *              By the nature of legacy storage engine, it is therefor possible to use $groupId as well here.
      * @return \ezp\Persistence\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId );
@@ -153,7 +157,7 @@ interface Handler
      *       Hence you would simplify the design and reduce future bugs by forcing use of policy limitations instead.
      * @param mixed $groupId The group Id to assign the role to.
      *                       In Legacy storage engine this is the content object id of the group to assign to.
-     *                       Assigning to a user is not supported, only un-assigning is supported for bc.
+     *                       By the nature of legacy storage engine, it is therefor possible to use $userId as well here.
      * @param mixed $roleId
      * @param array $limitation
      */
@@ -162,7 +166,9 @@ interface Handler
     /**
      * Un-assign a role
      *
-     * @param mixed $groupId The group / user Id to un-assign a role from
+     * @param mixed $groupId The group Id to un-assign the role from.
+     *                       In Legacy storage engine this is the content object id of the group to un-assign from.
+     *                       By the nature of legacy storage engine, it is therefor possible to use $userId as well here.
      * @param mixed $roleId
      */
     public function unAssignRole( $groupId, $roleId );
