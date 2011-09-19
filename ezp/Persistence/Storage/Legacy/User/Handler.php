@@ -72,7 +72,21 @@ class Handler implements BaseUserHandler
      */
     public function load( $userId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $data = $this->userGateway->load( $userId );
+
+        if ( empty( $data ) )
+        {
+            throw new \ezp\Base\Exception\NotFound( 'user', $userId );
+        }
+
+        $user = new User();
+        $user->id            = $data[0]['contentobject_id'];
+        $user->login         = $data[0]['login'];
+        $user->email         = $data[0]['email'];
+        $user->password      = $data[0]['password_hash'];
+        $user->hashAlgorithm = $data[0]['password_hash_type'];
+
+        return $user;
     }
 
     /**

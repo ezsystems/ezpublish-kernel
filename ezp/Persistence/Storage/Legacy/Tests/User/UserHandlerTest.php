@@ -84,6 +84,27 @@ class UserHandlerTest extends TestCase
         $handler->create( $user );
     }
 
+    public function testLoadUser()
+    {
+        $handler = $this->getUserHandler();
+        $handler->create( $user = $this->getValidUser() );
+
+        $this->assertEquals(
+            $user,
+            $handler->load( $user->id )
+        );
+    }
+
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadUnknownUser()
+    {
+        $handler = $this->getUserHandler();
+
+        $handler->load( 1337 );
+    }
+
     public function testCreateAndDeleteUser()
     {
         $handler = $this->getUserHandler();

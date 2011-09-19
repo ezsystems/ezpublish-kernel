@@ -85,6 +85,36 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Load user with user ID.
+     *
+     * @param mixed $userId
+     * @return array
+     */
+    public function load( $userId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn( 'contentobject_id', 'ezuser' ),
+            $this->handler->quoteColumn( 'login', 'ezuser' ),
+            $this->handler->quoteColumn( 'email', 'ezuser' ),
+            $this->handler->quoteColumn( 'password_hash', 'ezuser' ),
+            $this->handler->quoteColumn( 'password_hash_type', 'ezuser' )
+        )->from(
+            $this->handler->quoteTable( 'ezuser' )
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'contentobject_id', 'ezuser' ),
+                $query->bindValue( $userId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Update the user information specified by the user struct
      *
      * @param User $user
