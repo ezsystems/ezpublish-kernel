@@ -160,6 +160,22 @@ class UserHandlerTest extends TestCase
         );
     }
 
+    public function testUpdateUserSettings()
+    {
+        $handler = $this->getUserHandler();
+
+        $handler->create( $user = $this->getValidUser() );
+
+        $user->maxLogin = 42;
+        $handler->update( $user );
+
+        $this->assertQueryResult(
+            array( array( 1, 42, 42 ) ),
+            $this->handler->createSelectQuery()->select( '*' )->from( 'ezuser_setting' ),
+            'Expected user data to be updated.'
+        );
+    }
+
     public function testSilentlyUpdateNotExistingUser()
     {
         $handler = $this->getUserHandler();

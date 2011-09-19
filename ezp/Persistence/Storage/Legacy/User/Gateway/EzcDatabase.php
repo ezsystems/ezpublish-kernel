@@ -166,6 +166,23 @@ class EzcDatabase extends Gateway
                 )
             );
         $query->prepare()->execute();
+
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( $this->handler->quoteTable( 'ezuser_setting' ) )
+            ->set(
+                $this->handler->quoteColumn( 'is_enabled' ),
+                $query->bindValue( $user->isEnabled, null, \PDO::PARAM_INT )
+            )->set(
+                $this->handler->quoteColumn( 'max_login' ),
+                $query->bindValue( $user->maxLogin, null, \PDO::PARAM_INT )
+            )->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'user_id' ),
+                    $query->bindValue( $user->id, null, \PDO::PARAM_INT )
+                )
+            );
+        $query->prepare()->execute();
     }
 
     /**
