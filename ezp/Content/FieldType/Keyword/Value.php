@@ -47,8 +47,15 @@ class Value implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
-        throw new \RuntimeException( "@TODO: Implement" );
-        return new static( $stringValue );
+        $tags = array();
+        foreach ( explode( ',', $stringValue ) as $tag )
+        {
+            $tag = trim( $tag );
+            if ( $tag )
+                $tags[] = $tag;
+        }
+
+        return new static( array_unique( $tags ) );
     }
 
     /**
@@ -56,7 +63,6 @@ class Value implements ValueInterface
      */
     public function __toString()
     {
-        throw new \RuntimeException( "@TODO: Implement" );
-        return (string)$this->values;
+        return implode( ', ', $this->values );
     }
 }
