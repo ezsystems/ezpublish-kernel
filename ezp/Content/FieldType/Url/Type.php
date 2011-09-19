@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\FieldType\Url;
-use ezp\Content\FieldType,
+use ezp\Content\FieldType\Complex,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Content\FieldType\Url\Value as UrlValue,
     ezp\Base\Exception\BadFieldTypeInput,
@@ -19,7 +19,7 @@ use ezp\Content\FieldType,
  *
  * This field type represents a simple string.
  */
-class Type extends FieldType
+class Type extends Complex
 {
     const FIELD_TYPE_IDENTIFIER = "ezurl";
     const IS_SEARCHABLE = false;
@@ -56,6 +56,17 @@ class Type extends FieldType
     }
 
     /**
+     * Returns a handler, aka. a helper object which aids in the manipulation of
+     * complex field type values.
+     *
+     * @return void|ezp\Content\FieldType\Handler
+     */
+    public function getHandler()
+    {
+        return new Handler();
+    }
+
+    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @todo Sort seems to not be supported by this FieldType, is this handled correctly?
@@ -81,5 +92,16 @@ class Type extends FieldType
             "link" => $this->getValue()->link,
             "text" => $this->getValue()->text,
         );
+    }
+
+    /**
+     * Returns the external value of the field type in a format suitable for packing it
+     * in a FieldValue.
+     *
+     * @return null|array
+     * @todo Shouldn't it return a struct with appropriate properties instead of an array ?
+     */
+    public function getValueExternalData()
+    {
     }
 }
