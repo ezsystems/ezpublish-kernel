@@ -107,7 +107,7 @@ class FieldDefinition extends Model
      *
      * @return \ezp\Content\FieldType
      */
-    protected function getType()
+    public function getType()
     {
         return $this->type;
     }
@@ -133,7 +133,7 @@ class FieldDefinition extends Model
      *
      * @return \ezp\Content\FieldType\Value
      */
-    protected function getDefaultValue()
+    public function getDefaultValue()
     {
         return $this->defaultValue;
     }
@@ -143,7 +143,7 @@ class FieldDefinition extends Model
      *
      * @param \ezp\Content\FieldType\Value $value
      */
-    protected function setDefaultValue( FieldValue $value )
+    public function setDefaultValue( FieldValue $value )
     {
         $this->defaultValue = $value;
         $this->notify( 'field/setValue', array( 'value' => $value ) );

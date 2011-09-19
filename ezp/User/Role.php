@@ -71,7 +71,7 @@ class Role extends Model implements ModelDefinition
     /**
      * @return \ezp\User\Policy[]
      */
-    protected function getPolicies()
+    public function getPolicies()
     {
         return $this->policies;
     }

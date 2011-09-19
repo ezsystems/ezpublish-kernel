@@ -137,7 +137,7 @@ class Location extends Model
      *
      * @return \ezp\Content\Location
      */
-    protected function getParent()
+    public function getParent()
     {
         if ( $this->parent instanceof Proxy )
         {
@@ -163,7 +163,7 @@ class Location extends Model
      *
      * @return \ezp\Content
      */
-    protected function getContent()
+    public function getContent()
     {
         if ( $this->content instanceof Proxy )
         {
@@ -181,7 +181,8 @@ class Location extends Model
     {
         $this->content = $content;
         $this->properties->contentId = $content->id;
-        $content->locations[] = $this;
+        $locations = $content->getLocations();
+        $locations[] = $this;
     }
 
     /**
@@ -189,7 +190,7 @@ class Location extends Model
      *
      * @return \ezp\Content\Location[]
      */
-    protected function getChildren()
+    public function getChildren()
     {
         return $this->children;
     }

@@ -136,7 +136,7 @@ class Translation extends Model
         {
             throw new DomainException( "No published version in the translation '{$this->locale->code}'" );
         }
-        return $version->fields;
+        return $version->getFields();
     }
 
     /**

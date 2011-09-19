@@ -94,7 +94,7 @@ class Version extends Model
      *
      * @return \ezp\Content\Field[]
      */
-    protected function getFields()
+    public function getFields()
     {
         return $this->fields;
     }
@@ -104,7 +104,7 @@ class Version extends Model
      *
      * @return \ezp\Content
      */
-    protected function getContent()
+    public function getContent()
     {
         return $this->content;
     }

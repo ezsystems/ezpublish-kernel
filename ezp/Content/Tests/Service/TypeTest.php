@@ -177,7 +177,7 @@ class TypeTest extends BaseServiceTest
         $do->groups[] = $this->service->loadGroup( 1 );
         $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
         $field->identifier = 'title';
-        $field->defaultValue = new TextLineValue( 'New Test' );
+        $field->setDefaultValue( new TextLineValue( 'New Test' ) );
         $do = $this->service->create( $do );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
         $this->assertEquals( 1, count( $do->groups ) );
@@ -255,7 +255,7 @@ class TypeTest extends BaseServiceTest
         $do->groups[] = $this->service->loadGroup( 1 );
         $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
         $field->identifier = 'title';
-        $field->defaultValue = new TextLineValue( 'New Test' );
+        $field->setDefaultValue( new TextLineValue( 'New Test' ) );
         $do = $this->service->createAndPublish( $do );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
         $this->assertEquals( 1, count( $do->groups ) );
@@ -625,7 +625,7 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->load( 1 );
         $field = new FieldDefinition( $type, 'ezstring' );
         $field->name = $field->description = array( 'eng-GB' => 'Test' );
-        $field->defaultValue = new TextLineValue( "" );
+        $field->setDefaultValue( new TextLineValue( "" ) );
         $field->fieldGroup = '';
         $field->identifier = 'test';
         $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
@@ -659,7 +659,7 @@ class TypeTest extends BaseServiceTest
 
         $field = new FieldDefinition( $type, 'ezstring' );
         $field->name = $field->description = array( 'eng-GB' => 'Test' );
-        $field->defaultValue = new TextLineValue( "" );
+        $field->setDefaultValue( new TextLineValue( "" ) );
         $field->fieldGroup = '';
         $field->identifier = 'test';
         $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
@@ -741,14 +741,15 @@ class TypeTest extends BaseServiceTest
         try
         {
             $type = $this->service->load( 1 );
-            $type->fields[0]->name = array( 'eng-GB' => 'New name' );
+            $fields = $type->getFields();
+            $fields[0]->name = array( 'eng-GB' => 'New name' );
             $this->service->delete( $type );
         }
         catch ( Exception $e )
         {
             self::fail( "Did not expect any exception here, but got:" . $e );
         }
-        $this->service->updateFieldDefinition( $type, $type->fields[0] );
+        $this->service->updateFieldDefinition( $type, $fields[0] );
     }
 
     /**
@@ -794,7 +795,7 @@ class TypeTest extends BaseServiceTest
         $do->groups[] = $this->service->loadGroup( 1 );
         $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
         $field->identifier = 'title';
-        $field->defaultValue = new TextLineValue( 'New Test' );
+        $field->setDefaultValue( new TextLineValue( 'New Test' ) );
         $do = $this->service->create( $do );
         $this->service->publish( $do );
         $published = $this->service->load( $do->id );

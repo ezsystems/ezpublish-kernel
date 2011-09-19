@@ -666,7 +666,7 @@ class ServiceTest extends BaseServiceTest
     /**
      * @return \ezp\User\Role
      */
-    protected function getRole()
+    public function getRole()
     {
         $do = new Role();
         $do->name = 'test';

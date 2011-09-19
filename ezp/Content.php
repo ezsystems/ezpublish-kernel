@@ -20,6 +20,7 @@ use ezp\Base\Model,
     ezp\Content\Version,
     ezp\Content\Version\StaticCollection as VersionCollection,
     ezp\Persistence\Content as ContentValue,
+    ezp\User,
     DateTime,
     InvalidArgumentException;
 
@@ -55,22 +56,25 @@ use ezp\Base\Model,
  *                $locationById = $content->locations->byId( 60 );
  *                </code>
  * @property-read DateTime $creationDate The date the object was created
- * @property \ezp\Content\Section $section The Section the content belongs to
- * @property \ezp\Content\Relation[] $relations Collection of \ezp\Content\Relation objects, related to the current one
- * @property \ezp\Content\Relation[] $reverseRelations Collection of \ezp\Content\Relation objects, reverse-related to the current one
- * @property \ezp\Content\Translation[] $translations
+ * @property-read \ezp\Content\Section $section The Section the content belongs to
+ * @property-read \ezp\Content\Relation[] $relations Collection of \ezp\Content\Relation objects, related to the current one
+ * @property-read \ezp\Content\Relation[] $reverseRelations Collection of \ezp\Content\Relation objects, reverse-related to the current one
+ * @property-read \ezp\Content\Translation[] $translations
  *           Collection of content's translations, indexed by locale (ie. eng-GB)
  *           <code>
  *           $myEnglishTranslation = $content->translations["eng-GB"];
  *           $myEnglishTitle = $content->translations["eng-GB"]->fields->title; // Where "title" is the field identifier
  *           </code>
- * @property \ezp\Content\Field[] $fields
+ * @property-read \ezp\Content\Field[] $fields
  *           Collection of content's fields in default (current) language.
  *           Shorthand property to directly access to the content's fields in current language
  *           <code>
  *           $myTitle = $content->fields->title; // Where "title" is the field identifier
  *           </code>
- * @property int $ownerId Owner identifier
+ * @property-read int $ownerId
+ *           Owner identifier
+ * @property \ezp\User $owner
+ *           Owner user object
  * @property-read mixed $initialLanguageId
  *                The id of the language the Content was initially created in. Set using {@see setInitialLanguage()}
  * @property \ezp\Content\Language $initialLanguage
@@ -94,7 +98,7 @@ class Content extends Model implements ModelDefinition
         'currentVersionNo' => false,
         'status' => false,
         'name' => true, // @todo: Make readOnly and generate on store event from attributes based on type nameScheme
-        'ownerId' => true,// @todo make read only by providing interface that takes User as input
+        'ownerId' => false,
         'alwaysAvailable' => true,
         'remoteId' => true,// @todo Make readonly and deal with this internally (in all DO's)
         'sectionId' => false,
@@ -219,7 +223,7 @@ class Content extends Model implements ModelDefinition
                     'ParentOwner' => array(
                         'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
                         {
-                            return $parent && in_array( $parent->content->ownerId, $limitationsValues, true );
+                            return $parent && in_array( $parent->getContent()->ownerId, $limitationsValues, true );
                         },
                     ),
                     'ParentGroup' => array(
@@ -228,7 +232,7 @@ class Content extends Model implements ModelDefinition
                             if ( !$parent )
                                 return false;
 
-                            foreach ( $parent->content->owner->getGroups() as $group )
+                            foreach ( $parent->getContent()->getOwner()->getGroups() as $group )
                             {
                                 if ( in_array( $group->id, $limitationsValues, true ) )
                                     return true;
@@ -240,7 +244,7 @@ class Content extends Model implements ModelDefinition
                     'ParentClass' => array(
                         'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
                         {
-                            return $parent && in_array( $parent->content->typeId, $limitationsValues, true );
+                            return $parent && in_array( $parent->getContent()->typeId, $limitationsValues, true );
                         },
                     ),
                     'ParentDepth' => array(
@@ -303,7 +307,7 @@ class Content extends Model implements ModelDefinition
                     'Group' => array(
                         'compare' => function( Content $content, array $limitationsValues )
                         {
-                            foreach ( $content->owner->getGroups() as $group )
+                            foreach ( $content->getOwner()->getGroups() as $group )
                             {
                                 if ( in_array( $group->id, $limitationsValues, true ) )
                                     return true;
@@ -408,7 +412,7 @@ class Content extends Model implements ModelDefinition
      *
      * @return \ezp\Content\Location
      */
-    protected function getMainLocation()
+    public function getMainLocation()
     {
         return $this->locations[0];
     }
@@ -418,7 +422,7 @@ class Content extends Model implements ModelDefinition
      *
      * @return \ezp\Content\Version[]
      */
-    protected function getVersions()
+    public function getVersions()
     {
         return $this->versions;
     }
@@ -428,7 +432,7 @@ class Content extends Model implements ModelDefinition
      *
      * @return \ezp\Content\Version|null
      */
-    protected function getCurrentVersion()
+    public function getCurrentVersion()
     {
         foreach ( $this->versions as $contentVersion )
         {
@@ -443,7 +447,7 @@ class Content extends Model implements ModelDefinition
      *
      * @return \ezp\Content\Type
      */
-    protected function getContentType()
+    public function getContentType()
     {
         if ( $this->contentType instanceof Proxy )
         {
@@ -458,9 +462,9 @@ class Content extends Model implements ModelDefinition
      *
      * @return \ezp\Content\Field[]
      */
-    protected function getFields()
+    public function getFields()
     {
-        return $this->getCurrentVersion()->fields;
+        return $this->getCurrentVersion()->getFields();
     }
 
     /**
@@ -479,7 +483,7 @@ class Content extends Model implements ModelDefinition
      *
      * @return \ezp\Content\Section
      */
-    protected function getSection()
+    public function getSection()
     {
         if ( $this->section instanceof Proxy )
         {
@@ -489,11 +493,21 @@ class Content extends Model implements ModelDefinition
     }
 
     /**
+     * Sets the Owner the Content belongs to
+     *
+     * @param \ezp\User $owner
+     */
+    public function setOwner( User $owner )
+    {
+        $this->owner = $owner;
+        $this->properties->ownerId = $owner->id;
+    }
+    /**
      * Returns the User the Content is owned by
      *
      * @return \ezp\User
      */
-    protected function getOwner()
+    public function getOwner()
     {
         if ( $this->owner instanceof Proxy )
         {
@@ -520,7 +534,7 @@ class Content extends Model implements ModelDefinition
      *
      * @return \ezp\Content\Location[]
      */
-    protected function getLocations()
+    public function getLocations()
     {
         return $this->locations;
     }
@@ -530,7 +544,7 @@ class Content extends Model implements ModelDefinition
      *
      * @return \ezp\Content[]
      */
-    protected function getRelations()
+    public function getRelations()
     {
         return $this->relations;
     }
@@ -540,7 +554,7 @@ class Content extends Model implements ModelDefinition
      *
      * @return \ezp\Content[]
      */
-    protected function getReverseRelations()
+    public function getReverseRelations()
     {
         return $this->reverseRelations;
     }

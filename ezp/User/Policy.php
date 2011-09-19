@@ -66,7 +66,7 @@ class Policy extends Model
     /**
      * @return \ezp\User\Role
      */
-    protected function getRole()
+    public function getRole()
     {
         if ( $this->role instanceof Proxy )
             $this->role = $this->role->load();

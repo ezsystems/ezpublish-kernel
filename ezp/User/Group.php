@@ -154,7 +154,8 @@ class Group implements GroupAbleInterface, ModelInterface, Observable
             if ( $property === 'id' )
                 return $this->content->id;
 
-            return $this->content->fields[$property]->value;
+            $fields = $this->content->getFields();
+            return $fields[$property]->value;
         }
 
         throw new PropertyNotFound( $property, get_class( $this ) );

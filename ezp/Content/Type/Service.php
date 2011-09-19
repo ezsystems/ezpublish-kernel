@@ -367,10 +367,11 @@ class Service extends BaseService
     protected function buildType( TypeValue $vo )
     {
         $type = new Type();
+        $fields = $type->getFields();
         foreach ( $vo->fieldDefinitions as $fieldDefinitionVo )
         {
             $fieldDefinition = new FieldDefinition( $type, $fieldDefinitionVo->fieldType );
-            $type->fields[] = $fieldDefinition->setState( array( 'properties' => $fieldDefinitionVo ) );
+            $fields[] = $fieldDefinition->setState( array( 'properties' => $fieldDefinitionVo ) );
         }
         $type->setState(
             array(

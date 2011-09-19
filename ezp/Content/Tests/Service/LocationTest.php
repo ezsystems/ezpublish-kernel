@@ -68,11 +68,11 @@ class LocationTest extends BaseServiceTest
 
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );
-        $content = new Content( $type, new User( 10 ) );
+        $content = new Content( $type, new User( 14 ) );
         $content->name = array( "eng-GB" => "test" );
-        $content->ownerId = 14;
         $content->setSection( $section );
-        $content->fields['name'] = 'Welcome';
+        $fields = $content->getFields();
+        $fields['name'] = 'Welcome';
 
         $this->content = $this->repository->getContentService()->create( $content );
         $this->contentToDelete[] = $this->content;
@@ -88,11 +88,11 @@ class LocationTest extends BaseServiceTest
         for ( $i = 0; $i < 10; ++$i )
         {
 
-            $content = new Content( $type, new User( 10 ) );
+            $content = new Content( $type, new User( 14 ) );
             $content->name = array( "eng-GB" => "foo$i" );
-            $content->ownerId = 14;
             $content->setSection( $section );
-            $content->fields['name'] = "bar$i";
+            $fields = $content->getFields();
+            $fields['name'] = "bar$i";
 
             $content = $this->repository->getContentService()->create( $content );
             $this->contentToDelete[] = $content;
@@ -338,18 +338,18 @@ class LocationTest extends BaseServiceTest
     public function testSwap()
     {
         $topContentId = $this->topLocation->contentId;
-        $topContentName = $this->topLocation->content->name;
+        $topContentName = $this->topLocation->getContent()->name;
         $topLocationId = $this->topLocation->id;
         $contentId = $this->location->contentId;
-        $contentName = $this->location->content->name;
+        $contentName = $this->location->getContent()->name;
         $locationId = $this->location->id;
 
         $this->service->swap( $this->topLocation, $this->location );
 
         self::assertSame( $topContentId, $this->location->contentId );
-        self::assertSame( $topContentName, $this->location->content->name );
+        self::assertSame( $topContentName, $this->location->getContent()->name );
         self::assertSame( $contentId, $this->topLocation->contentId );
-        self::assertSame( $contentName, $this->topLocation->content->name );
+        self::assertSame( $contentName, $this->topLocation->getContent()->name );
         self::assertSame( $topLocationId, $this->topLocation->id, 'Swapped locations keep same Ids' );
         self::assertSame( $locationId, $this->location->id, 'Swapped locations keep same Ids' );
     }

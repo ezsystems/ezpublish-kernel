@@ -111,7 +111,7 @@ class ContentTest extends BaseServiceTest
         $refMethod->setAccessible( true );
         $do = $refMethod->invoke( $this->service, $content, $versionVo );
         self::assertSame( $versionVo, $do->getState( 'properties' ) );
-        self::assertInstanceOf( 'ezp\\Base\\Collection', $do->fields );
+        self::assertInstanceOf( 'ezp\\Base\\Collection', $do->getFields() );
     }
 
     /**
@@ -126,7 +126,6 @@ class ContentTest extends BaseServiceTest
         $content = new Content( $type, new User( 10 ) );
         $content->addParent( $location );
         $content->name = array( "eng-GB" => "New object" );
-        $content->ownerId = 10;
         $content->setSection( $section );
 
         $content = $this->service->create( $content );
@@ -137,8 +136,9 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
         self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
         self::assertEquals( Content::STATUS_DRAFT, $content->status, "Status not correctly set" );
-        self::assertEquals( 1, count( $content->locations ), "Location count is wrong" );
-        self::assertEquals( $content->locations[0]->id, $content->locations[0]->mainLocationId, "Main Location id is not correct" );
+        $locations = $content->getLocations();
+        self::assertEquals( 1, count( $locations ), "Location count is wrong" );
+        self::assertEquals( $locations[0]->id, $locations[0]->mainLocationId, "Main Location id is not correct" );
     }
 
     /**
@@ -150,8 +150,9 @@ class ContentTest extends BaseServiceTest
         // @todo Test with change to fields!
 
         $content = $this->service->load( 1 );
+        $user = $this->repository->getUserService()->load( 10 );
         $content->name = array( "eng-GB" => "New name" );
-        $content->ownerId = 10;
+        $content->setOwner( $user );
         $content = $this->service->update( $content );
 
         self::assertInstanceOf( "ezp\\Content", $content );
@@ -241,7 +242,7 @@ class ContentTest extends BaseServiceTest
                 $this->assertEquals( 0, $version->status );
             }
 
-            $this->assertInstanceOf( 'ezp\\Base\\Collection', $version->fields );
+            $this->assertInstanceOf( 'ezp\\Base\\Collection', $version->getFields() );
         }
         $this->assertEquals( array( 1 => true, 2 => true ), $foundVersions, "The versions returned is not correct" );
     }
@@ -268,7 +269,7 @@ class ContentTest extends BaseServiceTest
     public function testDelete()
     {
         $content = $this->service->load( 1 );
-        $locations = $content->locations;
+        $locations = $content->GetLocations();
         $this->service->delete( $content );
         $locationService = $this->repository->getLocationService();
         foreach ( $locations as $location )
@@ -320,7 +321,7 @@ class ContentTest extends BaseServiceTest
         $fieldsDef = array();
 
         // First index fields definitions by id
-        foreach ( $content->contentType->fields as $fieldDefinition )
+        foreach ( $content->contentType->getFields() as $fieldDefinition )
         {
             $fieldsDef[$fieldDefinition->id] = $fieldDefinition;
         }
@@ -380,7 +381,7 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( $content->typeId, $copy->typeId, "Type ID does not match" );
         self::assertEquals( $content->ownerId, $copy->ownerId, "Owner ID does not match" );
         self::assertEquals( $content->currentVersionNo, $copy->currentVersionNo, "Current version no does not match" );
-        self::assertEquals( 0, count( $copy->locations ), "Locations must be empty" );
+        self::assertEquals( 0, count( $copy->getLocations() ), "Locations must be empty" );
     }
 
     /**
@@ -395,7 +396,7 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( $version->creatorId, $copyVersion->creatorId, "Creator ID does not match" );
 
         // Compare Fields
-        foreach ( $version->fields as $identifier => $field )
+        foreach ( $version->getFields() as $identifier => $field )
         {
             self::assertTrue( isset( $copyVersion->fields[$identifier] ) );
             self::assertInstanceOf( 'ezp\\Content\\Field', $copyVersion->fields[$identifier] );
@@ -507,7 +508,7 @@ class ContentTest extends BaseServiceTest
         $draft = $this->service->createDraftFromVersion( $content );
         self::assertEquals( $maxVersionNo + 1, $draft->versionNo );
         self::assertSame( Content::STATUS_DRAFT, $draft->status );
-        self::assertSame( count( $srcVersion->fields ), count( $draft->fields ) );
+        self::assertSame( count( $srcVersion->getFields() ), count( $draft->getFields() ) );
         foreach ( $srcVersion->fields as $identifier => $field )
         {
             self::assertTrue( isset( $draft->fields[$identifier] ) );

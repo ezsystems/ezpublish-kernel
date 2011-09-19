@@ -80,7 +80,7 @@ class Relation extends Model
      *
      * @return \ezp\Content
      */
-    protected function getContent()
+    public function getContent()
     {
         return $this->content;
     }

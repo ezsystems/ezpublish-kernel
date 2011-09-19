@@ -93,11 +93,11 @@ class TrashTest extends Base
 
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );
-        $content = new Content( $type, new User( 10 ) );
+        $content = new Content( $type, new User( 14 ) );
         $content->name = "test";
-        $content->ownerId = 14;
         $content->setSection( $section );
-        $content->fields['name'] = 'Welcome';
+        $fields = $content->getFields();
+        $fields['name'] = 'Welcome';
 
         $this->content = $this->repository->getContentService()->create( $content );
         $this->contentToDelete[] = $this->content;
@@ -112,11 +112,11 @@ class TrashTest extends Base
         $parent = $this->topLocation;
         for ( $i = 0; $i < 10; ++$i )
         {
-            $content = new Content( $type, new User( 10 ) );
+            $content = new Content( $type, new User( 14 ) );
             $content->name = "foo$i";
-            $content->ownerId = 14;
             $content->setSection( $section );
-            $content->fields['name'] = "bar$i";
+            $fields = $content->getFields();
+            $fields['name'] = "bar$i";
 
             $content = $this->repository->getContentService()->create( $content );
             $this->contentToDelete[] = $content;

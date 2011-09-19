@@ -108,7 +108,7 @@ class Service extends BaseService
         if ( !$parentContent instanceof Content  )
             throw new Logic( 'createGroup', 'can not create group when $parentGroup is not created (persisted)' );
 
-        $parentLocation = $parentContent->mainLocation;
+        $parentLocation = $parentContent->getMainLocation();
         if ( !$parentLocation instanceof Location  )
             throw new Logic( 'createGroup', 'can not create group when $parentGroup is not created (persisted)' );
 
@@ -118,16 +118,16 @@ class Service extends BaseService
 
         $content = new Content( $type, $this->repository->getUser() );
         $content->addParent( $parentLocation );
-        $content->ownerId = $this->repository->getUser()->id;
         $content->getState( 'properties' )->sectionId = $parentContent->sectionId;
 
-        if ( !isset( $content->fields['name'] ) )
+        $fields = $content->getFields();
+        if ( !isset( $fields['name'] ) )
             throw new PropertyNotFound( 'name', get_class( $content ) );
-        else if ( !isset( $content->fields['description'] ) )
+        else if ( !isset( $fields['description'] ) )
             throw new PropertyNotFound( 'description', get_class( $content ) );
 
-        $content->fields['name'] = $name;
-        $content->fields['description'] = $description;
+        $fields['name'] = $name;
+        $fields['description'] = $description;
         $content->name = array( 'eng-GB' => $name );// @todo remove when name handler is in place
 
         return $this->buildGroup( $this->repository->getContentService()->create( $content ) );
@@ -158,6 +158,7 @@ class Service extends BaseService
      *
      * Notice: Group related api currently deals with content in the background, see Readme.rst for info and constraints
      *
+     * @access private Used by $user->getGroups()
      * @param mixed $id
      * @return \ezp\User\Group[]
      * @throws \ezp\Base\Exception\InvalidArgumentType If $id does not belong to a user object
@@ -175,9 +176,9 @@ class Service extends BaseService
             throw new InvalidArgumentType( "id", 'id of user object, got typeId:' . $contentUser->typeId );
 
         $groups = array();
-        foreach ( $contentUser->locations as $location )
+        foreach ( $contentUser->getLocations() as $location )
         {
-            $parentContent = $location->parent->content;
+            $parentContent = $location->getParent()->getContent();
             if ( $parentContent->typeId != $groupTypeId )
                 throw new NotFoundWithType( "User Group({$groupTypeId})", $parentContent->id );
 
@@ -206,7 +207,7 @@ class Service extends BaseService
         if ( $groups->indexOf( $group ) !== false )
             throw new Logic( 'assignGroup', 'can not assign group that is already assigned' );
 
-        $newLocation = $content->addParent( $group->getState( 'content' )->mainLocation );
+        $newLocation = $content->addParent( $group->getState( 'content' )->getMainLocation() );
         $this->repository->getLocationService()->create( $newLocation );
 
         $groups[] = $group;
@@ -238,12 +239,13 @@ class Service extends BaseService
         if ( !count( $groups ) )// $groups is collection so need to use count()
             throw new Logic( 'unAssignGroup', 'can not remove $group, it seems to be last group on user' );
 
-        $groupLocation = $group->getState( 'content' )->mainLocation;
+        $groupLocation = $group->getState( 'content' )->getMainLocation();
         if ( !$groupLocation instanceof Location  )
             throw new Logic( 'unAssignGroup', 'can not remove non created (persisted)$groupLocation on $group' );
 
         $locationKey = false;
-        foreach ( $content->locations as $key => $location )
+        $locations = $content->getLocations();
+        foreach ( $locations as $key => $location )
         {
             if ( $location->parentId == $groupLocation->id )
             {
@@ -256,7 +258,7 @@ class Service extends BaseService
 
         $this->repository->getLocationService()->delete( $location );
 
-        unset( $content->locations[$locationKey] );
+        unset( $locations[$locationKey] );
         unset( $content->getState( 'properties' )->locations[$locationKey] );//order should be same, so reusing key
 
         unset( $groups[$key] );
@@ -293,6 +295,7 @@ class Service extends BaseService
     /**
      * Load list of Roles assigned to a certain user [group] by id
      *
+     * @access private Used by $group->getRoles()
      * @param mixed $id The user [group] id that returned roles are assigned to
      * @return \ezp\User\Role[]
      * @throws \ezp\Base\Exception\NotFound If role is not found
@@ -355,6 +358,7 @@ class Service extends BaseService
     /**
      * Load list of Policies assigned and inherited on a user [group]
      *
+     * @access Private Used by $user->getPolicies()
      * @param mixed $id The user [group] id that returned roles are assigned to
      * @return \ezp\User\Policy[]
      * @throws \ezp\Base\Exception\NotFound If user is not found
@@ -449,15 +453,15 @@ class Service extends BaseService
     protected function buildGroup( Content $content )
     {
         $parent = null;
-        if ( $content->mainLocation->parentId > 1 )
+        if ( $content->getMainLocation()->parentId > 1 )
         {
             $parent = new Proxy( $this,
-                                 $content->mainLocation->parent->content->id,// not very lazy, callback / api?
+                                 $content->getMainLocation()->getParent()->getContent()->id,// not very lazy, callback / api?
                                  'loadGroup' );
         }
         $do = new Group( $content );
         $do->setState(
-            array(
+            array(  
                 "parent" => $parent,
                 "roles" => new Lazy(
                     "ezp\\User\\Role",

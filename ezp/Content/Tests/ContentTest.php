@@ -38,16 +38,17 @@ class ContentTest extends \PHPUnit_Framework_TestCase
         $this->contentType->identifier = 'article';
 
         // Add some fields
-        $fields = array(
+        $fieldsData = array(
             'title' => array( 'ezstring', new TextLineValue( 'New Article' ) ),
             'tags' => array( 'ezkeyword', new KeywordValue() )
         );
-        foreach ( $fields as $identifier => $data )
+        $fields = $this->contentType->getFields();
+        foreach ( $fieldsData as $identifier => $data )
         {
             $field = new FieldDefinition( $this->contentType, $data[0] );
             $field->identifier = $identifier;
-            $field->defaultValue = $data[1];
-            $this->contentType->fields[] = $field;
+            $field->setDefaultValue( $data[1] );
+            $fields[] = $field;
         }
     }
 
@@ -149,8 +150,9 @@ class ContentTest extends \PHPUnit_Framework_TestCase
     {
         $content = new Content( $this->contentType, new User( 10 ) );
         $location = new Location( $content );
-        $this->assertEquals( $content->locations[0], $location, 'Location on Content is not correctly updated when Location is created with content in constructor!' );
-        $content->locations[] = $location;
-        $this->assertEquals( 1, count( $content->locations ), 'Collection allows several instances of same object!' );
+        $locations = $content->getLocations();
+        $this->assertEquals( $location, $locations[0], 'Location on Content is not correctly updated when Location is created with content in constructor!' );
+        $locations[] = $location;
+        $this->assertEquals( 1, count( $content->getLocations() ), 'Collection allows several instances of same object!' );
     }
 }

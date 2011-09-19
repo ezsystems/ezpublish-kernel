@@ -131,7 +131,7 @@ class User extends Model implements GroupAbleInterface, ModelDefinition
      *
      * @return array|User\Role[]
      */
-    protected function getRoles()
+    public function getRoles()
     {
         return $this->roles;
     }
@@ -141,7 +141,7 @@ class User extends Model implements GroupAbleInterface, ModelDefinition
      *
      * @return array|User\Policy[]
      */
-    protected function getPolicies()
+    public function getPolicies()
     {
         return $this->policies;
     }

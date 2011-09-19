@@ -91,11 +91,11 @@ class ContentSearchTest extends BaseServiceTest
         $this->expectedContentVo = array();
         for ( $i = 0; $i < 10; ++$i )
         {
-            $content = new Content( $type, new User( 10 ) );
+            $content = new Content( $type, new User( 14 ) );
             $content->name = array( "eng-GB" => "foo$i" );
-            $content->ownerId = 14;
             $content->setSection( $section );
-            $content->fields['name'] = "bar$i";
+            $fields = $content->getFields();
+            $fields['name'] = "bar$i";
             $content = $this->service->create( $content );
             $this->expectedContent[] = $content;
             $this->expectedContentVo[] = $content->getState( 'properties' );

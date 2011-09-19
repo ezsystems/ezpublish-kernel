@@ -17,16 +17,17 @@ $contentType = new Type();
 $contentType->identifier = 'article';
 
 // Add some fields
-$fields = array(
-    'title' => array( 'ezstring', 'New Article' ),
-    'tags' => array( 'ezkeyword', '' )
+$fieldsData = array(
+    'title' => array( 'ezstring', new TextLineValue( 'New Article' ) ),
+    'tags' => array( 'ezkeyword', new KeywordValue() )
 );
-foreach ( $fields as $identifier => $data )
+$fields = $contentType->getFields();
+foreach ( $fieldsData as $identifier => $data )
 {
     $field = new FieldDefinition( $contentType, $data[0] );
     $field->identifier = $identifier;
-    $field->defaultValue = $data[1];
-    $contentType->fields[] = $field;
+    $field->setDefaultValue( $data[1] );
+    $fields[] = $field;
 }
 
 // Create section
@@ -36,7 +37,6 @@ $section->name = "Standard";
 
 // Create Content object
 $content = new Content( $contentType, new User( 10 ) );
-$content->ownerId = 10;
 $content->setSection( $section );
 
 $content->fields['tags'] = 'ezpublish, demo, public, api';

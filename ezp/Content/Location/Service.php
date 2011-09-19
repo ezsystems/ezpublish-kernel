@@ -123,7 +123,7 @@ class Service extends BaseService
         $result = $this->repository->getContentService()->find( $qb->getQuery() );
         foreach ( $result as $childContent )
         {
-            foreach ( $childContent->locations as $child )
+            foreach ( $childContent->getLocations() as $child )
             {
                 if ( $child->parentId == $location->id )
                 {
@@ -162,7 +162,8 @@ class Service extends BaseService
             }
         }
 
-        $struct->invisible = ( $location->parent->invisible == true ) || ( $location->parent->hidden == true );
+        $parent = $location->getParent();
+        $struct->invisible = ( $parent->invisible == true ) || ( $parent->hidden == true );
         $struct->contentId = $location->contentId;
         $struct->priority = (int)$location->priority;
 

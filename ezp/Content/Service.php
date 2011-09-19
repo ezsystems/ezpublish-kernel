@@ -59,7 +59,7 @@ class Service extends BaseService
 
         $struct = new CreateStruct();
         $this->fillStruct( $struct, $content, array( 'parentLocations', 'fields' ) );
-        foreach ( $content->locations as $location )
+        foreach ( $content->getLocations() as $location )
         {
             // @todo: Generate pathIdentificationString?
             // @todo set sort order and fields based on settings in type
@@ -75,7 +75,7 @@ class Service extends BaseService
                 array( "contentId", "contentVersion", "mainLocationId" )
             );
         }
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             $fieldStruct = $field->getState( 'properties' );
             $fieldStruct->value = $field->fieldDefinition->type->setFieldValue( new FieldValue );
@@ -102,7 +102,7 @@ class Service extends BaseService
         $struct->userId = $content->ownerId;
         $struct->versionNo = $content->currentVersionNo;
 
-        foreach ( $content->fields as $field )
+        foreach ( $content->getFields() as $field )
         {
             $fieldStruct = $field->getState( 'properties' );
             $fieldStruct->value = $field->fieldDefinition->type->setFieldValue( new FieldValue );
@@ -175,7 +175,7 @@ class Service extends BaseService
     /**
      * List fields for a content $version.
      *
-     * @access private For use in $version->fields when lazy loaded, hence why it returns native array
+     * @access private For use in $version->getFields() when lazy loaded, hence why it returns native array
      * @param \ezp\Content\Version $version
      * @return \ezp\Content\Field[]
      * @throws \ezp\Base\Exception\NotFound If version can not be found
@@ -199,7 +199,7 @@ class Service extends BaseService
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
                     $fields[$identifier] = $field->setState( array( 'properties' => $voField ) );
-                    $fields[$identifier]->value = FieldTypeFactory::buildValue( $voField->type, $voField->value );
+                    $fields[$identifier]->setValue( FieldTypeFactory::buildValue( $voField->type, $voField->value ) );
                     continue 2;
                 }
 
@@ -415,9 +415,10 @@ class Service extends BaseService
         );
 
         $locationService = $this->repository->getLocationService();
+        $locations = $content->getLocations();
         foreach ( $vo->locations as $locationValue )
         {
-            $content->locations[] = $location = new Location( $content );
+            $locations[] = $location = new Location( $content );
             $location->setState(
                 array(
                     "properties" => $locationValue,
@@ -459,14 +460,14 @@ class Service extends BaseService
 
         $version->setState( array( 'fields' => new StaticFieldCollection( $version ) ) );
         // @todo Deal with translations
-        foreach ( $version->fields as $identifier => $field )
+        foreach ( $version->getFields() as $identifier => $field )
         {
             foreach ( $vo->fields as $voField )
             {
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
                     $field->setState( array( 'properties' => $voField ) );
-                    $field->value = FieldTypeFactory::buildValue( $voField->type, $voField->value );
+                    $field->setValue( FieldTypeFactory::buildValue( $voField->type, $voField->value ) );
                     continue 2;
                 }
 

@@ -60,6 +60,6 @@ class LazyCollection extends Lazy
             );
         }
 
-        $field->value = $value;
+        $field->setValue( $value );
     }
 }

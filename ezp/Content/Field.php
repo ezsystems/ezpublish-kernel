@@ -91,7 +91,7 @@ class Field extends Model
      *
      * @return \ezp\Content\Version
      */
-    protected function getVersion()
+    public function getVersion()
     {
         return $this->version;
     }
@@ -101,7 +101,7 @@ class Field extends Model
      *
      * @return \ezp\Content\Type\FieldDefinition
      */
-    protected function getFieldDefinition()
+    public function getFieldDefinition()
     {
         return $this->fieldDefinition;
     }
@@ -111,7 +111,7 @@ class Field extends Model
      *
      * @return \ezp\Content\FieldType\Value
      */
-    protected function getValue()
+    public function getValue()
     {
         return $this->value;
     }
@@ -121,7 +121,7 @@ class Field extends Model
      *
      * @param \ezp\Content\FieldType\Value $inputValue
      */
-    protected function setValue( FieldValue $inputValue )
+    public function setValue( FieldValue $inputValue )
     {
         $this->value = $inputValue;
         $this->notify( 'field/setValue', array( 'value' => $inputValue ) );

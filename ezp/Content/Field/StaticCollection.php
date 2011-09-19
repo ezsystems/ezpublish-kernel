@@ -36,7 +36,7 @@ class StaticCollection extends TypeCollection
     public function __construct( Version $contentVersion )
     {
         $elements = array();
-        foreach ( $contentVersion->content->contentType->fields as $fieldDefinition )
+        foreach ( $contentVersion->getContent()->getContentType()->getFields() as $fieldDefinition )
         {
             $elements[ $fieldDefinition->identifier ] = new Field( $contentVersion, $fieldDefinition );
         }
@@ -69,6 +69,6 @@ class StaticCollection extends TypeCollection
             );
         }
 
-        $field->value = $value;
+        $field->setValue( $value );
     }
 }
