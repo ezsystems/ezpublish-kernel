@@ -163,6 +163,30 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
+     * Load a (defined) content type by identifier
+     *
+     * @param string $identifier
+     * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     */
+    public function loadByIdentifier( $identifier )
+    {
+        $type = $this->backend->find(
+            'Content\\Type',
+            array( 'identifier' => $identifier, 'status' => Type::STATUS_DEFINED ),
+            array( 'fieldDefinitions' => array(
+                'type' => 'Content\\Type\\FieldDefinition',
+                'match' => array( '_typeId' => 'id',  '_status' => 'status' ) )
+            )
+        );
+
+        if ( !$type )
+            throw new NotFound( 'Content\\Type', "{$identifier}' and status '" . Type::STATUS_DEFINED );
+
+        return $type[0];
+    }
+
+    /**
      * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
      * @return \ezp\Persistence\Content\Type
      */

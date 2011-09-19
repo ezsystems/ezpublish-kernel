@@ -371,6 +371,35 @@ class TypeTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
+     * @covers ezp\Content\Type\Service::loadByIdentifier
+     */
+    public function testLoadByIdentifier()
+    {
+        $type = $this->service->loadByIdentifier( 'folder' );
+
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
+        $this->assertEquals( 2, count( $type->fields ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
+        // lazy collection tests
+        $this->assertEquals( 1, count( $type->groups ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type\\Group', $type->groups[0] );
+        $this->assertEquals( 1, count( $type->groups[0]->types ) );
+        $this->assertInstanceOf( 'ezp\\Content\\Type', $type->groups[0]->types[0] );
+        $this->assertEquals( $type->id, $type->groups[0]->types[0]->id );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::loadByIdentifier
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadByIdentifierNotFound()
+    {
+        $this->service->loadByIdentifier( "hokuspokus" );
+    }
+
+    /**
+     * @group contentTypeService
      * @covers ezp\Content\Type\Service::loadDraft
      */
     public function testLoadDraft()

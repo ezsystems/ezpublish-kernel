@@ -66,6 +66,15 @@ interface Handler
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED );
 
     /**
+     * Load a (defined) content type by identifier
+     *
+     * @param string $identifier
+     * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     */
+    public function loadByIdentifier( $identifier );
+
+    /**
      * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
      * @return \ezp\Persistence\Content\Type
      */

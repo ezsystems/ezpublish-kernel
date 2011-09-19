@@ -222,7 +222,7 @@ class Service extends BaseService
      */
     public function loadByIdentifier( $identifier )
     {
-        throw new RuntimeException( "@TODO: Implement" );
+        return $this->buildType( $this->handler->contentTypeHandler()->loadByIdentifier( $identifier ) );
     }
 
     /**

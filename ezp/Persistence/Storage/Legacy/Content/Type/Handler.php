@@ -140,6 +140,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param int $contentTypeId
      * @param int $status
+     * @return \ezp\Persistence\Content\Type
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
@@ -153,8 +154,20 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
-     * @return Type
+     * Load a (defined) content type by identifier
+     *
+     * @param string $identifier
+     * @return \ezp\Persistence\Content\Type
+     * @throws \ezp\Base\Exception\NotFound If defined type is not found
+     */
+    public function loadByIdentifier( $identifier )
+    {
+        throw new \RuntimeException( "@TODO Implement" );
+    }
+
+    /**
+     * @param \ezp\Persistence\Content\Type\CreateStruct $createStruct
+     * @return \ezp\Persistence\Content\Type
      */
     public function create( CreateStruct $createStruct )
     {
