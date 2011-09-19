@@ -19,6 +19,8 @@ interface Handler
      * @param string $name
      * @param string $identifier
      * @return \ezp\Persistence\Content\Section
+     * @todo Should validate that $identifier is unique??
+     * @todo What about translatable $name?
      */
     public function create( $name, $identifier );
 
@@ -35,9 +37,19 @@ interface Handler
      * Get section data
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Section|null
+     * @return \ezp\Persistence\Content\Section
+     * @throws \ezp\Base\Exception\NotFound If role is not found
      */
     public function load( $id );
+
+    /**
+     * Get section data by identifier
+     *
+     * @param string $identifier
+     * @return \ezp\Persistence\Content\Section
+     * @throws \ezp\Base\Exception\NotFound If section is not found
+     */
+    public function loadByIdentifier( $identifier );
 
     /**
      * Delete a section
@@ -57,5 +69,13 @@ interface Handler
      * @param mixed $contentId
      */
     public function assign( $sectionId, $contentId );
+
+    /**
+     * Number of content assignments a Section has
+     *
+     * @param mixed $sectionId
+     * @return int
+     */
+    public function assignmentsCount( $sectionId );
 }
 ?>

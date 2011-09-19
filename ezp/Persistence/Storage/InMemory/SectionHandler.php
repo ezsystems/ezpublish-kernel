@@ -10,7 +10,8 @@
 
 namespace ezp\Persistence\Storage\InMemory;
 use ezp\Persistence\Content\Section\Handler as SectionHandlerInterface,
-    RuntimeException;
+    ezp\Base\Exception\NotFound,
+    ezp\Base\Exception\Logic;
 
 /**
  * @see ezp\Persistence\Content\Section\Handler
@@ -78,6 +79,24 @@ class SectionHandler implements SectionHandlerInterface
     }
 
     /**
+     * Get section data by identifier
+     *
+     * @param string $identifier
+     * @return \ezp\Persistence\Content\Section
+     * @throws \ezp\Base\Exception\NotFound If section is not found
+     */
+    public function loadByIdentifier( $identifier )
+    {
+        $list = $this->backend->find( 'Content\\Section', array( 'identifier' => $identifier ) );
+        if ( empty( $list ) )
+            throw new NotFound( 'Section', $identifier );
+        else if ( isset( $list[1] ) )
+            throw new Logic( 'several Sections with same identifier' );
+
+        return $list[0];
+    }
+
+    /**
      * @see ezp\Persistence\Content\Section\Handler
      */
     public function delete( $id )
@@ -90,8 +109,24 @@ class SectionHandler implements SectionHandlerInterface
      */
     public function assign( $sectionId, $contentId )
     {
-        // @todo Depends on working SubTree Criterion implementation.
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->backend->update(
+            'Content',
+            $contentId,
+            array(
+                'sectionId' => $sectionId,
+            )
+        );
+    }
+
+    /**
+     * Number of content assignments a Section has
+     *
+     * @param mixed $sectionId
+     * @return int
+     */
+    public function assignmentsCount( $sectionId )
+    {
+        return $this->backend->count( 'Content', array( 'sectionId' => $sectionId ) );
     }
 }
 ?>

@@ -9,7 +9,8 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Section;
 use ezp\Persistence\Content\Section\Handler as BaseSectionHandler,
-    ezp\Persistence\Content\Section;
+    ezp\Persistence\Content\Section,
+    ezp\Base\Exception\NotFound;
 
 /**
  * Section Handler
@@ -75,17 +76,31 @@ class Handler implements BaseSectionHandler
      * Get section data
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Section|null
+     * @return \ezp\Persistence\Content\Section
+     * @throws \ezp\Base\Exception\NotFound If section is not found
      */
     public function load( $id )
     {
         $rows = $this->sectionGateway->loadSectionData( $id );
 
-        if ( count( $rows ) < 1 )
+        if ( empty( $rows ) )
         {
-            throw new \RuntimeException( "Section with ID '{$id}' not found." );
+            throw new NotFound( "Section", $id );
         }
         return $this->createSectionFromArray( reset( $rows ) );
+    }
+
+    /**
+     * Get section data by identifier
+     *
+     * @param string $identifier
+     * @return \ezp\Persistence\Content\Section
+     * @throws \ezp\Base\Exception\NotFound If section is not found
+     */
+    public function loadByIdentifier( $identifier )
+    {
+        throw new \RuntimeException( "@TODO Implement" );
+        //throw new NotFound( "Section", $identifier );
     }
 
     /**
@@ -136,6 +151,17 @@ class Handler implements BaseSectionHandler
     public function assign( $sectionId, $contentId )
     {
         $this->sectionGateway->assignSectionToContent( $sectionId, $contentId );
+    }
+
+    /**
+     * Number of content assignments a Section has
+     *
+     * @param mixed $sectionId
+     * @return int
+     */
+    public function assignmentsCount( $sectionId )
+    {
+        return $this->sectionGateway->countContentObjectsInSection( $sectionId );
     }
 }
 ?>

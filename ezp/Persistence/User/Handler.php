@@ -36,6 +36,7 @@ interface Handler
      *
      * @param mixed $userId
      * @return \ezp\Persistence\User
+     * @throws \ezp\Base\Exception\NotFound If user is not found
      */
     public function load( $userId );
 
