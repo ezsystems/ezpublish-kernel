@@ -39,7 +39,7 @@ class Value implements ValueInterface
      */
     public static function build( PersistenceFieldValue $vo )
     {
-        throw new RuntimeException( "@TODO: Implement" );
+        throw new \RuntimeException( "@TODO: Implement" );
     }
 
     /**
@@ -47,7 +47,7 @@ class Value implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
-        throw new RuntimeException( "@TODO: Implement" );
+        throw new \RuntimeException( "@TODO: Implement" );
         return new static( $stringValue );
     }
 
@@ -56,7 +56,7 @@ class Value implements ValueInterface
      */
     public function __toString()
     {
-        throw new RuntimeException( "@TODO: Implement" );
+        throw new \RuntimeException( "@TODO: Implement" );
         return (string)$this->values;
     }
 }

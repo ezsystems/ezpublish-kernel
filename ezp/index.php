@@ -6,6 +6,8 @@ namespace ezp\Content;
 use ezp\Base\Configuration,
     ezp\Base\Autoloader,
     ezp\Content,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue,
+    ezp\Content\FieldType\Keyword\Value as KeywordValue,
     ezp\Content\Type\FieldDefinition,
     ezp\User;
 
