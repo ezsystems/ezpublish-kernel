@@ -63,6 +63,21 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $user->hashAlgorithm, null, \PDO::PARAM_INT )
             );
         $query->prepare()->execute();
+
+        $query = $this->handler->createInsertQuery();
+        $query
+            ->insertInto( $this->handler->quoteTable( 'ezuser_setting' ) )
+            ->set(
+                $this->handler->quoteColumn( 'user_id' ),
+                $query->bindValue( $user->id, null, \PDO::PARAM_INT )
+            )->set(
+                $this->handler->quoteColumn( 'is_enabled' ),
+                $query->bindValue( $user->isEnabled, null, \PDO::PARAM_INT )
+            )->set(
+                $this->handler->quoteColumn( 'max_login' ),
+                $query->bindValue( $user->maxLogin, null, \PDO::PARAM_INT )
+            );
+        $query->prepare()->execute();
     }
 
     /**
@@ -98,9 +113,17 @@ class EzcDatabase extends Gateway
             $this->handler->quoteColumn( 'login', 'ezuser' ),
             $this->handler->quoteColumn( 'email', 'ezuser' ),
             $this->handler->quoteColumn( 'password_hash', 'ezuser' ),
-            $this->handler->quoteColumn( 'password_hash_type', 'ezuser' )
+            $this->handler->quoteColumn( 'password_hash_type', 'ezuser' ),
+            $this->handler->quoteColumn( 'is_enabled', 'ezuser_setting' ),
+            $this->handler->quoteColumn( 'max_login', 'ezuser_setting' )
         )->from(
             $this->handler->quoteTable( 'ezuser' )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezuser_setting' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'user_id', 'ezuser_setting' ),
+                $this->handler->quoteColumn( 'contentobject_id', 'ezuser' )
+            )
         )->where(
             $query->expr->eq(
                 $this->handler->quoteColumn( 'contentobject_id', 'ezuser' ),

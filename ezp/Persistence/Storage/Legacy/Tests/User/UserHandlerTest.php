@@ -44,6 +44,8 @@ class UserHandlerTest extends TestCase
         $user->email = 'kore@example.org';
         $user->password = '1234567890';
         $user->hashAlgorithm = 2;
+        $user->isEnabled = true;
+        $user->maxLogin = 23;
 
         return $user;
     }
@@ -57,6 +59,12 @@ class UserHandlerTest extends TestCase
             array( array( 1 ) ),
             $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser' ),
             'Expected one user to be created.'
+        );
+
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $this->handler->createSelectQuery()->select( 'COUNT( * )' )->from( 'ezuser_setting' ),
+            'Expected one user setting to be created.'
         );
     }
 
