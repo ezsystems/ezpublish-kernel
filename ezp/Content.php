@@ -410,11 +410,14 @@ class Content extends Model implements ModelDefinition
     /**
      * Return Main location object on this Content object
      *
-     * @return \ezp\Content\Location
+     * @return \ezp\Content\Location|null
      */
     public function getMainLocation()
     {
-        return $this->locations[0];
+        if ( isset( $this->locations[0] ) )
+            return $this->locations[0];
+
+        return null;
     }
 
     /**

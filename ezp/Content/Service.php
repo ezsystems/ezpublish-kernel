@@ -57,6 +57,11 @@ class Service extends BaseService
         if ( $content->id )
             throw new InvalidArgumentType( '$content->id', 'false' );
 
+        if ( !$content->sectionId && $content->getMainLocation() )
+        {
+            $content->setSection( $content->getMainLocation()->getParent()->getContent()->getSection() );
+        }
+
         $struct = new CreateStruct();
         $this->fillStruct( $struct, $content, array( 'parentLocations', 'fields' ) );
         foreach ( $content->getLocations() as $location )
