@@ -72,6 +72,33 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Load a specified role by id
+     *
+     * @param mixed $roleId
+     * @return array
+     */
+    public function loadRole( $roleId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn( 'id', 'ezrole' ),
+            $this->handler->quoteColumn( 'name', 'ezrole' )
+        )->from(
+            $this->handler->quoteTable( 'ezrole' )
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'id', 'ezrole' ),
+                $query->bindValue( $roleId, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Update role
      *
      * @param RoleUpdateStruct $role

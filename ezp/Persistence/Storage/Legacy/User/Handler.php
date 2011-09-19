@@ -138,7 +138,18 @@ class Handler implements BaseUserHandler
      */
     public function loadRole( $roleId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $data = $this->roleGateway->loadRole( $roleId );
+
+        if ( empty( $data ) )
+        {
+            throw new \ezp\Base\Exception\NotFound( 'role', $roleId );
+        }
+
+        $role = new Role();
+        $role->id       = $data[0]['id'];
+        $role->name     = $data[0]['name'];
+
+        return $role;
     }
 
     /**

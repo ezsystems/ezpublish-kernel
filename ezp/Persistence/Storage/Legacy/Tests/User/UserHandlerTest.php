@@ -215,6 +215,21 @@ class UserHandlerTest extends TestCase
         $this->assertSame( '1', $role->id );
     }
 
+    public function testLoadRole()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+
+        $role = $handler->createRole( $role );
+
+        $this->assertEquals(
+            $role,
+            $handler->loadRole( $role->id )
+        );
+    }
+
     public function testUpdateRole()
     {
         $handler = $this->getUserHandler();
