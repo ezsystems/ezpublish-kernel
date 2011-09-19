@@ -27,12 +27,21 @@ class BinaryRepository
      */
     public function __construct( $defaultBackendOverride = null, $backendsOverride = null, $backendsConfigurationOverride = null )
     {
+        if ( $defaultBackendOverride === null && self::$defaultBackendOverride !== null )
+        {
+            $defaultBackendOverride = self::$defaultBackendOverride;
+        }
+
         $this->configuration = Configuration::getInstance( 'io' );
 
         $backends = $this->configuration->get( 'backends', 'Backends' );
         if ( $backendsOverride != null )
         {
             $backends = $backendsOverride + $backends;
+        }
+        if ( self::$backendsOverride !== null )
+        {
+            $backends = self::$backendsOverride + $backends;
         }
 
         // all backends are indexed, identifier as key, false as the value
@@ -46,7 +55,32 @@ class BinaryRepository
         {
             $this->defaultBackend = $this->configuration->get( 'general', 'DefaultBinaryFileBackend' );
         }
-        $this->initBackend( $this->defaultBackend );
+
+        if ( self::$backendsConfigurationOverride !== null )
+        {
+            if ( $backendsConfigurationOverride !== null )
+            {
+                $backendsConfigurationOverride = $backendsConfigurationOverride + self::$backendsConfigurationOverride;
+            }
+            else
+            {
+                $backendsConfigurationOverride = self::$backendsConfigurationOverride;
+            }
+        }
+        $this->initBackend( $this->defaultBackend, $backendsConfigurationOverride );
+    }
+
+    /**
+     * Sets global override options for the BinaryRepository
+     * @param string $defaultBackendOverride Override identifier for the default backend
+     * @param array $backendsOverride Override of the backends list
+     * @param array $backendsConfigurationOverride Override of the backends configuration
+     */
+    public static function setOverrideOptions( $defaultBackendOverride, $backendsOverride = null, $backendsConfigurationOverride = null )
+    {
+        self::$defaultBackendOverride = $defaultBackendOverride;
+        self::$backendsOverride = $backendsOverride;
+        self::$backendsConfigurationOverride = $backendsConfigurationOverride;
     }
 
     /**
@@ -190,7 +224,7 @@ class BinaryRepository
      * @throws BadConfiguration on non existing backend identifier
      * @throws BadConfiguration on non existing backend class
      */
-    private function initBackend( $identifier )
+    private function initBackend( $identifier, $backendsConfigurationOverride = null )
     {
         if ( !array_key_exists( $identifier, $this->backends ) )
         {
@@ -198,9 +232,9 @@ class BinaryRepository
         }
 
         $configurationKey = "backend_settings_{$identifier}";
-        if ( isset( $this->backendsConfigurationOverride[$configurationKey] ) )
+        if ( isset( $backendsConfigurationOverride[$configurationKey] ) )
         {
-            $backendClass = $this->backendsConfigurationOverride[$configurationKey]["Class"];
+            $backendClass = $backendsConfigurationOverride[$configurationKey]["Class"];
         }
         else
         {
@@ -230,9 +264,20 @@ class BinaryRepository
     private $defaultBackend;
 
     /**
-     * Override of backend configuration
-     * Mostly used in unit tests to dynamically change configuration of backends
+     * Default backend override value
+     * @var string
+     */
+    private static $defaultBackendOverride;
+
+    /**
+     * Backends list override value
      * @var array
      */
-    private $backendsConfigurationOverride = null;
+    private static $backendsOverride;
+
+    /**
+     * Bbackends configuration override value
+     * @var array
+     */
+    private static $backendsConfigurationOverride;
 }
