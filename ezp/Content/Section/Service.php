@@ -57,7 +57,7 @@ class Service extends BaseService
     {
         $valueObject = $this->handler->sectionHandler()->load( $sectionId );
         if ( !$valueObject )
-            throw new NotFound( 'section', $sectionId );
+            throw new NotFound( 'Section', $sectionId );
         return $this->buildDomainObject( $valueObject );
     }
 
@@ -70,29 +70,29 @@ class Service extends BaseService
      */
     public function loadByIdentifier( $sectionIdentifier )
     {
-        throw new NotFound( 'section', $sectionIdentifier );
+        $valueObject = $this->handler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
+        if ( !$valueObject )
+            throw new NotFound( 'Section', $sectionIdentifier );
+        return $this->buildDomainObject( $valueObject );
     }
 
     /**
      * Counts the contents which $section is assigned to
      *
-     * @param int $sectionId
+     * @param mixed $sectionId
      * @return int
      */
     public function countAssignedContents( $sectionId )
     {
-        return 0;
+        return $this->handler->sectionHandler()->assignmentsCount( $sectionId );
     }
 
     /**
      * Counts the contents which $section is assigned to
      *
-     * @todo should this function assign section object to content->section?
-     *       What if that is already done but nothing is saved, then first line here will fail.
      *
      * @param \ezp\Content\Section $section
      * @param Content $content
-     * @uses \ezp\Base\StorageEngine\SectionHandler::assign()
      */
     public function assign( SectionObject $section, Content $content )
     {
