@@ -122,11 +122,36 @@ class ContentTest extends BaseServiceTest
     {
         $type = $this->repository->getContentTypeService()->load( 1 );
         $location = $this->repository->getLocationService()->load( 2 );
-        $section = $this->repository->getSectionService()->load( 1 );
+        $section = $this->repository->getSectionService()->load( 2 );
         $content = new Content( $type, new User( 10 ) );
         $content->addParent( $location );
         $content->name = array( "eng-GB" => "New object" );
         $content->setSection( $section );
+
+        $content = $this->service->create( $content );
+        // @todo: Deal with field value when that is ready for manipulation
+        self::assertInstanceOf( "ezp\\Content", $content );
+        self::assertEquals( array( "eng-GB" => "New object" ), $content->name, "Name not correctly set" );
+        self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
+        self::assertEquals( 2, $content->sectionId, "Section ID not correctly set" );
+        self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
+        self::assertEquals( Content::STATUS_DRAFT, $content->status, "Status not correctly set" );
+        $locations = $content->getLocations();
+        self::assertEquals( 1, count( $locations ), "Location count is wrong" );
+        self::assertEquals( $locations[0]->id, $locations[0]->mainLocationId, "Main Location id is not correct" );
+    }
+
+    /**
+     * @group contentService
+     * @covers \ezp\Content\Service::create
+     */
+    public function testCreateInheritSection()
+    {
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $location = $this->repository->getLocationService()->load( 2 );
+        $content = new Content( $type, new User( 10 ) );
+        $content->addParent( $location );
+        $content->name = array( "eng-GB" => "New object" );
 
         $content = $this->service->create( $content );
         // @todo: Deal with field value when that is ready for manipulation

@@ -57,12 +57,12 @@ class Service extends BaseService
         if ( $content->id )
             throw new InvalidArgumentType( '$content->id', 'false' );
 
+        $struct = new CreateStruct();
         if ( !$content->sectionId && $content->getMainLocation() )
         {
-            $content->setSection( $content->getMainLocation()->getParent()->getContent()->getSection() );
+            $struct->sectionId = $content->getMainLocation()->getParent()->getContent()->sectionId;
         }
 
-        $struct = new CreateStruct();
         $this->fillStruct( $struct, $content, array( 'parentLocations', 'fields' ) );
         foreach ( $content->getLocations() as $location )
         {
@@ -316,7 +316,7 @@ class Service extends BaseService
      */
     public function find( Query $query )
     {
-        // TODO: handle $translations with $query object (not implemented yet)
+        // @TODO: handle $translations with $query object (not implemented yet)
         $translations = null;
         $result = $this->handler->searchHandler()->find(
             $query->criterion,
@@ -345,7 +345,7 @@ class Service extends BaseService
      */
     public function findSingle( Query $query )
     {
-        // TODO: handle $translations with $query object (not implemented yet)
+        // @TODO: handle $translations with $query object (not implemented yet)
         $translations = null;
         $contentVo = $this->handler->searchHandler()->findSingle(
             $query->criterion,
