@@ -191,6 +191,9 @@ abstract class FieldType implements Observer
     public function setFieldValue( PersistenceFieldValue $valueStruct )
     {
         $valueStruct->data = $this->getValueData();
+        // @todo Evaluate if creating the sortKey in every case is really needed
+        //       Couldn't this be retrieved with a method, which would initialize
+        //       that info on request only?
         $valueStruct->sortKey = $this->getSortInfo();
         return $valueStruct;
     }
