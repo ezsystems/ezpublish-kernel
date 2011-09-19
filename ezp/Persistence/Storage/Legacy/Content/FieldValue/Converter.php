@@ -18,7 +18,7 @@ use ezp\Persistence\Content\FieldValue,
 /**
  * Converter for field values in legacy storage
  */
-abstract class Converter
+interface Converter
 {
     /**
      * Converts data from $value to $storageFieldValue
@@ -26,7 +26,7 @@ abstract class Converter
      * @param FieldValue $value
      * @param StorageFieldValue
      */
-    abstract public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue );
+    public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue );
 
     /**
      * Converts data from $value to $fieldValue
@@ -34,7 +34,7 @@ abstract class Converter
      * @param StorageFieldValue $value
      * @param FieldValue $fieldValue
      */
-    abstract public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue );
+    public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue );
 
     /**
      * Converts field definition data in $fieldDef into $storageFieldDef
@@ -42,7 +42,7 @@ abstract class Converter
      * @param FieldDefinition $fieldDef
      * @param StorageFieldDefinition $storageDef
      */
-    abstract public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef );
+    public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef );
 
     /**
      * Converts field definition data in $storageDef into $fieldDef
@@ -50,7 +50,7 @@ abstract class Converter
      * @param StorageFieldDefinition $storageDef
      * @param FieldDefinition $fieldDef
      */
-    abstract public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef );
+    public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef );
 
     /**
      * Returns the name of the index column in the attribute table
@@ -61,5 +61,5 @@ abstract class Converter
      *
      * @return string
      */
-    abstract public function getIndexColumn();
+    public function getIndexColumn();
 }

@@ -14,7 +14,7 @@ use \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     \ezp\Persistence\Content\Type\FieldDefinition,
     \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
 
-class TextLine extends Converter
+class TextLine implements Converter
 {
     /**
      * Converts data from $value to $storageFieldValue
