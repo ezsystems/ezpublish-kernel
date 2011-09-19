@@ -67,8 +67,7 @@ class CreateStruct extends ValueObject
     public $remoteId;
 
     /**
-      * TODO: Document
-      *
+      * Language id the content was initially created in
       * @var mixed
       */
     public $initialLanguageId = false;
