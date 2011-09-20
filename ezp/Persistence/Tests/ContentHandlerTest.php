@@ -335,4 +335,13 @@ class ContentHandlerTest extends HandlerTest
             self::assertSame( $field->versionNo + 1, $aIndexedFields[$definitionId]->versionNo, 'Field version number must be incremented' );
         }
     }
+
+    public  function testSetStatus()
+    {
+        $content = $this->content;
+        self::assertEquals( Version::STATUS_DRAFT, $content->version->status );
+        $this->repositoryHandler->contentHandler()->setStatus( $content->id, Version::STATUS_PUBLISHED, $content->version->versionNo );
+        $content = $this->repositoryHandler->contentHandler()->load( $content->id, $content->version->versionNo );
+        self::assertEquals( Version::STATUS_PUBLISHED, $content->version->status );
+    }
 }

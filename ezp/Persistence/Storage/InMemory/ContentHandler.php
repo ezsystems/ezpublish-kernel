@@ -297,7 +297,14 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function setStatus( $contentId, $status, $version )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $contentId, 'versionNo' => $version ) );
+
+        if ( !count( $versions ) )
+        {
+            throw new NotFound( "Version", "contentId: $contentId, versionNo: $version" );
+        }
+        $version = $versions[0];
+        return $this->backend->update( 'Content\\Version', $version->id, array( 'status' => $status ) );
     }
 
     /**
