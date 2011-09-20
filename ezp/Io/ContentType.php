@@ -18,6 +18,18 @@ use finfo,
  */
 class ContentType
 {
+    /**
+     * The type (audio, video, text, image)
+     * @var string
+     */
+    public $type;
+
+    /**
+     * The subtype (mp3, mp4, plain, jpeg, ...)
+     * @var string
+     */
+    public $subType;
+
     public function __construct( $type, $subType )
     {
         $this->type = $type;
@@ -50,16 +62,4 @@ class ContentType
 
         throw new NotFound( 'File', $path );
     }
-
-    /**
-     * The type (audio, video, text, image)
-     * @var string
-     */
-    public $type;
-
-    /**
-     * The subtype (mp3, mp4, plain, jpeg, ...)
-     * @var string
-     */
-    public $subType;
 }
