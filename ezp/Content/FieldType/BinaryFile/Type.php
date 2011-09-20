@@ -76,7 +76,7 @@ class Type extends FieldType
     {
         return array(
             'file' => $this->getValue()->file,
-            'handler' => $this->getValue()->handler
+            'originalFilename' => $this->getValue()->originalFilename
         );
     }
 }

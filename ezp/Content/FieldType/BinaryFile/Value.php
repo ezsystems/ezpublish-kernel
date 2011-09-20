@@ -25,6 +25,13 @@ class Value implements ValueInterface
     public $file;
 
     /**
+     * Original file name
+     *
+     * @var string
+     */
+    public $originalFilename;
+
+    /**
      * @var \ezp\Content\FieldType\BinaryFile\Handler
      */
     protected $handler;
@@ -39,6 +46,7 @@ class Value implements ValueInterface
 
     /**
      * @see \ezp\Content\FieldType\Value
+     * @todo
      */
     public static function build( PersistenceFieldValue $vo )
     {
@@ -52,6 +60,7 @@ class Value implements ValueInterface
     {
         $value = new static();
         $value->file = $value->handler->createFromLocalPath( $stringValue );
+        $value->originalFilename = basename( $stringValue );
     }
 
     /**

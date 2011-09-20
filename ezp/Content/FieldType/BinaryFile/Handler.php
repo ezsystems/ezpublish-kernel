@@ -17,7 +17,8 @@ use ezp\Content\FieldType\Value as ValueInterface,
     ezp\Base\BinaryRepository;
 
 /**
- * Description of Handler
+ * Binary file handler
+ * @todo Handle creation from HTTP
  */
 class Handler
 {
