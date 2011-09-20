@@ -12,8 +12,6 @@ use ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Value,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
     ezp\Content\Type\FieldDefinition,
-    ezp\Base\Configuration,
-    ezp\Base\Exception\MissingClass,
     ezp\Base\Observer,
     ezp\Base\Observable,
     ezp\Base\Exception\InvalidArgumentValue;
