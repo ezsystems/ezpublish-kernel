@@ -43,7 +43,12 @@ class Value implements ValueInterface
     }
 
     /**
-     * @see \ezp\Content\FieldType\Value
+     * Initializes the keyword value with a simple string.
+     *
+     * @param string $stringValue A comma separated list of tags, eg: "php, eZ Publish, html5"
+     *                            Space after comma is optional, each tag is trimmed to remove it.
+     * @return \ezp\Content\FieldType\Keyword\Value Instance of the keyword value
+     * @throws \ezp\Base\Exception\InvalidArgumentValue
      */
     public static function fromString( $stringValue )
     {
@@ -59,7 +64,9 @@ class Value implements ValueInterface
     }
 
     /**
-     * @see \ezp\Content\FieldType\Value
+     * Returns a string representation of the keyword value.
+     *
+     * @return string A comma separated list of tags, eg: "php, eZ Publish, html5"
      */
     public function __toString()
     {
