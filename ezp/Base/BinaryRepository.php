@@ -64,9 +64,8 @@ class BinaryRepository
 
         $file = new BinaryFile();
         $file->size = $uploadedFile['size'];
-        $time = new DateTime;
-        $file->ctime = $time;
-        $file->mtime = $time;
+        $file->ctime = new DateTime;
+        $file->mtime = clone $file->ctime;
 
         // shall we use fileinfo here instead, so that we don't rely on browser provided informations ?
         $file->contentType = $uploadedFile['type'];
@@ -90,9 +89,8 @@ class BinaryRepository
         $file = new BinaryFileCreateStruct();
         $file->originalFile = basename( $localFile );
         $file->size = filesize( $localFile );
-        $time = new DateTime;
-        $file->ctime = $time;
-        $file->mtime = $time;
+        $file->ctime = new DateTime;
+        $file->mtime = clone $file->ctime;
         $file->contentType = ContentType::getFromPath( $localFile );
 
         $inputStream = fopen( $localFile, 'rb' );

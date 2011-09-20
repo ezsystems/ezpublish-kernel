@@ -165,7 +165,8 @@ class Legacy implements Backend
         $file->mtime = new DateTime();
         $file->mtime->setTimestamp( $metaData['mtime'] );
 
-        $file->ctime = $file->mtime;
+        // Setting the same timestamp as mtime, since ctime is not supported in Legacy
+        $file->ctime = clone $file->mtime;
 
         $file->size = $metaData['size'];
 
