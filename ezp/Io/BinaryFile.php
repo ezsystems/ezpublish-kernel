@@ -31,13 +31,13 @@ class BinaryFile
 
     /**
      * File modification time
-     * @var DateTime
+     * @var \DateTime
      */
     public $mtime;
 
     /**
      * File creation time
-     * @var DateTime
+     * @var \DateTime
      */
     public $ctime;
 
