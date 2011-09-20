@@ -46,17 +46,15 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
         $repositoryPath = 'var/test/storage/images/ezplogo.gif';
-        $binaryFileCreateStruct->path = $repositoryPath;
-        $binaryFile = $this->binaryRepository->create( $binaryFileCreateStruct );
+        $binaryFile = $this->binaryRepository->createFromLocalFile( $this->imageInputPath, $repositoryPath );
 
         self::assertInstanceOf( 'ezp\Io\BinaryFile', $binaryFile );
         self::assertEquals( $repositoryPath, $binaryFile->path );
-        self::assertEquals( $binaryFileCreateStruct->size, $binaryFile->size );
-        self::assertEquals( $binaryFileCreateStruct->mtime, $binaryFile->mtime );
-        // self::assertEquals( $binaryFileCreateStruct->ctime, $binaryFile->ctime );
-        self::assertEquals( $binaryFileCreateStruct->contentType, $binaryFile->contentType );
+        self::assertEquals( 1928, $binaryFile->size );
+        self::assertInstanceOf( '\DateTime', $binaryFile->mtime );
+        self::assertNotEquals( 0, $binaryFile->mtime->getTimestamp() );
+        self::assertEquals( new ContentType( 'image', 'gif' ), $binaryFile->contentType );
     }
 
     /**
@@ -66,24 +64,17 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $repositoryPath = 'var/test/storage/images/testCreateFileExists.gif';
 
-        $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
-        $binaryFileCreateStruct->path = $repositoryPath;
-        $binaryFile = $this->binaryRepository->create( $binaryFileCreateStruct );
-
-        $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
-        $binaryFileCreateStruct->path = $repositoryPath;
-        $binaryFile = $this->binaryRepository->create( $binaryFileCreateStruct );
+        $this->binaryRepository->createFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $this->binaryRepository->createFromLocalFile( $this->imageInputPath, $repositoryPath );
     }
 
     public function testExists()
     {
         $repositoryPath = 'var/test/storage/exists.gif';
-        $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
-        $binaryFileCreateStruct->path = $repositoryPath;
 
         self::assertFalse( $this->binaryRepository->exists( $repositoryPath ) );
 
-        $this->binaryRepository->create( $binaryFileCreateStruct );
+        $this->binaryRepository->createFromLocalFile( $this->imageInputPath, $repositoryPath );
 
         self::assertTrue( $this->binaryRepository->exists( $repositoryPath ) );
     }
@@ -92,9 +83,7 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
     {
         $repositoryPath = 'var/test/storage/delete.gif';
 
-        $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
-        $binaryFileCreateStruct->path = $repositoryPath;
-        $this->binaryRepository->create( $binaryFileCreateStruct );
+        $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath, $repositoryPath );
 
         self::assertTrue( $this->binaryRepository->exists( $repositoryPath ) );
 
@@ -122,9 +111,7 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
     public function testLoad()
     {
         $repositoryPath = 'var/test/storage/load.gif';
-        $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
-        $binaryFileCreateStruct->path = $repositoryPath;
-        $this->binaryRepository->create( $binaryFileCreateStruct );
+        $this->binaryRepository->createFromLocalFile( $this->imageInputPath, $repositoryPath );
 
         $loadedFile = $this->binaryRepository->load( $repositoryPath );
 
@@ -278,9 +265,7 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
      */
     private function createFileWithPath( $path )
     {
-        $binaryFileCreateStruct = $this->binaryRepository->createFromLocalFile( $this->imageInputPath );
-        $binaryFileCreateStruct->path = $path;
-        return $this->binaryRepository->create( $binaryFileCreateStruct );
+        return $this->binaryRepository->createFromLocalFile( $this->imageInputPath, $path );
     }
 
     private function urlFopenPrecheck()

@@ -86,10 +86,11 @@ class BinaryRepository
     /**
      * Creates a BinaryFile object from the uploaded file $uploadedFile
      * @param array $uploadedFile The _POST hash of an uploaded file
+     * @param string $repositoryPath The path the file must be stored as
      * @return \ezp\Io\BinaryFile
      * @throws InvalidArgumentValue When given an invalid uploaded file
      */
-    public function createFromUploadedFile( array $uploadedFile )
+    public function createFromUploadedFile( array $uploadedFile, $repositoryPath )
     {
         if ( !isset( $uploadedFile['tmp_name'] ) || !is_uploaded_file( $uploadedFile['tmp_name'] ) )
         {
@@ -100,8 +101,6 @@ class BinaryRepository
         $file->size = $uploadedFile['size'];
         $file->ctime = new DateTime;
         $file->mtime = clone $file->ctime;
-
-        // shall we use fileinfo here instead, so that we don't rely on browser provided informations ?
         $file->contentType = $uploadedFile['type'];
 
         return $file;
@@ -110,10 +109,11 @@ class BinaryRepository
     /**
      * Creates a BinaryFile object from $localFile
      * @param string $localFile
+     * @param string $repositoryPath The path the file must be stored as
      * @return \ezp\Io\BinaryFile
      * @throws InvalidArgumentValue When given a non existing / unreadable file
      */
-    public function createFromLocalFile( $localFile )
+    public function createFromLocalFile( $localFile, $repositoryPath )
     {
         if ( !file_exists( $localFile ) || !is_readable( $localFile ) )
         {
@@ -123,13 +123,13 @@ class BinaryRepository
         $file = new BinaryFileCreateStruct();
         $file->originalFile = basename( $localFile );
         $file->size = filesize( $localFile );
-        $file->ctime = new DateTime;
-        $file->mtime = clone $file->ctime;
         $file->contentType = ContentType::getFromPath( $localFile );
+        $file->path = $repositoryPath;
 
         $inputStream = fopen( $localFile, 'rb' );
         $file->setInputStream( $inputStream );
-        return $file;
+
+        return $this->create( $file );
     }
 
     /**

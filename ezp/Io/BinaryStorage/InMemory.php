@@ -10,7 +10,8 @@ namespace ezp\Io\BinaryStorage;
 
 use ezp\Io\BinaryStorage\Backend,
     ezp\Io\BinaryFile, ezp\Io\BinaryFileUpdateStruct, ezp\Io\BinaryFileCreateStruct,
-    ezp\Base\Exception\NotFound, ezp\Io\Exception\PathExists;
+    ezp\Base\Exception\NotFound, ezp\Io\Exception\PathExists,
+    DateTime;
 
 /**
  * Backend interface for handling of binary files I/O
@@ -43,8 +44,8 @@ class InMemory implements Backend
         $binaryFile = new BinaryFile();
         $binaryFile->path = $file->path;
         $binaryFile->contentType = $file->contentType;
-        $binaryFile->ctime = $file->ctime;
-        $binaryFile->mtime = $file->mtime;
+        $binaryFile->ctime = new DateTime;
+        $binaryFile->mtime = clone $binaryFile->ctime;
         $binaryFile->originalFile = $file->originalFile;
         $binaryFile->size = $file->size;
         $this->storage[$binaryFile->path] = $binaryFile;
