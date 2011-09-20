@@ -272,10 +272,10 @@ class Service extends BaseService
      *
      * Copies all fields from $content in $srcVersion and creates a new
      * version of the referred Content from it.
-     * If $srcVersion (default value) is null, last version from $content will be taken
+     * If $srcVersion (default value) is null, currentVersion from $content will be taken
      *
      * @param \ezp\Content $content
-     * @param \ezp\Content\Version $srcVersion
+     * @param \ezp\Content\Version $srcVersion The source version to use. currentVersion is used if not specificed
      * @return \ezp\Persistence\Content\Version
      * @throws \ezp\Base\Exception\NotFound
      * @todo Language support
@@ -368,8 +368,11 @@ class Service extends BaseService
      * Publishes $version of $content
      * @param \ezp\Content $content
      * @param \ezp\Content\Version $version
+     *
      * @throws \ezp\Base\Exception\Logic if $version doesn't have the DRAFT status
      * @throws \ezp\Base\Exception\Logic if $version and $content don't match
+     *
+     * @return \ezp\Content The updated, published Content
      */
     public function publish( Content $content, Version $version )
     {
@@ -385,20 +388,28 @@ class Service extends BaseService
             throw new Logic( '$version->contentId', 'Content/Version arguments mismatch' );
         }
 
-        $this->handler->beginTransaction();
+        // $this->handler->beginTransaction();
 
-        $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_ARCHIVED, $content->currentVersion->versionNo );
+        // Archive the previous version if it exists
+        if ( $version->versionNo > 1 )
+        {
+            $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_ARCHIVED, $content->currentVersion->versionNo );
+        }
         $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_PUBLISHED, $version->versionNo );
 
-        $struct = new UpdateStruct();
-        $struct->id = $content->id;
-        $struct->userId = $version->creatorId;
-        $struct->versionNo = $version->versionNo;
+        // Update $content->currentVersionNo to $version->versionNo
+
+        $updateStruct = new UpdateStruct();
+        $updateStruct->id = $content->id;
+        $updateStruct->userId = $version->creatorId;
+        $updateStruct->versionNo = $version->versionNo;
         // $struct->name = ... // @todo Get names using the appropriate call
 
-        $this->handler->contentHandler()->publish( $updateStruct );
+        $contentVo = $this->handler->contentHandler()->publish( $updateStruct );
 
-        $this->handler->commit();
+        // $this->handler->commit();
+
+        return $this->buildDomainObject( $contentVo );
     }
 
     /**

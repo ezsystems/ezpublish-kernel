@@ -303,8 +303,7 @@ class ContentHandler implements ContentHandlerInterface
         {
             throw new NotFound( "Version", "contentId: $contentId, versionNo: $version" );
         }
-        $version = $versions[0];
-        return $this->backend->update( 'Content\\Version', $version->id, array( 'status' => $status ) );
+        return $this->backend->update( 'Content\\Version', $versions[0]->id, array( 'status' => $status ) );
     }
 
     /**
@@ -333,7 +332,9 @@ class ContentHandler implements ContentHandlerInterface
             "Content",
             $content->id,
             array(
+                // Is this the right place ?
                 "ownerId" => $content->userId,
+                // @todo Is this right ? Updating a version data doesn't mean we set the currentversionNo...
                 "currentVersionNo" => $content->versionNo,
                 "name" => $content->name,
             )
@@ -517,7 +518,13 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function publish( UpdateStruct $updateStruct )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        // Change the currentVersionNo to the published version
+        $this->backend->update(
+            "Content", $updateStruct->id,
+            array( 'currentVersionNo' => $updateStruct->versionNo )
+        );
+
+        return $this->backend->load( "Content", $updateStruct->id );
     }
 
     /**

@@ -154,6 +154,7 @@ class ContentTest extends BaseServiceTest
         $content->name = array( "eng-GB" => "New object" );
 
         $content = $this->service->create( $content );
+
         // @todo: Deal with field value when that is ready for manipulation
         self::assertInstanceOf( "ezp\\Content", $content );
         self::assertEquals( array( "eng-GB" => "New object" ), $content->name, "Name not correctly set" );
@@ -164,6 +165,8 @@ class ContentTest extends BaseServiceTest
         $locations = $content->getLocations();
         self::assertEquals( 1, count( $locations ), "Location count is wrong" );
         self::assertEquals( $locations[0]->id, $locations[0]->mainLocationId, "Main Location id is not correct" );
+        self::assertNotEquals( 0, $content->published );
+        self::assertNotEquals( 0, $content->modified );
     }
 
     /**
@@ -588,6 +591,7 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
+     * Tests publishing of a version that doesn't have the DRAFT status
      * @expectedException \ezp\Base\Exception\Logic
      */
     public function testPublishNonDraft()
@@ -598,6 +602,7 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
+     * Tests publishing of a version that doesn't belong to the provided content
      * @expectedException \ezp\Base\Exception\Logic
      */
     public function testPublishContentVersionMismatch()
@@ -607,9 +612,65 @@ class ContentTest extends BaseServiceTest
         $section = $this->repository->getSectionService()->load( 1 );
         $newContent = new Content( $type, new User( 10 ) );
 
-        $content = $this->service->load( 1 );
-        $version = $content->currentVersion;
+        $version = $this->service->load( 1 )->currentVersion;
 
         $this->service->publish( $newContent, $version );
+    }
+
+    /**
+     * Tests publishing of a newly created content
+     */
+    public function testPublishNewContent()
+    {
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $location = $this->repository->getLocationService()->load( 2 );
+        $section = $this->repository->getSectionService()->load( 1 );
+
+        $content = new Content( $type, new User( 10 ) );
+        $content->addParent( $location );
+        $content->name = array( "eng-GB" => __METHOD__ );
+        $content->setSection( $section );
+
+        $content = $this->repository->getContentService()->create( $content );
+
+        $version = $content->currentVersion;
+
+        self::assertEquals( Version::STATUS_DRAFT, $version->status );
+
+        $publishedContent = $this->service->publish( $content, $version );
+
+        self::assertEquals( Version::STATUS_PUBLISHED, $publishedContent->currentVersion->status );
+    }
+
+    /**
+     * Tests publishing of a new version of an existing content
+     */
+    public function testPublishNewVersion()
+    {
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $location = $this->repository->getLocationService()->load( 2 );
+        $section = $this->repository->getSectionService()->load( 1 );
+
+        // Create and publish content in version 1
+        $content = new Content( $type, new User( 10 ) );
+        $content->addParent( $location );
+        $content->name = array( "eng-GB" => __METHOD__ );
+        $content->setSection( $section );
+
+        $content = $this->repository->getContentService()->create( $content );
+
+        $content = $this->service->publish( $content, $content->currentVersion );
+
+        $version = $this->service->createDraftFromVersion( $content );
+
+        self::assertEquals( 1, $content->currentVersionNo );
+        self::assertEquals( Version::STATUS_DRAFT, $version->status );
+        self::assertEquals( Version::STATUS_PUBLISHED, $content->versions[1]->status );
+
+        $content = $this->service->publish( $content, $content->versions[2] );
+
+        self::assertEquals( 2, $content->currentVersionNo );
+        self::assertEquals( Version::STATUS_ARCHIVED, $content->versions[1]->status );
+        self::assertEquals( Version::STATUS_PUBLISHED, $content->versions[2]->status );
     }
 }
