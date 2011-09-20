@@ -78,7 +78,7 @@ class FieldValueConverterRegistryTest extends TestCase
      */
     protected function getFieldValueConverterMock()
     {
-        return $this->getMockForAbstractClass(
+        return $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
         );
     }

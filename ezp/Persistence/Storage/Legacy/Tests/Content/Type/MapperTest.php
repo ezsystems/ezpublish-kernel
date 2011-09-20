@@ -339,7 +339,7 @@ class MapperTest extends TestCase
      */
     public function testToStorageFieldDefinition()
     {
-        $converterMock = $this->getMockForAbstractClass(
+        $converterMock = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
         );
         $converterMock->expects( $this->once() )
@@ -372,7 +372,7 @@ class MapperTest extends TestCase
      */
     public function testToFieldDefinition()
     {
-        $converterMock = $this->getMockForAbstractClass(
+        $converterMock = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
         );
         $converterMock->expects( $this->once() )

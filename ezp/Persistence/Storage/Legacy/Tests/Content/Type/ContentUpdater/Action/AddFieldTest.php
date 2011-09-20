@@ -144,7 +144,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     {
         if ( !isset( $this->fieldValueConverterMock ) )
         {
-            $this->fieldValueConverterMock = $this->getMockForAbstractClass(
+            $this->fieldValueConverterMock = $this->getMock(
                 'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
             );
         }
