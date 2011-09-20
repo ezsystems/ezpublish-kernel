@@ -41,15 +41,21 @@ interface Storage
     public function storeFieldData( $fieldId, FieldValue $value, array $context );
 
     /**
+     * Returns an updated field values based on the external data
+     *
      * @param int $fieldId
+     * @param FieldValue $value
+     * @param array $context
+     * @return FieldValue
      */
-    public function getFieldData( $fieldId );
+    public function getFieldData( $fieldId, FieldValue $value, array $context );
 
     /**
      * @param array $fieldId
+     * @param array $context
      * @return bool
      */
-    public function deleteFieldData( array $fieldId );
+    public function deleteFieldData( array $fieldId, array $context );
 
     /**
      * @return bool
@@ -58,12 +64,14 @@ interface Storage
 
     /**
      * @param int $fieldId
+     * @param array $context
      */
-    public function copyFieldData( $fieldId );
+    public function copyFieldData( $fieldId, array $context );
 
     /**
      * @param int $fieldId
+     * @param array $context
      */
-    public function getIndexData( $fieldId );
+    public function getIndexData( $fieldId, array $context );
 }
 ?>
