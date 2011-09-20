@@ -456,6 +456,16 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadContentNotFound()
+    {
+        $handler = $this->getAlmostRealContentHandler();
+
+        $content = $handler->load( 1337, 4 );
+    }
+
+    /**
      * Returns a result from creating a draft from a version.
      *
      * @return \ezp\Persistence\Content

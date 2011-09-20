@@ -186,8 +186,7 @@ class Handler implements BaseContentHandler
 
         if ( !count( $rows ) )
         {
-            // @TODO: Use proper exception here.
-            throw new \RuntimeException( 'Content object not found.' );
+            throw new \ezp\Base\Exception\NotFound( 'content', $id );
         }
 
         // @TODO: Handle external field data.
