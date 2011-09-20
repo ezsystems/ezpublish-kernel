@@ -189,10 +189,19 @@ class Handler implements BaseContentHandler
             throw new \ezp\Base\Exception\NotFound( 'content', $id );
         }
 
-        // @TODO: Handle external field data.
-
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
-        return $contentObjects[0];
+        $content        = $contentObjects[0];
+
+        foreach ( $content->version->fields as $field )
+        {
+            $storage = $this->storageRegistry->getStorage( $field->type );
+            if ( $storage->hasFieldData() )
+            {
+                $field->value = $storage->getFieldData( $field->id, $field->value, $this->contentGateway->getContext() );
+            }
+        }
+
+        return $content;
     }
 
     /**
@@ -289,7 +298,7 @@ class Handler implements BaseContentHandler
         foreach ( $fieldIds as $fieldType => $ids )
         {
             $this->storageRegistry->getStorage( $fieldType )
-                ->deleteFieldData( $ids );
+                ->deleteFieldData( $ids, $this->contentGateway->getContext() );
         }
 
         $this->contentGateway->deleteRelations( $contentId );

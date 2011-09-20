@@ -226,7 +226,7 @@ class ContentHandlerTest extends TestCase
                 $locationMapper,
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
             ),
-            new StorageRegistry()
+            $storageRegMock = $this->getStorageRegistryMock()
         );
 
         $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
@@ -239,6 +239,15 @@ class ContentHandlerTest extends TestCase
             ->expects( $this->any() )
             ->method( 'getConverter' )
             ->will( $this->returnValue( $converter ) );
+
+        $storageMock = $this->getMock( 'ezp\\Persistence\\Fields\\Storage' );
+
+        $storageRegMock
+            ->expects( $this->any() )
+            ->method( 'getStorage' )
+            ->will(
+                $this->returnValue( $storageMock )
+            );
 
         return $handler;
     }
@@ -356,7 +365,7 @@ class ContentHandlerTest extends TestCase
                 $locationMapperMock = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
             ),
-            new StorageRegistry()
+            $storageRegMock = $this->getStorageRegistryMock()
         );
 
         $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
@@ -394,6 +403,115 @@ class ContentHandlerTest extends TestCase
             ->method( 'getConverter' )
             ->with( 'ezimage' )
             ->will( $this->returnValue( $converter ) );
+
+        $storageMock = $this->getMock( 'ezp\\Persistence\\Fields\\Storage' );
+
+        $storageRegMock
+            ->expects( $this->any( 0 ) )
+            ->method( 'getStorage' )
+            ->will( $this->returnValue( $storageMock ) );
+
+        $content = $handler->load( 14, 4 );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
+     */
+    public function testLoadContentFieldDataGetFieldData()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/contentobjects.php' );
+
+        $handler = new Handler(
+            new Gateway\EzcDatabase(
+                $this->getDatabaseHandler(),
+                new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() ),
+                $this->getLanguageMaskGeneratorMock()
+            ),
+            new Location\Handler(
+                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
+                new Location\Mapper()
+            ),
+            new Mapper(
+                $locationMapperMock = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
+                $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
+            ),
+            $storageRegMock = $this->getStorageRegistryMock()
+        );
+
+        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter
+            ->expects( $this->any() )
+            ->method( 'toFieldValue' )
+            ->will( $this->returnValue( new FieldValue() ) );
+
+        $registry
+            ->expects( $this->any() )
+            ->method( 'getConverter' )
+            ->will( $this->returnValue( $converter ) );
+
+        $storageMock = $this->getMock( 'ezp\\Persistence\\Fields\\Storage' );
+
+        $storageRegMock
+            ->expects( $this->at( 0 ) )
+            ->method( 'getStorage' )
+            ->with( 'ezstring' )
+            ->will( $this->returnValue( $storageMock ) );
+
+        $storageRegMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'getStorage' )
+            ->with( 'ezstring' )
+            ->will( $this->returnValue( $storageMock ) );
+
+        $storageRegMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'getStorage' )
+            ->with( 'ezuser' )
+            ->will( $this->returnValue( $storageMock ) );
+
+        $storageRegMock
+            ->expects( $this->at( 3 ) )
+            ->method( 'getStorage' )
+            ->with( 'eztext' )
+            ->will( $this->returnValue( $storageMock ) );
+
+        $storageRegMock
+            ->expects( $this->at( 4 ) )
+            ->method( 'getStorage' )
+            ->with( 'ezimage' )
+            ->will( $this->returnValue( $storageMock ) );
+
+        $storageMock
+            ->expects( $this->at( 0 ) )
+            ->method( 'hasFieldData' )
+            ->will( $this->returnValue( false ) );
+
+        $storageMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'hasFieldData' )
+            ->will( $this->returnValue( false ) );
+
+        $storageMock
+            ->expects( $this->at( 2 ) )
+            ->method( 'hasFieldData' )
+            ->will( $this->returnValue( true ) );
+
+        $storageMock
+            ->expects( $this->at( 3 ) )
+            ->method( 'getFieldData' )
+            ->with( 30, new FieldValue())
+            ->will( $this->returnValue( true ) );
+
+        $storageMock
+            ->expects( $this->at( 4 ) )
+            ->method( 'hasFieldData' )
+            ->will( $this->returnValue( false ) );
+
+        $storageMock
+            ->expects( $this->at( 5 ) )
+            ->method( 'hasFieldData' )
+            ->will( $this->returnValue( false ) );
 
         $content = $handler->load( 14, 4 );
     }
