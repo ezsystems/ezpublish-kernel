@@ -246,7 +246,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Sets the state of object identified by $contentId and $version to $state.
+     * Sets the status of the version identified by $contentId and $version to $status.
      *
      * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
      *
