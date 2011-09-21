@@ -105,6 +105,48 @@ class ServiceTest extends BaseServiceTest
     }
 
     /**
+     * Test service function for loading user by credentials
+     *
+     * @covers \ezp\User\Service::loadByCredentials
+     * @group userService
+     */
+    public function testLoadByCredentials()
+    {
+        $service = $this->repository->getUserService();
+        $do = $service->loadByCredentials( 'admin', 'publish' );
+        self::assertInstanceOf( 'ezp\\User', $do );
+        self::assertEquals( 14, $do->id );
+        self::assertEquals( 'admin', $do->login );
+        self::assertEquals( 'spam@ez.no', $do->email );
+    }
+
+    /**
+     * Test service function for loading user by credentials
+     *
+     * @covers \ezp\User\Service::loadByCredentials
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @group userService
+     */
+    public function testLoadByCredentialsNotFound()
+    {
+        $service = $this->repository->getUserService();
+        $service->loadByCredentials( 'kore', 'password' );
+    }
+
+    /**
+     * Test service function for loading user by credentials
+     *
+     * @covers \ezp\User\Service::loadByCredentials
+     * @expectedException \ezp\User\Exception\FailedLogin
+     * @group userService
+     */
+    public function testLoadByCredentialsFailedLogin()
+    {
+        $service = $this->repository->getUserService();
+        $service->loadByCredentials( 'admin', 'password' );
+    }
+
+    /**
      * Test service function for updating user
      *
      * @covers \ezp\User\Service::update

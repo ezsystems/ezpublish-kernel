@@ -22,6 +22,7 @@ use ezp\Base\Configuration,
     ezp\Content,
     ezp\Content\Location,
     ezp\User,
+    ezp\User\Exception\FailedLogin,
     ezp\User\Group,
     ezp\User\GroupAbleInterface,
     ezp\User\Role,
@@ -65,6 +66,61 @@ class Service extends BaseService
     {
         $content = $this->repository->getContentService()->load( $id );
         return $this->buildUser( $this->handler->userHandler()->load( $id ), $content );
+    }
+
+    /**
+     * Load a User object by login and password
+     *
+     * @param string $login
+     * @param string $password
+     * @return \ezp\User
+     * @throws \ezp\Base\Exception\NotFound If user is not found
+     * @throws \ezp\User\Exception\FailedLogin If password does not match
+     */
+    public function loadByCredentials( $login, $password )
+    {
+        $match = Configuration::getInstance( 'site' )->get( 'UserSettings', 'AuthenticateMatch', 'login' );
+        $users = $this->handler->userHandler()->loadByLogin( $login, strpos( 'email', $match ) === false );
+
+        if ( empty( $users ) )
+            throw new NotFound( 'User', $login );
+
+        foreach ( $users as $user )
+        {
+            if ( $user->passwordHash == self::createHash( $user->login, $password, $user->hashAlgorithm ) )
+            {
+                $content = $this->repository->getContentService()->load( $user->id );
+                return $this->buildUser( $user, $content );
+            }
+        }
+        throw new FailedLogin();
+    }
+
+    /**
+     * Create user password hash
+     *
+     * @param string $login
+     * @param string $password
+     * @param int $type One of User::PASSWORD_HASH_* constants
+     * @return string
+     */
+    protected static function createHash( $login, $password, $type )
+    {
+        if ( $type == User::PASSWORD_HASH_MD5_USER )
+        {
+            return md5( "$login\n$password" );
+        }
+        elseif ( $type == User::PASSWORD_HASH_MD5_SITE )
+        {
+            $site = Configuration::getInstance( 'site' )->get( 'UserSettings', 'SiteName', 'ez.no' );
+            return md5( "$login\n$password\n$site" );
+        }
+        elseif ( $type == User::PASSWORD_HASH_PLAIN_TEXT )
+        {
+            return $password;
+        }
+        //elseif ( $type == User::PASSWORD_HASH_MD5_PASSWORD )
+        return md5( $password );
     }
 
     /**

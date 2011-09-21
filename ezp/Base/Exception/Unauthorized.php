@@ -23,7 +23,7 @@ class Unauthorized extends Http
      * Generates: Login required to get access to '{$what}'
      *
      * @param string $what
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $what, PHPException $previous = null )
     {

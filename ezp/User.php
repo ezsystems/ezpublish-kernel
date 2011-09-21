@@ -29,6 +29,26 @@ use ezp\Base\Model,
 class User extends Model implements GroupAbleInterface, ModelDefinition
 {
     /**
+     * @var int MD5 of password, not recommended
+     */
+    const PASSWORD_HASH_MD5_PASSWORD = 1;
+
+    /**
+     * @var int MD5 of user and password
+     */
+    const PASSWORD_HASH_MD5_USER = 2;
+
+    /**
+     * @var int MD5 of site, user and password
+     */
+    const PASSWORD_HASH_MD5_SITE = 3;
+
+    /**
+     * @var int Passwords in plaintext, should not be used for real sites
+     */
+    const PASSWORD_HASH_PLAIN_TEXT = 5;
+
+    /**
      * @var array Readable of properties on this object
      */
     protected $readWriteProperties = array(
@@ -36,7 +56,7 @@ class User extends Model implements GroupAbleInterface, ModelDefinition
         'login' => true,
         'email' => true,
         'passwordHash' => true,
-        'hashAlgorithm' => true,
+        'hashAlgorithm' => true,// @todo Make read only?
         'isEnabled' => true,
         //'maxLogin' => true,
     );

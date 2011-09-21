@@ -14,26 +14,6 @@ namespace ezp\Persistence;
 class User extends ValueObject
 {
     /**
-     * @var int MD5 of password, not recommended
-     */
-    const PASSWORD_HASH_MD5_PASSWORD = 1;
-
-    /**
-     * @var int MD5 of user and password
-     */
-    const PASSWORD_HASH_MD5_USER = 2;
-
-    /**
-     * @var int MD5 of site, user and password
-     */
-    const PASSWORD_HASH_MD5_SITE = 3;
-
-    /**
-     * @var int Passwords in plaintext, should not be used for real sites
-     */
-    const PASSWORD_HASH_PLAIN_TEXT = 5;
-
-    /**
      * User ID
      *
      * @var mixed
