@@ -13,6 +13,10 @@ use PHPUnit_Framework_TestCase,
     ReflectionProperty,
     ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Value,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue,
+    ezp\Content\FieldType\TextLine\StringLengthValidator,
+    ezp\Content\Type as ContentType,
+    ezp\Content\Type\FieldDefinition,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
@@ -191,7 +195,47 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testFillConstraintsFromValidator()
     {
-        $this->markTestIncomplete();
+        $contentType = new ContentType;
+        $contentType->identifier = 'article';
+        $fields = $contentType->getFields();
+        $fieldDef = new FieldDefinition( $contentType, 'ezstring' );
+        $fieldDef->identifier = 'title';
+        $fieldDef->setDefaultValue( new TextLineValue( 'New article' ) );
+        $fieldDef->fieldTypeConstraints = array(
+            'SomeValidator' => array( 'foo' => 'bar' )
+        );
+        $fields[] = $fieldDef;
+
+        $validator = new StringLengthValidator();
+        $validator->maxStringLength = 20;
+        $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef, $validator );
+        $expectedConstraints = array(
+            'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator' => array(
+                'maxStringLength' => 20,
+                'minStringLength' => false
+            ),
+            'SomeValidator' => array( 'foo' => 'bar' )
+        );
+        self::assertSame( $expectedConstraints, $fieldDef->fieldTypeConstraints );
+    }
+
+    /**
+     * @group fieldType
+     * @covers \ezp\Content\FieldType::fillConstraintsFromValidator
+     * @expectedException \ezp\Base\Exception\InvalidArgumentType
+     */
+    public function testFillConstraintsFromUnsupportedValidator()
+    {
+        $contentType = new ContentType;
+        $contentType->identifier = 'article';
+        $fields = $contentType->getFields();
+        $fieldDef = new FieldDefinition( $contentType, 'ezstring' );
+        $fieldDef->identifier = 'title';
+        $fieldDef->setDefaultValue( new TextLineValue( 'New article' ) );
+        $fields[] = $fieldDef;
+
+        $validator = $this->getMockForAbstractClass( 'ezp\\Content\\FieldType\\Validator' );
+        $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef, $validator );
     }
 
     /**
