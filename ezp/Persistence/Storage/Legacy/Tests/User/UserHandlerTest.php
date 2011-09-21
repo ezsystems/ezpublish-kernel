@@ -42,7 +42,7 @@ class UserHandlerTest extends TestCase
         $user->id = 42;
         $user->login = 'kore';
         $user->email = 'kore@example.org';
-        $user->password = '1234567890';
+        $user->passwordHash = '1234567890';
         $user->hashAlgorithm = 2;
         $user->isEnabled = true;
         $user->maxLogin = 23;

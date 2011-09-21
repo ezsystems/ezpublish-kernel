@@ -59,14 +59,14 @@ class UserHandlerTest extends HandlerTest
         $obj->email = 'unit@ez.no';
         $obj->hashAlgorithm = 2;
         $obj->login = 'unit';
-        $obj->password = 'SomeRandomStuffShouldHaveBeenHash';
+        $obj->passwordHash = 'SomeRandomStuffShouldHaveBeenHash';
         $obj = $handler->create( $obj );
         $this->assertInstanceOf( 'ezp\\Persistence\\User', $obj );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( 'unit@ez.no', $obj->email );
         $this->assertEquals( 2, $obj->hashAlgorithm );
         $this->assertEquals( 'unit', $obj->login );
-        $this->assertEquals( 'SomeRandomStuffShouldHaveBeenHash', $obj->password );
+        $this->assertEquals( 'SomeRandomStuffShouldHaveBeenHash', $obj->passwordHash );
     }
 
     /**
@@ -82,7 +82,7 @@ class UserHandlerTest extends HandlerTest
         $obj->email = 'unit@ez.no';
         $obj->hashAlgorithm = 2;
         $obj->login = 'unit';
-        $obj->password = 'SomeRandomStuffShouldHaveBeenHash';
+        $obj->passwordHash = 'SomeRandomStuffShouldHaveBeenHash';
         $handler->create( $obj );
     }
 
@@ -100,7 +100,7 @@ class UserHandlerTest extends HandlerTest
         $obj->email = 'unit@ez.no';
         $obj->hashAlgorithm = 2;
         $obj->login = 'unit';
-        $obj->password = 'SomeRandomStuffShouldHaveBeenHash';
+        $obj->passwordHash = 'SomeRandomStuffShouldHaveBeenHash';
         $handler->create( $obj );
     }
 

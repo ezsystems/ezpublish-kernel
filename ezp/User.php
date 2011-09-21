@@ -35,7 +35,7 @@ class User extends Model implements GroupAbleInterface, ModelDefinition
         'id' => false,
         'login' => true,
         'email' => true,
-        'password' => true,
+        'passwordHash' => true,
         'hashAlgorithm' => true,
         'isEnabled' => true,
         //'maxLogin' => true,

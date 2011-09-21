@@ -83,7 +83,7 @@ class Handler implements BaseUserHandler
         $user->id            = $data[0]['contentobject_id'];
         $user->login         = $data[0]['login'];
         $user->email         = $data[0]['email'];
-        $user->password      = $data[0]['password_hash'];
+        $user->passwordHash  = $data[0]['password_hash'];
         $user->hashAlgorithm = $data[0]['password_hash_type'];
         $user->isEnabled     = (bool) $data[0]['is_enabled'];
         $user->maxLogin      = $data[0]['max_login'];

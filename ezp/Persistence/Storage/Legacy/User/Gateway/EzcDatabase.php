@@ -57,7 +57,7 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $user->email )
             )->set(
                 $this->handler->quoteColumn( 'password_hash' ),
-                $query->bindValue( $user->password )
+                $query->bindValue( $user->passwordHash )
             )->set(
                 $this->handler->quoteColumn( 'password_hash_type' ),
                 $query->bindValue( $user->hashAlgorithm, null, \PDO::PARAM_INT )
@@ -155,7 +155,7 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $user->email )
             )->set(
                 $this->handler->quoteColumn( 'password_hash' ),
-                $query->bindValue( $user->password )
+                $query->bindValue( $user->passwordHash )
             )->set(
                 $this->handler->quoteColumn( 'password_hash_type' ),
                 $query->bindValue( $user->hashAlgorithm )
