@@ -9,7 +9,7 @@
 
 namespace ezp\Content\FieldType\Float;
 use ezp\Content\FieldType\Validator,
-    ezp\Content\FieldType\Value;
+    ezp\Content\FieldType\Value as BaseValue;
 
 /**
  * Validator to validate ranges in float values.
@@ -39,7 +39,7 @@ class FloatValueValidator extends Validator
      * @param \ezp\Content\FieldType\Float\Value $value
      * @return bool
      */
-    public function validate( Value $value )
+    public function validate( BaseValue $value )
     {
         $isValid = true;
 

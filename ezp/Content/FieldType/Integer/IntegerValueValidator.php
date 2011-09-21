@@ -9,7 +9,7 @@
 
 namespace ezp\Content\FieldType\Integer;
 use ezp\Content\FieldType\Validator,
-    ezp\Content\FieldType\Value;
+    ezp\Content\FieldType\Value as BaseValue;
 
 /**
  * Validate ranges of integer value.
@@ -36,7 +36,7 @@ class IntegerValueValidator extends Validator
      * @param \ezp\Content\FieldType\Integer\Value $value
      * @return bool
      */
-    public function validate( Value $value )
+    public function validate( BaseValue $value )
     {
         $isValid = true;
 
