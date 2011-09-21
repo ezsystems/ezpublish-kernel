@@ -77,6 +77,31 @@ class UserHandler implements UserHandlerInterface
     }
 
     /**
+     * Load user with user login / email.
+     *
+     * @param string $login
+     * @param bool $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
+     * @return \ezp\Persistence\User[]
+     */
+    public function loadByLogin( $login, $alsoMatchEmail = false )
+    {
+        $users = $this->backend->find( 'User', array( 'login' => $login ) );
+        if ( !$alsoMatchEmail )
+            return $users;
+
+        foreach ( $this->backend->find( 'User', array( 'email' => $login ) ) as $emailUser )
+        {
+            foreach ( $users as $loginUser )
+            {
+                if ( $emailUser->id === $loginUser->id )
+                    continue 2;
+            }
+            $users[] = $emailUser;
+        }
+        return $users;
+    }
+
+    /**
      * Update the user information specified by the user struct
      *
      * @param \ezp\Persistence\User $user

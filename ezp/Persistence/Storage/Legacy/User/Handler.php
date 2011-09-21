@@ -92,6 +92,18 @@ class Handler implements BaseUserHandler
     }
 
     /**
+     * Load user with user login / email.
+     *
+     * @param string $login
+     * @param bool $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
+     * @return \ezp\Persistence\User[]
+     */
+    public function loadByLogin( $login, $alsoMatchEmail = false )
+    {
+        throw new RuntimeException( '@TODO: Implement' );
+    }
+
+    /**
      * Update the user information specified by the user struct
      *
      * @param \ezp\Persistence\User $user
