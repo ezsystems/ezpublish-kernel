@@ -129,8 +129,7 @@ interface Handler
      * Returns the user policies associated with the user (including inherited policies from user groups)
      *
      * @param mixed $userId
-     *              In legacy storage engine this is the content object id roles are assigned to.
-     *              By the nature of legacy storage engine, it is therefor possible to use $groupId as well here.
+     *              In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
      * @return \ezp\Persistence\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId );
