@@ -21,16 +21,17 @@ class Value implements ValueInterface
      *
      * @var int
      */
-    public $value;
+    public $value = 0;
 
     /**
      * Construct a new Value object and initialize with $value
      *
      * @param int $value
      */
-    public function __construct( $value )
+    public function __construct( $value = null )
     {
-        $this->value = $value;
+        if ( $value !== null )
+            $this->value = $value;
     }
 
     /**

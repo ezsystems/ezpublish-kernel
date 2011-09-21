@@ -103,6 +103,16 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @covers \ezp\Content\FieldType\Float\Value::__construct
+     */
+    public function testBuildFieldValueWithoutParam()
+    {
+        $value = new FloatValue;
+        self::assertSame( 0.0, $value->value );
+    }
+
+    /**
+     * @group fieldType
      * @covers \ezp\Content\FieldType\Float\Value::fromString
      */
     public function testBuildFieldValueFromString()
