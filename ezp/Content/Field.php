@@ -9,6 +9,7 @@
 
 namespace ezp\Content;
 use ezp\Base\Model,
+    ezp\Base\Exception\FieldValidation as FieldValidationException,
     ezp\Content\Version,
     ezp\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Field as FieldVO,
@@ -123,7 +124,37 @@ class Field extends Model
      */
     public function setValue( FieldValue $inputValue )
     {
-        $this->value = $inputValue;
+        $this->value = $this->validateValue( $inputValue );
         $this->notify( 'field/setValue', array( 'value' => $inputValue ) );
+    }
+
+    /**
+     * Validates $inputValue against validators registered in field definition.
+     * If $inputValue is valid, it will be returned as is.
+     * If not, a ValidationException will be thrown
+     *
+     * @param \ezp\Content\FieldType\FieldValue $inputValue
+     * @return \ezp\Content\FieldType\FieldValue
+     * @throws \ezp\Base\Exception\FieldValidation
+     */
+    protected function validateValue( FieldValue $inputValue )
+    {
+        $hasError = false;
+        $errors = array();
+        foreach ( $this->getFieldDefinition()->getValidators() as $validator )
+        {
+            if ( !$validator->validate( $inputValue ) )
+            {
+                $hasError = true;
+                $errors = array_merge( $errors, $validator->getMessage() );
+            }
+        }
+
+        if ( $hasError )
+        {
+            throw new FieldValidationException( $this->getFieldDefinition()->identifier, $errors );
+        }
+
+        return $inputValue;
     }
 }

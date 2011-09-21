@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\FieldType\Validator;
-use ezp\Content\FieldType\Validator;
+use ezp\Content\FieldType\Validator,
+    ezp\Content\FieldType\Value;
 
 /**
  * Validate ranges of integer value.
@@ -32,20 +33,20 @@ class IntegerValueValidator extends Validator
      * When a check against aconstaint has failed, an entry will be added to the
      * $errors array.
      *
-     * @param mixed $value
+     * @param \ezp\Content\FieldType\Integer\Value $value
      * @return bool
      */
-    public function validate( $value )
+    public function validate( Value $value )
     {
         $isValid = true;
 
-        if ( $this->constraints['maxIntegerValue'] !== null && $value > $this->constraints['maxIntegerValue'] )
+        if ( $this->constraints['maxIntegerValue'] !== false && $value->value > $this->constraints['maxIntegerValue'] )
         {
             $this->errors[] = "The value can not be higher than {$this->constraints['maxIntegerValue']}.";
             $isValid = false;
         }
 
-        if ( $this->constraints['minIntegerValue'] !== null && $value < $this->constraints['minIntegerValue'] )
+        if ( $this->constraints['minIntegerValue'] !== false && $value->value < $this->constraints['minIntegerValue'] )
         {
             $this->errors[] = "The value can not be lower than {$this->constraints['minIntegerValue']}.";
             $isValid = false;

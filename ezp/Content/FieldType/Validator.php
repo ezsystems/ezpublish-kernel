@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\FieldType;
-use ezp\Base\Exception\PropertyNotFound;
+use ezp\Base\Exception\PropertyNotFound,
+    ezp\Content\FieldType\Value;
 
 /**
  * Base field type validator validator.
@@ -50,10 +51,10 @@ abstract class Validator
      * $errors array.
      *
      * @abstract
-     * @param mixed $value
+     * @param \ezp\Content\FieldType\Value $value
      * @return bool
      */
-    abstract public function validate( $value );
+    abstract public function validate( Value $value );
 
     /**
      * Return array of messages on performed validations.

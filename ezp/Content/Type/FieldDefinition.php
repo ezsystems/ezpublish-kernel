@@ -33,6 +33,7 @@ use ezp\Base\Model,
  * @property \ezp\Content\FieldType\Value $defaultValue
  * @property-read \ezp\Content\Type $contentType ContentType object
  * @property-read \ezp\Content\FieldType $type FieldType object
+ * @property-read \ezp\Content\FieldType\Validator $validators Registered validators for this field definition
  */
 class FieldDefinition extends Model
 {
@@ -59,7 +60,8 @@ class FieldDefinition extends Model
     protected $dynamicProperties = array(
         'contentType' => false,
         'type' => false,
-        'defaultValue' => true
+        'defaultValue' => true,
+        'validators' => false
     );
 
     /**
@@ -76,6 +78,11 @@ class FieldDefinition extends Model
      * @var \ezp\Content\FieldType\Value
      */
     protected $defaultValue;
+
+    /**
+     * @var \ezp\Content\FieldType\Validator[]
+     */
+    protected $validators = array();
 
     /**
      * Constructor, sets up value object, fieldType string and attach $contentType
@@ -149,5 +156,25 @@ class FieldDefinition extends Model
         $this->notify( 'field/setValue', array( 'value' => $value ) );
         $this->properties->defaultValue = new PersistenceFieldValue;
         $this->type->setFieldValue( $this->properties->defaultValue );
+    }
+
+    /**
+     * Returns validators for current field definition
+     *
+     * @return \ezp\Content\FieldType\Validator[]
+     */
+    public function getValidators()
+    {
+        if ( empty( $this->validators ) )
+        {
+            foreach ( $this->properties->fieldTypeConstraints as $validatorClass => $constraints )
+            {
+                $validator = new $validatorClass;
+                $validator->initializeWithConstraints( $constraints );
+                $this->validators[] = $validator;
+            }
+        }
+
+        return $this->validators;
     }
 }

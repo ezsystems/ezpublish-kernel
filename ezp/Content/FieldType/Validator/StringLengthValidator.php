@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\FieldType\Validator;
-use ezp\Content\FieldType\Validator;
+use ezp\Content\FieldType\Validator,
+    ezp\Content\FieldType\Value;
 
 /**
  * Validator for checking min. and max. length of strings.
@@ -28,20 +29,20 @@ class StringLengthValidator extends Validator
      *
      * The range is determined by $maxStringLength and $minStringLength.
      *
-     * @param string $value
+     * @param \ezp\Content\FieldType\TextLine\Value $value
      * @return bool
      */
-    public function validate( $value )
+    public function validate( Value $value )
     {
         $isValid = true;
 
-        if ( $this->constraints['maxStringLength'] !== null && strlen( $value ) > $this->constraints['maxStringLength'] )
+        if ( $this->constraints['maxStringLength'] !== false && strlen( $value->text ) > $this->constraints['maxStringLength'] )
         {
             $this->errors[] = "The string can not exceed {$this->constraints['maxStringLength']} characters.";
             $isValid = false;
         }
 
-        if ( $this->constraints['minStringLength'] !== null && strlen( $value ) < $this->constraints['minStringLength'] )
+        if ( $this->constraints['minStringLength'] !== false && strlen( $value->text ) < $this->constraints['minStringLength'] )
         {
             $this->errors[] = "The string can not be shorter than {$this->constraints['minStringLength']} characters.";
             $isValid = false;

@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\FieldType\Validator;
-use ezp\Content\FieldType\Validator;
+use ezp\Content\FieldType\Validator,
+    ezp\Content\FieldType\Value;
 
 /**
  * Validator for checking max. size of binary files.
@@ -24,16 +25,16 @@ class FileSizeValidator extends Validator
     /**
      * Checks if $binaryFile has the appropriate size
      *
-     * @param \ezp\Io\BinaryFile $binaryFile
+     * @param \ezp\Content\FieldType\BinaryFile\Value $value
      * @return bool
      */
-    public function validate( $binaryFile )
+    public function validate( Value $value )
     {
         $isValid = true;
 
-        if ( $this->constraints['maxFileSize'] !== false && $binaryFile->size > $this->constraints['maxFileSize'] )
+        if ( $this->constraints['maxFileSize'] !== false && $value->file->size > $this->constraints['maxFileSize'] )
         {
-            $this->errors[] = "The file size can not exceed {$this->constraints['maxFileSize']} btes.";
+            $this->errors[] = "The file size can not exceed {$this->constraints['maxFileSize']} bytes.";
             $isValid = false;
         }
 

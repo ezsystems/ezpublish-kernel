@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\FieldType\Validator;
-use ezp\Content\FieldType\Validator;
+use ezp\Content\FieldType\Validator,
+    ezp\Content\FieldType\Value;
 
 /**
  * Validator to validate ranges in float values.
@@ -35,20 +36,20 @@ class FloatValueValidator extends Validator
      * When a check against aconstaint has failed, an entry will be added to the
      * $errors array.
      *
-     * @param mixed $value
+     * @param \ezp\Content\FieldType\Float\Value $value
      * @return bool
      */
-    public function validate( $value )
+    public function validate( Value $value )
     {
         $isValid = true;
 
-        if ( $this->constraints['maxFloatValue'] !== null && $value > $this->constraints['maxFloatValue'] )
+        if ( $this->constraints['maxFloatValue'] !== false && $value->value > $this->constraints['maxFloatValue'] )
         {
             $this->errors[] = "The value can not be higher than {$this->constraints['maxFloatValue']}.";
             $isValid = false;
         }
 
-        if ( $this->constraints['minFloatValue'] !== null && $value < $this->constraints['minFloatValue'] )
+        if ( $this->constraints['minFloatValue'] !== false && $value->value < $this->constraints['minFloatValue'] )
         {
             $this->errors[] = "The value can not be lower than {$this->constraints['minFloatValue']}.";
             $isValid = false;
