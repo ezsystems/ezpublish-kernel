@@ -12,32 +12,16 @@ use ezp\Content\FieldType\Validator;
 
 /**
  * Validator for checking min. and max. length of strings.
+ *
+ * @property int $maxStringLength The maximum allowed length of the string.
+ * @property int $minStringLength The minimum required length of the string.
  */
 class StringLengthValidator extends Validator
 {
-    /**
-     * The maximum allowed length of the string.
-     *
-     * @var int
-     */
-    public $maxStringLength;
-
-    /**
-     * The minimum required length of the string.
-     *
-     * @var int
-     */
-    public $minStringLength;
-
-    /**
-     * Returns the name of the validator.
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return 'StringLengthValidator';
-    }
+    protected $constraints = array(
+        'maxStringLength' => false,
+        'minStringLength' => false
+    );
 
     /**
      * Checks if the string $value is in desired range.
@@ -51,36 +35,18 @@ class StringLengthValidator extends Validator
     {
         $isValid = true;
 
-        if ( $this->maxStringLength !== null && strlen( $value ) > $this->maxStringLength )
+        if ( $this->constraints['maxStringLength'] !== null && strlen( $value ) > $this->constraints['maxStringLength'] )
         {
-            $this->errors[] = "The string can not exceed {$this->maxStringLength} characters.";
+            $this->errors[] = "The string can not exceed {$this->constraints['maxStringLength']} characters.";
             $isValid = false;
         }
 
-        if ( $this->minStringLength !== null && strlen( $value ) < $this->minStringLength )
+        if ( $this->constraints['minStringLength'] !== null && strlen( $value ) < $this->constraints['minStringLength'] )
         {
-            $this->errors[] = "The string can not be shorter than {$this->minStringLength} characters.";
+            $this->errors[] = "The string can not be shorter than {$this->constraints['minStringLength']} characters.";
             $isValid = false;
         }
-        
+
         return $isValid;
     }
-
-    /**
-     * Combines configurable constraints in the validator and creates a map.
-     *
-     * This map is then supposed to be used inside a FieldDefinition.
-     *
-     * @internal
-     * @return array
-     */
-    public function getValidatorConstraints()
-    {
-        return array(
-            $this->name() => array(
-                'maxStringLength' => $this->maxStringLength,
-                'minStringLength' => $this->minStringLength
-            ));
-    }
-
 }

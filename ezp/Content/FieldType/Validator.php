@@ -18,12 +18,27 @@ abstract class Validator
     protected $errors = array();
 
     /**
-     * Returns the name of the validator.
+     * Hash of constraints handled by the validator.
+     * Key is the constraint name, value is the default value.
+     * If no default value is needed, just set to false.
      *
-     * @abstract
-     * @return string
+     * Example:
+     * <code>
+     * // With no default value
+     * protected $constraints = array(
+     *     "maxStringLength" => false
+     * );
+     *
+     * // With a default value
+     * protected $constraints = array(
+     *     "minIntegerValue" => 0,
+     *     "maxIntegerValue" => 40
+     * );
+     * </code>
+     *
+     * @var array
      */
-    abstract public function name();
+    protected $constraints = array();
 
     /**
      * Perform validation on $value.
@@ -57,11 +72,13 @@ abstract class Validator
      *
      * This map is then supposed to be used inside a FieldDefinition.
      *
-     * @abstract
      * @internal
      * @return array
      */
-    abstract public function getValidatorConstraints();
+    public function getValidatorConstraints()
+    {
+        return $this->constraints;
+    }
 
 
     /**
@@ -76,12 +93,44 @@ abstract class Validator
     {
         foreach ( $constraints as $constraint => $value )
         {
-            if ( !property_exists( $this, $constraint ) )
+            if ( !isset( $this->constraints[$constraint] ) )
             {
-                throw new  PropertyNotFound( "The constraint, {$constraint}, is not valid for for this validator." );
+                throw new  PropertyNotFound( "The constraint, {$constraint}, is not valid for this validator." );
             }
 
-            $this->$constraint = $value;
+            $this->constraints[$constraint] = $value;
         }
+    }
+
+    /**
+     * Magic getter.
+     * Returns constraint value, from its $name
+     *
+     * @param string $name
+     * @return mixed
+     * @throws \ezp\Base\Exception\PropertyNotFound
+     */
+    public function __get( $name )
+    {
+        if ( !isset( $this->constraints[$name] ) )
+            throw new  PropertyNotFound( "The constraint, {$name}, is not valid for this validator." );
+
+        return $this->constraints[$name];
+    }
+
+    /**
+     * Magic setter.
+     * Sets $value to constraint, identified by $name
+     *
+     * @param string $name
+     * @param mixed $value
+     * @throws \ezp\Base\Exception\PropertyNotFound
+     */
+    public function __set( $name, $value )
+    {
+        if ( !isset( $this->constraints[$name] ) )
+            throw new  PropertyNotFound( "The constraint, {$name}, is not valid for this validator." );
+
+        $this->constraints[$name] = $value;
     }
 }

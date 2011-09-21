@@ -12,30 +12,16 @@ use ezp\Content\FieldType\Validator;
 
 /**
  * Validate ranges of integer value.
+ *
+ * @property int $minIntegerValue The minimum allowed integer value.
+ * @property int $maxIntegerValue The maximum allowed integer value.
  */
 class IntegerValueValidator extends Validator
 {
-    /**
-     * The minimum allowed integer value.
-     * @var int
-     */
-    public $minIntegerValue;
-
-    /**
-     * The maximum allowed integer value.
-     * @var int
-     */
-    public $maxIntegerValue;
-
-    /**
-     * Returns the name of the validator.
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return 'IntegerValueValidator';
-    }
+    protected $constraints = array(
+        'minIntegerValue' => false,
+        'maxIntegerValue' => false
+    );
 
     /**
      * Perform validation on $value.
@@ -53,36 +39,18 @@ class IntegerValueValidator extends Validator
     {
         $isValid = true;
 
-        if ( $this->maxIntegerValue !== null && $value > $this->maxIntegerValue )
+        if ( $this->constraints['maxIntegerValue'] !== null && $value > $this->constraints['maxIntegerValue'] )
         {
-            $this->errors[] = "The value can not be higher than {$this->maxIntegerValue}.";
+            $this->errors[] = "The value can not be higher than {$this->constraints['maxIntegerValue']}.";
             $isValid = false;
         }
 
-        if ( $this->minIntegerValue !== null && $value < $this->minIntegerValue )
+        if ( $this->constraints['minIntegerValue'] !== null && $value < $this->constraints['minIntegerValue'] )
         {
-            $this->errors[] = "The value can not be lower than {$this->minIntegerValue}.";
+            $this->errors[] = "The value can not be lower than {$this->constraints['minIntegerValue']}.";
             $isValid = false;
         }
 
         return $isValid;
     }
-
-    /**
-     * Combines configurable constraints in the validator and creates a map.
-     *
-     * This map is then supposed to be used inside a FieldDefinition.
-     *
-     * @internal
-     * @return array
-     */
-    public function getValidatorConstraints()
-    {
-        return array(
-            $this->name() => array(
-                'maxIntegerValue' => $this->maxIntegerValue,
-                'minIntegerValue' => $this->minIntegerValue,
-        ));
-    }
-
 }

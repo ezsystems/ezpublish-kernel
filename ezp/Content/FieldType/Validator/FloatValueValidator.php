@@ -15,32 +15,16 @@ use ezp\Content\FieldType\Validator;
  *
  * Note that this validator can be limited by limitation on precision when
  * dealing with floating point numbers, and conversions.
+ *
+ * @property float $minFloatValue Minimum value for float.
+ * @property float $maxFloatValue Maximum value for float.
  */
 class FloatValueValidator extends Validator
 {
-    /**
-     * Minimum value for float.
-     *
-     * @var float
-     */
-    public $minFloatValue;
-
-    /**
-     * Maximum value for float.
-     *
-     * @var float
-     */
-    public $maxFloatValue;
-
-    /**
-     * Returns the name of the validator.
-     *
-     * @return string
-     */
-    public function name()
-    {
-        return 'FloatValueValidator';
-    }
+    protected $constraints = array(
+        'minFloatValue' => false,
+        'maxFloatValue' => false
+    );
 
     /**
      * Perform validation on $value.
@@ -58,36 +42,18 @@ class FloatValueValidator extends Validator
     {
         $isValid = true;
 
-        if ( $this->maxFloatValue !== null && $value > $this->maxFloatValue )
+        if ( $this->constraints['maxFloatValue'] !== null && $value > $this->constraints['maxFloatValue'] )
         {
-            $this->errors[] = "The value can not be higher than {$this->maxFloatValue}.";
+            $this->errors[] = "The value can not be higher than {$this->constraints['maxFloatValue']}.";
             $isValid = false;
         }
 
-        if ( $this->minFloatValue !== null && $value < $this->minFloatValue )
+        if ( $this->constraints['minFloatValue'] !== null && $value < $this->constraints['minFloatValue'] )
         {
-            $this->errors[] = "The value can not be lower than {$this->minFloatValue}.";
+            $this->errors[] = "The value can not be lower than {$this->constraints['minFloatValue']}.";
             $isValid = false;
         }
 
         return $isValid;
     }
-
-    /**
-     * Combines configurable constraints in the validator and creates a map.
-     *
-     * This map is then supposed to be used inside a FieldDefinition.
-     *
-     * @internal
-     * @return array
-     */
-    public function getValidatorConstraints()
-    {
-        return array(
-            $this->name() => array(
-                'maxFloatValue' => $this->maxFloatValue,
-                'minFloatValue' => $this->minFloatValue,
-        ));
-    }
-
 }

@@ -254,9 +254,12 @@ abstract class FieldType implements Observer
      */
      public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, $validator )
      {
-         if ( in_array( $validator->name(), $this->allowedValidators() ) )
+         $validatorClass = get_class( $validator );
+         if ( in_array( $validatorClass, $this->allowedValidators() ) )
          {
-             $fieldDefinition->fieldTypeConstraints = array_merge( $fieldDefinition->fieldTypeConstraints, $validator->getValidatorConstraints() );
+             $fieldDefinition->fieldTypeConstraints = array(
+                 $validatorClass => $validator->getValidatorConstraints()
+             ) + $fieldDefinition->fieldTypeConstraints;
          }
      }
 
