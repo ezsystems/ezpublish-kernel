@@ -39,7 +39,7 @@ class BinaryFileStorage implements Storage
     public function storeFieldData( $fieldId, FieldValue $value, array $context )
     {
         $dbHandler = $context['connection'];
-        $file = $value['file'];
+        $file = $value->data->file;
 
         $q = $dbHandler->createInsertQuery();
         $q->insertInto(
@@ -53,13 +53,13 @@ class BinaryFileStorage implements Storage
             $q->bindValue( 0, null, \PDO::PARAM_INT )
         )->set(
             $dbHandler->quoteColumn( 'filename' ),
-            $q->bindValue( basename( $value['file']->path ) )
+            $q->bindValue( basename( $file->path ) )
         )->set(
             $dbHandler->quoteColumn( 'mime_type' ),
-            $q->bindValue( (string)$value['file']->contentType )
+            $q->bindValue( (string)$file->contentType )
         )->set(
             $dbHandler->quoteColumn( 'original_filename' ),
-            $q->bindValue( $value['originalFilename'] )
+            $q->bindValue( $value->data->originalFilename )
         )->set(
             // @todo: How should I get the version number here ?
             $dbHandler->quoteColumn( 'version' ),
