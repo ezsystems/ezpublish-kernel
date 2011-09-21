@@ -36,4 +36,19 @@ class FileInfo extends SplFileInfo
 
         return $this->contentType;
     }
+
+    /**
+     * Returns file extension, without the dot.
+     *
+     * @return string
+     */
+    public function getExtension()
+    {
+        if ( method_exists( '\SplFileInfo', 'getExtension' ) )
+        {
+            return parent::getExtension();
+        }
+
+        return pathinfo( $this->getBasename(), PATHINFO_EXTENSION );
+    }
 }
