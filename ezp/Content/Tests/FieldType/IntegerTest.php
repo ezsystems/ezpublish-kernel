@@ -40,7 +40,11 @@ class IntegerTest extends PHPUnit_Framework_TestCase
     public function testIntegerSupportedValidators()
     {
         $ft = new Integer();
-        self::assertSame( array( "IntegerValueValidator" ), $ft->allowedValidators(), "The set of allowed validators does not match what is expected." );
+        self::assertSame(
+            array( "ezp\\Content\\FieldType\\Integer\\IntegerValueValidator" ),
+            $ft->allowedValidators(),
+            "The set of allowed validators does not match what is expected."
+        );
     }
 
     /**

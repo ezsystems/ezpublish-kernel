@@ -24,7 +24,9 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezstring";
     const IS_SEARCHABLE = true;
 
-    protected $allowedValidators = array( 'StringLengthValidator' );
+    protected $allowedValidators = array(
+        'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator'
+    );
 
     /**
      * Returns the fallback default value of field type when no such default

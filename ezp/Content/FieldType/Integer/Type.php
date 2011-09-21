@@ -20,10 +20,12 @@ use ezp\Content\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = "ezinteger";
+    const FIELD_TYPE_IDENTIFIER = 'ezinteger';
     const IS_SEARCHABLE = true;
 
-    protected $allowedValidators = array( "IntegerValueValidator" );
+    protected $allowedValidators = array(
+        'ezp\\Content\\FieldType\\Integer\\IntegerValueValidator'
+    );
 
     /**
      * Returns the fallback default value of field type when no such default

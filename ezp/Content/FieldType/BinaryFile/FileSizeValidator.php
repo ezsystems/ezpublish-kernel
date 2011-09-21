@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType\Validator;
+namespace ezp\Content\FieldType\BinaryFile;
 use ezp\Content\FieldType\Validator,
     ezp\Content\FieldType\Value;
 

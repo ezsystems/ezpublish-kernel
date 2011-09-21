@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType\Validator;
+namespace ezp\Content\FieldType\Integer;
 use ezp\Content\FieldType\Validator,
     ezp\Content\FieldType\Value;
 

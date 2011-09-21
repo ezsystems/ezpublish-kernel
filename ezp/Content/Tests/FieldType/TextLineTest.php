@@ -43,7 +43,11 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     public function testTextLineSupportedValidators()
     {
         $ft = new TextLine();
-        self::assertSame( array( 'StringLengthValidator' ), $ft->allowedValidators(), "The set of allowed validators does not match what is expected." );
+        self::assertSame(
+            array( 'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator' ),
+            $ft->allowedValidators(),
+            "The set of allowed validators does not match what is expected."
+        );
     }
 
     /**

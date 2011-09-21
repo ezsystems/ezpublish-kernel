@@ -57,8 +57,13 @@ abstract class FieldType implements Observer
 
     /**
      * Validators which are supported for this field type.
-     *
-     * Key is the name of supported validators, value is an array of stored settings.
+     * Full Qualified Class Name should be registered here.
+     * Example:
+     * <code>
+     * protected $allowedValidators = array(
+     *     "ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator"
+     * );
+     * </code>
      *
      * @var array
      */

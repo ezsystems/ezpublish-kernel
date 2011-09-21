@@ -20,10 +20,12 @@ use ezp\Content\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = "ezfloat";
+    const FIELD_TYPE_IDENTIFIER = 'ezfloat';
     const IS_SEARCHABLE = false;
 
-    protected $allowedValidators = array( 'FloatValueValidator' );
+    protected $allowedValidators = array(
+        'ezp\\Content\\FieldType\\Float\\FloatValueValidator'
+    );
 
     /**
      * Returns the fallback default value of field type when no such default

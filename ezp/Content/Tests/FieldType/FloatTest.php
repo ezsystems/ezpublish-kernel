@@ -40,7 +40,11 @@ class FloatTest extends PHPUnit_Framework_TestCase
     public function testFloatSupportedValidators()
     {
         $ft = new Float();
-        self::assertSame( array( "FloatValueValidator" ), $ft->allowedValidators(), "The set of allowed validators does not match what is expected." );
+        self::assertSame(
+            array( "ezp\\Content\\FieldType\\Float\\FloatValueValidator" ),
+            $ft->allowedValidators(),
+            "The set of allowed validators does not match what is expected."
+        );
     }
 
     /**

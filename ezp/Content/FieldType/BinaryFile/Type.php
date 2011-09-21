@@ -25,7 +25,9 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezbinaryfile";
     const IS_SEARCHABLE = true;
 
-    protected $allowedValidators = array( 'FileSizeValidator' );
+    protected $allowedValidators = array(
+        'ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator'
+    );
 
     /**
      * Returns the fallback default value of field type when no such default
