@@ -9,7 +9,8 @@
 
 namespace ezp\Io;
 
-use finfo;
+use finfo,
+    ezp\Base\Exception\NotFound;
 
 /**
  * This struct describes a file content type, as described in RFC 2045, RFC 2046,
@@ -17,6 +18,18 @@ use finfo;
  */
 class ContentType
 {
+    /**
+     * The type (audio, video, text, image)
+     * @var string
+     */
+    public $type;
+
+    /**
+     * The subtype (mp3, mp4, plain, jpeg, ...)
+     * @var string
+     */
+    public $subType;
+
     public function __construct( $type, $subType )
     {
         $this->type = $type;
@@ -39,21 +52,14 @@ class ContentType
      */
     public static function getFromPath( $path )
     {
-        $finfo = new finfo( FILEINFO_MIME_TYPE );
-        $mime = $finfo->file( $path );
-        $mimeParts = explode( '/', $mime );
-        return new self( $mimeParts[0], $mimeParts[1] );
+        if ( file_exists( $path ) )
+        {
+            $finfo = new finfo( FILEINFO_MIME_TYPE );
+            $mime = $finfo->file( $path );
+            $mimeParts = explode( '/', $mime );
+            return new self( $mimeParts[0], $mimeParts[1] );
+        }
+
+        throw new NotFound( 'File', $path );
     }
-
-    /**
-     * The type (audio, video, text, image)
-     * @var string
-     */
-    public $type;
-
-    /**
-     * The subtype (mp3, mp4, plain, jpeg, ...)
-     * @var string
-     */
-    public $subType;
 }

@@ -31,7 +31,7 @@ abstract class Validator
      * Will return true when all constraints are matched. If one or more
      * constraints fail, the method will return false.
      *
-     * When a check against aconstaint has failed, an entry will be added to the
+     * When a check against a constraint has failed, an entry will be added to the
      * $errors array.
      *
      * @abstract
