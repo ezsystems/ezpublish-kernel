@@ -10,11 +10,13 @@
 namespace ezp\Content;
 use ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Value,
+    ezp\Content\FieldType\Validator,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
     ezp\Content\Type\FieldDefinition,
     ezp\Base\Observer,
     ezp\Base\Observable,
-    ezp\Base\Exception\InvalidArgumentValue;
+    ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\InvalidArgumentType;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -240,15 +242,15 @@ abstract class FieldType implements Observer
      * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */
-     public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, $validator )
+     public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, Validator $validator )
      {
          $validatorClass = get_class( $validator );
-         if ( in_array( $validatorClass, $this->allowedValidators() ) )
-         {
-             $fieldDefinition->fieldTypeConstraints = array(
-                 $validatorClass => $validator->getValidatorConstraints()
-             ) + $fieldDefinition->fieldTypeConstraints;
-         }
+         if ( !in_array( $validatorClass, $this->allowedValidators() ) )
+             throw new InvalidArgumentType( '$validator', implode( ', ', $this->allowedValidators() ) );
+
+         $fieldDefinition->fieldTypeConstraints = array(
+             $validatorClass => $validator->getValidatorConstraints()
+         ) + $fieldDefinition->fieldTypeConstraints;
      }
 
      /**
