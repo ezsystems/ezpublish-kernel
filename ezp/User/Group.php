@@ -137,7 +137,7 @@ class Group implements GroupAbleInterface, ModelInterface, Observable
      */
     public function notify( $event = 'update', array $arguments = null )
     {
-        return $this->content->notify( $event );
+        return $this->content->notify( $event, $arguments );
     }
 
     /**
