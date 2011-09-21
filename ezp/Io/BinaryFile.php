@@ -43,7 +43,7 @@ class BinaryFile
 
     /**
      * File contentType (image/jpeg, audio/mp3, etc)
-     * @var ContentType
+     * @var \ezp\Io\ContentType
      */
     public $contentType;
 
