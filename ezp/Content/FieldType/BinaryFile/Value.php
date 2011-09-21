@@ -34,7 +34,7 @@ class Value implements ValueInterface
     /**
      * @var \ezp\Content\FieldType\BinaryFile\Handler
      */
-    public $handler;
+    protected $handler;
 
     /**
      * Construct a new Value object and initialize its $binaryFile
@@ -42,15 +42,6 @@ class Value implements ValueInterface
     public function __construct()
     {
         $this->handler = new Handler;
-    }
-
-    /**
-     * @see \ezp\Content\FieldType\Value
-     * @todo
-     */
-    public static function build( PersistenceFieldValue $vo )
-    {
-        return $vo->data;
     }
 
     /**
