@@ -12,10 +12,12 @@ use \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     \ezp\Persistence\Content\FieldValue,
     \ezp\Persistence\Content\Type\FieldDefinition,
-    \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
+    \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue;
 
 class TextLine implements Converter
 {
+    const STRING_LENGTH_VALIDATOR_FQN = 'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator';
     /**
      * Converts data from $value to $storageFieldValue
      *
@@ -24,7 +26,7 @@ class TextLine implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data['value'];
+        $storageFieldValue->dataText = $value->data->text;
         $storageFieldValue->sortKeyString = $value->sortKey['sort_key_string'];
         // @TODO: This shouldn't be done here, a converter shouldn't add missing data, it should only convert.
         $storageFieldValue->sortKeyInt = 0;
@@ -38,7 +40,7 @@ class TextLine implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data['value'] = $value->dataText;
+        $fieldValue->data = new TextLineValue( $value->dataText );
         // TODO: Feel there is room for some improvement here, to generalize this code across field types.
         $fieldValue->sortKey = array( $value->sortKeyString );
     }
@@ -51,9 +53,9 @@ class TextLine implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints['StringLengthValidator']['maxStringLength'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints['StringLengthValidator']['maxStringLength'];
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'];
         }
     }
 
@@ -67,7 +69,8 @@ class TextLine implements Converter
     {
         if ( !empty( $storageDef->dataInt1 ) )
         {
-            $fieldDef->fieldTypeConstraints = array( 'StringLengthValidator' => array( 'maxStringLength' => $storageDef->dataInt1 ) );
+            $fieldDef->fieldTypeConstraints = array(
+                self::STRING_LENGTH_VALIDATOR_FQN => array( 'maxStringLength' => $storageDef->dataInt1 ) );
         }
     }
 
