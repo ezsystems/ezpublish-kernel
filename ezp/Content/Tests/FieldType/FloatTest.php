@@ -12,7 +12,6 @@ use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Float\Type as Float,
     ezp\Content\FieldType\Float\Value as FloatValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -75,18 +74,16 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Float\Type::setFieldValue
+     * @covers \ezp\Content\FieldType\Float\Type::toFieldValue
      */
-    public function testSetFieldValue()
+    public function testToFieldValue()
     {
-        $float = 42.42;
         $ft = new Float();
-        $ft->setValue( new FloatValue( $float ) );
+        $ft->setValue( $fv = new FloatValue( 42.42 ) );
 
-        $fieldValue = new FieldValue();
-        $ft->setFieldValue( $fieldValue );
+        $fieldValue = $ft->toFieldValue();
 
-        self::assertSame( array( "value" => $float ), $fieldValue->data );
+        self::assertSame( $fv, $fieldValue->data );
         self::assertNull( $fieldValue->externalData );
         self::assertSame( array( "sort_key_string" => "", "sort_key_int" => 0 ), $fieldValue->sortKey );
     }

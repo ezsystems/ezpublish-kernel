@@ -12,7 +12,6 @@ use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Integer\Type as Integer,
     ezp\Content\FieldType\Integer\Value as IntegerValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -75,18 +74,17 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Integer\Type::setFieldValue
+     * @covers \ezp\Content\FieldType\Integer\Type::toFieldValue
      */
-    public function testSetFieldValue()
+    public function testToFieldValue()
     {
         $integer = 42;
         $ft = new Integer();
-        $ft->setValue( new IntegerValue( $integer ) );
+        $ft->setValue( $fv = new IntegerValue( $integer ) );
 
-        $fieldValue = new FieldValue();
-        $ft->setFieldValue( $fieldValue );
+        $fieldValue = $ft->toFieldValue();
 
-        self::assertSame( array( "value" => $integer ), $fieldValue->data );
+        self::assertSame( $fv, $fieldValue->data );
         self::assertNull( $fieldValue->externalData );
         self::assertSame( array( "sort_key_int" => $integer ), $fieldValue->sortKey );
     }

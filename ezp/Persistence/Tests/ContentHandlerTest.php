@@ -18,7 +18,8 @@ use ezp\Persistence\Content,
     ezp\Base\Exception\NotFound,
     ezp\Content as ContentDomainObject,
     ezp\Content\Version,
-    ezp\Content\Relation;
+    ezp\Content\Relation,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for ContentHandler using in memory storage.
@@ -60,7 +61,7 @@ class ContentHandlerTest extends HandlerTest
                 // FieldValue object compatible with ezstring
                 'value' => new FieldValue(
                     array(
-                        'data' => array( 'value' => 'Welcome' )
+                        'data' => new TextLineValue( "Welcome" )
                     )
                 ),
                 'language' => 'eng-GB',
@@ -114,7 +115,7 @@ class ContentHandlerTest extends HandlerTest
                 // FieldValue object compatible with ezstring
                 "value" => new FieldValue(
                     array(
-                        "data" => array( "value" => "Welcome" )
+                        "data" => new TextLineValue( "Welcome" )
                     )
                 ),
                 'language' => 'eng-GB',
@@ -139,7 +140,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Field', $field );
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->language );
-        $this->assertEquals( 'Welcome', $field->value->data['value'] );
+        $this->assertEquals( 'Welcome', $field->value->data->text );
         $this->assertEquals( $content->version->versionNo, $field->versionNo );
     }
 
@@ -276,8 +277,11 @@ class ContentHandlerTest extends HandlerTest
         $struct->fields[] = new Field(
             array(
                 "type" => "ezstring",
-                // @todo Use FieldValue object
-                "value" => "Welcome2",
+                "value" => new FieldValue(
+                    array(
+                        "data" => new TextLineValue( "Welcome2" )
+                    )
+                ),
                 "language" => "eng-GB",
             )
         );

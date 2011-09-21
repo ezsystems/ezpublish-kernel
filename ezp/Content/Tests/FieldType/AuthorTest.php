@@ -77,9 +77,9 @@ class AuthorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Author\Type::setFieldValue
+     * @covers \ezp\Content\FieldType\Author\Type::toFieldValue
      */
-    public function testSetFieldValue()
+    public function testToFieldValue()
     {
         $this->markTestIncomplete( "@TODO: implement this test" );
     }

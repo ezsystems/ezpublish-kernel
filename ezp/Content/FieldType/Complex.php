@@ -26,29 +26,4 @@ abstract class Complex extends FieldType
      * @return null|ezp\Content\FieldType\Handler
      */
     abstract public function getHandler();
-
-    /**
-     * Returns the external value of the field type in a format suitable for packing it
-     * in a FieldValue.
-     *
-     * @abstract
-     * @return null|array
-     * @todo Shouldn't it return a struct with appropriate properties instead of an array ?
-     */
-    abstract public function getValueExternalData();
-
-    /**
-     * Method to populate the FieldValue struct for field types
-     *
-     * @internal
-     * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
-     * @return void
-     * @see \ezp\Content\FieldType::setFieldValue()
-     */
-    public function setFieldValue( PersistenceFieldValue $valueStruct )
-    {
-        $valueStruct = parent::setFieldValue( $valueStruct );
-        $valueStruct->externalData = $this->getValueExternalData();
-        return $valueStruct;
-    }
 }

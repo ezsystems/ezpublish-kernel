@@ -81,18 +81,17 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Content\FieldType\TextLine\Type::setFieldValue
+     * @covers \ezp\Content\FieldType\TextLine\Type::toFieldValue
      */
-    public function testSetFieldValue()
+    public function testToFieldValue()
     {
         $string = 'Test of FieldValue';
         $ft = new TextLine();
-        $ft->setValue( new TextLineValue( $string ) );
+        $ft->setValue( $fv = new TextLineValue( $string ) );
 
-        $fieldValue = new FieldValue();
-        $ft->setFieldValue( $fieldValue );
+        $fieldValue = $ft->toFieldValue();
 
-        self::assertSame( array( 'value' => $string ), $fieldValue->data );
+        self::assertSame( $fv, $fieldValue->data );
         self::assertNull( $fieldValue->externalData );
         self::assertSame( array( 'sort_key_string' => $string ), $fieldValue->sortKey );
     }
@@ -107,26 +106,6 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $text = 'According to developers, strings are good for women health.';
         $value = new TextLineValue( $text );
         self::assertSame( $text, $value->text );
-    }
-
-
-    /**
-     * @group fieldType
-     * @group textLine
-     * @covers \ezp\Content\FieldType\TextLine\Value::build
-     */
-    public function testBuildValue()
-    {
-        self::assertInstanceOf(
-            'ezp\\Content\\FieldType\\TextLine\\Value',
-            TextLineValue::build(
-                new FieldValue(
-                    array(
-                        'data' => array( 'value' => 'With a knick-knack, paddy whack, Give a dog a bone, This old man came rolling home.' )
-                    )
-                )
-            )
-        );
     }
 
     /**

@@ -50,20 +50,6 @@ class FieldTypeFactoryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Factory::buildValue
-     */
-    public function testBuildValue()
-    {
-        $data = array( "value" => "Working test" );
-        self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Value",
-            Factory::buildValue( "ezstring", new FieldValue( array( 'data' => $data ) ) ),
-            "Factory did not build a class of kind FieldType\\Value"
-        );
-    }
-
-    /**
-     * @group fieldType
      * @covers \ezp\Content\FieldType\Factory::buildValueFromString
      */
     public function testBuildValueFromStringKnownType()

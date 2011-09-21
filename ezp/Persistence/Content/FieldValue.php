@@ -9,19 +9,20 @@
  */
 
 namespace ezp\Persistence\Content;
-use ezp\Persistence\ValueObject;
+use ezp\Persistence\ValueObject,
+    ezp\Content\FieldType\Value;
 
 /**
  */
 class FieldValue extends ValueObject
 {
     /**
-     * Mixed data, which is contained in the field data
+     * FieldType Value object
      *
      * @note: For the "old" storage engine we will need adaptors to map them to
      * the existing database fields, like data_int, data_float, data_text.
      *
-     * @var mixed
+     * @var ezp\Content\FieldType\Value
      */
     public $data;
 
@@ -31,6 +32,7 @@ class FieldValue extends ValueObject
      * This field is used to handle data of a field type, which will be stored
      * in its own database tables.
      *
+     * @todo To remove? Since FieldType Value object is now used it might not be useful anymore.
      * @var mixed|null
      */
     public $externalData;

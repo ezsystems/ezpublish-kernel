@@ -13,6 +13,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Criterion\ContentId,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Base\Exception\NotFound;
 
 /**
@@ -55,7 +56,7 @@ class SearchHandlerTest extends HandlerTest
                 // FieldValue object compatible with ezstring
                 "value" => new FieldValue(
                     array(
-                        "data" => array( "value" => "Welcome" )
+                        "data" => new TextLineValue( "Welcome" )
                     )
                 ),
                 "language" => "eng-GB",

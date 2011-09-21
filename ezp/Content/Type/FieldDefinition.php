@@ -154,8 +154,7 @@ class FieldDefinition extends Model
     {
         $this->defaultValue = $value;
         $this->notify( 'field/setValue', array( 'value' => $value ) );
-        $this->properties->defaultValue = new PersistenceFieldValue;
-        $this->type->setFieldValue( $this->properties->defaultValue );
+        $this->properties->defaultValue = $this->type->toFieldValue();
     }
 
     /**

@@ -35,14 +35,6 @@ class Value implements ValueInterface
     }
 
     /**
-     * @see \ezp\Content\FieldType\Value
-     */
-    public static function build( PersistenceFieldValue $vo )
-    {
-        throw new \RuntimeException( "@TODO: Implement" );
-    }
-
-    /**
      * Initializes the keyword value with a simple string.
      *
      * @param string $stringValue A comma separated list of tags, eg: "php, eZ Publish, html5"

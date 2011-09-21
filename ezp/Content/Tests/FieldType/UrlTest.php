@@ -12,7 +12,6 @@ use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Url\Type as Url,
     ezp\Content\FieldType\Url\Value as UrlValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -75,18 +74,17 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Url\Type::setFieldValue
+     * @covers \ezp\Content\FieldType\Url\Type::toFieldValue
      */
-    public function testSetFieldValue()
+    public function testToFieldValue()
     {
         $link = "http://ez.no/";
         $ft = new Url();
-        $ft->setValue( new UrlValue( $link ) );
+        $ft->setValue( $fv = new UrlValue( $link ) );
 
-        $fieldValue = new FieldValue();
-        $ft->setFieldValue( $fieldValue );
+        $fieldValue = $ft->toFieldValue();
 
-        self::assertSame( array( "link" => $link, "text" => null ), $fieldValue->data );
+        self::assertSame( $fv, $fieldValue->data );
         self::assertNull( $fieldValue->externalData );
     }
 

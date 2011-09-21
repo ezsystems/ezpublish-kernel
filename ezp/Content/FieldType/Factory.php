@@ -54,21 +54,6 @@ abstract class Factory
     }
 
     /**
-     * Builds a field value object from a {@link \ezp\Persistence\Content\FieldValue} object, returned by persistence layer.
-     * Field type is identified by $fieldTypeIdentifier (e.g. "ezstring").
-     *
-     * @param string $fieldTypeIdentifier
-     * @param \ezp\Persistence\ContentFieldValue $vo
-     * @return \ezp\Content\FieldType\Value
-     */
-    public static function buildValue( $fieldTypeIdentifier, FieldValue $vo )
-    {
-        $fieldTypeNS = self::getFieldTypeNamespace( $fieldTypeIdentifier );
-        $fieldValueClass = "$fieldTypeNS\\Value";
-        return $fieldValueClass::build( $vo );
-    }
-
-    /**
      * Returns field type namespace.
      * Field type is identified by $fiedTypeIdentifier.
      * Will throw a MissingClass exception if $fieldTypeIdentifier cannot be identified as a valid field type.

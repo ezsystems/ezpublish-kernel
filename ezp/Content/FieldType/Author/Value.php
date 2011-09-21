@@ -38,14 +38,6 @@ class Value implements ValueInterface
     /**
      * @see \ezp\Content\FieldType\Value
      */
-    public static function build( PersistenceFieldValue $vo )
-    {
-        throw new RuntimeException( "@TODO: Implement" );
-    }
-
-    /**
-     * @see \ezp\Content\FieldType\Value
-     */
     public static function fromString( $stringValue )
     {
         throw new RuntimeException( "@TODO: Implement" );

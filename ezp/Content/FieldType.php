@@ -183,17 +183,19 @@ abstract class FieldType implements Observer
      * Method to populate the FieldValue struct for field types
      *
      * @internal
-     * @param \ezp\Persistence\Content\FieldValue $valueStruct The value struct which the field type data is packaged in for consumption by the storage engine.
      * @return void
      */
-    public function setFieldValue( PersistenceFieldValue $valueStruct )
+    public function toFieldValue()
     {
-        $valueStruct->data = $this->getValueData();
         // @todo Evaluate if creating the sortKey in every case is really needed
         //       Couldn't this be retrieved with a method, which would initialize
         //       that info on request only?
-        $valueStruct->sortKey = $this->getSortInfo();
-        return $valueStruct;
+        return new PersistenceFieldValue(
+            array(
+                "data" => $this->getValue(),
+                "sortKey" => $this->getSortInfo()
+            )
+        );
     }
 
     /**

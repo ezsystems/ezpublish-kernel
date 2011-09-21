@@ -15,7 +15,8 @@ use ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue,
     ezp\Base\Exception\NotFound,
-    ezp\Content\Location;
+    ezp\Content\Location,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue;
 
 /**
  * Test case for Location Handler using in memory storage.
@@ -91,7 +92,7 @@ class LocationHandlerTest extends HandlerTest
                                     // FieldValue object compatible with ezstring
                                     "value" => new FieldValue(
                                         array(
-                                            'data' => array( 'value' => "Welcome $i" )
+                                            'data' => new TextLineValue( "Welcome $i" )
                                         )
                                     ),
                                     "language" => "eng-GB",

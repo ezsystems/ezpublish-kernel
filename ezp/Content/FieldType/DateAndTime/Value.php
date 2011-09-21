@@ -38,16 +38,6 @@ class Value implements ValueInterface
     /**
      * @see \ezp\Content\FieldType\Value
      */
-    public static function build( PersistenceFieldValue $vo )
-    {
-        $date = new DateTime;
-        $date->setTimestamp( $vo->data );
-        return new static( $date );
-    }
-
-    /**
-     * @see \ezp\Content\FieldType\Value
-     */
     public static function fromString( $stringValue )
     {
         throw new RuntimeException( "@TODO: Implement" );

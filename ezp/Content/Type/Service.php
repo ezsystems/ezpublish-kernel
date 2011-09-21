@@ -26,7 +26,6 @@ use ezp\Base\Service as BaseService,
     ezp\Persistence\Content\Type\Group as GroupValue,
     ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\ValueObject;
 
 /**
@@ -126,7 +125,7 @@ class Service extends BaseService
                 throw new Logic( "Type\\Service->create()", '->fields can not already be persisted' );
 
             $fieldDefStruct = $fieldDefinition->getState( 'properties' );
-            $fieldDefStruct->defaultValue = $fieldDefinition->type->setFieldValue( new FieldValue );
+            $fieldDefStruct->defaultValue = $fieldDefinition->type->toFieldValue();
             $struct->fieldDefinitions[] = $fieldDefStruct;
         }
 
@@ -305,7 +304,7 @@ class Service extends BaseService
             throw new InvalidArgumentType( '$field->id', 'false' );
 
         $fieldDefStruct = $field->getState( 'properties' );
-        $fieldDefStruct->defaultValue = $field->type->setFieldValue( new FieldValue );
+        $fieldDefStruct->defaultValue = $field->type->toFieldValue();
         $this->handler->contentTypeHandler()->addFieldDefinition(
             $type->id,
             $type->status,
@@ -339,7 +338,7 @@ class Service extends BaseService
     public function updateFieldDefinition( Type $type, FieldDefinition $field  )
     {
         $fieldDefStruct = $field->getState( 'properties' );
-        $fieldDefStruct->defaultValue = $field->type->setFieldValue( new FieldValue );
+        $fieldDefStruct->defaultValue = $field->type->toFieldValue();
         $this->handler->contentTypeHandler()->updateFieldDefinition(
             $type->id,
             $type->status,

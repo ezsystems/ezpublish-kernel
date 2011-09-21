@@ -22,7 +22,6 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\Criterion\ParentLocationId,
     ezp\Persistence\Content\Criterion\LogicalAnd,
     ezp\Persistence\Content\Criterion\Operator,
-    ezp\Persistence\Content\FieldValue,
     ezp\Base\Exception\NotFound,
     Exception;
 
@@ -107,16 +106,6 @@ class SearchHandler extends Handler
                 ),
             )
         );
-
-        // Fix field values
-        foreach ( $list as $content )
-        {
-            foreach ( $content->version->fields as $field )
-            {
-                $fieldValue = new FieldValue( array( 'data' => $field->value ) );
-                $field->value = $fieldValue;
-            }
-        }
 
         $result = new Result();
         $result->count = count( $list );

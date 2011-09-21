@@ -17,6 +17,7 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Persistence\Content\Criterion\Operator,
     ezp\Persistence\Content\FieldValue,
+    ezp\Persistence\Content\FieldType\Factory,
     ezp\Content,
     ezp\Content\Version,
     ezp\Base\Exception\NotFound,
@@ -80,24 +81,20 @@ class ContentHandler implements ContentHandlerInterface
         );
         foreach ( $content->fields as $field )
         {
-            $fieldVo = $this->backend->create(
+            $version->fields[] = $this->backend->create(
                 'Content\\Field',
                 array(
                     'versionNo' => $version->versionNo,
                     // Using internal _contentId since it's not directly exposed by Persistence
                     '_contentId' => $contentObj->id,
-                    'value' => $field->value->data
+                    'value' => new FieldValue(
+                        array(
+                            'data' => $field->value->data,
+                            'sortKey' => array( 'sort_key_string' => $field->value->sortKey )
+                        )
+                    )
                 ) + (array)$field
             );
-
-            // Fix value in $fieldVo as it must be a FieldValue object
-            $fieldVo->value = new FieldValue(
-                array(
-                    'data' => $fieldVo->value,
-                    'sortKey' => array( 'sort_key_string' => $field->value->sortKey )
-                )
-            );
-            $version->fields[] = $fieldVo;
         }
         $contentObj->version = $version;
 
@@ -154,10 +151,6 @@ class ContentHandler implements ContentHandlerInterface
             $fieldVo = $this->backend->create(
                 'Content\\Field',
                 array( 'versionNo' => $newVersionNo, '_contentId' => $contentId ) + (array)$field
-            );
-            // Fix value in $fieldVo as it must be a FieldValue object
-            $fieldVo->value = new FieldValue(
-                array( 'data' => $fieldVo->value )
             );
             $newVersion->fields[] = $fieldVo;
         }
@@ -249,23 +242,14 @@ class ContentHandler implements ContentHandlerInterface
         }
 
         // Associate last version's fields
-        $aFields = array();
-        foreach ( $this->backend->find(
-            'Content\\Field',
-            array(
-                '_contentId' => $contentObj->id,
-                'versionNo' => $currentVersionNo
-            )
-        ) as $fieldVo )
-        {
-            // Fix value in $fieldVo as it must be a FieldValue object
-            $fieldVo->value = new FieldValue(
-                array( 'data' => $fieldVo->value )
-            );
-            $aFields[] = $fieldVo;
-        }
         // @todo: Throw NotFound if no fields at all ?
-        $contentObj->version->fields = $aFields;
+        $contentObj->version->fields = $this->backend->find(
+            "Content\\Field",
+            array(
+                "_contentId" => $contentObj->id,
+                "versionNo" => $currentVersionNo
+            )
+        );
 
         return $contentObj;
     }
@@ -280,14 +264,10 @@ class ContentHandler implements ContentHandlerInterface
             return null;
 
         $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id, 'versionNo' => $version ) );
-        $versions[0]->fields = $this->backend->find( 'Content\\Field', array( '_contentId' => $content->id,
-                                                                              'versionNo' => $version ) );
-
-        foreach ( $versions[0]->fields as $field )
-        {
-            $fieldVo = new FieldValue( array( 'data' => $field->value ) );
-            $field->value = $fieldVo;
-        }
+        $versions[0]->fields = $this->backend->find( 'Content\\Field', array(
+            "_contentId" => $content->id,
+            "versionNo" => $version )
+        );
 
         $content->version = $versions[0];
         $content->locations = $this->backend->find( 'Content\\Location', array( 'contentId' => $content->id  ) );

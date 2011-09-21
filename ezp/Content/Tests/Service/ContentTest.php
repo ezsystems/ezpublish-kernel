@@ -432,7 +432,7 @@ class ContentTest extends BaseServiceTest
             $fieldVo = $field->getState( 'properties' );
             $copyFieldVo = $copyVersion->fields[$identifier]->getState( 'properties' );
             self::assertSame( $fieldVo->type, $copyFieldVo->type, "Field type must be the same for copy" );
-            self::assertSame( $fieldVo->value->data, $copyFieldVo->value->data, "Field value must be the same for copy" );
+            self::assertEquals( $fieldVo->value->data, $copyFieldVo->value->data, "Field value must be the same for copy" );
             self::assertSame( $fieldVo->language, $copyFieldVo->language, "Field language must be the same for copy" );
             self::assertSame( $fieldVo->versionNo, $copyFieldVo->versionNo, "Field version number must be the same for copy" );
         }

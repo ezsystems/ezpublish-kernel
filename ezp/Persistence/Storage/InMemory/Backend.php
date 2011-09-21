@@ -11,6 +11,8 @@ namespace ezp\Persistence\Storage\InMemory;
 use ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\NotFound,
+    ezp\Content\FieldType\Factory,
+    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\ValueObject;
 
 /**
@@ -396,7 +398,23 @@ class Backend
         foreach ( $obj as $prop => &$value )
         {
             if ( isset( $data[$prop] ) )
-                $value = $data[$prop];
+            {
+                if ( $type === "Content\\Field" && $prop === "value" && ! $data["value"] instanceof FieldValue )
+                {
+                    $fieldValueClassName = Factory::getFieldTypeNamespace( $obj->type ) . "\\Value";
+                    $fieldTypeValue = new $fieldValueClassName;
+                    foreach ( $data["value"] as $fieldValuePropertyName => $fieldValuePropertyValue )
+                    {
+                        $fieldTypeValue->$fieldValuePropertyName = $fieldValuePropertyValue;
+                    }
+                    
+                    $value = new FieldValue( array( "data" => $fieldTypeValue ) );
+                }
+                else
+                {
+                    $value = $data[$prop];
+                }
+            }
         }
         return $this->joinToValue( $obj, $joinInfo );
     }

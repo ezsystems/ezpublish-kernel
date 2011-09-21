@@ -17,14 +17,6 @@ use ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 interface Value
 {
     /**
-     * Initializes the field value with $value object coming from persistence layer.
-     *
-     * @param \ezp\Persistence\Content\FieldValue $value
-     * @return \ezp\Content\FieldType\Value Instance of the field value
-     */
-    public static function build( PersistenceFieldValue $value );
-
-    /**
      * Initializes the field value with a simple string.
      * It's up to the field value to define $stringValue format.
      * If $stringValue format is not supported, an {@link \ezp\Base\Exception\InvalidArgumentValue} exception should be thrown.

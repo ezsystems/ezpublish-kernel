@@ -36,14 +36,6 @@ class Value implements ValueInterface
     /**
      * @see \ezp\Content\FieldType\Value
      */
-    public static function build( PersistenceFieldValue $vo )
-    {
-        return new static( $vo->data['value'] );
-    }
-
-    /**
-     * @see \ezp\Content\FieldType\Value
-     */
     public static function fromString( $stringValue )
     {
         return new static( $stringValue );

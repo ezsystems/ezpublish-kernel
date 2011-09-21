@@ -12,7 +12,6 @@ use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Country\Type as Country,
     ezp\Content\FieldType\Country\Value as CountryValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -76,18 +75,17 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Country\Type::setFieldValue
+     * @covers \ezp\Content\FieldType\Country\Type::toFieldValue
      */
-    public function testSetFieldValue()
+    public function testToFieldValue()
     {
         $countries = array( "Belgium", "Norway" );
         $ft = new Country();
-        $ft->setValue( new CountryValue( $countries ) );
+        $ft->setValue( $fv = new CountryValue( $countries ) );
 
-        $fieldValue = new FieldValue();
-        $ft->setFieldValue( $fieldValue );
+        $fieldValue = $ft->toFieldValue();
 
-        self::assertSame( array( "values" => $countries ), $fieldValue->data );
+        self::assertSame( $fv, $fieldValue->data );
         self::assertNull( $fieldValue->externalData );
     }
 

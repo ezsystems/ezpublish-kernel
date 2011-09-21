@@ -92,15 +92,4 @@ class Type extends Complex
             "values" => $this->getValue()->values,
         );
     }
-
-    /**
-     * Returns the external value of the field type in a format suitable for packing it
-     * in a FieldValue.
-     *
-     * @return null|array
-     * @todo Shouldn't it return a struct with appropriate properties instead of an array ?
-     */
-    public function getValueExternalData()
-    {
-    }
 }

@@ -17,6 +17,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\Criterion\ContentId,
     ezp\Base\Exception\NotFound,
     ezp\Content\Relation,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
@@ -63,7 +64,7 @@ class ContentHandlerRelationTest extends HandlerTest
                 // FieldValue object compatible with ezstring
                 'value' => new FieldValue(
                     array(
-                        'data' => array( 'value' => 'Welcome' )
+                        'data' => new TextLineValue( 'Welcome' )
                     )
                 ),
                 'language' => 'eng-GB',

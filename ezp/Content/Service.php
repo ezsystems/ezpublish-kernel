@@ -83,7 +83,7 @@ class Service extends BaseService
         foreach ( $content->getFields() as $field )
         {
             $fieldStruct = $field->getState( 'properties' );
-            $fieldStruct->value = $field->fieldDefinition->type->setFieldValue( new FieldValue );
+            $fieldStruct->value = $field->fieldDefinition->type->toFieldValue();
             $struct->fields[] = $fieldStruct;
         }
         $vo = $this->handler->contentHandler()->create( $struct );
@@ -110,7 +110,7 @@ class Service extends BaseService
         foreach ( $content->getFields() as $field )
         {
             $fieldStruct = $field->getState( 'properties' );
-            $fieldStruct->value = $field->fieldDefinition->type->setFieldValue( new FieldValue );
+            $fieldStruct->value = $field->fieldDefinition->type->toFieldValue();
             $struct->fields[] = $fieldStruct;
         }
 
@@ -204,7 +204,7 @@ class Service extends BaseService
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
                     $fields[$identifier] = $field->setState( array( 'properties' => $voField ) );
-                    $fields[$identifier]->setValue( FieldTypeFactory::buildValue( $voField->type, $voField->value ) );
+                    $fields[$identifier]->setValue( $voField->value->data );
                     continue 2;
                 }
 
@@ -484,7 +484,7 @@ class Service extends BaseService
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
                     $field->setState( array( 'properties' => $voField ) );
-                    $field->setValue( FieldTypeFactory::buildValue( $voField->type, $voField->value ) );
+                    $field->setValue( $voField->value->data );
                     continue 2;
                 }
 
