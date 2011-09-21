@@ -256,11 +256,6 @@ class Repository
         return $this->service( 'ezp\\Content\\Section\\Service' );
     }
 
-    public function getPublishingService()
-    {
-        return $this->service( 'ezp\\Content\\Publishing\\Service' );
-    }
-
     /**
      * Get User Service
      *
