@@ -222,26 +222,6 @@ abstract class FieldType implements Observer
     abstract protected function getSortInfo();
 
     /**
-     * Returns the value of the field type in a format suitable for packing it
-     * in a FieldValue.
-     * Return value is a hash where key is 'value' and value is current field value to be stored.
-     * Here some serialization/format can be done in order to store complex values
-     * (through XML, php serialize, or whatever solution that can be stored as string)
-     *
-     * <code>
-     * protected function getValueData()
-     * {
-     *     // Example for a text line type:
-     *     return array( 'value' => $this->getValue()->text );
-     * }
-     * </code>
-     *
-     * @abstract
-     * @return array
-     */
-    abstract protected function getValueData();
-
-    /**
      * Used by the FieldDefinition to populate the fieldConstraints field.
      *
      * If validator is not allowed for a given field type, no data from that

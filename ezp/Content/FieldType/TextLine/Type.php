@@ -65,15 +65,4 @@ class Type extends FieldType
     {
         return array( 'sort_key_string' => $this->getValue()->text );
     }
-
-    /**
-     * Returns the value of the field type in a format suitable for packing it
-     * in a FieldValue.
-     *
-     * @return array
-     */
-    protected function getValueData()
-    {
-        return array( 'value' => $this->getValue()->text );
-    }
 }

@@ -29,7 +29,7 @@ class Value implements ValueInterface
      *
      * @param array $authors
      */
-    public function __construct( $authors = null )
+    public function __construct( array $authors = null )
     {
         if ( $authors !== null )
             $this->authors = $authors;
