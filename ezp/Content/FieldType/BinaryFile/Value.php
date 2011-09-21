@@ -34,7 +34,7 @@ class Value implements ValueInterface
     /**
      * @var \ezp\Content\FieldType\BinaryFile\Handler
      */
-    protected $handler;
+    public $handler;
 
     /**
      * Construct a new Value object and initialize its $binaryFile
