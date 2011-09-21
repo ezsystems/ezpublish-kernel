@@ -82,7 +82,7 @@ class FieldDefinition extends Model
     /**
      * @var \ezp\Content\FieldType\Validator[]
      */
-    protected $validators = array();
+    protected $validators;
 
     /**
      * Constructor, sets up value object, fieldType string and attach $contentType
@@ -128,11 +128,19 @@ class FieldDefinition extends Model
     public function addValidator( Validator $validator )
     {
         // We'll initialize the map with constraints if it does not already exist.
-        if ( empty( $this->fieldTypeConstraints ) )
+        if ( !isset( $this->properties->fieldTypeConstraints ) )
         {
-            $this->fieldTypeConstraints = array();
+            $this->properties->fieldTypeConstraints = array();
+            $this->validators = array();
         }
+        else
+        {
+            if ( !isset( $this->validators ) )
+                $this->validators = $this->getValidators();
+        }
+
         $this->type->fillConstraintsFromValidator( $this, $validator );
+        $this->validators[] = $validator;
     }
 
     /**
@@ -164,13 +172,21 @@ class FieldDefinition extends Model
      */
     public function getValidators()
     {
-        if ( empty( $this->validators ) )
+        if ( !isset( $this->validators ) )
         {
-            foreach ( $this->properties->fieldTypeConstraints as $validatorClass => $constraints )
+            $this->validators = array();
+            if ( isset( $this->properties->fieldTypeConstraints ) )
             {
-                $validator = new $validatorClass;
-                $validator->initializeWithConstraints( $constraints );
-                $this->validators[] = $validator;
+                foreach ( $this->properties->fieldTypeConstraints as $validatorClass => $constraints )
+                {
+                    $validator = new $validatorClass;
+                    $validator->initializeWithConstraints( $constraints );
+                    $this->validators[] = $validator;
+                }
+            }
+            else
+            {
+                $this->properties->fieldTypeConstraints = array();
             }
         }
 
