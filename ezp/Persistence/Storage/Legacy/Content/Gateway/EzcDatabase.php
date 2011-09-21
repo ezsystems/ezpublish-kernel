@@ -361,7 +361,7 @@ class EzcDatabase extends Gateway
      */
     public function updateField( Field $field, StorageFieldValue $value )
     {
-        // Note, no need to care for language_id here, since Content->$alwaysAvailable 
+        // Note, no need to care for language_id here, since Content->$alwaysAvailable
         // cannot change on update
         $q = $this->dbHandler->createUpdateQuery();
         $q->update(
@@ -488,7 +488,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @return int[]
-     * @TODO This method does hardly belong here. Maybe put it into 
+     * @TODO This method does hardly belong here. Maybe put it into
      *       Location\Handler? But that hinders inter-operability.
      */
     public function getAllLocationIds( $contentId )

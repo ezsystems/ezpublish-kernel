@@ -75,7 +75,7 @@ interface Handler
      * The $status can be one of STATUS_DRAFT, STATUS_PUBLISHED, STATUS_ARCHIVED
      * @todo Is this supposed to be constants from Content or Version? They differ..
      *
-     * @param int $contentId
+     * @param mixed $contentId
      * @param int $status
      * @param int $version
      * @see ezp\Content

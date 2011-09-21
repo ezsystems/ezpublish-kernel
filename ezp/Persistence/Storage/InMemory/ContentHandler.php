@@ -63,6 +63,8 @@ class ContentHandler implements ContentHandlerInterface
                 'ownerId' => $content->ownerId,
                 'status' => Content::STATUS_DRAFT,
                 'currentVersionNo' => 1,
+                'modified' => $content->modified,
+                'published' => $content->published,
             )
         );
         $version = $this->backend->create(

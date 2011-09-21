@@ -22,6 +22,7 @@ use ezp\Base\Model,
  * @property-read mixed $contentId
  * @property-read int $status One of the STATUS_* constants
  * @property-read \ezp\Content $content
+ * @property mixed $initialLanguageId
  * @property int $creatorId
  * @property int $created
  * @property int $modified
@@ -50,8 +51,9 @@ class Version extends Model
         'creatorId' => true,
         'created' => true,
         'modified' => true,
-        "status" => false,
-        "contentId" => false,
+        'status' => false,
+        'contentId' => false,
+        'initialLanguageId' => false,
     );
 
     /**
