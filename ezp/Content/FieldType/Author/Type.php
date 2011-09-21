@@ -43,6 +43,7 @@ class Type extends FieldType
      * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
      * @param mixed $inputValue
      * @return mixed
+     * @todo There should not be any XML parsing here
      */
     protected function canParseValue( BaseValue $inputValue )
     {
