@@ -47,6 +47,59 @@ class UserHandlerTest extends HandlerTest
     }
 
     /**
+     * Test loadByLogin function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadByLogin
+     */
+    public function testLoadByLogin()
+    {
+        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'anonymous' );
+        $this->assertEquals( 1, count( $users ) );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User', $users[0] );
+        $this->assertEquals( 10, $users[0]->id );
+        $this->assertEquals( 'nospam@ez.no', $users[0]->email );
+        $this->assertEquals( 'anonymous', $users[0]->login );
+
+        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'anonymous', true );
+        $this->assertEquals( 1, count( $users ) );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User', $users[0] );
+        $this->assertEquals( 10, $users[0]->id );
+        $this->assertEquals( 'nospam@ez.no', $users[0]->email );
+        $this->assertEquals( 'anonymous', $users[0]->login );
+    }
+
+    /**
+     * Test loadByLogin function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadByLogin
+     */
+    public function testLoadByLoginWithEmail()
+    {
+        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'nospam@ez.no' );
+        $this->assertEquals( 0, count( $users ) );
+
+        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'nospam@ez.no', true );
+        $this->assertEquals( 1, count( $users ) );
+        $this->assertInstanceOf( 'ezp\\Persistence\\User', $users[0] );
+        $this->assertEquals( 10, $users[0]->id );
+        $this->assertEquals( 'nospam@ez.no', $users[0]->email );
+        $this->assertEquals( 'anonymous', $users[0]->login );
+    }
+
+    /**
+     * Test loadByLogin function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadByLogin
+     */
+    public function testLoadByLoginUnExistingUser()
+    {
+        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'kamlase' );
+        $this->assertEquals( array(), $users );
+        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'kamlase@ez.no', true );
+        $this->assertEquals( array(), $users );
+    }
+
+    /**
      * Test create function
      *
      * @covers ezp\Persistence\Storage\InMemory\UserHandler::create
