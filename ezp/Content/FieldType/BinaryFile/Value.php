@@ -37,7 +37,13 @@ class Value implements ValueInterface
     protected $handler;
 
     /**
-     * Construct a new Value object and initialize its $binaryFile
+     * Construct a new Value object.
+     * To affect a BinaryFile object to the $file property, use the handler:
+     * <code>
+     * use \ezp\Content\FieldType\BinaryFile;
+     * $binaryValue = new BinaryFile\Value;
+     * $binaryValue->file = $binaryValue->getHandler()->createFromLocalPath( '/path/to/local/file.txt' );
+     * </code>
      */
     public function __construct()
     {
