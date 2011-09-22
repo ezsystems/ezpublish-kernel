@@ -66,7 +66,6 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers ezp\Content\FieldType::setValue
      * @group fieldType
      * @group textLine
      * @covers \ezp\Content\FieldType\TextLine\Type::canParseValue
