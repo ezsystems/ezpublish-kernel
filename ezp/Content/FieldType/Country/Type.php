@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\FieldType\Country;
-use ezp\Content\FieldType\Complex,
+use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Content\FieldType\Country\Value as CountryValue,
     ezp\Base\Exception\BadFieldTypeInput,
@@ -20,7 +20,7 @@ use ezp\Content\FieldType\Complex,
  *
  * This field type represents a simple string.
  */
-class Type extends Complex
+class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezcountry";
     const IS_SEARCHABLE = true;
@@ -57,17 +57,6 @@ class Type extends Complex
     }
 
     /**
-     * Returns a handler, aka. a helper object which aids in the manipulation of
-     * complex field type values.
-     *
-     * @return void|ezp\Content\FieldType\Handler
-     */
-    public function getHandler()
-    {
-        return new Handler();
-    }
-
-    /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @todo Sort seems to not be supported by this FieldType, is this handled correctly?
@@ -77,19 +66,6 @@ class Type extends Complex
     {
         return array(
             'sort_key_string' => implode( ",", $this->getValue()->values )
-        );
-    }
-
-    /**
-     * Returns the value of the field type in a format suitable for packing it
-     * in a FieldValue.
-     *
-     * @return array
-     */
-    protected function getValueData()
-    {
-        return array(
-            "values" => $this->getValue()->values,
         );
     }
 }

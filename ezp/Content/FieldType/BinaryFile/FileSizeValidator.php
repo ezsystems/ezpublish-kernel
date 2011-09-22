@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType\Validator;
+namespace ezp\Content\FieldType\BinaryFile;
 use ezp\Content\FieldType\Validator,
-    ezp\Content\FieldType\Value;
+    ezp\Content\FieldType\Value as BaseValue;
 
 /**
  * Validator for checking max. size of binary files.
@@ -28,7 +28,7 @@ class FileSizeValidator extends Validator
      * @param \ezp\Content\FieldType\BinaryFile\Value $value
      * @return bool
      */
-    public function validate( Value $value )
+    public function validate( BaseValue $value )
     {
         $isValid = true;
 

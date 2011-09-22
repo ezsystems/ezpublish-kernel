@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\FieldType\Author;
-use ezp\Content\FieldType\Complex,
+use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Base\Exception\BadFieldTypeInput,
     DOMDocument;
@@ -19,7 +19,7 @@ use ezp\Content\FieldType\Complex,
  * Field type representing a list of authors, consisting of author name, and
  * author email.
  */
-class Type extends Complex
+class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezauthor";
     const IS_SEARCHABLE = true;
@@ -43,6 +43,7 @@ class Type extends Complex
      * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
      * @param mixed $inputValue
      * @return mixed
+     * @todo There should not be any XML parsing here
      */
     protected function canParseValue( BaseValue $inputValue )
     {
@@ -52,17 +53,6 @@ class Type extends Complex
             throw new BadFieldTypeInput( $inputValue, __CLASS__ );
         }
         return $inputValue;
-    }
-
-    /**
-     * Returns a handler, aka. a helper object which aids in the manipulation of
-     * complex field type values.
-     *
-     * @return void|ezp\Content\FieldType\Handler
-     */
-    public function getHandler()
-    {
-        return new Handler();
     }
 
     /**
@@ -76,16 +66,5 @@ class Type extends Complex
             'sort_key_string' => '',
             'sort_key_int' => 0
         );
-    }
-
-    /**
-     * Returns the value of the field type in a format suitable for packing it
-     * in a FieldValue.
-     *
-     * @return array
-     */
-    protected function getValueData()
-    {
-        return array( 'value' => $this->getValue() );
     }
 }

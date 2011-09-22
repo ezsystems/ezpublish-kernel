@@ -24,7 +24,9 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezstring";
     const IS_SEARCHABLE = true;
 
-    protected $allowedValidators = array( 'StringLengthValidator' );
+    protected $allowedValidators = array(
+        'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator'
+    );
 
     /**
      * Returns the fallback default value of field type when no such default
@@ -64,16 +66,5 @@ class Type extends FieldType
     protected function getSortInfo()
     {
         return array( 'sort_key_string' => $this->getValue()->text );
-    }
-
-    /**
-     * Returns the value of the field type in a format suitable for packing it
-     * in a FieldValue.
-     *
-     * @return array
-     */
-    protected function getValueData()
-    {
-        return array( 'value' => $this->getValue()->text );
     }
 }

@@ -10,11 +10,13 @@
 namespace ezp\Content;
 use ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Value,
+    ezp\Content\FieldType\Validator,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
     ezp\Content\Type\FieldDefinition,
     ezp\Base\Observer,
     ezp\Base\Observable,
-    ezp\Base\Exception\InvalidArgumentValue;
+    ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\InvalidArgumentType;
 
 /**
  * Base class for field types, the most basic storage unit of data inside eZ Publish.
@@ -57,8 +59,13 @@ abstract class FieldType implements Observer
 
     /**
      * Validators which are supported for this field type.
-     *
-     * Key is the name of supported validators, value is an array of stored settings.
+     * Full Qualified Class Name should be registered here.
+     * Example:
+     * <code>
+     * protected $allowedValidators = array(
+     *     "ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator"
+     * );
+     * </code>
      *
      * @var array
      */
@@ -222,26 +229,6 @@ abstract class FieldType implements Observer
     abstract protected function getSortInfo();
 
     /**
-     * Returns the value of the field type in a format suitable for packing it
-     * in a FieldValue.
-     * Return value is a hash where key is 'value' and value is current field value to be stored.
-     * Here some serialization/format can be done in order to store complex values
-     * (through XML, php serialize, or whatever solution that can be stored as string)
-     *
-     * <code>
-     * protected function getValueData()
-     * {
-     *     // Example for a text line type:
-     *     return array( 'value' => $this->getValue()->text );
-     * }
-     * </code>
-     *
-     * @abstract
-     * @return array
-     */
-    abstract protected function getValueData();
-
-    /**
      * Used by the FieldDefinition to populate the fieldConstraints field.
      *
      * If validator is not allowed for a given field type, no data from that
@@ -255,15 +242,15 @@ abstract class FieldType implements Observer
      * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */
-     public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, $validator )
+     public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, Validator $validator )
      {
          $validatorClass = get_class( $validator );
-         if ( in_array( $validatorClass, $this->allowedValidators() ) )
-         {
-             $fieldDefinition->fieldTypeConstraints = array(
-                 $validatorClass => $validator->getValidatorConstraints()
-             ) + $fieldDefinition->fieldTypeConstraints;
-         }
+         if ( !in_array( $validatorClass, $this->allowedValidators() ) )
+             throw new InvalidArgumentType( '$validator', implode( ', ', $this->allowedValidators() ) );
+
+         $fieldDefinition->fieldTypeConstraints = array(
+             $validatorClass => $validator->getValidatorConstraints()
+         ) + $fieldDefinition->fieldTypeConstraints;
      }
 
      /**

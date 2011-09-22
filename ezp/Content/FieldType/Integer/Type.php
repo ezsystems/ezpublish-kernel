@@ -20,10 +20,12 @@ use ezp\Content\FieldType,
  */
 class Type extends FieldType
 {
-    const FIELD_TYPE_IDENTIFIER = "ezinteger";
+    const FIELD_TYPE_IDENTIFIER = 'ezinteger';
     const IS_SEARCHABLE = true;
 
-    protected $allowedValidators = array( "IntegerValueValidator" );
+    protected $allowedValidators = array(
+        'ezp\\Content\\FieldType\\Integer\\IntegerValueValidator'
+    );
 
     /**
      * Returns the fallback default value of field type when no such default
@@ -62,16 +64,5 @@ class Type extends FieldType
     protected function getSortInfo()
     {
         return array( 'sort_key_int' => $this->getValue()->value );
-    }
-
-    /**
-     * Returns the value of the field type in a format suitable for packing it
-     * in a FieldValue.
-     *
-     * @return array
-     */
-    protected function getValueData()
-    {
-        return array( 'value' => $this->getValue()->value );
     }
 }

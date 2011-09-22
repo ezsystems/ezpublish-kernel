@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\FieldType\Validator;
+namespace ezp\Content\FieldType\TextLine;
 use ezp\Content\FieldType\Validator,
-    ezp\Content\FieldType\Value;
+    ezp\Content\FieldType\Value as BaseValue;
 
 /**
  * Validator for checking min. and max. length of strings.
@@ -32,7 +32,7 @@ class StringLengthValidator extends Validator
      * @param \ezp\Content\FieldType\TextLine\Value $value
      * @return bool
      */
-    public function validate( Value $value )
+    public function validate( BaseValue $value )
     {
         $isValid = true;
 
