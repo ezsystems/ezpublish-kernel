@@ -281,8 +281,8 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->assertStringStartsWith( 'folder_', $obj->identifier );
         $this->assertEquals( $userId, $obj->creatorId );
         $this->assertEquals( $userId, $obj->modifierId );
-        $this->assertEquals( $time, $obj->created );//ehm
-        $this->assertEquals( $time, $obj->modified );//ehm
+        $this->assertGreaterThanOrEqual( $time, $obj->created );
+        $this->assertGreaterThanOrEqual( $time, $obj->modified );
         $this->assertEquals( Type::STATUS_DRAFT, $obj->status );
         $this->assertGreaterThan( $original->created, $obj->created );
         $this->assertEquals( 2, count( $obj->fieldDefinitions ) );
