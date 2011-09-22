@@ -172,20 +172,19 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldValue()
     {
-        $this->markTestIncomplete( "@todo This test must be redone!" );
-        $data = array( 'value' => "The Force is strong with him -- Darth Vader" );
-        $this->stub->expects( $this->once() )
-                   ->method( 'getValueData' )
-                   ->will( $this->returnValue( $data ) );
-
+        $fieldValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
         $sortingInfo = array( 'sort_key_string' => "The Force is strong" );
+        $this->stub->expects( $this->once() )
+                   ->method( 'canParseValue' )
+                   ->will( $this->returnArgument( 0 ) );
+        $this->stub->setValue( $fieldValue );
         $this->stub->expects( $this->once() )
                    ->method( 'getSortInfo' )
                    ->will( $this->returnValue( $sortingInfo ) );
 
         $fieldVo = $this->stub->toFieldValue();
         self::assertInstanceOf( "ezp\\Persistence\\Content\\FieldValue", $fieldVo );
-        self::assertSame( $data, $fieldVo->data );
+        self::assertEquals( $fieldValue, $fieldVo->data );
         self::assertSame( $sortingInfo, $fieldVo->sortKey );
     }
 
