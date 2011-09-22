@@ -79,6 +79,13 @@ class RepositoryHandler implements HandlerInterface
     protected $locationHandler;
 
     /**
+     * Location gateway
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     */
+    protected $locationGateway;
+
+    /**
      * Location mapper
      *
      * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
@@ -247,7 +254,7 @@ class RepositoryHandler implements HandlerInterface
         {
             $this->contentHandler = new Content\Handler(
                 $this->getContentGateway(),
-                $this->locationHandler(),
+                $this->getLocationGateway(),
                 new Content\Mapper(
                     $this->getLocationMapper(),
                     $this->getFieldValueConverterRegistry()
@@ -528,11 +535,25 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->locationHandler ) )
         {
             $this->locationHandler = new LocationHandler(
-                new Content\Location\Gateway\EzcDatabase( $this->getDatabase() ),
+                $this->getLocationGateway(),
                 $this->getLocationMapper()
             );
         }
         return $this->locationHandler;
+    }
+
+    /**
+     * Returns a location gateway
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase
+     */
+    protected function getLocationGateway()
+    {
+        if ( !isset( $this->locationGateway ) )
+        {
+            $this->locationGateway = new Content\Location\Gateway\EzcDatabase( $this->getDatabase() );
+        }
+        return $this->locationGateway;
     }
 
     /**
