@@ -69,7 +69,7 @@ class Service extends BaseService
     }
 
     /**
-     * Load a User object by login and password
+     * Load a User object by login and password if user is enabled
      *
      * @param string $login
      * @param string $password
@@ -87,7 +87,11 @@ class Service extends BaseService
 
         foreach ( $users as $user )
         {
-            if ( $user->passwordHash == self::createHash( $user->login, $password, $user->hashAlgorithm ) )
+            if ( !$user->isEnabled )
+            {
+                continue;
+            }
+            elseif ( $user->passwordHash == self::createHash( $user->login, $password, $user->hashAlgorithm ) )
             {
                 $content = $this->repository->getContentService()->load( $user->id );
                 return $this->buildUser( $user, $content );
