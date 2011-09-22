@@ -19,7 +19,7 @@ use ezp\Base\Collection\Type as TypeCollection,
     ezp\Content,
     ezp\Content\Type,
     ezp\Content\Type\FieldDefinition,
-    ezp\User\GroupAbleInterface;
+    ezp\User\Groupable;
 
 /**
  * This class represents a Group item
@@ -31,7 +31,7 @@ use ezp\Base\Collection\Type as TypeCollection,
  * @property string $name
  * @property string description
  */
-class Group implements GroupAbleInterface, ModelInterface, Observable
+class Group implements Groupable, ModelInterface, Observable
 {
     /**
      * @var array Readable of properties on this object (and writable if value is true)

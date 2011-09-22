@@ -24,7 +24,7 @@ use ezp\Base\Configuration,
     ezp\User,
     ezp\User\Exception\FailedLogin,
     ezp\User\Group,
-    ezp\User\GroupAbleInterface,
+    ezp\User\Groupable,
     ezp\User\Role,
     ezp\User\Policy,
     ezp\Persistence\User as UserValueObject,
@@ -456,7 +456,7 @@ class Service extends BaseService
      * @param \ezp\User\Role $role
      * @throws \ezp\Base\Exception\InvalidArgumentValue If group does not contain role
      */
-    public function unAssignRole( GroupAbleInterface $group, Role $role )
+    public function unAssignRole( Groupable $group, Role $role )
     {
         $this->handler->userHandler()->unAssignRole( $group->id, $role->id );
 

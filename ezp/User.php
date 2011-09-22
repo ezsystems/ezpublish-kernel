@@ -12,7 +12,7 @@ use ezp\Base\Model,
     ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Persistence\User as UserValue,
-    ezp\User\GroupAbleInterface;
+    ezp\User\Groupable;
 
 /**
  * This class represents a User item
@@ -26,7 +26,7 @@ use ezp\Base\Model,
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
-class User extends Model implements GroupAbleInterface, ModelDefinition
+class User extends Model implements Groupable, ModelDefinition
 {
     /**
      * @var int MD5 of password, not recommended
