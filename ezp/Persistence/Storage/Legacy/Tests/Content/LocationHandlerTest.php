@@ -214,7 +214,13 @@ class LocationHandlerTest extends TestCase
         $this->locationGateway
             ->expects( $this->once() )
             ->method( 'create' )
-            ->with( $createStruct, $parentInfo );
+            ->with( $createStruct, $parentInfo )
+            ->will( $this->returnValue( $createStruct ) );
+
+        $this->locationGateway
+            ->expects( $this->once() )
+            ->method( 'createNodeAssignment' )
+            ->with( $createStruct, 77, 2 );
 
         $handler->create( $createStruct );
     }

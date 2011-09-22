@@ -490,7 +490,7 @@ class EzpDatabaseTest extends TestCase
 
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->create(
+        $handler->createNodeAssignment(
             new CreateStruct(
                 array(
                     'contentId' => 68,
@@ -503,11 +503,8 @@ class EzpDatabaseTest extends TestCase
                     'sortOrder' => 1,
                 )
             ),
-            array(
-                'node_id' => '77',
-                'depth' => '2',
-                'path_string' => '/1/2/77/',
-            )
+            '77',
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
         );
 
         $query = $this->handler->createSelectQuery();

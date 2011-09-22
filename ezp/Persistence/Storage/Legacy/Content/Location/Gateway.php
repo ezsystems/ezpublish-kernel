@@ -123,6 +123,16 @@ abstract class Gateway
     abstract public function create( CreateStruct $createStruct, array $parentNode );
 
     /**
+     * Create an entry in the node assignment table
+     *
+     * @param CreateStruct $createStruct
+     * @param mixed $parentNodeId
+     * @param int $type
+     * @return void
+     */
+    abstract public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP );
+
+    /**
      * Updates an existing location.
      *
      * @param \ezp\Persistence\Content\Location\UpdateStruct $location

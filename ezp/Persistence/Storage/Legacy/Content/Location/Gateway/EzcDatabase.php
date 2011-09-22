@@ -170,34 +170,6 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Update node assignement table
-     *
-     * @param mixed $nodeId
-     * @return void
-     */
-    public function updateNodeAssignement( $contentObjectId, $newParent )
-    {
-        $query = $this->handler->createUpdateQuery();
-        $query
-            ->update( $this->handler->quoteTable( 'eznode_assignment' ) )
-            ->set(
-                $this->handler->quoteColumn( 'parent_node' ),
-                $query->bindValue( $newParent )
-            )
-            ->set(
-                $this->handler->quoteColumn( 'op_code' ),
-                $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_MOVE )
-            )
-            ->where(
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'contentobject_id' ),
-                    $query->bindValue( $contentObjectId )
-                )
-            );
-        $query->prepare()->execute();
-    }
-
-    /**
      * Sets a location to be hidden, and it self + all children to invisible.
      *
      * @param string $pathString
@@ -499,6 +471,19 @@ class EzcDatabase extends Gateway
             );
         $query->prepare()->execute();
 
+        return $location;
+    }
+
+    /**
+     * Create an entry in the node assignment table
+     *
+     * @param CreateStruct $createStruct
+     * @param mixed $parentNodeId
+     * @param int $type
+     * @return void
+     */
+    public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP )
+    {
         $query = $this->handler->createInsertQuery();
         $query
             ->insertInto( $this->handler->quoteTable( 'eznode_assignment' ) )
@@ -519,10 +504,10 @@ class EzcDatabase extends Gateway
                 $query->bindValue( 0, null, \PDO::PARAM_INT ) // Changed by the business layer, later
             )->set(
                 $this->handler->quoteColumn( 'op_code' ),
-                $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP, null, \PDO::PARAM_INT )
+                $query->bindValue( $type, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'parent_node' ),
-                $query->bindValue( $parentNode['node_id'], null, \PDO::PARAM_INT )
+                $query->bindValue( $parentNodeId, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'parent_remote_id' ),
                 $query->bindValue( '' )
@@ -537,8 +522,34 @@ class EzcDatabase extends Gateway
                 $query->bindValue( 0, null, \PDO::PARAM_INT ) // eZContentObjectTreeNode::SORT_ORDER_DESC
             );
         $query->prepare()->execute();
+    }
 
-        return $location;
+    /**
+     * Update node assignement table
+     *
+     * @param mixed $nodeId
+     * @return void
+     */
+    public function updateNodeAssignement( $contentObjectId, $newParent )
+    {
+        $query = $this->handler->createUpdateQuery();
+        $query
+            ->update( $this->handler->quoteTable( 'eznode_assignment' ) )
+            ->set(
+                $this->handler->quoteColumn( 'parent_node' ),
+                $query->bindValue( $newParent )
+            )
+            ->set(
+                $this->handler->quoteColumn( 'op_code' ),
+                $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_MOVE )
+            )
+            ->where(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $contentObjectId )
+                )
+            );
+        $query->prepare()->execute();
     }
 
     /**
