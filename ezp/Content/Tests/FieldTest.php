@@ -17,7 +17,8 @@ use ezp\Content,
     ezp\Content\FieldType\Value as FieldValue,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Content\FieldType\TextLine\StringLengthValidator,
-    ezp\Content\FieldType\Keyword\Value as KeywordValue;
+    ezp\Content\FieldType\Keyword\Value as KeywordValue,
+    ReflectionObject;
 
 /**
  * Test case for ezp\Content\Field
@@ -133,9 +134,19 @@ And I will strike down upon thee with great vengeance and furious anger those wh
 And you will know My name is the Lord when I lay My vengeance upon thee.
 EOT;
         $value = new TextLineValue( $longPulpFictionQuote );
-        $validator = new StringLengthValidator();
-        $validator->maxStringLength = 100;
+        $validator = $this->getMockForAbstractClass( 'ezp\\Content\\FieldType\\Validator' );
+        $validator->expects( $this->once() )
+                  ->method( 'validate' )
+                  ->with( $value )
+                  ->will( $this->returnValue( false ) );
+
         $field = $this->content->fields['title'];
+        $fieldType = $field->getFieldDefinition()->getType();
+        $refType = new ReflectionObject( $fieldType );
+        $refAllowedValidators = $refType->getProperty( 'allowedValidators' );
+        $refAllowedValidators->setAccessible( true );
+        $refAllowedValidators->setValue( $fieldType, array( get_class( $validator ) ) );
+
         $field->fieldDefinition->addValidator( $validator );
         $field->setValue( $value );
     }
