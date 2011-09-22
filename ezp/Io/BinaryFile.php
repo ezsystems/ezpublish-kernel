@@ -52,4 +52,10 @@ class BinaryFile
      * @var string
      */
     public $uri;
+
+    /**
+     * Original file name
+     * @var string
+     */
+    public $originalFile;
 }
