@@ -57,6 +57,11 @@ class TextLine implements Converter
         {
             $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'];
         }
+
+        if ( $fieldDef->defaultValue->data instanceof TextLineValue )
+        {
+            $storageDef->dataText1 = $fieldDef->defaultValue->data->text;
+        }
     }
 
     /**
@@ -72,6 +77,11 @@ class TextLine implements Converter
             $fieldDef->fieldTypeConstraints = array(
                 self::STRING_LENGTH_VALIDATOR_FQN => array( 'maxStringLength' => $storageDef->dataInt1 ) );
         }
+
+        $defaultValue = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
+        $fieldDef->defaultValue = new FieldValue(
+            array( 'data' => new TextLineValue( $defaultValue ) )
+        );
     }
 
     /**
