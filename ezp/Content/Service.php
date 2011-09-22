@@ -404,7 +404,8 @@ class Service extends BaseService
         $updateStruct->id = $content->id;
         $updateStruct->userId = $version->creatorId;
         $updateStruct->versionNo = $version->versionNo;
-        // $struct->name = ... // @todo Get names using the appropriate call
+        // @todo Get names using the appropriate call
+        // $struct->name = ...
 
         $contentVo = $this->handler->contentHandler()->publish( $updateStruct );
 

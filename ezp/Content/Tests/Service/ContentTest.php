@@ -593,6 +593,7 @@ class ContentTest extends BaseServiceTest
     /**
      * Tests publishing of a version that doesn't have the DRAFT status
      * @expectedException \ezp\Base\Exception\Logic
+     * @covers \ezp\Content\Service::publish
      */
     public function testPublishNonDraft()
     {
@@ -604,6 +605,7 @@ class ContentTest extends BaseServiceTest
     /**
      * Tests publishing of a version that doesn't belong to the provided content
      * @expectedException \ezp\Base\Exception\Logic
+     * @covers \ezp\Content\Service::publish
      */
     public function testPublishContentVersionMismatch()
     {
@@ -619,6 +621,7 @@ class ContentTest extends BaseServiceTest
 
     /**
      * Tests publishing of a newly created content
+     * @covers \ezp\Content\Service::publish
      */
     public function testPublishNewContent()
     {
@@ -644,6 +647,7 @@ class ContentTest extends BaseServiceTest
 
     /**
      * Tests publishing of a new version of an existing content
+     * @covers \ezp\Content\Service::publish
      */
     public function testPublishNewVersion()
     {
