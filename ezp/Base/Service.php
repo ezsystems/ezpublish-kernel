@@ -14,7 +14,8 @@ use ezp\Base\Model,
     ezp\Base\Observer,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Persistence\Repository\Handler,
-    ezp\Persistence\ValueObject;
+    ezp\Persistence\ValueObject,
+    SplObjectStorage;
 
 /**
  * Abstract Repository Services
@@ -35,7 +36,7 @@ abstract class Service implements Observable
     /**
      * List of event listeners
      *
-     * @var \ezp\Base\Observer[]
+     * @var SplStorage[<event>]
      */
     private $observers = array();
 
@@ -137,13 +138,14 @@ abstract class Service implements Observable
      */
     public function attach( Observer $observer, $event = 'update' )
     {
-        if ( isset( $this->observers[$event] ) )
+        if ( !isset( $this->observers[$event] ) )
         {
-            $this->observers[$event][] = $observer;
+            $this->observers[$event] = new SplObjectStorage();
+            $this->observers[$event]->attach( $observer );
         }
         else
         {
-            $this->observers[$event] = array( $observer );
+            $this->observers[$event]->attach( $observer );
         }
         return $this;
     }
@@ -157,12 +159,12 @@ abstract class Service implements Observable
      */
     public function detach( Observer $observer, $event = 'update' )
     {
-        if ( !empty( $this->observers[$event] ) )
+        if ( isset( $this->observers[$event] ) )
         {
-            foreach ( $this->observers[$event] as $key => $obj )
+            $this->observers[$event]->detach( $observer );
+            if ( !count( $this->observers[$event] ) )
             {
-                if ( $obj === $observer )
-                    unset( $this->observers[$event][$key] );
+                unset( $this->observers[$event] );
             }
         }
         return $this;
@@ -179,9 +181,9 @@ abstract class Service implements Observable
     {
         if ( !empty( $this->observers[$event] ) )
         {
-            foreach ( $this->observers[$event] as $obj )
+            foreach ( $this->observers[$event] as $observer )
             {
-                $obj->update( $this, $event, $arguments );
+                $observer->update( $this, $event, $arguments );
             }
         }
         return $this;
