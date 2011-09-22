@@ -60,6 +60,7 @@ class BinaryFileHandlerTest extends \PHPUnit_Framework_TestCase
                        $this->imageFileInfo->getContentType()->type .
                        '/[a-z0-9]{32}.' . $this->imageFileInfo->getExtension() . '$#';
         self::assertRegExp( $pathPattern, $file->path );
+        self::assertSame( $file->originalFile, $this->imageFileInfo->getBasename() );
     }
 
     /**
