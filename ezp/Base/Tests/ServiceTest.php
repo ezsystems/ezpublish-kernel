@@ -35,13 +35,15 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $repositoryStub = $this->getMockBuilder( 'ezp\\Base\\Repository' )
             ->setConstructorArgs( array(
                 $this->getMock( 'ezp\\Persistence\\Repository\\Handler' ),
-                $this->getMock( 'ezp\\User' ) ) )
+                $this->getMock( 'ezp\\User' )
+            ) )
             ->getMock();
 
         $this->service = $this->getMockBuilder( 'ezp\\Base\\Service' )
              ->setConstructorArgs( array(
                 $repositoryStub,
-                $this->getMock( 'ezp\\Persistence\\Repository\\Handler' ) ) )
+                $this->getMock( 'ezp\\Persistence\\Repository\\Handler' )
+             ) )
              ->getMockForAbstractClass();
 
         $this->serviceRC = new ReflectionClass( 'ezp\\Base\\Service' );
