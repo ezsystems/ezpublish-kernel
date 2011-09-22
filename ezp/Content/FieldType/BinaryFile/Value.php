@@ -69,4 +69,15 @@ class Value implements ValueInterface
     {
         return $this->file->path;
     }
+
+    /**
+     * Returns handler object.
+     * Useful manipulate {@link self::$file}
+     *
+     * @return \ezp\Content\FieldType\BinaryFile\Handler
+     */
+    public function getHandler()
+    {
+        return $this->handler;
+    }
 }
