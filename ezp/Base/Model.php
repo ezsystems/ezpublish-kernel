@@ -101,7 +101,7 @@ abstract class Model implements Observable, ModelInterface
     }
 
     /**
-     * Attach a event listener to this subject
+     * Attaches $observer for $event to the Model
      *
      * @param \ezp\Base\Observer $observer
      * @param string $event
@@ -121,7 +121,7 @@ abstract class Model implements Observable, ModelInterface
     }
 
     /**
-     * Detach a event listener to this subject
+     * Detaches $observer for $event from the Model
      *
      * @param \ezp\Base\Observer $observer
      * @param string $event
@@ -141,7 +141,7 @@ abstract class Model implements Observable, ModelInterface
     }
 
     /**
-     * Notify listeners about certain events, by default $event is a plain 'update'
+     * Notifies registered observers about $event
      *
      * @param string $event
      * @param array|null $arguments
