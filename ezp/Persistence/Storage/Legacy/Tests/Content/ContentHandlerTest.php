@@ -36,7 +36,7 @@ class ContentHandlerTest extends TestCase
     public function testCtor()
     {
         $gatewayMock = $this->getGatewayMock();
-        $locationMock = $this->getLocationHandlerMock();
+        $locationMock = $this->getLocationGatewayMock();
         $mapperMock = $this->getMapperMock();
         $storageRegistryMock = $this->getStorageRegistryMock();
 
@@ -72,7 +72,7 @@ class ContentHandlerTest extends TestCase
     public function testCreate()
     {
         $mapperMock = $this->getMapperMock();
-        $locationMock = $this->getLocationHandlerMock();
+        $locationMock = $this->getLocationGatewayMock();
         $gatewayMock = $this->getGatewayMock();
         $storageRegMock = $this->getStorageRegistryMock();
         $storageMock = $this->getMock(
@@ -160,7 +160,7 @@ class ContentHandlerTest extends TestCase
             );
 
         $locationMock->expects( $this->once() )
-            ->method( 'create' )
+            ->method( 'createNodeAssignment' )
             ->with(
                 $this->isInstanceOf(
                     'ezp\\Persistence\\Content\\Location\\CreateStruct'
@@ -218,12 +218,9 @@ class ContentHandlerTest extends TestCase
                 new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() ),
                 $this->getLanguageMaskGeneratorMock()
             ),
-            new Location\Handler(
-                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
-                ( $locationMapper = new Location\Mapper() )
-            ),
+            new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
             new Mapper(
-                $locationMapper,
+                new Location\Mapper(),
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
             ),
             $storageRegMock = $this->getStorageRegistryMock()
@@ -357,10 +354,7 @@ class ContentHandlerTest extends TestCase
                 new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() ),
                 $this->getLanguageMaskGeneratorMock()
             ),
-            new Location\Handler(
-                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
-                new Location\Mapper()
-            ),
+            new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
             new Mapper(
                 $locationMapperMock = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
@@ -428,10 +422,7 @@ class ContentHandlerTest extends TestCase
                 new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() ),
                 $this->getLanguageMaskGeneratorMock()
             ),
-            new Location\Handler(
-                new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
-                new Location\Mapper()
-            ),
+            new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
             new Mapper(
                 $locationMapperMock = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
@@ -611,7 +602,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'getConverter' )
             ->will( $this->returnValue( $converter ) );
 
-        $locationMock = $this->getLocationHandlerMock();
+        $locationMock = $this->getLocationGatewayMock();
         $gatewayMock = $this->getGatewayMock();
         $storageRegMock = $this->getStorageRegistryMock();
         $storageMock = $this->getMock(
@@ -793,7 +784,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'getConverter' )
             ->will( $this->returnValue( $converter ) );
 
-        $locationMock = $this->getLocationHandlerMock();
+        $locationMock = $this->getLocationGatewayMock();
         $gatewayMock = $this->getGatewayMock();
         $storageRegMock = $this->getStorageRegistryMock();
         $storageMock = $this->getMock(
@@ -892,7 +883,7 @@ class ContentHandlerTest extends TestCase
     {
         $handler = new Handler(
             ( $gatewayMock = $this->getGatewayMock() ),
-            $this->getLocationHandlerMock(),
+            $this->getLocationGatewayMock(),
             ( $mapperMock = $this->getMapperMock() ),
             $this->getStorageRegistryMock()
         );
@@ -923,7 +914,7 @@ class ContentHandlerTest extends TestCase
     {
         $handler = new Handler(
             ( $gatewayMock = $this->getGatewayMock() ),
-            ( $locationHandlerMock = $this->getLocationHandlerMock() ),
+            ( $locationHandlerMock = $this->getLocationGatewayMock() ),
             $this->getMapperMock(),
             ( $storageReg = new StorageRegistry() )
         );
@@ -995,7 +986,7 @@ class ContentHandlerTest extends TestCase
     {
         $handler = new Handler(
             ( $gatewayMock = $this->getGatewayMock() ),
-            $this->getLocationHandlerMock(),
+            $this->getLocationGatewayMock(),
             ( $mapperMock = $this->getMapperMock() ),
             $this->getStorageRegistryMock()
         );
@@ -1044,14 +1035,10 @@ class ContentHandlerTest extends TestCase
      *
      * @return Mapper
      */
-    protected function getLocationHandlerMock()
+    protected function getLocationGatewayMock()
     {
         return $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Handler',
-            array( 'create', 'removeSubtree' ),
-            array(),
-            '',
-            false
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Gateway'
         );
     }
 

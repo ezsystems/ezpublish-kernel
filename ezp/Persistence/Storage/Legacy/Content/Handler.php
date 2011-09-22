@@ -31,11 +31,11 @@ class Handler implements BaseContentHandler
     protected $contentGateway;
 
     /**
-     * Location handler.
+     * Location gateway.
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Handler
+     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
      */
-    protected $locationHandler;
+    protected $locationGateway;
 
     /**
      * Mapper.
@@ -58,13 +58,13 @@ class Handler implements BaseContentHandler
      */
     public function __construct(
         Gateway $contentGateway,
-        Location\Handler $locationHandler,
+        Location\Gateway $locationGateway,
         Mapper $mapper,
         StorageRegistry $storageRegistry
     )
     {
         $this->contentGateway = $contentGateway;
-        $this->locationHandler = $locationHandler;
+        $this->locationGateway = $locationGateway;
         $this->mapper = $mapper;
         $this->storageRegistry = $storageRegistry;
     }
@@ -114,9 +114,10 @@ class Handler implements BaseContentHandler
 
         foreach ( $struct->parentLocations as $location )
         {
-            $this->locationHandler->create(
+            $this->locationGateway->createNodeAssignment(
                 $this->mapper->createLocationCreateStruct( $content ),
-                $location
+                $location,
+                Location\Gateway::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
             );
         }
 
@@ -301,7 +302,7 @@ class Handler implements BaseContentHandler
         $locationIds = $this->contentGateway->getAllLocationIds( $contentId );
         foreach ( $locationIds as $locationId )
         {
-            $this->locationHandler->removeSubtree( $locationId );
+            $this->locationGateway->removeSubtree( $locationId );
         }
 
         $fieldIds = $this->contentGateway->getFieldIdsByType( $contentId );
