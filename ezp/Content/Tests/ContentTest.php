@@ -22,36 +22,8 @@ use ezp\Content,
  * Test case for Content class
  *
  */
-class ContentTest extends \PHPUnit_Framework_TestCase
+class ContentTest extends BaseContentTest
 {
-    /**
-     * @var \ezp\Content\Type
-     */
-    protected $contentType;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        // setup a content type & content object of use by tests
-        $this->contentType = new Type();
-        $this->contentType->identifier = 'article';
-
-        // Add some fields
-        $fieldsData = array(
-            'title' => array( 'ezstring', new TextLineValue( 'New Article' ) ),
-            'tags' => array( 'ezkeyword', new KeywordValue() )
-        );
-        $fields = $this->contentType->getFields();
-        foreach ( $fieldsData as $identifier => $data )
-        {
-            $field = new FieldDefinition( $this->contentType, $data[0] );
-            $field->identifier = $identifier;
-            $field->setDefaultValue( $data[1] );
-            $fields[] = $field;
-        }
-    }
-
     /**
      * Test the default Translation internally created with a Content is created
      * @covers \ezp\Content::__construct

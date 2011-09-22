@@ -42,7 +42,7 @@ class TextLine implements Converter
     {
         $fieldValue->data = new TextLineValue( $value->dataText );
         // TODO: Feel there is room for some improvement here, to generalize this code across field types.
-        $fieldValue->sortKey = array( $value->sortKeyString );
+        $fieldValue->sortKey = array( 'sort_key_string' => $value->sortKeyString );
     }
 
     /**
@@ -56,6 +56,11 @@ class TextLine implements Converter
         if ( isset( $fieldDef->fieldTypeConstraints[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'] ) )
         {
             $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'];
+        }
+
+        if ( $fieldDef->defaultValue->data instanceof TextLineValue )
+        {
+            $storageDef->dataText1 = $fieldDef->defaultValue->data->text;
         }
     }
 
@@ -72,6 +77,11 @@ class TextLine implements Converter
             $fieldDef->fieldTypeConstraints = array(
                 self::STRING_LENGTH_VALIDATOR_FQN => array( 'maxStringLength' => $storageDef->dataInt1 ) );
         }
+
+        $defaultValue = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
+        $fieldDef->defaultValue = new FieldValue(
+            array( 'data' => new TextLineValue( $defaultValue ) )
+        );
     }
 
     /**

@@ -161,6 +161,8 @@ class Service extends BaseService
      * @param int $contentId
      * @return \ezp\Content\Version[]
      * @todo Since this is internal it can just as well take Content as input to avoid extra load
+     *
+     * @internal
      */
     public function listVersions( $contentId )
     {
@@ -203,6 +205,7 @@ class Service extends BaseService
             {
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
+                    // @todo Attach observer to Field. See why this method isn't used in buildVersionDomainObject
                     $fields[$identifier] = $field->setState( array( 'properties' => $voField ) );
                     $fields[$identifier]->setValue( $voField->value->data );
                     continue 2;
@@ -404,7 +407,8 @@ class Service extends BaseService
         $updateStruct->id = $content->id;
         $updateStruct->userId = $version->creatorId;
         $updateStruct->versionNo = $version->versionNo;
-        // $struct->name = ... // @todo Get names using the appropriate call
+        // @todo Get names using the appropriate call
+        // $struct->name = ...
 
         $contentVo = $this->handler->contentHandler()->publish( $updateStruct );
 
@@ -421,6 +425,7 @@ class Service extends BaseService
     protected function buildDomainObject( ContentValue $vo )
     {
         $content = new Content( new Type, new User( $vo->ownerId ) );
+        // @todo Attach observer to Content
         $content->setState(
             array(
                 "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
@@ -466,6 +471,7 @@ class Service extends BaseService
             throw new InvalidArgumentType( '$versionVo', 'Version or RestrictedVersion', $vo );
 
         $version = new Version( $content );
+        // @todo Attach observer to Version
         $version->setState( array( 'properties' => $vo ) );
 
         // lazy load fields if Version does not contain fields
@@ -483,6 +489,7 @@ class Service extends BaseService
             {
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
+                    // @todo Attach observer to Field
                     $field->setState( array( 'properties' => $voField ) );
                     $field->setValue( $voField->value->data );
                     continue 2;

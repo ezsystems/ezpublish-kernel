@@ -10,15 +10,18 @@
 namespace ezp\Base;
 use ezp\Base\Model,
     ezp\Base\Repository,
+    ezp\Base\Observable,
+    ezp\Base\Observer,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Persistence\Repository\Handler,
-    ezp\Persistence\ValueObject;
+    ezp\Persistence\ValueObject,
+    SplObjectStorage;
 
 /**
  * Abstract Repository Services
  *
  */
-abstract class Service
+abstract class Service implements Observable
 {
     /**
      * @var \ezp\Base\Repository
@@ -29,6 +32,13 @@ abstract class Service
      * @var \ezp\Persistence\Repository\Handler
      */
     protected $handler;
+
+    /**
+     * List of event listeners
+     *
+     * @var SplStorage[<event>]
+     */
+    private $observers = array();
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler
@@ -118,4 +128,65 @@ abstract class Service
         }
         return true;
     }
+
+    /**
+     * Attach the event listener $observer for $event to the service
+     *
+     * @param \ezp\Base\Observer $observer
+     * @param string $event
+     * @return \ezp\Base\Service
+     */
+    public function attach( Observer $observer, $event = 'update' )
+    {
+        if ( !isset( $this->observers[$event] ) )
+        {
+            $this->observers[$event] = new SplObjectStorage();
+            $this->observers[$event]->attach( $observer );
+        }
+        else
+        {
+            $this->observers[$event]->attach( $observer );
+        }
+        return $this;
+    }
+
+    /**
+     * Detach $observer for $event from the service
+     *
+     * @param \ezp\Base\Observer $observer
+     * @param string $event
+     * @return \ezp\Base\Service
+     */
+    public function detach( Observer $observer, $event = 'update' )
+    {
+        if ( isset( $this->observers[$event] ) )
+        {
+            $this->observers[$event]->detach( $observer );
+            if ( !count( $this->observers[$event] ) )
+            {
+                unset( $this->observers[$event] );
+            }
+        }
+        return $this;
+    }
+
+    /**
+     * Notify registered observers about $event
+     *
+     * @param string $event
+     * @param array|null $arguments
+     * @return \ezp\Base\Service
+     */
+    public function notify( $event = 'update', array $arguments = null )
+    {
+        if ( !empty( $this->observers[$event] ) )
+        {
+            foreach ( $this->observers[$event] as $observer )
+            {
+                $observer->update( $this, $event, $arguments );
+            }
+        }
+        return $this;
+    }
 }
+

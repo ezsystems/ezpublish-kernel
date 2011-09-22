@@ -33,7 +33,7 @@ class FieldValidation extends InvalidArgumentException implements Exception
         $this->validationErrors = $validationErrors;
 
         parent::__construct(
-            "The field {$what} did not validate. Validation errors: " . var_export( $validationErros, true ),
+            "The field {$what} did not validate. Validation errors: " . var_export( $validationErrors, true ),
             0,
             $previous
         );
