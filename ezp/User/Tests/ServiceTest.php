@@ -9,8 +9,9 @@
 
 namespace ezp\User\Tests;
 use ezp\Content\Tests\Service\Base as BaseServiceTest,
-    ezp\User,
-    ezp\User\Role,
+    ezp\User\Proxy as ProxyUser,
+    ezp\User\Concrete as ConcreteUser,
+    ezp\User\Role\Concrete as ConcreteRole,
     ezp\User\Policy,
     ezp\Base\Exception\NotFound,
     Exception;
@@ -30,7 +31,7 @@ class ServiceTest extends BaseServiceTest
     public function testCreate()
     {
         $service = $this->repository->getUserService();
-        $do = new User( 1 );
+        $do = new ConcreteUser( 1 );
         $do->login = $do->passwordHash = 'test';
         $do->email = 'test@ez.no';
         $do->hashAlgorithm = 2;
@@ -51,7 +52,7 @@ class ServiceTest extends BaseServiceTest
     public function testCreateExistingId()
     {
         $service = $this->repository->getUserService();
-        $do = new User( 14 );
+        $do = new ConcreteUser( 14 );
         $do->login = $do->passwordHash = 'test';
         $do->email = 'test@ez.no';
         $do->hashAlgorithm = 2;
@@ -68,7 +69,7 @@ class ServiceTest extends BaseServiceTest
     public function testCreateMissingId()
     {
         $service = $this->repository->getUserService();
-        $do = new User();
+        $do = new ConcreteUser();
         $do->login = $do->passwordHash = 'test';
         $do->email = 'test@ez.no';
         $do->hashAlgorithm = 2;
@@ -219,7 +220,7 @@ class ServiceTest extends BaseServiceTest
     public function testDeleteNotFound()
     {
         $service = $this->repository->getUserService();
-        $service->delete( new User( 999 ) );
+        $service->delete( new ProxyUser( 999, $service ) );
     }
 
     /**
@@ -514,7 +515,7 @@ class ServiceTest extends BaseServiceTest
     public function testDeleteRoleNotFound()
     {
         $service = $this->repository->getUserService();
-        $role = new Role();
+        $role = new ConcreteRole();
         $role->getState( 'properties' )->id = 999;
         $service->deleteRole( $role );
     }
@@ -710,7 +711,7 @@ class ServiceTest extends BaseServiceTest
      */
     public function getRole()
     {
-        $do = new Role();
+        $do = new ConcreteRole();
         $do->name = 'test';
 
         $do->addPolicy( $policy = new Policy( $do ) );

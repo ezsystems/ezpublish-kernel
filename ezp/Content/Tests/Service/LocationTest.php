@@ -9,15 +9,14 @@
 
 namespace ezp\Content\Tests\Service;
 use ezp\Content\Tests\Service\Base as BaseServiceTest,
-    ezp\Content\Location\Service,
-    ezp\Base\Exception\NotFound,
-    \ReflectionObject,
-    ezp\Content,
-    ezp\Content\Type,
+    ezp\Content\Concrete as ConcreteContent,
+    ezp\Content\Proxy as ProxyContent,
     ezp\Content\Location,
-    ezp\Base\Proxy,
-    ezp\Content\Section,
-    ezp\User;
+    ezp\Content\Location\Concrete as ConcreteLocation,
+    ezp\Content\Section\Concrete as ConcreteSection,
+    ezp\Base\Exception\NotFound,
+    ezp\User\Proxy as ProxyUser,
+    ReflectionObject;
 
 /**
  * Test case for Location service
@@ -65,10 +64,11 @@ class LocationTest extends BaseServiceTest
     {
         parent::setUp();
         $this->service = $this->repository->getLocationService();
+        $administrator = new ProxyUser( 14, $this->repository->getUserService() );
 
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );
-        $content = new Content( $type, new User( 14 ) );
+        $content = new ConcreteContent( $type, $administrator );
         $content->name = array( "eng-GB" => "test" );
         $content->setSection( $section );
         $fields = $content->getFields();
@@ -79,7 +79,7 @@ class LocationTest extends BaseServiceTest
 
         // Now creating location for content
         $this->topLocation = $this->service->load( 2 );
-        $this->location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $this->location = new ConcreteLocation( new ProxyContent( $this->content->id, $this->repository->getContentService() ) );
         $this->location->setParent( $this->topLocation );
         $this->location = $this->service->create( $this->location );
         $this->locationToDelete[] = $this->location;
@@ -88,7 +88,7 @@ class LocationTest extends BaseServiceTest
         for ( $i = 0; $i < 10; ++$i )
         {
 
-            $content = new Content( $type, new User( 14 ) );
+            $content = new ConcreteContent( $type, $administrator );
             $content->name = array( "eng-GB" => "foo$i" );
             $content->setSection( $section );
             $fields = $content->getFields();
@@ -97,7 +97,7 @@ class LocationTest extends BaseServiceTest
             $content = $this->repository->getContentService()->create( $content );
             $this->contentToDelete[] = $content;
 
-            $location = new Location( $content );
+            $location = new ConcreteLocation( $content );
             $location->setParent( $parent );
             $location = $this->service->create( $location );
             $this->locationToDelete[] = $location;
@@ -166,13 +166,13 @@ class LocationTest extends BaseServiceTest
         $refParent = $refDo->getProperty( 'parent' );
         $refParent->setAccessible( true );
         $parent = $refParent->getValue( $do );
-        self::assertInstanceOf( 'ezp\\Base\\Proxy', $parent, 'Parent location must be a valid Proxy object after init by service' );
+        self::assertInstanceOf( 'ezp\\Content\\Location\\Proxy', $parent, 'Parent location must be a valid Proxy object after init by service' );
         self::assertEquals( $vo->parentId, $parent->id );
 
         $refContent = $refDo->getProperty( 'content' );
         $refContent->setAccessible( true );
         $content = $refContent->getValue( $do );
-        self::assertInstanceOf( 'ezp\\Base\\Proxy', $content, 'Content must be a valid Proxy object after init by service' );
+        self::assertInstanceOf( 'ezp\\Content\\Proxy', $content, 'Content must be a valid Proxy object after init by service' );
         self::assertEquals( $vo->contentId, $content->id );
 
         self::assertEquals( $do->sortField, $vo->sortField );
@@ -218,7 +218,7 @@ class LocationTest extends BaseServiceTest
     {
         $remoteId = md5( microtime() );
         $parent = $this->service->load( 2 );
-        $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $location = new ConcreteLocation( new ProxyContent( $this->content->id, $this->repository->getContentService() ) );
         $location->setParent( $parent );
         $location->remoteId = $remoteId;
         $location->sortField = Location::SORT_FIELD_PRIORITY;
@@ -256,7 +256,7 @@ class LocationTest extends BaseServiceTest
      */
     public function testCreateNoParent()
     {
-        $location = new Location( new Proxy( $this->repository->getContentService(), 1 ) );
+        $location = new ConcreteLocation( new ProxyContent( 1, $this->repository->getContentService() ) );
         $do = $this->service->create( $location );
     }
 
@@ -268,7 +268,7 @@ class LocationTest extends BaseServiceTest
     {
         $time = time();
         // Setup a location for test content and delete local variable
-        $locationForTestContent = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $locationForTestContent = new ConcreteLocation( new ProxyContent( $this->content->id, $this->repository->getContentService() ) );
         $locationForTestContent->setParent( $this->topLocation );
         $locationForTestContent = $this->service->create( $locationForTestContent );
         $this->locationToDelete[] = $locationForTestContent;
@@ -282,14 +282,14 @@ class LocationTest extends BaseServiceTest
 
         // Try to create a new location under a hidden one.
         // Newly created location should be invisible
-        $location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $location = new ConcreteLocation( new ProxyContent( $this->content->id, $this->repository->getContentService() ) );
         $location->setParent( $this->topLocation );
         self::assertTrue( $this->service->create( $location )->invisible );
         $this->locationToDelete[] = $location;
 
         // Create a new location under an invisible one
         // New location should also be invisible
-        $anotherLocation4AnotherContent = new Location( new Proxy( $this->repository->getContentService(), 1 ) );
+        $anotherLocation4AnotherContent = new ConcreteLocation( new ProxyContent( 1, $this->repository->getContentService() ) );
         $anotherLocation4AnotherContent->setParent( $location );
         self::assertTrue( $this->service->create( $anotherLocation4AnotherContent )->invisible );
         $this->locationToDelete[] = $anotherLocation4AnotherContent;
@@ -307,14 +307,14 @@ class LocationTest extends BaseServiceTest
         $hiddenLocation = $this->service->hide( $this->topLocation );
 
         // Create a new location that will be hidden
-        $locationShouldStayHidden = new Location( new Proxy( $this->repository->getContentService(), 1 ) );
+        $locationShouldStayHidden = new ConcreteLocation( new ProxyContent( 1, $this->repository->getContentService() ) );
         $locationShouldStayHidden->setParent( $this->location );
         $this->service->create( $locationShouldStayHidden );
         $this->locationToDelete[] = $locationShouldStayHidden;
         $this->service->hide( $locationShouldStayHidden );
 
         // Create again a new location, under the last hidden one
-        $locationShouldStayInvisible = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $locationShouldStayInvisible = new ConcreteLocation( new ProxyContent( $this->content->id, $this->repository->getContentService() ) );
         $locationShouldStayInvisible->setParent( $locationShouldStayHidden );
         $locationShouldStayInvisible = $this->service->create( $locationShouldStayInvisible );
 
@@ -495,7 +495,7 @@ class LocationTest extends BaseServiceTest
         // Create a secondary location for one the inserted locations
         // Delete the previous one and check if only location has been removed
         $startIndex--;
-        $newLocation = new Location( new Proxy( $this->repository->getContentService(), $this->insertedLocations[$startIndex]->contentId ) );
+        $newLocation = new ConcreteLocation( new ProxyContent( $this->insertedLocations[$startIndex]->contentId, $this->repository->getContentService() ) );
         $newLocation->setParent( $this->topLocation );
         $newLocation = $this->service->create( $newLocation );
         $this->service->delete( $this->insertedLocations[$startIndex] );
@@ -513,7 +513,7 @@ class LocationTest extends BaseServiceTest
         $startIndex = 5;
 
         // Create the new section
-        $section = new Section;
+        $section = new ConcreteSection;
         $section->identifier = 'myNewSection';
         $section->name = 'My new Section';
         $this->repository->getSectionService()->create( $section );
@@ -551,7 +551,7 @@ class LocationTest extends BaseServiceTest
     public function testCopySubtreeInvalidSource()
     {
         $newSubtree = $this->service->copySubtree(
-            new Location( new Proxy( $this->repository->getContentService(), 1 ) ),
+            new ConcreteLocation( new ProxyContent( 1, $this->repository->getContentService() ) ),
             $this->topLocation
         );
     }
@@ -565,7 +565,7 @@ class LocationTest extends BaseServiceTest
     {
         $newSubtree = $this->service->copySubtree(
             $this->insertedLocations[5],
-            new Location( new Proxy( $this->repository->getContentService(), 1 ) )
+            new ConcreteLocation( new ProxyContent( 1, $this->repository->getContentService() ) )
         );
     }
 }

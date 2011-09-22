@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Tests\Service;
 use ezp\Content\Tests\Service\Base as BaseServiceTest,
-    ezp\Content\Section,
+    ezp\Content\Section\Concrete as ConcreteSection,
     ezp\Base\Exception\NotFound;
 
 /**
@@ -24,7 +24,7 @@ class SectionTest extends BaseServiceTest
      */
     public function testCreate()
     {
-        $section = new Section();
+        $section = new ConcreteSection();
         $section->identifier = 'test';
         $section->name = 'Test';
 
@@ -42,7 +42,7 @@ class SectionTest extends BaseServiceTest
      */
     public function testDelete()
     {
-        $section = new Section();
+        $section = new ConcreteSection();
         $section->identifier = 'test';
         $section->name = 'Test';
 
@@ -64,7 +64,7 @@ class SectionTest extends BaseServiceTest
      */
     public function testLoad()
     {
-        $section = new Section();
+        $section = new ConcreteSection();
         $section->identifier = 'test';
         $section->name = 'Test';
 

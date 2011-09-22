@@ -13,30 +13,24 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\InvalidArgumentType,
-    ezp\Base\Proxy,
     ezp\Content,
-    ezp\Content\Location,
-    ezp\Content\Version,
+    ezp\Content\Section\Proxy as ProxySection,
+    ezp\Content\Location\Proxy as ProxyLocation,
+    ezp\Content\Type\Proxy as ProxyType,
+    ezp\Content\Type\Concrete as ConcreteType,
+    ezp\User\Proxy as ProxyUser,
     ezp\Content\Version\LazyCollection as LazyVersionCollection,
-    ezp\Content\Field,
     ezp\Content\Field\LazyCollection as LazyFieldCollection,
     ezp\Content\Field\StaticCollection as StaticFieldCollection,
-    ezp\Content\FieldType\Factory as FieldTypeFactory,
-    ezp\Content\Query,
-    ezp\Content\Query\Builder,
     ezp\Content\Search\Result,
-    ezp\Persistence\ValueObject,
     ezp\Persistence\Content as ContentValue,
-    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     ezp\Persistence\Content\Query\Criterion\ContentId,
-    ezp\Persistence\Content\Query\Criterion\Operator,
     ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     ezp\Persistence\Content\Version as VersionValue,
-    ezp\Persistence\Content\RestrictedVersion as RestrictedVersionValue,
-    ezp\User;
+    ezp\Persistence\Content\RestrictedVersion as RestrictedVersionValue;
 
 /**
  * Content service, used for Content operations
@@ -424,14 +418,17 @@ class Service extends BaseService
      */
     protected function buildDomainObject( ContentValue $vo )
     {
-        $content = new Content( new Type, new User( $vo->ownerId ) );
+        // @todo Using ConcreteType for now, but I guess there is something wrong here
+        //       Shouldn't a ProxyType be used, but then, which Content Type ID to use?
+        //       Should I use the one provided in setState?
+        $content = new Concrete( new ConcreteType, new ProxyUser( $vo->ownerId, $this->repository->getUserService() ) );
         // @todo Attach observer to Content
         $content->setState(
             array(
-                "section" => new Proxy( $this->repository->getSectionService(), $vo->sectionId ),
-                "contentType" => new Proxy( $this->repository->getContentTypeService(), $vo->typeId ),
+                "section" => new ProxySection( $vo->sectionId, $this->repository->getSectionService() ),
+                "contentType" => new ProxyType( $vo->typeId, $this->repository->getContentTypeService() ),
                 "versions" => new LazyVersionCollection( $this, $vo->id ),//@todo Avoid throwing away version info on $vo
-                "owner" => new Proxy( $this->repository->getUserService(), $vo->ownerId ),
+                "owner" => new ProxyUser( $vo->ownerId, $this->repository->getUserService() ),
                 "properties" => $vo
             )
         );
@@ -440,11 +437,11 @@ class Service extends BaseService
         $locations = $content->getLocations();
         foreach ( $vo->locations as $locationValue )
         {
-            $locations[] = $location = new Location( $content );
+            $locations[] = $location = new Location\Concrete( $content );
             $location->setState(
                 array(
                     "properties" => $locationValue,
-                    "parent" => new Proxy( $locationService, $locationValue->parentId ),
+                    "parent" => new ProxyLocation( $locationValue->parentId, $locationService ),
                     "children" => new Lazy(
                         "ezp\\Content\\Location",
                         $locationService,

@@ -1,25 +1,26 @@
 <?php
 /**
- * File containing the ezp\Content\Concrete interface.
+ * File containing the ezp\Content\Proxy class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp;
-use ezp\Content\Section,
-    ezp\Content\Location,
+namespace ezp\Content;
+use ezp\Base\Proxy as BaseProxy,
+    ezp\Base\ModelDefinition,
+    ezp\Content,
     ezp\User;
 
 /**
- * This interface represents a Content item
+ * This class represents a Proxy Content item
  *
  * It is used for both input and output manipulation.
  *
  * @property-read mixed $id The Content's ID, automatically assigned by the persistence layer
  * @property-read int $currentVersionNo The Content's current version
- * @property-read int $status The Content's status, as one of the ezp\Content::STATUS_* constants
+ * @property-read int $status The Content's status, as one of the \ezp\Content::STATUS_* constants
  * @property string[] $name The Content's name
  * @property-read mixed $ownerId Id of the user object that owns the content
  * @property-read bool $alwaysAvailable The Content's always available flag
@@ -68,43 +69,67 @@ use ezp\Content\Section,
  * @property \ezp\Content\Language $initialLanguage
  *           The language the Content was initially created in
  */
-interface Content
+class Proxy extends BaseProxy implements ModelDefinition, Content
 {
+    public function __construct( $id, Service $service )
+    {
+        parent::__construct( $id, $service );
+    }
+
     /**
-     * Publication status constants
-     * @var int
+     * Returns definition of the content object, atm: permissions
+     *
+     * @access private
+     * @return array
      */
-    const STATUS_DRAFT = 0;
-    const STATUS_PUBLISHED = 1;
-    const STATUS_ARCHIVED = 2;
+    public static function definition()
+    {
+        return Concrete::definition();
+    }
 
     /**
      * Return Main location object on this Content object
      *
      * @return \ezp\Content\Location|null
      */
-    public function getMainLocation();
+    public function getMainLocation()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getMainLocation();
+    }
 
     /**
      * Return a collection containing all available versions of the Content
      *
      * @return \ezp\Content\Version[]
      */
-    public function getVersions();
+    public function getVersions()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getVersions();
+    }
 
     /**
      * Find current version amongst version objects
      *
      * @return \ezp\Content\Version|null
      */
-    public function getCurrentVersion();
+    public function getCurrentVersion()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getCurrentVersion();
+    }
 
     /**
      * Return Type object
      *
      * @return \ezp\Content\Type
      */
-    public function getContentType();
+    public function getContentType()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getContentType();
+    }
 
     /**
      * Get fields of current version
@@ -112,35 +137,54 @@ interface Content
      * @todo Do we really want/need this shortcut?
      * @return \ezp\Content\Field[]
      */
-    public function getFields();
+    public function getFields()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getFields();
+    }
 
     /**
      * Sets the Section the Content belongs to
      *
      * @param \ezp\Content\Section $section
      */
-    public function setSection( Section $section );
+    public function setSection( Section $section )
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->setSection( $section );
+    }
 
     /**
      * Returns the Section the Content belongs to
      *
      * @return \ezp\Content\Section
      */
-    public function getSection();
+    public function getSection()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getSection();
+    }
 
     /**
      * Sets the Owner the Content belongs to
      *
      * @param \ezp\User $owner
      */
-    public function setOwner( User $owner );
-
+    public function setOwner( User $owner )
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->setOwner( $owner );
+    }
     /**
      * Returns the User the Content is owned by
      *
      * @return \ezp\User
      */
-    public function getOwner();
+    public function getOwner()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getOwner();
+    }
 
     /**
      * Adds a new location to content under an existing one.
@@ -148,26 +192,42 @@ interface Content
      * @param \ezp\Content\Location $parentLocation
      * @return \ezp\Content\Location
      */
-    public function addParent( Location $parentLocation );
+    public function addParent( Location $parentLocation )
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->addParent( $parentLocation );
+    }
 
     /**
      * Gets locations
      *
      * @return \ezp\Content\Location[]
      */
-    public function getLocations();
+    public function getLocations()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getLocations();
+    }
 
     /**
      * Gets Content relations
      *
      * @return \ezp\Content[]
      */
-    public function getRelations();
+    public function getRelations()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getRelations();
+    }
 
     /**
      * Gets Content reverse relations
      *
      * @return \ezp\Content[]
      */
-    public function getReverseRelations();
+    public function getReverseRelations()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getReverseRelations();
+    }
 }

@@ -9,11 +9,9 @@
 
 namespace ezp\User;
 use ezp\Base\Model,
-    ezp\Base\Proxy,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Exception\InvalidArgumentType,
-    ezp\Persistence\User\Policy as PolicyValue,
-    ezp\User\Role;
+    ezp\Persistence\User\Policy as PolicyValue;
 
 /**
  * This class represents a Policy item
@@ -54,11 +52,8 @@ class Policy extends Model
      *
      * @param \ezp\User\Role $role
      */
-    public function __construct( $role )
+    public function __construct( Role $role )
     {
-        if ( !$role instanceof Role && !$role instanceof Proxy )
-            throw new InvalidArgumentType( '$role', 'ezp\\User\\Role, ezp\\Base\\Proxy', $role );
-
         $this->properties = new PolicyValue( array( 'roleId' => $role->id ) );
         $this->role = $role;
     }
@@ -68,9 +63,6 @@ class Policy extends Model
      */
     public function getRole()
     {
-        if ( $this->role instanceof Proxy )
-            $this->role = $this->role->load();
-
         $this->role;
     }
 }

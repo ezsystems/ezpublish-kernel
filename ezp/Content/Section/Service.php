@@ -12,7 +12,7 @@ use ezp\Base\Exception\NotFound,
     ezp\Base\Exception\Logic,
     ezp\Base\Service as BaseService,
     ezp\Content,
-    ezp\Content\Section as SectionObject,
+    ezp\Content\Section,
     ezp\Persistence\ValueObject;
 
 /**
@@ -27,7 +27,7 @@ class Service extends BaseService
      * @return \ezp\Content\Section The newly create section
      * @todo Should api be adjusted to take name and identifier like handler instead of object?
      */
-    public function create( SectionObject $section )
+    public function create( Section $section )
     {
         $valueObject = $this->handler->sectionHandler()->create( $section->name, $section->identifier );
         return $section->setState( array( 'properties' => $valueObject ) );
@@ -40,7 +40,7 @@ class Service extends BaseService
      * @return \ezp\Content\Section
      * @throws Exception\Validation If a validation problem has been found for $section
      */
-    public function update( SectionObject $section )
+    public function update( Section $section )
     {
         $this->handler->sectionHandler()->update( $section->id, $section->identifier, $section->name );
         return $section;
@@ -94,7 +94,7 @@ class Service extends BaseService
      * @param \ezp\Content\Section $section
      * @param Content $content
      */
-    public function assign( SectionObject $section, Content $content )
+    public function assign( Section $section, Content $content )
     {
         if ( $section->id === $content->section->id )
             return;
@@ -111,7 +111,7 @@ class Service extends BaseService
      *         because it is still assigned to some contents.
      * @throws \ezp\Base\Exception\NotFound If the specified section is not found
      */
-    public function delete( SectionObject $section )
+    public function delete( Section $section )
     {
         if ( $this->countAssignedContents( $section->id ) > 0 )
         {
@@ -131,7 +131,7 @@ class Service extends BaseService
      */
     protected function buildDomainObject( ValueObject $vo )
     {
-        $section = new SectionObject();
+        $section = new Concrete();
         return $section->setState( array( 'properties' => $vo ) );
     }
 }

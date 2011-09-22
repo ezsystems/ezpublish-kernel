@@ -18,8 +18,7 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Model,
     ezp\Content\Type,
-    ezp\Content\Type\FieldDefinition,
-    ezp\Content\Type\Group,
+    ezp\Content\Type\Concrete as ConcreteType,
     ezp\Persistence\Content\Type as TypeValue,
     ezp\Persistence\Content\Type\CreateStruct,
     ezp\Persistence\Content\Type\UpdateStruct,
@@ -365,7 +364,7 @@ class Service extends BaseService
      */
     protected function buildType( TypeValue $vo )
     {
-        $type = new Type();
+        $type = new ConcreteType();
         $fields = $type->getFields();
         foreach ( $vo->fieldDefinitions as $fieldDefinitionVo )
         {

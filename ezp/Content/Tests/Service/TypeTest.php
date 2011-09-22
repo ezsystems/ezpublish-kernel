@@ -10,7 +10,7 @@
 namespace ezp\Content\Tests\Service;
 use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Content\Type\Service,
-    ezp\Content\Type,
+    ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Type\FieldDefinition,
     ezp\Content\Type\Group,
     ezp\Content\FieldType\Value,
@@ -143,7 +143,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testCreate()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $do->creatorId = $do->modifierId = 14;
         $do->name = $do->description = array( 'eng-GB' => 'Test' );
@@ -166,7 +166,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testCreateWithField()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $do->creatorId = $do->modifierId = 14;
         $do->name = $do->description = array( 'eng-GB' => 'Test' );
@@ -192,7 +192,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testCreateException()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $this->service->create( $do );
     }
@@ -204,7 +204,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testCreateWithoutGroup()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $do->creatorId = $do->modifierId = 14;
         $do->name = $do->description = array( 'eng-GB' => 'Test' );
@@ -221,7 +221,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testCreateAndPublish()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $do->creatorId = $do->modifierId = 14;
         $do->name = $do->description = array( 'eng-GB' => 'Test' );
@@ -244,7 +244,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testCreateAndPublishWithField()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $do->creatorId = $do->modifierId = 14;
         $do->name = $do->description = array( 'eng-GB' => 'Test' );
@@ -270,7 +270,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testCreateAndPublishException()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $this->service->createAndPublish( $do );
     }
@@ -282,7 +282,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testCreateAndPublishWithoutGroup()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $do->creatorId = $do->modifierId = 14;
         $do->name = $do->description = array( 'eng-GB' => 'Test' );
@@ -500,7 +500,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testCopyInvalidStatus()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $do->creatorId = $do->modifierId = 14;
         $do->name = $do->description = array( 'eng-GB' => 'Test' );
@@ -787,7 +787,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testPublish()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $do->creatorId = $do->modifierId = 14;
         $do->name = $do->description = array( 'eng-GB' => 'Test' );
@@ -813,7 +813,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testPublishWithFields()
     {
-        $do = new Type();
+        $do = new ConcreteType();
         $do->created = $do->modified = time();
         $do->creatorId = $do->modifierId = 14;
         $do->name = $do->description = array( 'eng-GB' => 'Test' );
@@ -843,7 +843,7 @@ class TypeTest extends BaseServiceTest
      */
     public function testPublishInvalidTypeId()
     {
-        $type = new Type();
+        $type = new ConcreteType();
         $struct = $type->getState( 'properties' );
         $struct->id = 999;
         $this->service->publish( $type );

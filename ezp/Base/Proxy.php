@@ -8,75 +8,95 @@
  */
 
 namespace ezp\Base;
-use ezp\Base\ProxyInterface,
-    ezp\Base\Service as BaseService,
+use ezp\Base\Service as BaseService,
     InvalidArgumentException;
 
 /**
  * Proxy class for model objects
  *
  */
-class Proxy implements ProxyInterface
+abstract class Proxy
 {
     /**
      * Service used to load the object the proxy represents.
      *
-     * @var Service
+     * @var \ezp\Base\Service
      */
     protected $service;
 
     /**
      * Id of the object
      *
-     * @var int
+     * @var mixed
      */
     protected $id;
 
     /**
-     * Method to use on the service to load the object
+     * Concrete proxied object
      *
-     * @var string
+     * @var mixed
      */
-    protected $method;
+    protected $proxiedObject = null;
 
     /**
      * Setup proxy object with enough info to be able to perform a load operation on the object it proxies.
      *
-     * @param Service $service
      * @param mixed $id Primary id
-     * @param string $method Optional, defines which function on handler to call, 'load' by default
+     * @param \ezp\Base\Service $service
      */
-    public function __construct( BaseService $service, $id, $method = 'load' )
+    public function __construct( $id, Service $service )
     {
-        $this->service = $service;
         $this->id = $id;
-        $this->method = $method;
+        $this->service = $service;
     }
 
     /**
-     * Load the object this proxy object represent
-     *
-     * @return \ezp\Base\Model
+     * Loads the proxied object in the case it has not happened yet.
      */
-    public function load()
+    protected function lazyLoad()
     {
-        $fn = $this->method;
-        return $this->service->$fn( $this->id );
+        if ( $this->proxiedObject === null )
+        {
+            $this->proxiedObject = $this->service->load( $this->id );
+        }
     }
 
     /**
-     * Provides access to id property
+     * Provides read access to a $property
      *
-     * @throws InvalidArgumentException
-     * @param  string $name
-     * @return int
+     * @param string $property
+     * @return mixed
      */
-    public function __get( $name )
+    public function __get( $property )
     {
-        if ( $name === 'id' )
+        if ( $property === "id" )
             return $this->id;
-        throw new InvalidArgumentException( "{$name} is not a valid property on Proxy class" );
+
+        $this->lazyLoad();
+        return $this->proxiedObject->$property;
+    }
+
+    /**
+     * Provides write access to a $property
+     *
+     * @param string $property
+     * @param mixed $value
+     */
+    public function __set( $property, $value )
+    {
+        $this->lazyLoad();
+        return $this->$property = $value;
+    }
+
+    /**
+     * Checks if a public virtual property is set
+     *
+     * @param string $property Property name
+     * @return bool
+     */
+    public function __isset( $property )
+    {
+        $this->lazyLoad();
+        return isset( $this->$property );
     }
 }
-
-?>

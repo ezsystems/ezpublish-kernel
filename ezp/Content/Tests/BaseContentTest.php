@@ -8,20 +8,19 @@
  */
 
 namespace ezp\Content\Tests;
-use ezp\Content,
-    ezp\Content\Location,
-    ezp\Content\Section,
-    ezp\Content\Type,
+use ezp\Content\Concrete as ConcreteContent,
+    ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Type\FieldDefinition,
-    ezp\User,
-    ezp\Content\FieldType\Value as FieldValue,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
-    ezp\Content\FieldType\Keyword\Value as KeywordValue;
+    ezp\Content\FieldType\Keyword\Value as KeywordValue,
+    ezp\User\Proxy as ProxyUser,
+    ezp\Base\Service\Container,
+    PHPUnit_Framework_TestCase;
 
 /**
  * Base class for all test cases relying on Content domain object
  */
-abstract class BaseContentTest extends \PHPUnit_Framework_TestCase
+abstract class BaseContentTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Content\Type
@@ -33,12 +32,20 @@ abstract class BaseContentTest extends \PHPUnit_Framework_TestCase
      */
     protected $content;
 
+    /**
+     * @var \ezp\Base\Repository
+     */
+    protected $repository;
+
     protected function setUp()
     {
         parent::setUp();
 
+        $sc = new Container;
+        $this->repository = $sc->getRepository();
+
         // setup a content type & content object of use by tests
-        $this->contentType = new Type;
+        $this->contentType = new ConcreteType;
         $this->contentType->identifier = 'article';
 
         // Add some fields
@@ -55,6 +62,6 @@ abstract class BaseContentTest extends \PHPUnit_Framework_TestCase
             $fieldDefCollection[] = $fieldDef;
         }
 
-        $this->content = new Content( $this->contentType, new User( 10 ) );
+        $this->content = new ConcreteContent( $this->contentType, new ProxyUser( 10, $this->repository->getUserService() ) );
     }
 }

@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Tests\Service;
-use ezp\Content,
+use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Location,
     ezp\Content\Search\Result,
     ezp\Content\Query,
@@ -18,8 +18,8 @@ use ezp\Content,
     ezp\Persistence\Content as ContentValue,
     ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content\Search\Result as ResultValue,
-    \ReflectionObject,
-    ezp\User;
+    ezp\User\Proxy as ProxyUser,
+    ReflectionObject;
 
 /**
  * Test case for Content service
@@ -91,7 +91,7 @@ class ContentSearchTest extends BaseServiceTest
         $this->expectedContentVo = array();
         for ( $i = 0; $i < 10; ++$i )
         {
-            $content = new Content( $type, new User( 14 ) );
+            $content = new ConcreteContent( $type, new ProxyUser( 14, $this->repository->getUserService() ) );
             $content->name = array( "eng-GB" => "foo$i" );
             $content->setSection( $section );
             $fields = $content->getFields();

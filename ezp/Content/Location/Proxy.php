@@ -1,17 +1,19 @@
 <?php
 /**
- * File containing the ezp\Content\Location\Concrete interface.
+ * File containing the ezp\Content\Location\Proxy class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content;
-use ezp\Content;
+namespace ezp\Content\Location;
+use ezp\Base\Proxy as BaseProxy,
+    ezp\Content,
+    ezp\Content\Location;
 
 /**
- * This interface represents a Content Location
+ * This class represents a Proxy Content Location
  *
  * @property-read int $id
  * @property int $priority
@@ -31,58 +33,65 @@ use ezp\Content;
  * @property \ezp\Content $content Associated Content object
  * @property \ezp\Content\Location $parent Location's parent location
  */
-interface Location
+class Proxy extends BaseProxy implements Location
 {
-    // TODO const from eZ Publish 4.5
-    // needs update to reflect concept changes
-    const SORT_FIELD_PATH = 1;
-    const SORT_FIELD_PUBLISHED = 2;
-    const SORT_FIELD_MODIFIED = 3;
-    const SORT_FIELD_SECTION = 4;
-    const SORT_FIELD_DEPTH = 5;
-    const SORT_FIELD_CLASS_IDENTIFIER = 6;
-    const SORT_FIELD_CLASS_NAME = 7;
-    const SORT_FIELD_PRIORITY = 8;
-    const SORT_FIELD_NAME = 9;
-    const SORT_FIELD_MODIFIED_SUBNODE = 10;
-    const SORT_FIELD_NODE_ID = 11;
-    const SORT_FIELD_CONTENTOBJECT_ID = 12;
-
-    const SORT_ORDER_DESC = 0;
-    const SORT_ORDER_ASC = 1;
+    public function __construct( $id, Service $service )
+    {
+        parent::__construct( $id, $service );
+    }
 
     /**
      * Returns the parent Location
      *
      * @return \ezp\Content\Location
      */
-    public function getParent();
+    public function getParent()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getParent();
+    }
 
     /**
      * Sets the parent Location and updates inverse side ( $parent->children )
      *
      * @param \ezp\Content\Location $parent
      */
-    public function setParent( Location $parent );
+    public function setParent( Location $parent )
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->setParent( $parent );
+    }
 
     /**
      * Returns the Content the Location holds
      *
      * @return \ezp\Content
      */
-    public function getContent();
+    public function getContent()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getContent();
+    }
 
     /**
      * Sets the content and updates inverse side ( $content->locations )
      *
      * @param \ezp\Content $content
      */
-    public function setContent( Content $content );
+    public function setContent( Content $content )
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->setContent( $content );
+    }
 
     /**
      * Returns collection of children locations
      *
      * @return \ezp\Content\Location[]
      */
-    public function getChildren();
+    public function getChildren()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getChildren();
+    }
 }

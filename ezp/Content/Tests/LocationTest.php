@@ -8,17 +8,19 @@
  */
 
 namespace ezp\Content\Tests;
-use ezp\Content\Location,
-    ezp\Content,
-    ezp\Content\Section,
-    ezp\Content\Type,
-    ezp\User;
+use ezp\Content\Location\Concrete as ConcreteLocation,
+    ezp\Content\Concrete as ConcreteContent,
+    ezp\Content\Section\Concrete as ConcreteSection,
+    ezp\Content\Type\Concrete as ConcreteType,
+    ezp\Base\Service\Container,
+    ezp\User\Proxy as ProxyUser,
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Location class
  *
  */
-class LocationTest extends \PHPUnit_Framework_TestCase
+class LocationTest extends PHPUnit_Framework_TestCase
 {
     protected $content;
 
@@ -27,10 +29,11 @@ class LocationTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
 
         // setup a content type & content object of use by tests, fields are not needed for location
-        $contentType = new Type();
+        $contentType = new ConcreteType();
         $contentType->identifier = 'article';
 
-        $this->content = new Content( $contentType, new User( 10 ) );
+        $sc = new Container;
+        $this->content = new ConcreteContent( $contentType, new ProxyUser( 10, $sc->getRepository()->getUserService() ) );
     }
 
     /**
@@ -39,8 +42,8 @@ class LocationTest extends \PHPUnit_Framework_TestCase
      */
     public function testChildrenWrongClass()
     {
-        $location = new Location( $this->content );
-        $location->children[] = new Section();
+        $location = new ConcreteLocation( $this->content );
+        $location->children[] = new ConcreteSection();
     }
 
     /**
@@ -49,8 +52,8 @@ class LocationTest extends \PHPUnit_Framework_TestCase
      */
     public function testParentWrongClass()
     {
-        $location = new Location( $this->content );
-        $location->setParent( new Section() );
+        $location = new ConcreteLocation( $this->content );
+        $location->setParent( new ConcreteSection() );
     }
 
     /**
@@ -59,10 +62,10 @@ class LocationTest extends \PHPUnit_Framework_TestCase
      */
     public function testChildrenWhenSetWithParent()
     {
-        $location = new Location( $this->content );
-        $location2 = new Location( $this->content );
+        $location = new ConcreteLocation( $this->content );
+        $location2 = new ConcreteLocation( $this->content );
         $location2->setParent( $location );
         $this->assertEquals( $location->children[0], $location2, 'Children on inverse side was not correctly updated when assigned as parent!' );
-        $this->assertNotEquals( $location->children[0], new Location( $this->content ), 'Equal function miss-behaves, this should not be equal!' );
+        $this->assertNotEquals( $location->children[0], new ConcreteLocation( $this->content ), 'Equal function miss-behaves, this should not be equal!' );
     }
 }

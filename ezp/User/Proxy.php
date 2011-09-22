@@ -1,16 +1,19 @@
 <?php
 /**
- * File containing User interface
+ * File containing the ezp\User\Proxy class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp;
+namespace ezp\User;
+use ezp\Base\Proxy as BaseProxy,
+    ezp\Base\ModelDefinition,
+    ezp\User;
 
 /**
- * This interface represents a User item
+ * This class represents a Proxy User object
  *
  * @property-read mixed $id
  * @property string $login
@@ -21,48 +24,56 @@ namespace ezp;
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
-interface User
+class Proxy extends BaseProxy implements Groupable, ModelDefinition, User
 {
-    /**
-     * @var int MD5 of password, not recommended
-     */
-    const PASSWORD_HASH_MD5_PASSWORD = 1;
+    public function __construct( $id, Service $service )
+    {
+        parent::__construct( $id, $service );
+    }
 
     /**
-     * @var int MD5 of user and password
+     * Returns definition of the user object, atm: permissions
+     *
+     * @access private
+     * @return array
      */
-    const PASSWORD_HASH_MD5_USER = 2;
-
-    /**
-     * @var int MD5 of site, user and password
-     */
-    const PASSWORD_HASH_MD5_SITE = 3;
-
-    /**
-     * @var int Passwords in plaintext, should not be used for real sites
-     */
-    const PASSWORD_HASH_PLAIN_TEXT = 5;
+    public static function definition()
+    {
+        return Concrete::definition();
+    }
 
     /**
      * List of assigned groups
      *
      * @return \ezp\User\Group[]
      */
-    public function getGroups();
+    public function getGroups()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getGroups();
+    }
 
     /**
      * List of assigned Roles
      *
      * @return array|User\Role[]
      */
-    public function getRoles();
+    public function getRoles()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getRoles();
+    }
 
     /**
      * List of assigned and inherited policies (via assigned and inherited roles)
      *
      * @return array|User\Policy[]
      */
-    public function getPolicies();
+    public function getPolicies()
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getPolicies();
+    }
 
     /**
      * Checks if user has access to a specific module/function
@@ -76,5 +87,9 @@ interface User
      * @param string $function
      * @return array|bool
      */
-    public function hasAccessTo( $module, $function );
+    public function hasAccessTo( $module, $function )
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->hasAccessTo( $module, $function );
+    }
 }

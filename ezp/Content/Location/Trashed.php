@@ -9,11 +9,11 @@
 
 namespace ezp\Content\Location;
 use ezp\Content,
-    ezp\Content\Location,
+    ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Persistence\Content\Location\Trashed as TrashedLocationValue,
     ezp\Base\Exception\InvalidArgumentType;
 
-class Trashed extends Location
+class Trashed extends ConcreteLocation
 {
     /**
      * @var array Readable of properties on this object

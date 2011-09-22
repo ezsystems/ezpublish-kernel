@@ -8,21 +8,21 @@
  */
 
 namespace ezp\Content\Tests\Service;
-use ezp\Content\Location\Trash\Service,
+use ezp\Content\Location,
+    ezp\Content\Location\Trash\Service,
     ezp\Content\Location\Service as LocationService,
-    ezp\Base\Exception\NotFound,
-    \ReflectionObject,
-    ezp\Content,
-    ezp\Content\Type,
-    ezp\Content\Location,
+    ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Location\Collection,
     ezp\Content\Location\Trashed,
-    ezp\Base\Proxy,
-    ezp\Content\Section,
+    ezp\Content\Concrete as ConcreteContent,
+    ezp\Content\Type,
     ezp\Content\Query,
+    ezp\Content\Proxy as ProxyContent,
     ezp\Content\Query\Builder as QueryBuilder,
+    ezp\Base\Exception\NotFound,
     ezp\Persistence\Content\Location\Trashed as TrashedValue,
-    ezp\User;
+    ezp\User\Proxy as ProxyUser,
+    ReflectionObject;
 
 /**
  * Test case for Location service
@@ -90,10 +90,11 @@ class TrashTest extends Base
         parent::setUp();
         $this->locationService = $this->repository->getLocationService();
         $this->service = $this->repository->getTrashService();
+        $administrator = new ProxyUser( 14, $this->repository->getUserService() );
 
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );
-        $content = new Content( $type, new User( 14 ) );
+        $content = new ConcreteContent( $type, $administrator );
         $content->name = "test";
         $content->setSection( $section );
         $fields = $content->getFields();
@@ -104,7 +105,7 @@ class TrashTest extends Base
 
         // Now creating location for content
         $this->topLocation = $this->locationService->load( 2 );
-        $this->location = new Location( new Proxy( $this->repository->getContentService(), $this->content->id ) );
+        $this->location = new ConcreteLocation( new ProxyContent( $this->content->id, $this->repository->getContentService() ) );
         $this->location->setParent( $this->topLocation );
         $this->location = $this->locationService->create( $this->location );
         $this->locationToDelete[] = $this->location;
@@ -112,7 +113,7 @@ class TrashTest extends Base
         $parent = $this->topLocation;
         for ( $i = 0; $i < 10; ++$i )
         {
-            $content = new Content( $type, new User( 14 ) );
+            $content = new ConcreteContent( $type, $administrator );
             $content->name = "foo$i";
             $content->setSection( $section );
             $fields = $content->getFields();
@@ -121,7 +122,7 @@ class TrashTest extends Base
             $content = $this->repository->getContentService()->create( $content );
             $this->contentToDelete[] = $content;
 
-            $location = new Location( $content );
+            $location = new ConcreteLocation( $content );
             $location->setParent( $parent );
             $location = $this->locationService->create( $location );
             $this->locationToDelete[] = $location;
@@ -254,13 +255,13 @@ class TrashTest extends Base
         $refParent = $refDo->getProperty( 'parent' );
         $refParent->setAccessible( true );
         $parent = $refParent->getValue( $do );
-        self::assertInstanceOf( 'ezp\\Base\\Proxy', $parent, 'Parent location must be a valid Proxy object after init by service' );
+        self::assertInstanceOf( 'ezp\\Content\\Location\\Proxy', $parent, 'Parent location must be a valid Proxy object after init by service' );
         self::assertEquals( $vo->parentId, $parent->id );
 
         $refContent = $refDo->getProperty( 'content' );
         $refContent->setAccessible( true );
         $content = $refContent->getValue( $do );
-        self::assertInstanceOf( 'ezp\\Base\\Proxy', $content, 'Content must be a valid Proxy object after init by service' );
+        self::assertInstanceOf( 'ezp\\Content\\Proxy', $content, 'Content must be a valid Proxy object after init by service' );
         self::assertEquals( $vo->contentId, $content->id );
 
         self::assertEquals( $do->sortField, $vo->sortField );

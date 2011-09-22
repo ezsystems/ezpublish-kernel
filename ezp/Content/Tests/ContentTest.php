@@ -8,15 +8,10 @@
  */
 
 namespace ezp\Content\Tests;
-use ezp\Content,
-    ezp\Content\Location,
-    ezp\Content\Section,
-    ezp\Content\Type,
-    ezp\Content\Type\FieldDefinition,
-    ezp\User,
-    ezp\Content\FieldType\Value as FieldValue,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue,
-    ezp\Content\FieldType\Keyword\Value as KeywordValue;
+use ezp\Content\Concrete as ConcreteContent,
+    ezp\Content\Location\Concrete as ConcreteLocation,
+    ezp\Content\Section\Concrete as ConcreteSection,
+    ezp\User\Proxy as ProxyUser;
 
 /**
  * Test case for Content class
@@ -26,12 +21,12 @@ class ContentTest extends BaseContentTest
 {
     /**
      * Test the default Translation internally created with a Content is created
-     * @covers \ezp\Content::__construct
+     * @covers \ezp\Content\Concrete::__construct
      */
     public function testDefaultContentTranslation()
     {
         $this->markTestIncomplete( '@TODO: Re impl' );
-        $content = new Content( $this->contentType, $this->localeEN );
+        $content = new ConcreteContent( $this->contentType, $this->localeEN );
         $tr = $content->translations['eng-GB'];
         self::assertEquals( 1, count( $content->translations ) );
         self::assertEquals( 1, count( $content->versions ) );
@@ -41,46 +36,46 @@ class ContentTest extends BaseContentTest
 
     /**
      * @expectedException InvalidArgumentException
-     * @covers \ezp\Content::addTranslation
+     * @covers \ezp\Content\Concrete::addTranslation
      */
     public function testContentAddExistingTranslation()
     {
         $this->markTestIncomplete( '@TODO: Re impl' );
-        $content = new Content( $this->contentType, $this->localeEN );
+        $content = new ConcreteContent( $this->contentType, $this->localeEN );
         $content->addTranslation( $this->localeEN );
     }
 
     /**
      * @expectedException InvalidArgumentException
-     * @covers \ezp\Content::removeTranslation
+     * @covers \ezp\Content\Concrete::removeTranslation
      */
     public function testContentRemoveUnexistingTranslation()
     {
         $this->markTestIncomplete( '@TODO: Re impl' );
-        $content = new Content( $this->contentType, $this->localeEN );
+        $content = new ConcreteContent( $this->contentType, $this->localeEN );
         $content->removeTranslation( $this->localeFR );
     }
 
     /**
      * @expectedException InvalidArgumentException
-     * @covers \ezp\Content::removeTranslation
+     * @covers \ezp\Content\Concrete::removeTranslation
      */
     public function testContentRemoveMainLocaleTranslation()
     {
         $this->markTestIncomplete( '@TODO: Re impl' );
-        $content = new Content( $this->contentType, $this->localeEN );
+        $content = new ConcreteContent( $this->contentType, $this->localeEN );
         $content->removeTranslation( $this->localeEN );
     }
 
     /**
      * Test that Content::removeTranslation() really removes the Translation
      * object
-     * @covers \ezp\Content::removeTranslation
+     * @covers \ezp\Content\Concrete::removeTranslation
      */
     public function testContentRemoveTranslation()
     {
         $this->markTestIncomplete( '@TODO: Re impl' );
-        $content = new Content( $this->contentType, $this->localeEN );
+        $content = new ConcreteContent( $this->contentType, $this->localeEN );
         $content->addTranslation( $this->localeFR );
         $content->removeTranslation( $this->localeFR );
         self::assertEquals( count( $content->translations ), 1 );
@@ -91,12 +86,12 @@ class ContentTest extends BaseContentTest
      * - new Translation has the right locale
      * - new Translation has one version
      * - a new version is also added to the Content
-     * @covers \ezp\Content::addTranslation
+     * @covers \ezp\Content\Concrete::addTranslation
      */
     public function testContentAddTranslation()
     {
         $this->markTestIncomplete( '@TODO: Re impl' );
-        $content = new Content( $this->contentType, $this->localeEN );
+        $content = new ConcreteContent( $this->contentType, $this->localeEN );
         $tr = $content->addTranslation( $this->localeFR );
         self::assertEquals( $tr->locale->code, $this->localeFR->code );
         self::assertEquals( 1, count( $tr->versions ) );
@@ -104,24 +99,24 @@ class ContentTest extends BaseContentTest
     }
 
     /**
-     * @covers \ezp\Content::getLocations
+     * @covers \ezp\Content\Concrete::getLocations
      * @expectedException ezp\Base\Exception\InvalidArgumentType
      */
     public function testLocationWrongClass()
     {
-        $content = new Content( $this->contentType, new User( 10 ) );
-        $content->locations[] = new Section();
+        $content = new ConcreteContent( $this->contentType, new ProxyUser( 10, $this->repository->getUserService() ) );
+        $content->locations[] = new ConcreteSection();
     }
 
     /**
      * Test that foreign side of relation is updated for Location -> Content when Location is created
      *
-     * @covers \ezp\Content::getLocations
+     * @covers \ezp\Content\Concrete::getLocations
      */
     public function testContentLocationWhenLocationIsCreated()
     {
-        $content = new Content( $this->contentType, new User( 10 ) );
-        $location = new Location( $content );
+        $content = new ConcreteContent( $this->contentType, new ProxyUser( 10, $this->repository->getUserService() ) );
+        $location = new ConcreteLocation( $content );
         $locations = $content->getLocations();
         $this->assertEquals( $location, $locations[0], 'Location on Content is not correctly updated when Location is created with content in constructor!' );
         $locations[] = $location;

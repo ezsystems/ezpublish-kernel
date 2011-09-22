@@ -16,9 +16,8 @@ use ezp\Persistence\Repository\Handler,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\Logic,
     ezp\Base\ModelDefinition,
-    ezp\Base\Proxy,
-    ezp\Base\ProxyInterface,
-    ezp\User;
+    ezp\User,
+    ezp\User\Proxy as ProxyUser;
 
 /**
  * Repository class
@@ -36,7 +35,7 @@ class Repository
     /**
      * Currently logged in user object for permission purposes
      *
-     * @var \ezp\User|\ezp\Base\ProxyInterface
+     * @var \ezp\User
      */
     protected $user;
 
@@ -62,9 +61,9 @@ class Repository
         if ( $user !== null )
             $this->setUser( $user );
         else
-            $this->user = new Proxy(
-                $this->getUserService(),
-                Configuration::getInstance( 'site' )->get( 'UserSettings', 'AnonymousUserID', 10 )
+            $this->user = new ProxyUser(
+                Configuration::getInstance( 'site' )->get( 'UserSettings', 'AnonymousUserID', 10 ),
+                $this->getUserService()
             );
 
     }
@@ -76,9 +75,6 @@ class Repository
      */
     function getUser()
     {
-        if ( $this->user instanceof ProxyInterface )
-            $this->user = $this->user->load();
-
         return $this->user;
     }
 

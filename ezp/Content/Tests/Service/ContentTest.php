@@ -9,18 +9,15 @@
 
 namespace ezp\Content\Tests\Service;
 use ezp\Content,
-    ezp\Content\Location,
-    ezp\Content\Type,
+    ezp\Content\Concrete as ConcreteContent,
+    ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Relation,
     ezp\Content\Version,
     ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Base\Exception\NotFound,
-    ezp\Persistence\Content as ContentValue,
     ezp\Persistence\Content\Location as LocationValue,
-    ezp\Persistence\Content\Version as VersionValue,
-    ezp\Persistence\Content\Query\Criterion\ContentId,
-    \ReflectionObject,
-    ezp\User;
+    ezp\User\Proxy as ProxyUser,
+    ReflectionObject;
 
 /**
  * Test case for Content service
@@ -32,10 +29,16 @@ class ContentTest extends BaseServiceTest
      */
     protected $service;
 
+    /**
+     * @var \ezp\User\Service
+     */
+    protected $anonymousUser;
+
     protected function setUp()
     {
         parent::setUp();
         $this->service = $this->repository->getContentService();
+        $this->anonymousUser = new ProxyUser( 10, $this->repository->getUserService() );
     }
 
     /**
@@ -62,13 +65,13 @@ class ContentTest extends BaseServiceTest
         $refSection = $refDo->getProperty( "section" );
         $refSection->setAccessible( true );
         $section = $refSection->getValue( $do );
-        self::assertInstanceOf( "ezp\\Base\\Proxy", $section, "Section must be a valid Proxy object after init by service" );
+        self::assertInstanceOf( "ezp\\Content\\Section\\Proxy", $section, "Section must be a valid Proxy object after init by service" );
         self::assertEquals( $vo->sectionId, $section->id );
 
         $refContentType = $refDo->getProperty( "contentType" );
         $refContentType->setAccessible( true );
         $contentType = $refContentType->getValue( $do );
-        self::assertInstanceOf( "ezp\\Base\\Proxy", $contentType, "Content Type must be a valid Proxy object after init by service" );
+        self::assertInstanceOf( "ezp\\Content\\Type\\Proxy", $contentType, "Content Type must be a valid Proxy object after init by service" );
         self::assertEquals( $vo->typeId, $contentType->id );
 
         self::assertEquals( 14, $do->ownerId, "Owner ID must be the one of Administrator" );
@@ -123,7 +126,7 @@ class ContentTest extends BaseServiceTest
         $type = $this->repository->getContentTypeService()->load( 1 );
         $location = $this->repository->getLocationService()->load( 2 );
         $section = $this->repository->getSectionService()->load( 2 );
-        $content = new Content( $type, new User( 10 ) );
+        $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
         $content->name = array( "eng-GB" => "New object" );
         $content->setSection( $section );
@@ -149,7 +152,7 @@ class ContentTest extends BaseServiceTest
     {
         $type = $this->repository->getContentTypeService()->load( 1 );
         $location = $this->repository->getLocationService()->load( 2 );
-        $content = new Content( $type, new User( 10 ) );
+        $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
         $content->name = array( "eng-GB" => "New object" );
 
@@ -322,7 +325,7 @@ class ContentTest extends BaseServiceTest
      */
     public function testDeleteNotExisting()
     {
-        $content = new Content( new Type, new User( 10 ) );
+        $content = new ConcreteContent( new ConcreteType, $this->anonymousUser );
         $content->getState( "properties" )->id = 999;
         $this->service->delete( $content );
     }
@@ -379,7 +382,7 @@ class ContentTest extends BaseServiceTest
      */
     public function testLoadFieldsNonExistingContent()
     {
-        $content = new Content( new Type, new User( 10 ) );
+        $content = new ConcreteContent( new ConcreteType, $this->anonymousUser );
         $content->getState( "properties" )->id = 999;
         foreach ( $content->versions as $version )
         {
@@ -612,7 +615,7 @@ class ContentTest extends BaseServiceTest
         $type = $this->repository->getContentTypeService()->load( 1 );
         $location = $this->repository->getLocationService()->load( 2 );
         $section = $this->repository->getSectionService()->load( 1 );
-        $newContent = new Content( $type, new User( 10 ) );
+        $newContent = new ConcreteContent( $type, $this->anonymousUser );
 
         $version = $this->service->load( 1 )->currentVersion;
 
@@ -629,7 +632,7 @@ class ContentTest extends BaseServiceTest
         $location = $this->repository->getLocationService()->load( 2 );
         $section = $this->repository->getSectionService()->load( 1 );
 
-        $content = new Content( $type, new User( 10 ) );
+        $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
         $content->name = array( "eng-GB" => __METHOD__ );
         $content->setSection( $section );
@@ -656,7 +659,7 @@ class ContentTest extends BaseServiceTest
         $section = $this->repository->getSectionService()->load( 1 );
 
         // Create and publish content in version 1
-        $content = new Content( $type, new User( 10 ) );
+        $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
         $content->name = array( "eng-GB" => __METHOD__ );
         $content->setSection( $section );

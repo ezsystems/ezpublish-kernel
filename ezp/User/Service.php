@@ -10,7 +10,6 @@
 namespace ezp\User;
 use ezp\Base\Configuration,
     ezp\Base\Service as BaseService,
-    ezp\Base\Proxy,
     ezp\Base\Collection\Lazy,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Exception\BadConfiguration,
@@ -21,12 +20,15 @@ use ezp\Base\Configuration,
     ezp\Base\Exception\Logic,
     ezp\Content,
     ezp\Content\Location,
+    ezp\Content\Proxy as ProxyContent,
     ezp\User,
+    ezp\User\Concrete as ConcreteUser,
     ezp\User\Exception\FailedLogin,
-    ezp\User\Group,
-    ezp\User\Groupable,
-    ezp\User\Role,
-    ezp\User\Policy,
+    ezp\User\Proxy as ProxyUser,
+    ezp\User\Group\Concrete as ConcreteGroup,
+    ezp\User\Group\Proxy as ProxyGroup,
+    ezp\User\Role\Concrete as ConcreteRole,
+    ezp\User\Role\Proxy as ProxyRole,
     ezp\Persistence\User as UserValueObject,
     ezp\Persistence\User\Role as RoleValueObject,
     ezp\Persistence\User\RoleUpdateStruct,
@@ -176,7 +178,7 @@ class Service extends BaseService
         if ( !$type )
             throw new BadConfiguration( 'site.ini[UserSettings]UserGroupClassID', 'could not load type:' . $typeId );
 
-        $content = new Content( $type, $this->repository->getUser() );
+        $content = new Content\Concrete( $type, $this->repository->getUser() );
         $content->addParent( $parentLocation );
         $content->getState( 'properties' )->sectionId = $parentContent->sectionId;
 
@@ -427,7 +429,7 @@ class Service extends BaseService
     {
         $policies = $this->handler->userHandler()->loadPoliciesByUserId( $id );
         foreach ( $policies as &$value )
-            $value = $this->buildPolicy( $value, new Proxy( $this, $value->roleId, 'loadRole' ) );
+            $value = $this->buildPolicy( $value, new ProxyRole( $value->roleId, $this ) );
         return $policies;
     }
 
@@ -478,7 +480,7 @@ class Service extends BaseService
      */
     protected function buildUser( UserValueObject $vo, Content $content )
     {
-        $do = new User();
+        $do = new ConcreteUser();
         $do->setState(
             array(
                 "properties" => $vo,
@@ -515,11 +517,12 @@ class Service extends BaseService
         $parent = null;
         if ( $content->getMainLocation()->parentId > 1 )
         {
-            $parent = new Proxy( $this,
-                                 $content->getMainLocation()->getParent()->getContent()->id,// not very lazy, callback / api?
-                                 'loadGroup' );
+            $parent = new ProxyGroup( 
+                $content->getMainLocation()->getParent()->getContent()->id,// not very lazy, callback / api?
+                $this
+            );
         }
-        $do = new Group( $content );
+        $do = new ConcreteGroup( $content );
         $do->setState(
             array(  
                 "parent" => $parent,
@@ -540,7 +543,7 @@ class Service extends BaseService
      */
     protected function buildRole( RoleValueObject $vo )
     {
-        $do = new Role();
+        $do = new ConcreteRole();
         $policies = array();
         foreach ( $vo->policies as $policyVo )
         {
@@ -557,10 +560,10 @@ class Service extends BaseService
 
     /**
      * @param \ezp\Persistence\User\Policy $vo
-     * @param \ezp\User\Role|\ezp\Base\Proxy $role
+     * @param \ezp\User\Role $role
      * @return \ezp\User\Policy
      */
-    protected function buildPolicy( PolicyValueObject $vo, $role )
+    protected function buildPolicy( PolicyValueObject $vo, Role $role )
     {
         $do = new Policy( $role );
         $do->setState(

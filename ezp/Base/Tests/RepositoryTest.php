@@ -9,8 +9,8 @@
 
 namespace ezp\Base\Tests;
 use ezp\Content\Tests\Service\Base as BaseServiceTest,
-    ezp\Content,
-    ezp\User\Role,
+    ezp\Content\Concrete as ConcreteContent,
+    ezp\User\Role\Concrete as ConcreteRole,
     ezp\User\Policy;
 
 /**
@@ -84,7 +84,7 @@ class RepositoryTest extends BaseServiceTest
             $contentService->load( $userGroup->id )->locations[0]
         );
 
-        $role = new Role();
+        $role = new ConcreteRole();
         $role->name = 'Role manager';
         $role->addPolicy( $policy = new Policy( $role ) );
         $policy->module = 'role';
@@ -131,7 +131,7 @@ class RepositoryTest extends BaseServiceTest
             $contentService->load( $userGroup->id )->locations[0]
         );
 
-        $role = new Role();
+        $role = new ConcreteRole();
         $role->name = 'Type (Class) manager';
         $role->addPolicy( $policy = new Policy( $role ) );
         $policy->module = 'class';
@@ -153,7 +153,7 @@ class RepositoryTest extends BaseServiceTest
         $section = $this->repository->getSectionService()->load( 1 );
         $type = $this->repository->getContentTypeService()->load( 1 );
         $parent = $this->repository->getLocationService()->load( 2 );
-        $content = new Content( $type, $this->repository->getUser() );
+        $content = new ConcreteContent( $type, $this->repository->getUser() );
         $content->setSection( $section );
         $this->assertFalse( $this->repository->canUser( 'create', $content, $parent ) );
 
@@ -205,7 +205,7 @@ class RepositoryTest extends BaseServiceTest
             $contentService->load( $userGroup->id )->locations[0]
         );
 
-        $role = new Role();
+        $role = new ConcreteRole();
         $role->name = 'Limited section assigner';
 
         $role->addPolicy( $policy = new Policy( $role ) );

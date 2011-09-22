@@ -14,9 +14,11 @@ use ezp\Base\Exception,
     ezp\Base\Service as BaseService,
     ezp\Base\Collection\Lazy,
     ezp\Content\Location,
+    ezp\Content\Location\Concrete as ConcreteLocation,
+    ezp\Content\Location\Proxy as ProxyLocation,
     ezp\Content\Location\Exception\NotFound as LocationNotFound,
-    ezp\Base\Proxy,
     ezp\Content\Section,
+    ezp\Content\Proxy as ProxyContent,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
     ezp\Persistence\Content\Location as LocationValue,
@@ -331,7 +333,7 @@ class Service extends BaseService
      */
     protected function buildDomainObject( LocationValue $vo )
     {
-        $location = new Location( new Proxy( $this->repository->getContentService(), $vo->contentId ) );
+        $location = new ConcreteLocation( new ProxyContent( $vo->contentId, $this->repository->getContentService() ) );
 
         return $this->refreshDomainObject( $location, $vo );
     }
@@ -353,7 +355,7 @@ class Service extends BaseService
 
         $newState = array(
             'properties' => $vo,
-            'parent' => new Proxy( $this, $vo->parentId ),
+            'parent' => new ProxyLocation( $vo->parentId, $this ),
             'children' => new Lazy(
                 'ezp\\Content\\Location',
                 $this,
@@ -364,7 +366,7 @@ class Service extends BaseService
         // Check if associated content also needs to be refreshed
         if ( $vo->contentId != $location->contentId )
         {
-            $newState['content'] = new Proxy( $this->repository->getContentService(), $vo->contentId );
+            $newState['content'] = new ProxyContent( $vo->contentId, $this->repository->getContentService() );
         }
         $location->setState( $newState );
 

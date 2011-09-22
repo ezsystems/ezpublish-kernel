@@ -11,11 +11,12 @@ namespace ezp\Content\Location\Trash;
 use ezp\Base\Exception,
     ezp\Base\Service as BaseService,
     ezp\Content\Location,
+    ezp\Content\Location\Proxy as ProxyLocation,
     ezp\Content\Location\Trashed,
     ezp\Content\Location\Collection,
     ezp\Content\Location\Trash\Exception\NotFound as TrashedLocationNotFound,
     ezp\Content\Query,
-    ezp\Base\Proxy,
+    ezp\Content\Proxy as ProxyContent,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\Logic,
@@ -142,10 +143,10 @@ class Service extends BaseService
      */
     protected function buildDomainObject( TrashedLocationValue $vo )
     {
-        $trashedLocation = new Trashed( new Proxy( $this->repository->getContentService(), $vo->contentId ) );
+        $trashedLocation = new Trashed( new ProxyContent( $vo->contentId, $this->repository->getContentService() ) );
         $trashedLocation->setState(
             array(
-                'parent' => new Proxy( $this, $vo->parentId ),
+                'parent' => new ProxyLocation( $vo->parentId, $this->repository->getLocationService() ),
                 'properties' => $vo
             )
         );

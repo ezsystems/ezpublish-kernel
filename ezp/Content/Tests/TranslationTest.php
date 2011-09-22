@@ -10,7 +10,7 @@
 namespace ezp\Content\Tests;
 use ezp\Content,
     ezp\Content\Translation,
-    ezp\Content\Type;
+    ezp\Content\Type\Concrete as ConcreteType;
 
 /**
  * Test case for Translation class
@@ -27,7 +27,7 @@ class TranslationTest extends \PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->contentType = new Type();
+        $this->contentType = new ConcreteType();
         $this->contentType->identifier = 'article';
     }
 

@@ -15,7 +15,7 @@ use PHPUnit_Framework_TestCase,
     ezp\Content\FieldType\Value,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Content\FieldType\TextLine\StringLengthValidator,
-    ezp\Content\Type as ContentType,
+    ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Type\FieldDefinition,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
@@ -194,7 +194,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testFillConstraintsFromValidator()
     {
-        $contentType = new ContentType;
+        $contentType = new ConcreteType;
         $contentType->identifier = 'article';
         $fields = $contentType->getFields();
         $fieldDef = new FieldDefinition( $contentType, 'ezstring' );
@@ -225,7 +225,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testFillConstraintsFromUnsupportedValidator()
     {
-        $contentType = new ContentType;
+        $contentType = new ConcreteType;
         $contentType->identifier = 'article';
         $fields = $contentType->getFields();
         $fieldDef = new FieldDefinition( $contentType, 'ezstring' );

@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Tests;
-use ezp\Content\Section,
+use ezp\Content\Section\Concrete as ConcreteSection,
     ezp\Base\Service\Container;
 
 /**
@@ -19,11 +19,11 @@ class SectionTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * Test a new class and default values on properties
-     * @covers \ezp\Content\Section::__construct
+     * @covers \ezp\Content\Section\Concrete::__construct
      */
     public function testNewClass()
     {
-        $section = new Section();
+        $section = new ConcreteSection();
         self::assertEquals( $section->id, null );
         self::assertEquals( $section->identifier, null );
         self::assertEquals( $section->name, null );
@@ -31,21 +31,21 @@ class SectionTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException ezp\Base\Exception\PropertyNotFound
-     * @covers \ezp\Content\Section::__construct
+     * @covers \ezp\Content\Section\Concrete::__construct
      */
     public function testMissingProperty()
     {
-        $section = new Section();
+        $section = new ConcreteSection();
         $value = $section->notDefined;
     }
 
     /**
      * @expectedException ezp\Base\Exception\PropertyPermission
-     * @covers \ezp\Content\Section::__set
+     * @covers \ezp\Content\Section\Concrete::__set
      */
     public function testReadOnlyProperty()
     {
-        $section = new Section();
+        $section = new ConcreteSection();
         $section->id = 22;
     }
 }
