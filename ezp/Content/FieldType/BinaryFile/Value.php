@@ -46,12 +46,14 @@ class Value implements ValueInterface
 
     /**
      * @see \ezp\Content\FieldType\Value
+     * @return \ezp\Content\FieldType\BinaryFile\Value
      */
     public static function fromString( $stringValue )
     {
         $value = new static();
         $value->file = $value->handler->createFromLocalPath( $stringValue );
         $value->originalFilename = basename( $stringValue );
+        return $value;
     }
 
     /**
