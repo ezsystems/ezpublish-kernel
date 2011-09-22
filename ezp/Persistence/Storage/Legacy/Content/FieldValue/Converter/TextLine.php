@@ -42,7 +42,7 @@ class TextLine implements Converter
     {
         $fieldValue->data = new TextLineValue( $value->dataText );
         // TODO: Feel there is room for some improvement here, to generalize this code across field types.
-        $fieldValue->sortKey = array( $value->sortKeyString );
+        $fieldValue->sortKey = array( 'sort_key_string' => $value->sortKeyString );
     }
 
     /**
