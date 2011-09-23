@@ -49,9 +49,9 @@ class BinaryFileHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType\BinaryFile\Handler::createFromLocalFile
+     * @covers \ezp\Content\FieldType\BinaryFile\Handler::createFromLocalPath
      */
-    public function testCreateFromLocalFile()
+    public function testCreateFromLocalPath()
     {
         $file = $this->handler->createFromLocalPath( $this->imagePath );
         self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $file );
