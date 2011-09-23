@@ -590,6 +590,21 @@ class ServiceTest extends BaseServiceTest
     public function testLoadPoliciesByUserId()
     {
         $service = $this->repository->getUserService();
+        $policies = $service->loadPoliciesByUserId( 10 );
+        self::assertEquals( 8, count( $policies ) );
+        self::assertEquals( 'content', $policies[0]->module );
+        self::assertEquals( 'pdf', $policies[0]->function );
+        self::assertEquals( array( 'Section' => array( 1 ) ), $policies[0]->limitations );
+    }
+    /**
+     * Test service function for loading policies by user id
+     *
+     * @covers \ezp\User\Service::loadPoliciesByUserId
+     * @group userService
+     */
+    public function testLoadPoliciesByUserIdWithNewPolicies()
+    {
+        $service = $this->repository->getUserService();
         $this->clearRolesByGroup( $service->loadGroup( 42 ) );
 
         $policies = $service->loadPoliciesByUserId( 10 );
