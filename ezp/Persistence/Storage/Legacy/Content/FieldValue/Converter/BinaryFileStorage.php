@@ -79,6 +79,7 @@ class BinaryFileStorage implements Storage
      * @param \ezp\Persistence\Content\FieldValue $value
      * @param array $context
      * @return \ezp\Persistence\Content\FieldValue
+     * @todo Currently impossible to handle since $fieldId is not sufficient (missing at least version)
      */
     public function getFieldData( $fieldId, FieldValue $value, array $context )
     {
