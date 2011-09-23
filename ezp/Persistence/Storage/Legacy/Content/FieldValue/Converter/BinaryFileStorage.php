@@ -33,7 +33,7 @@ class BinaryFileStorage implements Storage
      * @param \ezp\Persistence\Content\FieldValue $value
      * @param array $context
      * @return bool
-     * @todo Handle download_count and version columns
+     * @todo Check if it's insert or update query
      *
      */
     public function storeFieldData( $fieldId, FieldValue $value, array $context )
