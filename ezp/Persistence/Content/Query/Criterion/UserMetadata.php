@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Criterion\Operator\Specifications,
-    ezp\Persistence\Content\CriterionInterface,
+namespace ezp\Persistence\Content\Query\Criterion;
+use ezp\Persistence\Content\Query\Criterion,
+    ezp\Persistence\Content\Query\Criterion\Operator\Specifications,
+    ezp\Persistence\Content\Query\CriterionInterface,
     InvalidArgumentException;
 
 /**

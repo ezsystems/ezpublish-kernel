@@ -12,7 +12,7 @@ use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
     ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
     ezp\Persistence\Storage\Legacy\Content\Search\TransformationProcessor,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Query\Criterion;
 
 /**
  * Full text criterion handler

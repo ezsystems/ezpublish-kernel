@@ -13,7 +13,7 @@ use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
     ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Search,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Query\Criterion;
 
 /**
  * Content locator gateway implementation using the zeta handler component.

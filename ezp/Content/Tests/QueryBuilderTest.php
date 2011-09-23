@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Content\Tests;
-use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\CriterionFactory,
+use ezp\Persistence\Content\Query\Criterion,
+    ezp\Persistence\Content\Query\CriterionFactory,
     ezp\Content\Query\Builder;
 
 class QueryBuilderTest extends \PHPUnit_Framework_TestCase
@@ -34,7 +34,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf( 'ezp\\Content\\CriterionFactory', $factory );
         // $factory->operator( $param1, $param2 )
         $criterion = call_user_func_array( array( $factory, $operator ), $parameters );
-        self::assertInstanceOf( 'ezp\\Persistence\\Content\\Criterion', $criterion );
+        self::assertInstanceOf( 'ezp\\Persistence\\Content\\Query\\Criterion', $criterion );
     }
 
     public static function providerForTestCriterionGetter()
@@ -118,9 +118,9 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
     public static function providerForTestLogical()
     {
         return array(
-            array( 'or', 2, 'ezp\\Persistence\\Content\\Criterion\\LogicalOr', 2 ),
-            array( 'and', 2, 'ezp\\Persistence\\Content\\Criterion\\LogicalAnd', 2 ),
-            array( 'not', 1, 'ezp\\Persistence\\Content\\Criterion\\LogicalNot', 1 ),
+            array( 'or', 2, 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalOr', 2 ),
+            array( 'and', 2, 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalAnd', 2 ),
+            array( 'not', 1, 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalNot', 1 ),
         );
     }
 

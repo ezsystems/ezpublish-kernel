@@ -148,7 +148,7 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
             ->expects( $this->once() )
             ->method( 'find' )
             ->with(
-                $this->equalTo( new Content\Criterion\ContentTypeId( 23 ) )
+                $this->equalTo( new Content\Query\Criterion\ContentTypeId( 23 ) )
             )->will(
                 $this->returnValue( array( $content, clone $content ) )
             );

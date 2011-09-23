@@ -10,7 +10,7 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Query\Criterion;
 
 /**
  * Content locator gateway implementation using the zeta database component.

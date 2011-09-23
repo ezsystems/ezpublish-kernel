@@ -8,11 +8,11 @@
  */
 
 namespace ezp\Content;
-use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Criterion\Operator,
-    ezp\Persistence\Content\Criterion\LogicalOr,
-    ezp\Persistence\Content\Criterion\LogicalAnd,
-    ezp\Persistence\Content\Criterion\LogicalNot,
+use ezp\Persistence\Content\Query\Criterion,
+    ezp\Persistence\Content\Query\Criterion\Operator,
+    ezp\Persistence\Content\Query\Criterion\LogicalOr,
+    ezp\Persistence\Content\Query\Criterion\LogicalAnd,
+    ezp\Persistence\Content\Query\Criterion\LogicalNot,
     InvalidArgumentException;
 
 /**

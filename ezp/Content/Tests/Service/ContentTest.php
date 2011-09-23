@@ -18,7 +18,7 @@ use ezp\Content,
     ezp\Persistence\Content as ContentValue,
     ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content\Version as VersionValue,
-    ezp\Persistence\Content\Criterion\ContentId,
+    ezp\Persistence\Content\Query\Criterion\ContentId,
     \ReflectionObject,
     ezp\User;
 

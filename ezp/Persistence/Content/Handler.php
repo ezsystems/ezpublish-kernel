@@ -12,7 +12,7 @@ namespace ezp\Persistence\Content;
 use ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
-    ezp\Persistence\Content\Criterion as AbstractCriterion,
+    ezp\Persistence\Content\Query\Criterion as AbstractCriterion,
     ezp\Persistence\Content\RestrictedVersion,
     ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 

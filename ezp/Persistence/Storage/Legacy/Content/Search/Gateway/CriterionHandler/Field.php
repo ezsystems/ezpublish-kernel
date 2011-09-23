@@ -11,7 +11,7 @@ namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
     ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Base\Exception;
 

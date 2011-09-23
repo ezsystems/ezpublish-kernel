@@ -13,7 +13,7 @@ use ezp\Persistence\Content\Location\Trash,
     ezp\Persistence\Content\Location\Trash\CreateStruct,
     ezp\Persistence\Content\Location\Trash\UpdateStruct,
     ezp\Persistence\Content\Location\Trash\Handler as BaseTrashHandler,
-    ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence\Storage\Legacy\Content\Location\Gateway as LocationGateway,
     ezp\Persistence\Storage\Legacy\Content\Location\Mapper as LocationMapper;
 
@@ -113,7 +113,7 @@ class Handler implements BaseTrashHandler
      * sorted with SortClause objects contained in $sort (if any).
      * If no criterion is provided (null), no filter is applied
      *
-     * @param \ezp\Persistence\Content\Criterion $criterion
+     * @param \ezp\Persistence\Content\Query\Criterion $criterion
      * @param $offset Offset to start listing from, 0 by default
      * @param $limit Limit for the listing. Null by default (no limit)
      * @param \ezp\Persistence\Content\Query\SortClause[] $sort

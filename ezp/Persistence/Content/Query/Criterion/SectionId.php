@@ -1,37 +1,41 @@
 <?php
 /**
- * File containing the ezp\Persistence\Content\Criterion\ParentLocationId
+ * File containing the ezp\Persistence\Content\Query\Criterion\Section
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  *
  */
 
-namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Criterion\Operator\Specifications,
-    ezp\Persistence\Content\CriterionInterface;
+namespace ezp\Persistence\Content\Query\Criterion;
+use ezp\Persistence\Content\Query\Criterion,
+    ezp\Persistence\Content\Query\Criterion\Operator\Specifications,
+    ezp\Persistence\Content\Query\CriterionInterface;
 
 /**
- * A criterion that matches content based on its parent location id
+ * SectionId Criterion
  *
- * Own location id is done using {@see LocationId}
- *
- * Supported operators:
- * - IN: matches against a list of location ids
- * - EQ: matches against a unique location id
+ * Will match content that belongs to one of the given sections
  */
-class ParentLocationId extends Criterion implements CriterionInterface
+class SectionId extends Criterion implements CriterionInterface
 {
     /**
-     * Creates a new ParentLocationId criterion
+     * Creates a new Section criterion
      *
-     * @param integer|array(integer) One or more locationId parent locations must be matched against
+     * Matches the content against one or more sectionId
+     *
+     * @param null $target Not used
+     * @param string $operator
+     *        Possible values:
+     *        - Operator::IN: match against a list of sectionId. $value must be an array of sectionId
+     *        - Operator::EQ: match against a single sectionId. $value must be a single sectionId
+     * @param integer|array(integer) One or more sectionId that must be matched
      *
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $value )
+    public function __construct( $value  )
     {
         parent::__construct( null, null, $value );
     }

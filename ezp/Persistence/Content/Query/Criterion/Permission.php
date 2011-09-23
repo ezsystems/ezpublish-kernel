@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\Persistence\Content\Criterion\Permission class
+ * File containing the ezp\Persistence\Content\Query\Criterion\Permission class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,9 +8,9 @@
  *
  */
 
-namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\CriterionInterface,
+namespace ezp\Persistence\Content\Query\Criterion;
+use ezp\Persistence\Content\Query\Criterion,
+    ezp\Persistence\Content\Query\CriterionInterface,
     InvalidArgumentException;
 
 /**

@@ -12,7 +12,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     ezp\Persistence\Storage\Legacy\Content,
     ezp\Persistence\Content as ContentObject,
-    ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence;
 
 /**

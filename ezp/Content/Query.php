@@ -14,7 +14,7 @@ class Query
     /**
      * The Query criterion
      * Can contain multiple criterion, as items of a logical one (by default AND)
-     * @var \ezp\Persistence\Content\Criterion
+     * @var \ezp\Persistence\Content\Query\Criterion
      */
     public $criterion;
 
@@ -40,4 +40,3 @@ class Query
 
     const SORT_DESC = 'descending';
 }
-?>

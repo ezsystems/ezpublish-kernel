@@ -12,7 +12,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Criterion\ContentId,
+    ezp\Persistence\Content\Query\Criterion\ContentId,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Base\Exception\NotFound;
 

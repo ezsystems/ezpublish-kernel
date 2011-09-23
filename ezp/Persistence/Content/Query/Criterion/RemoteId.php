@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\Persistence\Content\Criterion\Section
+ * File containing the ezp\Persistence\Content\Query\Criterion\RemoteId class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,29 +8,24 @@
  *
  */
 
-namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Criterion\Operator\Specifications,
-    ezp\Persistence\Content\CriterionInterface;
+namespace ezp\Persistence\Content\Query\Criterion;
+use ezp\Persistence\Content\Query\Criterion,
+    ezp\Persistence\Content\Query\Criterion\Operator\Specifications,
+    ezp\Persistence\Content\Query\CriterionInterface;
 
 /**
- * SectionId Criterion
+ * A criterion that matches content based on its RemoteId
  *
- * Will match content that belongs to one of the given sections
+ * Supported operators:
+ * - IN: will match from a list of RemoteId
+ * - EQ: will match against one RemoteId
  */
-class SectionId extends Criterion implements CriterionInterface
+class RemoteId extends Criterion implements CriterionInterface
 {
     /**
-     * Creates a new Section criterion
+     * Creates a new remoteId criterion
      *
-     * Matches the content against one or more sectionId
-     *
-     * @param null $target Not used
-     * @param string $operator
-     *        Possible values:
-     *        - Operator::IN: match against a list of sectionId. $value must be an array of sectionId
-     *        - Operator::EQ: match against a single sectionId. $value must be a single sectionId
-     * @param integer|array(integer) One or more sectionId that must be matched
+     * @param integer|array(integer) One or more remoteId that must be matched
      *
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator

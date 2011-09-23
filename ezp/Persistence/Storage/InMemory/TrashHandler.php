@@ -13,7 +13,7 @@ use ezp\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface,
     ezp\Persistence\Content\Location\Trashed as TrashedValue,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\Location as LocationValue,
-    ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Query\Criterion,
     ezp\Base\Exception\NotFound,
     ezp\Content\Location\Exception\ParentNotFound;
 

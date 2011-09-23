@@ -11,7 +11,7 @@ namespace ezp\Persistence\Tests;
 use ezp\Persistence\Content\Location as LocationValue,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\CreateStruct as ContentCreateStruct,
-    ezp\Persistence\Content\Criterion\ContentId,
+    ezp\Persistence\Content\Query\Criterion\ContentId,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue,
     ezp\Base\Exception\NotFound,

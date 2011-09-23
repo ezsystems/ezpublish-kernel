@@ -10,7 +10,7 @@
 namespace ezp\Persistence\Content\Search;
 
 use ezp\Persistence\Content,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Query\Criterion;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -25,7 +25,7 @@ abstract class Handler
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
-     * @param \ezp\Persistence\Content\Criterion $criterion
+     * @param \ezp\Persistence\Content\Query\Criterion $criterion
      * @param int $offset
      * @param int|null $limit
      * @param \ezp\Persistence\Content\Query\SortClause[] $sort
@@ -45,7 +45,7 @@ abstract class Handler
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
-     * @param \ezp\Persistence\Content\Criterion $criterion
+     * @param \ezp\Persistence\Content\Query\Criterion $criterion
      * @param string[] $translations
      * @return \ezp\Persistence\Content
      */

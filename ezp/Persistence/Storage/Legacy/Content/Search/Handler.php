@@ -12,7 +12,7 @@ namespace ezp\Persistence\Storage\Legacy\Content\Search;
 use ezp\Persistence\Content,
     ezp\Persistence\Content\Search\Handler as BaseSearchHandler,
     ezp\Persistence\Content\Search\Result,
-    ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence\Storage\Legacy\Exception,
     ezp\Persistence\Storage\Legacy\Content\Mapper as ContentMapper;
 
@@ -72,7 +72,7 @@ class Handler extends BaseSearchHandler
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
-     * @param \ezp\Persistence\Content\Criterion $criterion
+     * @param \ezp\Persistence\Content\Query\Criterion $criterion
      * @param int $offset
      * @param int|null $limit
      * @param \ezp\Persistence\Content\Query\SortClause[] $sort

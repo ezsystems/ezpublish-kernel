@@ -10,7 +10,7 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Search;
 
 use ezp\Persistence\Content,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Query\Criterion;
 
 /**
  * The Content Search Gateway provides the implementation for one database to

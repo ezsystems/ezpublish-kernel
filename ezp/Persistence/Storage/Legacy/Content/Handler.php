@@ -14,7 +14,7 @@ use ezp\Persistence\Storage\Legacy\Content\Gateway,
     ezp\Persistence\Content\Handler as BaseContentHandler,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\Criterion,
+    ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence\Content\RestrictedVersion,
     ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 

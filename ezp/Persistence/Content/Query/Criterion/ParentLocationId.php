@@ -1,36 +1,37 @@
 <?php
 /**
- * File containing the ezp\Persistence\Content\Criterion\RemoteId class
+ * File containing the ezp\Persistence\Content\Query\Criterion\ParentLocationId
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
- * @version //autogentag//
  *
  */
 
-namespace ezp\Persistence\Content\Criterion;
-use ezp\Persistence\Content\Criterion,
-    ezp\Persistence\Content\Criterion\Operator\Specifications,
-    ezp\Persistence\Content\CriterionInterface;
+namespace ezp\Persistence\Content\Query\Criterion;
+use ezp\Persistence\Content\Query\Criterion,
+    ezp\Persistence\Content\Query\Criterion\Operator\Specifications,
+    ezp\Persistence\Content\Query\CriterionInterface;
 
 /**
- * A criterion that matches content based on its RemoteId
+ * A criterion that matches content based on its parent location id
+ *
+ * Own location id is done using {@see LocationId}
  *
  * Supported operators:
- * - IN: will match from a list of RemoteId
- * - EQ: will match against one RemoteId
+ * - IN: matches against a list of location ids
+ * - EQ: matches against a unique location id
  */
-class RemoteId extends Criterion implements CriterionInterface
+class ParentLocationId extends Criterion implements CriterionInterface
 {
     /**
-     * Creates a new remoteId criterion
+     * Creates a new ParentLocationId criterion
      *
-     * @param integer|array(integer) One or more remoteId that must be matched
+     * @param integer|array(integer) One or more locationId parent locations must be matched against
      *
      * @throw InvalidArgumentException if a non numeric id is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
-    public function __construct( $value  )
+    public function __construct( $value )
     {
         parent::__construct( null, null, $value );
     }

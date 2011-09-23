@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Query;
-use ezp\Persistence\Content\Criterion,
+use ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence\Content\Query\SortClause,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\InvalidArgumentValue,
@@ -65,11 +65,11 @@ class Builder
      * Field -> Field
      * A criterion factory
      *
-     * @return \ezp\Persistence\Content\CriterionFactory
+     * @return \ezp\Persistence\Content\Query\CriterionFactory
      */
     public function __get( $property )
     {
-        $class = "ezp\\Persistence\\Content\\Criterion\\" . ucfirst( $property );
+        $class = "ezp\\Persistence\\Content\\Query\\Criterion\\" . ucfirst( $property );
         if ( !class_exists( $class ) )
         {
             throw new InvalidArgumentException( "Criterion $class not found" );
@@ -83,7 +83,7 @@ class Builder
      * The given criteria will be added with a logical AND, meaning that they must all match.
      * To handle OR criteria, the {@see or}/{@see lOr} methods must be used.
      *
-     * @param \ezp\Persistence\Content\Criterion..$ $c
+     * @param \ezp\Persistence\Content\Query\Criterion..$ $c
      * @return \ezp\Content\Query\Builder
      */
     public function addCriteria( Criterion $c )
@@ -92,7 +92,7 @@ class Builder
         {
             if ( !$arg instanceof Criterion )
             {
-                throw new InvalidArgumentException( "All arguments must be instances of ezp\Persistence\Content\Criterion" );
+                throw new InvalidArgumentException( "All arguments must be instances of ezp\Persistence\Content\Query\Criterion" );
             }
             $this->criteria[] = $arg;
         }
@@ -104,14 +104,14 @@ class Builder
      * Logical or
      * Criterion: Criterion\LogicalAnd
      *
-     * @param \ezp\Persistence\Content\Criterion $elementOne
-     * @param \ezp\Persistence\Content\Criterion $elementTwo$...
+     * @param \ezp\Persistence\Content\Query\Criterion $elementOne
+     * @param \ezp\Persistence\Content\Query\Criterion $elementTwo$...
      *
-     * @return \ezp\Persistence\Content\Criterion\LogicalOr
+     * @return \ezp\Persistence\Content\Query\Criterion\LogicalOr
      */
     public function lOr( Criterion $elementOne, Criterion $elementTwo )
     {
-        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Criterion\\LogicalOr' );
+        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalOr' );
         return call_user_func_array( array( $criterionFactory, 'logicalOr' ), func_get_args() );
     }
 
@@ -119,14 +119,14 @@ class Builder
      * Logical and
      * Criterion: Criterion\LogicalAnd
      *
-     * @param \ezp\Persistence\Content\Criterion $elementOne
-     * @param \ezp\Persistence\Content\Criterion $elementTwo$...
+     * @param \ezp\Persistence\Content\Query\Criterion $elementOne
+     * @param \ezp\Persistence\Content\Query\Criterion $elementTwo$...
      *
-     * @return \ezp\Persistence\Content\Criterion\LogicalAnd
+     * @return \ezp\Persistence\Content\Query\Criterion\LogicalAnd
      */
     public function lAnd( Criterion $elementOne, Criterion $elementTwo )
     {
-        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Criterion\\LogicalAnd' );
+        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalAnd' );
         return call_user_func_array( array( $criterionFactory, 'logicalAnd' ), func_get_args() );
     }
 
@@ -134,13 +134,13 @@ class Builder
      * Logical not
      * Criterion: Criterion\LogicalNot
      *
-     * @param \ezp\Persistence\Content\Criterion $criterion
+     * @param \ezp\Persistence\Content\Query\Criterion $criterion
      *
-     * @return \ezp\Persistence\Content\Criterion\LogicalNot
+     * @return \ezp\Persistence\Content\Query\Criterion\LogicalNot
      */
     public function not( Criterion $criterion )
     {
-        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Criterion\\LogicalNot' );
+        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalNot' );
         return call_user_func_array( array( $criterionFactory, 'logicalNot' ), func_get_args() );
     }
 
@@ -150,7 +150,7 @@ class Builder
      * @param string $method
      * @param array $arguments
      *
-     * @return \ezp\Persistence\Content\Criterion
+     * @return \ezp\Persistence\Content\Query\Criterion
      */
     public function __call( $method, $arguments )
     {
@@ -260,7 +260,7 @@ class Builder
 
     /**
      * The internal criteria array
-     * @var Criterion[]
+     * @var \ezp\Persistence\Content\Query\Criterion[]
      */
     private $criteria = array();
 
@@ -288,4 +288,3 @@ class Builder
      */
     public $limit;
 }
-?>

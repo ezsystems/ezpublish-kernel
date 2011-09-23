@@ -11,7 +11,7 @@ namespace ezp\Persistence\Content\Location\Trash;
 use ezp\Persistence\Content\Location,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\Location\UpdateStruct,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Query\Criterion;
 
 /**
  * The Trash Handler interface defines operations on Location elements in the storage engine.
@@ -61,7 +61,7 @@ interface Handler
      * sorted with SortClause objects contained in $sort (if any).
      * If no criterion is provided (null), no filter is applied
      *
-     * @param \ezp\Persistence\Content\Criterion $criterion
+     * @param \ezp\Persistence\Content\Query\Criterion $criterion
      * @param $offset Offset to start listing from, 0 by default
      * @param $limit Limit for the listing. Null by default (no limit)
      * @param \ezp\Persistence\Content\Query\SortClause[] $sort

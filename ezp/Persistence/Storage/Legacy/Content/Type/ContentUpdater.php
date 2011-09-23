@@ -11,7 +11,7 @@ namespace ezp\Persistence\Storage\Legacy\Content\Type;
 use ezp\Persistence\Storage\Legacy\Content,
     ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater,
     ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Criterion;
+    ezp\Persistence\Content\Query\Criterion;
 
 /**
  * Class to update content objects to a new type version
