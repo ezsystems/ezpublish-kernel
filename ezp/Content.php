@@ -121,7 +121,7 @@ class Content extends Model implements ModelDefinition
         'locations' => true,
         //'translations' => true,
         'relations' => false,
-        'reversedRelations' => false,
+        'reverseRelations' => false,
         'currentVersion' => false,
         'initialLanguageId' => true,
     );
@@ -159,7 +159,7 @@ class Content extends Model implements ModelDefinition
      *
      * @var \ezp\Content\Relation[]
      */
-    protected $reversedRelations;
+    protected $reverseRelations;
 
     /**
      * Versions
@@ -201,7 +201,7 @@ class Content extends Model implements ModelDefinition
         $this->owner = $owner;
         $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
         $this->relations = new TypeCollection( 'ezp\\Content\\Relation' );
-        $this->reversedRelations = new TypeCollection( 'ezp\\Content\\Relation' );
+        $this->reverseRelations = new TypeCollection( 'ezp\\Content\\Relation' );
         $this->versions = new VersionCollection( array( new Version( $this ) ) );
     }
 
