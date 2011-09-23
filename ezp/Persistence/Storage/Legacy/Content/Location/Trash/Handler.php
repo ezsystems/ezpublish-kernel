@@ -121,6 +121,7 @@ class Handler implements BaseTrashHandler
      */
     public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
     {
+        // CBA: Ignore criterion for now.
         throw new \RuntimeException( '@TODO: Implement.' );
     }
 
