@@ -791,7 +791,16 @@ class ContentHandlerTest extends TestCase
             'ezp\\Persistence\\Fields\\Storage'
         );
 
-        $handler = new Handler( $gatewayMock, $locationMock, $mapper, $storageRegMock );
+        $handler = $this->getMock(
+            '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
+            array( 'load' ),
+            array(
+                $gatewayMock,
+                $locationMock,
+                $mapper,
+                $storageRegMock
+            )
+        );
 
         // Ensure the external storage handler is called properly.
         $storageRegMock->expects( $this->exactly( 2 ) )

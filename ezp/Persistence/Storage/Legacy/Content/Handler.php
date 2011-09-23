@@ -286,6 +286,8 @@ class Handler implements BaseContentHandler
             }
             $version->fields[] = $field;
         }
+
+        return $this->load( $content->id, $content->versionNo );
     }
 
     /**
