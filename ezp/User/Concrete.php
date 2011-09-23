@@ -179,15 +179,8 @@ class Concrete extends Model implements Groupable, ModelDefinition, User
             if ( $policy->limitations === '*' )
                 return true;
 
-            foreach ( $policy->limitations as $key => $values )
-            {
-                // @todo: Can not merge limitations pr policy on same module / function unless all other limitations are
-                // the same (it's an or condition), 1: no merge 2: merge if only limitation on this & the merging policy
-                if ( empty( $limitations[$key] ) )
-                    $limitations[$key] = $values;
-                else
-                    $limitations[$key] = $values + $limitations[$key];
-            }
+            // @todo Merge policies that only have one (and same) limitation as an optimization
+            $limitations[] = $policy->limitations;
         }
 
         if ( !empty( $limitations ) )

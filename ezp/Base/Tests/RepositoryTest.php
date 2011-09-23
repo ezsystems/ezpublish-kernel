@@ -160,7 +160,7 @@ class RepositoryTest extends BaseServiceTest
         $admin = $this->repository->getUserService()->load( 14 );
         $this->repository->setUser( $admin );
         $this->assertTrue( $this->repository->canUser( 'create', $content, $parent ) );
-        // @todo Test using User with limitations
+        // @todo Test using User with create limitations
     }
 
     /**
@@ -174,7 +174,20 @@ class RepositoryTest extends BaseServiceTest
         $admin = $this->repository->getUserService()->load( 14 );
         $this->repository->setUser( $admin );
         $this->assertTrue( $this->repository->canUser( 'edit', $content ) );
-        // @todo Test using User with limitations
+        // @todo Test using User with edit limitations
+    }
+
+    /**
+     * @covers \ezp\Base\Repository::canUser
+     */
+    public function testCanUserReadContent()
+    {
+        $content = $this->repository->getContentService()->load( 1 );
+        $this->assertTrue( $this->repository->canUser( 'read', $content ) );
+
+        $admin = $this->repository->getUserService()->load( 14 );
+        $this->repository->setUser( $admin );
+        $this->assertTrue( $this->repository->canUser( 'read', $content ) );
     }
 
     /**
