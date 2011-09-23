@@ -831,6 +831,10 @@ class ContentHandlerTest extends TestCase
                 $this->isInstanceOf( 'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue' )
             );
 
+        $handler->expects( $this->at( 0 ) )
+            ->method( 'load' )
+            ->with( 14, 4 );
+
         $result = $handler->update(
             new UpdateStruct(
                 array(
