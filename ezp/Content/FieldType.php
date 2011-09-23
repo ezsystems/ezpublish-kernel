@@ -273,6 +273,10 @@ abstract class FieldType implements Observer
 
                  $this->setValue( $arguments['value'] );
                  break;
+
+             case 'content/publish':
+                 // @todo Implement
+                 break;
          }
      }
 }

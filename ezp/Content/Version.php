@@ -9,6 +9,8 @@
 
 namespace ezp\Content;
 use ezp\Base\Model,
+    ezp\Base\Observer,
+    ezp\Base\Observable,
     ezp\Content,
     ezp\Content\Field\StaticCollection as FieldCollection,
     ezp\Persistence\Content\Version as VersionValue;
@@ -28,7 +30,7 @@ use ezp\Base\Model,
  * @property int $modified
  * @property-read ContentField[] $fields An hash structure of fields
  */
-class Version extends Model
+class Version extends Model implements Observer
 {
     /**
      * @todo taken from eZContentObjectVersion, to be redefined
@@ -120,5 +122,19 @@ class Version extends Model
     {
         $this->properties->id = false;
     }
+
+    /**
+     * @see \ezp\Base\Observer
+     */
+    public function update( Observable $observable, $event = 'update', array $arguments = null )
+    {
+        switch ( $event )
+        {
+            case 'content/publish':
+                // @todo Implement
+                break;
+        }
+    }
+
 }
 ?>

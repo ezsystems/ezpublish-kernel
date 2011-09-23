@@ -11,6 +11,8 @@ namespace ezp\Content;
 use ezp\Base\Model,
     ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
+    ezp\Base\Observer,
+    ezp\Base\Observable,
     ezp\Content,
     ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Version\StaticCollection as VersionCollection,
@@ -75,7 +77,7 @@ use ezp\Base\Model,
  * @property \ezp\Content\Language $initialLanguage
  *           The language the Content was initially created in
  */
-class Concrete extends Model implements ModelDefinition, Content
+class Concrete extends Model implements ModelDefinition, Content, Observer
 {
     /**
      * @var array Readable of properties on this object
@@ -392,6 +394,19 @@ class Concrete extends Model implements ModelDefinition, Content
         $def['functions']['hide'] = $def['functions']['hide'] + $def['functions']['read'];
 
         return $def;
+    }
+
+    /**
+     * @see \ezp\Base\Observer
+     */
+    public function update( Observable $observable, $event = 'update', array $arguments = null )
+    {
+        switch ( $event )
+        {
+            case 'content/publish':
+                // @todo Implement
+                break;
+        }
     }
 
     /**

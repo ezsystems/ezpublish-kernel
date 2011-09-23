@@ -202,6 +202,9 @@ class Service extends BaseService
                     // @todo Attach observer to Field. See why this method isn't used in buildVersionDomainObject
                     $fields[$identifier] = $field->setState( array( 'properties' => $voField ) );
                     $fields[$identifier]->setValue( $voField->value->data );
+
+                    // Make the FieldType an Observer for content/publish
+                    $content->attach( $fields[$identifier]->getFieldDefinition()->getType(), 'content/publish' );
                     continue 2;
                 }
 
@@ -406,9 +409,15 @@ class Service extends BaseService
 
         $contentVo = $this->handler->contentHandler()->publish( $updateStruct );
 
+
+
         // $this->handler->commit();
 
-        return $this->buildDomainObject( $contentVo );
+        $contentDO = $this->buildDomainObject( $contentVo );
+
+        $this->notify( 'publish', array( $contentDO, $version ) );
+
+        return $contentDO;
     }
 
     /**
@@ -451,6 +460,8 @@ class Service extends BaseService
             );
         }
 
+        $this->attach( $content, 'content/publish' );
+
         return $content;
     }
 
@@ -467,7 +478,7 @@ class Service extends BaseService
             throw new InvalidArgumentType( '$versionVo', 'Version or RestrictedVersion', $vo );
 
         $version = new Version( $content );
-        // @todo Attach observer to Version
+
         $version->setState( array( 'properties' => $vo ) );
 
         // lazy load fields if Version does not contain fields
@@ -485,15 +496,21 @@ class Service extends BaseService
             {
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
-                    // @todo Attach observer to Field
                     $field->setState( array( 'properties' => $voField ) );
                     $field->setValue( $voField->value->data );
+
+                    // Make the FieldType an observer of content/publish
+                    $content->attach( $field->getFieldDefinition()->getType(), 'content/publish' );
+
                     continue 2;
                 }
 
             }
             throw new Logic( 'field:' . $identifier, 'could not find this field in returned Version value data'  );
         }
+
+        $this->attach( $version, 'content/publish' );
+
         return $version;
     }
 }
