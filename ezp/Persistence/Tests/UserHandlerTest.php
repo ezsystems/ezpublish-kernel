@@ -93,9 +93,9 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadByLoginUnExistingUser()
     {
-        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'kamlase' );
+        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'kamelåså' );
         $this->assertEquals( array(), $users );
-        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'kamlase@ez.no', true );
+        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'kamelåså@ez.no', true );
         $this->assertEquals( array(), $users );
     }
 
@@ -229,7 +229,7 @@ class UserHandlerTest extends HandlerTest
     public function testLoadRoleNotFound()
     {
         $handler = $this->repositoryHandler->userHandler();
-        $handler->loadRole( 1 );//exception
+        $handler->loadRole( 999 );//exception
     }
 
     /**
@@ -241,13 +241,13 @@ class UserHandlerTest extends HandlerTest
     {
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
-        $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
+        $handler->assignRole( 4, $obj->id );// 4: Users
 
         // add a policy and check that it is part of returned permission after re fetch
         $handler->addPolicy( $obj->id, new Policy( array( 'module' => 'Foo',
                                                      'function' => 'Bar',
                                                      'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
-        $list = $handler->loadRolesByGroupId( 42 );
+        $list = $handler->loadRolesByGroupId( 4 );
         $this->assertEquals( 1, count( $list ) );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $list[0] );
         $role = $list[0];
@@ -263,8 +263,11 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadRolesByGroupIdEmpty()
     {
+        $this->clearRolesByGroupId( 42 );
+
         $handler = $this->repositoryHandler->userHandler();
         $list = $handler->loadRolesByGroupId( 42 );
+        $this->assertEquals( 0, count( $list ) );
         $this->assertEquals( array(), $list  );
     }
 
@@ -402,7 +405,7 @@ class UserHandlerTest extends HandlerTest
         $this->assertEquals( 3, count( $obj->policies ) );
         $id = $obj->id;
 
-        $handler->removePolicy( $id, 3 );
+        $handler->removePolicy( $id, $obj->policies[2]->id );
         $obj = $handler->loadRole( $id );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 2, count( $obj->policies ) );
@@ -554,6 +557,8 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadPoliciesByUserId()
     {
+        $this->clearRolesByGroupId( 42 );
+
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
@@ -580,6 +585,8 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadPoliciesByUserIdDeep()
     {
+        $this->clearRolesByGroupId( 42 );
+
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
@@ -607,6 +614,8 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadPoliciesByUserIdDuplicates()
     {
+        $this->clearRolesByGroupId( 42 );
+
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
@@ -649,6 +658,8 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadPoliciesByUserIdWithSameValuePolicies()
     {
+        $this->clearRolesByGroupId( 42 );
+
         $handler = $this->repositoryHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
@@ -682,5 +693,20 @@ class UserHandlerTest extends HandlerTest
             new Policy( array( 'module' => 'user', 'function' => '*', 'limitations' => '*' ) ),
         );
         return $role;
+    }
+
+    /**
+     * Clear all roles (and policies) assignments on a user group
+     *
+     * @param mixed $groupId
+     */
+    protected function clearRolesByGroupId( $groupId )
+    {
+        $handler = $this->repositoryHandler->userHandler();
+        $roles = $handler->loadRolesByGroupId( $groupId );
+        foreach ( $roles as $role )
+        {
+            $handler->unAssignRole( $groupId, $role->id );
+        }
     }
 }

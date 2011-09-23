@@ -12,6 +12,8 @@ use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\User\Proxy as ProxyUser,
     ezp\User\Concrete as ConcreteUser,
     ezp\User\Role\Concrete as ConcreteRole,
+    ezp\User\Group,
+    ezp\User\Role,
     ezp\User\Policy,
     ezp\Base\Exception\NotFound,
     Exception;
@@ -460,7 +462,9 @@ class ServiceTest extends BaseServiceTest
     public function testLoadRolesByGroupIdNotFoundWithType()
     {
         $service = $this->repository->getUserService();
-        self::assertEquals( array(), $service->loadRolesByGroupId( 14 ) );
+        $roles = $service->loadRolesByGroupId( 14 );
+        self::assertEquals( 0, count( $roles ) );
+        self::assertEquals( array(), $roles );
     }
 
     /**
@@ -586,7 +590,11 @@ class ServiceTest extends BaseServiceTest
     public function testLoadPoliciesByUserId()
     {
         $service = $this->repository->getUserService();
-        self::assertEquals( array(), $service->loadPoliciesByUserId( 10 ) );
+        $this->clearRolesByGroup( $service->loadGroup( 42 ) );
+
+        $policies = $service->loadPoliciesByUserId( 10 );
+        self::assertEquals( 0, count( $policies ) );
+        self::assertEquals( array(), $policies );
 
         $group = $service->loadGroup( 4 );//Users
 
@@ -709,7 +717,7 @@ class ServiceTest extends BaseServiceTest
     /**
      * @return \ezp\User\Role
      */
-    public function getRole()
+    protected function getRole()
     {
         $do = new ConcreteRole();
         $do->name = 'test';
@@ -728,5 +736,20 @@ class ServiceTest extends BaseServiceTest
         $policy->module = 'user';
         $policy->function = $policy->limitations = '*';
         return $do;
+    }
+
+    /**
+     * Clear all roles (and policies) assignments on a user group
+     *
+     * @param \ezp\User\Group $group
+     */
+    protected function clearRolesByGroup( Group $group )
+    {
+        $service = $this->repository->getUserService();
+        $roles = $service->loadRolesByGroupId( $group->id);
+        foreach ( $roles as $role )
+        {
+            $service->unAssignRole( $group, $role );
+        }
     }
 }

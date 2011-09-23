@@ -43,7 +43,8 @@
     ],
     "Content\\Section" : [
         {"id": 1, "identifier": "standard", "name": "Standard"},
-        {"id": 2, "identifier": "users", "name": "Users"}
+        {"id": 2, "identifier": "users", "name": "Users"},
+        {"id": 3, "identifier": "media", "name": "Media"}
     ],
     "Content\\Type": [
         {"id": 1, "status": 0, "name": {"eng-GB": "Folder"}, "description": {"eng-GB": "A simple folder"}, "identifier": "folder", "remoteId": "remoteIDForType1", "created": 1312473387, "modified": 1312473387, "creatorId": 14, "modifierId": 14, "nameSchema": "<short_name|name>", "urlAliasSchema": "<short_name|name>", "isContainer": true, "initialLanguageId": 2, "groupIds": [1]},
@@ -67,9 +68,18 @@
         {"id": 10, "login": "anonymous", "email": "nospam@ez.no", "passwordHash": "4e6f6184135228ccd45f8233d72a0363", "hashAlgorithm": 2, "isEnabled": true, "maxLogin": 1000}
     ],
     "User\\Role" : [
+        {"id": 1, "name": "Anonymous", "groupIds": [ 42 ] },
         {"id": 2, "name": "Administrator", "groupIds": [ 12 ] }
     ],
     "User\\Policy" : [
-        {"id": 1, "roleId": 2, "module": "*", "function": "*", "limitations": "*" }
+        {"id": 1, "roleId": 2, "module": "*", "function": "*", "limitations": "*" },
+        {"id": 2, "roleId": 1, "module": "content", "function": "pdf", "limitations": { "Section" : [ 1 ] } },
+        {"id": 3, "roleId": 1, "module": "content", "function": "read", "limitations": { "Section" : [ 1 ] }},
+        {"id": 4, "roleId": 1, "module": "content", "function": "read", "limitations": { "Class" : [ 29, 30, 32, 33, 34, 42 ], "Section" : [ 3 ] } },
+        {"id": 5, "roleId": 1, "module": "rss", "function": "feed", "limitations": "*" },
+        {"id": 6, "roleId": 1, "module": "user", "function": "login", "limitations": { "SiteAccess" : [ 2576532274 ] } },
+        {"id": 7, "roleId": 1, "module": "user", "function": "login", "limitations": { "SiteAccess" : [ 2582995467 ] } },
+        {"id": 8, "roleId": 1, "module": "user", "function": "login", "limitations": { "SiteAccess" : [ 2479546403 ] } },
+        {"id": 9, "roleId": 1, "module": "user", "function": "login", "limitations": { "SiteAccess" : [ 3781580864 ] } }
     ]
 }
