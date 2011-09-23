@@ -32,15 +32,12 @@ interface ModelDefinition
      *                 {
      *                     return in_array( $content->typeId, $limitationsValues );
      *                 },
-     *                 'query' => function( Criterion $criterion, array $limitationsValues[, Repository $repository] )
+     *                 'query' => function( array $limitationsValues[, Repository $repository] )
      *                 {
-     *                     if ( !$criterion instanceof Criterion\LogicalAnd )
-     *                         $criterion = new Criterion\LogicalAnd( $criterion );
+     *                     if ( !isset( $limitationsValues[1] ) )
+     *                         return new Criterion\ContentTypeId( $limitationsValues[0] )
      *
-     *                     foreach ( $limitationsValues as $classId )
-     *                     {
-     *                         $criterion->append( new Criterion\ContentTypeId( $classId ) );
-     *                     }
+     *                     return new Criterion\ContentTypeId( $limitationsValues );
      *                 },
      *             )
      *         )

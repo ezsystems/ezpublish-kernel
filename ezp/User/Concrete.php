@@ -103,6 +103,7 @@ class Concrete extends Model implements Groupable, ModelDefinition, User
                     'SiteAccess' => array(
                         'compare' => function( User $user, array $limitationsValues )
                         {
+                            // ezp code in def 64 compat mode: sprintf( '%u', crc32( $siteAccessName ) )
                             return true;// @todo Use current siteaccess when it becomes part of API
                         },
                     ),
@@ -180,6 +181,8 @@ class Concrete extends Model implements Groupable, ModelDefinition, User
 
             foreach ( $policy->limitations as $key => $values )
             {
+                // @todo: Can not merge limitations pr policy on same module / function unless all other limitations are
+                // the same (it's an or condition), 1: no merge 2: merge if only limitation on this & the merging policy
                 if ( empty( $limitations[$key] ) )
                     $limitations[$key] = $values;
                 else
