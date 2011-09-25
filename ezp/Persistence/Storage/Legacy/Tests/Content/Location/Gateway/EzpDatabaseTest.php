@@ -105,11 +105,11 @@ class EzpDatabaseTest extends TestCase
         );
     }
 
-    public function testMoveSubtreeAssignementUpdate()
+    public function testMoveSubtreeAssignmentUpdate()
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->updateNodeAssignement( 67, 77, 5 );
+        $handler->updateNodeAssignment( 67, 77, 5 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
@@ -341,7 +341,6 @@ class EzpDatabaseTest extends TestCase
                 array(
                     'contentId' => 68,
                     'contentVersion' => 1,
-                    'remoteId' => 'some_id',
                     'mainLocationId' => 42,
                     'priority' => 1,
                     'remoteId' => 'some_id',
@@ -403,7 +402,6 @@ class EzpDatabaseTest extends TestCase
                 array(
                     'contentId' => 68,
                     'contentVersion' => 1,
-                    'remoteId' => 'some_id',
                     'mainLocationId' => true,
                     'priority' => 1,
                     'remoteId' => 'some_id',
@@ -483,11 +481,6 @@ class EzpDatabaseTest extends TestCase
      */
     public function testCreateLocationNodeAssignmentCreation( $field, $value )
     {
-        if ( $value === null )
-        {
-            $this->markTestIncomplete( 'Proper value setting yet unknown.' );
-        }
-
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
         $handler->createNodeAssignment(
@@ -495,7 +488,6 @@ class EzpDatabaseTest extends TestCase
                 array(
                     'contentId' => 68,
                     'contentVersion' => 1,
-                    'remoteId' => 'some_id',
                     'mainLocationId' => 1,
                     'priority' => 1,
                     'remoteId' => 'some_id',
@@ -519,6 +511,84 @@ class EzpDatabaseTest extends TestCase
                         $query->expr->eq( 'parent_node', 77 )
                     )
                 )
+        );
+    }
+
+    /**
+     * @depends testCreateLocationNodeAssignmentCreation
+     */
+    public function testConvertNodeAssignments()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $handler = $this->getLocationGateway();
+        $handler->createNodeAssignment(
+            new CreateStruct(
+                array(
+                    'contentId' => 68,
+                    'contentVersion' => 1,
+                    'mainLocationId' => 1,
+                    'priority' => 1,
+                    'remoteId' => 'some_id',
+                    'sortField' => 1,
+                    'sortOrder' => 1,
+                )
+            ),
+            '77',
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
+        );
+
+        $handler->createLocationsFromNodeAssignments( 68, 1 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( '/1/2/77/229/' ) ),
+            $query
+                ->select( 'path_string' )
+                ->from( 'ezcontentobject_tree' )
+                ->where( $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 68 ),
+                    $query->expr->eq( 'parent_node_id', 77 )
+                ) )
+        );
+    }
+
+    /**
+     * @depends testCreateLocationNodeAssignmentCreation
+     */
+    public function testConvertNodeAssignmentsUpdateAssignment()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+
+        $handler = $this->getLocationGateway();
+        $handler->createNodeAssignment(
+            new CreateStruct(
+                array(
+                    'contentId' => 68,
+                    'contentVersion' => 1,
+                    'mainLocationId' => 1,
+                    'priority' => 1,
+                    'remoteId' => 'some_id',
+                    'sortField' => 1,
+                    'sortOrder' => 1,
+                )
+            ),
+            '77',
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
+        );
+
+        $handler->createLocationsFromNodeAssignments( 68, 1 );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE ) ),
+            $query
+                ->select( 'op_code' )
+                ->from( 'eznode_assignment' )
+                ->where( $query->expr->lAnd(
+                    $query->expr->eq( 'contentobject_id', 68 ),
+                    $query->expr->eq( 'parent_node', 77 )
+                ) )
         );
     }
 

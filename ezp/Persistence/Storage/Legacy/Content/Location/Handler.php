@@ -108,7 +108,7 @@ class Handler implements BaseLocationHandler
             $destinationNodeData['path_string']
         );
 
-        $this->locationGateway->updateNodeAssignement(
+        $this->locationGateway->updateNodeAssignment(
             $sourceNodeData['contentobject_id'],
             $destinationParentId,
             Gateway::NODE_ASSIGNMENT_OP_CODE_MOVE

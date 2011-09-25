@@ -528,29 +528,34 @@ class EzcDatabase extends Gateway
      * Update node assignement table
      *
      * @param int $contentObjectId
-     * @param int $parent
+     * @param int $oldParent
+     * @param int $newParent
      * @param int $opcode
      * @return void
      */
-    public function updateNodeAssignement( $contentObjectId, $parent, $opcode )
+    public function updateNodeAssignment( $contentObjectId, $oldParent, $newParent, $opcode )
     {
         $query = $this->handler->createUpdateQuery();
         $query
             ->update( $this->handler->quoteTable( 'eznode_assignment' ) )
             ->set(
                 $this->handler->quoteColumn( 'parent_node' ),
-                $query->bindValue( $parent, null, \PDO::PARAM_INT )
+                $query->bindValue( $newParent, null, \PDO::PARAM_INT )
             )
             ->set(
                 $this->handler->quoteColumn( 'op_code' ),
                 $query->bindValue( $opcode, null, \PDO::PARAM_INT )
             )
-            ->where(
+            ->where( $query->expr->lAnd(
                 $query->expr->eq(
                     $this->handler->quoteColumn( 'contentobject_id' ),
-                    $query->bindValue( $contentObjectId )
+                    $query->bindValue( $contentObjectId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'parent_node' ),
+                    $query->bindValue( $oldParent, null, \PDO::PARAM_INT )
                 )
-            );
+            ) );
         $query->prepare()->execute();
     }
 
@@ -565,6 +570,50 @@ class EzcDatabase extends Gateway
      */
     public function createLocationsFromNodeAssignments( $contentId, $versionNo )
     {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( '*' )
+            ->from( $this->handler->quoteTable( 'eznode_assignment' ) )
+            ->where( $query->expr->lAnd(
+                $query->expr->like(
+                    $this->handler->quoteColumn( 'contentobject_id' ),
+                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->like(
+                    $this->handler->quoteColumn( 'contentobject_version' ),
+                    $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->like(
+                    $this->handler->quoteColumn( 'op_code' ),
+                    $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP, null, \PDO::PARAM_INT )
+                )
+            ) );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            $this->create(
+                new CreateStruct(
+                    array(
+                        'contentId' => $row['contentobject_id'],
+                        'contentVersion' => $row['contentobject_version'],
+                        'mainLocationId' => 0,
+                        'remoteId' => $row['remote_id'],
+                        'sortField' => $row['sort_field'],
+                        'sortOrder' => $row['sort_order'],
+                    )
+                ),
+                $this->getBasicNodeData( $row['parent_node'] )
+            );
+
+            $this->updateNodeAssignment(
+                $row['contentobject_id'],
+                $row['parent_node'],
+                $row['parent_node'],
+                self::NODE_ASSIGNMENT_OP_CODE_CREATE
+            );
+        }
     }
 
     /**

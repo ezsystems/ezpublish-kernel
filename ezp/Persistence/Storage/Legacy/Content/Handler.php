@@ -125,6 +125,29 @@ class Handler implements BaseContentHandler
     }
 
     /**
+     * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
+     * $updateStruct->id as the published one.
+     *
+     * The UpdateStruct will also contain an array of Content name indexed by Locale.
+     *
+     * The publish procedure will:
+     * - Create location nodes based on the node assignments
+     * - Create the entry in the ezcontentobject_name table
+     * - Updates the content object using the provided update struct
+     * - Updates the node assignments
+     *
+     * @param \ezp\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
+     * @return \ezp\Persistence\Content The published Content
+     */
+    public function publish( UpdateStruct $updateStruct )
+    {
+        $content = $this->update( $updateStruct );
+
+        $this->contentGateway->setName( … );
+        $this->locationGateway->createLocationsFromNodeAssignments( … );
+    }
+
+    /**
      * Creates a new draft version from $contentId in $version.
      *
      * Copies all fields from $contentId in $srcVersion and creates a new
@@ -398,21 +421,6 @@ class Handler implements BaseContentHandler
      * @return \ezp\Persistence\Content\Relation[]
      */
     public function loadReverseRelations( $destinationContentId, $type = null )
-    {
-        throw new \Exception( "@TODO: Not implemented yet." );
-    }
-
-    /**
-     * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
-     * $updateStruct->id as the published one.
-     *
-     * The UpdateStruct will also contain an array of Content name indexed by Locale.
-     *
-     * @param \ezp\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
-     *
-     * @return \ezp\Persistence\Content The published Content
-     */
-    public function publish( UpdateStruct $updateStruct )
     {
         throw new \Exception( "@TODO: Not implemented yet." );
     }

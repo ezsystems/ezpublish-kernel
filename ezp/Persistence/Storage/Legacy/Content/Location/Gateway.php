@@ -82,11 +82,12 @@ abstract class Gateway
      * Update node assignement table
      *
      * @param int $contentObjectId
-     * @param int $parent
+     * @param int $oldParent
+     * @param int $newParent
      * @param int $opcode
      * @return void
      */
-    abstract public function updateNodeAssignement( $contentObjectId, $parent, $opcode );
+    abstract public function updateNodeAssignment( $contentObjectId, $oldParent, $newParent, $opcode );
 
     /**
      * Create locations from node assignments
