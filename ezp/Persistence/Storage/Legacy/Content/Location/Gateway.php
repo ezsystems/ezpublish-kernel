@@ -81,10 +81,23 @@ abstract class Gateway
     /**
      * Update node assignement table
      *
-     * @param mixed $nodeId
+     * @param int $contentObjectId
+     * @param int $parent
+     * @param int $opcode
      * @return void
      */
-    abstract public function updateNodeAssignement( $contentObjectId, $newParent );
+    abstract public function updateNodeAssignement( $contentObjectId, $parent, $opcode );
+
+    /**
+     * Create locations from node assignments
+     *
+     * Convert existing node assignments into real locations.
+     *
+     * @param mixed $contentId
+     * @param mixed $versionNo
+     * @return void
+     */
+    abstract public function createLocationsFromNodeAssignments( $contentId, $versionNo );
 
     /**
      * Sets a location to be hidden, and it self + all children to invisible.

@@ -119,7 +119,7 @@ class LocationHandlerTest extends TestCase
         $this->locationGateway
             ->expects( $this->once() )
             ->method( 'updateNodeAssignement' )
-            ->with( 67, 77 );
+            ->with( 67, 77, 5 );
 
         $handler->move( 69, 77 );
     }

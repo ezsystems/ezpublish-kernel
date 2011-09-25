@@ -109,7 +109,7 @@ class EzpDatabaseTest extends TestCase
     {
         $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
         $handler = $this->getLocationGateway();
-        $handler->updateNodeAssignement( 67, 77 );
+        $handler->updateNodeAssignement( 67, 77, 5 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(

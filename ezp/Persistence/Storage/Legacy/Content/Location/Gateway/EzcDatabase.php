@@ -527,21 +527,23 @@ class EzcDatabase extends Gateway
     /**
      * Update node assignement table
      *
-     * @param mixed $nodeId
+     * @param int $contentObjectId
+     * @param int $parent
+     * @param int $opcode
      * @return void
      */
-    public function updateNodeAssignement( $contentObjectId, $newParent )
+    public function updateNodeAssignement( $contentObjectId, $parent, $opcode )
     {
         $query = $this->handler->createUpdateQuery();
         $query
             ->update( $this->handler->quoteTable( 'eznode_assignment' ) )
             ->set(
                 $this->handler->quoteColumn( 'parent_node' ),
-                $query->bindValue( $newParent )
+                $query->bindValue( $parent, null, \PDO::PARAM_INT )
             )
             ->set(
                 $this->handler->quoteColumn( 'op_code' ),
-                $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_MOVE )
+                $query->bindValue( $opcode, null, \PDO::PARAM_INT )
             )
             ->where(
                 $query->expr->eq(
@@ -550,6 +552,19 @@ class EzcDatabase extends Gateway
                 )
             );
         $query->prepare()->execute();
+    }
+
+    /**
+     * Create locations from node assignments
+     *
+     * Convert existing node assignments into real locations.
+     *
+     * @param mixed $contentId
+     * @param mixed $versionNo
+     * @return void
+     */
+    public function createLocationsFromNodeAssignments( $contentId, $versionNo )
+    {
     }
 
     /**
