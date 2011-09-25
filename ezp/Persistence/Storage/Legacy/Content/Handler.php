@@ -143,8 +143,12 @@ class Handler implements BaseContentHandler
     {
         $content = $this->update( $updateStruct );
 
-        $this->contentGateway->setName( … );
-        $this->locationGateway->createLocationsFromNodeAssignments( … );
+        foreach ( $updateStruct->name as $language => $name )
+        {
+            $this->contentGateway->setName( $updateStruct->id, $updateStruct->versionNo, $name, $language );
+        }
+
+        $this->locationGateway->createLocationsFromNodeAssignments( $updateStruct->id, $updateStruct->versionNo );
     }
 
     /**

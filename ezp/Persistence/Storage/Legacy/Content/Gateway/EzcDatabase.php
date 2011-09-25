@@ -674,10 +674,9 @@ class EzcDatabase extends Gateway
      * @param int $version
      * @param string $name
      * @param string $language
-     * @param int $languageID
      * @return void
      */
-    public function setName( $contentId, $version, $name, $language, $languageID )
+    public function setName( $contentId, $version, $name, $language )
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
@@ -690,7 +689,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $version, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'language_id' ),
-            $q->bindValue( $languageID )
+            $q->bindValue( 0 )
         )->set(
             $this->dbHandler->quoteColumn( 'content_translation' ),
             $q->bindValue( $language )

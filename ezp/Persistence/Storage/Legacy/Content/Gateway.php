@@ -174,10 +174,9 @@ abstract class Gateway
      * @param int $version
      * @param string $name
      * @param string $language
-     * @param int $languageID
      * @return void
      */
-    abstract public function setName( $contentId, $version, $name, $language, $languageID );
+    abstract public function setName( $contentId, $version, $name, $language );
 
     /**
      * Deletes the actual content object referred to by $contentId

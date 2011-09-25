@@ -206,6 +206,63 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::publish
+     */
+    public function testPublish()
+    {
+        $mapperMock = $this->getMapperMock();
+        $locationMock = $this->getLocationGatewayMock();
+        $gatewayMock = $this->getGatewayMock();
+        $storageRegMock = $this->getStorageRegistryMock();
+        $storageMock = $this->getMock(
+            'ezp\\Persistence\\Fields\\Storage'
+        );
+
+        $handler = $this->getMock(
+            '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
+            array( 'update' ),
+            array(
+                $gatewayMock,
+                $locationMock,
+                $mapperMock,
+                $storageRegMock
+            )
+        );
+
+        $updateStruct = new UpdateStruct( array(
+            'id' => 42,
+            'versionNo' => 1,
+            'name' => array(
+                'eng-US' => "Hello",
+                'eng-GB' => "Hello (GB)",
+            ),
+        ) );
+
+        $handler
+            ->expects( $this->once() )
+            ->method( 'update' )
+            ->with( $updateStruct );
+
+        $gatewayMock
+            ->expects( $this->at( 0 ) )
+            ->method( 'setName' )
+            ->with( 42, 1, 'Hello', 'eng-US' );
+
+        $gatewayMock
+            ->expects( $this->at( 1 ) )
+            ->method( 'setName' )
+            ->with( 42, 1, 'Hello (GB)', 'eng-GB' );
+
+        $locationMock
+            ->expects( $this->at( 0 ) )
+            ->method( 'createLocationsFromNodeAssignments' )
+            ->with( 42, 1 );
+
+        $handler->publish( $updateStruct );
+    }
+
+    /**
      * Returns a content handler with rather real instead of mock objects.
      *
      * @return \ezp\Persistence\Storage\Legacy\Content\Handler
