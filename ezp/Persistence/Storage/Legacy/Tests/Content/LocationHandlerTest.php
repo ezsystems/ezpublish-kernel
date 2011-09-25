@@ -93,6 +93,7 @@ class LocationHandlerTest extends TestCase
                     array(
                         'node_id' => 69,
                         'path_string' => '/1/2/69/',
+                        'parent_node_id' => 2,
                         'contentobject_id' => 67,
                     )
                 )
@@ -118,8 +119,8 @@ class LocationHandlerTest extends TestCase
 
         $this->locationGateway
             ->expects( $this->once() )
-            ->method( 'updateNodeAssignement' )
-            ->with( 67, 77, 5 );
+            ->method( 'updateNodeAssignment' )
+            ->with( 67, 2, 77, 5 );
 
         $handler->move( 69, 77 );
     }
