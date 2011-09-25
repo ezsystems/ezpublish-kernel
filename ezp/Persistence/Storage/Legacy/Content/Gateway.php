@@ -168,6 +168,18 @@ abstract class Gateway
     abstract public function deleteNames( $contentId );
 
     /**
+     * Sets the content object name
+     *
+     * @param int $contentId
+     * @param int $version
+     * @param string $name
+     * @param string $language
+     * @param int $languageID
+     * @return void
+     */
+    abstract public function setName( $contentId, $version, $name, $language, $languageID );
+
+    /**
      * Deletes the actual content object referred to by $contentId
      *
      * @param int $contentId

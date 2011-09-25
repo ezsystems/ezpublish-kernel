@@ -668,6 +668,43 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Sets the content object name
+     *
+     * @param int $contentId
+     * @param int $version
+     * @param string $name
+     * @param string $language
+     * @param int $languageID
+     * @return void
+     */
+    public function setName( $contentId, $version, $name, $language, $languageID )
+    {
+        $q = $this->dbHandler->createInsertQuery();
+        $q->insertInto(
+            $this->dbHandler->quoteTable( 'ezcontentobject_name' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'contentobject_id' ),
+            $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'content_version' ),
+            $q->bindValue( $version, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'language_id' ),
+            $q->bindValue( $languageID )
+        )->set(
+            $this->dbHandler->quoteColumn( 'content_translation' ),
+            $q->bindValue( $language )
+        )->set(
+            $this->dbHandler->quoteColumn( 'real_translation' ),
+            $q->bindValue( $language )
+        )->set(
+            $this->dbHandler->quoteColumn( 'name' ),
+            $q->bindValue( $name )
+        );
+        $q->prepare()->execute();
+    }
+
+    /**
      * Deletes the actual content object referred to by $contentId
      *
      * @param int $contentId

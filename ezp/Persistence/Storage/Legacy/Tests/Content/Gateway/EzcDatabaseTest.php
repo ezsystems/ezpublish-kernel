@@ -713,7 +713,30 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteVersions
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::setName
+     */
+    public function testSetName()
+    {
+        $beforeCount = array(
+            'all' => $this->countContentNames(),
+            'this' => $this->countContentNames( 14 )
+        );
+
+        $gateway = $this->getDatabaseGateway();
+        $gateway->setName( 14, 2, "Hello world!", 'eng-US', 2 );
+
+        $this->assertQueryResult(
+            array( array( 'eng-US', 2, 14, 2, 'Hello world!', 'eng-US' ) ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( '*' )
+                ->from( 'ezcontentobject_name' )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::deleteNames
      */
     public function testDeleteNames()
     {
