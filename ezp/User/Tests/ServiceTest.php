@@ -596,6 +596,7 @@ class ServiceTest extends BaseServiceTest
         self::assertEquals( 'pdf', $policies[0]->function );
         self::assertEquals( array( 'Section' => array( 1 ) ), $policies[0]->limitations );
     }
+
     /**
      * Test service function for loading policies by user id
      *
@@ -648,6 +649,46 @@ class ServiceTest extends BaseServiceTest
     {
         $service = $this->repository->getUserService();
         $service->loadPoliciesByUserId( 42 );
+    }
+
+    /**
+     * Test user has access to
+     *
+     * @covers \ezp\User::hasAccessTo
+     * @group userService
+     */
+    public function testLoadPoliciesByUserIdHasAccessTo()
+    {
+        $user = $this->repository->getUserService()->load( 10 );
+        $limitationArray = $user->hasAccessTo( 'user', 'login' );
+        $this->assertInternalType( 'array', $limitationArray );
+
+        /*// Optimized result
+        $this->assertEquals( 1, count( $limitationArray ) );
+        $this->assertEquals(
+            array(
+                 array(
+                     'SiteAccess' => array(
+                         2576532274,
+                         2582995467,
+                         2479546403,
+                         3781580864,
+                     )
+                 )
+            ),
+            $limitationArray
+        );*/
+
+        $this->assertEquals( 4, count( $limitationArray ) );
+        $this->assertEquals(
+            array(
+                 array( 'SiteAccess' => array( 2576532274 ) ),
+                 array( 'SiteAccess' => array( 2582995467 ) ),
+                 array( 'SiteAccess' => array( 2479546403 ) ),
+                 array( 'SiteAccess' => array( 3781580864 ) ),
+            ),
+            $limitationArray
+        );
     }
 
     /**

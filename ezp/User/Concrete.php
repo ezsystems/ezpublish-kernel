@@ -161,7 +161,7 @@ class Concrete extends Model implements Groupable, ModelDefinition, User
      */
     public function hasAccessTo( $module, $function )
     {
-        $limitations = array();
+        $limitationArray = array();
         foreach ( $this->getPolicies() as $policy )
         {
             if ( $policy->module === '*' )
@@ -179,13 +179,26 @@ class Concrete extends Model implements Groupable, ModelDefinition, User
             if ( $policy->limitations === '*' )
                 return true;
 
-            // @todo Merge policies that only have one (and same) limitation as an optimization
-            $limitations[] = $policy->limitations;
+            /*// Try to do some optimization if only one limitation, {@see \ezp\User\Tests\ServiceTest::testLoadPoliciesByUserIdHasAccessTo()}
+            if ( !empty( $limitationArray ) && count( $policy->limitations ) === 1 )
+            {
+                foreach ( $policy->limitations as $limitationKey => $limitationValues );// to get first & only pair
+                foreach ( $limitationArray as &$limitations )
+                {
+                    if ( isset( $limitations[ $limitationKey ] ) && count( $limitations ) === 1 )
+                    {
+                        $limitations[ $limitationKey ] = array_merge( $limitations[ $limitationKey ], $limitationValues );
+                        continue 2;
+                    }
+                }
+            }*/
+
+            $limitationArray[] = $policy->limitations;
         }
 
-        if ( !empty( $limitations ) )
-            return $limitations;
+        if ( !empty( $limitationArray ) )
+            return $limitationArray;
 
-        return false;
+        return false;// No policies matching $module and $function
     }
 }
