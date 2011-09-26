@@ -45,7 +45,7 @@ class Handler
     /**
      * Creates a {@link \ezp\Io\BinaryFile} object from $localPath.
      * Destination dir is to be something like <storageDir>/original/<MajorFileType>/ .
-     * e.g. for an MP3 file (mime-typ = audio/mp3) => var/storage/original/audio/ .
+     * e.g. for an MP3 file (mime-type = audio/mp3) => var/storage/original/audio/ .
      * File name will be a hash with suffix added (if any).
      *
      * @param string $localPath Path to the local file, somewhere accessible in the system
