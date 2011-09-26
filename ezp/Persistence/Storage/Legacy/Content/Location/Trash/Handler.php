@@ -51,25 +51,14 @@ class Handler implements BaseTrashHandler
 
     /**
      * Loads the data for the trashed location identified by $id.
+     * $id is the same as original location (which has been previously trashed)
      *
      * @param int $id
      * @return \ezp\Persistence\Content\Location\Trashed
      */
     public function load( $id )
     {
-        throw new \RuntimeException( '@TODO: There is no such thing as a trash ID -- pending clarification.' );
-    }
-
-    /**
-     * Loads the data for the trashed location identified by $locationId.
-     * $locationId is the original Id for trashed location
-     *
-     * @param int $locationId
-     * @return \ezp\Persistence\Content\Location\Trashed
-     */
-    public function loadFromLocationId( $locationId )
-    {
-        $data = $this->locationGateway->loadTrashByLocation( $locationId );
+        $data = $this->locationGateway->loadTrashByLocation( $id );
         return $this->locationMapper->createLocationFromRow( $data, null, new Trashed() );
     }
 

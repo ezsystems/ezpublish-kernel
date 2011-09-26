@@ -107,6 +107,6 @@ class TrashHandlerTest extends TestCase
             ->method( 'createLocationFromRow' )
             ->with( $array, null, new Trashed() );
 
-        $handler->loadFromLocationId( 69 );
+        $handler->load( 69 );
     }
 }
