@@ -723,10 +723,10 @@ class EzcDatabaseTest extends TestCase
         );
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->setName( 14, 2, "Hello world!", 'eng-US', 2 );
+        $gateway->setName( 14, 2, "Hello world!", 'eng-US' );
 
         $this->assertQueryResult(
-            array( array( 'eng-US', 2, 14, 2, 'Hello world!', 'eng-US' ) ),
+            array( array( 'eng-US', 2, 14, 0, 'Hello world!', 'eng-US' ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( '*' )
@@ -976,7 +976,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Returns a ready to test EzcDatabase gateway
      *
-     * @return ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase
+     * @return \ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase
      */
     protected function getDatabaseGateway()
     {

@@ -668,7 +668,7 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Sets the content object name
+     * Sets the name for Content $contentId in version $version to $name in $language
      *
      * @param int $contentId
      * @param int $version
