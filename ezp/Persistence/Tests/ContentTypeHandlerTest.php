@@ -236,7 +236,7 @@ class ContentTypeHandlerTest extends HandlerTest
         $this->assertEquals( $original->creatorId, $obj->creatorId );
         $this->assertEquals( $original->created, $obj->created );//ehm
         $this->assertEquals( $userId, $obj->modifierId );
-        $this->assertEquals( $time, $obj->modified );//ehm
+        $this->assertGreaterThanOrEqual( $time, $obj->modified );//ehm
         $this->assertEquals( Type::STATUS_DRAFT, $obj->status );
         $this->assertEquals( 2, count( $obj->fieldDefinitions ) );
         $this->assertEquals( 'Name', $obj->fieldDefinitions[0]->name['eng-GB'] );
