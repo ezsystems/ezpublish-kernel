@@ -13,7 +13,9 @@ use ezp\Persistence\Storage\Legacy\Content\Location\Gateway,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Location,
     ezp\Persistence\Content\Location\UpdateStruct,
-    ezp\Persistence\Content\Location\CreateStruct;
+    ezp\Persistence\Content\Location\CreateStruct,
+    ezp\Persistence\Content\Query\SortClause,
+    ezp\Content\Query;
 
 /**
  * Location gateway implementation using the zeta database component.
@@ -838,6 +840,29 @@ class EzcDatabase extends Gateway
         $query
             ->select( '*' )
             ->from( $this->handler->quoteTable( 'ezcontentobject_trash' ) );
+
+        foreach ( $sort as $condition )
+        {
+            $sortDirection = $condition->direction === Query::SORT_ASC ? \ezcQuerySelect::ASC : \ezcQuerySelect::DESC;
+            switch ( true )
+            {
+                case $condition instanceof SortClause\LocationDepth:
+                    $query->orderBy( 'depth', $sortDirection );
+                    break;
+
+                case $condition instanceof SortClause\LocationPathString:
+                    $query->orderBy( 'path_string', $sortDirection );
+                    break;
+
+                case $condition instanceof SortClause\LocationPriority:
+                    $query->orderBy( 'priority', $sortDirection );
+                    break;
+
+                default:
+                    throw new \RuntimeException( 'Unhandled sort clause: ' . get_class( $condition ) );
+                    break;
+            }
+        }
 
         if ( $limit !== null )
         {

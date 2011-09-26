@@ -14,6 +14,8 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\Location\Trashed,
     ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase,
+    ezp\Persistence\Content\Query\SortClause,
+    ezp\Content\Query,
     ezp\Persistence;
 
 /**
@@ -280,6 +282,65 @@ class EzpDatabaseTrashTest extends TestCase
 
         $trashList = $handler->listTrashed( 0, 1, array() );
         $this->assertEquals( $value, $trashList[0][$key] );
+    }
+
+    public function testListTrashSortedPathStringDesc()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69/' );
+
+        $this->assertEquals(
+            array(
+                '/1/2/69/76/',
+                '/1/2/69/72/75/',
+                '/1/2/69/72/74/',
+                '/1/2/69/72/73/',
+                '/1/2/69/72/',
+                '/1/2/69/70/71/',
+                '/1/2/69/70/',
+                '/1/2/69/',
+            ),
+            array_map(
+                function ( $trashItem )
+                {
+                    return $trashItem['path_string'];
+                },
+                $trashList = $handler->listTrashed( 0, null, array(
+                    new SortClause\LocationPathString( Query::SORT_DESC ),
+                ) )
+            )
+        );
+    }
+
+    public function testListTrashSortedDepth()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69/' );
+
+        $this->assertEquals(
+            array(
+                '/1/2/69/',
+                '/1/2/69/76/',
+                '/1/2/69/72/',
+                '/1/2/69/70/',
+                '/1/2/69/72/75/',
+                '/1/2/69/72/74/',
+                '/1/2/69/72/73/',
+                '/1/2/69/70/71/',
+            ),
+            array_map(
+                function ( $trashItem )
+                {
+                    return $trashItem['path_string'];
+                },
+                $trashList = $handler->listTrashed( 0, null, array(
+                    new SortClause\LocationDepth(),
+                    new SortClause\LocationPathString( Query::SORT_DESC ),
+                ) )
+            )
+        );
     }
 }
 
