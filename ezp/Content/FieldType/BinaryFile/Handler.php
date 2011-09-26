@@ -65,4 +65,16 @@ class Handler
         $destination .= '/' . $destFileName;
         return $this->binaryRepository->createFromLocalFile( $localPath, $destination );
     }
+
+    /**
+     * Loads a file from its $filename and $contentType (aka MIME Type)
+     *
+     * @param string $filename Name of the file to retrieve (including its extension)
+     * @param \ezp\Io\ContentType $contentType ContentType object (aka MIME type)
+     */
+    public function loadFileFromContentType( $filename, ContentType $contentType )
+    {
+        $dir = SysInfo::storageDirectory() . '/original/' . $contentType->type;
+        return $this->binaryRepository->load( "$dir/$filename" );
+    }
 }
