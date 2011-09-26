@@ -8,7 +8,7 @@
  */
 
 namespace ezp\User\Group;
-use ezp\Base\Proxy as BaseProxy,
+use ezp\Base\Proxy\Observable as ObservableProxy,
     ezp\Base\ModelInterface,
     ezp\Base\Observable,
     ezp\Base\Observer,
@@ -26,7 +26,7 @@ use ezp\Base\Proxy as BaseProxy,
  * @property string $name
  * @property string description
  */
-class Proxy extends BaseProxy implements Group, Groupable, ModelInterface, Observable
+class Proxy extends ObservableProxy implements Group, Groupable, ModelInterface, Observable
 {
     public function __construct( $id, Service $service )
     {
@@ -72,45 +72,6 @@ class Proxy extends BaseProxy implements Group, Groupable, ModelInterface, Obser
     {
         $this->lazyLoad();
         return $this->properties();
-    }
-
-    /**
-     * Attach a event listener to this subject
-     *
-     * @param \ezp\Base\Observer $observer
-     * @param string $event
-     * @return Model
-     */
-    public function attach( Observer $observer, $event = 'update' )
-    {
-        $this->lazyLoad();
-        return $this->attach( $observer, $event );
-    }
-
-    /**
-     * Detach a event listener to this subject
-     *
-     * @param \ezp\Base\Observer $observer
-     * @param string $event
-     * @return Model
-     */
-    public function detach( Observer $observer, $event = 'update' )
-    {
-        $this->lazyLoad();
-        return $this->detach( $observer, $event );
-    }
-
-    /**
-     * Notify listeners about certain events, by default $event is a plain 'update'
-     *
-     * @param string $event
-     * @param array|null $arguments
-     * @return Model
-     */
-    public function notify( $event = 'update', array $arguments = null )
-    {
-        $this->lazyLoad();
-        return $this->notify( $event, $arguments );
     }
 
     /**

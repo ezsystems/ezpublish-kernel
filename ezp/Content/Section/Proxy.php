@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Section;
-use ezp\Base\Proxy as BaseProxy,
+use ezp\Base\Proxy\Observable as ObservableProxy,
     ezp\Base\ModelDefinition,
     ezp\Content\Section;
 
@@ -22,7 +22,7 @@ use ezp\Base\Proxy as BaseProxy,
  * @property string $name
  *                Human readable name of the section (preferably short for gui's)
  */
-class Proxy extends BaseProxy implements ModelDefinition, Section
+class Proxy extends ObservableProxy implements ModelDefinition, Section
 {
     public function __construct( $id, Service $service )
     {
