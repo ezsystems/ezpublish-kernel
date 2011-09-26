@@ -12,6 +12,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Location,
     ezp\Persistence\Content\Location\CreateStruct,
+    ezp\Persistence\Content\Location\Trashed,
     ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase,
     ezp\Persistence;
 
@@ -210,6 +211,75 @@ class EzpDatabaseTrashTest extends TestCase
             $data[$field],
             "Value in property $field not as expected."
         );
+    }
+
+    public function testListEmptyTrash()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+
+        $this->assertEquals(
+            array(),
+            $handler->listTrashed( 0, null, array() )
+        );
+    }
+
+    public function testListFullTrash()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69/' );
+
+        $this->assertEquals(
+            8,
+            count( $handler->listTrashed( 0, null, array() ) )
+        );
+    }
+
+    public function testListTrashLimited()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69/' );
+
+        $this->assertEquals(
+            5,
+            count( $handler->listTrashed( 0, 5, array() ) )
+        );
+    }
+
+    public static function getTrashValues()
+    {
+        return array(
+            array( 'contentobject_id', 67 ),
+            array( 'contentobject_version', 1 ),
+            array( 'depth', 2 ),
+            array( 'is_hidden', 0 ),
+            array( 'is_invisible', 0 ),
+            array( 'main_node_id', 69 ),
+            array( 'modified_subnode', 1311065014 ),
+            array( 'node_id', 69 ),
+            array( 'parent_node_id', 2 ),
+            array( 'path_identification_string', 'products' ),
+            array( 'path_string', '/1/2/69/' ),
+            array( 'priority', 0 ),
+            array( 'remote_id', '9cec85d730eec7578190ee95ce5a36f5' ),
+            array( 'sort_field', 2 ),
+            array( 'sort_order', 1 ),
+        );
+    }
+
+    /**
+     * @dataProvider getTrashValues
+     */
+    public function testListTrashItem( $key, $value )
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->trashSubtree( '/1/2/69/' );
+
+        $trashList = $handler->listTrashed( 0, 1, array() );
+        $this->assertEquals( $value, $trashList[0][$key] );
     }
 }
 

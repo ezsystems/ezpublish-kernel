@@ -824,6 +824,39 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * List trashed items
+     *
+     * @param int $offset
+     * @param int $limit
+     * @param array $sort
+     * @return array
+     */
+    public function listTrashed( $offset, $limit, array $sort )
+    {
+        $query = $this->handler->createSelectQuery();
+        // @TODO: Handle sorting
+        $query
+            ->select( '*' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_trash' ) );
+
+        if ( $limit !== null )
+        {
+            $query->limit( $limit, $offset );
+        }
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $rows = array();
+        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    /**
      * Set section on all content objects in the subtree
      *
      * @param mixed $pathString
