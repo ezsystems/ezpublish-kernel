@@ -8,8 +8,6 @@
  */
 
 namespace ezp\Base;
-use ezp\Base\Service as BaseService,
-    InvalidArgumentException;
 
 /**
  * Proxy class for model objects
