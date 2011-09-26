@@ -10,8 +10,10 @@
 namespace ezp\Content;
 use ezp\Base\Model,
     ezp\Base\Collection\Type as TypeCollection,
+    ezp\Base\Exception\Logic as LogicException,
     ezp\Base\Observer,
     ezp\Base\Observable,
+    ezp\Base\Repository,
     ezp\Content,
     ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Version\StaticCollection as VersionCollection,
@@ -311,19 +313,15 @@ class Concrete extends Model implements Content, Observer
                         {
                             return in_array( $content->ownerId, $limitationsValues, true );
                         },
-                        'query' => function( array $limitationsValues )
+                        'query' => function( array $limitationsValues, Repository $repository )
                         {
-                            if ( !isset( $limitationsValues[1] ) )
-                                return new CriterionUserMetadata(
-                                    CriterionUserMetadata::OWNER,
-                                    CriterionOperator::EQ,
-                                    $limitationsValues[0]
-                                );
+                            if ( $limitationsValues[0] != 1 )
+                                throw new LogicException( 'Owner limitation', 'expected limitation value to be 1 but got:' . $limitationsValues[0]  );
 
                             return new CriterionUserMetadata(
                                 CriterionUserMetadata::OWNER,
-                                CriterionOperator::IN,
-                                $limitationsValues
+                                CriterionOperator::EQ,
+                                $repository->getUser()->id
                             );
                         },
                     ),
@@ -338,7 +336,7 @@ class Concrete extends Model implements Content, Observer
 
                             return false;
                         },
-                        // @todo Add query support when criterion support exists
+                        // @todo Add query support when criterion support exists using current user data
                     ),
                     'Node' => array(
                         'compare' => function( Content $content, array $limitationsValues )
