@@ -136,7 +136,7 @@ class IntegerTest extends PHPUnit_Framework_TestCase
         self::assertSame( $integer, (string)$value );
 
         self::assertSame(
-            $integer,
+            (int)$integer,
             IntegerValue::fromString( (string)$value )->value,
             "fromString() and __toString() must be compatible"
         );
