@@ -428,7 +428,6 @@ class Service extends BaseService
                 "section" => new ProxySection( $vo->sectionId, $this->repository->getSectionService() ),
                 "contentType" => new ProxyType( $vo->typeId, $this->repository->getContentTypeService() ),
                 "versions" => new LazyVersionCollection( $this, $vo->id ),//@todo Avoid throwing away version info on $vo
-                "owner" => new ProxyUser( $vo->ownerId, $this->repository->getUserService() ),
                 "properties" => $vo
             )
         );
