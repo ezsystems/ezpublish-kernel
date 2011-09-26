@@ -83,7 +83,7 @@ abstract class Proxy
     public function __set( $property, $value )
     {
         $this->lazyLoad();
-        return $this->$property = $value;
+        return $this->proxiedObject->$property = $value;
     }
 
     /**
@@ -95,6 +95,6 @@ abstract class Proxy
     public function __isset( $property )
     {
         $this->lazyLoad();
-        return isset( $this->$property );
+        return isset( $this->proxiedObject->$property );
     }
 }

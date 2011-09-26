@@ -47,7 +47,7 @@ class Proxy extends ObservableProxy implements Group, Groupable, ModelInterface,
     public function getParent()
     {
         $this->lazyLoad();
-        return $this->getParent();
+        return $this->proxiedObject->getParent();
     }
 
     /**
@@ -60,7 +60,7 @@ class Proxy extends ObservableProxy implements Group, Groupable, ModelInterface,
     public function getRoles()
     {
         $this->lazyLoad();
-        return $this->getRoles();
+        return $this->proxiedObject->getRoles();
     }
 
     /**
@@ -71,7 +71,7 @@ class Proxy extends ObservableProxy implements Group, Groupable, ModelInterface,
     public function properties()
     {
         $this->lazyLoad();
-        return $this->properties();
+        return $this->proxiedObject->properties();
     }
 
     /**
@@ -87,7 +87,7 @@ class Proxy extends ObservableProxy implements Group, Groupable, ModelInterface,
     public function setState( array $state )
     {
         $this->lazyLoad();
-        return $this->setState( $state );
+        return $this->proxiedObject->setState( $state );
     }
 
     /**
@@ -103,6 +103,6 @@ class Proxy extends ObservableProxy implements Group, Groupable, ModelInterface,
     public function getState( $property = null )
     {
         $this->lazyLoad();
-        return $this->getState( $property );
+        return $this->proxiedObject->getState( $property );
     }
 }
