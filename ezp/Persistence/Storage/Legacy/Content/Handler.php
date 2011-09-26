@@ -102,10 +102,7 @@ class Handler implements BaseContentHandler
                 $this->mapper->convertToStorageValue( $field )
             );
             $storage = $this->storageRegistry->getStorage( $field->type );
-            if ( false !== ( $value = $storage->storeFieldData( $field->id, $field->value, $this->contentGateway->getContext() ) ) )
-            {
-                $field->value = $value;
-            }
+            $storage->storeFieldData( $field, $this->contentGateway->getContext() );
 
             $version->fields[] = $field;
         }
@@ -188,10 +185,7 @@ class Handler implements BaseContentHandler
                 $this->mapper->convertToStorageValue( $field )
             );
             $storage = $this->storageRegistry->getStorage( $field->type );
-            if ( false !== ( $value = $storage->storeFieldData( $field->id, $field->value, $this->contentGateway->getContext() ) ) )
-            {
-                $field->value = $value;
-            }
+            $storage->storeFieldData( $field, $this->contentGateway->getContext() );
             $version->fields[] = $field;
         }
 
@@ -232,7 +226,7 @@ class Handler implements BaseContentHandler
             $storage = $this->storageRegistry->getStorage( $field->type );
             if ( $storage->hasFieldData() )
             {
-                $field->value = $storage->getFieldData( $field->id, $field->value, $this->contentGateway->getContext() );
+                $storage->getFieldData( $field, $this->contentGateway->getContext() );
             }
         }
 
@@ -307,10 +301,7 @@ class Handler implements BaseContentHandler
                 $this->mapper->convertToStorageValue( $field )
             );
             $storage = $this->storageRegistry->getStorage( $field->type );
-            if ( false !== ( $value = $storage->storeFieldData( $field->id, $field->value, $this->contentGateway->getContext() ) ) )
-            {
-                $field->value = $value;
-            }
+            $storage->storeFieldData( $field, $this->contentGateway->getContext() );
             $version->fields[] = $field;
         }
 

@@ -153,9 +153,8 @@ class ContentHandlerTest extends TestCase
         $storageMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
             ->with(
-                $this->equalTo( 42 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\FieldValue'
+                    'ezp\\Persistence\\Content\\Field'
                 )
             );
 
@@ -548,7 +547,7 @@ class ContentHandlerTest extends TestCase
         $storageMock
             ->expects( $this->at( 3 ) )
             ->method( 'getFieldData' )
-            ->with( 30, new FieldValue())
+            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) )
             ->will( $this->returnValue( true ) );
 
         $storageMock
@@ -690,9 +689,8 @@ class ContentHandlerTest extends TestCase
         $storageMock->expects( $this->exactly( 5 ) )
             ->method( 'storeFieldData' )
             ->with(
-                $this->equalTo( 23 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\FieldValue'
+                    'ezp\\Persistence\\Content\\Field'
                 )
             );
 
@@ -869,9 +867,8 @@ class ContentHandlerTest extends TestCase
         $storageMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
             ->with(
-                $this->equalTo( 23 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\FieldValue'
+                    'ezp\\Persistence\\Content\\Field'
                 )
             );
 
