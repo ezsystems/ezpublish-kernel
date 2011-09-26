@@ -836,7 +836,6 @@ class EzcDatabase extends Gateway
     public function listTrashed( $offset, $limit, array $sort )
     {
         $query = $this->handler->createSelectQuery();
-        // @TODO: Handle sorting
         $query
             ->select( '*' )
             ->from( $this->handler->quoteTable( 'ezcontentobject_trash' ) );
@@ -859,6 +858,10 @@ class EzcDatabase extends Gateway
                     break;
 
                 default:
+                    // Only handle location related sort clauses. The others
+                    // require data aggregation which is not sensible here.
+                    // Since also criteria are yet ignored, because they are
+                    // simply not used yet in eZ Publish, we skip that for now.
                     throw new \RuntimeException( 'Unhandled sort clause: ' . get_class( $condition ) );
                     break;
             }
