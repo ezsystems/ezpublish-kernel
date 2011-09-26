@@ -726,7 +726,7 @@ class EzcDatabaseTest extends TestCase
         $gateway->setName( 14, 2, "Hello world!", 'eng-US' );
 
         $this->assertQueryResult(
-            array( array( 'eng-US', 2, 14, 0, 'Hello world!', 'eng-US' ) ),
+            array( array( 'eng-US', 2, 14, 2, 'Hello world!', 'eng-US' ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( '*' )
