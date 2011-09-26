@@ -144,4 +144,34 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
         $value = BinaryFileValue::fromString( $this->imagePath );
         self::assertSame( $value->file->path, (string)$value );
     }
+
+    /**
+     * Tests legacy properties, not directly accessible from Value object
+     *
+     * @group fieldType
+     * @group binaryFile
+     * @covers \ezp\Content\FieldType\BinaryFile\Value::__get
+     */
+    public function testVirtualLegacyProperty()
+    {
+        $value = BinaryFileValue::fromString( $this->imagePath );
+        self::assertSame( basename( $value->file->path ), $value->filename );
+        self::assertSame( $value->file->contentType->__toString(), $value->mimeType );
+        self::assertSame( $value->file->contentType->type, $value->mimeTypeCategory );
+        self::assertSame( $value->file->contentType->subType, $value->mimeTypePart );
+        self::assertSame( $value->file->path, $value->filepath );
+        self::assertSame( $value->file->size, $value->filesize );
+    }
+
+    /**
+     * @group fieldType
+     * @group binaryFile
+     * @covers \ezp\Content\FieldType\BinaryFile\Value::__get
+     * @expectedException \ezp\Base\Exception\PropertyNotFound
+     */
+    public function testInvalidVirtualProperty()
+    {
+        $value = BinaryFileValue::fromString( $this->imagePath );
+        $value->nonExistingProperty;
+    }
 }
