@@ -9,7 +9,6 @@
 
 namespace ezp\User;
 use ezp\Base\Model,
-    ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Persistence\User as UserValue,
     ezp\User;
@@ -26,7 +25,7 @@ use ezp\Base\Model,
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
-class Concrete extends Model implements Groupable, ModelDefinition, User
+class Concrete extends Model implements Groupable, User
 {
     /**
      * @var array Readable of properties on this object

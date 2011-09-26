@@ -9,7 +9,6 @@
 
 namespace ezp\Content\Section;
 use ezp\Base\Model,
-    ezp\Base\ModelDefinition,
     ezp\Base\Repository,
     ezp\Base\Exception\Logic,
     ezp\Content,
@@ -26,7 +25,7 @@ use ezp\Base\Model,
  * @property string $name
  *                Human readable name of the section (preferably short for gui's)
  */
-class Concrete extends Model implements ModelDefinition, Section
+class Concrete extends Model implements Section
 {
     /**
      * @inherit-doc

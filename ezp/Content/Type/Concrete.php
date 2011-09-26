@@ -9,7 +9,6 @@
 
 namespace ezp\Content\Type;
 use ezp\Base\Model,
-    ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Content\Type,
     ezp\Persistence\Content\Type as TypeValue;
@@ -36,7 +35,7 @@ use ezp\Base\Model,
  * @property Type\FieldDefinition[] $fields Appending items after it has been created has no effect, use TypeService->addFieldDefinition()
  * @property-read Type\Group[] $groups Appended items after it has been created has no effect, use TypeService->link()
  */
-class Concrete extends Model implements ModelDefinition, Type
+class Concrete extends Model implements Type
 {
     /**
      * @var array List of VO properties on this object

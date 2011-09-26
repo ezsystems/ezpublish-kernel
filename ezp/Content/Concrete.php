@@ -9,7 +9,6 @@
 
 namespace ezp\Content;
 use ezp\Base\Model,
-    ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Observer,
     ezp\Base\Observable,
@@ -83,7 +82,7 @@ use ezp\Base\Model,
  * @property \ezp\Content\Language $initialLanguage
  *           The language the Content was initially created in
  */
-class Concrete extends Model implements ModelDefinition, Content, Observer
+class Concrete extends Model implements Content, Observer
 {
     /**
      * @var array Readable of properties on this object

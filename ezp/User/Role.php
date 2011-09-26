@@ -19,7 +19,7 @@ use ezp\Base\ModelDefinition,
  * @property-read mixed[] $groupIds Use {@link \ezp\User\Service::addGroup} & {@link \ezp\User\Service::removeGroup}
  * @property-read \ezp\User\Policy[] $policies Use {@link \ezp\User\Service::addPolicy} & {@link \ezp\User\Service::removePolicy}
  */
-interface Role
+interface Role extends ModelDefinition
 {
     /**
      * @return \ezp\User\Policy[]

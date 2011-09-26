@@ -8,6 +8,7 @@
  */
 
 namespace ezp\Content;
+use ezp\Base\ModelDefinition;
 
 /**
  * This interface represents a Section object
@@ -19,6 +20,6 @@ namespace ezp\Content;
  * @property string $name
  *                Human readable name of the section (preferably short for gui's)
  */
-interface Section
+interface Section extends ModelDefinition
 {
 }

@@ -9,7 +9,6 @@
 
 namespace ezp\User\Role;
 use ezp\Base\Model,
-    ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\User\Role,
     ezp\User\Policy,
@@ -23,7 +22,7 @@ use ezp\Base\Model,
  * @property-read mixed[] $groupIds Use {@link \ezp\User\Service::addGroup} & {@link \ezp\User\Service::removeGroup}
  * @property-read \ezp\User\Policy[] $policies Use {@link \ezp\User\Service::addPolicy} & {@link \ezp\User\Service::removePolicy}
  */
-class Concrete extends Model implements ModelDefinition, Role
+class Concrete extends Model implements Role
 {
     /**
      * @var array Readable of properties on this object

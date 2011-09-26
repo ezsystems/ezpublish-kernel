@@ -9,7 +9,6 @@
 
 namespace ezp\Content;
 use ezp\Base\Proxy\Observable as ObservableProxy,
-    ezp\Base\ModelDefinition,
     ezp\Content,
     ezp\User;
 
@@ -69,7 +68,7 @@ use ezp\Base\Proxy\Observable as ObservableProxy,
  * @property \ezp\Content\Language $initialLanguage
  *           The language the Content was initially created in
  */
-class Proxy extends ObservableProxy implements ModelDefinition, Content
+class Proxy extends ObservableProxy implements Content
 {
     public function __construct( $id, Service $service )
     {

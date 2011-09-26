@@ -10,6 +10,7 @@
 namespace ezp;
 use ezp\Content\Section,
     ezp\Content\Location,
+    ezp\Base\ModelDefinition,
     ezp\User;
 
 /**
@@ -68,7 +69,7 @@ use ezp\Content\Section,
  * @property \ezp\Content\Language $initialLanguage
  *           The language the Content was initially created in
  */
-interface Content
+interface Content extends ModelDefinition
 {
     /**
      * Publication status constants

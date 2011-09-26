@@ -8,6 +8,7 @@
  */
 
 namespace ezp;
+use ezp\Base\ModelDefinition;
 
 /**
  * This interface represents a User item
@@ -21,7 +22,7 @@ namespace ezp;
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
-interface User
+interface User extends ModelDefinition
 {
     /**
      * @var int MD5 of password, not recommended

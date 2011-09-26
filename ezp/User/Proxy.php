@@ -9,7 +9,6 @@
 
 namespace ezp\User;
 use ezp\Base\Proxy\Observable as ObservableProxy,
-    ezp\Base\ModelDefinition,
     ezp\User;
 
 /**
@@ -24,7 +23,7 @@ use ezp\Base\Proxy\Observable as ObservableProxy,
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
-class Proxy extends ObservableProxy implements Groupable, ModelDefinition, User
+class Proxy extends ObservableProxy implements Groupable, User
 {
     public function __construct( $id, Service $service )
     {

@@ -8,9 +8,7 @@
  */
 
 namespace ezp\Content;
-use
-    ezp\Base\Collection\Type as TypeCollection,
-    ezp\Persistence\Content\Type as TypeValue;
+use ezp\Base\ModelDefinition;
 
 /**
  * Content Type interface
@@ -34,7 +32,7 @@ use
  * @property Type\FieldDefinition[] $fields Appending items after it has been created has no effect, use TypeService->addFieldDefinition()
  * @property-read Type\Group[] $groups Appended items after it has been created has no effect, use TypeService->link()
  */
-interface Type
+interface Type extends ModelDefinition
 {
     /**
      * @return \ezp\Content\Type\FieldDefinition[]
