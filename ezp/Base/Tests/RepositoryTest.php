@@ -77,6 +77,8 @@ class RepositoryTest extends BaseServiceTest
         //$this->assertFalse( $this->repository->canUser( '*', $role ) );
 
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
+
         $contentService = $this->repository->getContentService();
         $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
         $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
@@ -124,6 +126,8 @@ class RepositoryTest extends BaseServiceTest
         //$this->assertFalse( $this->repository->canUser( '*', $type ) );
 
         $service = $this->repository->getUserService();
+        $anonymous = $this->repository->setUser( $service->load( 14 ) );
+
         $contentService = $this->repository->getContentService();
         $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
         $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
@@ -139,6 +143,8 @@ class RepositoryTest extends BaseServiceTest
         $policy->limitations = '*';
         $role = $service->createRole( $role );
         $service->assignRole( $userGroup, $role );
+
+        $this->repository->setUser( $anonymous );
 
         $type = $this->repository->getContentTypeService()->load( 1 );
         $this->assertTrue( $this->repository->canUser( 'edit', $type ) );
@@ -211,6 +217,8 @@ class RepositoryTest extends BaseServiceTest
     {
         // setup (create new group, move user:10 to it and apply roles to that group)
         $service = $this->repository->getUserService();
+        $anonymous = $this->repository->setUser( $service->load( 14 ) );
+
         $contentService = $this->repository->getContentService();
         $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
         $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
@@ -237,6 +245,8 @@ class RepositoryTest extends BaseServiceTest
         $policy->limitations = '*';
         $role = $service->createRole( $role );
         $service->assignRole( $userGroup, $role );
+
+        $this->repository->setUser( $anonymous );
 
         // test
         $section = $this->repository->getSectionService()->load( 2 );

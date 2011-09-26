@@ -35,7 +35,7 @@ interface ModelDefinition
      *                 'query' => function( array $limitationsValues[, Repository $repository] )
      *                 {
      *                     if ( !isset( $limitationsValues[1] ) )
-     *                         return new Criterion\ContentTypeId( $limitationsValues[0] )
+     *                         return new Criterion\ContentTypeId( $limitationsValues[0] );
      *
      *                     return new Criterion\ContentTypeId( $limitationsValues );
      *                 },

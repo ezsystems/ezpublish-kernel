@@ -33,6 +33,8 @@ class ServiceTest extends BaseServiceTest
     public function testCreate()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
+
         $do = new ConcreteUser( 1 );
         $do->login = $do->passwordHash = 'test';
         $do->email = 'test@ez.no';
@@ -54,6 +56,8 @@ class ServiceTest extends BaseServiceTest
     public function testCreateExistingId()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
+
         $do = new ConcreteUser( 14 );
         $do->login = $do->passwordHash = 'test';
         $do->email = 'test@ez.no';
@@ -71,6 +75,8 @@ class ServiceTest extends BaseServiceTest
     public function testCreateMissingId()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
+
         $do = new ConcreteUser();
         $do->login = $do->passwordHash = 'test';
         $do->email = 'test@ez.no';
@@ -234,6 +240,7 @@ class ServiceTest extends BaseServiceTest
     public function testCreateGroup()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $parent = $service->loadGroup( 12 );
 
         $groupName = 'A new group of users';
@@ -257,6 +264,8 @@ class ServiceTest extends BaseServiceTest
     public function testLoadGroup()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
+
         $do = $service->loadGroup( 12 );
         self::assertInstanceOf( 'ezp\\User\\Group', $do );
         self::assertEquals( 12, $do->id );
@@ -291,6 +300,7 @@ class ServiceTest extends BaseServiceTest
     public function testLoadGroupNotFoundWithType()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $service->loadGroup( 1 );
     }
 
@@ -303,6 +313,8 @@ class ServiceTest extends BaseServiceTest
     public function testAssignGroup()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
+
         $adminGroup = $service->loadGroup( 12 );
         $anonymousUser = $service->load( 10 );
 
@@ -322,6 +334,8 @@ class ServiceTest extends BaseServiceTest
     public function testAssignGroupAlreadyAssigned()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
+
         $adminGroup = $service->loadGroup( 12 );
         $anonymousUser = $service->load( 10 );
 
@@ -340,6 +354,8 @@ class ServiceTest extends BaseServiceTest
     public function testUnAssignGroup()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
+
         $adminGroup = $service->loadGroup( 12 );
         $anonymousUser = $service->load( 10 );
 

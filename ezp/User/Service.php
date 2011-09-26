@@ -66,8 +66,10 @@ class Service extends BaseService
      */
     public function load( $id )
     {
-        $content = $this->repository->getContentService()->load( $id );
-        return $this->buildUser( $this->handler->userHandler()->load( $id ), $content );
+        return $this->buildUser(
+            $this->handler->userHandler()->load( $id ),
+            new ProxyContent( $id, $this->repository->getContentService() )
+        );
     }
 
     /**
@@ -95,8 +97,7 @@ class Service extends BaseService
             }
             elseif ( $user->passwordHash == self::createHash( $user->login, $password, $user->hashAlgorithm ) )
             {
-                $content = $this->repository->getContentService()->load( $user->id );
-                return $this->buildUser( $user, $content );
+                return $this->buildUser( $user, new ProxyContent( $user->id, $this->repository->getContentService() ) );
             }
         }
         throw new FailedLogin();
@@ -321,8 +322,6 @@ class Service extends BaseService
         $this->repository->getLocationService()->delete( $location );
 
         unset( $locations[$locationKey] );
-        unset( $content->getState( 'properties' )->locations[$locationKey] );//order should be same, so reusing key
-
         unset( $groups[$key] );
         $user->setState( array( 'groups' => $groups ) );
     }

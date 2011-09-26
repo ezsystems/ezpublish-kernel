@@ -88,9 +88,12 @@ class TrashTest extends Base
     protected function setUp()
     {
         parent::setUp();
+        $administrator = new ProxyUser( 14, $this->repository->getUserService() );
+        $this->repository->setUser( $administrator );// "Login" admin
+
         $this->locationService = $this->repository->getLocationService();
         $this->service = $this->repository->getTrashService();
-        $administrator = new ProxyUser( 14, $this->repository->getUserService() );
+
 
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );

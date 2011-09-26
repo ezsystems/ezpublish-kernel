@@ -14,6 +14,7 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Content,
+    ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Section\Proxy as ProxySection,
     ezp\Content\Location\Proxy as ProxyLocation,
     ezp\Content\Type\Proxy as ProxyType,
@@ -28,6 +29,8 @@ use ezp\Base\Service as BaseService,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     ezp\Persistence\Content\Query\Criterion\ContentId,
+    ezp\Persistence\Content\Query\Criterion\LogicalOr,
+    ezp\Persistence\Content\Query\Criterion\LogicalAnd,
     ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     ezp\Persistence\Content\Version as VersionValue,
     ezp\Persistence\Content\RestrictedVersion as RestrictedVersionValue;
@@ -316,6 +319,61 @@ class Service extends BaseService
      */
     public function find( Query $query )
     {
+        // Permission handling
+        $definition = ConcreteContent::definition();
+        $limitationArray = $this->repository->getUser()->hasAccessTo( $definition['module'], 'read' );
+        if ( $limitationArray === false )
+        {
+            // User does not have read access to content at all
+            return new Result( array(), 0, $query );
+        }
+        else if ( $limitationArray !== true )
+        {
+            // Create OR conditions for every "policy" that contains AND conditions for limitations
+            $orCriteria = array();
+            foreach ( $limitationArray as $limitations )
+            {
+                $andCriteria = array();
+                foreach ( $limitations as $limitationKey => $limitationValues )
+                {
+                    if ( !isset( $definition['functions']['read'][$limitationKey]['query'] ) )
+                    {
+                        throw new Logic(
+                            "\$definition[functions][read][{$limitationKey}][query]",
+                            "could not find limitation query function on ezp\\Content\\Concrete::definition()"
+                        );
+                    }
+
+                    $limitationQueryFn = $definition['functions']['read'][$limitationKey]['query'];
+                    if ( !is_callable( $limitationQueryFn ) )
+                    {
+                        throw new Logic(
+                            "\$definition[functions][read][{$limitationKey}][query]",
+                            "query function from ezp\\Content\\Concrete::definition() is not callable"
+                        );
+                    }
+
+                    $andCriteria[] = $limitationQueryFn( $limitationValues, $this->repository );
+                }
+                $orCriteria[] = new LogicalAnd( $andCriteria );
+            }
+
+            // Merge with $query->criterion
+            if ( $query->criterion instanceof LogicalAnd )
+            {
+                $query->criterion->criteria[] = isset( $orCriteria[1] ) ? new LogicalOr( $orCriteria ) : $orCriteria[0];
+            }
+            else
+            {
+                $query->criterion = new LogicalAnd(
+                    array(
+                         $query->criterion,
+                         isset( $orCriteria[1] ) ? new LogicalOr( $orCriteria ) : $orCriteria[0]
+                    )
+                );
+            }
+        }
+
         // @TODO: handle $translations with $query object (not implemented yet)
         $translations = null;
         $result = $this->handler->searchHandler()->find(

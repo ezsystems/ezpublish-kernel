@@ -39,6 +39,7 @@ class ContentTest extends BaseServiceTest
         parent::setUp();
         $this->service = $this->repository->getContentService();
         $this->anonymousUser = new ProxyUser( 10, $this->repository->getUserService() );
+        $this->repository->setUser( new ProxyUser( 14, $this->repository->getUserService() ) );// "Login" admin
     }
 
     /**

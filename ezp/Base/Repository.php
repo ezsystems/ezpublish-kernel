@@ -84,13 +84,17 @@ class Repository
      * @param \ezp\User $user
      * @throws \ezp\Base\Exception\InvalidArgumentValue If provided user does not have a valid id value
      * @todo throw something if $user is not persisted to backend (not stored)
+     * @return \ezp\User Old user
      */
     function setUser( User $user )
     {
         if ( !$user->id )
             throw new InvalidArgumentValue( '$user->id', $user->id );
 
+
+        $oldUser = $this->user;
         $this->user = $user;
+        return $oldUser;
     }
 
     /**
@@ -136,9 +140,6 @@ class Repository
             $limitationsSaysYes = true;
             foreach ( $limitations as $limitationKey => $limitationValues )
             {
-                //if ( isset( $definition[$function][$limitationKey]['alias'] ) )
-                    //$limitationKey = $definition[$function][$limitationKey]['alias'];
-
                 if ( !isset( $definition['functions'][$function][$limitationKey]['compare'] ) )
                 {
                     throw new Logic(

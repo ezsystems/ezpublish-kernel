@@ -40,6 +40,6 @@ abstract class LogicalOperator extends Criterion
      * The set of criteria combined by the logical operator
      * @var array(Criterion)
      */
-    public $criteria;
+    public $criteria = array();
 }
 ?>

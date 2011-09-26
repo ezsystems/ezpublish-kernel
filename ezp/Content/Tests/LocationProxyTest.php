@@ -70,6 +70,7 @@ class LocationProxyTest extends PHPUnit_Framework_TestCase
      */
     public function testProxySetParent()
     {
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );// "Login" admin
         $location = new ProxyLocation( 5, $this->service );
         $location->setParent( new ProxyLocation( 2, $this->service ) );
     }

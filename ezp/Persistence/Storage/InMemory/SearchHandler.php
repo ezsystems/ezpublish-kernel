@@ -181,7 +181,7 @@ class SearchHandler extends Handler
             }
             else
             {
-                if ( $criterion instanceof UserMetadata )
+                if ( $criterion instanceof UserMetadata && $criterion->target !== $criterion::MODIFIER )
                 {
                     if ( $criterion->target === $criterion::OWNER && !isset( $match['ownerId'] ) )
                         $match['ownerId'] = $criterion->value[0];
@@ -189,8 +189,9 @@ class SearchHandler extends Handler
                         $match['version']['creatorId'] = $criterion->value[0];
                     //elseif ( $criterion->target === $criterion::MODIFIER && !isset( $match['version']['creatorId'] ) )
                         //$match['version']['creatorId'] = $criterion->value[0];
+                    continue;
                 }
-                throw new Exception( "Support for provided criterion not supported or used more then once: " . $criterion );
+                throw new Exception( "Support for provided criterion not supported or used more then once: " . get_class( $criterion ) );
             }
         }
     }

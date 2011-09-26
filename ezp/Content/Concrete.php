@@ -17,6 +17,12 @@ use ezp\Base\Model,
     ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Version\StaticCollection as VersionCollection,
     ezp\Persistence\Content as ContentValue,
+    ezp\Persistence\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
+    ezp\Persistence\Content\Query\Criterion\SectionId as CriterionSectionId,
+    ezp\Persistence\Content\Query\Criterion\UserMetadata as CriterionUserMetadata,
+    ezp\Persistence\Content\Query\Criterion\LocationId as CriterionLocationId,
+    ezp\Persistence\Content\Query\Criterion\SubtreeId as CriterionSubtreeId,
+    ezp\Persistence\Content\Query\Criterion\Operator as CriterionOperator,
     ezp\User,
     DateTime,
     InvalidArgumentException;
@@ -280,17 +286,46 @@ class Concrete extends Model implements ModelDefinition, Content, Observer
                         {
                             return in_array( $content->typeId, $limitationsValues, true );
                         },
+                        'query' => function( array $limitationsValues )
+                        {
+                            if ( !isset( $limitationsValues[1] ) )
+                                return new CriterionContentTypeId( $limitationsValues[0] );
+
+                            return new CriterionContentTypeId( $limitationsValues );
+                        },
                     ),
                     'Section' => array(
                         'compare' => function( Content $content, array $limitationsValues )
                         {
                             return in_array( $content->sectionId, $limitationsValues, true );
                         },
+                        'query' => function( array $limitationsValues )
+                        {
+                            if ( !isset( $limitationsValues[1] ) )
+                                return new CriterionSectionId( $limitationsValues[0] );
+
+                            return new CriterionSectionId( $limitationsValues );
+                        },
                     ),
                     'Owner' => array(
                         'compare' => function( Content $content, array $limitationsValues )
                         {
                             return in_array( $content->ownerId, $limitationsValues, true );
+                        },
+                        'query' => function( array $limitationsValues )
+                        {
+                            if ( !isset( $limitationsValues[1] ) )
+                                return new CriterionUserMetadata(
+                                    CriterionUserMetadata::OWNER,
+                                    CriterionOperator::EQ,
+                                    $limitationsValues[0]
+                                );
+
+                            return new CriterionUserMetadata(
+                                CriterionUserMetadata::OWNER,
+                                CriterionOperator::IN,
+                                $limitationsValues
+                            );
                         },
                     ),
                     'Group' => array(
@@ -304,6 +339,7 @@ class Concrete extends Model implements ModelDefinition, Content, Observer
 
                             return false;
                         },
+                        // @todo Add query support when criterion support exists
                     ),
                     'Node' => array(
                         'compare' => function( Content $content, array $limitationsValues )
@@ -315,6 +351,13 @@ class Concrete extends Model implements ModelDefinition, Content, Observer
                             }
 
                             return false;
+                        },
+                        'query' => function( array $limitationsValues )
+                        {
+                            if ( !isset( $limitationsValues[1] ) )
+                                return new CriterionLocationId( $limitationsValues[0] );
+
+                            return new CriterionLocationId( $limitationsValues );
                         },
                     ),
                     'Subtree' => array(
@@ -330,6 +373,14 @@ class Concrete extends Model implements ModelDefinition, Content, Observer
                             }
 
                             return false;
+                        },
+                        'query' => function( array $limitationsValues )
+                        {
+                            // @todo Adjust to CriterionSubtreeId as it only takes location id and not full path string
+                            if ( !isset( $limitationsValues[1] ) )
+                                return new CriterionSubtreeId( $limitationsValues[0] );
+
+                            return new CriterionSubtreeId( $limitationsValues );
                         },
                     ),
                 ),
