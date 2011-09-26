@@ -39,7 +39,7 @@ class Value implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
-        return new static( $stringValue );
+        return new static( (int)$stringValue );
     }
 
     /**
