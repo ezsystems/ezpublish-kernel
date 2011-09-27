@@ -68,7 +68,7 @@ class RepositoryTest extends BaseServiceTest
     }
 
     /**
-     * @covers \ezp\Base\Repository::canUser
+     * @covers \ezp\User\Role\Concrete::definition
      */
     public function testCanUserManageRoleWithPolicies()
     {
@@ -117,7 +117,7 @@ class RepositoryTest extends BaseServiceTest
     }
 
     /**
-     * @covers \ezp\Base\Repository::canUser
+     * @covers \ezp\Content\Type\Concrete::definition
      */
     public function testCanUserManageTypeWithPolicies()
     {
@@ -167,7 +167,69 @@ class RepositoryTest extends BaseServiceTest
         $admin = $this->repository->getUserService()->load( 14 );
         $this->repository->setUser( $admin );
         $this->assertTrue( $this->repository->canUser( 'create', $content, $parent ) );
-        // @todo Test using User with create limitations
+    }
+
+    /**
+     * @covers \ezp\Content\Concrete::definition
+     */
+    public function testCanUserCreateContentWithLimitations()
+    {
+        // setup (create new group, move user:10 to it and apply roles to that group)
+        $service = $this->repository->getUserService();
+        $anonymous = $this->repository->setUser( $service->load( 14 ) );
+
+        $contentService = $this->repository->getContentService();
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
+        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+            $contentService->load( 10 )->locations[0],
+            $contentService->load( $userGroup->id )->locations[0]
+        );
+
+        $role = new ConcreteRole();
+        $role->name = 'Limited content creator';
+
+        $role->addPolicy( $policy = new Policy( $role ) );
+        $policy->module = 'content';
+        $policy->function = 'create';
+        $policy->limitations = array(
+            'ParentClass' => array( '1' ),
+            'Class' => array( '1' ),
+            'Section' => array( '1' ),
+            'Subtree' => array( '/1/2/' ),
+            'Node' => array( '2' ),
+            'ParentOwner' => array( '2' ),
+            'ParentGroup' => array( '1' ),
+        );
+
+        $role = $service->createRole( $role );
+        $service->assignRole( $userGroup, $role );
+
+        // test
+        $section = $this->repository->getSectionService()->load( 1 );
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $parent = $this->repository->getLocationService()->load( 2 );
+        $content = new ConcreteContent( $type, $this->repository->getUser() );
+        $content->setSection( $section );
+
+        $this->repository->setUser( $anonymous );
+
+        $this->assertFalse( $this->repository->canUser( 'create', $content, $parent ) );
+
+        $deniedBy = array();
+        $parent->getContent()->getState( 'properties' )->ownerId = 10;
+        $this->assertTrue( $this->repository->canUser( 'create', $content, $parent, $deniedBy ),
+                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
+
+        $content->getState( 'properties' )->sectionId = 2;
+        $this->assertFalse( $this->repository->canUser( 'create', $content, $parent ) );
+
+        $deniedBy = array();
+        $content->getState( 'properties' )->sectionId = 1;
+        $this->assertTrue( $this->repository->canUser( 'create', $content, $parent, $deniedBy ),
+                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
+
+        $content->getState( 'properties' )->typeId = 2;
+        $this->assertFalse( $this->repository->canUser( 'create', $content, $parent ) );
     }
 
     /**
@@ -181,7 +243,119 @@ class RepositoryTest extends BaseServiceTest
         $admin = $this->repository->getUserService()->load( 14 );
         $this->repository->setUser( $admin );
         $this->assertTrue( $this->repository->canUser( 'edit', $content ) );
-        // @todo Test using User with edit limitations
+    }
+
+    /**
+     * @covers \ezp\Content\Concrete::definition
+     */
+    public function testCanUserEditContentWithLimitations()
+    {
+        // setup (create new group, move user:10 to it and apply roles to that group)
+        $service = $this->repository->getUserService();
+        $anonymous = $this->repository->setUser( $service->load( 14 ) );
+
+        $contentService = $this->repository->getContentService();
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
+        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+            $contentService->load( 10 )->locations[0],
+            $contentService->load( $userGroup->id )->locations[0]
+        );
+
+        $role = new ConcreteRole();
+        $role->name = 'Limited content creator';
+
+        $role->addPolicy( $policy = new Policy( $role ) );
+        $policy->module = 'content';
+        $policy->function = 'edit';
+        $policy->limitations = array(
+            'Class' => array( '1' ),
+            'Section' => array( '1' ),
+            'Subtree' => array( '/1/2/' ),
+            'Node' => array( '2' ),
+            'Owner' => array( '2' ),
+            'Group' => array( '1' ),
+        );
+
+        $role = $service->createRole( $role );
+        $service->assignRole( $userGroup, $role );
+
+        // test
+        $content = $contentService->load( 1 );
+
+        $this->repository->setUser( $anonymous );
+
+        $this->assertFalse( $this->repository->canUser( 'create', $content ) );
+
+        $deniedBy = array();
+        $content->getState( 'properties' )->ownerId = 10;
+        $this->assertTrue( $this->repository->canUser( 'edit', $content, null, $deniedBy ),
+                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
+
+        $content->getState( 'properties' )->sectionId = 2;
+        $this->assertFalse( $this->repository->canUser( 'edit', $content ) );
+
+        $deniedBy = array();
+        $content->getState( 'properties' )->sectionId = 1;
+        $this->assertTrue( $this->repository->canUser( 'edit', $content, null, $deniedBy ),
+                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
+
+        $content->getState( 'properties' )->typeId = 2;
+        $this->assertFalse( $this->repository->canUser( 'edit', $content ) );
+    }
+
+    /**
+     * @covers \ezp\Content\Concrete::definition
+     */
+    public function testCanUserEditContentWithLimitationsDenied()
+    {
+        // setup (create new group, move user:10 to it and apply roles to that group)
+        $service = $this->repository->getUserService();
+        $anonymous = $this->repository->setUser( $service->load( 14 ) );
+
+        $contentService = $this->repository->getContentService();
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
+        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+            $contentService->load( 10 )->locations[0],
+            $contentService->load( $userGroup->id )->locations[0]
+        );
+
+        $role = new ConcreteRole();
+        $role->name = 'Limited content creator';
+
+        $role->addPolicy( $policy = new Policy( $role ) );
+        $policy->module = 'content';
+        $policy->function = 'edit';
+        $policy->limitations = array(
+            'Class' => array( '1' ),
+            'Section' => array( '1' ),
+            'Subtree' => array( '/1/2/' ),
+            'Node' => array( '2' ),
+            'Owner' => array( '2' ),
+            'Group' => array( '1' ),
+        );
+
+        $role = $service->createRole( $role );
+        $service->assignRole( $userGroup, $role );
+
+        // test
+        $content = $contentService->load( 4 );
+
+        $this->repository->setUser( $anonymous );
+
+        $deniedBy = array();
+        $this->assertFalse( $this->repository->canUser( 'edit', $content, null, $deniedBy ) );
+
+        $this->assertEquals(
+            array(
+                array( 'limitation' => 'Class', 'values' => array( '1' ) ),
+                array( 'limitation' => 'Section', 'values' => array( '1' ) ),
+                array( 'limitation' => 'Subtree', 'values' => array( '/1/2/' ) ),
+                array( 'limitation' => 'Node', 'values' => array( '2' ) ),
+                array( 'limitation' => 'Owner', 'values' => array( '2' ) ),
+                array( 'limitation' => 'Group', 'values' => array( '1' ) ),
+             ),
+            $deniedBy
+        );
     }
 
     /**
@@ -212,7 +386,7 @@ class RepositoryTest extends BaseServiceTest
     }
 
     /**
-     * @covers \ezp\Base\Repository::canUser
+     * @covers \ezp\Content\Section\Concrete::definition
      */
     public function testCanUserAssignSectionWithLimitations()
     {
@@ -234,9 +408,9 @@ class RepositoryTest extends BaseServiceTest
         $policy->module = 'section';
         $policy->function = 'assign';
         $policy->limitations = array(
-            'Class' => array( 1 ),
-            'Section' => array( 1 ),
-            'NewSection' => array( 2 ),
+            'Class' => array( '1' ),
+            'Section' => array( '1' ),
+            'NewSection' => array( '2' ),
             'Owner' => array( '1' )
         );
 

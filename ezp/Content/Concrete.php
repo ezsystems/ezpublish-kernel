@@ -217,21 +217,36 @@ class Concrete extends Model implements Content, Observer
                 'create' => array(
                     // Note: Limitations 'Class' & 'Section' is copied from 'read' function further bellow
                     'ParentOwner' => array(
+                        // @todo Add support for $limitationsValues[0] == 2 when session support is added
                         'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
                         {
-                            return $parent && in_array( $parent->getContent()->ownerId, $limitationsValues, true );
+                            if ( $limitationsValues[0] != 1 && $limitationsValues[0] != 2 )
+                                throw new LogicException( 'Owner limitation', 'expected limitation value to be 1 or 2 but got:' . $limitationsValues[0] );
+
+                            return $parent && $parent->getContent()->ownerId == $repository->getUser()->id;
                         },
                     ),
                     'ParentGroup' => array(
                         'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
                         {
+                            if ( $limitationsValues[0] != 1 )
+                                throw new LogicException( 'ParentGroup limitation', 'expected limitation value to be 1 but got:' . $limitationsValues[0] );
+
                             if ( !$parent )
                                 return false;
 
-                            foreach ( $parent->getContent()->getOwner()->getGroups() as $group )
+                            $parentContent = $parent->getContent();
+                            $currentUser = $repository->getUser();
+                            if ( $parentContent->ownerId == $currentUser->id )
+                                return true;
+
+                            foreach ( $parentContent->getOwner()->getGroups() as $parentGroup )
                             {
-                                if ( in_array( $group->id, $limitationsValues, true ) )
-                                    return true;
+                                foreach ( $currentUser->getGroups() as $currentGroup )
+                                {
+                                    if ( $parentGroup->id == $currentGroup->id )
+                                        return true;
+                                }
                             }
 
                             return false;
@@ -310,14 +325,18 @@ class Concrete extends Model implements Content, Observer
                         },
                     ),
                     'Owner' => array(
-                        'compare' => function( Content $content, array $limitationsValues )
+                        // @todo Add support for $limitationsValues[0] == 2 when session support is added
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository )
                         {
-                            return in_array( $content->ownerId, $limitationsValues, true );
+                            if ( $limitationsValues[0] != 1 && $limitationsValues[0] != 2 )
+                                throw new LogicException( 'Owner limitation', 'expected limitation value to be 1 or 2 but got:' . $limitationsValues[0] );
+
+                            return $content->ownerId == $repository->getUser()->id;
                         },
                         'query' => function( array $limitationsValues, Repository $repository )
                         {
-                            if ( $limitationsValues[0] != 1 )
-                                throw new LogicException( 'Owner limitation', 'expected limitation value to be 1 but got:' . $limitationsValues[0]  );
+                            if ( $limitationsValues[0] != 1 && $limitationsValues[0] != 2 )
+                                throw new LogicException( 'Owner limitation', 'expected limitation value to be 1 or 2 but got:' . $limitationsValues[0] );
 
                             return new CriterionUserMetadata(
                                 CriterionUserMetadata::OWNER,
@@ -327,12 +346,22 @@ class Concrete extends Model implements Content, Observer
                         },
                     ),
                     'Group' => array(
-                        'compare' => function( Content $content, array $limitationsValues )
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository )
                         {
+                            if ( $limitationsValues[0] != 1 )
+                                throw new LogicException( 'Group limitation', 'expected limitation value to be 1 but got:' . $limitationsValues[0] );
+
+                            $currentUser = $repository->getUser();
+                            if ( $content->ownerId == $currentUser->id )
+                                return true;
+
                             foreach ( $content->getOwner()->getGroups() as $group )
                             {
-                                if ( in_array( $group->id, $limitationsValues, true ) )
-                                    return true;
+                                foreach ( $currentUser->getGroups() as $currentGroup )
+                                {
+                                    if ( $group->id == $currentGroup->id )
+                                        return true;
+                                }
                             }
 
                             return false;
