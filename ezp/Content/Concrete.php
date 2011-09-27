@@ -240,19 +240,19 @@ class Concrete extends Model implements Content, Observer
                     'ParentClass' => array(
                         'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
                         {
-                            return $parent && in_array( $parent->getContent()->typeId, $limitationsValues, true );
+                            return $parent && in_array( $parent->getContent()->typeId, $limitationsValues );
                         },
                     ),
                     'ParentDepth' => array(
                         'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
                         {
-                            return $parent && in_array( $parent->depth, $limitationsValues, true );
+                            return $parent && in_array( $parent->depth, $limitationsValues );
                         },
                     ),
                     'Node' => array(
                         'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $parent = null )
                         {
-                            return $parent && in_array( $parent->id, $limitationsValues, true );
+                            return $parent && in_array( $parent->id, $limitationsValues );
                         },
                     ),
                     'Subtree' => array(
@@ -285,7 +285,7 @@ class Concrete extends Model implements Content, Observer
                     'Class' => array(
                         'compare' => function( Content $content, array $limitationsValues )
                         {
-                            return in_array( $content->typeId, $limitationsValues, true );
+                            return in_array( $content->typeId, $limitationsValues );
                         },
                         'query' => function( array $limitationsValues )
                         {
@@ -298,7 +298,7 @@ class Concrete extends Model implements Content, Observer
                     'Section' => array(
                         'compare' => function( Content $content, array $limitationsValues )
                         {
-                            return in_array( $content->sectionId, $limitationsValues, true );
+                            return in_array( $content->sectionId, $limitationsValues );
                         },
                         'query' => function( array $limitationsValues )
                         {
@@ -343,7 +343,7 @@ class Concrete extends Model implements Content, Observer
                         {
                             foreach ( $content->locations as $location )
                             {
-                                if ( in_array( $location->id, $limitationsValues, true ) )
+                                if ( in_array( $location->id, $limitationsValues ) )
                                     return true;
                             }
 
