@@ -224,7 +224,7 @@ abstract class FieldType implements Observer
      * </code>
      *
      * @abstract
-     * @return array
+     * @return array|bool Array with sortInfo, or false if the Type doesn't support sorting
      */
     abstract protected function getSortInfo();
 
