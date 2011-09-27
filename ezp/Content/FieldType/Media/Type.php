@@ -89,4 +89,25 @@ class Type extends FieldType
     {
         return false;
     }
+
+    /**
+     * Fills in $value->type and $value->pluginspage according to default value in FieldDefinition
+     *
+     * @see \ezp\Content\FieldType::onFieldSetValue
+     * @param \ezp\Base\Observable $subject
+     * @param \ezp\Content\FieldType\Media\Value $value
+     */
+    protected function onFieldSetValue( Observable $subject, Value $value )
+    {
+        parent::onFieldSetValue( $subject, $value );
+        if ( $subject instanceof Field )
+        {
+            $defaultValue = $subject->getFieldDefinition()->getDefaultValue();
+            $value->type = $defaultValue->type;
+            if ( !isset( $value->pluginspage ) )
+            {
+                $value->pluginspage = $value->getHandler()->getPluginspageByType( $value->type );
+            }
+        }
+    }
 }
