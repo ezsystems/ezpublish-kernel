@@ -87,21 +87,19 @@ class SearchHandlerSortTest extends TestCase
             $processor->loadRules( $file );
         }
 
+        $db = $this->getDatabaseHandler();
         return new Content\Search\Handler(
             new Content\Search\Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
                 new Content\Search\Gateway\CriteriaConverter(
                     array(
-                        new Content\Search\Gateway\CriterionHandler\SectionId(
-                            $this->getDatabaseHandler()
-                        ),
+                        new Content\Search\Gateway\CriterionHandler\SectionId( $db ),
                     )
                 ),
                 new Content\Search\Gateway\SortClauseConverter(
                     array(
-                        new Content\Search\Gateway\SortClauseHandler\LocationPathString(
-                            $this->getDatabaseHandler()
-                        ),
+                        new Content\Search\Gateway\SortClauseHandler\LocationPathString( $db ),
+                        new Content\Search\Gateway\SortClauseHandler\LocationDepth( $db ),
                     )
                 ),
                 new QueryBuilder( $this->getDatabaseHandler() )
@@ -185,6 +183,53 @@ class SearchHandlerSortTest extends TestCase
 
         $this->assertEquals(
             array( 10, 42, 13, 14, 12, 11, 4 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result->content
+            )
+        );
+    }
+
+    public function testSortLocationDepth()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\SectionId(
+                array( 2 )
+            ),
+            0, 10,
+            array(
+                new SortClause\LocationDepth( Query::SORT_ASC ),
+            )
+        );
+
+        $this->assertEquals(
+            array( 4, 11, 12, 13, 42, 10, 14 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result->content
+            )
+        );
+    }
+
+    public function testSortLocationDepthAndPathString()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\SectionId(
+                array( 2 )
+            ),
+            0, 10,
+            array(
+                new SortClause\LocationDepth( Query::SORT_ASC ),
+                new SortClause\LocationPathString( Query::SORT_DESC ),
+            )
+        );
+
+        $this->assertEquals(
+            array( 4, 42, 13, 12, 11, 10, 14 ),
             array_map(
                 function ( $content ) { return $content->id; },
                 $result->content

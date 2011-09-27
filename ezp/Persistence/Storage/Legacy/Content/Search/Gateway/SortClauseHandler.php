@@ -76,5 +76,16 @@ abstract class SortClauseHandler
     {
         return $this->dbHandler->quoteIdentifier( 'sort_column_' . $number );
     }
+
+    /**
+     * Returns the sort table name
+     *
+     * @param int $number
+     * @return string
+     */
+    protected function getSortTableName( $number )
+    {
+        return 'sort_table_' . $number;
+    }
 }
 

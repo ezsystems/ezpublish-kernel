@@ -16,7 +16,7 @@ use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
 /**
  * Content locator gateway implementation using the zeta database component.
  */
-class LocationPathString extends SortClauseHandler
+class LocationDepth extends SortClauseHandler
 {
     /**
      * Check if this sort clause handler accepts to handle the given sort clause.
@@ -26,7 +26,7 @@ class LocationPathString extends SortClauseHandler
      */
     public function accept( SortClause $sortClause )
     {
-        return $sortClause instanceof SortClause\LocationPathString;
+        return $sortClause instanceof SortClause\LocationDepth;
     }
 
     /**
@@ -46,7 +46,7 @@ class LocationPathString extends SortClauseHandler
             ->select(
                 $query->alias(
                     $this->dbHandler->quoteColumn(
-                        'path_string',
+                        'depth',
                         $this->getSortTableName( $number )
                     ),
                     $column = $this->getSortColumnName( $number )
