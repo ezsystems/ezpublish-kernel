@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Io;
-use ezp\Base\Configuration;
+use ezp\Base\Configuration,
+    ezp\Io\DirPath;
 
 /**
  * Utility class for getting useful info on I/O
