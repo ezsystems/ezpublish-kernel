@@ -27,15 +27,15 @@ class FieldValue extends ValueObject
     public $data;
 
     /**
-     * Arbitrary external data.
+     * Array of custom properties which are specific to the field type.
+     * Typically these properties are used to configure behaviour of field types
+     * and normally set in the FieldDefinition on ContentTypes.
      *
-     * This field is used to handle data of a field type, which will be stored
-     * in its own database tables.
+     * Example: List of base choices in ezselection field type
      *
-     * @todo To remove? Since FieldType Value object is now used it might not be useful anymore.
-     * @var mixed|null
+     * @var array Key is the field setting name
      */
-    public $externalData;
+    public $fieldSettings;
 
     /**
      * Mixed sort key

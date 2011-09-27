@@ -95,7 +95,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $fieldValue = $ft->toFieldValue();
 
         self::assertSame( $fv, $fieldValue->data );
-        self::assertNull( $fieldValue->externalData );
+        self::assertInternalType( 'array', $fieldValue->fieldSettings );
         self::assertSame( array( 'sort_key_string' => $string ), $fieldValue->sortKey );
     }
 

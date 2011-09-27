@@ -88,8 +88,8 @@ class FloatTest extends PHPUnit_Framework_TestCase
         $fieldValue = $ft->toFieldValue();
 
         self::assertSame( $fv, $fieldValue->data );
-        self::assertNull( $fieldValue->externalData );
         self::assertSame( array( "sort_key_string" => "", "sort_key_int" => 0 ), $fieldValue->sortKey );
+        self::assertInternalType( 'array', $fieldValue->fieldSettings );
     }
 
     /**

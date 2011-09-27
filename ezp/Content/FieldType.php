@@ -200,7 +200,8 @@ abstract class FieldType implements Observer
         return new PersistenceFieldValue(
             array(
                 "data" => $this->getValue(),
-                "sortKey" => $this->getSortInfo()
+                "sortKey" => $this->getSortInfo(),
+                "fieldSettings" => $this->getFieldTypeSettings()
             )
         );
     }

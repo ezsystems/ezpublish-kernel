@@ -86,7 +86,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
         $fieldValue = $ft->toFieldValue();
 
         self::assertSame( $fv, $fieldValue->data );
-        self::assertNull( $fieldValue->externalData );
+        self::assertInternalType( 'array', $fieldValue->fieldSettings );
     }
 
     /**
