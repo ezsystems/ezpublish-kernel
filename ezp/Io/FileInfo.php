@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Io;
-use SplFileInfo;
+use ezp\Io\ContentType,
+    SplFileInfo;
 
 /**
  * FileInfo allows to extract useful information from a file.
