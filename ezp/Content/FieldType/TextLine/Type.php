@@ -10,7 +10,7 @@
 namespace ezp\Content\FieldType\TextLine;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue,
+    ezp\Content\FieldType\TextLine\Value,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Content\Type\FieldDefinition;
 
@@ -50,7 +50,7 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !$inputValue instanceof TextLineValue || !is_string( $inputValue->text ) )
+        if ( !$inputValue instanceof Value || !is_string( $inputValue->text ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
