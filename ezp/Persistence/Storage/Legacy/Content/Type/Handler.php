@@ -150,6 +150,11 @@ class Handler implements BaseContentTypeHandler
 
         $types = $this->mapper->extractTypesFromRows( $rows );
 
+        if ( count( $types ) !== 1 )
+        {
+            throw new Exception\TypeNotFound( $contentTypeId, $status );
+        }
+
         return $types[0];
     }
 

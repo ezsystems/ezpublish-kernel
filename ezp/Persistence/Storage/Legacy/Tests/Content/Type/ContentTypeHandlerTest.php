@@ -321,6 +321,36 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::load
+     * @expectedException \ezp\Persistence\Storage\Legacy\Exception\TypeNotFound
+     */
+    public function testLoadNotFound()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadTypeData' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 )
+            )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock = $this->getMapperMock();
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractTypesFromRows' )
+            ->with( $this->equalTo( array() ) )
+            ->will(
+                $this->returnValue(
+                    array()
+                )
+            );
+
+        $handler = $this->getHandler();
+        $type = $handler->load( 23, 1 );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::load
      */
     public function testLoadDefaultVersion()
     {
