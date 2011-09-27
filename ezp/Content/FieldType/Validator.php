@@ -90,7 +90,7 @@ abstract class Validator
      * @param array $constraints
      * @return void
      */
-    public function initializeWithConstraints( array $constraints )
+    public final function initializeWithConstraints( array $constraints )
     {
         foreach ( $constraints as $constraint => $value )
         {
