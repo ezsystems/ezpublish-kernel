@@ -9,8 +9,7 @@
 
 namespace ezp\Content\FieldType\TextBlock;
 use ezp\Content\FieldType,
-    ezp\Content\FieldType\TextLine\Type as TextLine,
-    ezp\Persistence\Content\FieldValue;
+    ezp\Content\FieldType\TextLine\Type as TextLine;
 
 /**
  * The TextBlock field type.

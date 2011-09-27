@@ -10,9 +10,7 @@
 namespace ezp\Content\FieldType\Country;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\Country\Value as CountryValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Content\Type\FieldDefinition,
     RuntimeException;
 
 /**
@@ -49,7 +47,7 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !$inputValue instanceof CountryValue || !is_array( $inputValue->values ) )
+        if ( !$inputValue instanceof Value || !is_array( $inputValue->values ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }

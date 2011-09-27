@@ -10,9 +10,7 @@
 namespace ezp\Content\FieldType\TextLine;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\TextLine\Value,
-    ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Content\Type\FieldDefinition;
+    ezp\Base\Exception\BadFieldTypeInput;
 
 /**
  * The TextLine field type.

@@ -8,10 +8,7 @@
  */
 
 namespace ezp\Content\FieldType\BinaryFile;
-use ezp\Content\FieldType\Value as ValueInterface,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
-    ezp\Io\BinaryFile,
-    ezp\Io\ContentType,
+use ezp\Io\ContentType,
     ezp\Io\SysInfo,
     ezp\Io\FileInfo,
     ezp\Base\BinaryRepository;

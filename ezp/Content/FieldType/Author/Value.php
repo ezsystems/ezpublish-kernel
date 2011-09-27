@@ -9,8 +9,7 @@
 
 namespace ezp\Content\FieldType\Author;
 use ezp\Content\FieldType\Value as ValueInterface,
-    RuntimeException,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
+    RuntimeException;
 
 /**
  * Value for Author field type

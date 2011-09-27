@@ -10,7 +10,6 @@
 namespace ezp\Content\FieldType\Media;
 use ezp\Content\FieldType\Value as ValueInterface,
     ezp\Content\FieldType\BinaryFile\Handler as BinaryFileHandler,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
     ezp\Io\BinaryFile,
     ezp\Io\ContentType,
     ezp\Io\SysInfo,

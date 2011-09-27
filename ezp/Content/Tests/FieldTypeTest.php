@@ -8,17 +8,13 @@
  */
 
 namespace ezp\Content\Tests;
-use PHPUnit_Framework_TestCase,
-    ReflectionObject,
-    ReflectionProperty,
-    ezp\Content\FieldType\FieldSettings,
-    ezp\Content\FieldType\Value,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue,
+use ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Content\FieldType\TextLine\StringLengthValidator,
     ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Type\FieldDefinition,
     ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
+    PHPUnit_Framework_TestCase,
+    ReflectionObject;
 
 class FieldTypeTest extends PHPUnit_Framework_TestCase
 {

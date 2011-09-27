@@ -10,7 +10,7 @@
 namespace ezp\Content\FieldType\DateAndTime;
 use ezp\Content\FieldType\Value as ValueInterface,
     DateTime,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
+    RuntimeException;
 
 /**
  * Value for DateAndTime field type

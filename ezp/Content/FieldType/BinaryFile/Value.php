@@ -9,8 +9,6 @@
 
 namespace ezp\Content\FieldType\BinaryFile;
 use ezp\Content\FieldType\Value as ValueInterface,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
-    ezp\Io\BinaryFile,
     ezp\Base\Exception\PropertyNotFound;
 
 /**

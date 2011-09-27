@@ -10,10 +10,8 @@
 namespace ezp\Content\FieldType\BinaryFile;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\BinaryFile\Value as BinaryFileValue,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Base\Exception\InvalidArgumentType,
-    ezp\Content\Type\FieldDefinition,
     ezp\Io\BinaryFile;
 
 /**
@@ -38,7 +36,7 @@ class Type extends FieldType
      */
     protected function getDefaultValue()
     {
-        return new BinaryFileValue;
+        return new Value;
     }
 
     /**
@@ -52,7 +50,7 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( $inputValue instanceof BinaryFileValue )
+        if ( $inputValue instanceof Value )
         {
             if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
                 throw new BadFieldTypeInput( $inputValue, get_class() );

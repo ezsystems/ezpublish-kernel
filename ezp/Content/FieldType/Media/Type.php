@@ -10,7 +10,6 @@
 namespace ezp\Content\FieldType\Media;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\Media\Value as MediaValue,
     ezp\Content\Field,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Base\Exception\InvalidArgumentType,
@@ -42,8 +41,8 @@ class Type extends FieldType
      */
     protected function getDefaultValue()
     {
-        $value = new MediaValue;
-        $value->type = MediaValue::TYPE_HTML5_VIDEO;
+        $value = new Value;
+        $value->type = Value::TYPE_HTML5_VIDEO;
         return $value;
     }
 
@@ -58,16 +57,16 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( $inputValue instanceof MediaValue )
+        if ( $inputValue instanceof Value )
         {
             $allowedTypes = array(
-                MediaValue::TYPE_HTML5_VIDEO,
-                MediaValue::TYPE_HTML5_AUDIO,
-                MediaValue::TYPE_FLASH,
-                MediaValue::TYPE_QUICKTIME,
-                MediaValue::TYPE_REALPLAYER,
-                MediaValue::TYPE_SILVERLIGHT,
-                MediaValue::TYPE_WINDOWSMEDIA
+                Value::TYPE_HTML5_VIDEO,
+                Value::TYPE_HTML5_AUDIO,
+                Value::TYPE_FLASH,
+                Value::TYPE_QUICKTIME,
+                Value::TYPE_REALPLAYER,
+                Value::TYPE_SILVERLIGHT,
+                Value::TYPE_WINDOWSMEDIA
             );
             if ( !empty( $inputValue->type ) && !in_array( $inputValue->type, $allowedTypes ) )
                 throw new InvalidArgumentValue ( 'media type', $inputValue->type, get_class( $inputValue ) );

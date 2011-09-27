@@ -10,9 +10,7 @@
 namespace ezp\Content\FieldType\Url;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\Url\Value as UrlValue,
-    ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Content\Type\FieldDefinition;
+    ezp\Base\Exception\BadFieldTypeInput;
 
 /**
  * The Url field type.
@@ -48,7 +46,7 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !$inputValue instanceof UrlValue || !is_string( $inputValue->link ) )
+        if ( !$inputValue instanceof Value || !is_string( $inputValue->link ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }

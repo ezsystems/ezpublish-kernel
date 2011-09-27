@@ -8,8 +8,7 @@
  */
 
 namespace ezp\Content\FieldType\Keyword;
-use ezp\Content\FieldType\Value as ValueInterface,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
+use ezp\Content\FieldType\Value as ValueInterface;
 
 /**
  * Value for Keyword field type

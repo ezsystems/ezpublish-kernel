@@ -10,8 +10,7 @@
 namespace ezp\Content\FieldType\Keyword;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue;
+    ezp\Base\Exception\BadFieldTypeInput;
 
 /**
  * Keyword field types

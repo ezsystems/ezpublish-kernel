@@ -13,7 +13,6 @@ use ezp\Base\Model,
     ezp\Content\Version,
     ezp\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Field as FieldVO,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
     ezp\Content\FieldType\Value as FieldValue;
 
 /**

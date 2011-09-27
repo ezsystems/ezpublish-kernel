@@ -8,9 +8,7 @@
  */
 
 namespace ezp\Content\FieldType\Url;
-use ezp\Content\FieldType\Value as ValueInterface,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
-    RuntimeException;
+use ezp\Content\FieldType\Value as ValueInterface;
 
 /**
  * Value for Url field type

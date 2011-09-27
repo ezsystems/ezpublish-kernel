@@ -8,8 +8,7 @@
  */
 
 namespace ezp\Content\FieldType;
-use ezp\Content\FieldType,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
+use ezp\Content\FieldType;
 
 /**
  * Base class for complex field types.

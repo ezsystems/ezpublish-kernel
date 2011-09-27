@@ -13,8 +13,7 @@ use ezp\Base\Model,
     ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
     ezp\Content\FieldType\Factory as FieldTypeFactory,
     ezp\Content\FieldType\Validator,
-    ezp\Content\FieldType\Value as FieldValue,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
+    ezp\Content\FieldType\Value as FieldValue;
 
 /**
  * Content Type Field (content class attribute) class
