@@ -366,59 +366,40 @@ class RepositoryHandler implements HandlerInterface
     {
         if ( !isset( $this->searchHandler ) )
         {
-
+            $db = $this->getDatabase();
             $this->searchHandler = new Content\Search\Handler(
                 new Content\Search\Gateway\EzcDatabase(
-                    $this->getDatabase(),
+                    $db,
                     new Content\Search\Gateway\CriteriaConverter(
                         array(
-                            new Content\Search\Gateway\CriterionHandler\ContentId(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\LogicalNot(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\LogicalAnd(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\LogicalOr(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\SubtreeId(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\ContentTypeId(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\DateMetadata(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\LocationId(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\ParentLocationId(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\RemoteId(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\SectionId(
-                                $this->getDatabase()
-                            ),
-                            new Content\Search\Gateway\CriterionHandler\Status(
-                                $this->getDatabase()
-                            ),
+                            new Content\Search\Gateway\CriterionHandler\ContentId( $db ),
+                            new Content\Search\Gateway\CriterionHandler\LogicalNot( $db ),
+                            new Content\Search\Gateway\CriterionHandler\LogicalAnd( $db ),
+                            new Content\Search\Gateway\CriterionHandler\LogicalOr( $db ),
+                            new Content\Search\Gateway\CriterionHandler\SubtreeId( $db ),
+                            new Content\Search\Gateway\CriterionHandler\ContentTypeId( $db ),
+                            new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId( $db ),
+                            new Content\Search\Gateway\CriterionHandler\DateMetadata( $db ),
+                            new Content\Search\Gateway\CriterionHandler\LocationId( $db ),
+                            new Content\Search\Gateway\CriterionHandler\ParentLocationId( $db ),
+                            new Content\Search\Gateway\CriterionHandler\RemoteId( $db ),
+                            new Content\Search\Gateway\CriterionHandler\SectionId( $db ),
+                            new Content\Search\Gateway\CriterionHandler\Status( $db ),
                             new Content\Search\Gateway\CriterionHandler\FullText(
-                                $this->getDatabase(),
+                                $db,
                                 $this->getTransformationProcessor()
                             ),
                             new Content\Search\Gateway\CriterionHandler\Field(
-                                $this->getDatabase(),
+                                $db,
                                 $this->getFieldValueConverterRegistry()
                             ),
+                        )
+                    ),
+                    new Content\Search\Gateway\SortClauseConverter(
+                        array(
+                            new Content\Search\Gateway\SortClauseHandler\LocationPathString( $db ),
+                            new Content\Search\Gateway\SortClauseHandler\LocationDepth( $db ),
+                            new Content\Search\Gateway\SortClauseHandler\LocationPriority( $db ),
                         )
                     ),
                     new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() )
