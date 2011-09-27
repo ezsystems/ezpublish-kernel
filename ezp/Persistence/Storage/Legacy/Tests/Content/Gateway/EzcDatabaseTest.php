@@ -380,6 +380,70 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::updateNonTranslatableField
+     * @return void
+     */
+    public function testUpdateNonTranslatableField()
+    {
+        $content = $this->getContentFixture();
+        $content->id = 2342;
+
+        $fieldGb = $this->getFieldFixture();
+        $fieldUs = $this->getOtherLanguageFieldFixture();
+        $value = $this->getStorageValueFixture();
+
+        $gateway = $this->getDatabaseGateway();
+        $fieldGb->id = $gateway->insertNewField( $content, $fieldGb, $value );
+        $fieldUs->id = $gateway->insertNewField( $content, $fieldUs, $value );
+
+        $updateStruct = new Content\UpdateStruct();
+        $updateStruct->id = $content->id;
+
+        $newValue = new StorageFieldValue(
+            array(
+                'dataFloat' => 124.42,
+                'dataInt' => 142,
+                'dataText' => 'New text',
+                'sortKeyInt' => 123,
+                'sortKeyString' => 'new_text',
+            )
+        );
+
+        $gateway->updateNonTranslatableField( $fieldGb, $newValue, $updateStruct );
+
+        $this->assertQueryResult(
+            array(
+                // Both fields updated
+                array(
+                    'data_float' => '124.42',
+                    'data_int' => '142',
+                    'data_text' => 'New text',
+                    'sort_key_int' => '123',
+                    'sort_key_string' => 'new_text',
+                ),
+                array(
+                    'data_float' => '124.42',
+                    'data_int' => '142',
+                    'data_text' => 'New text',
+                    'sort_key_int' => '123',
+                    'sort_key_string' => 'new_text',
+                )
+            ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select(
+                    array(
+                        'data_float',
+                        'data_int',
+                        'data_text',
+                        'sort_key_int',
+                        'sort_key_string',
+                    )
+                )->from( 'ezcontentobject_attribute' )
+        );
+    }
+
+    /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::listVersions
      */
@@ -969,6 +1033,18 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $field->language = 'eng-GB';
         $field->versionNo = 1;
 
+        return $field;
+    }
+
+    /**
+     * Returns a Field fixture in a different language
+     *
+     * @return Field
+     */
+    protected function getOtherLanguageFieldFixture()
+    {
+        $field = $this->getFieldFixture();
+        $field->language = 'eng-US';
         return $field;
     }
 

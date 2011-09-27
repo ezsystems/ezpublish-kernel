@@ -38,6 +38,13 @@ class Handler implements BaseContentHandler
     protected $locationGateway;
 
     /**
+     * Content type gateway
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     */
+    protected $typeGateway;
+
+    /**
      * Mapper.
      *
      * @var Mapper
@@ -59,12 +66,14 @@ class Handler implements BaseContentHandler
     public function __construct(
         Gateway $contentGateway,
         Location\Gateway $locationGateway,
+        Type\Gateway $typeGateway,
         Mapper $mapper,
         StorageRegistry $storageRegistry
     )
     {
         $this->contentGateway = $contentGateway;
         $this->locationGateway = $locationGateway;
+        $this->typeGateway = $typeGateway;
         $this->mapper = $mapper;
         $this->storageRegistry = $storageRegistry;
     }
@@ -305,10 +314,25 @@ class Handler implements BaseContentHandler
         foreach ( $content->fields as $field )
         {
             $field->versionNo = $content->versionNo;
-            $this->contentGateway->updateField(
-                $field,
-                $this->mapper->convertToStorageValue( $field )
-            );
+
+            if ( $this->typeGateway->isFieldTranslatable(
+                    $field->fieldDefinitionId,
+                    0 ) )
+            {
+                $this->contentGateway->updateField(
+                    $field,
+                    $this->mapper->convertToStorageValue( $field )
+                );
+            }
+            else
+            {
+                $this->contentGateway->updateNonTranslatableField(
+                    $field,
+                    $this->mapper->convertToStorageValue( $field ),
+                    $content
+                );
+            }
+
             $storage = $this->storageRegistry->getStorage( $field->type );
             $storage->storeFieldData( $field, $this->contentGateway->getContext() );
             $version->fields[] = $field;

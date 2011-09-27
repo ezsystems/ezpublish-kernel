@@ -255,6 +255,7 @@ class RepositoryHandler implements HandlerInterface
             $this->contentHandler = new Content\Handler(
                 $this->getContentGateway(),
                 $this->getLocationGateway(),
+                $this->getContentTypeGateway(),
                 new Content\Mapper(
                     $this->getLocationMapper(),
                     $this->getFieldValueConverterRegistry()

@@ -91,6 +91,19 @@ abstract class Gateway
     abstract public function updateField( Field $field, StorageFieldValue $value );
 
     /**
+     * Updates an existing, non-translatable field
+     *
+     * @param Field $field
+     * @param StorageFieldValue $value
+     * @param Content $content
+     * @return void
+     */
+    abstract public function updateNonTranslatableField(
+        Field $field,
+        StorageFieldValue $value,
+        Content\UpdateStruct $content );
+
+    /**
      * Load data for a content object
      *
      * Returns an array with the relevant data.

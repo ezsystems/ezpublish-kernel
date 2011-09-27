@@ -376,6 +376,31 @@ class EzcDatabase extends Gateway
         // Note, no need to care for language_id here, since Content->$alwaysAvailable
         // cannot change on update
         $q = $this->dbHandler->createUpdateQuery();
+        $this->setFieldUpdateValues( $q, $value );
+        $q->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $q->bindValue( $field->id, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $q->bindValue( $field->versionNo, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+        $q->prepare()->execute();
+    }
+
+    /**
+     * Sets update fields for $value on $q
+     *
+     * @param ezcQueryUpdate $q
+     * @param StorageFieldValue $value
+     * @return void
+     */
+    protected function setFieldUpdateValues( \ezcQueryUpdate $q, StorageFieldValue $value  )
+    {
         $q->update(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
         )->set(
@@ -393,11 +418,35 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'sort_key_string' ),
             $q->bindValue( $value->sortKeyString )
-        )->where(
+        );
+    }
+
+    /**
+     * Updates an existing, non-translatable field
+     *
+     * @param Field $field
+     * @param StorageFieldValue $value
+     * @param Content $content
+     * @return void
+     */
+    public function updateNonTranslatableField(
+        Field $field,
+        StorageFieldValue $value,
+        Content\UpdateStruct $content )
+    {
+        // Note, no need to care for language_id here, since Content->$alwaysAvailable
+        // cannot change on update
+        $q = $this->dbHandler->createUpdateQuery();
+        $this->setFieldUpdateValues( $q, $value );
+        $q->where(
             $q->expr->lAnd(
                 $q->expr->eq(
-                    $this->dbHandler->quoteColumn( 'id' ),
-                    $q->bindValue( $field->id, null, \PDO::PARAM_INT )
+                    $this->dbHandler->quoteColumn( 'contentclassattribute_id' ),
+                    $q->bindValue( $field->fieldDefinitionId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                    $q->bindValue( $content->id, null, \PDO::PARAM_INT )
                 ),
                 $q->expr->eq(
                     $this->dbHandler->quoteColumn( 'version' ),
