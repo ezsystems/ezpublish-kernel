@@ -99,7 +99,7 @@ class Location extends ValueObject
     public $pathIdentificationString;
 
     /**
-     * The materialized path of the location entry.
+     * The materialized path of the location entry, eg: /1/2/
      *
      * @var string
      */

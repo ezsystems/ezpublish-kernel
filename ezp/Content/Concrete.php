@@ -22,7 +22,7 @@ use ezp\Base\Model,
     ezp\Persistence\Content\Query\Criterion\SectionId as CriterionSectionId,
     ezp\Persistence\Content\Query\Criterion\UserMetadata as CriterionUserMetadata,
     ezp\Persistence\Content\Query\Criterion\LocationId as CriterionLocationId,
-    ezp\Persistence\Content\Query\Criterion\SubtreeId as CriterionSubtreeId,
+    ezp\Persistence\Content\Query\Criterion\Subtree as CriterionSubtree,
     ezp\Persistence\Content\Query\Criterion\Operator as CriterionOperator,
     ezp\User,
     DateTime,
@@ -405,11 +405,10 @@ class Concrete extends Model implements Content, Observer
                         },
                         'query' => function( array $limitationsValues )
                         {
-                            // @todo Adjust to CriterionSubtreeId as it only takes location id and not full path string
                             if ( !isset( $limitationsValues[1] ) )
-                                return new CriterionSubtreeId( $limitationsValues[0] );
+                                return new CriterionSubtree( $limitationsValues[0] );
 
-                            return new CriterionSubtreeId( $limitationsValues );
+                            return new CriterionSubtree( $limitationsValues );
                         },
                     ),
                 ),

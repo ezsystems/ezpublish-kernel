@@ -89,8 +89,8 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
             array( 'sectionId', 'in', array( array( 1, 2 ) ) ),
             array( 'sectionId', 'eq', array( 1 ) ),
 
-            array( 'subtreeId', 'in', array( array( 1, 2 ) ) ),
-            array( 'subtreeId', 'eq', array( 1 ) ),
+            array( 'subtree', 'in', array( array( '/1/', '/1/2/' ) ) ),
+            array( 'subtree', 'eq', array( '/1/' ) ),
 
             array( 'urlAlias', 'in', array( array( '/articles/*', '/blog/*' ) ) ),
             array( 'urlAlias', 'eq', array( '/homepage' ) ),

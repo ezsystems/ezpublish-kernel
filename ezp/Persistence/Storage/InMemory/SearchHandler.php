@@ -22,6 +22,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\Query\Criterion\ParentLocationId,
     ezp\Persistence\Content\Query\Criterion\LogicalAnd,
     ezp\Persistence\Content\Query\Criterion\Operator,
+    ezp\Persistence\Content\Query\Criterion\Subtree,
     ezp\Base\Exception\NotFound,
     Exception;
 
@@ -178,6 +179,10 @@ class SearchHandler extends Handler
             else if ( $criterion instanceof ParentLocationId && !isset( $match['locations']['parentId'] ) )
             {
                 $match['locations']['parentId'] = $criterion->value[0];
+            }
+            else if ( $criterion instanceof Subtree && !isset( $match['locations']['pathString'] ) )
+            {
+                $match['locations']['pathString'] = $criterion->value[0] . '%';
             }
             else
             {

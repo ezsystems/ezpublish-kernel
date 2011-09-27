@@ -11,25 +11,36 @@
 namespace ezp\Persistence\Content\Query\Criterion;
 use ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence\Content\Query\Criterion\Operator\Specifications,
-    ezp\Persistence\Content\Query\CriterionInterface;
+    ezp\Persistence\Content\Query\CriterionInterface,
+    InvalidArgumentException;
 
 /**
- * Criterion that matches content that belongs to a given list of SubtreeId
+ * Criterion that matches content that belongs to a given (list of) Subtree(s)
  *
- * Content will be matched if it is part of at least one of the given subtree id
+ * Content will be matched if it is part of at least one of the given subtree path strings
  */
-class SubtreeId extends Criterion implements CriterionInterface
+class Subtree extends Criterion implements CriterionInterface
 {
     /**
      * Creates a new SubTree criterion
      *
-     * @param integer|array(integer) $value an array of subtree ids
+     * @param string|array(string) $value an array of subtree path strings, eg: /1/2/
      *
-     * @throws InvalidArgumentException if a non numeric id is given
+     * @throws InvalidArgumentException if a non path string is given
      * @throw InvalidArgumentException if the value type doesn't match the operator
      */
     public function __construct( $value )
     {
+        if ( is_array( $value ) )
+        {
+            if ( !isset( $value[0][0] ) || $value[0][0] !== '/' )
+                throw new InvalidArgumentException( "\$value array values must follow the pathString format, eg /1/2/" );
+        }
+        else if ( !isset( $value[0] ) || $value[0] !== '/' )
+        {
+            throw new InvalidArgumentException( "\$value array values must follow the pathString format, eg /1/2/" );
+        }
+
         parent::__construct( null, null, $value );
     }
 
@@ -39,12 +50,12 @@ class SubtreeId extends Criterion implements CriterionInterface
             new Specifications(
                 Operator::EQ,
                 Specifications::FORMAT_SINGLE,
-                Specifications::TYPE_INTEGER | Specifications::TYPE_STRING
+                Specifications::TYPE_STRING
             ),
             new Specifications(
                 Operator::IN,
                 Specifications::FORMAT_ARRAY,
-                Specifications::TYPE_INTEGER | Specifications::TYPE_STRING
+                Specifications::TYPE_STRING
             )
         );
     }

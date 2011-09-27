@@ -377,7 +377,7 @@ class RepositoryHandler implements HandlerInterface
                             new Content\Search\Gateway\CriterionHandler\LogicalNot( $db ),
                             new Content\Search\Gateway\CriterionHandler\LogicalAnd( $db ),
                             new Content\Search\Gateway\CriterionHandler\LogicalOr( $db ),
-                            new Content\Search\Gateway\CriterionHandler\SubtreeId( $db ),
+                            new Content\Search\Gateway\CriterionHandler\Subtree( $db ),
                             new Content\Search\Gateway\CriterionHandler\ContentTypeId( $db ),
                             new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId( $db ),
                             new Content\Search\Gateway\CriterionHandler\DateMetadata( $db ),

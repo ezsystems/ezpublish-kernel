@@ -102,7 +102,7 @@ class ContentSearchHandlerTest extends TestCase
                         new Content\Search\Gateway\CriterionHandler\LogicalOr(
                             $this->getDatabaseHandler()
                         ),
-                        new Content\Search\Gateway\CriterionHandler\SubtreeId(
+                        new Content\Search\Gateway\CriterionHandler\Subtree(
                             $this->getDatabaseHandler()
                         ),
                         new Content\Search\Gateway\CriterionHandler\ContentTypeId(
@@ -454,15 +454,15 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\SubtreeId
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\Subtree
      * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
      */
-    public function testContentSubtreeIdFilterIn()
+    public function testContentSubtreeFilterIn()
     {
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
-            new Criterion\SubtreeId(
+            new Criterion\Subtree(
                 array(
                     '/1/2/69/',
                 )
@@ -481,15 +481,15 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\SubtreeId
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\Subtree
      * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
      */
-    public function testContentSubtreeIdFilterEq()
+    public function testContentSubtreeFilterEq()
     {
         $locator = $this->getContentSearchHandler();
 
         $result = $locator->find(
-            new Criterion\SubtreeId(
+            new Criterion\Subtree(
                 '/1/2/69/'
             ),
             0, 10, null
