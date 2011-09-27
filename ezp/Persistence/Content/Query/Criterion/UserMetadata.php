@@ -34,13 +34,13 @@ class UserMetadata extends Criterion implements CriterionInterface
     /**
      * Creates a new UserMetadata criterion on $metadata
      *
-     * @param string $target One of UserMetadata::CREATED or UserMetadata::MODIFIED
+     * @param string $target One of UserMetadata::OWNER, UserMetadata::GROUP, UserMetadata::CREATED or UserMetadata::MODIFIED
      * @param string $operator One of the Operator constants
      * @param mixed $value The match value, either as an array of as a single value, depending on the operator*
      */
     public function __construct( $target, $operator, $value )
     {
-        if ( $target != self::OWNER && $target != self::CREATOR && $target != self::MODIFIER )
+        if ( $target != self::OWNER && $target != self::GROUP && $target != self::CREATOR && $target != self::MODIFIER )
         {
             throw new InvalidArgumentException( "Unknown UserMetadata $target" );
         }
@@ -63,6 +63,11 @@ class UserMetadata extends Criterion implements CriterionInterface
      * UserMetadata target: Owner user
      */
     const OWNER = 'owner';
+
+    /**
+     * UserMetadata target: Owner user group
+     */
+    const GROUP = 'group';
 
     /**
      * UserMetadata target: Creator

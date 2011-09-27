@@ -366,7 +366,32 @@ class Concrete extends Model implements Content, Observer
 
                             return false;
                         },
-                        // @todo Add query support when criterion support exists using current user data
+                        'query' => function( array $limitationsValues, Repository $repository )
+                        {
+                            if ( $limitationsValues[0] != 1 )
+                                throw new LogicException( 'Group limitation', 'expected limitation value to be 1 but got:' . $limitationsValues[0] );
+
+                            $groups = $repository->getUser()->getGroups();
+                            if ( !isset( $groups[1] ) )
+                            {
+                                return new CriterionUserMetadata(
+                                    CriterionUserMetadata::GROUP,
+                                    CriterionOperator::EQ,
+                                    // User without user groups does not have access to content with this limitation
+                                    isset( $groups[0] ) ? $groups[0]->id : 0
+                                );
+                            }
+
+                            $groupIds = array();
+                            foreach ( $groups as $group )
+                                $groupIds[] = $group->id;
+
+                            return new CriterionUserMetadata(
+                                CriterionUserMetadata::GROUP,
+                                CriterionOperator::IN,
+                                $groupIds
+                            );
+                        },
                     ),
                     'Node' => array(
                         'compare' => function( Content $content, array $limitationsValues )
