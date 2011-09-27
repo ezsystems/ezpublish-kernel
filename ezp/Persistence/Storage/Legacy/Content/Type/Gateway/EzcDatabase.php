@@ -1108,6 +1108,39 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Returns if the field identified by $fieldDefinitionId and $status is
+     * translatable
+     *
+     * @param mixed $fieldDefinitionId
+     * @param int $status
+     * @return bool
+     */
+    public function isFieldTranslatable( $fieldDefinitionId, $status )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( 'can_translate' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezcontentclass_attribute' )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id' ),
+                    $query->bindValue( $fieldDefinitionId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $query->bindValue( $status, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+        $stmt = $query->prepare();
+        $stmt->execute();
+
+        return ( 1 == $stmt->fetchColumn() );
+    }
+
+    /**
      * Creates an array of select columns for $tableName.
      *
      * @param string $tableName
