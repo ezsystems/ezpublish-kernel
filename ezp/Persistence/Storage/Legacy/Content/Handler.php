@@ -85,12 +85,14 @@ class Handler implements BaseContentHandler
         $content = $this->mapper->createContentFromCreateStruct(
             $struct
         );
-        $content->id = $this->contentGateway->insertContentObject( $content );
+        $content->id = $this->contentGateway->insertContentObject(
+            $content, $struct->fields
+        );
 
         $version = $this->mapper->createVersionForContent( $content, 1 );
 
         $version->id = $this->contentGateway->insertVersion(
-            $version, $content->alwaysAvailable
+            $version, $struct->fields, $content->alwaysAvailable
         );
 
         foreach ( $struct->fields as $field )
@@ -180,7 +182,7 @@ class Handler implements BaseContentHandler
         );
 
         $version->id = $this->contentGateway->insertVersion(
-            $version, $content->alwaysAvailable
+            $version, $version->fields, $content->alwaysAvailable
         );
 
         foreach ( $content->version->fields as $field )

@@ -31,9 +31,10 @@ abstract class Gateway
      * Inserts a new content object.
      *
      * @param Content $content
+     * @param \ezp\Persistence\Content\Field[] $fields
      * @return int ID
      */
-    abstract public function insertContentObject( Content $content );
+    abstract public function insertContentObject( Content $content, array $fields );
 
     /**
      * Inserts a new version.
@@ -42,7 +43,7 @@ abstract class Gateway
      * @param bool $alwaysAvailable
      * @return int ID
      */
-    abstract public function insertVersion( Version $version, $alwaysAvailable );
+    abstract public function insertVersion( Version $version, array $fields, $alwaysAvailable );
 
 
     /**

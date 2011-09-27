@@ -63,7 +63,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $content = $this->getContentFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertContentObject( $content );
+        $gateway->insertContentObject( $content, array() );
 
         $this->assertQueryResult(
             array(
@@ -143,7 +143,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $version = $this->getVersionFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertVersion( $version, true );
+        $gateway->insertVersion( $version, array(), true );
 
         $this->assertQueryResult(
             array(
@@ -190,7 +190,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $version = $this->getVersionFixture();
 
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertVersion( $version, true );
+        $gateway->insertVersion( $version, array(), true );
 
         $this->assertTrue(
             $gateway->setStatus( $version->contentId, $version->versionNo, 2 )
@@ -228,7 +228,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $time = time();
         $version = $this->getVersionFixture();
-        $version->id = $gateway->insertVersion( $version, true );
+        $version->id = $gateway->insertVersion( $version, array(), true );
 
         $gateway->updateVersion( $version->id, 2 );
 

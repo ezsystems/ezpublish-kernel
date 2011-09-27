@@ -79,10 +79,11 @@ class EzcDatabase extends Gateway
      * Inserts a new content object.
      *
      * @param Content $content
+     * @param \ezp\Persistence\Content\Field[] $fields
      * @return int ID
      * @todo Oracle sequences?
      */
-    public function insertContentObject( Content $content )
+    public function insertContentObject( Content $content, array $fields )
     {
         if ( is_array( $content->name ) && isset( $content->name['always-available'] ) )
         {
@@ -124,7 +125,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
                 $this->generateLanguageMask(
-                    $content->version, $content->alwaysAvailable
+                    $fields, $content->alwaysAvailable
                 ),
                 null,
                 \PDO::PARAM_INT
@@ -142,18 +143,18 @@ class EzcDatabase extends Gateway
     /**
      * Generates a language mask for $version
      *
-     * @param \ezp\Persistence\Content\Version $version
+     * @param \ezp\Persistence\Content\Field[] $fields
      * @param bool $alwaysAvailable
      * @return int
      */
-    protected function generateLanguageMask( Version $version, $alwaysAvailable )
+    protected function generateLanguageMask( array $fields, $alwaysAvailable )
     {
         $languages = array_map(
             function ( Field $field )
             {
                 return $field->language;
             },
-            $version->fields
+            $fields
         );
         if ( $alwaysAvailable )
         {
@@ -166,10 +167,11 @@ class EzcDatabase extends Gateway
      * Inserts a new version.
      *
      * @param Version $version
+     * @param \ezp\Persistence\Content\Field[] $fields
      * @param bool $alwaysAvailable
      * @return int ID
      */
-    public function insertVersion( Version $version, $alwaysAvailable )
+    public function insertVersion( Version $version, array $fields, $alwaysAvailable )
     {
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
@@ -203,7 +205,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
                 $this->generateLanguageMask(
-                    $version, $alwaysAvailable
+                    $fields, $alwaysAvailable
                 ),
                 null,
                 \PDO::PARAM_INT
