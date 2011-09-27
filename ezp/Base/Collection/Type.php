@@ -74,7 +74,7 @@ class Type extends ArrayObject implements Collection
             throw new InvalidArgumentType( 'value', $this->type, $value );
 
         // stop if value is already in array
-        if ( in_array( $value, $this->getArrayCopy(), true ) )
+        if ( $this->indexOf( $value ) !== false )
             return;
 
         parent::offsetSet( $offset, $value );
