@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Type;
-use ezp\Base\Proxy\Observable as ObservableProxy,
+use ezp\Base\Proxy\Model as ModelProxy,
     ezp\Content\Type;
 
 /**
@@ -33,7 +33,7 @@ use ezp\Base\Proxy\Observable as ObservableProxy,
  * @property Type\FieldDefinition[] $fields Appending items after it has been created has no effect, use TypeService->addFieldDefinition()
  * @property-read Type\Group[] $groups Appended items after it has been created has no effect, use TypeService->link()
  */
-class Proxy extends ObservableProxy implements Type
+class Proxy extends ModelProxy implements Type
 {
     public function __construct( $id, Service $service )
     {

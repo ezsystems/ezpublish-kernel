@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Location;
-use ezp\Base\Proxy\Observable as ObservableProxy,
+use ezp\Base\Proxy\Model as ModelProxy,
     ezp\Content,
     ezp\Content\Location;
 
@@ -33,7 +33,7 @@ use ezp\Base\Proxy\Observable as ObservableProxy,
  * @property \ezp\Content $content Associated Content object
  * @property \ezp\Content\Location $parent Location's parent location
  */
-class Proxy extends ObservableProxy implements Location
+class Proxy extends ModelProxy implements Location
 {
     public function __construct( $id, Service $service )
     {

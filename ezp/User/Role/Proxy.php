@@ -8,7 +8,7 @@
  */
 
 namespace ezp\User\Role;
-use ezp\Base\Proxy\Observable as ObservableProxy,
+use ezp\Base\Proxy\Model as ModelProxy,
     ezp\User\Policy,
     ezp\User\Service,
     ezp\User\Role;
@@ -21,7 +21,7 @@ use ezp\Base\Proxy\Observable as ObservableProxy,
  * @property-read mixed[] $groupIds Use {@link \ezp\User\Service::addGroup} & {@link \ezp\User\Service::removeGroup}
  * @property-read \ezp\User\Policy[] $policies Use {@link \ezp\User\Service::addPolicy} & {@link \ezp\User\Service::removePolicy}
  */
-class Proxy extends ObservableProxy implements Role
+class Proxy extends ModelProxy implements Role
 {
     public function __construct( $id, Service $service )
     {

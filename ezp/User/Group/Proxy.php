@@ -8,7 +8,7 @@
  */
 
 namespace ezp\User\Group;
-use ezp\Base\Proxy\Observable as ObservableProxy,
+use ezp\Base\Proxy\Model as ModelProxy,
     ezp\Base\ModelInterface,
     ezp\Base\Observable,
     ezp\Base\Observer,
@@ -26,7 +26,7 @@ use ezp\Base\Proxy\Observable as ObservableProxy,
  * @property string $name
  * @property string description
  */
-class Proxy extends ObservableProxy implements Group, Groupable, ModelInterface, Observable
+class Proxy extends ModelProxy implements Group, Groupable, Observable
 {
     public function __construct( $id, Service $service )
     {
@@ -72,37 +72,5 @@ class Proxy extends ObservableProxy implements Group, Groupable, ModelInterface,
     {
         $this->lazyLoad();
         return $this->proxiedObject->properties();
-    }
-
-    /**
-     * Sets internal variables on object from array
-     *
-     * Key is property name and value is property value.
-     *
-     * @access private
-     * @param array $state
-     * @return Model
-     * @throws \ezp\Base\Exception\PropertyNotFound If one of the properties in $state is not found
-     */
-    public function setState( array $state )
-    {
-        $this->lazyLoad();
-        return $this->proxiedObject->setState( $state );
-    }
-
-    /**
-     * Gets internal variables on object as array
-     *
-     * Key is property name and value is property value.
-     *
-     * @access private
-     * @param string|null $property Optional, lets you specify to only return one property by name
-     * @return array|mixed Always returns array if $property is null, else value of property
-     * @throws \ezp\Base\Exception\PropertyNotFound If $property is not found (when not null)
-     */
-    public function getState( $property = null )
-    {
-        $this->lazyLoad();
-        return $this->proxiedObject->getState( $property );
     }
 }

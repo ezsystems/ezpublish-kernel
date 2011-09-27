@@ -8,20 +8,22 @@
  */
 
 namespace ezp\Base\Proxy;
-use ezp\Base\Proxy,
+use ezp\Base\ModelInterface,
+    ezp\Base\Observable as ObservableInterface,
     ezp\Base\Observer,
-    ezp\Base\Observable as ObservableBase;
+    ezp\Base\Proxy;
 
 /**
- * Observable Proxy class.
+ * Model Proxy class.
  *
  * Because of lack of traits in PHP < 5.4 we introduce an intermediate class
- * for Proxy objects that need to implement Observable.
+ * for Proxy objects that need to implement Observable and ModelInterface.
+ * This might change in the future, so never check if a class implemented this abstract, only it's interfaces!
  *
  * @internal
  * @see \ezp\Base\Model
  */
-abstract class Observable extends Proxy implements ObservableBase
+abstract class Model extends Proxy implements ObservableInterface, ModelInterface
 {
     /**
      * List of event listeners
@@ -81,5 +83,37 @@ abstract class Observable extends Proxy implements ObservableBase
     {
         $this->lazyLoad();
         return $this->proxiedObject->notify( $event, $arguments );
+    }
+
+    /**
+     * Sets internal variables on object from array
+     *
+     * Key is property name and value is property value.
+     *
+     * @access private
+     * @param array $state
+     * @return \ezp\Base\Model
+     * @throws \ezp\Base\Exception\PropertyNotFound If one of the properties in $state is not found
+     */
+    public function setState( array $state )
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->setState( $state );
+    }
+
+    /**
+     * Gets internal variables on object as array
+     *
+     * Key is property name and value is property value.
+     *
+     * @access private
+     * @param string|null $property Optional, lets you specify to only return one property by name
+     * @return array|mixed Array if $property is null, else value of property
+     * @throws \ezp\Base\Exception\PropertyNotFound If $property is not found (when not null)
+     */
+    public function getState( $property = null )
+    {
+        $this->lazyLoad();
+        return $this->proxiedObject->getState( $property );
     }
 }
