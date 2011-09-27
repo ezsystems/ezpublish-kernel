@@ -23,11 +23,12 @@ class FieldTypeConstraints extends ValueObject
     public $validators;
 
     /**
-     * Array of field settings as it is supported by dedicated field type, and set in {@link \ezp\Content\Type\FieldDefinition}.
-     * Key is the setting name.
+     * Collection of field settings as it is supported by dedicated field type,
+     * and set in {@link \ezp\Content\Type\FieldDefinition}.
+     * Collection is indexed by setting name.
      *
      * @see \ezp\Content\FieldType::$fieldSettings
-     * @var array
+     * @var \ezp\Content\FieldType\FieldSettings
      */
     public $fieldSettings;
 }

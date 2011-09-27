@@ -62,7 +62,7 @@ class FieldDefinition extends Model
         'contentType' => false,
         'type' => false,
         'defaultValue' => true,
-        'validators' => false
+        'validators' => false,
     );
 
     /**
@@ -94,13 +94,14 @@ class FieldDefinition extends Model
     public function __construct( Type $contentType, $fieldType )
     {
         $this->contentType = $contentType;
+        $this->type = FieldTypeFactory::build( $fieldType );
         $this->properties = new FieldDefinitionValue(
             array(
                 'fieldType' => $fieldType,
                 'fieldTypeConstraints' => new FieldTypeConstraints
             )
         );
-        $this->type = FieldTypeFactory::build( $fieldType );
+        $this->properties->fieldTypeConstraints->fieldSettings = $this->type->getFieldTypeSettings();
         $this->defaultValue = $this->type->getValue();
         $this->attach( $this->type, 'field/setValue' );
     }
@@ -199,5 +200,26 @@ class FieldDefinition extends Model
         return $this->validators;
     }
 
+    /**
+     * Sets a field setting, according to field type allowed settings
+     *
+     * @see \ezp\Content\FieldType::$allowedSettings
+     * @param string $settingName
+     * @param mixed $value
+     */
+    public function setFieldSetting( $settingName, $value )
+    {
+        $this->type->setFieldSetting( $settingName, $value );
+    }
 
+    /**
+     * Gets a field setting, identified by $settingName
+     *
+     * @param string $settingName
+     * @return mixed
+     */
+    public function getFieldSetting( $settingName )
+    {
+        return $this->type->getFieldSetting( $settingName );
+    }
 }

@@ -91,7 +91,9 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
     public function testGetFieldTypeSettings()
     {
         $this->stub->initializeSettings( $this->allowedSettings );
-        self::assertSame( $this->allowedSettings, $this->stub->getFieldTypeSettings() );
+        $fieldTypeSettings = $this->stub->getFieldTypeSettings();
+        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldTypeSettings );
+        self::assertSame( $this->allowedSettings, $fieldTypeSettings->getArrayCopy() );
     }
 
     /**

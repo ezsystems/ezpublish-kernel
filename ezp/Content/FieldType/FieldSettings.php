@@ -9,7 +9,8 @@
 
 namespace ezp\Content\FieldType;
 use \ArrayObject,
-    ezp\Base\Exception\PropertyPermission;
+    ezp\Base\Exception\PropertyPermission,
+    ezp\Base\Exception\PropertyNotFound;
 
 /**
  * Container for field type specific properties.
@@ -24,7 +25,7 @@ class FieldSettings extends ArrayObject
      * This is so that only settings specified by a field type can be set.
      *
      * @internal
-     * @throws ezp\Base\Exception\PropertyPermission
+     * @throws \ezp\Base\Exception\PropertyPermission
      * @param string|int $index
      * @param mixed $value
      * @return void
@@ -32,9 +33,24 @@ class FieldSettings extends ArrayObject
     public function offsetSet( $index, $value )
     {
         if ( !parent::offsetExists( $index ) )
-        {
             throw new PropertyPermission( $index, PropertyPermission::WRITE, __CLASS__ );
-        }
-           parent::offsetSet( $index, $value );
+
+        parent::offsetSet( $index, $value );
+    }
+
+    /**
+     * Returns value from internal array, identified by $index.
+     * If $index cannot be found, a {@link \ezp\Base\Exception\PropertyNotFound} exception is thrown
+     *
+     * @param string $index
+     * @return mixed
+     * @throws \ezp\Base\Exception\PropertyNotFound
+     */
+    public function offsetGet( $index )
+    {
+        if ( !parent::offsetExists( $index ) )
+            throw new PropertyNotFound( $index, __CLASS__ );
+
+        return parent::offsetGet( $index );
     }
 }

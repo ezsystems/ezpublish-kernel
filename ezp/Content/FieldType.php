@@ -41,9 +41,9 @@ abstract class FieldType implements Observer
 {
     /**
      * @var \ezp\Content\FieldType\FieldSettings Custom properties which are specific to the field
-     *                                          type. Typically these properties are used to
-     *                                          configure behaviour of field types and normally set
-     *                                          in the FieldDefinition on ContentTypes
+     *                                           type. Typically these properties are used to
+     *                                           configure behaviour of field types and normally set
+     *                                           in the FieldDefinition on ContentTypes
      */
     protected $fieldSettings;
 
@@ -87,17 +87,29 @@ abstract class FieldType implements Observer
     }
 
     /**
-     * Set $setting on field type.
+     * Sets $value for $settingName on field type.
+     * Allowed options are in {@link \ezp\Content\FieldType::$allowedSettings}
      *
-     * Allowed options are in {@link $allowedSettings}
-     *
-     * @param string $setting
+     * @see \ezp\Content\FieldType::$fieldSettings
+     * @param string $settingName
      * @param mixed $value
      * @return void
      */
-    public function setFieldSetting( $setting, $value )
+    public function setFieldSetting( $settingName, $value )
     {
-        $this->fieldSettings[$setting] = $value;
+        $this->fieldSettings[$settingName] = $value;
+    }
+
+    /**
+     * Gets field setting identified by $settingName
+     *
+     * @see \ezp\Content\FieldType::$fieldSettings
+     * @param string $settingName
+     * @return mixed
+     */
+    public function getFieldSetting( $settingName )
+    {
+        return $this->fieldSettings[$settingName];
     }
 
     /**
@@ -120,7 +132,7 @@ abstract class FieldType implements Observer
      */
     public function getFieldTypeSettings()
     {
-        return $this->fieldSettings->getArrayCopy();
+        return $this->fieldSettings;
     }
 
     /**

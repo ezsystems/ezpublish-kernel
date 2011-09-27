@@ -89,7 +89,7 @@ class IntegerTest extends PHPUnit_Framework_TestCase
         $fieldValue = $ft->toFieldValue();
 
         self::assertSame( $fv, $fieldValue->data );
-        self::assertInternalType( 'array', $fieldValue->fieldSettings );
+        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
         self::assertSame( array( "sort_key_int" => $integer ), $fieldValue->sortKey );
     }
 
