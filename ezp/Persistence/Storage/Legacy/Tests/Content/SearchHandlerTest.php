@@ -142,6 +142,7 @@ class ContentSearchHandlerTest extends TestCase
                         ),
                     )
                 ),
+                new Content\Search\Gateway\SortClauseConverter(),
                 new QueryBuilder( $this->getDatabaseHandler() )
             ),
             $this->getContentMapperMock()

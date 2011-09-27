@@ -32,7 +32,14 @@ class EzcDatabase extends Gateway
      *
      * @var CriteriaConverter
      */
-    protected $converter;
+    protected $criteriaConverter;
+
+    /**
+     * Sort clause converter
+     *
+     * @var SortClauseConverter
+     */
+    protected $sortClauseConverter;
 
     /**
      * Content load query builder
@@ -49,12 +56,15 @@ class EzcDatabase extends Gateway
      */
     public function __construct(
         EzcDbHandler $handler,
-        CriteriaConverter $converter,
-        QueryBuilder $queryBuilder )
+        CriteriaConverter $criteriaConverter,
+        SortClauseConverter $sortClauseConverter,
+        QueryBuilder $queryBuilder
+    )
     {
-        $this->handler = $handler;
-        $this->converter = $converter;
-        $this->queryBuilder = $queryBuilder;
+        $this->handler             = $handler;
+        $this->criteriaConverter   = $criteriaConverter;
+        $this->sortClauseConverter = $sortClauseConverter;
+        $this->queryBuilder        = $queryBuilder;
     }
 
     /**
@@ -66,9 +76,6 @@ class EzcDatabase extends Gateway
      * @param \ezp\Persistence\Content\Query\SortClause[] $sort
      * @param string[] $translations
      * @return mixed[][]
-     * @TODO This method now uses 3 querys (counting, ID fetching, loading) to
-     *       enable proper use of $offset and $limit. Do we find a way to
-     *       reduce this query count?
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, array $translations = null )
     {
@@ -76,29 +83,7 @@ class EzcDatabase extends Gateway
 
         // Get full object count
         $query = $this->handler->createSelectQuery();
-        $condition = $this->converter->convertCriteria( $query, $criterion );
-
-        if ( $translations !== null )
-        {
-            $translationQuery = $query->subSelect();
-            $translationQuery->select(
-                $this->handler->quoteColumn( 'contentobject_id' )
-            )->from(
-                $this->handler->quoteTable( 'ezcontentobject_attribute' )
-            )->where(
-                $translationQuery->expr->in(
-                    $this->handler->quoteColumn( 'language_code' ),
-                    $translations
-                )
-            );
-            $condition = $query->expr->lAnd(
-                $condition,
-                $query->expr->in(
-                    $this->handler->quoteColumn( 'id' ),
-                    $translationQuery
-                )
-            );
-        }
+        $condition = $this->getQueryCondition( $criterion, $query, $translations );
 
         $query
             ->select( 'COUNT( * )' )
@@ -115,8 +100,61 @@ class EzcDatabase extends Gateway
             return array( 'count' => $count, 'rows' => array() );
         }
 
-        // Fetch IDs of resulting content objects
-        // This is neccessary to be able to use $offset and $limit properly
+        $contentIds = $this->getContentIds( $query, $condition, $offset, $limit );
+
+        return array(
+            'count' => $count,
+            'rows'  => $this->loadContent( $contentIds, $translations ),
+        );
+    }
+
+    /**
+     * Get query condition
+     *
+     * @param Criterion $criterion
+     * @param mixed $query
+     * @param mixed $translations
+     * @return void
+     */
+    protected function getQueryCondition( Criterion $criterion, $query, $translations )
+    {
+        $condition = $this->criteriaConverter->convertCriteria( $query, $criterion );
+
+        if ( $translations === null )
+        {
+            return $condition;
+        }
+
+        $translationQuery = $query->subSelect();
+        $translationQuery->select(
+            $this->handler->quoteColumn( 'contentobject_id' )
+        )->from(
+            $this->handler->quoteTable( 'ezcontentobject_attribute' )
+        )->where(
+            $translationQuery->expr->in(
+                $this->handler->quoteColumn( 'language_code' ),
+                $translations
+            )
+        );
+
+        return $query->expr->lAnd(
+            $condition,
+            $query->expr->in(
+                $this->handler->quoteColumn( 'id' ),
+                $translationQuery
+            )
+        );
+    }
+
+    /**
+     * Get sorted arrays of content IDs, which should be returned
+     *
+     * @param mixed $query
+     * @param mixed $condition
+     * @return int[]
+     */
+    protected function getContentIds( $query, $condition, $offset, $limit )
+    {
         $query->reset();
         $query->select(
             $this->handler->quoteColumn( 'id', 'ezcontentobject' )
@@ -124,12 +162,22 @@ class EzcDatabase extends Gateway
             $this->handler->quoteTable( 'ezcontentobject' )
         )->where( $condition )->limit( $limit, $offset );
 
+        // @TODO: Apply sorting
+
         $statement = $query->prepare();
         $statement->execute();
 
-        $contentIds = $statement->fetchAll( \PDO::FETCH_COLUMN );
+        return $statement->fetchAll( \PDO::FETCH_COLUMN );
+    }
 
-        // Load content itself
+    /**
+     * Load the actual content based on the provided IDs
+     *
+     * @param array $contentIds
+     * @return mixed[][]
+     */
+    protected function loadContent( array $contentIds, $translations )
+    {
         $loadQuery = $this->queryBuilder->createFindQuery( $translations );
         $loadQuery->where(
             $loadQuery->expr->in(
@@ -141,12 +189,10 @@ class EzcDatabase extends Gateway
         $statement = $loadQuery->prepare();
         $statement->execute();
 
-        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
+        // @TODO: Ensure the sorting of the rows repects the sorting of the
+        // contentIds array?
 
-        return array(
-            'count' => $count,
-            'rows' => $rows,
-        );
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 }
 
