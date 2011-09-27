@@ -423,7 +423,7 @@ class Concrete extends Model implements Content, Observer
 
         // Create: Copy 'Class' & 'Section' from 'read'
         $def['functions']['create']['Class'] = $def['functions']['read']['Class'];
-        $def['functions']['create']['Class'] = $def['functions']['read']['Class'];
+        $def['functions']['create']['Section'] = $def['functions']['read']['Section'];
 
         // Edit: Copy 'Language' from 'creat'
         $def['functions']['edit']['Language'] = $def['functions']['create']['Language'];
