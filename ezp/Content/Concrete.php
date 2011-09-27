@@ -263,10 +263,11 @@ class Concrete extends Model implements Content, Observer
 
                             foreach ( $limitationsValues as $limitationPathString )
                             {
+                                if ( $parent->pathString === $limitationPathString )
+                                    return true;
                                 if ( strpos( $parent->pathString, $limitationPathString ) === 0 )
                                     return true;
                             }
-
                             return false;
                         },
                     ),
@@ -364,6 +365,8 @@ class Concrete extends Model implements Content, Observer
                             {
                                 foreach ( $limitationsValues as $limitationPathString )
                                 {
+                                    if ( $location->pathString === $limitationPathString )
+                                        return true;
                                     if ( strpos( $location->pathString, $limitationPathString ) === 0 )
                                         return true;
                                 }
