@@ -192,7 +192,7 @@ abstract class FieldType implements Observer
      * @internal
      * @return void
      */
-    public function toFieldValue()
+    public final function toFieldValue()
     {
         // @todo Evaluate if creating the sortKey in every case is really needed
         //       Couldn't this be retrieved with a method, which would initialize
