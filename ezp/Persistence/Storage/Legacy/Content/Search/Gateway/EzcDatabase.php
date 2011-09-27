@@ -112,11 +112,11 @@ class EzcDatabase extends Gateway
      * Get query condition
      *
      * @param Criterion $criterion
-     * @param mixed $query
+     * @param \ezcQuerySelect $query
      * @param mixed $translations
-     * @return void
+     * @return string
      */
-    protected function getQueryCondition( Criterion $criterion, $query, $translations )
+    protected function getQueryCondition( Criterion $criterion, \ezcQuerySelect $query, $translations )
     {
         $condition = $this->criteriaConverter->convertCriteria( $query, $criterion );
 
@@ -149,11 +149,13 @@ class EzcDatabase extends Gateway
     /**
      * Get sorted arrays of content IDs, which should be returned
      *
-     * @param mixed $query
-     * @param mixed $condition
+     * @param \ezcQuerySelect ixed $query
+     * @param string $condition
+     * @param int $offset
+     * @param int $limit
      * @return int[]
      */
-    protected function getContentIds( $query, $condition, $offset, $limit )
+    protected function getContentIds( \ezcQuerySelect $query, $condition, $offset, $limit )
     {
         $query->reset();
         $query->select(
@@ -174,7 +176,8 @@ class EzcDatabase extends Gateway
      * Load the actual content based on the provided IDs
      *
      * @param array $contentIds
-     * @return mixed[][]
+     * @param mixed $translations
+     * @return mixed[]
      */
     protected function loadContent( array $contentIds, $translations )
     {
