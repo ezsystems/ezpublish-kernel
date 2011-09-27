@@ -39,7 +39,8 @@ abstract class Gateway
     /**
      * Inserts a new version.
      *
-     * @param Version $version
+     * @param Version $version;
+     * @param \ezp\Persistence\Content\Field[] $fields
      * @param bool $alwaysAvailable
      * @return int ID
      */
