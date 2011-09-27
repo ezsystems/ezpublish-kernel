@@ -374,7 +374,7 @@ class Service extends BaseService
         $type->setState(
             array(
                 "properties" => $vo,
-                "groups" => new LazyIdList(
+                "groups" => new LazyIdList(//@todo Use regular TypeCollection instead and Proxies
                     "ezp\\Content\\Type\\Group",
                     $vo->groupIds,
                     $this,
