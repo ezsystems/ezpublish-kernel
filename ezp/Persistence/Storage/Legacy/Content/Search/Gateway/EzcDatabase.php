@@ -100,7 +100,7 @@ class EzcDatabase extends Gateway
             return array( 'count' => $count, 'rows' => array() );
         }
 
-        $contentIds = $this->getContentIds( $query, $condition, $offset, $limit );
+        $contentIds = $this->getContentIds( $query, $condition, $sort, $offset, $limit );
 
         return array(
             'count' => $count,
@@ -151,20 +151,40 @@ class EzcDatabase extends Gateway
      *
      * @param \ezcQuerySelect ixed $query
      * @param string $condition
+     * @param mixed $sort
      * @param int $offset
      * @param int $limit
      * @return int[]
      */
-    protected function getContentIds( \ezcQuerySelect $query, $condition, $offset, $limit )
+    protected function getContentIds( \ezcQuerySelect $query, $condition, $sort, $offset, $limit )
     {
         $query->reset();
         $query->select(
             $this->handler->quoteColumn( 'id', 'ezcontentobject' )
-        )->from(
-            $this->handler->quoteTable( 'ezcontentobject' )
-        )->where( $condition )->limit( $limit, $offset );
+        );
 
-        // @TODO: Apply sorting
+        if ( $sort !== null )
+        {
+            $this->sortClauseConverter->applySelect( $query, $sort );
+        }
+
+        $query->from(
+            $this->handler->quoteTable( 'ezcontentobject' )
+        );
+
+        if ( $sort !== null )
+        {
+            $this->sortClauseConverter->applyJoin( $query, $sort );
+        }
+
+        $query->where( $condition );
+
+        if ( $sort !== null )
+        {
+            $this->sortClauseConverter->applyOrderBy( $query, $sort );
+        }
+
+        $query->limit( $limit, $offset );
 
         $statement = $query->prepare();
         $statement->execute();
@@ -192,10 +212,20 @@ class EzcDatabase extends Gateway
         $statement = $loadQuery->prepare();
         $statement->execute();
 
-        // @TODO: Ensure the sorting of the rows repects the sorting of the
-        // contentIds array?
+        $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
 
-        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+        // Sort array, as defined in the $contentIds array
+        $contentIdOrder = array_flip( $contentIds );
+        usort(
+            $rows,
+            function ( $current, $next ) use ( $contentIdOrder )
+            {
+                return $contentIdOrder[$current['ezcontentobject_id']] -
+                    $contentIdOrder[$next['ezcontentobject_id']];
+            }
+        );
+
+        return $rows;
     }
 }
 
