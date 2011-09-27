@@ -75,7 +75,7 @@ class Field extends Model
     {
         $this->version = $contentVersion;
         $this->fieldDefinition = $fieldDefinition;
-        $this->attach( $this->fieldDefinition->type, 'field/setValue' );
+        $this->attach( $this->fieldDefinition->getType(), 'field/setValue' );
         $this->properties = new FieldVO(
             array(
                 "type" => $fieldDefinition->fieldType,
