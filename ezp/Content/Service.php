@@ -355,7 +355,7 @@ class Service extends BaseService
 
                     $andCriteria[] = $limitationQueryFn( $limitationValues, $this->repository );
                 }
-                $orCriteria[] = new LogicalAnd( $andCriteria );
+                $orCriteria[] = isset( $andCriteria[1] ) ? new LogicalAnd( $andCriteria ) : $andCriteria[0];
             }
 
             // Merge with $query->criterion
