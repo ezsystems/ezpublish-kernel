@@ -12,7 +12,8 @@ use \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     \ezp\Persistence\Content\FieldValue,
     \ezp\Persistence\Content\Type\FieldDefinition,
-    \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
+    \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+    \ezp\Content\FieldType\Media\Value as MediaValue;
 
 class Media implements Converter
 {
@@ -51,6 +52,8 @@ class Media implements Converter
         {
             $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints['FileSizeValidator']['maxFileSize'];
         }
+
+        $storageDef->dataText1 = $fieldDef->defaultValue->data->type;
     }
 
     /**
@@ -67,6 +70,9 @@ class Media implements Converter
                 'FileSizeValidator' => array( 'maxFileSize' => $storageDef->dataInt1 )
             );
         }
+
+        $defaultValue = new MediaValue;
+        $defaultValue->type = $storageDef->dataText1;
     }
 
     /**
