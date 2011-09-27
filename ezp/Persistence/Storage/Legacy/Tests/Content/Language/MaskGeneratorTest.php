@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Tests\Content\Language;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
+use ezp\Persistence\Storage\Legacy\Tests\Content\LanguageAwareTestCase,
     ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator,
     ezp\Persistence\Storage\Legacy\Content\Language\Cache,
     ezp\Persistence\Content\Language,
@@ -17,7 +17,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
 /**
  * Test case for Language MaskGenerator
  */
-class MaskGeneratorTest extends TestCase
+class MaskGeneratorTest extends LanguageAwareTestCase
 {
 
     /**
@@ -171,21 +171,7 @@ class MaskGeneratorTest extends TestCase
      */
     protected function getMaskGenerator()
     {
-        $cache = new Cache();
-
-        $languageUs = new Language();
-        $languageUs->id = 2;
-        $languageUs->locale = 'eng-US';
-
-        $cache->store( $languageUs );
-
-        $languageGb = new Language();
-        $languageGb->id = 4;
-        $languageGb->locale = 'eng-GB';
-
-        $cache->store( $languageGb );
-
-        return new MaskGenerator( $cache );
+        return new MaskGenerator( $this->getLanguageLookupMock() );
     }
 
 

@@ -15,20 +15,20 @@ namespace ezp\Persistence\Storage\Legacy\Content\Language;
 class MaskGenerator
 {
     /**
-     * Language cache
+     * Language lookup
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Lookup
      */
-    protected $languageCache;
+    protected $languageLookup;
 
     /**
      * Creates a new Language MaskGenerator
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Language\Cache $languageCache
+     * @param \ezp\Persistence\Storage\Legacy\Content\Language\Lookup $languageLookup
      */
-    public function __construct( Cache $languageCache )
+    public function __construct( Lookup $languageLookup )
     {
-        $this->languageCache = $languageCache;
+        $this->languageLookup = $languageLookup;
     }
 
     /**
@@ -48,7 +48,7 @@ class MaskGenerator
 
         foreach ( $languages as $language => $value )
         {
-            $mask |= $this->languageCache->getByLocale( $language )->id;
+            $mask |= $this->languageLookup->getByLocale( $language )->id;
         }
 
         return $mask;
@@ -63,7 +63,7 @@ class MaskGenerator
      */
     public function generateLanguageIndicator( $locale, $alwaysAvailable )
     {
-        return $this->languageCache->getByLocale( $locale )->id
+        return $this->languageLookup->getByLocale( $locale )->id
             | ( $alwaysAvailable ? 1 : 0 );
     }
 

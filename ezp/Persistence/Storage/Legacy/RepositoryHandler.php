@@ -293,7 +293,7 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->languageMaskGenerator ) )
         {
             $this->languageMaskGenerator = new Content\Language\MaskGenerator(
-                $this->getLanguageCache()
+                $this->contentLanguageHandler()
             );
         }
         return $this->languageMaskGenerator;

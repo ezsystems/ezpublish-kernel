@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Tests\Content\Type\Gateway;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
+use ezp\Persistence\Storage\Legacy\Tests\Content\LanguageAwareTestCase,
     ezp\Persistence\Storage\Legacy\Tests\Content\Type\Gateway,
     ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase,
     ezp\Persistence\Storage\Legacy\Content\Language\Cache as LanguageCache,
@@ -28,7 +28,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
 /**
  * Test case for ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase.
  */
-class EzcDatabaseTest extends TestCase
+class EzcDatabaseTest extends LanguageAwareTestCase
 {
     /**
      * The EzcDatabase gateway to test
@@ -1245,19 +1245,7 @@ class EzcDatabaseTest extends TestCase
      */
     protected function getLanguageMaskGenerator()
     {
-        $languageUs = new Language();
-        $languageUs->id = 2;
-        $languageUs->locale = 'eng-US';
-
-        $languageGb = new Language();
-        $languageGb->id = 4;
-        $languageGb->locale = 'eng-GB';
-
-        $cache = new LanguageCache();
-        $cache->store( $languageUs );
-        $cache->store( $languageGb );
-
-        return new LanguageMaskGenerator( $cache );
+        return new LanguageMaskGenerator( $this->getLanguageLookupMock() );
     }
 
     /**

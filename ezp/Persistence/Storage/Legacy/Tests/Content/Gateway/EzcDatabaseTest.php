@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Tests\Content\Gateway;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
+use ezp\Persistence\Storage\Legacy\Tests\Content\LanguageAwareTestCase,
     ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
@@ -21,7 +21,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
 /**
  * Test case for ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase.
  */
-class EzcDatabaseTest extends TestCase
+class EzcDatabaseTest extends LanguageAwareTestCase
 {
     /**
      * Database gateway to test.
@@ -1001,7 +1001,7 @@ class EzcDatabaseTest extends TestCase
         if ( !isset( $this->languageMaskGenerator ) )
         {
             $this->languageMaskGenerator = new LanguageMaskGenerator(
-                $this->getLanguageCacheMock()
+                $this->getLanguageLookupMock()
             );
         }
         return $this->languageMaskGenerator;

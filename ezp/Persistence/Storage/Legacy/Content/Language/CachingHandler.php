@@ -15,7 +15,7 @@ use ezp\Persistence\Content\Language,
 /**
  * Language Handler
  */
-class CachingHandler implements BaseLanguageHandler
+class CachingHandler implements BaseLanguageHandler, Lookup
 {
     /**
      * Inner Language handler
@@ -32,6 +32,13 @@ class CachingHandler implements BaseLanguageHandler
     protected $languageCache;
 
     /**
+     * If the cache has already been initialized
+     *
+     * @var bool
+     */
+    protected $isCacheInitialized = false;
+
+    /**
      * Creates a caching handler around $innerHandler
      *
      * @param \ezp\Persistence\Content\Language\Handler $innerHandler
@@ -40,12 +47,52 @@ class CachingHandler implements BaseLanguageHandler
     {
         $this->innerHandler  = $innerHandler;
         $this->languageCache = $languageCache;
+    }
 
-        $languages = $innerHandler->loadAll();
-        foreach ( $languages as $language )
+    /**
+     * Initializes the cache if necessary
+     *
+     * @return void
+     */
+    protected function initializeCache()
+    {
+        if ( false === $this->isCacheInitialized )
         {
-            $this->languageCache->store( $language );
+            $languages = $this->innerHandler->loadAll();
+            foreach ( $languages as $language )
+            {
+                $this->languageCache->store( $language );
+            }
+            $this->isCacheInitialized = true;
         }
+    }
+
+    /**
+     * Returns the Language with $id from the cache
+     *
+     * @param mixed $id
+     * @return \ezp\Persistence\Content\Language
+     * @throws \ezp\Base\Exception\NotFound
+     *         if the Language could not be found
+     */
+    public function getById( $id )
+    {
+        $this->initializeCache();
+        return $this->languageCache->getById( $id );
+    }
+
+    /**
+     * Returns the Language with $locale from the cache
+     *
+     * @param string $locale
+     * @return \ezp\Persistence\Content\Language
+     * @throws \ezp\Base\Exception\NotFound
+     *         if the Language could not be found
+     */
+    public function getByLocale( $locale )
+    {
+        $this->initializeCache();
+        return $this->languageCache->getByLocale( $locale );
     }
 
     /**
@@ -56,6 +103,7 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function create( CreateStruct $struct )
     {
+        $this->initializeCache();
         $language = $this->innerHandler->create( $struct );
         $this->languageCache->store( $language );
         return $language;
@@ -68,6 +116,7 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function update( Language $language )
     {
+        $this->initializeCache();
         $this->innerHandler->update( $language );
         $this->languageCache->store( $language );
     }
@@ -81,6 +130,7 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function load( $id )
     {
+        $this->initializeCache();
         return $this->languageCache->getById( $id );
     }
 
@@ -91,6 +141,7 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function loadAll()
     {
+        $this->initializeCache();
         return $this->languageCache->getAll();
     }
 
@@ -104,6 +155,7 @@ class CachingHandler implements BaseLanguageHandler
      */
     public function delete( $id )
     {
+        $this->initializeCache();
         $this->innerHandler->delete( $id );
         $this->languageCache->remove( $id );
     }

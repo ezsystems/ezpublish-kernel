@@ -43,15 +43,76 @@ class CachingLanguageHandlerTest extends TestCase
      * @return void
      * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::__construct
      */
-    public function testCtor()
+    public function testCtorPropertyInnerHandler()
     {
+        $handler   = $this->getLanguageHandler();
+
+        $this->assertAttributeSame(
+            $this->getInnerLanguageHandlerMock(),
+            'innerHandler',
+            $handler
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::__construct
+     */
+    public function testCtorPropertyLanguageCache()
+    {
+        $handler   = $this->getLanguageHandler();
+
+        $this->assertAttributeSame(
+            $this->getLanguageCacheMock(),
+            'languageCache',
+            $handler
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::getById
+     */
+    public function testGetById()
+    {
+        $this->expectCacheInitialize();
+
         $cacheMock = $this->getLanguageCacheMock();
 
-        $cacheMock->expects( $this->exactly( 2 ) )
-            ->method( 'store' )
-            ->with( $this->isInstanceOf( 'ezp\Persistence\Content\Language' ) );
+        $cacheMock->expects( $this->once() )
+            ->method( 'getById' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( new Language() ) );
 
-        $handler   = $this->getLanguageHandler();
+        $handler = $this->getLanguageHandler();
+
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content\\Language',
+            $handler->getById( 23 )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::getByLocale
+     */
+    public function testGetByLocale()
+    {
+        $this->expectCacheInitialize();
+
+        $cacheMock = $this->getLanguageCacheMock();
+
+        $cacheMock->expects( $this->once() )
+            ->method( 'getByLocale' )
+            ->with( $this->equalTo( 'eng-GB' ) )
+            ->will( $this->returnValue( new Language() ) );
+
+        $handler = $this->getLanguageHandler();
+
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content\\Language',
+            $handler->getByLocale( 'eng-GB' )
+        );
     }
 
     /**
@@ -60,9 +121,13 @@ class CachingLanguageHandlerTest extends TestCase
      */
     public function testCreate()
     {
+        $this->expectCacheInitialize();
+
         $handler = $this->getLanguageHandler();
         $innerHandlerMock = $this->getInnerLanguageHandlerMock();
         $cacheMock = $this->getLanguageCacheMock();
+
+        $languageFixture = $this->getLanguageFixture();
 
         $innerHandlerMock->expects( $this->once() )
             ->method( 'create' )
@@ -70,18 +135,19 @@ class CachingLanguageHandlerTest extends TestCase
                 $this->isInstanceOf(
                     'ezp\Persistence\Content\Language\CreateStruct'
                 )
-            )->will( $this->returnValue( $this->getLanguageFixture() ) );
+            )->will( $this->returnValue( $languageFixture ) );
 
-        $cacheMock->expects( $this->once() )
+        // Cache has been initialized before
+        $cacheMock->expects( $this->at( 2 ) )
             ->method( 'store' )
-            ->with( $this->equalTo( $this->getLanguageFixture() ) );
+            ->with( $this->equalTo( $languageFixture ) );
 
         $createStruct = $this->getCreateStructFixture();
 
         $result = $handler->create( $createStruct );
 
         $this->assertEquals(
-            $this->getLanguageFixture(),
+            $languageFixture,
             $result
         );
     }
@@ -115,6 +181,8 @@ class CachingLanguageHandlerTest extends TestCase
      */
     public function testUpdate()
     {
+        $this->expectCacheInitialize();
+
         $handler = $this->getLanguageHandler();
 
         $innerHandlerMock = $this->getInnerLanguageHandlerMock();
@@ -124,7 +192,8 @@ class CachingLanguageHandlerTest extends TestCase
             ->method( 'update' )
             ->with( $this->getLanguageFixture() );
 
-        $cacheMock->expects( $this->once() )
+        // Cache has been initialized before
+        $cacheMock->expects( $this->at( 2 ) )
             ->method( 'store' )
             ->with( $this->getLanguageFixture() );
 
@@ -137,6 +206,8 @@ class CachingLanguageHandlerTest extends TestCase
      */
     public function testLoad()
     {
+        $this->expectCacheInitialize();
+
         $handler   = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
@@ -160,6 +231,8 @@ class CachingLanguageHandlerTest extends TestCase
      */
     public function testLoadFailure()
     {
+        $this->expectCacheInitialize();
+
         $handler   = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
@@ -179,6 +252,8 @@ class CachingLanguageHandlerTest extends TestCase
      */
     public function testLoadAll()
     {
+        $this->expectCacheInitialize();
+
         $handler     = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
@@ -200,6 +275,8 @@ class CachingLanguageHandlerTest extends TestCase
      */
     public function testDelete()
     {
+        $this->expectCacheInitialize();
+
         $handler          = $this->getLanguageHandler();
         $cacheMock        = $this->getLanguageCacheMock();
         $innerHandlerMock = $this->getInnerLanguageHandlerMock();
@@ -245,11 +322,6 @@ class CachingLanguageHandlerTest extends TestCase
             $this->innerHandlerMock = $this->getMock(
                 'ezp\Persistence\Content\Language\Handler'
             );
-
-            // ChachingHandler->__construct()
-            $this->innerHandlerMock->expects( $this->once() )
-                ->method( 'loadAll' )
-                ->will( $this->returnValue( $this->getLanguagesFixture() ) );
         }
         return $this->innerHandlerMock;
     }
@@ -268,6 +340,19 @@ class CachingLanguageHandlerTest extends TestCase
             );
         }
         return $this->languageCacheMock;
+    }
+
+    /**
+     * Adds expectation for cache initialize to mocks
+     *
+     * @return void
+     */
+    protected function expectCacheInitialize()
+    {
+        $innerHandlerMock = $this->getInnerLanguageHandlerMock();
+        $innerHandlerMock->expects( $this->once() )
+            ->method( 'loadAll' )
+            ->will( $this->returnValue( $this->getLanguagesFixture() ) );
     }
 
     /**
