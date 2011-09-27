@@ -12,6 +12,7 @@ use ezp\Persistence\Storage\Legacy\Tests\Content\LanguageAwareTestCase,
     ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
+    ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler,
 
     ezp\Persistence\Content,
     ezp\Persistence\Content\Language,
@@ -36,6 +37,13 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      * @var \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
      */
     protected $languageMaskGenerator;
+
+    /**
+     * Language handler
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Language\CachingLanguageHandler
+     */
+    protected $languageHandler;
 
     /**
      * @return void
@@ -723,6 +731,15 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $gateway = $this->getDatabaseGateway();
+        $this->languageHandler
+            ->expects( $this->once() )
+            ->method( 'getByLocale' )
+            ->with( 'eng-US' )
+            ->will( $this->returnValue( new Language( array(
+                'id'     => 2,
+                'locale' => 'eng-US',
+            ) ) ) );
+
         $gateway->setName( 14, 2, "Hello world!", 'eng-US' );
 
         $this->assertQueryResult(
@@ -985,6 +1002,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             $this->databaseGateway = new EzcDatabase(
                 ( $dbHandler = $this->getDatabaseHandler() ),
                 new EzcDatabase\QueryBuilder( $dbHandler ),
+                $this->getLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             );
         }
@@ -1005,6 +1023,26 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             );
         }
         return $this->languageMaskGenerator;
+    }
+
+    /**
+     * Returns a language mask generator
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     */
+    protected function getLanguageHandler()
+    {
+        if ( !isset( $this->languageHandler ) )
+        {
+            $this->languageHandler = $this->getMock(
+                '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Language\\CachingHandler',
+                array( 'getByLocale' ),
+                array(),
+                '',
+                false
+            );
+        }
+        return $this->languageHandler;
     }
 
     /**

@@ -274,6 +274,7 @@ class ContentHandlerTest extends TestCase
             new Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
                 new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() ),
+                $this->getLanguageHandlerMock(),
                 $this->getLanguageMaskGeneratorMock()
             ),
             new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
@@ -305,6 +306,24 @@ class ContentHandlerTest extends TestCase
             );
 
         return $handler;
+    }
+
+    /**
+     * Returns a handler mock
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Language\CachingLanguageHandler
+     */
+    protected function getLanguageHandlerMock()
+    {
+        $mock = $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\Language\\CachingHandler',
+            array(),
+            array(),
+            '',
+            false
+        );
+
+        return $mock;
     }
 
     /**
@@ -410,6 +429,7 @@ class ContentHandlerTest extends TestCase
             new Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
                 new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() ),
+                $this->getLanguageHandlerMock(),
                 $this->getLanguageMaskGeneratorMock()
             ),
             new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),
@@ -478,6 +498,7 @@ class ContentHandlerTest extends TestCase
             new Gateway\EzcDatabase(
                 $this->getDatabaseHandler(),
                 new Gateway\EzcDatabase\QueryBuilder( $this->getDatabaseHandler() ),
+                $this->getLanguageHandlerMock(),
                 $this->getLanguageMaskGeneratorMock()
             ),
             new Location\Gateway\EzcDatabase( $this->getDatabaseHandler() ),

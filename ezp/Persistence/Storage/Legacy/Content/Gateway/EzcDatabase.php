@@ -13,6 +13,7 @@ use ezp\Persistence\Storage\Legacy\Content\Gateway,
     ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
+    ezp\Persistence\Storage\Legacy\Content\Language,
     ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     ezp\Persistence\Content,
     ezp\Persistence\Content\UpdateStruct,
@@ -39,6 +40,13 @@ class EzcDatabase extends Gateway
     protected $queryBuilder;
 
     /**
+     * Caching language handler
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler
+     */
+    protected $languageHandler;
+
+    /**
      * Language mask generator
      *
      * @var \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
@@ -55,10 +63,12 @@ class EzcDatabase extends Gateway
     public function __construct(
         EzcDbHandler $db,
         EzcDatabase\QueryBuilder $queryBuilder,
+        Language\CachingHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator )
     {
         $this->dbHandler             = $db;
         $this->queryBuilder          = $queryBuilder;
+        $this->languageHandler       = $languageHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
@@ -680,6 +690,8 @@ class EzcDatabase extends Gateway
      */
     public function setName( $contentId, $version, $name, $language )
     {
+        $language = $this->languageHandler->getByLocale( $language );
+
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject_name' )
@@ -691,13 +703,13 @@ class EzcDatabase extends Gateway
             $q->bindValue( $version, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'language_id' ),
-            $q->bindValue( 0 )
+            $q->bindValue( $language->id, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'content_translation' ),
-            $q->bindValue( $language )
+            $q->bindValue( $language->locale )
         )->set(
             $this->dbHandler->quoteColumn( 'real_translation' ),
-            $q->bindValue( $language )
+            $q->bindValue( $language->locale )
         )->set(
             $this->dbHandler->quoteColumn( 'name' ),
             $q->bindValue( $name )
