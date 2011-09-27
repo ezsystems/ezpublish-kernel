@@ -34,8 +34,9 @@ class RepositoryTest extends BaseServiceTest
     {
         $this->assertNotEquals( 14, $this->repository->getUser()->id );
         $admin = $this->repository->getUserService()->load( 14 );
-        $this->repository->setUser( $admin );
+        $oldUser = $this->repository->setUser( $admin );
         $this->assertEquals( 14, $this->repository->getUser()->id );
+        $this->assertNotEquals( 14, $oldUser->id );
     }
 
     /**
