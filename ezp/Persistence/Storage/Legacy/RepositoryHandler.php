@@ -277,6 +277,7 @@ class RepositoryHandler implements HandlerInterface
             $this->contentGateway = new Content\Gateway\EzcDatabase(
                 $this->getDatabase(),
                 new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() ),
+                $this->contentLanguageHandler(),
                 $this->getLanguageMaskGenerator()
             );
         }
