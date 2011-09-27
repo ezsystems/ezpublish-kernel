@@ -100,6 +100,7 @@ class SearchHandlerSortTest extends TestCase
                     array(
                         new Content\Search\Gateway\SortClauseHandler\LocationPathString( $db ),
                         new Content\Search\Gateway\SortClauseHandler\LocationDepth( $db ),
+                        new Content\Search\Gateway\SortClauseHandler\LocationPriority( $db ),
                     )
                 ),
                 new QueryBuilder( $this->getDatabaseHandler() )
@@ -230,6 +231,29 @@ class SearchHandlerSortTest extends TestCase
 
         $this->assertEquals(
             array( 4, 42, 13, 12, 11, 10, 14 ),
+            array_map(
+                function ( $content ) { return $content->id; },
+                $result->content
+            )
+        );
+    }
+
+    public function testSortLocationPriority()
+    {
+        $locator = $this->getContentSearchHandler();
+
+        $result = $locator->find(
+            new Criterion\SectionId(
+                array( 2 )
+            ),
+            0, 10,
+            array(
+                new SortClause\LocationPriority( Query::SORT_DESC ),
+            )
+        );
+
+        $this->assertEquals(
+            array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
                 function ( $content ) { return $content->id; },
                 $result->content
