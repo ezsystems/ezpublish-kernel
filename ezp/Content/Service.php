@@ -473,7 +473,7 @@ class Service extends BaseService
 
         $contentDO = $this->buildDomainObject( $contentVo );
 
-        $this->notify( 'publish', array( $contentDO, $version ) );
+        $this->notify( 'content/publish', array( $contentDO, $version ) );
 
         return $contentDO;
     }
