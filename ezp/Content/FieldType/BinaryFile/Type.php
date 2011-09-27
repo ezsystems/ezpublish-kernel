@@ -12,6 +12,7 @@ use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Content\FieldType\BinaryFile\Value as BinaryFileValue,
     ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Base\Exception\InvalidArgumentType,
     ezp\Content\Type\FieldDefinition,
     ezp\Io\BinaryFile;
 
@@ -51,11 +52,15 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !$inputValue instanceof BinaryFileValue || !$inputValue->file instanceof BinaryFile )
+        if ( $inputValue instanceof BinaryFileValue )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
+                throw new BadFieldTypeInput( $inputValue, get_class() );
+
+            return $inputValue;
         }
-        return $inputValue;
+
+        throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\BinaryFile\\Value' );
     }
 
     /**

@@ -93,6 +93,21 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @covers \ezp\Content\FieldType\BinaryFile\Type::canParseValue
+     * @expectedException ezp\Base\Exception\InvalidArgumentType
+     * @group fieldType
+     * @group binaryFile
+     */
+    public function testCanParseInvalidValue()
+    {
+        $ft = new BinaryFileType;
+        $ref = new ReflectionObject( $ft );
+        $refMethod = $ref->getMethod( 'canParseValue' );
+        $refMethod->setAccessible( true );
+        $refMethod->invoke( $ft, $this->getMock( 'ezp\\Content\\FieldType\\Value' ) );
+    }
+
+    /**
      * @group fieldType
      * @group binaryFile
      * @covers \ezp\Content\FieldType\BinaryFile\Type::canParseValue
