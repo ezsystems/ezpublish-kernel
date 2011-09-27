@@ -11,7 +11,10 @@ namespace ezp\Content\FieldType\Media;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Content\FieldType\Media\Value as MediaValue,
+    ezp\Content\Field,
     ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Exception\InvalidArgumentValue,
     ezp\Io\BinaryFile;
 
 /**
@@ -32,11 +35,15 @@ class Type extends FieldType
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
+     * Default value for ezmedia is a media of HTML5 video type
+     *
      * @return \ezp\Content\FieldType\Media\Value
      */
     protected function getDefaultValue()
     {
-        return new MediaValue;
+        $value = new MediaValue;
+        $value->type = MediaValue::TYPE_HTML5_VIDEO;
+        return $value;
     }
 
     /**
@@ -50,11 +57,27 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !$inputValue instanceof MediaValue || !$inputValue->file instanceof BinaryFile )
+        if ( $inputValue instanceof MediaValue )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            $allowedTypes = array(
+                MediaValue::TYPE_HTML5_VIDEO,
+                MediaValue::TYPE_HTML5_AUDIO,
+                MediaValue::TYPE_FLASH,
+                MediaValue::TYPE_QUICKTIME,
+                MediaValue::TYPE_REALPLAYER,
+                MediaValue::TYPE_SILVERLIGHT,
+                MediaValue::TYPE_WINDOWSMEDIA
+            );
+            if ( !empty( $inputValue->type ) && !in_array( $inputValue->type, $allowedTypes ) )
+                throw new InvalidArgumentValue ( 'media type', $inputValue->type, get_class( $inputValue ) );
+
+            if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
+                throw new BadFieldTypeInput( $inputValue, get_class() );
+
+            return $inputValue;
         }
-        return $inputValue;
+
+        throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\Media\\Value' );
     }
 
     /**
