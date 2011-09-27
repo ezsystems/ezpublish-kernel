@@ -43,3 +43,45 @@ Backward compatibility breakage
 * hiding/unhinding a subtree does not disable users or user groups, it only makes sure
   certain users trees are not browseable via content api's / module if a siteaccess
   is setup to not show hidden locations, use isEnabled
+
+
+Permissions API
+~~~~~~~~~~~~~~~
+
+Unlike eZ Publish permissions API centers around Models, and the idea is that you at some point can extend
+it more directly instead of having to write your own separate module logic to extend the content model.
+
+In your everyday work with the API you should not have to deal with the Permissions at all,
+they are handled by the service layer for you unless documented differently.
+
+However in some cases you might need to check permission access, and here are the api's involved:
+
+- $user->hasAccessTo( $module, $function )
+
+  This is the same low level permission api you can also find in eZ Publish. Similarly it
+  returns either a bool value or an array of limitations. The limitations is internal,
+  and you should not depend on it's format.
+
+  eg:
+      $user->hasAccessTo( 'user', 'login' )
+
+  hasAccessTo can be usefully if you need to check access to some resource before loading it,
+  but in most cases the next one is preferred.
+
+- $repository->canUser( $function, ModelDefinition $model[, Model $assignment[, array &$deniedBy ]] )
+
+  New api that deal with instances of objects, often used in service layer to make sure user actually have access
+  to delete / create / update an object. Only objects that implements ModelDefinition are supported, currently
+  Content, User, Content\Type, User\Role, Content\Section and Content\Language.
+  @todo Add doc on available functions on these Objects.
+
+  This api uses the response from $user->hasAccessTo() where $user is the current user as set on $repository->getUser()
+  and $repository->setUser( User $user ), and potential limitations is then given to closure functions returned by
+  ModelDefinition::defintion() for validation.
+
+  $assignment Is an extra object needed in the case of some functions:
+      * 'create' on Content, in this case it needs to be the parent Location where Content is created.
+      * 'assign' on Section, needs to be the Content that section is assigned to.
+
+  $deniedBy Is an optional by reference array that can be used for debugging permissions as it will be filled with
+  all limitations that return false in the order they where executed (order of limitations from $user->hasAccessTo())
