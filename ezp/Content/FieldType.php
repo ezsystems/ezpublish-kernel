@@ -271,12 +271,33 @@ abstract class FieldType implements Observer
                  if ( $arguments === null || !isset( $arguments['value'] ) )
                      throw new InvalidArgumentValue( 'arguments', $arguments, get_class() );
 
-                 $this->setValue( $arguments['value'] );
+                 $this->onFieldSetValue( $subject, $arguments['value'] );
                  break;
 
              case 'content/publish':
                  // @todo Implement
                  break;
          }
+     }
+
+     /**
+      * This method is called when a "field/setValue" event is triggered by $subject.
+      * Override this method if you need to manipulate $value when "field/setValue" event is triggered.
+      * By default, it injects $value in the field type, without any manipulation.
+      * When overriding this method, the parent must always be called:
+      * <code>
+      * protected function onFieldSetValue( Observable $subject, Value $value )
+      * {
+      *     parent::onFieldSetValue( $subject, $value );
+      *     // Do something with $value and $subject
+      * }
+      * </code>
+      *
+      * @param \ezp\Base\Observable $subject
+      * @param \ezp\Content\FieldType\Value $value
+      */
+     protected function onFieldSetValue( Observable $subject, Value $value )
+     {
+         $this->setValue( $value );
      }
 }
