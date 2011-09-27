@@ -182,11 +182,11 @@ class Concrete extends Model implements Groupable, User
             if ( !empty( $limitationArray ) && count( $policy->limitations ) === 1 )
             {
                 foreach ( $policy->limitations as $limitationKey => $limitationValues );// to get first & only pair
-                foreach ( $limitationArray as &$limitations )
+                foreach ( $limitationArray as &$limitationSet )
                 {
-                    if ( isset( $limitations[ $limitationKey ] ) && count( $limitations ) === 1 )
+                    if ( isset( $limitationSet[ $limitationKey ] ) && count( $limitationSet ) === 1 )
                     {
-                        $limitations[ $limitationKey ] = array_merge( $limitations[ $limitationKey ], $limitationValues );
+                        $limitationSet[ $limitationKey ] = array_merge( $limitationSet[ $limitationKey ], $limitationValues );
                         continue 2;
                     }
                 }

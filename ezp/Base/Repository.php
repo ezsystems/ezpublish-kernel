@@ -103,12 +103,13 @@ class Repository
      * @param string $function Eg: read, move, create
      * @param \ezp\Base\ModelDefinition $module An model instance
      * @param \ezp\Base\Model $assignment An additional model instance in cases like 'assign' and so on
+     * @param array $deniedBy Optional array by reference that will contain limitations that denied access for debug use
      * @return bool
      * @throws \ezp\Base\Exception\InvalidArgumentValue On invalid $function value
      * @throws \ezp\Base\Exception\BadConfiguration On missing __module__ in $model::defintion()
      * @throws \ezp\Base\Exception\Logic On limitation used in policies but not in $model::defintion()
      */
-    public function canUser( $function, ModelDefinition $model, Model $assignment = null )
+    public function canUser( $function, ModelDefinition $model, Model $assignment = null, &$deniedBy = null )
     {
         $definition = $model->definition();
         $className = get_class( $model );
@@ -135,10 +136,10 @@ class Repository
             );
         }
 
-        foreach ( $limitationArray as $limitations )
+        foreach ( $limitationArray as $limitationSet )
         {
-            $limitationsSaysYes = true;
-            foreach ( $limitations as $limitationKey => $limitationValues )
+            $limitationSetSaysYes = true;
+            foreach ( $limitationSet as $limitationKey => $limitationValues )
             {
                 if ( !isset( $definition['functions'][$function][$limitationKey]['compare'] ) )
                 {
@@ -158,9 +159,16 @@ class Repository
                 }
 
                 if ( !$limitationCompareFn( $model, $limitationValues, $this, $assignment ) )
-                    $limitationsSaysYes = false;
+                {
+                    $limitationSetSaysYes = false;
+                    // Break to next limitationSet unless $deniedBy is used
+                    if ( $deniedBy === null )
+                        break;
+                    else
+                        $deniedBy[] = array( 'limitation' => $limitationKey, 'values' => $limitationValues );
+                }
             }
-            if ( $limitationsSaysYes )
+            if ( $limitationSetSaysYes )
                 return true;
         }
         return false;

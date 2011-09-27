@@ -331,10 +331,10 @@ class Service extends BaseService
         {
             // Create OR conditions for every "policy" that contains AND conditions for limitations
             $orCriteria = array();
-            foreach ( $limitationArray as $limitations )
+            foreach ( $limitationArray as $limitationSet )
             {
                 $andCriteria = array();
-                foreach ( $limitations as $limitationKey => $limitationValues )
+                foreach ( $limitationSet as $limitationKey => $limitationValues )
                 {
                     if ( !isset( $definition['functions']['read'][$limitationKey]['query'] ) )
                     {
