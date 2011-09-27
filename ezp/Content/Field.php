@@ -121,6 +121,7 @@ class Field extends Model
      * Assigns FieldValue object $inputValue to current field
      *
      * @param \ezp\Content\FieldType\Value $inputValue
+     * @todo Make validate optional.
      */
     public function setValue( FieldValue $inputValue )
     {
@@ -132,6 +133,8 @@ class Field extends Model
      * Validates $inputValue against validators registered in field definition.
      * If $inputValue is valid, it will be returned as is.
      * If not, a ValidationException will be thrown
+     *
+     * @todo Change so validate does not throw exceptions for logical validation errors.
      *
      * @param \ezp\Content\FieldType\FieldValue $inputValue
      * @return \ezp\Content\FieldType\FieldValue
