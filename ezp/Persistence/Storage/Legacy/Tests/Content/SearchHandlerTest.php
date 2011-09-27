@@ -546,7 +546,7 @@ class ContentSearchHandlerTest extends TestCase
         );
 
         $this->assertEquals(
-            array( 4, 10, 11, 12, 13, 14, 42, 225 ),
+            array( 4, 11, 12, 13, 42, 225, 10, 14 ),
             array_map(
                 function ( $content ) { return $content->id; },
                 $result->content
@@ -681,7 +681,7 @@ class ContentSearchHandlerTest extends TestCase
         );
 
         $this->assertEquals(
-            array( 66, 131, 225 ),
+            array( 131, 66, 225 ),
             array_map(
                 function ( $content ) { return $content->id; },
                 $result->content
