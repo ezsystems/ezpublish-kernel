@@ -112,6 +112,7 @@ interface Handler
      * @param \ezp\Persistence\User\Policy $policy
      * @return \ezp\Persistence\User\Policy
      * @todo Throw on invalid Role Id?
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
     public function addPolicy( $roleId, Policy $policy );
 
@@ -121,6 +122,7 @@ interface Handler
      * Replaces limitations values with new values.
      *
      * @param \ezp\Persistence\User\Policy $policy
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
     public function updatePolicy( Policy $policy );
 

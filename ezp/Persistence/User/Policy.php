@@ -65,6 +65,7 @@ class Policy extends ValueObject
      * are an array of limitation values
      *
      * @var array|string If string, then only the value '*' is allowed, meaning all limitations.
+     *                   Can not be a empty array as '*' should be used in this case.
      */
     public $limitations;
 }

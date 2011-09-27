@@ -220,9 +220,13 @@ class UserHandler implements UserHandlerInterface
      * @param \ezp\Persistence\User\Policy $policy
      * @return \ezp\Persistence\User\Policy
      * @todo Throw on invalid Role Id?
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
     public function addPolicy( $roleId, Policy $policy )
     {
+        if ( empty( $policy->limitations ) )
+            throw new InvalidArgumentValue( '->limitations', $policy->limitations, get_class( $policy ) );
+
         $policyArr = array( 'roleId' => $roleId ) + ( (array) $policy );
         return $this->backend->create( 'User\\Policy', $policyArr );
     }
@@ -233,9 +237,13 @@ class UserHandler implements UserHandlerInterface
      * Replaces limitations values with new values.
      *
      * @param \ezp\Persistence\User\Policy $policy
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
     public function updatePolicy( Policy $policy )
     {
+        if ( empty( $policy->limitations ) )
+            throw new InvalidArgumentValue( '->limitations', $policy->limitations, get_class( $policy ) );
+
         $policyArr = (array) $policy;
         $this->backend->update( 'User\\Policy', $policyArr['id'], $policyArr, false );
     }
