@@ -15,7 +15,8 @@ use ezp\Content\FieldType\Factory,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine as TextLineConverter,
-    ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition;
+    ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
+    ezp\Persistence\Content\FieldTypeConstraints;
 
 /**
  * Test case for TextLine converter in Legacy storage
@@ -80,18 +81,20 @@ class TextLineConverterLegacyTest extends \PHPUnit_Framework_TestCase
         $storageFieldDef = new StorageFieldDefinition;
         $defaultValue = new FieldValue;
         $defaultValue->data = new TextLineValue( 'This is a default value' );
+        $fieldTypeConstraints = new FieldTypeConstraints;
+        $fieldTypeConstraints->validators = array(
+            TextLineConverter::STRING_LENGTH_VALIDATOR_FQN =>  array( 'maxStringLength' => 100 )
+        );
         $fieldDef = new PersistenceFieldDefinition(
             array(
-                'fieldTypeConstraints' => array(
-                    TextLineConverter::STRING_LENGTH_VALIDATOR_FQN =>  array( 'maxStringLength' => 100 )
-                ),
+                'fieldTypeConstraints' => $fieldTypeConstraints,
                 'defaultValue' => $defaultValue
             )
         );
 
         $this->converter->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
         self::assertSame(
-            $fieldDef->fieldTypeConstraints[TextLineConverter::STRING_LENGTH_VALIDATOR_FQN],
+            $fieldDef->fieldTypeConstraints->validators[TextLineConverter::STRING_LENGTH_VALIDATOR_FQN],
             array( 'maxStringLength' => $storageFieldDef->dataInt1 )
         );
         self::assertSame( $fieldDef->defaultValue->data->text, $storageFieldDef->dataText1 );
@@ -117,7 +120,7 @@ class TextLineConverterLegacyTest extends \PHPUnit_Framework_TestCase
             array(
                 TextLineConverter::STRING_LENGTH_VALIDATOR_FQN => array( 'maxStringLength' => 100 )
             ),
-            $fieldDef->fieldTypeConstraints
+            $fieldDef->fieldTypeConstraints->validators
         );
         self::assertInstanceOf( 'ezp\\Content\\FieldType\\TextLine\\Value', $fieldDef->defaultValue->data );
         self::assertSame( 'This is a default value', $fieldDef->defaultValue->data->text );

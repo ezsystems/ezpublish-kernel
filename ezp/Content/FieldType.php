@@ -12,7 +12,7 @@ use ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Value,
     ezp\Content\FieldType\Validator,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
-    ezp\Content\Type\FieldDefinition,
+    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Base\Observer,
     ezp\Base\Observable,
     ezp\Base\Exception\InvalidArgumentValue,
@@ -229,28 +229,25 @@ abstract class FieldType implements Observer
     abstract protected function getSortInfo();
 
     /**
-     * Used by the FieldDefinition to populate the fieldConstraints field.
+     * Used by the FieldDefinition to populate the $fieldTypeConstraints->validators field.
      *
      * If validator is not allowed for a given field type, no data from that
      * validator is populated to $constraints.
      *
-     * @todo Consider separating out the fieldTypeConstraints into a separate object, so that it could be passed, and not the whole FieldDefinition object.
-     *
-     * @abstract
      * @internal
-     * @param \ezp\Content\FieldDefinition $fieldDefinition
+     * @param \ezp\Persistence\Content\FieldTypeConstraints $fieldTypeConstraints
      * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */
-     public function fillConstraintsFromValidator( FieldDefinition $fieldDefinition, Validator $validator )
+     public final function fillConstraintsFromValidator( FieldTypeConstraints $fieldTypeConstraints, Validator $validator )
      {
          $validatorClass = get_class( $validator );
          if ( !in_array( $validatorClass, $this->allowedValidators() ) )
              throw new InvalidArgumentType( '$validator', implode( ', ', $this->allowedValidators() ) );
 
-         $fieldDefinition->fieldTypeConstraints = array(
+         $fieldTypeConstraints->validators = array(
              $validatorClass => $validator->getValidatorConstraints()
-         ) + $fieldDefinition->fieldTypeConstraints;
+         ) + $fieldTypeConstraints->validators;
      }
 
      /**

@@ -196,22 +196,22 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
         $fieldDef = new FieldDefinition( $contentType, 'ezstring' );
         $fieldDef->identifier = 'title';
         $fieldDef->setDefaultValue( new TextLineValue( 'New article' ) );
-        $fieldDef->fieldTypeConstraints = array(
+        $fieldDef->fieldTypeConstraints->validators = array(
             'SomeValidator' => array( 'foo' => 'bar' )
         );
         $fields[] = $fieldDef;
 
         $validator = new StringLengthValidator();
         $validator->maxStringLength = 20;
-        $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef, $validator );
-        $expectedConstraints = array(
+        $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef->fieldTypeConstraints, $validator );
+        $expectedValidatorConstraints = array(
             'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator' => array(
                 'maxStringLength' => 20,
                 'minStringLength' => false
             ),
             'SomeValidator' => array( 'foo' => 'bar' )
         );
-        self::assertSame( $expectedConstraints, $fieldDef->fieldTypeConstraints );
+        self::assertSame( $expectedValidatorConstraints, $fieldDef->fieldTypeConstraints->validators );
     }
 
     /**
@@ -230,7 +230,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
         $fields[] = $fieldDef;
 
         $validator = $this->getMockForAbstractClass( 'ezp\\Content\\FieldType\\Validator' );
-        $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef, $validator );
+        $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef->fieldTypeConstraints, $validator );
     }
 
     /**

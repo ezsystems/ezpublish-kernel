@@ -13,6 +13,7 @@ use ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\NotFound,
     ezp\Content\FieldType\Factory,
     ezp\Persistence\Content\FieldValue,
+    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Persistence\ValueObject;
 
 /**
@@ -407,8 +408,16 @@ class Backend
                     {
                         $fieldTypeValue->$fieldValuePropertyName = $fieldValuePropertyValue;
                     }
-                    
+
                     $value = new FieldValue( array( "data" => $fieldTypeValue ) );
+                }
+                else if ( $type === "Content\\Type\\FieldDefinition" && $prop === "fieldTypeConstraints" && !$data["fieldTypeConstraints"] instanceof FieldTypeConstraints )
+                {
+                    $value = new FieldTypeConstraints;
+                    foreach ( $data["fieldTypeConstraints"] as $constraintName => $constraintValue )
+                    {
+                        $value->$constraintName = $constraintValue;
+                    }
                 }
                 else
                 {

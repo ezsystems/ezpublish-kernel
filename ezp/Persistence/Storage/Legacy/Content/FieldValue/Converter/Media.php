@@ -11,6 +11,7 @@ namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
 use \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     \ezp\Persistence\Content\FieldValue,
+    \ezp\Persistence\Content\FieldTypeConstraints,
     \ezp\Persistence\Content\Type\FieldDefinition,
     \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     \ezp\Content\FieldType\Media\Value as MediaValue;
@@ -48,12 +49,12 @@ class Media implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints['FileSizeValidator']['maxFileSize'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints['FileSizeValidator']['maxFileSize'];
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'];
         }
 
-        $storageDef->dataText1 = $fieldDef->defaultValue->data->type;
+        $storageDef->dataText1 = $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'];
     }
 
     /**
@@ -64,15 +65,17 @@ class Media implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
         if ( !empty( $storageDef->dataInt1 ) )
         {
-            $fieldDef->fieldTypeConstraints = array(
+            $fieldDef->fieldTypeConstraints->validators = array(
                 'FileSizeValidator' => array( 'maxFileSize' => $storageDef->dataInt1 )
             );
         }
 
-        $defaultValue = new MediaValue;
-        $defaultValue->type = $storageDef->dataText1;
+        $fieldDef->fieldTypeConstraints->fieldSettings = array(
+            'mediaType' => $storageDef->dataText1
+        );
     }
 
     /**

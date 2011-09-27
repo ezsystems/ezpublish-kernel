@@ -87,9 +87,12 @@ class FieldDefinition extends ValueObject
     public $isInfoCollector;
 
     /**
-     * A map (hash) of field type constraints
+     * A map of field type constraints.
+     * 2 constraints are available (as keys):
+     *   - validators
+     *   - fieldSettings
      *
-     * @var array
+     * @var \ezp\Persistence\Content\FieldTypeConstraints
      */
     public $fieldTypeConstraints;
 

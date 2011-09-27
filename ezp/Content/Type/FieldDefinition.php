@@ -13,7 +13,9 @@ use ezp\Base\Model,
     ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
     ezp\Content\FieldType\Factory as FieldTypeFactory,
     ezp\Content\FieldType\Validator,
-    ezp\Content\FieldType\Value as FieldValue;
+    ezp\Content\FieldType\Value as FieldValue,
+    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
+    ezp\Persistence\Content\FieldTypeConstraints;
 
 /**
  * Content Type Field (content class attribute) class
@@ -91,8 +93,13 @@ class FieldDefinition extends Model
      */
     public function __construct( Type $contentType, $fieldType )
     {
-        $this->type = $contentType;
-        $this->properties = new FieldDefinitionValue( array( 'fieldType' => $fieldType ) );
+        $this->contentType = $contentType;
+        $this->properties = new FieldDefinitionValue(
+            array(
+                'fieldType' => $fieldType,
+                'fieldTypeConstraints' => new FieldTypeConstraints
+            )
+        );
         $this->type = FieldTypeFactory::build( $fieldType );
         $this->defaultValue = $this->type->getValue();
         $this->attach( $this->type, 'field/setValue' );
@@ -127,9 +134,9 @@ class FieldDefinition extends Model
     public function addValidator( Validator $validator )
     {
         // We'll initialize the map with constraints if it does not already exist.
-        if ( !isset( $this->properties->fieldTypeConstraints ) )
+        if ( !isset( $this->properties->fieldTypeConstraints->validators ) )
         {
-            $this->properties->fieldTypeConstraints = array();
+            $this->properties->fieldTypeConstraints->validators = array();
             $this->validators = array();
         }
         else
@@ -138,7 +145,7 @@ class FieldDefinition extends Model
                 $this->validators = $this->getValidators();
         }
 
-        $this->type->fillConstraintsFromValidator( $this, $validator );
+        $this->type->fillConstraintsFromValidator( $this->fieldTypeConstraints, $validator );
         $this->validators[] = $validator;
     }
 
@@ -174,9 +181,9 @@ class FieldDefinition extends Model
         if ( !isset( $this->validators ) )
         {
             $this->validators = array();
-            if ( isset( $this->properties->fieldTypeConstraints ) )
+            if ( isset( $this->properties->fieldTypeConstraints->validators ) )
             {
-                foreach ( $this->properties->fieldTypeConstraints as $validatorClass => $constraints )
+                foreach ( $this->properties->fieldTypeConstraints->validators as $validatorClass => $constraints )
                 {
                     $validator = new $validatorClass;
                     $validator->initializeWithConstraints( $constraints );
@@ -185,10 +192,12 @@ class FieldDefinition extends Model
             }
             else
             {
-                $this->properties->fieldTypeConstraints = array();
+                $this->properties->fieldTypeConstraints->validators = array();
             }
         }
 
         return $this->validators;
     }
+
+
 }
