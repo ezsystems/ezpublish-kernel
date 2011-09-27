@@ -147,6 +147,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
         self::assertInstanceOf( 'ezp\\Content\\FieldType\\BinaryFile\\Value', $value );
         self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $value->file );
         self::assertSame( $this->imageFileInfo->getBasename(), $value->originalFilename );
+        self::assertSame( $value->originalFilename, $value->file->originalFile );
     }
 
     /**
