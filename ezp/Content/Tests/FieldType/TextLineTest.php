@@ -113,6 +113,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
+     * @group textLine
      * @covers \ezp\Content\FieldType\TextLine\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
