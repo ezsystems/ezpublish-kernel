@@ -33,6 +33,23 @@ abstract class Model extends Proxy implements ObservableInterface, ModelInterfac
     private $observers = array();
 
     /**
+     * Loads the proxied object and moves observers over to it
+     */
+    protected function lazyLoad()
+    {
+        if ( $this->proxiedObject === null )
+        {
+            parent::lazyLoad();
+            foreach ( $this->observers as $event => $observers )
+            {
+                foreach ( $observers as $observer )
+                    $this->proxiedObject->attach( $observer, $event );
+            }
+            $this->observers = array();
+        }
+    }
+
+    /**
      * Attaches $observer for $event to the Model
      *
      * @param \ezp\Base\Observer $observer
@@ -41,7 +58,11 @@ abstract class Model extends Proxy implements ObservableInterface, ModelInterfac
      */
     public function attach( Observer $observer, $event = "update" )
     {
-        if ( isset( $this->observers[$event] ) )
+        if ( $this->proxiedObject !== null )
+        {
+            return $this->proxiedObject->attach( $observer, $event );
+        }
+        elseif ( isset( $this->observers[$event] ) )
         {
             $this->observers[$event][] = $observer;
         }
@@ -61,7 +82,11 @@ abstract class Model extends Proxy implements ObservableInterface, ModelInterfac
      */
     public function detach( Observer $observer, $event = "update" )
     {
-        if ( !empty( $this->observers[$event] ) )
+        if ( $this->proxiedObject !== null )
+        {
+            return $this->proxiedObject->detach( $observer, $event );
+        }
+        elseif ( !empty( $this->observers[$event] ) )
         {
             foreach ( $this->observers[$event] as $key => $obj )
             {

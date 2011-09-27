@@ -32,7 +32,7 @@ abstract class Proxy
     /**
      * Concrete proxied object
      *
-     * @var mixed
+     * @var \ezp\Base\Model|object
      */
     protected $proxiedObject = null;
 
