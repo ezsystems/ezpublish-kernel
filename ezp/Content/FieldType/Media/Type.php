@@ -15,6 +15,7 @@ use ezp\Content\FieldType,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Observable,
     ezp\Io\BinaryFile;
 
 /**
@@ -97,7 +98,7 @@ class Type extends FieldType
      * @param \ezp\Base\Observable $subject
      * @param \ezp\Content\FieldType\Media\Value $value
      */
-    protected function onFieldSetValue( Observable $subject, Value $value )
+    protected function onFieldSetValue( Observable $subject, BaseValue $value )
     {
         parent::onFieldSetValue( $subject, $value );
         if ( $subject instanceof Field )
