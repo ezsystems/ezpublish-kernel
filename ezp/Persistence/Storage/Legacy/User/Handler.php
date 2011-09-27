@@ -269,7 +269,6 @@ class Handler implements BaseUserHandler
      */
     public function assignRole( $groupId, $roleId, array $limitation = null )
     {
-        throw new \RuntimeException( "@TODO: Implement. The method semantics changed, and the implementation does not reflect this yet." );
         $limitation = $limitation ?: array( '' => array( '' ) );
         $this->userGateway->assignRole( $groupId, $roleId, $limitation );
     }
@@ -282,7 +281,6 @@ class Handler implements BaseUserHandler
      */
     public function unAssignRole( $groupId, $roleId )
     {
-        throw new \RuntimeException( "@TODO: Implement. The method semantics changed, and the implementation does not reflect this yet." );
         $this->userGateway->removeRole( $groupId, $roleId );
     }
 }

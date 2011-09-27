@@ -48,17 +48,17 @@ abstract class Gateway
     /**
      * Assign role to user with given limitation
      *
-     * @param mixed $userId
+     * @param mixed $contentId
      * @param mixed $roleId
      * @param array $limitation
      */
-    abstract public function assignRole( $userId, $roleId, array $limitation );
+    abstract public function assignRole( $contentId, $roleId, array $limitation );
 
     /**
      * Remove role from user
      *
-     * @param mixed $userId
+     * @param mixed $contentId
      * @param mixed $roleId
      */
-    abstract public function removeRole( $userId, $roleId );
+    abstract public function removeRole( $contentId, $roleId );
 }

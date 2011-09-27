@@ -199,11 +199,11 @@ class EzcDatabase extends Gateway
     /**
      * Assign role to user with given limitation
      *
-     * @param mixed $userId
+     * @param mixed $contentId
      * @param mixed $roleId
      * @param array $limitation
      */
-    public function assignRole( $userId, $roleId, array $limitation )
+    public function assignRole( $contentId, $roleId, array $limitation )
     {
         foreach ( $limitation as $identifier => $values )
         {
@@ -214,7 +214,7 @@ class EzcDatabase extends Gateway
                     ->insertInto( $this->handler->quoteTable( 'ezuser_role' ) )
                     ->set(
                         $this->handler->quoteColumn( 'contentobject_id' ),
-                        $query->bindValue( $userId, null, \PDO::PARAM_INT )
+                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                     )->set(
                         $this->handler->quoteColumn( 'role_id' ),
                         $query->bindValue( $roleId, null, \PDO::PARAM_INT )
@@ -233,10 +233,10 @@ class EzcDatabase extends Gateway
     /**
      * Remove role from user
      *
-     * @param mixed $userId
+     * @param mixed $contentId
      * @param mixed $roleId
      */
-    public function removeRole( $userId, $roleId )
+    public function removeRole( $contentId, $roleId )
     {
         $query = $this->handler->createDeleteQuery();
         $query
@@ -245,7 +245,7 @@ class EzcDatabase extends Gateway
                 $query->expr->lAnd(
                     $query->expr->eq(
                         $this->handler->quoteColumn( 'contentobject_id' ),
-                        $query->bindValue( $userId, null, \PDO::PARAM_INT )
+                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
                     ),
                     $query->expr->eq(
                         $this->handler->quoteColumn( 'role_id' ),

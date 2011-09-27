@@ -358,7 +358,6 @@ class UserHandlerTest extends TestCase
 
     public function testAddRoleToUser()
     {
-        $this->markTestIncomplete( "Method semantic has been changed, and it is yet unclear what actually should happen here. Clarification by eZ pending." );
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
@@ -377,7 +376,6 @@ class UserHandlerTest extends TestCase
 
     public function testAddRoleToUserWithLimitation()
     {
-        $this->markTestIncomplete( "Method semantic has been changed, and it is yet unclear what actually should happen here. Clarification by eZ pending." );
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
@@ -402,7 +400,6 @@ class UserHandlerTest extends TestCase
 
     public function testAddRoleToUserWithComplexLimitation()
     {
-        $this->markTestIncomplete( "Method semantic has been changed, and it is yet unclear what actually should happen here. Clarification by eZ pending." );
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
@@ -430,7 +427,6 @@ class UserHandlerTest extends TestCase
 
     public function testRemoveUserRoleAssociation()
     {
-        $this->markTestIncomplete( "Method semantic has been changed, and it is yet unclear what actually should happen here. Clarification by eZ pending." );
         $handler = $this->getUserHandler();
 
         $role = $this->createRole();
