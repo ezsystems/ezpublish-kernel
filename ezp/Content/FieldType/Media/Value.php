@@ -20,29 +20,6 @@ use ezp\Content\FieldType\Value as ValueInterface,
  */
 class Value implements ValueInterface
 {
-    const TYPE_FLASH = 'flash',
-          TYPE_QUICKTIME = 'quick_time',
-          TYPE_REALPLAYER = 'real_player',
-          TYPE_SILVERLIGHT = 'silverlight',
-          TYPE_WINDOWSMEDIA = 'windows_media_player',
-          TYPE_HTML5_VIDEO = 'html5_video',
-          TYPE_HTML5_AUDIO = 'html5_audio';
-
-    /**
-     * Media type.
-     * Can be one of those:
-     *   - flash
-     *   - quick_time
-     *   - real_player
-     *   - siverlight
-     *   - windows_media_player
-     *   - html5_video
-     *   - html5_audio
-     *
-     * @var string
-     */
-    public $type;
-
     /**
      * BinaryFile object
      *

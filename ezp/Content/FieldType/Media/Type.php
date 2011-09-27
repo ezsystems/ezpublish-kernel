@@ -10,6 +10,7 @@
 namespace ezp\Content\FieldType\Media;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
+    ezp\Content\FieldType\Media\Value,
     ezp\Content\Field,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Base\Exception\InvalidArgumentType,
@@ -27,23 +28,43 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = 'ezmedia';
     const IS_SEARCHABLE = false;
 
+    const TYPE_FLASH = 'flash',
+          TYPE_QUICKTIME = 'quick_time',
+          TYPE_REALPLAYER = 'real_player',
+          TYPE_SILVERLIGHT = 'silverlight',
+          TYPE_WINDOWSMEDIA = 'windows_media_player',
+          TYPE_HTML5_VIDEO = 'html5_video',
+          TYPE_HTML5_AUDIO = 'html5_audio';
+
     protected $allowedValidators = array(
         'ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator'
+    );
+
+    protected $allowedSettings = array(
+        /*
+         * mediaType can be one of those values:
+         *   - flash
+         *   - quick_time
+         *   - real_player
+         *   - siverlight
+         *   - windows_media_player
+         *   - html5_video
+         *   - html5_audio
+         *
+         * Default value for ezmedia is a media of HTML5 video type
+         */
+        'mediaType' => self::TYPE_HTML5_VIDEO
     );
 
     /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * Default value for ezmedia is a media of HTML5 video type
-     *
      * @return \ezp\Content\FieldType\Media\Value
      */
     protected function getDefaultValue()
     {
-        $value = new Value;
-        $value->type = Value::TYPE_HTML5_VIDEO;
-        return $value;
+        return new Value;
     }
 
     /**
@@ -59,18 +80,6 @@ class Type extends FieldType
     {
         if ( $inputValue instanceof Value )
         {
-            $allowedTypes = array(
-                Value::TYPE_HTML5_VIDEO,
-                Value::TYPE_HTML5_AUDIO,
-                Value::TYPE_FLASH,
-                Value::TYPE_QUICKTIME,
-                Value::TYPE_REALPLAYER,
-                Value::TYPE_SILVERLIGHT,
-                Value::TYPE_WINDOWSMEDIA
-            );
-            if ( !empty( $inputValue->type ) && !in_array( $inputValue->type, $allowedTypes ) )
-                throw new InvalidArgumentValue ( 'media type', $inputValue->type, get_class( $inputValue ) );
-
             if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
                 throw new BadFieldTypeInput( $inputValue, get_class() );
 
@@ -91,9 +100,9 @@ class Type extends FieldType
     }
 
     /**
-     * Fills in $value->type and $value->pluginspage according to default value in FieldDefinition
+     * Fills in $value->type and $value->pluginspage according to field settings set in FieldDefinition
      *
-     * @see \ezp\Content\FieldType::onFieldSetValue
+     * @see \ezp\Content\FieldType::onFieldSetValue()
      * @param \ezp\Base\Observable $subject
      * @param \ezp\Content\FieldType\Media\Value $value
      */
@@ -102,11 +111,9 @@ class Type extends FieldType
         parent::onFieldSetValue( $subject, $value );
         if ( $subject instanceof Field )
         {
-            $defaultValue = $subject->getFieldDefinition()->getDefaultValue();
-            $value->type = $defaultValue->type;
             if ( !isset( $value->pluginspage ) )
             {
-                $value->pluginspage = $value->getHandler()->getPluginspageByType( $value->type );
+                $value->pluginspage = $value->getHandler()->getPluginspageByType( $this->fieldSettings['mediaType'] );
             }
         }
     }

@@ -21,6 +21,12 @@ use ezp\Content\FieldType\Value as ValueInterface,
  */
 class Handler extends BinaryFileHandler
 {
+    const PLUGINSPAGE_FLASH = 'http://www.adobe.com/go/EN_US-H-GET-FLASH',
+          PLUGINSPAGE_QUICKTIME = 'http://quicktime.apple.com',
+          PLUGINSPAGE_REAL = 'http://www.real.com',
+          PLUGINSPAGE_SILVERLIGHT = 'http://go.microsoft.com/fwlink/?LinkID=108182',
+          PLUGINSPAGE_WINDOWSMEDIA = 'http://microsoft.com/windows/mediaplayer/en/download/';
+
     /**
      * Returns default plugin page depending on $mediaType
      *
@@ -29,31 +35,30 @@ class Handler extends BinaryFileHandler
      */
     public function getPluginspageByType( $mediaType )
     {
-        $pluginPage = '';
         switch ( $mediaType )
         {
-            case Value::TYPE_FLASH:
-                $pluginPage = 'http://www.adobe.com/go/EN_US-H-GET-FLASH';
+            case Type::TYPE_FLASH:
+                $pluginPage = self::PLUGINSPAGE_FLASH;
                 break;
 
-            case Value::TYPE_QUICKTIME:
-                $pluginPage = 'http://quicktime.apple.com';
+            case Type::TYPE_QUICKTIME:
+                $pluginPage = self::PLUGINSPAGE_QUICKTIME;
                 break;
 
-            case Value::TYPE_REALPLAYER:
-                $pluginPage = 'http://www.real.com/';
+            case Type::TYPE_REALPLAYER:
+                $pluginPage = self::PLUGINSPAGE_REAL;
                 break;
 
-            case Value::TYPE_SILVERLIGHT:
-                $pluginPage = 'http://go.microsoft.com/fwlink/?LinkID=108182';
+            case Type::TYPE_SILVERLIGHT:
+                $pluginPage = self::PLUGINSPAGE_SILVERLIGHT;
                 break;
 
-            case Value::TYPE_WINDOWSMEDIA:
-                $pluginPage = 'http://microsoft.com/windows/mediaplayer/en/download/';
+            case Type::TYPE_WINDOWSMEDIA:
+                $pluginPage = self::PLUGINSPAGE_WINDOWSMEDIA;
                 break;
 
-            case Value::TYPE_HTML5_VIDEO:
-            case Value::TYPE_HTML5_AUDIO:
+            case Type::TYPE_HTML5_VIDEO:
+            case Type::TYPE_HTML5_AUDIO:
             default:
                 $pluginPage = '';
         }

@@ -14,7 +14,8 @@ use \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     \ezp\Persistence\Content\FieldTypeConstraints,
     \ezp\Persistence\Content\Type\FieldDefinition,
     \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    \ezp\Content\FieldType\Media\Value as MediaValue;
+    \ezp\Content\FieldType\Media\Value as MediaValue,
+    \ezp\Content\FieldType\FieldSettings;
 
 class Media implements Converter
 {
@@ -73,8 +74,8 @@ class Media implements Converter
             );
         }
 
-        $fieldDef->fieldTypeConstraints->fieldSettings = array(
-            'mediaType' => $storageDef->dataText1
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array( 'mediaType' => $storageDef->dataText1 )
         );
     }
 
