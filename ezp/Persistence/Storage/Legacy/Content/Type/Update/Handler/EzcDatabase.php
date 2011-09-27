@@ -44,25 +44,45 @@ class EzcDatabase extends Handler
     }
 
     /**
-     * Performs the update of $contentTypeId from $srcVersion
+     * Updates existing content objects from $fromType to $toType
      *
      * @param \ezp\Persistence\Content\Type $fromType
      * @param \ezp\Persistence\Content\Type $toType
      * @return void
      */
-    public function performUpdate( $fromType, $toType )
+    public function updateContentObjects( $fromType, $toType )
     {
         $actions = $this->contentUpdater->determineActions( $fromType, $toType );
         $this->contentUpdater->applyUpdates( $fromType->id, $actions  );
+    }
 
+    /**
+     * Deletes $fromType and all of its field definitions
+     *
+     * @param \ezp\Persistence\Content\Type $fromType
+     * @return void
+     */
+    public function deleteOldType( $fromType )
+    {
         $this->contentTypeGateway->deleteType( $fromType->id, $fromType->status );
         $this->contentTypeGateway->deleteFieldDefinitionsForType(
             $fromType->id, $fromType->status
         );
+    }
+
+    /**
+     * Publishes $toType to $newStatus
+     *
+     * @param \ezp\Persistence\Content\Type $toType
+     * @param int $newStatus
+     * @return void
+     */
+    public function publishNewType( $toType, $newStatus )
+    {
         $this->contentTypeGateway->publishTypeAndFields(
-            $fromType->id,
+            $toType->id,
             $toType->status,
-            $fromType->status
+            $newStatus
         );
     }
 }

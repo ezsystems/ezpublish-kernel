@@ -416,9 +416,21 @@ class Handler implements BaseContentTypeHandler
      */
     public function publish( $contentTypeId )
     {
-        $fromType = $this->load( $contentTypeId, 0 );
         $toType   = $this->load( $contentTypeId, 1 );
-        $this->updateHandler->performUpdate( $fromType, $toType );
+
+        try
+        {
+            $fromType = $this->load( $contentTypeId, 0 );
+            $this->updateHandler->updateContentObjects( $fromType, $toType );
+            $this->updateHandler->deleteOldType( $fromType );
+        }
+        catch ( Exception\TypeNotFound $e )
+        {
+            // If no old type is found, no updates are necessary to it
+        }
+
+
+        $this->updateHandler->publishNewType( $toType, 0 );
     }
 }
 ?>

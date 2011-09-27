@@ -35,16 +35,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler::performUpdate
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler::updateContentObjects
      */
-    public function testPerformUpdate()
+    public function testUpdateContentObjects()
     {
         $handler = $this->getUpdateHandler();
 
-        $gatewayMock = $this->getGatewayMock();
         $updaterMock = $this->getContentUpdaterMock();
 
-        $updaterMock = $this->getContentUpdaterMock();
         $updaterMock->expects( $this->once() )
             ->method( 'determineActions' )
             ->with(
@@ -63,7 +61,21 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( array() )
             );
 
+        $types = $this->getTypeFixtures();
+
+        $handler->updateContentObjects( $types['from'], $types['to'] );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler::deleteOldType
+     */
+    public function testDeleteOldType()
+    {
+        $handler = $this->getUpdateHandler();
+
         $gatewayMock = $this->getGatewayMock();
+
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteType' )
             ->with(
@@ -77,19 +89,49 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 0 )
             );
 
+        $types = $this->getTypeFixtures();
+
+        $handler->deleteOldType( $types['from'], $types['to'] );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler::publishNewType
+     */
+    public function testPublishNewType()
+    {
+        $handler = $this->getUpdateHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $updaterMock = $this->getContentUpdaterMock();
+
         $gatewayMock->expects( $this->once() )
             ->method( 'publishTypeAndFields' )
-            ->with( $this->equalTo( 23 ), $this->equalTo( 1 ) );
+            ->with( $this->equalTo( 23 ), $this->equalTo( 1 ), $this->equalTo( 0 ) );
 
-        $fromType = new Type();
-        $fromType->id     = 23;
-        $fromType->status = Type::STATUS_DEFINED;
+        $types = $this->getTypeFixtures();
 
-        $toType = new Type();
-        $toType->id     = 23;
-        $toType->status = Type::STATUS_DRAFT;
+        $handler->publishNewType( $types['to'], 0 );
+    }
 
-        $handler->performUpdate( $fromType, $toType );
+    /**
+     * Returns an arra with 'from' and 'to' types
+     *
+     * @return \ezp\Persistence\Content\Type[]
+     */
+    protected function getTypeFixtures()
+    {
+        $types = array();
+
+        $types['from'] = new Type();
+        $types['from']->id     = 23;
+        $types['from']->status = Type::STATUS_DEFINED;
+
+        $types['to'] = new Type();
+        $types['to']->id     = 23;
+        $types['to']->status = Type::STATUS_DRAFT;
+
+        return $types;
     }
 
     /**

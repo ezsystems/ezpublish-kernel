@@ -899,10 +899,62 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             );
 
         $updateHandlerMock->expects( $this->once() )
-            ->method( 'performUpdate' )
+            ->method( 'updateContentObjects' )
             ->with(
                 $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' ),
                 $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' )
+            );
+        $updateHandlerMock->expects( $this->once() )
+            ->method( 'deleteOldType' )
+            ->with(
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' )
+            );
+        $updateHandlerMock->expects( $this->once() )
+            ->method( 'publishNewType' )
+            ->with(
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' ),
+                $this->equalTo( 0 )
+            );
+
+        $handler->publish( 23 );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::publish
+     */
+    public function testPublishNoOldType()
+    {
+        $handler = $this->getPartlyMockedHandler( array( 'load' ) );
+        $updateHandlerMock = $this->getUpdateHandlerMock();
+
+        $handler->expects( $this->at( 0 ) )
+            ->method( 'load' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 1 )
+            )->will(
+                $this->returnValue( new Type() )
+            );
+
+        $handler->expects( $this->at( 1 ) )
+            ->method( 'load' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 0 )
+            )->will(
+                $this->throwException( new Exception\TypeNotFound( 23, 0 ) )
+            );
+
+        $updateHandlerMock->expects( $this->never() )
+            ->method( 'updateContentObjects' );
+        $updateHandlerMock->expects( $this->never() )
+            ->method( 'deleteOldType' );
+        $updateHandlerMock->expects( $this->once() )
+            ->method( 'publishNewType' )
+            ->with(
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' ),
+                $this->equalTo( 0 )
             );
 
         $handler->publish( 23 );
