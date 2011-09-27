@@ -209,8 +209,8 @@ abstract class FieldType implements Observer
      * Returns information for PersistenceFieldValue->$sortKey relevant to the field type.
      * Return value is an array where key is the sort type, value is field value to be used for sorting.
      * Sort type can be :
-     *  - sort_key_string (sorting will be made with a string algorythm)
-     *  - sort_key_int (sorting will be made with an integer algorythm)
+     *  - sort_key_string (sorting will be made with a string algorithm)
+     *  - sort_key_int (sorting will be made with an integer algorithm)
      *
      * <code>
      * protected function getSortInfo()
