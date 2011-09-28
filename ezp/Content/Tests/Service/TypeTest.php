@@ -12,7 +12,7 @@ use ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Content\Type\Service,
     ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Type\FieldDefinition,
-    ezp\Content\Type\Group,
+    ezp\Content\Type\Group\Concrete as Group,
     ezp\Content\FieldType\Value,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Base\Exception\NotFound,
@@ -621,7 +621,7 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::unlink
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
      */
     public function testUnLinkTypeNotFound()
     {

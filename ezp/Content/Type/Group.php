@@ -26,48 +26,10 @@ use ezp\Base\Model,
  * @property mixed $modifierId
  * @property-read \ezp\Content\Type[] $types Appended items will not be stored, use TypeService->link()
  */
-class Group extends Model
+interface Group
 {
     /**
-     * @var array List of read/Write VO properties on this object
+     * @return \ezp\Content\Type[]
      */
-    protected $readWriteProperties = array(
-        'id' => false,
-        'name' => true,
-        'description' => true,
-        'identifier' => true,
-        'created' => true,
-        'creatorId' => true,
-        'modified' => true,
-        'modifierId' => true,
-    );
-
-    /**
-     * @var array List of dynamic properties on this object
-     */
-    protected $dynamicProperties = array(
-        'types' => true,
-    );
-
-    /**
-     * @var \ezp\Content\Type[]
-     */
-    protected $types;
-
-    /**
-     * Construct object with all internal objects
-     */
-    public function __construct()
-    {
-        $this->properties = new GroupValue();
-        $this->types = new TypeCollection( 'ezp\\Content\\Type' );
-    }
-
-    /**
-     * @return Type[]
-     */
-    public function getTypes()
-    {
-        return $this->types;
-    }
+    public function getTypes();
 }

@@ -21,7 +21,8 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Model,
     ezp\Content\Type,
     ezp\Content\Type\Concrete as ConcreteType,
-    ezp\Content\Type\Group,
+    ezp\Content\Type\Group\Concrete as ConcreteGroup,
+    ezp\Content\Type\Group\Proxy as ProxyGroup,
     ezp\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type as TypeValue,
     ezp\Persistence\Content\Type\CreateStruct,
@@ -282,20 +283,35 @@ class Service extends BaseService
      * @param \ezp\Content\Type $type
      * @param Group $group
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If $group is not an group on type
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $group is not on type or type is not on $group
+     * @throws \ezp\Base\Exception\InvalidArgumentType If $group or $type is missing id value
      * @throws \ezp\Base\Exception\BadRequest If $group is the last group on type
      */
     public function unlink( Type $type, Group $group )
     {
+        if ( !$type->id )
+           throw new InvalidArgumentType( '$type->id', 'int' );
+
+        if ( !$group->id )
+            throw new InvalidArgumentType( '$group->id', 'int' );
+
         $index = $type->getGroups()->indexOf( $group );
         if ( $index === false )
             throw new InvalidArgumentValue( '$group', 'Not part of $type->groups' );
+
+        $index2 = $group->getTypes()->indexOf( $type );
+        if ( $index2 === false )
+            throw new InvalidArgumentValue( '$type', 'Not part of $group->types' );
 
         $this->handler->contentTypeHandler()->unlink( $group->id, $type->id, $type->status );
 
         $groups = $type->getGroups()->getArrayCopy();
         unset( $groups[$index] );
         $type->setState( array( 'groups' => new ReadOnlyCollection( $groups ) ) );
+
+        $types = $group->getTypes()->getArrayCopy();
+        unset( $types[$index2] );
+        $group->setState( array( 'types' => new ReadOnlyCollection( $types ) ) );
     }
 
     /**
@@ -316,6 +332,10 @@ class Service extends BaseService
         $groups = $type->getGroups()->getArrayCopy();
         $groups[] = $group;
         $type->setState( array( 'groups' => new ReadOnlyCollection( $groups ) ) );
+
+        $types = $group->getTypes()->getArrayCopy();
+        $types[] = $type;
+        $group->setState( array( 'types' => new ReadOnlyCollection( $types ) ) );
     }
 
     /**
@@ -413,16 +433,16 @@ class Service extends BaseService
             $fieldDefinition = new FieldDefinition( $type, $fieldDefinitionVo->fieldType );
             $fields[] = $fieldDefinition->setState( array( 'properties' => $fieldDefinitionVo ) );
         }
+        $groups = array();
+        foreach ( $vo->groupIds as $groupId )
+        {
+            $groups[] = new ProxyGroup( $groupId, $this );
+        }
         $type->setState(
             array(
                 "properties" => $vo,
                 "fields" => new ReadOnlyCollection( $fields ),
-                "groups" => new LazyIdList(//@todo Use regular TypeCollection instead and Proxies
-                    "ezp\\Content\\Type\\Group",
-                    $vo->groupIds,
-                    $this,
-                    "loadGroup"
-                )
+                "groups" => new ReadOnlyCollection( $groups ),
             )
         );
         return $type;
@@ -434,7 +454,7 @@ class Service extends BaseService
      */
     protected function buildGroup( GroupValue $vo )
     {
-        $group = new Group();
+        $group = new ConcreteGroup();
         $group->setState(
             array(
                 "properties" => $vo,
