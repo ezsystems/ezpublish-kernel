@@ -16,7 +16,8 @@ use ezp\Content\FieldType\Factory,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine as TextLineConverter,
     ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
-    ezp\Persistence\Content\FieldTypeConstraints;
+    ezp\Persistence\Content\FieldTypeConstraints,
+    ezp\Content\FieldType\FieldSettings;
 
 /**
  * Test case for TextLine converter in Legacy storage
@@ -78,12 +79,18 @@ class TextLineConverterLegacyTest extends \PHPUnit_Framework_TestCase
      */
     public function testToStorageFieldDefinition()
     {
+        $defaultText = 'This is a default text';
         $storageFieldDef = new StorageFieldDefinition;
         $defaultValue = new FieldValue;
-        $defaultValue->data = new TextLineValue( 'This is a default value' );
+        $defaultValue->data = new TextLineValue( $defaultText );
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->validators = array(
             TextLineConverter::STRING_LENGTH_VALIDATOR_FQN =>  array( 'maxStringLength' => 100 )
+        );
+        $fieldTypeConstraints->fieldSettings = new \ezp\Content\FieldType\FieldSettings(
+            array(
+                'defaultText' => $defaultText
+            )
         );
         $fieldDef = new PersistenceFieldDefinition(
             array(
@@ -97,7 +104,10 @@ class TextLineConverterLegacyTest extends \PHPUnit_Framework_TestCase
             $fieldDef->fieldTypeConstraints->validators[TextLineConverter::STRING_LENGTH_VALIDATOR_FQN],
             array( 'maxStringLength' => $storageFieldDef->dataInt1 )
         );
-        self::assertSame( $fieldDef->defaultValue->data->text, $storageFieldDef->dataText1 );
+        self::assertSame(
+            $fieldDef->fieldTypeConstraints->fieldSettings['defaultText'],
+            $storageFieldDef->dataText1
+        );
     }
 
     /**
@@ -107,11 +117,12 @@ class TextLineConverterLegacyTest extends \PHPUnit_Framework_TestCase
      */
     public function testToFieldDefinition()
     {
+        $defaultText = 'This is a default value';
         $fieldDef = new PersistenceFieldDefinition;
         $storageDef = new StorageFieldDefinition(
             array(
                 'dataInt1' => 100,
-                'dataText1' => 'This is a default value'
+                'dataText1' => $defaultText
             )
         );
 
@@ -123,6 +134,11 @@ class TextLineConverterLegacyTest extends \PHPUnit_Framework_TestCase
             $fieldDef->fieldTypeConstraints->validators
         );
         self::assertInstanceOf( 'ezp\\Content\\FieldType\\TextLine\\Value', $fieldDef->defaultValue->data );
-        self::assertSame( 'This is a default value', $fieldDef->defaultValue->data->text );
+        self::assertSame( $defaultText, $fieldDef->defaultValue->data->text );
+        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertSame(
+            array( 'defaultText' => $defaultText ),
+            $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()
+        );
     }
 }

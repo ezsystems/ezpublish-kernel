@@ -26,6 +26,10 @@ class Type extends FieldType
         'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator'
     );
 
+    protected $allowedSettings = array(
+        'defaultText' => ''
+    );
+
     /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
@@ -34,7 +38,7 @@ class Type extends FieldType
      */
     protected function getDefaultValue()
     {
-        return new Value( "" );
+        return new Value( $this->fieldSettings['defaultText'] );
     }
 
     /**

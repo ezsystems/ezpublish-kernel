@@ -8,13 +8,14 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    \ezp\Persistence\Content\FieldValue,
-    \ezp\Persistence\Content\FieldTypeConstraints,
-    \ezp\Persistence\Content\Type\FieldDefinition,
-    \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue;
+use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
+    ezp\Persistence\Content\FieldValue,
+    ezp\Persistence\Content\FieldTypeConstraints,
+    ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+    ezp\Content\FieldType\TextLine\Value as TextLineValue,
+    ezp\Content\FieldType\FieldSettings;
 
 class TextLine implements Converter
 {
@@ -59,10 +60,7 @@ class TextLine implements Converter
             $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'];
         }
 
-        if ( $fieldDef->defaultValue->data instanceof TextLineValue )
-        {
-            $storageDef->dataText1 = $fieldDef->defaultValue->data->text;
-        }
+        $storageDef->dataText1 = $fieldDef->fieldTypeConstraints->fieldSettings['defaultText'];
     }
 
     /**
@@ -82,6 +80,11 @@ class TextLine implements Converter
         }
 
         $defaultValue = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
+        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
+                'defaultText' => $defaultValue
+            )
+        );
         $fieldDef->defaultValue = new FieldValue(
             array( 'data' => new TextLineValue( $defaultValue ) )
         );

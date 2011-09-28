@@ -51,6 +51,38 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group fieldType
+     * @group textLine
+     * @covers \ezp\Content\FieldType::allowedSettings
+     */
+    public function testTextLineAllowedSettings()
+    {
+        $ft = new TextLine();
+        self::assertSame(
+            array( 'defaultText' ),
+            $ft->allowedSettings(),
+            "The set of allowed settings does not match what is expected."
+        );
+    }
+
+    /**
+     * @group fieldType
+     * @group textLine
+     * @covers \ezp\Content\FieldType\TextLine\Type::getDefaultValue
+     */
+    public function testDefaultValueWithDefaultSetting()
+    {
+        $defaultText = 'A default text';
+        $ft = new TextLine();
+        $ft->setFieldSetting( 'defaultText', $defaultText );
+        self::assertSame(
+            $defaultText,
+            $ft->getValue()->text,
+            'defaultText setting should be reflected in default value object'
+        );
+    }
+
+    /**
      * @covers \ezp\Content\FieldType\TextLine\Type::canParseValue
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
