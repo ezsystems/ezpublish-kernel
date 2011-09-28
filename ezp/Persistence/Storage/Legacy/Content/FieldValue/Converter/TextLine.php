@@ -20,6 +20,7 @@ use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
 class TextLine implements Converter
 {
     const STRING_LENGTH_VALIDATOR_FQN = 'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator';
+
     /**
      * Converts data from $value to $storageFieldValue
      *
