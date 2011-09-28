@@ -40,12 +40,12 @@ class StorageFieldValue extends ValueObject
      *
      * @var int
      */
-    public $sortKeyInt;
+    public $sortKeyInt = 0;
 
     /**
      * Text sort key.
      *
      * @var string
      */
-    public $sortKeyString;
+    public $sortKeyString = '';
 }
