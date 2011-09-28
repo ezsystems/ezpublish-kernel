@@ -234,7 +234,10 @@ class Handler implements BaseUserHandler
      */
     public function removePolicy( $roleId, $policyId )
     {
-        $this->roleGateway->removePolicy( $roleId, $policyId );
+        // Each policy can only be associated to exactly one role. Thus it is
+        // sufficient to use the policyId for identification and just remove
+        // the policiy completely.
+        $this->roleGateway->removePolicy( $policyId );
     }
 
     /**

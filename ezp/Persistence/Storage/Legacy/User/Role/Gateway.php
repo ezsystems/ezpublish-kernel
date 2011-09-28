@@ -75,9 +75,16 @@ abstract class Gateway
     /**
      * Removes a policy from a role
      *
-     * @param mixed $roleId
      * @param mixed $policyId
      * @return void
      */
-    abstract public function removePolicy( $roleId, $policyId );
+    abstract public function removePolicy( $policyId );
+
+    /**
+     * Removes a policy from a role
+     *
+     * @param mixed $policyId
+     * @return void
+     */
+    abstract public function removePolicyLimitations( $policyId );
 }
