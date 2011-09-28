@@ -69,7 +69,8 @@ class MapperTest extends TestCase
         $this->assertStructsEqual(
             $struct,
             $content,
-            array( 'name', 'typeId', 'sectionId', 'ownerId' )
+            array( 'name', 'typeId', 'sectionId', 'ownerId', 'alwaysAvailable',
+            'remoteId', 'initialLanguageId', 'published', 'modified' )
         );
     }
 

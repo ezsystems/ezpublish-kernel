@@ -132,6 +132,12 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'remote_id' ),
             $q->bindValue( $content->remoteId )
         )->set(
+            $this->dbHandler->quoteColumn( 'modified' ),
+            $q->bindValue( $content->modified, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'published' ),
+            $q->bindValue( $content->published, null, \PDO::PARAM_INT )
+        )->set(
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
                 $this->generateLanguageMask(

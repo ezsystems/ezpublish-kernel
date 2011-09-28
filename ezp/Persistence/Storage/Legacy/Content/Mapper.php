@@ -62,6 +62,11 @@ class Mapper
         $content->typeId = $struct->typeId;
         $content->sectionId = $struct->sectionId;
         $content->ownerId = $struct->ownerId;
+        $content->alwaysAvailable = $struct->alwaysAvailable;
+        $content->remoteId = $struct->remoteId;
+        $content->initialLanguageId = $struct->initialLanguageId;
+        $content->published = $struct->published;
+        $content->modified = $struct->modified;
 
         return $content;
     }

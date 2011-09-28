@@ -84,9 +84,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'initial_language_id' => '1',
                     'remote_id' => 'some_remote_id',
                     'language_mask' => '1',
+                    'modified' => '456',
+                    'published' => '123',
                     // @FIXME
-                    // 'modified' => 0,
-                    // 'published' => 0,
                     // 'status' => 0,
                 ),
             ),
@@ -102,10 +102,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                         'initial_language_id',
                         'remote_id',
                         'language_mask',
-                        // FIXME: Not defined
-                        // 'modified',
-                        // FIXME: Not defined
-                        // 'published',
+                        'modified',
+                        'published',
                         // FIXME: Not defined
                         // 'status',
                     )
@@ -132,9 +130,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $struct->currentVersionNo = 2;
         $struct->initialLanguageId = 1;
         $struct->remoteId = 'some_remote_id';
-
-        // FIXME: Implement calculation (1st bit of language_mask)
         $struct->alwaysAvailable = true;
+        $struct->published = 123;
+        $struct->modified = 456;
 
         $struct->version = new Version();
         $struct->locations = array();
