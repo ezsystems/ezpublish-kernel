@@ -23,7 +23,7 @@ use ezp\Content\FieldType\Factory,
 class MediaTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * Path to test image
+     * Path to test media
      * @var string
      */
     protected $mediaPath;

@@ -19,6 +19,8 @@ use \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
 
 class Media implements Converter
 {
+    const FILESIZE_VALIDATOR_FQN = 'ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator';
+
     /**
      * Converts data from $value to $storageFieldValue.
      * Nothing has to be stored for eZMedia, as everything has to be stored in an external table.
@@ -50,9 +52,9 @@ class Media implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'] ) )
+        if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_FQN]['maxFileSize'] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators['FileSizeValidator']['maxFileSize'];
+            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FILESIZE_VALIDATOR_FQN]['maxFileSize'];
         }
 
         $storageDef->dataText1 = $fieldDef->fieldTypeConstraints->fieldSettings['mediaType'];
@@ -70,7 +72,7 @@ class Media implements Converter
         if ( !empty( $storageDef->dataInt1 ) )
         {
             $fieldDef->fieldTypeConstraints->validators = array(
-                'FileSizeValidator' => array( 'maxFileSize' => $storageDef->dataInt1 )
+                self::FILESIZE_VALIDATOR_FQN => array( 'maxFileSize' => $storageDef->dataInt1 )
             );
         }
 
