@@ -32,7 +32,8 @@ class UserHandlerTest extends TestCase
         $dbHandler = $this->getDatabaseHandler();
         return new User\Handler(
             new User\Gateway\EzcDatabase( $dbHandler ),
-            new User\Role\Gateway\EzcDatabase( $dbHandler )
+            new User\Role\Gateway\EzcDatabase( $dbHandler ),
+            new User\Mapper()
         );
     }
 
@@ -227,6 +228,87 @@ class UserHandlerTest extends TestCase
         $this->assertEquals(
             $role,
             $handler->loadRole( $role->id )
+        );
+    }
+
+    public function testLoadRoleWithGroups()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+
+        $role = $handler->createRole( $role );
+
+        $handler->assignRole( 23, $role->id );
+        $handler->assignRole( 42, $role->id );
+
+        $loaded = $handler->loadRole( $role->id );
+        $this->assertEquals(
+            array( 23, 42 ),
+            $loaded->groupIds
+        );
+    }
+
+    public function testLoadRoleWithPolicies()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+
+        $role = $handler->createRole( $role );
+
+        $policy = new Persistence\User\Policy();
+        $policy->module = 'foo';
+        $policy->function = 'bar';
+
+        $handler->addPolicy( $role->id, $policy );
+
+        $loaded = $handler->loadRole( $role->id );
+        $this->assertEquals(
+            array( new Persistence\User\Policy( array(
+                'id'       => 1,
+                'roleId'   => 1,
+                'module'   => 'foo',
+                'function' => 'bar',
+            ) ) ),
+            $loaded->policies
+        );
+    }
+
+    public function testLoadRoleWithPoliciesAndGroups()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+
+        $role = $handler->createRole( $role );
+
+        $policy = new Persistence\User\Policy();
+        $policy->module = 'foo';
+        $policy->function = 'bar';
+
+        $handler->addPolicy( $role->id, $policy );
+
+        $handler->assignRole( 23, $role->id );
+        $handler->assignRole( 42, $role->id );
+
+        $loaded = $handler->loadRole( $role->id );
+        $this->assertEquals(
+            array( new Persistence\User\Policy( array(
+                'id'       => 1,
+                'roleId'   => 1,
+                'module'   => 'foo',
+                'function' => 'bar',
+            ) ) ),
+            $loaded->policies
+        );
+
+        $this->assertEquals(
+            array( 23, 42 ),
+            $loaded->groupIds
         );
     }
 

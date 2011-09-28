@@ -37,16 +37,24 @@ class Handler implements BaseUserHandler
     protected $roleGateway;
 
     /**
+     * Mapper for user related objects
+     *
+     * @var \ezp\Persistence\Storage\Legacy\User\Mapper
+     */
+    protected $mapper;
+
+    /**
      * Construct from userGateway
      *
      * @param \ezp\Persistence\Storage\Legacy\User\Gateway $userGateway
      * @param \ezp\Persistence\Storage\Legacy\User\Role\Gateway $roleGateway
      * @return void
      */
-    public function __construct( Gateway $userGateway, RoleGateway $roleGateway )
+    public function __construct( Gateway $userGateway, RoleGateway $roleGateway, Mapper $mapper )
     {
         $this->userGateway = $userGateway;
         $this->roleGateway = $roleGateway;
+        $this->mapper      = $mapper;
     }
 
     /**
@@ -157,11 +165,7 @@ class Handler implements BaseUserHandler
             throw new \ezp\Base\Exception\NotFound( 'role', $roleId );
         }
 
-        $role = new Role();
-        $role->id       = $data[0]['id'];
-        $role->name     = $data[0]['name'];
-
-        return $role;
+        return $this->mapper->mapRole( $data );
     }
 
     /**
