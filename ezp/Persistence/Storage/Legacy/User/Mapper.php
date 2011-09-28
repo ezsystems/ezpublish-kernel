@@ -21,6 +21,26 @@ use ezp\Persistence\User,
 class Mapper
 {
     /**
+     * Map user data into user object
+     *
+     * @param array $data
+     * @return \ezp\Persistence\User
+     */
+    public function mapUser( array $data )
+    {
+        $user = new User();
+        $user->id            = $data[0]['contentobject_id'];
+        $user->login         = $data[0]['login'];
+        $user->email         = $data[0]['email'];
+        $user->passwordHash  = $data[0]['password_hash'];
+        $user->hashAlgorithm = $data[0]['password_hash_type'];
+        $user->isEnabled     = (bool) $data[0]['is_enabled'];
+        $user->maxLogin      = $data[0]['max_login'];
+
+        return $user;
+    }
+
+    /**
      * Map role data to a role
      *
      * @param array $data
