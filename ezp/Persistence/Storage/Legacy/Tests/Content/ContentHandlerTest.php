@@ -1089,6 +1089,56 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createCopy
+     */
+    public function testCreateCopy()
+    {
+        $handler = $this->getMock(
+            'ezp\Persistence\Storage\Legacy\Content\Handler',
+            array( 'create' ),
+            array(
+                ( $gatewayMock = $this->getGatewayMock() ),
+                $this->getLocationGatewayMock(),
+                $this->getTypeGatewayMock(),
+                ( $mapperMock = $this->getMapperMock() ),
+                new StorageRegistry()
+            )
+        );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadLatestPublishedData' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( array( 0 => array() ) ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractContentFromRows' )
+            ->with( $this->isType( 'array' ) )
+            ->will( $this->returnValue( array( new Content() ) ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'createCreateStructFromContent' )
+            ->with( $this->isInstanceOf(
+                'ezp\\Persistence\\Content'
+            ) )->will(
+                $this->returnValue( new CreateStruct() )
+            );
+
+        $handler->expects( $this->once() )
+            ->method( 'create' )
+            ->with( $this->isInstanceOf(
+                'ezp\\Persistence\\Content\\CreateStruct'
+            ) )->will( $this->returnValue( new Content() ) );
+
+        $result = $handler->createCopy( 23 );
+
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content',
+            $result
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Handler::setStatus
      */
     public function testSetStatus()

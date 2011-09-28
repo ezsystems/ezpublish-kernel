@@ -786,4 +786,16 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
     }
+
+    /**
+     * Loads data for the latest published version of the content identified by
+     * $contentId
+     *
+     * @param mixed $contentId
+     * @return array
+     */
+    public function loadLatestPublishedData( $contentId )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
 }

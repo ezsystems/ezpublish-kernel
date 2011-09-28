@@ -401,6 +401,28 @@ class Handler implements BaseContentHandler
     }
 
     /**
+     * Creates a copy of the latest published version of $contentId
+     *
+     * @param mixed $contentId
+     * @return \ezp\Persistence\Content
+     */
+    public function createCopy( $contentId )
+    {
+        $rows = $this->contentGateway->loadLatestPublishedData( $contentId );
+
+        if ( 0 == count( $rows ) )
+        {
+            throw new \ezp\Base\Exception\NotFound( 'content', $id );
+        }
+        $contentObjects = $this->mapper->extractContentFromRows( $rows );
+
+        $createStruct = $this->mapper->createCreateStructFromContent(
+            reset( $contentObjects )
+        );
+        return $this->create( $createStruct );
+    }
+
+    /**
      * Creates a relation between $sourceContentId in $sourceContentVersion
      * and $destinationContentId with a specific $type.
      *

@@ -340,4 +340,15 @@ class Mapper
         }
         return array_values( $versionList );
     }
+
+    /**
+     * createCreateStructFromContent
+     *
+     * @param Content $content
+     * @return void
+     */
+    public function createCreateStructFromContent( Content $content )
+    {
+        throw new \RuntimeException( 'Not implemented, yet.' );
+    }
 }
