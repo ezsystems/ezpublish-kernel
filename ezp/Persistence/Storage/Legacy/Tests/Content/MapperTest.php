@@ -325,6 +325,85 @@ class MapperTest extends TestCase
     }
 
     /**
+     * @return CreateStruct
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createCreateStructFromContent
+     */
+    public function testCreateCreateStructFromContent()
+    {
+        $mapper = $this->getMapper();
+
+        $content = $this->getContentExtractReference();
+
+        $struct = $mapper->createCreateStructFromContent( $content );
+
+        $this->assertInstanceOf(
+            'ezp\Persistence\Content\CreateStruct',
+            $struct
+        );
+        return array(
+            'original' => $content,
+            'result'   => $struct
+        );
+
+        // parentLocations
+        // fields
+    }
+
+    /**
+     * @return CreateStruct
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createCreateStructFromContent
+     * @depends testCreateCreateStructFromContent
+     */
+    public function testCreateCreateStructFromContentBasicProperties( $data )
+    {
+        $this->assertStructsEqual(
+            $data['original'],
+            $data['result'],
+            array( 'name', 'typeId', 'sectionId', 'ownerId', 'alwaysAvailable',
+            'remoteId', 'initialLanguageId', 'published', 'modified' )
+        );
+    }
+
+    /**
+     * @return CreateStruct
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createCreateStructFromContent
+     * @depends testCreateCreateStructFromContent
+     */
+    public function testCreateCreateStructFromContentParentLocationsEmpty( $data )
+    {
+        $this->assertEquals(
+            array(),
+            $data['result']->parentLocations
+        );
+    }
+
+    /**
+     * @return CreateStruct
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createCreateStructFromContent
+     * @depends testCreateCreateStructFromContent
+     */
+    public function testCreateCreateStructFromContentFieldCount( $data )
+    {
+        $this->assertEquals(
+            count( $data['original']->version->fields ),
+            count( $data['result']->fields )
+        );
+    }
+
+    /**
+     * @return CreateStruct
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createCreateStructFromContent
+     * @depends testCreateCreateStructFromContent
+     */
+    public function testCreateCreateStructFromContentFieldsNoId( $data )
+    {
+        foreach ( $data['result']->fields as $field )
+        {
+            $this->assertNull( $field->id );
+        }
+    }
+
+    /**
      * Returns a fixture of database rows for content extraction
      *
      * Fixture is stored in _fixtures/extract_content_from_rows.php

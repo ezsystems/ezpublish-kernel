@@ -342,13 +342,32 @@ class Mapper
     }
 
     /**
-     * createCreateStructFromContent
+     * Creates CreateStruct from $content
      *
-     * @param Content $content
-     * @return void
+     * @param ezp\Persistence\Content $content
+     * @return ezp\Persistence\Content\CreateStruct
      */
     public function createCreateStructFromContent( Content $content )
     {
-        throw new \RuntimeException( 'Not implemented, yet.' );
+        $struct = new CreateStruct();
+        $struct->name = $content->name;
+        $struct->typeId = $content->typeId;
+        $struct->sectionId = $content->sectionId;
+        $struct->ownerId = $content->ownerId;
+        $struct->parentLocations = array();
+        $struct->alwaysAvailable = $content->alwaysAvailable;
+        $struct->remoteId = $content->remoteId;
+        $struct->initialLanguageId = $content->initialLanguageId;
+        $struct->published = $content->published;
+        $struct->modified = $content->modified;
+
+        foreach ( $content->version->fields as $field )
+        {
+            $newField = clone $field;
+            $newField->id = null;
+            $struct->fields[] = $newField;
+        }
+
+        return $struct;
     }
 }
