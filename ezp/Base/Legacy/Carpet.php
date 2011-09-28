@@ -129,7 +129,7 @@ class Carpet
      * @return mixed
      * @throws \ezp\Base\Exception\MethodNotFound
      */
-    public function __callStatic( $method, array $arguments )
+    public static function __callStatic( $method, array $arguments )
     {
         if ( !method_exists( $this->className, $method) )
             throw new MethodNotFound( $method, $this->className );
