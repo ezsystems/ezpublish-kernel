@@ -114,6 +114,39 @@ class UserHandlerTest extends TestCase
         $handler->load( 1337 );
     }
 
+    public function testLoadUserByLogin()
+    {
+        $handler = $this->getUserHandler();
+        $handler->create( $user = $this->getValidUser() );
+
+        $this->assertEquals(
+            $user,
+            $handler->loadByLogin( $user->login )
+        );
+    }
+
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadUserByEmailNotFound()
+    {
+        $handler = $this->getUserHandler();
+        $handler->create( $user = $this->getValidUser() );
+
+        $handler->loadByLogin( $user->email );
+    }
+
+    public function testLoadUserByEmail()
+    {
+        $handler = $this->getUserHandler();
+        $handler->create( $user = $this->getValidUser() );
+
+        $this->assertEquals(
+            $user,
+            $handler->loadByLogin( $user->email, true )
+        );
+    }
+
     public function testCreateAndDeleteUser()
     {
         $handler = $this->getUserHandler();

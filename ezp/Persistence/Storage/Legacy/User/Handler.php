@@ -99,7 +99,14 @@ class Handler implements BaseUserHandler
      */
     public function loadByLogin( $login, $alsoMatchEmail = false )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $data = $this->userGateway->loadByLoginOrMail( $login, $alsoMatchEmail ? $login : null );
+
+        if ( empty( $data ) )
+        {
+            throw new \ezp\Base\Exception\NotFound( 'user', $login );
+        }
+
+        return $this->mapper->mapUser( $data );
     }
 
     /**

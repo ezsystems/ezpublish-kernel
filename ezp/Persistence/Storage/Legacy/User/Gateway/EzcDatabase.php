@@ -138,6 +138,55 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Load user with user ID.
+     *
+     * @param mixed $userId
+     * @return array
+     */
+    public function loadByLoginOrMail( $login, $email = null )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn( 'contentobject_id', 'ezuser' ),
+            $this->handler->quoteColumn( 'login', 'ezuser' ),
+            $this->handler->quoteColumn( 'email', 'ezuser' ),
+            $this->handler->quoteColumn( 'password_hash', 'ezuser' ),
+            $this->handler->quoteColumn( 'password_hash_type', 'ezuser' ),
+            $this->handler->quoteColumn( 'is_enabled', 'ezuser_setting' ),
+            $this->handler->quoteColumn( 'max_login', 'ezuser_setting' )
+        )->from(
+            $this->handler->quoteTable( 'ezuser' )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezuser_setting' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'user_id', 'ezuser_setting' ),
+                $this->handler->quoteColumn( 'contentobject_id', 'ezuser' )
+            )
+        )->where(
+            empty( $email ) ?
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'login', 'ezuser' ),
+                    $query->bindValue( $login )
+                ) :
+                $query->expr->lOr(
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'login', 'ezuser' ),
+                        $query->bindValue( $login )
+                    ),
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'email', 'ezuser' ),
+                        $query->bindValue( $email )
+                    )
+                )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Update the user information specified by the user struct
      *
      * @param User $user
