@@ -430,8 +430,10 @@ class RepositoryTest extends BaseServiceTest
         $content = $contentService->load( 1 );
         $this->assertFalse( $this->repository->canUser( 'assign', $section, $content ) );
 
+        $deniedBy = array();
         $content->getState( 'properties' )->ownerId = 10;
-        $this->assertTrue( $this->repository->canUser( 'assign', $section, $content ) );
+        $this->assertTrue( $this->repository->canUser( 'assign', $section, $content, $deniedBy ),
+                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
 
         $standardSection = $content->section;
         $this->assertFalse( $this->repository->canUser( 'assign', $standardSection, $content ) );
@@ -439,8 +441,10 @@ class RepositoryTest extends BaseServiceTest
         $content->getState( 'properties' )->sectionId = 2;
         $this->assertFalse( $this->repository->canUser( 'assign', $section, $content ) );
 
+        $deniedBy = array();
         $content->getState( 'properties' )->sectionId = 1;
-        $this->assertTrue( $this->repository->canUser( 'assign', $section, $content ) );
+        $this->assertTrue( $this->repository->canUser( 'assign', $section, $content, $deniedBy ),
+                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
 
         $content->getState( 'properties' )->typeId = 2;
         $this->assertFalse( $this->repository->canUser( 'assign', $section, $content ) );
