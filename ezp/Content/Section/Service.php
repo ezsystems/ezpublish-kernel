@@ -10,6 +10,7 @@
 namespace ezp\Content\Section;
 use ezp\Base\Exception\NotFound,
     ezp\Base\Exception\Logic,
+    ezp\Base\Exception\Forbidden,
     ezp\Base\Service as BaseService,
     ezp\Content,
     ezp\Content\Section,
@@ -29,6 +30,9 @@ class Service extends BaseService
      */
     public function create( Section $section )
     {
+        if ( !$this->repository->canUser( 'edit', $section ) )
+            throw new Forbidden( 'Section', 'edit' );
+
         $valueObject = $this->handler->sectionHandler()->create( $section->name, $section->identifier );
         return $section->setState( array( 'properties' => $valueObject ) );
     }
@@ -42,7 +46,10 @@ class Service extends BaseService
      */
     public function update( Section $section )
     {
-        $this->handler->sectionHandler()->update( $section->id, $section->identifier, $section->name );
+        if ( !$this->repository->canUser( 'edit', $section ) )
+            throw new Forbidden( 'Section', 'edit' );
+
+        $this->handler->sectionHandler()->update( $section->id, $section->name, $section->identifier );
         return $section;
     }
 
@@ -58,7 +65,12 @@ class Service extends BaseService
         $valueObject = $this->handler->sectionHandler()->load( $sectionId );
         if ( !$valueObject )
             throw new NotFound( 'Section', $sectionId );
-        return $this->buildDomainObject( $valueObject );
+
+        $section = $this->buildDomainObject( $valueObject );
+        //if ( !$this->repository->canUser( 'view', $section ) )
+            //throw new Forbidden( 'Section', 'view' );
+
+        return $section;
     }
 
     /**
@@ -73,7 +85,12 @@ class Service extends BaseService
         $valueObject = $this->handler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
         if ( !$valueObject )
             throw new NotFound( 'Section', $sectionIdentifier );
-        return $this->buildDomainObject( $valueObject );
+
+        $section = $this->buildDomainObject( $valueObject );
+        //if ( !$this->repository->canUser( 'view', $section ) )
+            //throw new Forbidden( 'Section', 'view' );
+
+        return $section;
     }
 
     /**
@@ -84,6 +101,9 @@ class Service extends BaseService
      */
     public function countAssignedContents( $sectionId )
     {
+        //if ( $this->repository->getUser()->hasAccessTo( 'section', 'view' ) !== true )
+            //throw new Forbidden( 'Section', 'view' );
+
         return $this->handler->sectionHandler()->assignmentsCount( $sectionId );
     }
 
@@ -96,9 +116,14 @@ class Service extends BaseService
      */
     public function assign( Section $section, Content $content )
     {
-        if ( $section->id === $content->section->id )
-            return;
+        if ( $section->id === $content->sectionId )
+            return;// @todo Throw exception?
+
+        if ( !$this->repository->canUser( 'assign', $section, $content ) )
+            throw new Forbidden( 'Section', 'view' );
+
         $this->handler->sectionHandler()->assign( $section->id, $content->id );
+        $content->setSection( $section );
     }
 
     /**
@@ -113,6 +138,9 @@ class Service extends BaseService
      */
     public function delete( Section $section )
     {
+        if ( !$this->repository->canUser( 'edit', $section ) )
+            throw new Forbidden( 'Section', 'edit' );
+
         if ( $this->countAssignedContents( $section->id ) > 0 )
         {
             throw new Logic(

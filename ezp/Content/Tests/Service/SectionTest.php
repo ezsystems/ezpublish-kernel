@@ -24,6 +24,7 @@ class SectionTest extends BaseServiceTest
      */
     public function testCreate()
     {
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
         $section = new ConcreteSection();
         $section->identifier = 'test';
         $section->name = 'Test';
@@ -36,12 +37,89 @@ class SectionTest extends BaseServiceTest
     }
 
     /**
+     * Test service function for creating sections
+     * @covers \ezp\Content\Section\Service::create
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCreateForbidden()
+    {
+        $section = new ConcreteSection();
+        $section->identifier = 'test';
+        $section->name = 'Test';
+
+        $service = $this->repository->getSectionService();
+        $newSection = $service->create( $section );
+    }
+
+    /**
+     * Test service function for loading sections
+     * @covers \ezp\Content\Section\Service::load
+     */
+    public function testLoad()
+    {
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
+        $section = new ConcreteSection();
+        $section->identifier = 'test';
+        $section->name = 'Test';
+
+        $service = $this->repository->getSectionService();
+        $section = $service->create( $section );
+        $newSection = $service->load( $section->id );
+        //self::assertEquals( $newSection->id, 2 );
+        self::assertEquals( $newSection->identifier, $section->identifier );
+        self::assertEquals( $newSection->name, $section->name );
+    }
+
+    /**
+     * Test service function for loading sections
+     *
+     * @covers \ezp\Content\Section\Service::load
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadNotFound()
+    {
+        $service = $this->repository->getSectionService();
+        $service->load( 999 );
+    }
+
+    /**
+     * Test service function for update sections
+     * @covers \ezp\Content\Section\Service::update
+     */
+    public function testUpdate()
+    {
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
+        $service = $this->repository->getSectionService();
+        $tempSection = $service->load( 1 );
+        $tempSection->identifier = 'test';
+        $tempSection->name = 'Test';
+        $service->update( $tempSection );
+        $section = $service->load( 1 );
+        self::assertEquals( $tempSection->identifier, $section->identifier );
+        self::assertEquals( $tempSection->name, $section->name );
+    }
+
+    /**
+     * Test service function for update sections
+     *
+     * @covers \ezp\Content\Section\Service::update
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testUpdateForbidden()
+    {
+        $service = $this->repository->getSectionService();
+        $section = $service->load( 1 );
+        $service->update( $section );
+    }
+
+    /**
      * Test service function for deleting sections
      *
      * @covers \ezp\Content\Section\Service::delete
      */
     public function testDelete()
     {
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
         $section = new ConcreteSection();
         $section->identifier = 'test';
         $section->name = 'Test';
@@ -59,10 +137,12 @@ class SectionTest extends BaseServiceTest
     }
 
     /**
-     * Test service function for loading sections
-     * @covers \ezp\Content\Section\Service::load
+     * Test service function for deleting sections
+     *
+     * @covers \ezp\Content\Section\Service::delete
+     * @expectedException \ezp\Base\Exception\Forbidden
      */
-    public function testLoad()
+    public function testDeleteForbidden()
     {
         $section = new ConcreteSection();
         $section->identifier = 'test';
@@ -70,22 +150,6 @@ class SectionTest extends BaseServiceTest
 
         $service = $this->repository->getSectionService();
         $section = $service->create( $section );
-        $newSection = $service->load( $section->id );
-        //self::assertEquals( $newSection->id, 2 );
-        self::assertEquals( $newSection->identifier, $section->identifier );
-        self::assertEquals( $newSection->name, $section->name );
-
-    }
-
-    /**
-     * Test service function for loading sections
-     *
-     * @expectedException \ezp\Base\Exception\NotFound
-     * @covers \ezp\Content\Section\Service::load
-     */
-    public function testLoadNotFound()
-    {
-        $service = $this->repository->getSectionService();
-        $service->load( 999 );
+        $service->delete( $section );
     }
 }
