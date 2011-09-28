@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Media\Handler as MediaFileHandler,
+use ezp\Content\FieldType\Media\Handler as MediaHandler,
+    ezp\Content\FieldType\Media\Type as MediaType,
     ezp\Io\BinaryFile,
     ezp\Io\SysInfo,
     ezp\Io\FileInfo,
@@ -43,7 +44,7 @@ class MediaHandlerTest extends \PHPUnit_Framework_TestCase
         BinaryRepository::setOverrideOptions( 'inmemory' );
         $this->mediaPath = __DIR__ . '/developer-got-hurt.m4v';
         $this->mediaFileInfo = new FileInfo( $this->mediaPath );
-        $this->handler = new MediaFileHandler;
+        $this->handler = new MediaHandler;
     }
 
     /**
@@ -53,6 +54,37 @@ class MediaHandlerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetPluginsPageByType()
     {
-        $this->markTestIncomplete();
+        self::assertSame(
+            MediaHandler::PLUGINSPAGE_FLASH,
+            $this->handler->getPluginspageByType( MediaType::TYPE_FLASH )
+        );
+        self::assertSame(
+            MediaHandler::PLUGINSPAGE_QUICKTIME,
+            $this->handler->getPluginspageByType( MediaType::TYPE_QUICKTIME )
+        );
+        self::assertSame(
+            MediaHandler::PLUGINSPAGE_REAL,
+            $this->handler->getPluginspageByType( MediaType::TYPE_REALPLAYER )
+        );
+        self::assertSame(
+            MediaHandler::PLUGINSPAGE_SILVERLIGHT,
+            $this->handler->getPluginspageByType( MediaType::TYPE_SILVERLIGHT )
+        );
+        self::assertSame(
+            MediaHandler::PLUGINSPAGE_WINDOWSMEDIA,
+            $this->handler->getPluginspageByType( MediaType::TYPE_WINDOWSMEDIA )
+        );
+        self::assertSame(
+            '',
+            $this->handler->getPluginspageByType( MediaType::TYPE_HTML5_VIDEO )
+        );
+        self::assertSame(
+            '',
+            $this->handler->getPluginspageByType( MediaType::TYPE_HTML5_AUDIO )
+        );
+        self::assertSame(
+            '',
+            $this->handler->getPluginspageByType( 'UnknownMediaType' )
+        );
     }
 }
