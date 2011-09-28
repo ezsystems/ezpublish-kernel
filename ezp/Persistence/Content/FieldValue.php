@@ -27,13 +27,15 @@ class FieldValue extends ValueObject
     public $data;
 
     /**
-     * Array of custom properties which are specific to the field type.
+     * Collection of custom properties which are specific to the field type.
      * Typically these properties are used to configure behaviour of field types
      * and normally set in the FieldDefinition on ContentTypes.
      *
      * Example: List of base choices in ezselection field type
      *
-     * @var array Key is the field setting name
+     * Settings are indexed by field setting name.
+     *
+     * @var \ezp\Content\FieldType\FieldSettings
      */
     public $fieldSettings;
 
