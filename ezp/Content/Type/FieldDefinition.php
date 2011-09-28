@@ -30,7 +30,7 @@ use ezp\Base\Model,
  * @property bool $isTranslatable
  * @property bool $isRequired
  * @property bool $isInfoCollector
- * @property array $fieldTypeConstraints
+ * @property-read \ezp\Content\FieldTypeConstraints $fieldTypeConstraints
  * @property \ezp\Content\FieldType\Value $defaultValue
  * @property-read \ezp\Content\Type $contentType ContentType object
  * @property-read \ezp\Content\FieldType $type FieldType object
@@ -52,7 +52,7 @@ class FieldDefinition extends Model
         'isTranslatable' => true,
         'isRequired' => true,
         'isInfoCollector' => true,
-        'fieldTypeConstraints' => true,
+        'fieldTypeConstraints' => false,
     );
 
     /**
