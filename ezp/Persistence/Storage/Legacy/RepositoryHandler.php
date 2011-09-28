@@ -260,7 +260,7 @@ class RepositoryHandler implements HandlerInterface
                     $this->getLocationMapper(),
                     $this->getFieldValueConverterRegistry()
                 ),
-                new Content\StorageRegistry( $this->getStorageRegistry() )
+                $this->getStorageRegistry()
             );
         }
         return $this->contentHandler;

@@ -50,6 +50,27 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
+     * Issue #97
+     *
+     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::contentHandler
+     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::getStorageRegistry
+     * @return void
+     */
+    public function testStorageRegistryReused()
+    {
+        $handler = $this->getRepositoryHandlerFixture();
+
+        $storageRegistry = $handler->getStorageRegistry();
+        $contentHandler = $handler->contentHandler();
+
+        $this->assertAttributeSame(
+            $storageRegistry,
+            'storageRegistry',
+            $contentHandler
+        );
+    }
+
+    /**
      * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::getFieldValueConverterRegistry
      * @return void
      */
