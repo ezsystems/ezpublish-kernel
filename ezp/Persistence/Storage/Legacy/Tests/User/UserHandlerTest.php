@@ -420,7 +420,7 @@ class UserHandlerTest extends TestCase
         );
     }
 
-    public function testAddPolicyToRole()
+    public function testAddPolicyToRoleLimitations()
     {
         $handler = $this->getUserHandler();
 
@@ -522,10 +522,17 @@ class UserHandlerTest extends TestCase
         $policy1 = new Persistence\User\Policy();
         $policy1->module = 'foo';
         $policy1->function = 'bar';
+        $policy1->limitations = array(
+            'Subtree' => array( '/1', '/1/2' ),
+            'Foo' => array( 'Bar' ),
+        );
 
         $policy2 = new Persistence\User\Policy();
         $policy2->module = 'foo';
         $policy2->function = 'blubb';
+        $policy2->limitations = array(
+            'Foo' => array( 'Blubb' ),
+        );
 
         $role = new Persistence\User\Role();
         $role->name = 'Test';
@@ -560,6 +567,32 @@ class UserHandlerTest extends TestCase
             ),
             $this->handler->createSelectQuery()->select( 'id', 'module_name', 'function_name', 'role_id' )->from( 'ezpolicy' ),
             'Expected a new policy.'
+        );
+    }
+
+    public function testRemovePolicyLimitations()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = $this->createRole();
+        $handler->removePolicy( $role->id, $role->policies[0]->id );
+
+        $this->assertQueryResult(
+            array( array( 3, 'Foo', 2 ) ),
+            $this->handler->createSelectQuery()->select( '*' )->from( 'ezpolicy_limitation' )
+        );
+    }
+
+    public function testRemovePolicyLimitationValues()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = $this->createRole();
+        $handler->removePolicy( $role->id, $role->policies[0]->id );
+
+        $this->assertQueryResult(
+            array( array( 4, 3, 'Blubb' ) ),
+           $this->handler->createSelectQuery()->select( '*' )->from( 'ezpolicy_limitation_value' )
         );
     }
 

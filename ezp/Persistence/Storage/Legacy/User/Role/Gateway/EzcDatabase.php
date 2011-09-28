@@ -421,24 +421,73 @@ class EzcDatabase extends Gateway
      */
     public function removePolicy( $roleId, $policyId )
     {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->aliasedColumn( $query, 'id', 'ezpolicy' ),
+            $this->handler->aliasedColumn( $query, 'id', 'ezpolicy_limitation' ),
+            $this->handler->aliasedColumn( $query, 'id', 'ezpolicy_limitation_value' )
+        )->from(
+            $this->handler->quoteTable( 'ezpolicy' )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezpolicy_limitation' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'policy_id', 'ezpolicy_limitation' ),
+                $this->handler->quoteColumn( 'id', 'ezpolicy' )
+            )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezpolicy_limitation_value' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'limitation_id', 'ezpolicy_limitation_value' ),
+                $this->handler->quoteColumn( 'id', 'ezpolicy_limitation' )
+            )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'id', 'ezpolicy' ),
+                    $query->bindValue( $policyId, null, \PDO::PARAM_INT )
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'role_id', 'ezpolicy' ),
+                    $query->bindValue( $roleId, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $policies    = array();
+        $limitations = array();
+        $values      = array();
+        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            $policies[]    = $row['ezpolicy_id'];
+            $limitations[] = $row['ezpolicy_limitation_id'];
+            $values[]      = $row['ezpolicy_limitation_value_id'];
+        }
+
         $query = $this->handler->createDeleteQuery();
         $query
             ->deleteFrom( $this->handler->quoteTable( 'ezpolicy' ) )
             ->where(
-                $query->expr->lAnd(
-                    $query->expr->eq(
-                        $this->handler->quoteColumn( 'id' ),
-                        $query->bindValue( $policyId, null, \PDO::PARAM_INT )
-                    ),
-                    $query->expr->eq(
-                        $this->handler->quoteColumn( 'role_id' ),
-                        $query->bindValue( $roleId, null, \PDO::PARAM_INT )
-                    )
-                )
+                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_unique( $policies ) )
             );
         $query->prepare()->execute();
 
-        // @TODO: Cascade on delete to policy limitations and limitation
-        // values.
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation' ) )
+            ->where(
+                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_unique( $limitations ) )
+            );
+        $query->prepare()->execute();
+
+        $query = $this->handler->createDeleteQuery();
+        $query
+            ->deleteFrom( $this->handler->quoteTable( 'ezpolicy_limitation_value' ) )
+            ->where(
+                $query->expr->in( $this->handler->quoteColumn( 'id' ), array_unique( $values ) )
+            );
+        $query->prepare()->execute();
     }
 }
