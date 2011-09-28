@@ -129,6 +129,72 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Load all roles associated with the given content objects
+     *
+     * @param array $contentIds
+     * @return array
+     */
+    public function loadRolesForContentObjects( $contentIds )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->aliasedColumn( $query, 'contentobject_id', 'ezuser_role' ),
+            $this->handler->aliasedColumn( $query, 'id', 'ezrole' ),
+            $this->handler->aliasedColumn( $query, 'name', 'ezrole' ),
+            $this->handler->aliasedColumn( $query, 'id', 'ezpolicy' ),
+            $this->handler->aliasedColumn( $query, 'function_name', 'ezpolicy' ),
+            $this->handler->aliasedColumn( $query, 'module_name', 'ezpolicy' ),
+            $this->handler->aliasedColumn( $query, 'identifier', 'ezpolicy_limitation' ),
+            $this->handler->aliasedColumn( $query, 'value', 'ezpolicy_limitation_value' )
+        )->from(
+            $query->alias(
+                $this->handler->quoteTable( 'ezuser_role' ),
+                $this->handler->quoteIdentifier( 'ezuser_role_search' )
+            )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezrole' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'id', 'ezrole' ),
+                $this->handler->quoteColumn( 'role_id', 'ezuser_role' )
+            )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezuser_role' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'role_id', 'ezuser_role' ),
+                $this->handler->quoteColumn( 'id', 'ezrole' )
+            )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezpolicy' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'role_id', 'ezpolicy' ),
+                $this->handler->quoteColumn( 'id', 'ezrole' )
+            )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezpolicy_limitation' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'policy_id', 'ezpolicy_limitation' ),
+                $this->handler->quoteColumn( 'id', 'ezpolicy' )
+            )
+        )->leftJoin(
+            $this->handler->quoteTable( 'ezpolicy_limitation_value' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'limitation_id', 'ezpolicy_limitation_value' ),
+                $this->handler->quoteColumn( 'id', 'ezpolicy_limitation' )
+            )
+        )->where(
+            $query->expr->in(
+                $this->handler->quoteColumn( 'contentobject_id', 'ezuser_role_search' ),
+                $contentIds
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Update role
      *
      * @param RoleUpdateStruct $role

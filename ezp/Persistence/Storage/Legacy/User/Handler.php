@@ -167,7 +167,9 @@ class Handler implements BaseUserHandler
      */
     public function loadRolesByGroupId( $groupId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $data = $this->roleGateway->loadRolesForContentObjects( array( $groupId ) );
+
+        return $this->mapper->mapRoles( $data );
     }
 
     /**

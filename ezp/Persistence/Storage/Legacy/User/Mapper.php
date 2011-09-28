@@ -81,16 +81,40 @@ class Mapper
             {
                 $role->policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] = array( $row['ezpolicy_limitation_value_value'] );
             }
-            else
+            elseif ( !in_array( $row['ezpolicy_limitation_value_value'], $role->policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] ) )
             {
                 $role->policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']][] = $row['ezpolicy_limitation_value_value'];
             }
         }
 
-        $role->groupIds = array_unique( array_filter( $role->groupIds ) );
+        // Remove dublicates and santitize arrays
         $role->policies = array_values( $role->policies );
+        $role->groupIds = array_values( array_unique( array_filter( $role->groupIds ) ) );
 
         return $role;
+    }
+
+    /**
+     * Map data for a set of roles
+     *
+     * @param array $data
+     * @return \ezp\Persistence\User\Role[]
+     */
+    public function mapRoles( array $data )
+    {
+        $roleData = array();
+        foreach ( $data as $row )
+        {
+            $roleData[$row['ezrole_id']][] = $row;
+        }
+
+        $roles = array();
+        foreach ( $roleData as $data )
+        {
+            $roles[] = $this->mapRole( $data );
+        }
+
+        return $roles;
     }
 }
 ?>
