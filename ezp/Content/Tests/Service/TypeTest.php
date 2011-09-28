@@ -151,8 +151,7 @@ class TypeTest extends BaseServiceTest
         $do->nameSchema = $do->urlAliasSchema = "<>";
         $do->isContainer = true;
         $do->initialLanguageId = 1;
-        $do->groups[] = $this->service->loadGroup( 1 );
-        $do = $this->service->create( $do );
+        $do = $this->service->create( $do, array( $this->service->loadGroup( 1 ) ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
         $this->assertEquals( TypeValue::STATUS_DRAFT, $do->status );
         $this->assertEquals( 1, count( $do->groups ) );
@@ -174,11 +173,11 @@ class TypeTest extends BaseServiceTest
         $do->nameSchema = $do->urlAliasSchema = "<>";
         $do->isContainer = true;
         $do->initialLanguageId = 1;
-        $do->groups[] = $this->service->loadGroup( 1 );
-        $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
+        $groups[] = $this->service->loadGroup( 1 );
+        $fields[] = $field = new FieldDefinition( $do, 'ezstring' );
         $field->identifier = 'title';
         $field->setDefaultValue( new TextLineValue( 'New Test' ) );
-        $do = $this->service->create( $do );
+        $do = $this->service->create( $do, $groups, $fields );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
         $this->assertEquals( 1, count( $do->groups ) );
         $this->assertEquals( 1, count( $do->fields ) );
@@ -194,7 +193,7 @@ class TypeTest extends BaseServiceTest
     {
         $do = new ConcreteType();
         $do->created = $do->modified = time();
-        $this->service->create( $do );
+        $this->service->create( $do, array() );
     }
 
     /**
@@ -212,7 +211,7 @@ class TypeTest extends BaseServiceTest
         $do->nameSchema = $do->urlAliasSchema = "<>";
         $do->isContainer = true;
         $do->initialLanguageId = 1;
-        $this->service->create( $do );
+        $this->service->create( $do, array() );
     }
 
     /**
@@ -229,8 +228,8 @@ class TypeTest extends BaseServiceTest
         $do->nameSchema = $do->urlAliasSchema = "<>";
         $do->isContainer = true;
         $do->initialLanguageId = 1;
-        $do->groups[] = $this->service->loadGroup( 1 );
-        $do = $this->service->createAndPublish( $do );
+        $groups[] = $this->service->loadGroup( 1 );
+        $do = $this->service->createAndPublish( $do, $groups );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
         $this->assertEquals( TypeValue::STATUS_DEFINED, $do->status );
         $this->assertEquals( 1, count( $do->groups ) );
@@ -252,11 +251,11 @@ class TypeTest extends BaseServiceTest
         $do->nameSchema = $do->urlAliasSchema = "<>";
         $do->isContainer = true;
         $do->initialLanguageId = 1;
-        $do->groups[] = $this->service->loadGroup( 1 );
-        $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
+        $groups[] = $this->service->loadGroup( 1 );
+        $fields[] = $field = new FieldDefinition( $do, 'ezstring' );
         $field->identifier = 'title';
         $field->setDefaultValue( new TextLineValue( 'New Test' ) );
-        $do = $this->service->createAndPublish( $do );
+        $do = $this->service->createAndPublish( $do, $groups, $fields );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $do );
         $this->assertEquals( 1, count( $do->groups ) );
         $this->assertEquals( 1, count( $do->fields ) );
@@ -272,7 +271,7 @@ class TypeTest extends BaseServiceTest
     {
         $do = new ConcreteType();
         $do->created = $do->modified = time();
-        $this->service->createAndPublish( $do );
+        $this->service->createAndPublish( $do, array() );
     }
 
     /**
@@ -290,7 +289,7 @@ class TypeTest extends BaseServiceTest
         $do->nameSchema = $do->urlAliasSchema = "<>";
         $do->isContainer = true;
         $do->initialLanguageId = 1;
-        $this->service->createAndPublish( $do );
+        $this->service->createAndPublish( $do, array() );
     }
 
     /**
@@ -508,8 +507,7 @@ class TypeTest extends BaseServiceTest
         $do->nameSchema = $do->urlAliasSchema = "<>";
         $do->isContainer = true;
         $do->initialLanguageId = 1;
-        $do->groups[] = $this->service->loadGroup( 1 );
-        $do = $this->service->create( $do );
+        $do = $this->service->create( $do, array( $this->service->loadGroup( 1 ) ) );
         $this->service->copy( 10, $do->id );
     }
 
@@ -539,11 +537,29 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::link
+     * @expectedException \ezp\Base\Exception\InvalidArgumentType
+     */
+    public function testLinkGroupNotCreated()
+    {
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+
+        $type = $this->service->load( 1 );
+        $this->service->link( $type, $newGroup );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::link
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLinkGroupNotFound()
     {
         $newGroup = new Group();
+        $newGroup->getState( 'properties' )->id = 999;
         $newGroup->created = $newGroup->modified = time();
         $newGroup->creatorId = $newGroup->modifierId = 14;
         $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
@@ -618,7 +634,7 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::unlink
-     * @expectedException \ezp\Base\Exception\BadRequest
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
      */
     public function testUnLinkTypeNotPartOfGroup()
     {
@@ -711,13 +727,27 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::removeFieldDefinition
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     */
+    public function testRemoveFieldDefinitionNotOnType()
+    {
+        $type = $this->service->load( 1 );
+        $field = $type->fields[0];
+        $this->service->removeFieldDefinition( $type, $field );
+        $this->service->removeFieldDefinition( $type, $field );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::removeFieldDefinition
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testRemoveFieldDefinitionWithUnExistingFieldDefinition()
     {
         $type = $this->service->load( 1 );
+        $type2 = $this->service->load( 1 );
         $this->service->removeFieldDefinition( $type, $type->fields[0] );
-        $this->service->removeFieldDefinition( $type, $type->fields[0] );
+        $this->service->removeFieldDefinition( $type2, $type2->fields[0] );
     }
 
     /**
@@ -755,9 +785,10 @@ class TypeTest extends BaseServiceTest
     public function testUpdateFieldDefinitionWithUnExistingFieldDefinition()
     {
         $type = $this->service->load( 1 );
-        $type->fields[0]->name = array( 'eng-GB' => 'New name' );
-        $this->service->removeFieldDefinition( $type, $type->fields[0] );
-        $this->service->updateFieldDefinition( $type, $type->fields[0] );
+        $field = $type->fields[0];
+        $field->name = array( 'eng-GB' => 'New name' );
+        $this->service->removeFieldDefinition( $type, $field );
+        $this->service->updateFieldDefinition( $type, $field );
     }
 
     /**
@@ -795,8 +826,8 @@ class TypeTest extends BaseServiceTest
         $do->nameSchema = $do->urlAliasSchema = "<>";
         $do->isContainer = true;
         $do->initialLanguageId = 1;
-        $do->groups[] = $this->service->loadGroup( 1 );
-        $do = $this->service->create( $do );
+        $groups[] = $this->service->loadGroup( 1 );
+        $do = $this->service->create( $do, $groups );
         $this->service->publish( $do );
         $published = $this->service->load( $do->id );
 
@@ -821,11 +852,11 @@ class TypeTest extends BaseServiceTest
         $do->nameSchema = $do->urlAliasSchema = "<>";
         $do->isContainer = true;
         $do->initialLanguageId = 1;
-        $do->groups[] = $this->service->loadGroup( 1 );
-        $do->fields[] = $field = new FieldDefinition( $do, 'ezstring' );
+        $groups[] = $this->service->loadGroup( 1 );
+        $fields[] = $field = new FieldDefinition( $do, 'ezstring' );
         $field->identifier = 'title';
         $field->setDefaultValue( new TextLineValue( 'New Test' ) );
-        $do = $this->service->create( $do );
+        $do = $this->service->create( $do, $groups, $fields );
         $this->service->publish( $do );
         $published = $this->service->load( $do->id );
 

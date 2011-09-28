@@ -15,6 +15,7 @@ use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\FieldType\Keyword\Value as KeywordValue,
     ezp\User\Proxy as ProxyUser,
     ezp\Base\Service\Container,
+    ezp\Base\Collection\ReadOnly,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -53,7 +54,7 @@ abstract class BaseContentTest extends PHPUnit_Framework_TestCase
             'title' => array( 'ezstring', new TextLineValue( 'New Article' ) ),
             'tags' => array( 'ezkeyword', new KeywordValue() )
         );
-        $fieldDefCollection = $this->contentType->getFields();
+        $fieldDefCollection = array();
         foreach ( $aFieldDefData as $identifier => $data )
         {
             $fieldDef = new FieldDefinition( $this->contentType, $data[0] );
@@ -61,6 +62,7 @@ abstract class BaseContentTest extends PHPUnit_Framework_TestCase
             $fieldDef->setDefaultValue( $data[1] );
             $fieldDefCollection[] = $fieldDef;
         }
+         $this->contentType->setState( array( 'fields' => new ReadOnly( $fieldDefCollection ) ) );
 
         $this->content = new ConcreteContent( $this->contentType, new ProxyUser( 10, $this->repository->getUserService() ) );
     }

@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Type;
 use ezp\Base\Model,
-    ezp\Base\Collection\Type as TypeCollection,
+    ezp\Base\Collection\ReadOnly as ReadOnlyCollection,
     ezp\Content\Type,
     ezp\Persistence\Content\Type as TypeValue;
 
@@ -32,7 +32,7 @@ use ezp\Base\Model,
  * @property int $initialLanguageId
  * @property bool $defaultAlwaysAvailable
  * @property-read int[] $groupIds
- * @property Type\FieldDefinition[] $fields Appending items after it has been created has no effect, use TypeService->addFieldDefinition()
+ * @property-read Type\FieldDefinition[] $fields Appending items after it has been created has no effect, use TypeService->addFieldDefinition()
  * @property-read Type\Group[] $groups Appended items after it has been created has no effect, use TypeService->link()
  */
 class Concrete extends Model implements Type
@@ -83,8 +83,8 @@ class Concrete extends Model implements Type
     public function __construct()
     {
         $this->properties = new TypeValue();
-        $this->fields = new TypeCollection( 'ezp\\Content\\Type\\FieldDefinition' );
-        $this->groups = new TypeCollection( 'ezp\\Content\\Type\\Group' );
+        $this->fields = new ReadOnlyCollection();
+        $this->groups = new ReadOnlyCollection();
     }
 
     /**

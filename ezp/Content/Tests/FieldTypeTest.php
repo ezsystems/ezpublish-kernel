@@ -194,14 +194,12 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
     {
         $contentType = new ConcreteType;
         $contentType->identifier = 'article';
-        $fields = $contentType->getFields();
         $fieldDef = new FieldDefinition( $contentType, 'ezstring' );
         $fieldDef->identifier = 'title';
         $fieldDef->setDefaultValue( new TextLineValue( 'New article' ) );
         $fieldDef->fieldTypeConstraints->validators = array(
             'SomeValidator' => array( 'foo' => 'bar' )
         );
-        $fields[] = $fieldDef;
 
         $validator = new StringLengthValidator();
         $validator->maxStringLength = 20;
@@ -225,11 +223,9 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
     {
         $contentType = new ConcreteType;
         $contentType->identifier = 'article';
-        $fields = $contentType->getFields();
         $fieldDef = new FieldDefinition( $contentType, 'ezstring' );
         $fieldDef->identifier = 'title';
         $fieldDef->setDefaultValue( new TextLineValue( 'New article' ) );
-        $fields[] = $fieldDef;
 
         $validator = $this->getMockForAbstractClass( 'ezp\\Content\\FieldType\\Validator' );
         $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef->fieldTypeConstraints, $validator );

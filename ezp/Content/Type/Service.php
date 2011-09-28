@@ -13,12 +13,16 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\PropertyNotFound,
+    ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Collection\LazyIdList,
     ezp\Base\Collection\Lazy,
     ezp\Base\Collection\Type as TypeCollection,
+    ezp\Base\Collection\ReadOnly as ReadOnlyCollection,
     ezp\Base\Model,
     ezp\Content\Type,
     ezp\Content\Type\Concrete as ConcreteType,
+    ezp\Content\Type\Group,
+    ezp\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type as TypeValue,
     ezp\Persistence\Content\Type\CreateStruct,
     ezp\Persistence\Content\Type\UpdateStruct,
@@ -107,35 +111,41 @@ class Service extends BaseService
      * Create a Content Type object
      *
      * @param \ezp\Content\Type $type
+     * @param \ezp\Content\Type\Group[] $linkGroups Required list of groups to link type with (must contain one)
+     * @param \ezp\Content\Type\Field[] $addFields Optional array of fields to add on new Type
      * @return \ezp\Content\Type
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a empty value
      * @throws \ezp\Base\Exception\Logic If a group is _not_ persisted, or if type / fields is
      */
-    public function create( Type $type )
+    public function create( Type $type, array $linkGroups, array $addFields = array() )
     {
         if ( $type->id )
             throw new Logic( "Type\\Service->create()", '$type seems to already be persisted' );
 
         $struct = new CreateStruct();
         $this->fillStruct( $struct, $type, array( 'fieldDefinitions', 'groupIds' ) );
-        foreach ( $type->fields as $fieldDefinition )
+        foreach ( $addFields as $fieldDefinition )
         {
+            if ( !$fieldDefinition instanceof FieldDefinition )
+                throw new Logic( "Type\\Service->create()", '$addFields needs to be instance of Type\\FieldDefinition' );
             if ( $fieldDefinition->id )
-                throw new Logic( "Type\\Service->create()", '->fields can not already be persisted' );
+                throw new Logic( "Type\\Service->create()", '$addFields can not already be persisted' );
 
             $fieldDefStruct = $fieldDefinition->getState( 'properties' );
             $fieldDefStruct->defaultValue = $fieldDefinition->type->toFieldValue();
             $struct->fieldDefinitions[] = $fieldDefStruct;
         }
 
-        if ( !isset( $type->groups[0] ) )
+        if ( !isset( $linkGroups[0] ) )
             throw new PropertyNotFound( 'groups', get_class( $type ) );
 
         // @todo Remove this if api is introduced on Type to add / remove fields / groups (but still verify values)
-        foreach ( $type->groups as $group )
+        foreach ( $linkGroups as $group )
         {
+            if ( !$group instanceof Group )
+                throw new Logic( "Type\\Service->create()", '$linkGroups needs to be instance of Type\\Group' );
             if ( !$group->id )
-                throw new Logic( "Type\\Service->create()", '->groups needs to be persisted before adding it to type' );
+                throw new Logic( "Type\\Service->create()", '$linkGroups needs to be persisted before adding it to type' );
 
             $struct->groupIds[] = $group->id;
         }
@@ -148,13 +158,15 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Type $type
      * @return \ezp\Content\Type
+     * @param \ezp\Content\Type\Group[] $linkGroups Required list of groups to link type with (must contain one)
+     * @param \ezp\Content\Type\Field[] $addFields Optional array of fields to add on new Type
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a empty value
      * @throws \ezp\Base\Exception\Logic If a group is _not_ persisted, or if type / fields is
      */
-    public function createAndPublish( Type $type )
+    public function createAndPublish( Type $type, array $linkGroups, array $addFields = array() )
     {
         $type->getState( 'properties' )->status = TypeValue::STATUS_DEFINED;
-        return $this->create( $type );
+        return $this->create( $type, $linkGroups, $addFields );
     }
 
     /**
@@ -270,11 +282,20 @@ class Service extends BaseService
      * @param \ezp\Content\Type $type
      * @param Group $group
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
-     * @throws \ezp\Base\Exception\BadRequest If $groupId is not an group on type or is the last one
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $group is not an group on type
+     * @throws \ezp\Base\Exception\BadRequest If $group is the last group on type
      */
     public function unlink( Type $type, Group $group )
     {
+        $index = $type->getGroups()->indexOf( $group );
+        if ( $index === false )
+            throw new InvalidArgumentValue( '$group', 'Not part of $type->groups' );
+
         $this->handler->contentTypeHandler()->unlink( $group->id, $type->id, $type->status );
+
+        $groups = $type->getGroups()->getArrayCopy();
+        unset( $groups[$index] );
+        $type->setState( array( 'groups' => new ReadOnlyCollection( $groups ) ) );
     }
 
     /**
@@ -283,10 +304,18 @@ class Service extends BaseService
      * @param \ezp\Content\Type $type
      * @param Group $group
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
+     * @throws \ezp\Base\Exception\InvalidArgumentType If $group does not have id value
      */
     public function link( Type $type, Group $group  )
     {
+        if ( !$group->id )
+            throw new InvalidArgumentType( '$group->id', 'int' );
+
         $this->handler->contentTypeHandler()->link( $group->id, $type->id, $type->status );
+
+        $groups = $type->getGroups()->getArrayCopy();
+        $groups[] = $group;
+        $type->setState( array( 'groups' => new ReadOnlyCollection( $groups ) ) );
     }
 
     /**
@@ -309,6 +338,11 @@ class Service extends BaseService
             $type->status,
             $fieldDefStruct
         );
+
+        // @todo deal with ordering
+        $fields = $type->getFields()->getArrayCopy();
+        $fields[] = $field;
+        $type->setState( array( 'fields' => new ReadOnlyCollection( $fields ) ) );
     }
 
     /**
@@ -317,14 +351,22 @@ class Service extends BaseService
      * @param \ezp\Content\Type $type
      * @param FieldDefinition $field
      * @throws \ezp\Base\Exception\NotFound If field/type is not found
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $field is not an group on type
      */
     public function removeFieldDefinition( Type $type, FieldDefinition $field  )
     {
+        $index = $type->getFields()->indexOf( $field );
+        if ( $index === false )
+            throw new InvalidArgumentValue( '$field', 'Not part of $type->fields' );
+
         $this->handler->contentTypeHandler()->removeFieldDefinition(
             $type->id,
             $type->status,
             $field->id
         );
+        $fields = $type->getFields()->getArrayCopy();
+        unset( $fields[$index] );
+        $type->setState( array( 'fields' => new ReadOnlyCollection( $fields ) ) );
     }
 
     /**
@@ -365,7 +407,7 @@ class Service extends BaseService
     protected function buildType( TypeValue $vo )
     {
         $type = new ConcreteType();
-        $fields = $type->getFields();
+        $fields = array();
         foreach ( $vo->fieldDefinitions as $fieldDefinitionVo )
         {
             $fieldDefinition = new FieldDefinition( $type, $fieldDefinitionVo->fieldType );
@@ -374,6 +416,7 @@ class Service extends BaseService
         $type->setState(
             array(
                 "properties" => $vo,
+                "fields" => new ReadOnlyCollection( $fields ),
                 "groups" => new LazyIdList(//@todo Use regular TypeCollection instead and Proxies
                     "ezp\\Content\\Type\\Group",
                     $vo->groupIds,
