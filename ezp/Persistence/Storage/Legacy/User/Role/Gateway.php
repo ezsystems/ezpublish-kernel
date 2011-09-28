@@ -73,6 +73,15 @@ abstract class Gateway
     abstract public function addPolicy( $roleId, Policy $policy );
 
     /**
+     * Add limitations to an existing policy
+     *
+     * @param int $policyId
+     * @param array $limitations
+     * @return void
+     */
+    abstract public function addPolicyLimitations( $policyId, array $limitations );
+
+    /**
      * Removes a policy from a role
      *
      * @param mixed $policyId
