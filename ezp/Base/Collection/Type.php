@@ -57,8 +57,17 @@ class Type extends ArrayObject implements Collection
             return false;
 
         foreach ( $this as $key => $value )
-            if ( $value->id === $item->id )
+        {
+            if ( $item->id === null )
+            {
+                if ( $value === $item )
+                    return $key;
+            }
+            else if ( $value->id === $item->id )
+            {
                 return $key;
+            }
+        }
         return false;
     }
 
