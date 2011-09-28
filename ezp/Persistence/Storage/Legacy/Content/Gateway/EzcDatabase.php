@@ -495,6 +495,40 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads data for the latest published version of the content identified by
+     * $contentId
+     *
+     * @param mixed $contentId
+     * @return array
+     */
+    public function loadLatestPublishedData( $contentId )
+    {
+        $query = $this->queryBuilder->createFindQuery();
+        $query->where(
+            $query->expr->lAnd(
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'id', 'ezcontentobject' ),
+                    $query->bindValue( $contentId )
+                ),
+                $query->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentobject_version' ),
+                    $this->dbHandler->quoteColumn( 'current_version', 'ezcontentobject' )
+                )
+            )
+        );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $rows = array();
+        while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
+        {
+            $rows[] = $row;
+        }
+
+        return $rows;
+    }
+
+    /**
      * Returns all version data for the given $contentId
      *
      * @param mixed $contentId
@@ -785,17 +819,5 @@ class EzcDatabase extends Gateway
 
         $statement = $query->prepare();
         $statement->execute();
-    }
-
-    /**
-     * Loads data for the latest published version of the content identified by
-     * $contentId
-     *
-     * @param mixed $contentId
-     * @return array
-     */
-    public function loadLatestPublishedData( $contentId )
-    {
-        throw new \RuntimeException( 'Not implemented, yet.' );
     }
 }

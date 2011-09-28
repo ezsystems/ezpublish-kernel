@@ -873,6 +873,24 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::loadLatestPublishedData
+     */
+    public function testLoadLatestPublishedData()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+
+        $this->assertEquals(
+            $gateway->loadLatestPublishedData( 10 ),
+            $gateway->load( 10, 2 )
+        );
+    }
+
+    /**
      * Counts the number of relations in the database.
      *
      * @param int $fromId
