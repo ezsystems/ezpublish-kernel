@@ -112,7 +112,7 @@ class Service extends BaseService
      * Create a Content Type object
      *
      * @param \ezp\Content\Type $type
-     * @param \ezp\Content\Type\Group[] $linkGroups Required list of groups to link type with (must contain one)
+     * @param \ezp\Content\Type\Group[] $linkGroups Required array of Type\Group objects to link type with (must contain one)
      * @param \ezp\Content\Type\Field[] $addFields Optional array of fields to add on new Type
      * @return \ezp\Content\Type
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a empty value
@@ -158,9 +158,9 @@ class Service extends BaseService
      * Create a Content Type object and publish in one operation
      *
      * @param \ezp\Content\Type $type
-     * @return \ezp\Content\Type
-     * @param \ezp\Content\Type\Group[] $linkGroups Required list of groups to link type with (must contain one)
+     * @param \ezp\Content\Type\Group[] $linkGroups Required array of Type\Group objects to link type with (must contain one)
      * @param \ezp\Content\Type\Field[] $addFields Optional array of fields to add on new Type
+     * @return \ezp\Content\Type
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a empty value
      * @throws \ezp\Base\Exception\Logic If a group is _not_ persisted, or if type / fields is
      */
