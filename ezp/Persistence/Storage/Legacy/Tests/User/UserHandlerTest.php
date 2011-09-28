@@ -312,6 +312,41 @@ class UserHandlerTest extends TestCase
         );
     }
 
+    public function testLoadRoleWithPoliciyLimitations()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+
+        $role = $handler->createRole( $role );
+
+        $policy = new Persistence\User\Policy();
+        $policy->module = 'foo';
+        $policy->function = 'bar';
+        $policy->limitations = array(
+            'Subtree' => array( '/1', '/1/2' ),
+            'Foo' => array( 'Bar' ),
+        );
+
+        $handler->addPolicy( $role->id, $policy );
+
+        $loaded = $handler->loadRole( $role->id );
+        $this->assertEquals(
+            array( new Persistence\User\Policy( array(
+                'id'          => 1,
+                'roleId'      => 1,
+                'module'      => 'foo',
+                'function'    => 'bar',
+                'limitations' => array(
+                    'Subtree' => array( '/1', '/1/2' ),
+                    'Foo' => array( 'Bar' ),
+                ),
+            ) ) ),
+            $loaded->policies
+        );
+    }
+
     public function testUpdateRole()
     {
         $handler = $this->getUserHandler();

@@ -72,7 +72,19 @@ class Mapper
                 ) );
             }
 
-            // @TODO: Handle policy limitations
+            if ( !$row['ezpolicy_limitation_identifier'] )
+            {
+                continue;
+            }
+
+            if ( !isset( $role->policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] ) )
+            {
+                $role->policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] = array( $row['ezpolicy_limitation_value_value'] );
+            }
+            else
+            {
+                $role->policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']][] = $row['ezpolicy_limitation_value_value'];
+            }
         }
 
         $role->groupIds = array_unique( array_filter( $role->groupIds ) );
