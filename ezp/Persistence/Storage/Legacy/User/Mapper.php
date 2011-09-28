@@ -41,6 +41,47 @@ class Mapper
     }
 
     /**
+     * Map policy data to an array of policies
+     *
+     * @param array $data
+     * @return \ezp\Persistence\User\Policy
+     */
+    public function mapPolicies( array $data )
+    {
+        $policies = array();
+        foreach ( $data as $row )
+        {
+            $policyId = $row['ezpolicy_id'];
+            if ( !isset( $policies[$policyId] ) &&
+                 ( $policyId !== null ) )
+            {
+                $policies[$policyId] = new Policy( array(
+                    'id'       => $row['ezpolicy_id'],
+                    'roleId'   => $row['ezrole_id'],
+                    'module'   => $row['ezpolicy_module_name'],
+                    'function' => $row['ezpolicy_function_name'],
+                ) );
+            }
+
+            if ( !$row['ezpolicy_limitation_identifier'] )
+            {
+                continue;
+            }
+
+            if ( !isset( $policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] ) )
+            {
+                $policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] = array( $row['ezpolicy_limitation_value_value'] );
+            }
+            elseif ( !in_array( $row['ezpolicy_limitation_value_value'], $policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] ) )
+            {
+                $policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']][] = $row['ezpolicy_limitation_value_value'];
+            }
+        }
+
+        return array_values( $policies );
+    }
+
+    /**
      * Map role data to a role
      *
      * @param array $data
@@ -59,37 +100,11 @@ class Mapper
             }
 
             $role->groupIds[] = $row['ezuser_role_contentobject_id'];
-
-            $policyId = $row['ezpolicy_id'];
-            if ( !isset( $role->policies[$policyId] ) &&
-                 ( $policyId !== null ) )
-            {
-                $role->policies[$policyId] = new Policy( array(
-                    'id'       => $row['ezpolicy_id'],
-                    'roleId'   => $row['ezrole_id'],
-                    'module'   => $row['ezpolicy_module_name'],
-                    'function' => $row['ezpolicy_function_name'],
-                ) );
-            }
-
-            if ( !$row['ezpolicy_limitation_identifier'] )
-            {
-                continue;
-            }
-
-            if ( !isset( $role->policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] ) )
-            {
-                $role->policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] = array( $row['ezpolicy_limitation_value_value'] );
-            }
-            elseif ( !in_array( $row['ezpolicy_limitation_value_value'], $role->policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] ) )
-            {
-                $role->policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']][] = $row['ezpolicy_limitation_value_value'];
-            }
         }
 
         // Remove dublicates and santitize arrays
-        $role->policies = array_values( $role->policies );
         $role->groupIds = array_values( array_unique( array_filter( $role->groupIds ) ) );
+        $role->policies = $this->mapPolicies( $data );
 
         return $role;
     }

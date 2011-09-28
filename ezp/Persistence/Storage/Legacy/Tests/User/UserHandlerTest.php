@@ -749,4 +749,30 @@ class UserHandlerTest extends TestCase
             $handler->loadRolesByGroupId( 23 )
         );
     }
+
+    public function testLoadPoliciesForUser()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/../Content/SearchHandler/_fixtures/full_dump.php' );
+        $handler = $this->getUserHandler();
+
+        $policies = $handler->loadPoliciesByUserId( 10 ); // Anonymous user
+
+        // Verify, that we received an array of Policy objects
+        $this->assertTrue(
+            array_reduce(
+                array_map(
+                    function ( $policy )
+                    {
+                        return $policy instanceof Persistence\User\Policy;
+                    },
+                    $policies
+                ),
+            function ( $a, $b )
+            {
+                return $a && $b;
+            },
+            true
+        ) );
+        $this->assertEquals( 47, count( $policies ) );
+    }
 }

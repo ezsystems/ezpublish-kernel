@@ -235,17 +235,6 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Returns the user policies associated with the user
-     *
-     * @param mixed $userId
-     * @return UserPolicy[]
-     */
-    public function loadPoliciesByUserId( $userId )
-    {
-
-    }
-
-    /**
      * Assign role to user with given limitation
      *
      * @param mixed $contentId

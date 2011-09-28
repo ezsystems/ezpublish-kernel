@@ -27,6 +27,11 @@ class EzcDatabase extends Gateway
     protected $handler;
 
     /**
+     * Internal type ID for user groups
+     */
+    const GROUP_TYPE_ID = 3;
+
+    /**
      * Construct from database handler
      *
      * @param EzcDbHandler $handler
@@ -193,6 +198,93 @@ class EzcDatabase extends Gateway
 
         return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
+
+    /**
+     * Returns the user policies associated with the user
+     *
+     * @param mixed $userId
+     * @return UserPolicy[]
+     */
+    public function loadPoliciesByUserId( $userId )
+    {
+        $groupIds = $this->fetchUserGroups( $userId );
+        $groupIds[] = $userId;
+
+        return $this->loadRolesForContentObjects( $groupIds );
+    }
+
+    /**
+     * Fetch all group IDs the user belongs to
+     *
+     * @param int $userId
+     * @return array
+     */
+    protected function fetchUserGroups( $userId )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' )
+        )->from(
+            $this->handler->quoteTable( 'ezcontentobject_tree' )
+        )->where(
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' ),
+                $query->bindValue( $userId )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $paths   = $statement->fetchAll( \PDO::FETCH_COLUMN );
+        $nodeIDs = array_unique(
+            array_reduce(
+                array_map(
+                    function ( $pathString )
+                    {
+                        return array_filter( explode( '/', $pathString ) );
+                    },
+                    $paths
+                ),
+                'array_merge_recursive',
+                array()
+            )
+        );
+
+        // Limit nodes to groups only
+        $query = $this->handler->createSelectQuery();
+        $query->select(
+            $this->handler->quoteColumn( 'id', 'ezcontentobject' )
+        )->from(
+            $this->handler->quoteTable( 'ezcontentobject_tree' )
+        )->rightJoin(
+            $this->handler->quoteTable( 'ezcontentobject' ),
+            $query->expr->eq(
+                $this->handler->quoteColumn( 'id', 'ezcontentobject' ),
+                $this->handler->quoteColumn( 'contentobject_id', 'ezcontentobject_tree' )
+            )
+        )->where(
+            $query->expr->lAnd(
+                $query->expr->in(
+                    $this->handler->quoteColumn( 'node_id', 'ezcontentobject_tree' ),
+                    $nodeIDs
+                ),
+                $query->expr->eq(
+                    $this->handler->quoteColumn( 'contentclass_id', 'ezcontentobject' ),
+                    // We use the integer type ID here, to minimize joins and
+                    // make use of existing keys. One might want to make this
+                    // "injectable".
+                    $query->bindValue( self::GROUP_TYPE_ID, null, \PDO::PARAM_INT )
+                )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_COLUMN );
+    }
+
 
     /**
      * Update role

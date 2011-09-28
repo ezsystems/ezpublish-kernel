@@ -245,8 +245,9 @@ class Handler implements BaseUserHandler
      */
     public function loadPoliciesByUserId( $userId )
     {
-        // @TODO: Specification of how this works is pending by eZ.
-        throw new RuntimeException( '@TODO: Implement' );
+        $data = $this->roleGateway->loadPoliciesByUserId( $userId );
+
+        return $this->mapper->mapPolicies( $data );
     }
 
     /**

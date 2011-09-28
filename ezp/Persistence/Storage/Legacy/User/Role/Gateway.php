@@ -26,6 +26,30 @@ abstract class Gateway
     abstract public function createRole( Role $role );
 
     /**
+     * Load a specified role by id
+     *
+     * @param mixed $roleId
+     * @return array
+     */
+    abstract public function loadRole( $roleId );
+
+    /**
+     * Load all roles associated with the given content objects
+     *
+     * @param array $contentIds
+     * @return array
+     */
+    abstract public function loadRolesForContentObjects( $contentIds );
+
+    /**
+     * Returns the user policies associated with the user
+     *
+     * @param mixed $userId
+     * @return UserPolicy[]
+     */
+    abstract public function loadPoliciesByUserId( $userId );
+
+    /**
      * Update role
      *
      * @param RoleUpdateStruct $role
