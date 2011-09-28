@@ -120,10 +120,10 @@ class MediaStorage implements Storage
         $q->select( '*' )
           ->from( $dbHandler->quoteTable( self::MEDIA_TABLE ) )
           ->where(
-              $e->eq( 'contentobject_attribute_id', $q->bindValue( $field->id, null, \PDO::PARAM_INT ) ),
-              $e->eq( 'version', $q->bindValue( $field->versionNo, null, \PDO::PARAM_INT ) )
+              $e->eq( 'contentobject_attribute_id', $q->bindValue( $fieldId, null, \PDO::PARAM_INT ) ),
+              $e->eq( 'version', $q->bindValue( $versionNo, null, \PDO::PARAM_INT ) )
           );
-        $statement = $query->prepare();
+        $statement = $q->prepare();
         $statement->execute();
         $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
         if ( !empty( $rows ) )
