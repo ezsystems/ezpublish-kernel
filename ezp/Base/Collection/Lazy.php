@@ -156,6 +156,17 @@ class Lazy extends TypeCollection
     }
 
     /**
+     * Return a copy of the internal array
+     *
+     * @return array
+     */
+    public function getArrayCopy()
+    {
+        $this->load();
+        return parent::getArrayCopy();
+    }
+
+    /**
      * Overrides count to lazy load items
      *
      * @internal

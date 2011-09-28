@@ -29,4 +29,11 @@ interface Collection extends Countable, ArrayAccess, Serializable
      * @return int|string|false False if nothing was found
      */
     public function indexOf( $item );
+
+    /**
+     * Return a copy of the internal array
+     *
+     * @return array
+     */
+    public function getArrayCopy();
 }

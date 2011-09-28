@@ -63,6 +63,24 @@ class LazyIdList extends ArrayObject implements Collection
     }
 
     /**
+     * Load all items
+     *
+     * @return void
+     */
+    protected function loadAll()
+    {
+        $fn = $this->method;
+        foreach ( parent::getArrayCopy() as $key => $value )
+        {
+            if ( $value instanceof $this->type )
+                continue;
+
+            $obj = $this->service->$fn( $value );
+            parent::offsetSet( $key, $obj );
+        }
+    }
+
+    /**
      * Overrides getIterator to lazy load items
      *
      * @internal
@@ -70,16 +88,19 @@ class LazyIdList extends ArrayObject implements Collection
      */
     public function getIterator()
     {
-        $fn = $this->method;
-        foreach ( $this->getArrayCopy() as $index => $value )
-        {
-            if ( $value instanceof $this->type )
-                continue;
-
-            $obj = $this->service->$fn( $value );
-            $this->offsetSet( $index, $obj );
-        }
+        $this->loadAll();
         return parent::getIterator();
+    }
+
+    /**
+     * Return a copy of the internal array
+     *
+     * @return array
+     */
+    public function getArrayCopy()
+    {
+        $this->loadAll();
+        return parent::getArrayCopy();
     }
 
     /**
