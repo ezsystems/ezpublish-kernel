@@ -55,6 +55,8 @@ class Carpet
      * @param array|null $constructorArgs Arguments to pass to the constructor.
      *                                    Set to null (default) if no argument is required
      * @return \ezp\Base\Legacy\Carpet
+     *
+     * @todo Fix inclusion of class files !
      */
     public function lift( array $constructorArgs = null )
     {
