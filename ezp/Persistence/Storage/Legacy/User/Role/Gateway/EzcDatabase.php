@@ -203,7 +203,55 @@ class EzcDatabase extends Gateway
             $this->handler->getSequenceName( 'ezpolicy', 'id' )
         );
 
-        // @TODO: Handle limitations -- this still has to be documented by eZ.
+        if ( !is_array( $policy->limitations ) )
+        {
+            // Handle the only valid non-array value "*" by not inserting
+            // anything. Still has not been documented by eZ Systems. So we
+            // assume this is the right way to handle it.
+            return $policy;
+        }
+
+        foreach ( $policy->limitations as $identifier => $values )
+        {
+            $query = $this->handler->createInsertQuery();
+            $query
+                ->insertInto( $this->handler->quoteTable( 'ezpolicy_limitation' ) )
+                ->set(
+                    $this->handler->quoteColumn( 'id' ),
+                    $this->handler->getAutoIncrementValue( 'ezpolicy_limitation', 'id' )
+                )->set(
+                    $this->handler->quoteColumn( 'identifier' ),
+                    $query->bindValue( $identifier )
+                )->set(
+                    $this->handler->quoteColumn( 'policy_id' ),
+                    $query->bindValue( $policy->id, null, \PDO::PARAM_INT )
+                );
+            $query->prepare()->execute();
+
+            $limitationId = $this->handler->lastInsertId(
+                $this->handler->getSequenceName( 'ezpolicy_limitation', 'id' )
+            );
+
+            foreach ( $values as $value )
+            {
+                $query = $this->handler->createInsertQuery();
+                $query
+                    ->insertInto( $this->handler->quoteTable( 'ezpolicy_limitation_value' ) )
+                    ->set(
+                        $this->handler->quoteColumn( 'id' ),
+                        $this->handler->getAutoIncrementValue( 'ezpolicy_limitation_value', 'id' )
+                    )->set(
+                        $this->handler->quoteColumn( 'value' ),
+                        $query->bindValue( $value )
+                    )->set(
+                        $this->handler->quoteColumn( 'limitation_id' ),
+                        $query->bindValue( $limitationId, null, \PDO::PARAM_INT )
+                    );
+                $query->prepare()->execute();
+            }
+        }
+
+        return $policy;
     }
 
     /**

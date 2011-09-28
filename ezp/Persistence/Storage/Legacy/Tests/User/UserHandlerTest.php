@@ -390,6 +390,63 @@ class UserHandlerTest extends TestCase
         $this->assertEquals( 1, $policy->id );
     }
 
+    public function testAddPolicyLimitations()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+        $handler->createRole( $role );
+
+        $policy = new Persistence\User\Policy();
+        $policy->module = 'foo';
+        $policy->function = 'bar';
+        $policy->limitations = array(
+            'Subtree' => array( '/1', '/1/2' ),
+            'Foo' => array( 'Bar' ),
+        );
+
+        $handler->addPolicy( $role->id, $policy );
+
+        $this->assertQueryResult(
+            array(
+                array( 1, 'Subtree', 1 ),
+                array( 2, 'Foo', 1 ),
+            ),
+            $this->handler->createSelectQuery()->select( 'id', 'identifier', 'policy_id' )->from( 'ezpolicy_limitation' ),
+            'Expected a new policy.'
+        );
+    }
+
+    public function testAddPolicyLimitationValues()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = new Persistence\User\Role();
+        $role->name = 'Test';
+        $handler->createRole( $role );
+
+        $policy = new Persistence\User\Policy();
+        $policy->module = 'foo';
+        $policy->function = 'bar';
+        $policy->limitations = array(
+            'Subtree' => array( '/1', '/1/2' ),
+            'Foo' => array( 'Bar' ),
+        );
+
+        $handler->addPolicy( $role->id, $policy );
+
+        $this->assertQueryResult(
+            array(
+                array( 1, '/1', 1 ),
+                array( 2, '/1/2', 1 ),
+                array( 3, 'Bar', 2 ),
+            ),
+            $this->handler->createSelectQuery()->select( 'id', 'value', 'limitation_id' )->from( 'ezpolicy_limitation_value' ),
+            'Expected a new policy.'
+        );
+    }
+
     protected function createRole()
     {
         $handler = $this->getUserHandler();
