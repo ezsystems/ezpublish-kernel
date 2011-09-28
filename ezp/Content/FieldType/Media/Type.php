@@ -10,11 +10,9 @@
 namespace ezp\Content\FieldType\Media;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\Media\Value,
     ezp\Content\Field,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Base\Exception\InvalidArgumentType,
-    ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Observable,
     ezp\Io\BinaryFile;
 
