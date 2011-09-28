@@ -596,6 +596,36 @@ class UserHandlerTest extends TestCase
         );
     }
 
+    public function testUpdatePolicies()
+    {
+        $handler = $this->getUserHandler();
+
+        $role = $this->createRole();
+
+        $policy = $role->policies[0];
+        $policy->limitations = array(
+            'new' => array( 'something' ),
+        );
+
+        $handler->updatePolicy( $policy );
+
+        $this->assertQueryResult(
+            array(
+                array( 3, 'Foo', 2 ),
+                array( 4, 'new', 1 ),
+            ),
+            $this->handler->createSelectQuery()->select( '*' )->from( 'ezpolicy_limitation' )
+        );
+
+        $this->assertQueryResult(
+            array(
+                array( 4, 3, 'Blubb' ),
+                array( 5, 4, 'something' ),
+            ),
+           $this->handler->createSelectQuery()->select( '*' )->from( 'ezpolicy_limitation_value' )
+        );
+    }
+
     public function testAddRoleToUser()
     {
         $handler = $this->getUserHandler();

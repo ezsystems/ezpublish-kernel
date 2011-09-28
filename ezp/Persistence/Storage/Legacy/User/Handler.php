@@ -222,7 +222,8 @@ class Handler implements BaseUserHandler
      */
     public function updatePolicy( Policy $policy )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $this->roleGateway->removePolicyLimitations( $policy->id );
+        $this->roleGateway->addPolicyLimitations( $policy->id, $policy->limitations );
     }
 
     /**
