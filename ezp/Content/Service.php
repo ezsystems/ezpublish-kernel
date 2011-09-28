@@ -279,7 +279,7 @@ class Service extends BaseService
      *
      * @param \ezp\Content $content
      * @param \ezp\Content\Version $srcVersion The source version to use. currentVersion is used if not specificed
-     * @return \ezp\Persistence\Content\Version
+     * @return \ezp\Content\Version
      * @throws \ezp\Base\Exception\NotFound
      * @todo Language support
      * @todo User support
