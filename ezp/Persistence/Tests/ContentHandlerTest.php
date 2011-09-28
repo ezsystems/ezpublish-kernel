@@ -271,9 +271,10 @@ class ContentHandlerTest extends HandlerTest
     {
         $struct = new UpdateStruct;
         $struct->id = $this->contentId;
-        $struct->versionNo = 2;
+        $struct->versionNo = 1;
         $struct->name = array( "eng-GB" => "New name", "fre-FR" => "Nouveau nom" );
-        $struct->userId = 10;
+        $struct->creatorId = 10;
+        $struct->ownerId = 10;
         $struct->fields[] = new Field(
             array(
                 "type" => "ezstring",

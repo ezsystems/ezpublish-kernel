@@ -31,10 +31,14 @@ class UpdateStruct extends ValueObject
     public $name;
 
     /**
-     * @var int Creator of the version
-     * @todo Rename to creatorId to be consistent
+     * @var int Creator of the new version
      */
-    public $userId;
+    public $creatorId;
+
+    /**
+     * @var int Owner id of the content object
+     */
+    public $ownerId;
 
     /**
      * Contains fields to be updated.
@@ -44,7 +48,7 @@ class UpdateStruct extends ValueObject
     public $fields = array();
 
     /**
-     * Publication date
+     * Publication date, only used by publish()
      * @var int Unix timestamp
      */
     public $published;

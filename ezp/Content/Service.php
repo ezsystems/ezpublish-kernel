@@ -91,20 +91,21 @@ class Service extends BaseService
      * Updates $content in the content repository
      *
      * @param \ezp\Content $content
+     * @param \ezp\Content\Version $version
      * @return \ezp\Content
      * @throws Exception\Validation If a validation problem has been found for $content
      */
-    public function update( Content $content )
+    public function update( Content $content, Version $version )
     {
         // @todo : Do any necessary actions to update $content in the content repository
         // go through all locations to create or update them?
 
         $struct = new UpdateStruct();
-        $this->fillStruct( $struct, $content, array( "versionNo", "userId", "fields" ) );
-        $struct->userId = $content->ownerId;
-        $struct->versionNo = $content->currentVersionNo;
+        $this->fillStruct( $struct, $content, array( "versionNo", "creatorId", "fields" ) );
+        $struct->creatorId = $version->creatorId;
+        $struct->versionNo = $version->versionNo;
 
-        foreach ( $content->getFields() as $field )
+        foreach ( $version->getFields() as $field )
         {
             $fieldStruct = $field->getState( 'properties' );
             $fieldStruct->value = $field->fieldDefinition->type->toFieldValue();
@@ -460,7 +461,8 @@ class Service extends BaseService
 
         $updateStruct = new UpdateStruct();
         $updateStruct->id = $content->id;
-        $updateStruct->userId = $version->creatorId;
+        $updateStruct->ownerId = $content->ownerId;
+        $updateStruct->creatorId = $version->creatorId;
         $updateStruct->versionNo = $version->versionNo;
         // @todo Get names using the appropriate call
         // $struct->name = ...

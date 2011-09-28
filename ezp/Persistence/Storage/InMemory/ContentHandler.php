@@ -264,6 +264,9 @@ class ContentHandler implements ContentHandlerInterface
             return null;
 
         $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $content->id, 'versionNo' => $version ) );
+        if ( !isset( $versions[0] ) )
+            throw new NotFound( "Version", "contentId:{$id}, versionNo:{$version}" );
+
         $versions[0]->fields = $this->backend->find( 'Content\\Field', array(
             "_contentId" => $content->id,
             "versionNo" => $version )
@@ -314,17 +317,29 @@ class ContentHandler implements ContentHandlerInterface
             "Content",
             $content->id,
             array(
-                // Is this the right place ?
-                "ownerId" => $content->userId,
-                // @todo Is this right ? Updating a version data doesn't mean we set the currentversionNo...
-                "currentVersionNo" => $content->versionNo,
+                "ownerId" => $content->ownerId,
                 "name" => $content->name,
             )
         );
 
-        // @todo update fields
+        $this->backend->updateByMatch(
+            'Content\\Version',
+            array( 'contentId' => $content->id, 'versionNo' => $content->versionNo ),
+            array(
+                "creatorId" => $content->creatorId,
+                "modified" => $content->modified,
+            )
+        );
+        foreach ( $content->fields as $field )
+        {
+            $this->backend->updateByMatch(
+                'Content\\Field',
+                array( "_contentId" => $content->id, "versionNo" => $content->versionNo ),
+                (array)$field
+            );
+        }
 
-        return $this->backend->load( "Content", $content->id );
+        return $this->load( $content->id, $content->versionNo );
     }
 
     /**

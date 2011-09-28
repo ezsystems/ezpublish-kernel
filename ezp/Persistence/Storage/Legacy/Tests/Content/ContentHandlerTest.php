@@ -933,7 +933,8 @@ class ContentHandlerTest extends TestCase
                 array(
                     'id' => 14,
                     'versionNo' => 4,
-                    'userId' => 14,
+                    'creatorId' => 14,
+                    'ownerId' => 14,
                     'fields' => array(
                         new Field(
                             array(

@@ -185,7 +185,7 @@ class ContentTest extends BaseServiceTest
         $user = $this->repository->getUserService()->load( 10 );
         $content->name = array( "eng-GB" => "New name" );
         $content->setOwner( $user );
-        $content = $this->service->update( $content );
+        $content = $this->service->update( $content, $content->versions[1] );
 
         self::assertInstanceOf( "ezp\\Content", $content );
         self::assertEquals( 1, $content->id, "ID not correctly set" );
