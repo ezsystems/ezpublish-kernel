@@ -29,6 +29,10 @@ class Value implements ValueInterface
      */
     public $text;
 
+    protected $properties = array(
+        "urlId" => null,
+    );
+
     /**
      * Construct a new Value object and initialize it with its $link and optional $text
      *
@@ -57,5 +61,25 @@ class Value implements ValueInterface
     public function __toString()
     {
         return $this->link;
+    }
+
+    /**
+     * Sets internal properties, mostly used by storage engine
+     *
+     * @internal
+     */
+    public function setProperty( $property, $value )
+    {
+        $this->properties[$property] = $value;
+    }
+
+    /**
+     * Gets internal properties, mostly used by storage engine
+     *
+     * @internal
+     */
+    public function getProperty( $property )
+    {
+        return $this->properties[$property];
     }
 }

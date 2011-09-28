@@ -22,17 +22,21 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezurl";
     const IS_SEARCHABLE = false;
 
+    protected $allowedSettings = array(
+        'defaultText' => ''
+    );
+
     /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
      * @todo Is a default value really possible with this type?
      *       Shouldn't an exception be used?
-     * @return \ezp\Content\FieldType\Url\Value
+     * @return \ezp\Content\FiedlType\Url\Value
      */
     protected function getDefaultValue()
     {
-        return new Value( "" );
+        return new Value( $this->fieldSettings["defaultText"] );
     }
 
     /**
@@ -61,9 +65,6 @@ class Type extends FieldType
      */
     protected function getSortInfo()
     {
-        return array(
-            'sort_key_string' => '',
-            'sort_key_int' => 0
-        );
+        return false;
     }
 }
