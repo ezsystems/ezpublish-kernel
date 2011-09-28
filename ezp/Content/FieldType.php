@@ -233,6 +233,9 @@ abstract class FieldType implements Observer
      *
      *     // Example for an int:
      *     // return array( 'sort_key_int' => 123 );
+     *
+     *     // Non sortable:
+     *     // return false;
      * }
      * </code>
      *
