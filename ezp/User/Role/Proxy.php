@@ -23,11 +23,18 @@ use ezp\Base\Proxy\Model as ModelProxy,
  */
 class Proxy extends ModelProxy implements Role
 {
+    /**
+     * @param mixed $id
+     * @param \ezp\User\Service $service
+     */
     public function __construct( $id, Service $service )
     {
         parent::__construct( $id, $service );
     }
 
+    /**
+     * @return void
+     */
     protected function lazyLoad()
     {
         if ( $this->proxiedObject === null )
