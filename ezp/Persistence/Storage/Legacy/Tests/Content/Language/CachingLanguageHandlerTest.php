@@ -71,7 +71,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::getById
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::getById
      */
     public function testGetById()
     {
@@ -94,7 +94,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::getByLocale
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::getByLocale
      */
     public function testGetByLocale()
     {
