@@ -113,8 +113,11 @@ class LazyIdList extends ArrayObject implements Collection
      */
     public function indexOf( $item )
     {
+        if ( !$item instanceof $this->type )
+            return false;
+
         foreach ( $this as $key => $value )
-            if ( $value === $item )
+            if ( $value->id === $item->id )
                 return $key;
         return false;
     }
@@ -154,7 +157,7 @@ class LazyIdList extends ArrayObject implements Collection
             throw new InvalidArgumentType( 'value', $this->type, $value );
 
         // stop if value is already in array
-        if ( in_array( $value, $this->getArrayCopy(), true ) )
+        if ( $this->indexOf( $value ) !== false )
             return;
 
         parent::offsetSet( $offset, $value );

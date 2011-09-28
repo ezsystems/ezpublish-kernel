@@ -53,8 +53,11 @@ class Type extends ArrayObject implements Collection
      */
     public function indexOf( $item )
     {
+        if ( !$item instanceof $this->type )
+            return false;
+
         foreach ( $this as $key => $value )
-            if ( $value === $item )
+            if ( $value->id === $item->id )
                 return $key;
         return false;
     }
