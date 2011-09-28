@@ -9,7 +9,6 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
 use ezp\Persistence\Fields\Storage,
-    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Content\FieldType\Media\Value as MediaValue,

@@ -8,18 +8,15 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Media\Type as MediaType,
+use ezp\Content\FieldType\Media\Type as MediaType,
     ezp\Content\FieldType\Media\Value as MediaTypeValue,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Media as MediaTypeConverter,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\MediaStorage as MediaTypeStorageConverter,
     ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Content\FieldType\FieldSettings,
-    ezp\Io\BinaryFile,
     ezp\Base\BinaryRepository;
 
 /**
