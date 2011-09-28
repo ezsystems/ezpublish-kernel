@@ -25,7 +25,7 @@ $fieldsData = array(
     'title' => array( 'ezstring', new TextLineValue( 'New Article' ) ),
     'tags' => array( 'ezkeyword', new KeywordValue() )
 );
-$fields = $contentType->getFields();
+$fields = array();
 foreach ( $fieldsData as $identifier => $data )
 {
     $field = new FieldDefinition( $contentType, $data[0] );
@@ -33,6 +33,8 @@ foreach ( $fieldsData as $identifier => $data )
     $field->setDefaultValue( $data[1] );
     $fields[] = $field;
 }
+// Internal method, in api TypeService create() or createAndPublish() should be used
+$contentType->setState( array( 'fields' => $fields ) );
 
 // Create section
 $section = new Section();
