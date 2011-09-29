@@ -281,6 +281,18 @@ class Repository
     }
 
     /**
+     * Get internal field type service.
+     *
+     * @internal
+     * @access private
+     * @return \ezp\Content\FieldType\Service
+     */
+    public function getInternalFieldTypeService()
+    {
+        return $this->service( 'ezp\\Content\\Fieldtype\\Service' );
+    }
+
+    /**
      * Begin transaction
      *
      * Begins an transaction, make sure you'll call commit or rollback when done,

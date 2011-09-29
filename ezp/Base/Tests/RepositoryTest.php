@@ -526,4 +526,15 @@ class RepositoryTest extends BaseServiceTest
             $this->repository->getUserService()
         );
     }
+
+    /**
+     * @covers \ezp\Base\Repository::getInternalFieldTypeService
+     */
+    public function testInternalFieldTypeService()
+    {
+        $this->assertInstanceOf(
+            '\\ezp\\Content\\FieldType\\Service',
+            $this->repository->getInternalFieldTypeService()
+        );
+    }
 }
