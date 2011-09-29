@@ -71,6 +71,21 @@ The methods ``getAutoIncrementValue`` and ``getSequenceName`` make sure the
 auto-increment handling works across multiple databases, which all implement
 different variations of auto increment.
 
+Search Handler
+==============
+
+The search handler itself contains some special features and concepts, which
+are described in this section.
+
+Searching involves filtering the content tree by the given recursive criterion
+tree. The criterion filtered search result is then sorted based on a set of
+given sort clauses.
+
+For both, criteria and sort clauses, a handler structure has been implemented,
+which implements handlers for each criterion or search clause. Additional
+handlers for those can be added in the repository handler. The handlers itself
+are fairly trivial and self explanatory.
+
 
 ..
    Local Variables:
