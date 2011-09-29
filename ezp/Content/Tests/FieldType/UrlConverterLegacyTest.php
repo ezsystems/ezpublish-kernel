@@ -40,12 +40,13 @@ class UrlConverterLegacyTest extends PHPUnit_Framework_TestCase
     public function testToStorageValue()
     {
         $value = new FieldValue;
-        $value->data = new UrlValue( "http://ez.no/" );
+        $text = "eZ Systems";
+        $value->data = new UrlValue( "http://ez.no/", $text );
         $value->sortKey = false;
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
-        self::assertSame( $value->data->text, $storageFieldValue->dataText );
+        self::assertSame( $text, $storageFieldValue->dataText );
     }
 
     /**
@@ -55,7 +56,11 @@ class UrlConverterLegacyTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldValue()
     {
+        $text = "A link's text";
+        $urlId = 842;
         $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue->dataText = $text;
+        $storageFieldValue->dataInt = $urlId;
         $storageFieldValue->sortKeyString = false;
         $storageFieldValue->sortKeyInt = false;
         $fieldValue = new FieldValue;
@@ -63,6 +68,8 @@ class UrlConverterLegacyTest extends PHPUnit_Framework_TestCase
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
         self::assertInstanceOf( "ezp\\Content\\FieldType\\Url\\Value", $fieldValue->data );
         self::assertFalse( $fieldValue->sortKey );
+        self::assertSame( $text, $fieldValue->data->text );
+        self::assertEquals( $urlId, $fieldValue->data->getState( "urlId" ) );
     }
 
     /**

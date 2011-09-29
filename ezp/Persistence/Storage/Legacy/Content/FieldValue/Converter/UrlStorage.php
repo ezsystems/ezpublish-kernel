@@ -32,7 +32,6 @@ class UrlStorage implements Storage
         else
             $urlId = $this->insert( $field->value->data->link, $dbHandler );
 
-        $data = $field->value->data;
         $q = $dbHandler->createUpdateQuery();
 
         $q->update(
