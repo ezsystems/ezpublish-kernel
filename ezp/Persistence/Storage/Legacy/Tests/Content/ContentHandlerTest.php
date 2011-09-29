@@ -270,6 +270,159 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createDraftFromVersion
+     */
+    public function testCreateDraftFromVersion()
+    {
+        $handler = $this->getPartlyMockedHandler( array( 'load' ) );
+
+        $mapperMock = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+        $storageHandlerMock = $this->getStorageHandlerMock();
+
+        $handler->expects( $this->once() )
+            ->method( 'load' )
+            ->with( 23, 2 )
+            ->will( $this->returnValue( $this->getContentFixtureForDraft() ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'createVersionForContent' )
+            ->with(
+                $this->isInstanceOf( 'ezp\\Persistence\\Content' ),
+                $this->equalTo( 3 )
+            )->will( $this->returnValue( new Version() ) );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'insertVersion' )
+            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Version' ) )
+            ->will( $this->returnValue( 42 ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'convertToStorageValue' )
+            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) )
+            ->will( $this->returnValue( new StorageFieldValue() ) );
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'insertNewField' )
+            ->with(
+                $this->isInstanceOf( 'ezp\\Persistence\\Content' ),
+                // $this->equalTo( $this->getContentFixtureForDraft() ),
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ),
+                $this->equalTo( new StorageFieldValue() )
+            )->will( $this->returnValue( 'field_123' ) );
+
+        $storageHandlerMock->expects( $this->once() )
+            ->method( 'storeFieldData' )
+            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) );
+
+        $result = $handler->createDraftFromVersion( 23, 2 );
+
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content',
+            $result
+        );
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content\\Version',
+            $result->version
+        );
+        $this->assertEquals(
+            42,
+            $result->version->id
+        );
+        $this->assertEquals(
+            1,
+            count( $result->version->fields )
+        );
+        $this->assertInstanceOf(
+            'ezp\\Persistence\\Content\\Field',
+            $result->version->fields[0]
+        );
+        $this->assertEquals(
+            'field_123',
+            $result->version->fields[0]->id
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
+     */
+    public function testLoad()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+        $storageHandlerMock = $this->getStorageHandlerMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'load' )
+            ->with(
+                $this->equalTo( 23 ),
+                $this->equalTo( 2 ),
+                $this->equalTo( array( 'eng-GB' ) )
+            )->will(
+                $this->returnValue( array( 42 ) )
+            );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractContentFromRows' )
+            ->with( $this->equalTo( array( 42 ) ) )
+            ->will( $this->returnValue( array( $this->getContentFixtureForDraft() ) ) );
+
+        $storageHandlerMock->expects( $this->once() )
+            ->method( 'getFieldData' )
+            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) );
+
+        $result = $handler->load( 23, 2, array( 'eng-GB' ) );
+
+        $this->assertEquals(
+            $result,
+            $this->getContentFixtureForDraft()
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
+     * @expectedException ezp\Base\Exception\NotFound
+     */
+    public function testLoadErrorNotFound()
+    {
+        $handler = $this->getContentHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'load' )
+            ->will(
+                $this->returnValue( array() )
+            );
+
+        $result = $handler->load( 23, 2, array( 'eng-GB' ) );
+    }
+
+    /**
+     * Returns a Content for {@link testCreateDraftFromVersion()}
+     *
+     * @return \ezp\Persistence\Content
+     */
+    protected function getContentFixtureForDraft()
+    {
+        $content = new Content();
+        $content->version = new Version();
+        $content->version->versionNo = 2;
+
+        $field = new Field();
+        $field->versionNo = 2;
+
+        $content->version->fields = array( $field );
+
+        return $content;
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Handler::update
      */
     public function testUpdateContent()
@@ -525,6 +678,27 @@ class ContentHandlerTest extends TestCase
             'ezp\\Persistence\\Content',
             $result
         );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createCopy
+     * @expectedException ezp\Base\Exception\NotFound
+     */
+    public function testCreateCopyErrorNotFound()
+    {
+        $handler = $this->getPartlyMockedHandler( array( 'create' ) );
+
+        $gatewayMock        = $this->getGatewayMock();
+        $mapperMock         = $this->getMapperMock();
+        $storageHandlerMock = $this->getStorageHandlerMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadLatestPublishedData' )
+            ->with( $this->equalTo( 23 ) )
+            ->will( $this->returnValue( array() ) );
+
+        $result = $handler->createCopy( 23 );
     }
 
     /**

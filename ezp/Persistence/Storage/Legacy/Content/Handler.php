@@ -410,7 +410,7 @@ class Handler implements BaseContentHandler
 
         if ( 0 == count( $rows ) )
         {
-            throw new \ezp\Base\Exception\NotFound( 'content', $id );
+            throw new \ezp\Base\Exception\NotFound( 'content', $contentId );
         }
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
 
