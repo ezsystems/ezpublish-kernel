@@ -22,4 +22,3 @@ interface FileResourceProvider
      */
     public function getResource( $clusterFile );
 }
-?>

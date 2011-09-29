@@ -13,7 +13,6 @@ use ezp\Base\Model,
     ezp\Content\Type\Group,
     ezp\Persistence\Content\Type\Group as GroupValue;
 
-
 /**
  * Concrete Group class ( Content Class Group )
  *

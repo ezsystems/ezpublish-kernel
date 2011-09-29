@@ -177,7 +177,7 @@ class TrashHandler implements TrashHandlerInterface
     {
         $vo = $this->load( $trashedId );
         $this->handler->contentHandler()->delete( $vo->contentId );
-        $this->backend->delete( 'Content\\Location\\Trashed' , $trashedId );
+        $this->backend->delete( 'Content\\Location\\Trashed', $trashedId );
     }
 
     /**

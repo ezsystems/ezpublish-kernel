@@ -64,7 +64,7 @@ class Backend
      */
     public function create( $type, array $data, $autoIncrement = true )
     {
-        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+        if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
         if ( $autoIncrement )
@@ -99,7 +99,7 @@ class Backend
      */
     public function load( $type, $id )
     {
-        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+        if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
         $return = null;
@@ -184,7 +184,7 @@ class Backend
      */
     public function updateByMatch( $type, array $match, array $data, $union = true )
     {
-        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+        if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
         // Make sure id isn't changed
@@ -231,7 +231,7 @@ class Backend
      */
     public function deleteByMatch( $type, array $match )
     {
-        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+        if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
         $found = false;
@@ -278,7 +278,7 @@ class Backend
      */
     protected function rawFind( $type, array $match = array(), array $joinInfo = array() )
     {
-        if ( !is_scalar($type) || !isset( $this->data[$type] ) )
+        if ( !is_scalar( $type ) || !isset( $this->data[$type] ) )
             throw new InvalidArgumentValue( 'type', $type );
 
         $items = array();
@@ -292,9 +292,11 @@ class Backend
                     if ( isset( $match[$joinProperty][$joinMatchKey] ) )
                         throw new Logic( "\$match[$joinProperty][$joinMatchKey]", "collision with match in \$joinInfo" );
                 }
-                $item[$joinProperty] = $this->rawFind( $joinItem['type'],
-                                                       $joinItem['match'],
-                                                       ( isset( $joinItem['sub'] ) ? $joinItem['sub'] : array() ) );
+                $item[$joinProperty] = $this->rawFind(
+                    $joinItem['type'],
+                    $joinItem['match'],
+                    ( isset( $joinItem['sub'] ) ? $joinItem['sub'] : array() )
+                );
             }
             if ( $this->match( $item, $match ) )
                 $items[] = $item;
@@ -442,18 +444,21 @@ class Backend
             if ( isset( $info['single'] ) && $info['single'] )
             {
                 $value =& $item->$property;
-                $value = $this->toValue( $info['type'],
-                                        $value[0],
-                                        ( isset( $info['sub'] ) ? $info['sub'] : array() ) );
+                $value = $this->toValue(
+                    $info['type'],
+                    $value[0],
+                    ( isset( $info['sub'] ) ? $info['sub'] : array() )
+                );
                 continue;
             }
 
             foreach ( $item->$property as &$joinItem )
             {
-                $joinItem = $this->toValue( $info['type'],
-                                        $joinItem,
-                                        ( isset( $info['sub'] ) ? $info['sub'] : array() ) );
-
+                $joinItem = $this->toValue(
+                    $info['type'],
+                    $joinItem,
+                    ( isset( $info['sub'] ) ? $info['sub'] : array() )
+                );
             }
         }
         return $item;

@@ -267,9 +267,12 @@ class ContentHandler implements ContentHandlerInterface
         if ( !isset( $versions[0] ) )
             throw new NotFound( "Version", "contentId:{$id}, versionNo:{$version}" );
 
-        $versions[0]->fields = $this->backend->find( 'Content\\Field', array(
-            "_contentId" => $content->id,
-            "versionNo" => $version )
+        $versions[0]->fields = $this->backend->find(
+            'Content\\Field',
+            array(
+                "_contentId" => $content->id,
+                "versionNo" => $version
+            )
         );
 
         $content->version = $versions[0];
@@ -352,8 +355,13 @@ class ContentHandler implements ContentHandlerInterface
         $versions = $this->backend->find( 'Content\\Version', array( 'contentId' => $contentId ) );
         foreach ( $versions as $version )
         {
-            $fields = $this->backend->find( 'Content\\Field', array( '_contentId' => $contentId,
-                                                                     'versionNo' => $version->versionNo ) );
+            $fields = $this->backend->find(
+                'Content\\Field',
+                array(
+                    '_contentId' => $contentId,
+                    'versionNo' => $version->versionNo
+                )
+            );
             foreach ( $fields as $field )
                 $this->backend->delete( 'Content\\Field', $field->id );
 
@@ -442,7 +450,7 @@ class ContentHandler implements ContentHandlerInterface
         if ( empty( $destinationContent ) )
             throw new NotFound( "Content", "id: {$relation->destinationContentId}" );
 
-        return $this->backend->create( "Content\\Relation", (array) $relation );
+        return $this->backend->create( "Content\\Relation", (array)$relation );
     }
 
     /**

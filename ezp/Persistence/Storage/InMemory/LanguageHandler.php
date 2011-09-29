@@ -48,7 +48,7 @@ class LanguageHandler implements LanguageHandlerInterface
      */
     public function create( CreateStruct $struct )
     {
-        return $this->backend->create( 'Content\\Language', (array) $struct );
+        return $this->backend->create( 'Content\\Language', (array)$struct );
     }
 
     /**
@@ -61,7 +61,7 @@ class LanguageHandler implements LanguageHandlerInterface
         $this->backend->update(
             'Content\\Language',
             $struct->id,
-            (array) $struct
+            (array)$struct
         );
     }
 

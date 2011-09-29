@@ -61,7 +61,7 @@ class UserHandler implements UserHandlerInterface
      */
     public function create( User $user )
     {
-        $userArr = (array) $user;
+        $userArr = (array)$user;
         return $this->backend->create( 'User', $userArr, false );
     }
 
@@ -108,7 +108,7 @@ class UserHandler implements UserHandlerInterface
      */
     public function update( User $user )
     {
-        $userArr = (array) $user;
+        $userArr = (array)$user;
         $this->backend->update( 'User', $userArr['id'], $userArr );
     }
 
@@ -131,7 +131,7 @@ class UserHandler implements UserHandlerInterface
      */
     public function createRole( Role $role )
     {
-        $roleArr = (array) $role;
+        $roleArr = (array)$role;
         $roleArr['policies'] = array();
         $newRole = $this->backend->create( 'User\\Role', $roleArr );
         foreach ( $role->policies as $policy )
@@ -153,9 +153,11 @@ class UserHandler implements UserHandlerInterface
         $list = $this->backend->find(
             'User\\Role',
             array( 'id' => $roleId ),
-            array( 'policies' => array(
-                'type' => 'User\\Policy',
-                'match' => array( 'roleId' => 'id' ) )
+            array(
+                'policies' => array(
+                    'type' => 'User\\Policy',
+                    'match' => array( 'roleId' => 'id' )
+                )
             )
         );
         if ( !$list )
@@ -184,9 +186,11 @@ class UserHandler implements UserHandlerInterface
         return $this->backend->find(
             'User\\Role',
             array( 'groupIds' => $groupId ),
-            array( 'policies' => array(
-                'type' => 'User\\Policy',
-                'match' => array( 'roleId' => 'id' ) )
+            array(
+                'policies' => array(
+                    'type' => 'User\\Policy',
+                    'match' => array( 'roleId' => 'id' )
+                )
             )
         );
     }
@@ -198,7 +202,7 @@ class UserHandler implements UserHandlerInterface
      */
     public function updateRole( RoleUpdateStruct $role )
     {
-        $roleArr = (array) $role;
+        $roleArr = (array)$role;
         $this->backend->update( 'User\\Role', $roleArr['id'], $roleArr );
     }
 
@@ -227,7 +231,7 @@ class UserHandler implements UserHandlerInterface
         if ( empty( $policy->limitations ) )
             throw new InvalidArgumentValue( '->limitations', $policy->limitations, get_class( $policy ) );
 
-        $policyArr = array( 'roleId' => $roleId ) + ( (array) $policy );
+        $policyArr = array( 'roleId' => $roleId ) + ( (array)$policy );
         return $this->backend->create( 'User\\Policy', $policyArr );
     }
 
@@ -244,7 +248,7 @@ class UserHandler implements UserHandlerInterface
         if ( empty( $policy->limitations ) )
             throw new InvalidArgumentValue( '->limitations', $policy->limitations, get_class( $policy ) );
 
-        $policyArr = (array) $policy;
+        $policyArr = (array)$policy;
         $this->backend->update( 'User\\Policy', $policyArr['id'], $policyArr, false );
     }
 
@@ -274,9 +278,11 @@ class UserHandler implements UserHandlerInterface
         $list = $this->backend->find(
             'Content',
             array( 'id' => $userId ),
-            array( 'locations' => array(
-                'type' => 'Content\\Location',
-                'match' => array( 'contentId' => 'id' ) )
+            array(
+                'locations' => array(
+                    'type' => 'Content\\Location',
+                    'match' => array( 'contentId' => 'id' )
+                )
             )
         );
 
@@ -298,9 +304,11 @@ class UserHandler implements UserHandlerInterface
                 $list = $this->backend->find(
                     'Content',
                     array( 'locations' => array( 'id' => $parentId ) ),
-                    array( 'locations' => array(
-                        'type' => 'Content\\Location',
-                        'match' => array( 'contentId' => 'id' ) )
+                    array(
+                        'locations' => array(
+                            'type' => 'Content\\Location',
+                            'match' => array( 'contentId' => 'id' )
+                        )
                     )
                 );
 
@@ -328,9 +336,11 @@ class UserHandler implements UserHandlerInterface
         $list = $this->backend->find(
             'User\\Role',
             array( 'groupIds' => $content->id ),
-            array( 'policies' => array(
-                'type' => 'User\\Policy',
-                'match' => array( 'roleId' => 'id' ) )
+            array(
+                'policies' => array(
+                    'type' => 'User\\Policy',
+                    'match' => array( 'roleId' => 'id' )
+                )
             )
         );
 
@@ -387,7 +397,7 @@ class UserHandler implements UserHandlerInterface
             throw new InvalidArgumentValue( '$roleId', $roleId );
 
         $role->groupIds[] = $groupId;
-        $this->backend->update( 'User\\Role', $roleId, (array) $role );
+        $this->backend->update( 'User\\Role', $roleId, (array)$role );
     }
 
     /**
@@ -414,7 +424,7 @@ class UserHandler implements UserHandlerInterface
             throw new InvalidArgumentValue( '$roleId', $roleId );
 
         $role->groupIds = array_values( array_diff( $role->groupIds, array( $groupId ) ) );
-        $this->backend->update( 'User\\Role', $roleId, (array) $role );
+        $this->backend->update( 'User\\Role', $roleId, (array)$role );
     }
 }
 ?>

@@ -290,7 +290,7 @@ class Repository
      */
     public function getInternalFieldTypeService()
     {
-        return $this->service( 'ezp\\Content\\Fieldtype\\Service' );
+        return $this->service( 'ezp\\Content\\FieldType\\Service' );
     }
 
     /**

@@ -135,7 +135,9 @@ class SectionTest extends BaseServiceTest
             $service->load( $section->id );
             self::fail( 'Section is still returned after being deleted' );
         }
-        catch ( NotFound $e ){}
+        catch ( NotFound $e )
+        {
+        }
     }
 
     /**

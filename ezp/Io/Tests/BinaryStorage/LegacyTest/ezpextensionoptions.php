@@ -19,4 +19,3 @@ class ezpExtensionOptions
 
     public $handlerParams;
 }
-?>

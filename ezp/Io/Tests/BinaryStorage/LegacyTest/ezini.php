@@ -61,4 +61,3 @@ class eZINI
 
     private $file;
 }
-?>

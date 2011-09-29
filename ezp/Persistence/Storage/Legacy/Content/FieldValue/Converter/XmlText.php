@@ -71,7 +71,7 @@ class XmlText implements Converter
 
         $settings = new FieldSettings;
 
-        if( !empty( $storageDefinion->dataInt1 ) )
+        if ( !empty( $storageDefinion->dataInt1 ) )
         {
             $settings['numRows'] = $storageDefinion->dataInt1;
         }

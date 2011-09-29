@@ -34,9 +34,11 @@ class SysInfo
      */
     public static function storageDirectory()
     {
-        return DirPath::clean( array(
-            self::varDirectory(),
-            Configuration::getInstance( 'site' )->get( 'FileSettings', 'StorageDir', 'storage' )
-        ) );
+        return DirPath::clean(
+            array(
+                self::varDirectory(),
+                Configuration::getInstance( 'site' )->get( 'FileSettings', 'StorageDir', 'storage' )
+            )
+        );
     }
 }

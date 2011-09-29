@@ -774,7 +774,6 @@ class TypeTest extends BaseServiceTest
         $this->assertEquals( $newGroup->id, $type->groups[0]->id );
     }
 
-
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::unlink

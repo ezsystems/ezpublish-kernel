@@ -77,11 +77,15 @@ class ContentHandlerRelationTest extends HandlerTest
 
         $this->lastRelationId = $this->repositoryHandler
             ->contentHandler()
-            ->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => 1,
-                                   'destinationContentId' => $this->contentId,
-                                   'type' => Relation::COMMON | Relation::EMBED
-                                   ) ) )->id;
+            ->addRelation(
+                new RelationCreateStruct(
+                    array(
+                        'sourceContentId' => 1,
+                        'destinationContentId' => $this->contentId,
+                        'type' => Relation::COMMON | Relation::EMBED
+                    )
+                )
+            )->id;
     }
 
     /**
@@ -113,11 +117,15 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testAddRelation1()
     {
-        $relation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => 14,
-                                   'destinationContentId' => 10,
-                                   'type' => Relation::COMMON
-                                   ) ) );
+        $relation = $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => 14,
+                    'destinationContentId' => 10,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
         $this->assertEquals( $this->lastRelationId + 1, $relation->id );
         $this->assertEquals( 14, $relation->sourceContentId );
         $this->assertNull( $relation->sourceContentVersion );
@@ -131,12 +139,16 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testAddRelation2()
     {
-        $relation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => 14,
-                                   'sourceContentVersion' => 1,
-                                   'destinationContentId' => 10,
-                                   'type' => Relation::COMMON
-                                   ) ) );
+        $relation = $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => 14,
+                    'sourceContentVersion' => 1,
+                    'destinationContentId' => 10,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
         $this->assertEquals( $this->lastRelationId + 1, $relation->id );
         $this->assertEquals( 14, $relation->sourceContentId );
         $this->assertEquals( 1, $relation->sourceContentVersion );
@@ -151,12 +163,16 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testAddRelationSourceDoesNotExist1()
     {
-        $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => 123456,
-                                   'sourceContentVersion' => null,
-                                   'destinationContentId' => 10,
-                                   'type' => Relation::COMMON
-                                   ) ) );
+        $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => 123456,
+                    'sourceContentVersion' => null,
+                    'destinationContentId' => 10,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
     }
 
     /**
@@ -167,12 +183,16 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testAddRelationSourceDoesNotExist2()
     {
-        $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => 14,
-                                   'sourceContentVersion' => 123456,
-                                   'destinationContentId' => 10,
-                                   'type' => Relation::COMMON
-                                   ) ) );
+        $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => 14,
+                    'sourceContentVersion' => 123456,
+                    'destinationContentId' => 10,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
     }
 
     /**

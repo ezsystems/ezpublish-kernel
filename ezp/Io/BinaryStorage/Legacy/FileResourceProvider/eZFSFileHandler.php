@@ -27,4 +27,3 @@ class eZFSFileHandler implements FileResourceProvider
         return fopen( $file->path, 'rb' );
     }
 }
-?>

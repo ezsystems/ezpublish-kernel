@@ -97,7 +97,7 @@ class LocationHandler implements LocationHandlerInterface
         if ( $newParentVO->parentId == 1 )
             $newPathIdentificationString = $this->getStrippedContentName( $vo );
         else
-            $newPathIdentificationString = $this->getPathIdentificationString ( $newParentVO ) . '/' . $this->getStrippedContentName( $vo );
+            $newPathIdentificationString = $this->getPathIdentificationString( $newParentVO ) . '/' . $this->getStrippedContentName( $vo );
 
         $this->backend->update(
             'Content\\Location',
@@ -132,13 +132,12 @@ class LocationHandler implements LocationHandlerInterface
     {
     }
 
-
     /**
      * @see ezp\Persistence\Content\Location\Handler
      */
     public function hide( $id )
     {
-        $this->backend->update( 'Content\\Location' , $id, array( 'hidden' => true, 'invisible' => true ) );
+        $this->backend->update( 'Content\\Location', $id, array( 'hidden' => true, 'invisible' => true ) );
 
         $locationVO = $this->backend->load( 'Content\\Location', $id );
         $this->backend->updateByMatch(

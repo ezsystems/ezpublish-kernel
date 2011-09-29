@@ -96,9 +96,11 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
             if ( $update )
             {
                 // @todo If groupIds is empty, content type and content of that type should be deleted?
-                $this->backend->update( 'Content\\Type',
-                                        $type->id,
-                                        array( 'groupIds' => $type->groupIds ) );
+                $this->backend->update(
+                    'Content\\Type',
+                    $type->id,
+                    array( 'groupIds' => $type->groupIds )
+                );
             }
         }
     }
@@ -130,9 +132,11 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         return $this->backend->find(
             'Content\\Type',
             array( 'groupIds' => $groupId, 'status' => $status ),
-            array( 'fieldDefinitions' => array(
-                'type' => 'Content\\Type\\FieldDefinition',
-                'match' => array( '_typeId' => 'id',  '_status' => 'status' ) )
+            array(
+                'fieldDefinitions' => array(
+                    'type' => 'Content\\Type\\FieldDefinition',
+                    'match' => array( '_typeId' => 'id', '_status' => 'status' )
+                )
             )
         );
     }
@@ -150,9 +154,11 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $type = $this->backend->find(
             'Content\\Type',
             array( 'id' => $contentTypeId, 'status' => $status ),
-            array( 'fieldDefinitions' => array(
-                'type' => 'Content\\Type\\FieldDefinition',
-                'match' => array( '_typeId' => 'id',  '_status' => 'status' ) )
+            array(
+                'fieldDefinitions' => array(
+                    'type' => 'Content\\Type\\FieldDefinition',
+                    'match' => array( '_typeId' => 'id', '_status' => 'status' )
+                )
             )
         );
 
@@ -174,9 +180,11 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $type = $this->backend->find(
             'Content\\Type',
             array( 'identifier' => $identifier, 'status' => Type::STATUS_DEFINED ),
-            array( 'fieldDefinitions' => array(
-                'type' => 'Content\\Type\\FieldDefinition',
-                'match' => array( '_typeId' => 'id',  '_status' => 'status' ) )
+            array(
+                'fieldDefinitions' => array(
+                    'type' => 'Content\\Type\\FieldDefinition',
+                    'match' => array( '_typeId' => 'id', '_status' => 'status' )
+                )
             )
         );
 
@@ -213,9 +221,11 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     public function update( $typeId, $status, UpdateStruct $contentType )
     {
         $contentTypeArr = (array)$contentType;
-        $this->backend->updateByMatch( 'Content\\Type',
-                                       array( 'id' => $typeId, 'status' => $status ),
-                                       $contentTypeArr );
+        $this->backend->updateByMatch(
+            'Content\\Type',
+            array( 'id' => $typeId, 'status' => $status ),
+            $contentTypeArr
+        );
     }
 
     /**
@@ -224,10 +234,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function delete( $contentTypeId, $status )
     {
-        $this->backend->deleteByMatch( 'Content\\Type',
-                                       array( 'id' => $contentTypeId, 'status' => $status ) );
-        $this->backend->deleteByMatch( 'Content\\Type\\FieldDefinition',
-                                           array( '_typeId' => $contentTypeId, '_status' => $status ) );
+        $this->backend->deleteByMatch(
+            'Content\\Type',
+            array( 'id' => $contentTypeId, 'status' => $status )
+        );
+        $this->backend->deleteByMatch(
+            'Content\\Type\\FieldDefinition',
+            array( '_typeId' => $contentTypeId, '_status' => $status )
+        );
     }
 
     /**
@@ -302,7 +316,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function unlink( $groupId, $contentTypeId, $status )
     {
-        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
+        $list = $this->backend->find( 'Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
         if ( !isset( $list[0] ) )
             throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
 
@@ -311,15 +325,19 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
             throw new BadRequest( "group:{$groupId}", "groupIds on Type:{$contentTypeId}" );
 
         if ( !isset( $type->groupIds[1] ) )
-            throw new BadRequest( 'groups', "Type: {$contentTypeId}.\n"
-                                          . "Can not remove last Group: {$groupId}, delete Type instead" );
+            throw new BadRequest(
+                'groups',
+                "Type: {$contentTypeId}.\nCan not remove last Group: {$groupId}, delete Type instead"
+            );
 
-        if ( !$this->backend->load('Content\\Type\\Group', $groupId ) )
+        if ( !$this->backend->load( 'Content\\Type\\Group', $groupId ) )
             throw new NotFound( 'Content\\Type\\Group', $groupId );
 
-        $this->backend->updateByMatch( 'Content\\Type',
-                            array( 'id' => $contentTypeId, 'status' => $status ),
-                            array( 'groupIds' => array_values( array_diff( $type->groupIds, array( $groupId ) ) ) ) );
+        $this->backend->updateByMatch(
+            'Content\\Type',
+            array( 'id' => $contentTypeId, 'status' => $status ),
+            array( 'groupIds' => array_values( array_diff( $type->groupIds, array( $groupId ) ) ) )
+        );
     }
 
     /**
@@ -333,7 +351,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function link( $groupId, $contentTypeId, $status )
     {
-        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
+        $list = $this->backend->find( 'Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
         if ( !isset( $list[0] ) )
             throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
 
@@ -341,12 +359,14 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         if ( in_array( $groupId, $type->groupIds ) )
             throw new BadRequest( "group:{$groupId}", "groupIds on Type:{$contentTypeId}" );
 
-        if ( !$this->backend->load('Content\\Type\\Group', $groupId ) )
+        if ( !$this->backend->load( 'Content\\Type\\Group', $groupId ) )
             throw new NotFound( 'Content\\Type\\Group', $groupId );
 
-        $this->backend->updateByMatch( 'Content\\Type',
-                               array( 'id' => $contentTypeId, 'status' => $status ),
-                               array( 'groupIds' => array_merge( $type->groupIds, array( $groupId ) ) ) );
+        $this->backend->updateByMatch(
+            'Content\\Type',
+            array( 'id' => $contentTypeId, 'status' => $status ),
+            array( 'groupIds' => array_merge( $type->groupIds, array( $groupId ) ) )
+        );
     }
 
     /**
@@ -365,7 +385,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
-        $list = $this->backend->find('Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
+        $list = $this->backend->find( 'Content\\Type', array( 'id' => $contentTypeId, 'status' => $status ) );
         if ( !isset( $list[0] ) )
             throw new NotFound( 'Content\\Type', "{$contentTypeId}' and status '{$status}" );
 
@@ -419,11 +439,15 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
     {
         $fieldDefinitionArr = (array)$fieldDefinition;
-        $updated = $this->backend->updateByMatch( 'Content\\Type\\FieldDefinition', array(
-                                                                           '_typeId' => $contentTypeId,
-                                                                           '_status' => $status,
-                                                                           'id' => $fieldDefinition->id,
-                                                                         ), $fieldDefinitionArr );
+        $updated = $this->backend->updateByMatch(
+            'Content\\Type\\FieldDefinition',
+            array(
+                '_typeId' => $contentTypeId,
+                '_status' => $status,
+                'id' => $fieldDefinition->id,
+            ),
+            $fieldDefinitionArr
+        );
         if ( !$updated )
             throw new NotFound( 'Content\\Type\\FieldDefinition', $fieldDefinition->id );
     }

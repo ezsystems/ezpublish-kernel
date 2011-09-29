@@ -85,7 +85,6 @@ class SearchHandler extends Handler
             throw new Exception( "Logical error: \$match is empty" );
         }
 
-
         $list = $this->backend->find(
             'Content',
             $match,
@@ -190,9 +189,9 @@ class SearchHandler extends Handler
                 {
                     if ( $criterion->target === $criterion::OWNER && !isset( $match['ownerId'] ) )
                         $match['ownerId'] = $criterion->value[0];
-                    elseif ( $criterion->target === $criterion::CREATOR && !isset( $match['version']['creatorId'] ) )
+                    else if ( $criterion->target === $criterion::CREATOR && !isset( $match['version']['creatorId'] ) )
                         $match['version']['creatorId'] = $criterion->value[0];
-                    //elseif ( $criterion->target === $criterion::MODIFIER && !isset( $match['version']['creatorId'] ) )
+                    //else if ( $criterion->target === $criterion::MODIFIER && !isset( $match['version']['creatorId'] ) )
                         //$match['version']['creatorId'] = $criterion->value[0];
                     continue;
                 }

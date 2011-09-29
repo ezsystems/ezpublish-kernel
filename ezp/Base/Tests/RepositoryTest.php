@@ -81,8 +81,10 @@ class RepositoryTest extends BaseServiceTest
         $this->repository->setUser( $service->load( 14 ) );
 
         $contentService = $this->repository->getContentService();
-        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
-        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+        // Users/Editors
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );
+        // save some code by moving anonymous user to new location
+        $this->repository->getLocationService()->move(
             $contentService->load( 10 )->locations[0],
             $contentService->load( $userGroup->id )->locations[0]
         );
@@ -130,8 +132,10 @@ class RepositoryTest extends BaseServiceTest
         $anonymous = $this->repository->setUser( $service->load( 14 ) );
 
         $contentService = $this->repository->getContentService();
-        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
-        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+        // Users/Editors
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );
+        // save some code by moving anonymous user to new location
+        $this->repository->getLocationService()->move(
             $contentService->load( 10 )->locations[0],
             $contentService->load( $userGroup->id )->locations[0]
         );
@@ -179,8 +183,10 @@ class RepositoryTest extends BaseServiceTest
         $anonymous = $this->repository->setUser( $service->load( 14 ) );
 
         $contentService = $this->repository->getContentService();
-        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
-        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+        // Users/Editors
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );
+        // save some code by moving anonymous user to new location
+        $this->repository->getLocationService()->move(
             $contentService->load( 10 )->locations[0],
             $contentService->load( $userGroup->id )->locations[0]
         );
@@ -217,16 +223,20 @@ class RepositoryTest extends BaseServiceTest
 
         $deniedBy = array();
         $parent->getContent()->getState( 'properties' )->ownerId = 10;
-        $this->assertTrue( $this->repository->canUser( 'create', $content, $parent, $deniedBy ),
-                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
+        $this->assertTrue(
+            $this->repository->canUser( 'create', $content, $parent, $deniedBy ),
+            "Access denied by following limitations: " . var_export( $deniedBy, true )
+        );
 
         $content->getState( 'properties' )->sectionId = 2;
         $this->assertFalse( $this->repository->canUser( 'create', $content, $parent ) );
 
         $deniedBy = array();
         $content->getState( 'properties' )->sectionId = 1;
-        $this->assertTrue( $this->repository->canUser( 'create', $content, $parent, $deniedBy ),
-                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
+        $this->assertTrue(
+            $this->repository->canUser( 'create', $content, $parent, $deniedBy ),
+            "Access denied by following limitations: " . var_export( $deniedBy, true )
+        );
 
         $content->getState( 'properties' )->typeId = 2;
         $this->assertFalse( $this->repository->canUser( 'create', $content, $parent ) );
@@ -255,8 +265,10 @@ class RepositoryTest extends BaseServiceTest
         $anonymous = $this->repository->setUser( $service->load( 14 ) );
 
         $contentService = $this->repository->getContentService();
-        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
-        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+        // Users/Editors
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );
+        // save some code by moving anonymous user to new location
+        $this->repository->getLocationService()->move(
             $contentService->load( 10 )->locations[0],
             $contentService->load( $userGroup->id )->locations[0]
         );
@@ -288,16 +300,20 @@ class RepositoryTest extends BaseServiceTest
 
         $deniedBy = array();
         $content->getState( 'properties' )->ownerId = 10;
-        $this->assertTrue( $this->repository->canUser( 'edit', $content, null, $deniedBy ),
-                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
+        $this->assertTrue(
+            $this->repository->canUser( 'edit', $content, null, $deniedBy ),
+            "Access denied by following limitations: " . var_export( $deniedBy, true )
+        );
 
         $content->getState( 'properties' )->sectionId = 2;
         $this->assertFalse( $this->repository->canUser( 'edit', $content ) );
 
         $deniedBy = array();
         $content->getState( 'properties' )->sectionId = 1;
-        $this->assertTrue( $this->repository->canUser( 'edit', $content, null, $deniedBy ),
-                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
+        $this->assertTrue(
+            $this->repository->canUser( 'edit', $content, null, $deniedBy ),
+            "Access denied by following limitations: " . var_export( $deniedBy, true )
+        );
 
         $content->getState( 'properties' )->typeId = 2;
         $this->assertFalse( $this->repository->canUser( 'edit', $content ) );
@@ -313,8 +329,10 @@ class RepositoryTest extends BaseServiceTest
         $anonymous = $this->repository->setUser( $service->load( 14 ) );
 
         $contentService = $this->repository->getContentService();
-        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
-        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+        // Users/Editors
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );
+        // save some code by moving anonymous user to new location
+        $this->repository->getLocationService()->move(
             $contentService->load( 10 )->locations[0],
             $contentService->load( $userGroup->id )->locations[0]
         );
@@ -353,7 +371,7 @@ class RepositoryTest extends BaseServiceTest
                 array( 'limitation' => 'Node', 'values' => array( '2' ) ),
                 array( 'limitation' => 'Owner', 'values' => array( '2' ) ),
                 array( 'limitation' => 'Group', 'values' => array( '1' ) ),
-             ),
+            ),
             $deniedBy
         );
     }
@@ -395,8 +413,10 @@ class RepositoryTest extends BaseServiceTest
         $anonymous = $this->repository->setUser( $service->load( 14 ) );
 
         $contentService = $this->repository->getContentService();
-        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );// Users/Editors
-        $this->repository->getLocationService()->move(// save some code by moving anonymous user to new location
+        // Users/Editors
+        $userGroup = $service->createGroup( $service->loadGroup( 4 ), 'Editors' );
+        // save some code by moving anonymous user to new location
+        $this->repository->getLocationService()->move(
             $contentService->load( 10 )->locations[0],
             $contentService->load( $userGroup->id )->locations[0]
         );
@@ -432,8 +452,10 @@ class RepositoryTest extends BaseServiceTest
 
         $deniedBy = array();
         $content->getState( 'properties' )->ownerId = 10;
-        $this->assertTrue( $this->repository->canUser( 'assign', $section, $content, $deniedBy ),
-                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
+        $this->assertTrue(
+            $this->repository->canUser( 'assign', $section, $content, $deniedBy ),
+            "Access denied by following limitations: " . var_export( $deniedBy, true )
+        );
 
         $standardSection = $content->section;
         $this->assertFalse( $this->repository->canUser( 'assign', $standardSection, $content ) );
@@ -443,8 +465,10 @@ class RepositoryTest extends BaseServiceTest
 
         $deniedBy = array();
         $content->getState( 'properties' )->sectionId = 1;
-        $this->assertTrue( $this->repository->canUser( 'assign', $section, $content, $deniedBy ),
-                           "Access denied by following limitations: " . var_export( $deniedBy, true ) );
+        $this->assertTrue(
+            $this->repository->canUser( 'assign', $section, $content, $deniedBy ),
+            "Access denied by following limitations: " . var_export( $deniedBy, true )
+        );
 
         $content->getState( 'properties' )->typeId = 2;
         $this->assertFalse( $this->repository->canUser( 'assign', $section, $content ) );

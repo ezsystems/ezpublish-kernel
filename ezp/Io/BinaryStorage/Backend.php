@@ -68,4 +68,3 @@ interface Backend
      */
     public function getFileContents( $path );
 }
-?>

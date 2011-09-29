@@ -18,4 +18,3 @@ use ezp\Io\BinaryStorage\Legacy\FileResourceProvider;
 class eZFS2FileHandler extends eZFSFileHandler
 {
 }
-?>

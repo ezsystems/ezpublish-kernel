@@ -422,9 +422,9 @@ class Handler implements BaseContentTypeHandler
             $this->updateHandler->updateContentObjects( $fromType, $toType );
             $this->updateHandler->deleteOldType( $fromType );
         }
+        // If no old type is found, no updates are necessary to it
         catch ( Exception\TypeNotFound $e )
         {
-            // If no old type is found, no updates are necessary to it
         }
 
         $this->updateHandler->publishNewType( $toType, 0 );

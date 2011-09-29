@@ -38,19 +38,19 @@ class Type extends FieldType
         'ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator'
     );
 
+    /*
+     * mediaType can be one of those values:
+     *   - flash
+     *   - quick_time
+     *   - real_player
+     *   - siverlight
+     *   - windows_media_player
+     *   - html5_video
+     *   - html5_audio
+     *
+     * Default value for ezmedia is a media of HTML5 video type
+     */
     protected $allowedSettings = array(
-        /*
-         * mediaType can be one of those values:
-         *   - flash
-         *   - quick_time
-         *   - real_player
-         *   - siverlight
-         *   - windows_media_player
-         *   - html5_video
-         *   - html5_audio
-         *
-         * Default value for ezmedia is a media of HTML5 video type
-         */
         'mediaType' => self::TYPE_HTML5_VIDEO
     );
 

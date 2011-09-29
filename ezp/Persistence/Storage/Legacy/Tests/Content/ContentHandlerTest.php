@@ -107,10 +107,10 @@ class ContentHandlerTest extends TestCase
     {
         $handler = $this->getContentHandler();
 
-        $mapperMock         = $this->getMapperMock();
-        $gatewayMock        = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
         $storageHandlerMock = $this->getStorageHandlerMock();
-        $locationMock       = $this->getLocationGatewayMock();
+        $locationMock = $this->getLocationGatewayMock();
 
         $mapperMock->expects( $this->once() )
             ->method( 'createContentFromCreateStruct' )
@@ -231,7 +231,7 @@ class ContentHandlerTest extends TestCase
     {
         $handler = $this->getPartlyMockedHandler( array( 'update' ) );
 
-        $gatewayMock  = $this->getGatewayMock();
+        $gatewayMock = $this->getGatewayMock();
         $locationMock = $this->getLocationGatewayMock();
 
         $updateStruct = new UpdateStruct(
@@ -399,7 +399,7 @@ class ContentHandlerTest extends TestCase
         $handler = $this->getContentHandler();
 
         $gatewayMock = $this->getGatewayMock();
-        $mapperMock  = $this->getMapperMock();
+        $mapperMock = $this->getMapperMock();
 
         $gatewayMock->expects( $this->once() )
             ->method( 'listVersions' )
@@ -427,9 +427,9 @@ class ContentHandlerTest extends TestCase
     {
         $handler = $this->getContentHandler();
 
-        $gatewayMock         = $this->getGatewayMock();
+        $gatewayMock = $this->getGatewayMock();
         $locationHandlerMock = $this->getLocationGatewayMock();
-        $storageHandlerMock  = $this->getStorageHandlerMock();
+        $storageHandlerMock = $this->getStorageHandlerMock();
 
         $gatewayMock->expects( $this->once() )
             ->method( 'getAllLocationIds' )
@@ -487,8 +487,8 @@ class ContentHandlerTest extends TestCase
     {
         $handler = $this->getPartlyMockedHandler( array( 'create' ) );
 
-        $gatewayMock        = $this->getGatewayMock();
-        $mapperMock         = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+        $mapperMock = $this->getMapperMock();
         $storageHandlerMock = $this->getStorageHandlerMock();
 
         $gatewayMock->expects( $this->once() )
@@ -503,17 +503,21 @@ class ContentHandlerTest extends TestCase
 
         $mapperMock->expects( $this->once() )
             ->method( 'createCreateStructFromContent' )
-            ->with( $this->isInstanceOf(
-                'ezp\\Persistence\\Content'
-            ) )->will(
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content'
+                )
+            )->will(
                 $this->returnValue( new CreateStruct() )
             );
 
         $handler->expects( $this->once() )
             ->method( 'create' )
-            ->with( $this->isInstanceOf(
-                'ezp\\Persistence\\Content\\CreateStruct'
-            ) )->will( $this->returnValue( new Content() ) );
+            ->with(
+                $this->isInstanceOf(
+                    'ezp\\Persistence\\Content\\CreateStruct'
+                )
+            )->will( $this->returnValue( new Content() ) );
 
         $result = $handler->createCopy( 23 );
 
