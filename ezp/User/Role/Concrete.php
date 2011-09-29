@@ -66,6 +66,8 @@ class Concrete extends Model implements Role
         return array(
             'module' => 'role',
             // @todo Add functions (with group limitations?)
+            // suggested functions can be found in service permission checks, but
+            // might only need view, edit and assign like on section
         );
     }
 

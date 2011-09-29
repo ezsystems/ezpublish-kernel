@@ -392,6 +392,7 @@ class ServiceTest extends BaseServiceTest
     public function testCreateRole()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $do = $service->createRole( $this->getRole() );
         self::assertEquals( 'test', $do->name );
         self::assertEquals( array(), $do->groupIds );
@@ -403,6 +404,19 @@ class ServiceTest extends BaseServiceTest
     }
 
     /**
+     * Test service function for creating role
+     *
+     * @covers \ezp\User\Service::createRole
+     * @expectedException \ezp\Base\Exception\Forbidden
+     * @group userService
+     */
+    public function testCreateRoleForbidden()
+    {
+        $service = $this->repository->getUserService();
+        $service->createRole( $this->getRole() );
+    }
+
+    /**
      * Test service function for loading role
      *
      * @covers \ezp\User\Service::loadRole
@@ -411,6 +425,7 @@ class ServiceTest extends BaseServiceTest
     public function testLoadRole()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $do = $service->createRole( $this->getRole() );
 
         $role = $service->loadRole( $do->id );
@@ -440,6 +455,7 @@ class ServiceTest extends BaseServiceTest
     public function testLoadRolesByGroupId()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         self::assertEquals( array(), $service->loadRolesByGroupId( 4 ) );
 
         $group = $service->loadGroup( 4 );//Users
@@ -492,6 +508,7 @@ class ServiceTest extends BaseServiceTest
     public function testUpdateRole()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $do = $service->createRole( $this->getRole() );
 
         $do->name = 'updated';
@@ -500,6 +517,31 @@ class ServiceTest extends BaseServiceTest
         $role = $service->loadRole( $do->id );
         self::assertEquals( $do->id, $role->id );
         self::assertEquals( 'updated', $do->name );
+    }
+
+    /**
+     * Test service function for updating role
+     *
+     * @covers \ezp\User\Service::updateRole
+     * @expectedException \ezp\Base\Exception\Forbidden
+     * @group userService
+     */
+    public function testUpdateRoleForbidden()
+    {
+        $service = $this->repository->getUserService();
+        $anon = $this->repository->setUser( $service->load( 14 ) );
+        try
+        {
+            $do = $service->createRole( $this->getRole() );
+            $this->repository->setUser( $anon );
+        }
+        catch ( \Exception $e )
+        {
+            self::fail( "Did not except any exceptions here, got: " . $e );
+        }
+
+        $do->name = 'updated';
+        $service->updateRole( $do );
     }
 
     /**
@@ -512,6 +554,7 @@ class ServiceTest extends BaseServiceTest
     public function testDeleteRole()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         try
         {
             $do = $service->createRole( $this->getRole() );
@@ -519,7 +562,7 @@ class ServiceTest extends BaseServiceTest
         }
         catch ( Exception $e )
         {
-            self::assertTrue( false, "Did not except any exceptions here, got: " . $e );
+            self::fail( "Did not except any exceptions here, got: " . $e );
         }
 
         $service->loadRole( $do->id );
@@ -535,8 +578,23 @@ class ServiceTest extends BaseServiceTest
     public function testDeleteRoleNotFound()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $role = new ConcreteRole();
         $role->getState( 'properties' )->id = 999;
+        $service->deleteRole( $role );
+    }
+
+    /**
+     * Test service function for deleting role
+     *
+     * @covers \ezp\User\Service::deleteRole
+     * @expectedException \ezp\Base\Exception\Forbidden
+     * @group userService
+     */
+    public function testDeleteRoleForbidden()
+    {
+        $service = $this->repository->getUserService();
+        $role = $service->loadRole( 1 );
         $service->deleteRole( $role );
     }
 
@@ -549,6 +607,7 @@ class ServiceTest extends BaseServiceTest
     public function testAddPolicy()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $do = $service->createRole( $this->getRole() );
 
         $policy = new Policy( $do );
@@ -572,6 +631,34 @@ class ServiceTest extends BaseServiceTest
     }
 
     /**
+     * Test service function for adding policy on a role
+     *
+     * @covers \ezp\User\Service::addPolicy
+     * @expectedException \ezp\Base\Exception\Forbidden
+     * @group userService
+     */
+    public function testAddPolicyForbidden()
+    {
+        $service = $this->repository->getUserService();
+        try
+        {
+            $anon = $this->repository->setUser( $service->load( 14 ) );
+            $do = $service->createRole( $this->getRole() );
+            $this->repository->setUser( $anon );
+        }
+        catch ( \Exception $e )
+        {
+            self::assertTrue( false, 'Did not except an exception here, got:' . $e->getMessage() );
+        }
+        $policy = new Policy( $do );
+        $policy->module = 'Foo';
+        $policy->function = 'Bar';
+        $policy->limitations = array( 'Limit' => array( 'Test' ) );
+
+        $service->addPolicy( $do, $policy );
+    }
+
+    /**
      * Test service function for removing policy on a role
      *
      * @covers \ezp\User\Service::removePolicy
@@ -580,6 +667,7 @@ class ServiceTest extends BaseServiceTest
     public function testRemovePolicy()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $do = $service->createRole( $this->getRole() );
 
         $service->removePolicy( $do, $do->policies[2] );
@@ -595,6 +683,29 @@ class ServiceTest extends BaseServiceTest
         self::assertEquals( 'read', $do->policies[1]->function );
         self::assertEquals( '*', $do->policies[1]->limitations );
         self::assertEquals( $do->id, $do->policies[1]->roleId );
+    }
+
+    /**
+     * Test service function for removing policy on a role
+     *
+     * @covers \ezp\User\Service::addPolicy
+     * @expectedException \ezp\Base\Exception\Forbidden
+     * @group userService
+     */
+    public function testRemovePolicyForbidden()
+    {
+        $service = $this->repository->getUserService();
+        try
+        {
+            $anon = $this->repository->setUser( $service->load( 14 ) );
+            $do = $service->createRole( $this->getRole() );
+            $this->repository->setUser( $anon );
+        }
+        catch ( \Exception $e )
+        {
+            self::assertTrue( false, 'Did not except an exception here, got:' . $e->getMessage() );
+        }
+        $service->removePolicy( $do, $do->policies[2] );
     }
 
     /**
@@ -622,6 +733,7 @@ class ServiceTest extends BaseServiceTest
     public function testLoadPoliciesByUserIdWithNewPolicies()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $this->clearRolesByGroup( $service->loadGroup( 42 ) );
 
         $policies = $service->loadPoliciesByUserId( 10 );
@@ -716,6 +828,7 @@ class ServiceTest extends BaseServiceTest
     public function testAssignRole()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $group = $service->loadGroup( 12 );//Administrator users
         $groupCount = count( $group->getRoles() );
 
@@ -736,6 +849,7 @@ class ServiceTest extends BaseServiceTest
     public function testAssignRoleExistingRole()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $group = $service->loadGroup( 12 );//Administrator users
 
         $do = $service->createRole( $this->getRole() );
@@ -753,12 +867,37 @@ class ServiceTest extends BaseServiceTest
     /**
      * Test service function for assigning role
      *
+     * @covers \ezp\User\Service::assignRole
+     * @expectedException \ezp\Base\Exception\Forbidden
+     * @group userService
+     */
+    public function testAssignRoleForbidden()
+    {
+        $service = $this->repository->getUserService();
+        try
+        {
+            $anon = $this->repository->setUser( $service->load( 14 ) );
+            $group = $service->loadGroup( 12 );//Administrator users
+            $do = $service->createRole( $this->getRole() );
+            $this->repository->setUser( $anon );
+        }
+        catch ( \Exception $e )
+        {
+            self::assertTrue( false, 'Did not except an exception here, got:' . $e->getMessage() );
+        }
+        $service->assignRole( $group, $do );
+    }
+
+    /**
+     * Test service function for assigning role
+     *
      * @covers \ezp\User\Service::unAssignRole
      * @group userService
      */
     public function testUnAssignRole()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $group = $service->loadGroup( 12 );//Administrator users
         $groupCount = count( $group->getRoles() );
 
@@ -780,9 +919,36 @@ class ServiceTest extends BaseServiceTest
     public function testUnAssignRoleExistingRole()
     {
         $service = $this->repository->getUserService();
+        $this->repository->setUser( $service->load( 14 ) );
         $group = $service->loadGroup( 12 );//Administrator users
 
         $do = $service->createRole( $this->getRole() );
+        $service->unAssignRole( $group, $do );
+    }
+
+    /**
+     * Test service function for assigning role
+     *
+     * @covers \ezp\User\Service::unAssignRole
+     * @expectedException \ezp\Base\Exception\Forbidden
+     * @group userService
+     */
+    public function testUnAssignRoleForbidden()
+    {
+        $service = $this->repository->getUserService();
+        try
+        {
+            $anon = $this->repository->setUser( $service->load( 14 ) );
+            $group = $service->loadGroup( 12 );//Administrator users
+            $do = $service->createRole( $this->getRole() );
+            $service->assignRole( $group, $do );
+            $this->repository->setUser( $anon );
+        }
+        catch ( \Exception $e )
+        {
+            self::assertTrue( false, 'Did not except an exception here, got:' . $e->getMessage() );
+        }
+
         $service->unAssignRole( $group, $do );
     }
 

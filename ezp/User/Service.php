@@ -13,6 +13,7 @@ use ezp\Base\Configuration,
     ezp\Base\Collection\Lazy,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Exception\BadConfiguration,
+    ezp\Base\Exception\Forbidden,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\NotFoundWithType,
@@ -335,6 +336,9 @@ class Service extends BaseService
      */
     public function createRole( Role $role )
     {
+        if ( !$this->repository->canUser( 'create', $role ) )
+            throw new Forbidden( 'Role', 'create' );
+
         $struct = new RoleValueObject();
         $this->fillStruct( $struct, $role, array( 'id' ) );
         $vo = $this->handler->userHandler()->createRole( $struct );
@@ -377,6 +381,9 @@ class Service extends BaseService
      */
     public function updateRole( Role $role )
     {
+        if ( !$this->repository->canUser( 'edit', $role ) )
+            throw new Forbidden( 'Role', 'edit' );
+
         $struct = new RoleUpdateStruct();
         $this->fillStruct( $struct, $role );
         $this->handler->userHandler()->updateRole( $struct );
@@ -389,6 +396,9 @@ class Service extends BaseService
      */
     public function deleteRole( Role $role )
     {
+        if ( !$this->repository->canUser( 'delete', $role ) )
+            throw new Forbidden( 'Role', 'delete' );
+
         $this->handler->userHandler()->deleteRole( $role->id );
     }
 
@@ -400,6 +410,9 @@ class Service extends BaseService
      */
     public function addPolicy( Role $role, Policy $policy )
     {
+        if ( !$this->repository->canUser( 'edit', $role ) )
+            throw new Forbidden( 'Role', 'edit' );
+
         $this->handler->userHandler()->addPolicy( $role->id, $policy->getState( 'properties' ) );
         $role->addPolicy( $policy );
     }
@@ -412,6 +425,9 @@ class Service extends BaseService
      */
     public function removePolicy( Role $role, Policy $policy )
     {
+        if ( !$this->repository->canUser( 'edit', $role ) )
+            throw new Forbidden( 'Role', 'edit' );
+
         $this->handler->userHandler()->removePolicy( $role->id, $policy->id );
         $role->removePolicy( $policy );
     }
@@ -439,6 +455,9 @@ class Service extends BaseService
      */
     public function assignRole( Group $group, Role $role )
     {
+        if ( !$this->repository->canUser( 'assign', $role ))//, $group ) )
+            throw new Forbidden( 'Role', 'assign' );
+
         $this->handler->userHandler()->assignRole( $group->id, $role->id );
 
         $roles = $group->getRoles();
@@ -459,6 +478,9 @@ class Service extends BaseService
      */
     public function unAssignRole( Groupable $group, Role $role )
     {
+        if ( !$this->repository->canUser( 'assign', $role ))//, $group ) )
+            throw new Forbidden( 'Role', 'assign' );
+
         $this->handler->userHandler()->unAssignRole( $group->id, $role->id );
 
         $roles = $group->getRoles();
