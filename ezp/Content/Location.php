@@ -25,8 +25,8 @@ use ezp\Content;
  * @property-read int $modifiedSubLocation
  * @property-read int $mainLocationId
  * @property-read int $depth
- * @property int $sortField Sort field int, to be compared with \ezp\Content\ContainerProperty::SORT_FIELD_* constants
- * @property int $sortOrder Sort order int, to be compared with \ezp\Content\ContainerProperty::SORT_ORDER_* constants
+ * @property int $sortField Sort field int, to be compared with \ezp\Content\Location::SORT_FIELD_* constants
+ * @property int $sortOrder Sort order int, to be compared with \ezp\Content\Location::SORT_ORDER_* constants
  * @property-read \ezp\Content\Location[] $children Location's children in subtree
  * @property \ezp\Content $content Associated Content object
  * @property \ezp\Content\Location $parent Location's parent location
