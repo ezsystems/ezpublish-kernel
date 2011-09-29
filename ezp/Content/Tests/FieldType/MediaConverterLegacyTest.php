@@ -72,8 +72,8 @@ class MediaConverterLegacyTest extends \PHPUnit_Framework_TestCase
         self::assertNull( $storageFieldValue->dataText );
         self::assertNull( $storageFieldValue->dataInt );
         self::assertNull( $storageFieldValue->dataFloat );
-        self::assertNull( $storageFieldValue->sortKeyInt );
-        self::assertNull( $storageFieldValue->sortKeyString );
+        self::assertEquals( 0, $storageFieldValue->sortKeyInt );
+        self::assertEquals( '', $storageFieldValue->sortKeyString );
     }
 
     /**
