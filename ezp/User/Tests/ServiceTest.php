@@ -688,7 +688,7 @@ class ServiceTest extends BaseServiceTest
     /**
      * Test service function for removing policy on a role
      *
-     * @covers \ezp\User\Service::addPolicy
+     * @covers \ezp\User\Service::removePolicy
      * @expectedException \ezp\Base\Exception\Forbidden
      * @group userService
      */
