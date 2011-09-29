@@ -32,6 +32,11 @@ class ContentHandlerRelationTest extends HandlerTest
     protected $content;
 
     /**
+     * @var \ezp\Content
+     */
+    protected $content2;
+
+    /**
      * @var int
      */
     protected $contentId;
@@ -53,23 +58,7 @@ class ContentHandlerRelationTest extends HandlerTest
     {
         parent::setUp();
 
-        $struct = new CreateStruct();
-        $struct->name = "test";
-        $struct->ownerId = 14;
-        $struct->sectionId = 1;
-        $struct->typeId = 2;
-        $struct->fields[] = new Field(
-            array(
-                'type' => 'ezstring',
-                // FieldValue object compatible with ezstring
-                'value' => new FieldValue(
-                    array(
-                        'data' => new TextLineValue( 'Welcome' )
-                    )
-                ),
-                'language' => 'eng-GB',
-            )
-        );
+        $struct = $this->createContentStruct( "test", "Welcome" );
 
         $this->content = $this->repositoryHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $this->content;
@@ -86,6 +75,33 @@ class ContentHandlerRelationTest extends HandlerTest
                     )
                 )
             )->id;
+
+        $this->content2 = $this->repositoryHandler->contentHandler()->create(
+            $this->createContentStruct( "Second object", "Do you relate to me?" )
+        );
+        $this->contentToDelete[] = $this->content2;
+    }
+
+    protected function createContentStruct( $name, $textValue )
+    {
+        $struct = new CreateStruct();
+        $struct->name = $name;
+        $struct->ownerId = 14;
+        $struct->sectionId = 1;
+        $struct->typeId = 2;
+        $struct->fields[] = new Field(
+            array(
+                 'type' => 'ezstring',
+                 // FieldValue object compatible with ezstring
+                 'value' => new FieldValue(
+                     array(
+                          'data' => new TextLineValue( $textValue )
+                     )
+                 ),
+                 'language' => 'eng-GB',
+            )
+        );
+        return $struct;
     }
 
     /**
@@ -270,5 +286,154 @@ class ContentHandlerRelationTest extends HandlerTest
                 Relation::LINK
             )
         );
+    }
+
+    /**
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadReverseRelations
+     */
+    public function testLoadReverseRelationsOneEntry()
+    {
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
+                                   'sourceContentId' => $this->contentId,
+                                   'destinationContentId' => $this->content2->id,
+                                   'type' => Relation::COMMON
+                                   ) ) );
+
+
+        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id );
+        self::assertEquals( 1, count( $reverseRelations ) );
+        self::assertEquals( $this->contentId, $reverseRelations[0]->sourceContentId );
+        self::assertNull( $reverseRelations[0]->sourceContentVersion );
+        self::assertEquals( $this->content2->id, $reverseRelations[0]->destinationContentId );
+        self::assertEquals( Relation::COMMON, $reverseRelations[0]->type );
+    }
+
+    /**
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadReverseRelations
+     */
+    public function testLoadReverseRelationsOneEntryMatchingType()
+    {
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
+                                   'sourceContentId' => $this->contentId,
+                                   'destinationContentId' => $this->content2->id,
+                                   'type' => Relation::COMMON
+                                   ) ) );
+
+
+        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::COMMON );
+        self::assertEquals( 1, count( $reverseRelations ) );
+        self::assertEquals( $this->contentId, $reverseRelations[0]->sourceContentId );
+        self::assertNull( $reverseRelations[0]->sourceContentVersion );
+        self::assertEquals( $this->content2->id, $reverseRelations[0]->destinationContentId );
+        self::assertEquals( Relation::COMMON, $reverseRelations[0]->type );
+    }
+
+    /**
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadReverseRelations
+     */
+    public function testLoadReverseRelationsOneEntryNoMatchingType()
+    {
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
+                                   'sourceContentId' => $this->contentId,
+                                   'destinationContentId' => $this->content2->id,
+                                   'type' => Relation::COMMON
+                                   ) ) );
+
+
+        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::EMBED );
+        self::assertEmpty( $reverseRelations );
+    }
+
+    /**
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadReverseRelations
+     */
+    public function testLoadReverseRelationsTwoEntries()
+    {
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
+                                   'sourceContentId' => $this->contentId,
+                                   'destinationContentId' => $this->content2->id,
+                                   'type' => Relation::COMMON
+                                   ) ) );
+
+        $newRelation2 = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
+                                   'sourceContentId' => 1,
+                                   'destinationContentId' => $this->content2->id,
+                                   'type' => Relation::COMMON
+                                   ) ) );
+
+
+        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id );
+        self::assertEquals( 2, count( $reverseRelations ) );
+
+        $approvedRelatedObjectIds = array( $this->contentId, 1 );
+
+        foreach ( $reverseRelations as $revRel )
+        {
+            self::assertContains( $revRel->sourceContentId, $approvedRelatedObjectIds );
+        }
+    }
+
+    /**
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadReverseRelations
+     */
+    public function testLoadReverseRelationsTwoEntriesDifferentTypes()
+    {
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
+                                   'sourceContentId' => $this->contentId,
+                                   'destinationContentId' => $this->content2->id,
+                                   'type' => Relation::COMMON
+                                   ) ) );
+
+        $newRelation2 = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
+                                   'sourceContentId' => 1,
+                                   'destinationContentId' => $this->content2->id,
+                                   'type' => Relation::ATTRIBUTE
+                                   ) ) );
+
+
+        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id );
+        self::assertEquals( 2, count( $reverseRelations ) );
+
+        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::ATTRIBUTE );
+        self::assertEquals( 1, count( $reverseRelations ) );
+        self::assertEquals( Relation::ATTRIBUTE, current( $reverseRelations )->type );
+
+        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::COMMON );
+        self::assertEquals( 1, count( $reverseRelations ) );
+        self::assertEquals( Relation::COMMON, current($reverseRelations)->type );
+    }
+
+    /**
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::removeRelation
+     */
+    public function testRemoveRelation()
+    {
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
+                                   'sourceContentId' => $this->contentId,
+                                   'destinationContentId' => $this->content2->id,
+                                   'type' => Relation::COMMON
+                                   ) ) );
+
+        $relations = $this->repositoryHandler->contentHandler()->loadRelations( $this->contentId );
+        self::assertEquals( 1, count( $relations ) );
+        self::assertEquals( $newRelation->id, $relations[0]->id );
+
+        $this->repositoryHandler->contentHandler()->removeRelation( $newRelation->id );
+        $relations = $this->repositoryHandler->contentHandler()->loadRelations( $this->contentId );
+        self::assertEmpty( $relations );
+    }
+    /**
+     * @expectedException ezp\Base\Exception\NotFound
+     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::removeRelation
+     */
+    public function testRemoveRelationDoesNotExist()
+    {
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
+                                   'sourceContentId' => $this->contentId,
+                                   'destinationContentId' => $this->content2->id,
+                                   'type' => Relation::COMMON
+                                   ) ) );
+
+        $this->repositoryHandler->contentHandler()->removeRelation( 42 );
     }
 }

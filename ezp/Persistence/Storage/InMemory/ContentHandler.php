@@ -422,8 +422,6 @@ class ContentHandler implements ContentHandlerInterface
      * Creates a relation between $sourceContentId in $sourceContentVersion
      * and $destinationContentId with a specific $type.
      *
-     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
-     *
      * @param  \ezp\Persistence\Content\Relation\CreateStruct $relation
      * @return \ezp\Persistence\Content\Relation
      */
@@ -456,13 +454,16 @@ class ContentHandler implements ContentHandlerInterface
     /**
      * Removes a relation by relation Id.
      *
-     * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
-     *
      * @param mixed $relationId
      */
     public function removeRelation( $relationId )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $requestedRelation = $this->backend->find( "Content\\Relation", array( "id" => $relationId ) );
+        if ( empty( $requestedRelation ) )
+        {
+            throw new NotFound( "Content\\Relation", "id: " . $relationId );
+        }
+        $this->backend->delete( "Content\\Relation", $relationId );
     }
 
     /**
@@ -508,7 +509,20 @@ class ContentHandler implements ContentHandlerInterface
      */
     public function loadReverseRelations( $destinationContentId, $type = null )
     {
-        throw new \Exception( "@TODO: Not implemented yet." );
+        $filter = array( "destinationContentId" => $destinationContentId );
+        $relations = $this->backend->find( "Content\\Relation", $filter );
+
+        if ( $type === null )
+            return $relations;
+
+        foreach ( $relations as $key => $relation )
+        {
+            if ( ~$relation->type & $type )
+            {
+                unset( $relations[$key] );
+            }
+        }
+        return $relations;
     }
 
     /**
