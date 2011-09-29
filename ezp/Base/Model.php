@@ -105,7 +105,7 @@ abstract class Model implements Observable, ModelInterface
      *
      * @param \ezp\Base\Observer $observer
      * @param string $event
-     * @return Model
+     * @return \ezp\Base\Model
      */
     public function attach( Observer $observer, $event = 'update' )
     {
@@ -125,7 +125,7 @@ abstract class Model implements Observable, ModelInterface
      *
      * @param \ezp\Base\Observer $observer
      * @param string $event
-     * @return Model
+     * @return \ezp\Base\Model
      */
     public function detach( Observer $observer, $event = 'update' )
     {
@@ -145,7 +145,7 @@ abstract class Model implements Observable, ModelInterface
      *
      * @param string $event
      * @param array|null $arguments
-     * @return Model
+     * @return \ezp\Base\Model
      */
     public function notify( $event = 'update', array $arguments = null )
     {
@@ -164,7 +164,7 @@ abstract class Model implements Observable, ModelInterface
      *
      * @param string $property Property name
      * @return mixed
-     * @throws PropertyNotFound If $property cannot be found
+     * @throws \ezp\Base\Exception\PropertyNotFound If $property cannot be found
      */
     public function __get( $property )
     {
@@ -197,8 +197,8 @@ abstract class Model implements Observable, ModelInterface
      *
      * @param string $property
      * @param mixed $value
-     * @throws PropertyNotFound If $property cannot be found
-     * @throws PropertyPermission When trying to set a value to a read-only property
+     * @throws \ezp\Base\Exception\PropertyNotFound If $property cannot be found
+     * @throws \ezp\Base\Exception\PropertyPermission When trying to set a value to a read-only property
      */
     public function __set( $property, $value )
     {
@@ -264,10 +264,10 @@ abstract class Model implements Observable, ModelInterface
         // $property is provided, return its value if valid
         if ( $property !== null )
         {
-            if ( is_string( $property ) && property_exists( $this, $property ) )
-                return $this->$property;
-            else
+            if ( !( is_string( $property ) && property_exists( $this, $property ) ) )
                 throw new PropertyNotFound( $property, get_class( $this ) );
+
+            return $this->$property;
         }
 
         $arr = array();
@@ -283,7 +283,7 @@ abstract class Model implements Observable, ModelInterface
      * Set properties with hash
      *
      * @param array $properties Where key is property name and value if set is value to set on property
-     * @return Model Return $this
+     * @return \ezp\Base\Model Return $this
      */
     public function fromHash( array $properties )
     {
