@@ -71,6 +71,7 @@ class Type extends FieldType
      * Otherwise, an \ezp\Base\Exception\BadFieldTypeInput exception is thrown
      *
      * @throws \ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
+     * @throws \ezp\Base\Exception\InvalidArgumentType
      * @param \ezp\Content\FieldType\Media\Value $inputValue
      * @return \ezp\Content\FieldType\Media\Value
      */
