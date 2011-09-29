@@ -33,9 +33,9 @@ use ezp\Base\Configuration,
  *
  *     [service_repository]
  *     class=ezp\Base\Repository
- *     arguments[repository_handler]=@repository_handler
+ *     arguments[repository_handler]=@inmemory_repository_handler
  *
- *     [service_repository_handler]
+ *     [service_inmemory_repository_handler]
  *     class=ezp\Persistence\Storage\InMemory\RepositoryHandler
  *
  * Arguments can start with either @ in case of other services being dependency, $ if a predefined global variable

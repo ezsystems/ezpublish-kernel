@@ -38,11 +38,11 @@ abstract class Base extends PHPUnit_Framework_TestCase
     protected static function getRepository()
     {
         /*
-         * For legacy storage engine it will be some thing like bellow.
+         * For legacy storage engine it will be something like bellow.
          * BUT: Scheme & data will have to be inserted and data needs to be synced with data.json in InMemory SE
          *
          *   $dns = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
-         *   $sc = new Container(
+         *   $sc = new ServiceContainer(
          *       array(
          *           '@repository_handler' => new \ezp\Persistence\Storage\Legacy\RepositoryHandler( $dns )
          *       )
