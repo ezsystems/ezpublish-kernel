@@ -160,7 +160,7 @@ class EzcDatabase extends Gateway
             $this->handler->quoteTable( 'ezrole' ),
             $query->expr->eq(
                 $this->handler->quoteColumn( 'id', 'ezrole' ),
-                $this->handler->quoteColumn( 'role_id', 'ezuser_role' )
+                $this->handler->quoteColumn( 'role_id', 'ezuser_role_search' )
             )
         )->leftJoin(
             $this->handler->quoteTable( 'ezuser_role' ),

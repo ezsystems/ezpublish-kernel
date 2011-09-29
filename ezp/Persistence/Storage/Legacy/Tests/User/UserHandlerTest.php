@@ -836,6 +836,6 @@ class UserHandlerTest extends TestCase
             },
             true
         ) );
-        $this->assertEquals( 47, count( $policies ) );
+        $this->assertEquals( 6, count( $policies ) );
     }
 }
