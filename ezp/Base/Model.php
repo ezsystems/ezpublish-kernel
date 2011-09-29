@@ -232,9 +232,9 @@ abstract class Model implements Observable, ModelInterface
      *
      * Key is property name and value is property value.
      *
-     * @access private
+     * @internal
      * @param array $state
-     * @return Model
+     * @return \ezp\Base\Model
      * @throws \ezp\Base\Exception\PropertyNotFound If one of the properties in $state is not found
      */
     public function setState( array $state )
@@ -254,24 +254,27 @@ abstract class Model implements Observable, ModelInterface
      *
      * Key is property name and value is property value.
      *
-     * @access private
+     * @internal
      * @param string|null $property Optional, lets you specify to only return one property by name
      * @return array|mixed Array if $property is null, else value of property
      * @throws \ezp\Base\Exception\PropertyNotFound If $property is not found (when not null)
      */
     public function getState( $property = null )
     {
+        // $property is provided, return its value if valid
+        if ( $property !== null )
+        {
+            if ( is_string( $property ) && property_exists( $this, $property ) )
+                return $this->$property;
+            else
+                throw new PropertyNotFound( $property, get_class( $this ) );
+        }
+
         $arr = array();
         foreach ( $this as $name => $value )
         {
-            if ( $property === $name )
-                return $value;
-            else if ( $property === null )
-                $arr[$name] = $value;
+            $arr[$name] = $value;
         }
-
-        if ( $property !== null )
-            throw new PropertyNotFound( $property, get_class( $this ) );
 
         return $arr;
     }
