@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\Language;
-use ezp\Base\Exception\NotFound,
+use ezp\Base\Exception\Forbidden,
+    ezp\Base\Exception\NotFound,
     ezp\Base\Exception\Logic,
     ezp\Base\Service as BaseService,
     ezp\Content,
@@ -31,6 +32,9 @@ class Service extends BaseService
      */
     public function create( $locale, $name, $isEnabled = true )
     {
+        if ( $this->repository->getUser()->hasAccessTo( 'content', 'translations' ) !== true )
+            throw new Forbidden( 'Language', 'translations' );
+
         $struct = new LanguageCreateStruct();
         $struct->locale = $locale;
         $struct->name = $name;
@@ -46,6 +50,9 @@ class Service extends BaseService
      */
     public function update( Language $language )
     {
+        if ( !$this->repository->canUser( 'translations', $language ) )
+            throw new Forbidden( 'Language', 'translations' );
+
         $this->handler->contentLanguageHandler()->update( $language->getState( 'properties' ) );
     }
 
@@ -89,6 +96,9 @@ class Service extends BaseService
      */
     public function delete( Language $language )
     {
+        if ( !$this->repository->canUser( 'translations', $language ) )
+            throw new Forbidden( 'Language', 'translations' );
+
         $this->handler->contentLanguageHandler()->delete( $language->id );
     }
 

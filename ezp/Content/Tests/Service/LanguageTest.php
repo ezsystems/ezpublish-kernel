@@ -19,27 +19,77 @@ use ezp\Content\Tests\Service\Base as BaseServiceTest,
 class LanguageTest extends BaseServiceTest
 {
     /**
-     * Test service function for creating sections
+     * Test service function for creating language
      * @covers \ezp\Content\Language\Service::create
      */
     public function testCreate()
     {
         $service = $this->repository->getContentLanguageService();
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
         $newLanguage = $service->create( 'test-TEST', 'test' );
-        //self::assertEquals( $newLanguage->id, 2 );
         self::assertEquals( $newLanguage->locale, 'test-TEST' );
         self::assertEquals( $newLanguage->name, 'test' );
         self::assertTrue( $newLanguage->isEnabled );
     }
 
     /**
-     * Test service function for deleting sections
+     * Test service function for creating language
+     * @covers \ezp\Content\Language\Service::create
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCreateForbidden()
+    {
+        $service = $this->repository->getContentLanguageService();
+        $service->create( 'test-TEST', 'test' );
+    }
+
+    /**
+     * Test service function for updating language
+     * @covers \ezp\Content\Language\Service::update
+     */
+    public function testUpdate()
+    {
+        $service = $this->repository->getContentLanguageService();
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
+        $language = $service->load( 2 );
+        $language->locale = 'test-TEST';
+        $language->name = 'test';
+        $language->isEnabled = false;
+        $service->update( $language );
+        $sameLanguage = $service->load( 2 );
+        self::assertEquals( $language->locale, $sameLanguage->locale );
+        self::assertEquals( $language->name, $sameLanguage->name );
+        self::assertEquals( $language->isEnabled, $sameLanguage->isEnabled );
+    }
+
+    /**
+     * Test service function for updating language
+     * @covers \ezp\Content\Language\Service::update
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testUpdateForbidden()
+    {
+        try
+        {
+            $service = $this->repository->getContentLanguageService();
+            $language = $service->load( 2 );
+        }
+        catch ( \Exception $e )
+        {
+            self::fail( "Did not except any exceptions here, got: " . $e );
+        }
+        $service->update( $language );
+    }
+
+    /**
+     * Test service function for deleting language
      *
      * @covers \ezp\Content\Language\Service::delete
      */
     public function testDelete()
     {
         $service = $this->repository->getContentLanguageService();
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
         $newLanguage = $service->create( 'test-TEST', 'test' );
         $service->delete( $newLanguage );
         try
@@ -53,15 +103,37 @@ class LanguageTest extends BaseServiceTest
     }
 
     /**
-     * Test service function for loading sections
+     * Test service function for deleting language
+     *
+     * @covers \ezp\Content\Language\Service::delete
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testDeleteForbidden()
+    {
+        $service = $this->repository->getContentLanguageService();
+        try
+        {
+            $anon = $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
+            $newLanguage = $service->create( 'test-TEST', 'test' );
+        }
+        catch ( \Exception $e )
+        {
+            self::fail( "Did not except any exceptions here, got: " . $e );
+        }
+        $this->repository->setUser( $anon );
+        $service->delete( $newLanguage );
+    }
+
+    /**
+     * Test service function for loading language
      * @covers \ezp\Content\Language\Service::load
      */
     public function testLoad()
     {
         $service = $this->repository->getContentLanguageService();
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
         $language = $service->create( 'test-TEST', 'test' );
         $newLanguage = $service->load( $language->id );
-        //self::assertEquals( $newLanguage->id, 2 );
         self::assertEquals( $newLanguage->id, $language->id );
         self::assertEquals( $newLanguage->locale, $language->locale );
         self::assertEquals( $newLanguage->name, $language->name );
@@ -69,12 +141,13 @@ class LanguageTest extends BaseServiceTest
     }
 
     /**
-     * Test service function for loading sections
+     * Test service function for loading language
      * @covers \ezp\Content\Language\Service::loadAll
      */
     public function testLoadAll()
     {
         $service = $this->repository->getContentLanguageService();
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
         foreach ( $service->loadAll() as $item )
         {
             $service->delete( $item );
@@ -90,7 +163,7 @@ class LanguageTest extends BaseServiceTest
     }
 
     /**
-     * Test service function for loading sections
+     * Test service function for loading language
      *
      * @expectedException \ezp\Base\Exception\NotFound
      * @covers \ezp\Content\Language\Service::load
