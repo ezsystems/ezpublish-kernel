@@ -40,7 +40,7 @@ class UrlStorage implements Storage
             $dbHandler->quoteColumn( "data_int" ),
             $q->bindValue( $urlId, null, \PDO::PARAM_INT )
         )->where(
-            $q->expr->eq( $dbHandler->quoteColumn( "id" ), $urlId )
+            $q->expr->eq( $dbHandler->quoteColumn( "id" ), $field->id )
         );
 
         $stmt = $q->prepare();
