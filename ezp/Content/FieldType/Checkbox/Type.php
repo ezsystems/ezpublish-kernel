@@ -10,7 +10,8 @@
 namespace ezp\Content\FieldType\Checkbox;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Base\Exception\BadFieldTypeInput;
+    ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Base\Exception\InvalidArgumentType;
 
 /**
  * Checkbox field type.
@@ -22,15 +23,19 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezboolean";
     const IS_SEARCHABLE = true;
 
+    protected $allowedSettings = array(
+        'defaultValue' => false
+    );
+
     /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
      *
-     * @return \ezp\Content\FieldType\Float\Value
+     * @return \ezp\Content\FieldType\Checkbox\Value
      */
     protected function getDefaultValue()
     {
-        return new Value( false );
+        return new Value( $this->fieldSettings['defaultValue'] );
     }
 
     /**
@@ -38,17 +43,22 @@ class Type extends FieldType
      *
      * If the value actually can be parsed, the value is returned.
      *
-     * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param mixed $inputValue
-     * @return mixed
+     * @throws \ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
+     * @throws \ezp\Base\Exception\InvalidArgumentType
+     * @param \ezp\Content\FieldType\Value $inputValue
+     * @return \ezp\Content\FieldType\Checkbox\Value
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !is_bool( $inputValue ) )
+        if ( $inputValue instanceof Value )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            if ( !is_bool( $inputValue->bool ) )
+                throw new BadFieldTypeInput( $inputValue, get_class() );
+
+            return $inputValue;
         }
-        return $inputValue;
+
+        throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\Checkbox\\Value' );
     }
 
     /**
@@ -58,6 +68,6 @@ class Type extends FieldType
      */
     protected function getSortInfo()
     {
-        return array( 'sort_key_int' => $this->getValue() ? 1 : 0 );
+        return array( 'sort_key_int' => (int)$this->getValue()->bool );
     }
 }
