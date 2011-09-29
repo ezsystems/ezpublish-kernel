@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content;
-use ezp\Content\FieldType\FieldSettings,
+use ezp\Content\Version,
+    ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Value,
     ezp\Content\FieldType\Validator,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
@@ -287,8 +288,12 @@ abstract class FieldType implements Observer
                  $this->onFieldSetValue( $subject, $arguments['value'] );
                  break;
 
-             case 'content/publish':
-                 // @todo Implement
+             case 'pre_publish':
+             case 'post_publish':
+                 if ( $subject instanceof Version )
+                 {
+                     // @todo Implement
+                 }
                  break;
          }
      }

@@ -207,8 +207,10 @@ class Service extends BaseService
                     $fields[$identifier] = $field->setState( array( 'properties' => $voField ) );
                     $fields[$identifier]->setValue( $voField->value->data );
 
-                    // Make the FieldType an Observer for content/publish
-                    $content->attach( $fields[$identifier]->getFieldDefinition()->getType(), 'content/publish' );
+                    // Make the FieldType an Observer for publish events
+                    $type = $fields[$identifier]->getFieldDefinition()->getType();
+                    $version->attach( $type, 'pre_publish' );
+                    $version->attach( $type, 'post_publish' );
                     continue 2;
                 }
             }
@@ -452,6 +454,8 @@ class Service extends BaseService
 
         // $this->handler->beginTransaction();
 
+        $version->notify( 'pre_publish', array( $this->repository ) );
+
         // Archive the previous version if it exists
         if ( $version->versionNo > 1 )
         {
@@ -472,13 +476,13 @@ class Service extends BaseService
 
         $contentVo = $this->handler->contentHandler()->publish( $updateStruct );
 
+        $updatedContent = $this->buildDomainObject( $contentVo );
+
+        $version->notify( 'post_publish', array( $this->repository, $updatedContent ) );
+
         // $this->handler->commit();
 
-        $contentDO = $this->buildDomainObject( $contentVo );
-
-        $this->notify( 'content/publish', array( $contentDO, $version ) );
-
-        return $contentDO;
+        return $updatedContent;
     }
 
     /**
@@ -521,8 +525,6 @@ class Service extends BaseService
             );
         }
 
-        $this->attach( $content, 'content/publish' );
-
         return $content;
     }
 
@@ -560,16 +562,15 @@ class Service extends BaseService
                     $field->setState( array( 'properties' => $voField ) );
                     $field->setValue( $voField->value->data );
 
-                    // Make the FieldType an observer of content/publish
-                    $content->attach( $field->getFieldDefinition()->getType(), 'content/publish' );
-
+                    // Make the FieldType an observer of publish events
+                    $type = $field->getFieldDefinition()->getType();
+                    $version->attach( $type, 'pre_publish' );
+                    $version->attach( $type, 'post_publish' );
                     continue 2;
                 }
             }
             throw new Logic( 'field:' . $identifier, 'could not find this field in returned Version value data'  );
         }
-
-        $this->attach( $version, 'content/publish' );
 
         return $version;
     }
