@@ -562,8 +562,8 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @param FieldDefinition $fieldDefinition
-     * @param StorageFieldDefinition $storageFieldDef
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return mixed Field definition ID
      */
     public function insertFieldDefinition(
@@ -597,7 +597,8 @@ class EzcDatabase extends Gateway
      * Set common columns for insert/update of FieldDefinition.
      *
      * @param \ezcQuery $q
-     * @param FieldDefinition $fieldDefinition
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
      */
     protected function setCommonFieldColumns(
@@ -720,8 +721,8 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @param FieldDefinition $fieldDefinition
-     * @param StorageFieldDefinition $storageFieldDef
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
      * @TODO Handle StorageFieldDefinition
      */

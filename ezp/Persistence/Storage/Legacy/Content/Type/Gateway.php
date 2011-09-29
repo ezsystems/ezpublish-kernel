@@ -117,8 +117,8 @@ abstract class Gateway
      *
      * @param mixed $typeId
      * @param int $version
-     * @param FieldDefinition $fieldDefinition
-     * @param StorageFieldDefinition $storageFieldDef
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return mixed Field definition ID
      */
     abstract public function insertFieldDefinition(
@@ -141,8 +141,8 @@ abstract class Gateway
      *
      * @param mixed $typeId
      * @param int $version
-     * @param FieldDefinition $fieldDefinition
-     * @param StorageFieldDefinition $storageFieldDef
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
      */
     abstract public function updateFieldDefinition(

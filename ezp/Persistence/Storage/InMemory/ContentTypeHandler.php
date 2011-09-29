@@ -24,7 +24,7 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
     RuntimeException;
 
 /**
- * @see ezp\Persistence\Content\Type\Handler
+ * @see \ezp\Persistence\Content\Type\Handler
  *
  * @todo Validate $status arguments
  */
@@ -358,8 +358,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @param FieldDefinition $fieldDefinition
-     * @return FieldDefinition
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @return \ezp\Persistence\Content\Type\FieldDefinition
      * @throws \ezp\Base\Exception\NotFound If type is not found
      * @todo Add FieldDefintion\CreateStruct?
      */
@@ -412,7 +412,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @param FieldDefinition $fieldDefinition
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @return void
      * @throws \ezp\Base\Exception\NotFound If field is not found
      */

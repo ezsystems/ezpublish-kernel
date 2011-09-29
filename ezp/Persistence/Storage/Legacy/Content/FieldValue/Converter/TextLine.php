@@ -24,8 +24,8 @@ class TextLine implements Converter
     /**
      * Converts data from $value to $storageFieldValue
      *
-     * @param FieldValue $value
-     * @param StorageFieldValue
+     * @param \ezp\Persistence\Content\FieldValue $value
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue $storageFieldValue
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
@@ -38,8 +38,8 @@ class TextLine implements Converter
     /**
      * Converts data from $value to $fieldValue
      *
-     * @param StorageFieldValue $value
-     * @param FieldValue $fieldValue
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue $value
+     * @param \ezp\Persistence\Content\FieldValue $fieldValue
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
@@ -51,8 +51,8 @@ class TextLine implements Converter
     /**
      * Converts field definition data in $fieldDef into $storageFieldDef
      *
-     * @param FieldDefinition $fieldDef
-     * @param StorageFieldDefinition $storageDef
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageDef
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
@@ -67,8 +67,8 @@ class TextLine implements Converter
     /**
      * Converts field definition data in $storageDef into $fieldDef
      *
-     * @param StorageFieldDefinition $storageDef
-     * @param FieldDefinition $fieldDef
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageDef
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDef
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {

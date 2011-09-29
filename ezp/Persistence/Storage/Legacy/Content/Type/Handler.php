@@ -25,9 +25,7 @@ use ezp\Persistence\Content\Type,
 class Handler implements BaseContentTypeHandler
 {
     /**
-     * ezp\Persistence\Storage\Legacy\Content\Type\Gateway
-     *
-     * @var mixed
+     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
      */
     protected $contentTypeGateway;
 
@@ -344,7 +342,7 @@ class Handler implements BaseContentTypeHandler
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param FieldDefinition $fieldDefinition
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @return void
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
@@ -387,7 +385,7 @@ class Handler implements BaseContentTypeHandler
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param FieldDefinition $fieldDefinition
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @return void
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )

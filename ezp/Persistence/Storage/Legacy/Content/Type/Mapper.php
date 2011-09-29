@@ -27,7 +27,7 @@ class Mapper
     /**
      * Converter registry
      *
-     * @var ezp\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @var \ezp\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $converterRegistry;
 
@@ -70,7 +70,7 @@ class Mapper
      * Extracts Group objects from theb given $rows.
      *
      * @param array $rows
-     * @return ezp\Persistence\Content\Type\Group[]
+     * @return \ezp\Persistence\Content\Type\Group[]
      */
     public function extractGroupsFromRows( array $rows )
     {
@@ -168,7 +168,7 @@ class Mapper
      * Creates a FieldDefinition from the data in $row.
      *
      * @param array $row
-     * @return FieldDefinition
+     * @return \ezp\Persistence\Content\Type\FieldDefinition
      * @todo Handle field definition conversion.
      */
     protected function extractFieldFromRow( array $row )
@@ -199,7 +199,7 @@ class Mapper
      * Extracts a StorageFieldDefinition from $row
      *
      * @param array $row
-     * @return StorageFieldDefinition
+     * @return \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition
      */
     protected function extractStorageFieldFromRow( array $row )
     {
@@ -291,8 +291,8 @@ class Mapper
     /**
      * Maps $fieldDef to the legacy storage specific StorageFieldDefinition
      *
-     * @param FieldDefinition $fieldDef
-     * @param StorageFieldDefinition $storageFieldDef
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
      */
     public function toStorageFieldDefinition(
@@ -310,8 +310,8 @@ class Mapper
     /**
      * Maps a FieldDefinition from the given $storageFieldDef
      *
-     * @param StorageFieldDefinition $storageFieldDef
-     * @param FieldDefinition $fieldDef
+     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDef
      * @return void
      */
     public function toFieldDefinition(

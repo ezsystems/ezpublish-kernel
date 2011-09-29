@@ -370,7 +370,7 @@ class Service extends BaseService
      * Adds a new field definition to an existing Type.
      *
      * @param \ezp\Content\Type $type
-     * @param FieldDefinition $field
+     * @param \ezp\Content\Type\FieldDefinition $field
      * @throws \ezp\Base\Exception\InvalidArgumentType If field has id already
      * @throws \ezp\Base\Exception\NotFound If type is not found
      */
@@ -400,7 +400,7 @@ class Service extends BaseService
      * Remove a field definition from an existing Type.
      *
      * @param \ezp\Content\Type $type
-     * @param FieldDefinition $field
+     * @param \ezp\Content\Type\FieldDefinition $field
      * @throws \ezp\Base\Exception\NotFound If field/type is not found
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $field is not an group on type
      */
@@ -427,7 +427,7 @@ class Service extends BaseService
      * Remove a field definition from an existing Type.
      *
      * @param \ezp\Content\Type $type
-     * @param FieldDefinition $field
+     * @param \ezp\Content\Type\FieldDefinition $field
      * @throws \ezp\Base\Exception\NotFound If field/type is not found
      */
     public function updateFieldDefinition( Type $type, FieldDefinition $field  )
