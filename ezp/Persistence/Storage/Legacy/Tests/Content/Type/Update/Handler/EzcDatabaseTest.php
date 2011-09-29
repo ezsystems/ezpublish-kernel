@@ -124,11 +124,11 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $types = array();
 
         $types['from'] = new Type();
-        $types['from']->id     = 23;
+        $types['from']->id = 23;
         $types['from']->status = Type::STATUS_DEFINED;
 
         $types['to'] = new Type();
-        $types['to']->id     = 23;
+        $types['to']->id = 23;
         $types['to']->status = Type::STATUS_DRAFT;
 
         return $types;

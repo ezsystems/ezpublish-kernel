@@ -288,15 +288,18 @@ class EzcDatabase extends Gateway
                 ->insertInto( $this->dbHandler->quoteTable( 'ezcontentclass_name' ) )
                 ->set( 'contentclass_id', $query->bindValue( $typeId, null, \PDO::PARAM_INT ) )
                 ->set( 'contentclass_version', $query->bindValue( $typeStatus, null, \PDO::PARAM_INT ) )
-                ->set( 'language_id', $query->bindValue(
-                    $this->languageMaskGenerator->generateLanguageIndicator(
-                        $language,
-                        $this->languageMaskGenerator->isLanguageAlwaysAvailable(
+                ->set(
+                    'language_id',
+                    $query->bindValue(
+                        $this->languageMaskGenerator->generateLanguageIndicator(
                             $language,
-                            $languages
-                        )
-                    ), null, \PDO::PARAM_INT
-                ) )
+                            $this->languageMaskGenerator->isLanguageAlwaysAvailable(
+                                $language,
+                                $languages
+                            )
+                        ), null, \PDO::PARAM_INT
+                    )
+                )
                 ->set( 'language_locale', $query->bindValue( $language ) )
                 ->set( 'name', $query->bindValue( $name ) );
             $query->prepare()->execute();
@@ -391,7 +394,7 @@ class EzcDatabase extends Gateway
             $q->bindValue( $type->sortOrder, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'always_available' ),
-            $q->bindValue( (int) $type->defaultAlwaysAvailable, null, \PDO::PARAM_INT )
+            $q->bindValue( (int)$type->defaultAlwaysAvailable, null, \PDO::PARAM_INT )
         );
     }
 

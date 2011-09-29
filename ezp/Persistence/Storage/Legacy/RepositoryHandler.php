@@ -233,7 +233,7 @@ class RepositoryHandler implements HandlerInterface
         if ( !isset( $this->dbHandler ) )
         {
             $connection = \ezcDbFactory::create( $this->configurator->getDsn() );
-            $database   = preg_replace( '(^([a-z]+).*)', '\\1', $this->configurator->getDsn() );
+            $database = preg_replace( '(^([a-z]+).*)', '\\1', $this->configurator->getDsn() );
 
             switch ( $database )
             {

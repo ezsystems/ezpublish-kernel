@@ -29,4 +29,3 @@ class Field extends SortClause
         parent::__construct( 'field', $sortDirection, new FieldSortClauseTarget( $typeIdentifier, $fieldIdentifier ) );
     }
 }
-?>

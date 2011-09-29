@@ -22,7 +22,6 @@ abstract class Base extends PHPUnit_Framework_TestCase
      */
     protected $repository;
 
-
     protected function setUp()
     {
         parent::setUp();

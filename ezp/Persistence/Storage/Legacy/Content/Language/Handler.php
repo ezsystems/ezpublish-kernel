@@ -41,7 +41,7 @@ class Handler implements BaseLanguageHandler
     public function __construct( Gateway $languageGateway, Mapper $languageMapper )
     {
         $this->languageGateway = $languageGateway;
-        $this->languageMapper  = $languageMapper;
+        $this->languageMapper = $languageMapper;
     }
 
     /**

@@ -31,7 +31,7 @@ class ContentProxyTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $sc = new Container;
-        $this->service =$sc->getRepository()->getContentService();
+        $this->service = $sc->getRepository()->getContentService();
     }
 
     /**

@@ -85,7 +85,7 @@ class TextLineConverterLegacyTest extends \PHPUnit_Framework_TestCase
         $defaultValue->data = new TextLineValue( $defaultText );
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->validators = array(
-            TextLineConverter::STRING_LENGTH_VALIDATOR_FQN =>  array( 'maxStringLength' => 100 )
+            TextLineConverter::STRING_LENGTH_VALIDATOR_FQN => array( 'maxStringLength' => 100 )
         );
         $fieldTypeConstraints->fieldSettings = new \ezp\Content\FieldType\FieldSettings(
             array(

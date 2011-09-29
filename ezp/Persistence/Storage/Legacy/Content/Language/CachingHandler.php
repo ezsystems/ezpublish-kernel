@@ -45,7 +45,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
      */
     public function __construct( BaseLanguageHandler $innerHandler, Cache $languageCache )
     {
-        $this->innerHandler  = $innerHandler;
+        $this->innerHandler = $innerHandler;
         $this->languageCache = $languageCache;
     }
 

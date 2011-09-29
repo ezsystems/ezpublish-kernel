@@ -698,10 +698,10 @@ class ServiceTest extends BaseServiceTest
         $this->assertEquals( 4, count( $limitationArray ) );
         $this->assertEquals(
             array(
-                 array( 'SiteAccess' => array( 2576532274 ) ),
-                 array( 'SiteAccess' => array( 2582995467 ) ),
-                 array( 'SiteAccess' => array( 2479546403 ) ),
-                 array( 'SiteAccess' => array( 3781580864 ) ),
+                array( 'SiteAccess' => array( 2576532274 ) ),
+                array( 'SiteAccess' => array( 2582995467 ) ),
+                array( 'SiteAccess' => array( 2479546403 ) ),
+                array( 'SiteAccess' => array( 3781580864 ) ),
             ),
             $limitationArray
         );
@@ -818,7 +818,7 @@ class ServiceTest extends BaseServiceTest
     protected function clearRolesByGroup( Group $group )
     {
         $service = $this->repository->getUserService();
-        $roles = $service->loadRolesByGroupId( $group->id);
+        $roles = $service->loadRolesByGroupId( $group->id );
         foreach ( $roles as $role )
         {
             $service->unAssignRole( $group, $role );

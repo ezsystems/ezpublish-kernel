@@ -94,7 +94,6 @@ class TrashTest extends Base
         $this->locationService = $this->repository->getLocationService();
         $this->service = $this->repository->getTrashService();
 
-
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );
         $content = new ConcreteContent( $type, $administrator );
@@ -212,7 +211,7 @@ class TrashTest extends Base
     public function testTrashSubtree()
     {
         $topTrashed = $this->service->trash( $this->insertedLocations[0] );
-        self::assertInstanceOf( 'ezp\\Content\\Location\\Trashed' , $topTrashed );
+        self::assertInstanceOf( 'ezp\\Content\\Location\\Trashed', $topTrashed );
 
         foreach ( $this->insertedLocations as $location )
         {
@@ -475,13 +474,13 @@ class TrashTest extends Base
         $refBackend = $refHandler->getProperty( 'backend' );
         $refBackend->setAccessible( true );
         $trashHandler = $this->getMockBuilder( 'ezp\\Persistence\\Storage\\InMemory\\TrashHandler' )
-                                    ->setConstructorArgs(
-                                        array(
-                                            $repositoryHandler,
-                                            $refBackend->getValue( $repositoryHandler )
-                                        )
-                                    )
-                                    ->getMock();
+            ->setConstructorArgs(
+                array(
+                    $repositoryHandler,
+                    $refBackend->getValue( $repositoryHandler )
+                )
+            )
+            ->getMock();
         $refServiceHandlersProp = $refHandler->getProperty( 'serviceHandlers' );
         $refServiceHandlersProp->setAccessible( true );
         $refServiceHandlersProp->setValue(
@@ -516,26 +515,25 @@ class TrashTest extends Base
         $qb = new QueryBuilder;
         $qb->addCriteria(
             $qb->fullText->like( 'foo*' )
-        )
-        ->addSortClause(
+        )->addSortClause(
             $qb->sort->field( 'folder', 'name', Query::SORT_ASC ),
             $qb->sort->dateCreated( Query::SORT_DESC )
-        )
-        ->setOffset( 3 )->setLimit( $limit );
+        )->setOffset( 3 )->setLimit( $limit );
         $query = $qb->getQuery();
 
-        $trashHandler->expects( $this->once() )
-                     ->method( 'listTrashed' )
-                     ->with(
-                         $query->criterion,
-                         $query->offset,
-                         $query->limit,
-                         $query->sortClauses
-                     )
-                     ->will( $this->returnValue( $expectedResult ) );
+        $trashHandler
+            ->expects( $this->once() )
+            ->method( 'listTrashed' )
+            ->with(
+                $query->criterion,
+                $query->offset,
+                $query->limit,
+                $query->sortClauses
+            )
+            ->will( $this->returnValue( $expectedResult ) );
 
         $result = $this->service->getList( $query );
-        self::assertInstanceOf( 'ezp\\Content\\Location\\Collection' , $result );
+        self::assertInstanceOf( 'ezp\\Content\\Location\\Collection', $result );
         self::assertEquals( $limit, count( $result ) );
     }
 }

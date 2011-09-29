@@ -46,7 +46,7 @@ class Handler implements BaseTrashHandler
     public function __construct( LocationGateway $locationGateway, LocationMapper $locationMapper )
     {
         $this->locationGateway = $locationGateway;
-        $this->locationMapper  = $locationMapper;
+        $this->locationMapper = $locationMapper;
     }
 
     /**

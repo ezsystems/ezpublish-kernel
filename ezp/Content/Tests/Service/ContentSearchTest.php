@@ -67,14 +67,14 @@ class ContentSearchTest extends BaseServiceTest
         $refHandler = new ReflectionObject( $repositoryHandler );
         $refBackend = $refHandler->getProperty( 'backend' );
         $refBackend->setAccessible( true );
-        $this->searchHandler = $this->getMockBuilder( 'ezp\\Persistence\\Storage\\InMemory\\SearchHandler' )
-                                    ->setConstructorArgs(
-                                        array(
-                                            $repositoryHandler,
-                                            $refBackend->getValue( $repositoryHandler )
-                                        )
-                                    )
-                                    ->getMock();
+        $this->searchHandler = $this->getMockBuilder(
+            'ezp\\Persistence\\Storage\\InMemory\\SearchHandler'
+        )->setConstructorArgs(
+            array(
+                $repositoryHandler,
+                $refBackend->getValue( $repositoryHandler )
+            )
+        )->getMock();
         $refServiceHandlersProp = $refHandler->getProperty( 'serviceHandlers' );
         $refServiceHandlersProp->setAccessible( true );
         $refServiceHandlersProp->setValue(
@@ -118,18 +118,19 @@ class ContentSearchTest extends BaseServiceTest
             $qb->sort->dateCreated( Query::SORT_DESC )
         );
 
-        $this->searchHandler->expects( $this->once() )
-                            ->method( 'find' )
-                            ->will(
-                                $this->returnValue(
-                                    new ResultValue(
-                                        array(
-                                            'content' => $this->expectedContentVo,
-                                            'count' => count( $this->expectedContentVo )
-                                        )
-                                    )
-                                )
-                            );
+        $this->searchHandler
+            ->expects( $this->once() )
+            ->method( 'find' )
+            ->will(
+                $this->returnValue(
+                    new ResultValue(
+                        array(
+                            'content' => $this->expectedContentVo,
+                            'count' => count( $this->expectedContentVo )
+                        )
+                    )
+                )
+            );
 
         $result = $this->service->find( $qb->getQuery() );
         self::assertInstanceOf( 'ezp\\Content\\Search\\Result', $result );
@@ -154,9 +155,10 @@ class ContentSearchTest extends BaseServiceTest
         $qb = new QueryBuilder;
         $qb->addCriteria( $qb->fullText->eq( 'foo0' ) );
 
-        $this->searchHandler->expects( $this->once() )
-                            ->method( 'findSingle' )
-                            ->will( $this->returnValue( $this->expectedContentVo[0] ) );
+        $this->searchHandler
+            ->expects( $this->once() )
+            ->method( 'findSingle' )
+            ->will( $this->returnValue( $this->expectedContentVo[0] ) );
 
         $content = $this->service->findSingle( $qb->getQuery() );
         self::assertInstanceOf( 'ezp\\Content', $content );

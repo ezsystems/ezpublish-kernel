@@ -66,9 +66,9 @@ class EzcDatabase extends Gateway
         Language\CachingHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator )
     {
-        $this->dbHandler             = $db;
-        $this->queryBuilder          = $queryBuilder;
-        $this->languageHandler       = $languageHandler;
+        $this->dbHandler = $db;
+        $this->queryBuilder = $queryBuilder;
+        $this->languageHandler = $languageHandler;
         $this->languageMaskGenerator = $languageMaskGenerator;
     }
 
@@ -284,20 +284,22 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'modified' ),
             $q->bindValue( time(), null, \PDO::PARAM_INT )
-        )->where( $q->expr->lAnd(
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn( 'contentobject_id' ),
-                $q->bindValue( $contentId, null, \PDO::PARAM_INT )
-            ),
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn( 'version' ),
-                $q->bindValue( $version, null, \PDO::PARAM_INT )
+        )->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                    $q->bindValue( $contentId, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $q->bindValue( $version, null, \PDO::PARAM_INT )
+                )
             )
-        ) );
+        );
         $statement = $q->prepare();
         $statement->execute();
 
-        return (bool) $statement->rowCount();
+        return (bool)$statement->rowCount();
     }
 
     /**

@@ -26,4 +26,3 @@ class DateCreated extends SortClause
         parent::__construct( 'date_created', $sortDirection );
     }
 }
-?>

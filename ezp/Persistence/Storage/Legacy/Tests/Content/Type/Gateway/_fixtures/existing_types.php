@@ -277,7 +277,7 @@ return array(
         ),
     ),
     'ezcontentclass_name' => array(
-         array(
+        array(
             'contentclass_id' => 1,
             'contentclass_version' => 0,
             'language_id' => 3,
@@ -285,6 +285,5 @@ return array(
             'name' => 'Folder'
         )
     ),
-    'ezcontent_language' => array(
-    )
+    'ezcontent_language' => array()
 );

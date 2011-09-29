@@ -45,6 +45,6 @@ class Value implements ValueInterface
      */
     public function __toString()
     {
-        return implode( "," , $this->values );
+        return implode( ",", $this->values );
     }
 }

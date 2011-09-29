@@ -71,5 +71,3 @@ EOF;
         return false;
     }
 }
-
-?>

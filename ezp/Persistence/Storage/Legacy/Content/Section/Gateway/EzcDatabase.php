@@ -189,8 +189,8 @@ class EzcDatabase extends Gateway
         $query->update(
             $this->dbHandler->quoteTable( 'ezcontentobject' )
         )->set(
-                $this->dbHandler->quoteColumn( 'section_id' ),
-                $query->bindValue( $sectionId, null, \PDO::PARAM_INT )
+            $this->dbHandler->quoteColumn( 'section_id' ),
+            $query->bindValue( $sectionId, null, \PDO::PARAM_INT )
         )->where(
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),

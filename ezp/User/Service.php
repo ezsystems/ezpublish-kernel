@@ -95,7 +95,7 @@ class Service extends BaseService
             {
                 continue;
             }
-            elseif ( $user->passwordHash == self::createHash( $user->login, $password, $user->hashAlgorithm ) )
+            else if ( $user->passwordHash == self::createHash( $user->login, $password, $user->hashAlgorithm ) )
             {
                 return $this->buildUser( $user, new ProxyContent( $user->id, $this->repository->getContentService() ) );
             }
@@ -117,16 +117,16 @@ class Service extends BaseService
         {
             return md5( "$login\n$password" );
         }
-        elseif ( $type == User::PASSWORD_HASH_MD5_SITE )
+        else if ( $type == User::PASSWORD_HASH_MD5_SITE )
         {
             $site = Configuration::getInstance( 'site' )->get( 'UserSettings', 'SiteName', 'ez.no' );
             return md5( "$login\n$password\n$site" );
         }
-        elseif ( $type == User::PASSWORD_HASH_PLAIN_TEXT )
+        else if ( $type == User::PASSWORD_HASH_PLAIN_TEXT )
         {
             return $password;
         }
-        //elseif ( $type == User::PASSWORD_HASH_MD5_PASSWORD )
+        //else if ( $type == User::PASSWORD_HASH_MD5_PASSWORD )
         return md5( $password );
     }
 
@@ -516,14 +516,15 @@ class Service extends BaseService
         $parent = null;
         if ( $content->getMainLocation()->parentId > 1 )
         {
-            $parent = new ProxyGroup( 
-                $content->getMainLocation()->getParent()->getContent()->id,// not very lazy, callback / api?
+            $parent = new ProxyGroup(
+                // not very lazy, callback / api?
+                $content->getMainLocation()->getParent()->getContent()->id,
                 $this
             );
         }
         $do = new ConcreteGroup( $content );
         $do->setState(
-            array(  
+            array(
                 "parent" => $parent,
                 "roles" => new Lazy(
                     "ezp\\User\\Role",

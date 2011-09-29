@@ -15,4 +15,3 @@ namespace ezp\Persistence\Content\Query\SortClause;
 abstract class Target
 {
 }
-?>

@@ -51,7 +51,7 @@ class TransformationProcessor
      */
     public function __construct( TransformationParser $parser, TransformationPcreCompiler $compiler )
     {
-        $this->parser   = $parser;
+        $this->parser = $parser;
         $this->compiler = $compiler;
     }
 

@@ -136,7 +136,7 @@ class Handler implements BaseSectionHandler
         if ( $contentCount > 0 )
         {
             throw new \RuntimeException(
-               "Section with ID '{$id}' still has content assigned."
+                "Section with ID '{$id}' still has content assigned."
             );
         }
         $this->sectionGateway->deleteSection( $id );

@@ -87,9 +87,9 @@ class EzcDatabase extends Gateway
         )->set(
             $this->dbHandler->quoteColumn( 'disabled' ),
             $query->bindValue(
-               ( (int) ( ! $language->isEnabled ) ),
-               null,
-               \PDO::PARAM_INT
+                ( (int)( ! $language->isEnabled ) ),
+                null,
+                \PDO::PARAM_INT
             )
         );
     }

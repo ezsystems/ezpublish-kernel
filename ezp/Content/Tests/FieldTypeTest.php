@@ -42,8 +42,9 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
      */
     protected function setUp()
     {
-        $this->stub = $this->getMockBuilder( 'ezp\\Content\\FieldType' )
-                           ->getMockForAbstractClass();
+        $this->stub = $this->getMockBuilder(
+            'ezp\\Content\\FieldType'
+        )->getMockForAbstractClass();
 
         $this->refStub = new ReflectionObject( $this->stub );
         // Allowed Validators
@@ -124,9 +125,10 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
         $mockValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
         $mockValue->bountyHunter = 'Boba Fett';
         $mockValue->jediMaster = 'Obi-Wan Kenobi';
-        $this->stub->expects( $this->once() )
-                   ->method( 'canParseValue' )
-                   ->will( $this->returnArgument( 0 ) );
+        $this->stub
+            ->expects( $this->once() )
+            ->method( 'canParseValue' )
+            ->will( $this->returnArgument( 0 ) );
 
         $this->stub->setValue( $mockValue );
         self::assertEquals( $mockValue, $this->stub->getValue() );
@@ -140,9 +142,10 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
     public function testSetValueInvalid()
     {
         $mockValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
-        $this->stub->expects( $this->once() )
-                   ->method( 'canParseValue' )
-                   ->will( $this->throwException( new BadFieldTypeInput( $mockValue ) ) );
+        $this->stub
+            ->expects( $this->once() )
+            ->method( 'canParseValue' )
+            ->will( $this->throwException( new BadFieldTypeInput( $mockValue ) ) );
 
         $this->stub->setValue( $mockValue );
     }
@@ -156,9 +159,10 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
         $mockValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
         $mockValue->bountyHunter = 'Han Solo';
         $mockValue->jediMaster = 'Yoda';
-        $this->stub->expects( $this->once() )
-                   ->method( 'canParseValue' )
-                   ->will( $this->returnArgument( 0 ) );
+        $this->stub
+            ->expects( $this->once() )
+            ->method( 'canParseValue' )
+            ->will( $this->returnArgument( 0 ) );
 
         $this->stub->setValue( $mockValue );
         self::assertEquals( $mockValue, $this->stub->getValue() );
@@ -172,13 +176,15 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
     {
         $fieldValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
         $sortingInfo = array( 'sort_key_string' => "The Force is strong" );
-        $this->stub->expects( $this->once() )
-                   ->method( 'canParseValue' )
-                   ->will( $this->returnArgument( 0 ) );
+        $this->stub
+            ->expects( $this->once() )
+            ->method( 'canParseValue' )
+            ->will( $this->returnArgument( 0 ) );
         $this->stub->setValue( $fieldValue );
-        $this->stub->expects( $this->once() )
-                   ->method( 'getSortInfo' )
-                   ->will( $this->returnValue( $sortingInfo ) );
+        $this->stub
+            ->expects( $this->once() )
+            ->method( 'getSortInfo' )
+            ->will( $this->returnValue( $sortingInfo ) );
 
         $fieldVo = $this->stub->toFieldValue();
         self::assertInstanceOf( "ezp\\Persistence\\Content\\FieldValue", $fieldVo );
@@ -239,10 +245,11 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
     {
         $mockValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
         $mockValue->foo = 'bar';
-        $this->stub->expects( $this->once() )
-                   ->method( 'canParseValue' )
-                   ->with( $mockValue )
-                   ->will( $this->returnArgument( 0 ) );
+        $this->stub
+            ->expects( $this->once() )
+            ->method( 'canParseValue' )
+            ->with( $mockValue )
+            ->will( $this->returnArgument( 0 ) );
 
         $this->stub->update(
             $this->getMock( 'ezp\\Base\\Observable' ),

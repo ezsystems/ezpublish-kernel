@@ -26,4 +26,3 @@ class LocationPathString extends SortClause
         parent::__construct( 'location_path_string', $sortDirection );
     }
 }
-?>

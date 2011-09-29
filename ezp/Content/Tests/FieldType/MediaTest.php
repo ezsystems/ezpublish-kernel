@@ -42,7 +42,6 @@ class MediaTest extends PHPUnit_Framework_TestCase
         $this->mediaFileInfo = new FileInfo( $this->mediaPath );
     }
 
-
     /**
      * This test will make sure a correct mapping for the field type string has
      * been made.
@@ -222,26 +221,31 @@ class MediaTest extends PHPUnit_Framework_TestCase
         $refMethod->setAccessible( true );
 
         $fieldDefMock = $this->getMockBuilder( 'ezp\\Content\\Type\\FieldDefinition' )
-                             ->setConstructorArgs( array(
-                                 $this->getMock( 'ezp\\Content\\Type' ),
-                                 'ezmedia'
-                             ) )
-                             ->getMock();
-        $fieldDefMock->expects( $this->once() )
-                     ->method( 'getType' )
-                     ->will( $this->returnValue( $ft ) );
+            ->setConstructorArgs(
+                array(
+                    $this->getMock( 'ezp\\Content\\Type' ),
+                    'ezmedia'
+                )
+            )
+            ->getMock();
+        $fieldDefMock
+            ->expects( $this->once() )
+            ->method( 'getType' )
+            ->will( $this->returnValue( $ft ) );
 
         $fieldMock = $this->getMockBuilder( 'ezp\\Content\\Field' )
-                          ->setConstructorArgs( array(
-                              $this->getMockBuilder( 'ezp\\Content\\Version' )
-                                   ->disableOriginalConstructor()
-                                   ->getMock(),
-                              $fieldDefMock
-                          ) )
-                          ->getMock();
+            ->setConstructorArgs(
+                array(
+                    $this->getMockBuilder( 'ezp\\Content\\Version' )
+                        ->disableOriginalConstructor()
+                        ->getMock(),
+                    $fieldDefMock
+                )
+            )
+            ->getMock();
 
         $refMethod->invoke( $ft, $fieldMock, $value );
-        self::assertSame( $ft->getValue() , $value );
+        self::assertSame( $ft->getValue(), $value );
         self::assertSame( MediaHandler::PLUGINSPAGE_QUICKTIME, $ft->getValue()->pluginspage );
     }
 }

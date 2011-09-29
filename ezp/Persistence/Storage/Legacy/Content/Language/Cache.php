@@ -38,7 +38,7 @@ class Cache
      */
     public function store( Language $language )
     {
-        $this->mapById[$language->id]         = $language;
+        $this->mapById[$language->id] = $language;
         $this->mapByLocale[$language->locale] = $language;
     }
 

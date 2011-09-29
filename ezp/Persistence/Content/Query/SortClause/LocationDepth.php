@@ -26,4 +26,3 @@ class LocationDepth extends SortClause
         parent::__construct( 'location_depth', $sortDirection );
     }
 }
-?>

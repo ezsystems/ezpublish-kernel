@@ -49,6 +49,8 @@ class SectionTest extends BaseServiceTest
 
         $service = $this->repository->getSectionService();
         $newSection = $service->create( $section );
+        {
+        }
     }
 
     /**

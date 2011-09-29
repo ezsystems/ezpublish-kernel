@@ -162,7 +162,10 @@ class SearchHandlerSortTest extends TestCase
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content )
+                {
+                    return $content->id;
+                },
                 $result->content
             )
         );
@@ -185,7 +188,10 @@ class SearchHandlerSortTest extends TestCase
         $this->assertEquals(
             array( 10, 42, 13, 14, 12, 11, 4 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content )
+                {
+                    return $content->id;
+                },
                 $result->content
             )
         );
@@ -208,7 +214,10 @@ class SearchHandlerSortTest extends TestCase
         $this->assertEquals(
             array( 4, 11, 12, 13, 42, 10, 14 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content )
+                {
+                    return $content->id;
+                },
                 $result->content
             )
         );
@@ -232,7 +241,10 @@ class SearchHandlerSortTest extends TestCase
         $this->assertEquals(
             array( 4, 42, 13, 12, 11, 10, 14 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content )
+                {
+                    return $content->id;
+                },
                 $result->content
             )
         );
@@ -255,7 +267,10 @@ class SearchHandlerSortTest extends TestCase
         $this->assertEquals(
             array( 4, 10, 11, 12, 13, 14, 42 ),
             array_map(
-                function ( $content ) { return $content->id; },
+                function ( $content )
+                {
+                    return $content->id;
+                },
                 $result->content
             )
         );

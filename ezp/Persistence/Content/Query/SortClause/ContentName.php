@@ -26,4 +26,3 @@ class ContentName extends SortClause
         parent::__construct( 'content_name', $sortDirection );
     }
 }
-?>

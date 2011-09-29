@@ -81,7 +81,6 @@ abstract class Validator
         return $this->constraints;
     }
 
-
     /**
      * Initialized an instance of Validator, with earlier configured constraints.
      *
@@ -96,7 +95,7 @@ abstract class Validator
         {
             if ( !isset( $this->constraints[$constraint] ) )
             {
-                throw new  PropertyNotFound( "The constraint, {$constraint}, is not valid for this validator." );
+                throw new PropertyNotFound( "The constraint, {$constraint}, is not valid for this validator." );
             }
 
             $this->constraints[$constraint] = $value;
@@ -114,7 +113,7 @@ abstract class Validator
     public function __get( $name )
     {
         if ( !isset( $this->constraints[$name] ) )
-            throw new  PropertyNotFound( "The constraint, {$name}, is not valid for this validator." );
+            throw new PropertyNotFound( "The constraint, {$name}, is not valid for this validator." );
 
         return $this->constraints[$name];
     }
@@ -130,7 +129,7 @@ abstract class Validator
     public function __set( $name, $value )
     {
         if ( !isset( $this->constraints[$name] ) )
-            throw new  PropertyNotFound( "The constraint, {$name}, is not valid for this validator." );
+            throw new PropertyNotFound( "The constraint, {$name}, is not valid for this validator." );
 
         $this->constraints[$name] = $value;
     }

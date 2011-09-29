@@ -61,10 +61,10 @@ class EzcDatabase extends Gateway
         QueryBuilder $queryBuilder
     )
     {
-        $this->handler             = $handler;
-        $this->criteriaConverter   = $criteriaConverter;
+        $this->handler = $handler;
+        $this->criteriaConverter = $criteriaConverter;
         $this->sortClauseConverter = $sortClauseConverter;
-        $this->queryBuilder        = $queryBuilder;
+        $this->queryBuilder = $queryBuilder;
     }
 
     /**
@@ -104,7 +104,7 @@ class EzcDatabase extends Gateway
 
         return array(
             'count' => $count,
-            'rows'  => $this->loadContent( $contentIds, $translations ),
+            'rows' => $this->loadContent( $contentIds, $translations ),
         );
     }
 

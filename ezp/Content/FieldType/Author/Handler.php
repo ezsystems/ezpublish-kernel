@@ -33,8 +33,6 @@ class Handler implements HandlerInterface
                 $this->addAuthor( $author->getAttribute( "id" ), $author->getAttribute( "name" ), $author->getAttribute( "email" ) );
             }
         }
-
-
     }
 
     /**
@@ -73,7 +71,7 @@ class Handler implements HandlerInterface
 
     public function addAuthor( $id, $name, $email )
     {
-        if ( $id === false || $id === null)
+        if ( $id === false || $id === null )
         {
             $id = $this->authors[$this->authorCount - 1]['id'] + 1;
         }

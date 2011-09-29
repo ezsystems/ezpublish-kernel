@@ -96,7 +96,7 @@ class TransformationPcreCompiler
     protected function compileMap( array $rule )
     {
         return array(
-            'regexp'   => '(' . preg_quote( $this->compileCharacter( $rule['data']['src'] ) ) . ')us',
+            'regexp' => '(' . preg_quote( $this->compileCharacter( $rule['data']['src'] ) ) . ')us',
             'callback' => $this->compileTargetCharacter( $rule['data']['dest'] ),
         );
     }
@@ -110,7 +110,7 @@ class TransformationPcreCompiler
     protected function compileReplace( array $rule )
     {
         return array(
-            'regexp'   => '([' .
+            'regexp' => '([' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcStart'] ) ) . '-' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcEnd'] ) ) .
                 '])us',
@@ -127,7 +127,7 @@ class TransformationPcreCompiler
     protected function compileTranspose( array $rule )
     {
         return array(
-            'regexp'   => '([' .
+            'regexp' => '([' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcStart'] ) ) . '-' .
                 preg_quote( $this->compileCharacter( $rule['data']['srcEnd'] ) ) .
                 '])us',
@@ -144,12 +144,14 @@ class TransformationPcreCompiler
     protected function compileTransposeModulo( array $rule )
     {
         return array(
-            'regexp'   => '([' .
-                preg_quote( $this->getModuloCharRange(
-                    $this->compileCharacter( $rule['data']['srcStart'] ),
-                    $this->compileCharacter( $rule['data']['srcEnd'] ),
-                    $rule['data']['modulo']
-                ) ) .
+            'regexp' => '([' .
+                preg_quote(
+                    $this->getModuloCharRange(
+                        $this->compileCharacter( $rule['data']['srcStart'] ),
+                        $this->compileCharacter( $rule['data']['srcEnd'] ),
+                        $rule['data']['modulo']
+                    )
+                ) .
                 '])us',
             'callback' => $this->getTransposeClosure( $rule['data']['op'], $rule['data']['dest'] ),
         );
@@ -169,8 +171,8 @@ class TransformationPcreCompiler
      */
     protected function getModuloCharRange( $start, $end, $modulo )
     {
-        $start  = $this->converter->toUnicodeCodepoint( $start );
-        $end    = $this->converter->toUnicodeCodepoint( $end );
+        $start = $this->converter->toUnicodeCodepoint( $start );
+        $end = $this->converter->toUnicodeCodepoint( $end );
         $modulo = hexdec( $modulo );
 
         $chars = '';
@@ -192,7 +194,7 @@ class TransformationPcreCompiler
      */
     protected function getTransposeClosure( $operator, $value )
     {
-        $value     = hexdec( $value ) * ( $operator === '-' ? -1 : 1 );
+        $value = hexdec( $value ) * ( $operator === '-' ? -1 : 1 );
         $converter = $this->converter;
         return function ( $matches ) use ( $value, $converter )
         {

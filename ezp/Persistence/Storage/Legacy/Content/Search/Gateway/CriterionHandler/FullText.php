@@ -81,7 +81,7 @@ class FullText extends CriterionHandler
         parent::__construct( $dbHandler );
 
         $this->configuration = $configuration + $this->configuration;
-        $this->processor     = $processor;
+        $this->processor = $processor;
     }
 
     /**

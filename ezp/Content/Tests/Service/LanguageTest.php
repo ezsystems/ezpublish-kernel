@@ -47,7 +47,9 @@ class LanguageTest extends BaseServiceTest
             $service->load( $newLanguage->id );
             self::fail( 'Language is still returned after being deleted' );
         }
-        catch ( NotFound $e ){}
+        catch ( NotFound $e )
+        {
+        }
     }
 
     /**
@@ -77,12 +79,12 @@ class LanguageTest extends BaseServiceTest
         {
             $service->delete( $item );
         }
- 
+
         $service->create( 'eng-GB', 'English (United Kingdom)' );
         $service->create( 'eng-US', 'English (American)' );
         $languages = $service->loadAll();
         self::assertEquals( 2, count( $languages ) );
-        self::assertEquals( $languages[0]->id +1, $languages[1]->id );
+        self::assertEquals( $languages[0]->id + 1, $languages[1]->id );
         self::assertEquals( 'eng-GB', $languages[0]->locale );
         self::assertEquals( 'eng-US', $languages[1]->locale );
     }

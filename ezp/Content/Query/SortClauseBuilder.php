@@ -68,8 +68,7 @@ class SortClauseBuilder
             {
                 array_push( $args, Query::SORT_ASC );
             }
-            return  $reflectionClass->newInstanceArgs( $args );
+            return $reflectionClass->newInstanceArgs( $args );
         }
     }
 }
-?>

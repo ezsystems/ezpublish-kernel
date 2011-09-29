@@ -18,6 +18,25 @@ use ezp\Content\Query,
 abstract class SortClause
 {
     /**
+     * Sort direction
+     * One of \ezp\Content\Query::SORT_ASC or \ezp\Content\Query::SORT_DESC;
+     * @var string
+     */
+    public $direction = Query::SORT_ASC;
+
+    /**
+     * Sort target, high level: section_identifier, attribute_value, etc
+     * @var string
+     */
+    public $target;
+
+    /**
+     * Extra target data, required by some sort clauses, field for instance
+     * @var SortClauseTarget
+     */
+    public $targetData;
+
+    /**
      * Constructs a new SortClause on $sortTarget in direction $sortDirection
      * @param string $sortTarget
      * @param string $sortDirection one of ezp\Content\Query::SORT_ASC or ezp\Content\Query::SORT_DESC
@@ -40,24 +59,4 @@ abstract class SortClause
             $this->targetData = $targetData;
         }
     }
-
-    /**
-     * Sort direction
-     * One of \ezp\Content\Query::SORT_ASC or \ezp\Content\Query::SORT_DESC;
-     * @var string
-     */
-    public $direction = Query::SORT_ASC;
-
-    /**
-     * Sort target, high level: section_identifier, attribute_value, etc
-     * @var string
-     */
-    public $target;
-
-    /**
-     * Extra target data, required by some sort clauses, field for instance
-     * @var SortClauseTarget
-     */
-    public $targetData;
 }
-?>

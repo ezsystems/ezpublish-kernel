@@ -40,7 +40,7 @@ class EzcDatabase extends Handler
     public function __construct( Gateway $contentTypeGateway, ContentUpdater $contentUpdater )
     {
         $this->contentTypeGateway = $contentTypeGateway;
-        $this->contentUpdater     = $contentUpdater;
+        $this->contentUpdater = $contentUpdater;
     }
 
     /**

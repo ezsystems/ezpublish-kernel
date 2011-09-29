@@ -187,8 +187,8 @@ class Mapper
         $field->isRequired = $row['ezcontentclass_attribute_is_required'] == 1;
         $field->isInfoCollector = $row['ezcontentclass_attribute_is_information_collector'] == 1;
 
-        $field->isSearchable = (bool) $row['ezcontentclass_attribute_is_searchable'];
-        $field->position = (int) $row['ezcontentclass_attribute_placement'];
+        $field->isSearchable = (bool)$row['ezcontentclass_attribute_is_searchable'];
+        $field->position = (int)$row['ezcontentclass_attribute_placement'];
 
         $this->toFieldDefinition( $storageFieldDef, $field );
 

@@ -88,7 +88,6 @@ class LocationTest extends BaseServiceTest
         $parent = $this->topLocation;
         for ( $i = 0; $i < 10; ++$i )
         {
-
             $content = new ConcreteContent( $type, $administrator );
             $content->name = array( "eng-GB" => "foo$i" );
             $content->setSection( $section );

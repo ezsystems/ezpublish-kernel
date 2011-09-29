@@ -26,4 +26,3 @@ class SectionName extends SortClause
         parent::__construct( 'section_name', $sortDirection );
     }
 }
-?>

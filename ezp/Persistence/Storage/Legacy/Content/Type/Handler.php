@@ -416,7 +416,7 @@ class Handler implements BaseContentTypeHandler
      */
     public function publish( $contentTypeId )
     {
-        $toType   = $this->load( $contentTypeId, 1 );
+        $toType = $this->load( $contentTypeId, 1 );
 
         try
         {
@@ -428,7 +428,6 @@ class Handler implements BaseContentTypeHandler
         {
             // If no old type is found, no updates are necessary to it
         }
-
 
         $this->updateHandler->publishNewType( $toType, 0 );
     }

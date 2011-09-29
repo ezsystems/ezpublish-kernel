@@ -42,7 +42,6 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
         $this->imageFileInfo = new FileInfo( $this->imagePath );
     }
 
-
     /**
      * This test will make sure a correct mapping for the field type string has
      * been made.

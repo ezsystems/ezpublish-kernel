@@ -71,7 +71,6 @@ class FieldTest extends BaseContentTest
         }
     }
 
-
     /**
      * @group field
      * @group content
@@ -135,10 +134,11 @@ And you will know My name is the Lord when I lay My vengeance upon thee.
 EOT;
         $value = new TextLineValue( $longPulpFictionQuote );
         $validator = $this->getMockForAbstractClass( 'ezp\\Content\\FieldType\\Validator' );
-        $validator->expects( $this->once() )
-                  ->method( 'validate' )
-                  ->with( $value )
-                  ->will( $this->returnValue( false ) );
+        $validator
+            ->expects( $this->once() )
+            ->method( 'validate' )
+            ->with( $value )
+            ->will( $this->returnValue( false ) );
 
         $field = $this->content->fields['title'];
         $fieldType = $field->getFieldDefinition()->getType();

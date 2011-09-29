@@ -48,7 +48,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
         if ( !$this->dsn )
         {
             $this->dsn = @$_ENV['DATABASE'] ?: 'sqlite://:memory:';
-            $this->db  = preg_replace( '(^([a-z]+).*)', '\\1', $this->dsn );
+            $this->db = preg_replace( '(^([a-z]+).*)', '\\1', $this->dsn );
         }
 
         return $this->dsn;
@@ -111,7 +111,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $schema   = __DIR__ . '/_fixtures/schema.' . $this->db . '.sql';
+        $schema = __DIR__ . '/_fixtures/schema.' . $this->db . '.sql';
 
         $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schema ) ) );
         foreach ( $queries as $query )

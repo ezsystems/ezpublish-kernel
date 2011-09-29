@@ -85,10 +85,12 @@ class Version extends Model implements Observer
      */
     public function __construct( Content $content )
     {
-        $this->properties = new VersionValue( array(
-            'contentId' => $content->id,
-            'status' => self::STATUS_DRAFT,
-        ) );
+        $this->properties = new VersionValue(
+            array(
+                'contentId' => $content->id,
+                'status' => self::STATUS_DRAFT,
+            )
+        );
         $this->content = $content;
         $this->fields = new FieldCollection( $this );
     }

@@ -26,4 +26,3 @@ class LocationPriority extends SortClause
         parent::__construct( 'location_priority', $sortDirection );
     }
 }
-?>

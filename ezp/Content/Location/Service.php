@@ -47,10 +47,11 @@ class Service extends BaseService
             return $this->buildDomainObject(
                 $this->handler->locationHandler()->copySubtree(
                     $subtree->id,
-                    $targetLocation->id )
+                    $targetLocation->id
+                )
             );
         }
-        catch( NotFound $e )
+        catch ( NotFound $e )
         {
             throw new LocationNotFound( $e->identifier, $e );
         }
@@ -359,7 +360,8 @@ class Service extends BaseService
             'children' => new Lazy(
                 'ezp\\Content\\Location',
                 $this,
-                $location,// api uses location to be able to use sort info
+                // api uses location to be able to use sort info
+                $location,
                 'children'
             )
         );

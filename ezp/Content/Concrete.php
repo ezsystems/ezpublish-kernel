@@ -185,11 +185,13 @@ class Concrete extends Model implements Content, Observer
      */
     public function __construct( Type $contentType, User $owner )
     {
-        $this->properties = new ContentValue( array(
-            'typeId' => $contentType->id,
-            'status' => self::STATUS_DRAFT,
-            'ownerId' => $owner->id
-        ) );
+        $this->properties = new ContentValue(
+            array(
+                'typeId' => $contentType->id,
+                'status' => self::STATUS_DRAFT,
+                'ownerId' => $owner->id
+            )
+        );
         /*
         @TODO Make sure all dynamic properties writes to value object if scalar value (creationDate (int)-> properties->created )
         */

@@ -88,11 +88,13 @@ class Utf8Converter
     public static function toUnicodeCodepoint( $char )
     {
         $charCode = false;
-        if ( ( ord( $char[0] ) & 0x80 ) == 0x00 ) // 7 bit, 1 char
+        // 7bits, 1 char
+        if ( ( ord( $char[0] ) & 0x80 ) == 0x00 )
         {
             $charCode = ord( $char[0] );
         }
-        elseif ( ( ord( $char[0] ) & 0xe0 ) == 0xc0 ) // 11 bit, 2 chars
+        // 11 bits, 2 chars
+        else if ( ( ord( $char[0] ) & 0xe0 ) == 0xc0 )
         {
             if ( ( ord( $char[1] ) & 0xc0 ) != 0x80 )
             {
@@ -109,7 +111,8 @@ class Utf8Converter
                 throw new \RuntimeException( 'Illegal UTF-8 input character: ' . $char );
             }
         }
-        elseif ( ( ord( $char[0] ) & 0xf0 ) == 0xe0 ) // 16 bit, 3 chars
+        // 16 bits, 3 chars
+        else if ( ( ord( $char[0] ) & 0xf0 ) == 0xe0 )
         {
             if ( ( ord( $char[1] ) & 0xc0 ) != 0x80 ||
                  ( ord( $char[2] ) & 0xc0 ) != 0x80 )
@@ -127,7 +130,8 @@ class Utf8Converter
                 throw new \RuntimeException( 'Illegal UTF-8 input character: ' . $char );
             }
         }
-        elseif ( ( ord( $char[0] ) & 0xf8 ) == 0xf0 ) // 21 bit, 4 chars
+        // 21 bits, 4 chars
+        else if ( ( ord( $char[0] ) & 0xf8 ) == 0xf0 )
         {
             if ( ( ord( $char[1] ) & 0xc0 ) != 0x80 ||
                  ( ord( $char[2] ) & 0xc0 ) != 0x80 ||
@@ -148,7 +152,8 @@ class Utf8Converter
                 throw new \RuntimeException( 'Illegal UTF-8 input character: ' . $char );
             }
         }
-        elseif ( ( ord( $char[0] ) & 0xfc ) == 0xf8 ) // 26 bit, 5 chars
+        // 26 bits, 5 chars
+        else if ( ( ord( $char[0] ) & 0xfc ) == 0xf8 )
         {
             if ( ( ord( $char[1] ) & 0xc0 ) != 0x80 ||
                  ( ord( $char[2] ) & 0xc0 ) != 0x80 ||
@@ -171,7 +176,8 @@ class Utf8Converter
                 throw new \RuntimeException( 'Illegal UTF-8 input character: ' . $char );
             }
         }
-        elseif ( ( ord( $char[0] ) & 0xfe ) == 0xfc ) // 31 bit, 6 chars
+        // 31 bits, 6 chars
+        else if ( ( ord( $char[0] ) & 0xfe ) == 0xfc )
         {
             if ( ( ord( $char[1] ) & 0xc0 ) != 0x80 ||
                  ( ord( $char[2] ) & 0xc0 ) != 0x80 ||

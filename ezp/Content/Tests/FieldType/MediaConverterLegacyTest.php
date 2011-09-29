@@ -103,7 +103,7 @@ class MediaConverterLegacyTest extends \PHPUnit_Framework_TestCase
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->validators = array(
             // Setting max file size to 1MB (1.048.576 bytes)
-            MediaTypeConverter::FILESIZE_VALIDATOR_FQN =>  array( 'maxFileSize' => 1048576 )
+            MediaTypeConverter::FILESIZE_VALIDATOR_FQN => array( 'maxFileSize' => 1048576 )
         );
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(

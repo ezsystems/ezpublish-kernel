@@ -136,4 +136,3 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf( 'ezp\\Persistence\\Content\\Query\\SortClause\\DateModified', $query->sortClauses[0] );
     }
 }
-?>

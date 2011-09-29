@@ -110,8 +110,9 @@ class Concrete extends Model implements Groupable, User
                 'password' => array(),
                 'preferences' => array(),
                 'register' => array(),
-                'selfedit' => array(),// @todo If this was a limitation somewhere, then logic could have been on limitation
-                                      // instead of having to be inline in the code with specific calls to selfedit + logic
+                // @todo If this was a limitation somewhere, then logic could have been on limitation
+                // instead of having to be inline in the code with specific calls to selfedit + logic
+                'selfedit' => array(),
             ),
         );
     }

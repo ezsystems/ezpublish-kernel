@@ -108,7 +108,9 @@ class TypeTest extends BaseServiceTest
             $this->fail( "Expected exception as group being loaded has been deleted" );
 
         }
-        catch ( NotFound $e ){}
+        catch ( NotFound $e )
+        {
+        }
     }
 
     /**
@@ -336,7 +338,9 @@ class TypeTest extends BaseServiceTest
             $this->service->load( 1 );
             $this->fail( "Expected exception as type being loaded has been deleted" );
         }
-        catch ( NotFound $e ){}
+        catch ( NotFound $e )
+        {
+        }
     }
 
     /**

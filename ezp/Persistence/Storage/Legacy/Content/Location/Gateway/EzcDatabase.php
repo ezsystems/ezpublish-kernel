@@ -409,7 +409,7 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $location->contentId = $createStruct->contentId, null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'contentobject_is_published' ),
-                $query->bindValue( (int) $published, null, \PDO::PARAM_INT ) // Will be set to 1, once the contentt object has been published
+                $query->bindValue( (int)$published, null, \PDO::PARAM_INT ) // Will be set to 1, once the contentt object has been published
             )->set(
                 $this->handler->quoteColumn( 'contentobject_version' ),
                 $query->bindValue( $createStruct->contentVersion, null, \PDO::PARAM_INT )
@@ -548,16 +548,18 @@ class EzcDatabase extends Gateway
                 $this->handler->quoteColumn( 'op_code' ),
                 $query->bindValue( $opcode, null, \PDO::PARAM_INT )
             )
-            ->where( $query->expr->lAnd(
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'contentobject_id' ),
-                    $query->bindValue( $contentObjectId, null, \PDO::PARAM_INT )
-                ),
-                $query->expr->eq(
-                    $this->handler->quoteColumn( 'parent_node' ),
-                    $query->bindValue( $oldParent, null, \PDO::PARAM_INT )
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'contentobject_id' ),
+                        $query->bindValue( $contentObjectId, null, \PDO::PARAM_INT )
+                    ),
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'parent_node' ),
+                        $query->bindValue( $oldParent, null, \PDO::PARAM_INT )
+                    )
                 )
-            ) );
+            );
         $query->prepare()->execute();
     }
 
@@ -576,20 +578,22 @@ class EzcDatabase extends Gateway
         $query
             ->select( '*' )
             ->from( $this->handler->quoteTable( 'eznode_assignment' ) )
-            ->where( $query->expr->lAnd(
-                $query->expr->like(
-                    $this->handler->quoteColumn( 'contentobject_id' ),
-                    $query->bindValue( $contentId, null, \PDO::PARAM_INT )
-                ),
-                $query->expr->like(
-                    $this->handler->quoteColumn( 'contentobject_version' ),
-                    $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
-                ),
-                $query->expr->like(
-                    $this->handler->quoteColumn( 'op_code' ),
-                    $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP, null, \PDO::PARAM_INT )
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->like(
+                        $this->handler->quoteColumn( 'contentobject_id' ),
+                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    ),
+                    $query->expr->like(
+                        $this->handler->quoteColumn( 'contentobject_version' ),
+                        $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    ),
+                    $query->expr->like(
+                        $this->handler->quoteColumn( 'op_code' ),
+                        $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP, null, \PDO::PARAM_INT )
+                    )
                 )
-            ) );
+            );
         $statement = $query->prepare();
         $statement->execute();
 

@@ -211,7 +211,6 @@ class Service extends BaseService
                     $content->attach( $fields[$identifier]->getFieldDefinition()->getType(), 'content/publish' );
                     continue 2;
                 }
-
             }
             throw new Logic( 'field:' . $identifier, 'could not find this field in returned Version value data'  );
         }
@@ -227,15 +226,19 @@ class Service extends BaseService
      */
     public function addRelation( Relation $relation, Content $content, $version = null )
     {
-        $struct = $this->fillStruct( new RelationCreateStruct( array(
-                                                                   'sourceContentId' => $content->id,
-                                                                   'sourceContentVersion' => $version
-                                     ) ),
-                                     $relation,
-                                     array(
-                                         'sourceContentVersion',
-                                         'sourceFieldDefinitionId'
-                                     ) );
+        $struct = $this->fillStruct(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => $content->id,
+                    'sourceContentVersion' => $version
+                )
+            ),
+            $relation,
+            array(
+                'sourceContentVersion',
+                'sourceFieldDefinitionId'
+            )
+        );
         return $relation->setState(
             array(
                 "properties" => $this->handler->contentHandler()->addRelation( $struct )
@@ -268,7 +271,7 @@ class Service extends BaseService
     public function copy( Content $content, Version $version = null )
     {
         $versionNo = isset( $version ) ? $version->versionNo : false;
-        return $this->buildDomainObject( $this->handler->contentHandler()->copy( $content->id , $versionNo ) );
+        return $this->buildDomainObject( $this->handler->contentHandler()->copy( $content->id, $versionNo ) );
     }
 
     /**
@@ -368,8 +371,8 @@ class Service extends BaseService
             {
                 $query->criterion = new LogicalAnd(
                     array(
-                         $query->criterion,
-                         isset( $orCriteria[1] ) ? new LogicalOr( $orCriteria ) : $orCriteria[0]
+                        $query->criterion,
+                        isset( $orCriteria[1] ) ? new LogicalOr( $orCriteria ) : $orCriteria[0]
                     )
                 );
             }
@@ -469,8 +472,6 @@ class Service extends BaseService
 
         $contentVo = $this->handler->contentHandler()->publish( $updateStruct );
 
-
-
         // $this->handler->commit();
 
         $contentDO = $this->buildDomainObject( $contentVo );
@@ -564,7 +565,6 @@ class Service extends BaseService
 
                     continue 2;
                 }
-
             }
             throw new Logic( 'field:' . $identifier, 'could not find this field in returned Version value data'  );
         }

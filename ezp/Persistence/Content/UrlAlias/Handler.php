@@ -92,7 +92,6 @@ interface Handler
       */
      public function getPath( $locationId, $language );
 
-
     /**
      * Runs filters which are defined to be run on url aliases in the legacy engine,
      * and returns the modified $urlText for the path element representing $locationId.

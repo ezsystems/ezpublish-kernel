@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\SortClauseHandler;
-use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\SortClauseHandler;
-use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
+use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\SortClauseHandler,
+    ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Content\Query\SortClause;
 

@@ -16,13 +16,12 @@ use ezp\Persistence\Content\Query\SortClause\Target as SortClauseTarget;
  */
 class Field extends SortClauseTarget
 {
+    public $typeIdentifier;
+    public $fieldIdentifier;
+
     public function __construct( $typeIdentifier, $fieldIdentifier )
     {
         $this->typeIdentifier = $typeIdentifier;
         $this->fieldIdentifier = $fieldIdentifier;
     }
-
-    public $typeIdentifier;
-    public $fieldIdentifier;
 }
-?>

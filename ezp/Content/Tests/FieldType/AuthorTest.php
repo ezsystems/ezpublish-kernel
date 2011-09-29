@@ -113,7 +113,8 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     public function testBuildFieldValueFromString()
     {
         $this->markTestIncomplete( "@TODO: implement this test" );
-        $authors = null /* String representation for authors */;
+        // String representation for authors
+        $authors = null;
         $value = AuthorValue::fromString( $authors );
         self::assertInstanceOf( "ezp\\Content\\FieldType\\Author\\Value", $value );
         self::assertSame( $authors, $value->value );
@@ -126,7 +127,8 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     public function testFieldValueToString()
     {
         $this->markTestIncomplete( "@TODO: implement this test" );
-        $authors = null /* String representation for authors */;
+        // String representation for authors
+        $authors = null;
         $authors = "4200";
         $value = AuthorValue::fromString( $authors );
         self::assertSame( $authors, (string)$value );

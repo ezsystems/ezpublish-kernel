@@ -46,7 +46,6 @@ abstract class Gateway
      */
     abstract public function insertVersion( Version $version, array $fields, $alwaysAvailable );
 
-
     /**
      * Updates an existing version
      *

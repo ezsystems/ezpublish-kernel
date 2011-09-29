@@ -143,8 +143,8 @@ class Mapper
     public function extractContentFromRows( array $rows )
     {
         $contentObjs = array();
-        $versions    = array();
-        $locations   = array();
+        $versions = array();
+        $locations = array();
 
         foreach ( $rows as $row )
         {
@@ -165,8 +165,7 @@ class Mapper
             $versionId = (int)$row['ezcontentobject_version_id'];
             if ( !isset( $versions[$contentId][$versionId] ) )
             {
-                $versions[$contentId][$versionId]
-                    = $this->extractVersionFromRow( $row );
+                $versions[$contentId][$versionId] = $this->extractVersionFromRow( $row );
             }
             if ( !isset( $locations[$contentId][$versionId] ) )
             {
@@ -176,8 +175,7 @@ class Mapper
             $field = (int)$row['ezcontentobject_attribute_id'];
             if ( !isset( $versions[$contentId][$versionId]->fields[$field] ) )
             {
-                $versions[$contentId][$versionId]->fields[$field]
-                    = $this->extractFieldFromRow( $row );
+                $versions[$contentId][$versionId]->fields[$field] = $this->extractFieldFromRow( $row );
             }
 
             $locationId = (int)$row['ezcontentobject_tree_node_id'];

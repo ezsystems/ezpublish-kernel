@@ -116,12 +116,13 @@ class MediaStorage implements Storage
     {
         $q = $dbHandler->createSelectQuery();
         $e = $q->expr;
-        $q->select( '*' )
-          ->from( $dbHandler->quoteTable( self::MEDIA_TABLE ) )
-          ->where(
-              $e->eq( 'contentobject_attribute_id', $q->bindValue( $fieldId, null, \PDO::PARAM_INT ) ),
-              $e->eq( 'version', $q->bindValue( $versionNo, null, \PDO::PARAM_INT ) )
-          );
+        $q
+            ->select( '*' )
+            ->from( $dbHandler->quoteTable( self::MEDIA_TABLE ) )
+            ->where(
+                $e->eq( 'contentobject_attribute_id', $q->bindValue( $fieldId, null, \PDO::PARAM_INT ) ),
+                $e->eq( 'version', $q->bindValue( $versionNo, null, \PDO::PARAM_INT ) )
+            );
         $statement = $q->prepare();
         $statement->execute();
         $rows = $statement->fetchAll( \PDO::FETCH_ASSOC );
@@ -259,20 +260,18 @@ class MediaStorage implements Storage
         $q = $dbHandler->createSelectQuery();
         $e = $q->expr;
         $q->select(
-              $q->alias( $e->count( '*' ), 'count' )
-          )
-          ->from(
-              $dbHandler->quoteTable( self::MEDIA_TABLE )
-          )
-          ->where(
-              $e->eq(
-                  $dbHandler->quoteColumn( 'ezcontentobject_attribute_id' ),
-                  $fieldId
-              ),
-              $e->eq(
-                  $dbHandler->quoteColumn( 'version' ),
-                  $version
-              )
+            $q->alias( $e->count( '*' ), 'count' )
+        )->from(
+            $dbHandler->quoteTable( self::MEDIA_TABLE )
+        )->where(
+            $e->eq(
+                $dbHandler->quoteColumn( 'ezcontentobject_attribute_id' ),
+                $fieldId
+            ),
+            $e->eq(
+                $dbHandler->quoteColumn( 'version' ),
+                $version
+            )
         );
 
         $stmt = $q->prepare();

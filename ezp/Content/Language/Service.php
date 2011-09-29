@@ -35,7 +35,7 @@ class Service extends BaseService
         $struct->locale = $locale;
         $struct->name = $name;
         $struct->isEnabled = $isEnabled;
-        $valueObject = $this->handler->contentLanguageHandler()->create( $struct);
+        $valueObject = $this->handler->contentLanguageHandler()->create( $struct );
         return $this->buildDomainObject( $valueObject );
     }
 

@@ -237,7 +237,7 @@ class Handler implements BaseContentHandler
         }
 
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
-        $content        = $contentObjects[0];
+        $content = $contentObjects[0];
 
         foreach ( $content->version->fields as $field )
         {
@@ -311,9 +311,12 @@ class Handler implements BaseContentHandler
         {
             $field->versionNo = $content->versionNo;
 
-            if ( $this->typeGateway->isFieldTranslatable(
+            if (
+                $this->typeGateway->isFieldTranslatable(
                     $field->fieldDefinitionId,
-                    0 ) )
+                    0
+                )
+            )
             {
                 $this->contentGateway->updateField(
                     $field,

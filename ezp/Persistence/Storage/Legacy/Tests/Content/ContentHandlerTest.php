@@ -225,14 +225,16 @@ class ContentHandlerTest extends TestCase
             )
         );
 
-        $updateStruct = new UpdateStruct( array(
-            'id' => 42,
-            'versionNo' => 1,
-            'name' => array(
-                'eng-US' => "Hello",
-                'eng-GB' => "Hello (GB)",
-            ),
-        ) );
+        $updateStruct = new UpdateStruct(
+            array(
+                'id' => 42,
+                'versionNo' => 1,
+                'name' => array(
+                    'eng-US' => "Hello",
+                    'eng-GB' => "Hello (GB)",
+                ),
+            )
+        );
 
         $handler
             ->expects( $this->once() )
