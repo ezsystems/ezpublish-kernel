@@ -9,6 +9,7 @@
 
 namespace ezp\Content\Location;
 use ezp\Base\Exception,
+    ezp\Base\Exception\Forbidden,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\Logic,
     ezp\Base\Service as BaseService,
@@ -39,6 +40,7 @@ class Service extends BaseService
      *
      * @return \ezp\Content\Location The newly created subtree
      * @throws \ezp\Content\Location\Exception\NotFound
+     * @todo Permission checking, is it possible w/o loading all content in the subtree?
      */
     public function copySubtree( Location $subtree, Location $targetLocation )
     {
@@ -156,6 +158,10 @@ class Service extends BaseService
             throw new Logic( 'Location', 'Parent location is not defined' );
         }
 
+        if ( !$this->repository->canUser( 'create', $location->getContent(), $location->getParent() ) )
+            throw new Forbidden( 'Content', 'create' );
+
+        // @todo Use fillStruct to not potentially pass empty properties to handler
         $struct = new CreateStruct();
         foreach ( $location->properties() as $name )
         {
@@ -186,6 +192,10 @@ class Service extends BaseService
      */
     public function update( Location $location )
     {
+        if ( !$this->repository->canUser( 'edit', $location->getContent() ) )
+            throw new Forbidden( 'Content', 'edit' );
+
+        // @todo Use fillStruct to not potentially pass empty properties to handler
         $struct = new UpdateStruct;
         foreach ( $location->properties() as $name )
         {
@@ -213,10 +223,17 @@ class Service extends BaseService
      */
     public function swap( Location $location1, Location $location2 )
     {
+        if ( !$this->repository->canUser( 'create', $location1->getContent(), $location2->getParent() ) )
+            throw new Forbidden( 'Content', 'create' );
+        if ( !$this->repository->canUser( 'create', $location2->getContent(), $location1->getParent() ) )
+            throw new Forbidden( 'Content', 'create' );
+
         $location1Id = $location1->id;
         $location2Id = $location2->id;
 
         $this->handler->locationHandler()->swap( $location1Id, $location2Id );
+
+        // @todo shouldn't content objects be swapped on location objects here?
 
         // Update Domain objects references
         $this->refreshDomainObject( $location1 );
@@ -232,20 +249,21 @@ class Service extends BaseService
      */
     public function hide( Location $location )
     {
+        if ( !$this->repository->canUser( 'hide', $location->getContent(), $location ) )
+            throw new Forbidden( 'Content', 'hide' );
+
         $this->handler->locationHandler()->hide( $location->id );
 
-        // Get VO, update hidden property and re-inject the reference it to $location
-        $state = $location->getState();
-        $state['properties']->hidden = true;
-        $location->setState( array( 'properties' => $state['properties'] ) );
+        // Get VO & update hidden property
+        $location->getState( 'properties' )->hidden = true;
 
-        foreach ( $location->children as $child )
+        $children = $location->getChildren();
+        if ( $children instanceof Lazy && !$children->isLoaded() )
+            return $location;
+
+        foreach ( $children as $child )
         {
-            $childState = $child->getState();
-            $childState['properties']->invisible = true;
-            // Following line is not needed but present for clarification
-            // $childState['properties'] is actually a reference of $child::$properties
-            $child->setState( array( 'properties' => $childState['properties'] ) );
+            $child->getState( 'properties' )->invisible = true;
         }
 
         return $location;
@@ -261,20 +279,21 @@ class Service extends BaseService
      */
     public function unhide( Location $location )
     {
+        if ( !$this->repository->canUser( 'hide', $location->getContent(), $location ) )
+            throw new Forbidden( 'Content', 'unhide' );
+
         $this->handler->locationHandler()->unHide( $location->id );
 
-        // Get VO, update hidden property and re-inject the reference to $location
-        $state = $location->getState();
-        $state['properties']->hidden = false;
-        $location->setState( array( 'properties' => $state['properties'] ) );
+        // Get VO & update hidden property
+        $location->getState( 'properties' )->hidden = false;
 
-        foreach ( $location->children as $child )
+        $children = $location->getChildren();
+        if ( $children instanceof Lazy && !$children->isLoaded() )
+            return $location;
+
+        foreach ( $children as $child )
         {
-            $childState = $child->getState();
-            $childState['properties']->invisible = false;
-            // Following line is not needed but present for clarification
-            // $childState['properties'] is actually a reference of $child::$properties
-            $child->setState( array( 'properties' => $childState['properties'] ) );
+            $child->getState( 'properties' )->invisible = false;
         }
 
         return $location;
@@ -288,6 +307,7 @@ class Service extends BaseService
      * @param \ezp\Content\Location $newParent
      * @return void
      * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
+     * @todo Figure out a way to do permissions w/o loading whole tree
      */
     public function move( Location $location, Location $newParent )
     {
@@ -302,12 +322,16 @@ class Service extends BaseService
      * @return void
      * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
      * @throws \ezp\Base\Exception\NotFound if no location is available with $locationId
+     * @todo Do we need to check permissions for delete on children? Or should we document that
+     * giving access to deleting implicit gives a user access to remove all childes no matter what?
      */
     public function delete( Location $location )
     {
+        if ( !$this->repository->canUser( 'remove', $location->getContent(), $location ) )
+            throw new Forbidden( 'Content', 'remove' );
+
         $this->handler->locationHandler()->removeSubtree( $location->id );
-        $state = $location->getState();
-        $this->refreshDomainObject( $location, $state['properties'] );
+        $this->refreshDomainObject( $location, $location->getState( 'properties' ) );
     }
 
     /**
@@ -318,6 +342,7 @@ class Service extends BaseService
      * @param \ezp\Content\Section $section
      * @return void
      * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
+     * @todo Figure out how to do permission checks w/o loading whole tree
      */
     public function assignSection( Location $startingPoint, Section $section )
     {

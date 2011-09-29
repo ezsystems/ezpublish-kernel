@@ -54,6 +54,16 @@ class LocationTest extends BaseServiceTest
     protected $locationToDelete = array();
 
     /**
+     * @var \ezp\User
+     */
+    protected $anonymous;
+
+    /**
+     * @var \ezp\User
+     */
+    protected $administrator;
+
+    /**
      * Locations that have been created by setUp() and tests
      *
      * @var \ezp\Content\Location[]
@@ -64,12 +74,12 @@ class LocationTest extends BaseServiceTest
     {
         parent::setUp();
         $this->service = $this->repository->getLocationService();
-        $administrator = new ProxyUser( 14, $this->repository->getUserService() );
-        $this->repository->setUser( $administrator );// "Login" admin
+        $this->administrator = new ProxyUser( 14, $this->repository->getUserService() );
+        $this->anonymous = $this->repository->setUser( $this->administrator );// "Login" admin
 
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );
-        $content = new ConcreteContent( $type, $administrator );
+        $content = new ConcreteContent( $type, $this->administrator );
         $content->name = array( "eng-GB" => "test" );
         $content->setSection( $section );
         $fields = $content->getFields();
@@ -88,7 +98,7 @@ class LocationTest extends BaseServiceTest
         $parent = $this->topLocation;
         for ( $i = 0; $i < 10; ++$i )
         {
-            $content = new ConcreteContent( $type, $administrator );
+            $content = new ConcreteContent( $type, $this->administrator );
             $content->name = array( "eng-GB" => "foo$i" );
             $content->setSection( $section );
             $fields = $content->getFields();
@@ -111,6 +121,7 @@ class LocationTest extends BaseServiceTest
      */
     protected function tearDown()
     {
+        $this->repository->setUser( $this->administrator );
         // Removing default objects as well as those created by tests
         foreach ( $this->contentToDelete as $content )
         {
@@ -249,10 +260,31 @@ class LocationTest extends BaseServiceTest
     }
 
     /**
+     * Test location creation
+     * @covers ezp\Content\Location\Service::create
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCreateForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $remoteId = md5( microtime() );
+        $parent = $this->topLocation;
+        $location = new ConcreteLocation( new ProxyContent( $this->content->id, $this->repository->getContentService() ) );
+        $location->setParent( $parent );
+        $location->remoteId = $remoteId;
+        $location->sortField = Location::SORT_FIELD_PRIORITY;
+        $location->sortOrder = Location::SORT_ORDER_DESC;
+        $location->priority = 100;
+
+        $this->service->create( $location );
+    }
+
+    /**
      * When creating a location, parent location is mandatory
-     * @expectedException \ezp\Base\Exception\Logic
+     *
      * @group locationService
      * @covers ezp\Content\Location\Service::create
+     * @expectedException \ezp\Base\Exception\Logic
      */
     public function testCreateNoParent()
     {
@@ -297,6 +329,17 @@ class LocationTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers ezp\Content\Location\Service::hide
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testHideForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $this->service->hide( $this->topLocation );
+    }
+
+    /**
+     * @group locationService
      * @covers ezp\Content\Location\Service::unhide
      */
     public function testUnhide()
@@ -333,6 +376,17 @@ class LocationTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers ezp\Content\Location\Service::unhide
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testUnHideForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $this->service->unhide( $this->topLocation );
+    }
+
+    /**
+     * @group locationService
      * @covers ezp\Content\Location\Service::swap
      */
     public function testSwap()
@@ -352,6 +406,17 @@ class LocationTest extends BaseServiceTest
         self::assertSame( $contentName, $this->topLocation->getContent()->name );
         self::assertSame( $topLocationId, $this->topLocation->id, 'Swapped locations keep same Ids' );
         self::assertSame( $locationId, $this->location->id, 'Swapped locations keep same Ids' );
+    }
+
+    /**
+     * @group locationService
+     * @covers ezp\Content\Location\Service::swap
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testSwapForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $this->service->swap( $this->topLocation, $this->location );
     }
 
     /**
@@ -435,6 +500,17 @@ class LocationTest extends BaseServiceTest
 
     /**
      * @group locationService
+     * @covers ezp\Content\Location\Service::update
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testUpdateForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $this->service->update( $this->location );
+    }
+
+    /**
+     * @group locationService
      * @covers \ezp\Content\Location\Service::move
      */
     public function testMove()
@@ -502,6 +578,17 @@ class LocationTest extends BaseServiceTest
         // Reload location from backend
         $newLocation = $this->service->load( $newLocation->id );
         self::assertSame( $newLocation->id, $newLocation->mainLocationId );
+    }
+
+    /**
+     * @group locationService
+     * @covers ezp\Content\Location\Service::delete
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testDeleteForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $this->service->delete( $this->location );
     }
 
     /**

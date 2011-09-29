@@ -211,6 +211,10 @@ class Concrete extends Model implements Content, Observer
      */
     public static function definition()
     {
+        static $def = null;
+        if ( $def !== null )
+            return $def;
+
         $def = array(
             'module' => 'content',
             'functions' => array(
@@ -396,14 +400,22 @@ class Concrete extends Model implements Content, Observer
                         },
                     ),
                     'Node' => array(
-                        'compare' => function( Content $content, array $limitationsValues )
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $location = null )
                         {
+                            // Use $location if provided, optionally used to check the specific location instead of all
+                            // eg: 'remove' in the context of removal of a specific location
+                            if ( $location instanceof Location )
+                            {
+                                if ( in_array( $location->id, $limitationsValues ) )
+                                    return true;
+                                return false;
+                            }
+
                             foreach ( $content->locations as $location )
                             {
                                 if ( in_array( $location->id, $limitationsValues ) )
                                     return true;
                             }
-
                             return false;
                         },
                         'query' => function( array $limitationsValues )
@@ -415,8 +427,22 @@ class Concrete extends Model implements Content, Observer
                         },
                     ),
                     'Subtree' => array(
-                        'compare' => function( Content $content, array $limitationsValues )
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $location = null )
                         {
+                            // Use $location if provided, optionally used to check the specific location instead of all
+                            // eg: 'remove' in the context of removal of a specific location
+                            if ( $location instanceof Location )
+                            {
+                                foreach ( $limitationsValues as $limitationPathString )
+                                {
+                                    if ( $location->pathString === $limitationPathString )
+                                        return true;
+                                    if ( strpos( $location->pathString, $limitationPathString ) === 0 )
+                                        return true;
+                                }
+                                return false;
+                            }
+
                             foreach ( $content->locations as $location )
                             {
                                 foreach ( $limitationsValues as $limitationPathString )
@@ -427,7 +453,6 @@ class Concrete extends Model implements Content, Observer
                                         return true;
                                 }
                             }
-
                             return false;
                         },
                         'query' => function( array $limitationsValues )
@@ -467,10 +492,31 @@ class Concrete extends Model implements Content, Observer
                 'pendinglist' => array(),
                 'manage_locations' => array(
                     // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
+                    'Node' => array(
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $location )
+                        {
+                            if ( in_array( $location->id, $limitationsValues ) )
+                                return true;
+                            return false;
+                        },
+                    ),
+                    'Subtree' => array(
+                        'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $location )
+                        {
+                            foreach ( $limitationsValues as $limitationPathString )
+                            {
+                                if ( $location->pathString === $limitationPathString )
+                                    return true;
+                                if ( strpos( $location->pathString, $limitationPathString ) === 0 )
+                                    return true;
+                            }
+                            return false;
+                        },
+                    ),
                 ),
                 'hide' => array(
                     // Note: Limitations copied over from 'read' further down
-                    // 'Language' is copied from 'create'
+                    // 'Language' is copied from 'create', & 'Subtree' + 'Node' from 'manage_locations'
                 ),
                 'restore' => array(),
                 'cleantrash' => array(),
@@ -483,10 +529,14 @@ class Concrete extends Model implements Content, Observer
         $def['functions']['create']['Class'] = $def['functions']['read']['Class'];
         $def['functions']['create']['Section'] = $def['functions']['read']['Section'];
 
-        // Edit: Copy 'Language' from 'creat'
+        // Copy 'Language' from 'create'
         $def['functions']['edit']['Language'] = $def['functions']['create']['Language'];
         $def['functions']['translate']['Language'] = $def['functions']['create']['Language'];
         $def['functions']['hide']['Language'] = $def['functions']['create']['Language'];
+
+        // Copy 'Node' & 'Subtree' from 'manage_locations'
+        $def['functions']['hide']['Node'] = $def['functions']['manage_locations']['Node'];
+        $def['functions']['hide']['Subtree'] = $def['functions']['manage_locations']['Subtree'];
 
         // Union duplicate code from 'read'
         $def['functions']['edit'] = $def['functions']['edit'] + $def['functions']['read'];

@@ -90,6 +90,7 @@ class Concrete extends Model implements Section
                             return in_array( $newSection->id, $limitationsValues );
                         },
                     ),
+                    // @todo For role limitations Subtree and Node limitations needs to be here as well
                 ),
                 'edit' => array(),
                 'view' => array(),
