@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Service;
+namespace ezp\Base;
 use ezp\Base\Configuration,
     ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\InvalidArgumentValue,
@@ -21,12 +21,12 @@ use ezp\Base\Configuration,
  *
  * Usage:
  *
- *     $sc = new ezp\Base\Service\Container();
+ *     $sc = new ezp\Base\ServiceContainer();
  *     $sc->GetRepository->GetContentService()->load( 42 );
  *
  * Or overriding dependencies (in unit tests):
  *
- *     $sc = new ezp\Base\Service\Container( array( '@repository_handler' => new \ezp\Persistence\Storage\InMemory\RepositoryHandler() ) );
+ *     $sc = new ezp\Base\ServiceContainer( array( '@repository_handler' => new \ezp\Persistence\Storage\InMemory\RepositoryHandler() ) );
  *     $sc->GetRepository->GetContentService()->load( 42 );
  *
  * Settings are defined in base.ini like the following example:
@@ -46,7 +46,7 @@ use ezp\Base\Configuration,
  * @todo Add support for factory functions, could simply check for existence of :: or -> for static / instance factories
  * @todo If needed add optional settings that define that service should be created on every call (not singleton)
  */
-class Container
+class ServiceContainer
 {
     /**
      * Holds service objects and variables

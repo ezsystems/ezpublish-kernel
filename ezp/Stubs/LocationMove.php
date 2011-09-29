@@ -1,5 +1,5 @@
 <?php
-use ezp\Base\Service\Container;
+use ezp\Base\ServiceContainer as Container;
 
 $sc = new Container();
 $locationService = $sc->getRepository()->getLocationService();

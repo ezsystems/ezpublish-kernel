@@ -14,7 +14,7 @@ use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Content\FieldType\Keyword\Value as KeywordValue,
     ezp\User\Proxy as ProxyUser,
-    ezp\Base\Service\Container,
+    ezp\Base\ServiceContainer as Container,
     ezp\Base\Collection\ReadOnly,
     PHPUnit_Framework_TestCase;
 

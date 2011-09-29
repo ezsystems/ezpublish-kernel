@@ -12,7 +12,7 @@ use ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Section\Concrete as ConcreteSection,
     ezp\Content\Type\Concrete as ConcreteType,
-    ezp\Base\Service\Container,
+    ezp\Base\ServiceContainer as Container,
     ezp\User\Proxy as ProxyUser,
     PHPUnit_Framework_TestCase;
 

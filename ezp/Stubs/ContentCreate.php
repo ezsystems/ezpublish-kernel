@@ -5,7 +5,7 @@
  * - Locale fre-FR has also been set in the system
  */
 
-use ezp\Content, ezp\Base\Service\Container;
+use ezp\Content, ezp\Base\ServiceContainer as Container;
 
 $sc = new Container();
 $repository = $sc->getRepository();

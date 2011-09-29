@@ -5,7 +5,7 @@
  * version exists in nor-NO
  */
 
-use ezp\Content, ezp\Base\Service\Container;
+use ezp\Content, ezp\Base\ServiceContainer as Container;
 
 $sc = new Container();
 $contentService = $sc->getRepository()->getContentService();

@@ -11,7 +11,7 @@ namespace ezp\Content\Tests;
 use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Relation,
-    ezp\Base\Service\Container,
+    ezp\Base\ServiceContainer as Container,
     ezp\Persistence\Content\Relation as RelationValue,
     ezp\User\Proxy as ProxyUser,
     PHPUnit_Framework_TestCase;

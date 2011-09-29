@@ -9,7 +9,7 @@
 
 namespace ezp\User\Tests;
 use ezp\User\Proxy as ProxyUser,
-    ezp\Base\Service\Container,
+    ezp\Base\ServiceContainer as Container,
     PHPUnit_Framework_TestCase;
 
 /**

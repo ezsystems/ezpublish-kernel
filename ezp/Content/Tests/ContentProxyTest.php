@@ -10,7 +10,7 @@
 namespace ezp\Content\Tests;
 use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Proxy as ProxyContent,
-    ezp\Base\Service\Container,
+    ezp\Base\ServiceContainer as Container,
     PHPUnit_Framework_TestCase;
 
 /**

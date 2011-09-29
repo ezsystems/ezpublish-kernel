@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Tests\Service;
 use PHPUnit_Framework_TestCase,
-    ezp\Base\Service\Container;
+    ezp\Base\ServiceContainer as Container;
 
 /**
  * Base test case for tests on services
