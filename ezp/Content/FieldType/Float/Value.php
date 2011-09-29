@@ -8,12 +8,13 @@
  */
 
 namespace ezp\Content\FieldType\Float;
-use ezp\Content\FieldType\Value as ValueInterface;
+use ezp\Content\FieldType\ValueInterface,
+    ezp\Content\FieldType\Value as BaseValue;
 
 /**
  * Value for Float field type
  */
-class Value implements ValueInterface
+class Value extends BaseValue implements ValueInterface
 {
     /**
      * Float content

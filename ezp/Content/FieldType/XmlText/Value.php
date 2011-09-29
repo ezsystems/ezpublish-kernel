@@ -8,13 +8,14 @@
  */
 
 namespace ezp\Content\FieldType\XmlText;
-use ezp\Content\FieldType\Value as ValueInterface,
+use ezp\Content\FieldType\ValueInterface,
+    ezp\Content\FieldType\Value as BaseValue,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
  * Value for TextLine field type
  */
-class Value implements ValueInterface
+class Value extends BaseValue implements ValueInterface
 {
     /**
      * Text content

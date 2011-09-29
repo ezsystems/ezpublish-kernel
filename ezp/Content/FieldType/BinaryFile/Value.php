@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\FieldType\BinaryFile;
-use ezp\Content\FieldType\Value as ValueInterface,
+use ezp\Content\FieldType\ValueInterface,
+    ezp\Content\FieldType\Value as BaseValue,
     ezp\Base\Exception\PropertyNotFound;
 
 /**
@@ -21,7 +22,7 @@ use ezp\Content\FieldType\Value as ValueInterface,
  * @property-read int $filesize The size of the file (number of bytes).
  * @property-read string $filepath The path to the file (including the filename).
  */
-class Value implements ValueInterface
+class Value extends BaseValue implements ValueInterface
 {
     /**
      * BinaryFile object

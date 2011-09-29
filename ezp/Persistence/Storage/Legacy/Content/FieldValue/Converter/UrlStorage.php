@@ -60,7 +60,7 @@ class UrlStorage implements Storage
      */
     public function getFieldData( Field $field, array $context )
     {
-        $url = $this->fetchById( $field->value->data->getProperty( "urlId" ), $context["connection"] );
+        $url = $this->fetchById( $field->value->data->getState( "urlId" ), $context["connection"] );
 
         $field->value->data->link = $url["link"];
     }

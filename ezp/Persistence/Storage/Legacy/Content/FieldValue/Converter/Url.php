@@ -37,7 +37,7 @@ class Url implements Converter
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
         $fieldValue->data = new UrlValue( "", $value->dataText );
-        $fieldValue->data->setProperty( "urlId", $value->dataInt );
+        $fieldValue->data->setState( array( "urlId" => $value->dataInt ) );
         $fieldValue->sortKey = false;
     }
 

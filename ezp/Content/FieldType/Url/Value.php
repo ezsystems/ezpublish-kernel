@@ -8,12 +8,13 @@
  */
 
 namespace ezp\Content\FieldType\Url;
-use ezp\Content\FieldType\Value as ValueInterface;
+use ezp\Content\FieldType\ValueInterface,
+    ezp\Content\FieldType\Value as BaseValue;
 
 /**
  * Value for Url field type
  */
-class Value implements ValueInterface
+class Value extends BaseValue implements ValueInterface
 {
     /**
      * Link content
@@ -28,10 +29,6 @@ class Value implements ValueInterface
      * @var string
      */
     public $text;
-
-    protected $properties = array(
-        "urlId" => null,
-    );
 
     /**
      * Construct a new Value object and initialize it with its $link and optional $text
@@ -61,25 +58,5 @@ class Value implements ValueInterface
     public function __toString()
     {
         return $this->link;
-    }
-
-    /**
-     * Sets internal properties, mostly used by storage engine
-     *
-     * @internal
-     */
-    public function setProperty( $property, $value )
-    {
-        $this->properties[$property] = $value;
-    }
-
-    /**
-     * Gets internal properties, mostly used by storage engine
-     *
-     * @internal
-     */
-    public function getProperty( $property )
-    {
-        return $this->properties[$property];
     }
 }

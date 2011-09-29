@@ -8,13 +8,14 @@
  */
 
 namespace ezp\Content\FieldType\Author;
-use ezp\Content\FieldType\Value as ValueInterface,
+use ezp\Content\FieldType\ValueInterface,
+    ezp\Content\FieldType\Value as BaseValue,
     RuntimeException;
 
 /**
  * Value for Author field type
  */
-class Value implements ValueInterface
+class Value extends BaseValue implements ValueInterface
 {
     /**
      * List of authors

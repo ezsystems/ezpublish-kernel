@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the Value interface
+ * File containing the Value abstract class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,29 +8,55 @@
  */
 
 namespace ezp\Content\FieldType;
+use ezp\Base\ModelInterface,
+    ezp\Base\Exception\PropertyNotFound;
 
 /**
- * Interface for all field value classes.
+ * Abstract class for all field value classes.
  * A field value object is to be understood with associated field type
  */
-interface Value
+abstract class Value implements ModelInterface
 {
     /**
-     * Initializes the field value with a simple string.
-     * It's up to the field value to define $stringValue format.
-     * If $stringValue format is not supported, an {@link \ezp\Base\Exception\InvalidArgumentValue} exception should be thrown.
+     * Internal properties
      *
-     * @param string $stringValue
-     * @return \ezp\Content\FieldType\Value Instance of the field value
-     * @throws \ezp\Base\Exception\InvalidArgumentValue
+     * @internal
+     * @var array
      */
-    public static function fromString( $stringValue );
+    protected $properties = array();
 
     /**
-     * Returns a string representation of the field value.
-     * This string representation must be compatible with {@link self::fromString()} supported format
+     * Sets internal variables on object from array
      *
-     * @return string
+     * Key is property name and value is property value.
+     *
+     * @internal
+     * @param array $state
+     * @return mixed
      */
-    public function __toString();
+    public function setState( array $state )
+    {
+        $this->properties = $state + $this->properties;
+    }
+
+    /**
+     * Gets internal variables on object as array
+     *
+     * Key is property name and value is property value.
+     *
+     * @internal
+     * @param string|null $property Optional, lets you specify to only return one property by name
+     * @return array|mixed Array if $property is null, else value of property
+     * @throws \ezp\Base\Exception\PropertyNotFound If $property is not found (when not null)
+     */
+    public function getState( $property = null )
+    {
+        if ( $property === null )
+            return $this->properties;
+
+        if ( !array_key_exists( $property, $this->properties ) )
+            throw new PropertyNotFound( $property, get_class() );
+
+        return $this->properties[$property];
+    }
 }

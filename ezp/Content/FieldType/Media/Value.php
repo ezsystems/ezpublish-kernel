@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Content\FieldType\Media;
-use ezp\Content\FieldType\Value as ValueInterface,
+use ezp\Content\FieldType\ValueInterface,
+    ezp\Content\FieldType\Value as BaseValue,
     ezp\Base\Exception\PropertyNotFound;
 
 /**
@@ -18,7 +19,7 @@ use ezp\Content\FieldType\Value as ValueInterface,
  *                            (for example "44b963c9e8d1ffa80cbb08e84d576735.avi").
  * @property string $mimeType
  */
-class Value implements ValueInterface
+class Value extends BaseValue implements ValueInterface
 {
     /**
      * BinaryFile object
