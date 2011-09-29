@@ -29,10 +29,22 @@ class TypeTest extends BaseServiceTest
      */
     protected $service;
 
+    /**
+     * @var \ezp\User
+     */
+    protected $anonymous;
+
+    /**
+     * @var \ezp\User
+     */
+    protected $administrator;
+
     protected function setUp()
     {
         parent::setUp();
         $this->service = $this->repository->getContentTypeService();
+        $this->administrator = $this->repository->getUserService()->load( 14 );
+        $this->anonymous = $this->repository->setUser( $this->administrator );// "Login" admin
     }
 
     /**
@@ -61,6 +73,22 @@ class TypeTest extends BaseServiceTest
     {
         $do = new Group();
         $do->created = $do->modified = time();
+        $this->service->createGroup( $do );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::createGroup
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCreateGroupForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $do = new Group();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
         $this->service->createGroup( $do );
     }
 
@@ -96,6 +124,22 @@ class TypeTest extends BaseServiceTest
 
     /**
      * @group contentTypeService
+     * @covers ezp\Content\Type\Service::updateGroup
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testUpdateGroupForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $do = $this->service->loadGroup( 1 );
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $this->service->updateGroup( $do );
+    }
+
+    /**
+     * @group contentTypeService
      * @covers ezp\Content\Type\Service::deleteGroup
      */
     public function testDeleteGroup()
@@ -111,6 +155,18 @@ class TypeTest extends BaseServiceTest
         catch ( NotFound $e )
         {
         }
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::deleteGroup
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testDeleteGroupForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $group = $this->service->loadGroup( 1 );
+        $this->service->deleteGroup( $group );
     }
 
     /**
@@ -201,6 +257,25 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::create
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCreateForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $do = new ConcreteType();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do->nameSchema = $do->urlAliasSchema = "<>";
+        $do->isContainer = true;
+        $do->initialLanguageId = 1;
+        $this->service->create( $do, array( $this->service->loadGroup( 1 ) ) );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::create
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testCreateWithoutGroup()
@@ -279,6 +354,25 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::createAndPublish
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCreateAndPublishForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $do = new ConcreteType();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do->nameSchema = $do->urlAliasSchema = "<>";
+        $do->isContainer = true;
+        $do->initialLanguageId = 1;
+        $this->service->createAndPublish( $do, array( $this->service->loadGroup( 1 ) ) );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::createAndPublish
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testCreateAndPublishWithoutGroup()
@@ -315,6 +409,22 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::update
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testUpdateForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $do = $this->service->load( 1 );
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $this->service->update( $do );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::update
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testUpdateException()
@@ -341,6 +451,18 @@ class TypeTest extends BaseServiceTest
         catch ( NotFound $e )
         {
         }
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::delete
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testDeleteForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $type = $this->service->load( 1 );
+        $this->service->delete( $type );
     }
 
     /**
@@ -489,6 +611,17 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::copy
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCopyForbidden()
+    {
+        $this->repository->setUser( $this->anonymous );
+        $this->service->copy( 10, 1 );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::copy
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testCopyInvalidTypeId()
@@ -536,6 +669,25 @@ class TypeTest extends BaseServiceTest
         $this->assertEquals( $newGroup->id, $type->groups[1]->id );
         $this->assertEquals( array( 'eng-GB' => 'Test' ), $type->groups[1]->name );
         $this->assertEquals( 'test', $type->groups[1]->identifier );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::link
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testLinkForbidden()
+    {
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+        $newGroup = $this->service->createGroup( $newGroup );
+        $type = $this->service->load( 1 );
+
+        $this->repository->setUser( $this->anonymous );
+        $this->service->link( $type, $newGroup );
     }
 
     /**
@@ -622,6 +774,30 @@ class TypeTest extends BaseServiceTest
         $this->assertEquals( $newGroup->id, $type->groups[0]->id );
     }
 
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::unlink
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testUnLinkForbidden()
+    {
+        $newGroup = new Group();
+        $newGroup->created = $newGroup->modified = time();
+        $newGroup->creatorId = $newGroup->modifierId = 14;
+        $newGroup->name = $newGroup->description = array( 'eng-GB' => 'Test' );
+        $newGroup->identifier = 'test';
+        $newGroup = $this->service->createGroup( $newGroup );
+
+        $type = $this->service->load( 1 );
+        $existingGroup = $this->service->loadGroup( 1 );
+
+        $this->service->link( $type, $newGroup );
+
+        $this->repository->setUser( $this->anonymous );
+        $this->service->unlink( $type, $existingGroup );
+    }
+
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::unlink
@@ -688,6 +864,25 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::addFieldDefinition
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testAddFieldDefinitionForbidden()
+    {
+        $type = $this->service->load( 1 );
+        $field = new FieldDefinition( $type, 'ezstring' );
+        $field->name = $field->description = array( 'eng-GB' => 'Test' );
+        $field->setDefaultValue( new TextLineValue( "" ) );
+        $field->fieldGroup = '';
+        $field->identifier = 'test';
+        $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
+
+        $this->repository->setUser( $this->anonymous );
+        $this->service->addFieldDefinition( $type, $field );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::addFieldDefinition
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      */
     public function testAddFieldDefinitionWithExistingFieldDefinition()
@@ -726,6 +921,18 @@ class TypeTest extends BaseServiceTest
 
         $type = $this->service->load( 1 );
         $this->assertEquals( 1, count( $type->fields ) );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::removeFieldDefinition
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testRemoveFieldDefinitionForbidden()
+    {
+        $type = $this->service->load( 1 );
+        $this->repository->setUser( $this->anonymous );
+        $this->service->removeFieldDefinition( $type, $type->fields[0] );
     }
 
     /**
@@ -779,6 +986,19 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->load( 1 );
         $this->assertEquals( 2, count( $type->fields ) );
         $this->assertEquals( array( 'eng-GB' => 'New name' ), $type->fields[0]->name );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::updateFieldDefinition
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testUpdateFieldDefinitionForbidden()
+    {
+        $type = $this->service->load( 1 );
+        $type->fields[0]->name = array( 'eng-GB' => 'New name' );
+        $this->repository->setUser( $this->anonymous );
+        $this->service->updateFieldDefinition( $type, $type->fields[0] );
     }
 
     /**
@@ -840,6 +1060,27 @@ class TypeTest extends BaseServiceTest
         $this->assertEquals( count( $do->groups ), count( $published->groups ) );
         $this->assertEquals( count( $do->fields ), count( $published->fields ) );
         $this->assertEquals( $do->name, $published->name );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::publish
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testPublishForbidden()
+    {
+        $do = new ConcreteType();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do->nameSchema = $do->urlAliasSchema = "<>";
+        $do->isContainer = true;
+        $do->initialLanguageId = 1;
+        $groups[] = $this->service->loadGroup( 1 );
+        $do = $this->service->create( $do, $groups );
+        $this->repository->setUser( $this->anonymous );
+        $this->service->publish( $do );
     }
 
     /**

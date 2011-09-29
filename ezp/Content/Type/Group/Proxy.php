@@ -38,6 +38,17 @@ class Proxy extends ModelProxy implements Group
     }
 
     /**
+     * Returns definition of the content type group object, atm: permissions
+     *
+     * @access private
+     * @return array
+     */
+    public static function definition()
+    {
+        return Concrete::definition();
+    }
+
+    /**
      * @return void
      */
     protected function lazyLoad()

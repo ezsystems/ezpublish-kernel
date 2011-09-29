@@ -9,6 +9,7 @@
 
 namespace ezp\Content\Type;
 use ezp\Base\Model,
+    ezp\Base\ModelDefinition,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Persistence\Content\Type\Group as GroupValue;
 
@@ -26,7 +27,7 @@ use ezp\Base\Model,
  * @property mixed $modifierId
  * @property-read \ezp\Content\Type[] $types Appended items will not be stored, use TypeService->link()
  */
-interface Group
+interface Group extends ModelDefinition
 {
     /**
      * @return \ezp\Content\Type[]

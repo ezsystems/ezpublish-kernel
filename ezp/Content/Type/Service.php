@@ -9,12 +9,12 @@
 
 namespace ezp\Content\Type;
 use ezp\Base\Service as BaseService,
+    ezp\Base\Exception\Forbidden,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Collection\LazyIdList,
     ezp\Base\Collection\Lazy,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Collection\ReadOnly as ReadOnlyCollection,
@@ -48,6 +48,9 @@ class Service extends BaseService
      */
     public function createGroup( Group $group )
     {
+        if ( !$this->repository->canUser( 'create', $group ) )
+            throw new Forbidden( 'Type\\Group', 'create' );
+
         $struct = new GroupCreateStruct();
         $this->fillStruct( $struct, $group );
         $vo = $this->handler->contentTypeHandler()->createGroup( $struct );
@@ -92,6 +95,9 @@ class Service extends BaseService
      */
     public function updateGroup( Group $group )
     {
+        if ( !$this->repository->canUser( 'edit', $group ) )
+            throw new Forbidden( 'Type\\Group', 'edit' );
+
         $struct = new GroupUpdateStruct();
         $this->fillStruct( $struct, $group );
         $this->handler->contentTypeHandler()->updateGroup( $struct );
@@ -105,6 +111,9 @@ class Service extends BaseService
      */
     public function deleteGroup( Group $group )
     {
+        if ( !$this->repository->canUser( 'delete', $group ) )
+            throw new Forbidden( 'Type\\Group', 'delete' );
+
         $this->handler->contentTypeHandler()->deleteGroup( $group->id );
     }
 
@@ -122,6 +131,9 @@ class Service extends BaseService
     {
         if ( $type->id )
             throw new Logic( "Type\\Service->create()", '$type seems to already be persisted' );
+
+        if ( !$this->repository->canUser( 'create', $type ) )
+            throw new Forbidden( 'Type', 'create' );
 
         $struct = new CreateStruct();
         $this->fillStruct( $struct, $type, array( 'fieldDefinitions', 'groupIds' ) );
@@ -245,6 +257,9 @@ class Service extends BaseService
      */
     public function update( Type $type )
     {
+        if ( !$this->repository->canUser( 'edit', $type ) )
+            throw new Forbidden( 'Type', 'edit' );
+
         $struct = new UpdateStruct();
         $this->fillStruct( $struct, $type );
         $this->handler->contentTypeHandler()->update( $type->id, $type->status, $struct );
@@ -258,6 +273,9 @@ class Service extends BaseService
      */
     public function delete( Type $type )
     {
+        if ( !$this->repository->canUser( 'delete', $type ) )
+            throw new Forbidden( 'Type', 'delete' );
+
         $this->handler->contentTypeHandler()->delete( $type->id, $type->status );
     }
 
@@ -271,9 +289,13 @@ class Service extends BaseService
      * @param mixed $typeId
      * @return \ezp\Content\Type
      * @throws \ezp\Base\Exception\NotFound If user or published type is not found
+     * @todo Change to take objects in input? ( more consistent with rest and removes needs for lots of NotFound possibilities )
      */
     public function copy( $userId, $typeId )
     {
+        if ( $this->repository->getUser()->hasAccessTo( 'class', 'create' ) !== true )
+            throw new Forbidden( 'Type', 'create' );
+
         return $this->buildType( $this->handler->contentTypeHandler()->copy( $userId, $typeId, TypeValue::STATUS_DEFINED ) );
     }
 
@@ -294,6 +316,9 @@ class Service extends BaseService
 
         if ( !$group->id )
             throw new InvalidArgumentType( '$group->id', 'int' );
+
+        if ( !$this->repository->canUser( 'link', $type, $group ) )
+            throw new Forbidden( 'Type', 'unlink' );
 
         $index = $type->getGroups()->indexOf( $group );
         if ( $index === false )
@@ -327,6 +352,9 @@ class Service extends BaseService
         if ( !$group->id )
             throw new InvalidArgumentType( '$group->id', 'int' );
 
+        if ( !$this->repository->canUser( 'link', $type, $group ) )
+            throw new Forbidden( 'Type', 'link' );
+
         $this->handler->contentTypeHandler()->link( $group->id, $type->id, $type->status );
 
         $groups = $type->getGroups()->getArrayCopy();
@@ -350,6 +378,9 @@ class Service extends BaseService
     {
         if ( $field->id )
             throw new InvalidArgumentType( '$field->id', 'false' );
+
+        if ( !$this->repository->canUser( 'edit', $type ) )
+            throw new Forbidden( 'Type', 'edit' );
 
         $fieldDefStruct = $field->getState( 'properties' );
         $fieldDefStruct->defaultValue = $field->type->toFieldValue();
@@ -379,6 +410,9 @@ class Service extends BaseService
         if ( $index === false )
             throw new InvalidArgumentValue( '$field', 'Not part of $type->fields' );
 
+        if ( !$this->repository->canUser( 'edit', $type ) )
+            throw new Forbidden( 'Type', 'edit' );
+
         $this->handler->contentTypeHandler()->removeFieldDefinition(
             $type->id,
             $type->status,
@@ -398,6 +432,9 @@ class Service extends BaseService
      */
     public function updateFieldDefinition( Type $type, FieldDefinition $field  )
     {
+        if ( !$this->repository->canUser( 'edit', $type ) )
+            throw new Forbidden( 'Type', 'edit' );
+
         $fieldDefStruct = $field->getState( 'properties' );
         $fieldDefStruct->defaultValue = $field->type->toFieldValue();
         $this->handler->contentTypeHandler()->updateFieldDefinition(
@@ -417,6 +454,9 @@ class Service extends BaseService
      */
     public function publish( Type $type  )
     {
+        if ( !$this->repository->canUser( 'edit', $type ) )
+            throw new Forbidden( 'Type', 'edit' );
+
         $this->handler->contentTypeHandler()->publish( $type->id );
     }
 

@@ -66,6 +66,20 @@ class Concrete extends Model implements Group
     }
 
     /**
+     * Returns definition of the content type group object, atm: permissions
+     *
+     * @access private
+     * @return array
+     */
+    public static function definition()
+    {
+        return array(
+            'module' => 'class',
+            // @todo Add functions with group limitations
+        );
+    }
+
+    /**
      * @return \ezp\Content\Type[]
      */
     public function getTypes()

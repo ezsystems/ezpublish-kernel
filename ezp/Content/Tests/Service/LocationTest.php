@@ -74,7 +74,7 @@ class LocationTest extends BaseServiceTest
     {
         parent::setUp();
         $this->service = $this->repository->getLocationService();
-        $this->administrator = new ProxyUser( 14, $this->repository->getUserService() );
+        $this->administrator = $this->repository->getUserService()->load( 14 );
         $this->anonymous = $this->repository->setUser( $this->administrator );// "Login" admin
 
         $type = $this->repository->getContentTypeService()->load( 1 );
