@@ -52,30 +52,31 @@ class Handler implements BaseContentHandler
     protected $mapper;
 
     /**
-     * Registry for storages
+     * Storage handler
      *
-     * @var StorageRegistry
+     * @var \ezp\Persistence\Storage\Legacy\StorageHandler
      */
-    protected $storageRegistry;
+    protected $storageHandler;
 
     /**
      * Creates a new content handler.
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
+     * @todo Fix param docs
      */
     public function __construct(
         Gateway $contentGateway,
         Location\Gateway $locationGateway,
         Type\Gateway $typeGateway,
         Mapper $mapper,
-        StorageRegistry $storageRegistry
+        StorageHandler $storageHandler
     )
     {
         $this->contentGateway = $contentGateway;
         $this->locationGateway = $locationGateway;
         $this->typeGateway = $typeGateway;
         $this->mapper = $mapper;
-        $this->storageRegistry = $storageRegistry;
+        $this->storageHandler = $storageHandler;
     }
 
     /**
@@ -112,8 +113,7 @@ class Handler implements BaseContentHandler
                 $field,
                 $this->mapper->convertToStorageValue( $field )
             );
-            $storage = $this->storageRegistry->getStorage( $field->type );
-            $storage->storeFieldData( $field, $this->contentGateway->getContext() );
+            $this->storageHandler->storeFieldData( $field );
 
             $version->fields[] = $field;
         }
@@ -202,8 +202,8 @@ class Handler implements BaseContentHandler
                 $field,
                 $this->mapper->convertToStorageValue( $field )
             );
-            $storage = $this->storageRegistry->getStorage( $field->type );
-            $storage->storeFieldData( $field, $this->contentGateway->getContext() );
+            $this->storageHandler->storeFieldData( $field );
+
             $version->fields[] = $field;
         }
 
@@ -241,11 +241,7 @@ class Handler implements BaseContentHandler
 
         foreach ( $content->version->fields as $field )
         {
-            $storage = $this->storageRegistry->getStorage( $field->type );
-            if ( $storage->hasFieldData() )
-            {
-                $storage->getFieldData( $field, $this->contentGateway->getContext() );
-            }
+            $this->storageHandler->getFieldData( $field );
         }
 
         return $content;
@@ -333,8 +329,8 @@ class Handler implements BaseContentHandler
                 );
             }
 
-            $storage = $this->storageRegistry->getStorage( $field->type );
-            $storage->storeFieldData( $field, $this->contentGateway->getContext() );
+            $this->storageHandler->storeFieldData( $field );
+
             $version->fields[] = $field;
         }
 
@@ -361,8 +357,7 @@ class Handler implements BaseContentHandler
         $fieldIds = $this->contentGateway->getFieldIdsByType( $contentId );
         foreach ( $fieldIds as $fieldType => $ids )
         {
-            $this->storageRegistry->getStorage( $fieldType )
-                ->deleteFieldData( $ids, $this->contentGateway->getContext() );
+            $this->storageHandler->deleteFieldData( $fieldType, $ids );
         }
 
         $this->contentGateway->deleteRelations( $contentId );

@@ -36,18 +36,19 @@ class ContentHandlerTest extends TestCase
      */
     public function testCtor()
     {
+        // @TODO: Extract to dedicated method
         $gatewayMock = $this->getGatewayMock();
         $locationMock = $this->getLocationGatewayMock();
         $typeGatewayMock = $this->getTypeGatewayMock();
         $mapperMock = $this->getMapperMock();
-        $storageRegistryMock = $this->getStorageRegistryMock();
+        $storageHandlerMock = $this->getStorageHandlerMock();
 
         $handler = new Handler(
             $gatewayMock,
             $locationMock,
             $typeGatewayMock,
             $mapperMock,
-            $storageRegistryMock
+            $storageHandlerMock
         );
 
         $this->assertAttributeSame(
@@ -61,8 +62,8 @@ class ContentHandlerTest extends TestCase
             $handler
         );
         $this->assertAttributeSame(
-            $storageRegistryMock,
-            'storageRegistry',
+            $storageHandlerMock,
+            'storageHandler',
             $handler
         );
     }
@@ -74,20 +75,18 @@ class ContentHandlerTest extends TestCase
      */
     public function testCreate()
     {
+        // @TODO: Extract to dedicated method
         $mapperMock = $this->getMapperMock();
         $locationMock = $this->getLocationGatewayMock();
         $gatewayMock = $this->getGatewayMock();
-        $storageRegMock = $this->getStorageRegistryMock();
-        $storageMock = $this->getMock(
-            'ezp\\Persistence\\Fields\\Storage'
-        );
+        $storageHandlerMock = $this->getStorageHandlerMock();
 
         $handler = new Handler(
             $gatewayMock,
             $locationMock,
             $this->getTypeGatewayMock(),
             $mapperMock,
-            $storageRegMock
+            $storageHandlerMock
         );
 
         $mapperMock->expects( $this->once() )
@@ -149,20 +148,9 @@ class ContentHandlerTest extends TestCase
                 $this->isInstanceOf( 'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue' )
             )->will( $this->returnValue( 42 ) );
 
-        $storageRegMock->expects( $this->exactly( 2 ) )
-            ->method( 'getStorage' )
-            ->with( $this->equalTo( 'some-type' ) )
-            ->will(
-                $this->returnValue( $storageMock )
-            );
-
-        $storageMock->expects( $this->exactly( 2 ) )
+        $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
-            ->with(
-                $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Field'
-                )
-            );
+            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) );
 
         $locationMock->expects( $this->once() )
             ->method( 'createNodeAssignment' )
@@ -174,6 +162,8 @@ class ContentHandlerTest extends TestCase
             );
 
         $res = $handler->create( $this->getCreateStructFixture() );
+
+        // @TODO Make subsequent tests
 
         $this->assertInstanceOf(
             'ezp\\Persistence\\Content',
@@ -216,14 +206,12 @@ class ContentHandlerTest extends TestCase
      */
     public function testPublish()
     {
+        // @TODO: Extract to dedicated method
         $mapperMock = $this->getMapperMock();
         $locationMock = $this->getLocationGatewayMock();
         $typeGatewayMock = $this->getTypeGatewayMock();
         $gatewayMock = $this->getGatewayMock();
-        $storageRegMock = $this->getStorageRegistryMock();
-        $storageMock = $this->getMock(
-            'ezp\\Persistence\\Fields\\Storage'
-        );
+        $storageHandlerMock = $this->getStorageHandlerMock();
 
         $handler = $this->getMock(
             '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
@@ -233,7 +221,7 @@ class ContentHandlerTest extends TestCase
                 $locationMock,
                 $typeGatewayMock,
                 $mapperMock,
-                $storageRegMock
+                $storageHandlerMock
             )
         );
 
@@ -289,7 +277,7 @@ class ContentHandlerTest extends TestCase
                 new Location\Mapper(),
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
             ),
-            $storageRegMock = $this->getStorageRegistryMock()
+            $this->getStorageHandlerMock()
         );
 
         $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
@@ -302,15 +290,6 @@ class ContentHandlerTest extends TestCase
             ->expects( $this->any() )
             ->method( 'getConverter' )
             ->will( $this->returnValue( $converter ) );
-
-        $storageMock = $this->getMock( 'ezp\\Persistence\\Fields\\Storage' );
-
-        $storageRegMock
-            ->expects( $this->any() )
-            ->method( 'getStorage' )
-            ->will(
-                $this->returnValue( $storageMock )
-            );
 
         return $handler;
     }
@@ -445,7 +424,7 @@ class ContentHandlerTest extends TestCase
                 $locationMapperMock = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
             ),
-            $storageRegMock = $this->getStorageRegistryMock()
+            $storageHandlerMock = $this->getStorageHandlerMock()
         );
 
         $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
@@ -486,10 +465,9 @@ class ContentHandlerTest extends TestCase
 
         $storageMock = $this->getMock( 'ezp\\Persistence\\Fields\\Storage' );
 
-        $storageRegMock
-            ->expects( $this->any( 0 ) )
-            ->method( 'getStorage' )
-            ->will( $this->returnValue( $storageMock ) );
+        $storageHandlerMock
+            ->expects( $this->any() )
+            ->method( 'getFieldData' );
 
         $content = $handler->load( 14, 4 );
     }
@@ -515,7 +493,7 @@ class ContentHandlerTest extends TestCase
                 $locationMapperMock = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
                 $registry = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry' )
             ),
-            $storageRegMock = $this->getStorageRegistryMock()
+            $storageHandlerMock = $this->getStorageHandlerMock()
         );
 
         $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
@@ -529,68 +507,10 @@ class ContentHandlerTest extends TestCase
             ->method( 'getConverter' )
             ->will( $this->returnValue( $converter ) );
 
-        $storageMock = $this->getMock( 'ezp\\Persistence\\Fields\\Storage' );
-
-        $storageRegMock
-            ->expects( $this->at( 0 ) )
-            ->method( 'getStorage' )
-            ->with( 'ezstring' )
-            ->will( $this->returnValue( $storageMock ) );
-
-        $storageRegMock
-            ->expects( $this->at( 1 ) )
-            ->method( 'getStorage' )
-            ->with( 'ezstring' )
-            ->will( $this->returnValue( $storageMock ) );
-
-        $storageRegMock
-            ->expects( $this->at( 2 ) )
-            ->method( 'getStorage' )
-            ->with( 'ezuser' )
-            ->will( $this->returnValue( $storageMock ) );
-
-        $storageRegMock
-            ->expects( $this->at( 3 ) )
-            ->method( 'getStorage' )
-            ->with( 'eztext' )
-            ->will( $this->returnValue( $storageMock ) );
-
-        $storageRegMock
-            ->expects( $this->at( 4 ) )
-            ->method( 'getStorage' )
-            ->with( 'ezimage' )
-            ->will( $this->returnValue( $storageMock ) );
-
-        $storageMock
-            ->expects( $this->at( 0 ) )
-            ->method( 'hasFieldData' )
-            ->will( $this->returnValue( false ) );
-
-        $storageMock
-            ->expects( $this->at( 1 ) )
-            ->method( 'hasFieldData' )
-            ->will( $this->returnValue( false ) );
-
-        $storageMock
-            ->expects( $this->at( 2 ) )
-            ->method( 'hasFieldData' )
-            ->will( $this->returnValue( true ) );
-
-        $storageMock
-            ->expects( $this->at( 3 ) )
+        $storageHandlerMock
+            ->expects( $this->exactly( 5 ) )
             ->method( 'getFieldData' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) )
-            ->will( $this->returnValue( true ) );
-
-        $storageMock
-            ->expects( $this->at( 4 ) )
-            ->method( 'hasFieldData' )
-            ->will( $this->returnValue( false ) );
-
-        $storageMock
-            ->expects( $this->at( 5 ) )
-            ->method( 'hasFieldData' )
-            ->will( $this->returnValue( false ) );
+            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) );
 
         $content = $handler->load( 14, 4 );
     }
@@ -695,15 +615,12 @@ class ContentHandlerTest extends TestCase
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Gateway'
         );
         $gatewayMock = $this->getGatewayMock();
-        $storageRegMock = $this->getStorageRegistryMock();
-        $storageMock = $this->getMock(
-            'ezp\\Persistence\\Fields\\Storage'
-        );
+        $storageHandlerMock = $this->getStorageHandlerMock();
 
         $handler = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
             array( 'load' ),
-            array( $gatewayMock, $locationMock, $typeGatewayMock, $mapper, $storageRegMock )
+            array( $gatewayMock, $locationMock, $typeGatewayMock, $mapper, $storageHandlerMock )
         );
 
         // Handler expects load() to be called on itself, where we return a "proper"
@@ -715,18 +632,10 @@ class ContentHandlerTest extends TestCase
             ->will( $this->returnValue( $content ) );
 
         // Ensure the external storage handler is called properly.
-        $storageRegMock->expects( $this->exactly( 5 ) )
-            ->method( 'getStorage' )
-            ->will(
-                $this->returnValue( $storageMock )
-            );
-
-        $storageMock->expects( $this->exactly( 5 ) )
+        $storageHandlerMock->expects( $this->exactly( 5 ) )
             ->method( 'storeFieldData' )
             ->with(
-                $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Field'
-                )
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' )
             );
 
         // These are the actually important expectations -- ensuring the
@@ -879,10 +788,7 @@ class ContentHandlerTest extends TestCase
             'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Gateway'
         );
         $gatewayMock = $this->getGatewayMock();
-        $storageRegMock = $this->getStorageRegistryMock();
-        $storageMock = $this->getMock(
-            'ezp\\Persistence\\Fields\\Storage'
-        );
+        $storageHandlerMock = $this->getStorageHandlerMock();
 
         $handler = $this->getMock(
             '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
@@ -892,23 +798,15 @@ class ContentHandlerTest extends TestCase
                 $locationMock,
                 $typeGatewayMock,
                 $mapper,
-                $storageRegMock
+                $storageHandlerMock
             )
         );
 
         // Ensure the external storage handler is called properly.
-        $storageRegMock->expects( $this->exactly( 2 ) )
-            ->method( 'getStorage' )
-            ->will(
-                $this->returnValue( $storageMock )
-            );
-
-        $storageMock->expects( $this->exactly( 2 ) )
+        $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
             ->with(
-                $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Field'
-                )
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' )
             );
 
         // These are the actually important expectations -- ensuring the
@@ -993,7 +891,7 @@ class ContentHandlerTest extends TestCase
             $this->getLocationGatewayMock(),
             $this->getTypeGatewayMock(),
             ( $mapperMock = $this->getMapperMock() ),
-            $this->getStorageRegistryMock()
+            $this->getStorageHandlerMock()
         );
 
         $gatewayMock->expects( $this->once() )
@@ -1025,18 +923,8 @@ class ContentHandlerTest extends TestCase
             ( $locationHandlerMock = $this->getLocationGatewayMock() ),
             $this->getTypeGatewayMock(),
             $this->getMapperMock(),
-            ( $storageReg = new StorageRegistry() )
+            ( $storageHandlerMock = $this->getStorageHandlerMock() )
         );
-
-        $stringStorageMock = $this->getMock(
-            'ezp\\Persistence\\Fields\\Storage'
-        );
-        $userStorageMock = $this->getMock(
-            'ezp\\Persistence\\Fields\\Storage'
-        );
-
-        $storageReg->register( 'ezstring', $stringStorageMock );
-        $storageReg->register( 'ezuser', $userStorageMock );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'getAllLocationIds' )
@@ -1060,13 +948,12 @@ class ContentHandlerTest extends TestCase
                     array( 'ezstring' => array( 1, 2 ), 'ezuser' => array( 3 ) )
                 )
             );
-
-        $stringStorageMock->expects( $this->once() )
+        $storageHandlerMock->expects( $this->at( 0 ) )
             ->method( 'deleteFieldData' )
-            ->with( $this->equalTo( array( 1, 2 ) ) );
-        $userStorageMock->expects( $this->once() )
+            ->with( $this->equalTo( 'ezstring' ), array( 1, 2 ) );
+        $storageHandlerMock->expects( $this->at( 1 ) )
             ->method( 'deleteFieldData' )
-            ->with( $this->equalTo( array( 3 ) ) );
+            ->with( $this->equalTo( 'ezuser' ), array( 3 ) );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'deleteRelations' )
@@ -1101,7 +988,7 @@ class ContentHandlerTest extends TestCase
                 $this->getLocationGatewayMock(),
                 $this->getTypeGatewayMock(),
                 ( $mapperMock = $this->getMapperMock() ),
-                new StorageRegistry()
+                ( $storageHandlerMock = $this->getStorageHandlerMock() )
             )
         );
 
@@ -1148,7 +1035,7 @@ class ContentHandlerTest extends TestCase
             $this->getLocationGatewayMock(),
             $this->getTypeGatewayMock(),
             ( $mapperMock = $this->getMapperMock() ),
-            $this->getStorageRegistryMock()
+            $this->getStorageHandlerMock()
         );
 
         $gatewayMock->expects( $this->once() )
@@ -1162,15 +1049,18 @@ class ContentHandlerTest extends TestCase
     }
 
     /**
-     * Returns a StorageRegistry mock.
+     * Returns a StorageHandler mock.
      *
-     * @return StorageRegistry
+     * @return StorageHandler
      */
-    protected function getStorageRegistryMock()
+    protected function getStorageHandlerMock()
     {
         return $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageRegistry',
-            array( 'getStorage' )
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageHandler',
+            array(),
+            array(),
+            '',
+            false
         );
     }
 

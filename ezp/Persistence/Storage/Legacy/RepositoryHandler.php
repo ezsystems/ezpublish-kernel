@@ -44,6 +44,13 @@ class RepositoryHandler implements HandlerInterface
     protected $storageRegistry;
 
     /**
+     * Storage registry
+     *
+     * @var Content\StorageHandler
+     */
+    protected $storageHandler;
+
+    /**
      * Search handler
      *
      * @var \ezp\Persistence\Storage\Legacy\Content\Search\Handler
@@ -260,7 +267,7 @@ class RepositoryHandler implements HandlerInterface
                     $this->getLocationMapper(),
                     $this->getFieldValueConverterRegistry()
                 ),
-                $this->getStorageRegistry()
+                $this->getStorageHandler()
             );
         }
         return $this->contentHandler;
@@ -334,6 +341,23 @@ class RepositoryHandler implements HandlerInterface
             );
         }
         return $this->storageRegistry;
+    }
+
+    /**
+     * Returns a storage handler
+     *
+     * @return \ezp\Persistence\Storage\Legacy\StorageHandler
+     */
+    protected function getStorageHandler()
+    {
+        if ( !isset( $this->storageHandler ) )
+        {
+            $this->storageHandler = new Content\StorageHandler(
+                $this->getStorageRegistry(),
+                $this->getContentGateway()->getContext()
+            );
+        }
+        return $this->storageHandler;
     }
 
     /**
