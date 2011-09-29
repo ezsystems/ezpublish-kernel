@@ -293,12 +293,15 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadReverseRelationsOneEntry()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => $this->contentId,
-                                   'destinationContentId' => $this->content2->id,
-                                   'type' => Relation::COMMON
-                                   ) ) );
-
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => $this->contentId,
+                    'destinationContentId' => $this->content2->id,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
 
         $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id );
         self::assertEquals( 1, count( $reverseRelations ) );
@@ -313,12 +316,15 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadReverseRelationsOneEntryMatchingType()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => $this->contentId,
-                                   'destinationContentId' => $this->content2->id,
-                                   'type' => Relation::COMMON
-                                   ) ) );
-
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => $this->contentId,
+                    'destinationContentId' => $this->content2->id,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
 
         $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::COMMON );
         self::assertEquals( 1, count( $reverseRelations ) );
@@ -333,12 +339,15 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadReverseRelationsOneEntryNoMatchingType()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => $this->contentId,
-                                   'destinationContentId' => $this->content2->id,
-                                   'type' => Relation::COMMON
-                                   ) ) );
-
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => $this->contentId,
+                    'destinationContentId' => $this->content2->id,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
 
         $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::EMBED );
         self::assertEmpty( $reverseRelations );
@@ -349,17 +358,25 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadReverseRelationsTwoEntries()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => $this->contentId,
-                                   'destinationContentId' => $this->content2->id,
-                                   'type' => Relation::COMMON
-                                   ) ) );
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => $this->contentId,
+                    'destinationContentId' => $this->content2->id,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
 
-        $newRelation2 = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => 1,
-                                   'destinationContentId' => $this->content2->id,
-                                   'type' => Relation::COMMON
-                                   ) ) );
+        $newRelation2 = $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => 1,
+                    'destinationContentId' => $this->content2->id,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
 
 
         $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id );
@@ -378,17 +395,25 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadReverseRelationsTwoEntriesDifferentTypes()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => $this->contentId,
-                                   'destinationContentId' => $this->content2->id,
-                                   'type' => Relation::COMMON
-                                   ) ) );
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => $this->contentId,
+                    'destinationContentId' => $this->content2->id,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
 
-        $newRelation2 = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => 1,
-                                   'destinationContentId' => $this->content2->id,
-                                   'type' => Relation::ATTRIBUTE
-                                   ) ) );
+        $newRelation2 = $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => 1,
+                    'destinationContentId' => $this->content2->id,
+                    'type' => Relation::ATTRIBUTE
+                )
+            )
+        );
 
 
         $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id );
@@ -408,11 +433,15 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testRemoveRelation()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
-                                   'sourceContentId' => $this->contentId,
-                                   'destinationContentId' => $this->content2->id,
-                                   'type' => Relation::COMMON
-                                   ) ) );
+        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+            new RelationCreateStruct(
+                array(
+                    'sourceContentId' => $this->contentId,
+                    'destinationContentId' => $this->content2->id,
+                    'type' => Relation::COMMON
+                )
+            )
+        );
 
         $relations = $this->repositoryHandler->contentHandler()->loadRelations( $this->contentId );
         self::assertEquals( 1, count( $relations ) );
