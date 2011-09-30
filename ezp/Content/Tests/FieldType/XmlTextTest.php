@@ -35,18 +35,18 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
 
     /**
      * @covers \ezp\Content\FieldType\XmlText\Type::canParseValue
-     * @expectedException PHPUnit_Framework_Error
-     * @expectedExceptionMessage must be an array
+     * @expectedException ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
      */
     public function testCanParseValueInvalidFormat()
     {
-        self::markTestIncomplete();
-        /*$ft = new Country();
+        $ft = new XmlTextType();
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "canParseValue" );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, new CountryValue( 42 ) );*/
+
+        $value = new XmlTextValue( '<a href="http://www.google.com/">bar</foo>' );
+        $refMethod->invoke( $ft, $value );
     }
 
     /**
@@ -55,14 +55,13 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
      */
     public function testCanParseValueValidFormat()
     {
-        self::markTestIncomplete();
-        /*$ft = new Country();
+        $ft = new XmlTextType();
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "canParseValue" );
         $refMethod->setAccessible( true );
 
-        $value = new CountryValue( array( "Belgium", "Norway" ) );
-        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );*/
+        $value = new XmlTextValue( '<strong>This is a piece of text</strong>' );
+        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
     }
 
     /**

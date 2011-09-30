@@ -109,7 +109,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $refMethod = $ref->getMethod( 'canParseValue' );
         $refMethod->setAccessible( true );
 
-        $value = new TextLineValue( 'Strings works just fine.' );
+        $value = new TextLineValue( 'Strings work just fine.' );
         self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
     }
 

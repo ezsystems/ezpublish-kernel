@@ -8,10 +8,16 @@
  */
 
 namespace ezp\Content\FieldType\XmlText;
-use ezp\Content\FieldType,
+use ezp\Base\Repository,
+    ezp\Content\Field,
+    ezp\Content\Version,
+    ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Content\FieldType\XmlText\Value,
-    ezp\Content\Type\FieldDefinition;
+    ezp\Content\Type\FieldDefinition,
+    ezp\Content\FieldType\XmlText\Input\Parser\Simplified as SimplifiedInputParser,
+    ezp\Content\FieldType\XmlText\Input\Handler\Simplified as SimplifiedInputHandler,
+    \ezp\Base\Exception\BadFieldTypeInput;
 
 /**
  * XmlBlock field type.
@@ -23,6 +29,18 @@ class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezxmltext";
     const IS_SEARCHABLE = true;
+
+    /**
+     * List of settings available for this FieldType
+     *
+     * The key is the setting name, and the value is the default value for this setting
+     *
+     * @var array
+     */
+    protected $allowedSettings = array(
+        'numRows' => 10,
+        'tagPreset' => null,
+    );
 
     /**
      * Returns the fallback default value of field type when no such default
@@ -56,7 +74,16 @@ EOF;
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
-        return $inputValue;
+
+        $xmlTextHandler = $this->getInputHandler( $inputValue->text );
+        if ( !$xmlTextHandler->isXmlValid() )
+        {
+            throw new BadFieldTypeInput( $inputValue, get_class() );
+        }
+        else
+        {
+            return $inputValue;
+        }
     }
 
     /**
@@ -69,5 +96,28 @@ EOF;
     protected function getSortInfo()
     {
         return false;
+    }
+
+    protected function onContentPublish( Repository $repository, Version $version, Field $field )
+    {
+        // needs to pass more data to the handler
+        // - repository (to publish new items)
+        // - validate or process modes... that's harder.
+        $handler = $this->getInputHandler( $field->getValue()->text );
+        $handler->process();
+
+        // From here, we can get the list of elements that need further processing:
+        // - links: replace the URL with the ID of the eZURL object; create the object if it doesn't exist yet
+        // - embeds: replace the embed contents with the internal version; create the relation accordingly
+    }
+
+    /**
+     * Returns the XML Input Handler for $xmlString
+     * @param string $xmlString
+     * @return \ezp\Content\FieldType\XmlText\Input\Handler
+     */
+    protected function getInputHandler( $xmlString )
+    {
+        return new SimplifiedInputHandler( $xmlString );
     }
 }

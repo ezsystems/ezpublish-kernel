@@ -293,6 +293,7 @@ abstract class FieldType implements Observer
                  if ( $subject instanceof Version )
                  {
                      // @todo Implement
+                     // $this->onContentPublish( $arguments['repository'], $subject, $arguments['version'] );
                  }
                  break;
          }
