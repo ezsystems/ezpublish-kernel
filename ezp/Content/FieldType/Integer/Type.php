@@ -26,6 +26,10 @@ class Type extends FieldType
         'ezp\\Content\\FieldType\\Integer\\IntegerValueValidator'
     );
 
+    protected $allowedSettings = array(
+        'defaultValue' => 0
+    );
+
     /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
@@ -34,7 +38,7 @@ class Type extends FieldType
      */
     protected function getDefaultValue()
     {
-        return new Value( 0 );
+        return new Value( $this->fieldSettings['defaultValue'] );
     }
 
     /**
@@ -48,11 +52,15 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !is_integer( $inputValue->value ) )
+        if ( $inputValue instanceof Value )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            if ( !is_integer( $inputValue->value ) )
+                throw new BadFieldTypeInput( $inputValue, get_class() );
+
+            return $inputValue;
         }
-        return $inputValue;
+
+        throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\Integer\\Value' );
     }
 
     /**
