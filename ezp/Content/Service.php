@@ -10,6 +10,7 @@
 namespace ezp\Content;
 use ezp\Base\Service as BaseService,
     ezp\Base\Collection\Lazy,
+    ezp\Base\Exception\Forbidden,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\InvalidArgumentType,
@@ -61,8 +62,14 @@ class Service extends BaseService
         }
 
         $this->fillStruct( $struct, $content, array( 'parentLocations', 'fields' ) );
+
+        $checkCreate = true;
         foreach ( $content->getLocations() as $location )
         {
+            $checkCreate = false;
+            if ( !$this->repository->canUser( 'create', $content, $location->getParent() ) )
+                throw new Forbidden( 'Content', 'create' );
+
             // @todo: Generate pathIdentificationString?
             // @todo set sort order and fields based on settings in type
             $struct->parentLocations[] = $this->fillStruct(
@@ -77,6 +84,11 @@ class Service extends BaseService
                 array( "contentId", "contentVersion", "mainLocationId" )
             );
         }
+
+        // Check create permissions w/o parent if no location is provided
+        if ( $checkCreate && !$this->repository->canUser( 'create', $content ) )
+            throw new Forbidden( 'Content', 'create' );
+
         foreach ( $content->getFields() as $field )
         {
             $fieldStruct = $field->getState( 'properties' );
@@ -104,6 +116,9 @@ class Service extends BaseService
         $this->fillStruct( $struct, $content, array( "versionNo", "creatorId", "fields" ) );
         $struct->creatorId = $version->creatorId;
         $struct->versionNo = $version->versionNo;
+
+        if ( !$this->repository->canUser( 'edit', $content ) )
+            throw new Forbidden( 'Content', 'edit' );
 
         foreach ( $version->getFields() as $field )
         {
@@ -149,6 +164,9 @@ class Service extends BaseService
      */
     public function delete( Content $content )
     {
+        if ( !$this->repository->canUser( 'remove', $content ) )
+            throw new Forbidden( 'Content', 'remove' );
+
         $this->handler->contentHandler()->delete( $content->id );
     }
 
@@ -230,6 +248,9 @@ class Service extends BaseService
      */
     public function addRelation( Content $contentFrom, Content $contentTo, $versionFrom = null )
     {
+        if ( !$this->repository->canUser( 'edit', $contentFrom ) )
+            throw new Forbidden( 'Content', 'edit' );
+
         $relation = new Relation( Relation::COMMON, $contentTo );
         $struct = $this->fillStruct(
             new RelationCreateStruct(
@@ -257,6 +278,7 @@ class Service extends BaseService
      * @param \ezp\Content\Relation $relation
      * @return void
      * @throws \ezp\Base\Exception\NotFound If the relation to be removed is not found.
+     * @todo Add permission checks when contentFrom object is available
      */
     public function removeRelation( Relation $relation )
     {
@@ -287,6 +309,10 @@ class Service extends BaseService
      */
     public function copy( Content $content, Version $version = null )
     {
+        // @todo API mistake: As parent is not provided, it will throw if user has Node/Subtree limitation
+        if ( !$this->repository->canUser( 'create', $content ) )
+            throw new Forbidden( 'Content', 'create' );
+
         $versionNo = isset( $version ) ? $version->versionNo : false;
         return $this->buildDomainObject( $this->handler->contentHandler()->copy( $content->id, $versionNo ) );
     }
@@ -307,6 +333,9 @@ class Service extends BaseService
      */
     public function createDraftFromVersion( Content $content, Version $srcVersion = null )
     {
+        if ( !$this->repository->canUser( 'edit', $content ) )
+            throw new Forbidden( 'Content', 'edit' );
+
         if ( !isset( $srcVersion ) )
             $srcVersion = $content->currentVersion;
 
@@ -441,6 +470,9 @@ class Service extends BaseService
      */
     public function deleteVersion( Version $version )
     {
+        if ( !$this->repository->canUser( 'versionremove', $version->getContent() ) )
+            throw new Forbidden( 'Content', 'versionremove' );
+
         $this->handler->contentHandler()->deleteVersion( $version->id );
     }
 
@@ -467,6 +499,9 @@ class Service extends BaseService
         {
             throw new Logic( '$version->contentId', 'Content/Version arguments mismatch' );
         }
+
+        if ( !$this->repository->canUser( 'edit', $version->getContent() ) )
+            throw new Forbidden( 'Content', 'edit' );
 
         // $this->handler->beginTransaction();
 

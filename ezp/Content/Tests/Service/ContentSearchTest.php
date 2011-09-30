@@ -50,6 +50,7 @@ class ContentSearchTest extends BaseServiceTest
     {
         parent::setUp();
         $this->service = $this->repository->getContentService();
+        $this->repository->setUser( new ProxyUser( 14, $this->repository->getUserService() ) );// "Login" admin
 
         /*
          * Mocking search handler and forcing the mock into the repository handler

@@ -475,21 +475,21 @@ class Concrete extends Model implements Content
                 'versionremove' => array(
                     // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
                 ),
-                'view_embed' => array(
+                'view_embed' => array(// @todo This is view stuff ,consider removing
                     // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
                 ),
-                'diff' => array(
+                'diff' => array(// @todo This is view stuff ,consider removing
                     // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
                 ),
-                'reverserelatedlist' => array(),
+                'reverserelatedlist' => array(),// @todo This is view stuff, should hence be removed
                 'translate' => array(
                     // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
                     // 'Language' is copied from 'create'
                 ),
                 'urltranslator' => array(),
-                'pendinglist' => array(),
+                'pendinglist' => array(),// @todo This is view stuff, consider removing
                 'manage_locations' => array(
-                    // Note: Limitations copied over from 'read', getting 'Group' as a bonus further down
+                    // Note: Other limitations copied over from 'read', getting 'Group' as a bonus further down
                     'Node' => array(
                         'compare' => function( Content $content, array $limitationsValues, Repository $repository, Location $location )
                         {

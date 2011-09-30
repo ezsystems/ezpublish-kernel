@@ -30,7 +30,7 @@ class ContentTest extends BaseServiceTest
     protected $service;
 
     /**
-     * @var \ezp\User\Service
+     * @var \ezp\User
      */
     protected $anonymousUser;
 
@@ -38,8 +38,9 @@ class ContentTest extends BaseServiceTest
     {
         parent::setUp();
         $this->service = $this->repository->getContentService();
-        $this->anonymousUser = new ProxyUser( 10, $this->repository->getUserService() );
-        $this->repository->setUser( new ProxyUser( 14, $this->repository->getUserService() ) );// "Login" admin
+        $this->anonymousUser = $this->repository->setUser(
+            new ProxyUser( 14, $this->repository->getUserService() )
+        );// "Login" admin
     }
 
     /**
@@ -175,6 +176,25 @@ class ContentTest extends BaseServiceTest
 
     /**
      * @group contentService
+     * @covers \ezp\Content\Service::create
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCreateForbidden()
+    {
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $location = $this->repository->getLocationService()->load( 2 );
+        $section = $this->repository->getSectionService()->load( 2 );
+        $content = new ConcreteContent( $type, $this->anonymousUser );
+        $content->addParent( $location );
+        $content->name = array( "eng-GB" => "New object" );
+        $content->setSection( $section );
+
+        $this->repository->setUser( $this->anonymousUser );
+        $this->service->create( $content );
+    }
+
+    /**
+     * @group contentService
      * @covers \ezp\Content\Service::update
      */
     public function testUpdate()
@@ -182,9 +202,8 @@ class ContentTest extends BaseServiceTest
         // @todo Test with change to fields!
 
         $content = $this->service->load( 1 );
-        $user = $this->repository->getUserService()->load( 10 );
         $content->name = array( "eng-GB" => "New name" );
-        $content->setOwner( $user );
+        $content->setOwner( $this->anonymousUser );
         $content = $this->service->update( $content, $content->versions[1] );
 
         self::assertInstanceOf( "ezp\\Content", $content );
@@ -193,6 +212,21 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
         self::assertEquals( Content::STATUS_PUBLISHED, $content->status, "Status not correctly set" );
+    }
+
+    /**
+     * @group contentService
+     * @covers \ezp\Content\Service::update
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testUpdateForbidden()
+    {
+        $content = $this->service->load( 1 );
+        $content->name = array( "eng-GB" => "New name" );
+        $content->setOwner( $this->anonymousUser );
+
+        $this->repository->setUser( $this->anonymousUser );
+        $this->service->update( $content, $content->versions[1] );
     }
 
     /**
@@ -283,13 +317,13 @@ class ContentTest extends BaseServiceTest
      * Test the Content Service listVersions operation
      * with a wrong Content argument
      *
-     * @expectedException \ezp\Base\Exception\NotFound
      * @group contentService
      * @covers \ezp\Content\Service::listVersions
+     * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testListVersionsNotExisting()
     {
-        $versions = $this->service->listVersions( 999 );
+        $this->service->listVersions( 999 );
     }
 
     /**
@@ -320,9 +354,9 @@ class ContentTest extends BaseServiceTest
     /**
      * Test the Content Service delete operation
      *
-     * @expectedException \ezp\Base\Exception\NotFound
      * @group contentService
      * @covers \ezp\Content\Service::delete
+     * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDeleteNotExisting()
     {
@@ -332,13 +366,28 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
      * @group contentService
      * @covers \ezp\Content\Service::load
+     * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadNotExisting()
     {
         $this->service->load( 0 );
+    }
+
+    /**
+     * Test the Content Service delete operation
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::delete
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testDeleteForbidden()
+    {
+        $content = $this->service->load( 1 );
+
+        $this->repository->setUser( $this->anonymousUser );
+        $this->service->delete( $content );
     }
 
     /**
@@ -497,6 +546,20 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
+     * @group contentService
+     * @covers \ezp\Content\Service::copy
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCopyForbidden()
+    {
+        $content = $this->service->load( 1 );
+        $version = $content->versions[1];
+
+        $this->repository->setUser( $this->anonymousUser );
+        $this->service->copy( $content, $version );
+    }
+
+    /**
      * Tests the addRelation operation
      *
      * @group contentService
@@ -517,6 +580,22 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
+     * Tests the addRelation operation
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::addRelation
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testAddRelationForbidden()
+    {
+        $from = $this->service->load( 10 );
+        $to = $this->service->load( 10 );
+
+        $this->repository->setUser( $this->anonymousUser );
+        $this->service->addRelation( $from, $to );
+    }
+
+    /**
      * @covers \ezp\Content\Service::removeRelation
      */
     public function testRemoveRelation()
@@ -529,13 +608,29 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
      * @covers \ezp\Content\Service::removeRelation
+     * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testRemoveRelationDoesNotExist()
     {
         $nonExistingRelation = new Relation( Relation::COMMON, $this->service->load( 10 ) );
         $this->service->removeRelation( $nonExistingRelation );
+    }
+
+    /**
+     * @covers \ezp\Content\Service::removeRelation
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testRemoveRelationForbidden()
+    {
+        self::markTestIncomplete( "Missing permission impl on removeRelation()" );
+        $relation = $this->service->addRelation(
+            $this->service->load( 10 ),
+            $this->service->load( 14 )
+        );
+
+        $this->repository->setUser( $this->anonymousUser );
+        $this->service->removeRelation( $relation );
     }
 
     /**
@@ -606,14 +701,27 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
      * @group contentService
      * @covers \ezp\Content\Service::createDraftFromVersion
+     * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testCreateDraftFromInvalidVersion()
     {
         $content = $this->service->load( 1 );
         $draft = $this->service->createDraftFromVersion( $content, new Version( $content ) );
+    }
+
+    /**
+     * @group contentService
+     * @covers \ezp\Content\Service::createDraftFromVersion
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCreateDraftForbidden()
+    {
+        $content = $this->service->load( 1 );
+
+        $this->repository->setUser( $this->anonymousUser );
+        $this->service->createDraftFromVersion( $content, $content->getCurrentVersion() );
     }
 
     /**
@@ -669,6 +777,27 @@ class ContentTest extends BaseServiceTest
         $publishedContent = $this->service->publish( $content, $version );
 
         self::assertEquals( Version::STATUS_PUBLISHED, $publishedContent->currentVersion->status );
+    }
+
+    /**
+     * Tests publishing of a newly created content
+     * @covers \ezp\Content\Service::publish
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testPublishForbidden()
+    {
+        $type = $this->repository->getContentTypeService()->load( 1 );
+        $location = $this->repository->getLocationService()->load( 2 );
+        $section = $this->repository->getSectionService()->load( 1 );
+
+        $content = new ConcreteContent( $type, $this->anonymousUser );
+        $content->addParent( $location );
+        $content->name = array( "eng-GB" => __METHOD__ );
+        $content->setSection( $section );
+        $content = $this->repository->getContentService()->create( $content );
+
+        $this->repository->setUser( $this->anonymousUser );
+        $this->service->publish( $content, $content->getCurrentVersion() );
     }
 
     /**
