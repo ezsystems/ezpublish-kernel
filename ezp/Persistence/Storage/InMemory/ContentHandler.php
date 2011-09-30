@@ -455,6 +455,7 @@ class ContentHandler implements ContentHandlerInterface
      * Removes a relation by relation Id.
      *
      * @param mixed $relationId
+     * @throws \ezp\Base\Exception\NotFound if relation to be removed is not found.
      */
     public function removeRelation( $relationId )
     {
