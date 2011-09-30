@@ -62,8 +62,12 @@ class RepositoryHandlerTest extends TestCase
 
         $storageRegistry = $handler->getStorageRegistry();
         $contentHandler = $handler->contentHandler();
-        $storageHandler = $this->readAttribute(
+        $fieldHandler = $this->readAttribute(
             $contentHandler,
+            'fieldHandler'
+        );
+        $storageHandler = $this->readAttribute(
+            $fieldHandler,
             'storageHandler'
         );
 

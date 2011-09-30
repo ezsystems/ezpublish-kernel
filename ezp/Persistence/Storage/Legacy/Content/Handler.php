@@ -38,13 +38,6 @@ class Handler implements BaseContentHandler
     protected $locationGateway;
 
     /**
-     * Content type gateway
-     *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
-     */
-    protected $typeGateway;
-
-    /**
      * Mapper.
      *
      * @var Mapper
@@ -52,11 +45,11 @@ class Handler implements BaseContentHandler
     protected $mapper;
 
     /**
-     * Storage handler
+     * FieldHandler
      *
-     * @var \ezp\Persistence\Storage\Legacy\StorageHandler
+     * @var \ezp\Persistence\Storage\Legacy\FieldHandler
      */
-    protected $storageHandler;
+    protected $fieldHandler;
 
     /**
      * Creates a new content handler.
@@ -67,16 +60,14 @@ class Handler implements BaseContentHandler
     public function __construct(
         Gateway $contentGateway,
         Location\Gateway $locationGateway,
-        Type\Gateway $typeGateway,
         Mapper $mapper,
-        StorageHandler $storageHandler
+        FieldHandler $fieldHandler
     )
     {
         $this->contentGateway = $contentGateway;
         $this->locationGateway = $locationGateway;
-        $this->typeGateway = $typeGateway;
         $this->mapper = $mapper;
-        $this->storageHandler = $storageHandler;
+        $this->fieldHandler = $fieldHandler;
     }
 
     /**
@@ -99,26 +90,13 @@ class Handler implements BaseContentHandler
             $content, $struct->fields
         );
 
-        $version = $this->mapper->createVersionForContent( $content, 1 );
-
-        $version->id = $this->contentGateway->insertVersion(
-            $version, $struct->fields, $content->alwaysAvailable
+        $content->version = $this->mapper->createVersionForContent( $content, 1 );
+        $content->version->id = $this->contentGateway->insertVersion(
+            $content->version, $struct->fields, $content->alwaysAvailable
         );
+        $content->version->fields = $struct->fields;
 
-        foreach ( $struct->fields as $field )
-        {
-            $field->versionNo = $version->versionNo;
-            $field->id = $this->contentGateway->insertNewField(
-                $content,
-                $field,
-                $this->mapper->convertToStorageValue( $field )
-            );
-            $this->storageHandler->storeFieldData( $field );
-
-            $version->fields[] = $field;
-        }
-
-        $content->version = $version;
+        $this->fieldHandler->createNewFields( $content );
 
         foreach ( $struct->parentLocations as $location )
         {
@@ -185,29 +163,19 @@ class Handler implements BaseContentHandler
         $content = $this->load( $contentId, $srcVersion );
 
         // Create new version
-        $version = $this->mapper->createVersionForContent(
+        $content->version = $this->mapper->createVersionForContent(
             $content,
             $content->version->versionNo + 1
         );
 
-        $version->id = $this->contentGateway->insertVersion(
-            $version, $version->fields, $content->alwaysAvailable
+        $content->version->id = $this->contentGateway->insertVersion(
+            $content->version,
+            $content->version->fields,
+            $content->alwaysAvailable
         );
 
-        foreach ( $content->version->fields as $field )
-        {
-            $field->versionNo = $version->versionNo;
-            $field->id = $this->contentGateway->insertNewField(
-                $content,
-                $field,
-                $this->mapper->convertToStorageValue( $field )
-            );
-            $this->storageHandler->storeFieldData( $field );
+        $this->fieldHandler->createNewFields( $content );
 
-            $version->fields[] = $field;
-        }
-
-        $content->version = $version;
         return $content;
     }
 
@@ -239,10 +207,7 @@ class Handler implements BaseContentHandler
         $contentObjects = $this->mapper->extractContentFromRows( $rows );
         $content = $contentObjects[0];
 
-        foreach ( $content->version->fields as $field )
-        {
-            $this->storageHandler->getFieldData( $field );
-        }
+        $this->fieldHandler->loadExternalFieldData( $content );
 
         return $content;
     }
@@ -306,36 +271,7 @@ class Handler implements BaseContentHandler
         $this->contentGateway->updateVersion(
             $content->id, $content->versionNo
         );
-
-        foreach ( $content->fields as $field )
-        {
-            $field->versionNo = $content->versionNo;
-
-            if (
-                $this->typeGateway->isFieldTranslatable(
-                    $field->fieldDefinitionId,
-                    0
-                )
-            )
-            {
-                $this->contentGateway->updateField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field )
-                );
-            }
-            else
-            {
-                $this->contentGateway->updateNonTranslatableField(
-                    $field,
-                    $this->mapper->convertToStorageValue( $field ),
-                    $content
-                );
-            }
-
-            $this->storageHandler->storeFieldData( $field );
-
-            $version->fields[] = $field;
-        }
+        $this->fieldHandler->updateFields( $content );
 
         return $this->load( $content->id, $content->versionNo );
     }
@@ -356,15 +292,9 @@ class Handler implements BaseContentHandler
         {
             $this->locationGateway->removeSubtree( $locationId );
         }
-
-        $fieldIds = $this->contentGateway->getFieldIdsByType( $contentId );
-        foreach ( $fieldIds as $fieldType => $ids )
-        {
-            $this->storageHandler->deleteFieldData( $fieldType, $ids );
-        }
+        $this->fieldHandler->deleteFields( $contentId );
 
         $this->contentGateway->deleteRelations( $contentId );
-        $this->contentGateway->deleteFields( $contentId );
         $this->contentGateway->deleteVersions( $contentId );
         $this->contentGateway->deleteNames( $contentId );
         $this->contentGateway->deleteContent( $contentId );

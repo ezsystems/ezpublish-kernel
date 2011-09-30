@@ -30,6 +30,13 @@ class RepositoryHandler implements HandlerInterface
     protected $contentHandler;
 
     /**
+     * Content mapper
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Mapper
+     */
+    protected $contentMapper;
+
+    /**
      * Field value converter registry
      *
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
@@ -49,6 +56,13 @@ class RepositoryHandler implements HandlerInterface
      * @var Content\StorageHandler
      */
     protected $storageHandler;
+
+    /**
+     * Field handler
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\FieldHandler
+     */
+    protected $fieldHandler;
 
     /**
      * Search handler
@@ -262,15 +276,28 @@ class RepositoryHandler implements HandlerInterface
             $this->contentHandler = new Content\Handler(
                 $this->getContentGateway(),
                 $this->getLocationGateway(),
-                $this->getContentTypeGateway(),
-                new Content\Mapper(
-                    $this->getLocationMapper(),
-                    $this->getFieldValueConverterRegistry()
-                ),
-                $this->getStorageHandler()
+                $this->getContentMapper(),
+                $this->getFieldHandler()
             );
         }
         return $this->contentHandler;
+    }
+
+    /**
+     * Returns a content mapper
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\Mapper
+     */
+    protected function getContentMapper()
+    {
+        if ( !isset( $this->contentMapper ) )
+        {
+            $this->contentMapper = new Content\Mapper(
+                $this->getLocationMapper(),
+                $this->getFieldValueConverterRegistry()
+            );
+        }
+        return $this->contentMapper;
     }
 
     /**
@@ -290,6 +317,25 @@ class RepositoryHandler implements HandlerInterface
             );
         }
         return $this->contentGateway;
+    }
+
+    /**
+     * Returns a field handler
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\FieldHandler
+     */
+    protected function getFieldHandler()
+    {
+        if ( !isset( $this->fieldHandler ) )
+        {
+            $this->fieldHandler = new Content\FieldHandler(
+                $this->getContentGateway(),
+                $this->getContentTypeGateway(),
+                $this->getContentMapper(),
+                $this->getStorageHandler()
+            );
+        }
+        return $this->fieldHandler;
     }
 
     /**
