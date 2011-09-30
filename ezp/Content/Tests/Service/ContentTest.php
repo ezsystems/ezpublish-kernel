@@ -505,8 +505,8 @@ class ContentTest extends BaseServiceTest
     public function testAddRelation()
     {
         $relation = $this->service->addRelation(
-            new Relation( Relation::COMMON, $this->service->load( 14 ) ),
-            $this->service->load( 10 )
+            $this->service->load( 10 ),
+            $this->service->load( 14 )
         );
 
         $this->assertEquals( Relation::COMMON, $relation->type );

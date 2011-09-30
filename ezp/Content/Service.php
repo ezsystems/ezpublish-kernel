@@ -220,19 +220,22 @@ class Service extends BaseService
     }
 
     /**
-     * Adds a $relation to $content
+     * Adds an object relation between $contentFrom and $contentTo.
      *
-     * @param \ezp\Content\Relation $relation
-     * @param \ezp\Content $content
-     * @param int|null $version
+     * The relation created will be of type Relation::COMMON,
+     *
+     * @param \ezp\Content$contentFrom
+     * @param \ezp\Content $contentTo
+     * @param int|null $versionFrom
      */
-    public function addRelation( Relation $relation, Content $content, $version = null )
+    public function addRelation( Content $contentFrom, Content $contentTo, $versionFrom = null )
     {
+        $relation = new Relation( Relation::COMMON, $contentTo );
         $struct = $this->fillStruct(
             new RelationCreateStruct(
                 array(
-                    'sourceContentId' => $content->id,
-                    'sourceContentVersion' => $version
+                    'sourceContentId' => $contentFrom->id,
+                    'sourceContentVersion' => $versionFrom
                 )
             ),
             $relation,
