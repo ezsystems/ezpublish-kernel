@@ -10,13 +10,13 @@
 namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Media\Type as MediaType,
     ezp\Content\FieldType\Media\Value as MediaTypeValue,
+    ezp\Content\FieldType\FieldSettings,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Media as MediaTypeConverter,
     ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     ezp\Persistence\Content\FieldTypeConstraints,
-    ezp\Content\FieldType\FieldSettings,
     ezp\Base\BinaryRepository;
 
 /**

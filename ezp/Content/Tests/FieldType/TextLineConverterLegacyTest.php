@@ -8,21 +8,20 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\TextLine\Type as TextLine,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue,
+use ezp\Content\FieldType\TextLine\Value as TextLineValue,
+    ezp\Content\FieldType\FieldSettings,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine as TextLineConverter,
     ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     ezp\Persistence\Content\FieldTypeConstraints,
-    ezp\Content\FieldType\FieldSettings;
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for TextLine converter in Legacy storage
  */
-class TextLineConverterLegacyTest extends \PHPUnit_Framework_TestCase
+class TextLineConverterLegacyTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine

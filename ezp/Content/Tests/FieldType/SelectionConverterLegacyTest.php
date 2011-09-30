@@ -8,21 +8,20 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Selection\Type as Selection,
-    ezp\Content\FieldType\Selection\Value as SelectionValue,
+use ezp\Content\FieldType\Selection\Value as SelectionValue,
+    ezp\Content\FieldType\FieldSettings,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection as SelectionConverter,
     ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     ezp\Persistence\Content\FieldTypeConstraints,
-    ezp\Content\FieldType\FieldSettings;
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Selection converter in Legacy storage
  */
-class SelectionConverterLegacyTest extends \PHPUnit_Framework_TestCase
+class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection

@@ -11,8 +11,6 @@ namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Checkbox\Type as Checkbox,
     ezp\Content\FieldType\Checkbox\Value as CheckboxValue,
-    ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 

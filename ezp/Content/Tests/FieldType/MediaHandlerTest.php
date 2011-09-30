@@ -10,15 +10,14 @@
 namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Media\Handler as MediaHandler,
     ezp\Content\FieldType\Media\Type as MediaType,
-    ezp\Io\BinaryFile,
-    ezp\Io\SysInfo,
     ezp\Io\FileInfo,
-    ezp\Base\BinaryRepository;
+    ezp\Base\BinaryRepository,
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for {@link \ezp\Content\FieldType\Media\Handler}
  */
-class MediaHandlerTest extends \PHPUnit_Framework_TestCase
+class MediaHandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Path to test image

@@ -12,11 +12,8 @@ use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Media\Type as MediaType,
     ezp\Content\FieldType\Media\Value as MediaValue,
     ezp\Content\FieldType\Media\Handler as MediaHandler,
-    ezp\Io\BinaryFile,
     ezp\Io\FileInfo,
-    ezp\Base\Exception\BadFieldTypeInput,
     ezp\Base\BinaryRepository,
-    ezp\Persistence\Content\FieldValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 

@@ -11,8 +11,6 @@ namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Author\Type as Author,
     ezp\Content\FieldType\Author\Value as AuthorValue,
-    ezp\Base\Exception\BadFieldTypeInput,
-    ezp\Persistence\Content\FieldValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 

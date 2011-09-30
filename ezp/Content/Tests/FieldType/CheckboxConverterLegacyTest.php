@@ -8,21 +8,20 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Checkbox\Type as Checkbox,
-    ezp\Content\FieldType\Checkbox\Value as CheckboxValue,
+use ezp\Content\FieldType\Checkbox\Value as CheckboxValue,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Checkbox as CheckboxConverter,
     ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     ezp\Persistence\Content\FieldTypeConstraints,
-    ezp\Content\FieldType\FieldSettings;
+    ezp\Content\FieldType\FieldSettings,
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Checkbox converter in Legacy storage
  */
-class CheckboxConverterLegacyTest extends \PHPUnit_Framework_TestCase
+class CheckboxConverterLegacyTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Checkbox

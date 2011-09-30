@@ -11,7 +11,6 @@ namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Country\Type as Country,
     ezp\Content\FieldType\Country\Value as CountryValue,
-    ezp\Base\Exception\BadFieldTypeInput,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 

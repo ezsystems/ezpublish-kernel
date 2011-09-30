@@ -11,7 +11,6 @@ namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Url\Type as Url,
     ezp\Content\FieldType\Url\Value as UrlValue,
-    ezp\Base\Exception\BadFieldTypeInput,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 

@@ -11,7 +11,6 @@ namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\XmlText\Type as XmlTextType,
     ezp\Content\FieldType\XmlText\Value as XmlTextValue,
-    ezp\Base\Exception\BadFieldTypeInput,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 

@@ -9,15 +9,15 @@
 
 namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\BinaryFile\Handler as BinaryFileHandler,
-    ezp\Io\BinaryFile,
     ezp\Io\SysInfo,
     ezp\Io\FileInfo,
-    ezp\Base\BinaryRepository;
+    ezp\Base\BinaryRepository,
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for {@link \ezp\Content\FieldType\BinaryFile\Handler}
  */
-class BinaryFileHandlerTest extends \PHPUnit_Framework_TestCase
+class BinaryFileHandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * Path to test image

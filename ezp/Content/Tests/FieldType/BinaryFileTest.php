@@ -12,11 +12,8 @@ use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\BinaryFile\Type as BinaryFileType,
     ezp\Content\FieldType\BinaryFile\Value as BinaryFileValue,
     ezp\Content\FieldType\BinaryFile\Handler as BinaryFileHandler,
-    ezp\Io\BinaryFile,
     ezp\Io\FileInfo,
-    ezp\Base\Exception\BadFieldTypeInput,
     ezp\Base\BinaryRepository,
-    ezp\Persistence\Content\FieldValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 

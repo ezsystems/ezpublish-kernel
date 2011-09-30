@@ -11,7 +11,6 @@ namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\Float\Type as Float,
     ezp\Content\FieldType\Float\Value as FloatValue,
-    ezp\Base\Exception\BadFieldTypeInput,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
