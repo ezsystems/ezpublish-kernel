@@ -252,6 +252,18 @@ class Service extends BaseService
     }
 
     /**
+     * Removes content object relation represented by $relation.
+     *
+     * @param \ezp\Content\Relation $relation
+     * @return void
+     * @throws \ezp\Base\Exception\NotFound If the relation to be removed is not found.
+     */
+    public function removeRelation( Relation $relation )
+    {
+        $this->handler->contentHandler()->removeRelation( $relation->id );
+    }
+
+    /**
      * Loads content relations from its id ($contentId)
      *
      * @todo Implement it (should be similar to listVersions())

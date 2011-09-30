@@ -517,6 +517,28 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
+     * @covers \ezp\Content\Service::removeRelation
+     */
+    public function testRemoveRelation()
+    {
+        $relation = $this->service->addRelation(
+            $this->service->load( 10 ),
+            $this->service->load( 14 )
+        );
+        $this->service->removeRelation( $relation );
+    }
+
+    /**
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @covers \ezp\Content\Service::removeRelation
+     */
+    public function testRemoveRelationDoesNotExist()
+    {
+        $nonExistingRelation = new Relation( Relation::COMMON, $this->service->load( 10 ) );
+        $this->service->removeRelation( $nonExistingRelation );
+    }
+
+    /**
      * Tests the createDraftFromVersion operation
      *
      * @group contentService
