@@ -116,11 +116,9 @@ class Autoloader
                 {
                     return false;
                 }
-                else
-                {
-                    require $classPath;
-                    return true;
-                }
+
+                require $classPath;
+                return true;
             }
         }
     }

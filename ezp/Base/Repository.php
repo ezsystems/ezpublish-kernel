@@ -92,7 +92,6 @@ class Repository
         if ( !$user->id )
             throw new InvalidArgumentValue( '$user->id', $user->id );
 
-
         $oldUser = $this->user;
         $this->user = $user;
         return $oldUser;
@@ -119,7 +118,7 @@ class Repository
         {
             throw new BadConfiguration( "{$className}::definition()", 'missing module key with name of module' );
         }
-        else if ( !empty( $definition['functions'] ) && !isset( $definition['functions'][$function] ) )
+        if ( !empty( $definition['functions'] ) && !isset( $definition['functions'][$function] ) )
         {
             throw new InvalidArgumentValue( '$function', $function, $className );
         }
@@ -129,7 +128,7 @@ class Repository
         {
             return $limitationArray;
         }
-        else if ( empty( $definition['functions'][$function] ) )
+        if ( empty( $definition['functions'][$function] ) )
         {
             throw new BadConfiguration(
                 "{$className}::definition()",

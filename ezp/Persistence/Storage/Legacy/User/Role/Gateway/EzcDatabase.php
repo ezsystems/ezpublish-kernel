@@ -236,7 +236,7 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
-        $paths   = $statement->fetchAll( \PDO::FETCH_COLUMN );
+        $paths = $statement->fetchAll( \PDO::FETCH_COLUMN );
         $nodeIDs = array_unique(
             array_reduce(
                 array_map(
@@ -481,11 +481,11 @@ class EzcDatabase extends Gateway
         $statement->execute();
 
         $limitations = array();
-        $values      = array();
+        $values = array();
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
             $limitations[] = $row['ezpolicy_limitation_id'];
-            $values[]      = $row['ezpolicy_limitation_value_id'];
+            $values[] = $row['ezpolicy_limitation_value_id'];
         }
 
         $query = $this->handler->createDeleteQuery();

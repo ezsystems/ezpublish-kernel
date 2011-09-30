@@ -69,9 +69,9 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'id'       => '8',
-                    'locale'   => 'de-DE',
-                    'name'     => 'Deutsch (Deutschland)',
+                    'id' => '8',
+                    'locale' => 'de-DE',
+                    'name' => 'Deutsch (Deutschland)',
                     'disabled' => '0',
                 )
             ),
@@ -91,8 +91,8 @@ class EzcDatabaseTest extends TestCase
     {
         $language = new Language();
 
-        $language->locale    = 'de-DE';
-        $language->name      = 'Deutsch (Deutschland)';
+        $language->locale = 'de-DE';
+        $language->name = 'Deutsch (Deutschland)';
         $language->isEnabled = true;
 
         return $language;
@@ -116,9 +116,9 @@ class EzcDatabaseTest extends TestCase
         $this->assertQueryResult(
             array(
                 array(
-                    'id'       => '2',
-                    'locale'   => 'de-DE',
-                    'name'     => 'Deutsch (Deutschland)',
+                    'id' => '2',
+                    'locale' => 'de-DE',
+                    'name' => 'Deutsch (Deutschland)',
                     'disabled' => '0',
                 )
             ),
@@ -143,9 +143,9 @@ class EzcDatabaseTest extends TestCase
         $this->assertEquals(
             array(
                 array(
-                    'id'       => '2',
-                    'locale'   => 'eng-US',
-                    'name'     => 'English (American)',
+                    'id' => '2',
+                    'locale' => 'eng-US',
+                    'name' => 'English (American)',
                     'disabled' => '0',
                 )
             ),
@@ -167,15 +167,15 @@ class EzcDatabaseTest extends TestCase
         $this->assertEquals(
             array(
                 array(
-                    'id'       => '2',
-                    'locale'   => 'eng-US',
-                    'name'     => 'English (American)',
+                    'id' => '2',
+                    'locale' => 'eng-US',
+                    'name' => 'English (American)',
                     'disabled' => '0',
                 ),
                 array(
-                    'id'       => '4',
-                    'locale'   => 'eng-GB',
-                    'name'     => 'English (United Kingdom)',
+                    'id' => '4',
+                    'locale' => 'eng-GB',
+                    'name' => 'English (United Kingdom)',
                     'disabled' => '0',
                 )
             ),

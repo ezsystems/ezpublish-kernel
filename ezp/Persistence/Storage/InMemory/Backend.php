@@ -75,13 +75,11 @@ class Backend
         {
           throw new Logic( 'create', '$autoIncrement is false but no id is provided' );
         }
-        else
+
+        foreach ( $this->data[$type] as $item )
         {
-            foreach ( $this->data[$type] as $item )
-            {
-                if ( $item['id'] == $data['id'] )
-                    throw new Logic( 'create', 'provided id already exist' );
-            }
+            if ( $item['id'] == $data['id'] )
+                throw new Logic( 'create', 'provided id already exist' );
         }
 
         $this->data[$type][] = $data;
@@ -108,7 +106,7 @@ class Backend
         {
             if ( $item['id'] != $id )
                 continue;
-            else if ( $return )
+            if ( $return )
                 throw new Logic( $type, "more than one item exist with id: {$id}" );
 
             $return = $this->toValue( $type, $item );

@@ -29,13 +29,13 @@ class Mapper
     public function mapUser( array $data )
     {
         $user = new User();
-        $user->id            = $data[0]['contentobject_id'];
-        $user->login         = $data[0]['login'];
-        $user->email         = $data[0]['email'];
-        $user->passwordHash  = $data[0]['password_hash'];
+        $user->id = $data[0]['contentobject_id'];
+        $user->login = $data[0]['login'];
+        $user->email = $data[0]['email'];
+        $user->passwordHash = $data[0]['password_hash'];
         $user->hashAlgorithm = $data[0]['password_hash_type'];
-        $user->isEnabled     = (bool) $data[0]['is_enabled'];
-        $user->maxLogin      = $data[0]['max_login'];
+        $user->isEnabled = (bool)$data[0]['is_enabled'];
+        $user->maxLogin = $data[0]['max_login'];
 
         return $user;
     }
@@ -55,12 +55,14 @@ class Mapper
             if ( !isset( $policies[$policyId] ) &&
                  ( $policyId !== null ) )
             {
-                $policies[$policyId] = new Policy( array(
-                    'id'       => $row['ezpolicy_id'],
-                    'roleId'   => $row['ezrole_id'],
-                    'module'   => $row['ezpolicy_module_name'],
-                    'function' => $row['ezpolicy_function_name'],
-                ) );
+                $policies[$policyId] = new Policy(
+                    array(
+                        'id' => $row['ezpolicy_id'],
+                        'roleId' => $row['ezrole_id'],
+                        'module' => $row['ezpolicy_module_name'],
+                        'function' => $row['ezpolicy_function_name'],
+                    )
+                );
             }
 
             if ( !$row['ezpolicy_limitation_identifier'] )
@@ -72,7 +74,7 @@ class Mapper
             {
                 $policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] = array( $row['ezpolicy_limitation_value_value'] );
             }
-            elseif ( !in_array( $row['ezpolicy_limitation_value_value'], $policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] ) )
+            else if ( !in_array( $row['ezpolicy_limitation_value_value'], $policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']] ) )
             {
                 $policies[$policyId]->limitations[$row['ezpolicy_limitation_identifier']][] = $row['ezpolicy_limitation_value_value'];
             }
@@ -95,7 +97,7 @@ class Mapper
         {
             if ( empty( $role->id ) )
             {
-                $role->id   = $row['ezrole_id'];
+                $role->id = $row['ezrole_id'];
                 $role->name = $row['ezrole_name'];
             }
 

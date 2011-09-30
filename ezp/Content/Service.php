@@ -348,7 +348,8 @@ class Service extends BaseService
             // User does not have read access to content at all
             return new Result( array(), 0, $query );
         }
-        else if ( $limitationArray !== true )
+
+        if ( $limitationArray !== true )
         {
             // Create OR conditions for every "policy" that contains AND conditions for limitations
             $orCriteria = array();

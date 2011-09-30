@@ -62,7 +62,8 @@ abstract class Model extends Proxy implements ObservableInterface, ModelInterfac
         {
             return $this->proxiedObject->attach( $observer, $event );
         }
-        elseif ( isset( $this->observers[$event] ) )
+
+        if ( isset( $this->observers[$event] ) )
         {
             $this->observers[$event][] = $observer;
         }
@@ -86,7 +87,8 @@ abstract class Model extends Proxy implements ObservableInterface, ModelInterfac
         {
             return $this->proxiedObject->detach( $observer, $event );
         }
-        elseif ( !empty( $this->observers[$event] ) )
+
+        if ( !empty( $this->observers[$event] ) )
         {
             foreach ( $this->observers[$event] as $key => $obj )
             {

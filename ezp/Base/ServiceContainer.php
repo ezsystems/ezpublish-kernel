@@ -130,11 +130,11 @@ class ServiceContainer
         {
             throw new BadConfiguration( "base\\[service_{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
-        else if ( empty( $settings['class'] ) )
+        if ( empty( $settings['class'] ) )
         {
             throw new BadConfiguration( "base\\[service_{$serviceName}]\\class", 'class setting is not defined' );
         }
-        else if ( !class_exists( $settings['class'] ) )
+        if ( !class_exists( $settings['class'] ) )
         {
             throw new MissingClass( $settings['class'], 'dependency' );
         }
@@ -167,11 +167,9 @@ class ServiceContainer
                     // Undefined variables will trow an exception
                     throw new InvalidArgumentValue( "arguments[{$key}]", $argument );
                 }
-                else
-                {
-                    // Try to load a @service dependency
-                    $arguments[] = $this->get( ltrim( $argument, '@' ) );
-                }
+
+                // Try to load a @service dependency
+                $arguments[] = $this->get( ltrim( $argument, '@' ) );
             }
             // Primitive type / object argument
             else

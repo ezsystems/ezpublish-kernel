@@ -53,9 +53,12 @@ class Service extends BaseService
     {
         $struct = new UserValueObject();
         $this->fillStruct( $struct, $user );
-        $content = $this->repository->getContentService()->load( $user->id );// before create() to validate ->id
-        $vo = $this->handler->userHandler()->create( $struct );
-        return $this->buildUser( $vo, $content );
+
+        return $this->buildUser(
+            $this->handler->userHandler()->create( $struct ),
+            // before create() to validate ->id
+            $this->repository->getContentService()->load( $user->id )
+        );
     }
 
     /**
@@ -96,7 +99,8 @@ class Service extends BaseService
             {
                 continue;
             }
-            else if ( $user->passwordHash == self::createHash( $user->login, $password, $user->hashAlgorithm ) )
+
+            if ( $user->passwordHash == self::createHash( $user->login, $password, $user->hashAlgorithm ) )
             {
                 return $this->buildUser( $user, new ProxyContent( $user->id, $this->repository->getContentService() ) );
             }
@@ -118,16 +122,16 @@ class Service extends BaseService
         {
             return md5( "$login\n$password" );
         }
-        else if ( $type == User::PASSWORD_HASH_MD5_SITE )
+        if ( $type == User::PASSWORD_HASH_MD5_SITE )
         {
             $site = Configuration::getInstance( 'site' )->get( 'UserSettings', 'SiteName', 'ez.no' );
             return md5( "$login\n$password\n$site" );
         }
-        else if ( $type == User::PASSWORD_HASH_PLAIN_TEXT )
+        if ( $type == User::PASSWORD_HASH_PLAIN_TEXT )
         {
             return $password;
         }
-        //else if ( $type == User::PASSWORD_HASH_MD5_PASSWORD )
+        //if ( $type == User::PASSWORD_HASH_MD5_PASSWORD )
         return md5( $password );
     }
 
@@ -187,7 +191,7 @@ class Service extends BaseService
         $fields = $content->getFields();
         if ( !isset( $fields['name'] ) )
             throw new PropertyNotFound( 'name', get_class( $content ) );
-        else if ( !isset( $fields['description'] ) )
+        if ( !isset( $fields['description'] ) )
             throw new PropertyNotFound( 'description', get_class( $content ) );
 
         $fields['name'] = $name;
@@ -271,8 +275,9 @@ class Service extends BaseService
         if ( $groups->indexOf( $group ) !== false )
             throw new Logic( 'assignGroup', 'can not assign group that is already assigned' );
 
-        $newLocation = $content->addParent( $group->getState( 'content' )->getMainLocation() );
-        $this->repository->getLocationService()->create( $newLocation );
+        $this->repository->getLocationService()->create(
+            $content->addParent( $group->getState( 'content' )->getMainLocation() )
+        );
 
         $groups[] = $group;
         $user->setState( array( 'groups' => $groups ) );
@@ -341,8 +346,10 @@ class Service extends BaseService
 
         $struct = new RoleValueObject();
         $this->fillStruct( $struct, $role, array( 'id' ) );
-        $vo = $this->handler->userHandler()->createRole( $struct );
-        return $this->buildRole( $vo );
+
+        return $this->buildRole(
+            $this->handler->userHandler()->createRole( $struct )
+        );
     }
 
     /**

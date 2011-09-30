@@ -301,9 +301,9 @@ class UserHandlerTest extends TestCase
         $loaded = $handler->loadRole( $role->id );
         $this->assertEquals(
             array( new Persistence\User\Policy( array(
-                'id'       => 1,
-                'roleId'   => 1,
-                'module'   => 'foo',
+                'id' => 1,
+                'roleId' => 1,
+                'module' => 'foo',
                 'function' => 'bar',
             ) ) ),
             $loaded->policies
@@ -331,9 +331,9 @@ class UserHandlerTest extends TestCase
         $loaded = $handler->loadRole( $role->id );
         $this->assertEquals(
             array( new Persistence\User\Policy( array(
-                'id'       => 1,
-                'roleId'   => 1,
-                'module'   => 'foo',
+                'id' => 1,
+                'roleId' => 1,
+                'module' => 'foo',
                 'function' => 'bar',
             ) ) ),
             $loaded->policies
@@ -367,10 +367,10 @@ class UserHandlerTest extends TestCase
         $loaded = $handler->loadRole( $role->id );
         $this->assertEquals(
             array( new Persistence\User\Policy( array(
-                'id'          => 1,
-                'roleId'      => 1,
-                'module'      => 'foo',
-                'function'    => 'bar',
+                'id' => 1,
+                'roleId' => 1,
+                'module' => 'foo',
+                'function' => 'bar',
                 'limitations' => array(
                     'Subtree' => array( '/1', '/1/2' ),
                     'Foo' => array( 'Bar' ),
@@ -771,10 +771,10 @@ class UserHandlerTest extends TestCase
                     'name' => 'Test role 1',
                     'policies' => array(
                         new Persistence\User\Policy( array(
-                            'id'          => 1,
-                            'roleId'      => 1,
-                            'module'      => 'foo_1',
-                            'function'    => 'blubb',
+                            'id' => 1,
+                            'roleId' => 1,
+                            'module' => 'foo_1',
+                            'function' => 'blubb',
                             'limitations' => array(
                                 'Foo' => array( 'Bar' ),
                             ),
@@ -787,20 +787,20 @@ class UserHandlerTest extends TestCase
                     'name' => 'Test role 2',
                     'policies' => array(
                         new Persistence\User\Policy( array(
-                            'id'          => 2,
-                            'roleId'      => 2,
-                            'module'      => 'foo_1',
-                            'function'    => 'bar',
+                            'id' => 2,
+                            'roleId' => 2,
+                            'module' => 'foo_1',
+                            'function' => 'bar',
                             'limitations' => array(
                                 'Subtree' => array( '/1', '/1/2' ),
                                 'Foo' => array( 'Bar' ),
                             ),
                         ) ),
                         new Persistence\User\Policy( array(
-                            'id'          => 3,
-                            'roleId'      => 2,
-                            'module'      => 'foo_2',
-                            'function'    => 'bar',
+                            'id' => 3,
+                            'roleId' => 2,
+                            'module' => 'foo_2',
+                            'function' => 'bar',
                             'limitations' => array(
                                 'Subtree' => array( '/1/2/3' ),
                             ),

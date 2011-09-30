@@ -151,14 +151,13 @@ abstract class Override
         {
             throw new InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
         }
-        else if ( $this->paths[$scope] === $paths )
+
+        if ( $this->paths[$scope] === $paths )
         {
             return false;
         }
-        else
-        {
-            $this->paths[$scope] = $paths;
-        }
+
+        $this->paths[$scope] = $paths;
 
         if ( $this->pathsHash !== '' )
         {

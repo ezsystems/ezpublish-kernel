@@ -143,16 +143,14 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
      */
     public function __get( $property )
     {
-        if ( isset( $this->contentProperties[$property] ) )
-        {
-            if ( $property === 'id' )
-                return $this->content->id;
+        if ( !isset( $this->contentProperties[$property] ) )
+            throw new PropertyNotFound( $property, get_class( $this ) );
 
-            $fields = $this->content->getFields();
-            return $fields[$property]->value;
-        }
+        if ( $property === 'id' )
+            return $this->content->id;
 
-        throw new PropertyNotFound( $property, get_class( $this ) );
+        $fields = $this->content->getFields();
+        return $fields[$property]->value;
     }
 
     /**
@@ -169,13 +167,13 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
         {
             throw new PropertyNotFound( $property, get_class( $this ) );
         }
-        else if ( $this->contentProperties[$property] )
+
+        if ( !$this->contentProperties[$property] )
         {
-            $this->content->fields[$property] = $value;
-            return;
+            throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
         }
 
-        throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
+        $this->content->fields[$property] = $value;
     }
 
     /**
@@ -204,10 +202,10 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
     {
         foreach ( $state as $name => $value )
         {
-            if ( property_exists( $this, $name ) )
-                $this->$name = $value;
-            else
+            if ( !property_exists( $this, $name ) )
                 throw new PropertyNotFound( $name, get_class( $this ) );
+
+            $this->$name = $value;
         }
         return $this;
     }
@@ -229,7 +227,8 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
         {
             if ( $property === $name )
                 return $value;
-            else if ( $property === null )
+
+            if ( $property === null )
                 $arr[$name] = $value;
         }
 

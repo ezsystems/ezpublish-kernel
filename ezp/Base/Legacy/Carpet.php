@@ -117,10 +117,10 @@ class Carpet
      */
     public function __call( $method, array $arguments )
     {
-        if ( !method_exists( $this->object, $method) )
+        if ( !method_exists( $this->object, $method ) )
             throw new MethodNotFound( $method, $this->className );
 
-        return call_user_func_array ( array( $this->object, $method ), $arguments );
+        return call_user_func_array( array( $this->object, $method ), $arguments );
     }
 
     /**
@@ -133,7 +133,7 @@ class Carpet
      */
     public static function __callStatic( $method, array $arguments )
     {
-        if ( !method_exists( $this->className, $method) )
+        if ( !method_exists( $this->className, $method ) )
             throw new MethodNotFound( $method, $this->className );
 
         return forward_static_call_array( array( $this->className, $method ), $arguments );

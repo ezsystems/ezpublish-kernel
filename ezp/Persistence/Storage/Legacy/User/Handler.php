@@ -54,7 +54,7 @@ class Handler implements BaseUserHandler
     {
         $this->userGateway = $userGateway;
         $this->roleGateway = $roleGateway;
-        $this->mapper      = $mapper;
+        $this->mapper = $mapper;
     }
 
     /**

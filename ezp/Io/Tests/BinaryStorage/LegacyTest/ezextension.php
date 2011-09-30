@@ -18,9 +18,7 @@ class eZExtension
         {
             return new eZFSFileHandler( $options->handlerParams[0] );
         }
-        else
-        {
-            return new eZFSFileHandler;
-        }
+
+        return new eZFSFileHandler;
     }
 }

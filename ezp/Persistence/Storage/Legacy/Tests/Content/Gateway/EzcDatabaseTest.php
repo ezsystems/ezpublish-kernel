@@ -166,7 +166,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'initial_language_id' => '0',
                     // Not needed, according to field mapping document
                     // 'user_id',
-
                 )
             ),
             $this->getDatabaseHandler()
@@ -797,10 +796,16 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             ->expects( $this->once() )
             ->method( 'getByLocale' )
             ->with( 'eng-US' )
-            ->will( $this->returnValue( new Language( array(
-                'id'     => 2,
-                'locale' => 'eng-US',
-            ) ) ) );
+            ->will(
+                $this->returnValue(
+                    new Language(
+                        array(
+                            'id' => 2,
+                            'locale' => 'eng-US',
+                        )
+                    )
+                )
+            );
 
         $gateway->setName( 14, 2, "Hello world!", 'eng-US' );
 

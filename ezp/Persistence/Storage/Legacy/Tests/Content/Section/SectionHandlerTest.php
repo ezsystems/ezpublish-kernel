@@ -39,7 +39,7 @@ class SectionHandlerTest extends TestCase
      */
     public function testCreate()
     {
-        $handler     = $this->getSectionHandler();
+        $handler = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
@@ -69,7 +69,7 @@ class SectionHandlerTest extends TestCase
      */
     public function testUpdate()
     {
-        $handler     = $this->getSectionHandler();
+        $handler = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
@@ -101,7 +101,7 @@ class SectionHandlerTest extends TestCase
      */
     public function testLoad()
     {
-        $handler     = $this->getSectionHandler();
+        $handler = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
@@ -113,9 +113,9 @@ class SectionHandlerTest extends TestCase
                 $this->returnValue(
                     array(
                         array(
-                            'id'         => '23',
+                            'id' => '23',
                             'identifier' => 'new_section',
-                            'name'       => 'New Section',
+                            'name' => 'New Section',
                         ),
                     )
                 )
@@ -140,7 +140,7 @@ class SectionHandlerTest extends TestCase
      */
     public function testDelete()
     {
-        $handler     = $this->getSectionHandler();
+        $handler = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
@@ -165,7 +165,7 @@ class SectionHandlerTest extends TestCase
      */
     public function testDeleteFailure()
     {
-        $handler     = $this->getSectionHandler();
+        $handler = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 
@@ -186,7 +186,7 @@ class SectionHandlerTest extends TestCase
      */
     public function testAssign()
     {
-        $handler     = $this->getSectionHandler();
+        $handler = $this->getSectionHandler();
 
         $gatewayMock = $this->getGatewayMock();
 

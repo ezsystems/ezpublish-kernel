@@ -181,13 +181,11 @@ abstract class Model implements Observable, ModelInterface
             );
         }
 
-        if ( isset( $this->dynamicProperties[$property] ) )
-        {
-            $method = "get{$property}";
-            return $this->$method();
-        }
+        if ( !isset( $this->dynamicProperties[$property] ) )
+            throw new PropertyNotFound( $property, get_class( $this ) );
 
-        throw new PropertyNotFound( $property, get_class( $this ) );
+        $method = "get{$property}";
+        return $this->$method();
     }
 
     /**
@@ -206,13 +204,13 @@ abstract class Model implements Observable, ModelInterface
         {
             throw new PropertyNotFound( $property, get_class( $this ) );
         }
-        else if ( $this->readWriteProperties[$property] )
+
+        if ( !$this->readWriteProperties[$property] )
         {
-            $this->properties->$property = $value;
-            return;
+            throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
         }
 
-        throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
+        $this->properties->$property = $value;
     }
 
     /**
@@ -241,10 +239,10 @@ abstract class Model implements Observable, ModelInterface
     {
         foreach ( $state as $name => $value )
         {
-            if ( property_exists( $this, $name ) )
-                $this->$name = $value;
-            else
+            if ( !property_exists( $this, $name ) )
                 throw new PropertyNotFound( $name, get_class( $this ) );
+
+            $this->$name = $value;
         }
         return $this;
     }

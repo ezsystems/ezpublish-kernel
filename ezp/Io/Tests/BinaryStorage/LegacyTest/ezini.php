@@ -25,14 +25,12 @@ class eZINI
 
     public function variable( $group, $variable )
     {
-        if ( isset( self::$data[ $this->file][$group][$variable] ) )
-        {
-            return self::$data[ $this->file][$group][$variable];
-        }
-        else
+        if ( !isset( self::$data[ $this->file][$group][$variable] ) )
         {
             throw new Exception( "eZINI setting not found: $this->file / $group / $variable" );
         }
+
+        return self::$data[ $this->file][$group][$variable];
     }
 
     public function __call( $method, $args )

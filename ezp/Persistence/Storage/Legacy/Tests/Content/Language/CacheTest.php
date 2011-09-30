@@ -67,14 +67,12 @@ class CachingTest extends TestCase
         $cache->remove( $languageFixture->id );
 
         $this->assertAttributeEquals(
-            array(
-            ),
+            array(),
             'mapById',
             $cache
         );
         $this->assertAttributeEquals(
-            array(
-            ),
+            array(),
             'mapByLocale',
             $cache
         );

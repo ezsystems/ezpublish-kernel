@@ -454,7 +454,8 @@ class LocationHandler implements LocationHandlerInterface
         {
             return '';
         }
-        else if ( empty( $parent->pathIdentificationString ) )
+
+        if ( empty( $parent->pathIdentificationString ) )
         {
             return $this->getStrippedContentName( $vo );
         }

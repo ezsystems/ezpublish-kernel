@@ -343,7 +343,7 @@ class MapperTest extends TestCase
         );
         return array(
             'original' => $content,
-            'result'   => $struct
+            'result' => $struct
         );
 
         // parentLocations

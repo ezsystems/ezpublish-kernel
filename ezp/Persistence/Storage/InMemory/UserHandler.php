@@ -181,7 +181,7 @@ class UserHandler implements UserHandlerInterface
         if ( !$content )
             throw new NotFound( 'Group', $groupId );
         if ( $content->typeId != 3 )
-             throw new NotFoundWithType( "Content with TypeId:3", $groupId );
+            throw new NotFoundWithType( "Content with TypeId:3", $groupId );
 
         return $this->backend->find(
             'User\\Role',
@@ -314,7 +314,7 @@ class UserHandler implements UserHandlerInterface
 
                 if ( isset( $list[1] ) )
                     throw new Logic( 'content tree', 'there is more then one item with parentId:' . $parentId );
-                else if ( $list )
+                if ( $list )
                     $this->getPermissionsForObject( $list[0], 3, $policies );
             }
         }
@@ -330,7 +330,7 @@ class UserHandler implements UserHandlerInterface
     protected function getPermissionsForObject( Content $content, $typeId, array &$policies )
     {
         if ( $content->typeId != $typeId )
-             throw new NotFoundWithType( "Content with TypeId:$typeId", $content->id );
+            throw new NotFoundWithType( "Content with TypeId:$typeId", $content->id );
 
         // fetch possible roles assigned to this object
         $list = $this->backend->find(
@@ -390,7 +390,7 @@ class UserHandler implements UserHandlerInterface
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->typeId != 3 )
-             throw new NotFoundWithType( 3, $groupId );
+            throw new NotFoundWithType( 3, $groupId );
 
         $role = $this->loadRole( $roleId );
         if ( in_array( $groupId, $role->groupIds ) )
@@ -417,7 +417,7 @@ class UserHandler implements UserHandlerInterface
 
         // @todo Use eZ Publish settings for this, and maybe a better exception
         if ( $content->typeId != 3 && $content->typeId != 4 )
-             throw new NotFoundWithType( "3 or 4", $groupId );
+            throw new NotFoundWithType( "3 or 4", $groupId );
 
         $role = $this->loadRole( $roleId );
         if ( !in_array( $groupId, $role->groupIds ) )

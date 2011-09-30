@@ -90,7 +90,7 @@ class SectionHandler implements SectionHandlerInterface
         $list = $this->backend->find( 'Content\\Section', array( 'identifier' => $identifier ) );
         if ( empty( $list ) )
             throw new NotFound( 'Section', $identifier );
-        else if ( isset( $list[1] ) )
+        if ( isset( $list[1] ) )
             throw new Logic( 'several Sections with same identifier' );
 
         return $list[0];

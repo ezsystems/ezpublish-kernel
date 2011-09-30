@@ -122,8 +122,8 @@ class LanguageHandlerTest extends TestCase
      */
     public function testLoad()
     {
-        $handler     = $this->getLanguageHandler();
-        $mapperMock  = $this->getMapperMock();
+        $handler = $this->getLanguageHandler();
+        $mapperMock = $this->getMapperMock();
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects( $this->once() )
@@ -151,8 +151,8 @@ class LanguageHandlerTest extends TestCase
      */
     public function testLoadFailure()
     {
-        $handler     = $this->getLanguageHandler();
-        $mapperMock  = $this->getMapperMock();
+        $handler = $this->getLanguageHandler();
+        $mapperMock = $this->getMapperMock();
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects( $this->once() )
@@ -175,8 +175,8 @@ class LanguageHandlerTest extends TestCase
      */
     public function testLoadAll()
     {
-        $handler     = $this->getLanguageHandler();
-        $mapperMock  = $this->getMapperMock();
+        $handler = $this->getLanguageHandler();
+        $mapperMock = $this->getMapperMock();
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects( $this->once() )
@@ -202,7 +202,7 @@ class LanguageHandlerTest extends TestCase
      */
     public function testDelete()
     {
-        $handler     = $this->getLanguageHandler();
+        $handler = $this->getLanguageHandler();
         $gatewayMock = $this->getGatewayMock();
 
         $gatewayMock->expects( $this->once() )

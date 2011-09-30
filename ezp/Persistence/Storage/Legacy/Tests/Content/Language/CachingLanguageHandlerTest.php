@@ -45,7 +45,7 @@ class CachingLanguageHandlerTest extends TestCase
      */
     public function testCtorPropertyInnerHandler()
     {
-        $handler   = $this->getLanguageHandler();
+        $handler = $this->getLanguageHandler();
 
         $this->assertAttributeSame(
             $this->getInnerLanguageHandlerMock(),
@@ -60,7 +60,7 @@ class CachingLanguageHandlerTest extends TestCase
      */
     public function testCtorPropertyLanguageCache()
     {
-        $handler   = $this->getLanguageHandler();
+        $handler = $this->getLanguageHandler();
 
         $this->assertAttributeSame(
             $this->getLanguageCacheMock(),
@@ -208,7 +208,7 @@ class CachingLanguageHandlerTest extends TestCase
     {
         $this->expectCacheInitialize();
 
-        $handler   = $this->getLanguageHandler();
+        $handler = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
         $cacheMock->expects( $this->once() )
@@ -233,7 +233,7 @@ class CachingLanguageHandlerTest extends TestCase
     {
         $this->expectCacheInitialize();
 
-        $handler   = $this->getLanguageHandler();
+        $handler = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
         $cacheMock->expects( $this->once() )
@@ -254,7 +254,7 @@ class CachingLanguageHandlerTest extends TestCase
     {
         $this->expectCacheInitialize();
 
-        $handler     = $this->getLanguageHandler();
+        $handler = $this->getLanguageHandler();
         $cacheMock = $this->getLanguageCacheMock();
 
         $cacheMock->expects( $this->once() )
@@ -277,8 +277,8 @@ class CachingLanguageHandlerTest extends TestCase
     {
         $this->expectCacheInitialize();
 
-        $handler          = $this->getLanguageHandler();
-        $cacheMock        = $this->getLanguageCacheMock();
+        $handler = $this->getLanguageHandler();
+        $cacheMock = $this->getLanguageCacheMock();
         $innerHandlerMock = $this->getInnerLanguageHandlerMock();
 
         $innerHandlerMock->expects( $this->once() )
