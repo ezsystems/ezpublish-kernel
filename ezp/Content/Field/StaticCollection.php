@@ -18,6 +18,7 @@ use ezp\Base\Configuration,
     ezp\Content\Field,
     ezp\Content\Version,
     ezp\Content\FieldType\Factory as FieldTypeFactory,
+    ezp\Content\FieldType\Value as FieldValue,
     RuntimeException;
 
 /**
