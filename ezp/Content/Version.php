@@ -65,7 +65,7 @@ class Version extends Model
     );
 
     /**
-     * @var Field[]
+     * @var \ezp\Content\Field[]
      */
     protected $fields;
 
