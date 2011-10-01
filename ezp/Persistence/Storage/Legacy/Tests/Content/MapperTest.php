@@ -217,6 +217,13 @@ class MapperTest extends TestCase
     /**
      * @return void
      * @todo Load referencing locations!
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractContentFromRows
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractContentFromRow
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractVersionFromRow
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::mapCommonVersionFields
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractFieldFromRow
+     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractFieldValueFromRow
+     * @covers ezp\Persistence\Storage\Legacy\Content\StorageFieldValue
      */
     public function testExtractContentFromRows()
     {

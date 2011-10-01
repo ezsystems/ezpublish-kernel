@@ -35,7 +35,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler::updateContentObjects
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler\EzcDatabase::updateContentObjects
      */
     public function testUpdateContentObjects()
     {
@@ -68,7 +68,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler::deleteOldType
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler\EzcDatabase::deleteOldType
      */
     public function testDeleteOldType()
     {
@@ -96,7 +96,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler::publishNewType
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler\EzcDatabase::publishNewType
      */
     public function testPublishNewType()
     {

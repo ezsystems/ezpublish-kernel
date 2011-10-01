@@ -336,6 +336,7 @@ class MapperTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::toStorageFieldDefinition
+     * @covers ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
@@ -369,6 +370,7 @@ class MapperTest extends TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::toFieldDefinition
+     * @covers ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition
      */
     public function testToFieldDefinition()
     {

@@ -64,6 +64,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::insertContentObject
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::generateLanguageMask
      * @todo Fix not available fields
      */
     public function testInsertContentObject()
@@ -143,6 +144,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::insertVersion
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::generateLanguageMask
      */
     public function testInsertVersion()
     {
@@ -327,6 +329,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::updateField
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::setFieldUpdateValues
      * @return void
      */
     public function testUpdateField()
@@ -378,6 +381,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::updateNonTranslatableField
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::setFieldUpdateValues
      * @return void
      */
     public function testUpdateNonTranslatableField()

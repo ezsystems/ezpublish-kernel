@@ -41,7 +41,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::__construct
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::__construct
      */
     public function testCtorPropertyInnerHandler()
     {
@@ -56,7 +56,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::__construct
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::__construct
      */
     public function testCtorPropertyLanguageCache()
     {
@@ -117,7 +117,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::create
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::create
      */
     public function testCreate()
     {
@@ -177,7 +177,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::update
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::update
      */
     public function testUpdate()
     {
@@ -202,7 +202,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::load
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::load
      */
     public function testLoad()
     {
@@ -226,7 +226,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::load
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::load
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadFailure()
@@ -271,7 +271,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::delete
+     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::delete
      */
     public function testDelete()
     {
@@ -296,7 +296,7 @@ class CachingLanguageHandlerTest extends TestCase
     /**
      * Returns the language handler to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\Handler
+     * @return \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler
      */
     protected function getLanguageHandler()
     {
