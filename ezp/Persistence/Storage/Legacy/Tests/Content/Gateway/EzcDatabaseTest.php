@@ -580,6 +580,30 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::load
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+    public function testCreateFixtureForMapperExtractContentFromRowsMultipleVersions()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+
+        $resFirst  = $gateway->load( 11, 1 );
+        $resSecond = $gateway->load( 11, 2 );
+
+        $res = array_merge( $resFirst, $resSecond );
+
+        $this->storeFixture(
+            __DIR__ . '/../_fixtures/extract_content_from_rows_multiple_versions.php', 
+            $res
+        );
+    }
+     */
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::load
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
      */
     public function testLoadWithSingleTranslation()
     {

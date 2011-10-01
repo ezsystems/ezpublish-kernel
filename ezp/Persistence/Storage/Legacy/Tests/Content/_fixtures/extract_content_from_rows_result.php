@@ -15,6 +15,10 @@ $content->ownerId = 14;
 $content->remoteId = '0d5109156ee806da8e86c8cea8004434';
 $content->locations = array( new Location() );
 $content->alwaysAvailable = true;
+$content->modified = 1312373715;
+$content->published = 1311756992;
+$content->currentVersionNo = 4;
+$content->initialLanguageId = 2;
 
 $version = new Version();
 $version->id = 679;

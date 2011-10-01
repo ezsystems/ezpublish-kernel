@@ -223,6 +223,11 @@ class Mapper
         $content->ownerId = (int)$row['ezcontentobject_owner_id'];
         $content->remoteId = $row['ezcontentobject_remote_id'];
         $content->alwaysAvailable = (bool)( $row['ezcontentobject_version_language_mask'] & 1 );
+        $content->currentVersionNo = (int)$row['ezcontentobject_current_version'];
+        $content->initialLanguageId = (int)$row['ezcontentobject_initial_language_id'];
+        $content->modified = (int)$row['ezcontentobject_modified'];
+        $content->name = $row['ezcontentobject_name'];
+        $content->published = (int)$row['ezcontentobject_published'];
         $content->locations = array();
 
         return $content;
