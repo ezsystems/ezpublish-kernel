@@ -15,6 +15,7 @@ use ezp\Persistence\Storage\Legacy\Tests\Content\LanguageAwareTestCase,
     ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler,
 
     ezp\Persistence\Content,
+    ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Language,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\Version;
@@ -87,8 +88,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'language_mask' => '1',
                     'modified' => '456',
                     'published' => '123',
-                    // @FIXME
-                    // 'status' => 0,
+                    'status' => '2',
                 ),
             ),
             $this->getDatabaseHandler()
@@ -105,8 +105,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                         'language_mask',
                         'modified',
                         'published',
-                        // FIXME: Not defined
-                        // 'status',
+                        'status',
                     )
                 )->from( 'ezcontentobject' )
         );
@@ -134,6 +133,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $struct->alwaysAvailable = true;
         $struct->published = 123;
         $struct->modified = 456;
+        $struct->status = 2;
 
         $struct->version = new Version();
         $struct->locations = array();
@@ -226,6 +226,61 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::updateContent
+     */
+    public function testUpdateContent()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $updateStruct = $this->getUpdateStructFixture();
+
+        $gateway->updateContent( $updateStruct );
+
+        $this->assertQueryResult(
+            array(
+                array(
+                    'initial_language_id' => '3',
+                    'modified' => '234567',
+                    'owner_id' => '42',
+                    'published' => '123456'
+                )
+            ),
+            $this->getDatabaseHandler()->createSelectQuery()
+                ->select(
+                    'initial_language_id',
+                    'modified',
+                    'owner_id',
+                    'published'
+                )->from( 'ezcontentobject' )
+                ->where( 'id = 10' )
+        );
+    }
+
+    /**
+     * Returns an UpdateStruct fixture
+     *
+     * @return \ezp\Persistence\Content\UpdateStruct
+     */
+    protected function getUpdateStructFixture()
+    {
+        $struct = new UpdateStruct();
+        $struct->id = 10;
+        $struct->versionNo = 2;
+        $struct->creatorId = 23;
+        $struct->ownerId = 42;
+        $struct->fields = array();
+        $struct->published = 123456;
+        $struct->modified = 234567;
+        $struct->initialLanguageId = 3;
+        return $struct;
+    }
+
+    /**
      * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::updateVersion
      * @return void
      */
@@ -233,22 +288,31 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     {
         $gateway = $this->getDatabaseGateway();
 
-        $time = time();
-        $version = $this->getVersionFixture();
-        $version->id = $gateway->insertVersion( $version, array(), true );
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
 
-        $gateway->updateVersion( $version->id, 2 );
+        $gateway->updateVersion( $this->getUpdateStructFixture() );
 
         $query = $this->getDatabaseHandler()->createSelectQuery();
         $this->assertQueryResult(
-            array( array( 2 ) ),
+            array(
+                array(
+                    'initial_language_id' => '3',
+                    'modified' => '234567',
+                )
+            ),
             $query
-                ->select( array( 'version' ) )
-                ->from( 'ezcontentobject_version' )
+                ->select(
+                    array(
+                        'initial_language_id',
+                        'modified',
+                    )
+                )->from( 'ezcontentobject_version' )
                 ->where(
                     $query->expr->lAnd(
-                        $query->expr->eq( 'id', $query->bindValue( $version->id, null, \PDO::PARAM_INT ) ),
-                        $query->expr->gte( 'modified', $query->bindValue( $time, null, \PDO::PARAM_INT ) )
+                        $query->expr->eq( 'contentobject_id', 10 ),
+                        $query->expr->eq( 'version', 2 )
                     )
                 )
         );

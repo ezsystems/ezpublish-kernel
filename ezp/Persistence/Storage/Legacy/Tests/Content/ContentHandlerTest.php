@@ -382,8 +382,11 @@ class ContentHandlerTest extends TestCase
         $fieldHandlerMock = $this->getFieldHandlerMock();
 
         $gatewayMock->expects( $this->once() )
+            ->method( 'updateContent' )
+            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\UpdateStruct' ) );
+        $gatewayMock->expects( $this->once() )
             ->method( 'updateVersion' )
-            ->with( 14, 4 );
+            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\UpdateStruct' ) );
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'updateFields' )

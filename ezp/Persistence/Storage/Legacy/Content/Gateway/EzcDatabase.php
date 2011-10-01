@@ -138,6 +138,9 @@ class EzcDatabase extends Gateway
             $this->dbHandler->quoteColumn( 'published' ),
             $q->bindValue( $content->published, null, \PDO::PARAM_INT )
         )->set(
+            $this->dbHandler->quoteColumn( 'status' ),
+            $q->bindValue( $content->status, null, \PDO::PARAM_INT )
+        )->set(
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
                 $this->generateLanguageMask(
@@ -237,27 +240,64 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Updates an existing version
+     * Updates an existing content in respect to $struct
      *
-     * @param int $version
-     * @param int $versionNo
+     * @param UpdateStruct $struct
      * @return void
      */
-    public function updateVersion( $version, $versionNo )
+    public function updateContent( UpdateStruct $struct )
+    {
+        $q = $this->dbHandler->createUpdateQuery();
+        $q->update(
+            $this->dbHandler->quoteTable( 'ezcontentobject' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'initial_language_id' ),
+            $q->bindValue( $struct->initialLanguageId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'modified' ),
+            $q->bindValue( $struct->modified, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'owner_id' ),
+            $q->bindValue( $struct->ownerId, null, \PDO::PARAM_INT )
+        )->set(
+            $this->dbHandler->quoteColumn( 'published' ),
+            $q->bindValue( $struct->published, null, \PDO::PARAM_INT )
+        )->where(
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $q->bindValue( $struct->id, null, \PDO::PARAM_INT )
+            )
+        );
+        $q->prepare()->execute();
+    }
+
+    /**
+     * Updates an existing version in respect to $struct
+     *
+     * @param UpdateStruct $struct
+     * @return void
+     */
+    public function updateVersion( UpdateStruct $struct )
     {
         $q = $this->dbHandler->createUpdateQuery();
         $q->update(
             $this->dbHandler->quoteTable( 'ezcontentobject_version' )
         )->set(
-            $this->dbHandler->quoteColumn( 'version' ),
-            $q->bindValue( $versionNo, null, \PDO::PARAM_INT )
+            $this->dbHandler->quoteColumn( 'initial_language_id' ),
+            $q->bindValue( $struct->initialLanguageId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'modified' ),
-            $q->bindValue( time(), null, \PDO::PARAM_INT )
+            $q->bindValue( $struct->modified, null, \PDO::PARAM_INT )
         )->where(
-            $q->expr->eq(
-                $this->dbHandler->quoteColumn( 'id' ),
-                $q->bindValue( $version, null, \PDO::PARAM_INT )
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'contentobject_id' ),
+                    $q->bindValue( $struct->id, null, \PDO::PARAM_INT )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version' ),
+                    $q->bindValue( $struct->versionNo, null, \PDO::PARAM_INT )
+                )
             )
         );
         $q->prepare()->execute();

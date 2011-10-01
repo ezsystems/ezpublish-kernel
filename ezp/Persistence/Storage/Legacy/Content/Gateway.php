@@ -47,13 +47,20 @@ abstract class Gateway
     abstract public function insertVersion( Version $version, array $fields, $alwaysAvailable );
 
     /**
-     * Updates an existing version
+     * Updates the content object in respect to $struct
      *
-     * @param int $version
-     * @param int $versionNo
+     * @param UpdateStruct $struct
      * @return void
      */
-    abstract public function updateVersion( $version, $versionNo );
+    abstract public function updateContent( UpdateStruct $struct );
+
+    /**
+     * Updates the version of a Content object in respect to $struct
+     *
+     * @param UpdateStruct $struct
+     * @return void
+     */
+    abstract public function updateVersion( UpdateStruct $struct );
 
     /**
      * Sets the state of object identified by $contentId and $version to $state.
