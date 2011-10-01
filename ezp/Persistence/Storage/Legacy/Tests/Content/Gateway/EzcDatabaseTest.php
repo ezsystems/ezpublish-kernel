@@ -164,8 +164,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'workflow_event_pos' => '0',
                     'version' => '1',
                     'language_mask' => '1',
-                    // @FIXME
-                    'initial_language_id' => '0',
+                    'initial_language_id' => '2',
                     // Not needed, according to field mapping document
                     // 'user_id',
                 )
@@ -335,6 +334,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $version->fields = array();
         $version->created = 1312278322;
         $version->modified = 1312278323;
+        $version->initialLanguageId = 2;
 
         return $version;
     }
@@ -599,6 +599,29 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
     }
      */
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::load
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     */
+    public function testCreateFixtureForMapperExtractContentFromRows()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/../_fixtures/contentobjects.php'
+        );
+
+        $gateway = $this->getDatabaseGateway();
+
+        $res = $gateway->load( 226, 1 );
+
+        $res = array_merge( $res );
+
+        $this->storeFixture(
+            __DIR__ . '/../_fixtures/extract_content_from_rows.php',
+            $res
+        );
+    }
 
     /**
      * @return void

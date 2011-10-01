@@ -8,89 +8,147 @@ use ezp\Persistence\Content,
 
 $content = new Content();
 $content->id = 226;
-$content->name = 'Test blog title - edited';
-$content->typeId = 20;
+$content->name = 'Something';
+$content->typeId = 16;
 $content->sectionId = 1;
 $content->ownerId = 14;
-$content->remoteId = '0d5109156ee806da8e86c8cea8004434';
+$content->remoteId = '95a226fb62c1533f60c16c3769bc7c6c';
 $content->locations = array( new Location() );
 $content->alwaysAvailable = true;
-$content->modified = 1312373715;
-$content->published = 1311756992;
-$content->currentVersionNo = 4;
+$content->modified = 1313061404;
+$content->published = 1313047907;
+$content->currentVersionNo = 2;
 $content->initialLanguageId = 2;
 
 $version = new Version();
-$version->id = 679;
-$version->versionNo = 4;
-$version->modified = 1312373715;
+$version->id = 675;
+$version->versionNo = 1;
+$version->modified = 1313047907;
 $version->creatorId = 14;
-$version->created = 1312373690;
-$version->status = 1;
+$version->created = 1313047865;
+$version->status = 3;
 $version->contentId = 226;
 $version->fields = array();
 
-$versionUkTitleField = new Field();
-$versionUkTitleField->id = 1338;
-$versionUkTitleField->fieldDefinitionId = 214;
-$versionUkTitleField->type = 'ezstring';
-$versionUkTitleField->value = new FieldValue();
-$versionUkTitleField->language = 'eng-GB';
-$versionUkTitleField->versionNo = 4;
+$field = new Field();
+$field->id = 1332;
+$field->fieldDefinitionId = 183;
+$field->type = 'ezstring';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
 
-$version->fields[] = $versionUkTitleField;
+$version->fields[] = $field;
 
-$versionUkBodyField = new Field();
-$versionUkBodyField->id = 1339;
-$versionUkBodyField->fieldDefinitionId = 215;
-$versionUkBodyField->type = 'ezxmltext';
-$versionUkBodyField->value = new FieldValue();
-$versionUkBodyField->language = 'eng-GB';
-$versionUkBodyField->versionNo = 4;
+$field = new Field();
+$field->id = 1333;
+$field->fieldDefinitionId = 184;
+$field->type = 'ezstring';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
 
-$version->fields[] = $versionUkBodyField;
+$version->fields[] = $field;
 
-$versionUkPubDateField = new Field();
-$versionUkPubDateField->id = 1340;
-$versionUkPubDateField->fieldDefinitionId = 216;
-$versionUkPubDateField->type = 'ezdatetime';
-$versionUkPubDateField->value = new FieldValue();
-$versionUkPubDateField->language = 'eng-GB';
-$versionUkPubDateField->versionNo = 4;
+$field = new Field();
+$field->id = 1334;
+$field->fieldDefinitionId = 185;
+$field->type = 'ezauthor';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
 
-$version->fields[] = $versionUkPubDateField;
+$version->fields[] = $field;
 
-$versionUsTitleField = new Field();
-$versionUsTitleField->id = 1332;
-$versionUsTitleField->fieldDefinitionId = 214;
-$versionUsTitleField->type = 'ezstring';
-$versionUsTitleField->value = new FieldValue();
-$versionUsTitleField->language = 'eng-US';
-$versionUsTitleField->versionNo = 4;
+$field = new Field();
+$field->id = 1335;
+$field->fieldDefinitionId = 186;
+$field->type = 'ezxmltext';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
 
-$version->fields[] = $versionUsTitleField;
+$version->fields[] = $field;
 
-$versionUsBodyField = new Field();
-$versionUsBodyField->id = 1333;
-$versionUsBodyField->fieldDefinitionId = 215;
-$versionUsBodyField->type = 'ezxmltext';
-$versionUsBodyField->value = new FieldValue();
-$versionUsBodyField->language = 'eng-US';
-$versionUsBodyField->versionNo = 4;
+$field = new Field();
+$field->id = 1336;
+$field->fieldDefinitionId = 187;
+$field->type = 'ezxmltext';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
 
-$version->fields[] = $versionUsBodyField;
+$version->fields[] = $field;
 
-$versionUsPubDateField = new Field();
-$versionUsPubDateField->id = 1334;
-$versionUsPubDateField->fieldDefinitionId = 216;
-$versionUsPubDateField->type = 'ezdatetime';
-$versionUsPubDateField->value = new FieldValue();
-$versionUsPubDateField->language = 'eng-US';
-$versionUsPubDateField->versionNo = 4;
+$field = new Field();
+$field->id = 1337;
+$field->fieldDefinitionId = 188;
+$field->type = 'ezboolean';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
 
-// @FIXME: This field is not translateable and should therefore only
-// occur once!
-$version->fields[] = $versionUsPubDateField;
+$version->fields[] = $field;
+
+$field = new Field();
+$field->id = 1338;
+$field->fieldDefinitionId = 189;
+$field->type = 'ezimage';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
+
+$version->fields[] = $field;
+
+$field = new Field();
+$field->id = 1339;
+$field->fieldDefinitionId = 190;
+$field->type = 'ezxmltext';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
+
+$version->fields[] = $field;
+
+$field = new Field();
+$field->id = 1340;
+$field->fieldDefinitionId = 191;
+$field->type = 'ezdatetime';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
+
+$version->fields[] = $field;
+
+$field = new Field();
+$field->id = 1341;
+$field->fieldDefinitionId = 192;
+$field->type = 'ezdatetime';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
+
+$version->fields[] = $field;
+
+$field = new Field();
+$field->id = 1342;
+$field->fieldDefinitionId = 193;
+$field->type = 'ezkeyword';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
+
+$version->fields[] = $field;
+
+$field = new Field();
+$field->id = 1343;
+$field->fieldDefinitionId = 194;
+$field->type = 'ezsrrating';
+$field->value = new FieldValue();
+$field->language = 'eng-US';
+$field->versionNo = 1;
+
+$version->fields[] = $field;
 
 $content->version = $version;
 

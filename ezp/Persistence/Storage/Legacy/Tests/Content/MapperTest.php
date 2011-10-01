@@ -236,7 +236,7 @@ class MapperTest extends TestCase
         $convMock = $this->getMock(
             'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
         );
-        $convMock->expects( $this->exactly( 6 ) )
+        $convMock->expects( $this->exactly( 12 ) )
             ->method( 'toFieldValue' )
             ->with(
                 $this->isInstanceOf(
@@ -245,9 +245,14 @@ class MapperTest extends TestCase
             )->will( $this->returnValue( new FieldValue() ) );
 
         $reg = new Registry();
+        $reg->register( 'ezauthor', $convMock );
         $reg->register( 'ezstring', $convMock );
         $reg->register( 'ezxmltext', $convMock );
+        $reg->register( 'ezboolean', $convMock );
+        $reg->register( 'ezimage', $convMock );
         $reg->register( 'ezdatetime', $convMock );
+        $reg->register( 'ezkeyword', $convMock );
+        $reg->register( 'ezsrrating', $convMock );
 
         $rowsFixture = $this->getContentExtractFixture();
 
