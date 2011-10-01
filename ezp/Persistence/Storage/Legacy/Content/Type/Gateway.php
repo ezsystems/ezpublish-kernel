@@ -170,6 +170,16 @@ abstract class Gateway
     abstract public function loadTypeData( $typeId, $version );
 
     /**
+     * Loads an array with data about the type referred to by $identifier in
+     * $version.
+     *
+     * @param string $identifier
+     * @param int $version
+     * @return array(int=>array(string=>mixed)) Data rows.
+     */
+    abstract public function loadTypeDataByIdentifier( $identifier, $version );
+
+    /**
      * Counts the number of instances that exists of the identified type.
      *
      * @param int $typeId

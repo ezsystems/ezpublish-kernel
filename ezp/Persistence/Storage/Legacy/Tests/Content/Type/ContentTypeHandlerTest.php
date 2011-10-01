@@ -286,6 +286,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::load
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadFromRows
      */
     public function testLoad()
     {
@@ -321,6 +322,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::load
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadFromRows
      * @expectedException \ezp\Persistence\Storage\Legacy\Exception\TypeNotFound
      */
     public function testLoadNotFound()
@@ -351,6 +353,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::load
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadFromRows
      */
     public function testLoadDefaultVersion()
     {
@@ -374,6 +377,41 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
         $handler = $this->getHandler();
         $type = $handler->load( 23 );
+
+        $this->assertEquals(
+            new Type(),
+            $type,
+            'Type not loaded correctly'
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadByIdentifier
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadFromRows
+     */
+    public function testLoadByIdentifier()
+    {
+        $gatewayMock = $this->getGatewayMock();
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadTypeDataByIdentifier' )
+            ->with(
+                $this->equalTo( 'blogentry' ),
+                $this->equalTo( 0 )
+            )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock = $this->getMapperMock();
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractTypesFromRows' )
+            ->will(
+                $this->returnValue(
+                    array( new Type() )
+                )
+            );
+
+        $handler = $this->getHandler();
+        $type = $handler->loadByIdentifier( 'blogentry' );
 
         $this->assertEquals(
             new Type(),

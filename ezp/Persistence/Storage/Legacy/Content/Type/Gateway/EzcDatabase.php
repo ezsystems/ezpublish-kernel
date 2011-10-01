@@ -846,6 +846,35 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads an array with data about the type referred to by $identifier in
+     * $version.
+     *
+     * @param string $identifier
+     * @param int $version
+     * @return array(int=>array(string=>mixed)) Data rows.
+     */
+    public function loadTypeDataByIdentifier( $identifier, $status )
+    {
+        $q = $this->getLoadTypeQuery();
+        $q->where(
+            $q->expr->lAnd(
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'identifier', 'ezcontentclass' ),
+                    $q->bindValue( $identifier )
+                ),
+                $q->expr->eq(
+                    $this->dbHandler->quoteColumn( 'version', 'ezcontentclass' ),
+                    $q->bindValue( $status )
+                )
+            )
+        );
+        $stmt = $q->prepare();
+        $stmt->execute();
+
+        return $stmt->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Returns a basic query to retrieve Type data.
      *
      * @return ezcQuerySelect

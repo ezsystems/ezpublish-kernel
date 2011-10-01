@@ -370,6 +370,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::getLoadTypeQuery
      * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns
      */
     public function testLoadTypeData()
@@ -398,6 +399,31 @@ class EzcDatabaseTest extends LanguageAwareTestCase
             "<?php\n\nreturn " . var_export( $rows, true ) . ";\n"
         );
          */
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::getLoadTypeQuery
+     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns
+     */
+    public function testLoadTypeDataByIdentifier()
+    {
+        $this->insertDatabaseFixture(
+            __DIR__ . '/_fixtures/existing_types.php'
+        );
+
+        $gateway = $this->getGateway();
+        $rows = $gateway->loadTypeDataByIdentifier( 'folder', 0 );
+
+        $this->assertEquals(
+            5,
+            count( $rows )
+        );
+        $this->assertEquals(
+            45,
+            count( $rows[0] )
+        );
     }
 
     /**

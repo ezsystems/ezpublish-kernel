@@ -145,15 +145,7 @@ class Handler implements BaseContentTypeHandler
         $rows = $this->contentTypeGateway->loadTypeData(
             $contentTypeId, $status
         );
-
-        $types = $this->mapper->extractTypesFromRows( $rows );
-
-        if ( count( $types ) !== 1 )
-        {
-            throw new Exception\TypeNotFound( $contentTypeId, $status );
-        }
-
-        return $types[0];
+        return $this->loadFromRows( $rows, $contentTypeId, $status );
     }
 
     /**
@@ -165,7 +157,30 @@ class Handler implements BaseContentTypeHandler
      */
     public function loadByIdentifier( $identifier )
     {
-        throw new \RuntimeException( "@TODO Implement" );
+        $rows = $this->contentTypeGateway->loadTypeDataByIdentifier(
+            $identifier, Type::STATUS_DEFINED
+        );
+        return $this->loadFromRows( $rows, $identifier, Type::STATUS_DEFINED );
+    }
+
+    /**
+     * Loads a single Type from $rows
+     *
+     * @param array $rows
+     * @param mixed $typeIdentifier
+     * @param int $status
+     * @return \ezp\Persistence\Content\Type
+     */
+    protected function loadFromRows( array $rows, $typeIdentifier, $status )
+    {
+        $types = $this->mapper->extractTypesFromRows( $rows );
+
+        if ( count( $types ) !== 1 )
+        {
+            throw new Exception\TypeNotFound( $typeIdentifier, $status );
+        }
+
+        return $types[0];
     }
 
     /**
