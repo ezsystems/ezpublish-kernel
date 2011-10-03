@@ -10,6 +10,7 @@
 namespace ezp\Content;
 use ezp\Base\Proxy\Model as ModelProxy,
     ezp\Content,
+    ezp\Content\Service,
     ezp\User;
 
 /**

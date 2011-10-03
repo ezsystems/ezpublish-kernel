@@ -20,6 +20,8 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Location\Proxy as ProxyLocation,
     ezp\Content\Type\Proxy as ProxyType,
     ezp\Content\Type\Concrete as ConcreteType,
+    ezp\Content\Version\Proxy as ProxyVersion,
+    ezp\Content\Version\Concrete as ConcreteVersion,
     ezp\User\Proxy as ProxyUser,
     ezp\Content\Version\LazyCollection as LazyVersionCollection,
     ezp\Content\Field\LazyCollection as LazyFieldCollection,
@@ -546,16 +548,25 @@ class Service extends BaseService
         // @todo Using ConcreteType for now, but I guess there is something wrong here
         //       Shouldn't a ProxyType be used, but then, which Content Type ID to use?
         //       Should I use the one provided in setState?
-        $content = new Concrete( new ConcreteType, new ProxyUser( $vo->ownerId, $this->repository->getUserService() ) );
+        $content = new Concrete( new ProxyType( $vo->typeId, $this->repository->getContentTypeService() ), new ProxyUser( $vo->ownerId, $this->repository->getUserService() ) );
         // @todo Attach observer to Content
+
         $content->setState(
             array(
                 "section" => new ProxySection( $vo->sectionId, $this->repository->getSectionService() ),
-                "contentType" => new ProxyType( $vo->typeId, $this->repository->getContentTypeService() ),
                 "versions" => new LazyVersionCollection( $this, $vo->id ),//@todo Avoid throwing away version info on $vo
                 "properties" => $vo
             )
         );
+
+        if ( $vo->currentVersionNo == $vo->version->versionNo )
+        {
+            $content->setState( array( "currentVersion" => $this->buildVersionDomainObject( $content, $vo->version ) ) );
+        }
+        else
+        {
+            $content->setState( array( "currentVersion" => new ProxyVersion( $vo->id, $vo->currentVersionNo, $this )) );
+        }
 
         $locationService = $this->repository->getLocationService();
         $locations = $content->getLocations();
@@ -591,7 +602,7 @@ class Service extends BaseService
         if ( !$vo instanceof VersionValue && !$vo instanceof RestrictedVersionValue )
             throw new InvalidArgumentType( '$versionVo', 'Version or RestrictedVersion', $vo );
 
-        $version = new Version( $content );
+        $version = new ConcreteVersion( $content );
 
         $version->setState( array( 'properties' => $vo ) );
 
@@ -620,7 +631,7 @@ class Service extends BaseService
                     continue 2;
                 }
             }
-            throw new Logic( 'field:' . $identifier, 'could not find this field in returned Version value data'  );
+            throw new Logic( "field:{$field->fieldDefinitionId}/" . $identifier, 'could not find this field in returned Version value data'  );
         }
 
         return $version;

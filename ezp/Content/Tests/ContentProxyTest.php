@@ -109,7 +109,7 @@ class ContentProxyTest extends PHPUnit_Framework_TestCase
     public function testProxyGetFields()
     {
         $content = new ProxyContent( 1, $this->service );
-        $this->assertInstanceOf( "ezp\\Content\\Field\\LazyCollection", $content->getFields() );
+        $this->assertInstanceOf( "ezp\\Content\\Field\\StaticCollection", $content->getFields() );// only lazy on RestrictedVersion
     }
 
     /**

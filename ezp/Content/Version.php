@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\Content\Version class.
+ * File containing the ezp\Content\Version interface.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -14,7 +14,7 @@ use ezp\Base\Model,
     ezp\Persistence\Content\Version as VersionValue;
 
 /**
- * This class represents a Content Version
+ * This class represents the Content Version Interface
  *
  *
  * @property-read int $id
@@ -28,7 +28,7 @@ use ezp\Base\Model,
  * @property int $modified
  * @property-read ContentField[] $fields An hash structure of fields
  */
-class Version extends Model
+interface Version
 {
     /**
      * @todo taken from eZContentObjectVersion, to be redefined
@@ -43,84 +43,17 @@ class Version extends Model
     const STATUS_QUEUED = 7;
 
     /**
-     * @var array Readable of properties on this object
-     */
-    protected $readWriteProperties = array(
-        'id' => false,
-        'versionNo' => false,
-        'creatorId' => true,
-        'created' => true,
-        'modified' => true,
-        'status' => false,
-        'contentId' => false,
-        'initialLanguageId' => false,
-    );
-
-    /**
-     * @var array Dynamic properties on this object
-     */
-    protected $dynamicProperties = array(
-        'fields' => true,
-        'content' => false,
-    );
-
-    /**
-     * @var \ezp\Content\Field[]
-     */
-    protected $fields;
-
-    /**
-     * Content object this version is attached to.
-     *
-     * @var Content
-     */
-    protected $content;
-
-    /**
-     * Create content version based on content and content type fields objects
-     *
-     * @param Content $content
-     */
-    public function __construct( Content $content )
-    {
-        $this->properties = new VersionValue(
-            array(
-                'contentId' => $content->id,
-                'status' => self::STATUS_DRAFT,
-            )
-        );
-        $this->content = $content;
-        $this->fields = new FieldCollection( $this );
-    }
-
-    /**
      * Get fields of current version
      *
      * @return \ezp\Content\Field[]
      */
-    public function getFields()
-    {
-        return $this->fields;
-    }
+    public function getFields();
 
     /**
      * Get content that this version is attached to
      *
      * @return \ezp\Content
      */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * Clones the version
-     *
-     * @return void
-     */
-    public function __clone()
-    {
-        $this->properties->id = false;
-    }
+    public function getContent();
 }
 ?>

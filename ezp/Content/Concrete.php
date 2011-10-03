@@ -15,6 +15,7 @@ use ezp\Base\Model,
     ezp\Content,
     ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Version\StaticCollection as VersionCollection,
+    ezp\Content\Version\Concrete as ConcreteVersion,
     ezp\Persistence\Content as ContentValue,
     ezp\Persistence\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
     ezp\Persistence\Content\Query\Criterion\SectionId as CriterionSectionId,
@@ -163,6 +164,13 @@ class Concrete extends Model implements Content
     protected $versions;
 
     /**
+     * Current Version
+     *
+     * @var \ezp\Content\Version
+     */
+    protected $currentVersion;
+
+    /**
      * Owner ( User )
      *
      * @var \ezp\User
@@ -198,7 +206,8 @@ class Concrete extends Model implements Content
         $this->locations = new TypeCollection( 'ezp\\Content\\Location' );
         $this->relations = new TypeCollection( 'ezp\\Content\\Relation' );
         $this->reverseRelations = new TypeCollection( 'ezp\\Content\\Relation' );
-        $this->versions = new VersionCollection( array( new Version( $this ) ) );
+        $this->currentVersion = new ConcreteVersion( $this );
+        $this->versions = new VersionCollection( array( $this->currentVersion ) );
     }
 
     /**
@@ -580,12 +589,7 @@ class Concrete extends Model implements Content
      */
     public function getCurrentVersion()
     {
-        foreach ( $this->versions as $contentVersion )
-        {
-            if ( $this->properties->currentVersionNo == $contentVersion->versionNo )
-                return $contentVersion;
-        }
-        return null;
+        return $this->currentVersion;
     }
 
     /**

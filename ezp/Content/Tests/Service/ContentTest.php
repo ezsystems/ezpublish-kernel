@@ -13,6 +13,7 @@ use ezp\Content,
     ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Relation,
     ezp\Content\Version,
+    ezp\Content\Version\Concrete as ConcreteVersion,
     ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Base\Exception\NotFound,
     ezp\Persistence\Content\Location as LocationValue,
@@ -447,7 +448,7 @@ class ContentTest extends BaseServiceTest
      */
     public function testLoadFieldsNonExisitingVersion()
     {
-        $this->service->loadFields( new Version( $this->service->load( 1 ) ) );
+        $this->service->loadFields( new ConcreteVersion( $this->service->load( 1 ) ) );
     }
 
     /**
@@ -470,7 +471,7 @@ class ContentTest extends BaseServiceTest
      * @param \ezp\Content\Version $version
      * @param \ezp\Content\Version $copyVersion
      */
-    private function compareCopyContentVersions( Version $version, Version $copyVersion )
+    private function compareCopyContentVersions( ConcreteVersion $version, ConcreteVersion $copyVersion )
     {
         self::assertInstanceOf( 'ezp\\Content\\Version', $copyVersion );
         self::assertEquals( $version->versionNo, $copyVersion->versionNo, "Version number does not match" );
@@ -708,7 +709,7 @@ class ContentTest extends BaseServiceTest
     public function testCreateDraftFromInvalidVersion()
     {
         $content = $this->service->load( 1 );
-        $draft = $this->service->createDraftFromVersion( $content, new Version( $content ) );
+        $draft = $this->service->createDraftFromVersion( $content, new ConcreteVersion( $content ) );
     }
 
     /**
