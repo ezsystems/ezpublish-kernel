@@ -544,7 +544,7 @@ class ContentHandler implements ContentHandlerInterface
             array( 'currentVersionNo' => $updateStruct->versionNo )
         );
 
-        return $this->backend->load( "Content", $updateStruct->id );
+        return $this->load( $updateStruct->id, $updateStruct->versionNo );
     }
 
     /**
