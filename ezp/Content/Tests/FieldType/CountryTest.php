@@ -43,25 +43,25 @@ class CountryTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Country\Type::canParseValue
-     * @expectedException PHPUnit_Framework_Error
-     * @expectedExceptionMessage must be an array
      * @group fieldType
+     * @covers \ezp\Content\FieldType\Country\Type::canParseValue
      */
-    public function testCanParseValueInvalidFormat()
+    public function testCanParseValueValidFormatSingle()
     {
         $ft = new Country();
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "canParseValue" );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, new CountryValue( 42 ) );
+
+        $value = new CountryValue( "Belgium" );
+        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
     }
 
     /**
      * @group fieldType
      * @covers \ezp\Content\FieldType\Country\Type::canParseValue
      */
-    public function testCanParseValueValidFormat()
+    public function testCanParseValueValidFormatMultiple()
     {
         $ft = new Country();
         $ref = new ReflectionObject( $ft );

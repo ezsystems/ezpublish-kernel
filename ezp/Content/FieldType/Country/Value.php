@@ -28,9 +28,9 @@ class Value extends BaseValue implements ValueInterface
      *
      * @param string[] $values
      */
-    public function __construct( array $values = array() )
+    public function __construct( $values = array() )
     {
-        $this->values = $values;
+        $this->values = (array)$values;
     }
 
     /**
