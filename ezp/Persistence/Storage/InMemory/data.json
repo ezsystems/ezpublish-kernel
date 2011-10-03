@@ -17,7 +17,10 @@
         {"id": 7, "fieldDefinitionId": 2, "type": "ezstring", "value": {"text": "Administrator users"}, "language": null, "versionNo": 1, "_contentId": 12},
         {"id": 8, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "language": null, "versionNo": 1, "_contentId": 12},
         {"id": 9, "fieldDefinitionId": 2, "type": "ezstring", "value": {"text": "Anonymous Users"}, "language": null, "versionNo": 1, "_contentId": 42},
-        {"id": 10, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "language": null, "versionNo": 1, "_contentId": 42}
+        {"id": 10, "fieldDefinitionId": 4, "type": "ezstring", "value": {"text": ""}, "language": null, "versionNo": 1, "_contentId": 42},
+        {"id": 11, "fieldDefinitionId": 3, "type": "ezstring", "value": {"text": "Administrator user"}, "language": null, "versionNo": 1, "_contentId": 10},
+        {"id": 12, "fieldDefinitionId": 3, "type": "ezstring", "value": {"text": "Anonymous User"}, "language": null, "versionNo": 1, "_contentId": 14}
+
     ],
     "Content\\Language" : [
         {"id": 2, "locale": "eng-GB", "isEnabled": true, "name": "English (United Kingdom)" }
