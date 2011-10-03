@@ -48,19 +48,19 @@ class Value extends BaseValue implements ValueInterface
      */
     protected $handler;
 
+    protected $properties = array(
+        'fieldId' => null,
+        'contentId' => null,
+        'versionNo' => null,
+        'languageCode' => null,
+    );
+
     /**
      * Construct a new Value object.
-     * To affect a BinaryFile object to the $file property, use the handler:
-     * <code>
-     * use \ezp\Content\FieldType\Media;
-     * $binaryValue = new BinaryFile\Value;
-     * $binaryValue->file = $binaryValue->getHandler()->createFromLocalPath( '/path/to/local/file.txt' );
-     * </code>
      */
     public function __construct()
     {
-        $this->aliasList = new AliasCollection;
-        $this->handler = new Handler( $this->aliasList );
+        $this->aliasList = new AliasCollection( $this );
     }
 
     /**

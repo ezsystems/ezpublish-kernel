@@ -70,6 +70,15 @@ class Type extends FieldType
         if ( $subject instanceof Field )
         {
             // Here inject $fieldId, $contentId, $versionNo, $languageCode, $isTranslatable
+            $this->getValue()->setState(
+                array(
+                    'fieldId' => $subject->id,
+                    'contentId' => $subject->getVersion()->contentId,
+                    'versionNo' => $subject->getVersion()->versionNo,
+                    'languageCode' => $subject->language,
+                    'isTranslatable' => $subject->getFieldDefinition()->isTranslatable
+                )
+            );
         }
     }
 }

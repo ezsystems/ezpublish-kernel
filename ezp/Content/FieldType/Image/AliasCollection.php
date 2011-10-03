@@ -8,7 +8,9 @@
  */
 
 namespace ezp\Content\FieldType\Image;
-use ezp\Base\Collection\Type as TypeCollection;
+use ezp\Base\Collection\Type as TypeCollection,
+    ezp\Content\FieldType\Image\Exception\InvalidAlias,
+    ezp\Content\FieldType\Image\Exception\MissingClass;
 
 /**
  * Image alias collection.
@@ -17,25 +19,46 @@ use ezp\Base\Collection\Type as TypeCollection;
 class AliasCollection extends TypeCollection
 {
     /**
-     * Image alias handler
+     * Image type value
      *
-     * @var \ezp\Content\FieldType\Image\Handler
+     * @var \ezp\Content\FieldType\Image\Value
      */
-    protected $aliasHandler;
+    protected $imageValue;
 
-    public function __construct( Handler $aliasHandler, array $elements = array() )
+    /**
+     *
+     * @var \ezp\Content\FieldType\Image\Manager
+     */
+    protected $imageManager;
+
+    public function __construct( Value $imageValue, array $elements = array() )
     {
-        $this->aliasHandler = $aliasHandler;
+        $this->imageValue = $imageValue;
+        $this->imageManager = new Manager;
         parent::__construct( 'ezp\\Content\\FieldType\\Image\\Alias', $elements );
     }
 
     /**
-     * @todo Here gets an alias with its alias name, and create it if needed
-     * @param type $index
-     * @return type
+     * Returns image alias identified by $aliasName).
+     * If needed, the alias will be created
+     *
+     * @param string $aliasName
+     * @return \ezp\Content\FieldType\Image\Alias
+     * @throws \ezp\Content\FieldType\Image\Exception\InvalidAlias when trying to access to an invalid (not configured) image alias
      */
-    public function offsetGet( $index )
+    public function offsetGet( $aliasName )
     {
-        return parent::offsetGet( $index );
+        if ( !$this->imageManager->hasAlias( $aliasName ) )
+            throw new InvalidAlias( $aliasName );
+
+        if ( parent::offsetExists( $aliasName ) )
+            return parent::offsetGet( $aliasName );
+
+        // "original" alias is mandatory to create a new one
+        if ( parent::offsetExists( 'original' ) )
+            throw new MissingAlias( 'original' );
+
+        $alias = $this->imageManager->createImageAlias( $aliasName );
+        parent::offsetSet( $aliasName, $alias );
     }
 }
