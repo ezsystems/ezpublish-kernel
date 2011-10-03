@@ -16,8 +16,6 @@ use ezp\Persistence\Fields\Storage,
  */
 class SelectionStorage implements Storage
 {
-    const SELECTION_TABLE = "ezselection";
-
     /**
      * @see \ezp\Persistence\Fields\Storage
      */
