@@ -32,19 +32,10 @@ class UrlStorage implements Storage
         else
             $urlId = $this->insert( $field->value->data->link, $dbHandler );
 
-        $q = $dbHandler->createUpdateQuery();
+        $field->value->data->setState( array( "urlId" => $urlId ) );
 
-        $q->update(
-            $dbHandler->quoteTable( "ezcontentobject_attribute" )
-        )->set(
-            $dbHandler->quoteColumn( "data_int" ),
-            $q->bindValue( $urlId, null, \PDO::PARAM_INT )
-        )->where(
-            $q->expr->eq( $dbHandler->quoteColumn( "id" ), $field->id )
-        );
-
-        $stmt = $q->prepare();
-        $stmt->execute();
+        // Signals that the Value has been modified and that an update is to be performed
+        return true;
     }
 
     /**
