@@ -335,9 +335,9 @@ class ContentHandler implements ContentHandlerInterface
         );
         foreach ( $content->fields as $field )
         {
-            $this->backend->updateByMatch(
+            $this->backend->update(
                 'Content\\Field',
-                array( "_contentId" => $content->id, "versionNo" => $content->versionNo ),
+                $field->id,
                 (array)$field
             );
         }
