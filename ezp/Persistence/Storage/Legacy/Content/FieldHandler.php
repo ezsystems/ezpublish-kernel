@@ -86,7 +86,17 @@ class FieldHandler
                 $field,
                 $this->mapper->convertToStorageValue( $field )
             );
-            $this->storageHandler->storeFieldData( $field );
+
+            // If the storage handler returns true, it means that $field value has been modified
+            // So we need to update it in order to store those modifications
+            // Field converter is called once again via the Mapper
+            if ( $this->storageHandler->storeFieldData( $field ) === true )
+            {
+                $this->contentGateway->updateField(
+                    $field,
+                    $this->mapper->convertToStorageValue( $field )
+                );
+            }
         }
     }
 
@@ -137,7 +147,16 @@ class FieldHandler
                 );
             }
 
-            $this->storageHandler->storeFieldData( $field );
+            // If the storage handler returns true, it means that $field value has been modified
+            // So we need to update it in order to store those modifications
+            // Field converter is called once again via the Mapper
+            if ( $this->storageHandler->storeFieldData( $field ) === true )
+            {
+                $this->contentGateway->updateField(
+                    $field,
+                    $this->mapper->convertToStorageValue( $field )
+                );
+            }
         }
     }
 
