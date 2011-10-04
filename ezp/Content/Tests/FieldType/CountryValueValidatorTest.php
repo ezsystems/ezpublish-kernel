@@ -99,7 +99,7 @@ class CountryValueValidatorTest extends PHPUnit_Framework_TestCase
             array( array( "Belgium", "Norway", "France" ) ),
             array(
                 array(
-                    "Korea (N)",
+                    "Korea, Democratic People's Republic of",
                     "French Southern Territories",
                     "Central African Republic",
                     "Heard Island and McDonald Islands",

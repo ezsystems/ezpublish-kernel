@@ -33,7 +33,11 @@ class CountryValueValidator extends Validator
     {
         $isValid = true;
 
-        $countries = array_flip( Configuration::getInstance( "content" )->get( "CountrySettings", "Countries" ) );
+        $countries = array();
+        foreach ( Configuration::getInstance( "country" )->getAll() as $section )
+        {
+            $countries[$section["Name"]] = $countries[$section["Alpha2"]] = $countries[$section["Alpha3"]] = $section["Alpha2"];
+        }
 
         foreach ( $value->values as $country )
         {
