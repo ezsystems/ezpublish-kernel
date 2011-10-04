@@ -74,20 +74,31 @@ class EzcDatabase extends Gateway
     }
 
     /**
-     * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
-     *
-     * Performs a deep copy of the location identified by $sourceId and all of
-     * its child locations, copying the most recent published content object
-     * for each location to a new content object without any additional version
-     * information. Relations are not copied. URLs are not touched at all.
+     * Find all content in the given subtree
      *
      * @param mixed $sourceId
-     * @param mixed $destinationParentId
-     * @return Location the newly created Location.
+     * @return array
      */
-    public function copySubtree( $sourceId, $destinationParentId )
+    public function getSubtreeContent( $sourceId )
     {
-        throw new RuntimeException( '@TODO: Implement' );
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select(
+                $this->handler->quoteColumn( '*' )
+            )->from(
+                $this->handler->quoteTable( 'ezcontentobject_tree' )
+            )->where(
+                $query->expr->like(
+                    $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' ),
+                    $query->bindValue( '%/' . $sourceId . '/%' )
+                )
+            )->orderBy(
+                $this->handler->quoteColumn( 'path_string', 'ezcontentobject_tree' )
+            );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
     }
 
     /**

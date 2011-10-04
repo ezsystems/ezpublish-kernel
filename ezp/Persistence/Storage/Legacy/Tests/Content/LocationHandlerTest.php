@@ -49,7 +49,9 @@ class LocationHandlerTest extends TestCase
         $dbHandler = $this->getDatabaseHandler();
         return new Handler(
             $this->locationGateway = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Gateway' ),
-            $this->locationMapper = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' )
+            $this->locationMapper = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
+            $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Handler', array(), array(), '', false ),
+            $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Mapper', array(), array(), '', false )
         );
     }
 

@@ -9,10 +9,12 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Location;
 use ezp\Persistence\Content\Location,
+    ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence\Content\Location\CreateStruct,
     ezp\Persistence\Content\Location\UpdateStruct,
     ezp\Persistence\Content\Location\Handler as BaseLocationHandler,
     ezp\Persistence\Storage\Legacy\Content\Handler as ContentHandler,
+    ezp\Persistence\Storage\Legacy\Content\Mapper as ContentMapper,
     ezp\Persistence\Storage\Legacy\Content\Location\Gateway as LocationGateway,
     ezp\Persistence\Storage\Legacy\Content\Location\Mapper as LocationMapper;
 
@@ -29,11 +31,25 @@ class Handler implements BaseLocationHandler
     protected $locationGateway;
 
     /**
-     * Location mapper
+     * Location locationMapper
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper $mapper
+     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
      */
-    protected $mapper;
+    protected $locationMapper;
+
+    /**
+     * Content handler
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Handler
+     */
+    protected $contentHandler;
+
+    /**
+     * Content locationMapper
+     *
+     * @var \ezp\Persistence\Storage\Legacy\Content\Mapper
+     */
+    protected $contentMapper;
 
     /**
      * Construct from userGateway
@@ -41,10 +57,17 @@ class Handler implements BaseLocationHandler
      * @param \ezp\Persistence\Storage\Legacy\Content\Location\Gateway $locationGateway
      * @return void
      */
-    public function __construct( LocationGateway $locationGateway, LocationMapper $mapper )
+    public function __construct(
+        LocationGateway $locationGateway,
+        LocationMapper $locationMapper,
+        ContentHandler $contentHandler,
+        ContentMapper $contentMapper
+    )
     {
         $this->locationGateway = $locationGateway;
-        $this->mapper = $mapper;
+        $this->locationMapper          = $locationMapper;
+        $this->contentHandler  = $contentHandler;
+        $this->contentMapper   = $contentMapper;
     }
 
     /**
@@ -67,7 +90,7 @@ class Handler implements BaseLocationHandler
     public function load( $locationId )
     {
         $data = $this->locationGateway->getBasicNodeData( $locationId );
-        return $this->mapper->createLocationFromRow( $data );
+        return $this->locationMapper->createLocationFromRow( $data );
     }
 
     /**
@@ -84,7 +107,32 @@ class Handler implements BaseLocationHandler
      */
     public function copySubtree( $sourceId, $destinationParentId )
     {
-        throw new \RuntimeException( '@TODO: Implement' );
+        throw new \RuntimeException( 'Not testable without a proper integration test setup.' );
+
+        $children = $this->locationGateway->getSubtreeContent( $sourceId );
+
+        $parentLocations = array();
+        foreach ( $children as $child )
+        {
+            $parentLocations[$child['contentobject_id']][] = $this->locationMapper->getLocationCreateStruct( $child );
+        }
+
+        foreach ( $children as $child )
+        {
+            $content = $this->contentHandler->copy(
+                $child['contentobject_id']
+            );
+            $this->contentHandler->publish(
+                $this->contentMapper->getUpdateStruct( $content )
+            );
+
+            foreach ( $parentLocations[$child['contentobject_id']] as $createStruct )
+            {
+                // @TODO: Map original location IDs to newly created locations
+                // for all elements below the "root" node.
+                $this->create( $createStruct );
+            }
+        }
     }
 
     /**

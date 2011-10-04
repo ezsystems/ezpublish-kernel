@@ -44,18 +44,12 @@ abstract class Gateway
     abstract public function getBasicNodeData( $nodeId );
 
     /**
-     * Copy location object identified by $sourceId, into destination identified by $destinationParentId.
-     *
-     * Performs a deep copy of the location identified by $sourceId and all of
-     * its child locations, copying the most recent published content object
-     * for each location to a new content object without any additional version
-     * information. Relations are not copied. URLs are not touched at all.
+     * Find all content in the given subtree
      *
      * @param mixed $sourceId
-     * @param mixed $destinationParentId
-     * @return Location the newly created Location.
+     * @return array
      */
-    abstract public function copySubtree( $sourceId, $destinationParentId );
+    abstract public function getSubtreeContent( $sourceId );
 
     /**
      * Update path strings to move nodes in the ezcontentobject_tree table

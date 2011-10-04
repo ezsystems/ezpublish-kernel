@@ -589,7 +589,9 @@ class RepositoryHandler implements HandlerInterface
         {
             $this->locationHandler = new LocationHandler(
                 $this->getLocationGateway(),
-                $this->getLocationMapper()
+                $this->getLocationMapper(),
+                $this->contentHandler(),
+                $this->getContentMapper()
             );
         }
         return $this->locationHandler;
