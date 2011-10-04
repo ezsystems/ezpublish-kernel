@@ -7,6 +7,7 @@
  * @version //autogentag//
  */
 
+
 use ezp\Base\Autoloader,
     ezp\Base\Configuration;
 
@@ -14,9 +15,6 @@ use ezp\Base\Autoloader,
 require 'config.php';
 require 'ezp/Base/Autoloader.php';
 spl_autoload_register( array( new Autoloader( $settings['base']['autoload'] ), 'load' ) );
-
-//require_once 'PHPUnit/Autoload.php';
-
 
 // setup configuration
 $paths = array();
