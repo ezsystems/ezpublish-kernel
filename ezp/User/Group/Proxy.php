@@ -38,6 +38,7 @@ class Proxy extends ModelProxy implements Group, Groupable, Observable
         if ( $this->proxiedObject === null )
         {
             $this->proxiedObject = $this->service->loadGroup( $this->proxiedObjectId );
+            $this->moveObservers();
         }
     }
 

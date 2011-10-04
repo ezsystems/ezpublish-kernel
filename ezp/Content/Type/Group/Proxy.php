@@ -56,6 +56,7 @@ class Proxy extends ModelProxy implements Group
         if ( $this->proxiedObject === null )
         {
             $this->proxiedObject = $this->service->loadGroup( $this->id );
+            $this->moveObservers();
         }
     }
 

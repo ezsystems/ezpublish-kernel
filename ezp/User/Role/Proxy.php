@@ -40,6 +40,7 @@ class Proxy extends ModelProxy implements Role
         if ( $this->proxiedObject === null )
         {
             $this->proxiedObject = $this->service->loadRole( $this->id );
+            $this->moveObservers();
         }
     }
 
