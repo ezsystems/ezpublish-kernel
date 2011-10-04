@@ -61,14 +61,14 @@ class StorageRegistryTest extends TestCase
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\StorageRegistry::getStorage
      * @covers ezp\Persistence\Storage\Legacy\Exception\StorageNotFound
-     * @expectedException ezp\Persistence\Storage\Legacy\Exception\StorageNotFound
-     * @expectedExceptionMessage Storage for type "not-found" not found.
      */
     public function testGetNotFound()
     {
         $registry = new StorageRegistry();
-
-        $registry->getStorage( 'not-found' );
+        self::assertInstanceOf(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            $registry->getStorage( 'not-found' )
+        );
     }
 
     /**
