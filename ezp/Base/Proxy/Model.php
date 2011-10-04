@@ -40,13 +40,27 @@ abstract class Model extends Proxy implements ObservableInterface, ModelInterfac
         if ( $this->proxiedObject === null )
         {
             parent::lazyLoad();
-            foreach ( $this->observers as $event => $observers )
-            {
-                foreach ( $observers as $observer )
-                    $this->proxiedObject->attach( $observer, $event );
-            }
-            $this->observers = array();
+            $this->moveObservers();
         }
+    }
+
+    /**
+     * Move observers from proxy to proxiedObject, must be done after load and
+     * proxiedObject must be a observable
+     *
+     * @return void
+     */
+    protected function moveObservers()
+    {
+        if ( empty( $this->observers ) )
+            return;
+
+        foreach ( $this->observers as $event => $observers )
+        {
+            foreach ( $observers as $observer )
+                $this->proxiedObject->attach( $observer, $event );
+        }
+        $this->observers = array();
     }
 
     /**
