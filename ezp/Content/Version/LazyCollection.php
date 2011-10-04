@@ -21,10 +21,11 @@ class LazyCollection extends Lazy
      * Constructor
      *
      * @param \ezp\Content\Service $contentService Content service to be used for fetching versions
-     * @param int $contentId Id of content this version collection belongs to.
+     * @param mixed $contentId Id of content this version collection belongs to.
+     * @param array $initialArray Optional array of initial elements that will be available w/o any loading
      */
-    public function __construct( ContentService $contentService, $contentId )
+    public function __construct( ContentService $contentService, $contentId, array $initialArray = array() )
     {
-        parent::__construct( 'ezp\\Content\\Version', $contentService, $contentId, 'listVersions' );
+        parent::__construct( "ezp\\Content\\Version", $contentService, $contentId, 'listVersions', $initialArray );
     }
 }

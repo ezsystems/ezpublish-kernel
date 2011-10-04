@@ -54,13 +54,14 @@ class Lazy extends TypeCollection
      * @param Service $service
      * @param mixed $primary Primary key to do lookup on
      * @param string $method Optional, defines which function on handler to call, 'load' by default.
+     * @param array $initialArray Optional array of initial elements that will be available w/o any loading
      */
-    public function __construct( $type, Service $service, $primary, $method = 'load' )
+    public function __construct( $type, Service $service, $primary, $method = 'load', array $initialArray = array() )
     {
         $this->service = $service;
         $this->primary = $primary;
         $this->method = $method;
-        parent::__construct( $type );
+        parent::__construct( $type, $initialArray );
     }
 
     /**
@@ -112,6 +113,10 @@ class Lazy extends TypeCollection
      */
     public function offsetGet( $index )
     {
+        // Check $initialArray first before loading
+        if ( $this->primary !== false && parent::offsetExists( $index ) )
+            return parent::offsetGet( $index );
+
         $this->load();
         return parent::offsetGet( $index );
     }
@@ -125,6 +130,10 @@ class Lazy extends TypeCollection
      */
     public function offsetExists( $index )
     {
+        // Check $initialArray first before loading
+        if ( $this->primary !== false && parent::offsetExists( $index ) )
+            return true;
+
         $this->load();
         return parent::offsetExists( $index );
     }

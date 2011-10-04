@@ -554,18 +554,28 @@ class Service extends BaseService
         $content->setState(
             array(
                 "section" => new ProxySection( $vo->sectionId, $this->repository->getSectionService() ),
-                "versions" => new LazyVersionCollection( $this, $vo->id ),//@todo Avoid throwing away version info on $vo
                 "properties" => $vo
             )
         );
 
+        $version = $this->buildVersionDomainObject( $content, $vo->version );
         if ( $vo->currentVersionNo == $vo->version->versionNo )
         {
-            $content->setState( array( "currentVersion" => $this->buildVersionDomainObject( $content, $vo->version ) ) );
+             $content->setState(
+                 array(
+                     "currentVersion" => $version,
+                     "versions" => new LazyVersionCollection( $this, $vo->id, array( $version->versionNo => $version ) )
+                 )
+             );
         }
         else
         {
-            $content->setState( array( "currentVersion" => new ProxyVersion( $vo->id, $vo->currentVersionNo, $this )) );
+            $content->setState(
+                 array(
+                     "currentVersion" => new ProxyVersion( $vo->id, $vo->currentVersionNo, $this ),
+                     "versions" => new LazyVersionCollection( $this, $vo->id, array( $version->versionNo => $version ) )
+                 )
+             );
         }
 
         $locationService = $this->repository->getLocationService();
