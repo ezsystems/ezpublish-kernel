@@ -15,7 +15,8 @@ use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Content\FieldType\FieldSettings,
-    ezp\Content\FieldType\Selection\Value as SelectionValue;
+    ezp\Content\FieldType\Selection\Value as SelectionValue,
+    DOMDocument;
 
 class Selection implements Converter
 {
@@ -48,8 +49,30 @@ class Selection implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
-        if ( isset( $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"] ) )
-            $storageDef->dataInt1 = (int)$fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"];
+        $fieldSettings = $fieldDef->fieldTypeConstraints->fieldSettings;
+
+        if ( isset( $fieldSettings["isMultiple"] ) )
+            $storageDef->dataInt1 = (int)$fieldSettings["isMultiple"];
+
+        if ( !empty( $fieldSettings["options"] ) )
+        {
+            $xml = new DOMDocument( "1.0", "utf-8" );
+            $xml->appendChild(
+                $selection = $xml->createElement( "ezselection" )
+            );
+            $selection->appendChild(
+                $options = $xml->createElement( "options" )
+            );
+            foreach ( $fieldSettings["options"] as $id => $name )
+            {
+                $options->appendChild(
+                    $option = $xml->createElement( "option" )
+                );
+                $option->setAttribute( "id", $id );
+                $option->setAttribute( "name", $name );
+            }
+            $storageDef->dataText5 = $xml->saveXML();
+        }
     }
 
     /**
@@ -60,10 +83,18 @@ class Selection implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
+        $options = array();
+
+        foreach ( simplexml_load_string( $storageDef->dataText5 )->options->option as $option )
+        {
+            $options[(int)$option["id"]] = (string)$option["name"];
+        }
+
         $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false
+                "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,
+                "options" => $options,
             )
         );
     }

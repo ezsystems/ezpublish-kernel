@@ -16,7 +16,9 @@ use ezp\Content\FieldType\Selection\Value as SelectionValue,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection as SelectionConverter,
     ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     ezp\Persistence\Content\FieldTypeConstraints,
-    PHPUnit_Framework_TestCase;
+    PHPUnit_Framework_TestCase,
+    DOMDocument,
+    DOMXPath;
 
 /**
  * Test case for Selection converter in Legacy storage
@@ -32,6 +34,17 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         $this->converter = new SelectionConverter;
+    }
+
+    protected function assertXpathMatch( $expected, $xpath, DOMDocument $doc, $message = null )
+    {
+        $xpathObj = new DOMXPath( $doc );
+
+        $this->assertEquals(
+            $expected,
+            $xpathObj->evaluate( $xpath ),
+            $message
+        );
     }
 
     /**
@@ -76,7 +89,12 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "isMultiple" => true
+                "isMultiple" => true,
+                "options" => array(
+                    "Choice1",
+                    "Choice2",
+                    "Choice3",
+                ),
             )
         );
 
@@ -93,6 +111,33 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
             1,
             $storageFieldDef->dataInt1
         );
+        $dataText5 = new DOMDocument;
+        $dataText5->loadXML( $storageFieldDef->dataText5 );
+        self::assertXpathMatch(
+            1,
+            "count(/ezselection/options)",
+            $dataText5
+        );
+        self::assertXpathMatch(
+            3,
+            "count(/ezselection/options/option)",
+            $dataText5
+        );
+        self::assertXpathMatch(
+            1,
+            "count(/ezselection/options/option[@id=0 and @name='Choice1'])",
+            $dataText5
+        );
+        self::assertXpathMatch(
+            1,
+            "count(/ezselection/options/option[@id=1 and @name='Choice2'])",
+            $dataText5
+        );
+        self::assertXpathMatch(
+            1,
+            "count(/ezselection/options/option[@id=2 and @name='Choice3'])",
+            $dataText5
+        );
     }
 
     /**
@@ -105,7 +150,12 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
         $fieldTypeConstraints = new FieldTypeConstraints;
         $fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                "isMultiple" => false
+                "isMultiple" => false,
+                "options" => array(
+                    "Choice1",
+                    "Choice2",
+                    "Choice3",
+                ),
             )
         );
 
@@ -122,6 +172,33 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
             0,
             $storageFieldDef->dataInt1
         );
+        $dataText5 = new DOMDocument;
+        $dataText5->loadXML( $storageFieldDef->dataText5 );
+        self::assertXpathMatch(
+            1,
+            "count(/ezselection/options)",
+            $dataText5
+        );
+        self::assertXpathMatch(
+            3,
+            "count(/ezselection/options/option)",
+            $dataText5
+        );
+        self::assertXpathMatch(
+            1,
+            "count(/ezselection/options/option[@id=0 and @name='Choice1'])",
+            $dataText5
+        );
+        self::assertXpathMatch(
+            1,
+            "count(/ezselection/options/option[@id=1 and @name='Choice2'])",
+            $dataText5
+        );
+        self::assertXpathMatch(
+            1,
+            "count(/ezselection/options/option[@id=2 and @name='Choice3'])",
+            $dataText5
+        );
     }
 
     /**
@@ -137,6 +214,7 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
             new StorageFieldDefinition(
                 array(
                     "dataInt1" => 1,
+                    "dataText5" => '<?xml version="1.0" encoding="utf-8"?><ezselection><options><option id="0" name="Choice1"/><option id="1" name="Choice2"/><option id="2" name="Choice3"/></options></ezselection>'
                 )
             ),
             $fieldDef
@@ -144,6 +222,14 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
         self::assertInstanceOf( "ezp\\Content\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertTrue(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
+        );
+        self::assertSame(
+            array(
+                "Choice1",
+                "Choice2",
+                "Choice3",
+            ),
+            $fieldDef->fieldTypeConstraints->fieldSettings["options"]
         );
     }
 
@@ -160,6 +246,7 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
             new StorageFieldDefinition(
                 array(
                     "dataInt1" => 0,
+                    "dataText5" => '<?xml version="1.0" encoding="utf-8"?><ezselection><options><option id="0" name="Choice1"/><option id="1" name="Choice2"/><option id="2" name="Choice3"/></options></ezselection>'
                 )
             ),
             $fieldDef
@@ -167,6 +254,14 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
         self::assertInstanceOf( "ezp\\Content\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertFalse(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
+        );
+        self::assertSame(
+            array(
+                "Choice1",
+                "Choice2",
+                "Choice3",
+            ),
+            $fieldDef->fieldTypeConstraints->fieldSettings["options"]
         );
     }
 }
