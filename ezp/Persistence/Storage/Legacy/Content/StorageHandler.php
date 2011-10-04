@@ -51,7 +51,7 @@ class StorageHandler
     public function storeFieldData( Field $field )
     {
         $storage = $this->storageRegistry->getStorage( $field->type );
-        $storage->storeFieldData( $field, $this->context );
+        return $storage->storeFieldData( $field, $this->context );
     }
 
     /**
