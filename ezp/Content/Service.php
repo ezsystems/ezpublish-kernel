@@ -545,11 +545,10 @@ class Service extends BaseService
      */
     protected function buildDomainObject( ContentValue $vo )
     {
-        // @todo Using ConcreteType for now, but I guess there is something wrong here
-        //       Shouldn't a ProxyType be used, but then, which Content Type ID to use?
-        //       Should I use the one provided in setState?
-        $content = new Concrete( new ProxyType( $vo->typeId, $this->repository->getContentTypeService() ), new ProxyUser( $vo->ownerId, $this->repository->getUserService() ) );
-        // @todo Attach observer to Content
+        $content = new Concrete(
+            new ProxyType( $vo->typeId, $this->repository->getContentTypeService() ),
+            new ProxyUser( $vo->ownerId, $this->repository->getUserService() )
+        );
 
         $content->setState(
             array(
