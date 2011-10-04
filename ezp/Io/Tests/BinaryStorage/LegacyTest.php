@@ -24,21 +24,23 @@ class BinaryRepositoryLegacyTest extends BinaryRepositoryTest
 {
     public function setUp()
     {
+        // Include mock dependencies
+        $dependenciesPath = __DIR__ . DIRECTORY_SEPARATOR . basename( __FILE__, '.php' ) . DIRECTORY_SEPARATOR;
+        include_once $dependenciesPath  . 'ezexecution.php';
+        include_once $dependenciesPath  . 'ezpextensionoptions.php';
+        include_once $dependenciesPath  . 'ezextension.php';
+        include_once $dependenciesPath  . 'ezdebugsetting.php';
+        include_once $dependenciesPath  . 'ezdebug.php';
+        include_once $dependenciesPath  . 'ezini.php';
+
+        // First check if eZClusterFileHandler was loaded by autoloader
         if ( !class_exists( 'eZClusterFileHandler' ) )
         {
+            // Secondly include manually using deprecated symlink structure
             if ( !file_exists( 'ezpublish/kernel/classes/ezclusterfilehandler.php' ) )
             {
-                self::markTestSkipped( "Cluster files not linked: ln -s /path/to/ezpublish ." );
+                self::markTestSkipped( "Cluster files could not be loaded, place api inside eZ Publish, update config.php 'repositories' and run using eg: phpunit -c extension/api/phpunit.xml" );
             }
-
-            // include mock dependencies
-            $dependenciesPath = __DIR__ . DIRECTORY_SEPARATOR . basename( __FILE__, '.php' ) . DIRECTORY_SEPARATOR;
-            include $dependenciesPath  . 'ezexecution.php';
-            include $dependenciesPath  . 'ezpextensionoptions.php';
-            include $dependenciesPath  . 'ezextension.php';
-            include $dependenciesPath  . 'ezdebugsetting.php';
-            include $dependenciesPath  . 'ezdebug.php';
-            include $dependenciesPath  . 'ezini.php';
 
             include 'ezpublish/lib/ezfile/classes/ezfile.php';
             include 'ezpublish/lib/ezfile/classes/ezdir.php';
@@ -64,7 +66,7 @@ class BinaryRepositoryLegacyTest extends BinaryRepositoryTest
      */
     public function testUpdateMtime()
     {
-        self::markTestSkipped();
+        self::markTestSkipped( "Not supported by Legacy io handler, aka incomplete" );
     }
 
     /**
@@ -72,6 +74,6 @@ class BinaryRepositoryLegacyTest extends BinaryRepositoryTest
      */
     public function testUpdateCtime()
     {
-        self::markTestSkipped();
+        self::markTestSkipped( "Not supported by Legacy io handler, aka incomplete" );
     }
 }
