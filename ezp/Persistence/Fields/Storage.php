@@ -33,7 +33,7 @@ interface Storage
      * Allows custom field types to store data in an external source (e.g. another DB table).
      *
      * Stores value for $field in an external data source.
-     * The whole {@link ezp\Persistence\Content\Field} ValueObject is passed and its value
+     * The whole {@link ezp\Persistence\Content\Field} object is passed and its value
      * is accessible through the {@link ezp\Persistence\Content\FieldValue} 'value' property.
      * This value holds the data filled by the user as a {@link ezp\Content\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link ezp\Content\FieldType\TextLine\Value} object).
@@ -62,9 +62,12 @@ interface Storage
      *                  to be used accordingly to
      *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
      *
+     * This method might return true if $field needs to be updated after storage done here (to store a PK for instance).
+     * In any other case, this method must not return anything (null).
+     *
      * @param \ezp\Persistence\Content\Field $field
      * @param array $context
-     * @return void
+     * @return null|true
      */
     public function storeFieldData( Field $field, array $context );
 
