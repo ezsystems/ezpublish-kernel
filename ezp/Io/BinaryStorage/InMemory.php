@@ -25,10 +25,10 @@ class InMemory implements Backend
     }
 
     /**
-     * Creates and stores a new BinaryFile based on the create data of $file
-     * @param BinaryFileCreateStruct $file
+     * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @return BinaryFile The newly created BinaryFile object
+     * @param \ezp\Io\BinaryFileCreateStruct $file
+     * @return \ezp\Io\BinaryFile The newly created BinaryFile object
      *
      * @throws \ezp\Base\Exception\PathExists If the target path already exists
      */
@@ -54,9 +54,31 @@ class InMemory implements Backend
     }
 
     /**
-     * Updates the existing BinaryFile at $path with data from $updateFile
-     * @param string $file
-     * @param BinaryFileUpdateStruct $updateFile
+     * Deletes the existing BinaryFile with path $path
+     *
+     * @param string $path
+     * @throws \ezp\Base\Exception\NotFound If the file doesn't exist
+     */
+    public function delete( $path )
+    {
+        if ( !isset( $this->storage[$path] ) )
+        {
+            throw new NotFound( 'BinaryFile', $path );
+        }
+
+        unset( $this->storage[$path] );
+        unset( $this->data[$path] );
+    }
+
+    /**
+     * Updates the file identified by $path with data from $updateFile
+     *
+     * @param string $path
+     * @param \ezp\Io\BinaryFileUpdateStruct $updateFile
+     * @return \ezp\Io\BinaryFile The updated BinaryFile
+     *
+     * @throws \ezp\Base\Exception\NotFound If the source path doesn't exist
+     * @throws \ezp\Base\Exception\PathExists If the target path already exists
      */
     public function update( $path, BinaryFileUpdateStruct $updateFile )
     {
@@ -111,24 +133,10 @@ class InMemory implements Backend
     }
 
     /**
-     * Deletes the existing BinaryFile with path $path
-     * @param string $path
-     * @throws Exception if $file doesn't exist
-     */
-    public function delete( $path )
-    {
-        if ( !isset( $this->storage[$path] ) )
-        {
-            throw new NotFound( 'BinaryFile', $path );
-        }
-
-        unset( $this->storage[$path] );
-        unset( $this->data[$path] );
-    }
-
-    /**
      * Checks if the BinaryFile with path $path exists
-     * @paraam string $file
+     *
+     * @param string $path
+     * @return bool
      */
     public function exists( $path )
     {
@@ -137,9 +145,10 @@ class InMemory implements Backend
 
     /**
      * Loads the BinaryFile identified by $path
+     *
      * @param string $path
-     * @return BinaryFile
-     * @throws ezp\Base\Exception\NotFound If no file identified by $path exists
+     * @return \ezp\Io\BinaryFile
+     * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function load( $path )
     {
@@ -152,9 +161,10 @@ class InMemory implements Backend
 
     /**
      * Returns a file resource to the BinaryFile identified by $path
-     * @param BinaryFile $path
+     *
+     * @param string $path
      * @return resource
-     * @throws ezp\Base\Exception\NotFound If no file identified by $path exists
+     * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function getFileResource( $path )
     {
@@ -169,9 +179,10 @@ class InMemory implements Backend
 
     /**
      * Returns the contents of the BinaryFile identified by $path
+     *
      * @param string $path
-     * @return BinaryContents
-     * @throws ezp\Base\Exception\NotFound if the file couldn't be found
+     * @return string
+     * @throws \ezp\Base\Exception\NotFound if the file couldn't be found
      */
     public function getFileContents( $path )
     {

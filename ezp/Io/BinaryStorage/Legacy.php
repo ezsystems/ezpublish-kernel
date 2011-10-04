@@ -33,10 +33,10 @@ class Legacy implements Backend
     }
 
     /**
-     * Creates a new BinaryFile based on the BinaryFileCreateStruct $file
-     * @param BinaryFileCreateStruct $file
+     * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @return BinaryFile The created BinaryFile object
+     * @param \ezp\Io\BinaryFileCreateStruct $file
+     * @return \ezp\Io\BinaryFile The newly created BinaryFile object
      *
      * @throws \ezp\Base\Exception\PathExists If the target path already exists
      */
@@ -60,7 +60,8 @@ class Legacy implements Backend
     }
 
     /**
-     * Deletes the file $path
+     * Deletes the existing BinaryFile with path $path
+     *
      * @param string $path
      * @throws \ezp\Base\Exception\NotFound If the file doesn't exist
      */
@@ -78,9 +79,8 @@ class Legacy implements Backend
      * Updates the file identified by $path with data from $updateFile
      *
      * @param string $path
-     * @param BinaryFileUpdateStruct $updateFile
-     *
-     * @return BinaryFile The updated BinaryFile
+     * @param \ezp\Io\BinaryFileUpdateStruct $updateFile
+     * @return \ezp\Io\BinaryFile The updated BinaryFile
      *
      * @throws \ezp\Base\Exception\NotFound If the source path doesn't exist
      * @throws \ezp\Base\Exception\PathExists If the target path already exists
@@ -122,19 +122,9 @@ class Legacy implements Backend
     }
 
     /**
-     * Returns a file resource to the BinaryFile identified by $path
+     * Checks if the BinaryFile with path $path exists
+     *
      * @param string $path
-     * @return resource
-     * @throws \ezp\Base\Exception\NotFound If the file doesn't exist
-     */
-    public function getFileResource( $path )
-    {
-        return $this->getFileResourceProvider()->getResource( $this->load( $path ) );
-    }
-
-    /**
-     * Checks if a file with $path exists in the backend
-     * @var string $path
      * @return bool
      */
     public function exists( $path )
@@ -144,9 +134,10 @@ class Legacy implements Backend
 
     /**
      * Loads the BinaryFile identified by $path
+     *
      * @param string $path
-     * @return BinaryFile
-     * @throws ezp\Base\Exception\NotFound When the requested $path doesn't exist
+     * @return \ezp\Io\BinaryFile
+     * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function load( $path )
     {
@@ -187,10 +178,23 @@ class Legacy implements Backend
     }
 
     /**
-     * Returns the contents of the BinaryFile identified by $path
+     * Returns a file resource to the BinaryFile identified by $path
+     *
      * @param string $path
-     * @return BinaryContents
-     * @throws ezp\Base\Exception\NotFound if the file couldn't be found
+     * @return resource
+     * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
+     */
+    public function getFileResource( $path )
+    {
+        return $this->getFileResourceProvider()->getResource( $this->load( $path ) );
+    }
+
+    /**
+     * Returns the contents of the BinaryFile identified by $path
+     *
+     * @param string $path
+     * @return string
+     * @throws \ezp\Base\Exception\NotFound if the file couldn't be found
      */
     public function getFileContents( $path )
     {
@@ -204,6 +208,7 @@ class Legacy implements Backend
 
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
+     *
      * @return \ezp\Io\BinaryStorage\Legacy\FileResourceProvider
      */
     private function getFileResourceProvider()
