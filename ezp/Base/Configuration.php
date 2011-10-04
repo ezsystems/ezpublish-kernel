@@ -545,6 +545,16 @@ class Configuration extends Override
     }
 
     /**
+     * Gets all section and configuration value
+     *
+     * @return array
+     */
+    public function getAll()
+    {
+        return $this->raw['data'];
+    }
+
+    /**
      * Gets a configuration value, or null if not set.
      *
      * @param string $section The configuration section to get value for
