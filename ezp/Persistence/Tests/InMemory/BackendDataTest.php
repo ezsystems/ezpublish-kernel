@@ -35,7 +35,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         // Create a new backend from JSON data and empty Content data to make it clean
-        $this->backend = new Backend( json_decode( file_get_contents( 'ezp/Persistence/Storage/InMemory/data.json' ), true ) );
+        $this->backend = new Backend( json_decode( file_get_contents( str_replace( '/Tests/InMemory', '/Storage/InMemory', __DIR__ ) . '/data.json' ), true ) );
     }
 
     protected function tearDown()
