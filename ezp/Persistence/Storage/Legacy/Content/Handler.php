@@ -142,6 +142,7 @@ class Handler implements BaseContentHandler
             $updateStruct->id,
             $updateStruct->versionNo
         );
+        return $content;
     }
 
     /**
