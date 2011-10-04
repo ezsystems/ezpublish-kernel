@@ -25,7 +25,7 @@ class Carpet
      *
      * @var string
      */
-    protected $className;
+    protected static $className;
 
     /**
      * Abstracted object coming from Legacy codebase
@@ -40,7 +40,7 @@ class Carpet
      */
     public function __construct( $classToSweep )
     {
-        $this->className = $classToSweep;
+        static::$className = $classToSweep;
     }
 
     /**
@@ -133,9 +133,9 @@ class Carpet
      */
     public static function __callStatic( $method, array $arguments )
     {
-        if ( !method_exists( $this->className, $method ) )
-            throw new MethodNotFound( $method, $this->className );
+        if ( !method_exists( static::$className, $method ) )
+            throw new MethodNotFound( $method, static::$className );
 
-        return forward_static_call_array( array( $this->className, $method ), $arguments );
+        return forward_static_call_array( array( static::$className, $method ), $arguments );
     }
 }
