@@ -47,7 +47,7 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !$inputValue instanceof Value || !is_array( $inputValue->values ) )
+        if ( !$inputValue instanceof Value )
         {
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
@@ -57,13 +57,20 @@ class Type extends FieldType
     /**
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
-     * @todo Sort seems to not be supported by this FieldType, is this handled correctly?
      * @return array
      */
     protected function getSortInfo()
     {
+        $countries = array();
+        foreach ( $this->getValue()->getCountriesInfo() as $countryInfo )
+        {
+            $countries[] = strtolower( $countryInfo["Name"] );
+        }
+
+        sort( $countries );
+
         return array(
-            'sort_key_string' => implode( ",", $this->getValue()->values )
+            'sort_key_string' => implode( ",", $countries )
         );
     }
 }
