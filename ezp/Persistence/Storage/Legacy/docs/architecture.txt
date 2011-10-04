@@ -86,6 +86,37 @@ which implements handlers for each criterion or search clause. Additional
 handlers for those can be added in the repository handler. The handlers itself
 are fairly trivial and self explanatory.
 
+Content-Type Handler
+====================
+
+In order to abstract updating of content types, the ``…\Legacy\Content\Type\Handler``
+uses a dedicated handler ``…\Type\Update\Handler``. One of the existing
+implementations of these abstractions realize type update in a synchronous
+way, the other one relies on legacy eZ Publish functionality to realize an
+asynchronous update.
+
+The synchronous mechanism (``…\Type\Update\Handler\EzcDatabase``) makes also
+use of the so-called Content-Updater, which takes care for updating existing
+Content objects.
+
+Storages and Converter
+======================
+
+There are basically 2 extension points for the Legacy Storage, which are
+necessary in order to support custom field types:
+
+- Converters (for fields and field definitions)
+- Storages (for external storage of custom types)
+
+All of these are available through the configuration of the
+``…\Legacy\RepositoryHandler`` (as requested by eZ) and through public methods of
+it, to be used for proper dependency injection. The corresponding interfaces /
+abstract base classes are:
+
+- ``…\Legacy\Content\FieldValue\Converter``
+- ``ezp\Persistence\Fields\Storage``
+
+
 
 ..
    Local Variables:
