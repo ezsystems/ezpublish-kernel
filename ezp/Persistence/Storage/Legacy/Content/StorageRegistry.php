@@ -10,7 +10,8 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content;
 use ezp\Persistence\Fields\Storage,
-    ezp\Persistence\Storage\Legacy\Exception;
+    ezp\Persistence\Storage\Legacy\Exception,
+    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage;
 
 /**
  * Registry for external storages
@@ -46,7 +47,7 @@ class StorageRegistry
     {
         if ( !isset( $this->storageMap[$typeName] ) )
         {
-            throw new Exception\StorageNotFound( $typeName );
+            $this->register( $typeName, new NullStorage );
         }
         return $this->storageMap[$typeName];
     }
