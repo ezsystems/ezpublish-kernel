@@ -9,6 +9,7 @@
 
 namespace ezp\Content\Version;
 use ezp\Base\Proxy\Model as ModelProxy,
+    ezp\Content,
     ezp\Content\Version,
     ezp\Content\Version\Concrete,
     ezp\Content\Service;
@@ -33,27 +34,37 @@ class Proxy extends ModelProxy implements Version
     /**
      * @var int
      */
-    protected $proxiedVersionNo;
+    protected $versionNo;
+
+    /**
+     * @var \ezp\Content
+     */
+    protected $content;
 
     /**
      * @param mixed $id
      * @param int $versionNo
      * @param \ezp\Content\Service $service
      */
-    public function __construct( $id, $versionNo, Service $service )
+    public function __construct( Content $content, $versionNo, Service $service )
     {
-        $this->proxiedVersionNo = $versionNo;
-        parent::__construct( $id, $service );
+        $this->versionNo = $versionNo;
+        $this->content = $content;
+        parent::__construct( $content->id, $service );
     }
 
     /**
+     * Overload to get version by Content object as there is no api to load version object atm
+     *
      * @return void
      */
     protected function lazyLoad()
     {
         if ( $this->proxiedObject === null )
         {
-            $this->proxiedObject = $this->service->load( $this->proxiedObjectId, $this->proxiedVersionNo );
+            $versions = $this->content->getVersions();
+            $this->proxiedObject = $versions[ $this->versionNo ];
+            $this->moveObservers();
         }
     }
 

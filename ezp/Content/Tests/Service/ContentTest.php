@@ -279,6 +279,35 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
+     * Test the getCurrentVersion() method after having loaded the content with the service
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::load
+     * @covers \ezp\Content::getCurrentVersion
+     */
+    public function testGetCurrentVersion()
+    {
+        $content = $this->service->load( 1 );
+        $this->assertInstanceOf( "ezp\\Content\\Version", $content->currentVersion );
+        $this->assertInstanceOf( "ezp\\Content\\Version\\Concrete", $content->currentVersion );
+        $this->assertEquals( 1, $content->currentVersion->versionNo );
+
+        $content = $this->service->load( 1, 2 );
+        $this->assertInstanceOf( "ezp\\Content\\Version", $content->currentVersion );
+        $this->assertInstanceOf( "ezp\\Content\\Version\\Proxy", $content->currentVersion );
+
+        $content->currentVersion->getFields();// force load of proxied object so we can inspect it
+        $refType = new ReflectionObject( $content->currentVersion );
+        $refProxiedObject = $refType->getProperty( 'proxiedObject' );
+        $refProxiedObject->setAccessible( true );
+        $proxiedVersion = $refProxiedObject->getValue( $content->currentVersion );
+        $this->assertInstanceOf( "ezp\\Content\\Version", $proxiedVersion );
+        $this->assertInstanceOf( "ezp\\Content\\Version\\Concrete", $proxiedVersion );
+
+        $this->assertEquals( 1, $content->currentVersion->versionNo );
+    }
+
+    /**
      * Test the Content Service listVersions operation
      *
      * @group contentService

@@ -571,7 +571,7 @@ class Service extends BaseService
         {
             $content->setState(
                  array(
-                     "currentVersion" => new ProxyVersion( $vo->id, $vo->currentVersionNo, $this ),
+                     "currentVersion" => new ProxyVersion( $content, $vo->currentVersionNo, $this ),
                      "versions" => new LazyVersionCollection( $this, $vo->id, array( $version->versionNo => $version ) )
                  )
              );
