@@ -263,7 +263,7 @@ class Service extends BaseService
      *
      * The relation created will be of type Relation::COMMON,
      *
-     * @param \ezp\Content$contentFrom
+     * @param \ezp\Content $contentFrom
      * @param \ezp\Content $contentTo
      * @param int|null $versionFrom
      */
