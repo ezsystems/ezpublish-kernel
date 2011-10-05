@@ -81,7 +81,7 @@ class XmlText implements Converter
             $settings['tagPreset'] = $storageDefinion->dataText2;
         }
 
-        $fieldDef->fieldTypeConstraints->fieldSettings = $settings;
+        $fieldDefinition->fieldTypeConstraints->fieldSettings = $settings;
     }
 
     /**
