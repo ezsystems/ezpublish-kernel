@@ -177,12 +177,12 @@ abstract class Model implements Observable, ModelInterface
 
             throw new Logic(
                 '$readWriteProperties',
-                "property '{$property}' could not be found on " . get_class( $this )
+                "property '{$property}' could not be found on " . get_class()
             );
         }
 
         if ( !isset( $this->dynamicProperties[$property] ) )
-            throw new PropertyNotFound( $property, get_class( $this ) );
+            throw new PropertyNotFound( $property, get_class() );
 
         $method = "get{$property}";
         return $this->$method();
@@ -202,12 +202,12 @@ abstract class Model implements Observable, ModelInterface
     {
         if ( !isset( $this->readWriteProperties[$property] ) )
         {
-            throw new PropertyNotFound( $property, get_class( $this ) );
+            throw new PropertyNotFound( $property, get_class() );
         }
 
         if ( !$this->readWriteProperties[$property] )
         {
-            throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
+            throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class() );
         }
 
         $this->properties->$property = $value;
@@ -240,7 +240,7 @@ abstract class Model implements Observable, ModelInterface
         foreach ( $state as $name => $value )
         {
             if ( !property_exists( $this, $name ) )
-                throw new PropertyNotFound( $name, get_class( $this ) );
+                throw new PropertyNotFound( $name, get_class() );
 
             $this->$name = $value;
         }
@@ -263,7 +263,7 @@ abstract class Model implements Observable, ModelInterface
         if ( $property !== null )
         {
             if ( !( is_string( $property ) && property_exists( $this, $property ) ) )
-                throw new PropertyNotFound( $property, get_class( $this ) );
+                throw new PropertyNotFound( $property, get_class() );
 
             return $this->$property;
         }

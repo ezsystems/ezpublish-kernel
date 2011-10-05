@@ -144,7 +144,7 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
     public function __get( $property )
     {
         if ( !isset( $this->contentProperties[$property] ) )
-            throw new PropertyNotFound( $property, get_class( $this ) );
+            throw new PropertyNotFound( $property, get_class() );
 
         if ( $property === 'id' )
             return $this->content->id;
@@ -165,12 +165,12 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
     {
         if ( !isset( $this->contentProperties[$property] ) )
         {
-            throw new PropertyNotFound( $property, get_class( $this ) );
+            throw new PropertyNotFound( $property, get_class() );
         }
 
         if ( !$this->contentProperties[$property] )
         {
-            throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
+            throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class() );
         }
 
         $this->content->fields[$property] = $value;
@@ -203,7 +203,7 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
         foreach ( $state as $name => $value )
         {
             if ( !property_exists( $this, $name ) )
-                throw new PropertyNotFound( $name, get_class( $this ) );
+                throw new PropertyNotFound( $name, get_class() );
 
             $this->$name = $value;
         }
@@ -233,7 +233,7 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
         }
 
         if ( $property !== null )
-            throw new PropertyNotFound( $property, get_class( $this ) );
+            throw new PropertyNotFound( $property, get_class() );
 
         return $arr;
     }

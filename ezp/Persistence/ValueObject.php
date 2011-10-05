@@ -36,7 +36,7 @@ abstract class ValueObject
      */
     public function __set( $name, $value )
     {
-        throw new PropertyNotFound( $name, get_class( $this ) );
+        throw new PropertyNotFound( $name, get_class() );
     }
 
     /**
@@ -48,7 +48,7 @@ abstract class ValueObject
      */
     public function __get( $name )
     {
-        throw new PropertyNotFound( $name, get_class( $this ) );
+        throw new PropertyNotFound( $name, get_class() );
     }
 }
 ?>
