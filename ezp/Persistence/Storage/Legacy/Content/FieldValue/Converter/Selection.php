@@ -28,6 +28,16 @@ class Selection implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
+        $optionsFlip = array_flip( $value->fieldSettings["options"] );
+        $options = array();
+        foreach ( $value->data->selection as $value )
+        {
+            if ( isset( $optionsFlip[$value] ) )
+            {
+                $options[] = $optionsFlip[$value];
+            }
+        }
+        $storageFieldValue->sortKeyString = $storageFieldValue->dataText = join( "-", $options );
     }
 
     /**
@@ -38,7 +48,16 @@ class Selection implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new SelectionValue();
+        $fieldValue->data = new SelectionValue(
+            array_values(
+                array_intersect_key(
+                    $fieldValue->fieldSettings["options"],
+                    $value->dataText !== ""
+                        ? array_flip( explode( "-", $value->dataText ) )
+                        : array()
+                )
+            )
+        );
     }
 
     /**

@@ -56,10 +56,55 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
     {
         $value = new FieldValue;
         $value->data = new SelectionValue( array( "Choice1", "Choice2" ) );
+        $value->fieldSettings = new FieldSettings(
+            array(
+                "isMultiple" => true,
+                "options" => array(
+                    "Choice0",
+                    "Choice1",
+                    "Choice2",
+                    "Choice3",
+                ),
+            )
+        );
         $storageFieldValue = new StorageFieldValue;
 
         $this->converter->toStorageValue( $value, $storageFieldValue );
-        // @todo Have some assert here?
+        $this->assertSame( "1-2", $storageFieldValue->dataText );
+        $this->assertSame( "1-2", $storageFieldValue->sortKeyString );
+    }
+
+    /**
+     * @group fieldType
+     * @group selection
+     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection::toFieldValue
+     */
+    public function testToFieldValueMultiple()
+    {
+        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue->dataText = "0-1-3";
+        $storageFieldValue->sortKeyString = "0-1-3";
+        $fieldValue = new FieldValue;
+        $fieldValue->fieldSettings = new FieldSettings(
+            array(
+                "isMultiple" => true,
+                "options" => array(
+                    "Choice0",
+                    "Choice1",
+                    "Choice2",
+                    "Choice3",
+                ),
+            )
+        );
+
+        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
+        self::assertInstanceOf( "ezp\\Content\\FieldType\\Selection\\Value", $fieldValue->data );
+        $this->assertEquals(
+            new SelectionValue(
+                array( "Choice0", "Choice1", "Choice3" )
+            ),
+            $fieldValue->data
+        );
     }
 
     /**
@@ -70,13 +115,60 @@ class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
     public function testToFieldValue()
     {
         $storageFieldValue = new StorageFieldValue;
-        $storageFieldValue->dataText = "0-1";
-        $storageFieldValue->sortKeyString = "0-1";
+        $storageFieldValue->dataText = "0";
+        $storageFieldValue->sortKeyString = "0";
         $fieldValue = new FieldValue;
+        $fieldValue->fieldSettings = new FieldSettings(
+            array(
+                "isMultiple" => false,
+                "options" => array(
+                    "Choice0",
+                    "Choice1",
+                    "Choice2",
+                    "Choice3",
+                ),
+            )
+        );
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
         self::assertInstanceOf( "ezp\\Content\\FieldType\\Selection\\Value", $fieldValue->data );
-        // @todo Have some additional assert here?
+        $this->assertEquals(
+            new SelectionValue(
+                array( "Choice0" )
+            ),
+            $fieldValue->data
+        );
+    }
+
+    /**
+     * @group fieldType
+     * @group selection
+     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection::toFieldValue
+     */
+    public function testToFieldValueEmpty()
+    {
+        $storageFieldValue = new StorageFieldValue;
+        $storageFieldValue->dataText = "";
+        $storageFieldValue->sortKeyString = "";
+        $fieldValue = new FieldValue;
+        $fieldValue->fieldSettings = new FieldSettings(
+            array(
+                "isMultiple" => true,
+                "options" => array(
+                    "Choice0",
+                    "Choice1",
+                    "Choice2",
+                    "Choice3",
+                ),
+            )
+        );
+
+        $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
+        self::assertInstanceOf( "ezp\\Content\\FieldType\\Selection\\Value", $fieldValue->data );
+        $this->assertEquals(
+            new SelectionValue(),
+            $fieldValue->data
+        );
     }
 
     /**
