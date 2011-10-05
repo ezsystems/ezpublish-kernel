@@ -51,13 +51,19 @@ class Handler
         // @todo instanceof
         if ( !is_object( $document ) )
         {
-            // $errorMessage = implode( ' ', $this->parser->getMessages() );
-            // throw an exception that gets catched by the caller
-            // $this->setValidationError( $errorMessage );
             return false;
         }
 
         return true;
+    }
+
+    /**
+     * Returns the last parsing messages (from the last parsing operation, {@see isXmlValid}, {@see process})
+     * @return array
+     */
+    public function getParsingMessages()
+    {
+        return $this->parser->getMessages();
     }
 
     /**

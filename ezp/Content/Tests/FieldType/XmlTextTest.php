@@ -10,8 +10,10 @@
 namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\XmlText\Type as XmlTextType,
-    ezp\Content\FieldType\XmlText\Value as RawXmlTextValue,
-    ezp\Content\FieldType\XmlText\Value\Simplified as SimplifiedXmlTextValue,
+    ezp\Content\FieldType\Value as BaseValue,
+    ezp\Content\FieldType\XmlText\Value as RawValue,
+    ezp\Content\FieldType\XmlText\Value\OnlineEditor as OnlineEditorValue,
+    ezp\Content\FieldType\XmlText\Value\Simplified as SimplifiedValue,
     ezp\Base\Exception\BadFieldTypeInput,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
@@ -30,7 +32,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
         self::assertInstanceOf(
             "ezp\\Content\\FieldType\\XmlText\\Type",
             Factory::build( "ezxmltext" ),
-            "Country object not returned for 'ezxmltext', incorrect mapping? "
+            "XmlText object not returned for 'ezxmltext', incorrect mapping? "
         );
     }
 
@@ -51,61 +53,65 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @param BaseValue $value
      * @covers \ezp\Content\FieldType\XmlText\Type::canParseValue
      * @group fieldType
-     * @dataProvider providerForTestCanParseRawValueValidFormat
+     * @dataProvider providerForTestCanParseValueValidFormat
      */
-    public function testCanParseRawValueValidFormat( $xml )
+    public function testCanParseValueValidFormat( BaseValue $value )
     {
         $ft = new XmlTextType();
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "canParseValue" );
         $refMethod->setAccessible( true );
 
-        $value = new RawXmlTextValue( $xml );
         self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
     }
 
-    public static function providerForTestCanParseRawValueValidFormat()
+    public static function providerForTestCanParseValueValidFormat()
     {
         return array(
-            array( '<?xml version="1.0" encoding="utf-8"?>
+
+            array( new RawValue( '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>' ),
-            array( '<?xml version="1.0" encoding="utf-8"?>
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"><header level="1">This is a piece of text</header></section>' ) ),
+
+            array( new RawValue( '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />' ),
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />' ) ),
+
+            array( new SimplifiedValue( '<section>test</section>' ) )
     );
     }
 
     /**
+     * @param BaseValue $value
      * @covers \ezp\Content\FieldType\XmlText\Type::canParseValue
      * @group fieldType
-     * @dataProvider providerForTestCanParseRawValueInvalidFormat
+     * @dataProvider providerForTestCanParseValueInvalidFormat
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
      */
-    public function testCanParseRawValueInvalidFormat( $xml )
+    public function testCanParseValueInvalidFormat( BaseValue $value )
     {
         $ft = new XmlTextType();
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "canParseValue" );
         $refMethod->setAccessible( true );
 
-        $value = new RawXmlTextValue( $xml );
         $refMethod->invoke( $ft, $value );
     }
 
-    public static function providerForTestCanParseRawValueInvalidFormat()
+    public static function providerForTestCanParseValueInvalidFormat()
     {
         return array(
-            array( '' ),
-            array( '<?xml version="1.0" encoding="utf-8"?>' ),
-            array( '<?xml version="1.0" encoding="utf-8"?>
+            array( new RawValue( '' ) ),
+            array( new RawValue( '<?xml version="1.0" encoding="utf-8"?>' ) ),
+            array( new RawValue( '<?xml version="1.0" encoding="utf-8"?>
 <section xmlns:image="http://ez.no/namespaces/ezpublish3/image/"
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
-         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">' ),
+         xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/">' ) ),
         );
     }
 

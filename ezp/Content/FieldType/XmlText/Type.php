@@ -13,7 +13,7 @@ use ezp\Base\Repository,
     ezp\Content\Version,
     ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\XmlText\Value as XmlTextValue,
+    ezp\Content\FieldType\XmlText\Value as RawValue,
     ezp\Content\FieldType\XmlText\Value\OnlineEditor as OnlineEditorValue,
     ezp\Content\FieldType\XmlText\Value\Simplified as SimplifiedValue,
     ezp\Content\Type\FieldDefinition,
@@ -45,6 +45,14 @@ class Type extends FieldType
         'numRows' => 10,
         'tagPreset' => null,
     );
+
+    private $parserClasses = array(
+            'ezp\\Content\\FieldType\\XmlText\\Value'               => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Raw',
+            'ezp\\Content\\FieldType\\XmlText\\Value\\Simplified'   => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Simplified',
+            'ezp\\Content\\FieldType\\XmlText\\Value\\OnlineEditor' => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\OnlineEditor',
+                                                                     // '\\ezp\\Content\\FieldType\\XmlText\\Input\\Parser'
+        );
+
 
     /**
      * Returns the fallback default value of field type when no such default
@@ -82,7 +90,9 @@ EOF;
         $handler = new Handler( $this->getInputParser( $inputValue ) );
         if ( !$handler->isXmlValid( $inputValue->text ) )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
+            // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
+            print_r( $handler->getParsingMessages() );
+            throw new BadFieldTypeInput( $inputValue, get_class() );
         }
         else
         {
@@ -120,29 +130,15 @@ EOF;
      * @param \ezp\Content\FieldType\XmlText\Value $value
      * @return \ezp\Content\FieldType\XmlText\Input\Parser
      */
-    protected function getInputParser( XmlTextValue $value )
+    protected function getInputParser( BaseValue $value )
     {
-        $parserNamespace = __NAMESPACE__ . '\\Input\\Parser\\';
-
-        switch ( $value )
+        $valueClass = get_class( $value );
+        if ( !isset( $this->parserClasses[$valueClass] ) )
         {
-            case $value instanceof XmlTextValue:
-                $handlerClass = $parserNamespace . 'Raw';
-                break;
-
-            case $value instanceof SimplifiedValue:
-                $handlerClass = $parserNamespace . 'Simplified';
-                break;
-
-            case $value instanceof OnlineEditorValue:
-                $handlerClass = $parserNamespace . 'OnlineEditor';
-                break;
-
-            default:
-                // @todo Use dedicated exception
-                throw new Exception( "No parser found for " . get_class( $value ) );
+            // @todo Use dedicated exception
+            throw new Exception( "No parser found for " . get_class( $value ) );
         }
 
-        return new $handlerClass;
+        return new $this->parserClasses[$valueClass];
     }
 }

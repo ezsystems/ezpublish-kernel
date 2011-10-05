@@ -26,12 +26,9 @@ use DOMDocument, DOMElement, DOMNode, DOMText,
  */
 abstract class Base
 {
-    /// \deprecated (back-compatibility)
-    const SHOW_NO_ERRORS = 0;
-    const SHOW_SCHEMA_ERRORS = 1;
-    const SHOW_ALL_ERRORS = 2;
-
-    /// Use these constants for error types
+    /**
+     * Error types constants
+     */
     const ERROR_NONE = 0;
     const ERROR_SYNTAX = 4;
     const ERROR_SCHEMA = 8;
@@ -92,10 +89,14 @@ abstract class Base
      * @var array
      */
     protected $Namespaces = array( 'image' => 'http://ez.no/namespaces/ezpublish3/image/',
-                                 'xhtml' => 'http://ez.no/namespaces/ezpublish3/xhtml/',
-                                 'custom' => 'http://ez.no/namespaces/ezpublish3/custom/',
-                                 'tmp' => 'http://ez.no/namespaces/ezpublish3/temporary/' );
+                                   'xhtml' => 'http://ez.no/namespaces/ezpublish3/xhtml/',
+                                   'custom' => 'http://ez.no/namespaces/ezpublish3/custom/',
+                                   'tmp' => 'http://ez.no/namespaces/ezpublish3/temporary/' );
 
+    /**
+     * Parser options list
+     * @var mixed[string]
+     */
     protected $options = array(
         'ValidateErrorLevel' => self::ERROR_NONE,
         'DetectErrorLevel' => self::ERROR_NONE,
@@ -263,7 +264,6 @@ abstract class Base
         }
         return $this->Document;
     }
-
 
     /*
      * Pass 1: Parsing the source HTML string.
@@ -1293,6 +1293,26 @@ abstract class Base
         }
     }
 
+    protected function getRelatedObjectIDArray()
+    {
+        return $this->relatedObjectIDArray;
+    }
+
+    protected function getLinkedObjectIDArray()
+    {
+        return $this->linkedObjectIDArray;
+    }
+
+    protected function getUrlIDArray()
+    {
+        return $this->urlIDArray;
+    }
+
+    /**
+     * Class name of the DOM document object
+     * @var string
+     * @see setDOMDocumentClass()
+     */
     protected $DOMDocumentClass = 'DOMDocument';
 
     /**
@@ -1301,18 +1321,64 @@ abstract class Base
      */
     protected $XMLSchema;
 
+    /**
+     * DOM document object
+     * @var \DOMDocument
+     */
     protected $Document = null;
 
     /**
      * Processing messages
-     * @var array
+     * @var string[]
      * @see getMessages()
      */
     protected $Messages = array();
 
+    /**
+     * Parent nodes stack
+     * @var string[]
+     */
     protected $ParentStack = array();
 
+    /**
+     * Boolean holding the validity status of the input string
+     * @var boolean
+     * @see isInputValid()
+     */
     protected $isInputValid = true;
+
+    /**
+     * Boolean used to interrupt the process between steps
+     * @var boolean
+     */
     protected $QuitProcess = false;
+
+    /**
+     * Array of Url objects ids
+     * @var integer[]
+     */
+    protected $urlIDArray = array();
+
+    /**
+     * Array of related Content objects id
+     * @var integer[]
+     */
+    protected $relatedObjectIDArray = array();
+
+    /**
+     * Array of linked Content objects id
+     * @var integer[]
+     */
+    protected $linkedObjectIDArray = array();
+
+    // needed for self-embedding protection
+    protected $contentObjectID = 0;
+
+    /**
+     * Input handler
+     * @var \ezp\Content\FieldType\XmlText\Input\Handler
+     */
+    protected $handler;
+
 }
 ?>
