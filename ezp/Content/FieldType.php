@@ -283,7 +283,7 @@ abstract class FieldType implements Observer
          {
              case 'field/setValue':
                  if ( $arguments === null || !isset( $arguments['value'] ) )
-                     throw new InvalidArgumentValue( 'arguments', $arguments, get_class() );
+                     throw new InvalidArgumentValue( 'arguments', $arguments, get_class( $this ) );
 
                  $this->onFieldSetValue( $subject, $arguments['value'] );
                  break;

@@ -55,7 +55,7 @@ abstract class Value implements ModelInterface
             return $this->properties;
 
         if ( !array_key_exists( $property, $this->properties ) )
-            throw new PropertyNotFound( $property, get_class() );
+            throw new PropertyNotFound( $property, get_class( $this ) );
 
         return $this->properties[$property];
     }

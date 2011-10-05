@@ -72,13 +72,13 @@ EOF;
     {
         if ( !$inputValue instanceof Value || !is_string( $inputValue->text ) )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
         }
 
         $xmlTextHandler = $this->getInputHandler( $inputValue->text );
         if ( !$xmlTextHandler->isXmlValid() )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
         }
         else
         {

@@ -126,7 +126,7 @@ abstract class Override
         if ( $scope === null )
             return $this->paths;
         if ( !isset( $this->paths[$scope] ) )
-            throw new InvalidArgumentValue( 'scope', $scope, get_class() );
+            throw new InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
 
         return $this->paths[$scope];
     }
@@ -149,7 +149,7 @@ abstract class Override
         }
         else if ( !isset( $this->paths[$scope] ) )
         {
-            throw new InvalidArgumentValue( 'scope', $scope, get_class() );
+            throw new InvalidArgumentValue( 'scope', $scope, get_class( $this ) );
         }
 
         if ( $this->paths[$scope] === $paths )

@@ -49,7 +49,7 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
         }
         return $inputValue;
     }

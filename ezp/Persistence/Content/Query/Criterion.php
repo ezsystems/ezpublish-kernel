@@ -86,7 +86,7 @@ abstract class Criterion
         // Operator wasn't found in the criterion specifications
         if ( $operatorFound == false )
         {
-            throw new InvalidArgumentException( "Operator $operator isn't supported by the Criterion " . get_class() );
+            throw new InvalidArgumentException( "Operator $operator isn't supported by the Criterion " . get_class( $this ) );
         }
 
         $this->operator = $operator;

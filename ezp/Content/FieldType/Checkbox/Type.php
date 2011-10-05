@@ -53,7 +53,7 @@ class Type extends FieldType
         if ( $inputValue instanceof Value )
         {
             if ( !is_bool( $inputValue->bool ) )
-                throw new BadFieldTypeInput( $inputValue, get_class() );
+                throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
 
             return $inputValue;
         }

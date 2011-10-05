@@ -52,7 +52,7 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value || !is_string( $inputValue->link ) )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
         }
         return $inputValue;
     }

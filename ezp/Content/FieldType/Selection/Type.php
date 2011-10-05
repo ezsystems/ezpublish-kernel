@@ -46,7 +46,7 @@ class Type extends FieldType
     {
         if ( !$inputValue instanceof Value || !is_array( $inputValue->selection ) )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
         }
         return $inputValue;
     }

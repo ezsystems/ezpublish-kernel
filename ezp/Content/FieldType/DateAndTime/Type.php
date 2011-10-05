@@ -44,7 +44,7 @@ class Type extends FieldType
 
         if ( !$value instanceof DateTime )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
         }
         return $value;
 

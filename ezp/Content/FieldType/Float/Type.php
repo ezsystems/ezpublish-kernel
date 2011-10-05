@@ -50,7 +50,7 @@ class Type extends FieldType
     {
         if ( !is_float( $inputValue->value ) )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class() );
+            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
         }
         return $inputValue;
     }

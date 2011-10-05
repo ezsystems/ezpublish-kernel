@@ -55,7 +55,7 @@ class Type extends FieldType
         if ( $inputValue instanceof Value )
         {
             if ( !is_integer( $inputValue->value ) )
-                throw new BadFieldTypeInput( $inputValue, get_class() );
+                throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
 
             return $inputValue;
         }

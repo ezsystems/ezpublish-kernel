@@ -124,7 +124,7 @@ class Value extends BaseValue implements ValueInterface
                 break;
 
             default:
-                throw new PropertyNotFound( $name, get_class() );
+                throw new PropertyNotFound( $name, get_class( $this ) );
         }
     }
 }
