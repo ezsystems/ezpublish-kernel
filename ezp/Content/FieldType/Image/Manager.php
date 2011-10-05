@@ -12,12 +12,16 @@ use ezp\Base\Legacy\Carpet;
 
 /**
  * Wraps eZImageManager class from old eZ Publish
+ *
+ * @note This implementation is to be changed not to be dependent on the old eZImageManager
  */
 class Manager extends Carpet
 {
+    protected static $className = 'eZImageManager';
+
     public function __construct()
     {
-        parent::__construct( 'eZImageManager' );
+        parent::__construct( static::$className );
     }
 
     public function createImageAlias( $aliasName )
