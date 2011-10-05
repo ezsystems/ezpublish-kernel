@@ -76,7 +76,7 @@ class TextLineConverterLegacyTest extends PHPUnit_Framework_TestCase
      * @group textLine
      * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine::toStorageFieldDefinition
      */
-    public function testToStorageFieldDefinition()
+    public function testToStorageFieldDefinitionWithValidator()
     {
         $defaultText = 'This is a default text';
         $storageFieldDef = new StorageFieldDefinition;
@@ -102,6 +102,41 @@ class TextLineConverterLegacyTest extends PHPUnit_Framework_TestCase
         self::assertSame(
             $fieldDef->fieldTypeConstraints->validators[TextLineConverter::STRING_LENGTH_VALIDATOR_FQN],
             array( 'maxStringLength' => $storageFieldDef->dataInt1 )
+        );
+        self::assertSame(
+            $fieldDef->fieldTypeConstraints->fieldSettings['defaultText'],
+            $storageFieldDef->dataText1
+        );
+    }
+
+    /**
+     * @group fieldType
+     * @group textLine
+     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine::toStorageFieldDefinition
+     */
+    public function testToStorageFieldDefinitionNoValidator()
+    {
+        $defaultText = 'This is a default text';
+        $storageFieldDef = new StorageFieldDefinition;
+        $defaultValue = new FieldValue;
+        $defaultValue->data = new TextLineValue( $defaultText );
+        $fieldTypeConstraints = new FieldTypeConstraints;
+        $fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
+                'defaultText' => ''
+            )
+        );
+        $fieldDef = new PersistenceFieldDefinition(
+            array(
+                'fieldTypeConstraints' => $fieldTypeConstraints,
+                'defaultValue' => $defaultValue
+            )
+        );
+
+        $this->converter->toStorageFieldDefinition( $fieldDef, $storageFieldDef );
+        self::assertSame(
+            0,
+            $storageFieldDef->dataInt1
         );
         self::assertSame(
             $fieldDef->fieldTypeConstraints->fieldSettings['defaultText'],

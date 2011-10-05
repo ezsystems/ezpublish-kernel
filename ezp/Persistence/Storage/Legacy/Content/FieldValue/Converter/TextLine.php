@@ -60,6 +60,10 @@ class TextLine implements Converter
         {
             $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'];
         }
+        else
+        {
+            $storageDef->dataInt1 = 0;
+        }
 
         $storageDef->dataText1 = $fieldDef->fieldTypeConstraints->fieldSettings['defaultText'];
     }
