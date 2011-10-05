@@ -12,6 +12,7 @@ namespace ezp\Content\FieldType\XmlText\Input\Parser;
 use DOMDocument, DOMElement, DOMNode, DOMText,
     ezp\Base\Configuration,
     ezp\Content\FieldType\XmlText\Schema as XmlSchema,
+    ezp\Content\FieldType\XmlText\Input\Handler as InputHandler,
     ezp\Base\Exception\BadConfiguration;
 
 /**
@@ -142,6 +143,15 @@ abstract class Base
         $this->setOption( self::OPT_ALLOW_NUMERIC_ENTITIES, $xmlConfig->get( 'InputSettings', 'AllowNumericEntities', 'false' ) == 'true' ? true : false );
 
         self::setOption( self::OPT_STRICT_HEADERS, Configuration::getInstance( "content" )->get( 'header', 'UseStrictHeaderRule', 'false' ) == 'true' ? true : false );
+    }
+
+    /**
+     * Sets the input handler for the parser to $handler
+     * @param \ezp\Content\FieldType\XmlText\Input\Handler $handler
+     */
+    public function setHandler( InputHandler $handler )
+    {
+        $this->handler = $handler;
     }
 
     /**

@@ -48,7 +48,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
         $refMethod = $ref->getMethod( "canParseValue" );
         $refMethod->setAccessible( true );
 
-        $value = new SimplifiedXmlTextValue( '<a href="http://www.google.com/">bar</foo>' );
+        $value = new SimplifiedValue( '<a href="http://www.google.com/">bar</foo>' );
         $refMethod->invoke( $ft, $value );
     }
 

@@ -91,7 +91,6 @@ EOF;
         if ( !$handler->isXmlValid( $inputValue->text ) )
         {
             // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
-            print_r( $handler->getParsingMessages() );
             throw new BadFieldTypeInput( $inputValue, get_class() );
         }
         else

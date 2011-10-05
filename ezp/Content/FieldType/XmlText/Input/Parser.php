@@ -9,6 +9,8 @@
 
 namespace ezp\Content\FieldType\XmlText\Input;
 
+use ezp\Content\FieldType\XmlText\Input\Handler;
+
 /**
  * XmlText input parser interface
  */
@@ -35,5 +37,11 @@ interface Parser
      * @return bool
      */
     public function isValid();
+
+    /**
+     * Sets the input handler for the parser to $handler
+     * @param \ezp\Content\FieldType\XmlText\Input\Handler $handler
+     */
+    public function setHandler( Handler $handler );
 
 }

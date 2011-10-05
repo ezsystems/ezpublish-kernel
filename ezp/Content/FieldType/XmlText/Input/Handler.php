@@ -24,9 +24,10 @@ class Handler
      * @param string $xmlString
      * @param \ezp\Content\FieldType\XmlText\Input\Parser Parser
      */
-    public function __construct( Parser $parser )
+    public function __construct( InputParserInterface $parser )
     {
         $this->parser = $parser;
+        $this->parser->setHandler( $this );
         // $this->xmlString = preg_replace( '/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', '', $xmlString, -1, $count );
         /*if ( $count > 0 )
            {

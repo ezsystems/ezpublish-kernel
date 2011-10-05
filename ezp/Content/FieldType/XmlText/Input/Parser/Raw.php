@@ -12,6 +12,7 @@ namespace ezp\Content\FieldType\XmlText\Input\Parser;
 use ezp\Content\FieldType\XmlText\Input\Parser as InputParser,
     ezp\Content\FieldType\XmlText\Input\Parser\Base as BaseParser,
     ezp\Base\Configuration,
+    ezp\Content\Location,
     DOMElement, DOMDocument;
 
 /**
