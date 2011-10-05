@@ -26,12 +26,14 @@ class Handler
 
     public function __construct()
     {
+        //@todo Use Binary service available via injected Repository object!
         $this->binaryRepository = new BinaryRepository;
     }
 
     /**
      * Returns binary repository used by handler
      *
+     * @todo See todo in {@link __construct()}
      * @return \ezp\Base\BinaryRepository
      */
     public function getBinaryRepository()

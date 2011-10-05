@@ -27,11 +27,6 @@ use ezp\Io\BinaryStorage\Backend,
 
 class Legacy implements Backend
 {
-    public function __construct()
-    {
-        $this->clusterHandler = eZClusterFileHandler::instance();
-    }
-
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
@@ -49,7 +44,7 @@ class Legacy implements Backend
 
         // @todo Build a path / scope mapper
         $scope = 'todo';
-        $this->clusterHandler->fileStoreContents(
+        $this->getClusterHandler()->fileStoreContents(
             $file->path,
             fread( $file->getInputStream(), $file->size ),
             (string)$file->contentType,
@@ -67,12 +62,12 @@ class Legacy implements Backend
      */
     public function delete( $path )
     {
-        if ( !$this->clusterHandler->fileExists( $path ) )
+        if ( !$this->getClusterHandler()->fileExists( $path ) )
         {
             throw new NotFound( 'BinaryFile', $path );
         }
 
-        $this->clusterHandler->fileDelete( $path );
+        $this->getClusterHandler()->fileDelete( $path );
     }
 
     /**
@@ -87,7 +82,8 @@ class Legacy implements Backend
      */
     public function update( $path, BinaryFileUpdateStruct $updateFile )
     {
-        if ( !$this->clusterHandler->fileExists( $path ) )
+        $clusterHandler = $this->getClusterHandler();
+        if ( !$clusterHandler->fileExists( $path ) )
         {
             throw new NotFound( 'BinaryFile', $path );
         }
@@ -95,11 +91,11 @@ class Legacy implements Backend
         // path
         if ( $updateFile->path !== null && $updateFile->path != $path )
         {
-            if ( $this->clusterHandler->fileExists( $updateFile->path ) )
+            if ( $clusterHandler->fileExists( $updateFile->path ) )
             {
                 throw new PathExists( $updateFile->path );
             }
-            $this->clusterHandler->fileMove( $path, $updateFile->path );
+            $clusterHandler->fileMove( $path, $updateFile->path );
 
             // update the path we are working on
             $path = $updateFile->path;
@@ -129,7 +125,7 @@ class Legacy implements Backend
      */
     public function exists( $path )
     {
-        return $this->clusterHandler->fileExists( $path );
+        return $this->getClusterHandler()->fileExists( $path );
     }
 
     /**
@@ -198,12 +194,12 @@ class Legacy implements Backend
      */
     public function getFileContents( $path )
     {
-        if ( !$this->clusterHandler->fileExists( $path ) )
+        if ( !$this->getClusterHandler()->fileExists( $path ) )
         {
             throw new NotFound( 'BinaryFile', $path );
         }
 
-        return $this->clusterHandler->fileFetchContents( $path );
+        return $this->getClusterHandler()->fileFetchContents( $path );
     }
 
     /**
@@ -215,7 +211,7 @@ class Legacy implements Backend
     {
         if ( !isset( $this->fileResourceProvider ) )
         {
-            $class = __CLASS__ . '\\FileResourceProvider\\' . get_class( $this->clusterHandler );
+            $class = __CLASS__ . '\\FileResourceProvider\\' . get_class( $this->getClusterHandler() );
             if ( !class_exists( $class ) )
             {
                 throw new \Exception( "FileResourceProvider $class couldn't be found" );
@@ -224,6 +220,18 @@ class Legacy implements Backend
         }
 
         return $this->fileResourceProvider;
+    }
+
+    /**
+     * Lazy loads eZClusterFileHandler
+     *
+     * @return \eZClusterFileHandler
+     */
+    private function getClusterHandler()
+    {
+        if ( $this->clusterHandler === null )
+            $this->clusterHandler = eZClusterFileHandler::instance();
+        return $this->clusterHandler;
     }
 
     /**
@@ -236,6 +244,6 @@ class Legacy implements Backend
      * Cluster handler instance
      * @var eZClusterFileHandlerInterface
      */
-    private $clusterHandler;
+    private $clusterHandler = null;
 }
 ?>

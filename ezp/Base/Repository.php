@@ -17,6 +17,7 @@ use ezp\Persistence\Repository\Handler,
     ezp\Base\Exception\Logic,
     ezp\Base\ModelDefinition,
     ezp\Base\ModelInterface,
+    ezp\Io\BinaryStorage\Backend as IoBackend,
     ezp\User,
     ezp\User\Proxy as ProxyUser;
 
@@ -32,6 +33,13 @@ class Repository
      * @var \ezp\Persistence\Repository\Handler
      */
     protected $handler;
+
+    /**
+     * Io Handler object
+     *
+     * @var \ezp\Io\BinaryStorage\Backend
+     */
+    protected $ioHandler;
 
     /**
      * Currently logged in user object for permission purposes
@@ -53,11 +61,13 @@ class Repository
      * Construct repository object with provided storage engine
      *
      * @param \ezp\Persistence\Repository\Handler $handler
+     * @param \ezp\Io\BinaryStorage\Backend $ioHandler
      * @param \ezp\User|null $user
      */
-    public function __construct( Handler $handler, User $user = null )
+    public function __construct( Handler $handler, IoBackend $ioHandler, User $user = null )
     {
         $this->handler = $handler;
+        $this->ioHandler = $ioHandler;
 
         if ( $user !== null )
             $this->setUser( $user );
@@ -187,7 +197,13 @@ class Repository
             return $this->services[$className];
 
         if ( class_exists( $className ) )
+        {
+            // @todo Use Service Container? But then it needs to be a dependency though
+            if ( strpos( $className, 'ezp\\Io\\' ) === 0 )
+                return $this->services[$className] = new $className( $this, $this->ioHandler );
+
             return $this->services[$className] = new $className( $this, $this->handler );
+        }
 
         throw new RuntimeException( "Could not load '$className' service!" );
     }
@@ -195,7 +211,7 @@ class Repository
     /**
      * Get Content Service
      *
-     * Get service object to perform several operations on Content objects and it's aggregate members.
+     * Get service object to perform operations on Content objects and it's aggregate members.
      * ( ContentLocation, ContentVersion, ContentField )
      *
      * @return \ezp\Content\Service
@@ -208,7 +224,7 @@ class Repository
     /**
      * Get Content Language Service
      *
-     * Get service object to perform several operations on Content language objects
+     * Get service object to perform operations on Content language objects
      *
      * @return \ezp\Content\Language\Service
      */
@@ -220,7 +236,7 @@ class Repository
     /**
      * Get Content Type Service
      *
-     * Get service object to perform several operations on Content Type objects and it's aggregate members.
+     * Get service object to perform operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
      * @return \ezp\Content\Type\Service
@@ -231,10 +247,9 @@ class Repository
     }
 
     /**
-     * Get Content Service
+     * Get Content Location Service
      *
-     * Get service object to perform several operations on Content objects and it's aggregate members.
-     * ( ContentLocation, ContentVersion, ContentField )
+     * Get service object to perform operations on Location objects and subtrees
      *
      * @return \ezp\Content\Location\Service
      */
@@ -244,7 +259,7 @@ class Repository
     }
 
     /**
-     * Get Trash service
+     * Get Content Trash service
      *
      * Trash service allows to perform operations related to location trash
      * (trash/untrash, load/list from trash...)
@@ -257,8 +272,9 @@ class Repository
     }
 
     /**
-     * Get User Service
+     * Get Content Section Service
      *
+     * Get Section service that lets you manipulate section objects
      *
      * @return \ezp\Content\Section\Service
      */
@@ -268,9 +284,21 @@ class Repository
     }
 
     /**
+     * Get Io Service
+     *
+     * Get service object to perform operations on binary files
+     *
+     * @return \ezp\Io\Service
+     */
+    public function getIoService()
+    {
+        return $this->service( 'ezp\\Io\\Service' );
+    }
+
+    /**
      * Get User Service
      *
-     * Get service object to perform several operations on User objects and it's aggregate members.
+     * Get service object to perform operations on User objects and it's aggregate members.
      * ( UserGroups, UserRole, UserRolePolicy & UserRolePolicyLimitation )
      *
      * @return \ezp\User\Service
@@ -282,6 +310,8 @@ class Repository
 
     /**
      * Get internal field type service.
+     *
+     * Internal api for use by certain Field types
      *
      * @internal
      * @access private

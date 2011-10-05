@@ -8,7 +8,8 @@
  */
 
 namespace ezp\Io\Tests\BinaryStorage;
-use ezp\Base\BinaryRepository,
+use ezp\Base\ServiceContainer,
+    ezp\Io\BinaryStorage\Legacy,
     ezp\Io\BinaryFile,
     ezp\Io\BinaryFileCreateStruct,
     ezp\Io\BinaryFileUpdateStruct,
@@ -49,7 +50,12 @@ class BinaryRepositoryLegacyTest extends BinaryRepositoryTest
             include 'ezpublish/kernel/classes/clusterfilehandlers/ezfsfilehandler.php';
         }
 
-        $this->binaryRepository = new BinaryRepository( 'legacy' );
+        $sc = new ServiceContainer(
+            array(
+                '@io_handler' => new Legacy()
+            )
+        );
+        $this->binaryService = $sc->getRepository()->getIoService();
         $this->imageInputPath = realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'ezplogo.gif';
     }
 
