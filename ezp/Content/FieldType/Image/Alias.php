@@ -8,11 +8,24 @@
  */
 
 namespace ezp\Content\FieldType\Image;
+use ezp\Persistence\ValueObject,
+    ezp\Base\Exception\PropertyNotFound;
 
 /**
  * Class representing an image alias
+ *
+ * @property-read \ezp\Io\ContentType $mimeType
+ * @property-read string $filename The name of the file (for example "my_image.png").
+ * @property-read string $suffix The file suffix, aka "extension" (for example "png").
+ * @property-read string $dirpath The path to the image (for example "var/storage/images/test/199-2-eng-GB").
+ * @property-read string $basename The basename of the image file, without extension (for example "apple").
+ * @property-read string $url Complete path + name of image file (for example "var/storage/images/test/199-2-eng-GB/apple.png").
+ * @property-read string $fullPath Same as $url
+ * @property-read int $timestamp A UNIX timestamp pinpointing the exact date/time when the alias was last modified.
+ *                               For the "original" alias, the timestamp will reveal the time when the image was originally uploaded.
+ * @property-read int $filesize The number of bytes that the image consumes.
  */
-class Alias
+class Alias extends ValueObject
 {
     /**
      * The name of the variation (for example "original").
@@ -36,39 +49,11 @@ class Alias
     public $height;
 
     /**
-     * The MIME type (for example "image/png").
+     * FileInfo object for image alias
      *
-     * @var \ezp\Io\ContentType
+     * @var \ezp\Io\FileInfo
      */
-    public $mimeType;
-
-    /**
-     * The name of the file (for example "my_image.png").
-     *
-     * @var string
-     */
-    public $filename;
-
-    /**
-     * The file suffix, aka "extension" (for example "png").
-     *
-     * @var string
-     */
-    public $suffix;
-
-    /**
-     * The path to the image (for example "var/storage/images/test/199-2-eng-GB").
-     *
-     * @var string
-     */
-    public $dirpath;
-
-    /**
-     * The basename of the image file (for example "apple").
-     *
-     * @var string
-     */
-    public $basename;
+    public $fileInfo;
 
     /**
      * The alternative image text (for example "Picture of an apple.").
@@ -92,14 +77,6 @@ class Alias
     public $originalFilename;
 
     /**
-     * Complete path + name of image file
-     * (for example "var/storage/images/test/199-2-eng-GB/apple.png").
-     *
-     * @var string
-     */
-    public $url;
-
-    /**
      * A internal CRC32 value which is used when an alias is created.
      * This value is based on the filters that were used (parameters included)
      * and is checked when an alias is accessed.
@@ -112,20 +89,13 @@ class Alias
     public $aliasKey;
 
     /**
-     * A UNIX timestamp pinpointing the exact date/time when the alias was last modified.
+     * DateTime object pinpointing the exact date/time when the alias was last modified.
      * For the "original" alias, the timestamp will reveal the time
      * when the image was originally uploaded.
      *
-     * @var int
+     * @var \DateTime
      */
-    public $timestamp;
-
-    /**
-     * Complete path + name of image file (for example "var/storage/images/test/199-2-eng-GB/apple.png").
-     *
-     * @var string
-     */
-    public $fullPath;
+    public $modified;
 
     /**
      * TRUE if the alias was created properly, that means all conversion and filters
@@ -147,13 +117,6 @@ class Alias
     public $isNew;
 
     /**
-     * The number of bytes that the image consumes.
-     *
-     * @var int
-     */
-    public $filesize;
-
-    /**
      * Contains extra information about the image, depending on the image type.
      * It will typically contain EXIF information from digital cameras or information about animated GIFs.
      * If there is no information, the info will be a boolean FALSE.
@@ -161,4 +124,53 @@ class Alias
      * @var string
      */
     public $info;
+
+    /**
+     * Generic getter.
+     * Maps legacy alias information to new properties.
+     *
+     * @param string $name
+     * @return mixed
+     */
+    public function __get( $name )
+    {
+        switch ( $name )
+        {
+            case 'timestamp':
+                return $this->modified->getTimestamp();
+                break;
+
+            case 'mimeType':
+                return $this->fileInfo->getContentType();
+                break;
+
+            case 'fileName':
+                return $this->fileInfo->getFilename();
+                break;
+
+            case 'suffix':
+                return $this->fileInfo->getExtension();
+                break;
+
+            case 'dirpath':
+                return $this->fileInfo->getPath();
+                break;
+
+            case 'basename':
+                return $this->fileInfo->getBasename( $this->fileInfo->getExtension() );
+                break;
+
+            case 'fullPath':
+            case 'url':
+                return $this->fileInfo->getPathname();
+                break;
+
+            case 'filesize':
+                return $this->fileInfo->getSize();
+                break;
+
+            default:
+                throw new PropertyNotFound( $name, __CLASS__ );
+        }
+    }
 }
