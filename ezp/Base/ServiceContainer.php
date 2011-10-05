@@ -167,13 +167,15 @@ class ServiceContainer
                     // Undefined variables will trow an exception
                     throw new InvalidArgumentValue( "arguments[{$key}]", $argument );
                 }
-
-                // Try to load a @service dependency
-                $arguments[] = $this->get( ltrim( $argument, '@' ) );
+                else
+                {
+                    // Try to load a @service dependency
+                    $arguments[] = $this->get( ltrim( $argument, '@' ) );
+                }
             }
-            // Primitive type / object argument
             else
             {
+                // Primitive type / object argument
                 $arguments[] = $argument;
             }
         }
