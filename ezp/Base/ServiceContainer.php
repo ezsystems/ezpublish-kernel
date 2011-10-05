@@ -22,12 +22,12 @@ use ezp\Base\Configuration,
  * Usage:
  *
  *     $sc = new ezp\Base\ServiceContainer();
- *     $sc->GetRepository->GetContentService()->load( 42 );
+ *     $sc->getRepository->getContentService()->load( 42 );
  *
  * Or overriding dependencies (in unit tests):
  *
  *     $sc = new ezp\Base\ServiceContainer( array( '@repository_handler' => new \ezp\Persistence\Storage\InMemory\RepositoryHandler() ) );
- *     $sc->GetRepository->GetContentService()->load( 42 );
+ *     $sc->getRepository->getContentService()->load( 42 );
  *
  * Settings are defined in base.ini like the following example:
  *
@@ -41,10 +41,6 @@ use ezp\Base\Configuration,
  * Arguments can start with either @ in case of other services being dependency, $ if a predefined global variable
  * is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES and $serviceContainer ) or plain string if
  * that is to be given directly as argument value.
- *
- *
- * @todo Add support for factory functions, could simply check for existence of :: or -> for static / instance factories
- * @todo If needed add optional settings that define that service should be created on every call (not singleton)
  */
 class ServiceContainer
 {
@@ -110,9 +106,11 @@ class ServiceContainer
      *
      * @throws InvalidArgumentException
      * @param string $serviceName
+     * @param array $settingsOverride Optional, overrides settings from Configuration
+     *              Format: array( "<serviceName>" => array( <settings hash like in base.ini> ) )
      * @return object
      */
-    public function get( $serviceName )
+    public function get( $serviceName, array $settingsOverride = null )
     {
         $serviceKey = "@{$serviceName}";
 
@@ -123,10 +121,14 @@ class ServiceContainer
         }
 
         // Get settings
-        $settings = Configuration::getInstance()->getSection( "service_{$serviceName}", false );
+        $settings = Configuration::getInstance()->getSection( "service_{$serviceName}", array() );
+        if ( !empty( $settingsOverride[$serviceName] ) )
+        {
+            $settings = $settingsOverride[$serviceName] + $settings;
+        }
 
         // Validate settings
-        if ( $settings === false )
+        if ( empty( $settings ) )
         {
             throw new BadConfiguration( "base\\[service_{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
@@ -142,6 +144,9 @@ class ServiceContainer
         // Create service directly if it does not have any arguments
         if ( empty( $settings['arguments'] ) )
         {
+            if ( !empty( $settings['factory'] ) )
+                return $this->dependencies[$serviceKey] = $settings['class']::$settings['factory']();
+
             return $this->dependencies[$serviceKey] = new $settings['class']();
         }
 
@@ -170,7 +175,7 @@ class ServiceContainer
                 else
                 {
                     // Try to load a @service dependency
-                    $arguments[] = $this->get( ltrim( $argument, '@' ) );
+                    $arguments[] = $this->get( ltrim( $argument, '@' ), $settingsOverride );
                 }
             }
             else
@@ -180,11 +185,23 @@ class ServiceContainer
             }
         }
 
+        // If factory use call_user_func_array
+        if ( !empty( $settings['factory'] ) )
+        {
+            return $this->dependencies[$serviceKey] = call_user_func_array(
+                array(
+                     $settings['class'], $settings['factory']
+                ),
+                $arguments
+            );
+        }
+
         // Use "new" if just 1 or 2 arguments (premature optimization to avoid use of reflection in most cases)
         if ( isset( $arguments[0] ) && !isset( $arguments[2] ) )
         {
             if ( !isset( $arguments[1] ) )
                 return $this->dependencies[$serviceKey] = new $settings['class']( $arguments[0] );
+
             return $this->dependencies[$serviceKey] = new $settings['class']( $arguments[0], $arguments[1] );
         }
 
