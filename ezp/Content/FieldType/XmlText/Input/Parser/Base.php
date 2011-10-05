@@ -11,7 +11,8 @@ namespace ezp\Content\FieldType\XmlText\Input\Parser;
 
 use DOMDocument, DOMElement, DOMNode, DOMText,
     ezp\Base\Configuration,
-    ezp\Content\FieldType\XmlText\Schema as XmlSchema;
+    ezp\Content\FieldType\XmlText\Schema as XmlSchema,
+    ezp\Base\Exception\BadConfiguration;
 
 /**
  * Base class for the input parser.
@@ -90,59 +91,97 @@ abstract class Base
      * List of XmlText namespaces
      * @var array
      */
-    private $Namespaces = array( 'image' => 'http://ez.no/namespaces/ezpublish3/image/',
+    protected $Namespaces = array( 'image' => 'http://ez.no/namespaces/ezpublish3/image/',
                                  'xhtml' => 'http://ez.no/namespaces/ezpublish3/xhtml/',
                                  'custom' => 'http://ez.no/namespaces/ezpublish3/custom/',
                                  'tmp' => 'http://ez.no/namespaces/ezpublish3/temporary/' );
 
+    protected $options = array(
+        'ValidateErrorLevel' => self::ERROR_NONE,
+        'DetectErrorLevel' => self::ERROR_NONE,
+        'RemoveDefaultAttrs' => false,
+        'ParseLineBreaks' => false,
+        'eZPublishVersion' => 4.6,
+        'TrimSpaces' => false,
+        'AllowMultipleSpaces' => false,
+        'AllowNumericEntities' => false,
+        'StrictHeaders' => false,
+        'DOMDocumentClass' => 'DOMDocument',
+    );
+
     /**
-     * The constructor.
-     * @param $validate
-     * @param $validateErrorLevel Determines types of errors that break input processing
-     *                           It's possible to combine any error types, by creating a bitmask of EZ_XMLINPUTPARSER_ERROR_* constants.
-     *                           \c true value means that all errors defined by $detectErrorLevel parameter will break further processing
-     * @param $detectErrorLevel Determines types of errors that will be detected and added to error log ($Messages).
+     * Parser options constants, to be used with setOption
+     * @var string
+     * @see setOption()
      */
-    public function __construct( $validateErrorLevel = self::ERROR_NONE, $detectErrorLevel = self::ERROR_NONE, $parseLineBreaks = false,
-                               $removeDefaultAttrs = false )
+    const OPT_VALIDATE_ERROR_LEVEL = 'ValidateErrorLevel';
+    const OPT_DETECT_ERROR_LEVEL = 'DetectErrorLevel';
+    const OPT_REMOVE_DEFAULT_ATTRS = 'RemoveDefaultAttrs';
+    const OPT_PARSE_LINE_BREAKS = 'ParseLineBreaks';
+    const OPT_EZ_PUBLISH_VERSION = 'eZPublishVersion';
+    const OPT_TRIM_SPACES = 'TrimSpaces';
+    const OPT_ALLOW_MULTIPLE_SPACES = 'AllowMultipleSpaces';
+    const OPT_ALLOW_NUMERIC_ENTITIES = 'AllowNumericEntities';
+    const OPT_STRICT_HEADERS = 'StrictHeaders';
+    const OPT_DOM_DOCUMENT_CLASS = 'DOMDocumentClass';
+
+    /**
+     * Construct a new Parser
+     */
+    public function __construct()
     {
-        // Back-compatibility fixes:
-        if ( $detectErrorLevel === self::SHOW_SCHEMA_ERRORS )
-        {
-            $detectErrorLevel = self::ERROR_SCHEMA;
-        }
-        elseif ( $detectErrorLevel === self::SHOW_ALL_ERRORS )
-        {
-            $detectErrorLevel = self::ERROR_ALL;
-        }
-
-        if ( $validateErrorLevel === false )
-        {
-            $validateErrorLevel = self::ERROR_NONE;
-        }
-        elseif ( $validateErrorLevel === true )
-        {
-            $validateErrorLevel = $detectErrorLevel;
-        }
-
-        $this->ValidateErrorLevel = $validateErrorLevel;
-        $this->DetectErrorLevel = $detectErrorLevel;
-
-        $this->RemoveDefaultAttrs = $removeDefaultAttrs;
-        $this->ParseLineBreaks = $parseLineBreaks;
-
         $this->XMLSchema = XmlSchema::getInstance();
 
-        $this->eZPublishVersion = 4.6; // eZPublishSDK::majorVersion() + eZPublishSDK::minorVersion() * 0.1;
+        // $this->setOption( self::OPT_EZ_PUBLISH_VERSION, eZPublishSDK::majorVersion() + eZPublishSDK::minorVersion() * 0.1 );
 
         $xmlConfig = Configuration::getInstance( 'ezxml' );
 
-        $this->TrimSpaces = $xmlConfig->get( 'InputSettings', 'TrimSpaces', 'true' ) == 'true' ? true : false;
-        $this->AllowMultipleSpaces = $xmlConfig->get( 'InputSettings', 'AllowMultipleSpaces', 'false' ) == 'true' ? true : false;
-        $this->AllowNumericEntities = $xmlConfig->get( 'InputSettings', 'AllowNumericEntities', 'false' ) == 'true' ? true : false;
+        $this->setOption( self::OPT_TRIM_SPACES, $xmlConfig->get( 'InputSettings', 'TrimSpaces', 'true' ) == 'true' ? true : false );
+        $this->setOption( self::OPT_ALLOW_MULTIPLE_SPACES, $xmlConfig->get( 'InputSettings', 'AllowMultipleSpaces', 'false' ) == 'true' ? true : false );
+        $this->setOption( self::OPT_ALLOW_NUMERIC_ENTITIES, $xmlConfig->get( 'InputSettings', 'AllowNumericEntities', 'false' ) == 'true' ? true : false );
 
-        $useStrictHeaderRule = Configuration::getInstance( "content" )->get( 'header', 'UseStrictHeaderRule', 'false' );
-        $this->StrictHeaders = ( $useStrictHeaderRule == 'true' ) ? true : false;
+        self::setOption( self::OPT_STRICT_HEADERS, Configuration::getInstance( "content" )->get( 'header', 'UseStrictHeaderRule', 'false' ) == 'true' ? true : false );
+    }
+
+    /**
+     * Sets the parser option $option to $value
+     * @param string $option One of self::OPT_*
+     * @param mixed $value
+     * @throws \ezp\Base\Exception\BadConfiguration If the option is unknown or the value incorrect
+     */
+    public function setOption( $option, $value )
+    {
+        if ( !$this->optionExists( $option ) )
+        {
+            throw new BadConfiguration( "Unknown option $option" );
+        }
+        // @todo Add control over value
+        $this->options[$option] = $value;
+    }
+
+    /**
+     * Gets the parser option $option
+     * @param string $option One of self::OPT_*
+     * @throws \ezp\Base\Exception\BadConfiguration If the option is unknown or the value incorrect
+     */
+    public function getOption( $option )
+    {
+        if ( !$this->optionExists( $option ) )
+        {
+            throw new BadConfiguration( "Unknown option $option" );
+        }
+        return $this->options[$option];
+    }
+
+    /**
+     * Check if $option exists
+     *
+     * @param string $option
+     * @return bool
+     */
+    private function optionExists( $option )
+    {
+        return isset( $this->options[$option] );
     }
 
     /**
@@ -162,12 +201,13 @@ abstract class Base
         {
             $this->messages[] = "$count invalid character(s) have been found and replaced by a space";
         }
-        if ( !$this->ParseLineBreaks )
+        if ( !$this->getOption( self::OPT_PARSE_LINE_BREAKS ) )
         {
             $text = str_replace( "\n", '', $text);
         }
 
-        $this->Document = new $this->DOMDocumentClass( '1.0', 'utf-8' );
+        $domDocumentClass = $this->getOption( self::OPT_DOM_DOCUMENT_CLASS );
+        $this->Document = new $domDocumentClass( '1.0', 'utf-8' );
 
         if ( $createRootNode )
         {
@@ -205,21 +245,6 @@ abstract class Base
         }
 
         return $this->Document;
-    }
-
-    private function setDOMDocumentClass( $DOMDocumentClass )
-    {
-        $this->DOMDocumentClass = $DOMDocumentClass;
-    }
-
-    private function setParseLineBreaks( $value )
-    {
-        $this->ParseLineBreaks = $value;
-    }
-
-    private function setRemoveDefaultAttrs( $value )
-    {
-        $this->RemoveDefaultAttrs = $value;
     }
 
     public function createRootNode()
@@ -285,7 +310,7 @@ abstract class Base
         }
         $tagBeginPos = strpos( $data, '<', $pos );
 
-        if ( $this->ParseLineBreaks )
+        if ( $this->getOption( self::OPT_PARSE_LINE_BREAKS ) )
         {
             // Regard line break as a start tag position
             $lineBreakPos = strpos( $data, "\n", $pos );
@@ -366,7 +391,7 @@ abstract class Base
             return false;
         }
         // Insert <br/> instead of linebreaks
-        elseif ( $this->ParseLineBreaks && $data[$tagBeginPos] == "\n" )
+        elseif ( $this->getOption( self::OPT_PARSE_LINE_BREAKS ) && $data[$tagBeginPos] == "\n" )
         {
             $newTagName = 'br';
             $noChildren = true;
@@ -657,12 +682,12 @@ abstract class Base
     {
         $textContent = $this->entitiesDecode( $textContent );
 
-        if ( !$this->AllowNumericEntities )
+        if ( !$this->getOption( self::OPT_ALLOW_NUMERIC_ENTITIES ) )
         {
             $textContent = $this->convertNumericEntities( $textContent );
         }
 
-        if ( !$this->AllowMultipleSpaces )
+        if ( !$this->getOption( self::OPT_ALLOW_MULTIPLE_SPACES ) )
         {
             $textContent = preg_replace( "/ {2,}/", " ", $textContent );
         }
@@ -989,6 +1014,7 @@ abstract class Base
                     }
 
                     $elementName = $element->nodeType == XML_ELEMENT_NODE ? '&lt;' . $element->nodeName . '&gt;' : $element->nodeName;
+                    throw new \Exception( "'$elementName' is not allowed to be a child of &lt;$parent->nodeName&gt;." );
                     $this->handleError( self::ERROR_SCHEMA, "'$elementName' is not allowed to be a child of &lt;$parent->nodeName&gt;." );
                 }
                 $this->fixSubtree( $element, $element );
@@ -1073,7 +1099,7 @@ abstract class Base
                 $removeAttr = true;
                 $this->handleError( self::ERROR_SCHEMA, "Attribute '$fullName' is not allowed in &lt;$element->nodeName&gt; element.");
             }
-            elseif ( $this->RemoveDefaultAttrs )
+            elseif ( $this->getOption( self::OPT_REMOVE_DEFAULT_ATTRS ) )
             {
                 // Remove attributes having default values
                 $default = $this->XMLSchema->attrDefaultValue( $element->nodeName, $fullName );
@@ -1123,8 +1149,7 @@ abstract class Base
             }
             else
             {
-                // @todo -cBase Exception
-                // eZDebug::writeWarning( "'$handlerName' output handler for tag <$element->nodeName> doesn't exist: '" . $thisOutputTag[$handlerName] . "'.", 'eZXML input parser' );
+                throw new BadConfiguration( "outputHandler $handlerName ({$thisOutputTag[$handlerName]}) for $element->nodeName" );
             }
         }
 
@@ -1252,7 +1277,7 @@ abstract class Base
 
     protected function handleError( $type, $message )
     {
-        if ( $type & $this->DetectErrorLevel )
+        if ( $type & $this->getOption( self::OPT_DETECT_ERROR_LEVEL ) )
         {
             $this->IsInputValid = false;
             if ( $message )
@@ -1261,7 +1286,7 @@ abstract class Base
             }
         }
 
-        if ( $type & $this->ValidateErrorLevel )
+        if ( $type & $this->getOption( self::OPT_VALIDATE_ERROR_LEVEL ) )
         {
             $this->IsInputValid = false;
             $this->QuitProcess = true;
@@ -1284,24 +1309,10 @@ abstract class Base
      * @see getMessages()
      */
     protected $Messages = array();
-    protected $eZPublishVersion;
 
     protected $ParentStack = array();
 
-    protected $ValidateErrorLevel;
-    protected $DetectErrorLevel;
-
     protected $isInputValid = true;
     protected $QuitProcess = false;
-
-    // options that depend on settings
-    protected $TrimSpaces = true;
-    protected $AllowMultipleSpaces = false;
-    protected $AllowNumericEntities = false;
-    protected $StrictHeaders = false;
-
-    // options that depend on parameters passed
-    protected $ParseLineBreaks = false;
-    protected $RemoveDefaultAttrs = false;
 }
 ?>

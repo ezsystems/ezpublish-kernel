@@ -13,7 +13,7 @@ use ezp\Content\FieldType\ValueInterface,
     ezp\Persistence\Content\FieldValue as PersistenceFieldValue;
 
 /**
- * Value for TextLine field type
+ * Basic, raw value for TextLine field type
  */
 class Value extends BaseValue implements ValueInterface
 {

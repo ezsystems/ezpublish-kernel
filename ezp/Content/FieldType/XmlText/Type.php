@@ -13,11 +13,15 @@ use ezp\Base\Repository,
     ezp\Content\Version,
     ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\XmlText\Value,
+    ezp\Content\FieldType\XmlText\Value as XmlTextValue,
+    ezp\Content\FieldType\XmlText\Value\OnlineEditor as OnlineEditorValue,
+    ezp\Content\FieldType\XmlText\Value\Simplified as SimplifiedValue,
     ezp\Content\Type\FieldDefinition,
+    ezp\Content\FieldType\XmlText\Input\Handler,
     ezp\Content\FieldType\XmlText\Input\Parser\Simplified as SimplifiedInputParser,
-    ezp\Content\FieldType\XmlText\Input\Handler\Simplified as SimplifiedInputHandler,
-    \ezp\Base\Exception\BadFieldTypeInput;
+    ezp\Content\FieldType\XmlText\Input\Parser\OnlineEditor as OnlineEditorParser,
+    ezp\Content\FieldType\XmlText\Input\Parser\Raw as RawInputParser,
+    ezp\Base\Exception\BadFieldTypeInput;
 
 /**
  * XmlBlock field type.
@@ -75,8 +79,8 @@ EOF;
             throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
         }
 
-        $xmlTextHandler = $this->getInputHandler( $inputValue->text );
-        if ( !$xmlTextHandler->isXmlValid() )
+        $handler = new Handler( $this->getInputParser( $inputValue ) );
+        if ( !$handler->isXmlValid( $inputValue->text ) )
         {
             throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
         }
@@ -103,8 +107,8 @@ EOF;
         // needs to pass more data to the handler
         // - repository (to publish new items)
         // - validate or process modes... that's harder.
-        $handler = $this->getInputHandler( $field->getValue()->text );
-        $handler->process();
+        $handler = $this->getInputHandler( $field->getValue() );
+        $handler->process( $field->getValue()->text );
 
         // From here, we can get the list of elements that need further processing:
         // - links: replace the URL with the ID of the eZURL object; create the object if it doesn't exist yet
@@ -112,12 +116,33 @@ EOF;
     }
 
     /**
-     * Returns the XML Input Handler for $xmlString
-     * @param string $xmlString
-     * @return \ezp\Content\FieldType\XmlText\Input\Handler
+     * Returns the XML Input Parser for an XmlText Value
+     * @param \ezp\Content\FieldType\XmlText\Value $value
+     * @return \ezp\Content\FieldType\XmlText\Input\Parser
      */
-    protected function getInputHandler( $xmlString )
+    protected function getInputParser( XmlTextValue $value )
     {
-        return new SimplifiedInputHandler( $xmlString );
+        $parserNamespace = __NAMESPACE__ . '\\Input\\Parser\\';
+
+        switch ( $value )
+        {
+            case $value instanceof XmlTextValue:
+                $handlerClass = $parserNamespace . 'Raw';
+                break;
+
+            case $value instanceof SimplifiedValue:
+                $handlerClass = $parserNamespace . 'Simplified';
+                break;
+
+            case $value instanceof OnlineEditorValue:
+                $handlerClass = $parserNamespace . 'OnlineEditor';
+                break;
+
+            default:
+                // @todo Use dedicated exception
+                throw new Exception( "No parser found for " . get_class( $value ) );
+        }
+
+        return new $handlerClass;
     }
 }
