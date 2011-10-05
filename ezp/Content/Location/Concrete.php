@@ -121,7 +121,9 @@ class Concrete extends Model implements Location
     }
 
     /**
-     * Sets the parent Location and updates inverse side ( $parent->children )
+     * Sets the parent Location and updates inverse side ( $parent->children ) (if it has been loaded)
+     *
+     * Note: This function does not store the change, use Location service for such functionality!
      *
      * @param \ezp\Content\Location $parent
      */
@@ -129,7 +131,9 @@ class Concrete extends Model implements Location
     {
         $this->parent = $parent;
         $this->properties->parentId = $parent->id;
-        $parent->children[] = $this;
+        $children = $parent->getChildren();
+        if ( !$children instanceof Lazy || $children->isLoaded() )
+            $parent->children[] = $this;
     }
 
     /**
