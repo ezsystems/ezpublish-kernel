@@ -21,7 +21,7 @@ use ezp\Base\ServiceContainer,
  * @fixme This class should be named LegacyTest according to the file name or
  *        the file name must be adapted.
  */
-class BinaryRepositoryLegacyTest extends BinaryRepositoryTest
+class LegacyTest extends BinaryRepositoryTest
 {
     public function setUp()
     {

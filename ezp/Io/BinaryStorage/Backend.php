@@ -32,7 +32,7 @@ interface Backend
      * @param string $path
      * @throws \ezp\Base\Exception\NotFound If the file doesn't exist
      */
-    public function delete( $file );
+    public function delete( $path );
 
     /**
      * Updates the file identified by $path with data from $updateFile
