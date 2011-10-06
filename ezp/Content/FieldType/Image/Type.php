@@ -69,12 +69,13 @@ class Type extends FieldType
         parent::onFieldSetValue( $subject, $value );
         if ( $subject instanceof Field )
         {
-            // Here inject $fieldId, $contentId, $versionNo, $languageCode, $isTranslatable
+            // Here inject $fieldId, $contentId, $versionNo, $status (publication status), $languageCode, $isTranslatable
             $this->getValue()->setState(
                 array(
                     'fieldId' => $subject->id,
                     'contentId' => $subject->getVersion()->contentId,
                     'versionNo' => $subject->getVersion()->versionNo,
+                    'versionStatus' => $subject->getVersion()->status,
                     'languageCode' => $subject->language,
                     'isTranslatable' => $subject->getFieldDefinition()->isTranslatable
                 )

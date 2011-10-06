@@ -52,15 +52,19 @@ class Value extends BaseValue implements ValueInterface
         'fieldId' => null,
         'contentId' => null,
         'versionNo' => null,
+        // Publication status (one of \ezp\Content\Version::STATUS_*)
+        'status' => null,
         'languageCode' => null,
     );
 
     /**
      * Construct a new Value object.
      */
-    public function __construct()
+    public function __construct( $imagePath = null, $alternativeText = '' )
     {
-        $this->aliasList = new AliasCollection( $this );
+        $this->alternativeText = $alternativeText;
+        $this->aliasList = new AliasCollection( $this, new BinaryRepository );
+        $this->aliasList->initializeFromLocalImage( $imagePath );
     }
 
     /**
