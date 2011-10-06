@@ -68,7 +68,7 @@ class AliasCollection extends TypeCollection
         $this->imageValue = $imageValue;
         $this->binaryRepository = $binaryRepository;
         $this->imageConf = Configuration::getInstance( 'image' );
-        $this->imageManager = new Manager( $this );
+        $this->imageManager = new Manager( $this, $binaryRepository );
         parent::__construct( 'ezp\\Content\\FieldType\\Image\\Alias', $elements );
     }
 
