@@ -292,7 +292,11 @@ class ContentTest extends BaseServiceTest
         $this->assertInstanceOf( "ezp\\Content\\Version\\Concrete", $content->currentVersion );
         $this->assertEquals( 1, $content->currentVersion->versionNo );
 
-        $content = $this->service->load( 1, 2 );
+        $version = $this->service->loadVersion( 1, 2 );
+        $this->assertInstanceOf( "ezp\\Content\\Version", $version );
+        $this->assertInstanceOf( "ezp\\Content\\Version\\Concrete", $version );
+
+        $content = $version->getContent();
         $this->assertInstanceOf( "ezp\\Content\\Version", $content->currentVersion );
         $this->assertInstanceOf( "ezp\\Content\\Version\\Proxy", $content->currentVersion );
 

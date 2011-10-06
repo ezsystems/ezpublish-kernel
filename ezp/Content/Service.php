@@ -138,24 +138,34 @@ class Service extends BaseService
      * Loads a content from its id ($contentId)
      *
      * @param mixed $contentId
-     * @param int $version
      * @return \ezp\Content
      * @throws \ezp\Base\Exception\NotFound if content could not be found
      */
-    public function load( $contentId, $version = null )
+    public function load( $contentId )
     {
-        if ( !$contentId )
-            throw new NotFound( 'Content', $contentId );
-
-        if ( $version === null )
-            $contentVO = $this->handler->searchHandler()->findSingle( new ContentId( $contentId ) );
-        else
-            $contentVO = $this->handler->contentHandler()->load( $contentId, $version );
-
+        $contentVO = $this->handler->searchHandler()->findSingle( new ContentId( $contentId ) );
         if ( !$contentVO instanceof ContentValue )
             throw new NotFound( 'Content', $contentId );
 
         return $this->buildDomainObject( $contentVO );
+    }
+
+    /**
+     * Loads a version from its id and versionNo
+     *
+     * @param mixed $contentId
+     * @param int $versionNo
+     * @return \ezp\Content\Version
+     * @throws \ezp\Base\Exception\NotFound If content/version could not be found
+     */
+    public function loadVersion( $contentId, $versionNo )
+    {
+        $contentVO = $this->handler->contentHandler()->load( $contentId, $versionNo );
+        if ( !$contentVO instanceof ContentValue )
+            throw new NotFound( 'Content\\Version', $contentId . ' ' . $versionNo  );
+
+        $this->buildDomainObject( $contentVO, $versionDO );
+        return $versionDO;
     }
 
     /**
@@ -208,11 +218,16 @@ class Service extends BaseService
      */
     public function loadFields( Version $version )
     {
+        if ( !$version->contentId )
+            throw new NotFound( 'Version->contentId', $version->contentId );
         if ( !$version->versionNo )
-            throw new NotFound( 'Version', $version->versionNo );
+            throw new NotFound( 'Version->versionNo', $version->versionNo );
 
-        $content = $this->load( $version->contentId, $version->versionNo );
-        $versionVo = $content->getState( 'properties' )->version;
+        if ( $version instanceof ConcreteVersion && $version->getFields() instanceof StaticFieldCollection )
+            return $version->getFields()->getArrayCopy();
+
+        $newVersion = $this->loadVersion( $version->contentId, $version->versionNo );
+        $versionVo = $newVersion->getState( 'properties' );
 
         $version->setState( array( 'properties' => $versionVo ) );
         $defaultFields = new StaticFieldCollection( $version );
@@ -541,9 +556,10 @@ class Service extends BaseService
     /**
      * Build a content Domain Object from a content Value object returned by Persistence
      * @param \ezp\Persistence\Content $vo
+     * @param \ezp\Content\Version $version Will be set to version object during execution
      * @return \ezp\Content
      */
-    protected function buildDomainObject( ContentValue $vo )
+    protected function buildDomainObject( ContentValue $vo, &$version = null )
     {
         $content = new Concrete(
             new ProxyType( $vo->typeId, $this->repository->getContentTypeService() ),
@@ -571,7 +587,7 @@ class Service extends BaseService
         {
             $content->setState(
                  array(
-                     "currentVersion" => new ProxyVersion( $content, $vo->currentVersionNo, $this ),
+                     "currentVersion" => new ProxyVersion( $content->id, $vo->currentVersionNo, $this ),
                      "versions" => new LazyVersionCollection( $this, $vo->id, array( $version->versionNo => $version ) )
                  )
              );

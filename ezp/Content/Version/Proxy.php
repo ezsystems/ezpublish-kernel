@@ -37,20 +37,14 @@ class Proxy extends ModelProxy implements Version
     protected $versionNo;
 
     /**
-     * @var \ezp\Content
-     */
-    protected $content;
-
-    /**
-     * @param mixed $id
+     * @param mixed $contentId
      * @param int $versionNo
      * @param \ezp\Content\Service $service
      */
-    public function __construct( Content $content, $versionNo, Service $service )
+    public function __construct( $contentId, $versionNo, Service $service )
     {
         $this->versionNo = $versionNo;
-        $this->content = $content;
-        parent::__construct( $content->id, $service );
+        parent::__construct( $contentId, $service );
     }
 
     /**
@@ -62,8 +56,7 @@ class Proxy extends ModelProxy implements Version
     {
         if ( $this->proxiedObject === null )
         {
-            $versions = $this->content->getVersions();
-            $this->proxiedObject = $versions[ $this->versionNo ];
+            $this->proxiedObject = $this->service->loadVersion( $this->id, $this->versionNo );
             $this->moveObservers();
         }
     }
@@ -77,6 +70,23 @@ class Proxy extends ModelProxy implements Version
     public static function definition()
     {
         return Concrete::definition();
+    }
+
+    /**
+     * Provides read access to a $property
+     *
+     * @param string $property
+     * @return mixed
+     */
+    public function __get( $property )
+    {
+        if ( $property === "contentId" )
+            return $this->id;
+        if ( $property === "versionNo" )
+            return $this->versionNo;
+
+        $this->lazyLoad();
+        return $this->proxiedObject->$property;
     }
 
     /**

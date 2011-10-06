@@ -560,7 +560,7 @@ class LocationTest extends BaseServiceTest
 
             try
             {
-                $this->repository->getContentService()->load( $location->contentId, 1 );
+                $this->repository->getContentService()->load( $location->contentId );
                 $this->fail( "Content #{$location->contentId} has not been properly removed" );
             }
             catch ( NotFound $e )
