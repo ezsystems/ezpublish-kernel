@@ -121,7 +121,7 @@ class Alias extends ValueObject
      * It will typically contain EXIF information from digital cameras or information about animated GIFs.
      * If there is no information, the info will be a boolean FALSE.
      *
-     * @var string
+     * @var \ezp\Base\Image\Data
      */
     public $info;
 

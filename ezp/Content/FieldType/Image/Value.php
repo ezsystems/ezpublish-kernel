@@ -9,7 +9,8 @@
 
 namespace ezp\Content\FieldType\Image;
 use ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\ValueInterface;
+    ezp\Content\FieldType\ValueInterface,
+    ezp\Base\BinaryRepository;
 
 /**
  * Value for Image field type
@@ -84,7 +85,11 @@ class Value extends BaseValue implements ValueInterface
      */
     public function __toString()
     {
-        return $this->file->path;
+        $string = $this->aliasList['original']->url;
+        if ( isset( $this->alternativeText ) )
+            $string .= "|$this->alternativeText";
+
+        return $string;
     }
 
     /**
