@@ -154,13 +154,17 @@ class Service extends BaseService
      * Loads a version from its id and versionNo
      *
      * @param mixed $contentId
-     * @param int $versionNo
+     * @param int|null $versionNo If null (default), then current version is returned
      * @return \ezp\Content\Version
      * @throws \ezp\Base\Exception\NotFound If content/version could not be found
      */
-    public function loadVersion( $contentId, $versionNo )
+    public function loadVersion( $contentId, $versionNo = null )
     {
-        $contentVO = $this->handler->contentHandler()->load( $contentId, $versionNo );
+        if ( $versionNo === null )
+            $contentVO = $this->handler->searchHandler()->findSingle( new ContentId( $contentId ) );
+        else
+            $contentVO = $this->handler->contentHandler()->load( $contentId, $versionNo );
+
         if ( !$contentVO instanceof ContentValue )
             throw new NotFound( 'Content\\Version', $contentId . ' ' . $versionNo  );
 
