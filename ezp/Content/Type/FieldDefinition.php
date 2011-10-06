@@ -28,6 +28,7 @@ use ezp\Base\Model,
  * @property int $position
  * @property-read string $fieldType
  * @property bool $isTranslatable
+ * @property bool $isSearchable
  * @property bool $isRequired
  * @property bool $isInfoCollector
  * @property-read \ezp\Content\FieldTypeConstraints $fieldTypeConstraints
@@ -50,6 +51,7 @@ class FieldDefinition extends Model
         'position' => true,
         'fieldType' => false,
         'isTranslatable' => true,
+        'isSearchable' => true,
         'isRequired' => true,
         'isInfoCollector' => true,
         'fieldTypeConstraints' => false,
