@@ -18,7 +18,6 @@ use ezp\Base\Configuration,
 
 /**
  * Configuration Ini Parser / writer
- *
  */
 class Ini implements Parser
 {
@@ -37,6 +36,14 @@ class Ini implements Parser
      * @var string
      */
     const TEMP_INI_FALSE_VAR = '__FALSE__';
+
+    /**
+     * Constant string used as a temporary array key separator when merging several dimensions
+     * for php_ini_string support, {@see parsePhpPostArrayFilter()} & {@see parserPhpDimensionArraySupport()}
+     *
+     * @var string
+     */
+    const TEMP_INI_KEY_VAR = '__KEY__';
 
     /**
      * File name as needed by writer
@@ -109,6 +116,7 @@ class Ini implements Parser
             array( ';', "\n", "\n", "=" . self::TEMP_INI_TRUE_VAR . "\n", "=" . self::TEMP_INI_FALSE_VAR . "\n" ),
             $fileContent . "\n"
         );
+        $fileContent = $this->parserPhpDimensionArraySupport( $fileContent );
         $fileContent = $this->parserClearArraySupport( $fileContent );
 
         // Parse string
@@ -127,14 +135,11 @@ class Ini implements Parser
             {
                 if ( is_array( $settingValue ) )
                 {
-                    foreach ( $settingValue as $key => $keyValue )
-                    {
-                        $configurationData[$section][$setting][$key] = self::parseFilePhpPostFilter( $keyValue );
-                    }
+                    $configurationData[$section][$setting] = self::parsePhpPostArrayFilter( $configurationData[$section][$setting] );
                 }
                 else
                 {
-                    $configurationData[$section][$setting] = self::parseFilePhpPostFilter( $settingValue );
+                    $configurationData[$section][$setting] = self::parsePhpPostFilter( $settingValue );
                 }
             }
         }
@@ -213,18 +218,71 @@ class Ini implements Parser
     }
 
     /**
+     * Pre processing needed for php ini parsers to support three dimensional arrays
+     *
+     * Injects constants which is later cleaned up in {@link parsePhpPostArrayFilter()}.
+     *
+     * @param string $fileContent
+     * @return string
+     */
+    protected function parserPhpDimensionArraySupport( $fileContent )
+    {
+        if ( preg_match_all( "/^([\w_-]+)\[([\w_-]+)?\]\[([\w_-]+)?\](\[([\w_-]+)?\])?/m", $fileContent, $valueArray, PREG_OFFSET_CAPTURE ) )
+        {
+            $offsetDiff = 0;// Since we use offset captured before replace operations, we need to maintain an offset diff
+            foreach ( $valueArray[0] as $key => $match )
+            {
+                // Variable name
+                $replaceString = $valueArray[1][$key][0] . '[';
+
+                // If first key is empty use $key to make it unique
+                if ( empty( $valueArray[2][$key][0] ) )
+                    $replaceString .= $key;
+                else
+                    $replaceString .= $valueArray[2][$key][0];
+
+                // Add key separator
+                $replaceString .= self::TEMP_INI_KEY_VAR;
+
+                // If second key is empty use $key to make it unique
+                if ( empty( $valueArray[3][$key][0] ) )
+                    $replaceString .= $key;
+                else
+                    $replaceString .= $valueArray[3][$key][0];
+
+                if ( !empty( $valueArray[4][$key][0] ) )
+                {
+                    $replaceString .= self::TEMP_INI_KEY_VAR;
+                    if ( empty( $valueArray[5][$key][0] ) )
+                        $replaceString .= $key;
+                    else
+                        $replaceString .= $valueArray[5][$key][0];
+                }
+
+                $replaceString .= ']';
+
+                $fileContent = substr_replace( $fileContent, $replaceString, $match[1] + $offsetDiff, strlen( $match[0] ) );
+                $offsetDiff += strlen( $replaceString ) - strlen( $match[0] );
+            }
+        }
+        return $fileContent;
+    }
+
+    /**
      * Transform temporary values the php equivalent to make sure parsed ini settings
      * are the same as with ezcConfigurationIniReader.
      *
      * @param mixed $iniValue
      * @return mixed
      */
-    protected static function parseFilePhpPostFilter( $iniValue )
+    protected static function parsePhpPostFilter( $iniValue )
     {
         if ( $iniValue === self::TEMP_INI_TRUE_VAR )
             return true;
+
         if ( $iniValue === self::TEMP_INI_FALSE_VAR )
             return false;
+
         if ( is_numeric( $iniValue ) )
         {
             if ( strpos( $iniValue, '.' ) !== false )
@@ -232,13 +290,84 @@ class Ini implements Parser
 
             return (int)$iniValue;
         }
+
         if ( isset( $iniValue[1] ) && is_string( $iniValue ) )
             return rtrim( $iniValue, ' ' );
+
         return $iniValue;
     }
 
     /**
+     * Transform temporary array values the php equivalent to make sure parsed ini settings
+     * are the same as with ezcConfigurationIniReader.
+     *
+     * Deals specifically with post parse fixes for three dimensional arrays.
+     *
+     * @param array $array
+     * @return array
+     */
+    protected static function parsePhpPostArrayFilter( array $array )
+    {
+        $newArray = array();
+        foreach ( $array as $key => $value )
+        {
+            if ( strpos( $key, self::TEMP_INI_KEY_VAR ) !== false )
+            {
+                $keys = explode( self::TEMP_INI_KEY_VAR, $key );
+                if ( is_numeric( $keys[0] ) )
+                {
+                    if ( is_numeric( $keys[1] ) )
+                    {
+                        if ( isset( $keys[2] ) && is_numeric( $keys[2] ) )
+                            $newArray[][][] = self::parsePhpPostFilter( $value );
+                        elseif ( isset( $keys[2] ) )
+                            $newArray[][][$keys[2]] = self::parsePhpPostFilter( $value );
+                        else
+                            $newArray[][] = self::parsePhpPostFilter( $value );
+                    }
+                    else
+                    {
+                        if ( isset( $keys[2] ) && is_numeric( $keys[2] ) )
+                            $newArray[][$keys[1]][] = self::parsePhpPostFilter( $value );
+                        elseif ( isset( $keys[2] ) )
+                            $newArray[][$keys[1]][$keys[2]] = self::parsePhpPostFilter( $value );
+                        else
+                            $newArray[][$keys[1]] = self::parsePhpPostFilter( $value );
+                    }
+                }
+                else
+                {
+                    if ( is_numeric( $keys[1] ) )
+                    {
+                        if ( isset( $keys[2] ) && is_numeric( $keys[2] ) )
+                            $newArray[$keys[0]][][] = self::parsePhpPostFilter( $value );
+                        elseif ( isset( $keys[2] ) )
+                            $newArray[$keys[0]][][$keys[2]] = self::parsePhpPostFilter( $value );
+                        else
+                            $newArray[$keys[0]][] = self::parsePhpPostFilter( $value );
+                    }
+                    else
+                    {
+                        if ( isset( $keys[2] ) && is_numeric( $keys[2] ) )
+                            $newArray[$keys[0]][$keys[1]][] = self::parsePhpPostFilter( $value );
+                        elseif ( isset( $keys[2] ) )
+                            $newArray[$keys[0]][$keys[1]][$keys[2]] = self::parsePhpPostFilter( $value );
+                        else
+                            $newArray[$keys[0]][$keys[1]] = self::parsePhpPostFilter( $value );
+                    }
+                }
+            }
+            else
+            {
+                $newArray[ $key ] = self::parsePhpPostFilter( $value );
+            }
+        }
+        return $newArray;
+    }
+
+    /**
      * Common pre processing needed for both ezc and php parsers
+     *
      * Marks array clearing, so post parser code in {@link Configuration::parse()} can detect it
      *
      * @param string $fileContent
@@ -246,11 +375,10 @@ class Ini implements Parser
      */
     protected function parserClearArraySupport( $fileContent )
     {
-        if ( preg_match_all( "/^([\w_-]+)\[\]$/m", $fileContent, $valueArray ) )
+        if ( preg_match_all( "/^([\w_-]+)\[([\w_-]+)?\](\[([\w_-]+)?\])?$/m", $fileContent, $valueArray ) )
         {
-            foreach ( $valueArray[1] as $variableArrayClearing )
+            foreach ( $valueArray[0] as $variableArrayClearing )
             {
-                $variableArrayClearing .= '[]';
                 $fileContent = str_replace( "\n$variableArrayClearing\n", "\n$variableArrayClearing=" . Configuration::TEMP_INI_UNSET_VAR . "\n", $fileContent );
             }
         }

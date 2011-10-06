@@ -53,7 +53,7 @@ HashBoomer=enabled##!';
 
     /**
      * Test that types in ini is properly parsed to native php types
-     * @covers \ezp\Base\Configuration\Parser\Ini::parseFilePhpPostFilter
+     * @covers \ezp\Base\Configuration\Parser\Ini::parsePhpPostFilter
      * @covers \ezp\Base\Configuration\Parser\Ini::parseFilePhp
      * @covers \ezp\Base\Configuration\Parser\Ini::parseFileEzc
      */
@@ -155,8 +155,13 @@ empty-array[]';
 
     /**
      * Test that complex hash structures with symbol use in key and value are parsed
+     *
+     * Also tests two dimensional arrays
+     *
      * @covers \ezp\Base\Configuration\Parser\Ini::parseFilePhp
      * @covers \ezp\Base\Configuration\Parser\Ini::parseFileEzc
+     * @covers \ezp\Base\Configuration\Parser\Ini::parserPhpTwoDimensionArraySupport
+     * @covers \ezp\Base\Configuration\Parser\Ini::parsePhpPostFilter
      */
     public function testComplexHash()
     {
@@ -164,21 +169,32 @@ empty-array[]';
 [test]
 conditions[ezp\\system\\Filter_Get::dev]=uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php
 conditions[$user_object->check]=ezp/system/router\\ezp\\system\\Filter_Get::dev
-conditions[]=uri\\0:§£$content';
+conditions[]=uri\\0:§£$content
+conditions[][]=subOne
+conditions[][]=subTwo
+conditions[two][two]=subThree
+conditions[two][two2]=subFour
+conditions[two][two]=subFive
+conditions[][][]=subSix
+conditions[][][]=subSeven
+conditions[three][three][three]=subEight
+conditions[three][three][three3]=subNine
+conditions[three][three][three]=subTen
+';
         $expects = array(
             'test' => array(
                 'conditions' => array(
                     'ezp\\system\\Filter_Get::dev' => 'uri\\0:content\\uri\\1:^v\\auth:?php\\params:%php',
                     '$user_object->check' => 'ezp/system/router\\ezp\\system\\Filter_Get::dev',
-                    'uri\\0:§£$content'
+                    'uri\\0:§£$content',
+                    array( 'subOne' ),
+                    array( 'subTwo' ),
+                    'two' => array( 'two' => 'subFive', 'two2' => 'subFour' ),
+                    array( array( 'subSix' ) ),
+                    array( array( 'subSeven' ) ),
+                    'three' => array( 'three' => array( 'three' => 'subTen', 'three3' => 'subNine' ) ),
                 )
             )
-        );
-        $result = $this->parser->parseFilePhp( $iniString );
-        $this->assertEquals(
-            $expects,
-            $result,
-            'parse_ini_string based ini parser did not parse complex hash'
         );
 
         $result = $this->parser->parseFileEzc( $iniString );
@@ -186,6 +202,13 @@ conditions[]=uri\\0:§£$content';
             $expects,
             $result,
             'ezcConfigurationIniReader based ini parser did not parse complex hash'
+        );
+
+        $result = $this->parser->parseFilePhp( $iniString );
+        $this->assertEquals(
+            $expects,
+            $result,
+            'parse_ini_string based ini parser did not parse complex hash'
         );
     }
 
@@ -198,13 +221,15 @@ conditions[]=uri\\0:§£$content';
         $iniString = '
 [test]
 sub[]=hi
-sub[]';
-        $expects = array( 'test' => array( 'sub' => array( 'hi', Configuration::TEMP_INI_UNSET_VAR ) ) );
-        $result = $this->parser->parseFilePhp( $iniString );
-        $this->assertEquals(
-            $expects,
-            $result,
-            'parse_ini_string based ini parser did not properly clear array'
+sub[]
+two[one][]=hi
+two[one][]
+';
+        $expects = array(
+            'test' => array(
+                'sub' => array( 'hi', Configuration::TEMP_INI_UNSET_VAR ),
+                'two' => array( 'one' => array( 'hi', Configuration::TEMP_INI_UNSET_VAR ) ),
+             )
         );
 
         $result = $this->parser->parseFileEzc( $iniString );
@@ -212,6 +237,13 @@ sub[]';
             $expects,
             $result,
             'ezcConfigurationIniReader based ini parser did not properly clear array'
+        );
+
+        $result = $this->parser->parseFilePhp( $iniString );
+        $this->assertEquals(
+            $expects,
+            $result,
+            'parse_ini_string based ini parser did not properly clear array'
         );
     }
 }
