@@ -239,40 +239,6 @@ class RepositoryHandler implements HandlerInterface
     }
 
     /**
-     * @param array $config
-     * @return \ezp\Persistence\Storage\Legacy\RepositoryHandler
-     */
-    public static function factory( array $config = array() )
-    {
-        $site = Configuration::getInstance( 'site' );
-        $type = preg_replace( '/^ez/', '', $site->get( 'DatabaseSettings', 'DatabaseImplementation' ) );
-        $dsn = ( $type === 'mysqli' ? 'mysql' : $type ) . '://';
-        if ( $site->hasValue( 'DatabaseSettings', 'User' ) )
-        {
-            $dsn .= $site->get( 'DatabaseSettings', 'User' );
-            if ( $site->hasValue( 'DatabaseSettings', 'Password' ) )
-            {
-                $dsn .= ':' . $site->get( 'DatabaseSettings', 'Password' );
-            }
-        }
-
-        $dsn .= '@' . $site->get( 'DatabaseSettings', 'Server', 'localhost' );
-        if ( $site->hasValue( 'DatabaseSettings', 'Port' ) )
-        {
-            $dsn .= ':' . $site->get( 'DatabaseSettings', 'Port' );
-        }
-
-        if ( $site->hasValue( 'DatabaseSettings', 'Database' ) )
-        {
-            $dsn .= '/' . $site->get( 'DatabaseSettings', 'Database' );
-        }
-
-        $config['dsn'] = $dsn;
-        // @todo Deal with other $config variables as well either from configuration or parameters on factory
-        return new static( $config );
-    }
-
-    /**
      * Returns the Zeta Database handler
      *
      * @return \ezp\Persistence\Storage\Legacy\EzcDbHandler

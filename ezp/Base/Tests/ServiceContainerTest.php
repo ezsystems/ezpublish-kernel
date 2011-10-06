@@ -199,6 +199,31 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         );
         self::assertInstanceOf( 'ezp\\Base\\Tests\\D', $d );
     }
+
+    /**
+     * @covers \ezp\Base\ServiceContainer::get
+     */
+    public function testSimpleServiceUsingHash()
+    {
+        $sc = new ServiceContainer();
+        $d = $sc->get(
+            'EService',
+            array(
+                'EService' => array(
+                    'class' => 'ezp\\Base\\Tests\\E',
+                    'arguments' => array(
+                        array(
+                            'bool' => true,
+                            'int' => 42,
+                            'string' => 'Archer',
+                            'array' => array( 'ezfile' => 'ezp\\Content\\FieldType\\File', 'something' ),
+                        )
+                    ),
+                ),
+            )
+        );
+        self::assertInstanceOf( 'ezp\\Base\\Tests\\E', $d );
+    }
 }
 
 
@@ -240,5 +265,20 @@ class C
 class D
 {
     public function __construct( ServiceContainer $sc, array $server, B $b ){}
+}
 
+
+class E
+{
+    public function __construct( array $config )
+    {
+        if ( $config['bool'] !== true )
+            throw new \Exception( "Bool was not 'true' value" );
+        if ( $config['string'] !== 'Archer' )
+            throw new \Exception( "String was not 'Archer' value" );
+        if ( $config['int'] !== 42 )
+            throw new \Exception( "Int was not '42' value" );
+        if ( $config['array'] !== array( 'ezfile' => 'ezp\\Content\\FieldType\\File', 'something' ) )
+            throw new \Exception( "Array was not expected value" );
+    }
 }
