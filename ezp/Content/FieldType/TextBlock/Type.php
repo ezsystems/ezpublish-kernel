@@ -22,7 +22,6 @@ class Type extends TextLine
     const IS_SEARCHABLE = true;
 
     protected $allowedSettings = array( 'textColumns' => null );
-    protected $allowedValidators = array();
 
     /**
      * Returns the fallback default value of field type when no such default

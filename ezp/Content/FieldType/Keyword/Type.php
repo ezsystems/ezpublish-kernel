@@ -22,8 +22,6 @@ class Type extends FieldType
     const FIELD_TYPE_IDENTIFIER = "ezkeyword";
     const IS_SEARCHABLE = true;
 
-    protected $allowedValidators = array();
-
     /**
      * Returns the fallback default value of field type when no such default
      * value is provided in the field definition in content types.
