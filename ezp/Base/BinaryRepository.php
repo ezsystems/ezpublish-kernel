@@ -109,17 +109,18 @@ class BinaryRepository
     /**
      * Creates a BinaryFile object from $localFile
      * @param string $localFile
-     * @param string $repositoryPath The path the file must be stored as
+     * @param string $repositoryPath The path the file must be stored as. If false, $localFile will be used.
      * @return \ezp\Io\BinaryFile
      * @throws InvalidArgumentValue When given a non existing / unreadable file
      */
-    public function createFromLocalFile( $localFile, $repositoryPath )
+    public function createFromLocalFile( $localFile, $repositoryPath = false )
     {
         if ( !file_exists( $localFile ) || !is_readable( $localFile ) )
         {
             throw new InvalidArgumentValue( 'localFile', $localFile );
         }
 
+        $repositoryPath = $repositoryPath ?: $localFile;
         $file = new BinaryFileCreateStruct();
         $file->originalFile = basename( $localFile );
         $file->size = filesize( $localFile );
