@@ -39,17 +39,27 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     /**
      * @covers \ezp\Content\FieldType\XmlText\Type::canParseValue
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
+     * @dataProvider providerForTestCanParseSimplifiedValueInvalidFormat
      * @group fieldType
      */
-    public function testCanParseSimplifiedValueInvalidFormat()
+    public function testCanParseSimplifiedValueInvalidFormat( $value )
     {
         $ft = new XmlTextType();
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( "canParseValue" );
         $refMethod->setAccessible( true );
 
-        $value = new SimplifiedValue( '<a href="http://www.google.com/">bar</foo>' );
         $refMethod->invoke( $ft, $value );
+    }
+
+    public function providerForTestCanParseSimplifiedValueInvalidFormat()
+    {
+        return array(
+            // RawValue requires root XML + section tags
+            array( new RawValue( '' ) ),
+            // wrong closing tag
+            array( new SimplifiedValue( '<a href="http://www.google.com/">bar</foo>' ) ),
+        );
     }
 
     /**
