@@ -19,7 +19,7 @@ use ezp\Content\FieldType\XmlText\Input\Parser as InputParser,
  *
  * Parses X(HT)ML produced by the OnlineEditor.
  */
-class Simplified extends BaseParser implements InputParser
+class OnlineEditor extends BaseParser implements InputParser
 {
     /**
      * Used to strip out ezoe, tinymce & browser specific classes
