@@ -109,6 +109,7 @@ abstract class Base
         'AllowNumericEntities' => false,
         'StrictHeaders' => false,
         'DOMDocumentClass' => 'DOMDocument',
+        'checkExternalData' => true,
     );
 
     /**
@@ -126,6 +127,7 @@ abstract class Base
     const OPT_ALLOW_NUMERIC_ENTITIES = 'AllowNumericEntities';
     const OPT_STRICT_HEADERS = 'StrictHeaders';
     const OPT_DOM_DOCUMENT_CLASS = 'DOMDocumentClass';
+    const OPT_CHECK_EXTERNAL_DATA = 'checkExternalData';
 
     /**
      * Construct a new Parser

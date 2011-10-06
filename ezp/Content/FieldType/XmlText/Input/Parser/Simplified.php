@@ -714,62 +714,87 @@ class Simplified extends BaseParser implements InputParser
 
         if ( $href )
         {
+            // ezobject:// link
             if ( preg_match( "@^ezobject://[0-9]+(#.*)?$@", $href ) )
             {
-                $url = strtok( $href, '#' );
-                $anchorName = strtok( '#' );
-                $objectID = substr( strrchr( $url, "/" ), 1 );
-                $element->setAttribute( 'object_id', $objectID );
-
-                if ( !in_array( $objectID, $this->linkedObjectIDArray ) )
+                // check if the referenced Content exists
+                if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
                 {
-                    $this->linkedObjectIDArray[] = $objectID;
+                    $url = strtok( $href, '#' );
+                    $anchorName = strtok( '#' );
+                    $contentId = substr( strrchr( $url, "/" ), 1 );
+
+                    // check if the referenced Content exists
+                    if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
+                    {
+                        if ( !$this->handler->checkContentById( $contentId ))
+                        {
+                            $this->Messages[] = "Object '$contentId' does not exist.";
+                        }
+                    }
+
+                    $element->setAttribute( 'object_id', $contentId );
+
+                    if ( !in_array( $contentId, $this->linkedObjectIDArray ) )
+                    {
+                        $this->linkedObjectIDArray[] = $contentId;
+                    }
                 }
             }
+
+            // eznode:// link
             elseif ( preg_match( "@^eznode://.+(#.*)?$@" , $href ) )
             {
-                $objectID = null;
-                $url = strtok( $href, '#' );
-                $anchorName = strtok( '#' );
-                $nodePath = substr( strchr( $url, "/" ), 2 );
-                if ( preg_match( "@^[0-9]+$@", $nodePath ) )
+                // check if the referenced Content exists
+                if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
                 {
-                    $nodeID = $nodePath;
-                    $node = eZContentObjectTreeNode::fetch( $nodeID, false, false );
-                    if ( !$node )
+                    $objectID = null;
+                    $url = strtok( $href, '#' );
+                    $anchorName = strtok( '#' );
+                    $locationPath = substr( strchr( $url, "/" ), 2 );
+                    if ( preg_match( "@^[0-9]+$@", $locationPath ) )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA,"Node '$nodeID' does not exist." );
+                        $locationId = $locationPath;
+                        $location = $this->handler->getlocationById( $locationId );
+                        if ( !$location )
+                        {
+                            $this->handleError( self::ERROR_DATA, "Location '$locationId' does not exist." );
+                        }
+                        else
+                        {
+                            $contentId = $location->contentId;
+                        }
                     }
                     else
                     {
-                        $objectID = $node['contentobject_id'];
+                        $location = $this->handler->getLocationByPath( $locationPath );
+                        if ( !$location )
+                        {
+                            $this->handleError( self::ERROR_DATA, "Node '$locationPath' does not exist." );
+                        }
+                        else
+                        {
+                            $locationId = $location->id;
+                            $contentId = $location->contentId;
+                        }
+                        $element->setAttribute( 'show_path', 'true' );
                     }
-                }
-                else
-                {
-                    $node = eZContentObjectTreeNode::fetchByURLPath( $nodePath, false );
-                    if ( !$node )
-                    {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Node '$nodePath' does not exist." );
-                    }
-                    else
-                    {
-                        $nodeID = $node['node_id'];
-                        $objectID = $node['contentobject_id'];
-                    }
-                    $element->setAttribute( 'show_path', 'true' );
-                }
-                $element->setAttribute( 'node_id', $nodeID );
+                    $element->setAttribute( 'node_id', $locationId );
 
-                if ( $objectID && !in_array( $objectID, $this->linkedObjectIDArray ) )
-                {
-                    $this->linkedObjectIDArray[] = $objectID;
+                    if ( isset( $contentId ) && !in_array( $contentId, $this->linkedObjectIDArray ) )
+                    {
+                        $this->linkedObjectIDArray[] = $contentId;
+                    }
                 }
             }
+
+            // anchor
             elseif ( preg_match( "@^#.*$@" , $href ) )
             {
                 $anchorName = substr( $href, 1 );
             }
+
+            // other
             else
             {
                 //washing href. single and double quotes replaced with their urlencoded form
@@ -787,21 +812,23 @@ class Simplified extends BaseParser implements InputParser
                     // Protection from XSS attack
                     if ( preg_match( "/^(java|vb)script:.*/i" , $url ) )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Using scripts in links is not allowed, link '$url' has been removed" );
+                        $this->handleError( self::ERROR_DATA, "Using scripts in links is not allowed, link '$url' has been removed" );
 
                         $element->removeAttribute( 'href' );
                         return $ret;
 
                     }
-                    // Check mail address validity
-                    if ( preg_match( "/^mailto:(.*)/i" , $url, $mailAddr ) &&
+
+                    // mailto: link
+                    // @todo Implement
+                    /*if ( preg_match( "/^mailto:(.*)/i" , $url, $mailAddr ) &&
                         !eZMail::validate( $mailAddr[1] ) )
                     {
-                        $this->handleError( eZXMLInputParser::ERROR_DATA, "Invalid e-mail address: '$mailAddr[1]'" );
+                        $this->handleError( self::ERROR_DATA, "Invalid e-mail address: '$mailAddr[1]'" );
 
                         $element->removeAttribute( 'href' );
                         return $ret;
-                    }
+                    }*/
                     // Store urlID instead of href
                     $urlID = $this->convertHrefToID( $url );
                     if ( $urlID )

@@ -82,7 +82,9 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />' ) ),
 
-            array( new SimplifiedValue( '<section>test</section>' ) )
+            array( new SimplifiedValue( '<section>test</section>' ) ),
+
+            array( new SimplifiedValue( '<paragraph><a href="eznode://1">test</a><a href="ezobject://1">test</a></paragraph>' ) )
     );
     }
 

@@ -38,14 +38,18 @@ class Handler
     /**
      * Checks if $xmlString is a valid XML
      * @param string $xmlString
+     * @param bool $checkExternalData Wether or not to check external data (content, location...) validity
+     *        If the option is set to false, the tags will be checked, but not the external elements they reference
      * @return bool
      */
-    public function isXmlValid( $xmlString )
+    public function isXmlValid( $xmlString, $checkExternalData = true )
     {
         $this->parser->setOption( BaseInputParser::OPT_VALIDATE_ERROR_LEVEL, BaseInputParser::ERROR_ALL );
         $this->parser->setOption( BaseInputParser::OPT_DETECT_ERROR_LEVEL, BaseInputParser::ERROR_ALL );
         $this->parser->setOption( BaseInputParser::OPT_PARSE_LINE_BREAKS, false );
         $this->parser->setOption( BaseInputParser::OPT_REMOVE_DEFAULT_ATTRS, false );
+
+        $this->parser->setOption( BaseInputParser::OPT_CHECK_EXTERNAL_DATA, $checkExternalData );
 
         $document = $this->parser->process( $xmlString );
 
@@ -115,6 +119,16 @@ class Handler
      * @todo Implement & Document
      */
     public function registerUrl( $url )
+    {
+        return false;
+    }
+
+    /**
+     * Checks if a Content exists using its id
+     * @param int $contentId
+     * @return bool true if the Content exists, false otherwise
+     */
+    public function checkContentById( $contentId )
     {
         return false;
     }

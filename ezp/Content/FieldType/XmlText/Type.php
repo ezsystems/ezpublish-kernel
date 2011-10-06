@@ -88,7 +88,7 @@ EOF;
         }
 
         $handler = new Handler( $this->getInputParser( $inputValue ) );
-        if ( !$handler->isXmlValid( $inputValue->text ) )
+        if ( !$handler->isXmlValid( $inputValue->text, false ) )
         {
             // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
             throw new BadFieldTypeInput( $inputValue, get_class() );

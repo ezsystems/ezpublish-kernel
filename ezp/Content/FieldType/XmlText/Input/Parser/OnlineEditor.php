@@ -1101,18 +1101,21 @@ class OnlineEditor extends BaseParser implements InputParser
             if ( strpos( $href, 'ezobject' ) === 0
                 && preg_match( "@^ezobject://([0-9]+)/?(#.+)?@i", $href, $matches ) )
             {
-                $objectID = $matches[1];
+                $contentId = $matches[1];
                 if ( isset( $matches[2] ) )
                     $anchorName = substr( $matches[2], 1 );
-                $element->setAttribute( 'object_id', $objectID );
-                if ( !eZContentObject::exists( $objectID ))
+                $element->setAttribute( 'object_id', $contentId );
+
+                // check if the referenced Content exists
+                if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
                 {
-                    $this->Messages[] = ezpI18n::tr( 'design/standard/ezoe/handler',
-                                                'Object %1 does not exist.',
-                                                false,
-                                                array( $objectID ) );
+                    if ( !$this->handler->checkContentById( $contentId ))
+                    {
+                        $this->Messages[] = "Object '$contentId' does not exist.";
+                    }
                 }
             }
+
             /*
                * rfc2396: ^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?
                * ezdhtml: "@^eznode://([^/#]+)/?(#[^/]*)?/?@i"
@@ -1124,37 +1127,45 @@ class OnlineEditor extends BaseParser implements InputParser
                 if ( isset( $matches[2] ) )
                     $anchorName = substr( $matches[2], 1 );
 
+                // Location by id
                 if ( is_numeric( $nodePath ) )
                 {
                     $locationId = $nodePath;
-                    $location = $this->handler->getLocationById( $nodeId );
-                    if ( $location === false )
+                    if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
                     {
-                        $this->Messages[] = "Location $locationId does not exist";
+                        $location = $this->handler->getLocationById( $nodeId );
+                        if ( $location === false )
+                        {
+                            $this->Messages[] = "Location $locationId does not exist";
+                        }
+                        else
+                        {
+                            $contentId = $location->contentId;
+                        }
                     }
                 }
+                // Location by path
                 else
                 {
-                    $location = $this->handler->getLocationByPath( $nodePath );
-                    if ( $location === false )
+                    if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
                     {
-                        $this->Messages[] = "Node &apos;$nodePath&apos; does not exist.";
+                        $location = $this->handler->getLocationByPath( $nodePath );
+                        if ( $location === false )
+                        {
+                            $this->Messages[] = "Node &apos;$nodePath&apos; does not exist.";
+                        }
+                        else
+                        {
+                            $locationId = $location->id;
+                            $contentId = $location->contentId;
+                        }
+                        $element->setAttribute( 'show_path', 'true' );
                     }
-                    else
-                    {
-                        $locationId = $location->id;
-                    }
-                    $element->setAttribute( 'show_path', 'true' );
                 }
 
                 if ( isset( $locationId ) && $locationId )
                 {
                     $element->setAttribute( 'node_id', $locationId );
-                }
-
-                if ( isset( $location ) && $location !== false )
-                {
-                    $objectID = $location->contentId;
                 }
             }
             elseif ( strpos( $href, '#' ) === 0 )
@@ -1199,15 +1210,18 @@ class OnlineEditor extends BaseParser implements InputParser
 
                     }
                     // Store urlID instead of href
-                    $url   = str_replace(array('&amp;', '%28', '%29'), array('&', '(', ')'), $url );
-                    $url = $this->handler->registerUrl( $url );
-
-                    if ( $url !== false )
+                    if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
                     {
-                        if ( !in_array( $url->id, $this->urlIDArray ) )
-                            $this->urlIDArray[] = $url->id;
+                        $url   = str_replace(array('&amp;', '%28', '%29'), array('&', '(', ')'), $url );
+                        $url = $this->handler->registerUrl( $url );
 
-                        $element->setAttribute( 'url_id', $url->id );
+                        if ( $url !== false )
+                        {
+                            if ( !in_array( $url->id, $this->urlIDArray ) )
+                                $this->urlIDArray[] = $url->id;
+
+                            $element->setAttribute( 'url_id', $url->id );
+                        }
                     }
                 }
             }
@@ -1239,31 +1253,41 @@ class OnlineEditor extends BaseParser implements InputParser
             $element->removeAttribute( 'id' );
             if ( strpos( $ID, 'eZObject_' ) !== false )
             {
-                $objectID = substr( $ID, strpos( $ID, '_' ) + 1 );
-                $element->setAttribute( 'object_id', $objectID );
-                $object = $this->handler->get( $objectID );
-                if ( !$object )
+                if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
                 {
-                    if ( !in_array( $objectID, $this->deletedEmbeddedObjectIDArray ) )
-                        $this->deletedEmbeddedObjectIDArray[] = $objectID;
+                    $objectID = substr( $ID, strpos( $ID, '_' ) + 1 );
+                    $element->setAttribute( 'object_id', $objectID );
+                    $object = $this->handler->getContentById( $objectID );
+                    if ( !$object )
+                    {
+                        if ( !in_array( $objectID, $this->deletedEmbeddedObjectIDArray ) )
+                            $this->deletedEmbeddedObjectIDArray[] = $objectID;
+                    }
+                    elseif ( $object->attribute('status') == eZContentObject::STATUS_ARCHIVED )
+                    {
+                        $this->thrashedEmbeddedObjectIDArray[] = $objectID;
+                    }
                 }
-                else if ( $object->attribute('status') == eZContentObject::STATUS_ARCHIVED )
-                    $this->thrashedEmbeddedObjectIDArray[] = $objectID;
             }
             else if ( strpos( $ID, 'eZNode_' ) !== false )
             {
-                $nodeID = substr( $ID, strpos( $ID, '_' ) + 1 );
-                $element->setAttribute( 'node_id', $nodeID );
+                if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
+                {
+                    $nodeID = substr( $ID, strpos( $ID, '_' ) + 1 );
+                    $element->setAttribute( 'node_id', $nodeID );
 
-                $node = $this->handler->getLocationById( $nodeID );
-                if ( $node )
-                    $objectID = $node->contentId;
-                else if ( !in_array( $nodeID, $this->deletedEmbeddedNodeIDArray ) )
-                    $this->deletedEmbeddedNodeIDArray[] = $nodeID;
+                    $node = $this->handler->getLocationById( $nodeID );
+                    if ( $node )
+                        $objectID = $node->contentId;
+                    else if ( !in_array( $nodeID, $this->deletedEmbeddedNodeIDArray ) )
+                        $this->deletedEmbeddedNodeIDArray[] = $nodeID;
+                }
             }
 
             if ( $objectID && !in_array( $objectID, $this->embeddedObjectIDArray ) )
+            {
                 $this->embeddedObjectIDArray[] = $objectID;
+            }
         }
         $align = $element->getAttribute( 'align' );
         if ( $align && $align === 'middle' )
@@ -1303,22 +1327,9 @@ class OnlineEditor extends BaseParser implements InputParser
         parent::processAttributesBySchema( $element );
     }
 
-    /*
-       * Misc internally (by this and main xml handler) used functions
-    */
-    public function getUrlIDArray()
-    {
-        return $this->urlIDArray;
-    }
-
     public function getEmbeddedObjectIDArray()
     {
         return $this->embeddedObjectIDArray;
-    }
-
-    public function getLinkedObjectIDArray()
-    {
-        return $this->linkedObjectIDArray;
     }
 
     /**
@@ -1385,16 +1396,20 @@ class OnlineEditor extends BaseParser implements InputParser
         }
     }
 
-    protected $urlIDArray = array();
-    protected $linkedObjectIDArray = array();
+    /**
+     * Lists of external ids found during parsing
+     * @var integer[]
+     */
     protected $embeddedObjectIDArray = array();
     protected $deletedEmbeddedNodeIDArray = array();
     protected $deletedEmbeddedObjectIDArray = array();
     protected $thrashedEmbeddedObjectIDArray = array();
 
-
     protected $anchorAsAttribute = false;
 
+    /**
+     * @var array
+     */
     protected static $customTagList = null;
 
     /**
