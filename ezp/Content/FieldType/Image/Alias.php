@@ -144,7 +144,7 @@ class Alias extends ValueObject
                 return $this->fileInfo->getContentType();
                 break;
 
-            case 'fileName':
+            case 'filename':
                 return $this->fileInfo->getFilename();
                 break;
 
