@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the CountryTest class
+ * File containing the XmlText\FieldTypeTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace ezp\Content\Tests\FieldType\XmlText;
 use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\XmlText\Type as XmlTextType,
     ezp\Content\FieldType\Value as BaseValue,
@@ -18,7 +18,7 @@ use ezp\Content\FieldType\Factory,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
-class XmlTextTest extends PHPUnit_Framework_TestCase
+class FieldTypeTest extends PHPUnit_Framework_TestCase
 {
     /**
      * This test will make sure a correct mapping for the field type string has

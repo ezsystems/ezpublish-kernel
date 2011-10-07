@@ -1305,17 +1305,17 @@ abstract class Base
         }
     }
 
-    protected function getRelatedObjectIDArray()
+    public function getRelatedContentIdArray()
     {
         return $this->relatedObjectIDArray;
     }
 
-    protected function getLinkedObjectIDArray()
+    public function getLinkedContentIdArray()
     {
         return $this->linkedObjectIDArray;
     }
 
-    protected function getUrlIDArray()
+    public function getUrlIdArray()
     {
         return $this->urlIDArray;
     }

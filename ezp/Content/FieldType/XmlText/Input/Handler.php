@@ -9,7 +9,9 @@
 
 namespace ezp\Content\FieldType\XmlText\Input;
 
-use ezp\Content\FieldType\XmlText\Input\Parser as InputParserInterface,
+use ezp\Base\Repository,
+    ezp\Content\Version,
+    ezp\Content\FieldType\XmlText\Input\Parser as InputParserInterface,
     ezp\Content\FieldType\XmlText\Input\Parser\Base as BaseInputParser,
     DOMDocument;
 
@@ -54,12 +56,7 @@ class Handler
         $document = $this->parser->process( $xmlString );
 
         // @todo instanceof
-        if ( !is_object( $document ) )
-        {
-            return false;
-        }
-
-        return true;
+        return $document instanceof DOMDocument;
     }
 
     /**
@@ -73,13 +70,38 @@ class Handler
 
     /**
      * Processes $xmlString and indexes the external data it references
+     * @param string $xmlString
+     * @param \ezp\Base\Repository $repository
+     * @param \ezp\Content\Version $version
      * @return bool
      */
-    public function process( $xmlString )
+    public function process( $xmlString, Repository $repository, Version $version )
     {
+        $this->parser->setOption( BaseInputParser::OPT_CHECK_EXTERNAL_DATA, true );
+
         $document = $this->parser->process( $xmlString );
 
-        return !$document instanceof DOMDocument;
+        if ( !$document instanceof DOMDocument )
+        {
+            return false;
+        }
+
+        $service = $repository->getInternalFieldTypeService();
+        $service->
+
+        // related content
+        foreach( $this->parser->getRelatedContentIdArray() as $contentId )
+        {
+            // add related object to $version
+        }
+
+        // linked content
+        foreach( $this->parser->getLinkedContentIdArray() as $contentId )
+        {
+            // add linked object to $version
+        }
+
+        return true;
     }
 
     /**

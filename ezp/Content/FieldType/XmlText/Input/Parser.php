@@ -44,4 +44,33 @@ interface Parser
      */
     public function setHandler( Handler $handler );
 
+    /**
+     * Sets the parser option $option to $value
+     * @param string $option One of self::OPT_*
+     * @param mixed $value
+     * @throws \ezp\Base\Exception\BadConfiguration If the option is unknown or the value incorrect
+     */
+    public function setOption( $option, $value );
+
+    /**
+     * Gets the parser option $option
+     * @param string $option One of self::OPT_*
+     * @throws \ezp\Base\Exception\BadConfiguration If the option is unknown or the value incorrect
+     */
+    public function getOption( $option );
+
+    /**
+     * @return array
+     */
+    public function getRelatedContentIdArray();
+
+    /**
+     * @return array
+     */
+    public function getLinkedContentIdArray();
+
+    /**
+     * @return array
+     */
+    public function getUrlIdArray();
 }
