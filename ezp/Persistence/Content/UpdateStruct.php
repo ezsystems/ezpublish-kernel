@@ -43,7 +43,7 @@ class UpdateStruct extends ValueObject
     /**
      * Contains fields to be updated.
      *
-     * @var array(Field)
+     * @var \ezp\Persistence\Content\Field[]
      */
     public $fields = array();
 
