@@ -130,6 +130,7 @@ class AliasCollection extends TypeCollection
     {
         $alias = $this->imageManager->createOriginalAlias( $imageInfo, $originalImageInfo->getBasename() );
         $alias->alternativeText = $this->imageValue->alternativeText;
+        $this->imageValue->originalFilename = $originalImageInfo->getBasename();
         $this->exchangeArray( array( 'original' => $alias ) );
     }
 
