@@ -125,6 +125,8 @@ class Concrete extends Model implements Location
      *
      * Note: This function does not store the change, use Location service for such functionality!
      *
+     * @todo Should be removed or documented as internal as you will have to use move api if you want to change
+     *       parent after creation.
      * @param \ezp\Content\Location $parent
      */
     public function setParent( Location $parent )
