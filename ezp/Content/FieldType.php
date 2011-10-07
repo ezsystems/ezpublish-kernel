@@ -9,6 +9,7 @@
 
 namespace ezp\Content;
 use ezp\Content\Version,
+    ezp\Content\Field
     ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Value,
     ezp\Content\FieldType\Validator,
@@ -256,7 +257,7 @@ abstract class FieldType implements Observer
      * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */
-     public final function fillConstraintsFromValidator( FieldTypeConstraints $fieldTypeConstraints, Validator $validator )
+    public final function fillConstraintsFromValidator( FieldTypeConstraints $fieldTypeConstraints, Validator $validator )
      {
          $validatorClass = get_class( $validator );
          if ( !in_array( $validatorClass, $this->allowedValidators() ) )
@@ -267,7 +268,7 @@ abstract class FieldType implements Observer
          ) + $fieldTypeConstraints->validators;
      }
 
-     /**
+    /**
       * Called when subject has been updated
       * Supported events:
       *   - field/setValue Should be triggered when a field has been set a value. Will inject the value in the field type
@@ -277,27 +278,31 @@ abstract class FieldType implements Observer
       * @param array $arguments
       * @throws \ezp\Base\Exception\InvalidArgumentValue
       */
-     public function update( Observable $subject, $event = 'update', array $arguments = null )
-     {
-         switch ( $event )
-         {
-             case 'field/setValue':
-                 if ( $arguments === null || !isset( $arguments['value'] ) )
-                     throw new InvalidArgumentValue( 'arguments', $arguments, get_class( $this ) );
+    public function update( Observable $subject, $event = 'update', array $arguments = null )
+    {
+        switch ( $event )
+        {
+            case 'field/setValue':
+                if ( $arguments === null || !isset( $arguments['value'] ) )
+                throw new InvalidArgumentValue( 'arguments', $arguments, get_class( $this ) );
 
-                 $this->onFieldSetValue( $subject, $arguments['value'] );
-                 break;
+                $this->onFieldSetValue( $subject, $arguments['value'] );
+                break;
 
-             case 'pre_publish':
-             case 'post_publish':
-                 if ( $subject instanceof Version )
-                 {
-                     // @todo Implement
-                     // $this->onContentPublish( $arguments['repository'], $subject, $arguments['version'] );
-                 }
-                 break;
-         }
-     }
+            case 'pre_publish':
+            case 'post_publish':
+                if ( !$subject instanceof Field )
+                {
+                    throw new InvalidArgumentType( 'subject', 'ezp\Content\Version', $subject );
+                }
+                if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof Repository )
+                {
+                    throw new InvalidArgumentValue( 'repository', 'ezp\Base\Repository', null );
+                }
+                $this->onContentPublish( $subject, $arguments['repository'] );
+            break;
+        }
+    }
 
      /**
       * This method is called when a "field/setValue" event is triggered by $subject.

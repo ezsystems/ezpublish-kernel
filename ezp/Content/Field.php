@@ -10,6 +10,10 @@
 namespace ezp\Content;
 use ezp\Base\Model,
     ezp\Base\Exception\FieldValidation as FieldValidationException,
+    ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Observer,
+    ezp\Base\Observable,
     ezp\Content\Version,
     ezp\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Field as FieldVO,
@@ -28,7 +32,7 @@ use ezp\Base\Model,
  * @property-read \ezp\Content\Version $version
  * @property-read \ezp\Content\Type\FieldDefinition $fieldDefinition
  */
-class Field extends Model
+class Field extends Model implements Observer
 {
     /**
      * @var array Readable of properties on this object
@@ -76,6 +80,8 @@ class Field extends Model
         $this->version = $contentVersion;
         $this->fieldDefinition = $fieldDefinition;
         $this->attach( $this->fieldDefinition->getType(), 'field/setValue' );
+        $this->attach( $this->fieldDefinition->getType(), 'pre_publish' );
+        $this->attach( $this->fieldDefinition->getType(), 'post_publish' );
         $this->properties = new FieldVO(
             array(
                 "type" => $fieldDefinition->fieldType,
@@ -158,5 +164,37 @@ class Field extends Model
         }
 
         return $inputValue;
+    }
+
+    /**
+     * Called when subject has been updated
+     * Supported events:
+     *   - field/setValue Should be triggered when a field has been set a value. Will inject the value in the field type
+     *
+     * @param \ezp\Base\Observable $subject
+     * @param string $event
+     * @param array $arguments
+     * @throws \ezp\Base\Exception\InvalidArgumentType If an expected observable argument isn't passed
+     */
+    public function update( Observable $subject, $event = 'update', array $arguments = null )
+    {
+        switch ( $event )
+        {
+            case 'pre_publish':
+            case 'post_publish':
+                if ( !$subject instanceof Version )
+                {
+                    throw new InvalidArgumentType( 'version', 'ezp\Content\Version', null );
+                }
+
+                if ( !isset( $arguments[0] ) || !$arguments[0] instanceof Repository )
+                {
+                    throw new InvalidArgumentType( 'repository', 'ezp\Base\Repository', null );
+                }
+
+                // notify FieldTypes about the event
+                $this->notify( $event, array( 'repository' => $arguments['repository'] ) );
+                break;
+        }
     }
 }

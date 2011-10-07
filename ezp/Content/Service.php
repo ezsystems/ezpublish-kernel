@@ -683,10 +683,9 @@ class Service extends BaseService
                     $field->setState( array( 'properties' => $voField ) );
                     $field->setValue( $voField->value->data );
 
-                    // Make the FieldType an observer of publish events
-                    $type = $field->getFieldDefinition()->getType();
-                    $version->attach( $type, 'pre_publish' );
-                    $version->attach( $type, 'post_publish' );
+                    // Make the Field an observer of publish events
+                    $version->attach( $field, 'pre_publish' );
+                    $version->attach( $field, 'post_publish' );
                     continue 2;
                 }
             }
