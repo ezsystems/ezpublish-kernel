@@ -14,10 +14,12 @@ use ezp\Base\Model,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Observer,
     ezp\Base\Observable,
+    ezp\Base\Repository,
     ezp\Content\Version,
     ezp\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Field as FieldVO,
-    ezp\Content\FieldType\Value as FieldValue;
+    ezp\Content\FieldType\Value as FieldValue,
+    ezp\Content\FieldType\OnContentPublish as OnContentPublishFieldType;
 
 /**
  * This class represents a Content's field
@@ -79,9 +81,17 @@ class Field extends Model implements Observer
     {
         $this->version = $contentVersion;
         $this->fieldDefinition = $fieldDefinition;
-        $this->attach( $this->fieldDefinition->getType(), 'field/setValue' );
-        $this->attach( $this->fieldDefinition->getType(), 'pre_publish' );
-        $this->attach( $this->fieldDefinition->getType(), 'post_publish' );
+
+        // Observer setup
+        $fieldType = $this->fieldDefinition->getType();
+        $this->attach( $fieldType, 'field/setValue' );
+        if ( $fieldType instanceof OnContentPublishFieldType )
+        {
+            echo "OnContentPublishFieldType\n";
+            $this->attach( $fieldType, 'pre_publish' );
+            $this->attach( $fieldType, 'post_publish' );
+        }
+
         $this->properties = new FieldVO(
             array(
                 "type" => $fieldDefinition->fieldType,

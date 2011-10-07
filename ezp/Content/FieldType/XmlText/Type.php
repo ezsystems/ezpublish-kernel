@@ -12,6 +12,7 @@ use ezp\Base\Repository,
     ezp\Content\Field,
     ezp\Content\Version,
     ezp\Content\FieldType,
+    ezp\Content\FieldType\OnContentPublish,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Content\FieldType\XmlText\Value as RawValue,
     ezp\Content\FieldType\XmlText\Value\OnlineEditor as OnlineEditorValue,
@@ -29,7 +30,7 @@ use ezp\Base\Repository,
  * This field
  * @package
  */
-class Type extends FieldType
+class Type extends FieldType implements OnContentPublish
 {
     const FIELD_TYPE_IDENTIFIER = "ezxmltext";
     const IS_SEARCHABLE = true;
@@ -111,13 +112,20 @@ EOF;
         return false;
     }
 
-    protected function onContentPublish( Repository $repository, Version $version, Field $field )
+    /**
+     * Event handler for content/publish
+     * @param \ezp\Base\Repository $repository
+     * @param \ezp\Content\Version $version
+     * @param \ezp\Content\Field $field
+     */
+    public function onContentPublish( Repository $repository, Field $field )
     {
+
         // needs to pass more data to the handler
         // - repository (to publish new items)
         // - validate or process modes... that's harder.
-        $handler = $this->getInputHandler( $field->getValue() );
-        $handler->process( $field->getValue()->text );
+        $handler = $this->getInputHandler( $this->getInputParser( $inputValue ) );
+        $handler->process( $field->getValue()->text, $repository, $version );
 
         // From here, we can get the list of elements that need further processing:
         // - links: replace the URL with the ID of the eZURL object; create the object if it doesn't exist yet
