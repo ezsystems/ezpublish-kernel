@@ -265,7 +265,8 @@ class Service extends BaseService
      *
      * @param \ezp\Content $contentFrom
      * @param \ezp\Content $contentTo
-     * @param int|null $versionFrom
+     * @param mixed|null $versionFrom
+     * @return \ezp\Content\Relation
      */
     public function addRelation( Content $contentFrom, Content $contentTo, $versionFrom = null )
     {
