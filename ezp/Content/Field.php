@@ -197,7 +197,7 @@ class Field extends Model implements Observer
                     throw new InvalidArgumentType( 'version', 'ezp\Content\Version', null );
                 }
 
-                if ( !isset( $arguments[0] ) || !$arguments[0] instanceof Repository )
+                if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof Repository )
                 {
                     throw new InvalidArgumentType( 'repository', 'ezp\Base\Repository', null );
                 }

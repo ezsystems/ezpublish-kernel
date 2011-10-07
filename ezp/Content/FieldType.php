@@ -17,6 +17,7 @@ use ezp\Content\Version,
     ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Base\Observer,
     ezp\Base\Observable,
+    ezp\Base\Repository,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\InvalidArgumentType;
 
@@ -297,7 +298,7 @@ abstract class FieldType implements Observer
                 }
                 if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof Repository )
                 {
-                    throw new InvalidArgumentValue( 'repository', 'ezp\Base\Repository', null );
+                    throw new InvalidArgumentType( 'repository', 'ezp\Base\Repository', null );
                 }
                 $this->onContentPublish( $subject, $arguments['repository'] );
             break;

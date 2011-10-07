@@ -533,7 +533,7 @@ class Service extends BaseService
 
         // $this->handler->beginTransaction();
 
-        $version->notify( 'pre_publish', array( $this->repository ) );
+        $version->notify( 'pre_publish', array( 'repository' => $this->repository ) );
 
         // Archive the previous version if it exists
         if ( $version->versionNo > 1 )
@@ -559,7 +559,7 @@ class Service extends BaseService
 
         $updatedContent = $this->buildDomainObject( $contentVo );
 
-        $version->notify( 'post_publish', array( $this->repository, $updatedContent ) );
+        $version->notify( 'post_publish', array( 'repository' => $this->repository ) );
 
         // $this->handler->commit();
 
