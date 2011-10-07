@@ -273,17 +273,21 @@ class Service extends BaseService
         if ( !$this->repository->canUser( 'edit', $contentFrom ) )
             throw new Forbidden( 'Content', 'edit' );
 
+        if ( $versionFrom === null )
+        {
+            $versionFrom = $contentFrom->getCurrentVersion()->versionNo;
+        }
+
         $relation = new Relation( Relation::COMMON, $contentTo );
         $struct = $this->fillStruct(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => $contentFrom->id,
-                    'sourceContentVersion' => $versionFrom
+                    'sourceContentVersion' => $versionFrom // version is in legacy system not optional, it must be derived from the content in question if not provided.
                 )
             ),
             $relation,
             array(
-                'sourceContentVersion',
                 'sourceFieldDefinitionId'
             )
         );
