@@ -279,16 +279,12 @@ class ContentHandlerTest extends TestCase
         $result = $handler->createDraftFromVersion( 23, 2 );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content',
-            $result
-        );
-        $this->assertInstanceOf(
             'ezp\\Persistence\\Content\\Version',
-            $result->version
+            $result
         );
         $this->assertEquals(
             42,
-            $result->version->id
+            $result->id
         );
     }
 

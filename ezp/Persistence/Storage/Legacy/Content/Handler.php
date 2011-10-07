@@ -157,7 +157,7 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @param int|bool $srcVersion
-     * @return \ezp\Persistence\Content\Content
+     * @return \ezp\Persistence\Content\Version
      */
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
@@ -177,7 +177,7 @@ class Handler implements BaseContentHandler
 
         $this->fieldHandler->createNewFields( $content );
 
-        return $content;
+        return $content->version;
     }
 
     /**
