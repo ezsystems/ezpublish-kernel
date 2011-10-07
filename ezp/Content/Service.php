@@ -656,17 +656,17 @@ class Service extends BaseService
      * @param \ezp\Persistence\Content\Version|\ezp\Persistence\Content\RestrictedVersion $versionVo
      * @return \ezp\Content\Version
      */
-    protected function buildVersionDomainObject( Content $content, $vo )
+    protected function buildVersionDomainObject( Content $content, $versionVo )
     {
-        if ( !$vo instanceof VersionValue && !$vo instanceof RestrictedVersionValue )
-            throw new InvalidArgumentType( '$versionVo', 'Version or RestrictedVersion', $vo );
+        if ( !$versionVo instanceof VersionValue && !$versionVo instanceof RestrictedVersionValue )
+            throw new InvalidArgumentType( '$versionVo', 'Version or RestrictedVersion', $versionVo );
 
         $version = new ConcreteVersion( $content );
 
-        $version->setState( array( 'properties' => $vo ) );
+        $version->setState( array( 'properties' => $versionVo ) );
 
         // lazy load fields if Version does not contain fields
-        if ( $vo instanceof RestrictedVersionValue )
+        if ( $versionVo instanceof RestrictedVersionValue )
         {
             $version->setState( array( 'fields' => new LazyFieldCollection( $this, $version ) ) );
             return $version;
@@ -676,7 +676,7 @@ class Service extends BaseService
         // @todo Deal with translations
         foreach ( $version->getFields() as $identifier => $field )
         {
-            foreach ( $vo->fields as $voField )
+            foreach ( $versionVo->fields as $voField )
             {
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
