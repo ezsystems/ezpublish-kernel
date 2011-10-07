@@ -13,6 +13,7 @@ use ezp\Base\Repository,
     ezp\Content\Version,
     ezp\Content\FieldType\XmlText\Input\Parser as InputParserInterface,
     ezp\Content\FieldType\XmlText\Input\Parser\Base as BaseInputParser,
+    ezp\Content\Relation,
     DOMDocument;
 
 /**
@@ -87,18 +88,17 @@ class Handler
         }
 
         $service = $repository->getInternalFieldTypeService();
-        $service->
 
         // related content
         foreach( $this->parser->getRelatedContentIdArray() as $contentId )
         {
-            // add related object to $version
+            $service->addRelation( Relation::ATTRIBUTE, $version->contentId, $version->id, $contentId );
         }
 
         // linked content
         foreach( $this->parser->getLinkedContentIdArray() as $contentId )
         {
-            // add linked object to $version
+            $service->addRelation( Relation::LINK, $version->contentId, $version->id, $contentId );
         }
 
         return true;

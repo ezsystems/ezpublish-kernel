@@ -10,6 +10,8 @@
 namespace ezp\Content\Tests\FieldType\XmlText;
 
 use ezp\Content\FieldType\XmlText\Input\Handler as InputHandler,
+    ezp\Content\Relation,
+
     PHPUnit_Framework_TestCase,
     DOMDocument;
 
@@ -44,7 +46,13 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
      */
     public function testProcessRelatedContent()
     {
+        // List of ids returned by the parser
         $idArray = array( 1, 2, 3 );
+
+        // Version DO
+        $version = $this->getMock( 'ezp\\Content\\Version' );
+        $version->id = 1;
+        $version->contentId = 1;
 
         $repository = $this->getMockBuilder( '\\ezp\\Base\\Repository' )
             ->disableOriginalConstructor()
@@ -56,12 +64,22 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
             ->setConstructorArgs( array( $repository, $repositoryHandler ) )
             ->getMock();
 
+        // 6 calls to FieldType\Service::addRelation())
+        $fieldTypeService
+            ->expects( $this->exactly( 6 ) )
+            ->method( 'addRelation' )
+            ->with(
+                $this->logicalOr( $this->equalTo( Relation::ATTRIBUTE ), $this->equalTo( Relation::LINK ) ),
+                $version->contentId,
+                $version->id,
+                $this->logicalOr( $this->equalTo( 1 ), $this->equalTo( 2 ), $this->equalTo( 3 ) ),
+                $this->isNull()
+            );
+
         $repository
             ->expects( $this->once() )
             ->method( 'getInternalFieldTypeService' )
             ->will( $this->returnValue( $fieldTypeService ) );
-
-        $version = $this->getMock( 'ezp\\Content\\Version' );
 
         $inputParser = $this->getInputParserMock();
 
