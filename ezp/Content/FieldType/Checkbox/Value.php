@@ -50,4 +50,12 @@ class Value extends BaseValue implements ValueInterface
     {
         return $this->bool ? '1' : '0';
     }
+
+    /**
+     * @see \ezp\Content\FieldType\ValueInterface::getTitle()
+     */
+    public function getTitle()
+    {
+        return $this->bool ? '1' : '0';
+    }
 }

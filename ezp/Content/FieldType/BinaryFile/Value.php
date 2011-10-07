@@ -127,4 +127,12 @@ class Value extends BaseValue implements ValueInterface
                 throw new PropertyNotFound( $name, get_class( $this ) );
         }
     }
+
+    /**
+     * @see \ezp\Content\FieldType\ValueInterface::getTitle()
+     */
+    public function getTitle()
+    {
+        return $this->originalFilename;
+    }
 }

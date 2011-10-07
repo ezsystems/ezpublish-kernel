@@ -53,4 +53,12 @@ class Value extends BaseValue implements ValueInterface
         throw new RuntimeException( "@TODO: Implement" );
         return $this->value;
     }
+
+    /**
+     * @see \ezp\Content\FieldType\ValueInterface::getTitle()
+     */
+    public function getTitle()
+    {
+        throw new \RuntimeException( 'Implement this method' );
+    }
 }

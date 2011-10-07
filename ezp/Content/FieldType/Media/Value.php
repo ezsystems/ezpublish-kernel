@@ -179,4 +179,12 @@ class Value extends BaseValue implements ValueInterface
     {
         return $this->handler;
     }
+
+    /**
+     * @see \ezp\Content\FieldType\ValueInterface::getTitle()
+     */
+    public function getTitle()
+    {
+        return $this->originalFilename;
+    }
 }

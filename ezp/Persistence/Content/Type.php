@@ -114,13 +114,21 @@ class Type extends ValueObject
 
     /**
      * URL alias schema
+     * Same as {@link \ezp\Persistence\Content\Type::$nameSchema}.
+     * If nothing is provided, $nameSchema will be used instead.
      *
      * @var string
+     * @see \ezp\Persistence\Content\Type::$nameSchema
      */
     public $urlAliasSchema;
 
     /**
-     * Name schema
+     * Name schema.
+     * Can be composed of FieldDefinition identifier place holders.
+     * These place holders must comply this pattern : <field_definition_identifier>.
+     * An OR condition can be used :
+     * <field_def|other_field_def>
+     * In this example, field_def will be used if available. If not, other_field_def will be used for content name generation
      *
      * @var string
      */

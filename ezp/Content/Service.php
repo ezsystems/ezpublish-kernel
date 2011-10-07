@@ -14,6 +14,7 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Configuration,
     ezp\Content,
     ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Section\Proxy as ProxySection,
@@ -27,6 +28,7 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Field\LazyCollection as LazyFieldCollection,
     ezp\Content\Field\StaticCollection as StaticFieldCollection,
     ezp\Content\Search\Result,
+    ezp\Content\Utils\NamePatternResolver,
     ezp\Persistence\Content as ContentValue,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
@@ -548,8 +550,10 @@ class Service extends BaseService
         $updateStruct->ownerId = $content->ownerId;
         $updateStruct->creatorId = $version->creatorId;
         $updateStruct->versionNo = $version->versionNo;
-        // @todo Get names using the appropriate call
-        // $struct->name = ...
+        // @todo : Take translations into account instead of hardcoding eng-GB :)
+        $updateStruct->name = array(
+            'eng-GB' => $this->generateContentName( $content, $version )
+        );
 
         $contentVo = $this->handler->contentHandler()->publish( $updateStruct );
 
@@ -560,6 +564,27 @@ class Service extends BaseService
         // $this->handler->commit();
 
         return $updatedContent;
+    }
+
+    /**
+     * Generates content name for $content in $version
+     *
+     * @param \ezp\Content $content
+     * @param \ezp\Content\Version $version
+     * @return string
+     * @todo Implement translations
+     */
+    private function generateContentName( Content $content, Version $version )
+    {
+        $nameResolver = new NamePatternResolver( $content->getContentType()->nameSchema, $version );
+        $conf = Configuration::getInstance( 'ini' );
+
+        $length = (int)$conf->get( 'ContentSettings', 'ContentObjectNameLimit', '150' );
+        if ( $length < 1 || $length > NamePatternResolver::CONTENT_NAME_MAX_LENGTH )
+            $length = NamePatternResolver::CONTENT_NAME_MAX_LENGTH;
+        $sequence = $conf->get( 'ContentSettings', 'ContentObjectNameLimitSequence', '...' );
+
+        return $nameResolver->resolveNamePattern( $length, $sequence );
     }
 
     /**

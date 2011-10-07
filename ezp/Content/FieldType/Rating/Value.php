@@ -48,4 +48,12 @@ class Value extends BaseValue implements ValueInterface
     {
         return $this->isDisabled ? "1" : "0";
     }
+
+    /**
+     * @see \ezp\Content\FieldType\ValueInterface::getTitle()
+     */
+    public function getTitle()
+    {
+        throw new \RuntimeException( 'Implement this method' );
+    }
 }

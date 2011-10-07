@@ -64,4 +64,12 @@ class Value extends BaseValue implements ValueInterface
     {
         return implode( ', ', $this->values );
     }
+
+    /**
+     * @see \ezp\Content\FieldType\ValueInterface::getTitle()
+     */
+    public function getTitle()
+    {
+        return implode( ', ', $this->values );
+    }
 }

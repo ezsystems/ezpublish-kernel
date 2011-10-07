@@ -48,4 +48,12 @@ class Value extends BaseValue implements ValueInterface
     {
         return implode( ",", $this->selection );
     }
+
+    /**
+     * @see \ezp\Content\FieldType\ValueInterface::getTitle()
+     */
+    public function getTitle()
+    {
+        throw new \RuntimeException( 'Implement this method' );
+    }
 }

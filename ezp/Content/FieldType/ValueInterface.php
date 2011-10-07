@@ -33,4 +33,13 @@ interface ValueInterface
      * @return string
      */
     public function __toString();
+
+    /**
+     * Returns the title of the current field value.
+     * It will be used to generate content name and url alias if current field is designated
+     * to be used in the content name/urlAlias pattern.
+     *
+     * @return string
+     */
+    public function getTitle();
 }

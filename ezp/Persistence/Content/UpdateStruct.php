@@ -28,7 +28,7 @@ class UpdateStruct extends ValueObject
     /**
      * @var string[] Eg. array( 'eng-GB' => "New Article" )
      */
-    public $name;
+    public $name = array();
 
     /**
      * @var int Creator of the new version
