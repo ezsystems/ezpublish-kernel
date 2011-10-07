@@ -17,7 +17,7 @@ use ezp\Base\Configuration,
 /**
  * Service container class
  *
- * A dependency injection container that uses configuration for defining dependencies.
+ * A dependency injection container (DIC) that uses configuration for defining dependencies.
  *
  * Usage:
  *
@@ -52,11 +52,19 @@ class ServiceContainer
     private $dependencies;
 
     /**
+     * Array of optional settings overrides
+     *
+     * @var array[]
+     */
+    private $settings;
+
+    /**
      * Construct object with optional configuration overrides
      *
      * @param mixed[]|object[] $dependencies
+     * @param array[] $settingsOverride
      */
-    public function __construct( array $dependencies = array() )
+    public function __construct( array $dependencies = array(), array $settingsOverride = array() )
     {
         $this->dependencies = $dependencies +
             array(
@@ -65,6 +73,8 @@ class ServiceContainer
                 '$_COOKIE' => $_COOKIE,
                 '$_FILES' => $_FILES
             );
+        $this->settings = $settingsOverride + Configuration::getInstance('base')->getAll();
+
     }
 
     /**
@@ -114,28 +124,24 @@ class ServiceContainer
     {
         $serviceKey = "@{$serviceName}";
 
-        // Return directly if already exists
+        // Return directly if it already exists
         if ( isset( $this->dependencies[$serviceKey] ) )
         {
             return $this->dependencies[$serviceKey];
         }
 
-        // Get settings
-        $settings = Configuration::getInstance()->getSection( "service_{$serviceName}", array() );
-        if ( !empty( $settingsOverride[$serviceName] ) )
-        {
-            $settings = $settingsOverride[$serviceName] + $settings;
-        }
-
         // Validate settings
-        if ( empty( $settings ) )
+        if ( empty( $this->settings["service_{$serviceName}"] ) )
         {
             throw new BadConfiguration( "base\\[service_{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
+
+        $settings = $this->settings["service_{$serviceName}"];
         if ( empty( $settings['class'] ) )
         {
             throw new BadConfiguration( "base\\[service_{$serviceName}]\\class", 'class setting is not defined' );
         }
+
         if ( !class_exists( $settings['class'] ) )
         {
             throw new MissingClass( $settings['class'], 'dependency' );

@@ -21,15 +21,15 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleService()
     {
-        $sc = new ServiceContainer();
-        $b = $sc->get(
-            'BService',
+        $sc = new ServiceContainer(
+            array(),
             array(
-                'BService' => array(
+                'service_BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B'
                 )
             )
         );
+        $b = $sc->get('BService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\B', $b );
         self::assertFalse( $b->factoryExecuted );
     }
@@ -39,16 +39,16 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleServiceFactory()
     {
-        $sc = new ServiceContainer();
-        $b = $sc->get(
-            'BService',
+        $sc = new ServiceContainer(
+            array(),
             array(
-                'BService' => array(
+                'service_BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
                     'factory' => 'factory',
                 )
             )
         );
+        $b = $sc->get('BService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\B', $b );
         self::assertTrue( $b->factoryExecuted );
     }
@@ -58,19 +58,19 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testArgumentsService()
     {
-        $sc = new ServiceContainer();
-        $c = $sc->get(
-            'CService',
+        $sc = new ServiceContainer(
+            array(),
             array(
-                'BService' => array(
+                'service_BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
                  ),
-                'CService' => array(
+                'service_CService' => array(
                     'class' => 'ezp\\Base\\Tests\\C',
                     'arguments' => array( '@BService' ),
                 )
             )
         );
+        $c = $sc->get('CService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\C', $c );
         self::assertEquals( '', $c->string );
     }
@@ -80,20 +80,20 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testArgumentsServiceFactory()
     {
-        $sc = new ServiceContainer();
-        $c = $sc->get(
-            'CService',
+        $sc = new ServiceContainer(
+            array(),
             array(
-                'BService' => array(
+                'service_BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
                  ),
-                'CService' => array(
+                'service_CService' => array(
                     'class' => 'ezp\\Base\\Tests\\C',
                     'factory' => 'factory',
                     'arguments' => array( '@BService', 'B', 'S' ),
                 )
             )
         );
+        $c = $sc->get('CService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\C', $c );
         self::assertEquals( 'BS', $c->string );
     }
@@ -103,23 +103,23 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testComplexService()
     {
-        $sc = new ServiceContainer();
-        $a = $sc->get(
-            'AService',
+        $sc = new ServiceContainer(
+            array(),
             array(
-                'AService' => array(
+                'service_AService' => array(
                     'class' => 'ezp\\Base\\Tests\\A',
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
-                'BService' => array(
+                'service_BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
                  ),
-                'CService' => array(
+                'service_CService' => array(
                     'class' => 'ezp\\Base\\Tests\\C',
                     'arguments' => array( '@BService' ),
                 )
             )
         );
+        $a = $sc->get('AService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\A', $a );
         self::assertEquals( '__', $a->string );
         self::assertInstanceOf( 'ezp\\Base\\Tests\\B', $a->b );
@@ -131,25 +131,25 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testComplexServiceFactory()
     {
-        $sc = new ServiceContainer();
-        $a = $sc->get(
-            'AService',
+        $sc = new ServiceContainer(
+            array(),
             array(
-                'AService' => array(
+                'service_AService' => array(
                     'class' => 'ezp\\Base\\Tests\\A',
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
-                'BService' => array(
+                'service_BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
                     'factory' => 'factory',
                  ),
-                'CService' => array(
+                'service_CService' => array(
                     'class' => 'ezp\\Base\\Tests\\C',
                     'factory' => 'factory',
                     'arguments' => array( '@BService', 'B', 'S' ),
                 )
             )
         );
+        $a = $sc->get('AService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\A', $a );
         self::assertEquals( '__', $a->string );
         self::assertInstanceOf( 'ezp\\Base\\Tests\\B', $a->b );
@@ -161,21 +161,21 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testComplexServiceCustomDependencies()
     {
-        $sc = new ServiceContainer( array( '@BService' => new B ) );
-        $a = $sc->get(
-            'AService',
+        $sc = new ServiceContainer(
+            array( '@BService' => new B ),
             array(
-                'AService' => array(
+                'service_AService' => array(
                     'class' => 'ezp\\Base\\Tests\\A',
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
-                'CService' => array(
+                'service_CService' => array(
                     'class' => 'ezp\\Base\\Tests\\C',
                     'factory' => 'factory',
                     'arguments' => array( '@BService', 'B', 'S' ),
                 )
             )
         );
+        $a = $sc->get('AService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\A', $a );
         self::assertEquals( '__', $a->string );
         self::assertInstanceOf( 'ezp\\Base\\Tests\\B', $a->b );
@@ -187,16 +187,16 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testComplexServiceUsingVariables()
     {
-        $sc = new ServiceContainer( array( '$B' => new B ) );
-        $d = $sc->get(
-            'DService',
+        $sc = new ServiceContainer(
+            array( '$B' => new B ),
             array(
-                'DService' => array(
+                'service_DService' => array(
                     'class' => 'ezp\\Base\\Tests\\D',
                     'arguments' => array( '$serviceContainer', '$_SERVER', '$B' ),
                 ),
             )
         );
+        $d = $sc->get('DService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\D', $d );
     }
 
@@ -205,11 +205,10 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSimpleServiceUsingHash()
     {
-        $sc = new ServiceContainer();
-        $d = $sc->get(
-            'EService',
+        $sc = new ServiceContainer(
+            array(),
             array(
-                'EService' => array(
+                'service_EService' => array(
                     'class' => 'ezp\\Base\\Tests\\E',
                     'arguments' => array(
                         array(
@@ -222,6 +221,7 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
                 ),
             )
         );
+        $d = $sc->get('EService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\E', $d );
     }
 }
