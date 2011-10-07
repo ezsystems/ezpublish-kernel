@@ -139,6 +139,7 @@ EOF;
      */
     protected function getInputParser( BaseValue $value )
     {
+        // @todo Load from configuration
         $valueClass = get_class( $value );
         if ( !isset( $this->parserClasses[$valueClass] ) )
         {
