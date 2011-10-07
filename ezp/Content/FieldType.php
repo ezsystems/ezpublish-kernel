@@ -9,7 +9,7 @@
 
 namespace ezp\Content;
 use ezp\Content\Version,
-    ezp\Content\Field
+    ezp\Content\Field,
     ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Value,
     ezp\Content\FieldType\Validator,
