@@ -250,8 +250,6 @@ class Service extends BaseService
 
                     // Make the FieldType an Observer for publish events
                     $type = $fields[$identifier]->getFieldDefinition()->getType();
-                    $version->attach( $type, 'pre_publish' );
-                    $version->attach( $type, 'post_publish' );
                     continue 2;
                 }
             }
