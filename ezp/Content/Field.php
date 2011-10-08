@@ -87,7 +87,6 @@ class Field extends Model implements Observer
         $this->attach( $fieldType, 'field/setValue' );
         if ( $fieldType instanceof OnContentPublishFieldType )
         {
-            echo "OnContentPublishFieldType\n";
             $this->attach( $fieldType, 'pre_publish' );
             $this->attach( $fieldType, 'post_publish' );
         }
