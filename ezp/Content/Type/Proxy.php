@@ -29,6 +29,8 @@ use ezp\Base\Proxy\Model as ModelProxy,
  * @property bool $isContainer
  * @property int $initialLanguageId
  * @property bool $defaultAlwaysAvailable
+ * @property int $sortField Valid values are found at {@link \ezp\Content\Location::SORT_FIELD_*}
+ * @property int $sortOrder Valid values are {@link \ezp\Content\Location::SORT_ORDER_*}
  * @property-read int[] $groupIds
  * @property Type\FieldDefinition[] $fields Appending items after it has been created has no effect, use TypeService->addFieldDefinition()
  * @property-read Type\Group[] $groups Appended items after it has been created has no effect, use TypeService->link()
