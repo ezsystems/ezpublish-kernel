@@ -107,7 +107,7 @@ class TrashTest extends Base
 
         // Now creating location for content
         $this->topLocation = $this->locationService->load( 2 );
-        $this->location = new ConcreteLocation( new ProxyContent( $this->content->id, $this->repository->getContentService() ) );
+        $this->location = new ConcreteLocation( $this->content );
         $this->location->setParent( $this->topLocation );
         $this->location = $this->locationService->create( $this->location );
         $this->locationToDelete[] = $this->location;
