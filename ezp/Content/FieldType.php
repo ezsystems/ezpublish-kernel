@@ -300,7 +300,7 @@ abstract class FieldType implements Observer
                 {
                     throw new InvalidArgumentType( 'repository', 'ezp\Base\Repository', null );
                 }
-                $this->onContentPublish( $subject, $arguments['repository'] );
+                $this->onContentPublish( $arguments['repository'], $subject );
             break;
         }
     }
