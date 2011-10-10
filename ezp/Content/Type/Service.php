@@ -415,16 +415,18 @@ class Service extends BaseService
 
         $fieldDefStruct = $field->getState( 'properties' );
         $fieldDefStruct->defaultValue = $field->type->toFieldValue();
-        $this->handler->contentTypeHandler()->addFieldDefinition(
+        $fieldDefStruct = $this->handler->contentTypeHandler()->addFieldDefinition(
             $type->id,
             $type->status,
             $fieldDefStruct
         );
+        $field->setState( array( 'properties' => $fieldDefStruct ) );
 
         // @todo deal with ordering
         $fields = $type->getFields()->getArrayCopy();
         $fields[] = $field;
         $type->setState( array( 'fields' => new ReadOnlyCollection( $fields ) ) );
+        $type->getState( 'properties' )->fieldDefinitions[] = $fieldDefStruct;
     }
 
     /**
@@ -452,6 +454,7 @@ class Service extends BaseService
         $fields = $type->getFields()->getArrayCopy();
         unset( $fields[$index] );
         $type->setState( array( 'fields' => new ReadOnlyCollection( $fields ) ) );
+        unset( $type->getState( 'properties' )->fieldDefinitions[$index] );// should be in same order so reuses index
     }
 
     /**
