@@ -125,7 +125,7 @@ EOF;
         // - repository (to publish new items)
         // - validate or process modes... that's harder.
         $handler = new InputHandler( $this->getInputParser( $field->getValue() ) );
-        $handler->process( $field->getValue()->text, $repository, $version );
+        $handler->process( $field->getValue()->text, $repository, $field->version );
 
         // From here, we can get the list of elements that need further processing:
         // - links: replace the URL with the ID of the eZURL object; create the object if it doesn't exist yet
