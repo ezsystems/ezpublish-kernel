@@ -44,11 +44,6 @@ class Value extends BaseValue implements ValueInterface
      */
     public $aliasList;
 
-    /**
-     * @var \ezp\Content\FieldType\Image\Handler
-     */
-    protected $handler;
-
     protected $properties = array(
         'fieldId' => null,
         'contentId' => null,
@@ -69,14 +64,13 @@ class Value extends BaseValue implements ValueInterface
     }
 
     /**
-     * @see \ezp\Content\FieldType\Value
+     * @param string $stringValue Image path (can be real path or relative to eZ Publish root).
+     *
      * @return \ezp\Content\FieldType\Media\Value
      */
     public static function fromString( $stringValue )
     {
-        $value = new static();
-        $value->file = $value->handler->createFromLocalPath( $stringValue );
-        $value->originalFilename = basename( $stringValue );
+        $value = new static( $stringValue );
         return $value;
     }
 
@@ -129,18 +123,6 @@ class Value extends BaseValue implements ValueInterface
                 throw new PropertyNotFound( $name, get_class() );
         }
     }
-
-    /**
-     * Returns handler object.
-     * Useful manipulate {@link self::$file}
-     *
-     * @return \ezp\Content\FieldType\Media\Handler
-     */
-    public function getHandler()
-    {
-        return $this->handler;
-    }
-
     /**
      * @see \ezp\Content\FieldType\ValueInterface::getTitle()
      */
