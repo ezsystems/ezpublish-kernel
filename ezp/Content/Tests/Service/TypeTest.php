@@ -263,6 +263,30 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::create
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     */
+    public function testCreateWithFieldWithDuplicatedIdentifier()
+    {
+        $do = new ConcreteType();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'test';
+        $do->nameSchema = $do->urlAliasSchema = "<>";
+        $do->isContainer = true;
+        $do->initialLanguageId = 1;
+        $groups[] = $this->service->loadGroup( 1 );
+        $fields[] = $field = new FieldDefinition( $do, 'ezstring' );
+        $fields[] = $field2 = new FieldDefinition( $do, 'ezstring' );
+        $field2->identifier = $field->identifier = 'title';
+        $field->setDefaultValue( new TextLineValue( 'New Test' ) );
+        $field2->setDefaultValue( new TextLineValue( 'New Test2' ) );
+        $this->service->create( $do, $groups, $fields );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::create
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testCreateException()
@@ -896,6 +920,23 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::addFieldDefinition
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     */
+    public function testAddFieldDefinitionWithExistingIdentifier()
+    {
+        $type = $this->service->load( 1 );
+        $field = new FieldDefinition( $type, 'ezstring' );
+        $field->name = $field->description = array( 'eng-GB' => 'Test' );
+        $field->setDefaultValue( new TextLineValue( "" ) );
+        $field->fieldGroup = '';
+        $field->identifier = 'name';
+        $field->isInfoCollector = $field->isRequired = $field->isTranslatable = true;
+        $this->service->addFieldDefinition( $type, $field );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::addFieldDefinition
      * @expectedException \ezp\Base\Exception\Forbidden
      */
     public function testAddFieldDefinitionForbidden()
@@ -1018,6 +1059,18 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->load( 1 );
         $this->assertEquals( 3, count( $type->fields ) );
         $this->assertEquals( array( 'eng-GB' => 'New name' ), $type->fields[0]->name );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::updateFieldDefinition
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     */
+    public function testUpdateFieldDefinitionWithExistingIdentifier()
+    {
+        $type = $this->service->load( 1 );
+        $type->fields[0]->identifier = 'description';
+        $this->service->updateFieldDefinition( $type, $type->fields[0] );
     }
 
     /**

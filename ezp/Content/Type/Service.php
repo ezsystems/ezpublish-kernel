@@ -129,6 +129,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a empty value
      * @throws \ezp\Base\Exception\Logic If a group is _not_ persisted, or if type / fields is
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $type->identifier is in use
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $field->identifier is used in several fields
      */
     public function create( Type $type, array $linkGroups, array $addFields = array() )
     {
@@ -138,18 +139,24 @@ class Service extends BaseService
         if ( !$this->repository->canUser( 'create', $type ) )
             throw new Forbidden( 'Type', 'create' );
 
+        $identifiers = array();
         $struct = new CreateStruct();
         $this->fillStruct( $struct, $type, array( 'fieldDefinitions', 'groupIds' ) );
         foreach ( $addFields as $fieldDefinition )
         {
             if ( !$fieldDefinition instanceof FieldDefinition )
                 throw new Logic( "Type\\Service->create()", '$addFields needs to be instance of Type\\FieldDefinition' );
+
             if ( $fieldDefinition->id )
                 throw new Logic( "Type\\Service->create()", '$addFields can not already be persisted' );
+
+            if ( in_array( $fieldDefinition->identifier, $identifiers ) )
+                throw new InvalidArgumentValue( '$field->identifier', "{$fieldDefinition->identifier} (already exists)" );
 
             $fieldDefStruct = $fieldDefinition->getState( 'properties' );
             $fieldDefStruct->defaultValue = $fieldDefinition->type->toFieldValue();
             $struct->fieldDefinitions[] = $fieldDefStruct;
+            $identifiers[] = $fieldDefStruct->identifier;
         }
 
         if ( !isset( $linkGroups[0] ) )
@@ -411,6 +418,7 @@ class Service extends BaseService
      * @param \ezp\Content\Type\FieldDefinition $field
      * @throws \ezp\Base\Exception\InvalidArgumentType If field has id already
      * @throws \ezp\Base\Exception\NotFound If type is not found
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $field->identifier is used in existing field on $type
      */
     public function addFieldDefinition( Type $type, FieldDefinition $field  )
     {
@@ -419,6 +427,12 @@ class Service extends BaseService
 
         if ( !$this->repository->canUser( 'edit', $type ) )
             throw new Forbidden( 'Type', 'edit' );
+
+        foreach ( $type->fields as $existingField )
+        {
+            if ( $existingField->identifier == $field->identifier )
+                throw new InvalidArgumentValue( '$field->identifier', "{$field->identifier} (already exists)" );
+        }
 
         $fieldDefStruct = $field->getState( 'properties' );
         $fieldDefStruct->defaultValue = $field->type->toFieldValue();
@@ -441,11 +455,15 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Type $type
      * @param \ezp\Content\Type\FieldDefinition $field
+     * @throws \ezp\Base\Exception\InvalidArgumentType If $field->id is false
      * @throws \ezp\Base\Exception\NotFound If field/type is not found
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $field is not an group on type
      */
     public function removeFieldDefinition( Type $type, FieldDefinition $field  )
     {
+        if ( !$field->id )
+            throw new InvalidArgumentType( '$field->id', 'int' );
+
         $index = $type->getFields()->indexOf( $field );
         if ( $index === false )
             throw new InvalidArgumentValue( '$field', 'Not part of $type->fields' );
@@ -469,12 +487,23 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Type $type
      * @param \ezp\Content\Type\FieldDefinition $field
+     * @throws \ezp\Base\Exception\InvalidArgumentType If $field->id is false
      * @throws \ezp\Base\Exception\NotFound If field/type is not found
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $field->identifier is used in existing field on $type
      */
     public function updateFieldDefinition( Type $type, FieldDefinition $field  )
     {
+        if ( !$field->id )
+            throw new InvalidArgumentType( '$field->id', 'int' );
+
         if ( !$this->repository->canUser( 'edit', $type ) )
             throw new Forbidden( 'Type', 'edit' );
+
+        foreach ( $type->fields as $existingField )
+        {
+            if ( $existingField->id != $field->id && $existingField->identifier == $field->identifier )
+                throw new InvalidArgumentValue( '$field->identifier', "{$field->identifier} (already exists on another field)" );
+        }
 
         $fieldDefStruct = $field->getState( 'properties' );
         $fieldDefStruct->defaultValue = $field->type->toFieldValue();
