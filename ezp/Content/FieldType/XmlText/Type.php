@@ -124,7 +124,7 @@ EOF;
         // needs to pass more data to the handler
         // - repository (to publish new items)
         // - validate or process modes... that's harder.
-        $handler = new InputHandler( $this->getInputParser( $inputValue ) );
+        $handler = new InputHandler( $this->getInputParser( $field->getValue() ) );
         $handler->process( $field->getValue()->text, $repository, $version );
 
         // From here, we can get the list of elements that need further processing:
