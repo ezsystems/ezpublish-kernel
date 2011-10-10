@@ -827,24 +827,7 @@ class ContentTest extends BaseServiceTest
      */
     public function testPublishNonDraft()
     {
-        $content = $this->service->load( 1 );
-        $this->service->publish( $content, $content->getCurrentVersion() );
-    }
-
-    /**
-     * Tests publishing of a version that doesn't belong to the provided content
-     * @expectedException \ezp\Base\Exception\Logic
-     * @covers \ezp\Content\Service::publish
-     */
-    public function testPublishContentVersionMismatch()
-    {
-        $this->service->publish(
-            new ConcreteContent(
-                $this->repository->getContentTypeService()->load( 1 ),
-                $this->anonymousUser
-            ),
-            $this->service->load( 1 )->getCurrentVersion()
-        );
+        $this->service->publish( $this->service->loadVersion( 1 ) );
     }
 
     /**
@@ -868,7 +851,7 @@ class ContentTest extends BaseServiceTest
 
         self::assertEquals( Version::STATUS_DRAFT, $version->status );
 
-        $publishedContent = $this->service->publish( $content, $version );
+        $publishedContent = $this->service->publish( $version );
 
         self::assertEquals( Version::STATUS_PUBLISHED, $publishedContent->getCurrentVersion()->status );
         self::assertEquals( array( 'eng-GB' => __METHOD__ ), $publishedContent->name );
@@ -892,7 +875,7 @@ class ContentTest extends BaseServiceTest
         $content = $this->repository->getContentService()->create( $content );
 
         $this->repository->setUser( $this->anonymousUser );
-        $this->service->publish( $content, $content->getCurrentVersion() );
+        $this->service->publish( $content->getCurrentVersion() );
     }
 
     /**
@@ -913,7 +896,7 @@ class ContentTest extends BaseServiceTest
 
         $content = $this->repository->getContentService()->create( $content );
 
-        $content = $this->service->publish( $content, $content->getCurrentVersion() );
+        $content = $this->service->publish( $content->getCurrentVersion() );
 
         $version = $this->service->createDraftFromVersion( $content );
 
@@ -921,7 +904,7 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( Version::STATUS_DRAFT, $version->status );
         self::assertEquals( Version::STATUS_PUBLISHED, $content->versions[1]->status );
 
-        $content = $this->service->publish( $content, $content->versions[2] );
+        $content = $this->service->publish( $content->versions[2] );
 
         self::assertEquals( 2, $content->currentVersionNo );
         self::assertEquals( Version::STATUS_ARCHIVED, $content->versions[1]->status );
@@ -946,11 +929,11 @@ class ContentTest extends BaseServiceTest
         $refMethod->setAccessible( true );
 
         // Content name for folder is <short_name|name> by default
-        self::assertSame( $folderName, $refMethod->invoke( $service, $content, $content->currentVersion ) );
+        self::assertSame( $folderName, $refMethod->invoke( $service, $content->getCurrentVersion() ) );
 
         // Adding a short name, content name generation should take it
         $folderShortName = 'This one is short';
         $content->fields['short_name'] = $folderShortName;
-        self::assertSame( $folderShortName, $refMethod->invoke( $service, $content, $content->currentVersion ) );
+        self::assertSame( $folderShortName, $refMethod->invoke( $service, $content->getCurrentVersion() ) );
     }
 }

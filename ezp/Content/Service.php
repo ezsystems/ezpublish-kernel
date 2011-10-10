@@ -504,26 +504,18 @@ class Service extends BaseService
 
     /**
      * Publishes $version of $content
-     * @param \ezp\Content $content
      * @param \ezp\Content\Version $version
      *
      * @throws \ezp\Base\Exception\Logic if $version doesn't have the DRAFT status
-     * @throws \ezp\Base\Exception\Logic if $version and $content don't match
      *
      * @return \ezp\Content The updated, published Content
      */
-    public function publish( Content $content, Version $version )
+    public function publish( Version $version )
     {
         // Only drafts can be published
         if ( $version->status !== Version::STATUS_DRAFT )
         {
             throw new Logic( '$version->status', 'Version should be in Version::STATUS_DRAFT state' );
-        }
-
-        // The version should belong to the given content
-        if ( $version->contentId !== $content->id )
-        {
-            throw new Logic( '$version->contentId', 'Content/Version arguments mismatch' );
         }
 
         if ( !$this->repository->canUser( 'edit', $version->getContent() ) )
@@ -536,21 +528,21 @@ class Service extends BaseService
         // Archive the previous version if it exists
         if ( $version->versionNo > 1 )
         {
-            $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_ARCHIVED, $content->currentVersionNo );
+            $this->handler->contentHandler()->setStatus( $version->contentId, Version::STATUS_ARCHIVED, $version->getContent()->currentVersionNo );
         }
         // @todo Maybe allow this to be part of Update struct to reduce backend calls
-        $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_PUBLISHED, $version->versionNo );
+        $this->handler->contentHandler()->setStatus( $version->contentId, Version::STATUS_PUBLISHED, $version->versionNo );
 
         // @todo: Update $content->currentVersionNo to $version->versionNo
 
         $updateStruct = new UpdateStruct();
-        $updateStruct->id = $content->id;
-        $updateStruct->ownerId = $content->ownerId;
+        $updateStruct->id = $version->contentId;
+        $updateStruct->ownerId = $version->getOwnerId();
         $updateStruct->creatorId = $version->creatorId;
         $updateStruct->versionNo = $version->versionNo;
         // @todo : Take translations into account instead of hardcoding eng-GB :)
         $updateStruct->name = array(
-            'eng-GB' => $this->generateContentName( $content, $version )
+            'eng-GB' => $this->generateContentName( $version )
         );
 
         $contentVo = $this->handler->contentHandler()->publish( $updateStruct );
@@ -572,9 +564,9 @@ class Service extends BaseService
      * @return string
      * @todo Implement translations
      */
-    private function generateContentName( Content $content, Version $version )
+    private function generateContentName( Version $version )
     {
-        $nameResolver = new NamePatternResolver( $content->getContentType()->nameSchema, $version );
+        $nameResolver = new NamePatternResolver( $version->getContentType()->nameSchema, $version );
         $conf = Configuration::getInstance( 'ini' );
 
         $length = (int)$conf->get( 'ContentSettings', 'ContentObjectNameLimit', '150' );
