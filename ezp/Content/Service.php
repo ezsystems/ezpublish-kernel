@@ -65,7 +65,7 @@ class Service extends BaseService
             $struct->sectionId = $content->getMainLocation()->getParent()->getContent()->sectionId;
         }
 
-        $this->fillStruct( $struct, $content, array( 'parentLocations', 'fields' ) );
+        $this->fillStruct( $struct, $content, array( 'parentLocations', 'fields', 'name' ) );
 
         $checkCreate = true;
         foreach ( $content->getLocations() as $location )

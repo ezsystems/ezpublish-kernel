@@ -541,7 +541,10 @@ class ContentHandler implements ContentHandlerInterface
         // Change the currentVersionNo to the published version
         $this->backend->update(
             "Content", $updateStruct->id,
-            array( 'currentVersionNo' => $updateStruct->versionNo )
+            array(
+                'currentVersionNo' => $updateStruct->versionNo,
+                'name' => $updateStruct->name
+            )
         );
 
         return $this->load( $updateStruct->id, $updateStruct->versionNo );

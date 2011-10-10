@@ -799,7 +799,7 @@ class ContentTest extends BaseServiceTest
 
         $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
-        $content->name = array( "eng-GB" => __METHOD__ );
+        $content->fields['name'] = __METHOD__;
         $content->setSection( $section );
 
         $content = $this->repository->getContentService()->create( $content );
@@ -811,6 +811,7 @@ class ContentTest extends BaseServiceTest
         $publishedContent = $this->service->publish( $content, $version );
 
         self::assertEquals( Version::STATUS_PUBLISHED, $publishedContent->currentVersion->status );
+        self::assertEquals( array( 'eng-GB' => __METHOD__ ), $publishedContent->name );
     }
 
     /**
@@ -847,7 +848,7 @@ class ContentTest extends BaseServiceTest
         // Create and publish content in version 1
         $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
-        $content->name = array( "eng-GB" => __METHOD__ );
+        $content->fields['name'] = __METHOD__;
         $content->setSection( $section );
 
         $content = $this->repository->getContentService()->create( $content );
@@ -865,5 +866,31 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( 2, $content->currentVersionNo );
         self::assertEquals( Version::STATUS_ARCHIVED, $content->versions[1]->status );
         self::assertEquals( Version::STATUS_PUBLISHED, $content->versions[2]->status );
+    }
+
+    /**
+     * Tests content name generation
+     * @covers \ezp\Content\Service\generateContentName
+     */
+    public function testGenerateContentName()
+    {
+        $type = $this->repository->getContentTypeService()->load( 1 );
+
+        $folderName = 'This is a regular name';
+        $content = new ConcreteContent( $type, $this->anonymousUser );
+        $content->fields['name'] = $folderName;
+
+        $service = $this->repository->getContentService();
+        $refService = new ReflectionObject( $service );
+        $refMethod = $refService->getMethod( 'generateContentName' );
+        $refMethod->setAccessible( true );
+
+        // Content name for folder is <short_name|name> by default
+        self::assertSame( $folderName, $refMethod->invoke( $service, $content, $content->currentVersion ) );
+
+        // Adding a short name, content name generation should take it
+        $folderShortName = 'This one is short';
+        $content->fields['short_name'] = $folderShortName;
+        self::assertSame( $folderShortName, $refMethod->invoke( $service, $content, $content->currentVersion ) );
     }
 }
