@@ -5,9 +5,9 @@
  * - Locale fre-FR has also been set in the system
  */
 
-use ezp\Content, ezp\Base\ServiceContainer as Container;
+use ezp\Content, ezp\Base\ServiceContainer;
 
-$sc = new Container();
+$sc = new ServiceContainer();
 $repository = $sc->getRepository();
 
 $localeFR = ezp\Base\Locale::get( 'fre-FR' );

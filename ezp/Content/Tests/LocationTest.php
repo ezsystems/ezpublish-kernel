@@ -12,7 +12,7 @@ use ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Section\Concrete as ConcreteSection,
     ezp\Content\Type\Concrete as ConcreteType,
-    ezp\Base\ServiceContainer as Container,
+    ezp\Base\ServiceContainer,
     ezp\User\Proxy as ProxyUser,
     PHPUnit_Framework_TestCase;
 
@@ -32,7 +32,7 @@ class LocationTest extends PHPUnit_Framework_TestCase
         $contentType = new ConcreteType();
         $contentType->identifier = 'article';
 
-        $sc = new Container;
+        $sc = new ServiceContainer;
         $this->content = new ConcreteContent( $contentType, new ProxyUser( 10, $sc->getRepository()->getUserService() ) );
     }
 

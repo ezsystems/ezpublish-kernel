@@ -12,7 +12,7 @@ use ezp\Base\Repository,
     ezp\Content,
     ezp\Content\Query;
 
-$sc = new ezp\Base\ServiceContainer as Container;
+$sc = new ezp\Base\ServiceContainer;
 $qb = new ezp\Content\Query\Builder;
 $contentService = $sc->getRepository()->getContentService();
 

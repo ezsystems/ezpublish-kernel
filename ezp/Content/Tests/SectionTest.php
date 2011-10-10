@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Tests;
 use ezp\Content\Section\Concrete as ConcreteSection,
-    ezp\Base\ServiceContainer as Container;
+    ezp\Base\ServiceContainer;
 
 /**
  * Test case for Location class

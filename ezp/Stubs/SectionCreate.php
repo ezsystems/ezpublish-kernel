@@ -1,8 +1,8 @@
 <?php
 use ezp\Content\Section,
-    ezp\Base\ServiceContainer as Container;
+    ezp\Base\ServiceContainer;
 
-$sc = new Container();
+$sc = new ServiceContainer();
 $sectionService = $sc->getRepository()->getSectionService();
 
 $sectionIdentifier = 'content';

@@ -10,7 +10,7 @@
 namespace ezp\Content\Tests;
 use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Proxy as ProxyContent,
-    ezp\Base\ServiceContainer as Container,
+    ezp\Base\ServiceContainer,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -30,7 +30,7 @@ class ContentProxyTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $sc = new Container;
+        $sc = new ServiceContainer;
         $this->service = $sc->getRepository()->getContentService();
     }
 

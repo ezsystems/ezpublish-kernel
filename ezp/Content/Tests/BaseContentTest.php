@@ -14,7 +14,7 @@ use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Content\FieldType\Keyword\Value as KeywordValue,
     ezp\User\Proxy as ProxyUser,
-    ezp\Base\ServiceContainer as Container,
+    ezp\Base\ServiceContainer,
     ezp\Base\Collection\ReadOnly,
     PHPUnit_Framework_TestCase;
 
@@ -42,7 +42,7 @@ abstract class BaseContentTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $sc = new Container;
+        $sc = new ServiceContainer;
         $this->repository = $sc->getRepository();
 
         // setup a content type & content object of use by tests

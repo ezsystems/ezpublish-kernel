@@ -2,9 +2,9 @@
 /**
  * Delete a Content
  */
-use ezp\Base\ServiceContainer as Container;
+use ezp\Base\ServiceContainer;
 
-$sc = new Container();
+$sc = new ServiceContainer();
 $contentService = $sc->getRepository()->getContentService();
 try
 {

@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\Tests;
-use ezp\Base\ServiceContainer as Container,
+use ezp\Base\ServiceContainer,
     PHPUnit_Framework_TestCase;
 
 /**

@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Tests\Service;
 use PHPUnit_Framework_TestCase,
-    ezp\Base\ServiceContainer as Container;
+    ezp\Base\ServiceContainer;
 
 /**
  * Base test case for tests on services
@@ -48,7 +48,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
          *       )
          *   );
          */
-        $sc = new Container;
+        $sc = new ServiceContainer;
         return $sc->getRepository();
     }
 }

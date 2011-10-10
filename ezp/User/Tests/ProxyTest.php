@@ -9,7 +9,7 @@
 
 namespace ezp\User\Tests;
 use ezp\User\Proxy as ProxyUser,
-    ezp\Base\ServiceContainer as Container,
+    ezp\Base\ServiceContainer,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -36,7 +36,7 @@ class ProxyTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $sc = new Container;
+        $sc = new ServiceContainer;
         $this->repository = $sc->getRepository();
         $this->service = $this->repository->getUserService();
     }
