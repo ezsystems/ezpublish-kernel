@@ -16,6 +16,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content\RestrictedVersion,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
+    ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\Mapper,
@@ -443,7 +444,11 @@ class ContentHandlerTest extends TestCase
             $firstField, $secondField
         );
 
-        $struct->parentLocations = array( 42 );
+        $struct->locations = array(
+            new LocationCreateStruct(
+                array( 'parentId' => 42 )
+            )
+        );
 
         return $struct;
     }

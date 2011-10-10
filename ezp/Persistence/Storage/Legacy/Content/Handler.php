@@ -98,11 +98,11 @@ class Handler implements BaseContentHandler
 
         $this->fieldHandler->createNewFields( $content );
 
-        foreach ( $struct->parentLocations as $location )
+        foreach ( $struct->locations as $location )
         {
             $this->locationGateway->createNodeAssignment(
                 $this->mapper->createLocationCreateStruct( $content ),
-                $location,
+                $location->parentId,
                 Location\Gateway::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
             );
         }

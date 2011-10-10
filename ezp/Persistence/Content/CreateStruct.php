@@ -42,7 +42,7 @@ class CreateStruct extends ValueObject
      *
      * @var \ezp\Persistence\Content\Location\CreateStruct[]
      */
-    public $parentLocations = array();
+    public $locations = array();
 
     /**
      * Contains *all* fields of the object to be created.

@@ -17,7 +17,8 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content\Field,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\RestrictedVersion,
-    ezp\Persistence\Content\CreateStruct;
+    ezp\Persistence\Content\CreateStruct,
+    ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct;
 
 /**
  * Test case for Mapper
@@ -87,7 +88,17 @@ class MapperTest extends TestCase
         $struct->typeId = 23;
         $struct->sectionId = 42;
         $struct->ownerId = 13;
-        $struct->parentLocations = array( 2, 3, 4, );
+        $struct->locations = array(
+            new LocationCreateStruct(
+                array( 'parentId' => 2 )
+            ),
+            new LocationCreateStruct(
+                array( 'parentId' => 3 )
+            ),
+            new LocationCreateStruct(
+                array( 'parentId' => 4 )
+            )
+        );
         $struct->fields = array( new Field(), );
 
         return $struct;
@@ -386,7 +397,7 @@ class MapperTest extends TestCase
     {
         $this->assertEquals(
             array(),
-            $data['result']->parentLocations
+            $data['result']->locations
         );
     }
 

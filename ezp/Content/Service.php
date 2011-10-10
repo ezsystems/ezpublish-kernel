@@ -76,7 +76,7 @@ class Service extends BaseService
 
             // @todo: Generate pathIdentificationString?
             // @todo set sort order and fields based on settings in type
-            $struct->parentLocations[] = $this->fillStruct(
+            $struct->locations[] = $this->fillStruct(
                 new LocationCreateStruct(
                     array(
                         "pathIdentificationString" => "",

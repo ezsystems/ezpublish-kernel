@@ -99,7 +99,7 @@ class ContentHandler implements ContentHandlerInterface
         $contentObj->version = $version;
 
         $locationHandler = $this->handler->locationHandler();
-        foreach ( $content->parentLocations as $locationStruct )
+        foreach ( $content->locations as $locationStruct )
         {
             $locationStruct->contentId = $contentObj->id;
             $locationStruct->contentVersion = $contentObj->currentVersionNo;

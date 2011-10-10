@@ -362,7 +362,7 @@ class Mapper
         $struct->typeId = $content->typeId;
         $struct->sectionId = $content->sectionId;
         $struct->ownerId = $content->ownerId;
-        $struct->parentLocations = array();
+        $struct->locations = array();
         $struct->alwaysAvailable = $content->alwaysAvailable;
         $struct->remoteId = $content->remoteId;
         $struct->initialLanguageId = $content->initialLanguageId;
