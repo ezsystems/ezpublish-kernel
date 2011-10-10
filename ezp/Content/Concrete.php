@@ -74,8 +74,6 @@ use ezp\Base\Model,
  *           <code>
  *           $myTitle = $content->fields->title; // Where "title" is the field identifier
  *           </code>
- * @property-read int $ownerId
- *           Owner identifier
  * @property \ezp\User $owner
  *           Owner user object
  * @property-read mixed $initialLanguageId
