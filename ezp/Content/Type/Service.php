@@ -126,6 +126,7 @@ class Service extends BaseService
      * @return \ezp\Content\Type
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a empty value
      * @throws \ezp\Base\Exception\Logic If a group is _not_ persisted, or if type / fields is
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $type->identifier is in use
      */
     public function create( Type $type, array $linkGroups, array $addFields = array() )
     {
@@ -176,8 +177,7 @@ class Service extends BaseService
      * @param \ezp\Content\Type\Group[] $linkGroups Required array of Type\Group objects to link type with (must contain one)
      * @param \ezp\Content\Type\Field[] $addFields Optional array of fields to add on new Type
      * @return \ezp\Content\Type
-     * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a empty value
-     * @throws \ezp\Base\Exception\Logic If a group is _not_ persisted, or if type / fields is
+     * @uses create()
      */
     public function createAndPublish( Type $type, array $linkGroups, array $addFields = array() )
     {
@@ -280,6 +280,7 @@ class Service extends BaseService
      * @param \ezp\Content\Type $type
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
      * @throws \ezp\Base\Exception\NotFound If object can not be found
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $type->identifier is used on another type object
      */
     public function update( Type $type )
     {
