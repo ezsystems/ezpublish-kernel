@@ -474,7 +474,7 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->load( 1 );
 
         $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
-        $this->assertEquals( 2, count( $type->fields ) );
+        $this->assertEquals( 3, count( $type->fields ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
         // lazy collection tests
         $this->assertEquals( 1, count( $type->groups ) );
@@ -503,7 +503,7 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->loadByIdentifier( 'folder' );
 
         $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
-        $this->assertEquals( 2, count( $type->fields ) );
+        $this->assertEquals( 3, count( $type->fields ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
         // lazy collection tests
         $this->assertEquals( 1, count( $type->groups ) );
@@ -534,7 +534,7 @@ class TypeTest extends BaseServiceTest
 
         $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
         $this->assertEquals( $copy->id, $type->id );
-        $this->assertEquals( 2, count( $type->fields ) );
+        $this->assertEquals( 3, count( $type->fields ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
         // lazy collection tests
         $this->assertEquals( 1, count( $type->groups ) );
@@ -565,7 +565,7 @@ class TypeTest extends BaseServiceTest
 
         $type = $list[0];
         $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
-        $this->assertEquals( 2, count( $type->fields ) );
+        $this->assertEquals( 3, count( $type->fields ) );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
         // lazy collection tests
         $this->assertEquals( 1, count( $type->groups ) );
@@ -594,7 +594,7 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->copy( 10, 1 );
         $this->assertInstanceOf( 'ezp\\Content\\Type', $type );
         $this->assertStringStartsWith( 'folder_', $type->identifier );
-        $this->assertEquals( 2, count( $type->fields ) );
+        $this->assertEquals( 3, count( $type->fields ) );
         $this->assertEquals( TypeValue::STATUS_DRAFT, $type->status );
         $this->assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $type->fields[0] );
         // lazy collection tests
@@ -856,8 +856,8 @@ class TypeTest extends BaseServiceTest
         $this->service->addFieldDefinition( $type, $field );
 
         $type = $this->service->load( 1 );
-        $this->assertEquals( 3, count( $type->fields ) );
-        $this->assertEquals( 'test', $type->fields[2]->identifier );
+        $this->assertEquals( 4, count( $type->fields ) );
+        $this->assertEquals( 'test', $type->fields[3]->identifier );
     }
 
     /**
@@ -919,7 +919,7 @@ class TypeTest extends BaseServiceTest
         $this->service->removeFieldDefinition( $type, $type->fields[0] );
 
         $type = $this->service->load( 1 );
-        $this->assertEquals( 1, count( $type->fields ) );
+        $this->assertEquals( 2, count( $type->fields ) );
     }
 
     /**
@@ -983,7 +983,7 @@ class TypeTest extends BaseServiceTest
         $this->service->updateFieldDefinition( $type, $type->fields[0] );
 
         $type = $this->service->load( 1 );
-        $this->assertEquals( 2, count( $type->fields ) );
+        $this->assertEquals( 3, count( $type->fields ) );
         $this->assertEquals( array( 'eng-GB' => 'New name' ), $type->fields[0]->name );
     }
 

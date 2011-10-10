@@ -413,7 +413,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 $this->assertEquals( 1, $location->contentId );
             }
             $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
-            $this->assertEquals( 2, count( $content->version->fields ) );
+            $this->assertEquals( 3, count( $content->version->fields ) );
             foreach ( $content->version->fields as $field )
             {
                 $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Field', $field );
