@@ -220,6 +220,24 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::create
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     */
+    public function testCreateWithExistingIdentifier()
+    {
+        $do = new ConcreteType();
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'folder';
+        $do->nameSchema = $do->urlAliasSchema = "<>";
+        $do->isContainer = true;
+        $do->initialLanguageId = 1;
+        $this->service->create( $do, array( $this->service->loadGroup( 1 ) ) );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::create
      */
     public function testCreateWithField()
     {
@@ -409,6 +427,21 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::update
+     * @expectedException \ezp\Base\Exception\InvalidArgumentValue
+     */
+    public function testUpdateWithExistingIdentifier()
+    {
+        $do = $this->service->load( 1 );
+        $do->created = $do->modified = time();
+        $do->creatorId = $do->modifierId = 14;
+        $do->name = $do->description = array( 'eng-GB' => 'Test' );
+        $do->identifier = 'user_group';
+        $this->service->update( $do );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::update
      * @expectedException \ezp\Base\Exception\Forbidden
      */
     public function testUpdateForbidden()
@@ -427,7 +460,7 @@ class TypeTest extends BaseServiceTest
      * @covers ezp\Content\Type\Service::update
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
-    public function testUpdateException()
+    public function testUpdateMissingPropertyException()
     {
         $do = $this->service->load( 1 );
         $do->identifier = null;
