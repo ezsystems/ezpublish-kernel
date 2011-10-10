@@ -152,6 +152,9 @@ class Service extends BaseService
         if ( !isset( $linkGroups[0] ) )
             throw new PropertyNotFound( 'groups', get_class( $type ) );
 
+        if ( $this->loadIdIfExistsByIdentifier( $type->identifier ) )
+            throw new InvalidArgumentValue( '$type->identifier', "{$type->identifier} (already exists)" );
+
         // @todo Remove this if api is introduced on Type to add / remove fields / groups (but still verify values)
         foreach ( $linkGroups as $group )
         {
@@ -249,6 +252,29 @@ class Service extends BaseService
     }
 
     /**
+     * Check if content type exists by identifier, return id if so.
+     *
+     * @param string $identifier
+     * @return int|false
+     */
+    protected function loadIdIfExistsByIdentifier( $identifier )
+    {
+        try
+        {
+            $vo = $this->handler->contentTypeHandler()->loadByIdentifier( $identifier );
+        }
+        catch ( NotFound $e )
+        {
+            return false;
+        }
+
+        if ( !$vo instanceof TypeValue )
+            throw new Logic( "typeHandler->loadByIdentifier() did not return ezp\\Persistence\\Content\\Type" );
+
+        return $vo->id;
+    }
+
+    /**
      * Update a Content Type Group object
      *
      * @param \ezp\Content\Type $type
@@ -259,6 +285,10 @@ class Service extends BaseService
     {
         if ( !$this->repository->canUser( 'edit', $type ) )
             throw new Forbidden( 'Type', 'edit' );
+
+        $id = $this->loadIdIfExistsByIdentifier( $type->identifier );
+        if ( $id !== false && $id != $type->id )
+            throw new InvalidArgumentValue( '$type->identifier', "{$type->identifier} (already exists)" );
 
         $struct = new UpdateStruct();
         $this->fillStruct( $struct, $type );
