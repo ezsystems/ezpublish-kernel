@@ -466,7 +466,7 @@ class EzpDatabaseTest extends TestCase
             array( 'from_node_id', 0 ),
             array( 'id', 214 ),
             array( 'is_main', 0 ),
-            array( 'op_code', 2 ),
+            array( 'op_code', 3 ),
             array( 'parent_node', 77 ),
             array( 'parent_remote_id', '' ),
             array( 'remote_id', 0 ),
@@ -496,7 +496,7 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '77',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $query = $this->handler->createSelectQuery();
@@ -535,14 +535,14 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '77',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $handler->createLocationsFromNodeAssignments( 68, 1 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array( array( '/1/2/77/229/' ) ),
+            array( array( '/1/2/77/228/' ) ),
             $query
                 ->select( 'path_string' )
                 ->from( 'ezcontentobject_tree' )
@@ -574,14 +574,14 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '77',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $handler->createLocationsFromNodeAssignments( 68, 1 );
 
         $query = $this->handler->createSelectQuery();
         $this->assertQueryResult(
-            array( array( EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE ) ),
+            array( array( EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP ) ),
             $query
                 ->select( 'op_code' )
                 ->from( 'eznode_assignment' )

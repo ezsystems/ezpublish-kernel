@@ -601,7 +601,7 @@ class EzcDatabase extends Gateway
                     ),
                     $query->expr->like(
                         $this->handler->quoteColumn( 'op_code' ),
-                        $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP, null, \PDO::PARAM_INT )
+                        $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE, null, \PDO::PARAM_INT )
                     )
                 )
             );
@@ -628,7 +628,7 @@ class EzcDatabase extends Gateway
                 $row['contentobject_id'],
                 $row['parent_node'],
                 $row['parent_node'],
-                self::NODE_ASSIGNMENT_OP_CODE_CREATE
+                self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
             );
         }
     }
