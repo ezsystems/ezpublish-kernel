@@ -72,8 +72,7 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
                 $this->logicalOr( $this->equalTo( Relation::ATTRIBUTE ), $this->equalTo( Relation::LINK ) ),
                 $version->contentId,
                 $version->id,
-                $this->logicalOr( $this->equalTo( 1 ), $this->equalTo( 2 ), $this->equalTo( 3 ) ),
-                $this->isNull()
+                $this->logicalOr( $this->equalTo( 1 ), $this->equalTo( 2 ), $this->equalTo( 3 ) )
             );
 
         $repository
