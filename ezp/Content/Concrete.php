@@ -98,6 +98,8 @@ class Concrete extends Model implements Content
         'remoteId' => true,// @todo Make readonly and deal with this internally (in all DO's)
         'sectionId' => false,
         'typeId' => false,
+        // @todo missing @property doc and missing properties getter/setter implementation
+        // in Content/Version/Concrete for the following properties:
         'modified' => true,
         'published' => true,
     );
@@ -680,7 +682,7 @@ class Concrete extends Model implements Content
     /**
      * Gets Content relations
      *
-     * @return \ezp\Content[]
+     * @return \ezp\Content\Relation[]
      */
     public function getRelations()
     {
@@ -690,7 +692,7 @@ class Concrete extends Model implements Content
     /**
      * Gets Content reverse relations
      *
-     * @return \ezp\Content[]
+     * @return \ezp\Content\Relation[]
      */
     public function getReverseRelations()
     {
