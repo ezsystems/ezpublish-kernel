@@ -49,12 +49,4 @@ class Value extends BaseValue implements ValueInterface
     {
         return (string)$this->value;
     }
-
-    /**
-     * @see \ezp\Content\FieldType\ValueInterface::getTitle()
-     */
-    public function getTitle()
-    {
-        return (string)$this->value;
-    }
 }
