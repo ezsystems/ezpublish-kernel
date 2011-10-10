@@ -120,6 +120,7 @@ class Concrete extends Model implements Content
         'relations' => false,
         'reverseRelations' => false,
         'currentVersion' => false,
+        'initialLanguage' => true,
         'initialLanguageId' => true,
     );
 
