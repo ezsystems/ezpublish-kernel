@@ -363,7 +363,7 @@ class Service extends BaseService
             throw new Forbidden( 'Content', 'edit' );
 
         if ( !isset( $srcVersion ) )
-            $srcVersion = $content->currentVersion;
+            $srcVersion = $content->getCurrentVersion();
 
         $newVersionVo = $this->handler->contentHandler()->createDraftFromVersion( $content->id, $srcVersion->versionNo );
         $version = $this->buildVersionDomainObject( $content, $newVersionVo );
@@ -536,7 +536,7 @@ class Service extends BaseService
         // Archive the previous version if it exists
         if ( $version->versionNo > 1 )
         {
-            $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_ARCHIVED, $content->currentVersion->versionNo );
+            $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_ARCHIVED, $content->currentVersionNo );
         }
         // @todo Maybe allow this to be part of Update struct to reduce backend calls
         $this->handler->contentHandler()->setStatus( $content->id, Version::STATUS_PUBLISHED, $version->versionNo );

@@ -288,27 +288,29 @@ class ContentTest extends BaseServiceTest
     public function testGetCurrentVersion()
     {
         $content = $this->service->load( 1 );
-        $this->assertInstanceOf( "ezp\\Content\\Version", $content->currentVersion );
-        $this->assertInstanceOf( "ezp\\Content\\Version\\Concrete", $content->currentVersion );
-        $this->assertEquals( 1, $content->currentVersion->versionNo );
+        $currentVersion = $content->getCurrentVersion();
+        $this->assertInstanceOf( "ezp\\Content\\Version", $currentVersion );
+        $this->assertInstanceOf( "ezp\\Content\\Version\\Concrete", $currentVersion );
+        $this->assertEquals( 1, $currentVersion->versionNo );
 
         $version = $this->service->loadVersion( 1, 2 );
         $this->assertInstanceOf( "ezp\\Content\\Version", $version );
         $this->assertInstanceOf( "ezp\\Content\\Version\\Concrete", $version );
 
         $content = $version->getContent();
-        $this->assertInstanceOf( "ezp\\Content\\Version", $content->currentVersion );
-        $this->assertInstanceOf( "ezp\\Content\\Version\\Proxy", $content->currentVersion );
+        $currentVersion = $content->getCurrentVersion();
+        $this->assertInstanceOf( "ezp\\Content\\Version", $currentVersion );
+        $this->assertInstanceOf( "ezp\\Content\\Version\\Proxy", $currentVersion );
 
-        $content->currentVersion->getFields();// force load of proxied object so we can inspect it
-        $refType = new ReflectionObject( $content->currentVersion );
+        $currentVersion->getFields();// force load of proxied object so we can inspect it
+        $refType = new ReflectionObject( $currentVersion );
         $refProxiedObject = $refType->getProperty( 'proxiedObject' );
         $refProxiedObject->setAccessible( true );
-        $proxiedVersion = $refProxiedObject->getValue( $content->currentVersion );
+        $proxiedVersion = $refProxiedObject->getValue( $currentVersion );
         $this->assertInstanceOf( "ezp\\Content\\Version", $proxiedVersion );
         $this->assertInstanceOf( "ezp\\Content\\Version\\Concrete", $proxiedVersion );
 
-        $this->assertEquals( 1, $content->currentVersion->versionNo );
+        $this->assertEquals( 1, $content->currentVersionNo );
     }
 
     /**
@@ -676,7 +678,7 @@ class ContentTest extends BaseServiceTest
     public function testCreateDraftFromVersion()
     {
         $content = $this->service->load( 1 );
-        $srcVersion = $content->currentVersion;
+        $srcVersion = $content->getCurrentVersion();
 
         // Get current max version number (not necessaribly $content->currentVersionNo
         // since content may have drafts
@@ -766,8 +768,7 @@ class ContentTest extends BaseServiceTest
     public function testPublishNonDraft()
     {
         $content = $this->service->load( 1 );
-        $version = $content->currentVersion;
-        $this->service->publish( $content, $version );
+        $this->service->publish( $content, $content->getCurrentVersion() );
     }
 
     /**
@@ -777,14 +778,13 @@ class ContentTest extends BaseServiceTest
      */
     public function testPublishContentVersionMismatch()
     {
-        $type = $this->repository->getContentTypeService()->load( 1 );
-        $location = $this->repository->getLocationService()->load( 2 );
-        $section = $this->repository->getSectionService()->load( 1 );
-        $newContent = new ConcreteContent( $type, $this->anonymousUser );
-
-        $version = $this->service->load( 1 )->currentVersion;
-
-        $this->service->publish( $newContent, $version );
+        $this->service->publish(
+            new ConcreteContent(
+                $this->repository->getContentTypeService()->load( 1 ),
+                $this->anonymousUser
+            ),
+            $this->service->load( 1 )->getCurrentVersion()
+        );
     }
 
     /**
@@ -804,13 +804,13 @@ class ContentTest extends BaseServiceTest
 
         $content = $this->repository->getContentService()->create( $content );
 
-        $version = $content->currentVersion;
+        $version = $content->getCurrentVersion();
 
         self::assertEquals( Version::STATUS_DRAFT, $version->status );
 
         $publishedContent = $this->service->publish( $content, $version );
 
-        self::assertEquals( Version::STATUS_PUBLISHED, $publishedContent->currentVersion->status );
+        self::assertEquals( Version::STATUS_PUBLISHED, $publishedContent->getCurrentVersion()->status );
         self::assertEquals( array( 'eng-GB' => __METHOD__ ), $publishedContent->name );
     }
 
@@ -853,7 +853,7 @@ class ContentTest extends BaseServiceTest
 
         $content = $this->repository->getContentService()->create( $content );
 
-        $content = $this->service->publish( $content, $content->currentVersion );
+        $content = $this->service->publish( $content, $content->getCurrentVersion() );
 
         $version = $this->service->createDraftFromVersion( $content );
 
