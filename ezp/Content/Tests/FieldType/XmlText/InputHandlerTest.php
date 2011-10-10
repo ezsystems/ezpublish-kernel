@@ -17,7 +17,7 @@ use ezp\Content\FieldType\XmlText\Input\Handler as InputHandler,
 
 class InputHandlerTest extends PHPUnit_Framework_TestCase
 {
-    public function testIsXmlValid()
+    public function testIsXmlValidValidXml()
     {
         $inputParser = $this->getInputParserMock();
         $inputParser
@@ -29,7 +29,7 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
         self::assertTrue( $handler->isXmlValid( '', false ) );
     }
 
-    public function testIsXmlInvalid()
+    public function testIsXmlValidInvalidXml()
     {
         $inputParser = $this->getInputParserMock();
         $inputParser
