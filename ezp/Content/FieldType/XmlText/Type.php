@@ -18,7 +18,7 @@ use ezp\Base\Repository,
     ezp\Content\FieldType\XmlText\Value\OnlineEditor as OnlineEditorValue,
     ezp\Content\FieldType\XmlText\Value\Simplified as SimplifiedValue,
     ezp\Content\Type\FieldDefinition,
-    ezp\Content\FieldType\XmlText\Input\Handler,
+    ezp\Content\FieldType\XmlText\Input\Handler as InputHandler,
     ezp\Content\FieldType\XmlText\Input\Parser\Simplified as SimplifiedInputParser,
     ezp\Content\FieldType\XmlText\Input\Parser\OnlineEditor as OnlineEditorParser,
     ezp\Content\FieldType\XmlText\Input\Parser\Raw as RawInputParser,
@@ -88,7 +88,7 @@ EOF;
             throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
         }
 
-        $handler = new Handler( $this->getInputParser( $inputValue ) );
+        $handler = new InputHandler( $this->getInputParser( $inputValue ) );
         if ( !$handler->isXmlValid( $inputValue->text, false ) )
         {
             // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
@@ -124,7 +124,7 @@ EOF;
         // needs to pass more data to the handler
         // - repository (to publish new items)
         // - validate or process modes... that's harder.
-        $handler = $this->getInputHandler( $this->getInputParser( $inputValue ) );
+        $handler = new InputHandler( $this->getInputParser( $inputValue ) );
         $handler->process( $field->getValue()->text, $repository, $version );
 
         // From here, we can get the list of elements that need further processing:
