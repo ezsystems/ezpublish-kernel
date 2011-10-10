@@ -247,6 +247,66 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
+     * Test the Content Service load operation
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::loadVersion
+     * @covers \ezp\Content\Version\Concrete::getName
+     * @covers \ezp\Content\Version\Concrete::getOwnerId
+     * @covers \ezp\Content\Version\Concrete::getSectionId
+     * @covers \ezp\Content\Version\Concrete::getTypeId
+     * @covers \ezp\Content\Version\Concrete::getContentStatus
+     */
+    public function testLoadVersion()
+    {
+        $version = $this->service->loadVersion( 1 );
+        self::assertInstanceOf( "ezp\\Content\\Version", $version );
+        self::assertEquals( 1, $version->contentId, "Content ID not correctly set" );
+        self::assertEquals( 1, $version->id, "ID not correctly set" );
+        self::assertEquals( array( "eng-GB" => "eZ Publish" ), $version->getName(), "Name not correctly set" );
+        self::assertEquals( 14, $version->getOwnerId(), "Owner ID not correctly set" );
+        self::assertEquals( 1, $version->getSectionId(), "Section ID not correctly set" );
+        self::assertEquals( 1, $version->getTypeId(), "Type ID not correctly set" );
+        self::assertEquals( Content::STATUS_PUBLISHED, $version->getContentStatus(), "Content status not correctly set" );
+    }
+
+    /**
+     * Test the Content Service load operation
+     *
+     * @group contentService
+     * @covers \ezp\Content\Service::loadVersion
+     * @covers \ezp\Content\Version\Concrete::getName
+     * @covers \ezp\Content\Version\Concrete::getOwnerId
+     * @covers \ezp\Content\Version\Concrete::getSectionId
+     * @covers \ezp\Content\Version\Concrete::getTypeId
+     * @covers \ezp\Content\Version\Concrete::getContentStatus
+     */
+    public function testLoadVersionWithVersionNumber()
+    {
+        $version = $this->service->loadVersion( 1, 2 );
+        self::assertInstanceOf( "ezp\\Content\\Version", $version );
+        self::assertEquals( 1, $version->contentId, "Content ID not correctly set" );
+        self::assertEquals( 2, $version->id, "ID not correctly set" );
+        self::assertEquals( array( "eng-GB" => "eZ Publish" ), $version->getName(), "Name not correctly set" );
+        self::assertEquals( 14, $version->getOwnerId(), "Owner ID not correctly set" );
+        self::assertEquals( 1, $version->getSectionId(), "Section ID not correctly set" );
+        self::assertEquals( 1, $version->getTypeId(), "Type ID not correctly set" );
+        self::assertEquals( Content::STATUS_PUBLISHED, $version->getContentStatus(), "Content status not correctly set" );
+    }
+
+    /**
+     * Test the Content Service load operation
+     *
+     * @group contentService
+     * @expectedException \ezp\Base\Exception\NotFound
+     * @covers \ezp\Content\Service::loadVersion
+     */
+    public function testLoadVersionWithWrongVersionNumber()
+    {
+        $this->service->loadVersion( 1, 3 );
+    }
+
+    /**
      * Test the getVersions() method after having loaded the content with the service
      *
      * @group contentService
