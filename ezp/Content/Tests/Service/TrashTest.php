@@ -99,7 +99,7 @@ class TrashTest extends Base
         $content = new ConcreteContent( $type, $administrator );
         $content->name = "test";
         $content->setSection( $section );
-        $fields = $content->getFields();
+        $fields = $content->getCurrentVersion()->getFields();
         $fields['name'] = 'Welcome';
 
         $this->content = $this->repository->getContentService()->create( $content );
@@ -118,7 +118,7 @@ class TrashTest extends Base
             $content = new ConcreteContent( $type, $administrator );
             $content->name = "foo$i";
             $content->setSection( $section );
-            $fields = $content->getFields();
+            $fields = $content->getCurrentVersion()->getFields();
             $fields['name'] = "bar$i";
 
             $content = $this->repository->getContentService()->create( $content );

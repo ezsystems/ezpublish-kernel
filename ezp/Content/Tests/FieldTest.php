@@ -25,6 +25,13 @@ use ezp\Content,
  */
 class FieldTest extends BaseContentTest
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $this->fields = $this->content->getCurrentVersion()->getFields();
+    }
+
     /**
      * @group field
      * @group content
@@ -32,7 +39,7 @@ class FieldTest extends BaseContentTest
      */
     public function testVersion()
     {
-        foreach ( $this->content->fields as $identifier => $field )
+        foreach ( $this->fields as $identifier => $field )
         {
             self::assertInstanceOf( 'ezp\\Content\\Version', $field->getVersion() );
             self::assertSame( $field->getVersion(), $field->version );
@@ -46,7 +53,7 @@ class FieldTest extends BaseContentTest
      */
     public function testFieldDefinition()
     {
-        foreach ( $this->content->fields as $identifier => $field )
+        foreach ( $this->fields as $identifier => $field )
         {
             self::assertInstanceOf( 'ezp\\Content\\Type\\FieldDefinition', $field->getFieldDefinition() );
             self::assertSame( $field->getFieldDefinition(), $field->fieldDefinition );
@@ -60,7 +67,7 @@ class FieldTest extends BaseContentTest
      */
     public function testFieldsAreValid()
     {
-        foreach ( $this->content->fields as $identifier => $field )
+        foreach ( $this->fields as $identifier => $field )
         {
             self::assertSame( $field->fieldDefinition->identifier, $identifier );
             self::assertSame( $field->fieldDefinition->id, $field->fieldDefinitionId );
@@ -78,7 +85,7 @@ class FieldTest extends BaseContentTest
      */
     public function testGetValue()
     {
-        foreach ( $this->content->fields as $identifier => $field )
+        foreach ( $this->fields as $identifier => $field )
         {
             self::assertInstanceOf( 'ezp\\Content\\FieldType\\Value', $field->getValue() );
             self::assertSame( $field->getValue(), $field->value );
@@ -94,7 +101,7 @@ class FieldTest extends BaseContentTest
     {
         $pulpFictionQuote = 'The path of the righteous man is beset on all sides by the iniquities of the selfish and the tyranny of evil men.';
         $value = new TextLineValue( $pulpFictionQuote );
-        $field = $this->content->fields['title'];
+        $field = $this->fields['title'];
         $field->setValue( $value );
         self::assertSame( $value, $field->getValue() );
         self::assertsame( $value, $field->fieldDefinition->type->getValue() );
@@ -111,7 +118,7 @@ class FieldTest extends BaseContentTest
         $value = new TextLineValue( $pulpFictionQuote );
         $validator = new StringLengthValidator();
         $validator->maxStringLength = 100;
-        $field = $this->content->fields['title'];
+        $field = $this->fields['title'];
         $field->fieldDefinition->addValidator( $validator );
         $field->setValue( $value );
     }
@@ -140,7 +147,7 @@ EOT;
             ->with( $value )
             ->will( $this->returnValue( false ) );
 
-        $field = $this->content->fields['title'];
+        $field = $this->fields['title'];
         $fieldType = $field->getFieldDefinition()->getType();
         $refType = new ReflectionObject( $fieldType );
         $refAllowedValidators = $refType->getProperty( 'allowedValidators' );

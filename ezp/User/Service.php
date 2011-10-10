@@ -188,7 +188,7 @@ class Service extends BaseService
         $content->addParent( $parentLocation );
         $content->getState( 'properties' )->sectionId = $parentContent->sectionId;
 
-        $fields = $content->getFields();
+        $fields = $content->getCurrentVersion()->getFields();
         if ( !isset( $fields['name'] ) )
             throw new PropertyNotFound( 'name', get_class( $content ) );
         if ( !isset( $fields['description'] ) )

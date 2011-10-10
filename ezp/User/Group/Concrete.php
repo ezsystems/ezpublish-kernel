@@ -149,8 +149,7 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
         if ( $property === 'id' )
             return $this->content->id;
 
-        $fields = $this->content->getFields();
-        return $fields[$property]->value;
+        return $this->content->getCurrentVersion()->fields[$property]->value;
     }
 
     /**
@@ -173,7 +172,7 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
             throw new PropertyPermission( $property, PropertyPermission::WRITE, get_class( $this ) );
         }
 
-        $this->content->fields[$property] = $value;
+        $this->content->getCurrentVersion()->fields[$property] = $value;
     }
 
     /**
@@ -185,7 +184,7 @@ class Concrete implements Group, Groupable, ModelInterface, Observable
     public function __isset( $property )
     {
         return isset( $this->contentProperties[$property] )
-            && ( $property === 'id' || isset( $this->content->fields[$property] ) );
+            && ( $property === 'id' || isset( $this->content->getCurrentVersion()->fields[$property] ) );
     }
 
     /**

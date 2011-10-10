@@ -82,7 +82,7 @@ class LocationTest extends BaseServiceTest
         $content = new ConcreteContent( $type, $this->administrator );
         $content->name = array( "eng-GB" => "test" );
         $content->setSection( $section );
-        $fields = $content->getFields();
+        $fields = $content->getCurrentVersion()->getFields();
         $fields['name'] = 'Welcome';
 
         $this->content = $this->repository->getContentService()->create( $content );
@@ -101,7 +101,7 @@ class LocationTest extends BaseServiceTest
             $content = new ConcreteContent( $type, $this->administrator );
             $content->name = array( "eng-GB" => "foo$i" );
             $content->setSection( $section );
-            $fields = $content->getFields();
+            $fields = $content->getCurrentVersion()->getFields();
             $fields['name'] = "bar$i";
 
             $content = $this->repository->getContentService()->create( $content );

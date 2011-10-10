@@ -93,7 +93,7 @@ class Service extends BaseService
         if ( $checkCreate && !$this->repository->canUser( 'create', $content ) )
             throw new Forbidden( 'Content', 'create' );
 
-        foreach ( $content->getFields() as $field )
+        foreach ( $content->getCurrentVersion()->getFields() as $field )
         {
             $fieldStruct = $field->getState( 'properties' );
             $fieldStruct->value = $field->fieldDefinition->type->toFieldValue();
