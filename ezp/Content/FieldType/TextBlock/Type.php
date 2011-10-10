@@ -21,7 +21,9 @@ class Type extends TextLine
     const FIELD_TYPE_IDENTIFIER = "eztext";
     const IS_SEARCHABLE = true;
 
-    protected $allowedSettings = array( 'textColumns' => null );
+    protected $allowedValidators = array();
+
+    protected $allowedSettings = array( 'textColumns' => 10 );
 
     /**
      * Returns the fallback default value of field type when no such default
