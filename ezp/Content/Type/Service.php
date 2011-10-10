@@ -45,6 +45,7 @@ class Service extends BaseService
      * @param \ezp\Content\Type\Group $group
      * @return \ezp\Content\Type\Group
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
+     * @todo Validate that identifier is not already in use
      */
     public function createGroup( Group $group )
     {
@@ -92,6 +93,7 @@ class Service extends BaseService
      * @param \ezp\Content\Type\Group $group
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
      * @throws \ezp\Base\Exception\NotFound If object can not be found
+     * @todo Validate that identifier is not already in use (if it has been changed?)
      */
     public function updateGroup( Group $group )
     {
@@ -275,12 +277,17 @@ class Service extends BaseService
     }
 
     /**
-     * Update a Content Type Group object
+     * Update a Content Type object
+     *
+     * Does not update fields (fieldDefinitions), use {@link updateFieldDefinition()} to update them.
      *
      * @param \ezp\Content\Type $type
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $type->identifier is used on another type object
+     * @todo Consider adding fieldDefinitions on update struct when we have dirty state and knowledge about which
+     * one has been updated (not added / removed, there are separate api's for that). But remember to validate
+     * fieldDefinition->identifier when this is added.
      */
     public function update( Type $type )
     {
