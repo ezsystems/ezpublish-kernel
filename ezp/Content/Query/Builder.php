@@ -141,7 +141,7 @@ class Builder
     public function not( Criterion $criterion )
     {
         $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalNot' );
-        return call_user_func_array( array( $criterionFactory, 'logicalNot' ), func_get_args() );
+        return $criterionFactory->logicalNot( $criterion );
     }
 
     /**

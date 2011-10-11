@@ -432,10 +432,8 @@ class ContentSearchHandlerTest extends TestCase
                         array( 1, 4, 10 )
                     ),
                     new Criterion\LogicalNot(
-                        array(
-                            new Criterion\ContentId(
-                                array( 10, 12 )
-                            ),
+                        new Criterion\ContentId(
+                            array( 10, 12 )
                         )
                     ),
                 )

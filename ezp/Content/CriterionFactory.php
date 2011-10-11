@@ -215,7 +215,7 @@ class CriterionFactory
      */
     public function logicalNot( Criterion $criterion )
     {
-        return new LogicalNot( array( $criterion ) );
+        return new LogicalNot( $criterion );
     }
 
     /**

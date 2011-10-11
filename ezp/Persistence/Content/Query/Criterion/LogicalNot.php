@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\Content\Query\Criterion;
-use InvalidArgumentException;
+use ezp\Persistence\Content\Query\Criterion;
 
 /**
  * A NOT logical criterion
@@ -25,14 +25,9 @@ class LogicalNot extends LogicalOperator
      *
      * @throws InvalidArgumentException if more than one criterion is given in the array parameter
      */
-    public function __construct( array $criterion )
+    public function __construct( Criterion $criterion )
     {
-        if ( count( $criterion ) > 1 )
-        {
-            throw new InvalidArgumentException( "This operator only accepts one Criterion" );
-        }
-
-        parent::__construct( $criterion );
+        parent::__construct( array( $criterion ) );
     }
 }
 ?>
