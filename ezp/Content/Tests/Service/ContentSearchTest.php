@@ -64,22 +64,22 @@ class ContentSearchTest extends BaseServiceTest
         $refRepository = new ReflectionObject( $this->repository );
         $refHandlerProp = $refRepository->getProperty( 'handler' );
         $refHandlerProp->setAccessible( true );
-        $repositoryHandler = $refHandlerProp->getValue( $this->repository );
-        $refHandler = new ReflectionObject( $repositoryHandler );
+        $persistenceHandler = $refHandlerProp->getValue( $this->repository );
+        $refHandler = new ReflectionObject( $persistenceHandler );
         $refBackend = $refHandler->getProperty( 'backend' );
         $refBackend->setAccessible( true );
         $this->searchHandler = $this->getMockBuilder(
             'ezp\\Persistence\\Storage\\InMemory\\SearchHandler'
         )->setConstructorArgs(
             array(
-                $repositoryHandler,
-                $refBackend->getValue( $repositoryHandler )
+                $persistenceHandler,
+                $refBackend->getValue( $persistenceHandler )
             )
         )->getMock();
         $refServiceHandlersProp = $refHandler->getProperty( 'serviceHandlers' );
         $refServiceHandlersProp->setAccessible( true );
         $refServiceHandlersProp->setValue(
-            $repositoryHandler,
+            $persistenceHandler,
             array(
                 'ezp\\Persistence\\Storage\\InMemory\\SearchHandler' => $this->searchHandler
             )

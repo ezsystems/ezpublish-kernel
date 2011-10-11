@@ -30,7 +30,7 @@ use ezp\Persistence\Content\Handler as ContentHandlerInterface,
 class ContentHandler implements ContentHandlerInterface
 {
     /**
-     * @var RepositoryHandler
+     * @var Handler
      */
     protected $handler;
 
@@ -40,12 +40,12 @@ class ContentHandler implements ContentHandlerInterface
     protected $backend;
 
     /**
-     * Setups current handler instance with reference to RepositoryHandler object that created it.
+     * Setups current handler instance with reference to Handler object that created it.
      *
-     * @param RepositoryHandler $handler
+     * @param Handler $handler
      * @param Backend $backend The storage engine backend
      */
-    public function __construct( RepositoryHandler $handler, Backend $backend )
+    public function __construct( Handler $handler, Backend $backend )
     {
         $this->handler = $handler;
         $this->backend = $backend;

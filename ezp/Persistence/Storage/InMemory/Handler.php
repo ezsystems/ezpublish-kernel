@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the RepositoryHandler in memory implementation
+ * File containing the Handler in memory implementation
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -16,7 +16,7 @@ use ezp\Persistence\Handler as HandlerInterface,
  * The main handler for in memory Storage Engine
  *
  */
-class RepositoryHandler implements HandlerInterface
+class Handler implements HandlerInterface
 {
     /**
      * Instances of handlers

@@ -10,7 +10,7 @@
 namespace ezp\Persistence\Storage\InMemory;
 
 use ezp\Persistence\Content,
-    ezp\Persistence\Content\Search\Handler,
+    ezp\Persistence\Content\Search\Handler as SearchHandlerInterface,
     ezp\Persistence\Content\Search\Result,
     ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence\Content\Query\Criterion\ContentId,
@@ -47,10 +47,10 @@ use ezp\Persistence\Content,
  * content objects based on criteria, which could not be converted in to
  * database statements.
  */
-class SearchHandler extends Handler
+class SearchHandler extends SearchHandlerInterface
 {
     /**
-     * @var RepositoryHandler
+     * @var Handler
      */
     protected $handler;
 
@@ -60,12 +60,12 @@ class SearchHandler extends Handler
     protected $backend;
 
     /**
-     * Setups current handler instance with reference to RepositoryHandler object that created it.
+     * Setups current handler instance with reference to Handler object that created it.
      *
-     * @param RepositoryHandler $handler
+     * @param Handler $handler
      * @param Backend $backend The storage engine backend
      */
-    public function __construct( RepositoryHandler $handler, Backend $backend )
+    public function __construct( Handler $handler, Backend $backend )
     {
         $this->handler = $handler;
         $this->backend = $backend;

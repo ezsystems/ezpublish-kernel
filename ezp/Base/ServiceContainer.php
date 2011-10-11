@@ -26,7 +26,7 @@ use ezp\Base\Configuration,
  *
  * Or overriding dependencies (in unit tests):
  *
- *     $sc = new ezp\Base\ServiceContainer( array( '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\RepositoryHandler() ) );
+ *     $sc = new ezp\Base\ServiceContainer( array( '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler() ) );
  *     $sc->getRepository->getContentService()->load( 42 );
  *
  * Settings are defined in base.ini like the following example:
@@ -36,7 +36,7 @@ use ezp\Base\Configuration,
  *     arguments[persistence_handler]=@inmemory_persistence_handler
  *
  *     [service_inmemory_persistence_handler]
- *     class=ezp\Persistence\Storage\InMemory\RepositoryHandler
+ *     class=ezp\Persistence\Storage\InMemory\Handler
  *
  * Arguments can start with either @ in case of other services being dependency, $ if a predefined global variable
  * is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES and $serviceContainer ) or plain string if

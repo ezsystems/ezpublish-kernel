@@ -13,17 +13,17 @@ namespace ezp\Persistence\Tests;
  * Test case for RepositoryHandler using in memory storage.
  *
  */
-class RepositoryHandlerTest extends HandlerTest
+class PersistenceHandlerTest extends HandlerTest
 {
     /**
      * Test that instance is of correct type
      *
-     * @covers ezp\Persistence\Storage\InMemory\RepositoryHandler::__construct
+     * @covers ezp\Persistence\Storage\InMemory\Handler::__construct
      */
     public function testHandler()
     {
         $this->assertInstanceOf( 'ezp\\Persistence\\Handler', $this->persistenceHandler );
-        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\RepositoryHandler', $this->persistenceHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\Handler', $this->persistenceHandler );
     }
 
     /**

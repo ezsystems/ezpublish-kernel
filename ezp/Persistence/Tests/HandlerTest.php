@@ -30,6 +30,6 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         // Get in memory RepositoryHandler instance
-        $this->persistenceHandler = new \ezp\Persistence\Storage\InMemory\RepositoryHandler();
+        $this->persistenceHandler = new \ezp\Persistence\Storage\InMemory\Handler();
     }
 }

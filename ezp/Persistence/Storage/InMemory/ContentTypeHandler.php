@@ -19,7 +19,7 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
     ezp\Persistence\Content\Type\Group,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\BadRequest,
-    ezp\Persistence\Storage\InMemory\RepositoryHandler,
+    ezp\Persistence\Storage\InMemory\Handler,
     ezp\Persistence\Storage\InMemory\Backend,
     RuntimeException;
 
@@ -31,7 +31,7 @@ use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
 class ContentTypeHandler implements ContentTypeHandlerInterface
 {
     /**
-     * @var RepositoryHandler
+     * @var Handler
      */
     protected $handler;
 
@@ -41,12 +41,12 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     protected $backend;
 
     /**
-     * Setups current handler instance with reference to RepositoryHandler object that created it.
+     * Setups current handler instance with reference to Handler object that created it.
      *
-     * @param RepositoryHandler $handler
+     * @param Handler $handler
      * @param Backend $backend The storage engine backend
      */
-    public function __construct( RepositoryHandler $handler, Backend $backend )
+    public function __construct( Handler $handler, Backend $backend )
     {
         $this->handler = $handler;
         $this->backend = $backend;

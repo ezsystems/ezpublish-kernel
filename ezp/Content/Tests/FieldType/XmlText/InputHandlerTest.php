@@ -58,10 +58,10 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $repositoryHandler = $this->getMock( 'ezp\\Persistence\\Handler' );
+        $persistenceHandler = $this->getMock( 'ezp\\Persistence\\Handler' );
 
         $fieldTypeService = $this->getMockBuilder( 'ezp\\Content\\FieldType\\Service' )
-            ->setConstructorArgs( array( $repository, $repositoryHandler ) )
+            ->setConstructorArgs( array( $repository, $persistenceHandler ) )
             ->getMock();
 
         // 6 calls to FieldType\Service::addRelation())
