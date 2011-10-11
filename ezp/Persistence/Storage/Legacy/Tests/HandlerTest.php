@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\RepositoryHandlerTest class
+ * File contains: ezp\Persistence\Storage\Legacy\Tests\HandlerTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -9,20 +9,20 @@
 
 namespace ezp\Persistence\Storage\Legacy\Tests;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\RepositoryHandler;
+    ezp\Persistence\Storage\Legacy\Handler;
 
 /**
  * Test case for Repository Handler
  */
-class RepositoryHandlerTest extends TestCase
+class HandlerTest extends TestCase
 {
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::contentHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::contentHandler
      * @return void
      */
     public function testContentHandler()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
         $contentHandler = $handler->contentHandler();
 
         $this->assertInstanceOf(
@@ -36,12 +36,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::contentHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::contentHandler
      * @return void
      */
     public function testContentHandlerTwice()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
 
         $this->assertSame(
             $handler->contentHandler(),
@@ -52,13 +52,13 @@ class RepositoryHandlerTest extends TestCase
     /**
      * Issue #97
      *
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::contentHandler
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::getStorageRegistry
+     * @covers ezp\Persistence\Storage\Legacy\Handler::contentHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::getStorageRegistry
      * @return void
      */
     public function testStorageRegistryReused()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
 
         $storageRegistry = $handler->getStorageRegistry();
         $contentHandler = $handler->contentHandler();
@@ -79,12 +79,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::getFieldValueConverterRegistry
+     * @covers ezp\Persistence\Storage\Legacy\Handler::getFieldValueConverterRegistry
      * @return void
      */
     public function testGetFieldValueConverterRegistry()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
         $registry = $handler->getFieldValueConverterRegistry();
 
         $this->assertInstanceOf(
@@ -94,12 +94,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::getFieldValueConverterRegistry
+     * @covers ezp\Persistence\Storage\Legacy\Handler::getFieldValueConverterRegistry
      * @return void
      */
     public function testGetFieldValueConverterRegistryTwice()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
 
         $this->assertSame(
             $handler->getFieldValueConverterRegistry(),
@@ -108,12 +108,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::getStorageRegistry
+     * @covers ezp\Persistence\Storage\Legacy\Handler::getStorageRegistry
      * @return void
      */
     public function testGetStorageRegistry()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
         $registry = $handler->getStorageRegistry();
 
         $this->assertInstanceOf(
@@ -123,12 +123,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::getStorageRegistry
+     * @covers ezp\Persistence\Storage\Legacy\Handler::getStorageRegistry
      * @return void
      */
     public function testGetStorageRegistryTwice()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
 
         $this->assertSame(
             $handler->getStorageRegistry(),
@@ -137,12 +137,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::searchHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::searchHandler
      * @return void
      */
     public function testSearchHandler()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
         $searchHandler = $handler->searchHandler();
 
         $this->assertInstanceOf(
@@ -156,12 +156,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::searchHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::searchHandler
      * @return void
      */
     public function testSearchHandlerTwice()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
 
         $this->assertSame(
             $handler->searchHandler(),
@@ -170,12 +170,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::contentTypeHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::contentTypeHandler
      * @return void
      */
     public function testContentTypeHandler()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
         $contentTypeHandler = $handler->contentTypeHandler();
 
         $this->assertInstanceOf(
@@ -189,13 +189,13 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::contentLanguageHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::contentLanguageHandler
      * @return void
      */
     public function testContentLanguageHandler()
     {
         $this->markTestSkipped( 'Not testable due to broken DI.' );
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
         $contentLanguageHandler = $handler->contentLanguageHandler();
 
         $this->assertInstanceOf(
@@ -209,12 +209,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::contentTypeHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::contentTypeHandler
      * @return void
      */
     public function testContentTypeHandlerTwice()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
 
         $this->assertSame(
             $handler->contentTypeHandler(),
@@ -223,12 +223,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::locationHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::locationHandler
      * @return void
      */
     public function testLocationHandler()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
         $locationHandler = $handler->locationHandler();
 
         $this->assertInstanceOf(
@@ -242,12 +242,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::locationHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::locationHandler
      * @return void
      */
     public function testLocationHandlerTwice()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
 
         $this->assertSame(
             $handler->locationHandler(),
@@ -256,12 +256,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::userHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::userHandler
      * @return void
      */
     public function testUserHandler()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
         $userHandler = $handler->userHandler();
 
         $this->assertInstanceOf(
@@ -275,12 +275,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::userHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::userHandler
      * @return void
      */
     public function testUserHandlerTwice()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
 
         $this->assertSame(
             $handler->userHandler(),
@@ -289,12 +289,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::sectionHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::sectionHandler
      * @return void
      */
     public function testSectionHandler()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
         $sectionHandler = $handler->sectionHandler();
 
         $this->assertInstanceOf(
@@ -308,12 +308,12 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::sectionHandler
+     * @covers ezp\Persistence\Storage\Legacy\Handler::sectionHandler
      * @return void
      */
     public function testSectionHandlerTwice()
     {
-        $handler = $this->getRepositoryHandlerFixture();
+        $handler = $this->getHandlerFixture();
 
         $this->assertSame(
             $handler->sectionHandler(),
@@ -322,13 +322,13 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * Returns the RepositoryHandler
+     * Returns the Handler
      *
-     * @return RepositoryHandler
+     * @return Handler
      */
-    protected function getRepositoryHandlerFixture()
+    protected function getHandlerFixture()
     {
-        return new RepositoryHandler(
+        return new Handler(
             array(
                 'dsn' => $this->getDsn(),
             )
@@ -336,18 +336,18 @@ class RepositoryHandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\RepositoryHandler::getDatabase
+     * @covers ezp\Persistence\Storage\Legacy\Handler::getDatabase
      * @return void
      */
     public function testDatabaseInstance()
     {
         $method = new \ReflectionMethod(
-            'ezp\\Persistence\\Storage\\Legacy\\RepositoryHandler',
+            'ezp\\Persistence\\Storage\\Legacy\\Handler',
             'getDatabase'
         );
         $method->setAccessible( true );
 
-        $dbHandler = $method->invoke( $this->getRepositoryHandlerFixture() );
+        $dbHandler = $method->invoke( $this->getHandlerFixture() );
         $className = get_class( $this->getDatabaseHandler() );
 
         $this->assertTrue( $dbHandler instanceof $className, get_class( $dbHandler ) . " not of type $className." );

@@ -10,7 +10,7 @@
 namespace ezp\Persistence\Storage\Legacy;
 
 /**
- * Configurator for the RepositoryHandler
+ * Configurator for the Handler
  */
 class Configurator
 {
@@ -18,7 +18,7 @@ class Configurator
      * Configuration array
      *
      * as described in
-     * {@link \ezp\Persistence\Storage\Legacy\RepositoryHandler}.
+     * {@link \ezp\Persistence\Storage\Legacy\Handler}.
      *
      * @var string[][]
      */
