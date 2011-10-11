@@ -223,7 +223,6 @@ class Service extends BaseService
      * @param \ezp\Content\Location $location1
      * @param \ezp\Content\Location $location2
      * @return void
-     * @throws \ezp\Base\Exception\Validation If a validation problem has been found
      * @throws \ezp\Base\Exception\Forbidden If user does not have access to create provided objects
      */
     public function swap( Location $location1, Location $location2 )
@@ -313,7 +312,6 @@ class Service extends BaseService
      * @param \ezp\Content\Location $location
      * @param \ezp\Content\Location $newParent
      * @return void
-     * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
      * @todo Figure out a way to do permissions w/o loading whole tree
      */
     public function move( Location $location, Location $newParent )
@@ -327,11 +325,10 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Location $location
      * @return void
-     * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
      * @throws \ezp\Base\Exception\NotFound if no location is available with $locationId
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to remove provided object
      * @todo Do we need to check permissions for delete on children? Or should we document that
      * giving access to deleting implicit gives a user access to remove all childes no matter what?
-     * @throws \ezp\Base\Exception\Forbidden If user does not have access to remove provided object
      */
     public function delete( Location $location )
     {
@@ -349,7 +346,6 @@ class Service extends BaseService
      * @param \ezp\Content\Location $startingPoint
      * @param \ezp\Content\Section $section
      * @return void
-     * @throws \ezp\Base\Exception\Validation If a validation problem has been found;
      * @todo Figure out how to do permission checks w/o loading whole tree
      */
     public function assignSection( Location $startingPoint, Section $section )

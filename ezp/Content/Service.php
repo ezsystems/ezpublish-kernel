@@ -111,7 +111,6 @@ class Service extends BaseService
      * @param \ezp\Content $content
      * @param \ezp\Content\Version $version
      * @return \ezp\Content
-     * @throws Exception\Validation If a validation problem has been found for $content
      * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function update( Content $content, Version $version )

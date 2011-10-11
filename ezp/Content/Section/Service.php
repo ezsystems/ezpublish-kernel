@@ -43,7 +43,6 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Section $section
      * @return \ezp\Content\Section
-     * @throws Exception\Validation If a validation problem has been found for $section
      * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function update( Section $section )
