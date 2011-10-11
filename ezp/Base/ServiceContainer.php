@@ -78,18 +78,6 @@ class ServiceContainer
     }
 
     /**
-     * Service function to get Event instance.
-     *
-     * @return Event
-     */
-    public function getEvent( )
-    {
-        if ( isset( $this->dependencies['@event'] ) )
-            return $this->dependencies['@event'];
-        return $this->get( 'event' );
-    }
-
-    /**
      * Service function to get Repository object
      *
      * @return Repository
