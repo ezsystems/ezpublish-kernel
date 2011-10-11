@@ -62,7 +62,7 @@ class ContentSearchTest extends BaseServiceTest
          * This way, content service will only use the mock object as search handler
          */
         $refRepository = new ReflectionObject( $this->repository );
-        $refHandlerProp = $refRepository->getProperty( 'handler' );
+        $refHandlerProp = $refRepository->getProperty( 'persistenceHandler' );
         $refHandlerProp->setAccessible( true );
         $persistenceHandler = $refHandlerProp->getValue( $this->repository );
         $refHandler = new ReflectionObject( $persistenceHandler );

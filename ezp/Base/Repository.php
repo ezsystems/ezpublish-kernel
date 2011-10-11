@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Base;
-use ezp\Persistence\Handler,
+use ezp\Persistence\Handler as PersistenceHandler,
     RuntimeException,
     DomainException,
     ezp\Base\Configuration,
@@ -17,7 +17,7 @@ use ezp\Persistence\Handler,
     ezp\Base\Exception\Logic,
     ezp\Base\ModelDefinition,
     ezp\Base\ModelInterface,
-    ezp\Io\BinaryStorage\Backend as IoBackend,
+    ezp\Io\BinaryStorage\Backend as IoHandler,
     ezp\User,
     ezp\User\Proxy as ProxyUser;
 
@@ -32,7 +32,7 @@ class Repository
      *
      * @var \ezp\Persistence\Handler
      */
-    protected $handler;
+    protected $persistenceHandler;
 
     /**
      * Io Handler object
@@ -64,9 +64,9 @@ class Repository
      * @param \ezp\Io\BinaryStorage\Backend $ioHandler
      * @param \ezp\User|null $user
      */
-    public function __construct( Handler $handler, IoBackend $ioHandler, User $user = null )
+    public function __construct( PersistenceHandler $persistenceHandler, IoHandler $ioHandler, User $user = null )
     {
-        $this->handler = $handler;
+        $this->persistenceHandler = $persistenceHandler;
         $this->ioHandler = $ioHandler;
 
         if ( $user !== null )
@@ -202,7 +202,7 @@ class Repository
             if ( strpos( $className, 'ezp\\Io\\' ) === 0 )
                 return $this->services[$className] = new $className( $this, $this->ioHandler );
 
-            return $this->services[$className] = new $className( $this, $this->handler );
+            return $this->services[$className] = new $className( $this, $this->persistenceHandler );
         }
 
         throw new RuntimeException( "Could not load '$className' service!" );
@@ -330,7 +330,7 @@ class Repository
      */
     public function beginTransaction()
     {
-        $this->handler->beginTransaction();
+        $this->persistenceHandler->beginTransaction();
     }
 
     /**
@@ -342,7 +342,7 @@ class Repository
      */
     public function commit()
     {
-        $this->handler->commit();
+        $this->persistenceHandler->commit();
     }
 
     /**
@@ -354,6 +354,6 @@ class Repository
      */
     public function rollback()
     {
-        $this->handler->rollback();
+        $this->persistenceHandler->rollback();
     }
 }

@@ -467,7 +467,7 @@ class TrashTest extends Base
     private function getMockForTrash()
     {
         $refRepository = new ReflectionObject( $this->repository );
-        $refHandlerProp = $refRepository->getProperty( 'handler' );
+        $refHandlerProp = $refRepository->getProperty( 'persistenceHandler' );
         $refHandlerProp->setAccessible( true );
         $persistenceHandler = $refHandlerProp->getValue( $this->repository );
         $refHandler = new ReflectionObject( $persistenceHandler );
