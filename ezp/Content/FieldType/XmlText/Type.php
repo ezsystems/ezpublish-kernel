@@ -132,8 +132,9 @@ EOF;
      */
     protected function convertValueToRawValue( Value $value, Repository $repository, Field $field )
     {
-        /*if ( $value instanceof RawValue )
-            return $value;*/
+        // we don't convert Raw to Raw, right ?
+        if ( get_class( $value ) === 'ezp\\Content\\FieldType\\XmlText\\Value' )
+            return $value;
 
         $handler = $this->getInputHandler( $value );
         $handler->process( $value->text, $repository, $field->version );
