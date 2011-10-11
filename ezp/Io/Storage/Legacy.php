@@ -1,17 +1,17 @@
 <?php
 /**
- * File containing the ezp\Io\BinaryStorage\Legacy class.
+ * File containing the ezp\Io\Storage\Legacy class.
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Io\BinaryStorage;
+namespace ezp\Io\Storage;
 
 use ezp\Io\Handler as IoHandlerInterface,
     ezp\Io\BinaryFile, ezp\Io\BinaryFileCreateStruct, ezp\Io\BinaryFileUpdateStruct, ezp\Io\ContentType,
-    ezp\Io\BinaryStorage\Legacy\FileResourceAdapter,
+    ezp\Io\Storage\Legacy\FileResourceAdapter,
     ezp\Base\Exception\InvalidArgumentValue,
     eZClusterFileHandler,
     DateTime,
@@ -205,7 +205,7 @@ class Legacy implements IoHandlerInterface
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
      *
-     * @return \ezp\Io\BinaryStorage\Legacy\FileResourceProvider
+     * @return \ezp\Io\Storage\Legacy\FileResourceProvider
      */
     private function getFileResourceProvider()
     {

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Io\BinaryStorage\Legacy;
+namespace ezp\Io\Storage\Legacy;
 
 /**
  * This interface handles providing of a file resource based on a cluster handler / cluster file

@@ -6,7 +6,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Io\BinaryStorage;
+namespace ezp\Io\Storage;
 
 use ezp\Io\Handler as IoHandlerInterface,
     ezp\Io\BinaryFile, ezp\Io\BinaryFileUpdateStruct, ezp\Io\BinaryFileCreateStruct,

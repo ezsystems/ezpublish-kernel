@@ -6,7 +6,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Io\BinaryStorage;
+namespace ezp\Io\Storage;
 
 use ezp\Base\Exception\InvalidArgumentType,
     ezp\Io\Handler as IoHandlerInterface,

@@ -9,8 +9,8 @@
 
 namespace ezp\Io\Tests\BinaryStorage;
 use ezp\Base\ServiceContainer,
-    ezp\Io\BinaryStorage\Dispatcher,
-    ezp\Io\BinaryStorage\InMemory,
+    ezp\Io\Storage\Dispatcher,
+    ezp\Io\Storage\InMemory,
     ezp\Io\BinaryFile,
     ezp\Io\BinaryFileCreateStruct,
     ezp\Io\BinaryFileUpdateStruct,
@@ -23,12 +23,12 @@ use ezp\Base\ServiceContainer,
 class DispatcherTest extends BinaryRepositoryTest
 {
     /**
-     * @var \ezp\Io\BinaryStorage\InMemory
+     * @var \ezp\Io\Storage\InMemory
      */
     protected $defaultBackend;
 
     /**
-     * @var \ezp\Io\BinaryStorage\InMemory
+     * @var \ezp\Io\Storage\InMemory
      */
     protected $alternativeBackend;
 

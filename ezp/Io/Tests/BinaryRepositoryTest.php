@@ -9,7 +9,7 @@
 
 namespace ezp\Io\Tests;
 use ezp\Base\ServiceContainer,
-    ezp\Io\BinaryStorage\InMemory,
+    ezp\Io\Storage\InMemory,
     ezp\Io\BinaryFile,
     ezp\Io\BinaryFileCreateStruct,
     ezp\Io\BinaryFileUpdateStruct,
