@@ -219,19 +219,13 @@ abstract class Base
             $text = str_replace( "\n", '', $text);
         }
 
-        $domDocumentClass = $this->getOption( self::OPT_DOM_DOCUMENT_CLASS );
-        $this->Document = new $domDocumentClass( '1.0', 'utf-8' );
-
-        if ( $createRootNode )
-        {
-            $this->createRootNode();
-        }
+        $this->Document = $this->createDomDocument();
 
         // Perform pass 1
         // Parsing the source string
         $this->performPass1( $text );
 
-        //$this->Document->formatOutput = true;
+        $this->Document->formatOutput = true;
         // $debug = eZDebugSetting::isConditionTrue( 'kernel-datatype-ezxmltext', eZDebug::LEVEL_DEBUG );
         /*if ( $debug )
         {
@@ -246,7 +240,7 @@ abstract class Base
         // Perform pass 2
         $this->performPass2();
 
-        //$this->Document->formatOutput = true;
+        $this->Document->formatOutput = true;
         /*if ( $debug )
         {
             // eZDebug::writeDebug( $this->Document->saveXML(), eZDebugSetting::changeLabel( 'kernel-datatype-ezxmltext', 'XML after pass 2' ) );
@@ -260,21 +254,27 @@ abstract class Base
         return $this->Document;
     }
 
-    public function createRootNode()
+    /**
+     * Creates the DOMDocument object holding the XML text
+     * @param bool $createRootNode wether or not to create the root <section> node
+     * @return \DOMDocument
+     */
+    protected function createDomDocument( $createRootNode = true )
     {
-        if ( !$this->Document )
-        {
-            $this->Document = new $this->DOMDocumentClass( '1.0', 'utf-8' );
-        }
+        $domDocumentClass = $this->getOption( self::OPT_DOM_DOCUMENT_CLASS );
+        $domDocument = new $domDocumentClass( '1.0', 'utf-8' );
 
         // Creating root section with namespaces definitions
-        $mainSection = $this->Document->createElement( 'section' );
-        $this->Document->appendChild( $mainSection );
-        foreach( array( 'image', 'xhtml', 'custom' ) as $prefix )
+        if ( $createRootNode )
         {
-            $mainSection->setAttributeNS( 'http://www.w3.org/2000/xmlns/', 'xmlns:' . $prefix, $this->Namespaces[$prefix] );
+            $mainSection = $domDocument->createElement( 'section' );
+            $domDocument->appendChild( $mainSection );
+            foreach( array( 'image', 'xhtml', 'custom' ) as $prefix )
+            {
+                $mainSection->setAttributeNS( 'http://www.w3.org/2000/xmlns/', 'xmlns:' . $prefix, $this->Namespaces[$prefix] );
+            }
         }
-        return $this->Document;
+        return $domDocument;
     }
 
     /*
@@ -1319,13 +1319,6 @@ abstract class Base
     {
         return $this->urlIDArray;
     }
-
-    /**
-     * Class name of the DOM document object
-     * @var string
-     * @see setDOMDocumentClass()
-     */
-    protected $DOMDocumentClass = 'DOMDocument';
 
     /**
      * XmlSchema object
