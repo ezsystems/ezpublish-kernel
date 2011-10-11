@@ -107,6 +107,8 @@ class Mapper
         // @todo: Is draft version correct?
         $version->status = 0;
         $version->contentId = $content->id;
+        // @todo Implement real language id for translation
+        $version->initialLanguageId = 2;
 
         return $version;
     }

@@ -168,13 +168,15 @@ class EzcDatabase extends Gateway
      */
     protected function generateLanguageMask( array $fields, $alwaysAvailable )
     {
-        $languages = array_map(
-            function ( Field $field )
-            {
-                return $field->language;
-            },
-            $fields
-        );
+        $languages = array();
+        foreach ( $fields as $field )
+        {
+            if ( isset( $languages[$field->language] ) )
+                continue;
+
+            $languages[$field->language] = true;
+        }
+
         if ( $alwaysAvailable )
         {
             $languages['always-available'] = true;

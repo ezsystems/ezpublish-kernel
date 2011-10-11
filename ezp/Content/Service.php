@@ -97,9 +97,11 @@ class Service extends BaseService
 
         foreach ( $content->getCurrentVersion()->getFields() as $field )
         {
-            $fieldStruct = $field->getState( 'properties' );
-            $fieldStruct->value = $field->fieldDefinition->type->toFieldValue();
-            $struct->fields[] = $fieldStruct;
+            $fieldVo = $field->getState( 'properties' );
+            $fieldVo->value = $field->fieldDefinition->type->toFieldValue();
+            // @todo Properly implement language here instead of hardcoding eng-GB
+            $fieldVo->language = 'eng-GB';
+            $struct->fields[] = $fieldVo;
         }
         $vo = $this->handler->contentHandler()->create( $struct );
         return $this->buildDomainObject( $vo );
