@@ -69,19 +69,19 @@ class XmlText implements Converter
     {
         $fieldDefinition->fieldTypeConstraints = new FieldTypeConstraints;
 
-        $settings = new FieldSettings;
+        $settingsArray = array();
 
         if ( !empty( $storageDefinition->dataInt1 ) )
         {
-            $settings['numRows'] = $storageDefinition->dataInt1;
+        $settingsArray['numRows'] = $storageDefinition->dataInt1;
         }
 
         if ( !empty( $storageDefinition->dataText2 ) )
         {
-            $settings['tagPreset'] = $storageDefinition->dataText2;
+            $settingsArray['tagPreset'] = $storageDefinition->dataText2;
         }
 
-        $fieldDefinition->fieldTypeConstraints->fieldSettings = $settings;
+        $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings( $settingsArray );
     }
 
     /**
