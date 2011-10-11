@@ -78,7 +78,7 @@ EOF;
      * Otherwise, an \ezp\Base\Exception\BadFieldTypeInput exception is thrown
      *
      * @throws \ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param \ezp\Content\FieldType\TextLine\Value $inputValue
+     * @param \ezp\Content\FieldType\XmlText\Value $inputValue
      * @return \ezp\Content\FieldType\TextLine\Value
      */
     protected function canParseValue( BaseValue $inputValue )
