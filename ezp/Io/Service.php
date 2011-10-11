@@ -15,18 +15,18 @@ use ezp\Base\Repository,
     ezp\Io\BinaryFileUpdateStruct,
     ezp\Io\BinaryFileCreateStruct,
     ezp\Io\ContentType,
-    ezp\Io\BinaryStorage\Backend,
+    ezp\Io\Handler as IoHandlerInterface,
     DateTime;
 
 /**
  * Io\Service class
  *
- * Differs from other Services in that it uses different handler, namely {@link \ezp\Io\BinaryStorage\Backend}
+ * Differs from other Services in that it uses different handler, namely {@link \ezp\Io\Handler}
  */
 class Service extends BaseService
 {
     /**
-     * @var \ezp\Io\BinaryStorage\Backend
+     * @var \ezp\Io\Handler
      */
     protected $handler;
 
@@ -34,9 +34,9 @@ class Service extends BaseService
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \ezp\Base\Repository $repository
-     * @param \ezp\Io\BinaryStorage\Backend $handler
+     * @param \ezp\Io\Handler $handler
      */
-    public function __construct( Repository $repository, Backend $handler )
+    public function __construct( Repository $repository, IoHandlerInterface $handler )
     {
         $this->repository = $repository;
         $this->handler = $handler;
@@ -104,7 +104,7 @@ class Service extends BaseService
      *
      * @param \ezp\Io\BinaryFileCreateStruct $binaryFile
      * @return \ezp\Io\BinaryFile The created BinaryFile object
-     * @uses \ezp\Io\BinaryStorage\Backend::create() To create the binary file in backend
+     * @uses \ezp\Io\Handler::create() To create the binary file in backend
      */
     public function create( BinaryFileCreateStruct $binaryFile )
     {
@@ -117,7 +117,7 @@ class Service extends BaseService
      * @param string $originalPath
      * @param \ezp\Io\BinaryFileUpdateStruct $updateFile
      * @return \ezp\Io\BinaryFile The update BinaryFile
-     * @uses \ezp\Io\BinaryStorage\Backend::update() To update the binary file in backend
+     * @uses \ezp\Io\Handler::update() To update the binary file in backend
      */
     public function update( $originalPath, BinaryFileUpdateStruct $updateFile )
     {
@@ -129,7 +129,7 @@ class Service extends BaseService
      *
      * @param string $path
      * @return bool
-     * @uses \ezp\Io\BinaryStorage\Backend::exists() To see if file exists in backend
+     * @uses \ezp\Io\Handler::exists() To see if file exists in backend
      */
     public function exists( $path )
     {
@@ -140,7 +140,7 @@ class Service extends BaseService
      * Deletes the BinaryFile with $path
      *
      * @param string $path
-     * @uses \ezp\Io\BinaryStorage\Backend::delete() To delete the binary file in backend
+     * @uses \ezp\Io\Handler::delete() To delete the binary file in backend
      */
     public function delete( $path )
     {
@@ -152,7 +152,7 @@ class Service extends BaseService
      *
      * @param string $path
      * @return \ezp\Io\BinaryFile
-     * @uses \ezp\Io\BinaryStorage\Backend::load() To load the binary file from backend
+     * @uses \ezp\Io\Handler::load() To load the binary file from backend
      */
     public function load( $path )
     {
@@ -164,7 +164,7 @@ class Service extends BaseService
      *
      * @param string $path
      * @return resource
-     * @uses \ezp\Io\BinaryStorage\Backend::getFileResource() To get the binary file resource from backend
+     * @uses \ezp\Io\Handler::getFileResource() To get the binary file resource from backend
      */
     public function getFileResource( $path )
     {
@@ -175,7 +175,7 @@ class Service extends BaseService
      * Returns the contents of the BinaryFile identified by $path
      * @param string $path
      * @return string Binary content
-     * @uses \ezp\Io\BinaryStorage\Backend::getFileContents() To get the binary file content from backend
+     * @uses \ezp\Io\Handler::getFileContents() To get the binary file content from backend
      */
     public function getFileContents( $path )
     {

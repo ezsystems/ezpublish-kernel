@@ -17,7 +17,7 @@ use ezp\Persistence\Handler as PersistenceHandler,
     ezp\Base\Exception\Logic,
     ezp\Base\ModelDefinition,
     ezp\Base\ModelInterface,
-    ezp\Io\BinaryStorage\Backend as IoHandler,
+    ezp\Io\Handler as IoHandler,
     ezp\User,
     ezp\User\Proxy as ProxyUser;
 
@@ -37,7 +37,7 @@ class Repository
     /**
      * Io Handler object
      *
-     * @var \ezp\Io\BinaryStorage\Backend
+     * @var \ezp\Io\Handler
      */
     protected $ioHandler;
 
@@ -61,7 +61,7 @@ class Repository
      * Construct repository object with provided storage engine
      *
      * @param \ezp\Persistence\Handler $handler
-     * @param \ezp\Io\BinaryStorage\Backend $ioHandler
+     * @param \ezp\Io\Handler $ioHandler
      * @param \ezp\User|null $user
      */
     public function __construct( PersistenceHandler $persistenceHandler, IoHandler $ioHandler, User $user = null )

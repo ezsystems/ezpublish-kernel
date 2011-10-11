@@ -211,7 +211,7 @@ class BinaryRepository
     /**
      * Returns the appropriate backend for $path
      * @param string $path
-     * @return \ezp\Io\BinaryStorage\Backend
+     * @return \ezp\Io\Handler
      */
     private function getBackend( $path )
     {
@@ -254,7 +254,7 @@ class BinaryRepository
     /**
      * BinaryStorage backends instances
      * Uninstanciated ones have false as a value
-     * @var \ezp\Io\BinaryStorage\Backend[]
+     * @var \ezp\Io\Handler[]
      */
     private $backends = array();
 

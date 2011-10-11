@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\Io\BinaryStorage\Backend interface
+ * File containing the ezp\Io\Handler interface
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
@@ -8,7 +8,7 @@
 
 namespace ezp\Io\BinaryStorage;
 
-use ezp\Io\BinaryStorage\Backend,
+use ezp\Io\Handler as IoHandlerInterface,
     ezp\Io\BinaryFile, ezp\Io\BinaryFileUpdateStruct, ezp\Io\BinaryFileCreateStruct,
     ezp\Base\Exception\NotFound, ezp\Io\Exception\PathExists,
     DateTime;
@@ -17,7 +17,7 @@ use ezp\Io\BinaryStorage\Backend,
  * Backend interface for handling of binary files I/O
  */
 
-class InMemory implements Backend
+class InMemory implements IoHandlerInterface
 {
     public function __construct()
     {

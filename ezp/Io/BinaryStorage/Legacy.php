@@ -9,7 +9,7 @@
 
 namespace ezp\Io\BinaryStorage;
 
-use ezp\Io\BinaryStorage\Backend,
+use ezp\Io\Handler as IoHandlerInterface,
     ezp\Io\BinaryFile, ezp\Io\BinaryFileCreateStruct, ezp\Io\BinaryFileUpdateStruct, ezp\Io\ContentType,
     ezp\Io\BinaryStorage\Legacy\FileResourceAdapter,
     ezp\Base\Exception\InvalidArgumentValue,
@@ -25,7 +25,7 @@ use ezp\Io\BinaryStorage\Backend,
  * - mtime can not be modified, and will always automatically be set depending on the server time upon each write operation
  */
 
-class Legacy implements Backend
+class Legacy implements IoHandlerInterface
 {
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file

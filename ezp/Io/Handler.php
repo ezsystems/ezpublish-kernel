@@ -1,20 +1,22 @@
 <?php
 /**
- * File containing the ezp\Io\BinaryStorage\Backend interface
+ * File containing the ezp\Io\Handler interface
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Io\BinaryStorage;
+namespace ezp\Io;
 
-use ezp\Io\BinaryFile, ezp\Io\BinaryFileUpdateStruct, ezp\Io\BinaryFileCreateStruct;
+use ezp\Io\BinaryFile,
+    ezp\Io\BinaryFileUpdateStruct,
+    ezp\Io\BinaryFileCreateStruct;
 
 /**
  * Backend interface for handling of binary files I/O
  */
 
-interface Backend
+interface Handler
 {
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file

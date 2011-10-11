@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the ezp\Io\BinaryStorage\Backend interface
+ * File containing the ezp\Io\Handler interface
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
@@ -9,16 +9,16 @@
 namespace ezp\Io\BinaryStorage;
 
 use ezp\Base\Exception\InvalidArgumentType,
-    ezp\Io\BinaryStorage\Backend,
+    ezp\Io\Handler as IoHandlerInterface,
     ezp\Io\BinaryFileUpdateStruct,
     ezp\Io\BinaryFileCreateStruct,
     DateTime;
 
 /**
- * Backend interface for handling of binary files I/O
+ * Handler interface for handling of binary files I/O
  */
 
-class Dispatcher implements Backend
+class Dispatcher implements IoHandlerInterface
 {
     /**
      * BinaryStorage backends instances, {@see __construct()}
@@ -31,7 +31,7 @@ class Dispatcher implements Backend
      * Creates new object and validates $config param
      *
      * @param array $config Structure of backends that follows the following format:
-     *     array( 'backends' => array( 'handler' => Backend, 'match' => array(..) ), 'default' => Backend )
+     *     array( 'backends' => array( 'handler' => Handler, 'match' => array(..) ), 'default' => Handler )
      *     ie:
      *               array(
      *                   'default' => $backend1,
@@ -48,21 +48,21 @@ class Dispatcher implements Backend
      *               )
      *
      * @throws \ezp\Base\Exception\InvalidArgumentType If $config does not contain default backend that implements
-     *         Backend, backends is unset or empty (hence you could have used default directly), one of the 'patterns'
-     *         is unset or empty (hence it could have been default) or a 'handler' item does not implement Backend
+     *         Handler, backends is unset or empty (hence you could have used default directly), one of the 'patterns'
+     *         is unset or empty (hence it could have been default) or a 'handler' item does not implement Handler
      */
     public function __construct( array $config = array() )
     {
-        if ( empty( $config['default'] ) || !$config['default'] instanceof Backend )
+        if ( empty( $config['default'] ) || !$config['default'] instanceof IoHandlerInterface )
         {
-            throw new InvalidArgumentType( "\$config['default']", "ezp\\Io\\BinaryStorage\\Backend" );
+            throw new InvalidArgumentType( "\$config['default']", "ezp\\Io\\Handler" );
         }
         else if ( empty( $config['backends'] ) )
         {
             throw new InvalidArgumentType( "\$config['backends']", "array" );
         }
 
-        // Validate backends so it does not need to be done on every call to getBackend()
+        // Validate backends so it does not need to be done on every call to getHandler()
         foreach ( $config['backends'] as $key => $backend )
         {
             if ( empty( $backend['match'] ) )
@@ -75,9 +75,9 @@ class Dispatcher implements Backend
             {
                 throw new InvalidArgumentType( "\$config['backends'][$key]['match']['contains/prefix/suffix']", "string" );
             }
-            else if ( empty( $backend['handler'] ) || !$backend['handler'] instanceof Backend )
+            else if ( empty( $backend['handler'] ) || !$backend['handler'] instanceof IoHandlerInterface )
             {
-                throw new InvalidArgumentType( "\$config['backends'][$key]['handler']", "ezp\\Io\\BinaryStorage\\Backend" );
+                throw new InvalidArgumentType( "\$config['backends'][$key]['handler']", "ezp\\Io\\Handler" );
             }
         }
 
@@ -89,22 +89,22 @@ class Dispatcher implements Backend
      *
      * @param \ezp\Io\BinaryFileCreateStruct $file
      * @return \ezp\Io\BinaryFile The newly created BinaryFile object
-     * @uses \ezp\Io\BinaryStorage\Backend::create() To create the binary file in backend
+     * @uses \ezp\Io\Handler::create() To create the binary file in backend
      */
     public function create( BinaryFileCreateStruct $file )
     {
-        return $this->getBackend( $file->path )->create( $file );
+        return $this->getHandler( $file->path )->create( $file );
     }
 
     /**
      * Deletes the existing BinaryFile with path $path
      *
      * @param string $path
-     * @uses \ezp\Io\BinaryStorage\Backend::delete() To delete the binary file in backend
+     * @uses \ezp\Io\Handler::delete() To delete the binary file in backend
      */
     public function delete( $path )
     {
-        return $this->getBackend( $path )->delete( $path );
+        return $this->getHandler( $path )->delete( $path );
     }
 
     /**
@@ -113,29 +113,29 @@ class Dispatcher implements Backend
      * @param string $path
      * @param \ezp\Io\BinaryFileUpdateStruct $updateFile
      * @return \ezp\Io\BinaryFile The updated BinaryFile
-     * @uses \ezp\Io\BinaryStorage\Backend::update() To update the binary file in backend
+     * @uses \ezp\Io\Handler::update() To update the binary file in backend
      */
     public function update( $path, BinaryFileUpdateStruct $updateFile )
     {
         if ( $path === $updateFile->path )
-            return $this->getBackend( $path )->update( $path, $updateFile );
+            return $this->getHandler( $path )->update( $path, $updateFile );
 
         // When file path has changed, check if we should move from one handler to another
-        $oldBackend = $this->getBackend( $path );
-        $newBackend = $this->getBackend( $updateFile->path);
-        if ( $oldBackend === $newBackend )
-            return $oldBackend->update( $path, $updateFile );
+        $oldHandler = $this->getHandler( $path );
+        $newHandler = $this->getHandler( $updateFile->path);
+        if ( $oldHandler === $newHandler )
+            return $oldHandler->update( $path, $updateFile );
 
         // Move file from old to new handler
         throw new \Exception( '@TODO: Moving from one io handler to another one is not implemented!' );
-        /*$newBackend->create( $updateFile );
+        /*$newHandler->create( $updateFile );
         try
         {
-            $oldBackend->delete( $path );
+            $oldHandler->delete( $path );
         }
         catch ( \Exception $e )
         {
-            $newBackend->delete( $updateFile->path );
+            $newHandler->delete( $updateFile->path );
             throw $e;
         }*/
     }
@@ -145,11 +145,11 @@ class Dispatcher implements Backend
      *
      * @param string $path
      * @return bool
-     * @uses \ezp\Io\BinaryStorage\Backend::exists() To see if file exists in backend
+     * @uses \ezp\Io\Handler::exists() To see if file exists in backend
      */
     public function exists( $path )
     {
-        return $this->getBackend( $path )->exists( $path );
+        return $this->getHandler( $path )->exists( $path );
     }
 
     /**
@@ -157,11 +157,11 @@ class Dispatcher implements Backend
      *
      * @param string $path
      * @return \ezp\Io\BinaryFile
-     * @uses \ezp\Io\BinaryStorage\Backend::load() To load the binary file from backend
+     * @uses \ezp\Io\Handler::load() To load the binary file from backend
      */
     public function load( $path )
     {
-        return $this->getBackend( $path )->load( $path );
+        return $this->getHandler( $path )->load( $path );
     }
 
     /**
@@ -169,11 +169,11 @@ class Dispatcher implements Backend
      *
      * @param string $path
      * @return resource
-     * @uses \ezp\Io\BinaryStorage\Backend::getFileResource() To get the binary file resource from backend
+     * @uses \ezp\Io\Handler::getFileResource() To get the binary file resource from backend
      */
     public function getFileResource( $path )
     {
-        return $this->getBackend( $path )->getFileResource( $path );
+        return $this->getHandler( $path )->getFileResource( $path );
     }
 
     /**
@@ -181,11 +181,11 @@ class Dispatcher implements Backend
      *
      * @param string $path
      * @return string
-     * @uses \ezp\Io\BinaryStorage\Backend::getFileContents() To get the binary file content from backend
+     * @uses \ezp\Io\Handler::getFileContents() To get the binary file content from backend
      */
     public function getFileContents( $path )
     {
-        return $this->getBackend( $path )->getFileContents( $path );
+        return $this->getHandler( $path )->getFileContents( $path );
     }
 
     /**
@@ -194,9 +194,9 @@ class Dispatcher implements Backend
      * @internal Depends on {@link $config} being validated by {@link __construct()}!
      *
      * @param string $path
-     * @return \ezp\Io\BinaryStorage\Backend
+     * @return \ezp\Io\Handler
      */
-    private function getBackend( $path )
+    private function getHandler( $path )
     {
         if ( empty( $this->config['backends'] ) )
             return $this->config['default'];
