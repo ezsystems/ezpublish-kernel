@@ -73,7 +73,7 @@ class XmlText implements Converter
 
         if ( !empty( $storageDefinition->dataInt1 ) )
         {
-        $settingsArray['numRows'] = $storageDefinition->dataInt1;
+            $settingsArray['numRows'] = $storageDefinition->dataInt1;
         }
 
         if ( !empty( $storageDefinition->dataText2 ) )
