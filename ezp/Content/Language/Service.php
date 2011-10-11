@@ -29,6 +29,7 @@ class Service extends BaseService
      * @param string $name
      * @param bool $isEnabled
      * @return \ezp\Content\Language
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to content translations
      */
     public function create( $locale, $name, $isEnabled = true )
     {
@@ -47,6 +48,7 @@ class Service extends BaseService
      * Updates $language in the content repository
      *
      * @param \ezp\Content\Language $language
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to content translations
      */
     public function update( Language $language )
     {
@@ -93,6 +95,7 @@ class Service extends BaseService
      *         because it is still assigned to some content / type / (...).
      * @throws \ezp\Base\Exception\NotFound If the specified language is not found
      * @todo Add exception if still assigned to some content (needs handler support)
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to content translations
      */
     public function delete( Language $language )
     {

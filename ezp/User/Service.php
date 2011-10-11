@@ -338,6 +338,7 @@ class Service extends BaseService
      * @param \ezp\User\Role $role
      * @return \ezp\User\Role
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to create provided object
      */
     public function createRole( Role $role )
     {
@@ -385,6 +386,7 @@ class Service extends BaseService
      *
      * @param \ezp\User\Role $role
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function updateRole( Role $role )
     {
@@ -400,6 +402,7 @@ class Service extends BaseService
      * Delete a Role object by id
      *
      * @param \ezp\User\Role $role
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to delete provided object
      */
     public function deleteRole( Role $role )
     {
@@ -414,6 +417,7 @@ class Service extends BaseService
      *
      * @param \ezp\User\Role $role
      * @param \ezp\User\Policy $policy
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function addPolicy( Role $role, Policy $policy )
     {
@@ -429,6 +433,7 @@ class Service extends BaseService
      *
      * @param \ezp\User\Role $role
      * @param \ezp\User\Policy $policy
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function removePolicy( Role $role, Policy $policy )
     {
@@ -459,6 +464,7 @@ class Service extends BaseService
      * @param \ezp\User\Group $group
      * @param \ezp\User\Role $role
      * @throws \ezp\Base\Exception\InvalidArgumentValue If group is already contains role
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to assign provided object
      */
     public function assignRole( Group $group, Role $role )
     {
@@ -482,6 +488,7 @@ class Service extends BaseService
      * @param \ezp\User\Group $group Can also take instance of user atm
      * @param \ezp\User\Role $role
      * @throws \ezp\Base\Exception\InvalidArgumentValue If group does not contain role
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to (un)assign provided object
      */
     public function unAssignRole( Groupable $group, Role $role )
     {

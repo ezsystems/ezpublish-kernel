@@ -152,6 +152,7 @@ class Service extends BaseService
      * @param \ezp\Content\Location $location
      * @return \ezp\Content\Location the newly created Location
      * @throws \ezp\Base\Exception\Logic If a validation problem has been found for $content
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to create provided object
      */
     public function create( Location $location )
     {
@@ -191,6 +192,7 @@ class Service extends BaseService
      * @param \ezp\Content\Location $location
      * @return \ezp\Content\Location the updated Location
      * @throws \ezp\Base\Exception\Logic If a validation problem has been found for $location
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function update( Location $location )
     {
@@ -222,6 +224,7 @@ class Service extends BaseService
      * @param \ezp\Content\Location $location2
      * @return void
      * @throws \ezp\Base\Exception\Validation If a validation problem has been found
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to create provided objects
      */
     public function swap( Location $location1, Location $location2 )
     {
@@ -248,6 +251,7 @@ class Service extends BaseService
      * @param \ezp\Content\Location $location
      * @return \ezp\Content\Location $location, with updated hidden value
      * @todo Make children visibility update more dynamic with some kind of LazyLoadedCollection
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to hide provided object
      */
     public function hide( Location $location )
     {
@@ -278,6 +282,7 @@ class Service extends BaseService
      * @param \ezp\Content\Location $location
      * @return \ezp\Content\Location $location, with updated hidden value
      * @todo Make children visibility update more dynamic with some kind of LazyLoadedCollection
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to (un)hide provided object
      */
     public function unhide( Location $location )
     {
@@ -326,6 +331,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\NotFound if no location is available with $locationId
      * @todo Do we need to check permissions for delete on children? Or should we document that
      * giving access to deleting implicit gives a user access to remove all childes no matter what?
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to remove provided object
      */
     public function delete( Location $location )
     {

@@ -46,6 +46,7 @@ class Service extends BaseService
      * @return \ezp\Content\Type\Group
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
      * @todo Validate that identifier is not already in use
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to create provided object
      */
     public function createGroup( Group $group )
     {
@@ -94,6 +95,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing or has a value of null
      * @throws \ezp\Base\Exception\NotFound If object can not be found
      * @todo Validate that identifier is not already in use (if it has been changed?)
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function updateGroup( Group $group )
     {
@@ -110,6 +112,7 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Type\Group $group
      * @throws \ezp\Base\Exception\NotFound If object can not be found
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to delete provided object
      */
     public function deleteGroup( Group $group )
     {
@@ -130,6 +133,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\Logic If a group is _not_ persisted, or if type / fields is
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $type->identifier is in use
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $field->identifier is used in several fields
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to create provided object
      */
     public function create( Type $type, array $linkGroups, array $addFields = array() )
     {
@@ -295,6 +299,7 @@ class Service extends BaseService
      * @todo Consider adding fieldDefinitions on update struct when we have dirty state and knowledge about which
      * one has been updated (not added / removed, there are separate api's for that). But remember to validate
      * fieldDefinition->identifier when this is added.
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function update( Type $type )
     {
@@ -315,6 +320,7 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Type $type
      * @throws \ezp\Base\Exception\NotFound If object can not be found
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to delete provided object
      */
     public function delete( Type $type )
     {
@@ -335,6 +341,7 @@ class Service extends BaseService
      * @return \ezp\Content\Type
      * @throws \ezp\Base\Exception\NotFound If user or published type is not found
      * @todo Change to take objects in input? ( more consistent with rest and removes needs for lots of NotFound possibilities )
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to create provided object
      */
     public function copy( $userId, $typeId )
     {
@@ -353,6 +360,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $group is not on type or type is not on $group
      * @throws \ezp\Base\Exception\InvalidArgumentType If $group or $type is missing id value
      * @throws \ezp\Base\Exception\BadRequest If $group is the last group on type
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to (un)link provided object
      */
     public function unlink( Type $type, Group $group )
     {
@@ -391,6 +399,7 @@ class Service extends BaseService
      * @param Group $group
      * @throws \ezp\Base\Exception\NotFound If type or group is not found
      * @throws \ezp\Base\Exception\InvalidArgumentType If $group does not have id value
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to link provided object
      */
     public function link( Type $type, Group $group  )
     {
@@ -419,6 +428,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\InvalidArgumentType If field has id already
      * @throws \ezp\Base\Exception\NotFound If type is not found
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $field->identifier is used in existing field on $type
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function addFieldDefinition( Type $type, FieldDefinition $field  )
     {
@@ -458,6 +468,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\InvalidArgumentType If $field->id is false
      * @throws \ezp\Base\Exception\NotFound If field/type is not found
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $field is not an group on type
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function removeFieldDefinition( Type $type, FieldDefinition $field  )
     {
@@ -490,6 +501,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\InvalidArgumentType If $field->id is false
      * @throws \ezp\Base\Exception\NotFound If field/type is not found
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $field->identifier is used in existing field on $type
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function updateFieldDefinition( Type $type, FieldDefinition $field  )
     {
@@ -521,6 +533,7 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Type $type The type draft to publish
      * @throws \ezp\Base\Exception\NotFound If type draft is not found
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function publish( Type $type  )
     {

@@ -53,6 +53,7 @@ class Service extends BaseService
      * @param \ezp\Content $content
      * @return \ezp\Content The newly created content
      * @throws \ezp\Base\Exception\InvalidArgumentType If $content already has an id
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to create provided object
      * @todo If/when we have some sort of object storage, use that to check if object is persisted instead of just id
      */
     public function create( Content $content )
@@ -111,6 +112,7 @@ class Service extends BaseService
      * @param \ezp\Content\Version $version
      * @return \ezp\Content
      * @throws Exception\Validation If a validation problem has been found for $content
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function update( Content $content, Version $version )
     {
@@ -180,6 +182,7 @@ class Service extends BaseService
      *
      * @param \ezp\Content $content
      * @throws \ezp\Base\Exception\NotFound if content could not be found
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to remove provided object
      */
     public function delete( Content $content )
     {
@@ -267,6 +270,7 @@ class Service extends BaseService
      * @param \ezp\Content $contentTo
      * @param mixed|null $versionFrom
      * @return \ezp\Content\Relation
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function addRelation( Content $contentFrom, Content $contentTo, $versionFrom = null )
     {
@@ -341,6 +345,7 @@ class Service extends BaseService
      * @param \ezp\Content $content
      * @param \ezp\Content\Version $version
      * @return \ezp\Content
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to create provided object
      */
     public function copy( Content $content, Version $version = null )
     {
@@ -365,6 +370,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\NotFound
      * @todo Language support
      * @todo User support
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function createDraftFromVersion( Content $content, Version $srcVersion = null )
     {
@@ -521,6 +527,7 @@ class Service extends BaseService
      * Deletes $version
      *
      * @param \ezp\Content\Version $version
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to version-remove provided object
      */
     public function deleteVersion( Version $version )
     {
@@ -532,11 +539,11 @@ class Service extends BaseService
 
     /**
      * Publishes $version of $content
+     *
      * @param \ezp\Content\Version $version
-     *
-     * @throws \ezp\Base\Exception\Logic if $version doesn't have the DRAFT status
-     *
      * @return \ezp\Content The updated, published Content
+     * @throws \ezp\Base\Exception\Logic if $version doesn't have the DRAFT status
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function publish( Version $version )
     {

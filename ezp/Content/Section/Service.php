@@ -27,6 +27,7 @@ class Service extends BaseService
      * @param \ezp\Content\Section $section
      * @return \ezp\Content\Section The newly create section
      * @todo Should api be adjusted to take name and identifier like handler instead of object?
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function create( Section $section )
     {
@@ -43,6 +44,7 @@ class Service extends BaseService
      * @param \ezp\Content\Section $section
      * @return \ezp\Content\Section
      * @throws Exception\Validation If a validation problem has been found for $section
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function update( Section $section )
     {
@@ -113,6 +115,7 @@ class Service extends BaseService
      *
      * @param \ezp\Content\Section $section
      * @param Content $content
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to view provided object
      */
     public function assign( Section $section, Content $content )
     {
@@ -135,6 +138,7 @@ class Service extends BaseService
      *         if section can not be deleted
      *         because it is still assigned to some contents.
      * @throws \ezp\Base\Exception\NotFound If the specified section is not found
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
     public function delete( Section $section )
     {
