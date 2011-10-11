@@ -86,6 +86,8 @@ class Handler
         {
             return false;
         }
+        $this->document = $document;
+
 
         $service = $repository->getInternalFieldTypeService();
 
@@ -156,9 +158,31 @@ class Handler
     }
 
     /**
+     * Returns the processed DOMDocument as an XML string
+     * @return string
+     */
+    public function getDocumentAsXml()
+    {
+        if ( $this->document instanceof DOMDocument )
+        {
+            return $this->document->saveXML();
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /**
      * XmlText parser
      * @var \ezp\Content\FieldType\XmlText\Input\Parser
      */
     protected $parser;
+
+    /**
+     * DOMDocument, as processed
+     * @var \DOMDocument
+     */
+    protected $document;
 }
 ?>

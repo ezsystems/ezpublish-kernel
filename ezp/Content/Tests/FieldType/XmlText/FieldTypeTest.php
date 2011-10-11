@@ -16,7 +16,7 @@ use ezp\Content\FieldType\Factory,
     ezp\Content\FieldType\XmlText\Value\Simplified as SimplifiedValue,
     ezp\Base\Exception\BadFieldTypeInput,
     PHPUnit_Framework_TestCase,
-    ReflectionObject;
+    ReflectionObject, ReflectionProperty;
 
 class FieldTypeTest extends PHPUnit_Framework_TestCase
 {
@@ -133,15 +133,15 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
      */
     public function testToFieldValue()
     {
-        self::markTestIncomplete();
-        /*$countries = array( "Belgium", "Norway" );
-        $ft = new Country();
-        $ft->setValue( $fv = new CountryValue( $countries ) );
+        // @todo Do one per value class
+        $value = new SimplifiedValue( '');
+
+        $ft = new XmlTextType();
+        $ft->setValue( $value );
 
         $fieldValue = $ft->toFieldValue();
 
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertNull( $fieldValue->externalData );*/
+        self::assertSame( $value, $fieldValue->data );
     }
 
     /**
