@@ -48,6 +48,7 @@ abstract class Handler
      * @param \ezp\Persistence\Content\Query\Criterion $criterion
      * @param string[] $translations
      * @return \ezp\Persistence\Content
+     * @todo Define exceptions (InMemory uses NotFound while Legazy uses InvalidObjectCount)
      */
     abstract public function findSingle( Criterion $criterion, $translations = null );
 
