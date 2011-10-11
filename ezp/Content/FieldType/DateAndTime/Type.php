@@ -11,12 +11,31 @@ namespace ezp\Content\FieldType\DateAndTime;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Base\Exception\InvalidArgumentType,
     DateTime;
 
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezdatetime";
     const IS_SEARCHABLE = true;
+
+    /**
+     * Default value types
+     */
+    const DEFAULT_EMPTY = 0,
+          DEFAULT_CURRENT_DATE = 1,
+          DEFAULT_CURRENT_DATE_ADJUSTED = 2;
+
+    protected $allowedSettings = array(
+        'useSeconds' => false,
+        // One of the DEFAULT_* class constants
+        'defaultType' => self::DEFAULT_EMPTY,
+        /*
+         * @var \DateInterval
+         * Used only if defaultValueType is set to DEFAULT_CURRENT_DATE_ADJUSTED
+         */
+        'dateInterval' => null
+    );
 
     /**
      * Returns the fallback default value of field type when no such default
@@ -26,7 +45,7 @@ class Type extends FieldType
      */
     protected function getDefaultValue()
     {
-        return new Value( new DateTime );
+        return new Value;
     }
 
     /**
@@ -40,14 +59,15 @@ class Type extends FieldType
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        $value = new DateTime( $inputValue );
-
-        if ( !$value instanceof DateTime )
+        if ( $inputValue instanceof Value )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
-        }
-        return $value;
+            if ( isset( $inputValue->value ) && !$inputValue->value instanceof DateTime )
+                throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
 
+            return $inputValue;
+        }
+
+        throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\DateAndTime\\Value' );
     }
 
     /**
@@ -57,6 +77,6 @@ class Type extends FieldType
      */
     protected function getSortInfo()
     {
-        return array( 'sort_key_int' => $this->getValue()->getTimestamp() );
+        return array( 'sort_key_int' => $this->getValue()->value->getTimestamp() );
     }
 }

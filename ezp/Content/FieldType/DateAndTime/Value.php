@@ -10,8 +10,9 @@
 namespace ezp\Content\FieldType\DateAndTime;
 use ezp\Content\FieldType\ValueInterface,
     ezp\Content\FieldType\Value as BaseValue,
-    DateTime,
-    RuntimeException;
+    ezp\Base\Exception\InvalidArgumentValue,
+    Exception,
+    DateTime;
 
 /**
  * Value for DateAndTime field type
@@ -21,9 +22,16 @@ class Value extends BaseValue implements ValueInterface
     /**
      * Date content
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $value;
+
+    /**
+     * Date format to be used by {@link __toString()}
+     *
+     * @var string
+     */
+    public $stringFormat = 'U';
 
     /**
      * Construct a new Value object and initialize with $dateTime
@@ -37,12 +45,22 @@ class Value extends BaseValue implements ValueInterface
     }
 
     /**
+     * @param string $stringValue A valid date/time string.
+     *                            Valid formats are explained in {@link http://php.net/manual/en/datetime.formats.php Date and Time Formats}.
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $stringValue does not comply a valid date format
+     * @return \ezp\Content\FieldType\DateAndTime\Value
      * @see \ezp\Content\FieldType\Value
      */
     public static function fromString( $stringValue )
     {
-        throw new RuntimeException( "@TODO: Implement" );
-        return new static( $stringValue );
+        try
+        {
+            return new static( new DateTime( $stringValue ) );
+        }
+        catch ( Exception $e )
+        {
+            throw new InvalidArgumentValue( '$stringValue', $stringValue, __CLASS__, $e );
+        }
     }
 
     /**
@@ -50,15 +68,15 @@ class Value extends BaseValue implements ValueInterface
      */
     public function __toString()
     {
-        throw new RuntimeException( "@TODO: Implement" );
-        return $this->value;
+        return $this->value->format( $this->stringFormat );
     }
 
     /**
      * @see \ezp\Content\FieldType\ValueInterface::getTitle()
+     * @todo Return format taken from locale configuration
      */
     public function getTitle()
     {
-        throw new \RuntimeException( 'Implement this method' );
+        return $this->value->format( 'D Y-d-m H:i:s' );
     }
 }
