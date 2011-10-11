@@ -730,6 +730,60 @@ class ContentTest extends BaseServiceTest
     }
 
     /**
+     * @covers \ezp\Content\Service::loadRelations
+     */
+    public function testLoadRelations()
+    {
+        $relation = $this->service->addRelation(
+            $this->service->load( 10 ),
+            $this->service->load( 14 )
+        );
+
+        $relation2 = $this->service->addRelation(
+            $this->service->load( 10 ),
+            $this->service->load( 42 )
+        );
+
+        $relations = $this->service->loadRelations( 10 );
+        self::assertEquals( 2, count( $relations ) );
+
+        foreach ( $relations as $fetchedRelation )
+        {
+            self::assertInstanceOf( '\\ezp\\Content\\Relation', $fetchedRelation, "Retrieved relations has incorrect type." );
+
+            $relObject = null;
+            switch ( $fetchedRelation->id )
+            {
+                case $relation->id:
+                    $relObject = $relation;
+                    break;
+
+                case $relation2->id:
+                    $relObject = $relation2;
+                    break;
+
+                default:
+                    self::fail( "An error occured, no expected relation objects were returned." );
+            }
+
+            self::assertEquals( $relObject->destinationContentId, $fetchedRelation->destinationContentId );
+            self::assertEquals( $relObject->sourceContentId, $fetchedRelation->sourceContentId );
+            self::assertEquals( $relObject->sourceContentVersion, $fetchedRelation->sourceContentVersion );
+            self::assertEquals( $relObject->sourceFieldDefinitionId, $fetchedRelation->sourceFieldDefinitionId );
+            self::assertEquals( $relObject->type, $fetchedRelation->type );
+        }
+    }
+
+    /**
+     * @covers \ezp\Content\Service::loadRelations
+     */
+    public function testLoadRelationsNonExistingId()
+    {
+        $relations = $this->service->loadRelations( 4000 );
+        self::assertEmpty( ( $relations ) );
+    }
+
+    /**
      * Tests the createDraftFromVersion operation
      *
      * @group contentService
