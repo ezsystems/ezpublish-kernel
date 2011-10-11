@@ -17,6 +17,7 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Configuration,
     ezp\Content,
     ezp\Content\Concrete as ConcreteContent,
+    ezp\content\Proxy as ProxyContent,
     ezp\Content\Section\Proxy as ProxySection,
     ezp\Content\Location\Proxy as ProxyLocation,
     ezp\Content\Type\Proxy as ProxyType,
@@ -322,7 +323,16 @@ class Service extends BaseService
      */
     public function loadRelations( $contentId, $version = null )
     {
-        //$this->handler->contentHandler()->loadRelations();
+        $relations = array();
+        foreach ( $this->handler->contentHandler()->loadRelations( $contentId, $version ) as $relationStruct )
+        {
+            $relation = new Relation(
+                $relationStruct->type,
+                new ProxyContent( $relationStruct->destinationContentId, $this->repository->getContentService() )
+            );
+            $relations[] = $relation->setState( array( 'properties' => $relationStruct ) );
+        }
+        return $relations;
     }
 
     /**
