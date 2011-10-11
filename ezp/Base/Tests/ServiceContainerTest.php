@@ -24,7 +24,7 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(),
             array(
-                'service_BService' => array(
+                'BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B'
                 )
             )
@@ -42,7 +42,7 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(),
             array(
-                'service_BService' => array(
+                'BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
                     'factory' => 'factory',
                 )
@@ -61,10 +61,10 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(),
             array(
-                'service_BService' => array(
+                'BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
                  ),
-                'service_CService' => array(
+                'CService' => array(
                     'class' => 'ezp\\Base\\Tests\\C',
                     'arguments' => array( '@BService' ),
                 )
@@ -83,10 +83,10 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(),
             array(
-                'service_BService' => array(
+                'BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
                  ),
-                'service_CService' => array(
+                'CService' => array(
                     'class' => 'ezp\\Base\\Tests\\C',
                     'factory' => 'factory',
                     'arguments' => array( '@BService', 'B', 'S' ),
@@ -106,14 +106,14 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(),
             array(
-                'service_AService' => array(
+                'AService' => array(
                     'class' => 'ezp\\Base\\Tests\\A',
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
-                'service_BService' => array(
+                'BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
                  ),
-                'service_CService' => array(
+                'CService' => array(
                     'class' => 'ezp\\Base\\Tests\\C',
                     'arguments' => array( '@BService' ),
                 )
@@ -134,15 +134,15 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(),
             array(
-                'service_AService' => array(
+                'AService' => array(
                     'class' => 'ezp\\Base\\Tests\\A',
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
-                'service_BService' => array(
+                'BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
                     'factory' => 'factory',
                  ),
-                'service_CService' => array(
+                'CService' => array(
                     'class' => 'ezp\\Base\\Tests\\C',
                     'factory' => 'factory',
                     'arguments' => array( '@BService', 'B', 'S' ),
@@ -164,11 +164,11 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array( '@BService' => new B ),
             array(
-                'service_AService' => array(
+                'AService' => array(
                     'class' => 'ezp\\Base\\Tests\\A',
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
-                'service_CService' => array(
+                'CService' => array(
                     'class' => 'ezp\\Base\\Tests\\C',
                     'factory' => 'factory',
                     'arguments' => array( '@BService', 'B', 'S' ),
@@ -190,7 +190,7 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array( '$B' => new B ),
             array(
-                'service_DService' => array(
+                'DService' => array(
                     'class' => 'ezp\\Base\\Tests\\D',
                     'arguments' => array( '$serviceContainer', '$_SERVER', '$B' ),
                 ),
@@ -208,7 +208,7 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(),
             array(
-                'service_EService' => array(
+                'EService' => array(
                     'class' => 'ezp\\Base\\Tests\\E',
                     'arguments' => array(
                         array(

@@ -29,13 +29,13 @@ use ezp\Base\Configuration,
  *     $sc = new ezp\Base\ServiceContainer( array( '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler() ) );
  *     $sc->getRepository->getContentService()->load( 42 );
  *
- * Settings are defined in base.ini like the following example:
+ * Settings are defined in service.ini like the following example:
  *
- *     [service_repository]
+ *     [repository]
  *     class=ezp\Base\Repository
  *     arguments[persistence_handler]=@inmemory_persistence_handler
  *
- *     [service_inmemory_persistence_handler]
+ *     [inmemory_persistence_handler]
  *     class=ezp\Persistence\Storage\InMemory\Handler
  *
  * Arguments can start with either @ in case of other services being dependency, $ if a predefined global variable
@@ -73,7 +73,7 @@ class ServiceContainer
                 '$_COOKIE' => $_COOKIE,
                 '$_FILES' => $_FILES
             );
-        $this->settings = $settingsOverride + Configuration::getInstance('base')->getAll();
+        $this->settings = $settingsOverride + Configuration::getInstance('service')->getAll();
 
     }
 
@@ -105,7 +105,7 @@ class ServiceContainer
      * @throws InvalidArgumentException
      * @param string $serviceName
      * @param array $settingsOverride Optional, overrides settings from Configuration
-     *              Format: array( "<serviceName>" => array( <settings hash like in base.ini> ) )
+     *              Format: array( "<serviceName>" => array( <settings hash like in service.ini> ) )
      * @return object
      */
     public function get( $serviceName, array $settingsOverride = null )
@@ -119,15 +119,15 @@ class ServiceContainer
         }
 
         // Validate settings
-        if ( empty( $this->settings["service_{$serviceName}"] ) )
+        if ( empty( $this->settings[$serviceName] ) )
         {
-            throw new BadConfiguration( "base\\[service_{$serviceName}]", "no settings exist for '{$serviceName}'" );
+            throw new BadConfiguration( "base\\[{$serviceName}]", "no settings exist for '{$serviceName}'" );
         }
 
-        $settings = $this->settings["service_{$serviceName}"];
+        $settings = $this->settings[$serviceName];
         if ( empty( $settings['class'] ) )
         {
-            throw new BadConfiguration( "base\\[service_{$serviceName}]\\class", 'class setting is not defined' );
+            throw new BadConfiguration( "base\\[{$serviceName}]\\class", 'class setting is not defined' );
         }
 
         if ( !class_exists( $settings['class'] ) )
