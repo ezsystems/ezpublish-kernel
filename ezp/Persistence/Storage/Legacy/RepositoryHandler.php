@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy;
-use ezp\Persistence\Repository\Handler as HandlerInterface,
+use ezp\Persistence\Handler as HandlerInterface,
     ezp\Persistence\Storage\Legacy\Content,
     ezp\Persistence\Storage\Legacy\Content\Type,
     ezp\Persistence\Storage\Legacy\Content\Location\Handler as LocationHandler,

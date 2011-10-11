@@ -30,7 +30,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCreateGroup()
     {
-        $group = $this->repositoryHandler->ContentTypeHandler()->createGroup( $this->getGroupCreateStruct() );
+        $group = $this->persistenceHandler->ContentTypeHandler()->createGroup( $this->getGroupCreateStruct() );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\Group', $group );
         $this->assertEquals( array( 'eng-GB' => 'Media' ), $group->name );
     }
@@ -49,8 +49,8 @@ class ContentTypeHandlerTest extends HandlerTest
         $struct->name = array( 'eng-GB' => 'Content2' );
         $struct->description = array( 'eng-GB' => 'TestTest' );
         $struct->identifier = 'content2';
-        $this->repositoryHandler->ContentTypeHandler()->updateGroup( $struct );
-        $group = $this->repositoryHandler->ContentTypeHandler()->loadGroup( 1 );
+        $this->persistenceHandler->ContentTypeHandler()->updateGroup( $struct );
+        $group = $this->persistenceHandler->ContentTypeHandler()->loadGroup( 1 );
         $this->assertEquals( 1, $group->id );
         $this->assertEquals( array( 'eng-GB' => 'Content2' ), $group->name );
     }
@@ -62,11 +62,11 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testDeleteGroup()
     {
-        $this->repositoryHandler->ContentTypeHandler()->deleteGroup( 1 );
+        $this->persistenceHandler->ContentTypeHandler()->deleteGroup( 1 );
 
         try
         {
-            $this->repositoryHandler->ContentTypeHandler()->loadGroup( 1 );
+            $this->persistenceHandler->ContentTypeHandler()->loadGroup( 1 );
             $this->fail( "Group not deleted correctly" );
         }
         catch ( NotFound $e )
@@ -75,7 +75,7 @@ class ContentTypeHandlerTest extends HandlerTest
 
         $this->assertEquals(
             array(),
-            $this->repositoryHandler->ContentTypeHandler()->load( 1 )->groupIds
+            $this->persistenceHandler->ContentTypeHandler()->load( 1 )->groupIds
         );
     }
 
@@ -86,7 +86,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadGroup()
     {
-        $obj = $this->repositoryHandler->ContentTypeHandler()->loadGroup( 1 );
+        $obj = $this->persistenceHandler->ContentTypeHandler()->loadGroup( 1 );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\Group', $obj );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( array( 'eng-GB' => 'Content' ), $obj->name );
@@ -99,7 +99,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadAllGroups()
     {
-        $list = $this->repositoryHandler->ContentTypeHandler()->loadAllGroups();
+        $list = $this->persistenceHandler->ContentTypeHandler()->loadAllGroups();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\Group', $list[0] );
         $this->assertEquals( 1, $list[0]->id );
         $this->assertEquals( array( 'eng-GB' => 'Content' ), $list[0]->name );
@@ -112,12 +112,12 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadByGroup()
     {
-        $list = $this->repositoryHandler->ContentTypeHandler()->loadContentTypes( 1, 0 );
+        $list = $this->persistenceHandler->ContentTypeHandler()->loadContentTypes( 1, 0 );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $list[0] );
         $this->assertEquals( 1, $list[0]->id );
         $this->assertEquals( 'folder', $list[0]->identifier );
 
-        $list = $this->repositoryHandler->ContentTypeHandler()->loadContentTypes( 22, 0 );
+        $list = $this->persistenceHandler->ContentTypeHandler()->loadContentTypes( 22, 0 );
         $this->assertEquals( array(), $list );
     }
 
@@ -128,7 +128,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoad()
     {
-        $obj = $this->repositoryHandler->ContentTypeHandler()->load( 1, 0 );
+        $obj = $this->persistenceHandler->ContentTypeHandler()->load( 1, 0 );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( 'folder', $obj->identifier );
@@ -143,7 +143,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadUnExistingTypeId()
     {
-        $this->repositoryHandler->ContentTypeHandler()->load( 22, 0 );
+        $this->persistenceHandler->ContentTypeHandler()->load( 22, 0 );
     }
 
     /**
@@ -154,7 +154,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLoadUnExistingStatus()
     {
-        $this->repositoryHandler->ContentTypeHandler()->load( 1, 1 );
+        $this->persistenceHandler->ContentTypeHandler()->load( 1, 1 );
     }
 
     /**
@@ -164,7 +164,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCreate()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $obj = $handler->create( $this->getTypeCreateStruct() );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
         $this->assertEquals( 'article', $obj->identifier );
@@ -179,7 +179,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCreateWithFieldDefinition()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $struct = $this->getTypeCreateStruct();
         $struct->fieldDefinitions[] = $field =$this->getTypeFieldDefinition();
 
@@ -198,7 +198,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUpdate()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $handler->update( 1, 0, $this->getTypeUpdateStruct() );
         $obj = $handler->load( 1, 0 );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
@@ -216,7 +216,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $handler->delete( 1, 0 );
         $this->assertNull( $handler->load( 1, 0 ) );
     }
@@ -230,8 +230,8 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $userId = 10;
         $time = time();
-        $obj = $this->repositoryHandler->ContentTypeHandler()->createDraft( $userId, 1 );
-        $original = $this->repositoryHandler->ContentTypeHandler()->load( 1, Type::STATUS_DEFINED );
+        $obj = $this->persistenceHandler->ContentTypeHandler()->createDraft( $userId, 1 );
+        $original = $this->persistenceHandler->ContentTypeHandler()->load( 1, Type::STATUS_DEFINED );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
         $this->assertEquals( $original->creatorId, $obj->creatorId );
         $this->assertEquals( $original->created, $obj->created );//ehm
@@ -250,7 +250,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCreateDraftNonExistingTypeId()
     {
-        $this->repositoryHandler->ContentTypeHandler()->createDraft( 10, 999 );
+        $this->persistenceHandler->ContentTypeHandler()->createDraft( 10, 999 );
     }
 
     /**
@@ -261,7 +261,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCreateDraftNonExistingDefinedType()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $obj = $handler->create( $this->getTypeCreateStruct( Type::STATUS_DRAFT ) );
         $obj2 = $handler->createDraft( 10, $obj->id );
     }
@@ -275,8 +275,8 @@ class ContentTypeHandlerTest extends HandlerTest
     {
         $userId = 10;
         $time = time();
-        $obj = $this->repositoryHandler->ContentTypeHandler()->copy( $userId, 1, Type::STATUS_DEFINED );
-        $original = $this->repositoryHandler->ContentTypeHandler()->load( 1, Type::STATUS_DEFINED );
+        $obj = $this->persistenceHandler->ContentTypeHandler()->copy( $userId, 1, Type::STATUS_DEFINED );
+        $original = $this->persistenceHandler->ContentTypeHandler()->load( 1, Type::STATUS_DEFINED );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type', $obj );
         $this->assertStringStartsWith( 'folder_', $obj->identifier );
         $this->assertEquals( $userId, $obj->creatorId );
@@ -297,7 +297,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCopyNonExistingTypeId()
     {
-        $this->repositoryHandler->ContentTypeHandler()->copy( 10, 22, 0 );
+        $this->persistenceHandler->ContentTypeHandler()->copy( 10, 22, 0 );
     }
 
     /**
@@ -308,7 +308,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testCopyNonExistingStatus()
     {
-        $this->repositoryHandler->ContentTypeHandler()->copy( 10, 1, 1 );
+        $this->persistenceHandler->ContentTypeHandler()->copy( 10, 1, 1 );
     }
 
     /**
@@ -319,7 +319,7 @@ class ContentTypeHandlerTest extends HandlerTest
     public function testLink()
     {
         $group = $this->getGroupCreateStruct();
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $vo = $handler->createGroup( $group );
         $handler->link( $vo->id, 1, 0 );
         $type = $handler->load( 1, 0 );
@@ -334,7 +334,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLinkMissingGroup()
     {
-        $this->repositoryHandler->contentTypeHandler()->link( 64, 1, 0 );
+        $this->persistenceHandler->contentTypeHandler()->link( 64, 1, 0 );
     }
 
     /**
@@ -345,7 +345,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLinkMissingType()
     {
-        $this->repositoryHandler->contentTypeHandler()->link( 1, 64, 0 );
+        $this->persistenceHandler->contentTypeHandler()->link( 1, 64, 0 );
     }
 
     /**
@@ -356,7 +356,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testLinkExistingGroupLink()
     {
-        $this->repositoryHandler->contentTypeHandler()->link( 1, 1, 0 );
+        $this->persistenceHandler->contentTypeHandler()->link( 1, 1, 0 );
     }
 
     /**
@@ -366,7 +366,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUnLink()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $group = $this->getGroupCreateStruct();
         $vo = $handler->createGroup( $group );
         $handler->link( $vo->id, 1, 0 );
@@ -384,7 +384,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     /*public function testUnLinkMissingGroup()
     {
-        $this->repositoryHandler->contentTypeHandler()->unlink( 64, 1, 0 );
+        $this->persistenceHandler->contentTypeHandler()->unlink( 64, 1, 0 );
     }*/
 
     /**
@@ -395,7 +395,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUnLinkMissingType()
     {
-        $this->repositoryHandler->contentTypeHandler()->unlink( 1, 64, 0 );
+        $this->persistenceHandler->contentTypeHandler()->unlink( 1, 64, 0 );
     }
 
     /**
@@ -406,7 +406,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUnLinkNotInGroup()
     {
-        $this->repositoryHandler->contentTypeHandler()->unlink( 2, 1, 0 );
+        $this->persistenceHandler->contentTypeHandler()->unlink( 2, 1, 0 );
     }
 
     /**
@@ -417,7 +417,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUnLinkLastGroup()
     {
-        $this->repositoryHandler->contentTypeHandler()->unlink( 1, 1, 0 );
+        $this->persistenceHandler->contentTypeHandler()->unlink( 1, 1, 0 );
     }
 
     /**
@@ -427,7 +427,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testAddFieldDefinition()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $field = $this->getTypeFieldDefinition();
         $vo = $handler->addFieldDefinition( 1, 0, $field );
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\FieldDefinition', $vo );
@@ -443,7 +443,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testAddFieldDefinitionInvalidTypeId()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $field = $this->getTypeFieldDefinition();
         $handler->addFieldDefinition( 22, 0, $field );
     }
@@ -456,7 +456,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testAddFieldDefinitionInvalidStatus()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $field = $this->getTypeFieldDefinition();
         $handler->addFieldDefinition( 1, 1, $field );
     }
@@ -468,7 +468,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testRemoveFieldDefinitionDefinition()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $handler->removeFieldDefinition( 1, 0, 1 );
         $type = $handler->load( 1, 0 );
         $this->assertEquals( 2, count( $type->fieldDefinitions ) );
@@ -482,7 +482,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testRemoveFieldDefinitionInvalidTypeId()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $handler->removeFieldDefinition( 22, 0, 1 );
     }
 
@@ -494,7 +494,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testRemoveFieldDefinitionInvalidStatus()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $handler->removeFieldDefinition( 1, 1, 1 );
     }
 
@@ -506,7 +506,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testRemoveFieldDefinitionInvalidFieldId()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $handler->removeFieldDefinition( 1, 0, 22 );
     }
 
@@ -517,7 +517,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUpdateFieldDefinitionDefinition()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $type = $handler->load( 1, 0 );
         $fieldDefinition = $type->fieldDefinitions[0];
         $fieldDefinition->name = $fieldDefinition->name + array( 'nor-NB' => 'Navn' );
@@ -535,7 +535,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUpdateFieldDefinitionDefinitionInvalidTypeId()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $type = $handler->load( 1, 0 );
         $fieldDefinition = $type->fieldDefinitions[0];
         $fieldDefinition->name = $fieldDefinition->name + array( 'nor-NB' => 'Navn' );
@@ -550,7 +550,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUpdateFieldDefinitionDefinitionInvalidStatus()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $type = $handler->load( 1, 0 );
         $fieldDefinition = $type->fieldDefinitions[0];
         $fieldDefinition->name = $fieldDefinition->name + array( 'nor-NB' => 'Navn' );
@@ -565,7 +565,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testUpdateFieldDefinitionDefinitionInvalidFieldDefinitionId()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $type = $handler->load( 1, 0 );
         $fieldDefinition = $type->fieldDefinitions[0];
         $fieldDefinition->id = 22;
@@ -580,7 +580,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testPublish()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $type = $handler->copy( 10, 1, Type::STATUS_DEFINED );
         $handler->publish( $type->id );
         try {
@@ -612,7 +612,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testPublishInvalidTypeId()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $handler->publish( 999 );
     }
 
@@ -624,7 +624,7 @@ class ContentTypeHandlerTest extends HandlerTest
      */
     public function testPublishNoDraft()
     {
-        $handler = $this->repositoryHandler->ContentTypeHandler();
+        $handler = $this->persistenceHandler->ContentTypeHandler();
         $handler->publish( 1 );
     }
 

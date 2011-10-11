@@ -11,7 +11,7 @@ namespace ezp\Base;
 use ezp\Base\Model,
     ezp\Base\Repository,
     ezp\Base\Exception\PropertyNotFound,
-    ezp\Persistence\Repository\Handler,
+    ezp\Persistence\Handler,
     ezp\Persistence\ValueObject;
 
 /**
@@ -26,7 +26,7 @@ abstract class Service
     protected $repository;
 
     /**
-     * @var \ezp\Persistence\Repository\Handler
+     * @var \ezp\Persistence\Handler
      */
     protected $handler;
 
@@ -34,7 +34,7 @@ abstract class Service
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \ezp\Base\Repository $repository
-     * @param \ezp\Persistence\Repository\Handler $handler
+     * @param \ezp\Persistence\Handler $handler
      */
     public function __construct( Repository $repository, Handler $handler )
     {

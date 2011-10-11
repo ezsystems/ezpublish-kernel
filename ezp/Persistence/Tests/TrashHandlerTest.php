@@ -80,11 +80,11 @@ class TrashHandlerTest extends HandlerTest
     {
         parent::setUp();
 
-        $this->trashHandler = $this->repositoryHandler->trashHandler();
+        $this->trashHandler = $this->persistenceHandler->trashHandler();
         $this->lastLocationId = 2;
         for ( $i = 0 ; $i < $this->entriesGenerated; ++$i )
         {
-            $this->contents[] = $content = $this->repositoryHandler->contentHandler()->create(
+            $this->contents[] = $content = $this->persistenceHandler->contentHandler()->create(
                 new ContentCreateStruct(
                     array(
                         "name" => array( "eng-GB" => "test_$i" ),
@@ -111,7 +111,7 @@ class TrashHandlerTest extends HandlerTest
 
             $this->lastContentId = $content->id;
 
-            $this->locations[] = $location = $this->repositoryHandler->locationHandler()->create(
+            $this->locations[] = $location = $this->persistenceHandler->locationHandler()->create(
                 new CreateStruct(
                     array(
                         "contentId" => $this->lastContentId,
@@ -138,7 +138,7 @@ class TrashHandlerTest extends HandlerTest
     {
         $this->trashHandler->emptyTrash();
         $this->trashHandler = null;
-        $locationHandler = $this->repositoryHandler->locationHandler();
+        $locationHandler = $this->persistenceHandler->locationHandler();
 
         // Removing default objects as well as those created by tests
         foreach ( $this->locationToDelete as $location )
@@ -152,7 +152,7 @@ class TrashHandlerTest extends HandlerTest
             }
         }
 
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
         foreach ( $this->contentToDelete as $content )
         {
             try

@@ -22,8 +22,8 @@ class RepositoryHandlerTest extends HandlerTest
      */
     public function testHandler()
     {
-        $this->assertInstanceOf( 'ezp\\Persistence\\Repository\\Handler', $this->repositoryHandler );
-        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\RepositoryHandler', $this->repositoryHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Handler', $this->persistenceHandler );
+        $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\RepositoryHandler', $this->persistenceHandler );
     }
 
     /**
@@ -33,7 +33,7 @@ class RepositoryHandlerTest extends HandlerTest
      */
     public function testContentHandler()
     {
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Handler', $contentHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\ContentHandler', $contentHandler );
     }
@@ -45,7 +45,7 @@ class RepositoryHandlerTest extends HandlerTest
      */
     public function testLanguageHandler()
     {
-        $handler = $this->repositoryHandler->contentLanguageHandler();
+        $handler = $this->persistenceHandler->contentLanguageHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Language\\Handler', $handler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\LanguageHandler', $handler );
     }
@@ -57,7 +57,7 @@ class RepositoryHandlerTest extends HandlerTest
      */
     public function testContentTypeHandler()
     {
-        $contentHandler = $this->repositoryHandler->contentTypeHandler();
+        $contentHandler = $this->persistenceHandler->contentTypeHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Type\\Handler', $contentHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\ContentTypeHandler', $contentHandler );
     }
@@ -69,7 +69,7 @@ class RepositoryHandlerTest extends HandlerTest
      */
     public function testContentLocationHandler()
     {
-        $contentHandler = $this->repositoryHandler->locationHandler();
+        $contentHandler = $this->persistenceHandler->locationHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Location\\Handler', $contentHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\LocationHandler', $contentHandler );
     }
@@ -81,7 +81,7 @@ class RepositoryHandlerTest extends HandlerTest
      */
     public function testSectionHandler()
     {
-        $sectionHandler = $this->repositoryHandler->sectionHandler();
+        $sectionHandler = $this->persistenceHandler->sectionHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Section\\Handler', $sectionHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\SectionHandler', $sectionHandler );
     }
@@ -93,7 +93,7 @@ class RepositoryHandlerTest extends HandlerTest
      */
     public function testUserHandler()
     {
-        $sectionHandler = $this->repositoryHandler->userHandler();
+        $sectionHandler = $this->persistenceHandler->userHandler();
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Handler', $sectionHandler );
         $this->assertInstanceOf( 'ezp\\Persistence\\Storage\\InMemory\\UserHandler', $sectionHandler );
     }

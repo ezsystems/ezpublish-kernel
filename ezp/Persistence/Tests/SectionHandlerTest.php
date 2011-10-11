@@ -29,7 +29,7 @@ class SectionHandlerTest extends HandlerTest
     {
         parent::setUp();
 
-        $this->section = $this->repositoryHandler->sectionHandler()->create( "Test", "test" );
+        $this->section = $this->persistenceHandler->sectionHandler()->create( "Test", "test" );
     }
 
     /**
@@ -37,7 +37,7 @@ class SectionHandlerTest extends HandlerTest
      */
     protected function tearDown()
     {
-        $sectionHandler = $this->repositoryHandler->sectionHandler();
+        $sectionHandler = $this->persistenceHandler->sectionHandler();
         // Removing default objects as well as those created by
         try
         {
@@ -57,7 +57,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testLoad()
     {
-        $section = $this->repositoryHandler->sectionHandler()->load( $this->section->id );
+        $section = $this->persistenceHandler->sectionHandler()->load( $this->section->id );
         $this->assertTrue( $section instanceof Section );
         $this->assertEquals( 'Test', $section->name );
         $this->assertEquals( 'test', $section->identifier );
@@ -70,7 +70,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testCreate()
     {
-        $section = $this->repositoryHandler->sectionHandler()->create( 'Test2', 'test2' );
+        $section = $this->persistenceHandler->sectionHandler()->create( 'Test2', 'test2' );
         $this->assertTrue( $section instanceof Section );
         $this->assertEquals( $this->section->id +1, $section->id );
         $this->assertEquals( 'Test2', $section->name );
@@ -84,7 +84,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testUpdate()
     {
-        $sectionHandler = $this->repositoryHandler->sectionHandler();
+        $sectionHandler = $this->persistenceHandler->sectionHandler();
 
         $sectionHandler->update( $this->section->id, 'Change', 'change' );
 
@@ -101,7 +101,7 @@ class SectionHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
-        $sectionHandler = $this->repositoryHandler->sectionHandler();
+        $sectionHandler = $this->persistenceHandler->sectionHandler();
 
         $sectionHandler->delete( $this->section->id );
         try

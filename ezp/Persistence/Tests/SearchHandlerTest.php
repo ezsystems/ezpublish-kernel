@@ -63,14 +63,14 @@ class SearchHandlerTest extends HandlerTest
             )
         );
 
-        $this->content = $this->repositoryHandler->contentHandler()->create( $struct );
+        $this->content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $this->content;
         $this->contentId = $this->content->id;
     }
 
     protected function tearDown()
     {
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
 
         try
         {
@@ -94,7 +94,7 @@ class SearchHandlerTest extends HandlerTest
      */
     public function testFindSingle()
     {
-        $content = $this->repositoryHandler->searchHandler()->findSingle( new ContentId( $this->content->id ) );
+        $content = $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->id ) );
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( 14, $content->ownerId );

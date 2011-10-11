@@ -78,7 +78,7 @@ class LocationHandlerTest extends HandlerTest
         $this->lastLocationId = 2;
         for ( $i = 0 ; $i < $this->entriesGenerated; ++$i )
         {
-            $this->contents[] = $content = $this->repositoryHandler->contentHandler()->create(
+            $this->contents[] = $content = $this->persistenceHandler->contentHandler()->create(
                 new ContentCreateStruct(
                     array(
                         "name" => array( "eng-GB" => "test_$i" ),
@@ -105,7 +105,7 @@ class LocationHandlerTest extends HandlerTest
 
             $this->lastContentId = $content->id;
 
-            $this->locations[] = $location = $this->repositoryHandler->locationHandler()->create(
+            $this->locations[] = $location = $this->persistenceHandler->locationHandler()->create(
                 new CreateStruct(
                     array(
                         "contentId" => $this->lastContentId,
@@ -130,7 +130,7 @@ class LocationHandlerTest extends HandlerTest
      */
     protected function tearDown()
     {
-        $locationHandler = $this->repositoryHandler->locationHandler();
+        $locationHandler = $this->persistenceHandler->locationHandler();
 
         // Removing default objects as well as those created by tests
         foreach ( $this->locationToDelete as $location )
@@ -144,7 +144,7 @@ class LocationHandlerTest extends HandlerTest
             }
         }
 
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
         foreach ( $this->contentToDelete as $content )
         {
             try
@@ -168,7 +168,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testLoad()
     {
-        $location = $this->repositoryHandler->locationHandler()->load( $this->lastLocationId );
+        $location = $this->persistenceHandler->locationHandler()->load( $this->lastLocationId );
         $this->assertTrue( $location instanceof LocationValue );
         $this->assertEquals( $this->lastLocationId, $location->id );
         $this->assertEquals( $this->lastContentId, $location->contentId );
@@ -189,7 +189,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testCreate()
     {
-        $location = $this->repositoryHandler->locationHandler()->create(
+        $location = $this->persistenceHandler->locationHandler()->create(
             new CreateStruct(
                 array(
                     "contentId" => 1,
@@ -223,7 +223,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testRemoveSubtreeNoChildren()
     {
-        $locationHandler = $this->repositoryHandler->locationHandler();
+        $locationHandler = $this->persistenceHandler->locationHandler();
         $locationHandler->removeSubtree( $this->lastLocationId );
 
         try
@@ -244,7 +244,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testRemoveSubtreeChildren()
     {
-        $locationHandler = $this->repositoryHandler->locationHandler();
+        $locationHandler = $this->persistenceHandler->locationHandler();
         $locationHandler->removeSubtree( $this->lastLocationId - 2 );
 
         try
@@ -284,7 +284,7 @@ class LocationHandlerTest extends HandlerTest
     public function testCopySubtreeNoChildren()
     {
         // Copy the last location created in setUp
-        $newLocation = $this->repositoryHandler->locationHandler()->copySubtree( $this->lastLocationId, 1 );
+        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $this->lastLocationId, 1 );
         $this->assertTrue( $newLocation instanceof LocationValue );
         $this->assertEquals( $this->lastLocationId + 1 , $newLocation->id );
         $this->assertEquals( $this->lastContentId + 1, $newLocation->contentId );
@@ -293,7 +293,7 @@ class LocationHandlerTest extends HandlerTest
         $this->assertEquals( Location::SORT_ORDER_ASC, $newLocation->sortOrder );
 
         $this->assertEquals(
-            $this->repositoryHandler->searchHandler()->findSingle(
+            $this->persistenceHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId )
             )->locations[0],
             $newLocation,
@@ -310,7 +310,7 @@ class LocationHandlerTest extends HandlerTest
     public function testCopySubtreeChildren()
     {
         // Copy the grand parent of the last location created in setUp
-        $newLocation = $this->repositoryHandler->locationHandler()->copySubtree( $this->lastLocationId - 2, 1 );
+        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $this->lastLocationId - 2, 1 );
         $this->assertTrue( $newLocation instanceof LocationValue );
         $this->assertEquals( $this->lastLocationId + 1 , $newLocation->id );
         $this->assertEquals( $this->lastContentId + 1, $newLocation->contentId );
@@ -320,7 +320,7 @@ class LocationHandlerTest extends HandlerTest
 
         // Verifying the deepest child is present
         foreach (
-            $this->repositoryHandler->searchHandler()->findSingle(
+            $this->persistenceHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId )
             )->locations[0] as $property => $value
         )
@@ -337,9 +337,9 @@ class LocationHandlerTest extends HandlerTest
         }
 
         // Verifying the direct child is present
-        $loc = $this->repositoryHandler->locationHandler()->load( $newLocation->id - 1 );
+        $loc = $this->persistenceHandler->locationHandler()->load( $newLocation->id - 1 );
         foreach (
-            $this->repositoryHandler->searchHandler()->findSingle(
+            $this->persistenceHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId - 1 )
             )->locations[0] as $property => $value
         )
@@ -357,9 +357,9 @@ class LocationHandlerTest extends HandlerTest
         unset( $loc );
 
         // Verifying the top most copied location (the grand parent) is present
-        $loc = $this->repositoryHandler->locationHandler()->load( $newLocation->id - 2 );
+        $loc = $this->persistenceHandler->locationHandler()->load( $newLocation->id - 2 );
         foreach (
-            $this->repositoryHandler->searchHandler()->findSingle(
+            $this->persistenceHandler->searchHandler()->findSingle(
                 new ContentId( $newLocation->contentId - 2 )
             )->locations[0] as $property => $value
         )
@@ -384,7 +384,7 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testLoadByParentIdNoChildren()
     {
-        $this->assertEmpty( $this->repositoryHandler->locationHandler()->loadByParentId( $this->lastLocationId ) );
+        $this->assertEmpty( $this->persistenceHandler->locationHandler()->loadByParentId( $this->lastLocationId ) );
     }
 
     /**
@@ -397,7 +397,7 @@ class LocationHandlerTest extends HandlerTest
     {
         $this->assertEquals(
             array( end( $this->locations ) ),
-            $this->repositoryHandler->locationHandler()->loadByParentId( $this->lastLocationId - 1 )
+            $this->persistenceHandler->locationHandler()->loadByParentId( $this->lastLocationId - 1 )
         );
     }
 
@@ -410,6 +410,6 @@ class LocationHandlerTest extends HandlerTest
      */
     public function testLoadByParentIdNotExisting()
     {
-        $this->repositoryHandler->locationHandler()->loadByParentId( 123456 );
+        $this->persistenceHandler->locationHandler()->loadByParentId( 123456 );
     }
 }

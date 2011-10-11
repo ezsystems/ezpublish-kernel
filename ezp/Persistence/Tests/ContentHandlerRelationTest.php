@@ -60,11 +60,11 @@ class ContentHandlerRelationTest extends HandlerTest
 
         $struct = $this->createContentStruct( "test", "Welcome" );
 
-        $this->content = $this->repositoryHandler->contentHandler()->create( $struct );
+        $this->content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $this->content;
         $this->contentId = $this->content->id;
 
-        $this->lastRelationId = $this->repositoryHandler
+        $this->lastRelationId = $this->persistenceHandler
             ->contentHandler()
             ->addRelation(
                 new RelationCreateStruct(
@@ -76,7 +76,7 @@ class ContentHandlerRelationTest extends HandlerTest
                 )
             )->id;
 
-        $this->content2 = $this->repositoryHandler->contentHandler()->create(
+        $this->content2 = $this->persistenceHandler->contentHandler()->create(
             $this->createContentStruct( "Second object", "Do you relate to me?" )
         );
         $this->contentToDelete[] = $this->content2;
@@ -109,7 +109,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     protected function tearDown()
     {
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
 
         try
         {
@@ -133,7 +133,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testAddRelation1()
     {
-        $relation = $this->repositoryHandler->contentHandler()->addRelation(
+        $relation = $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => 14,
@@ -155,7 +155,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testAddRelation2()
     {
-        $relation = $this->repositoryHandler->contentHandler()->addRelation(
+        $relation = $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => 14,
@@ -179,7 +179,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testAddRelationSourceDoesNotExist1()
     {
-        $this->repositoryHandler->contentHandler()->addRelation(
+        $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => 123456,
@@ -199,7 +199,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testAddRelationSourceDoesNotExist2()
     {
-        $this->repositoryHandler->contentHandler()->addRelation(
+        $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => 14,
@@ -218,7 +218,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadRelations()
     {
-        $relations = $this->repositoryHandler->contentHandler()->loadRelations( 1 );
+        $relations = $this->persistenceHandler->contentHandler()->loadRelations( 1 );
         $this->assertEquals( 1, count( $relations ) );
         $this->assertEquals( 1, $relations[0]->sourceContentId );
         $this->assertNull( $relations[0]->sourceContentVersion );
@@ -233,7 +233,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadRelationsWithType1()
     {
-        $relations = $this->repositoryHandler->contentHandler()->loadRelations( 1, null, Relation::EMBED );
+        $relations = $this->persistenceHandler->contentHandler()->loadRelations( 1, null, Relation::EMBED );
         $this->assertEquals( 1, count( $relations ) );
         $this->assertEquals( 1, $relations[0]->sourceContentId );
         $this->assertNull( $relations[0]->sourceContentVersion );
@@ -248,7 +248,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadRelationsWithType2()
     {
-        $relations = $this->repositoryHandler->contentHandler()->loadRelations( 1, null, Relation::COMMON | Relation::EMBED );
+        $relations = $this->persistenceHandler->contentHandler()->loadRelations( 1, null, Relation::COMMON | Relation::EMBED );
         $this->assertEquals( 1, count( $relations ) );
         $this->assertEquals( 1, $relations[0]->sourceContentId );
         $this->assertNull( $relations[0]->sourceContentVersion );
@@ -264,7 +264,7 @@ class ContentHandlerRelationTest extends HandlerTest
     public function testLoadRelationsWithTypeNoResult1()
     {
         $this->assertEmpty(
-            $this->repositoryHandler->contentHandler()->loadRelations(
+            $this->persistenceHandler->contentHandler()->loadRelations(
                 1,
                 null,
                 Relation::COMMON | Relation::EMBED | Relation::LINK
@@ -280,7 +280,7 @@ class ContentHandlerRelationTest extends HandlerTest
     public function testLoadRelationsWithTypeNoResult2()
     {
         $this->assertEmpty(
-            $this->repositoryHandler->contentHandler()->loadRelations(
+            $this->persistenceHandler->contentHandler()->loadRelations(
                 1,
                 null,
                 Relation::LINK
@@ -293,7 +293,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadReverseRelationsOneEntry()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+        $newRelation = $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => $this->contentId,
@@ -303,7 +303,7 @@ class ContentHandlerRelationTest extends HandlerTest
             )
         );
 
-        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id );
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id );
         self::assertEquals( 1, count( $reverseRelations ) );
         self::assertEquals( $this->contentId, $reverseRelations[0]->sourceContentId );
         self::assertNull( $reverseRelations[0]->sourceContentVersion );
@@ -316,7 +316,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadReverseRelationsOneEntryMatchingType()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+        $newRelation = $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => $this->contentId,
@@ -326,7 +326,7 @@ class ContentHandlerRelationTest extends HandlerTest
             )
         );
 
-        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::COMMON );
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::COMMON );
         self::assertEquals( 1, count( $reverseRelations ) );
         self::assertEquals( $this->contentId, $reverseRelations[0]->sourceContentId );
         self::assertNull( $reverseRelations[0]->sourceContentVersion );
@@ -339,7 +339,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadReverseRelationsOneEntryNoMatchingType()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+        $newRelation = $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => $this->contentId,
@@ -349,7 +349,7 @@ class ContentHandlerRelationTest extends HandlerTest
             )
         );
 
-        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::EMBED );
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::EMBED );
         self::assertEmpty( $reverseRelations );
     }
 
@@ -358,7 +358,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadReverseRelationsTwoEntries()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+        $newRelation = $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => $this->contentId,
@@ -368,7 +368,7 @@ class ContentHandlerRelationTest extends HandlerTest
             )
         );
 
-        $newRelation2 = $this->repositoryHandler->contentHandler()->addRelation(
+        $newRelation2 = $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => 1,
@@ -379,7 +379,7 @@ class ContentHandlerRelationTest extends HandlerTest
         );
 
 
-        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id );
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id );
         self::assertEquals( 2, count( $reverseRelations ) );
 
         $approvedRelatedObjectIds = array( $this->contentId, 1 );
@@ -395,7 +395,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testLoadReverseRelationsTwoEntriesDifferentTypes()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+        $newRelation = $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => $this->contentId,
@@ -405,7 +405,7 @@ class ContentHandlerRelationTest extends HandlerTest
             )
         );
 
-        $newRelation2 = $this->repositoryHandler->contentHandler()->addRelation(
+        $newRelation2 = $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => 1,
@@ -416,14 +416,14 @@ class ContentHandlerRelationTest extends HandlerTest
         );
 
 
-        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id );
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id );
         self::assertEquals( 2, count( $reverseRelations ) );
 
-        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::ATTRIBUTE );
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::ATTRIBUTE );
         self::assertEquals( 1, count( $reverseRelations ) );
         self::assertEquals( Relation::ATTRIBUTE, current( $reverseRelations )->type );
 
-        $reverseRelations = $this->repositoryHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::COMMON );
+        $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::COMMON );
         self::assertEquals( 1, count( $reverseRelations ) );
         self::assertEquals( Relation::COMMON, current($reverseRelations)->type );
     }
@@ -433,7 +433,7 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testRemoveRelation()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation(
+        $newRelation = $this->persistenceHandler->contentHandler()->addRelation(
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => $this->contentId,
@@ -443,12 +443,12 @@ class ContentHandlerRelationTest extends HandlerTest
             )
         );
 
-        $relations = $this->repositoryHandler->contentHandler()->loadRelations( $this->contentId );
+        $relations = $this->persistenceHandler->contentHandler()->loadRelations( $this->contentId );
         self::assertEquals( 1, count( $relations ) );
         self::assertEquals( $newRelation->id, $relations[0]->id );
 
-        $this->repositoryHandler->contentHandler()->removeRelation( $newRelation->id );
-        $relations = $this->repositoryHandler->contentHandler()->loadRelations( $this->contentId );
+        $this->persistenceHandler->contentHandler()->removeRelation( $newRelation->id );
+        $relations = $this->persistenceHandler->contentHandler()->loadRelations( $this->contentId );
         self::assertEmpty( $relations );
     }
     /**
@@ -457,12 +457,12 @@ class ContentHandlerRelationTest extends HandlerTest
      */
     public function testRemoveRelationDoesNotExist()
     {
-        $newRelation = $this->repositoryHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
+        $newRelation = $this->persistenceHandler->contentHandler()->addRelation( new RelationCreateStruct( array(
                                    'sourceContentId' => $this->contentId,
                                    'destinationContentId' => $this->content2->id,
                                    'type' => Relation::COMMON
                                    ) ) );
 
-        $this->repositoryHandler->contentHandler()->removeRelation( 42 );
+        $this->persistenceHandler->contentHandler()->removeRelation( 42 );
     }
 }

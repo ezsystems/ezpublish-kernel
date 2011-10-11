@@ -36,7 +36,7 @@ class LanguageHandlerTest extends HandlerTest
     {
         parent::setUp();
 
-        $this->handler = $this->repositoryHandler->contentLanguageHandler();
+        $this->handler = $this->persistenceHandler->contentLanguageHandler();
 
         foreach ( $this->handler->loadAll() as $item )
         {

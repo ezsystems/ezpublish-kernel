@@ -68,7 +68,7 @@ class ContentHandlerTest extends HandlerTest
             )
         );
 
-        $this->content = $this->repositoryHandler->contentHandler()->create( $struct );
+        $this->content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $this->content;
         $this->contentId = $this->content->id;
     }
@@ -78,7 +78,7 @@ class ContentHandlerTest extends HandlerTest
      */
     protected function tearDown()
     {
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
 
         try
         {
@@ -122,7 +122,7 @@ class ContentHandlerTest extends HandlerTest
             )
         );
 
-        $content = $this->repositoryHandler->contentHandler()->create( $struct );
+        $content = $this->persistenceHandler->contentHandler()->create( $struct );
         $this->contentToDelete[] = $content;
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId + 1, $content->id );
@@ -152,12 +152,12 @@ class ContentHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
         $contentHandler->delete( $this->content->id );
 
         try
         {
-            $this->repositoryHandler->searchHandler()->findSingle( new ContentId( $this->content->id ) );
+            $this->persistenceHandler->searchHandler()->findSingle( new ContentId( $this->content->id ) );
             $this->fail( "Content not removed correctly" );
         }
         catch ( NotFound $e )
@@ -183,7 +183,7 @@ class ContentHandlerTest extends HandlerTest
     public function testCopyVersion1()
     {
         $time = time();
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
         $copy = $contentHandler->copy( 1, 1 );
         $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $copy->name );
         $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
@@ -211,7 +211,7 @@ class ContentHandlerTest extends HandlerTest
     {
         $time = time();
         $versionNoToCopy = 2;
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
         $copy = $contentHandler->copy( 1, $versionNoToCopy );
         $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $copy->name );
         $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
@@ -238,7 +238,7 @@ class ContentHandlerTest extends HandlerTest
     public function testCopyAllVersions()
     {
         $time = time();
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
         $copy = $contentHandler->copy( 1, false );
         $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $copy->name );
         $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
@@ -287,7 +287,7 @@ class ContentHandlerTest extends HandlerTest
             )
         );
 
-        $content = $this->repositoryHandler->contentHandler()->update( $struct );
+        $content = $this->persistenceHandler->contentHandler()->update( $struct );
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( ContentDomainObject::STATUS_DRAFT, $content->status );
@@ -306,7 +306,7 @@ class ContentHandlerTest extends HandlerTest
     public function testCreateDraftFromVersion()
     {
         $time = time();
-        $contentHandler = $this->repositoryHandler->contentHandler();
+        $contentHandler = $this->persistenceHandler->contentHandler();
         $content = $contentHandler->copy( 1, 1 );
         $this->contentToDelete[] = $content;
 
@@ -346,8 +346,8 @@ class ContentHandlerTest extends HandlerTest
         $content = $this->content;
 
         self::assertEquals( Version::STATUS_DRAFT, $content->version->status );
-        $this->repositoryHandler->contentHandler()->setStatus( $content->id, Version::STATUS_PUBLISHED, $content->version->versionNo );
-        $content = $this->repositoryHandler->contentHandler()->load( $content->id, $content->version->versionNo );
+        $this->persistenceHandler->contentHandler()->setStatus( $content->id, Version::STATUS_PUBLISHED, $content->version->versionNo );
+        $content = $this->persistenceHandler->contentHandler()->load( $content->id, $content->version->versionNo );
 
         self::assertEquals( Version::STATUS_PUBLISHED, $content->version->status );
     }

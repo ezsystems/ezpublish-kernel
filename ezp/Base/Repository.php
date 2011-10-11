@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Base;
-use ezp\Persistence\Repository\Handler,
+use ezp\Persistence\Handler,
     RuntimeException,
     DomainException,
     ezp\Base\Configuration,
@@ -30,7 +30,7 @@ class Repository
     /**
      * Repository Handler object
      *
-     * @var \ezp\Persistence\Repository\Handler
+     * @var \ezp\Persistence\Handler
      */
     protected $handler;
 
@@ -60,7 +60,7 @@ class Repository
      *
      * Construct repository object with provided storage engine
      *
-     * @param \ezp\Persistence\Repository\Handler $handler
+     * @param \ezp\Persistence\Handler $handler
      * @param \ezp\Io\BinaryStorage\Backend $ioHandler
      * @param \ezp\User|null $user
      */

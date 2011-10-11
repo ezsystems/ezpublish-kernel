@@ -28,7 +28,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoad()
     {
-        $obj = $this->repositoryHandler->userHandler()->load( 10 );
+        $obj = $this->persistenceHandler->userHandler()->load( 10 );
         $this->assertInstanceOf( 'ezp\\Persistence\\User', $obj );
         $this->assertEquals( 10, $obj->id );
         $this->assertEquals( 'nospam@ez.no', $obj->email );
@@ -43,7 +43,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadUnExistingUserId()
     {
-        $this->repositoryHandler->userHandler()->load( 22 );
+        $this->persistenceHandler->userHandler()->load( 22 );
     }
 
     /**
@@ -53,14 +53,14 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadByLogin()
     {
-        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'anonymous' );
+        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'anonymous' );
         $this->assertEquals( 1, count( $users ) );
         $this->assertInstanceOf( 'ezp\\Persistence\\User', $users[0] );
         $this->assertEquals( 10, $users[0]->id );
         $this->assertEquals( 'nospam@ez.no', $users[0]->email );
         $this->assertEquals( 'anonymous', $users[0]->login );
 
-        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'anonymous', true );
+        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'anonymous', true );
         $this->assertEquals( 1, count( $users ) );
         $this->assertInstanceOf( 'ezp\\Persistence\\User', $users[0] );
         $this->assertEquals( 10, $users[0]->id );
@@ -75,10 +75,10 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadByLoginWithEmail()
     {
-        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'nospam@ez.no' );
+        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no' );
         $this->assertEquals( 0, count( $users ) );
 
-        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'nospam@ez.no', true );
+        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no', true );
         $this->assertEquals( 1, count( $users ) );
         $this->assertInstanceOf( 'ezp\\Persistence\\User', $users[0] );
         $this->assertEquals( 10, $users[0]->id );
@@ -93,9 +93,9 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadByLoginUnExistingUser()
     {
-        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'kamelåså' );
+        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså' );
         $this->assertEquals( array(), $users );
-        $users = $this->repositoryHandler->userHandler()->loadByLogin( 'kamelåså@ez.no', true );
+        $users = $this->persistenceHandler->userHandler()->loadByLogin( 'kamelåså@ez.no', true );
         $this->assertEquals( array(), $users );
     }
 
@@ -106,7 +106,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testCreate()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = new User();
         $obj->id = 1;
         $obj->email = 'unit@ez.no';
@@ -130,7 +130,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testCreateMissingId()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = new User();
         $obj->email = 'unit@ez.no';
         $obj->hashAlgorithm = 2;
@@ -147,7 +147,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testCreateExistingId()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = new User();
         $obj->id = 14;
         $obj->email = 'unit@ez.no';
@@ -164,7 +164,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testUpdate()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->load( 10 );
         $obj->email = 'unit@ez.no';
         $handler->update( $obj );
@@ -184,10 +184,10 @@ class UserHandlerTest extends HandlerTest
      */
     public function testDelete()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $handler->delete( 10 );
         $this->assertNull( $handler->load( 10 ) );
-        $this->repositoryHandler->ContentHandler()->load( 10, 1 );//exception
+        $this->persistenceHandler->ContentHandler()->load( 10, 1 );//exception
     }
 
     /**
@@ -197,7 +197,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testCreateRole()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 'test', $obj->name );
@@ -212,7 +212,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadRole()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $obj = $handler->loadRole( $obj->id );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
@@ -228,7 +228,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadRoleNotFound()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $handler->loadRole( 999 );//exception
     }
 
@@ -239,7 +239,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadRolesByGroupId()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 4, $obj->id );// 4: Users
 
@@ -265,7 +265,7 @@ class UserHandlerTest extends HandlerTest
     {
         $this->clearRolesByGroupId( 42 );
 
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $list = $handler->loadRolesByGroupId( 42 );
         $this->assertEquals( 0, count( $list ) );
         $this->assertEquals( array(), $list  );
@@ -279,7 +279,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadRolesByGroupIdNotFound()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $handler->loadRolesByGroupId( 999 );
     }
 
@@ -291,7 +291,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadRolesByGroupIdNotFoundWithCorrectType()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $handler->loadRolesByGroupId( 1 );
     }
 
@@ -302,7 +302,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testUpdateRole()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $id = $obj->id;
@@ -326,7 +326,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testDeleteRole()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
 
@@ -343,7 +343,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testAddPolicy()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
@@ -370,7 +370,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testUpdatePolicy()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
@@ -399,7 +399,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testRemovePolicy()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
@@ -418,7 +418,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testAssignRole()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
         $obj = $handler->loadRole( $obj->id );
@@ -434,7 +434,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testAssignRoleWrongGroupType()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 1, $obj->id );
     }
@@ -447,7 +447,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testAssignRoleGroupNotFound()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 999, $obj->id );
     }
@@ -460,7 +460,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testAssignRoleRoleNotFound()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $handler->assignRole( 42, 999 );
     }
 
@@ -472,7 +472,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testAssignRoleAlreadyAssigned()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
         $handler->assignRole( 42, $obj->id );
@@ -485,7 +485,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testUnAssignRole()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
@@ -507,7 +507,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testUnAssignRoleWrongGroupType()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->unAssignRole( 1, $obj->id );
     }
@@ -520,7 +520,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testUnAssignRoleGroupNotFound()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->unAssignRole( 999, $obj->id );
     }
@@ -533,7 +533,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testUnAssignRoleRoleNotFound()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $handler->unAssignRole( 42, 999 );
     }
 
@@ -545,7 +545,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testUnAssignRoleNotAssigned()
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->unAssignRole( 42, $obj->id );// 42: Anonymous Users
     }
@@ -559,7 +559,7 @@ class UserHandlerTest extends HandlerTest
     {
         $this->clearRolesByGroupId( 42 );
 
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
@@ -587,7 +587,7 @@ class UserHandlerTest extends HandlerTest
     {
         $this->clearRolesByGroupId( 42 );
 
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
@@ -616,7 +616,7 @@ class UserHandlerTest extends HandlerTest
     {
         $this->clearRolesByGroupId( 42 );
 
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
@@ -635,7 +635,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadPoliciesByUserIdNotFound()
     {
-        $this->repositoryHandler->userHandler()->loadPoliciesByUserId( 999 );
+        $this->persistenceHandler->userHandler()->loadPoliciesByUserId( 999 );
     }
 
     /**
@@ -646,7 +646,7 @@ class UserHandlerTest extends HandlerTest
      */
     public function testLoadPoliciesByUserIdNotFoundWithType()
     {
-        $this->repositoryHandler->userHandler()->loadPoliciesByUserId( 42 );// 42: Anonymous Users (user group)
+        $this->persistenceHandler->userHandler()->loadPoliciesByUserId( 42 );// 42: Anonymous Users (user group)
     }
 
     /**
@@ -660,7 +660,7 @@ class UserHandlerTest extends HandlerTest
     {
         $this->clearRolesByGroupId( 42 );
 
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
@@ -702,7 +702,7 @@ class UserHandlerTest extends HandlerTest
      */
     protected function clearRolesByGroupId( $groupId )
     {
-        $handler = $this->repositoryHandler->userHandler();
+        $handler = $this->persistenceHandler->userHandler();
         $roles = $handler->loadRolesByGroupId( $groupId );
         foreach ( $roles as $role )
         {

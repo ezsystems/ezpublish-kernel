@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Persistence\Storage\InMemory;
-use ezp\Persistence\Repository\Handler as BaseRepositoryHandler,
+use ezp\Persistence\Handler as HandlerInterface,
     ezp\Base\Exception\MissingClass,
     RuntimeException;
 
@@ -16,7 +16,7 @@ use ezp\Persistence\Repository\Handler as BaseRepositoryHandler,
  * The main handler for in memory Storage Engine
  *
  */
-class RepositoryHandler implements BaseRepositoryHandler
+class RepositoryHandler implements HandlerInterface
 {
     /**
      * Instances of handlers

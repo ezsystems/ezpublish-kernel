@@ -18,9 +18,9 @@ use ezp\Base\ServiceContainer,
 abstract class HandlerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Persistence\Repository\Handler
+     * @var \ezp\Persistence\Handler
      */
-    protected $repositoryHandler;
+    protected $persistenceHandler;
 
     /**
      * Setup the HandlerTest.
@@ -30,6 +30,6 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         // Get in memory RepositoryHandler instance
-        $this->repositoryHandler = new \ezp\Persistence\Storage\InMemory\RepositoryHandler();
+        $this->persistenceHandler = new \ezp\Persistence\Storage\InMemory\RepositoryHandler();
     }
 }
