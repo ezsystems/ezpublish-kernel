@@ -85,6 +85,8 @@ class Service extends BaseService
      * @access private Used internally by $location->children
      * @param \ezp\Content\Location $location
      * @return \ezp\Content\Location[]
+     * @todo Should take parentId as input to avoid cyclic references, the extra load will eventually be handled with
+     *       identity map / object cache
      */
     public function children( Location $location )
     {

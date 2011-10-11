@@ -195,9 +195,6 @@ class Service extends BaseService
      * @access private For use in $content->versions, hence why it returns native array
      * @param int $contentId
      * @return \ezp\Content\Version[]
-     * @todo Since this is internal it can just as well take Content as input to avoid extra load
-     *
-     * @internal
      */
     public function listVersions( $contentId )
     {
@@ -222,6 +219,8 @@ class Service extends BaseService
      * @return \ezp\Content\Field[]
      * @throws \ezp\Base\Exception\NotFound If version can not be found
      * @todo Deal with translations
+     * @todo Should take id + versionNo as input to avoid cyclic references, identity map is needed to make sure same
+     *       Version object is used
      */
     public function loadFields( Version $version )
     {
