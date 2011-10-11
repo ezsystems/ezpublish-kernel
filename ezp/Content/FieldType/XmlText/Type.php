@@ -120,12 +120,34 @@ EOF;
      */
     public function onContentPublish( Repository $repository, Field $field )
     {
+        $this->value = $this->convertValueToRawValue( $field->value, $repository, $field );
+    }
 
-        // needs to pass more data to the handler
-        // - repository (to publish new items)
-        // - validate or process modes... that's harder.
-        $handler = new InputHandler( $this->getInputParser( $field->getValue() ) );
-        $handler->process( $field->getValue()->text, $repository, $field->version );
+    /**
+     * Converts complex values to a Value\Raw object
+     * @param \ezp\Content\FieldType\XmlText\Value $value
+     * @param \ezp\Base\Repository $repository
+     * @param \ezp\Content\Field $field
+     * @return \ezp\Content\FieldType\XmlText\Value
+     */
+    protected function convertValueToRawValue( Value $value, Repository $repository, Field $field )
+    {
+        /*if ( $value instanceof RawValue )
+            return $value;*/
+
+        $handler = $this->getInputHandler( $value );
+        $handler->process( $value->text, $repository, $field->version );
+
+        return new RawValue( $handler->getDocumentAsXml() );
+    }
+
+    /**
+     * Returns the InputHandler object
+     * @return \ezp\Content\FieldType\XmlText\Input\Handler
+     */
+    protected function getInputHandler( Value $value )
+    {
+        return new InputHandler( $this->getInputParser( $value ) );
     }
 
     /**

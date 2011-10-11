@@ -187,6 +187,34 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
         );*/
     }
 
+    /**
+     * @covers \ezp\Content\FieldType\XmlText\Type::getInputHandler
+     * @dataProvider providerForTestGetInputHandler
+     */
+    public function testGetInputHandler( $value, $parserClass )
+    {
+        $type = new XmlTextType();
+        $typeReflection = new ReflectionObject( $type );
+        $getInputHandlerReflection = $typeReflection->getMethod( "getInputHandler" );
+        $getInputHandlerReflection->setAccessible( true );
+
+        $handler = $getInputHandlerReflection->invoke( $type, $value );
+        self::assertInstanceOf( 'ezp\\Content\\FieldType\\XmlText\\Input\\Handler', $handler );
+
+        $handlerReflection = new ReflectionProperty( $handler, 'parser' );
+        $handlerReflection->setAccessible( true );
+        self::assertInstanceOf( $parserClass, $handlerReflection->getValue( $handler ) );
+    }
+
+    public function providerForTestGetInputHandler()
+    {
+        return array(
+            array( new RawValue, 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Raw' ),
+            array( new SimplifiedValue, 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Simplified' ),
+            array( new OnlineEditorValue, 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\OnlineEditor' )
+        );
+    }
+
     public function testGetSortInfo()
     {
         $type = new XmlTextType();
@@ -195,5 +223,64 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
         $refMethod->setAccessible( true );
 
         self::assertFalse( $refMethod->invoke( $type ) );
+    }
+
+    /**
+     * Tests that onContentPublish will convert any Value it receives as input to a Raw value
+     */
+    public function testOnContentPublish()
+    {
+        $value = new SimplifiedValue( '' );
+        $xmlString = '<?xml version="1.0" encoding="utf-8"?>
+<section xmlns:image="http://ez.no/namespaces/ezpublish3/image/" xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/" xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/"/>
+';
+
+        $type = $this
+            ->getMockBuilder( 'ezp\\Content\\FieldType\\XmlText\\Type' )
+            ->setMethods( array( 'getInputHandler' ) )
+            ->getMock();
+
+        $parser = $this->getMock( 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Simplified' );
+        $handler = $this->getMockBuilder( 'ezp\\Content\\FieldType\\XmlText\\Input\\Handler' )
+            ->setConstructorArgs( array( $parser ) )
+            ->getMock();
+
+        $repository = $this
+            ->getMockBuilder( 'ezp\\Base\\Repository' )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $field = $this
+            ->getMockBuilder( 'ezp\\Content\\Field' )
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $type
+            ->expects( $this->once() )
+            ->method( 'getInputHandler' )
+            ->with( $value )
+            ->will( $this->returnValue( $handler ) );
+
+        $handler
+            ->expects( $this->any() )
+            ->method( 'getDocumentAsXml' )
+            ->will( $this->returnValue( $xmlString ) );
+
+        $field
+            ->expects( $this->at( 0 ) )
+            ->method( '__get' )
+            ->with( 'value' )
+            ->will( $this->returnValue( $value ) );
+
+        $field
+            ->expects( $this->at( 1 ) )
+            ->method( '__get' )
+            ->with( 'version' )
+            ->will( $this->returnValue( $this->getMock( 'ezp\\Content\\Version' ) ) );
+
+
+        $type->onContentPublish( $repository, $field );
+
+        self::assertEquals( $type->value, new RawValue( $xmlString ) );
     }
 }
