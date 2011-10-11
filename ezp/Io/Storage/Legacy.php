@@ -18,7 +18,7 @@ use ezp\Io\Handler as IoHandlerInterface,
     ezp\Base\Exception\NotFound, ezp\Io\Exception\PathExists;
 
 /**
- * Legacy BinaryStorage handler, based on eZ Cluster
+ * Legacy Io/Storage handler, based on eZ Cluster
  *
  * Due to the legacy API, this handler has a few limitations:
  * - ctime is not really supported, and will always have the same value as mtime

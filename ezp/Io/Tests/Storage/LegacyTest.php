@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the ezp\Io\Tests\BinaryStorage\BinaryRepositoryLegacyTest class
+ * File containing the ezp\Io\Tests\Storage\BinaryRepositoryLegacyTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Io\Tests\BinaryStorage;
+namespace ezp\Io\Tests\Storage;
 use ezp\Base\ServiceContainer,
     ezp\Io\Storage\Legacy,
     ezp\Io\BinaryFile,

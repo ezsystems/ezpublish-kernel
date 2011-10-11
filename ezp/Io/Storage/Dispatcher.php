@@ -21,7 +21,7 @@ use ezp\Base\Exception\InvalidArgumentType,
 class Dispatcher implements IoHandlerInterface
 {
     /**
-     * BinaryStorage backends instances, {@see __construct()}
+     * Io\Storage backends instances, {@see __construct()}
      *
      * @var array
      */
