@@ -9,6 +9,7 @@
 
 namespace ezp\Io\Tests\Storage;
 use ezp\Base\ServiceContainer,
+    ezp\Base\Configuration,
     ezp\Io\Storage\Dispatcher,
     ezp\Io\Storage\InMemory,
     ezp\Io\BinaryFile,
@@ -40,7 +41,9 @@ class DispatcherTest extends BinaryRepositoryTest
         $this->defaultBackend = new InMemory();
         $this->alternativeBackend = new InMemory();
         $sc = new ServiceContainer(
+            Configuration::getInstance('service')->getAll(),
             array(
+                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
                 '@io_handler' => new Dispatcher(
                     array(
                         'default' => $this->defaultBackend,

@@ -3,9 +3,10 @@
  * Load a Content based on its Id (60)
  * Assume that this content is a folder
  */
-use ezp\Base\ServiceContainer;
+use ezp\Base\ServiceContainer,
+    ezp\Base\Configuration;
 
-$sc = new ServiceContainer();
+$sc = new ServiceContainer( Configuration::getInstance('service')->getAll() );
 $repository = $sc->getRepository();
 $contentService = $repository->getContentService();
 $locationService = $repository->getLocationService();

@@ -1,7 +1,8 @@
 <?php
-use ezp\Base\ServiceContainer;
+use ezp\Base\ServiceContainer,
+    ezp\Base\Configuration;
 
-$sc = new ServiceContainer();
+$sc = new ServiceContainer( Configuration::getInstance('service')->getAll() );
 $sectionService = $sc->getRepository()->getSectionService();
 $locationService = $sc->getRepository()->getLocationService();
 

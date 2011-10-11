@@ -8,8 +8,7 @@
  */
 
 namespace ezp\Base;
-use ezp\Base\Configuration,
-    ezp\Base\Exception\BadConfiguration,
+use ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\MissingClass,
     ReflectionClass;
@@ -61,11 +60,12 @@ class ServiceContainer
     /**
      * Construct object with optional configuration overrides
      *
-     * @param mixed[]|object[] $dependencies
-     * @param array[] $settingsOverride
+     * @param array[] $settings
+     * @param mixed[]|object[] $dependencies Optional initial dependencies
      */
-    public function __construct( array $dependencies = array(), array $settingsOverride = array() )
+    public function __construct( array $settings, array $dependencies = array() )
     {
+        $this->settings = $settings;
         $this->dependencies = $dependencies +
             array(
                 '$_SERVER' => $_SERVER,
@@ -73,8 +73,6 @@ class ServiceContainer
                 '$_COOKIE' => $_COOKIE,
                 '$_FILES' => $_FILES
             );
-        $this->settings = $settingsOverride + Configuration::getInstance('service')->getAll();
-
     }
 
     /**
@@ -104,11 +102,9 @@ class ServiceContainer
      *
      * @throws InvalidArgumentException
      * @param string $serviceName
-     * @param array $settingsOverride Optional, overrides settings from Configuration
-     *              Format: array( "<serviceName>" => array( <settings hash like in service.ini> ) )
      * @return object
      */
-    public function get( $serviceName, array $settingsOverride = null )
+    public function get( $serviceName )
     {
         $serviceKey = "@{$serviceName}";
 
@@ -169,7 +165,7 @@ class ServiceContainer
                 else
                 {
                     // Try to load a @service dependency
-                    $arguments[] = $this->get( ltrim( $argument, '@' ), $settingsOverride );
+                    $arguments[] = $this->get( ltrim( $argument, '@' ) );
                 }
             }
             else

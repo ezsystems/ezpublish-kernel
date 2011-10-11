@@ -12,6 +12,7 @@ use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Relation,
     ezp\Base\ServiceContainer,
+    ezp\Base\Configuration,
     ezp\Persistence\Content\Relation as RelationValue,
     ezp\User\Proxy as ProxyUser,
     PHPUnit_Framework_TestCase;
@@ -31,7 +32,13 @@ class RelationTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $sc = new ServiceContainer;
+        $sc = new ServiceContainer(
+            Configuration::getInstance('service')->getAll(),
+            array(
+                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@io_handler' => new \ezp\Io\Storage\InMemory(),
+            )
+        );
         $sc->getRepository()->getContentService();
 
         // setup a content type & content object of use by tests, fields are not needed for relation

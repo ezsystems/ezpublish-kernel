@@ -9,7 +9,8 @@
 
 namespace ezp\Content\Tests\Service;
 use PHPUnit_Framework_TestCase,
-    ezp\Base\ServiceContainer;
+    ezp\Base\ServiceContainer,
+    ezp\Base\Configuration;
 
 /**
  * Base test case for tests on services
@@ -48,7 +49,13 @@ abstract class Base extends PHPUnit_Framework_TestCase
          *       )
          *   );
          */
-        $sc = new ServiceContainer;
+        $sc = new ServiceContainer(
+            Configuration::getInstance('service')->getAll(),
+            array(
+                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@io_handler' => new \ezp\Io\Storage\InMemory(),
+            )
+        );
         return $sc->getRepository();
     }
 }

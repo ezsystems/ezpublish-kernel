@@ -22,7 +22,6 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     public function testSimpleService()
     {
         $sc = new ServiceContainer(
-            array(),
             array(
                 'BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B'
@@ -40,7 +39,6 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     public function testSimpleServiceFactory()
     {
         $sc = new ServiceContainer(
-            array(),
             array(
                 'BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
@@ -59,7 +57,6 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     public function testArgumentsService()
     {
         $sc = new ServiceContainer(
-            array(),
             array(
                 'BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
@@ -81,7 +78,6 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     public function testArgumentsServiceFactory()
     {
         $sc = new ServiceContainer(
-            array(),
             array(
                 'BService' => array(
                     'class' => 'ezp\\Base\\Tests\\B',
@@ -104,7 +100,6 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     public function testComplexService()
     {
         $sc = new ServiceContainer(
-            array(),
             array(
                 'AService' => array(
                     'class' => 'ezp\\Base\\Tests\\A',
@@ -132,7 +127,6 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     public function testComplexServiceFactory()
     {
         $sc = new ServiceContainer(
-            array(),
             array(
                 'AService' => array(
                     'class' => 'ezp\\Base\\Tests\\A',
@@ -162,7 +156,6 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     public function testComplexServiceCustomDependencies()
     {
         $sc = new ServiceContainer(
-            array( '@BService' => new B ),
             array(
                 'AService' => array(
                     'class' => 'ezp\\Base\\Tests\\A',
@@ -173,7 +166,8 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
                     'factory' => 'factory',
                     'arguments' => array( '@BService', 'B', 'S' ),
                 )
-            )
+            ),
+            array( '@BService' => new B )
         );
         $a = $sc->get('AService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\A', $a );
@@ -188,13 +182,13 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     public function testComplexServiceUsingVariables()
     {
         $sc = new ServiceContainer(
-            array( '$B' => new B ),
             array(
                 'DService' => array(
                     'class' => 'ezp\\Base\\Tests\\D',
                     'arguments' => array( '$serviceContainer', '$_SERVER', '$B' ),
                 ),
-            )
+            ),
+            array( '$B' => new B )
         );
         $d = $sc->get('DService');
         self::assertInstanceOf( 'ezp\\Base\\Tests\\D', $d );
@@ -206,7 +200,6 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     public function testSimpleServiceUsingHash()
     {
         $sc = new ServiceContainer(
-            array(),
             array(
                 'EService' => array(
                     'class' => 'ezp\\Base\\Tests\\E',

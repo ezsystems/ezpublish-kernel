@@ -9,6 +9,7 @@
 
 namespace ezp\Io\Tests\Storage;
 use ezp\Base\ServiceContainer,
+    ezp\Base\Configuration,
     ezp\Io\Storage\Legacy,
     ezp\Io\BinaryFile,
     ezp\Io\BinaryFileCreateStruct,
@@ -51,8 +52,10 @@ class LegacyTest extends BinaryRepositoryTest
         }
 
         $sc = new ServiceContainer(
+            Configuration::getInstance('service')->getAll(),
             array(
-                '@io_handler' => new Legacy()
+                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@io_handler' => new Legacy(),
             )
         );
         $this->binaryService = $sc->getRepository()->getIoService();

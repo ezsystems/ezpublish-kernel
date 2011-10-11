@@ -12,6 +12,7 @@ use ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Section\Concrete as ConcreteSection,
     ezp\Content\Type\Concrete as ConcreteType,
+    ezp\Base\Configuration,
     ezp\Base\ServiceContainer,
     ezp\User\Proxy as ProxyUser,
     PHPUnit_Framework_TestCase;
@@ -32,7 +33,13 @@ class LocationTest extends PHPUnit_Framework_TestCase
         $contentType = new ConcreteType();
         $contentType->identifier = 'article';
 
-        $sc = new ServiceContainer;
+        $sc = new ServiceContainer(
+            Configuration::getInstance('service')->getAll(),
+            array(
+                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@io_handler' => new \ezp\Io\Storage\InMemory(),
+            )
+        );
         $this->content = new ConcreteContent( $contentType, new ProxyUser( 10, $sc->getRepository()->getUserService() ) );
     }
 

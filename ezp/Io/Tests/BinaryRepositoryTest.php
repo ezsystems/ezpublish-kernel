@@ -9,6 +9,7 @@
 
 namespace ezp\Io\Tests;
 use ezp\Base\ServiceContainer,
+    ezp\Base\Configuration,
     ezp\Io\Storage\InMemory,
     ezp\Io\BinaryFile,
     ezp\Io\BinaryFileCreateStruct,
@@ -39,8 +40,10 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $sc = new ServiceContainer(
+            Configuration::getInstance('service')->getAll(),
             array(
-                '@io_handler' => new InMemory()
+                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@io_handler' => new InMemory(),
             )
         );
         $this->binaryService = $sc->getRepository()->getIoService();

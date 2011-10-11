@@ -10,6 +10,7 @@
 namespace ezp\Content\Tests;
 use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Proxy as ProxyContent,
+    ezp\Base\Configuration,
     ezp\Base\ServiceContainer,
     PHPUnit_Framework_TestCase;
 
@@ -30,7 +31,13 @@ class ContentProxyTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $sc = new ServiceContainer;
+        $sc = new ServiceContainer(
+            Configuration::getInstance('service')->getAll(),
+            array(
+                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@io_handler' => new \ezp\Io\Storage\InMemory(),
+            )
+        );
         $this->service = $sc->getRepository()->getContentService();
     }
 

@@ -2,9 +2,10 @@
 /**
  * Move a content to trash
  */
-use ezp\Base\ServiceContainer;
+use ezp\Base\ServiceContainer,
+    ezp\Base\Configuration;
 
-$sc = new ServiceContainer();
+$sc = new ServiceContainer( Configuration::getInstance('service')->getAll() );
 $locationService = $sc->getRepository()->getLocationService();
 $trashService = $sc->getRepository()->getTrashService();
 $location = $locationService->load( 60 );

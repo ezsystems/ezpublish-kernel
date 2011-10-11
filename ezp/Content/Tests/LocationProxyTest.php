@@ -10,6 +10,7 @@
 namespace ezp\Content\Tests;
 use ezp\Content\Proxy as ProxyContent,
     ezp\Content\Location\Proxy as ProxyLocation,
+    ezp\Base\Configuration,
     ezp\Base\ServiceContainer,
     PHPUnit_Framework_TestCase;
 
@@ -37,7 +38,13 @@ class LocationProxyTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         parent::setUp();
-        $sc = new ServiceContainer;
+        $sc = new ServiceContainer(
+            Configuration::getInstance('service')->getAll(),
+            array(
+                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+                '@io_handler' => new \ezp\Io\Storage\InMemory(),
+            )
+        );
         $this->repository = $sc->getRepository();
         $this->service = $this->repository->getLocationService();
     }
