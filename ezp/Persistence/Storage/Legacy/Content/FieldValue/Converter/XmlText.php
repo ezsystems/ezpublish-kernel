@@ -71,14 +71,14 @@ class XmlText implements Converter
 
         $settings = new FieldSettings;
 
-        if ( !empty( $storageDefinion->dataInt1 ) )
+        if ( !empty( $storageDefinition->dataInt1 ) )
         {
-            $settings['numRows'] = $storageDefinion->dataInt1;
+            $settings['numRows'] = $storageDefinition->dataInt1;
         }
 
-        if ( !empty( $storageDefinion->dataText2 ) )
+        if ( !empty( $storageDefinition->dataText2 ) )
         {
-            $settings['tagPreset'] = $storageDefinion->dataText2;
+            $settings['tagPreset'] = $storageDefinition->dataText2;
         }
 
         $fieldDefinition->fieldTypeConstraints->fieldSettings = $settings;
