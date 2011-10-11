@@ -165,7 +165,8 @@ class ContentHandlerTest extends TestCase
                 $this->isInstanceOf(
                     'ezp\\Persistence\\Content\\Location\\CreateStruct'
                 ),
-                $this->equalTo( 42 )
+                $this->equalTo( 42 ),
+                $this->equalTo( 3 ) // Location\Gateway::NODE_ASSIGNMENT_OP_CODE_CREATE
             );
 
         $res = $handler->create( $this->getCreateStructFixture() );

@@ -103,7 +103,7 @@ class Handler implements BaseContentHandler
             $this->locationGateway->createNodeAssignment(
                 $this->mapper->createLocationCreateStruct( $content ),
                 $location->parentId,
-                Location\Gateway::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
+                Location\Gateway::NODE_ASSIGNMENT_OP_CODE_CREATE
             );
         }
 
