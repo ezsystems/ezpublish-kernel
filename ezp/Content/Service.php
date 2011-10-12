@@ -103,6 +103,8 @@ class Service extends BaseService
             $fieldVo->language = 'eng-GB';
             $struct->fields[] = $fieldVo;
         }
+        // echo "CREATE STRUCT:\n";
+        // print_r( $struct );
         $vo = $this->handler->contentHandler()->create( $struct );
         return $this->buildDomainObject( $vo );
     }
@@ -576,6 +578,12 @@ class Service extends BaseService
         $updateStruct->ownerId = $version->getOwnerId();
         $updateStruct->creatorId = $version->creatorId;
         $updateStruct->versionNo = $version->versionNo;
+
+        // @todo Make it possible to get these from the public API (set on the Content)
+        // Default should still be the current time()
+        $updateStruct->published = time();
+        $updateStruct->modified = time();
+
         // @todo : Take translations into account instead of hardcoding eng-GB :)
         $updateStruct->name = array(
             'eng-GB' => $this->generateContentName( $version )
