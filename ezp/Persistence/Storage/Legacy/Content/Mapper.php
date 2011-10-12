@@ -67,6 +67,7 @@ class Mapper
         $content->initialLanguageId = $struct->initialLanguageId;
         $content->published = $struct->published;
         $content->modified = $struct->modified;
+        $content->currentVersionNo = 1;
 
         return $content;
     }

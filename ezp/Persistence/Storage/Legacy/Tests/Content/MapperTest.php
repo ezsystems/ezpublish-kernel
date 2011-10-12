@@ -73,6 +73,7 @@ class MapperTest extends TestCase
             array( 'name', 'typeId', 'sectionId', 'ownerId', 'alwaysAvailable',
             'remoteId', 'initialLanguageId', 'published', 'modified' )
         );
+        $this->assertEquals( 1, $content->currentVersionNo );
     }
 
     /**
