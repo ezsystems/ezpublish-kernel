@@ -21,7 +21,7 @@ use ezp\Base\Exception\InvalidArgumentType,
 class Dispatcher implements IoHandlerInterface
 {
     /**
-     * Io\Storage backends instances, {@see __construct()}
+     * Io\Storage handler instances, {@see __construct()}
      *
      * @var array
      */
@@ -30,14 +30,14 @@ class Dispatcher implements IoHandlerInterface
     /**
      * Creates new object and validates $config param
      *
-     * @param array $config Structure of backends that follows the following format:
-     *     array( 'backends' => array( 'handler' => Handler, 'match' => array(..) ), 'default' => Handler )
+     * @param array $config Structure of handlers that follows the following format:
+     *     array( 'handlers' => array( 'handler' => Handler, 'match' => array(..) ), 'default' => Handler )
      *     ie:
      *               array(
-     *                   'default' => $backend1,
-     *                   'backends' => array(
+     *                   'default' => $handler1,
+     *                   'handlers' => array(
      *                       array(
-     *                           'handler' => $backend2,
+     *                           'handler' => $handler2,
      *                           'match' => array(
      *                               'prefix' => 'var/original/',
      *                               'suffix' => '.gif,.jpg',
@@ -47,8 +47,8 @@ class Dispatcher implements IoHandlerInterface
      *                   )
      *               )
      *
-     * @throws \ezp\Base\Exception\InvalidArgumentType If $config does not contain default backend that implements
-     *         Handler, backends is unset or empty (hence you could have used default directly), one of the 'patterns'
+     * @throws \ezp\Base\Exception\InvalidArgumentType If $config does not contain default handler that implements
+     *         Handler, handlers is unset or empty (hence you could have used default directly), one of the 'patterns'
      *         is unset or empty (hence it could have been default) or a 'handler' item does not implement Handler
      */
     public function __construct( array $config = array() )
@@ -57,27 +57,27 @@ class Dispatcher implements IoHandlerInterface
         {
             throw new InvalidArgumentType( "\$config['default']", "ezp\\Io\\Handler" );
         }
-        else if ( empty( $config['backends'] ) )
+        else if ( empty( $config['handlers'] ) )
         {
-            throw new InvalidArgumentType( "\$config['backends']", "array" );
+            throw new InvalidArgumentType( "\$config['handlers']", "array" );
         }
 
-        // Validate backends so it does not need to be done on every call to getHandler()
-        foreach ( $config['backends'] as $key => $backend )
+        // Validate handlers so it does not need to be done on every call to getHandler()
+        foreach ( $config['handlers'] as $key => $handler )
         {
-            if ( empty( $backend['match'] ) )
+            if ( empty( $handler['match'] ) )
             {
-                throw new InvalidArgumentType( "\$config['backends'][$key]['match']", "array" );
+                throw new InvalidArgumentType( "\$config['handlers'][$key]['match']", "array" );
             }
 
-            $match = $backend['match'];
+            $match = $handler['match'];
             if ( empty( $match['contains'] ) && empty( $match['prefix'] ) && empty( $match['suffix'] ) )
             {
-                throw new InvalidArgumentType( "\$config['backends'][$key]['match']['contains/prefix/suffix']", "string" );
+                throw new InvalidArgumentType( "\$config['handlers'][$key]['match']['contains/prefix/suffix']", "string" );
             }
-            else if ( empty( $backend['handler'] ) || !$backend['handler'] instanceof IoHandlerInterface )
+            else if ( empty( $handler['handler'] ) || !$handler['handler'] instanceof IoHandlerInterface )
             {
-                throw new InvalidArgumentType( "\$config['backends'][$key]['handler']", "ezp\\Io\\Handler" );
+                throw new InvalidArgumentType( "\$config['handlers'][$key]['handler']", "ezp\\Io\\Handler" );
             }
         }
 
@@ -89,7 +89,7 @@ class Dispatcher implements IoHandlerInterface
      *
      * @param \ezp\Io\BinaryFileCreateStruct $file
      * @return \ezp\Io\BinaryFile The newly created BinaryFile object
-     * @uses \ezp\Io\Handler::create() To create the binary file in backend
+     * @uses \ezp\Io\Handler::create() To create the binary file in handler
      */
     public function create( BinaryFileCreateStruct $file )
     {
@@ -100,7 +100,7 @@ class Dispatcher implements IoHandlerInterface
      * Deletes the existing BinaryFile with path $path
      *
      * @param string $path
-     * @uses \ezp\Io\Handler::delete() To delete the binary file in backend
+     * @uses \ezp\Io\Handler::delete() To delete the binary file in handler
      */
     public function delete( $path )
     {
@@ -113,7 +113,7 @@ class Dispatcher implements IoHandlerInterface
      * @param string $path
      * @param \ezp\Io\BinaryFileUpdateStruct $updateFile
      * @return \ezp\Io\BinaryFile The updated BinaryFile
-     * @uses \ezp\Io\Handler::update() To update the binary file in backend
+     * @uses \ezp\Io\Handler::update() To update the binary file in handler
      */
     public function update( $path, BinaryFileUpdateStruct $updateFile )
     {
@@ -145,7 +145,7 @@ class Dispatcher implements IoHandlerInterface
      *
      * @param string $path
      * @return bool
-     * @uses \ezp\Io\Handler::exists() To see if file exists in backend
+     * @uses \ezp\Io\Handler::exists() To see if file exists in handler
      */
     public function exists( $path )
     {
@@ -157,7 +157,7 @@ class Dispatcher implements IoHandlerInterface
      *
      * @param string $path
      * @return \ezp\Io\BinaryFile
-     * @uses \ezp\Io\Handler::load() To load the binary file from backend
+     * @uses \ezp\Io\Handler::load() To load the binary file from handler
      */
     public function load( $path )
     {
@@ -169,7 +169,7 @@ class Dispatcher implements IoHandlerInterface
      *
      * @param string $path
      * @return resource
-     * @uses \ezp\Io\Handler::getFileResource() To get the binary file resource from backend
+     * @uses \ezp\Io\Handler::getFileResource() To get the binary file resource from handler
      */
     public function getFileResource( $path )
     {
@@ -181,7 +181,7 @@ class Dispatcher implements IoHandlerInterface
      *
      * @param string $path
      * @return string
-     * @uses \ezp\Io\Handler::getFileContents() To get the binary file content from backend
+     * @uses \ezp\Io\Handler::getFileContents() To get the binary file content from handler
      */
     public function getFileContents( $path )
     {
@@ -189,7 +189,7 @@ class Dispatcher implements IoHandlerInterface
     }
 
     /**
-     * Returns the appropriate backend for $path
+     * Returns the appropriate handler for $path
      *
      * @internal Depends on {@link $config} being validated by {@link __construct()}!
      *
@@ -198,13 +198,13 @@ class Dispatcher implements IoHandlerInterface
      */
     private function getHandler( $path )
     {
-        if ( empty( $this->config['backends'] ) )
+        if ( empty( $this->config['handlers'] ) )
             return $this->config['default'];
 
-        foreach ( $this->config['backends'] as $backend )
+        foreach ( $this->config['handlers'] as $handler )
         {
-            // Match backend using strpos & strstr for speed, and to avoid having regex in ini files
-            $match = $backend['match'];
+            // Match handler using strpos & strstr for speed, and to avoid having regex in ini files
+            $match = $handler['match'];
             if ( !empty( $match['contains'] ) && strpos( $path, $match['contains'] ) === false )
             {
                 continue;
@@ -232,7 +232,7 @@ class Dispatcher implements IoHandlerInterface
             }
             // Everything matched (incl one of suffixes), and since __construct made sure not all where empty
             // it should be fairly safe to return this handler
-            return $backend['handler'];
+            return $handler['handler'];
         }
 
         return $this->config['default'];

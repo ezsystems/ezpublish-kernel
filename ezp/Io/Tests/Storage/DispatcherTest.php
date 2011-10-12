@@ -34,7 +34,7 @@ class DispatcherTest extends BinaryRepositoryTest
     protected $alternativeBackend;
 
     /**
-     * Setup dispatcher backend for testing
+     * Setup dispatcher handler for testing
      */
     public function setUp()
     {
@@ -47,7 +47,7 @@ class DispatcherTest extends BinaryRepositoryTest
                 '@io_handler' => new Dispatcher(
                     array(
                         'default' => $this->defaultBackend,
-                        'backends' => array(
+                        'handlers' => array(
                             array(
                                 'handler' => $this->alternativeBackend,
                                 'match' => array(
@@ -66,7 +66,7 @@ class DispatcherTest extends BinaryRepositoryTest
     }
 
     /**
-     * Test that file is created in default backend
+     * Test that file is created in default handler
      */
     public function testDispatcherDefaultBackendCreate()
     {
@@ -78,7 +78,7 @@ class DispatcherTest extends BinaryRepositoryTest
     }
 
     /**
-     * Test that file is created in default backend
+     * Test that file is created in default handler
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDispatcherDefaultBackendCreateNotFound()
@@ -89,7 +89,7 @@ class DispatcherTest extends BinaryRepositoryTest
     }
 
     /**
-     * Test that file is created in alternative backend
+     * Test that file is created in alternative handler
      */
     public function testDispatcherAlternativeBackendCreate()
     {
@@ -101,7 +101,7 @@ class DispatcherTest extends BinaryRepositoryTest
     }
 
     /**
-     * Test that file is created in alternative backend
+     * Test that file is created in alternative handler
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDispatcherAlternativeBackendCreateNotFound()
