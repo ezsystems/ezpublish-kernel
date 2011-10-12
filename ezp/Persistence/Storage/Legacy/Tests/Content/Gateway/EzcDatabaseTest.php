@@ -193,9 +193,15 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      */
     public function testSetStatus()
     {
-        $version = $this->getVersionFixture();
-
         $gateway = $this->getDatabaseGateway();
+
+        // insert content
+        $content = $this->getContentFixture();
+        $contentId = $gateway->insertContentObject( $content, array() );
+
+        // insert version
+        $version = $this->getVersionFixture();
+        $version->contentId = $contentId;
         $gateway->insertVersion( $version, array(), true );
 
         $this->assertTrue(
@@ -208,6 +214,54 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                 ->createSelectQuery()
                 ->select( 'status' )
                 ->from( 'ezcontentobject_version' )
+        );
+
+        // check that content status has been set to published
+        $this->assertQueryResult(
+            array( array( '2' ) ), // 1 === ezp\Content::STATUS_PUBLISHED
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( 'status' )
+                ->from( 'ezcontentobject' )
+        );
+    }
+
+    /**
+     * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase::setStatus
+     */
+    public function testSetStatusPublished()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        // insert content
+        $content = $this->getContentFixture();
+        $contentId = $gateway->insertContentObject( $content, array() );
+
+        // insert version
+        $version = $this->getVersionFixture();
+        $version->contentId = $contentId;
+        $gateway->insertVersion( $version, array(), true );
+
+        $this->assertTrue(
+            $gateway->setStatus( $version->contentId, $version->versionNo, 1 )
+        );
+
+        $this->assertQueryResult(
+            array( array( '1' ) ),
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( 'status' )
+                ->from( 'ezcontentobject_version' )
+        );
+
+        // check that content status has been set to published
+        $this->assertQueryResult(
+            array( array( '1' ) ), // 1 === ezp\Content::STATUS_PUBLISHED
+            $this->getDatabaseHandler()
+                ->createSelectQuery()
+                ->select( 'status' )
+                ->from( 'ezcontentobject' )
         );
     }
 

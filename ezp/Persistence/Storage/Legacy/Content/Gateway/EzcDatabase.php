@@ -18,7 +18,9 @@ use ezp\Persistence\Storage\Legacy\Content\Gateway,
     ezp\Persistence\Content,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Version,
-    ezp\Persistence\Content\Field;
+    ezp\Persistence\Content\Field,
+    ezp\Content as ContentDo,
+    ezp\Content\Version as VersionDo;
 
 /**
  * ezcDatabase based content gateway
@@ -339,6 +341,30 @@ class EzcDatabase extends Gateway
                     $this->dbHandler->quoteColumn( 'version' ),
                     $q->bindValue( $version, null, \PDO::PARAM_INT )
                 )
+            )
+        );
+        $statement = $q->prepare();
+        $statement->execute();
+
+        if ( (bool)$statement->rowCount() === false )
+            return false;
+
+        if ( $status !== VersionDo::STATUS_PUBLISHED )
+        {
+            return true;
+        }
+
+        // If the version's status is PUBLISHED, we set the content to published status as well
+        $q = $this->dbHandler->createUpdateQuery();
+        $q->update(
+            $this->dbHandler->quoteTable( 'ezcontentobject' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'status' ),
+            $q->bindValue( ContentDo::STATUS_PUBLISHED, null, \PDO::PARAM_INT )
+        )->where(
+            $q->expr->eq(
+                $this->dbHandler->quoteColumn( 'id' ),
+                $q->bindValue( $contentId, null, \PDO::PARAM_INT )
             )
         );
         $statement = $q->prepare();
