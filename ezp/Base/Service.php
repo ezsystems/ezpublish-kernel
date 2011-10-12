@@ -109,6 +109,7 @@ abstract class Service
             case 'published':
                 $struct->$property = time();
                 break;
+            case 'ownerId':
             case 'creatorId':
             case 'modifierId':
                 $struct->$property = $this->repository->getUser()->id;
