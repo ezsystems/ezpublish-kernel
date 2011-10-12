@@ -50,11 +50,10 @@ class DispatcherTest extends BinaryRepositoryTest
                         'handlers' => array(
                             array(
                                 'handler' => $this->alternativeBackend,
-                                'match' => array(
-                                    'prefix' => 'var/test/',
-                                    'suffix' => '.gif,.jpg',
-                                    'contains' => 'image-versioned'
-                                )
+                                // match conditions:
+                                'prefix' => 'var/test/',
+                                'suffix' => '.gif,.jpg',
+                                'contains' => 'image-versioned'
                             )
                         )
                     )

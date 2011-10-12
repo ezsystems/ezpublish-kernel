@@ -31,18 +31,17 @@ class Dispatcher implements IoHandlerInterface
      * Creates new object and validates $config param
      *
      * @param array $config Structure of handlers that follows the following format:
-     *     array( 'handlers' => array( 'handler' => Handler, 'match' => array(..) ), 'default' => Handler )
+     *     array( 'handlers' => array( 'handler' => Handler, .. ), 'default' => Handler )
      *     ie:
      *               array(
      *                   'default' => $handler1,
      *                   'handlers' => array(
      *                       array(
      *                           'handler' => $handler2,
-     *                           'match' => array(
-     *                               'prefix' => 'var/original/',
-     *                               'suffix' => '.gif,.jpg',
-     *                               'contains' => 'image-versioned'
-     *                           )
+     *                           // match conditions:
+     *                           'prefix' => 'var/original/',
+     *                           'suffix' => '.gif,.jpg',
+     *                           'contains' => 'image-versioned'
      *                       )
      *                   )
      *               )
@@ -65,15 +64,9 @@ class Dispatcher implements IoHandlerInterface
         // Validate handlers so it does not need to be done on every call to getHandler()
         foreach ( $config['handlers'] as $key => $handler )
         {
-            if ( empty( $handler['match'] ) )
+            if ( empty( $handler['contains'] ) && empty( $handler['prefix'] ) && empty( $handler['suffix'] ) )
             {
-                throw new InvalidArgumentType( "\$config['handlers'][$key]['match']", "array" );
-            }
-
-            $match = $handler['match'];
-            if ( empty( $match['contains'] ) && empty( $match['prefix'] ) && empty( $match['suffix'] ) )
-            {
-                throw new InvalidArgumentType( "\$config['handlers'][$key]['match']['contains/prefix/suffix']", "string" );
+                throw new InvalidArgumentType( "\$config['handlers'][$key][contains|prefix|suffix]", "string" );
             }
             else if ( empty( $handler['handler'] ) || !$handler['handler'] instanceof IoHandlerInterface )
             {
@@ -204,31 +197,28 @@ class Dispatcher implements IoHandlerInterface
         foreach ( $this->config['handlers'] as $handler )
         {
             // Match handler using strpos & strstr for speed, and to avoid having regex in ini files
-            $match = $handler['match'];
-            if ( !empty( $match['contains'] ) && strpos( $path, $match['contains'] ) === false )
+            if ( !empty( $handler['contains'] ) && strpos( $path, $handler['contains'] ) === false )
             {
                 continue;
             }
-            else if ( !empty( $match['prefix'] ) && strpos( $path, $match['prefix'] ) !== 0 )
+            else if ( !empty( $handler['prefix'] ) && strpos( $path, $handler['prefix'] ) !== 0 )
             {
                 continue;
             }
-            else if ( !empty( $match['suffix'] ) )
+            else if ( !empty( $handler['suffix'] ) )
             {
-                $matchSuffix = false;
-                foreach ( explode( ',', $match['suffix'] ) as $suffix )
+                $suffixMatch = false;
+                foreach ( explode( ',', $handler['suffix'] ) as $suffix )
                 {
                     if ( strstr( $path, $suffix ) === $suffix )
                     {
-                        $matchSuffix = true;
+                        $suffixMatch = true;
                         break;
                     }
                 }
 
-                if ( !$matchSuffix )
-                {
+                if ( !$suffixMatch )
                     continue;
-                }
             }
             // Everything matched (incl one of suffixes), and since __construct made sure not all where empty
             // it should be fairly safe to return this handler
