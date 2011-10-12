@@ -39,7 +39,10 @@ class StaticCollection extends TypeCollection
         $elements = array();
         foreach ( $contentVersion->getContent()->getContentType()->getFields() as $fieldDefinition )
         {
-            $elements[ $fieldDefinition->identifier ] = new Field( $contentVersion, $fieldDefinition );
+            $elements[ $fieldDefinition->identifier ] = $field = new Field( $contentVersion, $fieldDefinition );
+            // Make the Field an observer of publish events
+            $contentVersion->attach( $field, 'pre_publish' );
+            $contentVersion->attach( $field, 'post_publish' );
         }
         parent::__construct( 'ezp\\Content\\Field', $elements );
     }
