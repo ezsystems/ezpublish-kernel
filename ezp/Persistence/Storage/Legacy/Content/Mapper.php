@@ -83,7 +83,7 @@ class Mapper
 
         $location->remoteId = md5( uniqid() );
         $location->contentId = $content->id;
-        $location->contentVersion = $content->version->id;
+        $location->contentVersion = $content->version->versionNo;
 
         return $location;
     }

@@ -585,6 +585,7 @@ class EzcDatabase extends Gateway
      */
     public function createLocationsFromNodeAssignments( $contentId, $versionNo )
     {
+        // select all node assignments with OP_CODE_CREATE (3) for this content
         $query = $this->handler->createSelectQuery();
         $query
             ->select( '*' )
@@ -608,6 +609,7 @@ class EzcDatabase extends Gateway
         $statement = $query->prepare();
         $statement->execute();
 
+        // convert all these assignments to nodes
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
             $this->create(

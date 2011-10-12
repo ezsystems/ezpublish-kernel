@@ -181,7 +181,7 @@ class MapperTest extends TestCase
 
         $struct->version = new Content\Version(
             array(
-                'id' => 1,
+                'versionNo' => 1,
             )
         );
 

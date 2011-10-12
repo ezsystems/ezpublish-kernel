@@ -236,7 +236,7 @@ class Handler implements BaseLocationHandler
     /**
      * Creates a new location rooted at $location->parentId.
      *
-     * @param \ezp\Persistence\Content\Location\CreateStruct $contentId
+     * @param \ezp\Persistence\Content\Location\CreateStruct $locationStruct
      * @return \ezp\Persistence\Content\Location
      */
     public function create( CreateStruct $locationStruct )
