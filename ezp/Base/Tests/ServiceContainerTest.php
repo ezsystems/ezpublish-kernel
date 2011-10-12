@@ -214,8 +214,36 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
                 ),
             )
         );
-        $d = $sc->get('EService');
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\E', $d );
+        $obj = $sc->get('EService');
+        self::assertInstanceOf( 'ezp\\Base\\Tests\\E', $obj );
+    }
+
+    /**
+     * @covers \ezp\Base\ServiceContainer::get
+     */
+    public function testComplexServiceUsingHash()
+    {
+        $sc = new ServiceContainer(
+            array(
+                'F' => array(
+                    'class' => 'ezp\\Base\\Tests\\F',
+                    'arguments' => array(
+                        array(
+                            'sc' => '$serviceContainer',
+                            'b' => '@B',
+                            'sub' => array( 'c' => '@C' ),
+                        )
+                    ),
+                ),
+                'C' => array(
+                    'class' => 'ezp\\Base\\Tests\\C',
+                    'arguments' => array( '@B' ),
+                )
+            ),
+            array( '@B' => new B )
+        );
+        $obj = $sc->get('F');
+        self::assertInstanceOf( 'ezp\\Base\\Tests\\F', $obj );
     }
 }
 
@@ -273,5 +301,18 @@ class E
             throw new \Exception( "Int was not '42' value" );
         if ( $config['array'] !== array( 'ezfile' => 'ezp\\Content\\FieldType\\File', 'something' ) )
             throw new \Exception( "Array was not expected value" );
+    }
+}
+
+class F
+{
+    public function __construct( array $config )
+    {
+        if ( !$config['sc'] instanceof ServiceContainer )
+            throw new \Exception( "sc was not instance of 'ServiceContainer'" );
+        if ( !$config['b'] instanceof B )
+            throw new \Exception( "b was not instance of 'B'" );
+        if ( !$config['sub']['c'] instanceof C )
+            throw new \Exception( "sub.c was not instance of 'C'" );
     }
 }

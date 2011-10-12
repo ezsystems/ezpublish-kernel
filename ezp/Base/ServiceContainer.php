@@ -141,39 +141,9 @@ class ServiceContainer
         }
 
         // Expand arguments with other service objects on arguments that start with @ and predefined variables that start with $
-        $arguments = array();
-        foreach ( $settings['arguments'] as $key => $argument )
-        {
-            // @Service / $Variable
-            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' ) )
-            {
-                if ( $argument === '$serviceContainer' )
-                {
-                    // Self
-                    $arguments[] = $this;
-                }
-                else if ( isset( $this->dependencies[ $argument ] ) )
-                {
-                    // Existing dependencies
-                    $arguments[] = $this->dependencies[ $argument ];
-                }
-                else if ( $argument[0] === '$' )
-                {
-                    // Undefined variables will trow an exception
-                    throw new InvalidArgumentValue( "arguments[{$key}]", $argument );
-                }
-                else
-                {
-                    // Try to load a @service dependency
-                    $arguments[] = $this->get( ltrim( $argument, '@' ) );
-                }
-            }
-            else
-            {
-                // Primitive type / object argument
-                $arguments[] = $argument;
-            }
-        }
+        $argumentKeys = array();
+        $arguments = $this->lookupArguments( $settings['arguments'], $argumentKeys );
+
 
         // If factory use call_user_func_array
         if ( !empty( $settings['factory'] ) )
@@ -187,16 +157,64 @@ class ServiceContainer
         }
 
         // Use "new" if just 1 or 2 arguments (premature optimization to avoid use of reflection in most cases)
-        if ( isset( $arguments[0] ) && !isset( $arguments[2] ) )
+        if ( isset( $argumentKeys[0] ) && !isset( $argumentKeys[2] ) )
         {
-            if ( !isset( $arguments[1] ) )
-                return $this->dependencies[$serviceKey] = new $settings['class']( $arguments[0] );
+            if ( !isset( $argumentKeys[1] ) )
+                return $this->dependencies[$serviceKey] = new $settings['class']( $arguments[ $argumentKeys[0] ] );
 
-            return $this->dependencies[$serviceKey] = new $settings['class']( $arguments[0], $arguments[1] );
+            return $this->dependencies[$serviceKey] = new $settings['class']( $arguments[ $argumentKeys[0] ], $arguments[ $argumentKeys[1] ] );
         }
 
         // use Reflection to create a new instance, using the $args
         $reflectionObj = new ReflectionClass( $settings['class'] );
         return $this->dependencies[$serviceKey] = $reflectionObj->newInstanceArgs( $arguments );
+    }
+
+    /**
+     * Lookup arguments for variable, service or arrays for recursive lookup
+     *
+     * @param array $arguments
+     * @param int $count Optional count of arguments in level provided
+     * @return array
+     */
+    protected function lookupArguments( array $arguments, array &$keys = array() )
+    {
+        $builtArguments = array();
+        foreach ( $arguments as $key => $argument )
+        {
+            if ( isset( $argument[0] ) && ( $argument[0] === '$' || $argument[0] === '@' ) )
+            {
+                if ( $argument === '$serviceContainer' )
+                {
+                    // Self
+                    $builtArguments[$key] = $this;
+                }
+                else if ( isset( $this->dependencies[ $argument ] ) )
+                {
+                    // Existing dependencies (@Service / $Variable)
+                    $builtArguments[$key] = $this->dependencies[ $argument ];
+                }
+                else if ( $argument[0] === '$' )
+                {
+                    // Undefined variables will trow an exception
+                    throw new InvalidArgumentValue( "arguments[{$key}]", $argument );
+                }
+                else
+                {
+                    // Try to load a @service dependency
+                    $builtArguments[$key] = $this->get( ltrim( $argument, '@' ) );
+                }
+            }
+            else if ( is_array( $argument ) )
+            {
+                $builtArguments[$key] = $this->lookupArguments( $argument );
+            }
+            else // Scalar values
+            {
+                $builtArguments[$key] = $argument;
+            }
+            $keys[] = $key;
+        }
+        return $builtArguments;
     }
 }
