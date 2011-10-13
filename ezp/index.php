@@ -4,7 +4,7 @@
  */
 namespace ezp\Content;
 use ezp\Base\Configuration,
-    ezp\Base\Autoloader,
+    ezp\Base\ServiceContainer,
     ezp\Content\Concrete as Content,
     ezp\Content\Section\Concrete as Section,
     ezp\Content\Type\Concrete as Type,
@@ -13,41 +13,40 @@ use ezp\Base\Configuration,
     ezp\Content\Type\FieldDefinition,
     ezp\User\Concrete as User;
 
+// Use testsBootstrap.php to setup autolaod and Configuration
 chdir( '../' );
 require 'testsBootstrap.php';
 
-// Create Type manually for test
-$contentType = new Type();
-$contentType->identifier = 'article';
 
-// Add some fields
-$fieldsData = array(
-    'title' => array( 'ezstring', new TextLineValue( 'New Article' ) ),
-    'tags' => array( 'ezkeyword', new KeywordValue() )
+// Setup ServiceContainer for dependency injection using in-memory storage
+$sc = new ServiceContainer(
+    Configuration::getInstance('service')->getAll(),
+    array(
+        '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
+        '@io_handler' => new \ezp\Io\Storage\InMemory(),
+    )
 );
-$fields = array();
-foreach ( $fieldsData as $identifier => $data )
-{
-    $field = new FieldDefinition( $contentType, $data[0] );
-    $field->identifier = $identifier;
-    $field->setDefaultValue( $data[1] );
-    $fields[] = $field;
-}
-// Internal method, in api TypeService create() or createAndPublish() should be used
-$contentType->setState( array( 'fields' => $fields ) );
 
-// Create section
-$section = new Section();
-$section->identifier = 'standard';
-$section->name = "Standard";
+// Get repository and set 'Admin' as current user ('Anonymous' is default user)
+$repository = $sc->getRepository();
+$admin = $repository->getUserService()->load( 14 );
+$anonymous = $repository->setUser( $admin );
+
+
+// Get 'Folder' Content Type (Class)
+$contentType = $repository->getContentTypeService()->load( 1 );
+
+// Get 'Standard' Section
+$section = $repository->getSectionService()->load( 1 );
+
 
 // Create Content object
-$content = new Content( $contentType, new User( 10 ) );
+$content = new Content( $contentType, $anonymous );
 $content->setSection( $section );
 
-$content->fields['tags'] = 'ezpublish, demo, public, api';
-//$content->fields['title'] = 'My new Article';
-// shortcut for: $content->fields['title']->value = 'My new Article';
+$content->fields['name'] = 'New Folder';
+$content->fields['description'] = 'This is an empty folder';
+
 
 echo "Content id: {$content->id}<br />";
 

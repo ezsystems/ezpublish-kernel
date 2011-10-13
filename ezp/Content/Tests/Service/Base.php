@@ -44,6 +44,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
          *
          *   $dns = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
          *   $sc = new ServiceContainer(
+         *       Configuration::getInstance('service')->getAll(),
          *       array(
          *           '@persistence_handler' => new \ezp\Persistence\Storage\Legacy\Handler( array( 'dns' => $dns ) )
          *       )
