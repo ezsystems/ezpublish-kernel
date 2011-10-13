@@ -147,32 +147,32 @@ class DateAndTime implements Converter
         $root = $doc->createElement( 'adjustment' );
 
         $year = $doc->createElement( 'year' );
-        $year->setAttribute( 'value', $dateInterval->y );
+        $year->setAttribute( 'value', $dateInterval->format( '%y' ) );
         $root->appendChild( $year );
         unset( $year );
 
         $month = $doc->createElement( 'month' );
-        $month->setAttribute( 'value', $dateInterval->m );
+        $month->setAttribute( 'value', $dateInterval->format( '%m' ) );
         $root->appendChild( $month );
         unset( $month );
 
         $day = $doc->createElement( 'day' );
-        $day->setAttribute( 'value', $dateInterval->d );
+        $day->setAttribute( 'value', $dateInterval->format( '%d' ) );
         $root->appendChild( $day );
         unset( $day );
 
         $hour = $doc->createElement( 'hour' );
-        $hour->setAttribute( 'value', $dateInterval->h );
+        $hour->setAttribute( 'value', $dateInterval->format( '%h' ) );
         $root->appendChild( $hour );
         unset( $hour );
 
         $minute = $doc->createElement( 'minute' );
-        $minute->setAttribute( 'value', $dateInterval->i );
+        $minute->setAttribute( 'value', $dateInterval->format( '%i' ) );
         $root->appendChild( $minute );
         unset( $minute );
 
         $second = $doc->createElement( 'second' );
-        $second->setAttribute( 'value', $dateInterval->s );
+        $second->setAttribute( 'value', $dateInterval->format( '%s' ) );
         $root->appendChild( $second );
         unset( $second );
 

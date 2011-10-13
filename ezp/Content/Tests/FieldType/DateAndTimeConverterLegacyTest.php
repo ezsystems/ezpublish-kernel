@@ -119,8 +119,8 @@ class DateAndTimeConverterLegacyTest extends PHPUnit_Framework_TestCase
         $xml = new SimpleXMLElement( $storageFieldDef->dataText5 );
         foreach ( $this->getXMLToDateIntervalMap() as $xmlNode => $property )
         {
-            self::assertEquals(
-                $dateInterval->$property,
+            self::assertSame(
+                $dateInterval->format( "%$property" ),
                 (string)$xml->{$xmlNode}['value']
             );
         }
