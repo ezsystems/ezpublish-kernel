@@ -9,14 +9,12 @@ ezp\User* contains a set of domain objects and a service for dealing with those,
 	ezp/User/Concrete.php		| Concrete User class, implements User
 	ezp/User/Proxy.php			| Proxy User class, implements User
 	ezp/User/Group.php			| Group interface, extends Groupable
-	ezp/User/Group/Concrete.php	| Concrete Group class, implements Group
-	ezp/User/Group/Proxy.php	| Proxy Group class, implements Group
+	ezp/User/Group/*	| Concrete & Proxy Group class, implements Group
 	ezp/User/Groupable.php		| Groupable interface (impl can be grouped)
 	ezp/User/Policy.php			| Concrete Policy class
 	ezp/User/Readme.md			| This file
 	ezp/User/Role.php			| Role interface, extends ModelDefinition
-	ezp/User/Role/Concrete.php	| Concrete Role class, implements Role
-	ezp/User/Role/Proxy.php		| Proxy Role class, implements Role
+	ezp/User/Role/*	| Concrete & Proxy Role class, implements Role
 	ezp/User/Service.php		| User Service, provides methods for User operations
 
 
