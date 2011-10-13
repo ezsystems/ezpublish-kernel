@@ -14,7 +14,8 @@ use ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Observer,
     ezp\Content,
     ezp\Content\Type,
-    ezp\Content\Type\FieldDefinition;
+    ezp\Content\Type\FieldDefinition,
+    ezp\User\Groupable;
 
 /**
  * This interface represents a Group item
@@ -26,7 +27,7 @@ use ezp\Base\Collection\Type as TypeCollection,
  * @property string $name
  * @property string description
  */
-interface Group
+interface Group extends Groupable
 {
     /**
      * @return \ezp\User\Group|null

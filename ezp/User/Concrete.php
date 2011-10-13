@@ -25,7 +25,7 @@ use ezp\Base\Model,
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
-class Concrete extends Model implements Groupable, User
+class Concrete extends Model implements User
 {
     /**
      * @var array Readable of properties on this object

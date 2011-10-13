@@ -15,8 +15,7 @@ use ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Observable,
     ezp\Base\Observer,
     ezp\Content,
-    ezp\User\Group,
-    ezp\User\Groupable;
+    ezp\User\Group;
 
 /**
  * This class represents a Concrete Group item
@@ -28,7 +27,7 @@ use ezp\Base\Collection\Type as TypeCollection,
  * @property string $name
  * @property string description
  */
-class Concrete implements Group, Groupable, ModelState, Observable
+class Concrete implements Group, ModelState, Observable
 {
     /**
      * @var array Readable of properties on this object (and writable if value is true)

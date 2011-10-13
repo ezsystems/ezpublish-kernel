@@ -1,13 +1,19 @@
 #User module readme
 
-The User module (ezp\User) is an module for handling users, user groups, roles and policies.
-It depends on ezp\Base and currently also ezp\Content, the latter because users and users groups
-uses the content engine as inherited from eZ Publish 4.x. However this module is modeled is such
-a way that persistence of users can be moved out of content model later.
+The User module (ezp\User) is an module for handling users, user groups, roles and policies. It depends on ezp\Base and currently also ezp\Content, the latter because users and users groups uses the content engine as inherited from eZ Publish 4.x. However this module is modeled is such a way that persistence of users can be moved out of content model later.
+
+##Overview
+User* contains a set of domain objects and a service for dealing with those, some of the domain objects have a Proxy (lazy loading) and a Concrete implementation with a interface shared between them. The Files involved are:
+| ezp/User.php | User interface, extends Groupable |
+| ezp/User/Concrete.php | Concreate User class, implements User |
+| ezp/User/Proxy.php |  Proxy User class, implements User interface |
+| ezp/User/Group.php | Group interface, extends Groupable |
+| ezp/User/Group/Concrete.php | Concreate User Group class, implements Group interface |
+| ezp/User/Group/Proxy.php |  Proxy User Group class, implements Group interface |
 
 
 ##Backward compatibility breakage
-* Roles can no longer be assigned to users, this is to align closer to how other systems behave to be able to use eg. ldap as backend for users without duplicating users to our storage. Retrieval does currently support returning policies that are assigned to users though, via User\Service->loadRolesByGroupId() & User\Service->loadPoliciesByUserId()
+* Roles can no longer be assigned to users, this is to align closer to how other systems behave to be able to use eg. ldap as backend for users without duplicating users to our storage. Retrieval does currently support returning policies that are assigned to users though, via `$userService->loadRolesByGroupId()` & `$userService->loadPoliciesByUserId()`
 
 * Multiple Group assignments are no longer supported for same reason as above, multiple assignments of users is however still fully supported. This affects retrieval of inherited policies, given a tree like this:
 
@@ -30,7 +36,6 @@ a way that persistence of users can be moved out of content model later.
 
 * hiding/unhinding a subtree does not disable users or user groups, it only makes sure certain users trees are not browseable via content api's / module if a siteaccess is setup to not show hidden locations, use isEnabled
 
-
 ##Permissions API
 Unlike eZ Publish permissions API centers around Models, and the idea is that you at some point can extend it more directly instead of having to write your own separate module logic to extend the content model.
 
@@ -52,7 +57,7 @@ hasAccessTo can be usefully if you need to check access to some resource before 
 New api that deal with instances of objects, often used in service layer to make sure user actually have access to delete / create / update an object. Only objects that implements ModelDefinition are supported, currently Content, User, Content\Type, User\Role, Content\Section and Content\Language.
 @todo Add doc on available permission functions on these Objects.
 
-This api uses the response from $user->hasAccessTo() where $user is the current user as set on $repository->getUser() (optionaly with: $repository->setUser( User $user ) ), and potential limitations is then given to closure functions returned by $model::defintion() for validation.
+This api uses the response from `$user->hasAccessTo()` where `$user` is the current user as set on `$repository->getUser()` (optionaly with: `$repository->setUser( User $user )` ), and potential limitations is then given to closure functions returned by `$model::defintion() for validation.
 
 *Arguments:*
 

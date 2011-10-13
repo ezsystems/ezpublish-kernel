@@ -23,7 +23,7 @@ use ezp\Base\Proxy\Model as ModelProxy,
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
-class Proxy extends ModelProxy implements Groupable, User
+class Proxy extends ModelProxy implements User
 {
     public function __construct( $id, Service $service )
     {

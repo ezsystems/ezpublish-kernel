@@ -8,7 +8,8 @@
  */
 
 namespace ezp;
-use ezp\Base\ModelDefinition;
+use ezp\Base\ModelDefinition,
+    ezp\User\Groupable;
 
 /**
  * This interface represents a User item
@@ -22,7 +23,7 @@ use ezp\Base\ModelDefinition;
  * @property \ezp\User\Role[] $roles
  * @property \ezp\User\Policy[] $policies
  */
-interface User extends ModelDefinition
+interface User extends ModelDefinition, Groupable
 {
     /**
      * @var int MD5 of password, not recommended

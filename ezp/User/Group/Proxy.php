@@ -13,7 +13,6 @@ use ezp\Base\Proxy\Model as ModelProxy,
     ezp\Base\Observable,
     ezp\Base\Observer,
     ezp\User\Group,
-    ezp\User\Groupable,
     ezp\User\Service;
 
 /**
@@ -26,7 +25,7 @@ use ezp\Base\Proxy\Model as ModelProxy,
  * @property string $name
  * @property string description
  */
-class Proxy extends ModelProxy implements Group, Groupable, Observable
+class Proxy extends ModelProxy implements Group, Observable
 {
     public function __construct( $id, Service $service )
     {
