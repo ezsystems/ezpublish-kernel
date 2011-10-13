@@ -206,4 +206,15 @@ class Field extends Model implements Observer
                 break;
         }
     }
+
+    /**
+     * Returns a string representation of the field value.
+     * This string representation must be compatible with {@link self::fromString()} supported format
+     *
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->value->__toString();
+    }
 }
