@@ -56,7 +56,7 @@ However in some cases you might need to check permission access, and here are th
     $user->hasAccessTo( $module, $function )
 This is the same low level permission api you can also find in eZ Publish. Similarly it returns either a bool value or an array of limitations. The limitations is internal, and you should not depend on it's format. Example of use:
 
-      $user->hasAccessTo( 'user', 'login' )
+    $user->hasAccessTo( 'user', 'login' )
 
 hasAccessTo can be usefully if you need to check access to some resource before loading it, but in most cases the next one is preferred.
 
