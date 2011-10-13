@@ -77,6 +77,10 @@ class Type extends FieldType
      */
     protected function getSortInfo()
     {
-        return array( 'sort_key_int' => $this->getValue()->value->getTimestamp() );
+        $timestamp = 0;
+        if ( $this->getValue()->value instanceof DateTime )
+            $timestamp = $this->getValue()->value->getTimestamp();
+
+        return array( 'sort_key_int' => $timestamp );
     }
 }
