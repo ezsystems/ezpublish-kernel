@@ -5,17 +5,17 @@ The User module (ezp\User) is an module for handling users, user groups, roles a
 ##Overview
 ezp\User* contains a set of domain objects and a service for dealing with those, some of the domain objects have a Proxy (lazy loading) and a Concrete implementation with a interface shared between them. The Files involved are:
 
-* [ezp/User/Group/](/ezsystems/ezp-next/tree/master/ezp/User/Group/)  *Concrete & Proxy Group class, implements Group*
-* [ezp/User/Role/](/ezsystems/ezp-next/tree/master/ezp/User/Role/)  *Concrete & Proxy Role class, implements Role*
-* [ezp/User/Concrete.php](/ezsystems/ezp-next/tree/master/ezp/User/Concrete.php)  *Concrete User class, implements User*
-* [ezp/User/Group.php](/ezsystems/ezp-next/tree/master/ezp/User/Group.php)  *Group interface, extends Groupable*
-* * [ezp/User/Groupable.php](/ezsystems/ezp-next/tree/master/ezp/User/Groupable.php)  *Groupable interface (impl can be grouped)*
-* [ezp/User/Policy.php](/ezsystems/ezp-next/tree/master/ezp/User/Policy.php)  *Concrete Policy class*
-* [ezp/User/Proxy.php](/ezsystems/ezp-next/tree/master/ezp/User/Proxy.php)  *Proxy User class, implements User*
+* [User/Group/](/ezsystems/ezp-next/tree/master/ezp/User/Group/)  *Concrete & Proxy Group class, implements Group*
+* [User/Role/](/ezsystems/ezp-next/tree/master/ezp/User/Role/)  *Concrete & Proxy Role class, implements Role*
+* [User/Concrete.php](/ezsystems/ezp-next/tree/master/ezp/User/Concrete.php)  *Concrete User class, implements User*
+* [User/Group.php](/ezsystems/ezp-next/tree/master/ezp/User/Group.php)  *Group interface, extends Groupable*
+* [User/Groupable.php](/ezsystems/ezp-next/tree/master/ezp/User/Groupable.php)  *Groupable interface (impl can be grouped)*
+* [User/Policy.php](/ezsystems/ezp-next/tree/master/ezp/User/Policy.php)  *Concrete Policy class*
+* [User/Proxy.php](/ezsystems/ezp-next/tree/master/ezp/User/Proxy.php)  *Proxy User class, implements User*
 * ezp/User/Readme.md  *This text*
-* [ezp/User/Role.php](/ezsystems/ezp-next/tree/master/ezp/User/Role.php)  *Role interface, extends ModelDefinition*
-* [ezp/User/Service.php](/ezsystems/ezp-next/tree/master/ezp/User/Service.php)  *User Service, provides methods for User operations*
-* * [ezp/User.php](/ezsystems/ezp-next/tree/master/ezp/User.php)  *User interface, extends Groupable & ModelDefinition*
+* [User/Role.php](/ezsystems/ezp-next/tree/master/ezp/User/Role.php)  *Role interface, extends ModelDefinition*
+* [User/Service.php](/ezsystems/ezp-next/tree/master/ezp/User/Service.php)  *User Service, provides methods for User operations*
+* [User.php](/ezsystems/ezp-next/tree/master/ezp/User.php)  *User interface, extends Groupable & ModelDefinition*
 
 
 
