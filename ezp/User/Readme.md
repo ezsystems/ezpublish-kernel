@@ -1,4 +1,4 @@
-###User module readme
+#User module readme
 
 The User module (ezp\User) is an module for handling users, user groups, roles and policies.
 It depends on ezp\Base and currently also ezp\Content, the latter because users and users groups
@@ -21,10 +21,10 @@ a way that persistence of users can be moved out of content model later.
 	         |- Anonymous Group
 
 	In this case "Administrator User" inherited policies from both groups as user is assigned to both, but "Anonymous User" does not as only the location of the user is taken into account.
-  
-  Technically this means policies are retrieved for:
-      1. User Object it self (deprecated)
-      2. All Groups in the paths of Groups assigned to the User from bottom to top
+
+	Technically this means policies are retrieved for:
+	1. User Object it self (deprecated)
+	2. All Groups in the paths of Groups assigned to the User from bottom to top
 
 * Roles can currently not be assigned with limitations. This will most likely change, but the reasoning for doing so was to simplify the complexity it causes for permissions. As well as the fact that for many policies this content centric set of limitation (SubTree & Section) does not make sense. So ideally we would like to expand Policy limitations so they can cover any use-cases Role assignment limitations provide.
 
@@ -38,14 +38,15 @@ In your everyday work with the API you should not have to deal with the Permissi
 
 However in some cases you might need to check permission access, and here are the api's involved:
 
-#hasAccessTo()
+###hasAccessTo()
     $user->hasAccessTo( $module, $function )
 This is the same low level permission api you can also find in eZ Publish. Similarly it returns either a bool value or an array of limitations. The limitations is internal, and you should not depend on it's format. Example of use:
+
       $user->hasAccessTo( 'user', 'login' )
 
 hasAccessTo can be usefully if you need to check access to some resource before loading it, but in most cases the next one is preferred.
 
-#canUser
+###canUser
     $repository->canUser( $function, ModelDefinition $model[, Model $assignment[, array &$deniedBy ]] )
 
 New api that deal with instances of objects, often used in service layer to make sure user actually have access to delete / create / update an object. Only objects that implements ModelDefinition are supported, currently Content, User, Content\Type, User\Role, Content\Section and Content\Language.
@@ -54,10 +55,10 @@ New api that deal with instances of objects, often used in service layer to make
 This api uses the response from $user->hasAccessTo() where $user is the current user as set on $repository->getUser() (optionaly with: $repository->setUser( User $user ) ), and potential limitations is then given to closure functions returned by $model::defintion() for validation.
 
 *Arguments:*
+
 * $function The function you are checking permissions for: create / delete / update
 * $model The object to check permissions against, contains meta information about the permission *module* involved as well as logic for limitations.
 * $assignment Is an extra object needed in the case of some functions:
 	1. 'create' on Content, in this case it needs to be the parent Location where Content is created.
 	2. 'assign' on Section, needs to be the Content that section is assigned to.
-
 * $deniedBy Is an optional by reference array that can be used for debugging permissions as it will be filled with all limitations that return false in the order they where executed (order of limitations from $user->hasAccessTo())
