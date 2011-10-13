@@ -3,13 +3,21 @@
 The User module (ezp\User) is an module for handling users, user groups, roles and policies. It depends on ezp\Base and currently also ezp\Content, the latter because users and users groups uses the content engine as inherited from eZ Publish 4.x. However this module is modeled is such a way that persistence of users can be moved out of content model later.
 
 ##Overview
-User* contains a set of domain objects and a service for dealing with those, some of the domain objects have a Proxy (lazy loading) and a Concrete implementation with a interface shared between them. The Files involved are:
-| ezp/User.php | User interface, extends Groupable |
-| ezp/User/Concrete.php | Concreate User class, implements User |
-| ezp/User/Proxy.php |  Proxy User class, implements User interface |
-| ezp/User/Group.php | Group interface, extends Groupable |
-| ezp/User/Group/Concrete.php | Concreate User Group class, implements Group interface |
-| ezp/User/Group/Proxy.php |  Proxy User Group class, implements Group interface |
+ezp\User* contains a set of domain objects and a service for dealing with those, some of the domain objects have a Proxy (lazy loading) and a Concrete implementation with a interface shared between them. The Files involved are:
+
+* ezp/User.php | User interface, extends Groupable & ModelDefinition
+* ezp/User/Concrete.php | Concreate User class, implements User
+* ezp/User/Proxy.php |  Proxy User class, implements User interface
+* ezp/User/Group.php | Group interface, extends Groupable
+* ezp/User/Group/Concrete.php | Concreate Group class, implements Group interface
+* ezp/User/Group/Proxy.php |  Proxy Group class, implements Group interface
+* ezp/User/Groupable.php | Groupable interface, impl can be grouped
+* ezp/User/Policy.php | Concreate Policy class
+* ezp/User/Readme.md | This file
+* ezp/User/Role.php | Role interface, extends ModelDefinition
+* ezp/User/Role/Concrete.php | Concreate Role class, implements Role interface
+* ezp/User/Role/Proxy.php |  Proxy Role class, implements Role interface
+
 
 
 ##Backward compatibility breakage
