@@ -472,6 +472,7 @@ class EzpDatabaseTest extends TestCase
             array( 'remote_id', 0 ),
             array( 'sort_field', 2 ),
             array( 'sort_order', 0 ),
+            array( 'is_main', 0 ),
         );
     }
 
@@ -504,6 +505,45 @@ class EzpDatabaseTest extends TestCase
             array( array( $value ) ),
             $query
                 ->select( $field )
+                ->from( 'eznode_assignment' )
+                ->where(
+                    $query->expr->lAnd(
+                        $query->expr->eq( 'contentobject_id', 68 ),
+                        $query->expr->eq( 'parent_node', 77 )
+                    )
+                )
+        );
+    }
+
+    /**
+     * @depends testCreateLocation
+     */
+    public function testCreateLocationNodeAssignmentCreationMainLocation()
+    {
+        $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+        $handler->createNodeAssignment(
+            new CreateStruct(
+                array(
+                    'contentId' => 68,
+                    'contentVersion' => 1,
+                    'mainLocationId' => 1,
+                    'priority' => 1,
+                    'remoteId' => 'some_id',
+                    'sortField' => 1,
+                    'sortOrder' => 1,
+                )
+            ),
+            '77',
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE,
+            true
+        );
+
+        $query = $this->handler->createSelectQuery();
+        $this->assertQueryResult(
+            array( array( 1 ) ),
+            $query
+                ->select( 'is_main' )
                 ->from( 'eznode_assignment' )
                 ->where(
                     $query->expr->lAnd(

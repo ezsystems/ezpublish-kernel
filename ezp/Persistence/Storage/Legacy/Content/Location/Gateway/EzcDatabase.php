@@ -493,9 +493,10 @@ class EzcDatabase extends Gateway
      * @param CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
+     * @param bool $isMain Wether the node assignment is a main one or a secondary one
      * @return void
      */
-    public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP )
+    public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP, $isMain = false )
     {
         $query = $this->handler->createInsertQuery();
         $query
@@ -514,7 +515,7 @@ class EzcDatabase extends Gateway
                 $this->handler->getAutoIncrementValue( 'eznode_assignment', 'id' )
             )->set(
                 $this->handler->quoteColumn( 'is_main' ),
-                $query->bindValue( 0, null, \PDO::PARAM_INT ) // Changed by the business layer, later
+                $query->bindValue( (int)$isMain, null, \PDO::PARAM_INT ) // Changed by the business layer, later
             )->set(
                 $this->handler->quoteColumn( 'op_code' ),
                 $query->bindValue( $type, null, \PDO::PARAM_INT )
