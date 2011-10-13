@@ -6,11 +6,6 @@ namespace ezp\Content;
 use ezp\Base\Configuration,
     ezp\Base\ServiceContainer,
     ezp\Content\Concrete as Content,
-    ezp\Content\Section\Concrete as Section,
-    ezp\Content\Type\Concrete as Type,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue,
-    ezp\Content\FieldType\Keyword\Value as KeywordValue,
-    ezp\Content\Type\FieldDefinition,
     ezp\User\Concrete as User;
 
 // Use testsBootstrap.php to setup autolaod and Configuration
@@ -43,9 +38,10 @@ $section = $repository->getSectionService()->load( 1 );
 // Create Content object
 $content = new Content( $contentType, $anonymous );
 $content->setSection( $section );
-
 $content->fields['name'] = 'New Folder';
 $content->fields['description'] = 'This is an empty folder';
+
+//$content = $repository->getContentService()->create( $content );
 
 
 echo "Content id: {$content->id}<br />";
@@ -53,6 +49,6 @@ echo "Content id: {$content->id}<br />";
 echo "Fields:<br />";
 foreach ( $content->fields as $identifier => $field )
 {
-    echo " > $identifier: {$field->value}<br />";
+    echo " > $identifier: {$field}<br />";// Using $value __toString()
 }
 
