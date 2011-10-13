@@ -103,8 +103,6 @@ class Service extends BaseService
             $fieldVo->language = 'eng-GB';
             $struct->fields[] = $fieldVo;
         }
-        // echo "CREATE STRUCT:\n";
-        // print_r( $struct );
         $vo = $this->handler->contentHandler()->create( $struct );
         return $this->buildDomainObject( $vo );
     }
