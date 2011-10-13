@@ -10,19 +10,19 @@ The public API is build on top of a layered architecture including a new persist
 The API is still very much work in progress, and so is documentation, hence why this is currently labeled as a Developer Preview. But expect both parts to get into Beta shape as we close in on the launch of Annapurna (end of November), and fully stable by the time we release Etna (Q2 2012).
 
 ##Directory Overview
-* design/				| Early uml class diagrams
-* doc/		| Placeholder for bc doc and other doc that can not be on wiki or inline
-* ezp/			| Main Namespace for eZ Publish API code
-* ezp/Base			| Base functionality that other modules depend on
-* ezp/Content	| Content related domain objects and services
-* ezp/Io	| Binaryfiles related objects, services and handlers
-* ezp/Persistence		| Persistence API (private api for now)
-* [ezp/Stubs](/ezsystems/ezp-next/tree/master/ezp/Stubs/)			| Code stubs for common code use
-* [ezp/User](/ezsystems/ezp-next/tree/master/ezp/User/)			| User related domain objects and services
-* config.php-RECOMMENDED			| Default config file (currently DEVELOPMENT config)
-* phpunit.xml	| PHPUnit 3.5+ xml configuration
-* Readme.md		| This file
-* testBootstrap.php		| Bootstrap for test system and testing
+* design/	 *Early uml class diagrams*
+* doc/  *Placeholder for bc doc and other doc that can not be on wiki or inline*
+* ezp/  *Main Namespace for eZ Publish API code*
+* ezp/Base  *Base functionality that other modules depend on*
+* ezp/Content  *Content related domain objects and services*
+* ezp/Io  *Binaryfiles related objects, services and handlers*
+* ezp/Persistence  *Persistence API (private api for now)*
+* [ezp/Stubs](/ezsystems/ezp-next/tree/master/ezp/Stubs/)  *Code stubs for common code use*
+* [ezp/User](/ezsystems/ezp-next/tree/master/ezp/User/)  *User related domain objects and services*
+* config.php-RECOMMENDED  *Default config file (currently DEVELOPMENT config)*
+* phpunit.xml  *PHPUnit 3.5+ xml configuration*
+* Readme.md  *This file*
+* testBootstrap.php  *Bootstrap for test system and testing*
 
 ##Requirements
 * php: 5.3+
