@@ -1,6 +1,6 @@
-#User module readme
+#User module
 
-The User module (ezp\User) is an module for handling users, user groups, roles and policies. It depends on ezp\Base and currently also ezp\Content, the latter because users and users groups uses the content engine as inherited from eZ Publish 4.x. However this module is modeled is such a way that persistence of users can be moved out of content model later.
+The User module (ezp\User) is an module for handling users, user groups, roles and policies. It depends on ezp\Base and currently also ezp\Content, the latter because users and users groups uses the content engine as inherited from eZ Publish 4.x. However this module is modeled is such a way that persistence of users can be moved out of content model later on.
 
 ##Overview
 ezp\User* contains a set of domain objects and a service for dealing with those, some of the domain objects have a Proxy (lazy loading) and a Concrete implementation with a interface shared between them. The Files involved are:
