@@ -12,7 +12,7 @@ ezp\User* contains a set of domain objects and a service for dealing with those,
 * [User/Groupable.php](/ezsystems/ezp-next/tree/master/ezp/User/Groupable.php)  *Groupable interface (impl can be grouped)*
 * [User/Policy.php](/ezsystems/ezp-next/tree/master/ezp/User/Policy.php)  *Concrete Policy class*
 * [User/Proxy.php](/ezsystems/ezp-next/tree/master/ezp/User/Proxy.php)  *Proxy User class, implements User*
-* ezp/User/Readme.md  *This text*
+* User/Readme.md  *This text*
 * [User/Role.php](/ezsystems/ezp-next/tree/master/ezp/User/Role.php)  *Role interface, extends ModelDefinition*
 * [User/Service.php](/ezsystems/ezp-next/tree/master/ezp/User/Service.php)  *User Service, provides methods for User operations*
 * [User.php](/ezsystems/ezp-next/tree/master/ezp/User.php)  *User interface, extends Groupable & ModelDefinition*
