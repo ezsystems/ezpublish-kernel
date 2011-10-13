@@ -17,6 +17,7 @@ ezp\User* contains a set of domain objects and a service for dealing with those,
 * ezp/User/Role.php | Role interface, extends ModelDefinition
 * ezp/User/Role/Concrete.php | Concreate Role class, implements Role interface
 * ezp/User/Role/Proxy.php |  Proxy Role class, implements Role interface
+* ezp/User/Service.php |  User Service, provides all available methods for User operations
 
 
 
