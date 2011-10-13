@@ -11,7 +11,7 @@ namespace ezp\User\Group;
 use ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
-    ezp\Base\ModelInterface,
+    ezp\Base\ModelState,
     ezp\Base\Observable,
     ezp\Base\Observer,
     ezp\Content,
@@ -28,7 +28,7 @@ use ezp\Base\Collection\Type as TypeCollection,
  * @property string $name
  * @property string description
  */
-class Concrete implements Group, Groupable, ModelInterface, Observable
+class Concrete implements Group, Groupable, ModelState, Observable
 {
     /**
      * @var array Readable of properties on this object (and writable if value is true)

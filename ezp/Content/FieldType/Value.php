@@ -8,14 +8,14 @@
  */
 
 namespace ezp\Content\FieldType;
-use ezp\Base\ModelInterface,
+use ezp\Base\ModelState,
     ezp\Base\Exception\PropertyNotFound;
 
 /**
  * Abstract class for all field value classes.
  * A field value object is to be understood with associated field type
  */
-abstract class Value implements ModelInterface
+abstract class Value implements ModelState
 {
     /**
      * Internal properties

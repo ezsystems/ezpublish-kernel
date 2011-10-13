@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Base\Proxy;
-use ezp\Base\ModelInterface,
+use ezp\Base\ModelState,
     ezp\Base\Observable as ObservableInterface,
     ezp\Base\Observer,
     ezp\Base\Proxy;
@@ -17,13 +17,13 @@ use ezp\Base\ModelInterface,
  * Model Proxy class.
  *
  * Because of lack of traits in PHP < 5.4 we introduce an intermediate class
- * for Proxy objects that need to implement Observable and ModelInterface.
+ * for Proxy objects that need to implement Observable and ModelState.
  * This might change in the future, so never check if a class implemented this abstract, only it's interfaces!
  *
  * @internal
  * @see \ezp\Base\Model
  */
-abstract class Model extends Proxy implements ObservableInterface, ModelInterface
+abstract class Model extends Proxy implements ObservableInterface, ModelState
 {
     /**
      * List of event listeners

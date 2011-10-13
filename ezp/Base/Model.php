@@ -10,7 +10,7 @@
 namespace ezp\Base;
 use ezp\Base\Observable,
     ezp\Base\Observer,
-    ezp\Base\ModelInterface,
+    ezp\Base\ModelState,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\PropertyNotFound,
@@ -47,7 +47,7 @@ use ezp\Base\Observable,
  *     $section->setState( array( 'properties' => $valueObject ) );
  *
  */
-abstract class Model implements Observable, ModelInterface
+abstract class Model implements Observable, ModelState
 {
     /**
      * Value object that serves as the property store

@@ -13,7 +13,7 @@ namespace ezp\Base;
  * Interface for domain objects
  *
  */
-interface ModelInterface
+interface ModelState
 {
     /**
      * Sets internal variables on object from array
@@ -22,7 +22,7 @@ interface ModelInterface
      *
      * @internal
      * @param array $state
-     * @return \ezp\Base\ModelInterface
+     * @return \ezp\Base\ModelState
      * @throws \ezp\Base\Exception\PropertyNotFound If one of the properties in $state is not found
      */
     public function setState( array $state );

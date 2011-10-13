@@ -16,7 +16,7 @@ use ezp\Persistence\Handler as PersistenceHandler,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\Logic,
     ezp\Base\ModelDefinition,
-    ezp\Base\ModelInterface,
+    ezp\Base\ModelState,
     ezp\Io\Handler as IoHandler,
     ezp\User,
     ezp\User\Proxy as ProxyUser;
@@ -112,14 +112,14 @@ class Repository
      *
      * @param string $function Eg: read, move, create
      * @param \ezp\Base\ModelDefinition $model An model instance
-     * @param \ezp\Base\ModelInterface $assignment An additional model instance in cases like 'assign' and so on
+     * @param \ezp\Base\ModelState $assignment An additional model instance in cases like 'assign' and so on
      * @param array $deniedBy Optional array by reference that will contain limitations that denied access for debug use
      * @return bool
      * @throws \ezp\Base\Exception\InvalidArgumentValue On invalid $function value
      * @throws \ezp\Base\Exception\BadConfiguration On missing __module__ in $model::defintion()
      * @throws \ezp\Base\Exception\Logic On limitation used in policies but not in $model::defintion()
      */
-    public function canUser( $function, ModelDefinition $model, ModelInterface $assignment = null, &$deniedBy = null )
+    public function canUser( $function, ModelDefinition $model, ModelState $assignment = null, &$deniedBy = null )
     {
         $definition = $model->definition();
         $className = get_class( $model );

@@ -9,7 +9,7 @@
 
 namespace ezp\User\Group;
 use ezp\Base\Proxy\Model as ModelProxy,
-    ezp\Base\ModelInterface,
+    ezp\Base\ModelState,
     ezp\Base\Observable,
     ezp\Base\Observer,
     ezp\User\Group,
