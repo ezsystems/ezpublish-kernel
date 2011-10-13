@@ -44,7 +44,7 @@ ezp\User* contains a set of domain objects and a service for dealing with those,
 * hiding/unhinding a subtree does not disable users or user groups, it only makes sure certain users trees are not browseable via content api's / module if a siteaccess is setup to not show hidden locations, use isEnabled
 
 ##Permissions API
-Unlike eZ Publish permissions API centers around Models, and the idea is that you at some point can extend it more directly instead of having to write your own separate module logic to extend the content model.
+Unlike eZ Publish, permissions in API centers around Models, and the idea is that you at some point can extend it more directly instead of having to write your own separate module logic to extend the content model.
 
 In your everyday work with the API you should not have to deal with the Permissions at all, they are handled by the service layer for you unless documented differently.
 
