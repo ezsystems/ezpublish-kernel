@@ -25,14 +25,14 @@ ezp\User* contains a set of domain objects and a service for dealing with those,
 
 * Multiple Group assignments are no longer supported for same reason as above, multiple assignments of users is however still fully supported. This affects retrieval of inherited policies, given a tree like this:
 
-	  User Group
-	    |- Anonymous Group
-	    |    |- Anonymous User
-	    |    |- Administrator User
-	    |
-	    |- Administrator Group
-	         |- Administrator User
-	         |- Anonymous Group
+		User Group
+		|- Anonymous Group
+		|   |- Anonymous User
+		|   |- Administrator User
+		|
+		|- Administrator Group
+		    |- Administrator User
+		    |- Anonymous Group
 
 	In this case "Administrator User" inherited policies from both groups as user is assigned to both, but "Anonymous User" does not as only the location of the user is taken into account.
 
