@@ -5,19 +5,19 @@ The User module (ezp\User) is an module for handling users, user groups, roles a
 ##Overview
 ezp\User* contains a set of domain objects and a service for dealing with those, some of the domain objects have a Proxy (lazy loading) and a Concrete implementation with a interface shared between them. The Files involved are:
 
-	ezp/User.php								| User interface, extends Groupable & ModelDefinition
-	ezp/User/Concrete.php				| Concreate User class, implements User
-	ezp/User/Proxy.php					|  Proxy User class, implements User
-	ezp/User/Group.php					| Group interface, extends Groupable
+	ezp/User.php			| User interface, extends Groupable & ModelDefinition
+	ezp/User/Concrete.php		| Concreate User class, implements User
+	ezp/User/Proxy.php		|  Proxy User class, implements User
+	ezp/User/Group.php		| Group interface, extends Groupable
 	ezp/User/Group/Concrete.php	| Concreate Group class, implements Group
-	ezp/User/Group/Proxy.php		|  Proxy Group class, implements Group
-	ezp/User/Groupable.php			| Groupable interface (impl can be grouped)
-	ezp/User/Policy.php					| Concreate Policy class
-	ezp/User/Readme.md					| This file
-	ezp/User/Role.php						| Role interface, extends ModelDefinition
-	ezp/User/Role/Concrete.php		| Concreate Role class, implements Role
-	ezp/User/Role/Proxy.php			|  Proxy Role class, implements Role
-	ezp/User/Service.php					|  User Service, provides methods for User operations
+	ezp/User/Group/Proxy.php	|  Proxy Group class, implements Group
+	ezp/User/Groupable.php		| Groupable interface (impl can be grouped)
+	ezp/User/Policy.php		| Concreate Policy class
+	ezp/User/Readme.md		| This file
+	ezp/User/Role.php		| Role interface, extends ModelDefinition
+	ezp/User/Role/Concrete.php	| Concreate Role class, implements Role
+	ezp/User/Role/Proxy.php		|  Proxy Role class, implements Role
+	ezp/User/Service.php		|  User Service, provides methods for User operations
 
 
 
