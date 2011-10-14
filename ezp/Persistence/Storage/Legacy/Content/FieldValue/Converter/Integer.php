@@ -24,7 +24,6 @@ class Integer implements Converter
     const NO_MIN_MAX_VALUE = 0;
     const HAS_MIN_VALUE = 1;
     const HAS_MAX_VALUE = 2;
-    const HAS_MIN_MAX_VALUE = 3;
 
     /**
      * Converts data from $value to $storageFieldValue
@@ -127,11 +126,10 @@ class Integer implements Converter
 
     /**
      * Returns validator state for storage definition.
-     * Validator state can be on of those:
+     * Validator state is a bitfield value composed of:
      *   - {@link self::NO_MIN_MAX_VALUE}
      *   - {@link self::HAS_MAX_VALUE}
      *   - {@link self::HAS_MIN_VALUE}
-     *   - {@link self::HAS_MIN_MAX_VALUE}
      *
      * @param int|null $minValue Minimum int value, or null if not set
      * @param int|null $maxValue Maximum int value, or null if not set
@@ -141,12 +139,11 @@ class Integer implements Converter
     {
         $state = self::NO_MIN_MAX_VALUE;
 
-        if( !isset( $minValue ) && isset( $maxValue ) )
-            $state = self::HAS_MAX_VALUE;
-        else if( isset( $minValue ) && !isset( $maxValue ) )
-            $state = self::HAS_MIN_VALUE;
-        else if ( isset( $minValue ) && isset( $maxValue ) )
-            $state = self::HAS_MIN_MAX_VALUE;
+        if ( $minValue !== null )
+            $state += self::HAS_MIN_VALUE;
+
+        if ( $maxValue !== null )
+            $state += self::HAS_MAX_VALUE;
 
         return $state;
     }
