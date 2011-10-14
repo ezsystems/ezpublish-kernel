@@ -35,7 +35,7 @@ The API is still very much work in progress, and so is documentation, hence why 
 Submitting bug reports is possible on http://issues.ez.no/ezpublish (pick the "ezp-next" component in the right column when reporting).
 
 ##Contributing
-eZ Publish API is an fully open source, community-driven project. If you'd like to contribute, please read the Contributing Code part of the documentation which includes info on our Coding Standards. If you're submitting a pull request, please follow the ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git) article on the community portal.
+eZ Publish API is an fully open source, community-driven project. If you'd like to contribute, please have a look at the [related guidance page](http://share.ez.no/get-involved/develop). You will, amongst other, learn how to make pull-requests. More on this here : ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git).
 
 ##Discussing/Exchanging##
 A dedicated forum has been set-up to discuss all PHP API-related topics : http://share.ez.no/forums/new-php-api
