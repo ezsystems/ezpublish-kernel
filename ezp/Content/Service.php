@@ -149,7 +149,7 @@ class Service extends BaseService
      */
     public function load( $contentId )
     {
-        $contentVO = $this->handler->searchHandler()->findSingle( new ContentId( $contentId ), false );//@todo Remove false if changed to handle permissions
+        $contentVO = $this->handler->searchHandler()->findSingle( new ContentId( $contentId ) );
         if ( !$contentVO instanceof ContentValue )
             throw new NotFound( 'Content', $contentId );
 
@@ -167,7 +167,7 @@ class Service extends BaseService
     public function loadVersion( $contentId, $versionNo = null )
     {
         if ( $versionNo === null )
-            $contentVO = $this->handler->searchHandler()->findSingle( new ContentId( $contentId ), false );//@todo Remove false if changed to handle permissions
+            $contentVO = $this->handler->searchHandler()->findSingle( new ContentId( $contentId ) );
         else
             $contentVO = $this->handler->contentHandler()->load( $contentId, $versionNo );
 
