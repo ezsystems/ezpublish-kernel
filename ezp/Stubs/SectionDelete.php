@@ -17,7 +17,7 @@ catch ( ezp\Base\Exception\NotFound $e )
     echo "Section ({$sectionIdentifier}) not found !";
     exit;
 }
-catch ( ValidationException $e )
+catch ( \Exception $e )
 {
     echo "Can not remove section ({$sectionIdentifier}) because {$e->getMessage()}";
     exit;

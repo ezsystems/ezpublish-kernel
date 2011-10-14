@@ -5,7 +5,7 @@
  * - Locale fre-FR has also been set in the system
  */
 
-use ezp\Content,
+use ezp\Content\Concrete as Content,
     ezp\Base\ServiceContainer,
     ezp\Base\Configuration;
 

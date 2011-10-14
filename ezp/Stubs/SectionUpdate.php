@@ -18,7 +18,7 @@ catch ( ezp\Base\Exception\NotFound $e )
     echo "Section #{$sectionId} not found !";
     exit;
 }
-catch ( ValidationException $e )
+catch ( \Exception $e )
 {
     echo "An error occurred during section update: {$e->getMessage()}";
     exit;

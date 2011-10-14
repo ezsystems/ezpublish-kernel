@@ -32,8 +32,10 @@ foreach ( $content->fields as $identifier => $value )
 // Now updating content
 $newParentLocation = $locationService->load( 43 ); // Fetch location with ID #43
 $content->addParent( $newParentLocation );
+// Use location service to store location
+
 $content->fields["name"] = "New content name";
-$contentService->update( $content );
+$contentService->update( $content, $content->getCurrentVersion() );
 
 // Countable interface for content version collection
 echo "There are now " . count( $content->versions ) . " versions for content";
