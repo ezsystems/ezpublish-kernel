@@ -1,5 +1,5 @@
 #API
-Welcome to the new eZ Publish API, this code repository contains several layers of API's, but this document will for the most part focus on the Public API.
+Welcome to the new eZ Publish API, this code repository contains several layers of API, but this document will for the most part focus on the Public API.
 
 ##What is the Public API
 The public API will give you an easy access to the content repository of eZ Publish. The content repository is the core component which manages content, locations (former Nodes), sections, content types (former Content Classes), user groups, users and roles. It also provides a new clear interface for plugging in custom field types (former Datatypes).
@@ -7,7 +7,7 @@ The public API will give you an easy access to the content repository of eZ Publ
 The public API is build on top of a layered architecture including a new persistence layer for abstracting the storage functionality. By using the public API your applications will be forward compatible to future releases based on enhanced, more scalable and more performant storage engines. Applications based on the public API are also fully backwards compatible by using the included storage engine based on the current kernel and database model.
 
 ## Alpha Notice
-The API is still very much work in progress, and so is documentation, hence why this is currently labeled as a Developer Preview. But expect both parts to get into Beta shape as we close in on the launch of Annapurna (end of November), and fully stable by the time we release Etna (Q2 2012).
+The API is still very much work in progress, and so is documentation, hence why this is currently labeled as a Developer Preview. But expect both parts to get into Beta shape as we close in on the launch of Annapurna (end of November), and fully stable by the time we release Etna (Q2 2012). But contribution is very open today, go for it !
 
 ##Directory Overview
 * [design/](/ezsystems/ezp-next/tree/master/design/)	 *Early uml class diagrams*
@@ -35,7 +35,7 @@ The API is still very much work in progress, and so is documentation, hence why 
 Submitting bug reports is possible on http://issues.ez.no/ezpublish (pick the "ezp-next" component in the right column when reporting).
 
 ##Contributing
-eZ Publish API is an fully open source, community-driven project. If you'd like to contribute, please read the Contributing Code part of the documentation witch includes info on our Coding Standards. If you're submitting a pull request, please follow the "How to contribute to eZ Publish using GIT" article on http://share.ez.no.
+eZ Publish API is an fully open source, community-driven project. If you'd like to contribute, please read the Contributing Code part of the documentation which includes info on our Coding Standards. If you're submitting a pull request, please follow the ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git) article on the community portal.
 
 ##Copyright and license
 <insert>
