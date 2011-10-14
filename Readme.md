@@ -32,7 +32,7 @@ The API is still very much work in progress, and so is documentation, hence why 
 <insert link and/or explain it briefly>
 
 ##Bug tracker
-Submitting bug reports will be made available on http://issues.ez.no shortly on the eZ Publish page with a dedicated API component.
+Submitting bug reports is possible on http://issues.ez.no/ezpublish (pick the "ezp-next" component in the right column when reporting).
 
 ##Contributing
 eZ Publish API is an fully open source, community-driven project. If you'd like to contribute, please read the Contributing Code part of the documentation witch includes info on our Coding Standards. If you're submitting a pull request, please follow the "How to contribute to eZ Publish using GIT" article on http://share.ez.no.
