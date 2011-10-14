@@ -37,5 +37,8 @@ Submitting bug reports is possible on http://issues.ez.no/ezpublish (pick the "e
 ##Contributing
 eZ Publish API is an fully open source, community-driven project. If you'd like to contribute, please read the Contributing Code part of the documentation which includes info on our Coding Standards. If you're submitting a pull request, please follow the ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git) article on the community portal.
 
+##Discussing/Exchanging##
+A dedicated forum has been set-up to discuss all PHP API-related topics : http://share.ez.no/forums/new-php-api
+
 ##Copyright and license
 <insert>
