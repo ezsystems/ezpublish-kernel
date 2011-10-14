@@ -11,7 +11,7 @@ namespace ezp\Content\FieldType\XmlText\Value;
 use ezp\Content\FieldType\XmlText\Value;
 
 /**
- * Simplified XML value for TextLine field type
+ * Simplified XML value for XmlText field type
  */
 class Simplified extends Value
 {

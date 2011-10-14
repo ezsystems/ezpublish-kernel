@@ -48,11 +48,11 @@ class Type extends FieldType implements OnContentPublish
     );
 
     private $parserClasses = array(
-            'ezp\\Content\\FieldType\\XmlText\\Value'               => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Raw',
-            'ezp\\Content\\FieldType\\XmlText\\Value\\Simplified'   => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Simplified',
-            'ezp\\Content\\FieldType\\XmlText\\Value\\OnlineEditor' => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\OnlineEditor',
-                                                                     // '\\ezp\\Content\\FieldType\\XmlText\\Input\\Parser'
-        );
+        'ezp\\Content\\FieldType\\XmlText\\Value'               => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Raw',
+        'ezp\\Content\\FieldType\\XmlText\\Value\\Simplified'   => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Simplified',
+        'ezp\\Content\\FieldType\\XmlText\\Value\\OnlineEditor' => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\OnlineEditor',
+                                                                 // '\\ezp\\Content\\FieldType\\XmlText\\Input\\Parser'
+    );
 
 
     /**
