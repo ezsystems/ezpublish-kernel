@@ -150,7 +150,7 @@ class FieldDefinition extends Model
      * // Updating a validator
      * // $allValidators is an array indexed by validator FQN
      * $allValidators = $fieldDefinition->getValidators();
-     * $validator = $allValidators["\ezp\Content\FieldType\Integer\IntegerValueValidator"];
+     * $validator = $allValidators["ezp\Content\FieldType\Integer\IntegerValueValidator"];
      * $validator->minIntegerValue = -5;
      * $fieldDefinition->setValidator( $validator );
      * </code>
