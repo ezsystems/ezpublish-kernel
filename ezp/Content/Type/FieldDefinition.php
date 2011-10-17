@@ -9,6 +9,7 @@
 
 namespace ezp\Content\Type;
 use ezp\Base\Model,
+    ezp\Base\Exception\InvalidArgumentValue,
     ezp\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition as FieldDefinitionValue,
     ezp\Content\FieldType\Factory as FieldTypeFactory,
@@ -35,7 +36,6 @@ use ezp\Base\Model,
  * @property \ezp\Content\FieldType\Value $defaultValue
  * @property-read \ezp\Content\Type $contentType ContentType object
  * @property-read \ezp\Content\FieldType $type FieldType object
- * @property-read \ezp\Content\FieldType\Validator $validators Registered validators for this field definition
  */
 class FieldDefinition extends Model
 {
@@ -63,8 +63,7 @@ class FieldDefinition extends Model
     protected $dynamicProperties = array(
         'contentType' => false,
         'type' => false,
-        'defaultValue' => true,
-        'validators' => false,
+        'defaultValue' => true
     );
 
     /**
@@ -83,6 +82,9 @@ class FieldDefinition extends Model
     protected $defaultValue;
 
     /**
+     * Array holding all the validator objects for this field definition.
+     * The array is indexed by validator FQN (Full Qualified Name), i.e. class name with namespace without first slash.
+     *
      * @var \ezp\Content\FieldType\Validator[]
      */
     protected $validators;
@@ -129,12 +131,63 @@ class FieldDefinition extends Model
     }
 
     /**
-     * Adds a validator to for this field.
+     * Sets a validator for this field.
+     * Only one kind of validator can exist at a time in a Field Definition.
+     * If a similar validator (same Full Qualified Name) already exists, it will be replaced by $validator.
+     * To update a validator, get it with {@link \ezp\Content\Type\FieldDefinition::getValidators()}, update its properties
+     * and set it again with this method.
+     *
+     * Examples:
+     * <code>
+     * // Assume $fieldDefinition is of Integer field type
+     *
+     * // Adding a new validator
+     * $validator = new \ezp\Content\FieldType\Integer\IntegerValueValidator;
+     * $validator->minIntegerValue = -6;
+     * $validator->maxIntegerValue = 6;
+     * $fieldDefinition->setValidator( $validator );
+     *
+     * // Updating a validator
+     * // $allValidators is an array indexed by validator FQN
+     * $allValidators = $fieldDefinition->getValidators();
+     * $validator = $allValidators["\ezp\Content\FieldType\Integer\IntegerValueValidator"];
+     * $validator->minIntegerValue = -5;
+     * $fieldDefinition->setValidator( $validator );
+     * </code>
      *
      * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */
-    public function addValidator( Validator $validator )
+    public function setValidator( Validator $validator )
+    {
+        $this->initializeValidators();
+        $this->type->fillConstraintsFromValidator( $this->fieldTypeConstraints, $validator );
+        $this->validators[] = $validator;
+    }
+
+    /**
+     * Returns a validator object for this field definition, identified by $validatorName
+     *
+     * @param string $validatorName Validator's FQN (Full Qualified Name, class name with namespace, without first slash).
+     *                              e.g. \ezp\Content\FieldType\Integer\IntegerValueValidator
+     * @return \ezp\Content\FieldType\Validator
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If no validator is referenced with $validatorName
+     */
+    public function getValidator( $validatorName )
+    {
+        $this->initializeValidators();
+        if ( !isset( $this->validators[$validatorName] ) )
+            throw new InvalidArgumentValue( '$validatorName', $validatorName, get_class( $this ) );
+
+        return $this->validators[$validatorName];
+    }
+
+    /**
+     * Initializes the validators map with constraints if it does not already exist.
+     *
+     * @return void
+     */
+    private function initializeValidators()
     {
         // We'll initialize the map with constraints if it does not already exist.
         if ( !isset( $this->properties->fieldTypeConstraints->validators ) )
@@ -147,9 +200,24 @@ class FieldDefinition extends Model
             if ( !isset( $this->validators ) )
                 $this->validators = $this->getValidators();
         }
+    }
 
-        $this->type->fillConstraintsFromValidator( $this->fieldTypeConstraints, $validator );
-        $this->validators[] = $validator;
+    /**
+     * Removes a validator, identified by $validatorName, from the field definition.
+     *
+     * @param string $validatorName Validator's FQN (Full Qualified Name, class name with namespace, without first slash).
+     *                              e.g. \ezp\Content\FieldType\Integer\IntegerValueValidator
+     */
+    public function removeValidator( $validatorName )
+    {
+        $this->initializeValidators();
+        if ( isset( $this->validators[$validatorName] ) )
+        {
+            unset(
+                $this->validators[$validatorName],
+                $this->properties->fieldTypeConstraints->validators[$validatorName]
+            );
+        }
     }
 
     /**
@@ -175,7 +243,7 @@ class FieldDefinition extends Model
     }
 
     /**
-     * Returns validators for current field definition
+     * Returns registered validators for current field definition
      *
      * @return \ezp\Content\FieldType\Validator[]
      */
@@ -190,7 +258,7 @@ class FieldDefinition extends Model
                 {
                     $validator = new $validatorClass;
                     $validator->initializeWithConstraints( $constraints );
-                    $this->validators[] = $validator;
+                    $this->validators[$validatorClass] = $validator;
                 }
             }
             else

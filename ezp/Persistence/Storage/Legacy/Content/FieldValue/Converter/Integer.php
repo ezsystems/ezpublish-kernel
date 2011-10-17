@@ -84,22 +84,24 @@ class Integer implements Converter
 
         if ( $storageDef->dataInt4 !== self::NO_MIN_MAX_VALUE )
         {
+            $fieldDef->fieldTypeConstraints->validators = array(
+                self::INTEGER_VALIDATOR_FQN => array( 'minIntegerValue' => false, 'maxIntegerValue' => false )
+            );
+
             if ( !empty( $storageDef->dataInt1 ) )
             {
-                $fieldDef->fieldTypeConstraints->validators = array(
-                    self::INTEGER_VALIDATOR_FQN => array( 'minIntegerValue' => $storageDef->dataInt1 )
-                );
+                $fieldDef->fieldTypeConstraints
+                         ->validators[self::INTEGER_VALIDATOR_FQN]['minIntegerValue'] = $storageDef->dataInt1;
             }
 
             if ( !empty( $storageDef->dataInt2 ) )
             {
-                $fieldDef->fieldTypeConstraints->validators = array(
-                    self::INTEGER_VALIDATOR_FQN => array( 'maxIntegerValue' => $storageDef->dataInt2 )
-                );
+                $fieldDef->fieldTypeConstraints
+                         ->validators[self::INTEGER_VALIDATOR_FQN]['maxIntegerValue'] = $storageDef->dataInt2;
             }
         }
 
-        $defaultValue = isset( $storageDef->dataInt3 ) ? $storageDef->dataText3 : 0;
+        $defaultValue = isset( $storageDef->dataInt3 ) ? $storageDef->dataInt3 : 0;
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 'defaultValue' => $defaultValue

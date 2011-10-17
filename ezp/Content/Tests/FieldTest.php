@@ -119,7 +119,7 @@ class FieldTest extends BaseContentTest
         $validator = new StringLengthValidator();
         $validator->maxStringLength = 100;
         $field = $this->fields['title'];
-        $field->fieldDefinition->addValidator( $validator );
+        $field->fieldDefinition->setValidator( $validator );
         $field->setValue( $value );
     }
 
@@ -154,7 +154,7 @@ EOT;
         $refAllowedValidators->setAccessible( true );
         $refAllowedValidators->setValue( $fieldType, array( get_class( $validator ) ) );
 
-        $field->fieldDefinition->addValidator( $validator );
+        $field->fieldDefinition->setValidator( $validator );
         $field->setValue( $value );
     }
 }
