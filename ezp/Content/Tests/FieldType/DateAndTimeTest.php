@@ -76,7 +76,8 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
             'ezp\\Content\\FieldType\\DateAndTime\\Value',
             $ft->getValue()
         );
-        self::assertNull( $ft->getValue()->value );
+        self::assertInstanceOf( 'DateTime', $ft->getValue()->value );
+        self::assertLessThanOrEqual( 1, time() - $ft->getValue()->value->getTimestamp() );
     }
 
     /**
@@ -162,10 +163,23 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
      * @group dateTime
      * @covers \ezp\Content\FieldType\DateAndTime\Value::__construct
      */
+    public function testBuildFieldValueWithStringParam()
+    {
+        $dateString = "@1048633200";
+        $value = new DateAndTimeValue( $dateString );
+        self::assertEquals( new DateTime( $dateString ), $value->value );
+    }
+
+    /**
+     * @group fieldType
+     * @group dateTime
+     * @covers \ezp\Content\FieldType\DateAndTime\Value::__construct
+     */
     public function testBuildFieldValueWithoutParam()
     {
         $value = new DateAndTimeValue;
-        self::assertNull( $value->value );
+        self::assertInstanceOf( 'DateTime', $value->value );
+        self::assertLessThanOrEqual( 1, time() - $value->value->getTimestamp() );
     }
 
     /**

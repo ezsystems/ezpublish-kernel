@@ -11,6 +11,7 @@ namespace ezp\Content\FieldType\DateAndTime;
 use ezp\Content\FieldType\ValueInterface,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\InvalidArgumentType,
     Exception,
     DateTime;
 
@@ -36,12 +37,31 @@ class Value extends BaseValue implements ValueInterface
     /**
      * Construct a new Value object and initialize with $dateTime
      *
-     * @param \DateTime $dateTime
+     * @param \DateTime|string $dateTime Date/Time as a DateTime object or a string understood by the DateTime class
+     * @throws \ezp\Base\Exception\InvalidArgumentType If $dateTime does not comply to a valid dateTime or string
+     * @throws \ezp\Base\Exception\InvalidArgumentValue If $dateTime does not comply to a valid date format string
      */
-    public function __construct( DateTime $dateTime = null )
+    public function __construct( $dateTime = "now" )
     {
         if ( $dateTime !== null )
+        {
+            if ( is_string( $dateTime ) )
+            {
+                try
+                {
+                    $dateTime = new DateTime( $dateTime );
+                }
+                catch ( Exception $e )
+                {
+                    throw new InvalidArgumentValue( '$stringValue', $stringValue, __CLASS__, $e );
+                }
+            }
+
+            if ( ! $dateTime instanceof DateTime )
+                throw new InvalidArgumentType( "dateTime", "DateTime", $dateTime );
+
             $this->value = $dateTime;
+        }
     }
 
     /**

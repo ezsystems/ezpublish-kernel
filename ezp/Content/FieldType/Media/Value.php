@@ -105,10 +105,18 @@ class Value extends BaseValue implements ValueInterface
      * $binaryValue = new BinaryFile\Value;
      * $binaryValue->file = $binaryValue->getHandler()->createFromLocalPath( '/path/to/local/file.txt' );
      * </code>
+     *
+     * @param null|string $file File to use
      */
-    public function __construct()
+    public function __construct( $file = null )
     {
         $this->handler = new Handler;
+
+        if ( $file !== null )
+        {
+            $this->file = $this->handler->createFromLocalPath( $file );
+            $this->originalFilename = basename( $file );
+        }
     }
 
     /**
@@ -117,10 +125,7 @@ class Value extends BaseValue implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
-        $value = new static();
-        $value->file = $value->handler->createFromLocalPath( $stringValue );
-        $value->originalFilename = basename( $stringValue );
-        return $value;
+        return new static( $stringValue );
     }
 
     /**

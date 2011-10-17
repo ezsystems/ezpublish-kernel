@@ -38,19 +38,18 @@ abstract class Factory
     }
 
     /**
-     * Builds a field value object for a field type from $stringValue.
+     * Builds a field value object for a field type from a $plainValue.
      * Field type is identified by $fieldTypeIdentifier (e.g. "ezstring").
-     * String format for $stringValue is entirely up to the field type value object.
+     * Format for $plainValue is entirely up to the field type value object.
      *
      * @param string $fieldTypeIdentifier
-     * @param string $stringValue
+     * @param mixed $plainValue
      * @return \ezp\Content\FieldType\Value
      */
-    public static function buildValueFromString( $fieldTypeIdentifier, $stringValue )
+    public static function buildValueFromPlain( $fieldTypeIdentifier, $plainValue )
     {
-        $fieldTypeNS = self::getFieldTypeNamespace( $fieldTypeIdentifier );
-        $fieldValueClass = "$fieldTypeNS\\Value";
-        return $fieldValueClass::fromString( $stringValue );
+        $fieldValueClass = self::getFieldTypeNamespace( $fieldTypeIdentifier ) . "\\Value";
+        return new $fieldValueClass( $plainValue );
     }
 
     /**

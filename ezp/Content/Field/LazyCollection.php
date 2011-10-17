@@ -51,12 +51,9 @@ class LazyCollection extends Lazy
         $field = $this->offsetGet( $identifier );
         if ( !$value instanceof FieldValue )
         {
-            if ( !is_scalar( $value ) )
-                throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\Value or scalar', $value );
-
-            $value = FieldTypeFactory::buildValueFromString(
+            $value = FieldTypeFactory::buildValueFromPlain(
                 $field->fieldDefinition->fieldType,
-                (string)$value
+                $value
             );
         }
 

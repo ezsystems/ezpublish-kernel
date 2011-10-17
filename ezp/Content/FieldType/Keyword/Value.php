@@ -26,12 +26,26 @@ class Value extends BaseValue implements ValueInterface
     /**
      * Construct a new Value object and initialize with $values
      *
-     * @param string[] $values
+     * @param string[]|string $values
      */
-    public function __construct( array $values = null )
+    public function __construct( $values = null )
     {
         if ( $values !== null )
-            $this->values = $values;
+        {
+            if ( !is_array( $values ) )
+            {
+                $tags = array();
+                foreach ( explode( ',', $stringValue ) as $tag )
+                {
+                    $tag = trim( $tag );
+                    if ( $tag )
+                        $tags[] = $tag;
+                }
+                $values = $tags;
+            }
+
+            $this->values = array_unique( $values );
+        }
     }
 
     /**
@@ -44,15 +58,7 @@ class Value extends BaseValue implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
-        $tags = array();
-        foreach ( explode( ',', $stringValue ) as $tag )
-        {
-            $tag = trim( $tag );
-            if ( $tag )
-                $tags[] = $tag;
-        }
-
-        return new static( array_unique( $tags ) );
+        return new static( $stringValue );
     }
 
     /**
