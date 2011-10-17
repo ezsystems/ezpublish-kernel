@@ -267,8 +267,7 @@ class NamePatternResolver
      */
     private function tokenParts( $token )
     {
-        $tokenParts = preg_split( '#\W#', $token, -1, PREG_SPLIT_NO_EMPTY );
-        return $tokenParts;
+        return preg_split( '#\\W#', $token, -1, PREG_SPLIT_NO_EMPTY );
     }
 
     /**
@@ -285,7 +284,7 @@ class NamePatternResolver
     private function filterNamePattern( $namePattern )
     {
         $retNamePattern = "";
-        $foundGroups = preg_match_all( "/[<|\|](\(.+\))[\||>]/U", $namePattern, $groupArray );
+        $foundGroups = preg_match_all( "/[<|\\|](\\(.+\\))[\\||>]/U", $namePattern, $groupArray );
 
         if ( $foundGroups )
         {
@@ -319,7 +318,7 @@ class NamePatternResolver
     private function getIdentifiers( $patternString )
     {
         $allTokens = '#<(.*)>#U';
-        $identifiers = '#\W#';
+        $identifiers = '#\\W#';
 
         $tmpArray = array();
         preg_match_all( $allTokens, $patternString, $matches );

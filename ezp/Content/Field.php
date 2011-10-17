@@ -193,12 +193,12 @@ class Field extends Model implements Observer
             case 'post_publish':
                 if ( !$subject instanceof Version )
                 {
-                    throw new InvalidArgumentType( 'version', 'ezp\Content\Version', null );
+                    throw new InvalidArgumentType( 'version', 'ezp\\Content\\Version', null );
                 }
 
                 if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof Repository )
                 {
-                    throw new InvalidArgumentType( 'repository', 'ezp\Base\Repository', null );
+                    throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
                 }
 
                 // notify FieldTypes about the event

@@ -45,7 +45,7 @@ class FileInfo extends SplFileInfo
      */
     public function getExtension()
     {
-        if ( method_exists( '\SplFileInfo', 'getExtension' ) )
+        if ( method_exists( 'SplFileInfo', 'getExtension' ) )
         {
             return parent::getExtension();
         }

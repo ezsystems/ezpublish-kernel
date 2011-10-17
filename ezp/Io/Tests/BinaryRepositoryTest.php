@@ -60,10 +60,10 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
         $repositoryPath = 'var/test/storage/images/ezplogo.gif';
         $binaryFile = $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
 
-        self::assertInstanceOf( 'ezp\Io\BinaryFile', $binaryFile );
+        self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $binaryFile );
         self::assertEquals( $repositoryPath, $binaryFile->path );
         self::assertEquals( 1928, $binaryFile->size );
-        self::assertInstanceOf( '\DateTime', $binaryFile->mtime );
+        self::assertInstanceOf( 'DateTime', $binaryFile->mtime );
         self::assertNotEquals( 0, $binaryFile->mtime->getTimestamp() );
         self::assertEquals( new ContentType( 'image', 'gif' ), $binaryFile->contentType );
     }
@@ -126,12 +126,12 @@ class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
 
         $loadedFile = $this->binaryService->load( $repositoryPath );
 
-        self::assertInstanceOf( 'ezp\Io\BinaryFile', $loadedFile );
+        self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $loadedFile );
 
         self::assertEquals( 'var/test/storage/load.gif', $loadedFile->path );
         self::assertEquals( 1928, $loadedFile->size );
-        self::assertInstanceOf( '\DateTime', $loadedFile->mtime );
-        self::assertInstanceOf( '\DateTime', $loadedFile->ctime );
+        self::assertInstanceOf( 'DateTime', $loadedFile->mtime );
+        self::assertInstanceOf( 'DateTime', $loadedFile->ctime );
         self::assertEquals( new ContentType( 'image', 'gif' ), $loadedFile->contentType );
     }
 

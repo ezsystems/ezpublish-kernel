@@ -106,7 +106,7 @@ class FullText extends CriterionHandler
         return array_filter(
             array_map(
                 'trim',
-                preg_split( '(\p{Z})u', strtr( $string, '\'"', '' ) )
+                preg_split( '(\\p{Z})u', strtr( $string, '\'"', '' ) )
             )
         );
     }

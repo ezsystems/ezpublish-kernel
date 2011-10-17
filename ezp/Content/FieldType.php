@@ -294,11 +294,11 @@ abstract class FieldType implements Observer
             case 'post_publish':
                 if ( !$subject instanceof Field )
                 {
-                    throw new InvalidArgumentType( 'subject', 'ezp\Content\Field', $subject );
+                    throw new InvalidArgumentType( 'subject', 'ezp\\Content\\Field', $subject );
                 }
                 if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof Repository )
                 {
-                    throw new InvalidArgumentType( 'repository', 'ezp\Base\Repository', null );
+                    throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
                 }
                 $this->onContentPublish( $arguments['repository'], $subject );
             break;
