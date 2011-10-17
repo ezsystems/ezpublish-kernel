@@ -100,6 +100,7 @@ class Concrete extends Model implements Content
         // in Content/Version/Concrete for the following properties:
         'modified' => true,
         'published' => true,
+        'initialLanguageId' => false,
     );
 
     /**
@@ -118,8 +119,7 @@ class Concrete extends Model implements Content
         'relations' => false,
         'reverseRelations' => false,
         'currentVersion' => false,
-        'initialLanguage' => true,
-        'initialLanguageId' => true,
+        'initialLanguage' => false,
     );
 
     /**
@@ -696,15 +696,6 @@ class Concrete extends Model implements Content
     public function getReverseRelations()
     {
         return $this->reverseRelations;
-    }
-
-    /**
-     * Gets the initial language Id
-     * @return mixed
-     */
-    protected function getInitialLanguageId()
-    {
-        return $this->initialLanguage->id;
     }
 
     /**

@@ -113,6 +113,7 @@ class Concrete extends Model implements Version
             array(
                 'contentId' => $content->id,
                 'status' => self::STATUS_DRAFT,
+                'initialLanguageId' => $content->initialLanguageId
             )
         );
         $this->content = $content;
