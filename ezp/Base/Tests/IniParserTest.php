@@ -160,7 +160,7 @@ empty-array[]';
      *
      * @covers \ezp\Base\Configuration\Parser\Ini::parseFilePhp
      * @covers \ezp\Base\Configuration\Parser\Ini::parseFileEzc
-     * @covers \ezp\Base\Configuration\Parser\Ini::parserPhpTwoDimensionArraySupport
+     * @covers \ezp\Base\Configuration\Parser\Ini::parserPhpDimensionArraySupport
      * @covers \ezp\Base\Configuration\Parser\Ini::parsePhpPostFilter
      */
     public function testComplexHash()
