@@ -24,6 +24,7 @@ use ezp\Base\Service as BaseService,
     ezp\Content\Type\Group\Concrete as ConcreteGroup,
     ezp\Content\Type\Group\Proxy as ProxyGroup,
     ezp\Content\Type\FieldDefinition,
+    ezp\Content\FieldType\Value as FieldTypeValue,
     ezp\Persistence\Content\Type as TypeValue,
     ezp\Persistence\Content\Type\CreateStruct,
     ezp\Persistence\Content\Type\UpdateStruct,
@@ -554,7 +555,10 @@ class Service extends BaseService
         foreach ( $vo->fieldDefinitions as $fieldDefinitionVo )
         {
             $fieldDefinition = new FieldDefinition( $type, $fieldDefinitionVo->fieldType );
-            $fields[] = $fieldDefinition->setState( array( 'properties' => $fieldDefinitionVo ) );
+            $fieldDefinition->setState( array( 'properties' => $fieldDefinitionVo ) );
+            if ( isset( $fieldDefinitionVo->defaultValue->data ) )
+                $fieldDefinition->setDefaultValue( $fieldDefinitionVo->defaultValue->data );
+            $fields[] = $fieldDefinition;
         }
         $groups = array();
         foreach ( $vo->groupIds as $groupId )
