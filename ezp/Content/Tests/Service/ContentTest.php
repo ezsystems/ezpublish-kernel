@@ -967,7 +967,7 @@ class ContentTest extends BaseServiceTest
 
     /**
      * Tests content name generation
-     * @covers \ezp\Content\Service\generateContentName
+     * @covers \ezp\Content\Service::generateContentName
      */
     public function testGenerateContentName()
     {
