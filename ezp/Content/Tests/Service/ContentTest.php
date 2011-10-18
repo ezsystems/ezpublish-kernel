@@ -896,19 +896,19 @@ class ContentTest extends BaseServiceTest
 
         $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
-        $content->fields['name'] = __METHOD__;
         $content->setSection( $section );
 
         $content = $this->repository->getContentService()->create( $content );
 
         $version = $content->getCurrentVersion();
+        $version->fields['name'] = __METHOD__;
 
         self::assertEquals( Version::STATUS_DRAFT, $version->status );
 
-        $publishedContent = $this->service->publish( $version );
+        $publishedVersion = $this->service->publish( $version )->getCurrentVersion();
 
-        self::assertEquals( Version::STATUS_PUBLISHED, $publishedContent->getCurrentVersion()->status );
-        self::assertEquals( array( 'eng-GB' => __METHOD__ ), $publishedContent->name );
+        self::assertEquals( Version::STATUS_PUBLISHED, $publishedVersion->status );
+        self::assertEquals( array( 'eng-GB' => __METHOD__ ), $publishedVersion->name );
     }
 
     /**
@@ -945,7 +945,6 @@ class ContentTest extends BaseServiceTest
         // Create and publish content in version 1
         $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
-        $content->fields['name'] = __METHOD__;
         $content->setSection( $section );
 
         $content = $this->repository->getContentService()->create( $content );
@@ -953,6 +952,7 @@ class ContentTest extends BaseServiceTest
         $content = $this->service->publish( $content->getCurrentVersion() );
 
         $version = $this->service->createDraftFromVersion( $content );
+        $version->fields['name'] = __METHOD__;
 
         self::assertEquals( 1, $content->currentVersionNo );
         self::assertEquals( Version::STATUS_DRAFT, $version->status );
@@ -975,7 +975,8 @@ class ContentTest extends BaseServiceTest
 
         $folderName = 'This is a regular name';
         $content = new ConcreteContent( $type, $this->anonymousUser );
-        $content->fields['name'] = $folderName;
+        $version = $content->getCurrentVersion();
+        $version->fields['name'] = $folderName;
 
         $service = $this->repository->getContentService();
         $refService = new ReflectionObject( $service );
@@ -983,11 +984,11 @@ class ContentTest extends BaseServiceTest
         $refMethod->setAccessible( true );
 
         // Content name for folder is <short_name|name> by default
-        self::assertSame( $folderName, $refMethod->invoke( $service, $content->getCurrentVersion() ) );
+        self::assertSame( $folderName, $refMethod->invoke( $service, $version ) );
 
         // Adding a short name, content name generation should take it
         $folderShortName = 'This one is short';
-        $content->fields['short_name'] = $folderShortName;
-        self::assertSame( $folderShortName, $refMethod->invoke( $service, $content->getCurrentVersion() ) );
+        $version->fields['short_name'] = $folderShortName;
+        self::assertSame( $folderShortName, $refMethod->invoke( $service, $version ) );
     }
 }

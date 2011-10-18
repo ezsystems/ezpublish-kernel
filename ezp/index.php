@@ -38,8 +38,9 @@ $section = $repository->getSectionService()->load( 1 );
 // Create Content object
 $content = new Content( $contentType, $anonymous );
 $content->setSection( $section );
-$content->fields['name'] = 'New Folder';
-$content->fields['description'] = 'This is an empty folder';
+$version = $content->getCurrentVersion();
+$version->fields['name'] = 'New Folder';
+$version->fields['description'] = 'This is an empty folder';
 
 //$content = $repository->getContentService()->create( $content );
 
@@ -47,7 +48,7 @@ $content->fields['description'] = 'This is an empty folder';
 echo "Content id: {$content->id}<br />";
 
 echo "Fields:<br />";
-foreach ( $content->fields as $identifier => $field )
+foreach ( $version->fields as $identifier => $field )
 {
     echo " > $identifier: {$field}<br />";// Using $value __toString()
 }
