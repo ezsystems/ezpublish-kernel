@@ -135,7 +135,7 @@ class Manager extends Carpet
             )
         );
         if ( isset( $aliasListForLegacy['original']['info'] ) && $aliasListForLegacy['original']['info'] !== false )
-            $alias->info = $this->buildImageData ( $aliasListForLegacy['original']['info'] );
+            $alias->info = $this->buildImageData( $aliasListForLegacy['original']['info'] );
 
         return $alias;
     }
