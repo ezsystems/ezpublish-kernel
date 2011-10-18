@@ -27,11 +27,6 @@ class Content extends ValueObject
     public $status;
 
     /**
-     * @var string[]
-     */
-    public $name;
-
-    /**
      * @var int
      */
     public $typeId;

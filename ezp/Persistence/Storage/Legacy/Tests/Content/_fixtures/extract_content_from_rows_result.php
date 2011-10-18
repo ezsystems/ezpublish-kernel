@@ -8,7 +8,6 @@ use ezp\Persistence\Content,
 
 $content = new Content();
 $content->id = 226;
-$content->name = 'Something';
 $content->typeId = 16;
 $content->sectionId = 1;
 $content->ownerId = 14;
@@ -22,6 +21,7 @@ $content->initialLanguageId = 2;
 
 $version = new Version();
 $version->id = 675;
+$version->name = 'Something';
 $version->versionNo = 1;
 $version->modified = 1313047907;
 $version->creatorId = 14;

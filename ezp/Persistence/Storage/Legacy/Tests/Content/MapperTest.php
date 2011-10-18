@@ -70,7 +70,7 @@ class MapperTest extends TestCase
         $this->assertStructsEqual(
             $struct,
             $content,
-            array( 'name', 'typeId', 'sectionId', 'ownerId', 'alwaysAvailable',
+            array( 'typeId', 'sectionId', 'ownerId', 'alwaysAvailable',
             'remoteId', 'initialLanguageId', 'published', 'modified' )
         );
         $this->assertEquals( 1, $content->currentVersionNo );
@@ -164,29 +164,28 @@ class MapperTest extends TestCase
      */
     protected function getContentFixture()
     {
-        $struct = new Content();
+        $content = new Content();
 
-        $struct->id = 2342;
-        $struct->name = 'Content name';
-        $struct->typeId = 23;
-        $struct->sectionId = 42;
-        $struct->ownerId = 13;
-        $struct->locations = array();
+        $content->id = 2342;
+        $content->typeId = 23;
+        $content->sectionId = 42;
+        $content->ownerId = 13;
+        $content->locations = array();
 
-        return $struct;
+        return $content;
     }
 
     protected function getFullContentFixture()
     {
-        $struct = $this->getContentFixture();
+        $content = $this->getContentFixture();
 
-        $struct->version = new Content\Version(
+        $content->version = new Content\Version(
             array(
                 'versionNo' => 1,
             )
         );
 
-        return $struct;
+        return $content;
     }
 
     /**
@@ -384,7 +383,7 @@ class MapperTest extends TestCase
         $this->assertStructsEqual(
             $data['original'],
             $data['result'],
-            array( 'name', 'typeId', 'sectionId', 'ownerId', 'alwaysAvailable',
+            array( 'typeId', 'sectionId', 'ownerId', 'alwaysAvailable',
             'remoteId', 'initialLanguageId', 'published', 'modified' )
         );
     }
@@ -483,6 +482,7 @@ class MapperTest extends TestCase
 
         $version = new RestrictedVersion();
         $version->id = 675;
+        $version->name = "Something";
         $version->versionNo = 1;
         $version->modified = 1313047907;
         $version->creatorId = 14;
@@ -495,6 +495,7 @@ class MapperTest extends TestCase
 
         $version = new RestrictedVersion();
         $version->id = 676;
+        $version->name = "Something";
         $version->versionNo = 2;
         $version->modified = 1313061404;
         $version->creatorId = 14;

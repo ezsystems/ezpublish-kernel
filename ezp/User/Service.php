@@ -196,7 +196,6 @@ class Service extends BaseService
 
         $fields['name'] = $name;
         $fields['description'] = $description;
-        $content->name = array( 'eng-GB' => $name );// @todo remove when name handler is in place
 
         return $this->buildGroup( $this->repository->getContentService()->create( $content ) );
     }

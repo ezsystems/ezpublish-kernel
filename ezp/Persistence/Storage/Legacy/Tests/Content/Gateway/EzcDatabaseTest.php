@@ -118,27 +118,27 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      */
     protected function getContentFixture()
     {
-        $struct = new Content();
+        $content = new Content();
 
-        $struct->name = array(
+        $content->typeId = 23;
+        $content->sectionId = 42;
+        $content->ownerId = 13;
+        $content->currentVersionNo = 2;
+        $content->initialLanguageId = 1;
+        $content->remoteId = 'some_remote_id';
+        $content->alwaysAvailable = true;
+        $content->published = 123;
+        $content->modified = 456;
+        $content->status = 2;
+
+        $content->version = new Version();
+        $content->version->name = array(
             'always-available' => 'eng-US',
             'eng-US' => 'Content name',
         );
-        $struct->typeId = 23;
-        $struct->sectionId = 42;
-        $struct->ownerId = 13;
-        $struct->currentVersionNo = 2;
-        $struct->initialLanguageId = 1;
-        $struct->remoteId = 'some_remote_id';
-        $struct->alwaysAvailable = true;
-        $struct->published = 123;
-        $struct->modified = 456;
-        $struct->status = 2;
+        $content->locations = array();
 
-        $struct->version = new Version();
-        $struct->locations = array();
-
-        return $struct;
+        return $content;
     }
 
     /**

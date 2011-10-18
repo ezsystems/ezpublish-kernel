@@ -58,7 +58,6 @@ class ContentHandler implements ContentHandlerInterface
     {
         $contentObj = $this->backend->create(
             'Content', array(
-                'name' => $content->name,
                 'typeId' => $content->typeId,
                 'sectionId' => $content->sectionId,
                 'ownerId' => $content->ownerId,
@@ -72,6 +71,8 @@ class ContentHandler implements ContentHandlerInterface
         $version = $this->backend->create(
             'Content\\Version',
             array(
+                // @todo: Name should be computed!
+                'name' => $content->name,
                 'modified' => $time,
                 'creatorId' => $content->ownerId,
                 'created' => $time,
@@ -181,7 +182,6 @@ class ContentHandler implements ContentHandlerInterface
         $currentVersionNo = $versionNo === false ? $content->currentVersionNo : $versionNo;
         $contentObj = $this->backend->create(
             "Content", array(
-                "name" => $content->name,
                 "typeId" => $content->typeId,
                 "sectionId" => $content->sectionId,
                 "ownerId" => $content->ownerId,
@@ -203,6 +203,7 @@ class ContentHandler implements ContentHandlerInterface
             $this->backend->create(
                 "Content\\Version",
                 array(
+                    "name" => $version->name,
                     "versionNo" => $version->versionNo,
                     "modified" => $time,
                     "creatorId" => $version->creatorId,
@@ -324,7 +325,6 @@ class ContentHandler implements ContentHandlerInterface
             $content->id,
             array(
                 "ownerId" => $content->ownerId,
-                "name" => $content->name,
             )
         );
 
@@ -332,6 +332,7 @@ class ContentHandler implements ContentHandlerInterface
             'Content\\Version',
             array( 'contentId' => $content->id, 'versionNo' => $content->versionNo ),
             array(
+                "name" => $content->name,
                 "creatorId" => $content->creatorId,
                 "modified" => $content->modified,
             )
@@ -533,9 +534,7 @@ class ContentHandler implements ContentHandlerInterface
      * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
      * $updateStruct->id as the published one.
      *
-     * The UpdateStruct will also contain an array of Content name indexed by Locale.
-     *
-     * @param \ezp\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
+     * @param \ezp\Persistence\Content\UpdateStruct An UpdateStruct with id and versionNo
      *
      * @return \ezp\Persistence\Content The published Content
      */
@@ -546,7 +545,17 @@ class ContentHandler implements ContentHandlerInterface
             "Content", $updateStruct->id,
             array(
                 'currentVersionNo' => $updateStruct->versionNo,
-                'name' => $updateStruct->name
+            )
+        );
+        
+        // Change the currentVersionNo to the published version
+        $this->backend->updateByMatch(
+            'Content\\Version',
+            array( 'contentId' => $updateStruct->id, 'versionNo' => $updateStruct->versionNo ),
+            array(
+                "name" => $updateStruct->name,
+                "creatorId" => $updateStruct->creatorId,
+                "modified" => $updateStruct->modified,
             )
         );
 

@@ -93,7 +93,6 @@ class ContentSearchTest extends BaseServiceTest
         for ( $i = 0; $i < 10; ++$i )
         {
             $content = new ConcreteContent( $type, new ProxyUser( 14, $this->repository->getUserService() ) );
-            $content->name = array( "eng-GB" => "foo$i" );
             $content->setSection( $section );
             $fields = $content->getCurrentVersion()->getFields();
             $fields['name'] = "bar$i";
