@@ -40,6 +40,11 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
     public static function providerForTestCriterionGetter()
     {
         $fieldIdentifier = new Criterion\FieldIdentifierStruct( 'testtype', 'testfield' );
+        $time = time();
+        $lastMonth = strtotime( "last month" );
+        $lastWeek = strtotime( "last week" );
+        $today = strtotime( "today" );
+        $yesterday = strtotime( "yesterday" );
 
         return array(
             array( 'contentId', 'in', array( array( 1, 2 )  ) ),
@@ -68,20 +73,20 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
             array( 'parentLocationId', 'eq', array( 1 ) ),
             array( 'parentLocationId', 'in', array( array( 1, 2, 3 ) ) ),
 
-            array( 'dateMetadata', 'eq', array( 'modified', time() ) ),
-            array( 'dateMetadata', 'eq', array( 'created', time() ) ),
-            array( 'dateMetadata', 'gt', array( 'modified', time() ) ),
-            array( 'dateMetadata', 'gt', array( 'created', time() ) ),
-            array( 'dateMetadata', 'gte', array( 'modified', time() ) ),
-            array( 'dateMetadata', 'gte', array( 'created', time() ) ),
-            array( 'dateMetadata', 'lt', array( 'modified', time() ) ),
-            array( 'dateMetadata', 'lt', array( 'created', time() ) ),
-            array( 'dateMetadata', 'lte', array( 'modified', time() ) ),
-            array( 'dateMetadata', 'lte', array( 'created', time() ) ),
-            array( 'dateMetadata', 'between', array( 'modified', strtotime( 'last month' ), strtotime( 'last week' ) ) ),
-            array( 'dateMetadata', 'between', array( 'created', strtotime( 'last month' ), strtotime( 'last week' ) ) ),
-            array( 'dateMetadata', 'in', array( 'modified', array( strtotime( 'today' ), strtotime( 'yesterday' ) ) ) ),
-            array( 'dateMetadata', 'in', array( 'created', array( strtotime( 'today' ), strtotime( 'yesterday' ) ) ) ),
+            array( 'dateMetadata', 'eq', array( 'modified', $time ) ),
+            array( 'dateMetadata', 'eq', array( 'created', $time ) ),
+            array( 'dateMetadata', 'gt', array( 'modified', $time ) ),
+            array( 'dateMetadata', 'gt', array( 'created', $time ) ),
+            array( 'dateMetadata', 'gte', array( 'modified', $time ) ),
+            array( 'dateMetadata', 'gte', array( 'created', $time ) ),
+            array( 'dateMetadata', 'lt', array( 'modified', $time ) ),
+            array( 'dateMetadata', 'lt', array( 'created', $time ) ),
+            array( 'dateMetadata', 'lte', array( 'modified', $time ) ),
+            array( 'dateMetadata', 'lte', array( 'created', $time ) ),
+            array( 'dateMetadata', 'between', array( 'modified', $lastMonth, $lastWeek ) ),
+            array( 'dateMetadata', 'between', array( 'created', $lastMonth, $lastWeek ) ),
+            array( 'dateMetadata', 'in', array( 'modified', array( $today, $yesterday ) ) ),
+            array( 'dateMetadata', 'in', array( 'created', array( $today, $yesterday ) ) ),
 
             array( 'remoteId', 'in', array( array( 1, 2 ) ) ),
             array( 'remoteId', 'eq', array( 1 ) ),

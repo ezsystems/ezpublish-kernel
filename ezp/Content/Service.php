@@ -579,8 +579,7 @@ class Service extends BaseService
 
         // @todo Make it possible to get these from the public API (set on the Content)
         // Default should still be the current time()
-        $updateStruct->published = time();
-        $updateStruct->modified = time();
+        $updateStruct->modified = $updateStruct->published = time();
 
         // @todo : Take translations into account instead of hardcoding eng-GB :)
         $updateStruct->name = array(

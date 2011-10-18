@@ -68,12 +68,13 @@ class ContentHandler implements ContentHandlerInterface
                 'published' => $content->published,
             )
         );
+        $time = time();
         $version = $this->backend->create(
             'Content\\Version',
             array(
-                'modified' => time(),
+                'modified' => $time,
                 'creatorId' => $content->ownerId,
-                'created' => time(),
+                'created' => $time,
                 'contentId' => $contentObj->id,
                 'status' => Version::STATUS_DRAFT,
                 'versionNo' => 1
@@ -125,13 +126,14 @@ class ContentHandler implements ContentHandlerInterface
 
         // Create new version
         $newVersionNo = $this->getLastVersionNumber( $contentId ) + 1;
+        $time = time();
         $newVersion = $this->backend->create(
             'Content\\Version',
             array(
-                'modified' => time(),
+                'modified' => $time,
                 // @todo: implement real user
                 'creatorId' => $aVersion[0]->creatorId,
-                'created' => time(),
+                'created' => $time,
                 'contentId' => $contentId,
                 'status' => Version::STATUS_DRAFT,
                 'versionNo' => $newVersionNo
@@ -188,6 +190,7 @@ class ContentHandler implements ContentHandlerInterface
             )
         );
 
+        $time = time();
         // Copy version(s)
         foreach (
             $this->backend->find(
@@ -201,9 +204,9 @@ class ContentHandler implements ContentHandlerInterface
                 "Content\\Version",
                 array(
                     "versionNo" => $version->versionNo,
-                    "modified" => time(),
+                    "modified" => $time,
                     "creatorId" => $version->creatorId,
-                    "created" => time(),
+                    "created" => $time,
                     "contentId" => $contentObj->id,
                     "status" => $version->status,
                 )

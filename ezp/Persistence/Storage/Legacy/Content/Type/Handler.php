@@ -301,9 +301,8 @@ class Handler implements BaseContentTypeHandler
             $this->load( $contentTypeId, $status )
         );
         $createStruct->modifierId = $userId;
-        $createStruct->modified = time();
+        $createStruct->created = $createStruct->modified = time();
         $createStruct->creatorId = $userId;
-        $createStruct->created = time();
 
         return $this->create( $createStruct );
     }
