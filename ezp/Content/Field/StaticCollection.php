@@ -64,7 +64,7 @@ class StaticCollection extends TypeCollection
         $field = $this->offsetGet( $identifier );
         if ( !$value instanceof FieldValue )
         {
-            $value = FieldTypeFactory::buildValueFromPlain(
+            $value = FieldTypeFactory::buildValue(
                 $field->fieldDefinition->fieldType,
                 $value
             );

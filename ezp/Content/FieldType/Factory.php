@@ -46,7 +46,7 @@ abstract class Factory
      * @param mixed $plainValue
      * @return \ezp\Content\FieldType\Value
      */
-    public static function buildValueFromPlain( $fieldTypeIdentifier, $plainValue )
+    public static function buildValue( $fieldTypeIdentifier, $plainValue )
     {
         $fieldValueClass = self::getFieldTypeNamespace( $fieldTypeIdentifier ) . "\\Value";
         return new $fieldValueClass( $plainValue );
