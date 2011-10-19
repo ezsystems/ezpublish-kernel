@@ -19,8 +19,6 @@ use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
 
 class XmlText implements Converter
 {
-    // const STRING_LENGTH_VALIDATOR_FQN = 'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator';
-
     /**
      * Converts data from $value to $storageFieldValue
      *
@@ -51,11 +49,8 @@ class XmlText implements Converter
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDefinition, StorageFieldDefinition $storageDefinition )
     {
-        if ( isset( $fieldDefinition->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'] ) )
-        {
-            $storageDefinition->dataInt1 = $fieldDefinition->fieldTypeConstraints->validators[self::STRING_LENGTH_VALIDATOR_FQN]['maxStringLength'];
-        }
-
+        $storageDefinition->dataInt1 = $fieldDefinition->fieldTypeConstraints->fieldSettings['numRows'];
+        $storageDefinition->dataText2 = $fieldDefinition->fieldTypeConstraints->fieldSettings['tagPreset'];
         $storageDefinition->dataText1 = $fieldDefinition->fieldTypeConstraints->fieldSettings['defaultText'];
     }
 
@@ -79,6 +74,11 @@ class XmlText implements Converter
         if ( !empty( $storageDefinition->dataText2 ) )
         {
             $settingsArray['tagPreset'] = $storageDefinition->dataText2;
+        }
+
+        if ( !empty( $storageDefinition->dataText1 ) )
+        {
+            $settingsArray['defaultText'] = $storageDefinition->dataText1;
         }
 
         $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings( $settingsArray );
