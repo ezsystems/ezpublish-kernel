@@ -135,6 +135,7 @@ class ContentSearchTest extends BaseServiceTest
 
         $result = $this->service->find( $qb->getQuery() );
         self::assertInstanceOf( 'ezp\\Content\\Search\\Result', $result );
+        self::assertEquals( 10, count( $result ) );
         foreach ( $result as $key => $content )
         {
             $originalVo = $this->expectedContent[$key]->getState( 'properties' );
