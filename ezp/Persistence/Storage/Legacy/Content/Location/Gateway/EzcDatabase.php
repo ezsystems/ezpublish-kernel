@@ -444,7 +444,7 @@ class EzcDatabase extends Gateway
                 $query->bindValue( $location->parentId = $parentNode['node_id'], null, \PDO::PARAM_INT )
             )->set(
                 $this->handler->quoteColumn( 'path_identification_string' ),
-                $query->bindValue( null ) // Set later by the publishing operation
+                $query->bindValue( null ) // Set after creation
             )->set(
                 $this->handler->quoteColumn( 'path_string' ),
                 $query->bindValue( 'dummy' ) // Set later
@@ -464,6 +464,7 @@ class EzcDatabase extends Gateway
         $query->prepare()->execute();
 
         $location->id = $this->handler->lastInsertId( $this->handler->getSequenceName( 'ezcontentobject_tree', 'node_id' ) );
+
         $location->mainLocationId = $createStruct->mainLocationId === true ? $location->id : $createStruct->mainLocationId;
         $query = $this->handler->createUpdateQuery();
         $query
@@ -493,11 +494,12 @@ class EzcDatabase extends Gateway
      * @param CreateStruct $createStruct
      * @param mixed $parentNodeId
      * @param int $type
-     * @param bool $isMain Wether the node assignment is a main one or a secondary one
      * @return void
      */
-    public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP, $isMain = false )
+    public function createNodeAssignment( CreateStruct $createStruct, $parentNodeId, $type = self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP )
     {
+        $isMain = ( $createStruct->mainLocationId === true ? 1 : 0 );
+
         $query = $this->handler->createInsertQuery();
         $query
             ->insertInto( $this->handler->quoteTable( 'eznode_assignment' ) )
@@ -515,7 +517,7 @@ class EzcDatabase extends Gateway
                 $this->handler->getAutoIncrementValue( 'eznode_assignment', 'id' )
             )->set(
                 $this->handler->quoteColumn( 'is_main' ),
-                $query->bindValue( (int)$isMain, null, \PDO::PARAM_INT ) // Changed by the business layer, later
+                $query->bindValue( $isMain, null, \PDO::PARAM_INT ) // Changed by the business layer, later
             )->set(
                 $this->handler->quoteColumn( 'op_code' ),
                 $query->bindValue( $type, null, \PDO::PARAM_INT )
@@ -606,19 +608,29 @@ class EzcDatabase extends Gateway
                         $query->bindValue( self::NODE_ASSIGNMENT_OP_CODE_CREATE, null, \PDO::PARAM_INT )
                     )
                 )
-            );
+            )->orderBy( 'id' );
         $statement = $query->prepare();
         $statement->execute();
 
         // convert all these assignments to nodes
+        $nodeMainLocationId = false;
+
         while ( $row = $statement->fetch( \PDO::FETCH_ASSOC ) )
         {
+            if ( (bool)$row['is_main'] === true )
+            {
+                $mainLocationId = true;
+            }
+            else
+            {
+                $mainLocationId = $this->getMainNodeId( $contentId, $versionNo );
+            }
             $this->create(
                 new CreateStruct(
                     array(
                         'contentId' => $row['contentobject_id'],
                         'contentVersion' => $row['contentobject_version'],
-                        'mainLocationId' => 0,
+                        'mainLocationId' => $mainLocationId,
                         'remoteId' => $row['remote_id'],
                         'sortField' => $row['sort_field'],
                         'sortOrder' => $row['sort_order'],
@@ -633,6 +645,48 @@ class EzcDatabase extends Gateway
                 $row['parent_node'],
                 self::NODE_ASSIGNMENT_OP_CODE_CREATE_NOP
             );
+        }
+    }
+
+    /**
+     * Searches for the main nodeId of $contentId in $versionId
+     * @param int $contentId
+     * @param int $versionId
+     * @return int
+     */
+    private function getMainNodeId( $contentId, $versionNo )
+    {
+        $query = $this->handler->createSelectQuery();
+        $query
+            ->select( 'node_id' )
+            ->from( $this->handler->quoteTable( 'ezcontentobject_tree' ) )
+            ->where(
+                $query->expr->lAnd(
+                    $query->expr->like(
+                        $this->handler->quoteColumn( 'contentobject_id' ),
+                        $query->bindValue( $contentId, null, \PDO::PARAM_INT )
+                    ),
+                    $query->expr->like(
+                        $this->handler->quoteColumn( 'contentobject_version' ),
+                        $query->bindValue( $versionNo, null, \PDO::PARAM_INT )
+                    ),
+                    $query->expr->eq(
+                        $this->handler->quoteColumn( 'main_node_id' ),
+                        $query->bindValue( 0, null, \PDO::PARAM_INT )
+                    )
+                )
+            );
+        $statement = $query->prepare();
+        $statement->execute();
+
+        $result = $statement->fetchAll( \PDO::FETCH_ASSOC );
+        if ( count( $result ) === 1 )
+        {
+            return (int)$result[0]['node_id'];
+        }
+        else
+        {
+            return false;
         }
     }
 

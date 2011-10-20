@@ -80,7 +80,7 @@ class CreateStruct extends ValueObject
      *
      * @var mixed|true
      */
-    public $mainLocationId;
+    public $mainLocationId = true;
 
     /**
      * Specifies which property the child locations should be sorted on.

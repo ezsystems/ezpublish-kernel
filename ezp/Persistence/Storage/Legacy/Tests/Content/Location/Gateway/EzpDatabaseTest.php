@@ -304,6 +304,54 @@ class EzpDatabaseTest extends TestCase
         );
     }
 
+    /**
+     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase::getMainNodeId()
+     * @depends testCreateLocation
+     */
+    public function testGetMainNodeId()
+    {
+        // $this->insertDatabaseFixture( __DIR__ . '/_fixtures/full_example_tree.php' );
+        $handler = $this->getLocationGateway();
+
+        $parentLocationData = array(
+            'node_id' => '77',
+            'depth' => '2',
+            'path_string' => '/1/2/77/',
+        );
+
+        // main location
+        $mainLocation = $handler->create(
+            new CreateStruct(
+                array(
+                    'contentId' => 68,
+                    'contentVersion' => 1,
+                    'remoteId' => 'some_id',
+                    'mainLocationId' => 0,
+                )
+            ),
+            $parentLocationData
+        );
+
+        // secondary location
+        $handler->create(
+            new CreateStruct(
+                array(
+                    'contentId' => 68,
+                    'contentVersion' => 1,
+                    'remoteId' => 'some_id',
+                    'mainLocationId' => $mainLocation->id,
+                )
+            ),
+            $parentLocationData
+        );
+
+
+        $handlerReflection = new \ReflectionObject( $handler );
+        $methodReflection = $handlerReflection->getMethod( "getMainNodeId" );
+        $methodReflection->setAccessible( true );
+        self::assertEquals( $mainLocation->id, $res = $methodReflection->invoke( $handler, 68, 1 ) );
+    }
+
     public static function getCreateLocationValues()
     {
         return array(
@@ -527,7 +575,7 @@ class EzpDatabaseTest extends TestCase
                 array(
                     'contentId' => 68,
                     'contentVersion' => 1,
-                    'mainLocationId' => 1,
+                    'mainLocationId' => true,
                     'priority' => 1,
                     'remoteId' => 'some_id',
                     'sortField' => 1,
@@ -535,8 +583,7 @@ class EzpDatabaseTest extends TestCase
                 )
             ),
             '77',
-            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE,
-            true
+            EzcDatabase::NODE_ASSIGNMENT_OP_CODE_CREATE
         );
 
         $query = $this->handler->createSelectQuery();
