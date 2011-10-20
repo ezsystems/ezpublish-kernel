@@ -382,9 +382,7 @@ class Service extends BaseService
             $srcVersion = $content->getCurrentVersion();
 
         $newVersionVo = $this->handler->contentHandler()->createDraftFromVersion( $content->id, $srcVersion->versionNo );
-        $version = $this->buildVersionDomainObject( $content, $newVersionVo );
-        $content->versions[$newVersionVo->versionNo] = $version;
-        return $version;
+        return $content->versions[$newVersionVo->versionNo] = $this->buildVersionDomainObject( $content, $newVersionVo );
     }
 
     /**
@@ -539,10 +537,10 @@ class Service extends BaseService
     }
 
     /**
-     * Publishes $version of $content
+     * Publishes $version
      *
      * @param \ezp\Content\Version $version
-     * @return \ezp\Content The updated, published Content
+     * @return \ezp\Content\Version The updated, published Version
      * @throws \ezp\Base\Exception\Logic if $version doesn't have the DRAFT status
      * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
@@ -553,8 +551,10 @@ class Service extends BaseService
         {
             throw new Logic( '$version->status', 'Version should be in Version::STATUS_DRAFT state' );
         }
+        
+        $content = $version->getContent();
 
-        if ( !$this->repository->canUser( 'edit', $version->getContent() ) )
+        if ( !$this->repository->canUser( 'edit', $content ) )
             throw new Forbidden( 'Content', 'edit' );
 
         // $this->handler->beginTransaction();
@@ -564,10 +564,12 @@ class Service extends BaseService
         // Archive the previous version if it exists
         if ( $version->versionNo > 1 )
         {
-            $this->handler->contentHandler()->setStatus( $version->contentId, Version::STATUS_ARCHIVED, $version->getContent()->currentVersionNo );
+            $this->handler->contentHandler()->setStatus( $version->contentId, Version::STATUS_ARCHIVED, $content->currentVersionNo );
+            $content->versions[$content->currentVersionNo]->getState( "properties" )->status = Version::STATUS_ARCHIVED;
         }
         // @todo Maybe allow this to be part of Update struct to reduce backend calls
         $this->handler->contentHandler()->setStatus( $version->contentId, Version::STATUS_PUBLISHED, $version->versionNo );
+        $content->versions[$version->versionNo]->getState( "properties" )->status = Version::STATUS_PUBLISHED;
 
         // @todo: Update $content->currentVersionNo to $version->versionNo
 
@@ -586,15 +588,20 @@ class Service extends BaseService
             'eng-GB' => $this->generateContentName( $version )
         );
 
-        $contentVo = $this->handler->contentHandler()->publish( $updateStruct );
+        $content->setState(
+            array(
+                "properties" => $this->handler->contentHandler()->publish( $updateStruct ),
+                "currentVersion" => $version,
+            )
+        );
 
-        $updatedContent = $this->buildDomainObject( $contentVo );
+        $content->getState( "properties" )->currentVersionNo = $version->versionNo;
 
         $version->notify( 'post_publish', array( 'repository' => $this->repository ) );
-
+        
         // $this->handler->commit();
 
-        return $updatedContent;
+        return $version;
     }
 
     /**

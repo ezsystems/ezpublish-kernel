@@ -905,7 +905,7 @@ class ContentTest extends BaseServiceTest
 
         self::assertEquals( Version::STATUS_DRAFT, $version->status );
 
-        $publishedVersion = $this->service->publish( $version )->getCurrentVersion();
+        $publishedVersion = $this->service->publish( $version );
 
         self::assertEquals( Version::STATUS_PUBLISHED, $publishedVersion->status );
         self::assertEquals( array( 'eng-GB' => __METHOD__ ), $publishedVersion->name );
@@ -949,20 +949,31 @@ class ContentTest extends BaseServiceTest
 
         $content = $this->repository->getContentService()->create( $content );
 
-        $content = $this->service->publish( $content->getCurrentVersion() );
+        $updatedVersion = $this->service->publish( $version = $content->getCurrentVersion() );
+        
+        self::assertTrue( $version === $version->getContent()->getCurrentVersion(), "Version->getContent()->getCurrentVersion() should match the Version" );
+        self::assertTrue( $content === $version->getContent(), "Version->getContent() should match Content" );
+        self::assertTrue( $updatedVersion === $version, "Provided Version and returned one should be the same object" );
 
         $version = $this->service->createDraftFromVersion( $content );
+
         $version->fields['name'] = __METHOD__;
 
-        self::assertEquals( 1, $content->currentVersionNo );
-        self::assertEquals( Version::STATUS_DRAFT, $version->status );
-        self::assertEquals( Version::STATUS_PUBLISHED, $content->versions[1]->status );
+        self::assertEquals( 1, $content->currentVersionNo, "Content's currentVersionNo not correctly set" );
+        self::assertEquals( Version::STATUS_DRAFT, $version->status, "Draft status not correctly set" );
+        self::assertEquals( Version::STATUS_PUBLISHED, $content->versions[1]->status, "Published status not correctly set" );
 
-        $content = $this->service->publish( $content->versions[2] );
+        $updatedVersion = $this->service->publish( $version = $content->versions[2] );
 
-        self::assertEquals( 2, $content->currentVersionNo );
-        self::assertEquals( Version::STATUS_ARCHIVED, $content->versions[1]->status );
-        self::assertEquals( Version::STATUS_PUBLISHED, $content->versions[2]->status );
+        self::assertEquals( 2, $content->currentVersionNo, "Content's currentVersionNo not correctly set" );
+        self::assertEquals( 2, $version->getContent()->currentVersionNo, "Version's Content's currentVersionNo not correctly set" );
+        
+        self::assertTrue( $version === $version->getContent()->getCurrentVersion(), "Version->getContent()->getCurrentVersion() should match the Version" );
+        self::assertTrue( $content === $version->getContent(), "Version->getContent() should match Content" );
+        self::assertTrue( $updatedVersion === $version, "Provided Version and returned one should be the same object" );
+        
+        self::assertEquals( Version::STATUS_ARCHIVED, $content->versions[1]->status, "Archived status not correctly set" );
+        self::assertEquals( Version::STATUS_PUBLISHED, $content->versions[2]->status, "Published status not correctly set" );
     }
 
     /**
