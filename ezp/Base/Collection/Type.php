@@ -85,9 +85,9 @@ class Type extends ArrayObject implements Collection
         if ( !$value instanceof $this->type )
             throw new InvalidArgumentType( 'value', $this->type, $value );
 
-        // stop if value is already in array
-        if ( $this->indexOf( $value ) !== false )
-            return;
+        // use existing $index if $value exists in collection to avoid duplicated objects
+        if ( ( $index = $this->indexOf( $value ) ) !== false )
+            $offset = $index;
 
         parent::offsetSet( $offset, $value );
     }
