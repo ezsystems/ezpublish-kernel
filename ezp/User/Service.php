@@ -478,7 +478,6 @@ class Service extends BaseService
         if ( !$roles instanceof Lazy || $roles->isLoaded() )
         {
             $roles[] = $role;
-            $group->setState( array( 'roles' => $roles ) );
         }
 
         $role->getState( 'properties' )->groupIds[] = $group->id;
@@ -502,7 +501,6 @@ class Service extends BaseService
         if ( !$roles instanceof Lazy || $roles->isLoaded() )
         {
             unset( $roles[$roles->indexOf( $role )] );
-            $group->setState( array( 'roles' => $roles ) );
         }
 
         $role->getState( 'properties' )->groupIds = array_values( array_diff( $role->groupIds, array( $group->id ) ) );

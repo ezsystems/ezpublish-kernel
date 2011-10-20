@@ -135,7 +135,7 @@ class Concrete extends Model implements Location
         $this->properties->parentId = $parent->id;
         $children = $parent->getChildren();
         if ( !$children instanceof Lazy || $children->isLoaded() )
-            $parent->children[] = $this;
+            $children[] = $this;
     }
 
     /**
