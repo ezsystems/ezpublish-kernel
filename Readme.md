@@ -32,7 +32,7 @@ The API is still very much work in progress, and so is documentation, hence why 
 ###Make ezp-next an eZ Publish extension
 In order to get the API in eZ Publish, you currently have to install it as an extension, for instance in `extension/api`:
 
-	ezpublish/extension$ git clone git@github.com:ezsystems/ezp-next.git api
+	ezpublish/extension$ git clone git://github.com/ezsystems/ezp-next.git api
 
 You can of course create a symbolic link if you want to keep the API in another directory.
 
