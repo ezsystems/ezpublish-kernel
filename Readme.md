@@ -28,6 +28,33 @@ The API is still very much work in progress, and so is documentation, hence why 
 * php: 5.3+
 * Currently a good portion willingness to digg into the code
 
+##Installing on eZ Publish
+###Make ezp-next an eZ Publish extension
+In order to get the API in eZ Publish, you currently have to install it as an extension, for instance in `extension/api`:
+
+	ezpublish/extension$ git clone git@github.com:ezsystems/ezp-next.git api
+
+You can of course create a symbolic link if you want to keep the API in another directory.
+
+###Create config.php
+Copy the provided `config.php-RECOMMENDED` file as `config.php` in the cloned directory:
+
+	ezpublish/extension/api$ cp config.php-RECOMMENDED config.php
+
+Edit the file depending on your system (the various possibilities are documented inline)
+* eZ Components path
+* Change the value for `ezp` in the `$repositories` array:
+  `'ezp' => 'extension/api/ezp'`
+* Done
+
+### Add the API to the autoloads ignore
+Since the API contains a few classes that are stubs of the eZ Publish ones, you  need to make sure the eZ Publish autoload generator
+will ignore the API when executed.
+
+To do so, create a file named .autoloadignore at the root of your eZ Publish directory, and add the path to the API to it:
+
+	ezpublish$ echo 'extension/api' > .autoloadignore
+
 ##Getting started
 <insert link and/or explain it briefly>
 
@@ -35,7 +62,7 @@ The API is still very much work in progress, and so is documentation, hence why 
 Submitting bug reports is possible on http://issues.ez.no/ezpublish (pick the "ezp-next" component in the right column when reporting).
 
 ##Contributing
-eZ Publish API is a fully open source, community-driven project. If you'd like to contribute, please have a look at the [related guidance page](http://share.ez.no/get-involved/develop). You will, amongst other, learn how to make pull-requests. More on this here : ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git).
+eZ Publish API is a fully open source, community-driven project. If you''d like to contribute, please have a look at the [related guidance page](http://share.ez.no/get-involved/develop). You will, amongst other, learn how to make pull-requests. More on this here : ["How to contribute to eZ Publish using GIT"](http://share.ez.no/learn/ez-publish/how-to-contribute-to-ez-publish-using-git).
 
 ##Discussing/Exchanging##
 A dedicated forum has been set-up to discuss all PHP API-related topics : http://share.ez.no/forums/new-php-api
