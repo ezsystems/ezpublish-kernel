@@ -42,6 +42,7 @@ Copy the provided `config.php-RECOMMENDED` file as `config.php` in the cloned di
 	ezpublish/extension/api$ cp config.php-RECOMMENDED config.php
 
 Edit the file depending on your system (the various possibilities are documented inline)
+
 * eZ Components path
 * Change the value for `ezp` in the `$repositories` array:
   `'ezp' => 'extension/api/ezp'`
