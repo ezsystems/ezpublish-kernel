@@ -228,4 +228,18 @@ return array(
             'name' => 'Folder'
         )
     ),
+    'ezcontentclass_classgroup' => array(
+        array(
+            'contentclass_id' => 1,
+            'contentclass_version' => 1,
+            'group_id' => 1,
+            'group_name' => 'Content'
+        ),
+        array(
+            'contentclass_id' => 1,
+            'contentclass_version' => 1,
+            'group_id' => 4,
+            'group_name' => 'Setup'
+        )
+    )
 );

@@ -1231,6 +1231,14 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         );
 
         $this->assertQueryResult(
+            array( array( 2 ) ),
+            $this->getDatabaseHandler()->createSelectQuery()
+                ->select( 'COUNT( * )' )
+                ->from( 'ezcontentclass_classgroup' )
+                ->where( 'contentclass_id = 1 AND contentclass_version = 0' )
+        );
+
+        $this->assertQueryResult(
             array( array( 5 ) ),
             $this->getDatabaseHandler()->createSelectQuery()
                 ->select( 'COUNT( * )' )
