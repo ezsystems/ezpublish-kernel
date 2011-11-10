@@ -4,6 +4,7 @@ return array (
   0 => 
   array (
     'ezcontentobject_version_id' => '675',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_version_version' => '1',
     'ezcontentobject_version_modified' => '1313047907',
     'ezcontentobject_version_creator_id' => '14',
@@ -16,6 +17,7 @@ return array (
   1 => 
   array (
     'ezcontentobject_version_id' => '676',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1313061404',
     'ezcontentobject_version_creator_id' => '14',

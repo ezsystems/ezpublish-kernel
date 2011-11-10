@@ -97,7 +97,6 @@ class TrashTest extends Base
         $type = $this->repository->getContentTypeService()->load( 1 );
         $section = $this->repository->getSectionService()->load( 1 );
         $content = new ConcreteContent( $type, $administrator );
-        $content->name = "test";
         $content->setSection( $section );
         $fields = $content->getCurrentVersion()->getFields();
         $fields['name'] = 'Welcome';
@@ -116,7 +115,6 @@ class TrashTest extends Base
         for ( $i = 0; $i < 10; ++$i )
         {
             $content = new ConcreteContent( $type, $administrator );
-            $content->name = "foo$i";
             $content->setSection( $section );
             $fields = $content->getCurrentVersion()->getFields();
             $fields['name'] = "bar$i";

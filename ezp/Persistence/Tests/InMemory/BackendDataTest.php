@@ -36,6 +36,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
 
         // Create a new backend from JSON data and empty Content data to make it clean
         $this->backend = new Backend( json_decode( file_get_contents( str_replace( '/Tests/InMemory', '/Storage/InMemory', __DIR__ ) . '/data.json' ), true ) );
+        $this->insertCustomContent();
     }
 
     protected function tearDown()
@@ -53,23 +54,36 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         $refData = $refObj->getProperty( 'data' );
         $refData->setAccessible( true );
         $data = $refData->getValue( $this->backend );
-        $data['Content'] = array();
+        $data['Content\\Version'] = array();
         $refData->setValue( $this->backend, $data );
 
         for ( $i = 0; $i < 10; ++$i)
             $this->backend->create(
-                "Content",
+                "Content\\Version",
                 array(
+                    "contentId" => 1,
+                    "versionNo" => 1,
                     "name" => array( "eng-GB" => "bar{$i}" ),
-                    "ownerId" => 42
+                    "creatorId" => 42,
                 )
             );
 
         for ( $i = 0; $i < 10; ++$i)
             $this->backend->create(
-                "Content",
+                "Content\\Version",
                 array(
+                    "contentId" => 1,
+                    "versionNo" => 1,
                     "name" => array( "eng-GB" => "foo{$i}" ),
+                )
+            );
+        for ( $i = 0; $i < 10; ++$i)
+            $this->backend->create(
+                "Content\\Language",
+                array(
+                    "locale" => "lan-{$i}",
+                    "isEnabled" => true,
+                    "name" => "lang{$i}"
                 )
             );
     }
@@ -83,10 +97,9 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindEmpty( $searchData )
     {
-        $this->insertCustomContent();
         $this->assertEquals(
             array(),
-            $this->backend->find( "Content", $searchData )
+            $this->backend->find( "Content\\Version", $searchData )
         );
     }
 
@@ -115,12 +128,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFind( $searchData, $result )
     {
-        $this->insertCustomContent();
-        $list = $this->backend->find( "Content", $searchData );
-        foreach ( $list as $key => $content )
+        foreach ( $this->backend->find( "Content\\Version", $searchData ) as $key => $version )
         {
-            $this->assertEquals( $result[$key]['id'], $content->id );
-            $this->assertEquals( array( "eng-GB" => $result[$key]['name'] ), $content->name );
+            $this->assertEquals( $result[$key]['id'], $version->id );
+            $this->assertEquals( array( "eng-GB" => $result[$key]['name'] ), $version->name );
         }
     }
 
@@ -146,7 +157,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 )
             ),
             array(
-                array( "ownerId" => 42 ),
+                array( "creatorId" => 42 ),
                 array(
                     array(
                         "id" => 1,
@@ -201,14 +212,13 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindMultipleIds()
     {
-        $this->insertCustomContent();
         $searchIds = array( 3, 5, 7 );
-        $list = $this->backend->find( 'Content', array( 'id' => $searchIds ) );
+        $list = $this->backend->find( 'Content\\Version', array( 'id' => $searchIds ) );
         self::assertEquals( count( $searchIds ), count( $list ) );
 
         foreach ( $list as $vo )
         {
-            self::assertInstanceOf( 'ezp\\Persistence\\Content', $vo );
+            self::assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $vo );
             self::assertContains( $vo->id, $searchIds );
         }
     }
@@ -254,7 +264,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         {
             $this->assertTrue( $content instanceof Content );
             $this->assertEquals( 1, $content->id );
-            $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $content->name );
+            $this->assertEquals( 1, $content->sectionId );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -290,7 +300,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         {
             $this->assertTrue( $content instanceof Content );
             $this->assertEquals( 1, $content->id );
-            $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $content->name );
+            $this->assertEquals( 1, $content->sectionId );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -336,7 +346,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         {
             $this->assertTrue( $content instanceof Content );
             $this->assertEquals( 1, $content->id );
-            $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $content->name );
+            $this->assertEquals( 1, $content->sectionId );
             $this->assertEquals( 2, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -404,7 +414,6 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
         {
             $this->assertInstanceOf( 'ezp\\Persistence\\Content', $content );
             $this->assertEquals( 1, $content->id );
-            $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $content->name );
             $this->assertEquals( 1, count( $content->locations ) );
             foreach ( $content->locations as $location )
             {
@@ -414,6 +423,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             }
             $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
             $this->assertEquals( 3, count( $content->version->fields ) );
+            $this->assertEquals( array( "eng-GB" => "bar0" ), $content->version->name );
             foreach ( $content->version->fields as $field )
             {
                 $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Field', $field );
@@ -430,12 +440,12 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testFindWildcard()
     {
-        $this->insertCustomContent();
-        $list = $this->backend->find( 'Content', array( 'name' => 'foo%' ) );
+        $list = $this->backend->find( 'Content\\Language', array( 'name' => "lang%" ) );
+        $this->assertEquals( 10, count( $list ) );
         foreach ( $list as $vo )
         {
-            self::assertInstanceOf( 'ezp\\Persistence\\Content', $vo );
-            self::assertTrue( strpos( $vo->name, 'foo' ) === 0 );
+            self::assertInstanceOf( 'ezp\\Persistence\\Content\\Language', $vo );
+            self::assertTrue( strpos( $vo->name, 'lang' ) === 0 );
         }
     }
 
@@ -448,7 +458,6 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testCountEmpty( $searchData )
     {
-        $this->insertCustomContent();
         $this->assertEquals(
             0,
             $this->backend->count( "Content", $searchData )
@@ -464,10 +473,9 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testCount( $searchData, $result )
     {
-        $this->insertCustomContent();
         $this->assertEquals(
             count( $result ),
-            $this->backend->count( "Content", $searchData )
+            $this->backend->count( "Content\\Version", $searchData )
         );
     }
 
@@ -525,7 +533,6 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testLoadEmpty( $searchData )
     {
-        $this->insertCustomContent();
         $this->backend->load( "Content", $searchData );
     }
 
@@ -550,10 +557,9 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testLoad( $searchData, $result )
     {
-        $this->insertCustomContent();
-        $content = $this->backend->load( "Content", $searchData );
+        $version = $this->backend->load( "Content\\Version", $searchData );
         foreach ( $result as $name => $value )
-            $this->assertEquals( $value, $content->$name );
+            $this->assertEquals( $value, $version->$name );
     }
 
     public function providerForLoad()
@@ -564,15 +570,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 array(
                     "id" => 1,
                     "name" => array( "eng-GB" => "bar0" ),
-                    "ownerId" => 42,
-                )
-            ),
-            array(
-                "1",
-                array(
-                    "id" => 1,
-                    "name" => array( "eng-GB" => "bar0" ),
-                    "ownerId" => 42,
+                    "creatorId" => 42,
                 )
             ),
             array(
@@ -580,7 +578,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 array(
                     "id" => 2,
                     "name" => array( "eng-GB" => "bar1" ),
-                    "ownerId" => 42,
+                    "creatorId" => 42,
                 )
             ),
             array(
@@ -588,7 +586,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
                 array(
                     "id" => 11,
                     "name" => array( "eng-GB" => "foo0" ),
-                    "ownerId" => null,
+                    "creatorId" => null,
                 )
             ),
         );
@@ -615,13 +613,12 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateNewAttribute()
     {
-        $this->insertCustomContent();
         $this->assertTrue(
             $this->backend->update( "Content", 1, array( "ownerId" => 5 ) )
         );
         $content = $this->backend->load( "Content", 1 );
         $this->assertEquals( 1, $content->id );
-        $this->assertEquals( array( "eng-GB" => "bar0" ), $content->name );
+        $this->assertEquals( 1, $content->sectionId );
         $this->assertEquals( 5, $content->ownerId );
     }
 
@@ -633,11 +630,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdate()
     {
-        $this->insertCustomContent();
         $this->assertTrue(
-            $this->backend->update( "Content", 2, array( "name" => array( "eng-GB" => "Testing" ) ) )
+            $this->backend->update( "Content\\Version", 2, array( "name" => array( "eng-GB" => "Testing" ) ) )
         );
-        $content = $this->backend->load( "Content", 2 );
+        $content = $this->backend->load( "Content\\Version", 2 );
         $this->assertEquals( array( "eng-GB" => "Testing" ), $content->name );
     }
 
@@ -649,11 +645,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testUpdateWithNullValue()
     {
-        $this->insertCustomContent();
         $this->assertTrue(
-            $this->backend->update( "Content", 3, array( "name" => null ) )
+            $this->backend->update( "Content\\Version", 3, array( "name" => null ) )
         );
-        $content = $this->backend->load( "Content", 3 );
+        $content = $this->backend->load( "Content\\Version", 3 );
         $this->assertEquals( null, $content->name );
     }
 
@@ -665,11 +660,10 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testDelete()
     {
-        $this->insertCustomContent();
-        $this->backend->delete( "Content", 1 );
+        $this->backend->delete( "Content\\Version", 1 );
         try
         {
-            $this->backend->load( "Content", 1 );
+            $this->backend->load( "Content\\Version", 1 );
             $this->fail( "Content has not been deleted" );
         }
         catch ( NotFound $e )
@@ -686,7 +680,6 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
      */
     public function testDeleteNotFound()
     {
-        $this->insertCustomContent();
-        $this->backend->delete( "Content", 999 );
+        $this->backend->delete( "Content\\Version", 999 );
     }
 }

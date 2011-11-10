@@ -24,6 +24,13 @@ class Version extends ValueObject
     public $id;
 
     /**
+     * Name in the different available translations
+     * 
+     * @var string[]
+     */
+    public $name;
+
+    /**
      * Version number.
      *
      * In contrast to {@link $id}, this is the version number, which only

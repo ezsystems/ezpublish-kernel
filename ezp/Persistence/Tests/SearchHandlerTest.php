@@ -98,7 +98,7 @@ class SearchHandlerTest extends HandlerTest
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( 14, $content->ownerId );
-        $this->assertEquals( "test", $content->name );
+        $this->assertEquals( "test", $content->version->name );
         $this->assertInstanceOf( "ezp\\Persistence\\Content\\Version", $content->version );
     }
 }

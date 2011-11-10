@@ -4,7 +4,6 @@ return array (
   0 => 
   array (
     'ezcontentobject_id' => '11',
-    'ezcontentobject_name' => 'Members',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
     'ezcontentobject_owner_id' => '14',
@@ -14,6 +13,7 @@ return array (
     'ezcontentobject_modified' => '1311154215',
     'ezcontentobject_published' => '1033920746',
     'ezcontentobject_version_id' => '439',
+    'ezcontentobject_version_name' => 'Members',
     'ezcontentobject_version_version' => '1',
     'ezcontentobject_version_modified' => '1033920746',
     'ezcontentobject_version_creator_id' => '14',
@@ -51,7 +51,6 @@ return array (
   1 => 
   array (
     'ezcontentobject_id' => '11',
-    'ezcontentobject_name' => 'Members',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
     'ezcontentobject_owner_id' => '14',
@@ -61,6 +60,7 @@ return array (
     'ezcontentobject_modified' => '1311154215',
     'ezcontentobject_published' => '1033920746',
     'ezcontentobject_version_id' => '439',
+    'ezcontentobject_version_name' => 'Members',
     'ezcontentobject_version_version' => '1',
     'ezcontentobject_version_modified' => '1033920746',
     'ezcontentobject_version_creator_id' => '14',
@@ -98,7 +98,6 @@ return array (
   2 => 
   array (
     'ezcontentobject_id' => '11',
-    'ezcontentobject_name' => 'Members',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
     'ezcontentobject_owner_id' => '14',
@@ -108,6 +107,7 @@ return array (
     'ezcontentobject_modified' => '1311154215',
     'ezcontentobject_published' => '1033920746',
     'ezcontentobject_version_id' => '674',
+    'ezcontentobject_version_name' => 'Members',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1311154215',
     'ezcontentobject_version_creator_id' => '14',
@@ -145,7 +145,6 @@ return array (
   3 => 
   array (
     'ezcontentobject_id' => '11',
-    'ezcontentobject_name' => 'Members',
     'ezcontentobject_contentclass_id' => '3',
     'ezcontentobject_section_id' => '2',
     'ezcontentobject_owner_id' => '14',
@@ -155,6 +154,7 @@ return array (
     'ezcontentobject_modified' => '1311154215',
     'ezcontentobject_published' => '1033920746',
     'ezcontentobject_version_id' => '674',
+    'ezcontentobject_version_name' => 'Members',
     'ezcontentobject_version_version' => '2',
     'ezcontentobject_version_modified' => '1311154215',
     'ezcontentobject_version_creator_id' => '14',

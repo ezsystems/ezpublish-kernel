@@ -127,11 +127,11 @@ class ContentHandlerTest extends HandlerTest
         $this->assertTrue( $content instanceof Content );
         $this->assertEquals( $this->contentId + 1, $content->id );
         $this->assertEquals( 14, $content->ownerId );
-        $this->assertEquals( 'test', $content->name );
         $this->assertEquals( ContentDomainObject::STATUS_DRAFT, $content->status );
 
         $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
         $this->assertEquals( 14, $content->version->creatorId );
+        $this->assertEquals( 'test', $content->version->name );
         $this->assertEquals( Version::STATUS_DRAFT, $content->version->status );
         $this->assertEquals( $content->id, $content->version->contentId );
         $this->assertEquals( 1, count( $content->version->fields ) );
@@ -185,7 +185,6 @@ class ContentHandlerTest extends HandlerTest
         $time = time();
         $contentHandler = $this->persistenceHandler->contentHandler();
         $copy = $contentHandler->copy( 1, 1 );
-        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $copy->name );
         $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
         $this->assertEquals( 1, $copy->typeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->ownerId, "Owner ID does not match" );
@@ -194,6 +193,7 @@ class ContentHandlerTest extends HandlerTest
 
         $versions = $contentHandler->listVersions( $copy->id );
         $this->assertEquals( 1, count( $versions ) );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->name );
         $this->assertEquals( 1, $versions[0]->versionNo, "Version number does not match" );
         $this->assertEquals( 14, $versions[0]->creatorId, "Creator ID does not match" );
         $this->assertEquals( $copy->id, $versions[0]->contentId );
@@ -213,7 +213,6 @@ class ContentHandlerTest extends HandlerTest
         $versionNoToCopy = 2;
         $contentHandler = $this->persistenceHandler->contentHandler();
         $copy = $contentHandler->copy( 1, $versionNoToCopy );
-        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $copy->name );
         $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
         $this->assertEquals( 1, $copy->typeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->ownerId, "Owner ID does not match" );
@@ -222,6 +221,7 @@ class ContentHandlerTest extends HandlerTest
 
         $versions = $contentHandler->listVersions( $copy->id );
         $this->assertEquals( 1, count( $versions ) );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->name );
         $this->assertEquals( 2, $versions[0]->versionNo, "Version number does not match" );
         $this->assertEquals( 14, $versions[0]->creatorId, "Creator ID does not match" );
         $this->assertEquals( $copy->id, $versions[0]->contentId );
@@ -240,7 +240,6 @@ class ContentHandlerTest extends HandlerTest
         $time = time();
         $contentHandler = $this->persistenceHandler->contentHandler();
         $copy = $contentHandler->copy( 1, false );
-        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $copy->name );
         $this->assertEquals( 1, $copy->sectionId, "Section ID does not match" );
         $this->assertEquals( 1, $copy->typeId, "Type ID does not match" );
         $this->assertEquals( 14, $copy->ownerId, "Owner ID does not match" );
@@ -249,6 +248,8 @@ class ContentHandlerTest extends HandlerTest
 
         $versions = $contentHandler->listVersions( $copy->id );
         $this->assertEquals( 2, count( $versions ) );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[0]->name );
+        $this->assertEquals( array( "eng-GB" => "eZ Publish" ), $versions[1]->name );
         $this->assertEquals( 1, $versions[0]->versionNo );
         $this->assertEquals( 2, $versions[1]->versionNo );
         $this->assertEquals( 14, $versions[0]->creatorId );
@@ -292,7 +293,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( ContentDomainObject::STATUS_DRAFT, $content->status );
         $this->assertEquals( 10, $content->ownerId );
-        $this->assertEquals( array( "eng-GB" => "New name", "fre-FR" => "Nouveau nom" ), $content->name );
+        $this->assertEquals( array( "eng-GB" => "New name", "fre-FR" => "Nouveau nom" ), $content->version->name );
 
         // @todo Test fields!
     }

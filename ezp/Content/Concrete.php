@@ -35,7 +35,6 @@ use ezp\Base\Model,
  * @property-read mixed $id The Content's ID, automatically assigned by the persistence layer
  * @property-read int $currentVersionNo The Content's current version
  * @property-read int $status The Content's status, as one of the ezp\Content::STATUS_* constants
- * @property string[] $name The Content's name
  * @property-read mixed $ownerId Id of the user object that owns the content
  * @property-read bool $alwaysAvailable The Content's always available flag
  * @property-read string $remoteId The Content's remote identifier (custom identifier for the object)
@@ -90,7 +89,6 @@ class Concrete extends Model implements Content
         'id' => false,
         'currentVersionNo' => false,
         'status' => false,
-        'name' => true, // @todo: Make readOnly and generate on store event from attributes based on type nameScheme
         'ownerId' => false,
         'alwaysAvailable' => true,
         'remoteId' => true,// @todo Make readonly and deal with this internally (in all DO's)

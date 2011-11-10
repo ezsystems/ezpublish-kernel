@@ -21,7 +21,7 @@ use ezp\Base\Model,
  * @property-read mixed $contentId
  * @property-read int $status One of the STATUS_* constants
  * @property-read \ezp\Content $content
- * @property-read string[] $name Content's name
+ * @property-read string[] $name Name in the different languages
  * @property-read mixed $ownerId Content's Owner id
  * @property-read bool $alwaysAvailable Content's always available flag
  * @property-read string $remoteId Content's Remote ID

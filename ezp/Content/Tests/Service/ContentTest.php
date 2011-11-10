@@ -82,7 +82,6 @@ class ContentTest extends BaseServiceTest
         self::assertEquals( 1, $do->id, "Content ID not correctly set" );
         self::assertInstanceOf( "ezp\\Content\\Type", $do->contentType, "Content type not correctly set" );
         self::assertEquals( 1, $do->contentType->id, "Content type retrieved is not the good one" );
-        self::assertEquals( array( "eng-GB" => "eZ Publish" ), $do->name, "Content name not correctly set" );
     }
 
     /**
@@ -131,13 +130,11 @@ class ContentTest extends BaseServiceTest
         $section = $this->repository->getSectionService()->load( 2 );
         $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
-        $content->name = array( "eng-GB" => "New object" );
         $content->setSection( $section );
 
         $content = $this->service->create( $content );
         // @todo: Deal with field value when that is ready for manipulation
         self::assertInstanceOf( "ezp\\Content", $content );
-        self::assertEquals( array( "eng-GB" => "New object" ), $content->name, "Name not correctly set" );
         self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 2, $content->sectionId, "Section ID not correctly set" );
         self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
@@ -157,13 +154,11 @@ class ContentTest extends BaseServiceTest
         $location = $this->repository->getLocationService()->load( 2 );
         $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
-        $content->name = array( "eng-GB" => "New object" );
 
         $content = $this->service->create( $content );
 
         // @todo: Deal with field value when that is ready for manipulation
         self::assertInstanceOf( "ezp\\Content", $content );
-        self::assertEquals( array( "eng-GB" => "New object" ), $content->name, "Name not correctly set" );
         self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
         self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
@@ -187,7 +182,6 @@ class ContentTest extends BaseServiceTest
         $section = $this->repository->getSectionService()->load( 2 );
         $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
-        $content->name = array( "eng-GB" => "New object" );
         $content->setSection( $section );
 
         $this->repository->setUser( $this->anonymousUser );
@@ -203,13 +197,11 @@ class ContentTest extends BaseServiceTest
         // @todo Test with change to fields!
 
         $content = $this->service->load( 1 );
-        $content->name = array( "eng-GB" => "New name" );
         $content->setOwner( $this->anonymousUser );
         $content = $this->service->update( $content, $content->versions[1] );
 
         self::assertInstanceOf( "ezp\\Content", $content );
         self::assertEquals( 1, $content->id, "ID not correctly set" );
-        self::assertEquals( array( "eng-GB" => "New name" ), $content->name, "Name not correctly set" );
         self::assertEquals( 10, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->currentVersionNo, "currentVersionNo not correctly set" );
         self::assertEquals( Content::STATUS_PUBLISHED, $content->status, "Status not correctly set" );
@@ -223,7 +215,6 @@ class ContentTest extends BaseServiceTest
     public function testUpdateForbidden()
     {
         $content = $this->service->load( 1 );
-        $content->name = array( "eng-GB" => "New name" );
         $content->setOwner( $this->anonymousUser );
 
         $this->repository->setUser( $this->anonymousUser );
@@ -241,7 +232,6 @@ class ContentTest extends BaseServiceTest
         $content = $this->service->load( 1 );
         self::assertInstanceOf( "ezp\\Content", $content );
         self::assertEquals( 1, $content->id, "ID not correctly set" );
-        self::assertEquals( array( "eng-GB" => "eZ Publish" ), $content->name, "Name not correctly set" );
         self::assertEquals( 14, $content->ownerId, "Owner ID not correctly set" );
         self::assertEquals( 1, $content->sectionId, "Section ID not correctly set" );
     }
@@ -251,7 +241,6 @@ class ContentTest extends BaseServiceTest
      *
      * @group contentService
      * @covers \ezp\Content\Service::loadVersion
-     * @covers \ezp\Content\Version\Concrete::getName
      * @covers \ezp\Content\Version\Concrete::getOwnerId
      * @covers \ezp\Content\Version\Concrete::getSectionId
      * @covers \ezp\Content\Version\Concrete::getTypeId
@@ -263,7 +252,7 @@ class ContentTest extends BaseServiceTest
         self::assertInstanceOf( "ezp\\Content\\Version", $version );
         self::assertEquals( 1, $version->contentId, "Content ID not correctly set" );
         self::assertEquals( 1, $version->id, "ID not correctly set" );
-        self::assertEquals( array( "eng-GB" => "eZ Publish" ), $version->getName(), "Name not correctly set" );
+        self::assertEquals( array( "eng-GB" => "eZ Publish" ), $version->name, "Name not correctly set" );
         self::assertEquals( 14, $version->getOwnerId(), "Owner ID not correctly set" );
         self::assertEquals( 1, $version->getSectionId(), "Section ID not correctly set" );
         self::assertEquals( 1, $version->getTypeId(), "Type ID not correctly set" );
@@ -275,7 +264,6 @@ class ContentTest extends BaseServiceTest
      *
      * @group contentService
      * @covers \ezp\Content\Service::loadVersion
-     * @covers \ezp\Content\Version\Concrete::getName
      * @covers \ezp\Content\Version\Concrete::getOwnerId
      * @covers \ezp\Content\Version\Concrete::getSectionId
      * @covers \ezp\Content\Version\Concrete::getTypeId
@@ -287,7 +275,7 @@ class ContentTest extends BaseServiceTest
         self::assertInstanceOf( "ezp\\Content\\Version", $version );
         self::assertEquals( 1, $version->contentId, "Content ID not correctly set" );
         self::assertEquals( 2, $version->id, "ID not correctly set" );
-        self::assertEquals( array( "eng-GB" => "eZ Publish" ), $version->getName(), "Name not correctly set" );
+        self::assertEquals( array( "eng-GB" => "eZ Publish" ), $version->name, "Name not correctly set" );
         self::assertEquals( 14, $version->getOwnerId(), "Owner ID not correctly set" );
         self::assertEquals( 1, $version->getSectionId(), "Section ID not correctly set" );
         self::assertEquals( 1, $version->getTypeId(), "Type ID not correctly set" );
@@ -553,7 +541,6 @@ class ContentTest extends BaseServiceTest
      */
     private function compareCopyContentProperties( Content $content, Content $copy )
     {
-        self::assertEquals( $content->name, $copy->name );
         self::assertEquals( $content->sectionId, $copy->sectionId, "Section ID does not match" );
         self::assertEquals( $content->typeId, $copy->typeId, "Type ID does not match" );
         self::assertEquals( $content->ownerId, $copy->ownerId, "Owner ID does not match" );
@@ -924,7 +911,6 @@ class ContentTest extends BaseServiceTest
 
         $content = new ConcreteContent( $type, $this->anonymousUser );
         $content->addParent( $location );
-        $content->name = array( "eng-GB" => __METHOD__ );
         $content->setSection( $section );
         $content = $this->repository->getContentService()->create( $content );
 

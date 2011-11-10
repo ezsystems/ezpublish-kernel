@@ -93,7 +93,6 @@ class ContentSearchTest extends BaseServiceTest
         for ( $i = 0; $i < 10; ++$i )
         {
             $content = new ConcreteContent( $type, new ProxyUser( 14, $this->repository->getUserService() ) );
-            $content->name = array( "eng-GB" => "foo$i" );
             $content->setSection( $section );
             $fields = $content->getCurrentVersion()->getFields();
             $fields['name'] = "bar$i";
@@ -135,6 +134,7 @@ class ContentSearchTest extends BaseServiceTest
 
         $result = $this->service->find( $qb->getQuery() );
         self::assertInstanceOf( 'ezp\\Content\\Search\\Result', $result );
+        self::assertEquals( 10, count( $result ) );
         foreach ( $result as $key => $content )
         {
             $originalVo = $this->expectedContent[$key]->getState( 'properties' );

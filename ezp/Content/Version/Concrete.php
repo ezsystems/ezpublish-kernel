@@ -22,7 +22,7 @@ use ezp\Base\Model,
  * @property-read mixed $contentId
  * @property-read int $status One of the STATUS_* constants
  * @property-read \ezp\Content $content
- * @property-read string[] $name Content's name
+ * @property-read string[] $name Name in the different languages
  * @property-read mixed $ownerId Content's Owner id
  * @property-read bool $alwaysAvailable Content's always available flag
  * @property-read string $remoteId Content's Remote ID
@@ -51,6 +51,7 @@ class Concrete extends Model implements Version
      */
     protected $readWriteProperties = array(
         'id' => false,
+        'name' => false,
         'versionNo' => false,
         'creatorId' => true,
         'created' => true,
@@ -66,8 +67,6 @@ class Concrete extends Model implements Version
     protected $dynamicProperties = array(
         'fields' => true,
         'content' => false,
-        // @todo (copied from Content\Concrete): Make readOnly and generate on store event from attributes based on type nameScheme
-        'name' => false,
         'ownerId' => false,
         'alwaysAvailable' => false,
         // @todo (copied from Content\Concrete): Make readonly and deal with this internally (in all DO's)
@@ -94,6 +93,13 @@ class Concrete extends Model implements Version
      * @var \ezp\Content\Field[]
      */
     protected $fields;
+
+    /**
+     * Translated names for this Version
+     *
+     * @var string[]
+     */
+    protected $name = array();
 
     /**
      * Content object this version is attached to.
@@ -138,16 +144,6 @@ class Concrete extends Model implements Version
     public function getContent()
     {
         return $this->content;
-    }
-
-    /**
-     * Get content's name that this version is attached to
-     *
-     * @return string[]
-     */
-    public function getName()
-    {
-        return $this->content->name;
     }
 
     /**

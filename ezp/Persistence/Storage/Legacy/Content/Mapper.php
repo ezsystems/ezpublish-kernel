@@ -58,7 +58,6 @@ class Mapper
     {
         $content = new Content();
 
-        $content->name = $struct->name;
         $content->typeId = $struct->typeId;
         $content->sectionId = $struct->sectionId;
         $content->ownerId = $struct->ownerId;
@@ -220,7 +219,6 @@ class Mapper
         $content = new Content();
 
         $content->id = (int)$row['ezcontentobject_id'];
-        $content->name = $row['ezcontentobject_name'];
         $content->typeId = (int)$row['ezcontentobject_contentclass_id'];
         $content->sectionId = (int)$row['ezcontentobject_section_id'];
         $content->ownerId = (int)$row['ezcontentobject_owner_id'];
@@ -229,7 +227,6 @@ class Mapper
         $content->currentVersionNo = (int)$row['ezcontentobject_current_version'];
         $content->initialLanguageId = (int)$row['ezcontentobject_initial_language_id'];
         $content->modified = (int)$row['ezcontentobject_modified'];
-        $content->name = $row['ezcontentobject_name'];
         $content->published = (int)$row['ezcontentobject_published'];
         $content->locations = array();
 
@@ -261,6 +258,7 @@ class Mapper
     protected function mapCommonVersionFields( array $row, $version )
     {
         $version->id = (int)$row['ezcontentobject_version_id'];
+        $version->name = $row['ezcontentobject_version_name'];
         $version->versionNo = (int)$row['ezcontentobject_version_version'];
         $version->modified = (int)$row['ezcontentobject_version_modified'];
         $version->creatorId = (int)$row['ezcontentobject_version_creator_id'];
@@ -361,7 +359,7 @@ class Mapper
     public function createCreateStructFromContent( Content $content )
     {
         $struct = new CreateStruct();
-        $struct->name = $content->name;
+        $struct->name = $content->version->name;
         $struct->typeId = $content->typeId;
         $struct->sectionId = $content->sectionId;
         $struct->ownerId = $content->ownerId;
