@@ -567,7 +567,7 @@ class Service extends BaseService
             $this->handler->contentHandler()->setStatus( $version->contentId, Version::STATUS_ARCHIVED, $content->currentVersionNo );
             $content->versions[$content->currentVersionNo]->getState( "properties" )->status = Version::STATUS_ARCHIVED;
         }
-        // @todo Maybe allow this to be part of Update struct to reduce backend calls
+        // @todo Maybe allow this to be part of Update struct to reduce backend calls?
         $this->handler->contentHandler()->setStatus( $version->contentId, Version::STATUS_PUBLISHED, $version->versionNo );
         $content->versions[$version->versionNo]->getState( "properties" )->status = Version::STATUS_PUBLISHED;
 
@@ -587,6 +587,7 @@ class Service extends BaseService
         $updateStruct->name = array(
             'eng-GB' => $this->generateContentName( $version )
         );
+        $version->getState( "properties" )->name = $updateStruct->name;
 
         $content->setState(
             array(
