@@ -69,7 +69,6 @@ class Concrete extends Model implements Version
         'content' => false,
         'ownerId' => false,
         'alwaysAvailable' => false,
-        // @todo (copied from Content\Concrete): Make readonly and deal with this internally (in all DO's)
         'remoteId' => false,
         'sectionId' => false,
         'typeId' => false,
@@ -93,13 +92,6 @@ class Concrete extends Model implements Version
      * @var \ezp\Content\Field[]
      */
     protected $fields;
-
-    /**
-     * Translated names for this Version
-     *
-     * @var string[]
-     */
-    protected $name = array();
 
     /**
      * Content object this version is attached to.
