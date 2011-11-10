@@ -4,7 +4,7 @@ return array (
   0 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -52,7 +52,7 @@ return array (
   1 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -100,7 +100,7 @@ return array (
   2 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -150,7 +150,7 @@ return array (
   3 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -200,7 +200,7 @@ return array (
   4 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -250,7 +250,7 @@ return array (
   5 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -298,7 +298,7 @@ return array (
   6 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -348,7 +348,7 @@ return array (
   7 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -398,7 +398,7 @@ return array (
   8 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -446,7 +446,7 @@ return array (
   9 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -494,7 +494,7 @@ return array (
   10 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -542,7 +542,7 @@ return array (
   11 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_name' => 'Something',
+    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
