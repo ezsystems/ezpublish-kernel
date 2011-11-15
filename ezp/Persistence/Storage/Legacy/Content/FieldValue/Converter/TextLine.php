@@ -65,7 +65,7 @@ class TextLine implements Converter
             $storageDef->dataInt1 = 0;
         }
 
-        $storageDef->dataText1 = $fieldDef->fieldTypeConstraints->fieldSettings['defaultText'];
+        $storageDef->dataText1 = $fieldDef->defaultValue->data->text;
     }
 
     /**
@@ -85,11 +85,6 @@ class TextLine implements Converter
         }
 
         $defaultValue = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
-        $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                'defaultText' => $defaultValue
-            )
-        );
         $fieldDef->defaultValue = new FieldValue(
             array( 'data' => new TextLineValue( $defaultValue ) )
         );

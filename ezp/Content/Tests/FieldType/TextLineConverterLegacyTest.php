@@ -121,11 +121,6 @@ class TextLineConverterLegacyTest extends PHPUnit_Framework_TestCase
         $defaultValue = new FieldValue;
         $defaultValue->data = new TextLineValue( $defaultText );
         $fieldTypeConstraints = new FieldTypeConstraints;
-        $fieldTypeConstraints->fieldSettings = new FieldSettings(
-            array(
-                'defaultText' => ''
-            )
-        );
         $fieldDef = new PersistenceFieldDefinition(
             array(
                 'fieldTypeConstraints' => $fieldTypeConstraints,
@@ -139,7 +134,7 @@ class TextLineConverterLegacyTest extends PHPUnit_Framework_TestCase
             $storageFieldDef->dataInt1
         );
         self::assertSame(
-            $fieldDef->fieldTypeConstraints->fieldSettings['defaultText'],
+            $fieldDef->defaultValue->data->text,
             $storageFieldDef->dataText1
         );
     }
@@ -169,10 +164,5 @@ class TextLineConverterLegacyTest extends PHPUnit_Framework_TestCase
         );
         self::assertInstanceOf( 'ezp\\Content\\FieldType\\TextLine\\Value', $fieldDef->defaultValue->data );
         self::assertSame( $defaultText, $fieldDef->defaultValue->data->text );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
-        self::assertSame(
-            array( 'defaultText' => $defaultText ),
-            $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()
-        );
     }
 }

@@ -57,26 +57,9 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     {
         $ft = new TextLine();
         self::assertSame(
-            array( 'defaultText' ),
+            array(),
             $ft->allowedSettings(),
             "The set of allowed settings does not match what is expected."
-        );
-    }
-
-    /**
-     * @group fieldType
-     * @group textLine
-     * @covers \ezp\Content\FieldType\TextLine\Type::getDefaultValue
-     */
-    public function testDefaultValueWithDefaultSetting()
-    {
-        $defaultText = 'A default text';
-        $ft = new TextLine();
-        $ft->setFieldSetting( 'defaultText', $defaultText );
-        self::assertSame(
-            $defaultText,
-            $ft->getValue()->text,
-            'defaultText setting should be reflected in default value object'
         );
     }
 
