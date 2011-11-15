@@ -48,12 +48,8 @@ class DateAndTime implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $date = null;
-        if ( $value->dataInt > 0 )
-        {
-            $date = new DateTime;
-            $date->setTimestamp( $value->dataInt );
-        }
+        $date = new DateTime;
+        $date->setTimestamp( $value->dataInt );
 
         $fieldValue->data = new DateAndTimeValue( $date );
         $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
