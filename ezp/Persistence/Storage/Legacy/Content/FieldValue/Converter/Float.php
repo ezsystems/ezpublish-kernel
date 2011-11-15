@@ -33,7 +33,7 @@ class Float implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataInt = $value->data->value;
+        $storageFieldValue->dataFloat = $value->data->value;
         $storageFieldValue->sortKeyInt = $value->sortKey['sort_key_int'];
     }
 
@@ -45,7 +45,7 @@ class Float implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new FloatValue( $value->dataInt );
+        $fieldValue->data = new FloatValue( $value->dataFloat );
         $fieldValue->sortKey = array( 'sort_key_int' => $value->sortKeyInt );
     }
 
@@ -59,17 +59,17 @@ class Float implements Converter
     {
         if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_FQN]['minFloatValue'] ) )
         {
-            $storageDef->dataInt1 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_FQN]['minFloatValue'];
+            $storageDef->dataFloat1 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_FQN]['minFloatValue'];
         }
 
         if ( isset( $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_FQN]['maxFloatValue'] ) )
         {
-            $storageDef->dataInt2 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_FQN]['maxFloatValue'];
+            $storageDef->dataFloat2 = $fieldDef->fieldTypeConstraints->validators[self::FLOAT_VALIDATOR_FQN]['maxFloatValue'];
         }
 
         // Defining dataInt4 which holds the validator state (min value/max value/minMax value)
-        $storageDef->dataInt4 = $this->getStorageDefValidatorState( $storageDef->dataInt1, $storageDef->dataInt2 );
-        $storageDef->dataInt3 = $fieldDef->fieldTypeConstraints->fieldSettings['defaultValue'];
+        $storageDef->dataFloat4 = $this->getStorageDefValidatorState( $storageDef->dataFloat1, $storageDef->dataFloat2 );
+        $storageDef->dataFloat3 = $fieldDef->defaultValue->data->value;
     }
 
     /**
@@ -82,24 +82,24 @@ class Float implements Converter
     {
         $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
 
-        if ( $storageDef->dataInt4 !== self::NO_MIN_MAX_VALUE )
+        if ( $storageDef->dataFloat4 !== self::NO_MIN_MAX_VALUE )
         {
-            if ( !empty( $storageDef->dataInt1 ) )
+            if ( !empty( $storageDef->dataFloat1 ) )
             {
                 $fieldDef->fieldTypeConstraints->validators = array(
-                    self::FLOAT_VALIDATOR_FQN => array( 'minFloatValue' => $storageDef->dataInt1 )
+                    self::FLOAT_VALIDATOR_FQN => array( 'minFloatValue' => $storageDef->dataFloat1 )
                 );
             }
 
-            if ( !empty( $storageDef->dataInt2 ) )
+            if ( !empty( $storageDef->dataFloat2 ) )
             {
                 $fieldDef->fieldTypeConstraints->validators = array(
-                    self::FLOAT_VALIDATOR_FQN => array( 'maxFloatValue' => $storageDef->dataInt2 )
+                    self::FLOAT_VALIDATOR_FQN => array( 'maxFloatValue' => $storageDef->dataFloat2 )
                 );
             }
         }
 
-        $defaultValue = isset( $storageDef->dataInt3 ) ? $storageDef->dataText3 : 0;
+        $defaultValue = isset( $storageDef->dataFloat3 ) ? $storageDef->dataFloat3 : 0.0;
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 'defaultValue' => $defaultValue

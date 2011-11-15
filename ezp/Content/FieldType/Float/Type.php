@@ -34,7 +34,7 @@ class Type extends FieldType
      */
     protected function getDefaultValue()
     {
-        return new Value( 0.0 );
+        return new Value();
     }
 
     /**
