@@ -146,7 +146,10 @@ class Service extends BaseService
 
         $identifiers = array();
         $struct = new CreateStruct();
-        $this->fillStruct( $struct, $type, array( 'fieldDefinitions', 'groupIds' ) );
+        $this->fillStruct(
+            $struct, $type,
+            array( 'fieldDefinitions', 'groupIds', 'urlAliasSchema' )
+        );
         foreach ( $addFields as $fieldDefinition )
         {
             if ( !$fieldDefinition instanceof FieldDefinition )
