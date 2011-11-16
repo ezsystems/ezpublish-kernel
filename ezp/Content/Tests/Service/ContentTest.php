@@ -17,6 +17,7 @@ use ezp\Content,
     ezp\Content\Tests\Service\Base as BaseServiceTest,
     ezp\Base\Exception\NotFound,
     ezp\Persistence\Content\Location as LocationValue,
+    ezp\Persistence\Content\Type as TypeValue,
     ezp\User\Proxy as ProxyUser,
     ReflectionObject;
 
@@ -35,6 +36,11 @@ class ContentTest extends BaseServiceTest
      */
     protected $anonymousUser;
 
+    /**
+     * @var \ezp\Content\Type
+     */
+    protected $contentType;
+
     protected function setUp()
     {
         parent::setUp();
@@ -42,6 +48,17 @@ class ContentTest extends BaseServiceTest
         $this->anonymousUser = $this->repository->setUser(
             new ProxyUser( 14, $this->repository->getUserService() )
         );// "Login" admin
+
+        $vo = new TypeValue(
+            array(
+                'id' => 1,
+                'status' => TypeValue::STATUS_DEFINED
+            )
+        );
+        $this->contentType = new ConcreteType();
+        $this->contentType->setState(
+            array( 'properties' => $vo )
+        );
     }
 
     /**
@@ -444,7 +461,7 @@ class ContentTest extends BaseServiceTest
      */
     public function testDeleteNotExisting()
     {
-        $content = new ConcreteContent( new ConcreteType, $this->anonymousUser );
+        $content = new ConcreteContent( $this->contentType, $this->anonymousUser );
         $content->getState( "properties" )->id = 999;
         $this->service->delete( $content );
     }
@@ -516,7 +533,7 @@ class ContentTest extends BaseServiceTest
      */
     public function testLoadFieldsNonExistingContent()
     {
-        $content = new ConcreteContent( new ConcreteType, $this->anonymousUser );
+        $content = new ConcreteContent( $this->contentType, $this->anonymousUser );
         $content->getState( "properties" )->id = 999;
         foreach ( $content->versions as $version )
         {

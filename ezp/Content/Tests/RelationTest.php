@@ -14,6 +14,7 @@ use ezp\Content\Concrete as ConcreteContent,
     ezp\Base\ServiceContainer,
     ezp\Base\Configuration,
     ezp\Persistence\Content\Relation as RelationValue,
+    ezp\Persistence\Content\Type as TypeValue,
     ezp\User\Proxy as ProxyUser,
     PHPUnit_Framework_TestCase;
 
@@ -42,8 +43,17 @@ class RelationTest extends PHPUnit_Framework_TestCase
         $sc->getRepository()->getContentService();
 
         // setup a content type & content object of use by tests, fields are not needed for relation
+        $vo = new TypeValue(
+            array(
+                'identifier' => 'article',
+                'id' => 1,
+                'status' => TypeValue::STATUS_DEFINED
+            )
+        );
         $contentType = new ConcreteType();
-        $contentType->identifier = "article";
+        $contentType->setState(
+            array( 'properties' => $vo )
+        );
 
         $this->content = new ConcreteContent( $contentType, new ProxyUser( 10, $sc->getRepository()->getUserService() ) );
         $this->content->setState(

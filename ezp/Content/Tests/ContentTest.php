@@ -11,6 +11,8 @@ namespace ezp\Content\Tests;
 use ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Section\Concrete as ConcreteSection,
+    ezp\Content\Type\Concrete as ConcreteType,
+    ezp\Persistence\Content\Type as TypeValue,
     ezp\User\Proxy as ProxyUser;
 
 /**
@@ -122,4 +124,47 @@ class ContentTest extends BaseContentTest
         $locations[] = $location;
         $this->assertEquals( 1, count( $content->getLocations() ), 'Collection allows several instances of same object!' );
     }
+
+    /**
+     * Test that creating a content from a not persisted type throws a Logic
+     * exception
+     *
+     * @expectedException ezp\Base\Exception\Logic
+     * @covers \ezp\Content\Concrete::__construct
+     */
+    public function testContentCreateFromNotPersistedType()
+    {
+        $content = new ConcreteContent(
+            new ConcreteType,
+            new ProxyUser( 10, $this->repository->getUserService() )
+        );
+    }
+
+    /**
+     * Test that creating a content from a type that is not in the defined
+     * status throws an exception
+     *
+     * @expectedException ezp\Base\Exception\Logic
+     * @covers \ezp\Content\Concrete::__construct
+     */
+    public function testContentCreateFromNotDefinedType()
+    {
+        $vo = new TypeValue(
+            array(
+                'identifier' => 'article',
+                'id' => 1,
+                'status' => TypeValue::STATUS_MODIFIED
+            )
+        );
+        $contentType = new ConcreteType();
+        $contentType->setState(
+            array( 'properties' => $vo )
+        );
+
+        $content = new ConcreteContent(
+            $contentType,
+            new ProxyUser( 10, $this->repository->getUserService() )
+        );
+    }
+
 }

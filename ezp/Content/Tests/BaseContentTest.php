@@ -17,6 +17,7 @@ use ezp\Content\Concrete as ConcreteContent,
     ezp\Base\Configuration,
     ezp\Base\ServiceContainer,
     ezp\Base\Collection\ReadOnly,
+    ezp\Persistence\Content\Type as TypeValue,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -53,8 +54,17 @@ abstract class BaseContentTest extends PHPUnit_Framework_TestCase
         $this->repository = $sc->getRepository();
 
         // setup a content type & content object of use by tests
+        $vo = new TypeValue(
+            array(
+                'identifier' => 'article',
+                'id' => 1,
+                'status' => TypeValue::STATUS_DEFINED
+            )
+        );
         $this->contentType = new ConcreteType;
-        $this->contentType->identifier = 'article';
+        $this->contentType->setState(
+            array( 'properties' => $vo )
+        );
 
         // Add some fields
         $aFieldDefData = array(

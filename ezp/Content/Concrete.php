@@ -17,6 +17,7 @@ use ezp\Base\Model,
     ezp\Content\Version\StaticCollection as VersionCollection,
     ezp\Content\Version\Concrete as ConcreteVersion,
     ezp\Persistence\Content as ContentValue,
+    ezp\Persistence\Content\Type as TypeValue,
     ezp\Persistence\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
     ezp\Persistence\Content\Query\Criterion\SectionId as CriterionSectionId,
     ezp\Persistence\Content\Query\Criterion\UserMetadata as CriterionUserMetadata,
@@ -187,9 +188,25 @@ class Concrete extends Model implements Content
      *
      * @param \ezp\Content\Type $contentType
      * @param \ezp\User $owner
+     * @throws \ezp\Base\Exception\Logic If $contentType is not persisted or if
+     *         it's not in the defined status.
      */
     public function __construct( Type $contentType, User $owner )
     {
+        if ( !$contentType->id )
+        {
+            throw new LogicException(
+                'Content\\Concrete->__contruct()',
+                '$contentType seems to not be persisted'
+            );
+        }
+        if ( $contentType->status !== TypeValue::STATUS_DEFINED )
+        {
+            throw new LogicException(
+                'Content\\Concrete->__contruct()',
+                '$contentType seems to not be in the defined status'
+            );
+        }
         $this->properties = new ContentValue(
             array(
                 'typeId' => $contentType->id,

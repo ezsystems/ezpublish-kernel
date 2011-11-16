@@ -15,11 +15,11 @@ use ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Base\Configuration,
     ezp\Base\ServiceContainer,
     ezp\User\Proxy as ProxyUser,
+    ezp\Persistence\Content\Type as TypeValue,
     PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Location class
- *
  */
 class LocationTest extends PHPUnit_Framework_TestCase
 {
@@ -30,8 +30,17 @@ class LocationTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         // setup a content type & content object of use by tests, fields are not needed for location
+        $vo = new TypeValue(
+            array(
+                'identifier' => 'article',
+                'id' => 1,
+                'status' => TypeValue::STATUS_DEFINED
+            )
+        );
         $contentType = new ConcreteType();
-        $contentType->identifier = 'article';
+        $contentType->setState(
+            array( 'properties' => $vo )
+        );
 
         $sc = new ServiceContainer(
             Configuration::getInstance('service')->getAll(),
