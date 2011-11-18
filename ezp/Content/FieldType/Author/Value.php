@@ -10,7 +10,7 @@
 namespace ezp\Content\FieldType\Author;
 use ezp\Content\FieldType\ValueInterface,
     ezp\Content\FieldType\Value as BaseValue,
-    RuntimeException;
+    ezp\Base\Exception\Logic;
 
 /**
  * Value for Author field type
@@ -20,19 +20,18 @@ class Value extends BaseValue implements ValueInterface
     /**
      * List of authors
      *
-     * @var array
+     * @var \ezp\Content\FieldType\Author\AuthorCollection
      */
     public $authors;
 
     /**
      * Construct a new Value object and initialize with $authors
      *
-     * @param array $authors
+     * @param \ezp\Content\FieldType\Author\Author[] $authors
      */
-    public function __construct( array $authors = null )
+    public function __construct( array $authors = array() )
     {
-        if ( $authors !== null )
-            $this->authors = $authors;
+        $this->authors = new AuthorCollection( $this, $authors );
     }
 
     /**
@@ -40,8 +39,7 @@ class Value extends BaseValue implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
-        throw new RuntimeException( "@TODO: Implement" );
-        return new static( $stringValue );
+        throw new Logic( 'fromString() is not supported by this field type' );
     }
 
     /**
@@ -49,8 +47,19 @@ class Value extends BaseValue implements ValueInterface
      */
     public function __toString()
     {
-        throw new RuntimeException( "@TODO: Implement" );
-        return $this->authors;
+        $string = '';
+        if ( count( $this->authors ) > 0 )
+        {
+            $authorNames = array();
+            foreach ( $this->authors as $author )
+            {
+                $authorNames[] = $author->name;
+            }
+
+            $string = implode( ', ', $authorNames );
+        }
+
+        return $string;
     }
 
     /**
@@ -58,6 +67,12 @@ class Value extends BaseValue implements ValueInterface
      */
     public function getTitle()
     {
-        throw new \RuntimeException( 'Implement this method' );
+        $title = '';
+        if ( count( $this->authors ) > 0 )
+        {
+            $title = $this->authors[0]->name;
+        }
+
+        return $title;
     }
 }

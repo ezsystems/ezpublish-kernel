@@ -9,18 +9,44 @@
 
 namespace ezp\Content\Tests\FieldType;
 use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Author\Type as Author,
+    ezp\Content\FieldType\Author\Type as AuthorType,
     ezp\Content\FieldType\Author\Value as AuthorValue,
+    ezp\Content\FieldType\Author\Author,
+    ezp\Content\FieldType\Author\AuthorCollection,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
+/**
+ * @group fieldType
+ * @group ezauthor
+ */
 class AuthorTest extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \ezp\Content\FieldType\Author\Author[]
+     */
+    private $authors;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->authors = array(
+            new Author( array( 'name' => 'Boba Fett', 'email' => 'boba.fett@bountyhunters.com' ) ),
+            new Author( array( 'name' => 'Darth Vader', 'email' => 'darth.vader@evilempire.biz' ) ),
+            new Author( array( 'name' => 'Luke Skywalker', 'email' => 'luke@imtheone.net' ) )
+        );
+    }
+
+    protected function tearDown()
+    {
+        unset( $this->authors );
+        parent::tearDown();
+    }
+
     /**
      * This test will make sure a correct mapping for the field type string has
      * been made.
      *
-     * @group fieldType
      * @covers \ezp\Content\FieldType\Factory::build
      */
     public function testFactory()
@@ -33,108 +59,139 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @group fieldType
      * @covers \ezp\Content\FieldType::allowedValidators
      */
     public function testAuthorSupportedValidators()
     {
-        $ft = new Author();
+        $ft = new AuthorType;
         self::assertSame( array(), $ft->allowedValidators(), "The set of allowed validators does not match what is expected." );
     }
 
     /**
      * @covers \ezp\Content\FieldType\Author\Type::canParseValue
-     * @expectedException ezp\Base\Exception\BadFieldTypeInput
-     * @group fieldType
+     * @expectedException \ezp\Base\Exception\InvalidArgumentType
      */
-    public function testCanParseValueInvalidFormat()
+    public function testCanParseValueInvalidType()
     {
-        $this->markTestIncomplete( "@TODO: implement this test" );
-        $ft = new Author();
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
-        $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, new AuthorValue( /* Some param */ ) );
+        $ft = new AuthorType;
+        $ft->setValue( $this->getMock( 'ezp\\Content\\FieldType\\Value' ) );
     }
 
     /**
-     * @group fieldType
+     * @covers \ezp\Content\FieldType\Author\Type::canParseValue
+     * @expectedException \ezp\Base\Exception\BadFieldTypeInput
+     */
+    public function testCanParseValueInvalidFormat()
+    {
+        $ft = new AuthorType;
+        $value = new AuthorValue;
+        $value->authors = 'This is not a valid author collection';
+        $ft->setValue( $value );
+    }
+
+    /**
      * @covers \ezp\Content\FieldType\Author\Type::canParseValue
      */
     public function testCanParseValueValidFormat()
     {
-        $this->markTestIncomplete( "@TODO: implement this test" );
-        $ft = new Author();
-        $ref = new ReflectionObject( $ft );
-        $refMethod = $ref->getMethod( "canParseValue" );
-        $refMethod->setAccessible( true );
-
-        $value = new AuthorValue( /* Some param */ );
-        self::assertSame( $value, $refMethod->invoke( $ft, $value ) );
+        $ft = new AuthorType;
+        $author = new Author;
+        $author->name = 'Boba Fett';
+        $author->email = 'boba.fett@bountyhunters.com';
+        $value = new AuthorValue( array( $author ) );
+        $ft->setValue( $value );
+        self::assertSame( $value, $ft->getValue() );
     }
 
     /**
-     * @group fieldType
-     * @covers \ezp\Content\FieldType\Author\Type::toFieldValue
-     */
-    public function testToFieldValue()
-    {
-        $this->markTestIncomplete( "@TODO: implement this test" );
-    }
-
-    /**
-     * @group fieldType
-     * @covers \ezp\Content\FieldType\Author\Value::__construct
-     */
-    public function testBuildFieldValueWithParam()
-    {
-        $this->markTestIncomplete( "@TODO: implement this test" );
-        $value = new AuthorValue( /* Some param */ );
-        self::assertSame( /* some value */ null, $value->value );
-    }
-
-    /**
-     * @group fieldType
      * @covers \ezp\Content\FieldType\Author\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
-        $this->markTestIncomplete( "@TODO: implement this test" );
         $value = new AuthorValue;
-        self::assertSame( array(), $value->value );
+        self::assertInstanceOf( 'ezp\\Content\\FieldType\\Author\\AuthorCollection', $value->authors );
+        self::assertSame( array(), $value->authors->getArrayCopy() );
     }
 
     /**
-     * @group fieldType
+     * @covers \ezp\Content\FieldType\Author\Value::__construct
+     */
+    public function testBuildFieldValueWithParam()
+    {
+        $value = new AuthorValue( $this->authors );
+        self::assertInstanceOf( 'ezp\\Content\\FieldType\\Author\\AuthorCollection', $value->authors );
+        self::assertSame( $this->authors, $value->authors->getArrayCopy() );
+    }
+
+
+    /**
      * @covers \ezp\Content\FieldType\Author\Value::fromString
+     * @expectedException \ezp\Base\Exception\Logic
      */
     public function testBuildFieldValueFromString()
     {
-        $this->markTestIncomplete( "@TODO: implement this test" );
-        // String representation for authors
-        $authors = null;
-        $value = AuthorValue::fromString( $authors );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Author\\Value", $value );
-        self::assertSame( $authors, $value->value );
+        $value = AuthorValue::fromString( 'This is not gonna work' );
     }
 
     /**
-     * @group fieldType
      * @covers \ezp\Content\FieldType\Author\Value::__toString
      */
     public function testFieldValueToString()
     {
-        $this->markTestIncomplete( "@TODO: implement this test" );
-        // String representation for authors
-        $authors = null;
-        $authors = "4200";
-        $value = AuthorValue::fromString( $authors );
-        self::assertSame( $authors, (string)$value );
+        $value = new AuthorValue( $this->authors );
 
-        self::assertSame(
-            $authors,
-            AuthorValue::fromString( (string)$value )->value,
-            "fromString() and __toString() must be compatible"
-        );
+        $authorsName = array();
+        foreach ( $this->authors as $author )
+        {
+            $authorsName[] = $author->name;
+        }
+
+        self::assertSame( implode( ', ', $authorsName ), $value->__toString() );
+    }
+
+    /**
+     * @covers \ezp\Content\FieldType\Author\Value::getTitle
+     */
+    public function testFieldValueTitle()
+    {
+        $value = new AuthorValue( $this->authors );
+        self::assertSame( $this->authors[0]->name , $value->getTitle() );
+    }
+
+    /**
+     * @covers \ezp\Content\FieldType\Author\AuthorCollection::offsetSet
+     */
+    public function testAddAuthor()
+    {
+        $value = new AuthorValue;
+        $value->authors[] = $this->authors[0];
+        self::assertSame( 1, $this->authors[0]->id );
+        self::assertSame( 1, count( $value->authors ) );
+
+        $this->authors[1]->id = 10;
+        $value->authors[] = $this->authors[1];
+        self::assertSame( 10, $this->authors[1]->id );
+
+        $this->authors[2]->id = -1;
+        $value->authors[] = $this->authors[2];
+        self::assertSame( $this->authors[1]->id + 1, $this->authors[2]->id );
+        self::assertSame( 3, count( $value->authors ) );
+    }
+
+    public function testRemoveAuthors()
+    {
+        $existingIds = array();
+        foreach ( $this->authors as $author )
+        {
+            $id = mt_rand( 1, 100 );
+            if ( in_array( $id, $existingIds ) )
+                $id++;
+            $author->id = $id;
+        }
+
+        $value = new AuthorValue( $this->authors );
+        $value->authors->removeAuthorsById( array( $this->authors[1]->id, $this->authors[2]->id ) );
+        self::assertSame( count( $this->authors ) - 2, count( $value->authors ) );
+        self::assertSame( array( $this->authors[0] ), $value->authors->getArrayCopy() );
     }
 }

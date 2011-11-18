@@ -11,7 +11,7 @@ namespace ezp\Content\FieldType\Author;
 use ezp\Content\FieldType,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Base\Exception\BadFieldTypeInput,
-    DOMDocument;
+    ezp\Base\Exception\InvalidArgumentType;
 
 /**
  * Author field type.
@@ -32,27 +32,25 @@ class Type extends FieldType
      */
     protected function getDefaultValue()
     {
-        return new Value( array() );
+        return new Value;
     }
 
     /**
-     * Checks if value can be parsed.
-     *
-     * If the value actually can be parsed, the value is returned.
-     *
-     * @throws ezp\Base\Exception\BadFieldTypeInput Thrown when $inputValue is not understood.
-     * @param mixed $inputValue
-     * @return mixed
-     * @todo There should not be any XML parsing here
+     * @see \ezp\Content\FieldType::canParseValue()
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        $dom = new DOMDocument( '1.0', 'utf-8' );
-        if ( !$dom->loadXML( $inputValue ) )
+        if ( $inputValue instanceof Value )
         {
-            throw new BadFieldTypeInput( $inputValue, __CLASS__ );
+            if ( !$inputValue->authors instanceof AuthorCollection )
+            {
+                throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
+            }
+
+            return $inputValue;
         }
-        return $inputValue;
+
+        throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\Author\\Value' );
     }
 
     /**
@@ -62,9 +60,6 @@ class Type extends FieldType
      */
     protected function getSortInfo()
     {
-        return array(
-            'sort_key_string' => '',
-            'sort_key_int' => 0
-        );
+        return false;
     }
 }
