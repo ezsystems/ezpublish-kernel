@@ -42,7 +42,7 @@ class Type extends FieldType
         if ( $inputValue instanceof Value )
         {
             if ( isset( $inputValue->file ) && !$inputValue->file instanceof BinaryFile )
-                throw new BadFieldTypeInput( $inputValue, get_class() );
+                throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
 
             return $inputValue;
         }
