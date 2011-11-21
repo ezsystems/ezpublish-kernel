@@ -11,12 +11,13 @@ namespace ezp\Content\FieldType\Author;
 use ezp\Persistence\ValueObject;
 
 /**
- * Description of Author
+ * Value object for an author
  */
 class Author extends ValueObject
 {
     /**
-     * Author's Id in the collection that holds it
+     * Author's Id in the collection that holds it.
+     * If not set or -1, an Id will be generated when added to AuthorCollection.
      *
      * @var int
      */
