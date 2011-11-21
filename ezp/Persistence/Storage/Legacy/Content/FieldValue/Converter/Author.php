@@ -61,7 +61,10 @@ class Author implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        // Nothing to restore
+        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
+        $fieldDef->defaultValue = new FieldValue(
+            array( 'data' => new AuthorValue )
+        );
     }
 
     /**
