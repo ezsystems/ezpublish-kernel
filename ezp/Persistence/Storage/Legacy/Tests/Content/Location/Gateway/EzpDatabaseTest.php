@@ -305,7 +305,7 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase::getMainNodeId()
+     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase::getMainNodeId
      * @depends testCreateLocation
      */
     public function testGetMainNodeId()
