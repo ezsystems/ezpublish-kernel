@@ -99,15 +99,15 @@ class LanguageHandlerTest extends HandlerTest
         $languages = $this->handler->loadAll();
 
         $this->assertEquals( 2, count( $languages ) );
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $languages[0] );
-        $this->assertEquals( 'eng-GB', $languages[0]->locale );
-        $this->assertEquals( 'English (United Kingdom)', $languages[0]->name );
-        $this->assertTrue( $languages[0]->isEnabled );
+        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $languages['eng-GB'] );
+        $this->assertEquals( 'eng-GB', $languages['eng-GB']->locale );
+        $this->assertEquals( 'English (United Kingdom)', $languages['eng-GB']->name );
+        $this->assertTrue( $languages['eng-GB']->isEnabled );
 
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $languages[1] );
-        $this->assertEquals( 'eng-US', $languages[1]->locale );
-        $this->assertEquals( 'English (American)', $languages[1]->name );
-        $this->assertTrue( $languages[1]->isEnabled );
+        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $languages['eng-US'] );
+        $this->assertEquals( 'eng-US', $languages['eng-US']->locale );
+        $this->assertEquals( 'English (American)', $languages['eng-US']->name );
+        $this->assertTrue( $languages['eng-US']->isEnabled );
 
         $struct = new CreateStruct();
         $struct->locale = 'nor-NB';
@@ -118,10 +118,10 @@ class LanguageHandlerTest extends HandlerTest
         $languages = $this->handler->loadAll();
 
         $this->assertEquals( 3, count( $languages ) );
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $languages[2] );
-        $this->assertEquals( 'nor-NB', $languages[2]->locale );
-        $this->assertEquals( 'Norwegian Bokmål', $languages[2]->name );
-        $this->assertFalse( $languages[2]->isEnabled );
+        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $languages['nor-NB'] );
+        $this->assertEquals( 'nor-NB', $languages['nor-NB']->locale );
+        $this->assertEquals( 'Norwegian Bokmål', $languages['nor-NB']->name );
+        $this->assertFalse( $languages['nor-NB']->isEnabled );
     }
 
     /**

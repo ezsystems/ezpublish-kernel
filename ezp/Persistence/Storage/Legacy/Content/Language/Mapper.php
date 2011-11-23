@@ -52,7 +52,7 @@ class Mapper
             $language->name = $row['name'];
             $language->isEnabled = !( (int)$row['disabled'] );
 
-            $languages[] = $language;
+            $languages[$row['locale']] = $language;
         }
 
         return $languages;

@@ -84,7 +84,12 @@ class LanguageHandler implements LanguageHandlerInterface
      */
     public function loadAll()
     {
-        return $this->backend->find( 'Content\\Language', array() );
+        $languages = array();
+        foreach ( $this->backend->find( 'Content\\Language', array() ) as  $language )
+        {
+            $languages[$language->locale] = $language;
+        }
+        return $languages;
     }
 
     /**

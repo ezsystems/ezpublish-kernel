@@ -87,7 +87,7 @@ class MapperTest extends TestCase
         $langGb->name = 'English (United Kingdom)';
         $langGb->isEnabled = true;
 
-        return array( $langUs, $langGb );
+        return array( 'eng-US' => $langUs, 'eng-GB' => $langGb );
     }
 
     /**

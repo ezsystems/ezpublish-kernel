@@ -157,9 +157,9 @@ class LanguageTest extends BaseServiceTest
         $service->create( 'eng-US', 'English (American)' );
         $languages = $service->loadAll();
         self::assertEquals( 2, count( $languages ) );
-        self::assertEquals( $languages[0]->id + 1, $languages[1]->id );
-        self::assertEquals( 'eng-GB', $languages[0]->locale );
-        self::assertEquals( 'eng-US', $languages[1]->locale );
+        self::assertEquals( $languages['eng-GB']->id + 1, $languages['eng-US']->id );
+        self::assertEquals( 'eng-GB', $languages['eng-GB']->locale );
+        self::assertEquals( 'eng-US', $languages['eng-US']->locale );
     }
 
     /**

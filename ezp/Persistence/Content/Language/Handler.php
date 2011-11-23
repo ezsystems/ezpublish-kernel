@@ -43,6 +43,8 @@ interface Handler
     /**
      * Get all languages
      *
+     * Return list of languages where key of hash is locale.
+     *
      * @return \ezp\Persistence\Content\Language[]
      */
     public function loadAll();
