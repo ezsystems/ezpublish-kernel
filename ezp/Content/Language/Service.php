@@ -87,6 +87,22 @@ class Service extends BaseService
     }
 
     /**
+     * Loads a Language by its locale ($localeCode)
+     *
+     * @param string $localeCode
+     * @return \ezp\Content\Language
+     * @throws \ezp\Base\Exception\NotFound if language could not be found
+     */
+    public function loadByLocale( $localeCode )
+    {
+        $list = $this->handler->contentLanguageHandler()->loadAll();
+        if ( !isset( $list[ $localeCode ] ) )
+            throw new NotFound( 'language', $localeCode );
+
+        return $this->buildDomainObject( $list[ $localeCode ] );
+    }
+
+    /**
      * Deletes $language from content repository
      *
      * @param \ezp\Content\Language $language

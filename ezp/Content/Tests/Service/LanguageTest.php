@@ -142,6 +142,22 @@ class LanguageTest extends BaseServiceTest
 
     /**
      * Test service function for loading language
+     * @covers \ezp\Content\Language\Service::loadByLocale
+     */
+    public function testLoadByLocale()
+    {
+        $service = $this->repository->getContentLanguageService();
+        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
+        $language = $service->create( 'test-TEST', 'test' );
+        $newLanguage = $service->loadByLocale( $language->locale );
+        self::assertEquals( $newLanguage->id, $language->id );
+        self::assertEquals( $newLanguage->locale, $language->locale );
+        self::assertEquals( $newLanguage->name, $language->name );
+        self::assertEquals( $newLanguage->isEnabled, $language->isEnabled );
+    }
+
+    /**
+     * Test service function for loading language
      * @covers \ezp\Content\Language\Service::loadAll
      */
     public function testLoadAll()
