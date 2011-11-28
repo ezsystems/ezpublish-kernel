@@ -8,14 +8,14 @@
  */
 
 namespace ezp\Content\Version;
-use ezp\Base\Collection\Lazy,
+use ezp\Base\Collection\LazyType,
     ezp\Content\Service as ContentService;
 
 /**
  * Version Collection class. Versions are indexed by version number
  * This collection uses lazy loading mechanism.
  */
-class LazyCollection extends Lazy
+class LazyCollection extends LazyType
 {
     /**
      * Constructor

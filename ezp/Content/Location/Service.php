@@ -14,6 +14,7 @@ use ezp\Base\Exception,
     ezp\Base\Exception\Logic,
     ezp\Base\Service as BaseService,
     ezp\Base\Collection\Lazy,
+    ezp\Base\Collection\LazyType,
     ezp\Content\Location,
     ezp\Content\Location\Concrete as ConcreteLocation,
     ezp\Content\Location\Proxy as ProxyLocation,
@@ -386,7 +387,7 @@ class Service extends BaseService
         $newState = array(
             'properties' => $vo,
             'parent' => new ProxyLocation( $vo->parentId, $this ),
-            'children' => new Lazy(
+            'children' => new LazyType(
                 'ezp\\Content\\Location',
                 $this,
                 // api uses location to be able to use sort info

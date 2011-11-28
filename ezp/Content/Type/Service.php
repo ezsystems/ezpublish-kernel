@@ -15,7 +15,7 @@ use ezp\Base\Service as BaseService,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Collection\Lazy,
+    ezp\Base\Collection\LazyType,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Collection\ReadOnly as ReadOnlyCollection,
     ezp\Base\Model,
@@ -588,7 +588,7 @@ class Service extends BaseService
         $group->setState(
             array(
                 "properties" => $vo,
-                "types" => new Lazy(
+                "types" => new LazyType(
                     "ezp\\Content\\Type",
                     $this,
                     $vo->id,

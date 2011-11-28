@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\Field;
-use ezp\Base\Collection\Lazy,
+use ezp\Base\Collection\LazyType,
     ezp\Content\Service as ContentService,
     ezp\Content\Version,
     ezp\Content\FieldType\Factory as FieldTypeFactory,
@@ -20,7 +20,7 @@ use ezp\Base\Collection\Lazy,
  * Field Collection class. Fields are indexed by field identifier
  * This collection uses lazy loading mechanism.
  */
-class LazyCollection extends Lazy
+class LazyCollection extends LazyType
 {
     /**
      * Constructor

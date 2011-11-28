@@ -9,7 +9,7 @@
 
 namespace ezp\Content;
 use ezp\Base\Service as BaseService,
-    ezp\Base\Collection\Lazy,
+    ezp\Base\Collection\LazyType,
     ezp\Base\Exception\Forbidden,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\Logic,
@@ -675,7 +675,7 @@ class Service extends BaseService
                 array(
                     "properties" => $locationValue,
                     "parent" => new ProxyLocation( $locationValue->parentId, $locationService ),
-                    "children" => new Lazy(
+                    "children" => new LazyType(
                         "ezp\\Content\\Location",
                         $locationService,
                         $location, // api uses location to be able to use sort info

@@ -11,6 +11,7 @@ namespace ezp\User;
 use ezp\Base\Configuration,
     ezp\Base\Service as BaseService,
     ezp\Base\Collection\Lazy,
+    ezp\Base\Collection\LazyType,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\Forbidden,
@@ -517,19 +518,19 @@ class Service extends BaseService
             array(
                 "properties" => $vo,
                 "content" => $content,
-                "groups" => new Lazy(
+                "groups" => new LazyType(
                     "ezp\\User\\Group",
                     $this,
                     $vo->id,
                     "loadGroupsByUserId"
                 ),
-                "roles" => new Lazy(
+                "roles" => new LazyType(
                     "ezp\\User\\Role",
                     $this,
                     $vo->id,
                     "loadRolesByGroupId"
                 ),
-                "policies" => new Lazy(
+                "policies" => new LazyType(
                     "ezp\\User\\Policy",
                     $this,
                     $vo->id,
@@ -559,7 +560,7 @@ class Service extends BaseService
         $do->setState(
             array(
                 "parent" => $parent,
-                "roles" => new Lazy(
+                "roles" => new LazyType(
                     "ezp\\User\\Role",
                     $this,
                     $content->id,
