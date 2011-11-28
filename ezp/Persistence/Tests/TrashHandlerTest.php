@@ -184,7 +184,7 @@ class TrashHandlerTest extends HandlerTest
         self::assertInstanceOf( 'ezp\\Persistence\\Content\\Location\\Trashed', $trashed );
         foreach ( $this->locations[0] as $property => $value )
         {
-            self::assertEquals( $value, $trashed->$property );
+            self::assertEquals( $value, $trashed->$property, "Property {$property} did not match");
         }
     }
 
