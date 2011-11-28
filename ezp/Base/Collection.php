@@ -36,4 +36,12 @@ interface Collection extends Countable, ArrayAccess, Serializable
      * @return array
      */
     public function getArrayCopy();
+
+    /**
+     * Exchange internal array with a new one, original (old) array is returned
+     *
+     * @param array $input
+     * @return array
+     */
+    public function exchangeArray( $input );
 }
