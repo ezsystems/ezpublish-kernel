@@ -77,7 +77,7 @@ class BinaryFileStorage implements Storage
             $q->bindValue( (string)$file->contentType )
         )->set(
             $dbHandler->quoteColumn( 'original_filename' ),
-            $q->bindValue( $value->data->originalFilename )
+            $q->bindValue( $field->value->data->originalFilename )
         )->set(
             $dbHandler->quoteColumn( 'version' ),
             $q->bindValue( $field->versionNo, null, \PDO::PARAM_INT )
