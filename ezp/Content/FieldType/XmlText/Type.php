@@ -22,7 +22,8 @@ use ezp\Base\Repository,
     ezp\Content\FieldType\XmlText\Input\Parser\Simplified as SimplifiedInputParser,
     ezp\Content\FieldType\XmlText\Input\Parser\OnlineEditor as OnlineEditorParser,
     ezp\Content\FieldType\XmlText\Input\Parser\Raw as RawInputParser,
-    ezp\Base\Exception\BadFieldTypeInput;
+    ezp\Base\Exception\BadFieldTypeInput,
+    ezp\Base\Exception\InvalidArgumentType;
 
 /**
  * XmlBlock field type.
@@ -83,21 +84,27 @@ EOF;
      */
     protected function canParseValue( BaseValue $inputValue )
     {
-        if ( !$inputValue instanceof Value || !is_string( $inputValue->text ) )
+        if ( $inputValue instanceof Value )
         {
-            throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
+
+            if ( !is_string( $inputValue->text ) )
+            {
+                throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
+            }
+
+            $handler = new InputHandler( $this->getInputParser( $inputValue ) );
+            if ( !$handler->isXmlValid( $inputValue->text, false ) )
+            {
+                // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
+                throw new BadFieldTypeInput( $inputValue, get_class() );
+            }
+            else
+            {
+                return $inputValue;
+            }
         }
 
-        $handler = new InputHandler( $this->getInputParser( $inputValue ) );
-        if ( !$handler->isXmlValid( $inputValue->text, false ) )
-        {
-            // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
-            throw new BadFieldTypeInput( $inputValue, get_class() );
-        }
-        else
-        {
-            return $inputValue;
-        }
+        throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\XmlText\\Value' );
     }
 
     /**

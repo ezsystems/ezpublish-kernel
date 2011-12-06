@@ -49,4 +49,5 @@ class Value extends BaseValue implements ValueInterface
     {
         throw new \RuntimeException( 'Implement this method' );
     }
+
 }
