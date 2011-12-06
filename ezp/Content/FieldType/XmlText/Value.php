@@ -37,6 +37,14 @@ class Value extends BaseValue implements ValueInterface
     /**
      * @see \ezp\Content\FieldType\Value
      */
+    public static function fromString( $stringValue )
+    {
+        return new static( $stringValue );
+    }
+
+    /**
+     * @see \ezp\Content\FieldType\Value
+     */
     public function __toString()
     {
         return (string)$this->text;
