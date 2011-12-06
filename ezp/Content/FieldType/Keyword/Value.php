@@ -35,7 +35,7 @@ class Value extends BaseValue implements ValueInterface
             if ( !is_array( $values ) )
             {
                 $tags = array();
-                foreach ( explode( ',', $stringValue ) as $tag )
+                foreach ( explode( ',', $values ) as $tag )
                 {
                     $tag = trim( $tag );
                     if ( $tag )
