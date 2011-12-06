@@ -12,6 +12,7 @@ use ezp\Base\Model,
     ezp\Base\Locale,
     ezp\Base\Collection\Type as TypeCollection,
     ezp\Content,
+    ezp\Content\Version\Concrete as ConcreteVersion,
     DomainException;
 
 /**
@@ -149,7 +150,7 @@ class Translation extends Model
     {
         if ( $base === null )
         {
-            $version = new Version( $this->content, $this->locale );
+            $version = new ConcreteVersion( $this->content, $this->locale );
         }
         else
         {
