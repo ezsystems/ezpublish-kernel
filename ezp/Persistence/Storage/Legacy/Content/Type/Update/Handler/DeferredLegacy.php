@@ -65,7 +65,7 @@ class DeferredLegacy extends Handler
     public function publishNewType( $toType, $newStatus )
     {
         $this->contentTypeGateway->publishTypeAndFields(
-            $fromType->id,
+            $toType->id,
             $toType->status,
             Type::STATUS_MODIFIED
         );
