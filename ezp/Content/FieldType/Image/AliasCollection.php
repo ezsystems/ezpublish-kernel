@@ -187,6 +187,6 @@ class AliasCollection extends TypeCollection
         if( $fileSuffix )
             $fileSuffix = '.' . $fileSuffix;
 
-        return md5( $fileInfo->getBasename( $fileSuffix ) . microtime() . mt_rand() ) . $fileSuffix;
+        return md5( $originalImageInfo->getBasename( $fileSuffix ) . microtime() . mt_rand() ) . $fileSuffix;
     }
 }
