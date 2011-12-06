@@ -1133,7 +1133,7 @@ class OnlineEditor extends BaseParser implements InputParser
                     $locationId = $nodePath;
                     if ( $this->getOption( self::OPT_CHECK_EXTERNAL_DATA ) )
                     {
-                        $location = $this->handler->getLocationById( $nodeId );
+                        $location = $this->handler->getLocationById( $locationId );
                         if ( $location === false )
                         {
                             $this->Messages[] = "Location $locationId does not exist";
