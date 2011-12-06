@@ -53,7 +53,7 @@ class Value extends BaseValue implements ValueInterface
                 }
                 catch ( Exception $e )
                 {
-                    throw new InvalidArgumentValue( '$stringValue', $stringValue, __CLASS__, $e );
+                    throw new InvalidArgumentValue( '$dateTime', $dateTime, __CLASS__, $e );
                 }
             }
 
