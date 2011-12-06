@@ -11,7 +11,6 @@ namespace ezp\Content\Version;
 use ezp\Base\Proxy\Model as ModelProxy,
     ezp\Content,
     ezp\Content\Version,
-    ezp\Content\Version\Concrete,
     ezp\Content\Service;
 
 /**
@@ -73,17 +72,6 @@ class Proxy extends ModelProxy implements Version
             $this->proxiedObject = $this->service->loadVersion( $this->id, $this->versionNo );
             $this->moveObservers();
         }
-    }
-
-    /**
-     * Returns definition of the content object, atm: permissions
-     *
-     * @access private
-     * @return array
-     */
-    public static function definition()
-    {
-        return Concrete::definition();
     }
 
     /**
