@@ -10,7 +10,8 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
     ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
-    ezp\Persistence\Content\Query\Criterion;
+    ezp\Persistence\Content\Query\Criterion,
+    ezcQuerySelect;
 
 /**
  * Status criterion handler
@@ -47,7 +48,7 @@ class Status extends CriterionHandler
      * @param Criterion $criterion
      * @return \ezcQueryExpression
      */
-    public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
+    public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
         $status = array();
         foreach ( $criterion->value as $value )

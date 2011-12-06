@@ -9,7 +9,8 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
-    ezp\Persistence\Content\Query\Criterion;
+    ezp\Persistence\Content\Query\Criterion,
+    ezcQuerySelect;
 
 /**
  * Content locator gateway implementation using the zeta database component.
@@ -41,7 +42,7 @@ class CriteriaConverter
      * @param Criterion $criterion
      * @return \ezcQueryExpression
      */
-    public function convertCriteria( \ezcQuerySelect $query, Criterion $criterion )
+    public function convertCriteria( ezcQuerySelect $query, Criterion $criterion )
     {
         foreach ( $this->handler as $handler )
         {

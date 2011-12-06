@@ -10,7 +10,8 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Content\Query\Criterion;
+    ezp\Persistence\Content\Query\Criterion,
+    ezcQuerySelect;
 
 /**
  * Content locator gateway implementation using the zeta database component.
@@ -64,6 +65,6 @@ abstract class CriterionHandler
      * @param Criterion $criterion
      * @return \ezcQueryExpression
      */
-    abstract public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion );
+    abstract public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion );
 }
 

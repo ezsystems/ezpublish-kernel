@@ -11,6 +11,7 @@
 namespace ezp\Persistence\Storage\Legacy\Content;
 use ezp\Persistence\Storage\Legacy\Content\Gateway,
     ezp\Persistence\Storage\Legacy\Content\Mapper,
+    ezp\Persistence\Storage\Legacy\Content\Location\Gateway as LocationGateway,
     ezp\Persistence\Content\Handler as BaseContentHandler,
     ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
@@ -59,7 +60,7 @@ class Handler implements BaseContentHandler
      */
     public function __construct(
         Gateway $contentGateway,
-        Location\Gateway $locationGateway,
+        LocationGateway $locationGateway,
         Mapper $mapper,
         FieldHandler $fieldHandler
     )

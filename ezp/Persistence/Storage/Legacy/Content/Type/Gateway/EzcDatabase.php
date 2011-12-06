@@ -11,12 +11,15 @@ namespace ezp\Persistence\Storage\Legacy\Content\Type\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Type\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Storage\Legacy\Content\Language,
+    ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator,
     ezp\Persistence\Content\Type,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Type\UpdateStruct,
     ezp\Persistence\Content\Type\Group,
     ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+    ezcQuery,
+    ezcQuerySelect;
 
 /**
  * Zeta Component Database based content type gateway.
@@ -98,9 +101,7 @@ class EzcDatabase extends Gateway
      *
      * @param EzcDbHandler $db
      */
-    public function __construct(
-        EzcDbHandler $db,
-        Language\MaskGenerator $languageMaskGenerator )
+    public function __construct( EzcDbHandler $db, MaskGenerator $languageMaskGenerator )
     {
         $this->dbHandler = $db;
         $this->languageMaskGenerator = $languageMaskGenerator;
@@ -343,11 +344,11 @@ class EzcDatabase extends Gateway
     /**
      * Set common columns for insert/update of a Type.
      *
-     * @param \ezcQuerySelect $q
+     * @param \ezcQuery $q
      * @param mixed $typeStruct
      * @return void
      */
-    protected function setCommonTypeColumns( \ezcQuery $q, $type )
+    protected function setCommonTypeColumns( ezcQuery $q, $type )
     {
         $q->set(
             $this->dbHandler->quoteColumn( 'serialized_name_list' ),
@@ -602,7 +603,7 @@ class EzcDatabase extends Gateway
      * @return void
      */
     protected function setCommonFieldColumns(
-        \ezcQuery $q, FieldDefinition $fieldDefinition,
+        ezcQuery $q, FieldDefinition $fieldDefinition,
         StorageFieldDefinition $storageFieldDef
     )
     {
@@ -1201,7 +1202,7 @@ class EzcDatabase extends Gateway
      * @param string $tableName
      * @return array
      */
-    protected function selectColumns( \ezcQuerySelect $q, $tableName )
+    protected function selectColumns( ezcQuerySelect $q, $tableName )
     {
         foreach ( $this->columns[$tableName] as $col )
         {

@@ -8,6 +8,9 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy;
+use ezp\Persistence\Storage\Legacy\Content\StorageRegistry,
+    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry,
+    ezp\Persistence\Storage\Legacy\Content\Search\TransformationProcessor;
 
 /**
  * Configurator for the Handler
@@ -65,7 +68,7 @@ class Configurator
      * @param \ezp\Persistence\Storage\Legacy\StorageRegistry $registry
      * @return void
      */
-    public function configureExternalStorages( Content\StorageRegistry $registry )
+    public function configureExternalStorages( StorageRegistry $registry )
     {
         if ( isset( $this->config['external_storages'] ) )
         {
@@ -82,7 +85,7 @@ class Configurator
      * @param \ezp\Persistence\Storage\Legacy\FieldValue\Converter\Registry $registry
      * @return void
      */
-    public function configureFieldConverter( Content\FieldValue\Converter\Registry $registry )
+    public function configureFieldConverter( Registry $registry )
     {
         if ( isset( $this->config['field_converter'] ) )
         {
@@ -99,7 +102,7 @@ class Configurator
      * @param \ezp\Persistence\Storage\Legacy\Content\Search\TransformationProcessor $processor
      * @return void
      */
-    public function configureTransformationRules( Content\Search\TransformationProcessor $processor )
+    public function configureTransformationRules( TransformationProcessor $processor )
     {
         if ( isset( $this->config['transformation_rule_files'] ) )
         {

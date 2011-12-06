@@ -10,7 +10,8 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Language\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Language\Gateway,
     ezp\Persistence\Content\Language,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler;
+    ezp\Persistence\Storage\Legacy\EzcDbHandler,
+    ezcQuery;
 
 /**
  * ezcDatabase based Language Gateway
@@ -76,7 +77,7 @@ class EzcDatabase extends Gateway
      * @param \ezp\Persistence\Content\Language $language
      * @return void
      */
-    protected function setCommonLanguageColumns( \ezcQuery $query, Language $language )
+    protected function setCommonLanguageColumns( ezcQuery $query, Language $language )
     {
         $query->set(
             $this->dbHandler->quoteColumn( 'locale' ),

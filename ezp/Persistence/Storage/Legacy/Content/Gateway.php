@@ -107,7 +107,7 @@ abstract class Gateway
     abstract public function updateNonTranslatableField(
         Field $field,
         StorageFieldValue $value,
-        Content\UpdateStruct $content );
+        UpdateStruct $content );
 
     /**
      * Load data for a content object

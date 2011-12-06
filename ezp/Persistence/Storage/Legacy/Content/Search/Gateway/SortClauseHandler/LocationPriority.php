@@ -11,7 +11,8 @@ namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\SortClauseHandle
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\SortClauseHandler,
     ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Content\Query\SortClause;
+    ezp\Persistence\Content\Query\SortClause,
+    ezcQuerySelect;
 
 /**
  * Content locator gateway implementation using the zeta database component.
@@ -40,7 +41,7 @@ class LocationPriority extends SortClauseHandler
      * @param int $number
      * @return string
      */
-    public function applySelect( \ezcQuerySelect $query, SortClause $sortClause, $number )
+    public function applySelect( ezcQuerySelect $query, SortClause $sortClause, $number )
     {
         $query
             ->select(
@@ -64,7 +65,7 @@ class LocationPriority extends SortClauseHandler
      * @param int $number
      * @return void
      */
-    public function applyJoin( \ezcQuerySelect $query, SortClause $sortClause, $number )
+    public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number )
     {
         $table = $this->getSortTableName( $number );
         $query

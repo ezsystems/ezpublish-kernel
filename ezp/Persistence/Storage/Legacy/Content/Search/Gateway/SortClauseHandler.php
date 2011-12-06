@@ -11,7 +11,8 @@ namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Content\Query\SortClause,
-    ezp\Content\Query;
+    ezp\Content\Query,
+    ezcQuerySelect;
 
 /**
  * Handler for a single sort clause
@@ -54,7 +55,7 @@ abstract class SortClauseHandler
      * @param int $number
      * @return string
      */
-    abstract public function applySelect( \ezcQuerySelect $query, SortClause $sortClause, $number );
+    abstract public function applySelect( ezcQuerySelect $query, SortClause $sortClause, $number );
 
     /**
      * applies joins to the query
@@ -64,7 +65,7 @@ abstract class SortClauseHandler
      * @param int $number
      * @return void
      */
-    abstract public function applyJoin( \ezcQuerySelect $query, SortClause $sortClause, $number );
+    abstract public function applyJoin( ezcQuerySelect $query, SortClause $sortClause, $number );
 
     /**
      * Returns the quoted sort column name

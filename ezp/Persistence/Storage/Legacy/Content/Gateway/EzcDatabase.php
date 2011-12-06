@@ -14,13 +14,15 @@ use ezp\Persistence\Storage\Legacy\Content\Gateway,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\Language,
+    ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler,
     ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     ezp\Persistence\Content,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Content\Field,
     ezp\Content as ContentDo,
-    ezp\Content\Version as VersionDo;
+    ezp\Content\Version as VersionDo,
+    ezcQueryUpdate;
 
 /**
  * ezcDatabase based content gateway
@@ -64,8 +66,8 @@ class EzcDatabase extends Gateway
      */
     public function __construct(
         EzcDbHandler $db,
-        EzcDatabase\QueryBuilder $queryBuilder,
-        Language\CachingHandler $languageHandler,
+        QueryBuilder $queryBuilder,
+        CachingHandler $languageHandler,
         LanguageMaskGenerator $languageMaskGenerator )
     {
         $this->dbHandler = $db;
@@ -478,7 +480,7 @@ class EzcDatabase extends Gateway
      * @param StorageFieldValue $value
      * @return void
      */
-    protected function setFieldUpdateValues( \ezcQueryUpdate $q, StorageFieldValue $value  )
+    protected function setFieldUpdateValues( ezcQueryUpdate $q, StorageFieldValue $value  )
     {
         $q->update(
             $this->dbHandler->quoteTable( 'ezcontentobject_attribute' )
@@ -511,7 +513,7 @@ class EzcDatabase extends Gateway
     public function updateNonTranslatableField(
         Field $field,
         StorageFieldValue $value,
-        Content\UpdateStruct $content )
+        UpdateStruct $content )
     {
         // Note, no need to care for language_id here, since Content->$alwaysAvailable
         // cannot change on update

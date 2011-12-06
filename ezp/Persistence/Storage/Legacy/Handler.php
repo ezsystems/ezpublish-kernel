@@ -11,9 +11,28 @@ namespace ezp\Persistence\Storage\Legacy;
 use ezp\Persistence\Handler as HandlerInterface,
     ezp\Persistence\Storage\Legacy\Content,
     ezp\Persistence\Storage\Legacy\Content\Type,
+    ezp\Persistence\Storage\Legacy\Content\Handler as ContentHandler,
+    ezp\Persistence\Storage\Legacy\Content\FieldHandler as ContentFieldHandler,
+    ezp\Persistence\Storage\Legacy\Content\Type\Handler as TypeHandler,
+    ezp\Persistence\Storage\Legacy\Content\Type\Mapper as TypeMapper,
+    ezp\Persistence\Storage\Legacy\Content\Language\Mapper as LanguageMapper,
     ezp\Persistence\Storage\Legacy\Content\Location\Handler as LocationHandler,
+    ezp\Persistence\Storage\Legacy\Content\Location\Mapper as LocationMapper,
+    ezp\Persistence\Storage\Legacy\Content\Mapper as ContentMapper,
+    ezp\Persistence\Storage\Legacy\Content\StorageRegistry,
+    ezp\Persistence\Storage\Legacy\Content\StorageHandler,
+    ezp\Persistence\Storage\Legacy\Content\Search\TransformationProcessor,
+    ezp\Persistence\Storage\Legacy\Content\Search\TransformationParser,
+    ezp\Persistence\Storage\Legacy\Content\Search\TransformationPcreCompiler,
+    ezp\Persistence\Storage\Legacy\Content\Search\Utf8Converter,
+    ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
+    ezp\Persistence\Storage\Legacy\Content\Search\Gateway\SortClauseHandler,
+    ezp\Persistence\Storage\Legacy\EzcDbHandler\Pgsql,
+    ezp\Persistence\Storage\Legacy\EzcDbHandler\Sqlite,
     ezp\Persistence\Storage\Legacy\User,
-    ezp\Base\Configuration;
+    ezp\Persistence\Storage\Legacy\User\Mapper as UserMapper,
+    ezp\Base\Configuration,
+    ezcDbFactory;
 
 /**
  * The repository handler for the legacy storage engine
@@ -247,17 +266,17 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->dbHandler ) )
         {
-            $connection = \ezcDbFactory::create( $this->configurator->getDsn() );
+            $connection = ezcDbFactory::create( $this->configurator->getDsn() );
             $database = preg_replace( '(^([a-z]+).*)', '\\1', $this->configurator->getDsn() );
 
             switch ( $database )
             {
                 case 'pgsql':
-                    $this->dbHandler = new EzcDbHandler\Pgsql( $connection );
+                    $this->dbHandler = new Pgsql( $connection );
                     break;
 
                 case 'sqlite':
-                    $this->dbHandler = new EzcDbHandler\Sqlite( $connection );
+                    $this->dbHandler = new Sqlite( $connection );
                     break;
 
                 default:
@@ -274,7 +293,7 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->contentHandler ) )
         {
-            $this->contentHandler = new Content\Handler(
+            $this->contentHandler = new ContentHandler(
                 $this->getContentGateway(),
                 $this->getLocationGateway(),
                 $this->getContentMapper(),
@@ -293,7 +312,7 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->contentMapper ) )
         {
-            $this->contentMapper = new Content\Mapper(
+            $this->contentMapper = new ContentMapper(
                 $this->getLocationMapper(),
                 $this->getFieldValueConverterRegistry()
             );
@@ -329,7 +348,7 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->fieldHandler ) )
         {
-            $this->fieldHandler = new Content\FieldHandler(
+            $this->fieldHandler = new ContentFieldHandler(
                 $this->getContentGateway(),
                 $this->getContentTypeGateway(),
                 $this->getContentMapper(),
@@ -382,7 +401,7 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->storageRegistry ) )
         {
-            $this->storageRegistry = new Content\StorageRegistry();
+            $this->storageRegistry = new StorageRegistry();
             $this->configurator->configureExternalStorages(
                 $this->storageRegistry
             );
@@ -399,7 +418,7 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->storageHandler ) )
         {
-            $this->storageHandler = new Content\StorageHandler(
+            $this->storageHandler = new StorageHandler(
                 $this->getStorageRegistry(),
                 $this->getContentGateway()->getContext()
             );
@@ -414,10 +433,10 @@ class Handler implements HandlerInterface
      */
     protected function getTransformationProcessor()
     {
-        $processor = new Content\Search\TransformationProcessor(
-            new Content\Search\TransformationParser(),
-            new Content\Search\TransformationPcreCompiler(
-                new Content\Search\Utf8Converter()
+        $processor = new TransformationProcessor(
+            new TransformationParser(),
+            new TransformationPcreCompiler(
+                new Utf8Converter()
             )
         );
 
@@ -445,24 +464,24 @@ class Handler implements HandlerInterface
                     $db,
                     new Content\Search\Gateway\CriteriaConverter(
                         array(
-                            new Content\Search\Gateway\CriterionHandler\ContentId( $db ),
-                            new Content\Search\Gateway\CriterionHandler\LogicalNot( $db ),
-                            new Content\Search\Gateway\CriterionHandler\LogicalAnd( $db ),
-                            new Content\Search\Gateway\CriterionHandler\LogicalOr( $db ),
-                            new Content\Search\Gateway\CriterionHandler\Subtree( $db ),
-                            new Content\Search\Gateway\CriterionHandler\ContentTypeId( $db ),
-                            new Content\Search\Gateway\CriterionHandler\ContentTypeGroupId( $db ),
-                            new Content\Search\Gateway\CriterionHandler\DateMetadata( $db ),
-                            new Content\Search\Gateway\CriterionHandler\LocationId( $db ),
-                            new Content\Search\Gateway\CriterionHandler\ParentLocationId( $db ),
-                            new Content\Search\Gateway\CriterionHandler\RemoteId( $db ),
-                            new Content\Search\Gateway\CriterionHandler\SectionId( $db ),
-                            new Content\Search\Gateway\CriterionHandler\Status( $db ),
-                            new Content\Search\Gateway\CriterionHandler\FullText(
+                            new CriterionHandler\ContentId( $db ),
+                            new CriterionHandler\LogicalNot( $db ),
+                            new CriterionHandler\LogicalAnd( $db ),
+                            new CriterionHandler\LogicalOr( $db ),
+                            new CriterionHandler\Subtree( $db ),
+                            new CriterionHandler\ContentTypeId( $db ),
+                            new CriterionHandler\ContentTypeGroupId( $db ),
+                            new CriterionHandler\DateMetadata( $db ),
+                            new CriterionHandler\LocationId( $db ),
+                            new CriterionHandler\ParentLocationId( $db ),
+                            new CriterionHandler\RemoteId( $db ),
+                            new CriterionHandler\SectionId( $db ),
+                            new CriterionHandler\Status( $db ),
+                            new CriterionHandler\FullText(
                                 $db,
                                 $this->getTransformationProcessor()
                             ),
-                            new Content\Search\Gateway\CriterionHandler\Field(
+                            new CriterionHandler\Field(
                                 $db,
                                 $this->getFieldValueConverterRegistry()
                             ),
@@ -470,9 +489,9 @@ class Handler implements HandlerInterface
                     ),
                     new Content\Search\Gateway\SortClauseConverter(
                         array(
-                            new Content\Search\Gateway\SortClauseHandler\LocationPathString( $db ),
-                            new Content\Search\Gateway\SortClauseHandler\LocationDepth( $db ),
-                            new Content\Search\Gateway\SortClauseHandler\LocationPriority( $db ),
+                            new SortClauseHandler\LocationPathString( $db ),
+                            new SortClauseHandler\LocationDepth( $db ),
+                            new SortClauseHandler\LocationPriority( $db ),
                         )
                     ),
                     new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() )
@@ -491,9 +510,9 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->contentTypeHandler ) )
         {
-            $this->contentTypeHandler = new Type\Handler(
+            $this->contentTypeHandler = new TypeHandler(
                 $this->getContentTypeGateway(),
-                new Type\Mapper( $this->getFieldValueConverterRegistry() ),
+                new TypeMapper( $this->getFieldValueConverterRegistry() ),
                 $this->getTypeUpdateHandler()
             );
         }
@@ -539,7 +558,7 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->contentTypeGateway ) )
         {
-            $this->contentTypeGateway = new Content\Type\Gateway\EzcDatabase(
+            $this->contentTypeGateway = new Type\Gateway\EzcDatabase(
                 $this->getDatabase(),
                 $this->getLanguageMaskGenerator()
             );
@@ -557,7 +576,7 @@ class Handler implements HandlerInterface
             $this->languageHandler = new Content\Language\CachingHandler(
                 new Content\Language\Handler(
                     new Content\Language\Gateway\EzcDatabase( $this->getDatabase() ),
-                    new Content\Language\Mapper()
+                    new LanguageMapper()
                 ),
                 $this->getLanguageCache()
             );
@@ -619,7 +638,7 @@ class Handler implements HandlerInterface
     {
         if ( !isset( $this->locationMapper ) )
         {
-            $this->locationMapper = new Content\Location\Mapper();
+            $this->locationMapper = new LocationMapper();
         }
         return $this->locationMapper;
     }
@@ -634,7 +653,7 @@ class Handler implements HandlerInterface
             $this->userHandler = new User\Handler(
                 new User\Gateway\EzcDatabase( $this->getDatabase() ),
                 new User\Role\Gateway\EzcDatabase( $this->getDatabase() ),
-                new User\Mapper()
+                new UserMapper()
             );
         }
         return $this->userHandler;

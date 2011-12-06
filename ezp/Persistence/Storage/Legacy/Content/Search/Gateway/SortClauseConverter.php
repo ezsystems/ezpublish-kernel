@@ -10,7 +10,8 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
     ezp\Persistence\Content\Query\SortClause,
-    ezp\Content\Query;
+    ezp\Content\Query,
+    ezcQuerySelect;
 
 /**
  * Converter manager for sort clauses
@@ -49,7 +50,7 @@ class SortClauseConverter
      * @param array $sortClauses
      * @return void
      */
-    public function applySelect( \ezcQuerySelect $query, array $sortClauses )
+    public function applySelect( ezcQuerySelect $query, array $sortClauses )
     {
         $sortColumn = array();
         foreach ( $sortClauses as $nr => $sortClause )
@@ -75,7 +76,7 @@ class SortClauseConverter
      * @param array $sortClauses
      * @return void
      */
-    public function applyJoin( \ezcQuerySelect $query, array $sortClauses )
+    public function applyJoin( ezcQuerySelect $query, array $sortClauses )
     {
         foreach ( $sortClauses as $nr => $sortClause )
         {
@@ -99,13 +100,13 @@ class SortClauseConverter
      * @param array $sortClauses
      * @return void
      */
-    public function applyOrderBy( \ezcQuerySelect $query, array $sortClauses )
+    public function applyOrderBy( ezcQuerySelect $query, array $sortClauses )
     {
         foreach ( $this->sortColumns as $column => $direction )
         {
             $query->orderBy(
                 $column,
-                $direction === Query::SORT_ASC ? \ezcQuerySelect::ASC : \ezcQuerySelect::DESC
+                $direction === Query::SORT_ASC ? ezcQuerySelect::ASC : ezcQuerySelect::DESC
             );
         }
     }

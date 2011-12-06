@@ -13,7 +13,8 @@ use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
     ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     ezp\Persistence\Content,
     ezp\Persistence\Content\Search,
-    ezp\Persistence\Content\Query\Criterion;
+    ezp\Persistence\Content\Query\Criterion,
+    ezcQuerySelect;
 
 /**
  * Content locator gateway implementation using the zeta handler component.
@@ -116,7 +117,7 @@ class EzcDatabase extends Gateway
      * @param mixed $translations
      * @return string
      */
-    protected function getQueryCondition( Criterion $criterion, \ezcQuerySelect $query, $translations )
+    protected function getQueryCondition( Criterion $criterion, ezcQuerySelect $query, $translations )
     {
         $condition = $this->criteriaConverter->convertCriteria( $query, $criterion );
 
@@ -156,7 +157,7 @@ class EzcDatabase extends Gateway
      * @param int $limit
      * @return int[]
      */
-    protected function getContentIds( \ezcQuerySelect $query, $condition, $sort, $offset, $limit )
+    protected function getContentIds( ezcQuerySelect $query, $condition, $sort, $offset, $limit )
     {
         $query->reset();
         $query->select(

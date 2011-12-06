@@ -12,7 +12,8 @@ use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
     ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
     ezp\Persistence\Storage\Legacy\Content\Search\TransformationProcessor,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Content\Query\Criterion;
+    ezp\Persistence\Content\Query\Criterion,
+    ezcQuerySelect;
 
 /**
  * Full text criterion handler
@@ -122,7 +123,7 @@ class FullText extends CriterionHandler
      * @param string $token
      * @return \ezcQueryExpression
      */
-    protected function getWordExpression( \ezcQuerySelect $query, $token )
+    protected function getWordExpression( ezcQuerySelect $query, $token )
     {
         if ( $this->configuration['enableWildcards'] &&
              $token[0] === '*' )
@@ -189,7 +190,7 @@ class FullText extends CriterionHandler
      * @param Criterion $criterion
      * @return \ezcQueryExpression
      */
-    public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
+    public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
         $subSelect = $query->subSelect();
         $subSelect

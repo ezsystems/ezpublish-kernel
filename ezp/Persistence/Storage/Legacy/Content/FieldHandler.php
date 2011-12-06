@@ -15,6 +15,7 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Storage\Legacy\Content\FieldHandler,
     ezp\Persistence\Storage\Legacy\Content\Mapper,
+    ezp\Persistence\Storage\Legacy\Content\Type\Gateway as TypeGateway,
     ezp\Persistence\Storage\Legacy\Content\Gateway;
 
 /**
@@ -60,7 +61,7 @@ class FieldHandler
      */
     public function __construct(
         Gateway $contentGateway,
-        Type\Gateway $typeGateway,
+        TypeGateway $typeGateway,
         Mapper $mapper,
         StorageHandler $storageHandler )
     {

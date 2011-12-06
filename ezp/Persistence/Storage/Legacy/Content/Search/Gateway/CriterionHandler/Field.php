@@ -12,8 +12,11 @@ use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
     ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
     ezp\Persistence\Storage\Legacy\EzcDbHandler,
     ezp\Persistence\Content\Query\Criterion,
+    ezp\Persistence\Content\Query\Criterion\FieldIdentifierStruct,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    ezp\Base\Exception;
+    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry,
+    ezp\Base\Exception,
+    ezcQuerySelect;
 
 /**
  * Field criterion handler
@@ -41,7 +44,7 @@ class Field extends CriterionHandler
      * @param Converter\Registry $fieldConverterRegistry
      * @return void
      */
-    public function __construct( EzcDbHandler $dbHandler, Converter\Registry $fieldConverterRegistry )
+    public function __construct( EzcDbHandler $dbHandler, Registry $fieldConverterRegistry )
     {
         $this->dbHandler = $dbHandler;
         $this->fieldConverterRegistry = $fieldConverterRegistry;
@@ -68,7 +71,7 @@ class Field extends CriterionHandler
      * @param Criterion\FieldIdentifierStruct $target
      * @return array
      */
-    protected function getFieldInformation( Criterion\FieldIdentifierStruct $target )
+    protected function getFieldInformation( FieldIdentifierStruct $target )
     {
         $query = $this->dbHandler->createSelectQuery();
         $query
@@ -120,7 +123,7 @@ class Field extends CriterionHandler
      * @param Criterion $criterion
      * @return \ezcQueryExpression
      */
-    public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
+    public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
         $fieldInformation = $this->getFieldInformation( $criterion->target );
         $column = $this->dbHandler->quoteColumn( $fieldInformation['column'] );

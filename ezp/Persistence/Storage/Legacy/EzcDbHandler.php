@@ -9,6 +9,8 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy;
+use ezcDbHandler as ezcDbHandlerWrapped,
+    ezcQuerySelect;
 
 /**
  * Wrapper class for the zeta components database handler, providing some
@@ -32,7 +34,7 @@ class EzcDbHandler
      * @param \ezcDbHandler $ezcDbHandler
      * @return void
      */
-    public function __construct( \ezcDbHandler $ezcDbHandler )
+    public function __construct( ezcDbHandlerWrapped $ezcDbHandler )
     {
         $this->ezcDbHandler = $ezcDbHandler;
     }
@@ -57,7 +59,7 @@ class EzcDbHandler
      * @param string $tableName
      * @return string
      */
-    public function aliasedColumn( \ezcQuerySelect $query, $columnName, $tableName = null )
+    public function aliasedColumn( ezcQuerySelect $query, $columnName, $tableName = null )
     {
         return $query->alias(
             $this->quoteColumn( $columnName, $tableName ),

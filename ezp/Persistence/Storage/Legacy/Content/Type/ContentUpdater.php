@@ -9,8 +9,12 @@
 
 namespace ezp\Persistence\Storage\Legacy\Content\Type;
 use ezp\Persistence\Storage\Legacy\Content,
+    ezp\Persistence\Storage\Legacy\Content\Search\Handler as SearchHandler,
+    ezp\Persistence\Storage\Legacy\Content\Gateway as ContentGateway,
+    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry,
     ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater,
     ezp\Persistence\Content\Type,
+    ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Query\Criterion;
 
 /**
@@ -46,9 +50,9 @@ class ContentUpdater
      * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
      */
     public function __construct(
-        Content\Search\Handler $searchHandler,
-        Content\Gateway $contentGateway,
-        Content\FieldValue\Converter\Registry $converterRegistry )
+        SearchHandler $searchHandler,
+        ContentGateway $contentGateway,
+        Registry $converterRegistry )
     {
         $this->searchHandler = $searchHandler;
         $this->contentGateway = $contentGateway;
@@ -97,9 +101,7 @@ class ContentUpdater
      * @param Content\Type\FieldDefinition $fieldDef
      * @return void
      */
-    protected function hasFieldDefinition(
-        Type $type,
-        Type\FieldDefinition $fieldDef )
+    protected function hasFieldDefinition( Type $type, FieldDefinition $fieldDef )
     {
         foreach ( $type->fieldDefinitions as $existFieldDef )
         {

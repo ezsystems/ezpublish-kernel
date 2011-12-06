@@ -10,7 +10,8 @@
 namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler;
 use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
     ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
-    ezp\Persistence\Content\Query\Criterion;
+    ezp\Persistence\Content\Query\Criterion,
+    ezcQuerySelect;
 
 /**
  * Logical or criterion handler
@@ -36,7 +37,7 @@ class LogicalOr extends CriterionHandler
      * @param Criterion $criterion
      * @return \ezcQueryExpression
      */
-    public function handle( CriteriaConverter $converter, \ezcQuerySelect $query, Criterion $criterion )
+    public function handle( CriteriaConverter $converter, ezcQuerySelect $query, Criterion $criterion )
     {
         $subexpressions = array();
         foreach ( $criterion->criteria as $subCriterion )
