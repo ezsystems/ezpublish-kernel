@@ -26,6 +26,6 @@ class InvalidAlias extends InvalidArgumentValue
     public function __construct( $aliasName, PHPException $previous = null )
     {
         $this->aliasName = $aliasName;
-        parent::InvalidArgumentValue( 'Image alias name', $aliasName, null, $previous );
+        parent::__construct( 'Image alias name', $aliasName, null, $previous );
     }
 }
