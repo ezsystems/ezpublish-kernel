@@ -20,12 +20,18 @@ use ezp\Base\Exception\BadConfiguration,
  *
  * Usage:
  *
- *     $sc = new ezp\Base\ServiceContainer();
+ *     $sc = new ezp\Base\ServiceContainer( Configuration::getInstance('service')->getAll() );
  *     $sc->getRepository->getContentService()->load( 42 );
  *
- * Or overriding dependencies (in unit tests):
+ * Or overriding $dependencies (in unit tests):
+ * ( $dependencies keys should have same value as service.ini "arguments" values explained bellow )
  *
- *     $sc = new ezp\Base\ServiceContainer( array( '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler() ) );
+ *     $sc = new ezp\Base\ServiceContainer(
+ *         Configuration::getInstance('service')->getAll(),
+ *         array(
+ *             '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler()
+ *         )
+ *     );
  *     $sc->getRepository->getContentService()->load( 42 );
  *
  * Settings are defined in service.ini like the following example:
@@ -37,9 +43,11 @@ use ezp\Base\Exception\BadConfiguration,
  *     [inmemory_persistence_handler]
  *     class=ezp\Persistence\Storage\InMemory\Handler
  *
- * Arguments can start with either @ in case of other services being dependency, $ if a predefined global variable
- * is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES and $serviceContainer ) or plain string if
- * that is to be given directly as argument value.
+ *     # @see \ezp\Base\settings\service.ini For more options and examples.
+ *
+ * "arguments" values in service.ini can start with either @ in case of other services being dependency, $ if a
+ * predefined global variable is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES and $serviceContainer )
+ * or plain scalar if that is to be given directly as argument value.
  */
 class ServiceContainer
 {
@@ -78,6 +86,9 @@ class ServiceContainer
     /**
      * Service function to get Repository object
      *
+     * Alias with type hints for $repo->get( 'repository' );
+     *
+     * @uses get()
      * @return Repository
      */
     public function getRepository()
@@ -88,6 +99,7 @@ class ServiceContainer
     }
 
     /**
+     * @deprecated Use IoService on Repository instead
      * @return BinaryRepository
      */
     public function getBinaryRepository()
@@ -174,7 +186,7 @@ class ServiceContainer
      * Lookup arguments for variable, service or arrays for recursive lookup
      *
      * @param array $arguments
-     * @param int $count Optional count of arguments in level provided
+     * @param array &$keys Optional, keys in array will be appended in the order they are found (but not recursively)
      * @return array
      */
     protected function lookupArguments( array $arguments, array &$keys = array() )
