@@ -32194,6 +32194,15 @@ keywords=cms, publish, e-commerce, content management, development framework',
       'name'=>'Partners',
       'real_translation'=>'eng-US'
     ),
+      
+    array(
+      'content_translation'=>'eng-US',
+      'content_version'=>1,
+      'contentobject_id'=>226,
+      'language_id'=>3,
+      'name'=>'Something',
+      'real_translation'=>'eng-US'
+    ),
   ),
 );
 

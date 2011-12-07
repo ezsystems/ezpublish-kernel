@@ -4,7 +4,6 @@ return array (
   0 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -48,11 +47,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   1 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -96,11 +96,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   2 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -146,11 +147,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   3 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -196,11 +198,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   4 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -246,11 +249,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   5 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -294,11 +298,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   6 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -344,11 +349,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   7 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -394,11 +400,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   8 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -442,11 +449,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   9 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -490,11 +498,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   10 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -538,11 +547,12 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
   11 => 
   array (
     'ezcontentobject_id' => '226',
-    'ezcontentobject_version_name' => 'Something',
     'ezcontentobject_contentclass_id' => '16',
     'ezcontentobject_section_id' => '1',
     'ezcontentobject_owner_id' => '14',
@@ -586,5 +596,7 @@ return array (
     'ezcontentobject_tree_remote_id' => NULL,
     'ezcontentobject_tree_sort_field' => NULL,
     'ezcontentobject_tree_sort_order' => NULL,
+    'ezcontentobject_name_name' => 'Something',
+    'ezcontentobject_name_content_translation' => 'eng-US',
   ),
 );

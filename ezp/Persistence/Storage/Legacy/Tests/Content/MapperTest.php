@@ -482,7 +482,7 @@ class MapperTest extends TestCase
 
         $version = new RestrictedVersion();
         $version->id = 675;
-        $version->name = "Something";
+        $version->name = array( "eng-US" => "Something" );
         $version->versionNo = 1;
         $version->modified = 1313047907;
         $version->creatorId = 14;
@@ -495,7 +495,7 @@ class MapperTest extends TestCase
 
         $version = new RestrictedVersion();
         $version->id = 676;
-        $version->name = "Something";
+        $version->name = array( "eng-US" => "Something" );
         $version->versionNo = 2;
         $version->modified = 1313061404;
         $version->creatorId = 14;

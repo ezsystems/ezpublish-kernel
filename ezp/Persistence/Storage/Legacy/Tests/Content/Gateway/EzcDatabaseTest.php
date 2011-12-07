@@ -671,12 +671,13 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         $res = array_merge( $res );
 
-        /*$this->storeFixture(
+        $this->storeFixture(
             __DIR__ . '/../_fixtures/extract_content_from_rows.php',
             $res
-        );*/
-        $this->markTestIncomplete( "Line above writes to a fixture used by other tests, name is written as
+        );
+        /*$this->markTestIncomplete( "Line above writes to a fixture used by other tests, name is written as
                                     ezcontentobject_name, but those tests expects ezcontentobject_version_name" );
+        */
     }
 
     /**

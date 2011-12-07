@@ -21,7 +21,7 @@ $content->initialLanguageId = 2;
 
 $version = new Version();
 $version->id = 675;
-$version->name = 'Something';
+$version->name = array( 'eng-US' => 'Something' );
 $version->versionNo = 1;
 $version->modified = 1313047907;
 $version->creatorId = 14;

@@ -169,6 +169,10 @@ class Mapper
             {
                 $versions[$contentId][$versionId] = $this->extractVersionFromRow( $row );
             }
+            if ( !isset( $versions[$contentId][$versionId]->name[$row['ezcontentobject_name_content_translation']] ) )
+            {
+                $versions[$contentId][$versionId]->name[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
+            }
             if ( !isset( $locations[$contentId][$versionId] ) )
             {
                 $locations[$contentId][$versionId] = array();
@@ -258,7 +262,6 @@ class Mapper
     protected function mapCommonVersionFields( array $row, $version )
     {
         $version->id = (int)$row['ezcontentobject_version_id'];
-        $version->name = $row['ezcontentobject_version_name'];
         $version->versionNo = (int)$row['ezcontentobject_version_version'];
         $version->modified = (int)$row['ezcontentobject_version_modified'];
         $version->creatorId = (int)$row['ezcontentobject_version_creator_id'];
@@ -334,6 +337,11 @@ class Mapper
                 $version->languageIds = array();
 
                 $versionList[$versionId] = $version;
+            }
+            
+            if ( !isset( $versionList[$versionId]->name[$row['ezcontentobject_name_content_translation']] ) )
+            {
+                $versionList[$versionId]->name[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];
             }
 
             if (
