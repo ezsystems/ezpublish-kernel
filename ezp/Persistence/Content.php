@@ -85,7 +85,7 @@ class Content extends ValueObject
     /**
      * @var bool Always available flag
      */
-    public $alwaysAvailable;
+    public $alwaysAvailable = false;
 
     /**
      * Remote identifier used as a custom identifier for the object

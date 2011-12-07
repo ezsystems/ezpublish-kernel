@@ -39,7 +39,8 @@ use ezp\Base\Service as BaseService,
     ezp\Persistence\Content\Query\Criterion\LogicalAnd,
     ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     ezp\Persistence\Content\Version as VersionValue,
-    ezp\Persistence\Content\RestrictedVersion as RestrictedVersionValue;
+    ezp\Persistence\Content\RestrictedVersion as RestrictedVersionValue,
+    ezp\Persistence\ValueObject;
 
 /**
  * Content service, used for Content operations
@@ -551,7 +552,7 @@ class Service extends BaseService
         {
             throw new Logic( '$version->status', 'Version should be in Version::STATUS_DRAFT state' );
         }
-        
+
         $content = $version->getContent();
 
         if ( !$this->repository->canUser( 'edit', $content ) )
@@ -599,7 +600,7 @@ class Service extends BaseService
         $content->getState( "properties" )->currentVersionNo = $version->versionNo;
 
         $version->notify( 'post_publish', array( 'repository' => $this->repository ) );
-        
+
         // $this->handler->commit();
 
         return $version;
@@ -728,5 +729,29 @@ class Service extends BaseService
         }
 
         return $version;
+    }
+
+    /**
+     * Defines specific conventions for filling content/update structs.
+     * This method is here mainly to provide fallbacks if a struct property cannot be set in another way (aka not implemented yet)
+     *
+     * @todo initialLanguageId should be processed via translation management, not hardcoded
+     * @see \ezp\Base\Service::setPropertyByConvention()
+     */
+    protected function setPropertyByConvention( ValueObject $struct, $property )
+    {
+        switch( $property )
+        {
+            // Hardcoding this property for now, until we have proper translation management
+            // See #EZPNEXT-75
+            case 'initialLanguageId':
+                $struct->$property = 2;
+                break;
+
+            default:
+                return parent::setPropertyByConvention( $struct, $property );
+        }
+
+        return true;
     }
 }

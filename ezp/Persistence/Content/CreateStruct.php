@@ -70,7 +70,7 @@ class CreateStruct extends ValueObject
       * Language id the content was initially created in
       * @var mixed
       */
-    public $initialLanguageId = false;
+    public $initialLanguageId;
 
     /**
      * Creation date
