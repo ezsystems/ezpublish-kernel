@@ -45,7 +45,6 @@ class QueryBuilder
         $query->select(
             // Content object
             $this->dbHandler->aliasedColumn( $query, 'id', 'ezcontentobject' ),
-            //$this->dbHandler->aliasedColumn( $query, 'name', 'ezcontentobject' ),
             $this->dbHandler->aliasedColumn( $query, 'contentclass_id', 'ezcontentobject' ),
             $this->dbHandler->aliasedColumn( $query, 'section_id', 'ezcontentobject' ),
             $this->dbHandler->aliasedColumn( $query, 'owner_id', 'ezcontentobject' ),
