@@ -102,24 +102,22 @@ class Autoloader
 
         foreach ( $this->settings['repositories'] as $namespace => $subPath )
         {
-            if ( strpos( $className, $namespace . '\\' ) === 0 )
-            {
-                $classNamePos = strripos( $className, '\\' );
-                $namespacePart = str_replace(
-                    array( './' . $namespace, '\\' ),
-                    array( './' . $subPath, '/' ),
-                    './' . substr( $className, 0, $classNamePos )
-                );
-                $classNamePart = str_replace( '_', '/', substr( $className, $classNamePos + 1 ) );
-                $classPath = $namespacePart . '/' . $classNamePart . '.php';
-                if ( !file_exists( $classPath ) )
-                {
-                    return false;
-                }
+            if ( strpos( $className, $namespace . '\\' ) !== 0 )
+                continue;
 
-                require $classPath;
-                return true;
+            $classNamePos = strripos( $className, '\\' );
+            $classPath = "$subPath/" .
+                // Replacing '\' to '/' in namespace part
+                substr( strtr( substr( $className, 0, $classNamePos ), '\\', '/' ), strlen( $namespace ) +1 ) .
+                // Appending class name + .php which corresponds to the filename
+                '/' . str_replace( '_', '/', substr( $className, $classNamePos + 1 ) ) . '.php';
+            if ( !file_exists( $classPath ) )
+            {
+                return false;
             }
+
+            require $classPath;
+            return true;
         }
     }
 
