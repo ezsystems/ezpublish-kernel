@@ -583,7 +583,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         foreach ( $res as $row )
         {
             $this->assertEquals(
-                9,
+                11,
                 count( $row )
             );
         }
