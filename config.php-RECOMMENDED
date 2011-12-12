@@ -44,8 +44,8 @@ $settings = array(
             'ezc-src-path' => '/',     // pear
 
             // Hash with class name prefix and folder name, needed for autoload system as well as router
-            'repositories' => array( 'ezp' => 'ezp',
-                                     'ezx' => 'ezx' ),
+            'repositories' => array( 'ezp' => __DIR__ . '/ezp',
+                                     'ezx' => __DIR__ . '/ezx' ),
 
             // Bool value for global development mode setting
             'development-mode' => true,

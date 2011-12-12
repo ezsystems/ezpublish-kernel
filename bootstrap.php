@@ -12,8 +12,8 @@ use ezp\Base\Autoloader,
     ezp\Base\Configuration;
 
 // setup autoloaders
-require 'config.php';
-require 'ezp/Base/Autoloader.php';
+require __DIR__ . '/config.php';
+require __DIR__ . '/ezp/Base/Autoloader.php';
 spl_autoload_register( array( new Autoloader( $settings['base']['autoload'] ), 'load' ) );
 
 // setup configuration
