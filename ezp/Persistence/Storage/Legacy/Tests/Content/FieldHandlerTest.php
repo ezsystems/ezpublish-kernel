@@ -12,6 +12,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Content,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\FieldHandler,
@@ -226,6 +227,8 @@ class FieldHandlerTest extends TestCase
         $firstField = new Field();
         $firstField->type = 'some-type';
         $firstField->fieldDefinitionId = 23;
+        $firstField->value = new FieldValue;
+        $firstField->value->data = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
 
         $secondField = clone $firstField;
 

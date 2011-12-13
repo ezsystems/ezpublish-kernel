@@ -163,6 +163,7 @@ class Handler implements BaseContentHandler
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
         $content = $this->load( $contentId, $srcVersion );
+        $fields = $content->version->fields;
 
         // Create new version
         $content->version = $this->mapper->createVersionForContent(
@@ -175,6 +176,16 @@ class Handler implements BaseContentHandler
             $content->version->fields,
             $content->alwaysAvailable
         );
+
+        // Clone fields from previous version and append them to the new one
+        // @TODO Manage translations
+        $content->version->fields = array();
+        foreach ( $fields as $field )
+        {
+            $newField = clone $field;
+            $newField->versionNo = $content->version->versionNo;
+            $content->version->fields[] = $newField;
+        }
 
         $this->fieldHandler->createNewFields( $content );
 

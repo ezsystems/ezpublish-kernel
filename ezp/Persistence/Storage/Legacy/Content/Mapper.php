@@ -338,7 +338,7 @@ class Mapper
 
                 $versionList[$versionId] = $version;
             }
-            
+
             if ( !isset( $versionList[$versionId]->name[$row['ezcontentobject_name_content_translation']] ) )
             {
                 $versionList[$versionId]->name[$row['ezcontentobject_name_content_translation']] = $row['ezcontentobject_name_name'];

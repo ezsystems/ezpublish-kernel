@@ -11,6 +11,7 @@ namespace ezp\Persistence\Storage\Legacy\Tests\Content;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Content\StorageHandler,
     ezp\Persistence\Content\Field,
+    ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageRegistry;
 
 /**
@@ -62,6 +63,8 @@ class StorageHandlerTest extends TestCase
 
         $field = new Field();
         $field->type = 'foobar';
+        $field->value = new FieldValue();
+        $field->value->data = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
 
         $handler = $this->getStorageHandler();
         $handler->storeFieldData( $field );
@@ -93,6 +96,8 @@ class StorageHandlerTest extends TestCase
 
         $field = new Field();
         $field->type = 'foobar';
+        $field->value = new FieldValue();
+        $field->value->data = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
 
         $handler = $this->getStorageHandler();
         $handler->getFieldData( $field );
@@ -120,6 +125,8 @@ class StorageHandlerTest extends TestCase
 
         $field = new Field();
         $field->type = 'foobar';
+        $field->value = new FieldValue();
+        $field->value->data = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
 
         $handler = $this->getStorageHandler();
         $handler->getFieldData( $field );
