@@ -727,7 +727,7 @@ class Concrete extends Model implements Content
      * Gets the initial language
      * @return \ezp\Content\Language
      */
-    protected function getInitialLanguage()
+    public function getInitialLanguage()
     {
         return $this->initialLanguage;
     }
