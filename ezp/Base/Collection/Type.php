@@ -10,13 +10,15 @@
 namespace ezp\Base\Collection;
 use ezp\Base\Collection,
     ezp\Base\Exception\InvalidArgumentType,
-    ArrayObject;
+    ezp\Base\Dumpable,
+    ArrayObject,
+    SplObjectStorage;
 
 /**
  * Type Collection class, collection only accepts new elements of a certain type
  *
  */
-class Type extends ArrayObject implements Collection
+class Type extends ArrayObject implements Collection, Dumpable
 {
     /**
      * @var string The class name (including namespace) to accept as input
@@ -107,6 +109,66 @@ class Type extends ArrayObject implements Collection
                 throw new InvalidArgumentType( 'input', $this->type, $item );
         }
         return parent::exchangeArray( $input );
+    }
+
+    /**
+     * Dump an object in a similar way to var_dump()
+     *
+     * @param int $maxDepth Maximum depth
+     * @param int $currentLevel Current level
+     * @param \SplObjectStorage Set of objects already printed (to avoid recursion)
+     */
+    public function dump( $maxDepth = Dumpable::DEFAULT_DEPTH, $currentLevel = 0, SplObjectStorage $objectSet = null )
+    {
+        $spaces = str_repeat( " ", 2 * $currentLevel );
+
+        if ( $maxDepth === $currentLevel )
+        {
+            echo $spaces, "...\n";
+            return;
+        }
+
+        if ( $objectSet === null )
+        {
+            $objectSet = new SplObjectStorage ();
+        }
+        else if ( $objectSet->contains( $this ) )
+        {
+            echo $spaces, "**RECURSION**\n";
+            return;
+        }
+
+        $objectSet->attach( $this );
+
+        echo
+            $spaces, "object(", get_class( $this ), ") {\n",
+            $spaces, "type:";
+
+        var_dump( $this->type );
+
+        echo $spaces, "elements array(", count( $this ), "):\n";
+
+        foreach ( $this as $key => $value )
+        {
+            echo $spaces, "  [$key] =>\n";
+            if ( $value instanceof Dumpable  )
+            {
+                // Artificially increasing the currentLevel for rendering purpose
+                $value->dump( $maxDepth + 1, $currentLevel + 2, $objectSet );
+            }
+            else if ( $value !== null )
+            {
+                echo get_class( $value ), "\n";
+            }
+            else
+            {
+                echo "NULL\n";
+            }
+        }
+
+        $objectSet->detach( $this );
+
+        echo $spaces, "}\n";
     }
 }
 
