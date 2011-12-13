@@ -203,7 +203,7 @@ class Concrete extends Model implements Version
      *
      * @return \ezp\Content\Location|null
      */
-    public function getContentMainLocation()
+    public function getMainLocation()
     {
         return $this->content->getMainLocation();
     }
