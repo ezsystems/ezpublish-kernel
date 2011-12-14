@@ -8,9 +8,9 @@ use ezp\Base\Configuration,
     ezp\Content\Concrete as Content,
     ezp\User\Concrete as User;
 
-// Use testsBootstrap.php to setup autolaod and Configuration
+// Use bootstrap.php to setup autoload and Configuration
 chdir( '../' );
-require 'testsBootstrap.php';
+require 'bootstrap.php';
 
 
 // Setup ServiceContainer for dependency injection using in-memory storage
