@@ -10,7 +10,7 @@ use ezp\Base\Configuration,
 
 // Use testsBootstrap.php to setup autolaod and Configuration
 chdir( '../' );
-require 'testsBootstrap.php';
+require 'bootstrap.php';
 
 
 // Setup ServiceContainer for dependency injection using in-memory storage
