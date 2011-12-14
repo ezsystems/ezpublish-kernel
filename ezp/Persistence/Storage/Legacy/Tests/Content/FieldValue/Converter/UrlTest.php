@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the UrlConverterLegacyTest class
+ * File containing the UrlTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Url\Value as UrlValue,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
@@ -19,7 +19,7 @@ use ezp\Content\FieldType\Url\Value as UrlValue,
 /**
  * Test case for Url converter in Legacy storage
  */
-class UrlConverterLegacyTest extends PHPUnit_Framework_TestCase
+class UrlTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Url

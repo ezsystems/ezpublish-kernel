@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the TextLineConverterLegacyTest class
+ * File containing the TextLineTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Content\FieldType\FieldSettings,
     ezp\Persistence\Content\FieldValue,
@@ -21,7 +21,7 @@ use ezp\Content\FieldType\TextLine\Value as TextLineValue,
 /**
  * Test case for TextLine converter in Legacy storage
  */
-class TextLineConverterLegacyTest extends PHPUnit_Framework_TestCase
+class TextLineTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine

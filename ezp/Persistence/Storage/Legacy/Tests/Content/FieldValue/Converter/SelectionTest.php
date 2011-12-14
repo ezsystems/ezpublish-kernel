@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the SelectionConverterLegacyTest class
+ * File containing the SelectionTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Selection\Value as SelectionValue,
     ezp\Content\FieldType\FieldSettings,
     ezp\Persistence\Content\FieldValue,
@@ -23,7 +23,7 @@ use ezp\Content\FieldType\Selection\Value as SelectionValue,
 /**
  * Test case for Selection converter in Legacy storage
  */
-class SelectionConverterLegacyTest extends PHPUnit_Framework_TestCase
+class SelectionTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection

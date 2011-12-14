@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the CheckboxConverterLegacyTest class
+ * File containing the CheckboxTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Checkbox\Value as CheckboxValue,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
@@ -21,7 +21,7 @@ use ezp\Content\FieldType\Checkbox\Value as CheckboxValue,
 /**
  * Test case for Checkbox converter in Legacy storage
  */
-class CheckboxConverterLegacyTest extends PHPUnit_Framework_TestCase
+class CheckboxTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Checkbox
