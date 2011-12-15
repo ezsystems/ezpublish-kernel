@@ -84,7 +84,7 @@ class Value extends BaseValue implements ValueInterface
      * @param string $text
      * @param string $type Which format the input is provided as. Expects one of the FORMAT_* class constants
      */
-    public function __construct( $text = '', $inputFormat = self::INPUT_FORMAT_RAW )
+    public function __construct( $text = '', $inputFormat = self::INPUT_FORMAT_PLAIN )
     {
         $this->text = $text;
         if ( $inputFormat === self::INPUT_FORMAT_RAW )
