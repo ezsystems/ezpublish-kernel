@@ -27,7 +27,7 @@ class XmlText implements Converter
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
-        $storageFieldValue->dataText = $value->data->text;
+        $storageFieldValue->dataText = $value->data->rawText;
     }
 
     /**
@@ -38,7 +38,7 @@ class XmlText implements Converter
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
-        $fieldValue->data = new XmlTextValue( $value->dataText );
+        $fieldValue->data = new XmlTextValue( $value->dataText, XmlTextValue::INPUT_FORMAT_RAW );
     }
 
     /**

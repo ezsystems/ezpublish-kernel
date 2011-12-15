@@ -17,10 +17,6 @@ use ezp\Base\Repository,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Content\FieldType\XmlText\Value as Value,
     ezp\Content\Type\FieldDefinition,
-    ezp\Content\FieldType\XmlText\Input\Handler as InputHandler,
-    ezp\Content\FieldType\XmlText\Input\Parser\Simplified as SimplifiedInputParser,
-    ezp\Content\FieldType\XmlText\Input\Parser\OnlineEditor as OnlineEditorParser,
-    ezp\Content\FieldType\XmlText\Input\Parser\Raw as RawInputParser,
     ezp\Base\Exception\BadFieldTypeInput,
     ezp\Base\Exception\InvalidArgumentType;
 
@@ -61,7 +57,7 @@ class Type extends FieldType implements OnPublish, OnCreate
          xmlns:xhtml="http://ez.no/namespaces/ezpublish3/xhtml/"
          xmlns:custom="http://ez.no/namespaces/ezpublish3/custom/" />
 EOF;
-        return new Value( $value );
+        return new Value( $value, Value::INPUT_FORMAT_RAW );
     }
 
     /**
@@ -83,16 +79,14 @@ EOF;
                 throw new BadFieldTypeInput( $inputValue, get_class( $this ) );
             }
 
-            $handler = new InputHandler( $this->getInputParser( $inputValue ) );
+            $handler = $inputValue->getInputHandler();
             if ( !$handler->isXmlValid( $inputValue->text, false ) )
             {
                 // @todo Pass on the parser error messages (if any: $handler->getParsingMessages())
                 throw new BadFieldTypeInput( $inputValue, get_class() );
             }
-            else
-            {
-                return $inputValue;
-            }
+
+            return $inputValue;
         }
 
         throw new InvalidArgumentType( 'value', 'ezp\\Content\\FieldType\\XmlText\\Value' );
