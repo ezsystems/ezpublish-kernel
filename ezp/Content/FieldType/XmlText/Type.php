@@ -14,9 +14,7 @@ use ezp\Base\Repository,
     ezp\Content\FieldType,
     ezp\Content\FieldType\OnContentPublish,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Content\FieldType\XmlText\Value as RawValue,
-    ezp\Content\FieldType\XmlText\Value\OnlineEditor as OnlineEditorValue,
-    ezp\Content\FieldType\XmlText\Value\Simplified as SimplifiedValue,
+    ezp\Content\FieldType\XmlText\Value as Value,
     ezp\Content\Type\FieldDefinition,
     ezp\Content\FieldType\XmlText\Input\Handler as InputHandler,
     ezp\Content\FieldType\XmlText\Input\Parser\Simplified as SimplifiedInputParser,
@@ -47,14 +45,6 @@ class Type extends FieldType implements OnContentPublish
         'numRows' => 10,
         'tagPreset' => null,
     );
-
-    private $parserClasses = array(
-        'ezp\\Content\\FieldType\\XmlText\\Value'               => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Raw',
-        'ezp\\Content\\FieldType\\XmlText\\Value\\Simplified'   => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\Simplified',
-        'ezp\\Content\\FieldType\\XmlText\\Value\\OnlineEditor' => 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser\\OnlineEditor',
-                                                                 // '\\ezp\\Content\\FieldType\\XmlText\\Input\\Parser'
-    );
-
 
     /**
      * Returns the fallback default value of field type when no such default
