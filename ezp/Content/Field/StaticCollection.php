@@ -40,7 +40,11 @@ class StaticCollection extends TypeCollection
         foreach ( $contentVersion->getContent()->getContentType()->getFields() as $fieldDefinition )
         {
             $elements[ $fieldDefinition->identifier ] = $field = new Field( $contentVersion, $fieldDefinition );
-            // Make the Field an observer of publish events
+
+            // Make the Field an observer of publish & create events
+            $contentVersion->attach( $field, 'pre_create' );
+            $contentVersion->attach( $field, 'post_create' );
+
             $contentVersion->attach( $field, 'pre_publish' );
             $contentVersion->attach( $field, 'post_publish' );
         }

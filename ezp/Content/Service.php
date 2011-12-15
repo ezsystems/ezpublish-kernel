@@ -62,6 +62,10 @@ class Service extends BaseService
         if ( $content->id )
             throw new InvalidArgumentType( '$content->id', 'false' );
 
+        $currentVersion = $content->getCurrentVersion();
+
+        $currentVersion->notify( 'pre_create', array( 'repository' => $this->repository ) );
+
         $struct = new CreateStruct();
         if ( !$content->sectionId && $content->getMainLocation() )
         {
@@ -96,7 +100,7 @@ class Service extends BaseService
         if ( $checkCreate && !$this->repository->canUser( 'create', $content ) )
             throw new Forbidden( 'Content', 'create' );
 
-        foreach ( $content->getCurrentVersion()->getFields() as $field )
+        foreach ( $currentVersion->getFields() as $field )
         {
             $fieldVo = $field->getState( 'properties' );
             $fieldVo->value = $field->fieldDefinition->type->toFieldValue();
@@ -105,6 +109,9 @@ class Service extends BaseService
             $struct->fields[] = $fieldVo;
         }
         $vo = $this->handler->contentHandler()->create( $struct );
+
+        $currentVersion->notify( 'post_create', array( 'repository' => $this->repository ) );
+
         return $this->buildDomainObject( $vo );
     }
 
@@ -121,6 +128,8 @@ class Service extends BaseService
         // @todo : Do any necessary actions to update $content in the content repository
         // go through all locations to create or update them?
 
+        $version->notify( 'pre_create', array( 'repository' => $this->repository ) );
+
         $struct = new UpdateStruct();
         $this->fillStruct( $struct, $content, array( "versionNo", "creatorId", "fields" ) );
         $struct->creatorId = $version->creatorId;
@@ -136,9 +145,13 @@ class Service extends BaseService
             $struct->fields[] = $fieldStruct;
         }
 
-        return $this->buildDomainObject(
+        $do = $this->buildDomainObject(
             $this->handler->contentHandler()->update( $struct  )
         );
+
+        $version->notify( 'post_create', array( 'repository' => $this->repository ) );
+
+        return $do;
     }
 
     /**

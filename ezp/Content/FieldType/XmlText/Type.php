@@ -12,7 +12,8 @@ use ezp\Base\Repository,
     ezp\Content\Field,
     ezp\Content\Version,
     ezp\Content\FieldType,
-    ezp\Content\FieldType\OnContentPublish,
+    ezp\Content\FieldType\OnPublish,
+    ezp\Content\FieldType\OnCreate,
     ezp\Content\FieldType\Value as BaseValue,
     ezp\Content\FieldType\XmlText\Value as Value,
     ezp\Content\Type\FieldDefinition,
@@ -29,7 +30,7 @@ use ezp\Base\Repository,
  * This field
  * @package
  */
-class Type extends FieldType implements OnContentPublish
+class Type extends FieldType implements OnPublish, OnCreate
 {
     const FIELD_TYPE_IDENTIFIER = "ezxmltext";
     const IS_SEARCHABLE = true;
@@ -110,17 +111,6 @@ EOF;
     }
 
     /**
-     * Event handler for content/publish
-     * @param \ezp\Base\Repository $repository
-     * @param \ezp\Content\Version $version
-     * @param \ezp\Content\Field $field
-     */
-    public function onContentPublish( Repository $repository, Field $field )
-    {
-        $this->value = $this->convertValueToRawValue( $field->value, $repository, $field );
-    }
-
-    /**
      * Converts complex values to a Value\Raw object
      * @param \ezp\Content\FieldType\XmlText\Value $value
      * @param \ezp\Base\Repository $repository
@@ -130,39 +120,51 @@ EOF;
     protected function convertValueToRawValue( Value $value, Repository $repository, Field $field )
     {
         // we don't convert Raw to Raw, right ?
-        if ( get_class( $value ) === 'ezp\\Content\\FieldType\\XmlText\\Value' )
-            return $value;
+        // if ( get_class( $value ) === 'ezp\\Content\\FieldType\\XmlText\\Value' )
+        //    return $value;
 
-        $handler = $this->getInputHandler( $value );
+        $handler = $value->getInputHandler( $value );
         $handler->process( $value->text, $repository, $field->version );
 
-        return new RawValue( $handler->getDocumentAsXml() );
+        $value->setRawText( $handler->getDocumentAsXml() );
     }
 
     /**
-     * Returns the InputHandler object
-     * @return \ezp\Content\FieldType\XmlText\Input\Handler
+     * Event handler for pre_publish
+     * @param \ezp\Base\Repository $repository
+     * @param \ezp\Content\Version $version
+     * @param \ezp\Content\Field $field
      */
-    protected function getInputHandler( Value $value )
+    public function onPrePublish( Repository $repository, Field $field )
     {
-        return new InputHandler( $this->getInputParser( $value ) );
     }
 
     /**
-     * Returns the XML Input Parser for an XmlText Value
-     * @param \ezp\Content\FieldType\XmlText\Value $value
-     * @return \ezp\Content\FieldType\XmlText\Input\Parser
+     * Event handler for post_publish
+     * @param \ezp\Base\Repository $repository
+     * @param \ezp\Content\Version $version
+     * @param \ezp\Content\Field $field
      */
-    protected function getInputParser( BaseValue $value )
+    public function onPostPublish( Repository $repository, Field $field )
     {
-        // @todo Load from configuration
-        $valueClass = get_class( $value );
-        if ( !isset( $this->parserClasses[$valueClass] ) )
-        {
-            // @todo Use dedicated exception
-            throw new Exception( "No parser found for " . get_class( $value ) );
-        }
+    }
 
-        return new $this->parserClasses[$valueClass];
+    /**
+     * Event handler for pre_create
+     * @param \ezp\Base\Repository $repository
+     * @param \ezp\Content\Field $field
+     */
+    public function onPreCreate( Repository $repository, Field $field )
+    {
+        $this->convertValueToRawValue( $field->value, $repository, $field );
+    }
+
+    /**
+     * Event handler for pre_create
+     * @param \ezp\Base\Repository $repository
+     * @param \ezp\Content\Field $field
+     */
+    public function onPostCreate( Repository $repository, Field $field )
+    {
     }
 }
