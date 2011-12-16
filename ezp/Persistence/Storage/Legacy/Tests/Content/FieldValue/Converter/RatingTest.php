@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the RatingConverterLegacyTest class
+ * File containing the RatingTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Rating\Value as RatingValue,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
@@ -19,7 +19,7 @@ use ezp\Content\FieldType\Rating\Value as RatingValue,
 /**
  * Test case for Rating converter in Legacy storage
  */
-class RatingConverterLegacyTest extends PHPUnit_Framework_TestCase
+class RatingTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Rating

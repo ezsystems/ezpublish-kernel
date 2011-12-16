@@ -215,6 +215,7 @@ class MapperTest extends TestCase
         $field = new Field();
         $field->type = 'some-type';
         $field->value = new FieldValue();
+        $field->value->data = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
 
         $mapper = new Mapper( $this->getLocationMapperMock(), $reg );
         $res = $mapper->convertToStorageValue( $field );
@@ -253,7 +254,11 @@ class MapperTest extends TestCase
                 $this->isInstanceOf(
                     'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue'
                 )
-            )->will( $this->returnValue( new FieldValue() ) );
+            )->will(
+                $this->returnValue(
+                    new FieldValue( array( 'data' => $this->getMock( 'ezp\\Content\\FieldType\\Value' ) ) )
+                )
+            );
 
         $reg = new Registry();
         $reg->register( 'ezauthor', $convMock );

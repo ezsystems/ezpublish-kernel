@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the AuthorConverterLegacyTest class
+ * File containing the AuthorTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Author\Value as AuthorValue,
     ezp\Content\FieldType\Author\Author,
     ezp\Content\FieldType\FieldSettings,
@@ -26,7 +26,7 @@ use ezp\Content\FieldType\Author\Value as AuthorValue,
  * @group fieldType
  * @group ezauthor
  */
-class AuthorConverterLegacyTest extends PHPUnit_Framework_TestCase
+class AuthorTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Author

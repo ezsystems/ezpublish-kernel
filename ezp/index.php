@@ -8,7 +8,7 @@ use ezp\Base\Configuration,
     ezp\Content\Concrete as Content,
     ezp\User\Concrete as User;
 
-// Use testsBootstrap.php to setup autolaod and Configuration
+// Use bootstrap.php to setup autoload and Configuration
 chdir( '../' );
 require 'bootstrap.php';
 

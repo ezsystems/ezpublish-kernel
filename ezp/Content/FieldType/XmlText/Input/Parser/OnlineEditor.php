@@ -791,7 +791,7 @@ class OnlineEditor extends BaseParser implements InputParser
         }
 
         // Left trim spaces:
-        if ( $this->TrimSpaces )
+        if ( $this->getOption( self::OPT_TRIM_SPACES ) )
         {
             $trim = false;
             $currentElement = $element;

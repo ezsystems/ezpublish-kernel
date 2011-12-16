@@ -97,7 +97,7 @@ class EzcDatabase extends Gateway
      */
     public function insertContentObject( Content $content, array $fields )
     {
-        if ( is_array( $content->version->name ) && isset( $content->version->name['always-available'] ) )
+        if ( isset( $content->version->name['always-available'] ) )
         {
             $name = $content->version->name[$content->version->name['always-available']];
         }

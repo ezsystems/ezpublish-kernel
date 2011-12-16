@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the MediaConverterLegacyTest class
+ * File containing the MediaTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Media\Type as MediaType,
     ezp\Content\FieldType\Media\Value as MediaTypeValue,
     ezp\Content\FieldType\FieldSettings,
@@ -22,7 +22,7 @@ use ezp\Content\FieldType\Media\Type as MediaType,
 /**
  * Test case for MediaType converter in Legacy storage
  */
-class MediaConverterLegacyTest extends \PHPUnit_Framework_TestCase
+class MediaTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\MediaType
@@ -46,7 +46,7 @@ class MediaConverterLegacyTest extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->converter = new MediaTypeConverter;
         BinaryRepository::setOverrideOptions( 'inmemory' );
-        $this->mediaPath = __DIR__ . '/developer-got-hurt.m4v';
+        $this->mediaPath = __DIR__ . '/../../../../../../../Content/Tests/FieldType/developer-got-hurt.m4v';
 
         $mediaValue = new MediaTypeValue;
         $mediaValue->file = $mediaValue->getHandler()->createFromLocalPath( $this->mediaPath );

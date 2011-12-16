@@ -291,17 +291,36 @@ abstract class FieldType implements Observer
                 break;
 
             case 'pre_publish':
+                if ( !$subject instanceof Field )
+                    throw new InvalidArgumentType( 'subject', 'ezp\\Content\\Field', $subject );
+                if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof Repository )
+                    throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
+                $this->onPrePublish( $arguments['repository'], $subject );
+                break;
+
             case 'post_publish':
                 if ( !$subject instanceof Field )
-                {
                     throw new InvalidArgumentType( 'subject', 'ezp\\Content\\Field', $subject );
-                }
                 if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof Repository )
-                {
                     throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
-                }
-                $this->onContentPublish( $arguments['repository'], $subject );
-            break;
+                $this->onPostPublish( $arguments['repository'], $subject );
+                break;
+
+            case 'pre_create':
+                if ( !$subject instanceof Field )
+                    throw new InvalidArgumentType( 'subject', 'ezp\\Content\\Field', $subject );
+                if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof Repository )
+                    throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
+                $this->onPreCreate( $arguments['repository'], $subject );
+                break;
+
+            case 'post_create':
+                if ( !$subject instanceof Field )
+                    throw new InvalidArgumentType( 'subject', 'ezp\\Content\\Field', $subject );
+                if ( !isset( $arguments['repository'] ) || !$arguments['repository'] instanceof Repository )
+                    throw new InvalidArgumentType( 'repository', 'ezp\\Base\\Repository', null );
+                $this->onPostCreate( $arguments['repository'], $subject );
+                break;
         }
     }
 

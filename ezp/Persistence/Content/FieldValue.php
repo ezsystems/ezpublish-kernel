@@ -48,4 +48,13 @@ class FieldValue extends ValueObject
      * @var mixed
      */
     public $sortKey;
+
+    public function __clone()
+    {
+        // Force object cloning to avoid them to point to the same object (same reference)
+        if ( isset( $this->data ) )
+            $this->data = clone $this->data;
+        if ( isset( $this->fieldSettings ) )
+            $this->fieldSettings = clone $this->fieldSettings;
+    }
 }

@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the TextBlockConverterLegacyTest class
+ * File containing the TextBlockTest class
  *
  * @copyright Copyright (C) 1999-2011 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\FieldType;
+namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\TextBlock\Value as TextBlockValue,
     ezp\Content\FieldType\FieldSettings,
     ezp\Persistence\Content\FieldValue,
@@ -21,7 +21,7 @@ use ezp\Content\FieldType\TextBlock\Value as TextBlockValue,
 /**
  * Test case for TextBlock converter in Legacy storage
  */
-class TextBlockConverterLegacyTest extends PHPUnit_Framework_TestCase
+class TextBlockTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextBlock

@@ -19,7 +19,8 @@ use ezp\Base\Model,
     ezp\Content\Type\FieldDefinition,
     ezp\Persistence\Content\Field as FieldVO,
     ezp\Content\FieldType\Value as FieldValue,
-    ezp\Content\FieldType\OnContentPublish as OnContentPublishFieldType;
+    ezp\Content\FieldType\OnPublish as OnPublishFieldType,
+    ezp\Content\FieldType\OnCreate as OnCreateFieldType;
 
 /**
  * This class represents a Content's field
@@ -85,10 +86,17 @@ class Field extends Model implements Observer
         // Observer setup
         $fieldType = $this->fieldDefinition->getType();
         $this->attach( $fieldType, 'field/setValue' );
-        if ( $fieldType instanceof OnContentPublishFieldType )
+
+        if ( $fieldType instanceof OnPublishFieldType )
         {
             $this->attach( $fieldType, 'pre_publish' );
             $this->attach( $fieldType, 'post_publish' );
+        }
+
+        if ( $fieldType instanceof OnCreateFieldType )
+        {
+            $this->attach( $fieldType, 'pre_create' );
+            $this->attach( $fieldType, 'post_create' );
         }
 
         $this->properties = new FieldVO(
@@ -189,6 +197,8 @@ class Field extends Model implements Observer
     {
         switch ( $event )
         {
+            case 'pre_create':
+            case 'post_create':
             case 'pre_publish':
             case 'post_publish':
                 if ( !$subject instanceof Version )
