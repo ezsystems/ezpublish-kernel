@@ -10,7 +10,10 @@
 namespace ezp\Base;
 use ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\BadConfiguration,
-    ezp\Io\BinaryFile, ezp\Io\BinaryFileUpdateStruct, ezp\Io\BinaryFileCreateStruct, ezp\Io\ContentType,
+    ezp\Io\BinaryFile,
+    ezp\Io\BinaryFileUpdateStruct,
+    ezp\Io\BinaryFileCreateStruct,
+    ezp\Io\ContentType,
     DateTime;
 
 /**

@@ -10,12 +10,16 @@
 namespace ezp\Io\Storage;
 
 use ezp\Io\Handler as IoHandlerInterface,
-    ezp\Io\BinaryFile, ezp\Io\BinaryFileCreateStruct, ezp\Io\BinaryFileUpdateStruct, ezp\Io\ContentType,
+    ezp\Io\BinaryFile,
+    ezp\Io\BinaryFileCreateStruct,
+    ezp\Io\BinaryFileUpdateStruct,
+    ezp\Io\ContentType,
     ezp\Io\Storage\Legacy\FileResourceAdapter,
+    ezp\Io\Exception\PathExists,
     ezp\Base\Exception\InvalidArgumentValue,
+    ezp\Base\Exception\NotFound,
     eZClusterFileHandler,
-    DateTime,
-    ezp\Base\Exception\NotFound, ezp\Io\Exception\PathExists;
+    DateTime;
 
 /**
  * Legacy Io/Storage handler, based on eZ Cluster

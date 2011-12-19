@@ -14,7 +14,7 @@ use ezp\Persistence\User,
     ezp\Persistence\User\RoleUpdateStruct,
     ezp\Persistence\User\Policy,
     ezp\Persistence\Storage\Legacy\User\Role\Gateway as RoleGateway,
-    \RuntimeException;
+    RuntimeException;
 
 /**
  * Storage Engine handler for user module

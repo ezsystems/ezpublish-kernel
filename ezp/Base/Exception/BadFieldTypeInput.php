@@ -9,8 +9,8 @@
 
 namespace ezp\Base\Exception;
 use ezp\Base\Exception,
-    \Exception as PhpException,
-    \InvalidArgumentException;
+    Exception as PhpException,
+    InvalidArgumentException;
 
 /**
  * Exception thrown when the input value to a field type is not understood by

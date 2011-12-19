@@ -12,7 +12,7 @@ use ezp\Persistence\User,
     ezp\Persistence\User\Role,
     ezp\Persistence\User\RoleUpdateStruct,
     ezp\Persistence\User\Policy,
-    \RuntimeException;
+    RuntimeException;
 
 /**
  * mapper for User realted objects

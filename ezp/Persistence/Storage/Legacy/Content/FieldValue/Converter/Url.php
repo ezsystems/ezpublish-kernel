@@ -8,11 +8,11 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    \ezp\Persistence\Content\FieldValue,
-    \ezp\Persistence\Content\Type\FieldDefinition,
-    \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
+    ezp\Persistence\Content\FieldValue,
+    ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Content\FieldType\Url\Value as UrlValue;
 
 class Url implements Converter

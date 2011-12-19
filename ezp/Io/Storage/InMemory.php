@@ -9,8 +9,11 @@
 namespace ezp\Io\Storage;
 
 use ezp\Io\Handler as IoHandlerInterface,
-    ezp\Io\BinaryFile, ezp\Io\BinaryFileUpdateStruct, ezp\Io\BinaryFileCreateStruct,
-    ezp\Base\Exception\NotFound, ezp\Io\Exception\PathExists,
+    ezp\Io\BinaryFile,
+    ezp\Io\BinaryFileUpdateStruct,
+    ezp\Io\BinaryFileCreateStruct,
+    ezp\Base\Exception\NotFound,
+    ezp\Io\Exception\PathExists,
     DateTime;
 
 /**

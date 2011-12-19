@@ -8,14 +8,14 @@
  */
 
 namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    \ezp\Persistence\Content\FieldValue,
-    \ezp\Persistence\Content\FieldTypeConstraints,
-    \ezp\Persistence\Content\Type\FieldDefinition,
-    \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    \ezp\Content\FieldType\Media\Value as MediaValue,
-    \ezp\Content\FieldType\FieldSettings;
+use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
+    ezp\Persistence\Content\FieldValue,
+    ezp\Persistence\Content\FieldTypeConstraints,
+    ezp\Persistence\Content\Type\FieldDefinition,
+    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+    ezp\Content\FieldType\Media\Value as MediaValue,
+    ezp\Content\FieldType\FieldSettings;
 
 class Media implements Converter
 {
