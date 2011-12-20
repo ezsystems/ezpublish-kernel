@@ -548,6 +548,27 @@ class Service extends BaseService
     }
 
     /**
+     * Creates a new draft for the published content type $type
+     * @param \ezp\Content\Type $type The type to create a draft for
+     * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
+     * @throws \ezp\Base\Exception\Logic If $type is not persisted
+     * @throws \ezp\Base\Exception\Logic If $type doesn't have the DEFINED status
+     */
+    public function createDraft( Type $type )
+    {
+        if ( !$this->repository->canUser( 'edit', $type ) )
+            throw new Forbidden( 'Type', 'edit' );
+
+        if ( !$type->id )
+            throw new Logic( "Type\\Service->create()", '$type doesn\'t seem to be persisted' );
+
+        if ( $type->status !== TypeValue::STATUS_DEFINED )
+            throw new Logic( 'Type\\Service->create()', '$type doesn\'t have the DEFINED status' );
+
+        $this->handler->contentTypeHandler()->createDraft( $type->id );
+    }
+
+    /**
      * @param \ezp\Persistence\Content\Type $vo
      * @return \ezp\Content\Type
      */
