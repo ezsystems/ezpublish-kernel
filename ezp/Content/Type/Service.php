@@ -565,7 +565,9 @@ class Service extends BaseService
         if ( $type->status !== TypeValue::STATUS_DEFINED )
             throw new Logic( 'Type\\Service->create()', '$type doesn\'t have the DEFINED status' );
 
-        $this->handler->contentTypeHandler()->createDraft( $type->id );
+        return $this->buildType(
+            $this->handler->contentTypeHandler()->createDraft( $this->repository->getUser()->id, $type->id )
+        );
     }
 
     /**

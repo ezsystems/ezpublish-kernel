@@ -1250,15 +1250,9 @@ class TypeTest extends BaseServiceTest
      */
     public function testCreateDraft()
     {
-        $persistenceHandler = $this->getMock( '\\ezp\\Persistence\\Handler' );
-
-        $repository = $this->getMockBuilder( '\\ezp\\Base\\Repository' );
-
-        // $type = $this->service->load( 1 );
-        // $draft = $this->service->createDraft( $type );
-    }
-
-    private function getContentTypeServiceMock()
-    {
+        $type = $this->service->load( 1 );
+        $draft = $this->service->createDraft( $type );
+        self::assertInstanceOf( '\\ezp\\Content\\Type', $draft );
+        self::assertEquals( TypeValue::STATUS_DRAFT, $draft->status );
     }
 }
