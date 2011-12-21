@@ -14,7 +14,8 @@ use ezp\Persistence\Content,
     ezp\Persistence\Content\Search\Result,
     ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence\Storage\Legacy\Exception,
-    ezp\Persistence\Storage\Legacy\Content\Mapper as ContentMapper;
+    ezp\Persistence\Storage\Legacy\Content\Mapper as ContentMapper,
+    ezp\Persistence\Storage\Legacy\Content\FieldHandler;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -54,15 +55,24 @@ class Handler extends BaseSearchHandler
     protected $contentMapper;
 
     /**
+     * FieldHandler
+     *
+     * @var \ezp\Persistence\Storage\Legacy\FieldHandler
+     */
+    protected $fieldHandler;
+
+    /**
      * Creates a new content handler.
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\Search\Gateway $gateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @param \ezp\Persistence\Storage\Legacy\Content\Mapper $contentMapper
+     * @param \ezp\Persistence\Storage\Legacy\Content\FieldHandler $fieldHandler
      */
-    public function __construct( Gateway $gateway, ContentMapper $contentMapper )
+    public function __construct( Gateway $gateway, ContentMapper $contentMapper, FieldHandler $fieldHandler )
     {
         $this->gateway = $gateway;
         $this->contentMapper = $contentMapper;
+        $this->fieldHandler = $fieldHandler;
     }
 
     /**
@@ -88,6 +98,11 @@ class Handler extends BaseSearchHandler
         $result->content = $this->contentMapper->extractContentFromRows(
             $data['rows']
         );
+
+        foreach ( $result->content as $content )
+        {
+            $this->fieldHandler->loadExternalFieldData( $content );
+        }
 
         return $result;
     }

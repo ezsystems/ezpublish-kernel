@@ -480,7 +480,8 @@ class Handler implements HandlerInterface
                 new Content\Mapper(
                     new Content\Location\Mapper(),
                     $this->getFieldValueConverterRegistry()
-                )
+                ),
+                $this->getFieldHandler()
             );
         }
         return $this->searchHandler;
