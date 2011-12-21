@@ -953,7 +953,7 @@ class ContentTest extends BaseServiceTest
         $content = $this->repository->getContentService()->create( $content );
 
         $updatedVersion = $this->service->publish( $version = $content->getCurrentVersion() );
-        
+
         self::assertTrue( $version === $version->getContent()->getCurrentVersion(), "Version->getContent()->getCurrentVersion() should match the Version" );
         self::assertTrue( $content === $version->getContent(), "Version->getContent() should match Content" );
         self::assertTrue( $updatedVersion === $version, "Provided Version and returned one should be the same object" );
@@ -970,11 +970,11 @@ class ContentTest extends BaseServiceTest
 
         self::assertEquals( 2, $content->currentVersionNo, "Content's currentVersionNo not correctly set" );
         self::assertEquals( 2, $version->getContent()->currentVersionNo, "Version's Content's currentVersionNo not correctly set" );
-        
+
         self::assertTrue( $version === $version->getContent()->getCurrentVersion(), "Version->getContent()->getCurrentVersion() should match the Version" );
         self::assertTrue( $content === $version->getContent(), "Version->getContent() should match Content" );
         self::assertTrue( $updatedVersion === $version, "Provided Version and returned one should be the same object" );
-        
+
         self::assertEquals( Version::STATUS_ARCHIVED, $content->versions[1]->status, "Archived status not correctly set" );
         self::assertEquals( Version::STATUS_PUBLISHED, $content->versions[2]->status, "Published status not correctly set" );
     }

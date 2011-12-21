@@ -77,7 +77,7 @@ class AddField extends Action
     }
 
     /**
-     * 
+     *
      *
      * @param Content $content
      * @return void

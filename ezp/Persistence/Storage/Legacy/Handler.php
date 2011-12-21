@@ -191,7 +191,7 @@ class Handler implements HandlerInterface
      * )
      * </code>
      *
-     * The DSN (data source name) defines which database to use. It's format is 
+     * The DSN (data source name) defines which database to use. It's format is
      * defined by the Apache Zeta Components Database component. Examples are:
      *
      * - mysql://root:secret@localhost/ezp
@@ -210,19 +210,19 @@ class Handler implements HandlerInterface
      * then executed by the old eZ Publish core.
      *
      * In 'external_storages' a mapping of field type names to classes is
-     * expected. The referred class is instantiated and the resulting object is 
+     * expected. The referred class is instantiated and the resulting object is
      * used to store/restore/delete/… data in external storages (e.g. another
      * database or a web service). The classes must comply to the
      * {@link \ezp\Persistence\Fields\Storage} interface. Note that due to the
      * configuration mechanism and missing proper DI, the classes may not
      * expect any constructor parameters!
      *
-     * The 'field_converter' configuration array consists of another mapping of 
+     * The 'field_converter' configuration array consists of another mapping of
      * field type names to classes. Each of the classes is instantiated and
-     * used to convert content fields and content type field definitions to the 
+     * used to convert content fields and content type field definitions to the
      * legacy storage engine. The given class names must derive the
      * {@link \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter}
-     * class. As for 'external_storage' classes, none of the classes may expect 
+     * class. As for 'external_storage' classes, none of the classes may expect
      * parameters in its constructor, due to missing proper DI.
      *
      * Through the 'transformation_rule_files' array, a list of files with

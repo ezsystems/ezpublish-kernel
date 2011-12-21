@@ -648,7 +648,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $res = array_merge( $resFirst, $resSecond );
 
         $this->storeFixture(
-            __DIR__ . '/../_fixtures/extract_content_from_rows_multiple_versions.php', 
+            __DIR__ . '/../_fixtures/extract_content_from_rows_multiple_versions.php',
             $res
         );
     }

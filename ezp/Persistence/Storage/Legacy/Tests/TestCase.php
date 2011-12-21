@@ -284,7 +284,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * Asserts correct property values on $object.
      *
-     * Asserts that for all keys in $properties a corresponding property 
+     * Asserts that for all keys in $properties a corresponding property
      * exists in $object with the *same* value as in $properties.
      *
      * @param array $properties

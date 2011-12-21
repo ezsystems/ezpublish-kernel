@@ -145,7 +145,7 @@ interface Handler
     /**
      * Adds a new field definition to an existing Type.
      *
-     * This method creates a new version of the Type with the $fieldDefinition 
+     * This method creates a new version of the Type with the $fieldDefinition
      * added. It does not update existing content objects depending on the
      * field (default) values.
      *
@@ -161,8 +161,8 @@ interface Handler
     /**
      * Removes a field definition from an existing Type.
      *
-     * This method creates a new version of the Type with the field definition 
-     * referred to by $fieldDefinitionId removed. It does not update existing 
+     * This method creates a new version of the Type with the field definition
+     * referred to by $fieldDefinitionId removed. It does not update existing
      * content objects depending on the field (default) values.
      *
      * @param mixed $contentTypeId
@@ -177,8 +177,8 @@ interface Handler
     /**
      * This method updates the given $fieldDefinition on a Type.
      *
-     * This method creates a new version of the Type with the updated 
-     * $fieldDefinition. It does not update existing content objects depending 
+     * This method creates a new version of the Type with the updated
+     * $fieldDefinition. It does not update existing content objects depending
      * on the
      * field (default) values.
      *

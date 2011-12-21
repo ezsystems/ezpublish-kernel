@@ -28,7 +28,7 @@ class RestrictedVersion extends ValueObject
 
     /**
      * Name in the different available translations
-     * 
+     *
      * @var string[]
      */
     public $name;
