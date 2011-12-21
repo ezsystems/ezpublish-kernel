@@ -297,7 +297,7 @@ abstract class Base
                 }
 
             }
-            while( $pos < strlen( $data ) );
+            while ( $pos < strlen( $data ) );
         }
         else
         {
@@ -574,7 +574,7 @@ abstract class Base
                     return false;
                 }
             }
-            while( $parseResult !== true );
+            while ( $parseResult !== true );
         }
 
         return false;
@@ -734,7 +734,7 @@ abstract class Base
         while ( $pos < strlen( $text ) - 1 )
         {
             $startPos = $pos;
-            while( !( $text[$pos] == '&' && $text[$pos + 1] == '#' ) && $pos < strlen( $text ) - 1 )
+            while ( !( $text[$pos] == '&' && $text[$pos + 1] == '#' ) && $pos < strlen( $text ) - 1 )
             {
                 $pos++;
             }

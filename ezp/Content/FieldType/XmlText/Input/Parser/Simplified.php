@@ -219,7 +219,7 @@ class Simplified extends BaseParser implements InputParser
                 $currentParent = $currentParent->parentNode;
                 prev( $this->ParentStack );
             }
-            while( $this->XMLSchema->isInline( $currentParent ) );
+            while ( $this->XMLSchema->isInline( $currentParent ) );
 
             $insertData .= $wholeTagString;
 
@@ -240,7 +240,7 @@ class Simplified extends BaseParser implements InputParser
                 $currentParent = $currentParent->parentNode;
                 prev( $this->ParentStack );
             }
-            while( $this->XMLSchema->isInline( $currentParent ) );
+            while ( $this->XMLSchema->isInline( $currentParent ) );
 
             $insertData .= $appendData;
 
@@ -346,7 +346,7 @@ class Simplified extends BaseParser implements InputParser
                     // create paragraph in case of the last empty paragraph (not inside section)
                     $nextToNext = $next->nextSibling;
                     $tmp = $parent;
-                    while( !$nextToNext && $tmp && $tmp->nodeName == 'section' )
+                    while ( !$nextToNext && $tmp && $tmp->nodeName == 'section' )
                     {
                         $nextToNext = $tmp->nextSibling;
                         $tmp = $tmp->parentNode;
@@ -433,7 +433,7 @@ class Simplified extends BaseParser implements InputParser
         {
             $sectionLevel = -1;
             $current = $element;
-            while( $current->parentNode )
+            while ( $current->parentNode )
             {
                 $current = $current->parentNode;
                 if ( $current->nodeName == 'section' )
@@ -474,7 +474,7 @@ class Simplified extends BaseParser implements InputParser
                     unset( $newSection );
                 }
                 $elementToMove = $element;
-                while( $elementToMove &&
+                while ( $elementToMove &&
                     $elementToMove->nodeName != 'section' )
                 {
                     $next = $elementToMove->nextSibling;
@@ -513,7 +513,7 @@ class Simplified extends BaseParser implements InputParser
             {
                 $newLevel = $sectionLevel + 1;
                 $current = $element;
-                while( $level < $newLevel )
+                while ( $level < $newLevel )
                 {
                     $current = $current->parentNode;
                     if ( $current->nodeName == 'section' )
@@ -522,7 +522,7 @@ class Simplified extends BaseParser implements InputParser
                     }
                 }
                 $elementToMove = $element;
-                while( $elementToMove &&
+                while ( $elementToMove &&
                     $elementToMove->nodeName != 'section' )
                 {
                     $next = $elementToMove->nextSibling;

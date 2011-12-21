@@ -508,7 +508,7 @@ class OnlineEditor extends BaseParser implements InputParser
                 $currentParent = $currentParent->parentNode;
                 prev( $this->ParentStack );
             }
-            while( $this->XMLSchema->isInline( $currentParent ) );
+            while ( $this->XMLSchema->isInline( $currentParent ) );
 
             $insertData .= $wholeTagString;
 
@@ -526,7 +526,7 @@ class OnlineEditor extends BaseParser implements InputParser
                 $currentParent = $currentParent->parentNode;
                 prev( $this->ParentStack );
             }
-            while( $this->XMLSchema->isInline( $currentParent ) );
+            while ( $this->XMLSchema->isInline( $currentParent ) );
 
             $insertData .= $appendData;
 
@@ -744,7 +744,7 @@ class OnlineEditor extends BaseParser implements InputParser
         // Fix for italic/bold styles in Mozilla.
         $addStrong = $addEmph = null;
         $myParent = $element->parentNode;
-        while( $myParent )
+        while ( $myParent )
         {
             $style = $myParent->getAttribute( 'style' );
             if ( $style && $addStrong !== false && strpos( $style, 'font-weight: bold;' ) !== false )
@@ -891,7 +891,7 @@ class OnlineEditor extends BaseParser implements InputParser
                     unset( $newSection );
                 }
                 $elementToMove = $element;
-                while( $elementToMove &&
+                while ( $elementToMove &&
                     $elementToMove->nodeName !== 'section' )
                 {
                     $next = $elementToMove->nextSibling;
@@ -909,7 +909,7 @@ class OnlineEditor extends BaseParser implements InputParser
             {
                 $newLevel = $sectionLevel + 1;
                 $current = $element;
-                while( $level < $newLevel )
+                while ( $level < $newLevel )
                 {
                     $tmp = $current;
                     $current = $tmp->parentNode;
@@ -917,7 +917,7 @@ class OnlineEditor extends BaseParser implements InputParser
                         --$newLevel;
                 }
                 $elementToMove = $element;
-                while( $elementToMove &&
+                while ( $elementToMove &&
                     $elementToMove->nodeName !== 'section' )
                 {
                     $next = $elementToMove->nextSibling;
