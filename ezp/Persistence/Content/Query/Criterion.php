@@ -48,7 +48,7 @@ abstract class Criterion
             $operatorFound = true;
 
             // input format check (single/array)
-            switch( $operatorSpecifications->valueFormat )
+            switch ( $operatorSpecifications->valueFormat )
             {
                 case Specifications::FORMAT_SINGLE:
                     if ( is_array( $value ) )

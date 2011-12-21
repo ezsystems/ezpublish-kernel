@@ -753,7 +753,7 @@ class Service extends BaseService
      */
     protected function setPropertyByConvention( ValueObject $struct, $property )
     {
-        switch( $property )
+        switch ( $property )
         {
             // Hardcoding this property for now, until we have proper translation management
             // See #EZPNEXT-75

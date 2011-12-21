@@ -99,7 +99,7 @@ class Value extends BaseValue implements ValueInterface
 
     public function __get( $name )
     {
-        switch( $name )
+        switch ( $name )
         {
             case 'filename':
                 return basename( $this->file->path );
