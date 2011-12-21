@@ -477,10 +477,7 @@ class Handler implements HandlerInterface
                     ),
                     new Content\Gateway\EzcDatabase\QueryBuilder( $this->getDatabase() )
                 ),
-                new Content\Mapper(
-                    new Content\Location\Mapper(),
-                    $this->getFieldValueConverterRegistry()
-                ),
+                $this->getContentMapper(),
                 $this->getFieldHandler()
             );
         }
