@@ -74,7 +74,7 @@ class DeferredLegacy extends Handler
             'syncobjectattributes.php',
             eZINI::instance( 'ezscriptmonitor.ini' )->variable( 'GeneralSettings', 'PhpCliCommand' ) .
             ' extension/ezscriptmonitor/bin/' . eZScheduledScript::SCRIPT_NAME_STRING .
-            ' -s ' . eZScheduledScript::SITE_ACCESS_STRING . ' --classid=' . $fromType->id
+            ' -s ' . eZScheduledScript::SITE_ACCESS_STRING . ' --classid=' . $toType->id
         );
         $script->store();
     }
