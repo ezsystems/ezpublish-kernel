@@ -1255,7 +1255,7 @@ abstract class Base
             }*/
 
             // Process attributes according to the schema
-            if( $element->hasAttributes() )
+            if ( $element->hasAttributes() )
             {
                 if ( !$this->XMLSchema->hasAttributes( $element ) )
                 {

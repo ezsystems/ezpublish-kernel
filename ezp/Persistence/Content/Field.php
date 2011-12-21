@@ -57,7 +57,7 @@ class Field extends ValueObject
     public function __clone()
     {
         $this->id = null;
-        if( isset( $this->value ) )
+        if ( isset( $this->value ) )
             $this->value = clone $this->value;
     }
 }

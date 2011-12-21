@@ -184,7 +184,7 @@ class AliasCollection extends TypeCollection
     private function generateTempImageName( FileInfo $originalImageInfo )
     {
         $fileSuffix = $originalImageInfo->getExtension();
-        if( $fileSuffix )
+        if ( $fileSuffix )
             $fileSuffix = '.' . $fileSuffix;
 
         return md5( $originalImageInfo->getBasename( $fileSuffix ) . microtime() . mt_rand() ) . $fileSuffix;

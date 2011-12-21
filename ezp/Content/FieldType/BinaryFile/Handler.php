@@ -57,7 +57,7 @@ class Handler
 
         // Grab suffix and prepend dot
         $fileSuffix = $fileInfo->getExtension();
-        if( $fileSuffix )
+        if ( $fileSuffix )
             $fileSuffix = '.' . $fileSuffix;
         // Create dest filename hash
         $destFileName = md5( $fileInfo->getBasename( $fileSuffix ) . microtime() . mt_rand() ) . $fileSuffix;

@@ -28,7 +28,7 @@ class FieldValidation extends InvalidArgumentException implements Exception
      */
     public function __construct( $what, $validationErrors, PhpException $previous = null )
     {
-        if( !is_array( $validationErrors ) )
+        if ( !is_array( $validationErrors ) )
             $validationErrors = array( $validationErrors );
         $this->validationErrors = $validationErrors;
 
