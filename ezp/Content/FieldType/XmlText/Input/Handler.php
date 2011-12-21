@@ -92,13 +92,13 @@ class Handler
         $service = $repository->getInternalFieldTypeService();
 
         // related content
-        foreach( $this->parser->getRelatedContentIdArray() as $contentId )
+        foreach ( $this->parser->getRelatedContentIdArray() as $contentId )
         {
             $service->addRelation( Relation::ATTRIBUTE, $version->contentId, $version->id, $contentId );
         }
 
         // linked content
-        foreach( $this->parser->getLinkedContentIdArray() as $contentId )
+        foreach ( $this->parser->getLinkedContentIdArray() as $contentId )
         {
             $service->addRelation( Relation::LINK, $version->contentId, $version->id, $contentId );
         }

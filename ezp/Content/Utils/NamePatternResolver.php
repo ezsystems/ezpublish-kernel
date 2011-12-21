@@ -163,7 +163,7 @@ class NamePatternResolver
         $tokenArray = $this->extractTokens( $this->namePattern );
         $objectName = $this->namePattern;
 
-        foreach( $tokenArray as $token )
+        foreach ( $tokenArray as $token )
         {
             $string = $this->resolveToken( $token );
             $objectName = str_replace( $token, $string, $objectName );

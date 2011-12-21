@@ -162,7 +162,7 @@ class Raw extends BaseParser implements InputParser
 
         $sectionTagString = substr( $xmlString, $sectionOpenStartPos + 9, $sectionOpenEndPos - 9 );
         $namespaces = array( 'image' => false, 'xhtml' => false, 'custom' => false );
-        foreach( explode( ' ', $sectionTagString ) as $tagPart )
+        foreach ( explode( ' ', $sectionTagString ) as $tagPart )
         {
             if ( strpos( $tagPart, '=' ) === false )
             {

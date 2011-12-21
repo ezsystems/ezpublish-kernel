@@ -269,7 +269,7 @@ abstract class Base
         {
             $mainSection = $domDocument->createElement( 'section' );
             $domDocument->appendChild( $mainSection );
-            foreach( array( 'image', 'xhtml', 'custom' ) as $prefix )
+            foreach ( array( 'image', 'xhtml', 'custom' ) as $prefix )
             {
                 $mainSection->setAttributeNS( 'http://www.w3.org/2000/xmlns/', 'xmlns:' . $prefix, $this->Namespaces[$prefix] );
             }
@@ -621,7 +621,7 @@ abstract class Base
     {
         $thisOutputTag = $this->OutputTags[$element->nodeName];
 
-        foreach( $attributes as $key => $value )
+        foreach ( $attributes as $key => $value )
         {
             // Convert attribute names
             if ( isset( $thisOutputTag['attributes'] ) &&
@@ -671,10 +671,10 @@ abstract class Base
         // Check for required attrs are present
         if ( isset( $this->OutputTags[$element->nodeName]['requiredInputAttributes'] ) )
         {
-            foreach( $this->OutputTags[$element->nodeName]['requiredInputAttributes'] as $reqAttrName )
+            foreach ( $this->OutputTags[$element->nodeName]['requiredInputAttributes'] as $reqAttrName )
             {
                 $presented = false;
-                foreach( $attributes as $key => $value )
+                foreach ( $attributes as $key => $value )
                 {
                     if ( $key == $reqAttrName )
                     {

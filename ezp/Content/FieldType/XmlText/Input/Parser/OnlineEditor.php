@@ -1312,7 +1312,7 @@ class OnlineEditor extends BaseParser implements InputParser
         if ( $attr )
         {
             $attrArray = explode( 'attribute_separation', $attr );
-            foreach( $attrArray as $attr )
+            foreach ( $attrArray as $attr )
             {
                 if ( $attr !== '' && strpos( $attr, '|' ) !== false )
                 {
@@ -1378,7 +1378,7 @@ class OnlineEditor extends BaseParser implements InputParser
         if ( $styleString )
         {
             $styleArray = explode( ';', $styleString );
-            foreach( $styleArray as $style )
+            foreach ( $styleArray as $style )
             {
                 if ( !$style )
                     continue;

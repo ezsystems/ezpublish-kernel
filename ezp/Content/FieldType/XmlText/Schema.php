@@ -175,7 +175,7 @@ class Schema
 
         // Get all tags available classes list
         // @todo Implement
-        foreach( array_keys( $this->schema ) as $tagName )
+        foreach ( array_keys( $this->schema ) as $tagName )
         {
             if ( $configuration->has( $tagName, 'AvailableClasses' ) )
             {
@@ -196,12 +196,12 @@ class Schema
 
         // Get all tags custom attributes list
         // @todo Implement
-        foreach( array_keys( $this->schema ) as $tagName )
+        foreach ( array_keys( $this->schema ) as $tagName )
         {
             if ( $tagName == 'custom' )
             {
                 // Custom attributes of custom tags
-                foreach( $this->schema['custom']['tagList'] as $customTagName )
+                foreach ( $this->schema['custom']['tagList'] as $customTagName )
                 {
                     if ( $configuration->has( $customTagName, 'CustomAttributes' ) )
                     {
