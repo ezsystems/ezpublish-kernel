@@ -374,7 +374,7 @@ abstract class Base
 
             // Find matching tag in ParentStack array
             $firstLoop = true;
-            for( $i = count( $this->ParentStack ) - 1; $i >= 0; $i-- )
+            for ( $i = count( $this->ParentStack ) - 1; $i >= 0; $i-- )
             {
                 $parentNames = $this->ParentStack[$i];
                 if ( $parentNames[0] == $closedTagName )
