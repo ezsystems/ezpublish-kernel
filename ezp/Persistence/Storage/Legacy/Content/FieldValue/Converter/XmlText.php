@@ -65,15 +65,8 @@ class XmlText implements Converter
 
         $settingsArray = array();
 
-        if ( !empty( $storageDefinition->dataInt1 ) )
-        {
-            $settingsArray['numRows'] = $storageDefinition->dataInt1;
-        }
-
-        if ( !empty( $storageDefinition->dataText2 ) )
-        {
-            $settingsArray['tagPreset'] = $storageDefinition->dataText2;
-        }
+        $settingsArray['numRows'] = $storageDefinition->dataInt1;
+        $settingsArray['tagPreset'] = $storageDefinition->dataText2;
 
         if ( !empty( $storageDefinition->dataText1 ) )
         {
