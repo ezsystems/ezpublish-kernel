@@ -41,6 +41,7 @@ class Type extends FieldType implements OnPublish, OnCreate
     protected $allowedSettings = array(
         'numRows' => 10,
         'tagPreset' => null,
+        'defaultText' => '',
     );
 
     /**
