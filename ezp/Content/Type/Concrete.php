@@ -106,7 +106,7 @@ class Concrete extends Model implements Type
     }
 
     /**
-     * @return ezp\Content\Type\FieldDefinition[]
+     * @return ezp\Base\Collection\ReadOnly[ezp\Content\Type\FieldDefinition]
      */
     public function getFields()
     {
@@ -114,7 +114,7 @@ class Concrete extends Model implements Type
     }
 
     /**
-     * @return ezp\Content\Type\Group[]
+     * @return ezp\Base\Collection\ReadOnly[ezp\Content\Type\Group]
      */
     public function getGroups()
     {
