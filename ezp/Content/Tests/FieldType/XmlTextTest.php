@@ -37,6 +37,21 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @group fieldType
+     * @group dateTime
+     * @covers \ezp\Content\FieldType::allowedSettings
+     */
+    public function testAllowedSettings()
+    {
+        $ft = new XmlTextType();
+        self::assertSame(
+            array( 'numRows', 'tagPreset', 'defaultText' ),
+            $ft->allowedSettings(),
+            "The set of allowed settings does not match what is expected."
+        );
+    }
+
+    /**
      * @covers \ezp\Content\FieldType\XmlText\Type::canParseValue
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      */
@@ -84,6 +99,7 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
         $fieldValue = $ft->toFieldValue();
 
         self::assertSame( $value, $fieldValue->data );
+        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
     }
 
     public function providerForTestCanParseValueInvalidFormat()
