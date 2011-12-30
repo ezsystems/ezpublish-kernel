@@ -62,18 +62,13 @@ class XmlText implements Converter
     public function toFieldDefinition( StorageFieldDefinition $storageDefinition, FieldDefinition $fieldDefinition )
     {
         $fieldDefinition->fieldTypeConstraints = new FieldTypeConstraints;
-
-        $settingsArray = array();
-
-        $settingsArray['numRows'] = $storageDefinition->dataInt1;
-        $settingsArray['tagPreset'] = $storageDefinition->dataText2;
-
-        if ( !empty( $storageDefinition->dataText1 ) )
-        {
-            $settingsArray['defaultText'] = $storageDefinition->dataText1;
-        }
-
-        $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings( $settingsArray );
+        $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings(
+            array(
+                'numRows' => $storageDefinition->dataInt1,
+                'tagPreset' => $storageDefinition->dataText2,
+                'defaultText' => $storageDefinition->dataText1
+            )
+        );
     }
 
     /**
