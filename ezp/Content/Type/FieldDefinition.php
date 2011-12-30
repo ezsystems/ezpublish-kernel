@@ -279,6 +279,7 @@ class FieldDefinition extends Model
      */
     public function setFieldSetting( $settingName, $value )
     {
+        $this->properties->fieldTypeConstraints->fieldSettings[$settingName] = $value;
         $this->type->setFieldSetting( $settingName, $value );
     }
 
@@ -290,6 +291,6 @@ class FieldDefinition extends Model
      */
     public function getFieldSetting( $settingName )
     {
-        return $this->type->getFieldSetting( $settingName );
+        return $this->properties->fieldTypeConstraints->fieldSettings[$settingName];
     }
 }
