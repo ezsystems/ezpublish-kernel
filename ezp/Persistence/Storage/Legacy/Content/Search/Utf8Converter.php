@@ -15,7 +15,7 @@ use ezp\Persistence\Fields\Storage;
  * Class for converting UTF-8 charecters to their decimal code points and vice
  * versa.
  *
- * The code originates from the eZUTF8Codec class availbale in lib/ezi18n/classes/ezutf8codec.php
+ * The code originates from the eZUTF8Codec class available in lib/ezi18n/classes/ezutf8codec.php
  */
 class Utf8Converter
 {
