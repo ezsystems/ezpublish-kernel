@@ -14,7 +14,8 @@ use ezp\Base\Model,
     ezp\Content\Concrete as ConcreteContent,
     ezp\Content\Location,
     ezp\Persistence\Content\Location as LocationValue,
-    ezp\Base\Exception\InvalidArgumentType;
+    ezp\Base\Exception\InvalidArgumentType,
+    ezp\Base\Collection\Lazy;
 
 /**
  * This class represents a Concrete Content Location
