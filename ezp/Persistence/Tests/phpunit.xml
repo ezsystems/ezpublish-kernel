@@ -1,6 +1,6 @@
 <phpunit backupGlobals="false"
          backupStaticAttributes="false"
-		 bootstrap="autoload.php"
+         bootstrap="autoload.php"
          convertErrorsToExceptions="true"
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
@@ -11,16 +11,16 @@
     <filter>
       <whitelist>
           <directory suffix=".php">../</directory>
-		  <exclude>
-			  <directory suffix=".php">../Tests</directory>
-		  </exclude>
+          <exclude>
+              <directory suffix=".php">../Tests</directory>
+          </exclude>
       </whitelist>
     </filter>
-	<!-- To run tests against a specific database use the following.
-		 By default, tests are run against SQLite in-memory. -->
-	<!--
-	<php>
-		<env name="DATABASE" value="mysql://root:root@localhost/ezp-test"/>
-	</php>
-	-->
+    <!-- To run tests against a specific database use the following.
+        By default, tests are run against SQLite in-memory. -->
+    <!--
+    <php>
+        <env name="DATABASE" value="mysql://root:root@localhost/ezp-test"/>
+    </php>
+    -->
 </phpunit>
