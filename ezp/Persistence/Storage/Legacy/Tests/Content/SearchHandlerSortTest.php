@@ -105,7 +105,8 @@ class SearchHandlerSortTest extends TestCase
                 ),
                 new QueryBuilder( $this->getDatabaseHandler() )
             ),
-            $this->getContentMapperMock()
+            $this->getContentMapperMock(),
+            $this->getContentFieldHandlerMock()
         );
     }
 
@@ -145,6 +146,22 @@ class SearchHandlerSortTest extends TestCase
                 )
             );
         return $mapperMock;
+    }
+
+    /**
+     * Returns a content field handler mock
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\FieldHandler
+     */
+    protected function getContentFieldHandlerMock()
+    {
+        return $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldHandler',
+            array( 'loadExternalFieldData' ),
+            array(),
+            '',
+            false
+        );
     }
 
     public function testNoSorting()

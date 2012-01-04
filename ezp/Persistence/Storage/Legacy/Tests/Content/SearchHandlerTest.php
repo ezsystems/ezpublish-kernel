@@ -11,6 +11,7 @@ namespace ezp\Persistence\Storage\Legacy\Tests\Content;
 use ezp\Persistence\Storage\Legacy\Tests\TestCase,
     ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
     ezp\Persistence\Storage\Legacy\Content,
+    ezp\Persistence\Storage\Legacy\FieldHandler,
     ezp\Persistence\Content as ContentObject,
     ezp\Persistence\Content\Query\Criterion,
     ezp\Persistence;
@@ -145,7 +146,8 @@ class ContentSearchHandlerTest extends TestCase
                 new Content\Search\Gateway\SortClauseConverter(),
                 new QueryBuilder( $this->getDatabaseHandler() )
             ),
-            $this->getContentMapperMock()
+            $this->getContentMapperMock(),
+            $this->getContentFieldHandlerMock()
         );
     }
 
@@ -185,6 +187,22 @@ class ContentSearchHandlerTest extends TestCase
                 )
             );
         return $mapperMock;
+    }
+
+    /**
+     * Returns a content field handler mock
+     *
+     * @return \ezp\Persistence\Storage\Legacy\Content\FieldHandler
+     */
+    protected function getContentFieldHandlerMock()
+    {
+        return $this->getMock(
+            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldHandler',
+            array( 'loadExternalFieldData' ),
+            array(),
+            '',
+            false
+        );
     }
 
     /**
