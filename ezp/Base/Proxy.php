@@ -8,12 +8,14 @@
  */
 
 namespace ezp\Base;
+use ezp\Base\Dumpable,
+    SplObjectStorage;
 
 /**
  * Proxy class for model objects
  *
  */
-abstract class Proxy
+abstract class Proxy implements Dumpable
 {
     /**
      * Service used to load the object the proxy represents.
@@ -96,5 +98,31 @@ abstract class Proxy
     {
         $this->lazyLoad();
         return isset( $this->proxiedObject->$property );
+    }
+
+    /**
+     * Dump an object in a similar way to var_dump()
+     *
+     * @param int $maxDepth Maximum depth
+     * @param int $currentLevel Current level
+     * @param \SplObjectStorage Set of objects already printed (to avoid recursion)
+     */
+    public function dump( $maxDepth = Dumpable::DEFAULT_DEPTH, $currentLevel = 0, SplObjectStorage $objectSet = null )
+    {
+        $spaces = str_repeat( " ", 2 * $currentLevel );
+
+        if ( $maxDepth === $currentLevel )
+        {
+            echo $spaces, "...\n";
+            return;
+        }
+
+        echo
+            $spaces, "object(", get_class( $this ), ") {\n",
+            $spaces, "id:";
+
+        var_dump( $this->id );
+
+        echo $spaces, "}\n";
     }
 }

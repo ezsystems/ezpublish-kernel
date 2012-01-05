@@ -11,11 +11,13 @@ namespace ezp\Base;
 use ezp\Base\Observable,
     ezp\Base\Observer,
     ezp\Base\ModelState,
+    ezp\Base\Dumpable,
     ezp\Base\Exception\InvalidArgumentType,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission,
-    Traversable;
+    Traversable,
+    SplObjectStorage;
 
 /**
  * Abstract model class for Domain objects
@@ -47,7 +49,7 @@ use ezp\Base\Observable,
  *     $section->setState( array( 'properties' => $valueObject ) );
  *
  */
-abstract class Model implements Observable, ModelState
+abstract class Model implements Observable, ModelState, Dumpable
 {
     /**
      * Value object that serves as the property store
@@ -357,5 +359,69 @@ abstract class Model implements Observable, ModelState
             }
         }
         return $hash;
+    }
+
+    /**
+     * Dump an object in a similar way to var_dump()
+     *
+     * @param int $maxDepth Maximum depth
+     * @param int $currentLevel Current level
+     * @param \SplObjectStorage Set of objects already printed (to avoid recursion)
+     */
+    public function dump( $maxDepth = Dumpable::DEFAULT_DEPTH, $currentLevel = 0, SplObjectStorage $objectSet = null )
+    {
+        $spaces = str_repeat( " ", 2 * $currentLevel );
+
+        if ( $maxDepth === $currentLevel )
+        {
+            echo $spaces, "...\n";
+            return;
+        }
+
+        if ( $objectSet === null )
+        {
+            $objectSet = new SplObjectStorage ();
+        }
+        else if ( $objectSet->contains( $this ) )
+        {
+            echo $spaces, "**RECURSION**\n";
+            return;
+        }
+
+        $objectSet->attach( $this );
+
+        echo $spaces, "object(", get_class( $this ), ") {\n";
+
+        foreach ( array_keys( $this->readWriteProperties + $this->dynamicProperties ) as $property )
+        {
+            if ( is_scalar( $this->$property ) || is_array( $this->$property ) )
+            {
+                echo
+                    $spaces, $property, ": ",
+                    str_replace(
+                        "\n",
+                        "\n" . $spaces,
+                        var_export( $this->$property, true )
+                    ),
+                    "\n";
+            }
+            else if ( $this->$property instanceof Dumpable )
+            {
+                echo $spaces, $property, ":\n";
+                $this->$property->dump( $maxDepth, $currentLevel + 1, $objectSet );
+            }
+            else if ( $this->$property !== null )
+            {
+                echo $spaces, $property, ": ", get_class( $this->$property ), "\n";
+            }
+            else
+            {
+                echo $spaces, $property, ": NULL\n";
+            }
+        }
+
+        $objectSet->detach( $this );
+
+        echo $spaces, "}\n";
     }
 }
