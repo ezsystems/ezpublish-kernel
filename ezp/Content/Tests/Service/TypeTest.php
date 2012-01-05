@@ -1220,4 +1220,39 @@ class TypeTest extends BaseServiceTest
         $type = $this->service->load( 1 );
         $this->service->publish( $type );
     }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::createDraft
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCreateDraftForbidden()
+    {
+        $do = new ConcreteType();
+        $this->repository->setUser( $this->anonymous );
+        $this->service->createDraft( $do );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::createDraft
+     * @expectedException \ezp\Base\Exception\Logic
+     */
+    public function testCreateDraftNotPersisted()
+    {
+        $do = new ConcreteType();
+        $this->service->createDraft( $do );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::createDraft
+     */
+    public function testCreateDraft()
+    {
+        $type = $this->service->load( 1 );
+        $draft = $this->service->createDraft( $type );
+        self::assertInstanceOf( '\\ezp\\Content\\Type', $draft );
+        self::assertEquals( TypeValue::STATUS_DRAFT, $draft->status );
+    }
 }
