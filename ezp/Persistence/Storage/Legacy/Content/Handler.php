@@ -96,6 +96,7 @@ class Handler implements BaseContentHandler
             $content->version, $struct->fields, $content->alwaysAvailable
         );
         $content->version->fields = $struct->fields;
+        $content->version->name = $struct->name;
 
         $this->fieldHandler->createNewFields( $content );
 
@@ -106,6 +107,16 @@ class Handler implements BaseContentHandler
                 $this->mapper->createLocationCreateStruct( $content ),
                 $location->parentId,
                 Location\Gateway::NODE_ASSIGNMENT_OP_CODE_CREATE
+            );
+        }
+
+        // Create name
+        foreach ( $content->version->name as $language => $name )
+        {
+            $this->contentGateway->setName(
+                $content->id,
+                $content->version->versionNo,
+                $name, $language
             );
         }
 
@@ -131,6 +142,7 @@ class Handler implements BaseContentHandler
     {
         $content = $this->update( $updateStruct );
 
+        // @todo : Is it necessary to do this here ? create()/update() should be sufficient I think...
         foreach ( $updateStruct->name as $language => $name )
         {
             $this->contentGateway->setName(
@@ -285,6 +297,14 @@ class Handler implements BaseContentHandler
         $this->contentGateway->updateContent( $content );
         $this->contentGateway->updateVersion( $content );
         $this->fieldHandler->updateFields( $content );
+        foreach ( $content->name as $language => $name )
+        {
+            $this->contentGateway->setName(
+                $content->id,
+                $content->versionNo,
+                $name, $language
+            );
+        }
 
         return $this->load( $content->id, $content->versionNo );
     }

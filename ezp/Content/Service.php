@@ -73,6 +73,10 @@ class Service extends BaseService
         }
 
         $this->fillStruct( $struct, $content, array( 'parentLocations', 'fields', 'name' ) );
+        // @todo : Take translations into account instead of hardcoding eng-GB :)
+        $struct->name = array(
+            'eng-GB' => $this->generateContentName( $currentVersion )
+        );
 
         $checkCreate = true;
         foreach ( $content->getLocations() as $location )
@@ -134,6 +138,10 @@ class Service extends BaseService
         $this->fillStruct( $struct, $content, array( "versionNo", "creatorId", "fields" ) );
         $struct->creatorId = $version->creatorId;
         $struct->versionNo = $version->versionNo;
+        // @todo : Take translations into account instead of hardcoding eng-GB :)
+        $struct->name = array(
+            'eng-GB' => $this->generateContentName( $version )
+        );
 
         if ( !$this->repository->canUser( 'edit', $content ) )
             throw new Forbidden( 'Content', 'edit' );

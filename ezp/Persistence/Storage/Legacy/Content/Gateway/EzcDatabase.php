@@ -875,10 +875,42 @@ class EzcDatabase extends Gateway
     {
         $language = $this->languageHandler->getByLocale( $language );
 
-        $q = $this->dbHandler->createInsertQuery();
-        $q->insertInto(
-            $this->dbHandler->quoteTable( 'ezcontentobject_name' )
-        )->set(
+        // Is it an insert or an update ?
+        $qSelect = $this->dbHandler->createSelectQuery();
+        $qSelect->select(
+            $qSelect->alias( $qSelect->expr->count( '*' ), 'count' ) )
+            ->from( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
+            ->where(
+                $qSelect->expr->lAnd(
+                    $qSelect->expr->eq( $this->dbHandler->quoteColumn( 'contentobject_id' ), $qSelect->bindValue( $contentId ) ),
+                    $qSelect->expr->eq( $this->dbHandler->quoteColumn( 'content_version' ), $qSelect->bindValue( $version ) ),
+                    $qSelect->expr->eq( $this->dbHandler->quoteColumn( 'content_translation' ), $qSelect->bindValue( $language->locale ) )
+                )
+            );
+        $stmt = $qSelect->prepare();
+        $stmt->execute();
+        $res = $stmt->fetchAll( \PDO::FETCH_ASSOC );
+
+        $insert = $res[0]['count'] == 0;
+        if ( $insert )
+        {
+            $q = $this->dbHandler->createInsertQuery();
+            $q->insertInto( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) );
+        }
+        else
+        {
+            $q = $this->dbHandler->createUpdateQuery();
+            $q->update( $this->dbHandler->quoteTable( 'ezcontentobject_name' ) )
+                ->where(
+                $q->expr->lAnd(
+                    $q->expr->eq( $this->dbHandler->quoteColumn( 'contentobject_id' ), $q->bindValue( $contentId ) ),
+                    $q->expr->eq( $this->dbHandler->quoteColumn( 'content_version' ), $q->bindValue( $version ) ),
+                    $q->expr->eq( $this->dbHandler->quoteColumn( 'content_translation' ), $q->bindValue( $language->locale ) )
+                )
+            );
+        }
+
+        $q->set(
             $this->dbHandler->quoteColumn( 'contentobject_id' ),
             $q->bindValue( $contentId, null, \PDO::PARAM_INT )
         )->set(
