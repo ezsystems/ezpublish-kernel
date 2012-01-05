@@ -61,6 +61,7 @@ class Backend
      * @return object
      * @throws InvalidArgumentValue On invalid $type
      * @throws Logic If $autoIncrement is false but $data does not include an id
+     * @throws Logic If provided id already exists (and if defined, data contain same status property value)
      */
     public function create( $type, array $data, $autoIncrement = true )
     {
@@ -78,7 +79,7 @@ class Backend
 
         foreach ( $this->data[$type] as $item )
         {
-            if ( $item['id'] == $data['id'] )
+            if ( $item['id'] == $data['id'] && ( !isset( $item['status'] ) || $item['status'] == $data['status'] ) )
                 throw new Logic( 'create', 'provided id already exist' );
         }
 
@@ -94,6 +95,7 @@ class Backend
      * @return object
      * @throws InvalidArgumentValue On invalid $type
      * @throws \ezp\Base\Exception\NotFound If data does not exist
+     * @throws \ezp\Base\Exception\Logic If several items exists with same id
      */
     public function load( $type, $id )
     {

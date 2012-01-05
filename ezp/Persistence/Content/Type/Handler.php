@@ -102,7 +102,6 @@ interface Handler
      * @param mixed $contentTypeId
      * @return \ezp\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
-     * @todo Should user be validated? And should it throw if there is an existing draft of content type??
      */
     public function createDraft( $modifierId, $contentTypeId );
 

@@ -253,7 +253,6 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $contentTypeId
      * @return \ezp\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
-     * @todo Should user be validated? And should it throw if there is an existing draft of content type??
      */
     public function createDraft( $modifierId, $contentTypeId )
     {
@@ -265,7 +264,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
         $contentTypeArr = (array)$contentType;
         unset( $contentTypeArr['fieldDefinitions'] );
 
-        $contentTypeObj = $this->backend->create( 'Content\\Type', $contentTypeArr );
+        $contentTypeObj = $this->backend->create( 'Content\\Type', $contentTypeArr, false );
         foreach ( $contentType->fieldDefinitions as $field )
         {
             $contentTypeObj->fieldDefinitions[] = $this->backend->create(
