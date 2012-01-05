@@ -20,8 +20,9 @@ class BadFieldTypeInput extends InvalidArgumentException implements Exception
 {
     public function __construct( $value, $fieldClass = null, PhpException $previous = null )
     {
+        $type = ( is_object( $value ) ? get_class( $value ): gettype( $value ) );
         parent::__construct(
-            "The field type" . ( $fieldClass !== null ? " '{$fieldClass}'": "" ) ." did not understand the value: " . var_export( $value, true ),
+            "The field type" . ( $fieldClass !== null ? " '{$fieldClass}'": "" ) ." did not understand the value of type " . $type,
             0,
             $previous
         );
