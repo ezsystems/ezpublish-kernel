@@ -737,8 +737,7 @@ class Concrete extends Model implements Content
      */
     public function __clone()
     {
-        $this->properties = clone $this->properties;
-        $this->properties->id = false;
+        parent::__clone();
         $this->properties->status = self::STATUS_DRAFT;
         // @todo make sure everything is cloned (versions / fields...) or remove these clone functions
 

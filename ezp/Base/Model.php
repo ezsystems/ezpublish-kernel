@@ -358,4 +358,15 @@ abstract class Model implements Observable, ModelState
         }
         return $hash;
     }
+
+    /**
+     * Clone object
+     *
+     * Objects extending Model should override this to add additional clone logic
+     */
+    public function __clone()
+    {
+        $this->properties = clone $this->properties;
+        $this->properties->id = false;
+    }
 }
