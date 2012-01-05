@@ -553,8 +553,8 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      * @throws \ezp\Base\Exception\Logic If $type is not persisted
      * @throws \ezp\Base\Exception\Logic If $type doesn't have the DEFINED status
-     * @throws \ezp\Base\Exception\Forbidden If draft already exists and is owned by another user
-     * @return \ezp\Content\Type A new draft for the provided type or existing one for current user if it exist
+     * @throws \ezp\Base\Exception\Forbidden If draft already exists
+     * @return \ezp\Content\Type A new draft for the provided type
      */
     public function createDraft( Type $type )
     {
@@ -570,10 +570,7 @@ class Service extends BaseService
         try
         {
             $draft = $this->loadDraft( $type->id );
-            if ( $draft->modifierId != $this->repository->getUser()->id )
-                throw new Forbidden( 'Type', 'edit existing draft' );
-
-            return $draft;
+            throw new Forbidden( 'Type', 'create draft when one exists' );
         }
         catch ( NotFound $e )
         {

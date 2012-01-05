@@ -1262,7 +1262,7 @@ class TypeTest extends BaseServiceTest
      * @covers ezp\Content\Type\Service::createDraft
      * @expectedException \ezp\Base\Exception\Forbidden
      */
-    public function testCreateDraftExistingForbidden()
+    public function testCreateDraftExistingForbiddenDifferentUser()
     {
         $type = $this->service->load( 1 );
         $draft = $this->service->createDraft( $type );
@@ -1276,12 +1276,12 @@ class TypeTest extends BaseServiceTest
     /**
      * @group contentTypeService
      * @covers ezp\Content\Type\Service::createDraft
+     * @expectedException \ezp\Base\Exception\Forbidden
      */
-    public function testCreateDraftExisting()
+    public function testCreateDraftExistingForbidden()
     {
         $type = $this->service->load( 1 );
         $draft = $this->service->createDraft( $type );
         $draft2 = $this->service->createDraft( $type );
-        self::assertTrue( $draft == $draft2 );// @todo When we have UoW / object cache, check with strict comparison
     }
 }
