@@ -307,6 +307,7 @@ class LocationTest extends BaseServiceTest
         $hiddenLocation = $this->service->hide( $this->topLocation );
         self::assertInstanceOf( 'ezp\\Content\\Location', $hiddenLocation );
         self::assertTrue( $hiddenLocation->hidden );
+        $locationForTestContent = $this->service->load( $locationForTestContent->id);// reload
         self::assertTrue( $locationForTestContent->invisible );
         unset( $locationForTestContent );
         self::assertGreaterThanOrEqual( $time, $this->service->load( 2 )->modifiedSubLocation );
@@ -365,6 +366,7 @@ class LocationTest extends BaseServiceTest
         self::assertInstanceOf( 'ezp\\Content\\Location', $parentMadeVisible );
         self::assertFalse( $this->location->invisible );
         self::assertFalse( $this->location->hidden );
+        $locationShouldStayHidden = $this->service->load( $locationShouldStayHidden->id);// reload
         self::assertTrue(
             $locationShouldStayHidden->hidden && $locationShouldStayHidden->invisible,
             "A hidden location should not be made visible by superior location"
