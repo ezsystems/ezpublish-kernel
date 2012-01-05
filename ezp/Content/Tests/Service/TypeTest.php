@@ -1254,5 +1254,34 @@ class TypeTest extends BaseServiceTest
         $draft = $this->service->createDraft( $type );
         self::assertInstanceOf( '\\ezp\\Content\\Type', $draft );
         self::assertEquals( TypeValue::STATUS_DRAFT, $draft->status );
+        self::assertEquals( $type->id, $draft->id );
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::createDraft
+     * @expectedException \ezp\Base\Exception\Forbidden
+     */
+    public function testCreateDraftExistingForbidden()
+    {
+        $type = $this->service->load( 1 );
+        $draft = $this->service->createDraft( $type );
+        $adminCopy = clone $this->administrator;
+        $adminCopy->getState( 'properties' )->id = 999;
+        $this->repository->setUser( $adminCopy );// "Login" admin copy
+        $draft = $this->service->createDraft( $type );
+
+    }
+
+    /**
+     * @group contentTypeService
+     * @covers ezp\Content\Type\Service::createDraft
+     */
+    public function testCreateDraftExisting()
+    {
+        $type = $this->service->load( 1 );
+        $draft = $this->service->createDraft( $type );
+        $draft2 = $this->service->createDraft( $type );
+        self::assertTrue( $draft == $draft2 );// @todo When we have UoW / object cache, check with strict comparison
     }
 }
