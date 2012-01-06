@@ -88,18 +88,7 @@ class Handler implements BaseContentHandler
             $struct
         );
 
-        if ( isset( $struct->name['always-available'] ) )
-        {
-            $content->id = $this->contentGateway->insertContentObject(
-                $content, $struct->fields, $struct->name[$struct->name['always-available']]
-            );
-        }
-        else
-        {
-            $content->id = $this->contentGateway->insertContentObject(
-                $content, $struct->fields
-            );
-        }
+        $content->id = $this->contentGateway->insertContentObject( $struct );
 
         $content->version = $this->mapper->createVersionForContent( $content, 1 );
         $content->version->id = $this->contentGateway->insertVersion(

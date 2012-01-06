@@ -11,6 +11,7 @@
 namespace ezp\Persistence\Storage\Legacy\Content;
 use ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content,
+    ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Content\Field;
@@ -30,11 +31,10 @@ abstract class Gateway
     /**
      * Inserts a new content object.
      *
-     * @param Content $content
-     * @param \ezp\Persistence\Content\Field[] $fields
+     * @param \ezp\Persistence\Content\CreateStruct $struct
      * @return int ID
      */
-    abstract public function insertContentObject( Content $content, array $fields );
+    abstract public function insertContentObject( CreateStruct $struct );
 
     /**
      * Inserts a new version.

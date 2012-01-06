@@ -13,8 +13,8 @@ use ezp\Persistence\Storage\Legacy\Tests\Content\LanguageAwareTestCase,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler,
-
     ezp\Persistence\Content,
+    ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Language,
     ezp\Persistence\Content\Field,
@@ -70,15 +70,10 @@ class EzcDatabaseTest extends LanguageAwareTestCase
      */
     public function testInsertContentObject()
     {
-        $content = $this->getContentFixture();
+        $struct = $this->getCreateStructFixture();
 
-        $name = $content->version->name;
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertContentObject(
-            $content,
-            array(),
-            ( isset( $name['always-available'] ) ? $name[$name['always-available']] : '' )
-        );
+        $gateway->insertContentObject( $struct );
 
         $this->assertQueryResult(
             array(
@@ -87,13 +82,13 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     'contentclass_id' => '23',
                     'section_id' => '42',
                     'owner_id' => '13',
-                    'current_version' => '2',
+                    'current_version' => '1',
                     'initial_language_id' => '1',
                     'remote_id' => 'some_remote_id',
                     'language_mask' => '1',
                     'modified' => '456',
                     'published' => '123',
-                    'status' => '2',
+                    'status' => Content::STATUS_DRAFT,
                 ),
             ),
             $this->getDatabaseHandler()
@@ -119,7 +114,34 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns a Content fixture
      *
-     * @return Content
+     * @return ezp\Persistence\Content\CreateStruct
+     */
+    protected function getCreateStructFixture()
+    {
+        $struct = new CreateStruct();
+
+        $struct->typeId = 23;
+        $struct->sectionId = 42;
+        $struct->ownerId = 13;
+        $struct->initialLanguageId = 1;
+        $struct->remoteId = 'some_remote_id';
+        $struct->alwaysAvailable = true;
+        $struct->published = 123;
+        $struct->modified = 456;
+        $struct->name = array(
+            'always-available' => 'eng-US',
+            'eng-US' => 'Content name',
+        );
+        $struct->fields = array();
+        $struct->locations = array();
+
+        return $struct;
+    }
+
+    /**
+     * Returns a Content fixture
+     *
+     * @return ezp\Persistence\Content
      */
     protected function getContentFixture()
     {
@@ -144,6 +166,28 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $content->locations = array();
 
         return $content;
+    }
+
+    /**
+     * Returns a Version fixture
+     *
+     * @return Version
+     */
+    protected function getVersionFixture()
+    {
+        $version = new Version();
+
+        $version->id = null;
+        $version->versionNo = 1;
+        $version->creatorId = 13;
+        $version->status = 0;
+        $version->contentId = 2342;
+        $version->fields = array();
+        $version->created = 1312278322;
+        $version->modified = 1312278323;
+        $version->initialLanguageId = 2;
+
+        return $version;
     }
 
     /**
@@ -201,8 +245,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
 
         // insert content
-        $content = $this->getContentFixture();
-        $contentId = $gateway->insertContentObject( $content, array() );
+        $struct = $this->getCreateStructFixture();
+        $contentId = $gateway->insertContentObject( $struct );
 
         // insert version
         $version = $this->getVersionFixture();
@@ -210,11 +254,11 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway->insertVersion( $version, array(), true );
 
         $this->assertTrue(
-            $gateway->setStatus( $version->contentId, $version->versionNo, 2 )
+            $gateway->setStatus( $version->contentId, $version->versionNo, Version::STATUS_PENDING )
         );
 
         $this->assertQueryResult(
-            array( array( '2' ) ),
+            array( array( Version::STATUS_PENDING ) ),
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -223,7 +267,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
         // check that content status has been set to published
         $this->assertQueryResult(
-            array( array( '2' ) ), // 1 === ezp\Content::STATUS_PUBLISHED
+            array( array( Content::STATUS_DRAFT ) ), // 1 === ezp\Content::STATUS_PUBLISHED
             $this->getDatabaseHandler()
                 ->createSelectQuery()
                 ->select( 'status' )
@@ -240,8 +284,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
         $gateway = $this->getDatabaseGateway();
 
         // insert content
-        $content = $this->getContentFixture();
-        $contentId = $gateway->insertContentObject( $content, array() );
+        $struct = $this->getCreateStructFixture();
+        $contentId = $gateway->insertContentObject( $struct );
 
         // insert version
         $version = $this->getVersionFixture();
@@ -374,28 +418,6 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     )
                 )
         );
-    }
-
-    /**
-     * Returns a Version fixture
-     *
-     * @return Version
-     */
-    protected function getVersionFixture()
-    {
-        $version = new Version();
-
-        $version->id = null;
-        $version->versionNo = 1;
-        $version->creatorId = 13;
-        $version->status = 0;
-        $version->contentId = 2342;
-        $version->fields = array();
-        $version->created = 1312278322;
-        $version->modified = 1312278323;
-        $version->initialLanguageId = 2;
-
-        return $version;
     }
 
     /**

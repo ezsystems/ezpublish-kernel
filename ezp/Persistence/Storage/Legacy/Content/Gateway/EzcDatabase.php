@@ -17,6 +17,7 @@ use ezp\Persistence\Storage\Legacy\Content\Gateway,
     ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler,
     ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
     ezp\Persistence\Content,
+    ezp\Persistence\Content\CreateStruct,
     ezp\Persistence\Content\UpdateStruct,
     ezp\Persistence\Content\Version,
     ezp\Persistence\Content\Field,
@@ -92,14 +93,21 @@ class EzcDatabase extends Gateway
     /**
      * Inserts a new content object.
      *
-     * @param Content $content
-     * @param \ezp\Persistence\Content\Field[] $fields
-     * @param string $name Empty string or always available name
+     * @param \ezp\Persistence\Content\CreateStruct $struct
      * @return int ID
      * @todo Oracle sequences?
      */
-    public function insertContentObject( Content $content, array $fields, $name = '' )
+    public function insertContentObject( CreateStruct $struct )
     {
+        if ( isset( $struct->name['always-available'] ) )
+        {
+            $name = $struct->name[$struct->name['always-available']];
+        }
+        else
+        {
+            $name = '';
+        }
+
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject' )
@@ -108,39 +116,39 @@ class EzcDatabase extends Gateway
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'current_version' ),
-            $q->bindValue( $content->currentVersionNo, null, \PDO::PARAM_INT )
+            $q->bindValue( 1, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'name' ),
             $q->bindValue( $name )
         )->set(
             $this->dbHandler->quoteColumn( 'contentclass_id' ),
-            $q->bindValue( $content->typeId, null, \PDO::PARAM_INT )
+            $q->bindValue( $struct->typeId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'section_id' ),
-            $q->bindValue( $content->sectionId, null, \PDO::PARAM_INT )
+            $q->bindValue( $struct->sectionId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'owner_id' ),
-            $q->bindValue( $content->ownerId, null, \PDO::PARAM_INT )
+            $q->bindValue( $struct->ownerId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'initial_language_id' ),
-            $q->bindValue( $content->initialLanguageId, null, \PDO::PARAM_INT )
+            $q->bindValue( $struct->initialLanguageId, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'remote_id' ),
-            $q->bindValue( $content->remoteId )
+            $q->bindValue( $struct->remoteId )
         )->set(
             $this->dbHandler->quoteColumn( 'modified' ),
-            $q->bindValue( $content->modified, null, \PDO::PARAM_INT )
+            $q->bindValue( $struct->modified, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'published' ),
-            $q->bindValue( $content->published, null, \PDO::PARAM_INT )
+            $q->bindValue( $struct->published, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'status' ),
-            $q->bindValue( $content->status, null, \PDO::PARAM_INT )
+            $q->bindValue( Content::STATUS_DRAFT, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'language_mask' ),
             $q->bindValue(
                 $this->generateLanguageMask(
-                    $fields, $content->alwaysAvailable
+                    $struct->fields, $struct->alwaysAvailable
                 ),
                 null,
                 \PDO::PARAM_INT

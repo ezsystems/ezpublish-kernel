@@ -67,6 +67,7 @@ class Mapper
         $content->published = $struct->published;
         $content->modified = $struct->modified;
         $content->currentVersionNo = 1;
+        $content->status = Content::STATUS_DRAFT;
 
         return $content;
     }
@@ -105,7 +106,7 @@ class Mapper
         $version->modified = $version->created;
         $version->creatorId = $content->ownerId;
         // @todo: Is draft version correct?
-        $version->status = 0;
+        $version->status = Version::STATUS_DRAFT;
         $version->contentId = $content->id;
         // @todo Implement real language id for translation
         $version->initialLanguageId = 2;

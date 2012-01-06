@@ -15,6 +15,14 @@ namespace ezp\Persistence;
 class Content extends ValueObject
 {
     /**
+     * Publication status constants
+     * @var int
+     */
+    const STATUS_DRAFT = 0;
+    const STATUS_PUBLISHED = 1;
+    const STATUS_ARCHIVED = 2;
+
+    /**
      * @var int
      */
     public $id;

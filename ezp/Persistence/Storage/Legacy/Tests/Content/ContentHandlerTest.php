@@ -144,8 +144,7 @@ class ContentHandlerTest extends TestCase
         $gatewayMock->expects( $this->once() )
             ->method( 'insertContentObject' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content' ),
-                $this->isType( 'array' )
+                $this->isInstanceOf( 'ezp\\Persistence\\Content\\CreateStruct' )
             )->will( $this->returnValue( 23 ) );
 
         $gatewayMock->expects( $this->once() )
