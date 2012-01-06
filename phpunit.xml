@@ -36,7 +36,7 @@
         <directory suffix=".php">ezp/Users/Tests</directory>
         <directory suffix=".php">ezp/Io/Tests</directory>
         <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests</directory>
-        <directory suffix=".php">ezp/Stubs</directory>
+        <directory suffix=".php">doc</directory>
         <file>ezp/index.php</file>
       </exclude>
     </whitelist>

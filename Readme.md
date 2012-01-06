@@ -12,12 +12,12 @@ The API is still very much work in progress, and so is documentation, hence why 
 ##Directory Overview
 * [design/](/ezsystems/ezp-next/tree/master/design/)	 *Early uml class diagrams*
 * [doc/](/ezsystems/ezp-next/tree/master/doc/)  *Placeholder for bc doc and other doc that can not be on wiki or inline*
+* [doc/Stubs](/ezsystems/ezp-next/tree/master/doc/Stubs/)  *Code stubs for common code use*
 * [ezp/](/ezsystems/ezp-next/tree/master/ezp/)  *Main Namespace for eZ Publish API code*
 * [ezp/Base](/ezsystems/ezp-next/tree/master/ezp/Base/)  *Base functionality that other modules depend on*
 * [ezp/Content](/ezsystems/ezp-next/tree/master/ezp/Content/)  *Content related domain objects and services*
 * [ezp/Io](/ezsystems/ezp-next/tree/master/ezp/Io/)  *Binaryfiles related objects, services and handlers*
 * [ezp/Persistence](/ezsystems/ezp-next/tree/master/ezp/Persistence/)  *Persistence API (private api for now)*
-* [ezp/Stubs](/ezsystems/ezp-next/tree/master/ezp/Stubs/)  *Code stubs for common code use*
 * [ezp/User](/ezsystems/ezp-next/tree/master/ezp/User/)  *User related domain objects and services*
 * config.php-RECOMMENDED  *Default config file (currently DEVELOPMENT config)*
 * phpunit.xml  *PHPUnit 3.5+ xml configuration*
