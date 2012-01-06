@@ -72,8 +72,13 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     {
         $content = $this->getContentFixture();
 
+        $name = $content->version->name;
         $gateway = $this->getDatabaseGateway();
-        $gateway->insertContentObject( $content, array() );
+        $gateway->insertContentObject(
+            $content,
+            array(),
+            ( isset( $name['always-available'] ) ? $name[$name['always-available']] : '' )
+        );
 
         $this->assertQueryResult(
             array(

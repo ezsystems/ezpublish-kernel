@@ -94,20 +94,12 @@ class EzcDatabase extends Gateway
      *
      * @param Content $content
      * @param \ezp\Persistence\Content\Field[] $fields
+     * @param string $name Empty string or always available name
      * @return int ID
      * @todo Oracle sequences?
      */
-    public function insertContentObject( Content $content, array $fields )
+    public function insertContentObject( Content $content, array $fields, $name = '' )
     {
-        if ( isset( $content->version->name['always-available'] ) )
-        {
-            $name = $content->version->name[$content->version->name['always-available']];
-        }
-        else
-        {
-            $name = '';
-        }
-
         $q = $this->dbHandler->createInsertQuery();
         $q->insertInto(
             $this->dbHandler->quoteTable( 'ezcontentobject' )
