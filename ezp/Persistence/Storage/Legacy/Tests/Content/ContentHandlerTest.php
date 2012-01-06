@@ -452,6 +452,10 @@ class ContentHandlerTest extends TestCase
             )
         );
 
+        $struct->name = array(
+            'eng-GB' => 'This is a test name'
+        );
+
         return $struct;
     }
 
