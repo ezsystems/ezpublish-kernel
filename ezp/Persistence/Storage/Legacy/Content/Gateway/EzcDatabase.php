@@ -256,9 +256,21 @@ class EzcDatabase extends Gateway
      */
     public function updateContent( UpdateStruct $struct )
     {
+        if ( isset( $struct->name['always-available'] ) )
+        {
+            $name = $struct->name[$struct->name['always-available']];
+        }
+        else
+        {
+            $name = '';
+        }
+
         $q = $this->dbHandler->createUpdateQuery();
         $q->update(
             $this->dbHandler->quoteTable( 'ezcontentobject' )
+        )->set(
+            $this->dbHandler->quoteColumn( 'name' ),
+            $q->bindValue( $name )
         )->set(
             $this->dbHandler->quoteColumn( 'initial_language_id' ),
             $q->bindValue( $struct->initialLanguageId, null, \PDO::PARAM_INT )
