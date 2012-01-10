@@ -53,6 +53,7 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
         $version = $this->getMock( 'ezp\\Content\\Version' );
         $version->id = 1;
         $version->contentId = 1;
+        $version->versionNo = 1;
 
         $repository = $this->getMockBuilder( '\\ezp\\Base\\Repository' )
             ->disableOriginalConstructor()
@@ -71,7 +72,7 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
             ->with(
                 $this->logicalOr( $this->equalTo( Relation::ATTRIBUTE ), $this->equalTo( Relation::LINK ) ),
                 $version->contentId,
-                $version->id,
+                $version->versionNo,
                 $this->logicalOr( $this->equalTo( 1 ), $this->equalTo( 2 ), $this->equalTo( 3 ) )
             );
 
@@ -101,7 +102,7 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $idArray ) );
 
         $handler = new InputHandler( $inputParser );
-        self::assertTrue( $handler->process( '', $repository, $version ) );
+        self::assertTrue( $handler->process( '', $repository, $version->contentId, $version->versionNo ) );
     }
 
     /**

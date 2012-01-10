@@ -10,6 +10,7 @@
 namespace ezp\Content\FieldType\XmlText\Input;
 
 use ezp\Base\Repository,
+    ezp\Base\Exception\InvalidArgumentType,
     ezp\Content\Version,
     ezp\Content\FieldType\XmlText\Input\Parser as InputParserInterface,
     ezp\Content\FieldType\XmlText\Input\Parser\Base as BaseInputParser,
@@ -71,13 +72,21 @@ class Handler
 
     /**
      * Processes $xmlString and indexes the external data it references
+     *
      * @param string $xmlString
      * @param \ezp\Base\Repository $repository
-     * @param \ezp\Content\Version $version
+     * @param mixed $contentId The contentId of the Content this xml string belongs to
+     * @param mixed $versionNo The versionNo of the Content\Version this xml string belongs to
      * @return bool
      */
-    public function process( $xmlString, Repository $repository, Version $version )
+    public function process( $xmlString, Repository $repository, $contentId, $versionNo )
     {
+        if ( !is_scalar( $contentId ) )
+            throw new InvalidArgumentType( '$contentId', 'scalar', $contentId );
+
+        if ( !is_scalar( $versionNo ) )
+            throw new InvalidArgumentType( '$versionNo', 'scalar', $versionNo );
+
         $this->parser->setOption( BaseInputParser::OPT_CHECK_EXTERNAL_DATA, true );
 
         $document = $this->parser->process( $xmlString );
@@ -92,15 +101,15 @@ class Handler
         $service = $repository->getInternalFieldTypeService();
 
         // related content
-        foreach ( $this->parser->getRelatedContentIdArray() as $contentId )
+        foreach ( $this->parser->getRelatedContentIdArray() as $relationContentId )
         {
-            $service->addRelation( Relation::ATTRIBUTE, $version->contentId, $version->id, $contentId );
+            $service->addRelation( Relation::ATTRIBUTE, $contentId, $versionNo, $relationContentId );
         }
 
         // linked content
-        foreach ( $this->parser->getLinkedContentIdArray() as $contentId )
+        foreach ( $this->parser->getLinkedContentIdArray() as $linkContentId )
         {
-            $service->addRelation( Relation::LINK, $version->contentId, $version->id, $contentId );
+            $service->addRelation( Relation::LINK, $contentId, $versionNo, $linkContentId );
         }
 
         return true;
