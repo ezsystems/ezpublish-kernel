@@ -206,7 +206,7 @@ class EzcDatabase extends Gateway
             $this->dbHandler->getAutoIncrementValue( 'ezcontentobject_version', 'id' )
         )->set(
             $this->dbHandler->quoteColumn( 'version' ),
-            $q->bindValue( $version->versionNo )
+            $q->bindValue( $version->versionNo, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'modified' ),
             $q->bindValue( $version->modified, null, \PDO::PARAM_INT )
