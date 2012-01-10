@@ -675,7 +675,7 @@ class ContentTest extends BaseServiceTest
         $this->assertEquals( Relation::COMMON, $relation->type );
         $this->assertEquals( 1, $relation->id );
         $this->assertEquals( 10, $relation->sourceContentId );
-        $this->assertEquals( $this->service->load( 10 )->getCurrentVersion()->versionNo, $relation->sourceContentVersion );
+        $this->assertEquals( $this->service->load( 10 )->getCurrentVersion()->versionNo, $relation->sourceContentVersionNo );
         $this->assertEquals( 14, $relation->destinationContentId );
     }
 
@@ -772,7 +772,7 @@ class ContentTest extends BaseServiceTest
 
             self::assertEquals( $relObject->destinationContentId, $fetchedRelation->destinationContentId );
             self::assertEquals( $relObject->sourceContentId, $fetchedRelation->sourceContentId );
-            self::assertEquals( $relObject->sourceContentVersion, $fetchedRelation->sourceContentVersion );
+            self::assertEquals( $relObject->sourceContentVersionNo, $fetchedRelation->sourceContentVersionNo );
             self::assertEquals( $relObject->sourceFieldDefinitionId, $fetchedRelation->sourceFieldDefinitionId );
             self::assertEquals( $relObject->type, $fetchedRelation->type );
         }

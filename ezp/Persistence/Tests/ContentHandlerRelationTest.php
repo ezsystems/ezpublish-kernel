@@ -144,7 +144,7 @@ class ContentHandlerRelationTest extends HandlerTest
         );
         $this->assertEquals( $this->lastRelationId + 1, $relation->id );
         $this->assertEquals( 14, $relation->sourceContentId );
-        $this->assertNull( $relation->sourceContentVersion );
+        $this->assertNull( $relation->sourceContentVersionNo );
         $this->assertEquals( 10, $relation->destinationContentId );
     }
 
@@ -159,7 +159,7 @@ class ContentHandlerRelationTest extends HandlerTest
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => 14,
-                    'sourceContentVersion' => 1,
+                    'sourceContentVersionNo' => 1,
                     'destinationContentId' => 10,
                     'type' => Relation::COMMON
                 )
@@ -167,7 +167,7 @@ class ContentHandlerRelationTest extends HandlerTest
         );
         $this->assertEquals( $this->lastRelationId + 1, $relation->id );
         $this->assertEquals( 14, $relation->sourceContentId );
-        $this->assertEquals( 1, $relation->sourceContentVersion );
+        $this->assertEquals( 1, $relation->sourceContentVersionNo );
         $this->assertEquals( 10, $relation->destinationContentId );
     }
 
@@ -183,7 +183,7 @@ class ContentHandlerRelationTest extends HandlerTest
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => 123456,
-                    'sourceContentVersion' => null,
+                    'sourceContentVersionNo' => null,
                     'destinationContentId' => 10,
                     'type' => Relation::COMMON
                 )
@@ -203,7 +203,7 @@ class ContentHandlerRelationTest extends HandlerTest
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => 14,
-                    'sourceContentVersion' => 123456,
+                    'sourceContentVersionNo' => 123456,
                     'destinationContentId' => 10,
                     'type' => Relation::COMMON
                 )
@@ -221,7 +221,7 @@ class ContentHandlerRelationTest extends HandlerTest
         $relations = $this->persistenceHandler->contentHandler()->loadRelations( 1 );
         $this->assertEquals( 1, count( $relations ) );
         $this->assertEquals( 1, $relations[0]->sourceContentId );
-        $this->assertNull( $relations[0]->sourceContentVersion );
+        $this->assertNull( $relations[0]->sourceContentVersionNo );
         $this->assertEquals( $this->contentId, $relations[0]->destinationContentId );
         $this->assertEquals( Relation::COMMON | Relation::EMBED, $relations[0]->type );
     }
@@ -236,7 +236,7 @@ class ContentHandlerRelationTest extends HandlerTest
         $relations = $this->persistenceHandler->contentHandler()->loadRelations( 1, null, Relation::EMBED );
         $this->assertEquals( 1, count( $relations ) );
         $this->assertEquals( 1, $relations[0]->sourceContentId );
-        $this->assertNull( $relations[0]->sourceContentVersion );
+        $this->assertNull( $relations[0]->sourceContentVersionNo );
         $this->assertEquals( $this->contentId, $relations[0]->destinationContentId );
         $this->assertEquals( Relation::COMMON | Relation::EMBED, $relations[0]->type );
     }
@@ -251,7 +251,7 @@ class ContentHandlerRelationTest extends HandlerTest
         $relations = $this->persistenceHandler->contentHandler()->loadRelations( 1, null, Relation::COMMON | Relation::EMBED );
         $this->assertEquals( 1, count( $relations ) );
         $this->assertEquals( 1, $relations[0]->sourceContentId );
-        $this->assertNull( $relations[0]->sourceContentVersion );
+        $this->assertNull( $relations[0]->sourceContentVersionNo );
         $this->assertEquals( $this->contentId, $relations[0]->destinationContentId );
         $this->assertEquals( Relation::COMMON | Relation::EMBED, $relations[0]->type );
     }
@@ -306,7 +306,7 @@ class ContentHandlerRelationTest extends HandlerTest
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id );
         self::assertEquals( 1, count( $reverseRelations ) );
         self::assertEquals( $this->contentId, $reverseRelations[0]->sourceContentId );
-        self::assertNull( $reverseRelations[0]->sourceContentVersion );
+        self::assertNull( $reverseRelations[0]->sourceContentVersionNo );
         self::assertEquals( $this->content2->id, $reverseRelations[0]->destinationContentId );
         self::assertEquals( Relation::COMMON, $reverseRelations[0]->type );
     }
@@ -329,7 +329,7 @@ class ContentHandlerRelationTest extends HandlerTest
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id, Relation::COMMON );
         self::assertEquals( 1, count( $reverseRelations ) );
         self::assertEquals( $this->contentId, $reverseRelations[0]->sourceContentId );
-        self::assertNull( $reverseRelations[0]->sourceContentVersion );
+        self::assertNull( $reverseRelations[0]->sourceContentVersionNo );
         self::assertEquals( $this->content2->id, $reverseRelations[0]->destinationContentId );
         self::assertEquals( Relation::COMMON, $reverseRelations[0]->type );
     }

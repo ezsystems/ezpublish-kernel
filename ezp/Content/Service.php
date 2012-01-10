@@ -291,18 +291,19 @@ class Service extends BaseService
      *
      * @param \ezp\Content $contentFrom
      * @param \ezp\Content $contentTo
-     * @param mixed|null $versionFrom
+     * @param mixed|null $versionFromNo Version number for use in relation, $contentFrom->currentVersionNo used if null
      * @return \ezp\Content\Relation
      * @throws \ezp\Base\Exception\Forbidden If user does not have access to edit provided object
      */
-    public function addRelation( Content $contentFrom, Content $contentTo, $versionFrom = null )
+    public function addRelation( Content $contentFrom, Content $contentTo, $versionFromNo = null )
     {
         if ( !$this->repository->canUser( 'edit', $contentFrom ) )
             throw new Forbidden( 'Content', 'edit' );
 
-        if ( $versionFrom === null )
+        if ( $versionFromNo === null )
         {
-            $versionFrom = $contentFrom->getCurrentVersion()->versionNo;
+            // version is in legacy system not optional, it must be derived from the content in question if not provided
+            $versionFromNo = $contentFrom->currentVersionNo;
         }
 
         $relation = new Relation( Relation::COMMON, $contentTo );
@@ -310,7 +311,7 @@ class Service extends BaseService
             new RelationCreateStruct(
                 array(
                     'sourceContentId' => $contentFrom->id,
-                    'sourceContentVersion' => $versionFrom // version is in legacy system not optional, it must be derived from the content in question if not provided.
+                    'sourceContentVersionNo' => $versionFromNo
                 )
             ),
             $relation,

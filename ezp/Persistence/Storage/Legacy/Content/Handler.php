@@ -383,7 +383,7 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Creates a relation between $sourceContentId in $sourceContentVersion
+     * Creates a relation between $sourceContentId in $sourceContentVersionNo
      * and $destinationContentId with a specific $type.
      *
      * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
@@ -409,14 +409,14 @@ class Handler implements BaseContentHandler
     }
 
     /**
-     * Loads relations from $sourceContentId. Optionally, loads only those with $type and $sourceContentVersion.
+     * Loads relations from $sourceContentId. Optionally, loads only those with $type and $sourceContentVersionNo.
      *
      * @param mixed $sourceContentId Source Content ID
-     * @param mixed|null $sourceContentVersion Source Content Version, null if not specified
+     * @param mixed|null $sourceContentVersionNo Source Content Version, null if not specified
      * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
      * @return \ezp\Persistence\Content\Relation[]
      */
-    public function loadRelations( $sourceContentId, $sourceContentVersion = null, $type = null )
+    public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
     {
         throw new \Exception( "@TODO: Not implemented yet." );
     }

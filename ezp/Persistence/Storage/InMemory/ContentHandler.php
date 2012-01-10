@@ -422,7 +422,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * Creates a relation between $sourceContentId in $sourceContentVersion
+     * Creates a relation between $sourceContentId in $sourceContentVersionNo
      * and $destinationContentId with a specific $type.
      *
      * @param  \ezp\Persistence\Content\Relation\CreateStruct $relation
@@ -437,12 +437,12 @@ class ContentHandler implements ContentHandlerInterface
             throw new NotFound( "Content", "id: {$relation->sourceContentId}" );
 
         // Ensure source content exists if version is specified
-        if ( $relation->sourceContentVersion !== null )
+        if ( $relation->sourceContentVersionNo !== null )
         {
-            $version = $this->backend->find( "Content\\Version", array( "contentId" => $relation->sourceContentId, "versionNo" => $relation->sourceContentVersion ) );
+            $version = $this->backend->find( "Content\\Version", array( "contentId" => $relation->sourceContentId, "versionNo" => $relation->sourceContentVersionNo ) );
 
             if ( empty( $version ) )
-                throw new NotFound( "Content\\Version", "contentId: {$relation->sourceContentId}, versionNo: {$relation->sourceContentVersion}" );
+                throw new NotFound( "Content\\Version", "contentId: {$relation->sourceContentId}, versionNo: {$relation->sourceContentVersionNo}" );
         }
 
         // Ensure destination content exists
@@ -471,18 +471,18 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * Loads relations from $sourceContentId. Optionally, loads only those with $type and $sourceContentVersion.
+     * Loads relations from $sourceContentId. Optionally, loads only those with $type and $sourceContentVersionNo.
      *
      * @param mixed $sourceContentId Source Content ID
-     * @param mixed|null $sourceContentVersion Source Content Version, null if not specified
+     * @param mixed|null $sourceContentVersionNo Source Content Version, null if not specified
      * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
      * @return \ezp\Persistence\Content\Relation[]
      */
-    public function loadRelations( $sourceContentId, $sourceContentVersion = null, $type = null )
+    public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
     {
         $filter = array( "sourceContentId" => $sourceContentId );
-        if ( $sourceContentVersion !== null )
-            $filter["sourceContentVersion"] = $sourceContentVersion;
+        if ( $sourceContentVersionNo !== null )
+            $filter["sourceContentVersionNo"] = $sourceContentVersionNo;
 
         $relations = $this->backend->find( "Content\\Relation", $filter );
 

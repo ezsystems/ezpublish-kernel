@@ -24,11 +24,11 @@ class CreateStruct extends ValueObject
     public $sourceContentId;
 
     /**
-     * Source Content Version
+     * Source Content Version number
      *
      * @var int
      */
-    public $sourceContentVersion;
+    public $sourceContentVersionNo;
 
     /**
      * Source Content Type Field Definition Id

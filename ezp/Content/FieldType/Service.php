@@ -30,7 +30,7 @@ class Service extends BaseService
      * @param int $relationType The type of relation to create.
      * @param mixed $contentFromId The content id you want where you want to add
      *                             the relation.
-     * @param mixed $versionFrom The version number where we are adding this relation.
+     * @param mixed $versionFromNo The version number where we are adding this relation.
      * @param mixed $contentToId The destination of the relation, which content
      *                           id we are relating to.
      * @param null|mixed $fieldDefinitionId The id of the field definition that
@@ -39,7 +39,7 @@ class Service extends BaseService
      * @throws \ezp\Base\Exception\Logic If there is a mismatch between $relationType and provided values.
      * @return \ezp\Content\Relation
      */
-    public function addRelation( $relationType, $contentFromId, $versionFrom, $contentToId, $fieldDefinitionId = null )
+    public function addRelation( $relationType, $contentFromId, $versionFromNo, $contentToId, $fieldDefinitionId = null )
     {
         // Creating the Relation object to be returned here, in order insert
         // proxied destination Content
@@ -57,7 +57,7 @@ class Service extends BaseService
             new RelationCreateStruct(
                 array(
                      'sourceContentId' => $contentFromId,
-                     'sourceContentVersion' => $versionFrom,
+                     'sourceContentVersionNo' => $versionFromNo,
                      'sourceFieldDefinitionId' => $fieldDefinitionId ?: 0
                 )
             ),

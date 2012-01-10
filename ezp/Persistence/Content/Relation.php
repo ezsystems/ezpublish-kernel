@@ -35,7 +35,7 @@ class Relation extends ValueObject
      *
      * @var int
      */
-    public $sourceContentVersion;
+    public $sourceContentVersionNo;
 
     /**
      * Source Content Type Field Definition Id

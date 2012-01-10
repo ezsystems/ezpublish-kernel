@@ -18,7 +18,7 @@ use ezp\Content,
  *
  * @property-read mixed $id
  * @property-read mixed $sourceContentId
- * @property-read id $sourceContentVersion
+ * @property-read id $sourceContentVersionNo
  * @property-read mixed $sourceFieldDefinitionId
  * @property-read mixed $destinationContentId
  * @property-read int $type Bitmask
@@ -38,7 +38,7 @@ class Relation extends Model
     protected $readWriteProperties = array(
         "id" => false,
         "sourceContentId" => true,
-        "sourceContentVersion" => true,
+        "sourceContentVersionNo" => true,
         "sourceFieldDefinitionId" => true,
         "destinationContentId" => false,
         "type" => false,
