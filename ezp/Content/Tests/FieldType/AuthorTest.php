@@ -185,7 +185,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
         {
             $id = mt_rand( 1, 100 );
             if ( in_array( $id, $existingIds ) )
-                $id++;
+                continue;
             $author->id = $id;
         }
 
