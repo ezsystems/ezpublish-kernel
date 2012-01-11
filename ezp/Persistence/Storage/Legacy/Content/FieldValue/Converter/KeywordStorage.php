@@ -23,6 +23,10 @@ class KeywordStorage implements Storage
      */
     public function storeFieldData( Field $field, array $context )
     {
+        // If there is no keywords, there is nothing to store.
+        if ( empty( $field->value->data->values ) )
+            return;
+
         $dbHandler = $context["connection"];
 
         // Retrieving the Content Type ID which is required in ezkeyword table
