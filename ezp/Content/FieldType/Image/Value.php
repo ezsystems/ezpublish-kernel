@@ -70,8 +70,7 @@ class Value extends BaseValue implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
-        $value = new static( $stringValue );
-        return $value;
+        return new static( $stringValue );
     }
 
     /**
@@ -122,13 +121,6 @@ class Value extends BaseValue implements ValueInterface
      */
     public function getTitle()
     {
-        if ( !empty( $this->alternativeText ) )
-        {
-            return $this->alternativeText;
-        }
-        else
-        {
-            return $this->originalFilename;
-        }
+        return !empty( $this->alternativeText ) ? $this->alternativeText : $this->originalFilename;
     }
 }
