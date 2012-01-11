@@ -1,0 +1,51 @@
+<?php
+namespace ezp\PublicAPI\Values\Content\Query\Criterion;
+use ezp\PublicAPI\Values\Content\Query\Criterion,
+    ezp\PublicAPI\Values\Content\Query\Criterion\Operator\Specifications,
+    ezp\PublicAPI\Values\Content\Query\CriterionInterface;
+
+/**
+ * Full text search criterion
+ *
+ * The string provided in this criterion is matched as a full text query
+ * against all indexed content objects in the storage layer.
+ *
+ * Normalization and querying capabilities might depend on the system
+ * configuration or the used search engine and might differ. The following
+ * basic query seamtics are supported:
+ *
+ * - If multiple words are specified an AND query is performed. OR queries are
+ *   not yet supported.
+ *
+ * - Simple wild cards are supported. If an asterisk (*) is used at the end or
+ *   beginning of a word this is translated into a wild card query. Thus "fo*"
+ *   would match "foo" and "foobar", for example.
+ *
+ * - Simple stop word removal might be applied to the words provided in the
+ *   query.
+ */
+class FullText extends Criterion implements CriterionInterface
+{
+    /**
+     * Creates a FullText criterion on $text, using the IN Operator
+     *
+     * @param string $text The text to match on
+     */
+    public function __construct( $value )
+    {
+        parent::__construct( null, Operator::LIKE, $value );
+    }
+
+    public function getSpecifications()
+    {
+        return array(
+            new Specifications( Operator::LIKE, Specifications::FORMAT_SINGLE )
+        );
+    }
+
+    public static function createFromQueryBuilder( $target, $operator, $value )
+    {
+        return new self( $value );
+    }
+}
+?>

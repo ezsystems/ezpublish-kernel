@@ -1,0 +1,1089 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class ContentTypeService</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Interface ContentTypeService</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">example:</span> <a href="../__examplesource/exsource_it_ezp-next_ezp_PublicAPI_Examples_contenttype.php_d58ff0f4c86e50626096362264a577eb.html">example</a></li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_Interfaces---ContentTypeService.php.html">/Interfaces/ContentTypeService.php</a> (line <span class="field">33</span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+												<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																																																																																																																																																																																																																				
+												<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#addFieldDefinition" title="details" class="method-name">addFieldDefinition</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>&nbsp;<span class="var-name">$contentTypeDraft</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinitionCreate.html">FieldDefinitionCreate</a></span>&nbsp;<span class="var-name">$fieldDefinitionCreate</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#assignContentTypeGroup" title="details" class="method-name">assignContentTypeGroup</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>&nbsp;<span class="var-name">$contentTypeGroup</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+										<a href="#copyContentType" title="details" class="method-name">copyContentType</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/User.html">User</a></span>&nbsp;<span class="var-name">$user</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+										<a href="#createContentType" title="details" class="method-name">createContentType</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeCreate.html">ContentTypeCreate</a></span>&nbsp;<span class="var-name">$contentTypeCreate</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$contentTypeGroups</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+										<a href="#createContentTypeDraft" title="details" class="method-name">createContentTypeDraft</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+										<a href="#createContentTypeGroup" title="details" class="method-name">createContentTypeGroup</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$contentTypeGroupCreate</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroupCreate.html">ContentTypeGroupCreate</a></span>&nbsp;<span class="var-name">$groupCreate</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#deleteContentType" title="details" class="method-name">deleteContentType</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$deleteObjects</span> = <span class="var-default">false</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#deleteContentTypeGroup" title="details" class="method-name">deleteContentTypeGroup</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>&nbsp;<span class="var-name">$contentTypeGroup</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$deleteObjects</span> = <span class="var-default">false</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+										<a href="#loadContentType" title="details" class="method-name">loadContentType</a>
+											(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentTypeId</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+										<a href="#loadContentTypeByIdentifier" title="details" class="method-name">loadContentTypeByIdentifier</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$identifier</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+										<a href="#loadContentTypeByRemoteId" title="details" class="method-name">loadContentTypeByRemoteId</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$remoteId</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+										<a href="#loadContentTypeDraft" title="details" class="method-name">loadContentTypeDraft</a>
+											(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentTypeId</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+										<a href="#loadContentTypeGroup" title="details" class="method-name">loadContentTypeGroup</a>
+											(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentTypeGroupId</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+										<a href="#loadContentTypeGroupByIdentifier" title="details" class="method-name">loadContentTypeGroupByIdentifier</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$contentTypeGroupIdentifier</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">aray</span>
+										<a href="#loadContentTypeGroups" title="details" class="method-name">loadContentTypeGroups</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">array</span>
+										<a href="#loadContentTypes" title="details" class="method-name">loadContentTypes</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>&nbsp;<span class="var-name">$contentTypeGroup</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeCreate.html">ContentTypeCreate</a></span>
+										<a href="#newContentTypeCreate" title="details" class="method-name">newContentTypeCreate</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$identifier</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeGroupCreate.html">ContentTypeGroupCreate</a></span>
+										<a href="#newContentTypeGroupCreate" title="details" class="method-name">newContentTypeGroupCreate</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$identifier</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeGroupUpdate.html">ContentTypeGroupUpdate</a></span>
+										<a href="#newContentTypeGroupUpdate" title="details" class="method-name">newContentTypeGroupUpdate</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeUpdate.html">ContentTypeUpdate</a></span>
+										<a href="#newContentTypeUpdate" title="details" class="method-name">newContentTypeUpdate</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/FieldDefinitionCreate.html">FieldDefinitionCreate</a></span>
+										<a href="#newFieldDefinitionCreate" title="details" class="method-name">newFieldDefinitionCreate</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$identifier</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$fieldTypeIdentifier</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/FieldDefinitionUpdate.html">FieldDefinitionUpdate</a></span>
+										<a href="#newFieldDefinitionUpdate" title="details" class="method-name">newFieldDefinitionUpdate</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#publishContentTypeDraft" title="details" class="method-name">publishContentTypeDraft</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>&nbsp;<span class="var-name">$contentTypeDraft</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#removeFieldDefinition" title="details" class="method-name">removeFieldDefinition</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>&nbsp;<span class="var-name">$contentTypeDraft</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinition.html">FieldDefinition</a></span>&nbsp;<span class="var-name">$fieldDefinition</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#unassignContentTypeGroup" title="details" class="method-name">unassignContentTypeGroup</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>&nbsp;<span class="var-name">$contentTypeGroup</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#updateContentTypeDraft" title="details" class="method-name">updateContentTypeDraft</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>&nbsp;<span class="var-name">$contentTypeDraft</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeUpdate.html">ContentTypeUpdate</a></span>&nbsp;<span class="var-name">$contentTypeUpdate</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#updateContentTypeGroup" title="details" class="method-name">updateContentTypeGroup</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>&nbsp;<span class="var-name">$contentTypeGroup</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroupUpdate.html">ContentTypeGroupUpdate</a></span>&nbsp;<span class="var-name">$contentTypeGroupUpdate</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#updateFieldDefinition" title="details" class="method-name">updateFieldDefinition</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>&nbsp;<span class="var-name">$contentTypeDraft</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinition.html">FieldDefinition</a></span>&nbsp;<span class="var-name">$fieldDefinition</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinitionUpdate.html">FieldDefinitionUpdate</a></span>&nbsp;<span class="var-name">$fieldDefinitionUpdate</span>)
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="methodaddFieldDefinition" id="addFieldDefinition"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">addFieldDefinition</span> (line <span class="line-number">223</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Adds a new field definition to an existing content type. The content type must be in state DRAFT.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to edit a content type</li>
+				<li><span class="field">throws:</span> \ezp\Base\Exception\Forbidden if the identifier in already exists in the content type</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			addFieldDefinition
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>&nbsp;<span class="var-name">$contentTypeDraft</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinitionCreate.html">FieldDefinitionCreate</a></span>&nbsp;<span class="var-name">$fieldDefinitionCreate</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+				<span class="var-name">$contentTypeDraft</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinitionCreate.html">FieldDefinitionCreate</a></span>
+				<span class="var-name">$fieldDefinitionCreate</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodassignContentTypeGroup" id="assignContentTypeGroup"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">assignContentTypeGroup</span> (line <span class="line-number">203</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Un-Link a content type from a group ( remove a group from a type )</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\InvalidArgumentValue If the content type is not assigned thi the given group.</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to unlink a content type</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If $contentTypeGroup is the last group assigned to the content type</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			assignContentTypeGroup
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>&nbsp;<span class="var-name">$contentTypeGroup</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+				<span class="var-name">$contentType</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+				<span class="var-name">$contentTypeGroup</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodcopyContentType" id="copyContentType"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">copyContentType</span> (line <span class="line-number">192</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Copy Type incl fields and groupIds to a new Type object</p>
+<p class="description"><p>New Type will have $userId as creator / modifier, created / modified should be updated with current time,  updated remoteId and identifier should be appended with '_' + unique string.</p></p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to copy a content type</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+		<span class="method-name">
+			copyContentType
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/User.html">User</a></span>&nbsp;<span class="var-name">$user</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+				<span class="var-name">$contentType</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/User.html">User</a></span>
+				<span class="var-name">$user</span><span class="var-description">: if null the current user is used</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodcreateContentType" id="createContentType"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">createContentType</span> (line <span class="line-number">101</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Create a Content Type object. The content type is created in the state STATUS_DRAFT.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If the identifier or remoteId in the content type create struct already exists</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\InvalidArgumentValue If an identifier of a field definition is used in several fields</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+		<span class="method-name">
+			createContentType
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeCreate.html">ContentTypeCreate</a></span>&nbsp;<span class="var-name">$contentTypeCreate</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$contentTypeGroups</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeCreate.html">ContentTypeCreate</a></span>
+				<span class="var-name">$contentTypeCreate</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$contentTypeGroups</span><span class="var-description">: Required array of <a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a> to link type with (must contain one)</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodcreateContentTypeDraft" id="createContentTypeDraft"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">createContentTypeDraft</span> (line <span class="line-number">156</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Creates a draft from an existing content type. This is a complete copy of the content  type wiich has the state STATUS_DRAFT.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If there is already a draft assigned to another user</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to edit a content type</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+		<span class="method-name">
+			createContentTypeDraft
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+				<span class="var-name">$contentType</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodcreateContentTypeGroup" id="createContentTypeGroup"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">createContentTypeGroup</span> (line <span class="line-number">43</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Create a Content Type Group object</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If a group with the same identifier already exists</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to create a content type group</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+		<span class="method-name">
+			createContentTypeGroup
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$contentTypeGroupCreate</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroupCreate.html">ContentTypeGroupCreate</a></span>&nbsp;<span class="var-name">$groupCreate</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroupCreate.html">ContentTypeGroupCreate</a></span>
+				<span class="var-name">$groupCreate</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$contentTypeGroupCreate</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methoddeleteContentType" id="deleteContentType"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">deleteContentType</span> (line <span class="line-number">179</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Delete a Content Type object. If $deleteObjects is set to true all object instances of this content type are deleted.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to delete a content type</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden $deleteObjects is set to false and there exist content objects of this type</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			deleteContentType
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$deleteObjects</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+				<span class="var-name">$contentType</span>			</li>
+					<li>
+				<span class="var-type">boolean</span>
+				<span class="var-name">$deleteObjects</span><span class="var-description">: indicates if content object should be deleted if exist</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methoddeleteContentTypeGroup" id="deleteContentTypeGroup"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">deleteContentTypeGroup</span> (line <span class="line-number">90</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Delete a Content Type Group. If the paramter $deleteObjects is set to true  this method deletes also all content types in this group which  are not assigned to other groups including the content object instances.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> \ezp\Base\Exception\Forbidden If the parameter $deleteObjects is set to false and a to be deleted content type                                        has instances</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to delete a content type group</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			deleteContentTypeGroup
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>&nbsp;<span class="var-name">$contentTypeGroup</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$deleteObjects</span> = <span class="var-default">false</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">boolean</span>
+				<span class="var-name">$deleteObjects</span><span class="var-description">: indicates if content object should be deleted if exist</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+				<span class="var-name">$contentTypeGroup</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContentType" id="loadContentType"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentType</span> (line <span class="line-number">110</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get a Content Type object by id</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound If a content type with the given id and status DEFINED can not be found</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+		<span class="method-name">
+			loadContentType
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentTypeId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$contentTypeId</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContentTypeByIdentifier" id="loadContentTypeByIdentifier"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentTypeByIdentifier</span> (line <span class="line-number">119</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get a Content Type object by identifier</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound If content type with the given identifier and status DEFINED can not be found</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+		<span class="method-name">
+			loadContentTypeByIdentifier
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$identifier</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$identifier</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContentTypeByRemoteId" id="loadContentTypeByRemoteId"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentTypeByRemoteId</span> (line <span class="line-number">128</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get a Content Type object by id</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound If content type with the given remote id and status DEFINED can not be found</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+		<span class="method-name">
+			loadContentTypeByRemoteId
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$remoteId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$remoteId</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContentTypeDraft" id="loadContentTypeDraft"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentTypeDraft</span> (line <span class="line-number">138</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get a Content Type object draft by id</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound If the content type draft owned by the current user can not be found</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+		<span class="method-name">
+			loadContentTypeDraft
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentTypeId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$contentTypeId</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContentTypeGroup" id="loadContentTypeGroup"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentTypeGroup</span> (line <span class="line-number">52</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get a Content Type Group object by id</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound If group can not be found</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+		<span class="method-name">
+			loadContentTypeGroup
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentTypeGroupId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$contentTypeGroupId</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContentTypeGroupByIdentifier" id="loadContentTypeGroupByIdentifier"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentTypeGroupByIdentifier</span> (line <span class="line-number">61</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get a Content Type Group object by identifier</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound If group can not be found</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+		<span class="method-name">
+			loadContentTypeGroupByIdentifier
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$contentTypeGroupIdentifier</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$contentTypeGroupIdentifier</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContentTypeGroups" id="loadContentTypeGroups"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentTypeGroups</span> (line <span class="line-number">68</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get all Content Type Groups</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> an array of <a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">aray</span>
+		<span class="method-name">
+			loadContentTypeGroups
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodloadContentTypes" id="loadContentTypes"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentTypes</span> (line <span class="line-number">146</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Get Content Type objects which belong to the given content type group</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> an array of <a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a> which have status DEFINED</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			loadContentTypes
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>&nbsp;<span class="var-name">$contentTypeGroup</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+				<span class="var-name">$contentTypeGroup</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodnewContentTypeCreate" id="newContentTypeCreate"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">newContentTypeCreate</span> (line <span class="line-number">272</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a new content type create class</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeCreate.html">ContentTypeCreate</a></span>
+		<span class="method-name">
+			newContentTypeCreate
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$identifier</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$identifier</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodnewContentTypeGroupCreate" id="newContentTypeGroupCreate"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">newContentTypeGroupCreate</span> (line <span class="line-number">264</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a new content type group create class</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeGroupCreate.html">ContentTypeGroupCreate</a></span>
+		<span class="method-name">
+			newContentTypeGroupCreate
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$identifier</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$identifier</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodnewContentTypeGroupUpdate" id="newContentTypeGroupUpdate"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">newContentTypeGroupUpdate</span> (line <span class="line-number">285</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a new content type update class</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeGroupUpdate.html">ContentTypeGroupUpdate</a></span>
+		<span class="method-name">
+			newContentTypeGroupUpdate
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodnewContentTypeUpdate" id="newContentTypeUpdate"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">newContentTypeUpdate</span> (line <span class="line-number">279</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a new content type update class</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentTypeUpdate.html">ContentTypeUpdate</a></span>
+		<span class="method-name">
+			newContentTypeUpdate
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodnewFieldDefinitionCreate" id="newFieldDefinitionCreate"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">newFieldDefinitionCreate</span> (line <span class="line-number">293</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a field definition create class</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/FieldDefinitionCreate.html">FieldDefinitionCreate</a></span>
+		<span class="method-name">
+			newFieldDefinitionCreate
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$identifier</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$fieldTypeIdentifier</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$fieldTypeIdentifier</span><span class="var-description">: the required  field type identifier</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$identifier</span><span class="var-description">: the required identifier for the field definition</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodnewFieldDefinitionUpdate" id="newFieldDefinitionUpdate"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">newFieldDefinitionUpdate</span> (line <span class="line-number">299</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a field definition update class</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/FieldDefinitionUpdate.html">FieldDefinitionUpdate</a></span>
+		<span class="method-name">
+			newFieldDefinitionUpdate
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodpublishContentTypeDraft" id="publishContentTypeDraft"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">publishContentTypeDraft</span> (line <span class="line-number">256</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Publish the content type and update content objects.</p>
+<p class="description"><p>This method updates content objects, depending on the changed field definitions.</p></p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to publish a content type</li>
+				<li><span class="field">throws:</span> \ezp\Base\Exception\Forbidden If the content type has no draft</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			publishContentTypeDraft
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>&nbsp;<span class="var-name">$contentTypeDraft</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+				<span class="var-name">$contentTypeDraft</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodremoveFieldDefinition" id="removeFieldDefinition"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">removeFieldDefinition</span> (line <span class="line-number">233</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Remove a field definition from an existing Type.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to edit a content type</li>
+				<li><span class="field">throws:</span> \ezp\Base\Exception\InvalidArgumentValue If the given field definition does not belong to the given type</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			removeFieldDefinition
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>&nbsp;<span class="var-name">$contentTypeDraft</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinition.html">FieldDefinition</a></span>&nbsp;<span class="var-name">$fieldDefinition</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+				<span class="var-name">$contentTypeDraft</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinition.html">FieldDefinition</a></span>
+				<span class="var-name">$fieldDefinition</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodunassignContentTypeGroup" id="unassignContentTypeGroup"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">unassignContentTypeGroup</span> (line <span class="line-number">213</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Link a content type to a group.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If the content type is already assigned thi the given group</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to link a content type</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			unassignContentTypeGroup
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>&nbsp;<span class="var-name">$contentTypeGroup</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+				<span class="var-name">$contentType</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+				<span class="var-name">$contentTypeGroup</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodupdateContentTypeDraft" id="updateContentTypeDraft"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">updateContentTypeDraft</span> (line <span class="line-number">169</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Update a Content Type object</p>
+<p class="description"><p>Does not update fields (fieldDefinitions), use <a href="../ezp-PublicAPI-Interfaces/ContentTypeService.html#methodupdateFieldDefinition">updateFieldDefinition()</a> to update them.</p></p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> \ezp\Base\Exception\Forbidden If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to update a content type</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			updateContentTypeDraft
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>&nbsp;<span class="var-name">$contentTypeDraft</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeUpdate.html">ContentTypeUpdate</a></span>&nbsp;<span class="var-name">$contentTypeUpdate</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+				<span class="var-name">$contentTypeDraft</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeUpdate.html">ContentTypeUpdate</a></span>
+				<span class="var-name">$contentTypeUpdate</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodupdateContentTypeGroup" id="updateContentTypeGroup"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">updateContentTypeGroup</span> (line <span class="line-number">77</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Update a Content Type Group object</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If the given identifier (if set) already exists</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to create a content type group</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			updateContentTypeGroup
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>&nbsp;<span class="var-name">$contentTypeGroup</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroupUpdate.html">ContentTypeGroupUpdate</a></span>&nbsp;<span class="var-name">$contentTypeGroupUpdate</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroup.html">ContentTypeGroup</a></span>
+				<span class="var-name">$contentTypeGroup</span><span class="var-description">: the content type group to be updated</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeGroupUpdate.html">ContentTypeGroupUpdate</a></span>
+				<span class="var-name">$contentTypeGroupUpdate</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodupdateFieldDefinition" id="updateFieldDefinition"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">updateFieldDefinition</span> (line <span class="line-number">245</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Update a field definition</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\InvalidArgumentValue If the field id in the update struct is not found or does not belong to the content type</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to edit a content type</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden  If the given identifier is used in an existing field of the given content type</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			updateFieldDefinition
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>&nbsp;<span class="var-name">$contentTypeDraft</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinition.html">FieldDefinition</a></span>&nbsp;<span class="var-name">$fieldDefinition</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinitionUpdate.html">FieldDefinitionUpdate</a></span>&nbsp;<span class="var-name">$fieldDefinitionUpdate</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentTypeDraft.html">ContentTypeDraft</a></span>
+				<span class="var-name">$contentTypeDraft</span><span class="var-description">: the content type draft</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinition.html">FieldDefinition</a></span>
+				<span class="var-name">$fieldDefinition</span><span class="var-description">: the field definition which should be updated</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/FieldDefinitionUpdate.html">FieldDefinitionUpdate</a></span>
+				<span class="var-name">$fieldDefinitionUpdate</span>			</li>
+				</ul>
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+
+	<p class="notes" id="credit">
+		Documentation generated on Wed, 11 Jan 2012 17:11:20 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+	</p>
+	</div></body>
+</html>

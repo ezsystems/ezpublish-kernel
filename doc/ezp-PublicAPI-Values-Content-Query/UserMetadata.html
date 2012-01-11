@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class UserMetadata</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class UserMetadata</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+													<a href="#sec-vars">Vars</a>
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+											<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+						
+			</div>
+	<div class="info-box-body">
+                <p class="implements">
+            Implements interfaces:
+            <ul>
+                <li><a href="../ezp-PublicAPI-Values-Content-Query/CriterionInterface.html">CriterionInterface</a></li>            </ul>
+        </p>
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">A criterion that matches content based on one of the user metadata (owner,  creator, modifier)</p>
+<p class="description"><p>Supported Operators:  EQ, IN: Matches the provided user ID(s) against the user IDs in the database</p><p>Example:  <div class="src-code"><ol><li><div class="src-line">&nbsp;<span class="src-var">$createdCriterion&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html">Criterion</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/UserMetadata.html">UserMetadata</a></span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html">Criterion</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/UserMetadata.html">UserMetadata</a></span><span class="src-sym">::</span><span class="src-id">CREATOR</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Operator.html">Operator</a></span><span class="src-sym">::</span><span class="src-id">IN</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">array</span><span class="src-sym">(&nbsp;</span><span class="src-num">10</span><span class="src-sym">,&nbsp;</span><span class="src-num">14&nbsp;</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;<span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+</ol></div></p></p>
+		<p class="notes">
+			Located in <a class="field" href="_Values---Content---Query---Criterion---UserMetadata.php.html">/Values/Content/Query/Criterion/UserMetadata.php</a> (line <span class="field">24</span>)
+		</p>
+		
+				
+		<pre><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html">Criterion</a>
+   |
+   --UserMetadata</pre>
+	
+			</div>
+</div>
+
+
+	<a name="sec-const-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constant Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Constants</span> (<a href="#sec-consts">details</a>)
+												<a href="#sec-vars">Vars</a>
+				 
+				|
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<div class="const-summary">
+								<div class="const-title">
+					<a href="#CREATOR" title="details" class="const-name">CREATOR</a> = 					<span class="var-type"> 'creator'</span>
+
+				</div>
+								<div class="const-title">
+					<a href="#GROUP" title="details" class="const-name">GROUP</a> = 					<span class="var-type"> 'group'</span>
+
+				</div>
+								<div class="const-title">
+					<a href="#MODIFIER" title="details" class="const-name">MODIFIER</a> = 					<span class="var-type"> 'modifier'</span>
+
+				</div>
+								<div class="const-title">
+					<a href="#OWNER" title="details" class="const-name">OWNER</a> = 					<span class="var-type"> 'owner'</span>
+
+				</div>
+							</div>
+		</div>
+	</div>
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+															<a href="#sec-vars">Vars</a>
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																				
+												<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#getSpecifications" title="details" class="method-name">getSpecifications</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">UserMetadata</span>
+										<a href="#__construct" title="details" class="method-name">__construct</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$target</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$operator</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$value</span>)
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+												<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+										<h4>Inherited Variables</h4>
+				<A NAME='inherited_vars'><!-- --></A>
+									<p>Inherited from <span class="classname"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html">Criterion</a></span></p>
+					<blockquote>
+													<span class="var-title">
+								<span class="var-name"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html#var$operator">Criterion::$operator</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html#var$target">Criterion::$target</a></span><br>
+							</span>
+													<span class="var-title">
+								<span class="var-name"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html#var$value">Criterion::$value</a></span><br>
+							</span>
+											</blockquote> 
+										
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-vars">Vars</a>
+																			<a href="#sec-const-summary">Constants</a> (<a href="#sec-consts">details</a>)
+							
+										<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="methodgetSpecifications" id="getSpecifications"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">getSpecifications</span> (line <span class="line-number">42</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			getSpecifications
+		</span>
+				()
+			</div>
+	
+		
+				<hr class="separator" />
+		<div class="notes">Implementation of:</div>
+			<dl>
+			<dt><a href="../ezp-PublicAPI-Values-Content-Query/CriterionInterface.html#methodgetSpecifications">CriterionInterface::getSpecifications()</a></dt>
+						<dd>Criterion description function.</dd>
+					</dl>
+			
+	</div>
+<a name="method__construct" id="__construct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">Constructor __construct</span> (line <span class="line-number">33</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Creates a new UserMetadata criterion on $metadata</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">UserMetadata</span>
+		<span class="method-name">
+			__construct
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$target</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$operator</span>, <span class="var-type">mixed</span>&nbsp;<span class="var-name">$value</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$target</span><span class="var-description">: One of UserMetadata::OWNER, UserMetadata::GROUP, UserMetadata::CREATED or UserMetadata::MODIFIED</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$operator</span><span class="var-description">: One of the Operator constants</span>			</li>
+					<li>
+				<span class="var-type">mixed</span>
+				<span class="var-name">$value</span><span class="var-description">: The match value, either as an array of as a single value, depending on the operator*</span>			</li>
+				</ul>
+		
+			<hr class="separator" />
+		<div class="notes">Redefinition of:</div>
+		<dl>
+			<dt><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html#method__construct">Criterion::__construct()</a></dt>
+						<dd>Performs operator validation based on the Criterion specifications returned by {@see getSpecifications()}</dd>
+					</dl>
+			
+	</div>
+							<h4>Inherited Methods</h4>
+				<a name='inherited_methods'><!-- --></a>	
+									<!-- =========== Summary =========== -->
+					<p>Inherited From <span class="classname"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html">Criterion</a></span></p>
+					<blockquote>
+													<span class="method-name"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html#method__construct">Criterion::__construct()</a></span><br>
+													<span class="method-name"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html#methodcreateFromQueryBuilder">Criterion::createFromQueryBuilder()</a></span><br>
+											</blockquote>
+										
+		</div>
+	</div>
+
+	<a name="sec-consts"></a>
+	<div class="info-box">
+		<div class="info-box-title">Class Constants</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Constants</a> (<span class="disabled">details</span>)
+						
+			
+												<a href="#sec-vars">Vars</a>
+														| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="constCREATOR" id="CREATOR"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<span class="const-title">
+			<span class="const-name">CREATOR</span>
+			 = <span class="const-default"> 'creator'</span>
+			(line <span class="line-number">67</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">UserMetadata target: Creator</p>
+	
+	
+</div>
+<a name="constGROUP" id="GROUP"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<span class="const-title">
+			<span class="const-name">GROUP</span>
+			 = <span class="const-default"> 'group'</span>
+			(line <span class="line-number">62</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">UserMetadata target: Owner user group</p>
+	
+	
+</div>
+<a name="constMODIFIER" id="MODIFIER"><!-- --></A>
+<div class="oddrow">
+
+	<div class="const-header">
+		<span class="const-title">
+			<span class="const-name">MODIFIER</span>
+			 = <span class="const-default"> 'modifier'</span>
+			(line <span class="line-number">72</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">UserMetadata target: Modifier</p>
+	
+	
+</div>
+<a name="constOWNER" id="OWNER"><!-- --></A>
+<div class="evenrow">
+
+	<div class="const-header">
+		<span class="const-title">
+			<span class="const-name">OWNER</span>
+			 = <span class="const-default"> 'owner'</span>
+			(line <span class="line-number">57</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">UserMetadata target: Owner user</p>
+	
+	
+</div>
+						
+		</div>
+	</div>
+
+	<p class="notes" id="credit">
+		Documentation generated on Wed, 11 Jan 2012 17:11:28 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+	</p>
+	</div></body>
+</html>

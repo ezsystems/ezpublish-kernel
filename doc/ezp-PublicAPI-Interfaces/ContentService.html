@@ -1,0 +1,1147 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class ContentService</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Interface ContentService</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+															<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">This class provides service methods for managing content</p>
+	<ul class="tags">
+				<li><span class="field">example:</span> <a href="../__examplesource/exsource_ev_git_ezp-next_ezp_PublicAPI_Examples_content.php_33e42d1d006caf6bfd806177f39224d4.html">example</a></li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_Interfaces---ContentService.php.html">/Interfaces/ContentService.php</a> (line <span class="field">37</span>)
+		</p>
+		
+				
+		<pre></pre>
+	
+			</div>
+</div>
+
+
+
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+												<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																																																																																																																																																																																																																																				
+												<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Relation.html">Relation</a></span>
+										<a href="#addRelation" title="details" class="method-name">addRelation</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$destinationId</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#addTranslationInfo" title="details" class="method-name">addTranslationInfo</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/TranslationInfo.html">TranslationInfo</a></span>&nbsp;<span class="var-name">$translatio9nInfo</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+										<a href="#copyContent" title="details" class="method-name">copyContent</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>&nbsp;<span class="var-name">$locationCreate</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+										<a href="#createContentDraft" title="details" class="method-name">createContentDraft</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span>&nbsp;<span class="var-name">$contentCreate</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$locationCreate</span> = <span class="var-default">array()</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+										<a href="#createDraftFromContent" title="details" class="method-name">createDraftFromContent</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#deleteContent" title="details" class="method-name">deleteContent</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#deleteRelation" title="details" class="method-name">deleteRelation</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$destinationId</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#deleteVersion" title="details" class="method-name">deleteVersion</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/SearchResult.html">SearchResult</a></span>
+										<a href="#findContent" title="details" class="method-name">findContent</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>&nbsp;<span class="var-name">$query</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$fieldFilters</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$filterOnUserPermissions</span> = <span class="var-default">true</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/SearchResult.html">SearchResult</a></span>
+										<a href="#findSingle" title="details" class="method-name">findSingle</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>&nbsp;<span class="var-name">$query</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$fieldFilters</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$filterOnUserPermissions</span> = <span class="var-default">true</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+										<a href="#loadContent" title="details" class="method-name">loadContent</a>
+											(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentId</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+										<a href="#loadContentByRemoteId" title="details" class="method-name">loadContentByRemoteId</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$remoteId</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">array</span>
+										<a href="#loadContentDrafts" title="details" class="method-name">loadContentDrafts</a>
+											([<span class="var-type">User</span>&nbsp;<span class="var-name">$user</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">array</span>
+										<a href="#loadIncomingRelations" title="details" class="method-name">loadIncomingRelations</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">array</span>
+										<a href="#loadOutgoingRelations" title="details" class="method-name">loadOutgoingRelations</a>
+											(<span class="var-type">$versionInfo</span>&nbsp;<span class="var-name">$versionInfo</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/TranslationInfo.html">TranslationInfo</a></span>
+										<a href="#loadTranslationInfos" title="details" class="method-name">loadTranslationInfos</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$filter</span> = <span class="var-default">array()</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+										<a href="#loadVersion" title="details" class="method-name">loadVersion</a>
+											(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentId</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$languages</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$versionNo</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+										<a href="#loadVersionByContentInfo" title="details" class="method-name">loadVersionByContentInfo</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$languages</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$versionNo</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+										<a href="#loadVersionByRemoteId" title="details" class="method-name">loadVersionByRemoteId</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$remoteId</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$languages</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$versionNo</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+										<a href="#loadVersionByVersionInfo" title="details" class="method-name">loadVersionByVersionInfo</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$languages</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+										<a href="#loadVersionInfo" title="details" class="method-name">loadVersionInfo</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, [<span class="var-type">int</span>&nbsp;<span class="var-name">$versionNo</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+										<a href="#loadVersionInfoById" title="details" class="method-name">loadVersionInfoById</a>
+											(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentId</span>, [<span class="var-type">int</span>&nbsp;<span class="var-name">$versionNo</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">array</span>
+										<a href="#loadVersions" title="details" class="method-name">loadVersions</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span>
+										<a href="#newContentCreate" title="details" class="method-name">newContentCreate</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$mainLanguageCode</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>
+										<a href="#newVersionUpdate" title="details" class="method-name">newVersionUpdate</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#publishDraft" title="details" class="method-name">publishDraft</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+										<a href="#updateContent" title="details" class="method-name">updateContent</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentUpdate.html">ContentUpdate</a></span>&nbsp;<span class="var-name">$contentUpdate</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+										<a href="#updateVersion" title="details" class="method-name">updateVersion</a>
+											(<span class="var-type"></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>&nbsp;<span class="var-name">$versionUpdate</span>)
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="methodaddRelation" id="addRelation"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">addRelation</span> (line <span class="line-number">270</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Adds a relation of type common</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> the newly created relation</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to edit this version</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Relation.html">Relation</a></span>
+		<span class="method-name">
+			addRelation
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$destinationId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+				<span class="var-name">$versionInfo</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$destinationId</span><span class="var-description">: the destination of the relation</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodaddTranslationInfo" id="addTranslationInfo"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">addTranslationInfo</span> (line <span class="line-number">286</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">5.x add translation information to the content object</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+				<li><span class="field">example:</span> <a href="../__examplesource/exsource_ezp-next_ezp_PublicAPI_Examples_translation_5x.php_e9a0e49acf3d51a379a0eae630c585c8.html">example</a></li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			addTranslationInfo
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/TranslationInfo.html">TranslationInfo</a></span>&nbsp;<span class="var-name">$translatio9nInfo</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/TranslationInfo.html">TranslationInfo</a></span>
+				<span class="var-name">$translatio9nInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodcopyContent" id="copyContent"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">copyContent</span> (line <span class="line-number">219</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">copies the the content to a new location. If no version is given,  all versions are copied, otherwise only the given version.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to copy the content to the given location</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+		<span class="method-name">
+			copyContent
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>&nbsp;<span class="var-name">$locationCreate</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>
+				<span class="var-name">$locationCreate</span><span class="var-description">: the target location where the content is copied to</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+				<span class="var-name">$versionInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodcreateContentDraft" id="createContentDraft"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">createContentDraft</span> (line <span class="line-number">137</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Creates a new content draft assigned to the authenticated user.</p>
+<p class="description"><p>If a different userId is given in the input it is assigned to the given user  but this required special rights for the authenticated user  (this is useful for content staging where the transfer process does not  have to authenticate with the user which created the content object in the source server).  The user has to publish the draft if it should be visible.  In 4.x at least one location has to be provided in the location creation array.</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> - the newly created content draft</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to create the content in the given location</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If the provided remoteId existis in the system or (4.x) there is no location provided</li>
+				<li><span class="field">throws:</span> InvalidArgumentException if the input is not valid</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+		<span class="method-name">
+			createContentDraft
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span>&nbsp;<span class="var-name">$contentCreate</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$locationCreate</span> = <span class="var-default">array()</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span>
+				<span class="var-name">$contentCreate</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$locationCreate</span><span class="var-description">: an array of <a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a> for each location parent under which a location should be created for the nontent</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodcreateDraftFromContent" id="createDraftFromContent"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">createDraftFromContent</span> (line <span class="line-number">166</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">creates a draft from a publshed or archived version. If no version is given, the current published version is used.</p>
+<p class="description"><p>4.x: The draft is created with the initialLanguge code of the source version or if not present with the main language.  It can be changed on updating the version.</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> - the newly created version</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if there is no published version or the version info points to a draft</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to create the draft</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+		<span class="method-name">
+			createDraftFromContent
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+				<span class="var-name">$versionInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methoddeleteContent" id="deleteContent"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">deleteContent</span> (line <span class="line-number">154</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">deletes a content object including all its versions and locations including their subtrees.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to delete the content (in one of the locations of the given content object)</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			deleteContent
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methoddeleteRelation" id="deleteRelation"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">deleteRelation</span> (line <span class="line-number">279</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Removes a relation of type COMMON from a draft.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed edit this version</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			deleteRelation
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type">int</span>&nbsp;<span class="var-name">$destinationId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+				<span class="var-name">$versionInfo</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$destinationId</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methoddeleteVersion" id="deleteVersion"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">deleteVersion</span> (line <span class="line-number">200</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">removes the given version</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to remove this version</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the version is in state published</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			deleteVersion
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+				<span class="var-name">$versionInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodfindContent" id="findContent"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">findContent</span> (line <span class="line-number">231</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">finds content objects for the given query.</p>
+	<ul class="tags">
+				<li><span class="field">TODO:</span> define structs for the field filters</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/SearchResult.html">SearchResult</a></span>
+		<span class="method-name">
+			findContent
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>&nbsp;<span class="var-name">$query</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$fieldFilters</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$filterOnUserPermissions</span> = <span class="var-default">true</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>
+				<span class="var-name">$query</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$fieldFilters</span><span class="var-description">: - a map of filters for the returned fields.         Currently supported: <div class="src-code"><ol><li><div class="src-line"><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">&quot;languages&quot;&nbsp;</span>=&gt;&nbsp;<span class="src-id">aaray</span><span class="src-sym">(</span>&lt;<span class="src-id">language1</span>&gt;<span class="src-sym">,</span>..<span class="src-sym">))</span></div></li>
+</ol></div>.</span>			</li>
+					<li>
+				<span class="var-type">boolean</span>
+				<span class="var-name">$filterOnUserPermissions</span><span class="var-description">: if true only the objects which is the user allowed to read are returned.</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodfindSingle" id="findSingle"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">findSingle</span> (line <span class="line-number">244</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+	<ul class="tags">
+				<li><span class="field">TODO:</span> throw an exception if the found object count is &gt; 1</li>
+				<li><span class="field">TODO:</span> define structs for the field filters</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to read the found content object</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/SearchResult.html">SearchResult</a></span>
+		<span class="method-name">
+			findSingle
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>&nbsp;<span class="var-name">$query</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$fieldFilters</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$filterOnUserPermissions</span> = <span class="var-default">true</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>
+				<span class="var-name">$query</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$fieldFilters</span><span class="var-description">: - a map of filters for the returned fields.         Currently supported: <div class="src-code"><ol><li><div class="src-line"><span class="src-key">array</span><span class="src-sym">(</span><span class="src-str">&quot;languages&quot;&nbsp;</span>=&gt;&nbsp;<span class="src-id">aaray</span><span class="src-sym">(</span>&lt;<span class="src-id">language1</span>&gt;<span class="src-sym">,</span>..<span class="src-sym">))</span></div></li>
+</ol></div>.</span>			</li>
+					<li>
+				<span class="var-type">boolean</span>
+				<span class="var-name">$filterOnUserPermissions</span><span class="var-description">: if true only the objects which is the user allowed to read are returned.</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContent" id="loadContent"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContent</span> (line <span class="line-number">46</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Loads a content info object - to load fields use loadVersion</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the content with the given id does not exist</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to read the content</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+		<span class="method-name">
+			loadContent
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$contentId</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContentByRemoteId" id="loadContentByRemoteId"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentByRemoteId</span> (line <span class="line-number">55</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Loads a content info object for the given remoteId - to load fields use loadVersion</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the content with the given remote id does not exist</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to create the content in the given location</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+		<span class="method-name">
+			loadContentByRemoteId
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$remoteId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$remoteId</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContentDrafts" id="loadContentDrafts"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentDrafts</span> (line <span class="line-number">174</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Load drafts for the given user or if null for the authenticated user</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> the drafts (<a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a>) owned by the given user</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load the draft list</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			loadContentDrafts
+		</span>
+					([<span class="var-type">User</span>&nbsp;<span class="var-name">$user</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/User.html">User</a></span>
+				<span class="var-name">$user</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadIncomingRelations" id="loadIncomingRelations"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadIncomingRelations</span> (line <span class="line-number">260</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Loads all incoming relations for a content object. The  relations come only</p>
+<p class="description"><p>from published versions of the source content objects</p></p>
+	<ul class="tags">
+				<li><span class="field">return:</span> an array of <a href="../ezp-PublicAPI-Values/Relation.html">Relation</a></li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			loadIncomingRelations
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadOutgoingRelations" id="loadOutgoingRelations"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadOutgoingRelations</span> (line <span class="line-number">252</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">load all outgoing relations for the given version</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> an array of <a href="../ezp-PublicAPI-Values/Relation.html">Relation</a></li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			loadOutgoingRelations
+		</span>
+					(<span class="var-type">$versionInfo</span>&nbsp;<span class="var-name">$versionInfo</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">$versionInfo</span>
+				<span class="var-name">$versionInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadTranslationInfos" id="loadTranslationInfos"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadTranslationInfos</span> (line <span class="line-number">294</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">5.x lists the translations done on this content object</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/TranslationInfo.html">TranslationInfo</a></span>
+		<span class="method-name">
+			loadTranslationInfos
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$filter</span> = <span class="var-default">array()</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$filter</span><span class="var-description">: TBD - filter by sourceversion destination version and languages</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadVersion" id="loadVersion"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadVersion</span> (line <span class="line-number">106</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">loads a version of the given content object. If no version number is given, the method returns the current version</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the content or version with the given id does not exist</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+		<span class="method-name">
+			loadVersion
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentId</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$languages</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$versionNo</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$contentId</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$languages</span><span class="var-description">: A language filter for fields. If not given all languages are returned</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$versionNo</span><span class="var-description">: the version number. If not given the current version is returned.</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadVersionByContentInfo" id="loadVersionByContentInfo"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadVersionByContentInfo</span> (line <span class="line-number">86</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">loads a version of the given content object. If no version number is given, the method returns the current version</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if version with the given number does not exist</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+		<span class="method-name">
+			loadVersionByContentInfo
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$languages</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$versionNo</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$languages</span><span class="var-description">: A language filter for fields. If not given all languages are returned</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$versionNo</span><span class="var-description">: the version number. If not given the current version is returned.</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadVersionByRemoteId" id="loadVersionByRemoteId"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadVersionByRemoteId</span> (line <span class="line-number">120</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">loads a version of the given content object reference by a remote id.</p>
+<p class="description"><p>If no version is given, the method returns the current version</p></p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the content or version with the given remote id does not exist</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+		<span class="method-name">
+			loadVersionByRemoteId
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$remoteId</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$languages</span> = <span class="var-default">null</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$versionNo</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$remoteId</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$languages</span><span class="var-description">: A language filter for fields. If not given all languages are returned</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$versionNo</span><span class="var-description">: the version number. If not given the current version is returned.</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadVersionByVersionInfo" id="loadVersionByVersionInfo"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadVersionByVersionInfo</span> (line <span class="line-number">95</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">loads a version of the given version info.</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+		<span class="method-name">
+			loadVersionByVersionInfo
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$languages</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+				<span class="var-name">$versionInfo</span>			</li>
+					<li>
+				<span class="var-type">array</span>
+				<span class="var-name">$languages</span><span class="var-description">: A language filter for fields. If not given all languages are returned</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadVersionInfo" id="loadVersionInfo"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadVersionInfo</span> (line <span class="line-number">65</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">loads a version info of the given content object. If no version number is given, the method returns the current version</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the version with the given number does not exist</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+		<span class="method-name">
+			loadVersionInfo
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, [<span class="var-type">int</span>&nbsp;<span class="var-name">$versionNo</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$versionNo</span><span class="var-description">: the version number. If not given the current version is returned.</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadVersionInfoById" id="loadVersionInfoById"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadVersionInfoById</span> (line <span class="line-number">75</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">loads a version info of the given content object id. If no version number is given, the method returns the current version</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the version with the given number does not exist</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+		<span class="method-name">
+			loadVersionInfoById
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentId</span>, [<span class="var-type">int</span>&nbsp;<span class="var-name">$versionNo</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$contentId</span>			</li>
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$versionNo</span><span class="var-description">: the version number. If not given the current version is returned.</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadVersions" id="loadVersions"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadVersions</span> (line <span class="line-number">208</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Loads all versions for the given content</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> an array of <a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a> sorted by creation date</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to list versions</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			loadVersions
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodnewContentCreate" id="newContentCreate"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">newContentCreate</span> (line <span class="line-number">304</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a new content type creat class</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span>
+		<span class="method-name">
+			newContentCreate
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$mainLanguageCode</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>
+				<span class="var-name">$contentType</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$mainLanguageCode</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodnewVersionUpdate" id="newVersionUpdate"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">newVersionUpdate</span> (line <span class="line-number">311</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a new version update class</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>
+		<span class="method-name">
+			newVersionUpdate
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodpublishDraft" id="publishDraft"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">publishDraft</span> (line <span class="line-number">192</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Publishes a draft</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to publish this version</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the version is not a draft</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			publishDraft
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+				<span class="var-name">$versionInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodupdateContent" id="updateContent"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">updateContent</span> (line <span class="line-number">147</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Updates the metadata (see <a href="../ezp-PublicAPI-Values/ContentUpdate.html">ContentUpdate</a>) of a content object - to update fields use updateVersion</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> the content info with the updated attributes</li>
+				<li><span class="field">throws:</span> InvalidArgumentException if the input is not valid</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to update the content meta data</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+		<span class="method-name">
+			updateContent
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentUpdate.html">ContentUpdate</a></span>&nbsp;<span class="var-name">$contentUpdate</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentUpdate.html">ContentUpdate</a></span>
+				<span class="var-name">$contentUpdate</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodupdateVersion" id="updateVersion"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">updateVersion</span> (line <span class="line-number">184</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Updates the fields of a draft.</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> the version with the updated fields</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to update this version</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+		<span class="method-name">
+			updateVersion
+		</span>
+					(<span class="var-type"></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>&nbsp;<span class="var-name">$versionUpdate</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>
+				<span class="var-name">$versionUpdate</span>			</li>
+					<li>
+				<span class="var-type"></span>
+				<span class="var-name">$versionInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+						
+		</div>
+	</div>
+
+
+	<p class="notes" id="credit">
+		Documentation generated on Wed, 11 Jan 2012 17:11:16 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+	</p>
+	</div></body>
+</html>
