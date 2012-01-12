@@ -285,7 +285,6 @@ class EzcDatabase extends Gateway
         return $statement->fetchAll( \PDO::FETCH_COLUMN );
     }
 
-
     /**
      * Update role
      *

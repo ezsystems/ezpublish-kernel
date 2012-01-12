@@ -69,7 +69,6 @@ class Field extends Model implements Observer
      */
     protected $versionStatus;
 
-
     /**
      * @var \ezp\Content\Type\FieldDefinition
      */

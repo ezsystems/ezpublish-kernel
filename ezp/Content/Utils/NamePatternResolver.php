@@ -152,7 +152,6 @@ class NamePatternResolver
         return $returnFieldTitleArray;
     }
 
-
     /**
      * Replaces tokens in the name pattern with their resolved values.
      *
@@ -234,7 +233,6 @@ class NamePatternResolver
 
         return $replaceString;
     }
-
 
     /**
      * Checks whether $identifier is a placeholder for a token group.

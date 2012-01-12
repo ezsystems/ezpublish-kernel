@@ -319,7 +319,6 @@ class Raw extends BaseParser implements InputParser
         return $ret;
     }
 
-
     /*
        Structure handlers. (called at pass 2)
     */

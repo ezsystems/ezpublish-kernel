@@ -247,8 +247,6 @@ class ServiceContainerTest extends \PHPUnit_Framework_TestCase
     }
 }
 
-
-
 class A
 {
     public function __construct( B $b, C $c, $string )
@@ -287,7 +285,6 @@ class D
 {
     public function __construct( ServiceContainer $sc, array $server, B $b ){}
 }
-
 
 class E
 {

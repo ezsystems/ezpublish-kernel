@@ -157,7 +157,6 @@ class StorageHandlerTest extends TestCase
         $handler->deleteFieldData( 'foobar', array( 1, 2, 3 ) );
     }
 
-
     /**
      * Returns the StorageHandler to test
      *

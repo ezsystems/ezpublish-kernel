@@ -289,7 +289,6 @@ class CachingLanguageHandlerTest extends TestCase
             ->method( 'remove' )
             ->with( $this->equalTo( 2 ) );
 
-
         $result = $handler->delete( 2 );
     }
 

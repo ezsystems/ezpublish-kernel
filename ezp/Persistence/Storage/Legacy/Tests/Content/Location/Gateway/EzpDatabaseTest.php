@@ -345,7 +345,6 @@ class EzpDatabaseTest extends TestCase
             $parentLocationData
         );
 
-
         $handlerReflection = new \ReflectionObject( $handler );
         $methodReflection = $handlerReflection->getMethod( "getMainNodeId" );
         $methodReflection->setAccessible( true );

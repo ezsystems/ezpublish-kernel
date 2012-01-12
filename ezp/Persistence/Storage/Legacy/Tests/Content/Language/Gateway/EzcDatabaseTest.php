@@ -110,7 +110,6 @@ class EzcDatabaseTest extends TestCase
         $language = $this->getLanguageFixture();
         $language->id = 2;
 
-
         $gateway->updateLanguage( $language );
 
         $this->assertQueryResult(

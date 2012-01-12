@@ -97,7 +97,6 @@ class Handler
         }
         $this->document = $document;
 
-
         $service = $repository->getInternalFieldTypeService();
 
         // related content

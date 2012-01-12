@@ -174,7 +174,6 @@ class MaskGeneratorTest extends LanguageAwareTestCase
         return new MaskGenerator( $this->getLanguageLookupMock() );
     }
 
-
     /**
      * Returns the test suite with all tests declared in this class.
      *

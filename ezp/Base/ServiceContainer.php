@@ -156,7 +156,6 @@ class ServiceContainer
         $argumentKeys = array();
         $arguments = $this->lookupArguments( $settings['arguments'], $argumentKeys );
 
-
         // If factory use call_user_func_array
         if ( !empty( $settings['factory'] ) )
         {

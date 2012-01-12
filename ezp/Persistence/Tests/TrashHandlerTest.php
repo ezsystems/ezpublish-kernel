@@ -198,7 +198,6 @@ class TrashHandlerTest extends HandlerTest
         $this->trashHandler->load( 0 );
     }
 
-
     /**
      * @group trashHandler
      * @covers \ezp\Persistence\Storage\InMemory\TrashHandler::trashSubtree

@@ -189,7 +189,6 @@ class Schema
                 $this->schema[$tagName]['classesList'] = array();
         }
 
-
         // Fix for empty paragraphs setting
         $allowEmptyParagraph = $configuration->get( 'paragraph', 'AllowEmpty', 'false' );
         $this->schema['paragraph']['childrenRequired'] = $allowEmptyParagraph == 'true' ? false : true;

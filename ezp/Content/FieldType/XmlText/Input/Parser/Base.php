@@ -927,7 +927,6 @@ abstract class Base
                                                               'XML after processBySchemaTree for element ' . $element->nodeName ) );
         }*/
 
-
         $tmp = null;
         // Call "Publish handler"
         $this->callOutputHandler( 'publishHandler', $element, $tmp );
