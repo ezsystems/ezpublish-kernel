@@ -61,13 +61,13 @@ class Checkbox implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $defaultValue = $storageDef->dataInt3;
+        $defaultValue = (bool)$storageDef->dataInt3;
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
-                'defaultValue' => (bool)$defaultValue
+                'defaultValue' => $defaultValue
             )
         );
-        $fieldDef->defaultValue->data = new CheckboxValue( (bool)$defaultValue );
+        $fieldDef->defaultValue->data = new CheckboxValue( $defaultValue );
     }
 
     /**
