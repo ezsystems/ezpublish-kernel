@@ -158,11 +158,9 @@ class Builder
         {
             case 'or':
                 return call_user_func_array( array( $this, 'lOr' ), $arguments );
-                break;
 
             case 'and':
                 return call_user_func_array( array( $this, 'lAnd' ), $arguments );
-                break;
 
             default:
                 throw new PropertyNotFound( $method, __CLASS__ );
