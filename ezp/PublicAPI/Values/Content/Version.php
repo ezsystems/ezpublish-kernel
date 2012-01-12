@@ -12,7 +12,7 @@ use ezp\PublicAPI\Values\Content\VersionInfo;
  * @property-read ContentInfo $contentInfo convenience getter for $versionInfo->ccntentInfo
  * @property-read int $contentId convenience getter for retrieving the contentId: $versionInfo->contentInfo->contentId
  * @property-read VersionInfo $versionInfo calls getVersionInfo()
- * @property-read array $fields access fields 
+ * @property-read array $fields access fields TBD
  * @property-read array $relations calls getRelations()
  *
  */

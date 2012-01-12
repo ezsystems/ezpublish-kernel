@@ -6,6 +6,7 @@ use ezp\PublicAPI\Values\ValueObject;
 
 /**
  * This class is used for creating a new content object 
+ * @property-write array $fields TBD
  */
 abstract class ContentCreate extends ValueObject
 {

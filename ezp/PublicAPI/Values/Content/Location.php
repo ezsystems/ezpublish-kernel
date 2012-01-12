@@ -7,6 +7,8 @@ use ezp\PublicAPI\Values\Content\ContentInfo;
 
 /**
  * This class represents a location in the repository
+ * @property-read ContentInfo $contentInfo calls getContentInfo()
+ * @property-read int $contentId calls getContentInfo()->contentId
  */
 abstract class Location extends ValueObject
 {

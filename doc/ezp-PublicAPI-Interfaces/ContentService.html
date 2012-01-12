@@ -23,10 +23,10 @@
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">This class provides service methods for managing content</p>
 	<ul class="tags">
-				<li><span class="field">example:</span> <a href="../__examplesource/exsource_ev_git_ezp-next_ezp_PublicAPI_Examples_content.php_33e42d1d006caf6bfd806177f39224d4.html">example</a></li>
+				<li><span class="field">example:</span> <a href="../__examplesource/exsource_earch_publicapi_ezp_PublicAPI_Examples_content.php_3f38b23d1d0c178556c44f4b40282aa1.html">example</a></li>
 			</ul>
 		<p class="notes">
-			Located in <a class="field" href="_Interfaces---ContentService.php.html">/Interfaces/ContentService.php</a> (line <span class="field">37</span>)
+			Located in <a class="field" href="_Interfaces---ContentService.php.html">/Interfaces/ContentService.php</a> (line <span class="field">38</span>)
 		</p>
 		
 				
@@ -47,7 +47,7 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																																																																																																																																																																																																																																				
+																																																																																																																																																																																																																																																				
 												<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Relation.html">Relation</a></span>
 										<a href="#addRelation" title="details" class="method-name">addRelation</a>
@@ -169,6 +169,11 @@
 											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$mainLanguageCode</span>)
 									</div>
 																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Translation.html">Translation</a></span>
+										<a href="#newTranslation" title="details" class="method-name">newTranslation</a>
+										()
+									</div>
+																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>
 										<a href="#newVersionUpdate" title="details" class="method-name">newVersionUpdate</a>
 										()
@@ -179,6 +184,11 @@
 											(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>)
 									</div>
 																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+										<a href="#translateVersion" title="details" class="method-name">translateVersion</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Translation.html">Translation</a></span>&nbsp;<span class="var-name">$translation</span>)
+									</div>
+																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
 										<a href="#updateContent" title="details" class="method-name">updateContent</a>
 											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentUpdate.html">ContentUpdate</a></span>&nbsp;<span class="var-name">$contentUpdate</span>)
@@ -186,7 +196,7 @@
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
 										<a href="#updateVersion" title="details" class="method-name">updateVersion</a>
-											(<span class="var-type"></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>&nbsp;<span class="var-name">$versionUpdate</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>&nbsp;<span class="var-name">$versionUpdate</span>)
 									</div>
 								</div>
 		</div>
@@ -208,7 +218,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">addRelation</span> (line <span class="line-number">270</span>)
+		<span class="method-title">addRelation</span> (line <span class="line-number">282</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -243,14 +253,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">addTranslationInfo</span> (line <span class="line-number">286</span>)
+		<span class="method-title">addTranslationInfo</span> (line <span class="line-number">298</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">5.x add translation information to the content object</p>
 	<ul class="tags">
 				<li><span class="field">access:</span> public</li>
-				<li><span class="field">example:</span> <a href="../__examplesource/exsource_ezp-next_ezp_PublicAPI_Examples_translation_5x.php_e9a0e49acf3d51a379a0eae630c585c8.html">example</a></li>
+				<li><span class="field">example:</span> <a href="../__examplesource/exsource_ublicapi_ezp_PublicAPI_Examples_translation_5x.php_92f589669b57dd063de930642dadacbc.html">example</a></li>
 			</ul>
 	
 	<div class="method-signature">
@@ -273,7 +283,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">copyContent</span> (line <span class="line-number">219</span>)
+		<span class="method-title">copyContent</span> (line <span class="line-number">231</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -309,7 +319,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">createContentDraft</span> (line <span class="line-number">137</span>)
+		<span class="method-title">createContentDraft</span> (line <span class="line-number">138</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -346,7 +356,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">createDraftFromContent</span> (line <span class="line-number">166</span>)
+		<span class="method-title">createDraftFromContent</span> (line <span class="line-number">167</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -382,7 +392,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteContent</span> (line <span class="line-number">154</span>)
+		<span class="method-title">deleteContent</span> (line <span class="line-number">155</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -412,7 +422,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteRelation</span> (line <span class="line-number">279</span>)
+		<span class="method-title">deleteRelation</span> (line <span class="line-number">291</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -446,7 +456,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteVersion</span> (line <span class="line-number">200</span>)
+		<span class="method-title">deleteVersion</span> (line <span class="line-number">212</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -477,7 +487,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">findContent</span> (line <span class="line-number">231</span>)
+		<span class="method-title">findContent</span> (line <span class="line-number">243</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -514,7 +524,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">findSingle</span> (line <span class="line-number">244</span>)
+		<span class="method-title">findSingle</span> (line <span class="line-number">256</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -552,7 +562,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadContent</span> (line <span class="line-number">46</span>)
+		<span class="method-title">loadContent</span> (line <span class="line-number">47</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -583,7 +593,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadContentByRemoteId</span> (line <span class="line-number">55</span>)
+		<span class="method-title">loadContentByRemoteId</span> (line <span class="line-number">56</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -614,7 +624,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadContentDrafts</span> (line <span class="line-number">174</span>)
+		<span class="method-title">loadContentDrafts</span> (line <span class="line-number">175</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -645,7 +655,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadIncomingRelations</span> (line <span class="line-number">260</span>)
+		<span class="method-title">loadIncomingRelations</span> (line <span class="line-number">272</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -676,7 +686,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadOutgoingRelations</span> (line <span class="line-number">252</span>)
+		<span class="method-title">loadOutgoingRelations</span> (line <span class="line-number">264</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -706,7 +716,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadTranslationInfos</span> (line <span class="line-number">294</span>)
+		<span class="method-title">loadTranslationInfos</span> (line <span class="line-number">306</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -738,7 +748,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersion</span> (line <span class="line-number">106</span>)
+		<span class="method-title">loadVersion</span> (line <span class="line-number">107</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -775,7 +785,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionByContentInfo</span> (line <span class="line-number">86</span>)
+		<span class="method-title">loadVersionByContentInfo</span> (line <span class="line-number">87</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -812,7 +822,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionByRemoteId</span> (line <span class="line-number">120</span>)
+		<span class="method-title">loadVersionByRemoteId</span> (line <span class="line-number">121</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -850,7 +860,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionByVersionInfo</span> (line <span class="line-number">95</span>)
+		<span class="method-title">loadVersionByVersionInfo</span> (line <span class="line-number">96</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -883,7 +893,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionInfo</span> (line <span class="line-number">65</span>)
+		<span class="method-title">loadVersionInfo</span> (line <span class="line-number">66</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -917,7 +927,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionInfoById</span> (line <span class="line-number">75</span>)
+		<span class="method-title">loadVersionInfoById</span> (line <span class="line-number">76</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -951,7 +961,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersions</span> (line <span class="line-number">208</span>)
+		<span class="method-title">loadVersions</span> (line <span class="line-number">220</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -982,7 +992,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">newContentCreate</span> (line <span class="line-number">304</span>)
+		<span class="method-title">newContentCreate</span> (line <span class="line-number">316</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1010,11 +1020,35 @@
 		
 			
 	</div>
-<a name="methodnewVersionUpdate" id="newVersionUpdate"><!-- --></a>
+<a name="methodnewTranslation" id="newTranslation"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">newVersionUpdate</span> (line <span class="line-number">311</span>)
+		<span class="method-title">newTranslation</span> (line <span class="line-number">329</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a Translation class</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Translation.html">Translation</a></span>
+		<span class="method-name">
+			newTranslation
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodnewVersionUpdate" id="newVersionUpdate"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">newVersionUpdate</span> (line <span class="line-number">323</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1035,10 +1069,10 @@
 			
 	</div>
 <a name="methodpublishDraft" id="publishDraft"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">publishDraft</span> (line <span class="line-number">192</span>)
+		<span class="method-title">publishDraft</span> (line <span class="line-number">204</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1065,11 +1099,44 @@
 		
 			
 	</div>
+<a name="methodtranslateVersion" id="translateVersion"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">translateVersion</span> (line <span class="line-number">186</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">5.x updates the destination version given in $translation-&gt;translationInfo with the provided tranlated fields</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> the version with the translated fields</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to update this version</li>
+				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the given destiantioon version is not a draft</li>
+				<li><span class="field">access:</span> public</li>
+				<li><span class="field">example:</span> <a href="../__examplesource/exsource_ublicapi_ezp_PublicAPI_Examples_translation_5x.php_92f589669b57dd063de930642dadacbc.html">example</a></li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
+		<span class="method-name">
+			translateVersion
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/Translation.html">Translation</a></span>&nbsp;<span class="var-name">$translation</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/Translation.html">Translation</a></span>
+				<span class="var-name">$translation</span>			</li>
+				</ul>
+		
+			
+	</div>
 <a name="methodupdateContent" id="updateContent"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateContent</span> (line <span class="line-number">147</span>)
+		<span class="method-title">updateContent</span> (line <span class="line-number">148</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1104,7 +1171,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateVersion</span> (line <span class="line-number">184</span>)
+		<span class="method-title">updateVersion</span> (line <span class="line-number">196</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1121,16 +1188,16 @@
 		<span class="method-name">
 			updateVersion
 		</span>
-					(<span class="var-type"></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>&nbsp;<span class="var-name">$versionUpdate</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>&nbsp;<span class="var-name">$versionUpdate</span>)
 			</div>
 	
 			<ul class="parameters">
 					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
+				<span class="var-name">$versionInfo</span>			</li>
+					<li>
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>
 				<span class="var-name">$versionUpdate</span>			</li>
-					<li>
-				<span class="var-type"></span>
-				<span class="var-name">$versionInfo</span>			</li>
 				</ul>
 		
 			
@@ -1141,7 +1208,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Wed, 11 Jan 2012 17:11:16 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Thu, 12 Jan 2012 08:49:13 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

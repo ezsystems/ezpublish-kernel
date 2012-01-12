@@ -27,6 +27,7 @@ use ezp\PublicAPI\Values\Content\Relation;
 use ezp\PublicAPI\Values\Content\TranslationInfo;
 
 use ezp\PublicAPI\Values\ContentType\ContentType;
+use ezp\PublicAPI\Values\Content\Translation;
 
 /**
  *
@@ -175,14 +176,25 @@ interface ContentService {
 
 
 	/**
+	 * 5.x updates the destination version given in $translation->translationInfo with the provided tranlated fields
+	 * @example Examples/translation_5x.php
+	 * @param Translation $translation
+	 * @return Version the version with the translated fields
+	 * @throws ezp\Base\Exception\Unauthorized if the user is not allowed to update this version
+	 * @throws ezp\Base\Exception\Forbidden if the given destiantioon version is not a draft
+	 */
+	public function translateVersion( /*Translation*/ $translation);
+
+	/**
 	 * Updates the fields of a draft.
+	 * @param VersionInfo $versionInfo
 	 * @param VersionUpdate $versionUpdate
 	 * @return Version the version with the updated fields
 	 * @throws ezp\Base\Exception\Unauthorized if the user is not allowed to update this version
 	 * @throws ezp\Base\Exception\Forbidden if the version is not a draft
-	 */
+	 */	
 	public function updateVersion(/*VersionInfo*/ $versionInfo, /*VersionUpdate*/ $versionUpdate);
-
+	
 	/**
 	 * Publishes a draft
 	 * @param VersionInfo $versionInfo
@@ -309,6 +321,10 @@ interface ContentService {
 	 * @return VersionUpdate
 	 */
 	public function newVersionUpdate();
-
-
+    
+    /**
+     * instanciates a Translation class
+     * @return Translation
+     */
+    public function newTranslation();
 }

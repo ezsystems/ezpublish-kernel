@@ -3,6 +3,7 @@ namespace ezp\PublicAPI\Values\Content;
 use ezp\PublicAPI\Values\ValueObject;
 /**
  * This class is used for updating the fields of a version
+ * @property-write array $fields TBD
  */
 abstract class VersionUpdate extends ValueObject
 {
