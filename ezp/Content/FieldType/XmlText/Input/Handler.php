@@ -22,6 +22,18 @@ use ezp\Base\Repository,
 class Handler
 {
     /**
+     * XmlText parser
+     * @var \ezp\Content\FieldType\XmlText\Input\Parser
+     */
+    protected $parser;
+
+    /**
+     * DOMDocument, as processed
+     * @var \DOMDocument
+     */
+    protected $document;
+
+    /**
      * Construct a new Simplified InputHandler$xmlString
      *
      * @param string $xmlString
@@ -171,17 +183,5 @@ class Handler
             return false;
         }
     }
-
-    /**
-     * XmlText parser
-     * @var \ezp\Content\FieldType\XmlText\Input\Parser
-     */
-    protected $parser;
-
-    /**
-     * DOMDocument, as processed
-     * @var \DOMDocument
-     */
-    protected $document;
 }
 ?>

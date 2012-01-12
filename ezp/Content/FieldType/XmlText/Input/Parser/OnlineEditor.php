@@ -152,6 +152,28 @@ class OnlineEditor extends BaseParser implements InputParser
     );
 
     /**
+     * Lists of external ids found during parsing
+     * @var integer[]
+     */
+    protected $embeddedObjectIDArray = array();
+    protected $deletedEmbeddedNodeIDArray = array();
+    protected $deletedEmbeddedObjectIDArray = array();
+    protected $thrashedEmbeddedObjectIDArray = array();
+
+    protected $anchorAsAttribute = false;
+
+    /**
+     * @var array
+     */
+    protected static $customTagList = null;
+
+    /**
+     * Input handler
+     * @var \ezp\Content\FieldType\XmlText\Input\Handler
+     */
+    protected $handler;
+
+    /**
      * Constructor
      * For more info see {@link eZXMLInputParser::eZXMLInputParser()}
      *
@@ -1395,27 +1417,5 @@ class OnlineEditor extends BaseParser implements InputParser
             }
         }
     }
-
-    /**
-     * Lists of external ids found during parsing
-     * @var integer[]
-     */
-    protected $embeddedObjectIDArray = array();
-    protected $deletedEmbeddedNodeIDArray = array();
-    protected $deletedEmbeddedObjectIDArray = array();
-    protected $thrashedEmbeddedObjectIDArray = array();
-
-    protected $anchorAsAttribute = false;
-
-    /**
-     * @var array
-     */
-    protected static $customTagList = null;
-
-    /**
-     * Input handler
-     * @var \ezp\Content\FieldType\XmlText\Input\Handler
-     */
-    protected $handler;
 }
 ?>

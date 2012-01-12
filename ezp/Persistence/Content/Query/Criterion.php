@@ -18,6 +18,24 @@ use ezp\Persistence\Content\Query\Criterion\Operator\Specifications,
 abstract class Criterion
 {
     /**
+     * The operator used by the Criterion
+     * @var string
+     */
+    public $operator;
+
+    /**
+     * The value(s) matched by the criteria
+     * @var array(int|string)
+     */
+    public $value;
+
+    /**
+     * The target used by the criteria (field, metadata...)
+     * @var string
+     */
+    public $target;
+
+    /**
      * Performs operator validation based on the Criterion specifications returned by {@see getSpecifications()}
      * @param string|null $target The target the Criterion applies to: metadata identifier, field identifier...
      * @param string|null $operator
@@ -136,23 +154,5 @@ abstract class Criterion
     {
         return new static( $target, $operator, $value );
     }
-
-    /**
-     * The operator used by the Criterion
-     * @var string
-     */
-    public $operator;
-
-    /**
-     * The value(s) matched by the criteria
-     * @var array(int|string)
-     */
-    public $value;
-
-    /**
-     * The target used by the criteria (field, metadata...)
-     * @var string
-     */
-    public $target;
 }
 ?>

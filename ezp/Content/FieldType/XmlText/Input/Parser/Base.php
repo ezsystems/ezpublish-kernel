@@ -36,6 +36,23 @@ abstract class Base
     const ERROR_DATA = 16;
     const ERROR_ALL = 28; // 4+8+16
 
+    /**
+     * Parser options constants, to be used with setOption
+     * @var string
+     * @see setOption()
+     */
+    const OPT_VALIDATE_ERROR_LEVEL = 'ValidateErrorLevel';
+    const OPT_DETECT_ERROR_LEVEL = 'DetectErrorLevel';
+    const OPT_REMOVE_DEFAULT_ATTRS = 'RemoveDefaultAttrs';
+    const OPT_PARSE_LINE_BREAKS = 'ParseLineBreaks';
+    const OPT_EZ_PUBLISH_VERSION = 'eZPublishVersion';
+    const OPT_TRIM_SPACES = 'TrimSpaces';
+    const OPT_ALLOW_MULTIPLE_SPACES = 'AllowMultipleSpaces';
+    const OPT_ALLOW_NUMERIC_ENTITIES = 'AllowNumericEntities';
+    const OPT_STRICT_HEADERS = 'StrictHeaders';
+    const OPT_DOM_DOCUMENT_CLASS = 'DOMDocumentClass';
+    const OPT_CHECK_EXTERNAL_DATA = 'checkExternalData';
+
     /** Properties of elements that come from the input.
      *
      * Each array element describes a tag that comes from the input. Arrays index is
@@ -113,21 +130,69 @@ abstract class Base
     );
 
     /**
-     * Parser options constants, to be used with setOption
-     * @var string
-     * @see setOption()
+     * XmlSchema object
+     * @var \ezp\Content\FieldType\XmlText\Schema
      */
-    const OPT_VALIDATE_ERROR_LEVEL = 'ValidateErrorLevel';
-    const OPT_DETECT_ERROR_LEVEL = 'DetectErrorLevel';
-    const OPT_REMOVE_DEFAULT_ATTRS = 'RemoveDefaultAttrs';
-    const OPT_PARSE_LINE_BREAKS = 'ParseLineBreaks';
-    const OPT_EZ_PUBLISH_VERSION = 'eZPublishVersion';
-    const OPT_TRIM_SPACES = 'TrimSpaces';
-    const OPT_ALLOW_MULTIPLE_SPACES = 'AllowMultipleSpaces';
-    const OPT_ALLOW_NUMERIC_ENTITIES = 'AllowNumericEntities';
-    const OPT_STRICT_HEADERS = 'StrictHeaders';
-    const OPT_DOM_DOCUMENT_CLASS = 'DOMDocumentClass';
-    const OPT_CHECK_EXTERNAL_DATA = 'checkExternalData';
+    protected $XMLSchema;
+
+    /**
+     * DOM document object
+     * @var \DOMDocument
+     */
+    protected $Document = null;
+
+    /**
+     * Processing messages
+     * @var string[]
+     * @see getMessages()
+     */
+    protected $Messages = array();
+
+    /**
+     * Parent nodes stack
+     * @var string[]
+     */
+    protected $ParentStack = array();
+
+    /**
+     * Boolean holding the validity status of the input string
+     * @var boolean
+     * @see isInputValid()
+     */
+    protected $isInputValid = true;
+
+    /**
+     * Boolean used to interrupt the process between steps
+     * @var boolean
+     */
+    protected $QuitProcess = false;
+
+    /**
+     * Array of Url objects ids
+     * @var integer[]
+     */
+    protected $urlIDArray = array();
+
+    /**
+     * Array of related Content objects id
+     * @var integer[]
+     */
+    protected $relatedObjectIDArray = array();
+
+    /**
+     * Array of linked Content objects id
+     * @var integer[]
+     */
+    protected $linkedObjectIDArray = array();
+
+    // needed for self-embedding protection
+    protected $contentObjectID = 0;
+
+    /**
+     * Input handler
+     * @var \ezp\Content\FieldType\XmlText\Input\Handler
+     */
+    protected $handler;
 
     /**
      * Construct a new Parser
@@ -1318,71 +1383,5 @@ abstract class Base
     {
         return $this->urlIDArray;
     }
-
-    /**
-     * XmlSchema object
-     * @var \ezp\Content\FieldType\XmlText\Schema
-     */
-    protected $XMLSchema;
-
-    /**
-     * DOM document object
-     * @var \DOMDocument
-     */
-    protected $Document = null;
-
-    /**
-     * Processing messages
-     * @var string[]
-     * @see getMessages()
-     */
-    protected $Messages = array();
-
-    /**
-     * Parent nodes stack
-     * @var string[]
-     */
-    protected $ParentStack = array();
-
-    /**
-     * Boolean holding the validity status of the input string
-     * @var boolean
-     * @see isInputValid()
-     */
-    protected $isInputValid = true;
-
-    /**
-     * Boolean used to interrupt the process between steps
-     * @var boolean
-     */
-    protected $QuitProcess = false;
-
-    /**
-     * Array of Url objects ids
-     * @var integer[]
-     */
-    protected $urlIDArray = array();
-
-    /**
-     * Array of related Content objects id
-     * @var integer[]
-     */
-    protected $relatedObjectIDArray = array();
-
-    /**
-     * Array of linked Content objects id
-     * @var integer[]
-     */
-    protected $linkedObjectIDArray = array();
-
-    // needed for self-embedding protection
-    protected $contentObjectID = 0;
-
-    /**
-     * Input handler
-     * @var \ezp\Content\FieldType\XmlText\Input\Handler
-     */
-    protected $handler;
-
 }
 ?>
