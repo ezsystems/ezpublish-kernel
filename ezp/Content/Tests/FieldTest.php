@@ -35,6 +35,20 @@ class FieldTest extends BaseContentTest
     /**
      * @group field
      * @group content
+     * @covers \ezp\Content\Field::getVersion
+     */
+    public function testVersion()
+    {
+        foreach ( $this->fields as $identifier => $field )
+        {
+            self::assertInstanceOf( 'ezp\\Content\\Version', $field->getVersion() );
+            self::assertSame( $field->getVersion(), $field->version );
+        }
+    }
+
+    /**
+     * @group field
+     * @group content
      * @covers \ezp\Content\Field::getFieldDefinition
      */
     public function testFieldDefinition()
@@ -55,12 +69,10 @@ class FieldTest extends BaseContentTest
     {
         foreach ( $this->fields as $identifier => $field )
         {
-            self::assertEquals( $this->content->id, $field->contentId );
-            self::assertEquals( $this->content->currentVersionNo, $field->versionNo );
-            self::assertEquals( $this->content->getCurrentVersion()->status, $field->versionStatus );
             self::assertSame( $field->fieldDefinition->identifier, $identifier );
             self::assertSame( $field->fieldDefinition->id, $field->fieldDefinitionId );
             self::assertSame( $field->fieldDefinition->fieldType, $field->type );
+            self::assertSame( $field->version->versionNo, $field->versionNo );
             self::assertSame( $field->fieldDefinition->defaultValue, $field->value );
             self::assertSame( $field->value, $field->fieldDefinition->type->getValue() );
         }

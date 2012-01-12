@@ -32,8 +32,7 @@ use ezp\Base\Model,
  * @property mixed $language
  * @property-read int $versionNo
  * @property-read mixed $fieldDefinitionId
- * @property-read int $contentId
- * @property-read int $versionStatus
+ * @property-read \ezp\Content\Version $version
  * @property-read \ezp\Content\Type\FieldDefinition $fieldDefinition
  */
 class Field extends Model implements Observer
@@ -53,21 +52,15 @@ class Field extends Model implements Observer
      * @var array Dynamic properties on this object
      */
     protected $dynamicProperties = array(
-        'contentId' => false,
-        'versionStatus' => false,
+        'version' => false,
         'fieldDefinition' => false,
         'value' => true
     );
 
     /**
-     * @var int
+     * @var \ezp\Content\Version
      */
-    protected $contentId;
-
-    /**
-     * @var int
-     */
-    protected $versionStatus;
+    protected $version;
 
     /**
      * @var \ezp\Content\Type\FieldDefinition
@@ -87,8 +80,7 @@ class Field extends Model implements Observer
      */
     public function __construct( Version $contentVersion, FieldDefinition $fieldDefinition )
     {
-        $this->contentId = $contentVersion->contentId;
-        $this->versionStatus = $contentVersion->status;
+        $this->version = $contentVersion;
         $this->fieldDefinition = $fieldDefinition;
 
         // Observer setup
@@ -111,7 +103,6 @@ class Field extends Model implements Observer
             array(
                 "type" => $fieldDefinition->fieldType,
                 "fieldDefinitionId" => $fieldDefinition->id,
-                "versionNo" => $contentVersion->versionNo,
             )
         );
         $this->value = $fieldDefinition->defaultValue;
@@ -119,23 +110,13 @@ class Field extends Model implements Observer
     }
 
     /**
-     * Return content id
+     * Return content version object
      *
-     * @return int
+     * @return \ezp\Content\Version
      */
-    public function getContentId()
+    public function getVersion()
     {
-        return $this->contentId;
-    }
-
-    /**
-     * Return content version status
-     *
-     * @return int
-     */
-    public function getVersionStatus()
-    {
-        return $this->versionStatus;
+        return $this->version;
     }
 
     /**
