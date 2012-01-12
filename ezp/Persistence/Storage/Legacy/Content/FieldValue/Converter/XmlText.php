@@ -11,7 +11,6 @@ namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
 use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Content\FieldType\XmlText\Value as XmlTextValue,
@@ -61,7 +60,6 @@ class XmlText implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDefinition, FieldDefinition $fieldDefinition )
     {
-        $fieldDefinition->fieldTypeConstraints = new FieldTypeConstraints;
         $fieldDefinition->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 'numRows' => $storageDefinition->dataInt1,

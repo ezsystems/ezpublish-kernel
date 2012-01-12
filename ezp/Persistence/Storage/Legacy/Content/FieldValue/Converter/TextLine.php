@@ -11,7 +11,6 @@ namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
 use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
@@ -76,7 +75,6 @@ class TextLine implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
         if ( !empty( $storageDef->dataInt1 ) )
         {
             $fieldDef->fieldTypeConstraints->validators = array(
@@ -84,10 +82,7 @@ class TextLine implements Converter
             );
         }
 
-        $defaultValue = isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '';
-        $fieldDef->defaultValue = new FieldValue(
-            array( 'data' => new TextLineValue( $defaultValue ) )
-        );
+        $fieldDef->defaultValue->data = new TextLineValue( isset( $storageDef->dataText1 ) ? $storageDef->dataText1 : '' );
     }
 
     /**

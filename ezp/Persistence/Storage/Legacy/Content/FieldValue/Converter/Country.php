@@ -14,7 +14,6 @@ use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Country\Value as CountryValue,
     DOMDocument;
@@ -81,7 +80,6 @@ class Country implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,

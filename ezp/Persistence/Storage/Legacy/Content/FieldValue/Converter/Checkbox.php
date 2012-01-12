@@ -11,7 +11,6 @@ namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
 use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Content\FieldType\Checkbox\Value as CheckboxValue,
@@ -62,16 +61,13 @@ class Checkbox implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
         $defaultValue = $storageDef->dataInt3;
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 'defaultValue' => (bool)$defaultValue
             )
         );
-        $fieldDef->defaultValue = new FieldValue(
-            array( 'data' => new CheckboxValue( (bool)$defaultValue ) )
-        );
+        $fieldDef->defaultValue->data = new CheckboxValue( (bool)$defaultValue );
     }
 
     /**

@@ -11,7 +11,6 @@ namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
 use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Content\FieldType\Author\Value as AuthorValue,
@@ -61,10 +60,7 @@ class Author implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
-        $fieldDef->defaultValue = new FieldValue(
-            array( 'data' => new AuthorValue )
-        );
+        $fieldDef->defaultValue->data = new AuthorValue;
     }
 
     /**

@@ -13,7 +13,6 @@ use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Content\FieldValue,
     ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Selection\Value as SelectionValue,
     DOMDocument;
@@ -109,7 +108,6 @@ class Selection implements Converter
             $options[(int)$option["id"]] = (string)$option["name"];
         }
 
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 "isMultiple" => !empty( $storageDef->dataInt1 ) ? (bool)$storageDef->dataInt1 : false,

@@ -11,7 +11,6 @@ namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
 use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Content\FieldType\Float\Value as FloatValue,
@@ -80,8 +79,6 @@ class Float implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
-
         if ( $storageDef->dataFloat4 !== self::NO_MIN_MAX_VALUE )
         {
             if ( !empty( $storageDef->dataFloat1 ) )
@@ -105,9 +102,7 @@ class Float implements Converter
                 'defaultValue' => $defaultValue
             )
         );
-        $fieldDef->defaultValue = new FieldValue(
-            array( 'data' => new FloatValue( $defaultValue ) )
-        );
+        $fieldDef->defaultValue->data = new FloatValue( $defaultValue );
     }
 
     /**
