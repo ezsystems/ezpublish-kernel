@@ -16,7 +16,6 @@ use ezp\Content\FieldType\Author\Value as AuthorValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Author as AuthorConverter,
     ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
-    ezp\Persistence\Content\FieldTypeConstraints,
     PHPUnit_Framework_TestCase,
     DOMDocument;
 
