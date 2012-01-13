@@ -105,13 +105,13 @@ class Handler
         // related content
         foreach ( $this->parser->getRelatedContentIdArray() as $contentId )
         {
-            $service->addRelation( Relation::ATTRIBUTE, $version->contentId, $version->id, $contentId );
+            $service->addRelation( Relation::ATTRIBUTE, $version->contentId, $version->versionNo, $contentId );
         }
 
         // linked content
         foreach ( $this->parser->getLinkedContentIdArray() as $contentId )
         {
-            $service->addRelation( Relation::LINK, $version->contentId, $version->id, $contentId );
+            $service->addRelation( Relation::LINK, $version->contentId, $version->versionNo, $contentId );
         }
 
         return true;
