@@ -1,5 +1,5 @@
 ==============================
-eZ Publish REST API DRAFT 1.05
+eZ Publish REST API DRAFT 1.06
 ==============================
 
 .. sectnum::
