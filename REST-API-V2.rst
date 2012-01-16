@@ -101,6 +101,8 @@ To publish the draft call:
 .. parsed-literal::
 
     POST <URI>/content/objects/<ID>/versions/<version_nr>
+    or
+    PUBLISH <URI>/content/objects/<ID>/versions/<version_nr>
 
 To list the drafts assigned to a user call:
 
@@ -108,7 +110,7 @@ To list the drafts assigned to a user call:
 
     GET <URI>/users/<ID>/drafts
 
-which returns a list of [ContentVersionInfo_]
+which returns a list of [VersionInfo_]
 
 To create and update a new draft for an existing content object call:
 
@@ -269,7 +271,7 @@ Creating Content
         :responseGroups:    alternative: comma separated lists of predefined field groups (see REST API Spec v1)
 :Inputschema:    ContentCreate_
 :Response:       201 Location: /content/objects/<ID>/versions/<version_nr> 
-                 ContentVersion_
+                 Version_
 :Error codes: 
        :400: If the Input does not match the input schema definition or the validation on a field fails, 
              In this case the response contains an ErrorMessage_ containing the appropriate error description
@@ -286,7 +288,7 @@ List/Search Content
     :fields:         comma separated list of fields which should be returned in the response (see Content)
     :responseGroups: comma separated lists of predefined field groups (see REST API Spec v1)
 :Inputschema: Query_
-:Response: 200 array of ContentVersion_
+:Response: 200 array of Version_
 :Error codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
 	
@@ -303,7 +305,7 @@ Alternatively:
     :offset:          offset of the result set
     :sortField:       the field used for sorting TBD.
     :sortOrder:       DESC or ASC
-:Response: 200 array of ContentVersion_
+:Response: 200 array of Version_
 :Error codes:
     :400: If the query string does not match the lucene query string format, In this case the response contains an ErrorMessage_
 	
@@ -317,7 +319,7 @@ Load Content
     :fields: comma separated list of fields which should be returned in the response (see ContentVersion_)
     :responseGroups: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
-:Response: 200 ContentVersion_
+:Response: 200 Version_
 :Error Codes:
     :401: If the user is not authorized to read  this object. This could also happen if there is no published version yet and another user owns a draft of this content
     :404: If the ID is not found
@@ -339,7 +341,7 @@ Update Content
     :fields:          comma separated list of fields which should be returned in the items of the response (see Content)
     :responseGroups:  comma separated lists of predefined field groups (see REST API Spec v1)
 :Inputschema: ContentUpdate_
-:Response: 200 ContentVersion_
+:Response: 200 ContentInfo_
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update this object  
@@ -371,7 +373,7 @@ Copy content
         :srcId: the src id of the content object to be copied        
         :srcRemoteId: alternatively the src remote id of the content object to be copied        
 :Inputschema:
-:Response: 201  ContentVersion_
+:Response: 201  ContentInfo_
 :Error codes: 
        :400: If one of the parameters parentId and parentRemoteId or srcId and srcRemoteId are missing or the corresponding objects do not exist.  
        :401: If the user is not authorized to copy this object to the given location
@@ -437,7 +439,7 @@ Load Content in one Language
 :Method: GET
 :Description: Loads the current version of a content object only containing the fields in the given language and the non translatable fields.
 :Parameters: 
-:Response: 200 ContentVersion_
+:Response: 200 Version_
 :Error Codes:
     :404: If the content object or the tranlation info was not found 
     :401: If the user is not authorized to delete this object
@@ -463,7 +465,7 @@ List Versions
 :Resource: /content/objects/<ID>/versions
 :Method: GET
 :Description: Returns a list of all versions of the content
-:Response: 200 array of ContentVersionInfo_
+:Response: 200 array of VersionInfo_
 :Error Codes:
      :401: If the user has no permission to read the versions
 
@@ -476,7 +478,7 @@ Load Content Version
     :fields: comma separated list of fields which should be returned in the response (see Content)
     :responseGroups: alternative: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
-:Response: 200 ContentVersion_
+:Response: 200 Version_
 :Error Codes:
     :401: If the user is not authorized to read  this object
     :404: If the ID or version is not found
@@ -492,7 +494,7 @@ Update Version
     :responseGroups: alternative: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Inputschema: ContentVersionInput_
-:Response: 200 ContentVersion_
+:Response: 200 Version_
 :Error Codes:
     :400: If the Input does not match the input schema definition, In this case the response contains an ErrorMessage_
     :401: If the user is not authorized to update this version  
@@ -528,7 +530,7 @@ Delete Content Version
 Publish a content version
 `````````````````````````
 :Resource: /content/objects/<ID>/version/<versionNo>
-:Method: POST
+:Method: POST or PUBLISH
 :Description: The content version is published
 :Response: 204
 :Error Codes:
@@ -1638,19 +1640,35 @@ The Reference can carry wether id or remoteId or both.
             }
     }
 
-.. _ContentVersion:
+Multi Language Value JSON Schema
+--------------------------------
 
-ContentVersion JSON Schema
---------------------------
+::
+    {
+        "name":"MLValue",
+        "properties": {
+            "languageCode": {
+                "type":"string",
+            }
+            "value":{
+                "type":"string"
+            }
+        }
+    }
+
+.. _ContentInfo:
+
+ContentInfo JSON Schema
+-----------------------
 
 ::
 
     {
-        "name":"ContentVersion",
+        "name":"ContentInfo",
         "properties": 
         {
             "contentId": {
-                "type":"#Reference"
+                "type": { "$ref":"#Reference" }
             },
             "contentType" : 
             {
@@ -1660,7 +1678,7 @@ ContentVersion JSON Schema
             },
             "name" : 
             {
-                "description":"the default name of the content",
+                "description":"the computed name (via name schema) of the content in the main language",
                 "type":"string",
             },
             "ownerId": 
@@ -1668,9 +1686,50 @@ ContentVersion JSON Schema
                 "description":"the user id of the user which owns this content object".
                 "type":"integer"
             },
+            "state": {
+                "description":"indicates if there is a published version of the content",
+                "type":"boolean",
+            },
             "sectionId": {
                 "type":"integer"
             },
+            "mainLocationId": {
+                "type":"integer"
+            },
+            "currentVersionNo": {
+                "type":"integer"
+            },
+            "publishDate": {
+                "type":"string",
+                "format":"date-time"
+            },   
+            "lastModifiedDate": {
+                "type":"string",
+                "format":"date-time"
+            },   
+            "mainLanguageCode": {
+                "type":"string",
+                "format":"date-time"
+            },   
+            "alwaysAvailable": {
+                "description":"defines if the content object is always shown even it is not 
+                               translated in the requested language"
+                "type":"boolean",
+            },
+        }
+    }
+
+.. _VersionInfo:
+
+VersionInfo JSON Schema
+-----------------------
+
+::
+
+    {
+        "name":"VersionInfo",
+        "properties": 
+        {
             "state": 
             {
                 "type":"string",
@@ -1679,29 +1738,53 @@ ContentVersion JSON Schema
             "versionNo": {
                 "type":"integer"
             },
+            "contentInfo": {
+                "type": { "$ref":"#ContentInfo" }
+            },
             "creatorId": {
                 "type":"integer"
             },
-            "created": {
+            "createdDate": {
                 "type":"string",
                 "format":"date-time"
             },
-            "modified": {
+            "lastModifiedDate": {
                 "type":"string",
                 "format":"date-time"
             },   
-            "alwaysAvailable": {
-                "description":"defines if the content object is always shown even it is not 
-                               translated in the requested language"
-                "type":"boolean",
-                "default": "false"
+            "names": {
+                "type":"array",
+                "items": {
+                    "type": { "$ref":"#MLValue" }
+                }
             },
-            "locationIds": 
-            {
-                "type": "array",
-                "items": {     
-                    "type": "integer"
-                }   
+            "languageCode": {
+                 "description","the main lanugage code for the version",
+                 "type":"string",
+            },
+            "languages": {
+                 "description":"the languages occuring in fields",
+                 "type":"array",
+                 "items": {
+                     "type":"string"
+                 }
+            }
+        }
+    }
+
+.. _Version:
+
+Version JSON Schema
+-------------------
+
+::
+
+    {
+        "name":"Version",
+        "properties": 
+        {
+            "versionInfo": {
+                "type": { "$ref":"#VersionInfo" }
             },
             "fields": {
                 "description":"the collection of fields",
@@ -1712,7 +1795,6 @@ ContentVersion JSON Schema
                         "properties": {
                             "fieldDef": {
                                 "type":"string",
-                                "required":"true"
                             }
                             "id": {
                                 "type":"integer"
@@ -1725,6 +1807,12 @@ ContentVersion JSON Schema
                             }
                         }
                     }
+                }
+            },
+            "relations": {
+                "type":"array",
+                "items": {
+                    "type": { "$ref":"#Relation" }
                 }
             }
         }
@@ -1755,11 +1843,11 @@ ContentCreate JSON Schema
                         "properties": {
                              "parentId": {
                                  "description":"the parent under which the new location should be created",
-                                 "type":"#Reference",
+                                 "type": { "$ref":"#Reference" }
                              }
                              "locationParameters": {
                                  "description":"the parameters (remoteId, sort etc.) for the new location",
-                                 "type":"#LocationInput"
+                                 "type": { "$ref":"#LocationInput" }
                              }   
                         }
                     }
@@ -2015,42 +2103,6 @@ RelationListInput
     }
 
 
-
-.. _ContentVersionInfo:
-
-
-ContentVersionInfo JSON Schema
-------------------------------
-
-::
-
-    {
-        "name":"ContentVersionInfo",
-        "properties": 
-         {
-            "id": {
-                "type":"integer"
-            },
-            "state": {
-                "type":"string",
-                "enum": ["DRAFT","PUBLISHED","ARCHIVED"]
-            },
-            "versionNr": {
-                "type":"integer"
-            },
-            "creatorId": {
-                "type":"integer"
-            },
-            "created": {
-                "type":"string",
-                "format":"date-time"
-            },
-            "modified": {
-                "type":"string",
-                "format":"date-time"
-            }   
-        }
-    }
 
 .. _Query:
 
@@ -2413,8 +2465,8 @@ Location JSON Schema
               "id": {
                       "type":"integer"
                },
-              "contentId": {
-                      "type":"integer"
+              "content": {
+                      "type": {"$ref":"#ContentInfo"}
                },
               "parentId": {
                       "type":"integer"
@@ -2555,17 +2607,7 @@ ContentTypeGroup JSON Schema
                 "description":"the name of the content type",
                 "type":"array",
                 "items": {
-                    "type": {
-                        "name":"MLValue",
-                        "properties": {
-                            "language": {
-                                "type":"string",
-                            }
-                            "value":{
-                                "type":"string"
-                            }
-                        }
-                    }
+                    "type": { "$ref":"#MLValue" }
                 }
             },
             "description" : {
