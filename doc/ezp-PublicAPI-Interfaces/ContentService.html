@@ -26,7 +26,7 @@
 				<li><span class="field">example:</span> <a href="../__examplesource/exsource_earch_publicapi_ezp_PublicAPI_Examples_content.php_3f38b23d1d0c178556c44f4b40282aa1.html">example</a></li>
 			</ul>
 		<p class="notes">
-			Located in <a class="field" href="_Interfaces---ContentService.php.html">/Interfaces/ContentService.php</a> (line <span class="field">38</span>)
+			Located in <a class="field" href="_Interfaces---ContentService.php.html">/Interfaces/ContentService.php</a> (line <span class="field">39</span>)
 		</p>
 		
 				
@@ -218,15 +218,15 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">addRelation</span> (line <span class="line-number">282</span>)
+		<span class="method-title">addRelation</span> (line <span class="line-number">283</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Adds a relation of type common</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the newly created relation</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the version is not a draft</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to edit this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit this version</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -253,12 +253,13 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">addTranslationInfo</span> (line <span class="line-number">298</span>)
+		<span class="method-title">addTranslationInfo</span> (line <span class="line-number">300</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">5.x add translation information to the content object</p>
 	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed add a trnaslation info</li>
 				<li><span class="field">access:</span> public</li>
 				<li><span class="field">example:</span> <a href="../__examplesource/exsource_ublicapi_ezp_PublicAPI_Examples_translation_5x.php_92f589669b57dd063de930642dadacbc.html">example</a></li>
 			</ul>
@@ -283,13 +284,13 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">copyContent</span> (line <span class="line-number">231</span>)
+		<span class="method-title">copyContent</span> (line <span class="line-number">232</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">copies the the content to a new location. If no version is given,  all versions are copied, otherwise only the given version.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to copy the content to the given location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to copy the content to the given location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -319,7 +320,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">createContentDraft</span> (line <span class="line-number">138</span>)
+		<span class="method-title">createContentDraft</span> (line <span class="line-number">139</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -327,8 +328,8 @@
 <p class="description"><p>If a different userId is given in the input it is assigned to the given user  but this required special rights for the authenticated user  (this is useful for content staging where the transfer process does not  have to authenticate with the user which created the content object in the source server).  The user has to publish the draft if it should be visible.  In 4.x at least one location has to be provided in the location creation array.</p></p>
 	<ul class="tags">
 				<li><span class="field">return:</span> - the newly created content draft</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to create the content in the given location</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If the provided remoteId existis in the system or (4.x) there is no location provided</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to create the content in the given location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If the provided remoteId existis in the system or (4.x) there is no location provided</li>
 				<li><span class="field">throws:</span> InvalidArgumentException if the input is not valid</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -356,7 +357,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">createDraftFromContent</span> (line <span class="line-number">167</span>)
+		<span class="method-title">createDraftFromContent</span> (line <span class="line-number">168</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -364,8 +365,8 @@
 <p class="description"><p>4.x: The draft is created with the initialLanguge code of the source version or if not present with the main language.  It can be changed on updating the version.</p></p>
 	<ul class="tags">
 				<li><span class="field">return:</span> - the newly created version</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if there is no published version or the version info points to a draft</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to create the draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if there is no published version or the version info points to a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create the draft</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -392,13 +393,13 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteContent</span> (line <span class="line-number">155</span>)
+		<span class="method-title">deleteContent</span> (line <span class="line-number">156</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">deletes a content object including all its versions and locations including their subtrees.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to delete the content (in one of the locations of the given content object)</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to delete the content (in one of the locations of the given content object)</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -422,14 +423,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteRelation</span> (line <span class="line-number">291</span>)
+		<span class="method-title">deleteRelation</span> (line <span class="line-number">292</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Removes a relation of type COMMON from a draft.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the version is not a draft</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed edit this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed edit this version</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -456,14 +457,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteVersion</span> (line <span class="line-number">212</span>)
+		<span class="method-title">deleteVersion</span> (line <span class="line-number">213</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">removes the given version</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to remove this version</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the version is in state published</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to remove this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the version is in state published</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -487,7 +488,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">findContent</span> (line <span class="line-number">243</span>)
+		<span class="method-title">findContent</span> (line <span class="line-number">244</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -524,14 +525,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">findSingle</span> (line <span class="line-number">256</span>)
+		<span class="method-title">findSingle</span> (line <span class="line-number">257</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 	<ul class="tags">
 				<li><span class="field">TODO:</span> throw an exception if the found object count is &gt; 1</li>
 				<li><span class="field">TODO:</span> define structs for the field filters</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to read the found content object</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to read the found content object</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -562,14 +563,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadContent</span> (line <span class="line-number">47</span>)
+		<span class="method-title">loadContent</span> (line <span class="line-number">48</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Loads a content info object - to load fields use loadVersion</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the content with the given id does not exist</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to read the content</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given id does not exist</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to read the content</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -593,14 +594,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadContentByRemoteId</span> (line <span class="line-number">56</span>)
+		<span class="method-title">loadContentByRemoteId</span> (line <span class="line-number">57</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Loads a content info object for the given remoteId - to load fields use loadVersion</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the content with the given remote id does not exist</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to create the content in the given location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given remote id does not exist</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to create the content in the given location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -624,14 +625,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadContentDrafts</span> (line <span class="line-number">175</span>)
+		<span class="method-title">loadContentDrafts</span> (line <span class="line-number">176</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Load drafts for the given user or if null for the authenticated user</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the drafts (<a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a>) owned by the given user</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load the draft list</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load the draft list</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -655,7 +656,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadIncomingRelations</span> (line <span class="line-number">272</span>)
+		<span class="method-title">loadIncomingRelations</span> (line <span class="line-number">273</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -686,7 +687,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadOutgoingRelations</span> (line <span class="line-number">264</span>)
+		<span class="method-title">loadOutgoingRelations</span> (line <span class="line-number">265</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -716,12 +717,13 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadTranslationInfos</span> (line <span class="line-number">306</span>)
+		<span class="method-title">loadTranslationInfos</span> (line <span class="line-number">309</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">5.x lists the translations done on this content object</p>
 	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed read trnaslation infos</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -748,14 +750,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersion</span> (line <span class="line-number">107</span>)
+		<span class="method-title">loadVersion</span> (line <span class="line-number">108</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">loads a version of the given content object. If no version number is given, the method returns the current version</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the content or version with the given id does not exist</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content or version with the given id does not exist</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -785,14 +787,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionByContentInfo</span> (line <span class="line-number">87</span>)
+		<span class="method-title">loadVersionByContentInfo</span> (line <span class="line-number">88</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">loads a version of the given content object. If no version number is given, the method returns the current version</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if version with the given number does not exist</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if version with the given number does not exist</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -822,15 +824,15 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionByRemoteId</span> (line <span class="line-number">121</span>)
+		<span class="method-title">loadVersionByRemoteId</span> (line <span class="line-number">122</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">loads a version of the given content object reference by a remote id.</p>
 <p class="description"><p>If no version is given, the method returns the current version</p></p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the content or version with the given remote id does not exist</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content or version with the given remote id does not exist</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -860,13 +862,13 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionByVersionInfo</span> (line <span class="line-number">96</span>)
+		<span class="method-title">loadVersionByVersionInfo</span> (line <span class="line-number">97</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">loads a version of the given version info.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -893,14 +895,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionInfo</span> (line <span class="line-number">66</span>)
+		<span class="method-title">loadVersionInfo</span> (line <span class="line-number">67</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">loads a version info of the given content object. If no version number is given, the method returns the current version</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the version with the given number does not exist</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the version with the given number does not exist</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -927,14 +929,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionInfoById</span> (line <span class="line-number">76</span>)
+		<span class="method-title">loadVersionInfoById</span> (line <span class="line-number">77</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">loads a version info of the given content object id. If no version number is given, the method returns the current version</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to load this version</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the version with the given number does not exist</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the version with the given number does not exist</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -961,14 +963,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersions</span> (line <span class="line-number">220</span>)
+		<span class="method-title">loadVersions</span> (line <span class="line-number">221</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Loads all versions for the given content</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> an array of <a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a> sorted by creation date</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to list versions</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to list versions</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -992,7 +994,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">newContentCreate</span> (line <span class="line-number">316</span>)
+		<span class="method-title">newContentCreate</span> (line <span class="line-number">319</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1024,7 +1026,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">newTranslation</span> (line <span class="line-number">329</span>)
+		<span class="method-title">newTranslation</span> (line <span class="line-number">332</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1048,7 +1050,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">newVersionUpdate</span> (line <span class="line-number">323</span>)
+		<span class="method-title">newVersionUpdate</span> (line <span class="line-number">326</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1072,14 +1074,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">publishDraft</span> (line <span class="line-number">204</span>)
+		<span class="method-title">publishDraft</span> (line <span class="line-number">205</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Publishes a draft</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to publish this version</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to publish this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -1103,15 +1105,15 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">translateVersion</span> (line <span class="line-number">186</span>)
+		<span class="method-title">translateVersion</span> (line <span class="line-number">187</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">5.x updates the destination version given in $translation-&gt;translationInfo with the provided tranlated fields</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the version with the translated fields</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to update this version</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the given destiantioon version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the given destiantioon version is not a draft</li>
 				<li><span class="field">access:</span> public</li>
 				<li><span class="field">example:</span> <a href="../__examplesource/exsource_ublicapi_ezp_PublicAPI_Examples_translation_5x.php_92f589669b57dd063de930642dadacbc.html">example</a></li>
 			</ul>
@@ -1136,7 +1138,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateContent</span> (line <span class="line-number">148</span>)
+		<span class="method-title">updateContent</span> (line <span class="line-number">149</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1144,7 +1146,7 @@
 	<ul class="tags">
 				<li><span class="field">return:</span> the content info with the updated attributes</li>
 				<li><span class="field">throws:</span> InvalidArgumentException if the input is not valid</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to update the content meta data</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to update the content meta data</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -1171,15 +1173,15 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateVersion</span> (line <span class="line-number">196</span>)
+		<span class="method-title">updateVersion</span> (line <span class="line-number">197</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Updates the fields of a draft.</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the version with the updated fields</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the version is not a draft</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to update this version</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update this version</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -1208,7 +1210,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 12 Jan 2012 08:49:13 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Tue, 17 Jan 2012 16:03:41 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

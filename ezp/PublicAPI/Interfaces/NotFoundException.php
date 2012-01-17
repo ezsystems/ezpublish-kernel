@@ -9,7 +9,7 @@ use ezp\PublicAPI\Interfaces\Exception;
  * @package ezp\PublicAPI\Interfaces
  *
  */
-abstract class NotFound extends RuntimeException implements Exception {
+abstract class NotFoundException extends RuntimeException implements Exception {
     
 }
 

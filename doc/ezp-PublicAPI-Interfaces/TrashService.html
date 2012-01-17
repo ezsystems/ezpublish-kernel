@@ -23,7 +23,7 @@
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Location service, used for complex subtree operations</p>
 		<p class="notes">
-			Located in <a class="field" href="_Interfaces---TrashService.php.html">/Interfaces/TrashService.php</a> (line <span class="field">17</span>)
+			Located in <a class="field" href="_Interfaces---TrashService.php.html">/Interfaces/TrashService.php</a> (line <span class="field">18</span>)
 		</p>
 		
 				
@@ -92,16 +92,16 @@
 			<A NAME='method_detail'></A>
 
 <a name="methoddeleteTrashItem" id="deleteTrashItem"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteTrashItem</span> (line <span class="line-number">64</span>)
+		<span class="method-title">deleteTrashItem</span> (line <span class="line-number">65</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Deletes a trash item  The corresponding content object will be removed</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to delete this trash item</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to delete this trash item</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -122,17 +122,17 @@
 			
 	</div>
 <a name="methodemptyTrash" id="emptyTrash"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">emptyTrash</span> (line <span class="line-number">55</span>)
+		<span class="method-title">emptyTrash</span> (line <span class="line-number">56</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Empties trash.</p>
 <p class="description"><p>All locations contained in the trash will be removed. Content objects will be removed  if all locations of the content are gone.</p></p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to empty the trash</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to empty the trash</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -148,10 +148,10 @@
 			
 	</div>
 <a name="methodfindTrashItems" id="findTrashItems"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">findTrashItems</span> (line <span class="line-number">73</span>)
+		<span class="method-title">findTrashItems</span> (line <span class="line-number">74</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -178,18 +178,18 @@
 			
 	</div>
 <a name="methodloadTrashItem" id="loadTrashItem"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadTrashItem</span> (line <span class="line-number">27</span>)
+		<span class="method-title">loadTrashItem</span> (line <span class="line-number">28</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Loads a trashed location object from its $id.</p>
 <p class="description"><p>Note that $id is identical to original location, which has been previously trashed</p></p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound - if the location with the given id does not exist</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to read the trashed location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException - if the location with the given id does not exist</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to read the trashed location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -210,10 +210,10 @@
 			
 	</div>
 <a name="methodrecover" id="recover"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">recover</span> (line <span class="line-number">47</span>)
+		<span class="method-title">recover</span> (line <span class="line-number">48</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -221,7 +221,7 @@
 <p class="description"><p>If $newParentLocation is provided, $trashedLocation will be restored under it.</p></p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the newly created or recovered location</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to recover the trash item at the parent location location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to recover the trash item at the parent location location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -245,16 +245,16 @@
 			
 	</div>
 <a name="methodtrash" id="trash"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">trash</span> (line <span class="line-number">36</span>)
+		<span class="method-title">trash</span> (line <span class="line-number">37</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Sends $location and all its children to trash and returns the corresponding trash item  Content is left untouched.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowd to trash the given location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to trash the given location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -280,7 +280,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 12 Jan 2012 08:49:26 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Tue, 17 Jan 2012 16:03:53 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

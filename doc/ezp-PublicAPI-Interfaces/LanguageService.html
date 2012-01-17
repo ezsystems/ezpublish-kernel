@@ -23,7 +23,7 @@
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Language service, used for language operations</p>
 		<p class="notes">
-			Located in <a class="field" href="_Interfaces---LanguageService.php.html">/Interfaces/LanguageService.php</a> (line <span class="field">12</span>)
+			Located in <a class="field" href="_Interfaces---LanguageService.php.html">/Interfaces/LanguageService.php</a> (line <span class="field">18</span>)
 		</p>
 		
 				
@@ -105,14 +105,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">create</span> (line <span class="line-number">24</span>)
+		<span class="method-title">create</span> (line <span class="line-number">30</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Creates the a new Language in the content repository</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the locale already exists</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If user does not have access to content translations</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the locale already exists</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -142,14 +142,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">delete</span> (line <span class="line-number">84</span>)
+		<span class="method-title">delete</span> (line <span class="line-number">90</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Deletes  a language from content repository</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If user does not have access to content translations</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden          if language can not be deleted          because it is still assigned to some content / type / (...).</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException          if language can not be deleted          because it is still assigned to some content / type / (...).</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -173,13 +173,13 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">disable</span> (line <span class="line-number">48</span>)
+		<span class="method-title">disable</span> (line <span class="line-number">54</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">disables a language</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If user does not have access to content translations</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -203,13 +203,13 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">enable</span> (line <span class="line-number">40</span>)
+		<span class="method-title">enable</span> (line <span class="line-number">46</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">enables a language</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If user does not have access to content translations</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -233,13 +233,13 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">load</span> (line <span class="line-number">57</span>)
+		<span class="method-title">load</span> (line <span class="line-number">63</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Loads a Language from its id ($languageId)</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound if language could not be found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException if language could not be found</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -263,7 +263,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadAll</span> (line <span class="line-number">64</span>)
+		<span class="method-title">loadAll</span> (line <span class="line-number">70</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -288,13 +288,13 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadByLanguageCode</span> (line <span class="line-number">73</span>)
+		<span class="method-title">loadByLanguageCode</span> (line <span class="line-number">79</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Loads a Language by its languageCode ($localeCode)</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound if language could not be found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException if language could not be found</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -318,13 +318,13 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateName</span> (line <span class="line-number">32</span>)
+		<span class="method-title">updateName</span> (line <span class="line-number">38</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Changes the name of the language in the content repository</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If user does not have access to content translations</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -353,7 +353,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 12 Jan 2012 08:49:22 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Tue, 17 Jan 2012 16:03:50 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

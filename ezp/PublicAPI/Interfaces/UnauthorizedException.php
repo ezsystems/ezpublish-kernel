@@ -7,6 +7,6 @@ use ezp\PublicAPI\Interfaces\Exception;
  *
  * @package ezp\PublicAPI\Interfaces
  */
-abstract class Unauthorized extends RuntimeException implements Exception {
+abstract class UnauthorizedException extends RuntimeException implements Exception {
     
 }

@@ -99,7 +99,7 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/SectionService.html#methodassignSection">SectionService::assignSection()</a> in SectionService.php</div>
-							<div class="index-item-description">assigns the content to the given section</div>
+							<div class="index-item-description">assigns the content to the given section  this method overrides the current assigned section</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">assignSectionToSubtree</span>
@@ -403,6 +403,19 @@
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/LanguageService.html#methodenable">LanguageService::enable()</a> in LanguageService.php</div>
 							<div class="index-item-description">enables a language</div>
 					</dd>
+			<dt class="field">
+						Exception
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/Exception.html">Exception</a> in Exception.php</div>
+							<div class="index-item-description">Base Interface inheriting from ezp\Base\Exception</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">Exception.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/_Interfaces---Exception.php.html">Exception.php</a> in Exception.php</div>
+					</dd>
 		</dl>
 	<a name="f"></a>
 	<div class="index-letter-section">
@@ -430,6 +443,19 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/TrashService.html#methodfindTrashItems">TrashService::findTrashItems()</a> in TrashService.php</div>
 							<div class="index-item-description">Returns a collection of Trashed locations contained in the trash.</div>
+					</dd>
+			<dt class="field">
+						ForbiddenException
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ForbiddenException.html">ForbiddenException</a> in ForbiddenException.php</div>
+							<div class="index-item-description">An Exception which is thrown if an operation cannot be performed by a service  although the current user  would have permission to perform this action.</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">ForbiddenException.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/_Interfaces---ForbiddenException.php.html">ForbiddenException.php</a> in ForbiddenException.php</div>
 					</dd>
 		</dl>
 	<a name="g"></a>
@@ -459,6 +485,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/Repository.html#methodgetContentTypeService">Repository::getContentTypeService()</a> in Repository.php</div>
 							<div class="index-item-description">Get Content Type Service</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getErrorCode</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ForbiddenException.html#methodgetErrorCode">ForbiddenException::getErrorCode()</a> in ForbiddenException.php</div>
+							<div class="index-item-description">returns an additional error code which indicates why an action could not be performed</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getLocationService</span>
@@ -847,6 +880,12 @@
 	</div>
 	<dl>
 			<dt class="field">
+						<span class="include-title">NotFoundException.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/_Interfaces---NotFoundException.php.html">NotFoundException.php</a> in NotFoundException.php</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">newContentCreate</span>
 					</dt>
 		<dd class="index-item-body">
@@ -921,14 +960,14 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodnewRoleCreate">RoleService::newRoleCreate()</a> in RoleService.php</div>
-							<div class="index-item-description">instanciates a policy create class</div>
+							<div class="index-item-description">instanciates a role create class</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">newRoleCreate</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodnewRoleCreate">RoleService::newRoleCreate()</a> in RoleService.php</div>
-							<div class="index-item-description">instanciates a role create class</div>
+							<div class="index-item-description">instanciates a policy create class</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">newTranslation</span>
@@ -957,6 +996,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodnewVersionUpdate">ContentService::newVersionUpdate()</a> in ContentService.php</div>
 							<div class="index-item-description">instanciates a new version update class</div>
+					</dd>
+			<dt class="field">
+						NotFoundException
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/NotFoundException.html">NotFoundException</a> in NotFoundException.php</div>
+							<div class="index-item-description">This Exception is thrown if an object referencenced by an id or identifier  could not be found in the repository.</div>
 					</dd>
 		</dl>
 	<a name="p"></a>
@@ -1121,6 +1167,12 @@
 	</div>
 	<dl>
 			<dt class="field">
+						<span class="include-title">UnauthorizedException.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/_Interfaces---UnauthorizedException.php.html">UnauthorizedException.php</a> in UnauthorizedException.php</div>
+					</dd>
+			<dt class="field">
 						<span class="include-title">UserService.php</span>
 					</dt>
 		<dd class="index-item-body">
@@ -1153,6 +1205,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UserService.html#methodunAssignUssrFromUserGroup">UserService::unAssignUssrFromUserGroup()</a> in UserService.php</div>
 							<div class="index-item-description">Removes a user group from the user</div>
+					</dd>
+			<dt class="field">
+						UnauthorizedException
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UnauthorizedException.html">UnauthorizedException</a> in UnauthorizedException.php</div>
+							<div class="index-item-description">This Exception is thrown if the current user is not allowed to perform an action in the reposittory.</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">unhideLocation</span>

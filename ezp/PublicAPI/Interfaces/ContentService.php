@@ -30,13 +30,6 @@ use ezp\PublicAPI\Values\ContentType\ContentType;
 
 use ezp\PublicAPI\Values\Content\Translation;
 
-use ezp\PublicAPI\Interfaces\Exception\Forbidden;
-
-use ezp\PublicAPI\Interfaces\Exception\NotFound;
-
-use ezp\PublicAPI\Interfaces\Exception\Unauthorized;
-
-
 /**
  *
  * This class provides service methods for managing content
@@ -49,8 +42,8 @@ interface ContentService {
      * Loads a content info object - to load fields use loadVersion
      * @param int $contentId
      * @return ContentInfo
-     * @throws Unauthorized if the user is not allowed to read the content
-     * @throws NotFound - if the content with the given id does not exist
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to read the content
+     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given id does not exist
      */
     public function loadContent($contentId);
 
@@ -58,8 +51,8 @@ interface ContentService {
      * Loads a content info object for the given remoteId - to load fields use loadVersion
      * @param string $remoteId
      * @return ContentInfo
-     * @throws Unauthorized if the user is not allowd to create the content in the given location
-     * @throws NotFound - if the content with the given remote id does not exist
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to create the content in the given location
+     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given remote id does not exist
      */
     public function loadContentByRemoteId($remoteId);
 
@@ -68,8 +61,8 @@ interface ContentService {
      * @param ContentInfo $contentInfo
      * @param int $versionNo the version number. If not given the current version is returned.
      * @return VersionInfo
-     * @throws NotFound - if the version with the given number does not exist
-     * @throws Unauthorized if the user is not allowed to load this version
+     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the version with the given number does not exist
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersionInfo(/*ContentInfo*/ $contentInfo, $versionNo = null);
 
@@ -78,8 +71,8 @@ interface ContentService {
      * @param int $contentId
      * @param int $versionNo the version number. If not given the current version is returned.
      * @return VersionInfo
-     * @throws NotFound - if the version with the given number does not exist
-     * @throws Unauthorized if the user is not allowed to load this version
+     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the version with the given number does not exist
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersionInfoById($contentId , $versionNo = null);
 
@@ -89,8 +82,8 @@ interface ContentService {
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      * @return Version
-     * @throws NotFound - if version with the given number does not exist
-     * @throws Unauthorized if the user is not allowed to load this version
+     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if version with the given number does not exist
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersionByContentInfo(/*ContentInfo*/ $contentInfo, array $languages = null, $versionNo = null);
 
@@ -99,7 +92,7 @@ interface ContentService {
      * @param VersionInfo $versionInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @return Version
-     * @throws Unauthorized if the user is not allowed to load this version
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersionByVersionInfo(/*VersionInfo*/ $versionInfo, array $languages = null);
 
@@ -109,8 +102,8 @@ interface ContentService {
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      * @return Version
-     * @throws NotFound - if the content or version with the given id does not exist
-     * @throws Unauthorized if the user is not allowed to load this version
+     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content or version with the given id does not exist
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersion($contentId, array $languages = null, $versionNo = null);
 
@@ -123,8 +116,8 @@ interface ContentService {
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      * @return Version
-     * @throws NotFound - if the content or version with the given remote id does not exist
-     * @throws Unauthorized if the user is not allowed to load this version
+     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content or version with the given remote id does not exist
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersionByRemoteId($remoteId, array $languages = null, $versionNo = null);
 
@@ -139,8 +132,8 @@ interface ContentService {
      * @param ContentCreate $contentCreate
      * @param array $locationCreate an array of {@link LocationCreate} for each location parent under which a location should be created for the nontent
      * @return Version - the newly created content draft
-     * @throws Unauthorized if the user is not allowd to create the content in the given location
-     * @throws Forbidden If the provided remoteId existis in the system or (4.x) there is no location provided
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to create the content in the given location
+     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If the provided remoteId existis in the system or (4.x) there is no location provided
      * @throws InvalidArgumentException if the input is not valid
      */
     public function createContentDraft(/*ContentCreate*/ $contentCreate, array $locationCreate = array());
@@ -150,7 +143,7 @@ interface ContentService {
      * @param ContentInfo $contentInfo
      * @param ContentUpdate $contentUpdate
      * @return ContentInfo the content info with the updated attributes
-     * @throws Unauthorized if the user is not allowd to update the content meta data
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to update the content meta data
      * @throws InvalidArgumentException if the input is not valid
      */
     public function updateContent(/*ContentInfo*/ $contentInfo, /*ContentUpdate*/ $contentUpdate);
@@ -158,7 +151,7 @@ interface ContentService {
     /**
      * deletes a content object including all its versions and locations including their subtrees.
      * @param ContentInfo $contentInfo
-     * @throws Unauthorized if the user is not allowd to delete the content (in one of the locations of the given content object)
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to delete the content (in one of the locations of the given content object)
      */
     public function deleteContent(/*ContentInfo*/ $contentInfo);
 
@@ -169,8 +162,8 @@ interface ContentService {
      * @param ContentInfo $contentInfo
      * @param VersionInfo $versionInfo
      * @return VersionInfo - the newly created version
-     * @throws Unauthorized if the user is not allowed to create the draft
-     * @throws Forbidden if there is no published version or the version info points to a draft
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create the draft
+     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if there is no published version or the version info points to a draft
      */
     public function createDraftFromContent(/*ContentInfo*/ $contentInfo, /*VersionInfo*/ $versionInfo = null);
 
@@ -178,7 +171,7 @@ interface ContentService {
      * Load drafts for the given user or if null for the authenticated user
      * @param User $user
      * @return array the drafts ({@link VersionInfo}) owned by the given user
-     * @throws Unauthorized if the user is not allowed to load the draft list
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load the draft list
      */
     public function loadContentDrafts(User $user = null);
 
@@ -188,8 +181,8 @@ interface ContentService {
      * @example Examples/translation_5x.php
      * @param Translation $translation
      * @return Version the version with the translated fields
-     * @throws Unauthorized if the user is not allowed to update this version
-     * @throws Forbidden if the given destiantioon version is not a draft
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update this version
+     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if the given destiantioon version is not a draft
      */
     public function translateVersion( /*Translation*/ $translation);
 
@@ -198,24 +191,24 @@ interface ContentService {
      * @param VersionInfo $versionInfo
      * @param VersionUpdate $versionUpdate
      * @return Version the version with the updated fields
-     * @throws Unauthorized if the user is not allowed to update this version
-     * @throws Forbidden if the version is not a draft
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update this version
+     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft
      */
     public function updateVersion(/*VersionInfo*/ $versionInfo, /*VersionUpdate*/ $versionUpdate);
 
     /**
      * Publishes a draft
      * @param VersionInfo $versionInfo
-     * @throws Forbidden if the version is not a draft
-     * @throws Unauthorized if the user is not allowed to publish this version
+     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to publish this version
      */
     public function publishDraft( /*VersionInfo*/ $versionInfo );
 
     /**
      * removes the given version
      * @param VersionInfo $versionInfo
-     * @throws Forbidden if the version is in state published
-     * @throws Unauthorized if the user is not allowed to remove this version
+     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if the version is in state published
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to remove this version
      */
     public function deleteVersion(/*VersionInfo*/ $versionInfo);
 
@@ -223,7 +216,7 @@ interface ContentService {
      * Loads all versions for the given content
      * @param ContentInfo $contentInfo
      * @return array an array of {@link VersionInfo} sorted by creation date
-     * @throws Unauthorized if the user is not allowed to list versions
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to list versions
      */
     public function loadVersions(/*ContentInfo*/ $contentInfo);
 
@@ -234,7 +227,7 @@ interface ContentService {
      * @param LocationCreate $locationCreate the target location where the content is copied to
      * @param VersionInfo $versionInfo
      * @return Version
-     * @throws Unauthorized if the user is not allowed to copy the content to the given location
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to copy the content to the given location
      */
     public function copyContent(/*ContentInfo*/ $contentInfo,/*LocationCreate*/ $locationCreate,/*VersionInfo*/ $versionInfo = null);
 
@@ -257,7 +250,7 @@ interface ContentService {
      * @param array  $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => aaray(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
-     * @throws Unauthorized if the user is not allowed to read the found content object
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to read the found content object
      * @TODO throw an exception if the found object count is > 1
      * @return SearchResult
      */
@@ -284,8 +277,8 @@ interface ContentService {
      * @param VersionInfo $versionInfo
      * @param int $destinationId the destination of the relation
      * @return Relation the newly created relation
-     * @throws Unauthorized if the user is not allowed to edit this version
-     * @throws Forbidden if the version is not a draft
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit this version
+     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft
      */
     public function addRelation(/*VersionInfo*/ $versionInfo, $destinationId);
 
@@ -293,8 +286,8 @@ interface ContentService {
      * Removes a relation of type COMMON from a draft.
      * @param VersionInfo $versionInfo
      * @param int $destinationId
-     * @throws Unauthorized if the user is not allowed edit this version
-     * @throws Forbidden if the version is not a draft
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed edit this version
+     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft
      */
     public function deleteRelation(/*VersionInfo*/ $versionInfo, $destinationId);
 
@@ -302,7 +295,7 @@ interface ContentService {
      * 5.x add translation information to the content object
      * @example Examples/translation_5x.php
      * @param TranslationInfo $translatio9nInfo
-     * @throws Unauthorized if the user is not allowed add a trnaslation info
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed add a trnaslation info
      */
     public function addTranslationInfo(/*TranslationInfo*/ $translatio9nInfo);
 
@@ -310,7 +303,7 @@ interface ContentService {
      * 5.x lists the translations done on this content object
      * @param ContentInfo $contentInfo
      * @param array $filter TBD - filter by sourceversion destination version and languages
-     * @throws Unauthorized if the user is not allowed read trnaslation infos
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed read trnaslation infos
      * @return TranslationInfo
      */
     public function loadTranslationInfos(/*ContentInfo*/ $contentInfo, array $filter = array() );

@@ -213,8 +213,8 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Adds a new field definition to an existing content type. The content type must be in state DRAFT.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to edit a content type</li>
-				<li><span class="field">throws:</span> \ezp\Base\Exception\Forbidden if the identifier in already exists in the content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit a content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the identifier in already exists in the content type</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -247,9 +247,9 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Un-Link a content type from a group ( remove a group from a type )</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\InvalidArgumentValue If the content type is not assigned thi the given group.</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to unlink a content type</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If $contentTypeGroup is the last group assigned to the content type</li>
+				<li><span class="field">throws:</span> InvalidArgumentValue If the content type is not assigned thi the given group.</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to unlink a content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If $contentTypeGroup is the last group assigned to the content type</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -283,7 +283,7 @@
 <p class="short-description">Copy Type incl fields and groupIds to a new Type object</p>
 <p class="description"><p>New Type will have $userId as creator / modifier, created / modified should be updated with current time,  updated remoteId and identifier should be appended with '_' + unique string.</p></p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to copy a content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to copy a content type</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -316,8 +316,8 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Create a Content Type object. The content type is created in the state STATUS_DRAFT.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If the identifier or remoteId in the content type create struct already exists</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\InvalidArgumentValue If an identifier of a field definition is used in several fields</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If the identifier or remoteId in the content type create struct already exists</li>
+				<li><span class="field">throws:</span> InvalidArgumentException If an identifier of a field definition is used in several fields</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -350,8 +350,8 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Creates a draft from an existing content type. This is a complete copy of the content  type wiich has the state STATUS_DRAFT.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If there is already a draft assigned to another user</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to edit a content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If there is already a draft assigned to another user</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit a content type</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -381,8 +381,8 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Create a Content Type Group object</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If a group with the same identifier already exists</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to create a content type group</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If a group with the same identifier already exists</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create a content type group</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -415,8 +415,8 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Delete a Content Type object. If $deleteObjects is set to true all object instances of this content type are deleted.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to delete a content type</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden $deleteObjects is set to false and there exist content objects of this type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to delete a content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException $deleteObjects is set to false and there exist content objects of this type</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -449,8 +449,8 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Delete a Content Type Group. If the paramter $deleteObjects is set to true  this method deletes also all content types in this group which  are not assigned to other groups including the content object instances.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> \ezp\Base\Exception\Forbidden If the parameter $deleteObjects is set to false and a to be deleted content type                                        has instances</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to delete a content type group</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If the parameter $deleteObjects is set to false and a to be deleted content type                                        has instances</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to delete a content type group</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -483,7 +483,7 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Get a Content Type object by id</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound If a content type with the given id and status DEFINED can not be found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException If a content type with the given id and status DEFINED can not be found</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -513,7 +513,7 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Get a Content Type object by identifier</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound If content type with the given identifier and status DEFINED can not be found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException If content type with the given identifier and status DEFINED can not be found</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -543,7 +543,7 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Get a Content Type object by id</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound If content type with the given remote id and status DEFINED can not be found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException If content type with the given remote id and status DEFINED can not be found</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -573,7 +573,7 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Get a Content Type object draft by id</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound If the content type draft owned by the current user can not be found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException If the content type draft owned by the current user can not be found</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -603,7 +603,7 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Get a Content Type Group object by id</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound If group can not be found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException If group can not be found</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -633,7 +633,7 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Get a Content Type Group object by identifier</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound If group can not be found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException If group can not be found</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -881,8 +881,8 @@
 <p class="short-description">Publish the content type and update content objects.</p>
 <p class="description"><p>This method updates content objects, depending on the changed field definitions.</p></p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to publish a content type</li>
-				<li><span class="field">throws:</span> \ezp\Base\Exception\Forbidden If the content type has no draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to publish a content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If the content type has no draft</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -912,8 +912,8 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Remove a field definition from an existing Type.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to edit a content type</li>
-				<li><span class="field">throws:</span> \ezp\Base\Exception\InvalidArgumentValue If the given field definition does not belong to the given type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit a content type</li>
+				<li><span class="field">throws:</span> InvalidArgumentException If the given field definition does not belong to the given type</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -946,8 +946,8 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Link a content type to a group.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If the content type is already assigned thi the given group</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to link a content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If the content type is already assigned thi the given group</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to link a content type</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -981,8 +981,8 @@
 <p class="short-description">Update a Content Type object</p>
 <p class="description"><p>Does not update fields (fieldDefinitions), use <a href="../ezp-PublicAPI-Interfaces/ContentTypeService.html#methodupdateFieldDefinition">updateFieldDefinition()</a> to update them.</p></p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> \ezp\Base\Exception\Forbidden If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to update a content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update a content type</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -1015,8 +1015,8 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Update a Content Type Group object</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden If the given identifier (if set) already exists</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to create a content type group</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If the given identifier (if set) already exists</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create a content type group</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -1049,9 +1049,9 @@
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Update a field definition</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\InvalidArgumentValue If the field id in the update struct is not found or does not belong to the content type</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized if the user is not allowed to edit a content type</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden  If the given identifier is used in an existing field of the given content type</li>
+				<li><span class="field">throws:</span> InvalidArgumentException If the field id in the update struct is not found or does not belong to the content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit a content type</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException  If the given identifier is used in an existing field of the given content type</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -1083,7 +1083,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 12 Jan 2012 08:49:18 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Tue, 17 Jan 2012 16:03:46 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

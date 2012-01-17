@@ -23,7 +23,7 @@
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">This service provides methods for managing Roles and Policies</p>
 		<p class="notes">
-			Located in <a class="field" href="_Interfaces---RoleService.php.html">/Interfaces/RoleService.php</a> (line <span class="field">20</span>)
+			Located in <a class="field" href="_Interfaces---RoleService.php.html">/Interfaces/RoleService.php</a> (line <span class="field">22</span>)
 		</p>
 		
 				
@@ -145,13 +145,13 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">addPolicy</span> (line <span class="line-number">49</span>)
+		<span class="method-title">addPolicy</span> (line <span class="line-number">51</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">adds a new policy to the role</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> \ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to add  a policy</li>
+				<li><span class="field">throws:</span> \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to add  a policy</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -178,13 +178,13 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">assignRoleToUser</span> (line <span class="line-number">127</span>)
+		<span class="method-title">assignRoleToUser</span> (line <span class="line-number">129</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">assigns a role to the given user</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to assign a role</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign a role</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -211,13 +211,13 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">assignRoleToUserGroup</span> (line <span class="line-number">109</span>)
+		<span class="method-title">assignRoleToUserGroup</span> (line <span class="line-number">111</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">assigns a role to the given user group</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to assign a role</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign a role</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -244,14 +244,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">createRole</span> (line <span class="line-number">30</span>)
+		<span class="method-title">createRole</span> (line <span class="line-number">32</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Creates a new Role</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the name of the role already exists</li>
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to create a role</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the name of the role already exists</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a role</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -275,13 +275,13 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteRole</span> (line <span class="line-number">91</span>)
+		<span class="method-title">deleteRole</span> (line <span class="line-number">93</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">deletes the given role</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to delete this role</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to delete this role</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -305,14 +305,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadPoliciesByUserId</span> (line <span class="line-number">100</span>)
+		<span class="method-title">loadPoliciesByUserId</span> (line <span class="line-number">102</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">loads all policies from roles which are assigned to a user or to user groups to which the user belongs</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> an array of <a href="../ezp-PublicAPI-Values/Policy.html">Policy</a></li>
-				<li><span class="field">throws:</span> \ezp\Base\Exceptio\NotFound if a user with the given id was not found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException if a user with the given id was not found</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -336,14 +336,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadRole</span> (line <span class="line-number">77</span>)
+		<span class="method-title">loadRole</span> (line <span class="line-number">79</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">loads a role for the given name</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\NotFound if a role with the given name was not found</li>
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to read this role</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException if a role with the given name was not found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read this role</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -367,14 +367,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadRoles</span> (line <span class="line-number">84</span>)
+		<span class="method-title">loadRoles</span> (line <span class="line-number">86</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">loads all roles</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> an array of <a href="../ezp-PublicAPI-Values/Role.html">Role</a></li>
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to read the roles</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read the roles</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -393,7 +393,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">newPolicyUpdate</span> (line <span class="line-number">158</span>)
+		<span class="method-title">newPolicyUpdate</span> (line <span class="line-number">160</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -417,7 +417,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">newRoleCreate</span> (line <span class="line-number">144</span>)
+		<span class="method-title">newRoleCreate</span> (line <span class="line-number">146</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -446,7 +446,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">newRoleCreate</span> (line <span class="line-number">152</span>)
+		<span class="method-title">newRoleCreate</span> (line <span class="line-number">154</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -478,14 +478,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">removePolicy</span> (line <span class="line-number">58</span>)
+		<span class="method-title">removePolicy</span> (line <span class="line-number">60</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">removes a policy from the role</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the updated role</li>
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to remove a policy</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove a policy</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -512,14 +512,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">unassignRoleFromUser</span> (line <span class="line-number">136</span>)
+		<span class="method-title">unassignRoleFromUser</span> (line <span class="line-number">138</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">removes a role from the given user.</p>
 	<ul class="tags">
 				<li><span class="field">throws:</span> InvalidArgumentException If the role is not assigned to the user</li>
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to remove a role</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove a role</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -546,14 +546,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">unassignRoleFromUserGroup</span> (line <span class="line-number">118</span>)
+		<span class="method-title">unassignRoleFromUserGroup</span> (line <span class="line-number">120</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">removes a role from the given user group.</p>
 	<ul class="tags">
 				<li><span class="field">throws:</span> InvalidArgumentException  If the role is not assigned to the given user group</li>
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to remove a role</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove a role</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -580,14 +580,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">updatePolicy</span> (line <span class="line-number">68</span>)
+		<span class="method-title">updatePolicy</span> (line <span class="line-number">70</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Updates the limitations of a policy. The module and function cannot be changed and</p>
 <p class="description"><p>the limitaions are replaced by the ones in $roleUpdate</p></p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to uüdate a policy</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to uüdate a policy</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -614,14 +614,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateRole</span> (line <span class="line-number">40</span>)
+		<span class="method-title">updateRole</span> (line <span class="line-number">42</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Updates the name and (5.x) description of the role</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden if the name of the role already exists</li>
-				<li><span class="field">throws:</span> ezp\Base\Exceptio\UnAuthorized if the authenticated user is not allowed to update a role</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the name of the role already exists</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to update a role</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -653,7 +653,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 12 Jan 2012 08:49:25 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Tue, 17 Jan 2012 16:03:52 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

@@ -28,6 +28,7 @@
 <a href="#DateMetadata.php">DateMetadata.php</a><br>
 <a href="#DateModified.php">DateModified.php</a><br>
 <a href="#Field.php">Field.php</a><br>
+<a href="#FieldCollection.php">FieldCollection.php</a><br>
 <a href="#FieldDefinition.php">FieldDefinition.php</a><br>
 <a href="#FieldDefinitionCreate.php">FieldDefinitionCreate.php</a><br>
 <a href="#FieldDefinitionUpdate.php">FieldDefinitionUpdate.php</a><br>
@@ -65,13 +66,14 @@
 <a href="#Specifications.php">Specifications.php</a><br>
 <a href="#Status.php">Status.php</a><br>
 <a href="#Subtree.php">Subtree.php</a><br>
+<a href="#TranslatableField.php">TranslatableField.php</a><br>
 <a href="#Translation.php">Translation.php</a><br>
 <a href="#TranslationInfo.php">TranslationInfo.php</a><br>
 <a href="#translation_5x.php">translation_5x.php</a><br>
 <a href="#TrashItem.php">TrashItem.php</a><br>
 <a href="#UrlAlias.php">UrlAlias.php</a><br>
-<a href="#User.php">User.php</a><br>
 <a href="#user.php">user.php</a><br>
+<a href="#User.php">User.php</a><br>
 <a href="#UserCreate.php">UserCreate.php</a><br>
 <a href="#UserGroup.php">UserGroup.php</a><br>
 <a href="#UserGroupCreate.php">UserGroupCreate.php</a><br>
@@ -85,6 +87,9 @@
 <a name="Post-parsing"></a>
 <h1>Post-parsing</h1>
 <h2>Warnings:</h2><br>
+<b>Warning</b> - Class Exception parent ezp not found<br>
+<b>Warning</b> - Class TranslatableField in file /Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/Content/TranslatableField.php has multiple possible parents named Field.  Cannot resolve name conflict,
+ try ignoring a file that contains the conflicting parent class<br>
 <b>Warning</b> - Class FieldSortClauseTarget parent SortClauseTarget not found<br>
 <a name="content.php"></a>
 <h1>content.php</h1>
@@ -135,8 +140,8 @@
 <a name="ContentTypeGroup.php"></a>
 <h1>ContentTypeGroup.php</h1>
 <h2>Warnings:</h2><br>
-<b>Warning on line 19</b> - @property-read magic tag does not have name, illegal. Ignoring tag "@property-read names calls getNames() or on access getName($language)"<br>
 <b>Warning on line 19</b> - no @package tag was used in a DocBlock for file /Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/ContentType/ContentTypeGroup.php<br>
+<b>Warning on line 19</b> - @property-read magic tag does not have name, illegal. Ignoring tag "@property-read names calls getNames() or on access getName($language)"<br>
 <b>Warning on line 19</b> - @property-read magic tag does not have name, illegal. Ignoring tag "@property-read descriptions calls getDescriptions() or on access getDescription($language)"<br>
 <b>Warning on line 20</b> - no @package tag was used in a DocBlock for class ContentTypeGroup<br>
 <a name="ContentTypeGroupCreate.php"></a>
@@ -166,8 +171,8 @@
 <a name="ContentTypeUpdate.php"></a>
 <h1>ContentTypeUpdate.php</h1>
 <h2>Warnings:</h2><br>
-<b>Warning on line 11</b> - @property-write magic tag does not have name, illegal. Ignoring tag "@property-write $description calls setDescription() for setting a description in an initial language"<br>
 <b>Warning on line 11</b> - @property-write magic tag does not have name, illegal. Ignoring tag "@property-write $name calls setName() for setting a namein the initial language"<br>
+<b>Warning on line 11</b> - @property-write magic tag does not have name, illegal. Ignoring tag "@property-write $description calls setDescription() for setting a description in an initial language"<br>
 <b>Warning on line 12</b> - no @package tag was used in a DocBlock for class ContentTypeUpdate<br>
 <b>Warning on line 105</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/ContentType/ContentTypeUpdate.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
 <a name="ContentUpdate.php"></a>
@@ -197,20 +202,25 @@
 <b>Warning on line 12</b> - no @package tag was used in a DocBlock for class Field<br>
 <b>Warning on line 37</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/Content/Field.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
 <b>Warning on line 41</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/Content/Query/Criterion/Field.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="FieldCollection.php"></a>
+<h1>FieldCollection.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 12</b> - no @package tag was used in a DocBlock for class FieldCollection<br>
+<b>Warning on line 19</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/Content/FieldCollection.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
 <a name="FieldDefinition.php"></a>
 <h1>FieldDefinition.php</h1>
 <h2>Warnings:</h2><br>
-<b>Warning on line 11</b> - @property-read magic tag does not have name, illegal. Ignoring tag "@property-read $names calls getNames() or on access getName($language)"<br>
+<b>Warning on line 11</b> - @property-read magic tag does not have name, illegal. Ignoring tag "@property-read $descriptions calls getDescriptions() or on access getDescription($language)"<br>
 <b>Warning on line 11</b> - @property-read magic tag does not have name, illegal. Ignoring tag "@property-read $validators calls getValidators()"<br>
 <b>Warning on line 11</b> - @property-read magic tag does not have name, illegal. Ignoring tag "@property-read $fieldSettings calls getFieldSettings()"<br>
-<b>Warning on line 11</b> - @property-read magic tag does not have name, illegal. Ignoring tag "@property-read $descriptions calls getDescriptions() or on access getDescription($language)"<br>
+<b>Warning on line 11</b> - @property-read magic tag does not have name, illegal. Ignoring tag "@property-read $names calls getNames() or on access getName($language)"<br>
 <b>Warning on line 12</b> - no @package tag was used in a DocBlock for class FieldDefinition<br>
 <b>Warning on line 136</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/ContentType/FieldDefinition.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
 <a name="FieldDefinitionCreate.php"></a>
 <h1>FieldDefinitionCreate.php</h1>
 <h2>Warnings:</h2><br>
-<b>Warning on line 12</b> - @property-write magic tag does not have name, illegal. Ignoring tag "@property-write $description calls setDescription() for setting a description in an initial language"<br>
 <b>Warning on line 12</b> - @property-write magic tag does not have name, illegal. Ignoring tag "@property-write $name calls setName() for setting a namein the initial language"<br>
+<b>Warning on line 12</b> - @property-write magic tag does not have name, illegal. Ignoring tag "@property-write $description calls setDescription() for setting a description in an initial language"<br>
 <b>Warning on line 12</b> - no @package tag was used in a DocBlock for class FieldDefinitionCreate<br>
 <b>Warning on line 109</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/ContentType/FieldDefinitionCreate.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
 <a name="FieldDefinitionUpdate.php"></a>
@@ -386,6 +396,11 @@
 <h2>Warnings:</h2><br>
 <b>Warning on line 13</b> - no @package tag was used in a DocBlock for class Subtree<br>
 <b>Warning on line 58</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/Content/Query/Criterion/Subtree.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="TranslatableField.php"></a>
+<h1>TranslatableField.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 8</b> - no @package tag was used in a DocBlock for class TranslatableField<br>
+<b>Warning on line 16</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/Content/TranslatableField.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
 <a name="Translation.php"></a>
 <h1>Translation.php</h1>
 <h2>Warnings:</h2><br>
@@ -410,16 +425,16 @@
 <h2>Warnings:</h2><br>
 <b>Warning on line 16</b> - no @package tag was used in a DocBlock for class UrlAlias<br>
 <b>Warning on line 60</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/Content/Query/Criterion/UrlAlias.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
-<a name="user.php"></a>
-<h1>user.php</h1>
-<h2>Warnings:</h2><br>
-<b>Warning on line 15</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Examples/user.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
 <a name="User.php"></a>
 <h1>User.php</h1>
 <h2>Warnings:</h2><br>
 <b>Warning on line 11</b> - no @package tag was used in a DocBlock for class User<br>
 <b>Warning on line 64</b> - Unknown tag "@todo:" used<br>
 <b>Warning on line 67</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/User/User.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
+<a name="user.php"></a>
+<h1>user.php</h1>
+<h2>Warnings:</h2><br>
+<b>Warning on line 15</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Examples/user.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
 <a name="UserCreate.php"></a>
 <h1>UserCreate.php</h1>
 <h2>Warnings:</h2><br>
@@ -471,7 +486,7 @@
 <b>Warning on line 8</b> - no @package tag was used in a DocBlock for class VersionUpdate<br>
 <b>Warning on line 37</b> - File "/Users/christianbacher/dev/git/research/publicapi/ezp/PublicAPI/Values/Content/VersionUpdate.php" has no page-level DocBlock, use @package in the first DocBlock to create one<br>
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 12 Jan 2012 08:49:27 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Tue, 17 Jan 2012 16:03:55 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</body>
 </html>

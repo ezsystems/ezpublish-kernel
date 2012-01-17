@@ -26,7 +26,7 @@
 				<li><span class="field">example:</span> <a href="../__examplesource/exsource_arch_publicapi_ezp_PublicAPI_Examples_location.php_7bfb0d00640eb6a1e30904ff3ba41db5.html">example</a></li>
 			</ul>
 		<p class="notes">
-			Located in <a class="field" href="_Interfaces---LocationService.php.html">/Interfaces/LocationService.php</a> (line <span class="field">20</span>)
+			Located in <a class="field" href="_Interfaces---LocationService.php.html">/Interfaces/LocationService.php</a> (line <span class="field">21</span>)
 		</p>
 		
 				
@@ -74,7 +74,7 @@
 											(<span class="var-type">integer</span>&nbsp;<span class="var-name">$locationId</span>)
 									</div>
 																<div class="method-definition">
-											<span class="method-result">\ezp\PublicAPI\Values\Content\Location</span>
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>
 										<a href="#loadLocationByRemoteId" title="details" class="method-name">loadLocationByRemoteId</a>
 											(<span class="var-type"></span>&nbsp;<span class="var-name">$remotenId</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$remoteId</span>)
 									</div>
@@ -133,7 +133,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">copySubtree</span> (line <span class="line-number">34</span>)
+		<span class="method-title">copySubtree</span> (line <span class="line-number">35</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -141,8 +141,8 @@
 	<ul class="tags">
 				<li><span class="field">return:</span> The newly created location of the copied subtree</li>
 				<li><span class="field">todo:</span> enhancment - this method should return a result structure containing the new location and a list        of locations which are not copied due to permission denials.</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If the current user user is not allowed copy the subtree to the given parent location</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden  if the target location is a sub location of the given location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException  if the target location is a sub location of the given location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -169,15 +169,15 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">createLocation</span> (line <span class="line-number">75</span>)
+		<span class="method-title">createLocation</span> (line <span class="line-number">76</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Creates the new $location in the content repository for the given content</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the newly created Location</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden  if the content is already below the specified parent                                         or the parent is a sub location of the location the content                                         or if set the remoteId existis already</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If the current user user is not allowed to create this location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException  if the content is already below the specified parent                                         or the parent is a sub location of the location the content                                         or if set the remoteId existis already</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create this location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -207,14 +207,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteLocation</span> (line <span class="line-number">140</span>)
+		<span class="method-title">deleteLocation</span> (line <span class="line-number">141</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Deletes the $locations and all descendants of $location.</p>
 <p class="description"><p>If $overridePermissions is set to false and a user has no permission to delete a descendant  it is not deleted and the location path to this item is left untouched i.e. only the  locations on which the user has permission to delete are deleted.  Otherwise if $overridePermissions is set to true (default) the method deletes all descendants  regardles of the permission settings.</p></p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If the current user is not allowed to delete this location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to delete this location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -241,14 +241,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">hideLocation</span> (line <span class="line-number">104</span>)
+		<span class="method-title">hideLocation</span> (line <span class="line-number">105</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Hides the $location and marks invisible all descendants of $location.</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> with updated hidden value</li>
-				<li><span class="field">throws:</span> \ezp\Base\Exception\Unauthorized If the current user user is not allowed to hide this location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to hide this location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -272,14 +272,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadLocation</span> (line <span class="line-number">43</span>)
+		<span class="method-title">loadLocation</span> (line <span class="line-number">44</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Loads a location object from its $locationId</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\NotFound If the specified location is not found</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If the current user user is not allowed to read this location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException If the specified location is not found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read this location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -303,19 +303,19 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadLocationByRemoteId</span> (line <span class="line-number">52</span>)
+		<span class="method-title">loadLocationByRemoteId</span> (line <span class="line-number">53</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Loads a location object from its $remoteId</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> \ezp\Base\Exception\NotFound If the specified location is not found</li>
-				<li><span class="field">throws:</span> \ezp\Base\Exception\Unauthorized If the current user user is not allowed to read this location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException If the specified location is not found</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read this location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result">\ezp\PublicAPI\Values\Content\Location</span>
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>
 		<span class="method-name">
 			loadLocationByRemoteId
 		</span>
@@ -337,7 +337,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadLocationChildren</span> (line <span class="line-number">62</span>)
+		<span class="method-title">loadLocationChildren</span> (line <span class="line-number">63</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -373,13 +373,13 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">moveSubtree</span> (line <span class="line-number">125</span>)
+		<span class="method-title">moveSubtree</span> (line <span class="line-number">126</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Moves the subtree to $newParentLocation  If a user has the permission to move the location to a target location  he can do it regardless of an existing descendant on which the user has no permission.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If the current user user is not allowed to move this location to the target</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to move this location to the target</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -406,7 +406,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">newLocationCreate</span> (line <span class="line-number">148</span>)
+		<span class="method-title">newLocationCreate</span> (line <span class="line-number">149</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -435,7 +435,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">newLocationUpdate</span> (line <span class="line-number">154</span>)
+		<span class="method-title">newLocationUpdate</span> (line <span class="line-number">155</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -459,13 +459,13 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">swapLoaction</span> (line <span class="line-number">95</span>)
+		<span class="method-title">swapLoaction</span> (line <span class="line-number">96</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Swaps the contents hold by the $location1 and $location2</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If the current user user is not allowed to swap content</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to swap content</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -492,14 +492,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">unhideLocation</span> (line <span class="line-number">114</span>)
+		<span class="method-title">unhideLocation</span> (line <span class="line-number">115</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Unhides the $location and marks visible all descendants of $locations  until a hidden location is found.</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> with updated hidden value</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If the current user user is not allowed to unhide this location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to unhide this location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -523,15 +523,15 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateLocation</span> (line <span class="line-number">85</span>)
+		<span class="method-title">updateLocation</span> (line <span class="line-number">86</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Updates $location in the content repository</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the updated Location</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Forbidden   if if set the remoteId existis already</li>
-				<li><span class="field">throws:</span> ezp\Base\Exception\Unauthorized If the current user user is not allowed to update this location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException   if if set the remoteId existis already</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to update this location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -560,7 +560,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 12 Jan 2012 08:49:23 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Tue, 17 Jan 2012 16:03:51 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

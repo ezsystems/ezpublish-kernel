@@ -5,11 +5,11 @@
 namespace ezp\PublicAPI\Interfaces;
 use ezp\PublicAPI\Values\Content\Language;
 
-use ezp\PublicAPI\Interfaces\Exception\Forbidden;
+use ezp\PublicAPI\Interfaces\Exception\ezp\PublicAPI\Interfaces\ForbiddenException;
 
-use ezp\PublicAPI\Interfaces\Exception\NotFound;
+use ezp\PublicAPI\Interfaces\Exception\ezp\PublicAPI\Interfaces\NotFoundException;
 
-use ezp\PublicAPI\Interfaces\Exception\Unauthorized;
+use ezp\PublicAPI\Interfaces\Exception\ezp\PublicAPI\Interfaces\UnauthorizedException;
 
 /**
  * Language service, used for language operations
@@ -24,8 +24,8 @@ interface LanguageService
      * @param string $name
      * @param bool $isEnabled
      * @return Language
-     * @throws Unauthorized If user does not have access to content translations
-     * @throws Forbidden if the locale already exists
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if the locale already exists
      */
     public function create( $languageCode, $name, $isEnabled = true );
 
@@ -33,7 +33,7 @@ interface LanguageService
      * Changes the name of the language in the content repository
      *
      * @param string $languageCode the unique indentifier of the language to be changed
-     * @throws Unauthorized If user does not have access to content translations
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
      */
     public function updateName($languageCode, $newName);
 
@@ -41,7 +41,7 @@ interface LanguageService
      * enables a language
      *
      * @param string $languageCode the unique indentifier of the language to be changed
-     * @throws Unauthorized If user does not have access to content translations
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
      */
     public function enable($languageCode);
 
@@ -49,7 +49,7 @@ interface LanguageService
      * disables a language
      *
      * @param string $languageCode the unique indentifier of the language to be changed
-     * @throws Unauthorized If user does not have access to content translations
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
      */
     public function disable($languageCode);
 
@@ -58,7 +58,7 @@ interface LanguageService
      *
      * @param int $languageId
      * @return Language
-     * @throws NotFound if language could not be found
+     * @throws ezp\PublicAPI\Interfaces\NotFoundException if language could not be found
      */
     public function load( $languageId );
 
@@ -74,7 +74,7 @@ interface LanguageService
      *
      * @param string $languageCode
      * @return Language
-     * @throws NotFound if language could not be found
+     * @throws ezp\PublicAPI\Interfaces\NotFoundException if language could not be found
      */
     public function loadByLanguageCode( $languageCode );
 
@@ -82,10 +82,10 @@ interface LanguageService
      * Deletes  a language from content repository
      *
      * @param string $languageCode
-     * @throws Forbidden
+     * @throws ezp\PublicAPI\Interfaces\ForbiddenException
      *         if language can not be deleted
      *         because it is still assigned to some content / type / (...).
-     * @throws Unauthorized If user does not have access to content translations
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
      */
     public function delete( $languageCode );
 

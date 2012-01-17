@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>example</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+						<h1>example</h1>
+<div class="listing">
+<div class="src-code"><ol><li><div class="src-line"><span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line">use&nbsp;<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Values</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">use&nbsp;<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Values</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">use&nbsp;<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Interfaces</span>\<span class="src-id"><a href="../ezp-PublicAPI-Interfaces/ContentTypeService.html">ContentTypeService</a></span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">use&nbsp;<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Interfaces</span>\<span class="src-id"><a href="../ezp-PublicAPI-Interfaces/ContentService.html">ContentService</a></span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">use&nbsp;<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Interfaces</span>\<span class="src-id"><a href="../ezp-PublicAPI-Interfaces/Repository.html">Repository</a></span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;assumed&nbsp;as&nbsp;injected</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;</span><span class="src-doc-coretag">@var&nbsp;</span><span class="src-doc-type">Repository&nbsp;</span><span class="src-doc-var">$repository&nbsp;</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line"><span class="src-var">$repository&nbsp;</span>=&nbsp;<span class="src-id">null</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;</span><span class="src-doc-coretag">@var&nbsp;</span><span class="src-doc-type">ContentTypeService&nbsp;</span><span class="src-doc-var">$contentTypeService&nbsp;</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentTypeService&nbsp;</span>=&nbsp;<span class="src-var">$repository</span><span class="src-sym">-&gt;</span><span class="src-id">getContentTypeService</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;</span><span class="src-doc-coretag">@var&nbsp;</span><span class="src-doc-type">ContentService&nbsp;</span><span class="src-doc-var">$contentService&nbsp;</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentService&nbsp;</span>=&nbsp;<span class="src-var">$repository</span><span class="src-sym">-&gt;</span><span class="src-id">getContentService</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;create&nbsp;a&nbsp;new&nbsp;instance&nbsp;of&nbsp;a&nbsp;content&nbsp;object&nbsp;of&nbsp;type&nbsp;article</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-var">$contentType&nbsp;</span>=&nbsp;<span class="src-var">$contentTypeService</span><span class="src-sym">-&gt;</span><span class="src-id">loadContentTypeByIdentifier</span><span class="src-sym">(</span><span class="src-str">'article'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;construct&nbsp;the&nbsp;creation&nbsp;structure&nbsp;with&nbsp;the&nbsp;content&nbsp;type&nbsp;and&nbsp;the&nbsp;main&nbsp;language&nbsp;of&nbsp;the&nbsp;content</span></div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;the&nbsp;main&nbsp;language&nbsp;is&nbsp;also&nbsp;the&nbsp;default&nbsp;language&nbsp;for&nbsp;the&nbsp;fields</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentCreate&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodnewContentCreate">newContentCreate</a><span class="src-sym">(</span><span class="src-var">$contentType</span><span class="src-sym">,</span><span class="src-str">'eng-US'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;set&nbsp;title&nbsp;field&nbsp;in&nbsp;the&nbsp;main&nbsp;language</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentCreate</span><span class="src-sym">-&gt;</span><span class="src-id">setField</span><span class="src-sym">(</span><span class="src-str">'title'</span><span class="src-sym">,</span><span class="src-str">'Title'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;set&nbsp;summary&nbsp;field&nbsp;in&nbsp;php&nbsp;array&nbsp;style</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentCreate</span><span class="src-sym">-&gt;</span><span class="src-id">fields</span><span class="src-sym">[</span><span class="src-str">'summary'</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-str">&quot;&lt;p&gt;this&nbsp;is&nbsp;a&nbsp;summary&lt;/p&gt;&quot;</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;set&nbsp;authors&nbsp;field&nbsp;of&nbsp;the&nbsp;article</span></div></li>
+<li><div class="src-line"><span class="src-var">$authors&nbsp;</span>=&nbsp;<span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$authors</span><span class="src-sym">[</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id">ezp</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../FieldTypeProviderInterface/FieldType.html">FieldType</a></span>\<span class="src-id">Author</span>\<span class="src-id">Author</span><span class="src-sym">(</span><span class="src-str">'John&nbsp;Doe'</span><span class="src-sym">,</span><span class="src-str">'john.doe@example.net'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$authors</span><span class="src-sym">[</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span><span class="src-id">ezp</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../FieldTypeProviderInterface/FieldType.html">FieldType</a></span>\<span class="src-id">Author</span>\<span class="src-id">Author</span><span class="src-sym">(</span><span class="src-str">'Bud&nbsp;Spencer'</span><span class="src-sym">,</span><span class="src-str">'bud.spencer@example.net'</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentCreate</span><span class="src-sym">-&gt;</span><span class="src-id">setField</span><span class="src-sym">(</span><span class="src-str">'author'</span><span class="src-sym">,</span><span class="src-key">new&nbsp;</span><span class="src-id">ezp</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../FieldTypeProviderInterface/FieldType.html">FieldType</a></span>\<span class="src-id">Author</span>\<span class="src-id">Value</span><span class="src-sym">(</span><span class="src-var">$authors</span><span class="src-sym">))</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;set&nbsp;image&nbsp;for&nbsp;the&nbsp;article</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentCreate</span><span class="src-sym">-&gt;</span><span class="src-id">setField</span><span class="src-sym">(</span><span class="src-str">'image'</span><span class="src-sym">,</span><span class="src-key">new&nbsp;</span><span class="src-id">ezp</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../FieldTypeProviderInterface/FieldType.html">FieldType</a></span>\<span class="src-id">Image</span>\<span class="src-id">Value</span><span class="src-sym">(</span><span class="src-str">&quot;/tmp/myimage.jpg&quot;</span><span class="src-sym">,</span><span class="src-str">&quot;my&nbsp;alternative&nbsp;text&quot;</span><span class="src-sym">))</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;set&nbsp;a&nbsp;remote&nbsp;id&nbsp;for&nbsp;the&nbsp;content</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentCreate</span><span class="src-sym">-&gt;</span><span class="src-id">remoteId&nbsp;</span>=&nbsp;<span class="src-str">&quot;12345&quot;</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;create&nbsp;the&nbsp;content&nbsp;instance&nbsp;with&nbsp;a&nbsp;default&nbsp;location&nbsp;create&nbsp;structure</span></div></li>
+<li><div class="src-line"><span class="src-var">$parentLocationId&nbsp;</span>=&nbsp;<span class="src-num">123</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$version&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodcreateContentDraft">createContentDraft</a><span class="src-sym">(</span><span class="src-var">$contentCreate</span><span class="src-sym">,&nbsp;</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$locationService</span><span class="src-sym">-&gt;</span><span class="src-id">newLocationCreate</span><span class="src-sym">(</span><span class="src-var">$parentLocationId</span><span class="src-sym">)))</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;print&nbsp;the&nbsp;new&nbsp;created&nbsp;info&nbsp;data</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentId&nbsp;</span>=&nbsp;<span class="src-var">$version</span><span class="src-sym">-&gt;</span><span class="src-id">contentId</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">echo&nbsp;<span class="src-var">$contentId</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;4.x.&nbsp;the&nbsp;location&nbsp;array&nbsp;is&nbsp;empty&nbsp;because&nbsp;the&nbsp;location&nbsp;are&nbsp;created&nbsp;on&nbsp;publish&nbsp;for&nbsp;the&nbsp;first&nbsp;time</span></div></li>
+<li><div class="src-line"><span class="src-var">$locations&nbsp;</span>=&nbsp;<span class="src-var">$version</span><span class="src-sym">-&gt;</span><span class="src-id">contentInfo</span><span class="src-sym">-&gt;</span><span class="src-id">locations</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;publish&nbsp;the&nbsp;content</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodpublishDraft">publishDraft</a><span class="src-sym">(</span><span class="src-var">$version</span><span class="src-sym">-&gt;</span><span class="src-id">versionInfo</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;now&nbsp;there&nbsp;is&nbsp;one&nbsp;location&nbsp;with&nbsp;parentId&nbsp;123&nbsp;in&nbsp;the&nbsp;returned&nbsp;array</span></div></li>
+<li><div class="src-line"><span class="src-var">$locations&nbsp;</span>=&nbsp;<span class="src-var">$version</span><span class="src-sym">-&gt;</span><span class="src-id">contentInfo</span><span class="src-sym">-&gt;</span><span class="src-id">locations</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;translate&nbsp;the&nbsp;article</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;translating&nbsp;the&nbsp;content&nbsp;object&nbsp;(4.x)</span></div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;load&nbsp;the&nbsp;content&nbsp;info&nbsp;object&nbsp;(note&nbsp;this&nbsp;info&nbsp;object&nbsp;differes&nbsp;from&nbsp;the&nbsp;one&nbsp;in&nbsp;the&nbsp;draft&nbsp;after&nbsp;publishing)</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadContent">loadContent</a><span class="src-sym">(</span><span class="src-var">$version</span><span class="src-sym">-&gt;</span><span class="src-id">contentId</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;create&nbsp;a&nbsp;draft&nbsp;from&nbsp;the&nbsp;before&nbsp;published&nbsp;content</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><span class="src-id">createDraftFromVersion</span><span class="src-sym">(</span><span class="src-id">contentInfo</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;instantiate&nbsp;a&nbsp;version&nbsp;update&nbsp;value&nbsp;object</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionUpdate&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodnewVersionUpdate">newVersionUpdate</a><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionUpdate</span><span class="src-sym">-&gt;</span><span class="src-id">initialLanguageId&nbsp;</span>=&nbsp;<span class="src-str">'ger-DE'</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionUpdate</span><span class="src-sym">-&gt;</span><span class="src-id">fields</span><span class="src-sym">[</span><span class="src-str">'title'</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-str">'Titel'</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;....&nbsp;as&nbsp;with&nbsp;creation&nbsp;see&nbsp;above</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;update&nbsp;the&nbsp;draft</span></div></li>
+<li><div class="src-line"><span class="src-var">$version&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodupdateVersion">updateVersion</a><span class="src-sym">(</span><span class="src-var">$versionInfo</span><span class="src-sym">,</span><span class="src-var">$versionUpdate</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;read&nbsp;the&nbsp;fields&nbsp;of&nbsp;the&nbsp;version</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-key">foreach&nbsp;</span><span class="src-sym">(&nbsp;</span><span class="src-var">$version</span><span class="src-sym">-&gt;</span><span class="src-id">getFields</span><span class="src-sym">(</span><span class="src-sym">)&nbsp;</span><span class="src-key">as&nbsp;</span><span class="src-var">$field</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;<span class="src-str">&quot;</span><span class="src-str">Field&nbsp;'{<span class="src-var">$field</span></span><span class="src-sym">-&gt;</span><span class="src-id">identifier</span><span class="src-str"></span><span class="src-sym">}</span>','{<span class="src-var">$field</span></span><span class="src-sym">-&gt;</span><span class="src-id">language</span><span class="src-str"></span><span class="src-sym">}</span>':&nbsp;{<span class="src-var">$field</span></span><span class="src-sym">-&gt;</span><span class="src-id">value</span><span class="src-str"></span><span class="src-sym">}</span>\n</span><span class="src-str">&quot;</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Update&nbsp;the&nbsp;content&nbsp;info&nbsp;object</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Create&nbsp;the&nbsp;content&nbsp;update&nbsp;struct</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentUpdate&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><span class="src-id">newContentUpdate</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Change&nbsp;the&nbsp;main&nbsp;language&nbsp;and&nbsp;alwaysAvailableFlag</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentUpdate</span><span class="src-sym">-&gt;</span><span class="src-id">mainLanguageCode&nbsp;</span>=&nbsp;<span class="src-str">'ger-DE'</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentUpdate</span><span class="src-sym">-&gt;</span><span class="src-id">alwaysAvailbale&nbsp;</span>=&nbsp;<span class="src-id">false</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Update&nbsp;the&nbsp;content</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodupdateContent">updateContent</a><span class="src-sym">(&nbsp;</span><span class="src-var">$contentInfo</span><span class="src-sym">,&nbsp;</span><span class="src-var">$contentUpdate&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;deleting&nbsp;the&nbsp;version&nbsp;and&nbsp;content</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/&nbsp;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;delete&nbsp;the&nbsp;version&nbsp;(draft)</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methoddeleteVersion">deleteVersion</a><span class="src-sym">(</span><span class="src-var">$version</span><span class="src-sym">-&gt;</span><span class="src-id">versionInfo</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;delete&nbsp;the&nbsp;content&nbsp;object</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methoddeleteContent">deleteContent</a><span class="src-sym">(</span><span class="src-var">$version</span><span class="src-sym">-&gt;</span><span class="src-id">contentInfo</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Load&nbsp;all&nbsp;drafts&nbsp;of&nbsp;the&nbsp;current&nbsp;user</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-key">foreach&nbsp;</span><span class="src-sym">(&nbsp;</span><span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><span class="src-id">loadDrafts</span><span class="src-sym">(</span><span class="src-sym">)&nbsp;</span><span class="src-key">as&nbsp;</span><span class="src-var">$versionInfo&nbsp;</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line"><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">foreach&nbsp;</span><span class="src-sym">(&nbsp;</span><span class="src-var">$versionInfo</span><span class="src-sym">-&gt;</span><span class="src-id">names&nbsp;</span><span class="src-key">as&nbsp;</span><span class="src-var">$language&nbsp;</span>=&gt;&nbsp;<span class="src-var">$name&nbsp;</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;<span class="src-str">'In&nbsp;language&nbsp;&quot;'</span><span class="src-sym">,&nbsp;</span><span class="src-var">$language</span><span class="src-sym">,&nbsp;</span><span class="src-str">'&quot;&nbsp;is&nbsp;name&nbsp;&quot;'</span><span class="src-sym">,&nbsp;</span><span class="src-var">$name</span><span class="src-sym">,&nbsp;</span><span class="src-str">'&quot;'</span><span class="src-sym">,&nbsp;</span><span class="src-id">PHP_EOL</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Load&nbsp;the&nbsp;latest&nbsp;version&nbsp;info&nbsp;for&nbsp;a&nbsp;given&nbsp;remote&nbsp;id</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;the&nbsp;content&nbsp;info&nbsp;by&nbsp;it's&nbsp;remote&nbsp;id</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadContentByRemoteId">loadContentByRemoteId</a><span class="src-sym">(&nbsp;</span><span class="src-str">'remote-id'&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;the&nbsp;version&nbsp;info&nbsp;instance</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersionInfo">loadVersionInfo</a><span class="src-sym">(&nbsp;</span><span class="src-var">$contentInfo&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Load&nbsp;a&nbsp;specific&nbsp;version&nbsp;info&nbsp;for&nbsp;a&nbsp;content&nbsp;info&nbsp;object.</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;a&nbsp;content&nbsp;info&nbsp;instance</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadContent">loadContent</a><span class="src-sym">(&nbsp;</span><span class="src-num">42&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;a&nbsp;specific&nbsp;version</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersionInfo">loadVersionInfo</a><span class="src-sym">(&nbsp;</span><span class="src-var">$contentInfo</span><span class="src-sym">,&nbsp;</span><span class="src-num">3&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Load&nbsp;the&nbsp;latest&nbsp;version&nbsp;with&nbsp;all&nbsp;languages.</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;a&nbsp;content&nbsp;info&nbsp;instance</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadContent">loadContent</a><span class="src-sym">(&nbsp;</span><span class="src-num">42&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;the&nbsp;latest&nbsp;version&nbsp;for&nbsp;this&nbsp;content&nbsp;object</span></div></li>
+<li><div class="src-line"><span class="src-var">$version&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersionByContentInfo">loadVersionByContentInfo</a><span class="src-sym">(&nbsp;</span><span class="src-var">$contentInfo&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Load&nbsp;the&nbsp;latest&nbsp;version&nbsp;with&nbsp;all&nbsp;languages&nbsp;(short&nbsp;form)</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;the&nbsp;latest&nbsp;version&nbsp;for&nbsp;this&nbsp;content&nbsp;object</span></div></li>
+<li><div class="src-line"><span class="src-var">$version&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersion">loadVersion</a><span class="src-sym">(&nbsp;</span><span class="src-num">42&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Load&nbsp;the&nbsp;latest&nbsp;version&nbsp;in&nbsp;german&nbsp;and&nbsp;english</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-var">$languages&nbsp;</span>=&nbsp;<span class="src-key">array</span><span class="src-sym">(&nbsp;</span><span class="src-str">'eng-US'</span><span class="src-sym">,&nbsp;</span><span class="src-str">'ger-DE'&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;the&nbsp;latest&nbsp;version&nbsp;for&nbsp;this&nbsp;content&nbsp;object</span></div></li>
+<li><div class="src-line"><span class="src-var">$version&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersion">loadVersion</a><span class="src-sym">(&nbsp;</span><span class="src-num">42</span><span class="src-sym">,&nbsp;</span><span class="src-var">$languages&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><a href="http://www.php.net/var_dump">var_dump</a><span class="src-sym">(&nbsp;</span><span class="src-var">$version</span><span class="src-sym">-&gt;</span><span class="src-id">contentInfo</span><span class="src-sym">-&gt;</span><span class="src-id">mainLanguage&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Load&nbsp;a&nbsp;specific&nbsp;version&nbsp;in&nbsp;german</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-var">$language&nbsp;</span>=&nbsp;<span class="src-key">array</span><span class="src-sym">(&nbsp;</span><span class="src-str">'de'&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;this&nbsp;version</span></div></li>
+<li><div class="src-line"><span class="src-var">$version&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersion">loadVersion</a><span class="src-sym">(&nbsp;</span><span class="src-num">42</span><span class="src-sym">,&nbsp;</span><span class="src-var">$language</span><span class="src-sym">,&nbsp;</span><span class="src-num">17&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Remove&nbsp;all&nbsp;archived&nbsp;versions&nbsp;from&nbsp;a&nbsp;content&nbsp;object.</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;a&nbsp;content&nbsp;info&nbsp;for&nbsp;a&nbsp;specific&nbsp;content&nbsp;id</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadContent">loadContent</a><span class="src-sym">(&nbsp;</span><span class="src-num">23&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;List&nbsp;of&nbsp;content&nbsp;versions</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionInfos&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersions">loadVersions</a><span class="src-sym">(&nbsp;</span><span class="src-var">$contentInfo&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-key">foreach</span><span class="src-sym">(&nbsp;</span><span class="src-var">$versionInfos&nbsp;</span><span class="src-key">as&nbsp;</span><span class="src-var">$versionInfo</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">if</span><span class="src-sym">(</span><span class="src-var">$versionInfo</span><span class="src-sym">-&gt;</span><span class="src-id">status&nbsp;</span>==&nbsp;<span class="src-id"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span><span class="src-sym">::</span><span class="src-id">STATUS_ARCHIVED</span><span class="src-sym">)&nbsp;</span><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methoddeleteVersion">deleteVersion</a><span class="src-sym">(</span><span class="src-var">$versionInfo</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">}</span></div></li>
+<li><div class="src-line"><span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Copy&nbsp;content&nbsp;object&nbsp;only&nbsp;with&nbsp;latest&nbsp;version</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;load&nbsp;the&nbsp;latesst&nbsp;version</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersionInfoById">loadVersionInfoById</a><span class="src-sym">(</span><span class="src-num">23</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Instantiate&nbsp;a&nbsp;location&nbsp;create&nbsp;struct</span></div></li>
+<li><div class="src-line"><span class="src-var">$locationCreate&nbsp;</span>=&nbsp;<span class="src-var">$locationService</span><span class="src-sym">-&gt;</span><span class="src-id">newLocationCreate</span><span class="src-sym">(</span><span class="src-num">123</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Copy&nbsp;content&nbsp;in&nbsp;latest&nbsp;version</span></div></li>
+<li><div class="src-line"><span class="src-var">$version&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="http://www.php.net/copy">copy</a><span class="src-sym">(&nbsp;</span><span class="src-var">$versionInfo</span><span class="src-sym">-&gt;</span><span class="src-id">contentInfo</span><span class="src-sym">,&nbsp;</span><span class="src-var">$locationCreate</span><span class="src-sym">,&nbsp;</span><span class="src-var">$versionInfo&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Find&nbsp;a&nbsp;set&nbsp;of&nbsp;matching&nbsp;versions</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Create&nbsp;a&nbsp;simple&nbsp;search&nbsp;query</span></div></li>
+<li><div class="src-line"><span class="src-var">$query&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span>\<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Values</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$query</span><span class="src-sym">-&gt;</span><span class="src-id">criterion&nbsp;</span>=&nbsp;<span class="src-key">new&nbsp;</span>\<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Values</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html">Criterion</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/LogicalAnd.html">LogicalAnd</a></span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">array</span><span class="src-sym">(</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">new&nbsp;</span>\<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Values</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html">Criterion</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Field.html">Field</a></span><span class="src-sym">(&nbsp;</span><span class="src-str">'title'</span><span class="src-sym">,&nbsp;</span>\<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Values</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html">Criterion</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Operator.html">Operator</a></span><span class="src-sym">::</span><span class="src-id">LIKE</span><span class="src-sym">,&nbsp;</span><span class="src-str">'*foo*'&nbsp;</span><span class="src-sym">)</span><span class="src-sym">,</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-key">new&nbsp;</span>\<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Values</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html">Criterion</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Field.html">Field</a></span><span class="src-sym">(&nbsp;</span><span class="src-str">'abstract'</span><span class="src-sym">,&nbsp;</span>\<span class="src-id">ezp</span>\<span class="src-id">PublicAPI</span>\<span class="src-id">Values</span>\<span class="src-id">Content</span>\<span class="src-id"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Criterion.html">Criterion</a></span>\<span class="src-id"><a href="../ezp-PublicAPI-Values-Content-Query/Operator.html">Operator</a></span><span class="src-sym">::</span><span class="src-id">LIKE</span><span class="src-sym">,&nbsp;</span><span class="src-str">'*foo*'&nbsp;</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<span class="src-sym">)</span></div></li>
+<li><div class="src-line"><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Search&nbsp;for&nbsp;matching&nbsp;versions</span></div></li>
+<li><div class="src-line"><span class="src-var">$searchResult&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><span class="src-id">find</span><span class="src-sym">(&nbsp;</span><span class="src-var">$query</span><span class="src-sym">,&nbsp;</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-sym">)&nbsp;)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Dump&nbsp;version&nbsp;number&nbsp;for&nbsp;all&nbsp;found&nbsp;versions</span></div></li>
+<li><div class="src-line"><span class="src-key">foreach&nbsp;</span><span class="src-sym">(&nbsp;</span><span class="src-var">$searchResult</span><span class="src-sym">-&gt;</span><span class="src-id">items&nbsp;</span><span class="src-key">as&nbsp;</span><span class="src-var">$version&nbsp;</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line"><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;<span class="src-var">$version</span><span class="src-sym">-&gt;</span><span class="src-id">getVersionInfo</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">-&gt;</span><span class="src-id">versionNo</span><span class="src-sym">,&nbsp;</span><span class="src-id">PHP_EOL</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Add&nbsp;a&nbsp;relation</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;specific&nbsp;version&nbsp;info</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersionInfoById">loadVersionInfoById</a><span class="src-sym">(&nbsp;</span><span class="src-num">42&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Add&nbsp;a&nbsp;relation</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodaddRelation">addRelation</a><span class="src-sym">(&nbsp;</span><span class="src-var">$versionInfo</span><span class="src-sym">,&nbsp;</span><span class="src-num">23&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Load&nbsp;all&nbsp;outgoing&nbsp;relations</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;the&nbsp;content&nbsp;info&nbsp;instance</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadContentByRemoteId">loadContentByRemoteId</a><span class="src-sym">(&nbsp;</span><span class="src-str">'remote'&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;the&nbsp;latest&nbsp;version&nbsp;info&nbsp;for&nbsp;the&nbsp;content&nbsp;object</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersionInfo">loadVersionInfo</a><span class="src-sym">(&nbsp;</span><span class="src-var">$contentInfo&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Now&nbsp;load&nbsp;all&nbsp;outgoing&nbsp;relations</span></div></li>
+<li><div class="src-line"><span class="src-key">foreach&nbsp;</span><span class="src-sym">(&nbsp;</span><span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadOutgoingRelations">loadOutgoingRelations</a><span class="src-sym">(&nbsp;</span><span class="src-var">$versionInfo&nbsp;</span><span class="src-sym">)&nbsp;</span><span class="src-key">as&nbsp;</span><span class="src-var">$relation&nbsp;</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line"><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.php.net/var_dump">var_dump</a><span class="src-sym">(&nbsp;</span><span class="src-var">$relation</span><span class="src-sym">-&gt;</span><span class="src-id">type&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Load&nbsp;all&nbsp;incoming&nbsp;relations</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;the&nbsp;used&nbsp;content&nbsp;info&nbsp;object</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadContent">loadContent</a><span class="src-sym">(&nbsp;</span><span class="src-num">17&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;the&nbsp;incoming&nbsp;relations&nbsp;for&nbsp;the&nbsp;content&nbsp;info&nbsp;object</span></div></li>
+<li><div class="src-line"><span class="src-key">foreach&nbsp;</span><span class="src-sym">(&nbsp;</span><span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadIncomingRelations">loadIncomingRelations</a><span class="src-sym">(&nbsp;</span><span class="src-var">$contentInfo&nbsp;</span><span class="src-sym">)&nbsp;</span><span class="src-key">as&nbsp;</span><span class="src-var">$relation&nbsp;</span><span class="src-sym">)</span></div></li>
+<li><div class="src-line"><span class="src-sym">{</span></div></li>
+<li><div class="src-line">&nbsp;&nbsp;&nbsp;&nbsp;echo&nbsp;<span class="src-var">$relation</span><span class="src-sym">-&gt;</span><span class="src-id">sourceContentId</span><span class="src-sym">,&nbsp;</span><span class="src-str">'&nbsp;--&gt;&nbsp;'</span><span class="src-sym">,&nbsp;</span><span class="src-var">$relation</span><span class="src-sym">-&gt;</span><span class="src-id">destinationContentId</span><span class="src-sym">,&nbsp;</span><span class="src-id">PHP_EOL</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-sym">}</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;Remove&nbsp;a&nbsp;relation</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;the&nbsp;content&nbsp;info&nbsp;instance</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadContent">loadContent</a><span class="src-sym">(&nbsp;</span><span class="src-num">42&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Load&nbsp;specific&nbsp;version&nbsp;info</span></div></li>
+<li><div class="src-line"><span class="src-var">$versionInfo&nbsp;</span>=&nbsp;<span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/ContentService.html#methodloadVersionInfo">loadVersionInfo</a><span class="src-sym">(&nbsp;</span><span class="src-var">$contentInfo</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
+<li><div class="src-line"><span class="src-comm">//&nbsp;Remove&nbsp;a&nbsp;relation</span></div></li>
+<li><div class="src-line"><span class="src-var">$contentService</span><span class="src-sym">-&gt;</span><span class="src-id">removeRelation</span><span class="src-sym">(&nbsp;</span><span class="src-var">$version</span><span class="src-sym">,&nbsp;</span><span class="src-num">23&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+</ol></div>
+</div>
+	<p class="notes" id="credit">
+		Documentation generated on Tue, 17 Jan 2012 16:03:44 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+	</p>
+	</body>
+</html>
