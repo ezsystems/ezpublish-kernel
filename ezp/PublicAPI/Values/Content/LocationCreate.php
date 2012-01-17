@@ -8,7 +8,7 @@ use ezp\PublicAPI\Values\ValueObject;
  *
  */
 abstract class LocationCreate extends ValueObject {
-		
+
     /**
      * Location priority
      *
@@ -66,5 +66,5 @@ abstract class LocationCreate extends ValueObject {
      * @var int
      */
     public $parentLocationId;
-	
+
 }

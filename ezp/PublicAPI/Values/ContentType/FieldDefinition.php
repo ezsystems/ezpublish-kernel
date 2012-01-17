@@ -2,7 +2,7 @@
 namespace ezp\PublicAPI\Values\ContentType;
 use ezp\PublicAPI\Value\ValueObject;
 /**
- * 
+ *
  * This class represents a field definiton
  * @property-read $names calls getNames() or on access getName($language)
  * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
@@ -22,10 +22,10 @@ class FieldDefinition extends ValueObject
      * Readable string identifier of a field definition
      *
      * @var string
-    */
+     */
     public $identifier;
 
-     /**
+    /**
      * This method returns the human readable name of this field in all provided languages
      * of the content type
      *
@@ -37,9 +37,9 @@ class FieldDefinition extends ValueObject
      * @return string[]
      */
     public abstract function getNames();
-    
+
     /**
-     * 
+     *
      * this method returns the name of the field in the given language
      * @param string $languageCode
      * @return string the name for the given language or null if none existis.
@@ -57,15 +57,15 @@ class FieldDefinition extends ValueObject
      * @return string[]
      */
     public abstract function getDescriptions();
-    
+
     /**
      * this method returns the name of the field in the given language
      * @param string $languageCode
      * @return string the description for the given language or null if none existis.
      */
     public abstract function getDescription($languageCode);
-    
-    
+
+
     /**
      * Field group name
      *

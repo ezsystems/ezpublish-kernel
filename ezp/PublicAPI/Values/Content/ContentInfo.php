@@ -6,7 +6,7 @@ use ezp\PublicAPI\Values\ContentType\ContentType;
 use ezp\PublicAPI\Values\Content\Location;
 
 /**
- * 
+ *
  * This class provides all version indepndent information of the content object.
  * @property-read $contentType calls {@link getContentType()}
  *
@@ -31,7 +31,7 @@ class ContentInfo extends ValueObject
      * @var string
      */
     public $name;
-    
+
     /**
      * The content type of this content object
      * @return ContentType
@@ -46,7 +46,7 @@ class ContentInfo extends ValueObject
 
     /**
      * the owner of this content object
-     * 
+     *
      * @var int
      */
     public $ownerId;
@@ -91,10 +91,10 @@ class ContentInfo extends ValueObject
     public $remoteId;
 
     /**
-     * The main language of the content. 
+     * The main language of the content.
      * @var mixed
      */
     public $mainLanguage;
-    
+
 }
 ?>

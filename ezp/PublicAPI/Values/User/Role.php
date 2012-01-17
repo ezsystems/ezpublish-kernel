@@ -29,7 +29,7 @@ abstract class Role extends ValueObject
      * @var string
      */
     public $description;
-    
+
     /**
      * returns the list of policies of this role
      * @return array an array of {@link Policy}
@@ -41,9 +41,9 @@ abstract class Role extends ValueObject
      * @return Policy
      */
     public abstract function getPolicy($module, $function);
-    
+
     /**
-     * 
+     *
      * returns a list of users and user groups assigned to this Role
      * @return mixed[]
      */

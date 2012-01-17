@@ -20,18 +20,18 @@ abstract class ContentTypeGroupUpdate extends ValueObject
     public $identifier;
 
     /**
-     * 
+     *
      * if set this value overrides the current user as modifier
      * @var int
      */
     public $modifierId = null;
-    
+
     /**
      * If set this value overrides the current time for modified
      * @var int (unix timestamp)
      */
     public $modified = null;
-    
+
 
     /**
      * 5.x only
@@ -39,15 +39,15 @@ abstract class ContentTypeGroupUpdate extends ValueObject
      * @var string
      */
     public $initialLanguageCode;
-    
-     /**
+
+    /**
      * 5.x only
      * set a content type group name for the given language
      * @param string $name
      * @param string $language if not given the initialLanguage is used as default
      */
     public abstract function setName($name, $language = null);
-        
+
     /**
      * 5.x only
      * set a content type description for the given language
@@ -55,5 +55,5 @@ abstract class ContentTypeGroupUpdate extends ValueObject
      * @param string $language if not given the initialLanguage is used as default
      */
     public abstract function setDescription($description, $language = null);
-    }
+}
 ?>

@@ -50,13 +50,13 @@ interface LocationService
      * @throws \ezp\Base\Exception\NotFound If the specified location is not found
      */
     public function loadLocationByRemoteId( $remotenId );
-        
+
     /**
      * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
-     * 
+     *
      * @param Location $location
      * @param int $offset the start offset for paging
-     * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned 
+     * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
      * @return array of {@link Location}
      */
     public function loadLocationChildren( /*Location*/ $location, $offset = 0, $limit = -1 );
@@ -68,7 +68,7 @@ interface LocationService
      * @param LocationCreate $location
      * @return Location the newly created Location
      * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to create this location
-     * @throws ezp\Base\Exception\Forbidden  if the content is already below the specified parent 
+     * @throws ezp\Base\Exception\Forbidden  if the content is already below the specified parent
      *                                        or the parent is a sub location of the location the content
      *                                        or if set the remoteId existis already
      */
@@ -102,7 +102,7 @@ interface LocationService
      * @throws \ezp\Base\Exception\Unauthorized If the current user user is not allowed to hide this location
      */
     public function hideLocation( /*Location*/ $location );
-    
+
     /**
      * Unhides the $location and marks visible all descendants of $locations
      * until a hidden location is found.
@@ -126,7 +126,7 @@ interface LocationService
 
     /**
      * Deletes the $locations and all descendants of $location.
-     * If $overridePermissions is set to false and a user has no permission to delete a descendant 
+     * If $overridePermissions is set to false and a user has no permission to delete a descendant
      * it is not deleted and the location path to this item is left untouched i.e. only the
      * locations on which the user has permission to delete are deleted.
      * Otherwise if $overridePermissions is set to true (default) the method deletes all descendants
@@ -134,21 +134,21 @@ interface LocationService
      *
      * @param Location $location
      * @param boolean $overridePermissions
-     * @throws ezp\Base\Exception\Unauthorized If the current user is not allowed to delete this location 
-     *                                       
+     * @throws ezp\Base\Exception\Unauthorized If the current user is not allowed to delete this location
+     *
      */
     public function deleteLocation( /*Location*/ $location, $overridePermissions = true );
 
 
     /**
-     * instanciates a new location create class	
+     * instanciates a new location create class
      * @param int $parentLocationId the parent under which the new location should be created
      * @return LocationCreate
      */
     public function newLocationCreate($parentLocationId);
-    
+
     /**
-     * instanciates a new location update class	
+     * instanciates a new location update class
      * @return LocationUpdate
      */
     public function newLocationUpdate();

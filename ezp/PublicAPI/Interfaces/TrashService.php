@@ -21,17 +21,17 @@ interface TrashService
      * Note that $id is identical to original location, which has been previously trashed
      * @param integer $trashItemId
      * @return TrashItem
-	 * @throws ezp\Base\Exception\Unauthorized if the user is not allowd to read the trashed location
-	 * @throws ezp\Base\Exception\NotFound - if the location with the given id does not exist
+     * @throws ezp\Base\Exception\Unauthorized if the user is not allowd to read the trashed location
+     * @throws ezp\Base\Exception\NotFound - if the location with the given id does not exist
      */
     public function loadTrashItem( $trashItemId );
-    
+
     /**
      * Sends $location and all its children to trash and returns the corresponding trash item
      * Content is left untouched.
      * @param Location $location
      * @return TrashItem
-	 * @throws ezp\Base\Exception\Unauthorized if the user is not allowd to trash the given location
+     * @throws ezp\Base\Exception\Unauthorized if the user is not allowd to trash the given location
      */
     public function trash( /*Location*/ $location );
 
@@ -40,26 +40,26 @@ interface TrashService
      * If $newParentLocation is provided, $trashedLocation will be restored under it.
      *
      * @param TrashItem $trashItem
-     * @param LocationCreate $newParentLocation 
+     * @param LocationCreate $newParentLocation
      * @return Location the newly created or recovered location
-	 * @throws ezp\Base\Exception\Unauthorized if the user is not allowd to recover the trash item at the parent location location
+     * @throws ezp\Base\Exception\Unauthorized if the user is not allowd to recover the trash item at the parent location location
      */
     public function recover( /*TrashItem*/ $trashItem, /*LocationCreate*/ $newParentLocation = null );
-    
+
     /**
      * Empties trash.
-     * All locations contained in the trash will be removed. Content objects will be removed 
+     * All locations contained in the trash will be removed. Content objects will be removed
      * if all locations of the content are gone.
-	 * @throws ezp\Base\Exception\Unauthorized if the user is not allowd to empty the trash
+     * @throws ezp\Base\Exception\Unauthorized if the user is not allowd to empty the trash
      */
     public function emptyTrash();
-    
+
     /**
      * Deletes a trash item
      * The corresponding content object will be removed
      *
      * @param TrashItem $trashItem
-	 * @throws ezp\Base\Exception\Unauthorized if the user is not allowd to delete this trash item
+     * @throws ezp\Base\Exception\Unauthorized if the user is not allowd to delete this trash item
      */
     public function deleteTrashItem( /*TrashItem*/ $trashItem );
 

@@ -7,31 +7,31 @@ use ezp\PublicAPI\Values\ValueObject;
  */
 class Relation extends ValueObject
 {
-	/**
-	 * The relation type COMMON is a general relation between object set by a user.
-	 * @var int
-	 */
-	const COMMON = 1;
-	
-	/**
-	 * the relation type EMBED is set for a relation which is anchored as embedded link in an attribute value
-	 * @var int
-	 */
+    /**
+     * The relation type COMMON is a general relation between object set by a user.
+     * @var int
+     */
+    const COMMON = 1;
+
+    /**
+     * the relation type EMBED is set for a relation which is anchored as embedded link in an attribute value
+     * @var int
+     */
     const EMBED = 2;
-    
-	/**
-	 * the relation type LINK is set for a relation which is anchored as link in an attribute value
-	 * @var int
-	 */
+
+    /**
+     * the relation type LINK is set for a relation which is anchored as link in an attribute value
+     * @var int
+     */
     const LINK = 4;
-    
-	/**
-	 * the relation type ATTRIBUTE is set for a relation which is part of an relation attribute value
-	 * @var int
-	 */
+
+    /**
+     * the relation type ATTRIBUTE is set for a relation which is part of an relation attribute value
+     * @var int
+     */
     const ATTRIBUTE = 8;
-	
-	
+
+
     /**
      * Id of the relation
      *
@@ -48,7 +48,7 @@ class Relation extends ValueObject
      * @var mixed
      */
     public $sourceFieldDefinitionId;
-    
+
     /**
      * the content id of the source of the relation
      * @var mixed

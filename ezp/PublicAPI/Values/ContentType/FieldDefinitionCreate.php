@@ -11,38 +11,38 @@ use ezp\PublicAPI\Values\ValueObject;
  * @property-write $description calls setDescription() for setting a description in an initial language
  */
 abstract class FieldDefinitionCreate extends ValueObject {
-	
+
     /**
      * String identifier of the field type
      *
      * @var string
      */
     public $fieldTypeIdentifier;
-	
-	
-	/**
+
+
+    /**
      * Readable string identifier of a field definition
      *
      * @var string
-    */
+     */
     public $identifier;
 
     /**
      * set a field definition name for the given language
      * @param string $name
-     * @param string $language 
+     * @param string $language
      */
     public abstract function setName($name, $language);
-        
+
     /**
      * set a  fie definition description for the given language
      * @param string $description
-     * @param string $language 
+     * @param string $language
      */
     public abstract function setDescription($description, $language);
-    
-    
-    
+
+
+
     /**
      * Field group name
      *
@@ -84,13 +84,13 @@ abstract class FieldDefinitionCreate extends ValueObject {
      * @param Validator $validator
      */
     public abstract function setValidator(/*Validator*/ $validator);
-    
-     /**
-     * 
+
+    /**
+     *
      * sets a field settings map supported by the field type
      * @param array $fieldSettings
      */
-     public abstract function setFieldSettings(array $fieldSettings);
+    public abstract function setFieldSettings(array $fieldSettings);
 
     /**
      * Default value of the field
@@ -105,6 +105,6 @@ abstract class FieldDefinitionCreate extends ValueObject {
      * @var bool
      */
     public $isSearchable;
-	
-	
+
+
 }

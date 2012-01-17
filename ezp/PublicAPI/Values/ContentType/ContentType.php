@@ -8,13 +8,13 @@ use ezp\PublicAPI\Values\ContentType\FieldDefinition;
 use ezp\PublicAPI\Values\ContentType\ContentTypeGroup;
 
 /**
- * 
+ *
  * this class represents a content type value
  * @property-read array $names calls getNames() or on access getName($language)
  * @property-read array $descriptions calls getDescriptions() or on access getDescription($language)
- * @property-read array $contentTypeGroups calls getContentTypeGroups 
+ * @property-read array $contentTypeGroups calls getContentTypeGroups
  * @property-read array $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
- * 
+ *
  */
 abstract class ContentType extends ValueObject
 {
@@ -58,9 +58,9 @@ abstract class ContentType extends ValueObject
      * @return string[]
      */
     public abstract function getNames();
-    
+
     /**
-     * 
+     *
      * this method returns the name of the content type in the given language
      * @param string $languageCode
      * @return string the name for the given language or null if none existis.
@@ -78,15 +78,15 @@ abstract class ContentType extends ValueObject
      * @return string[]
      */
     public abstract function getDescriptions();
-    
+
     /**
      * this method returns the name of the content type in the given language
      * @param string $languageCode
      * @return string the description for the given language or null if none existis.
      */
     public abstract function getDescription($languageCode);
-    
-    
+
+
     /**
      * String identifier of a content type
      *
@@ -167,14 +167,14 @@ abstract class ContentType extends ValueObject
     public $mainLanguageCode;
 
     /**
-     * if an instance of acontent type is created the always available flag is set 
+     * if an instance of acontent type is created the always available flag is set
      * by default this this value.
      *
      * @var bool
      */
     public $defaultAlwaysAvailable = true;
-    
-    
+
+
     /**
      * Specifies which property the child locations should be sorted on by default when created
      *
@@ -205,15 +205,15 @@ abstract class ContentType extends ValueObject
      * @return array an array of {@link FieldDefinition}
      */
     public abstract function getFieldDefinitions();
-    
+
     /**
-     * 
+     *
      * this method returns the field definition for the given identifier
      * @param $fieldDefinitionIdentifier
      * @return FieldDefinition
      */
     public abstract function getFieldDefinition($fieldDefinitionIdentifier);
-    
+
 
 }
 ?>

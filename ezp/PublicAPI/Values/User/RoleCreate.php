@@ -21,9 +21,9 @@ abstract class RoleCreate extends ValueObject
      * @var string
      */
     public $description;
-    
+
     /**
-     * 
+     *
      * adds a policy to this role
      * @param PolicyCreate $policyCreate
      */

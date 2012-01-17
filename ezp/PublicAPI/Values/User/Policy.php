@@ -40,7 +40,7 @@ abstract class Policy extends ValueObject
     public $function;
 
     /**
-     * 
+     *
      * @return array an array of limitations
      */
     public abstract function getLimitations();

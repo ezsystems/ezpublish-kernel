@@ -22,7 +22,7 @@ interface SectionService
      *
      * @param string $identifier
      * @param string $name
-     * 
+     *
      * @return Section The newly create section
      * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to create a section
      * @throws ezp\Base\Exception\Forbidden If the new identifier already exists
@@ -57,7 +57,7 @@ interface SectionService
      * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to read a section
      */
     public function loadSections();
-    
+
     /**
      * Loads a Section from its identifier ($sectionIdentifier)
      *
@@ -78,7 +78,7 @@ interface SectionService
 
     /**
      * assigns the content to the given section
-     *
+     * this method overrides the current assigned section
      *
      * @param ContentInfo $content
      * @param Section $section
@@ -86,19 +86,19 @@ interface SectionService
      */
     public function assignSection( /*ContentInfo*/ $content, /*Section*/ $section );
 
-     /**
+    /**
      * Assigns $section to the contents held by $startingPoint location and
      * all contents held by descendants locations of $startingPoint to which the user has
-     * the permission to assign a section 
+     * the permission to assign a section
      *
      * @param Location $startingPoint
      * @param Section $section
      * @return array  a list (string) of descendants which are not changed due to permissions
      * @throws ezp\Base\Exception\Unauthorized If the current user is not allowed to assign a section to this location
-     *                                       
+     *
      */
     public function assignSectionToSubtree( /*Location*/ $startingPoint, /*Section*/ $section );
-    
+
     /**
      * Deletes $section from content repository
      *

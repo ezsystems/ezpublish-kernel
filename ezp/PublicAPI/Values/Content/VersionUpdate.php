@@ -3,7 +3,7 @@ namespace ezp\PublicAPI\Values\Content;
 use ezp\PublicAPI\Values\ValueObject;
 /**
  * This class is used for updating the fields of a version
- * @property-write array $fields TBD
+ * @property-write FieldCollection $fields
  */
 abstract class VersionUpdate extends ValueObject
 {
@@ -15,14 +15,14 @@ abstract class VersionUpdate extends ValueObject
 
 
     /**
-      * The language code of the version. In 4.x this code will be used as the language code of the translation
-      * (which is shown in the admin interface). 
-      * It is also used as default language for added fields.
-      * @var string
-      */
+     * The language code of the version. In 4.x this code will be used as the language code of the translation
+     * (which is shown in the admin interface).
+     * It is also used as default language for added fields.
+     * @var string
+     */
     public $initialLanguageCode;
-       
-        /**
+     
+    /**
      * Adds a field to the field collection.
      * This method could also be implemented by ArrayAccess so that
      * $fielfs[$fieldDefIdentifer][$language] = $value or without language $fielfs[$fieldDefIdentifer] = $value
@@ -32,7 +32,7 @@ abstract class VersionUpdate extends ValueObject
      * @param string $language If not ghiven on a translatable field the initial language is used,
      */
     public abstract function setField($fieldDefIdentifier, $value, $language = false);
-    
-    
+
+
 }
 ?>

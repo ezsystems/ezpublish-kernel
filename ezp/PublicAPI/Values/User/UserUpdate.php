@@ -18,15 +18,15 @@ class UserUpdate extends ValueObject {
      *
      * @var string
      */
-	public $email = null;
+    public $email = null;
 
-	 /**
+    /**
      * if set the password is updated with this plain password
      *
      * @var string
      */
     public $password = null;
-    
+
     /**
      * Flag to signal if user is enabled or not
      * If set the enabled status is changed to this value
@@ -41,19 +41,19 @@ class UserUpdate extends ValueObject {
      * @var int
      */
     public $maxLogin = null;
-    
-    
+
+
     /**
      * the update structure  for the profile version
      * @var VersionUpdate
      */
     public $versionUpdate = null;
-    
+
     /**
      * the update structure  for the profile meta data
      * @var ContentUpdate
      */
     public $contentUpdate = null;
-    
-	
+
+
 }

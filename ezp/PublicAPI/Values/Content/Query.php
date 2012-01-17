@@ -8,7 +8,7 @@ use ezp\PublicAPI\Values\Content\Query\Criterion;
 use ezp\PublicAPI\Values\Content\Query\SortClause;
 
 /**
- * This class is used to perform a query 
+ * This class is used to perform a query
  */
 class Query extends ValueObject
 {

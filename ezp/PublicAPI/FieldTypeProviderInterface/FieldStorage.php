@@ -5,7 +5,7 @@
 namespace ezp\PublicAPI\FieldTypeProviderInterface;
 use ezp\Persistence\Content\Field;
 
- /**
+/**
  * Interface for setting field type data.
  *
  * Methods in this interface are called by storage engine.
@@ -20,13 +20,13 @@ use ezp\Persistence\Content\Field;
  *   - connection = {@link \ezp\Persistence\Storage\Legacy\EzcDbHandler} object handler (for DB connection),
  *                  to be used accordingly to
  *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
- * 	 
- * @package FieldTypeProviderInterface               
+ *
+ * @package FieldTypeProviderInterface
  */
 interface FieldStorage
 {
     /**
-     * 
+     *
      * Allows custom field types to store data in an external source (e.g. another DB table).
      *
      * Stores value for $field in an external data source.

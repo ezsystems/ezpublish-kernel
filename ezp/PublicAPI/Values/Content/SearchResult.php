@@ -5,17 +5,17 @@ namespace ezp\PublicAPI\Values\Content;
 use ezp\PublicAPI\Value\ValueObject;
 
 /**
- * 
+ *
  * This class is returnd by find methods providing a result of a search.
  */
 class SearchResult extends ValueObject
 {
-	/**
-	 * the query this result is based on
-	 * @var Query
-	 */
-	public $query;
-	
+    /**
+     * the query this result is based on
+     * @var Query
+     */
+    public $query;
+
     /**
      * Number of results found by the search
      *

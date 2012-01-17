@@ -11,27 +11,27 @@ use ezp\PublicAPI\Values\ValueObject;
  */
 abstract class UserGroup extends Version {
 
-	/**
-	 * The id of the user group
-	 * 
-	 * @var integer
-	 */
-	public $id;
-	
-	/**
-	 * 
-	 * the parent id of the user group
-	 * @var integer
-	 */
-	public $parentId;
-	
-	/**
-	 * 
-	 * The number of sub groups
-	 * @var integer
-	 */
-	public $subGroupCount;
-	
- 	
-	
+    /**
+     * The id of the user group
+     *
+     * @var integer
+     */
+    public $id;
+
+    /**
+     *
+     * the parent id of the user group
+     * @var integer
+     */
+    public $parentId;
+
+    /**
+     *
+     * The number of sub groups
+     * @var integer
+     */
+    public $subGroupCount;
+
+
+
 }

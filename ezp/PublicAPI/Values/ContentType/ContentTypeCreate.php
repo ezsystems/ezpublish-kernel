@@ -13,10 +13,10 @@ use ezp\PublicAPI\Values\Content\Location;
  * @property-write $name calls setName() for setting a namein the initial language
  * @property-write $descriptions $descriptions[$language] calls setDescription($language)
  * @property-write $description calls setDescription() for setting a description in an initial language
- * 
+ *
  */
 abstract class ContentTypeCreate extends ValueObject
-{	
+{
     /**
      * String identifier of a type
      * @var string
@@ -24,11 +24,11 @@ abstract class ContentTypeCreate extends ValueObject
     public $identifier;
 
     /**
-     * Initial language Code. 
+     * Initial language Code.
      * @var mixed
      */
     public $initialLanguageCode;
-    
+
     /**
      * The renote id
      * @var string
@@ -74,7 +74,7 @@ abstract class ContentTypeCreate extends ValueObject
 
 
     /**
-     * if an instance of acontent type is created the always available flag is set 
+     * if an instance of acontent type is created the always available flag is set
      * by default this this value.
      *
      * @var bool
@@ -87,28 +87,28 @@ abstract class ContentTypeCreate extends ValueObject
      * @param string $language if not given the initialLanguage is used as default
      */
     public abstract function setName($name, $language = null);
-        
+
     /**
      * set a content type description for the given language
      * @param string $description
      * @param string $language if not given the initialLanguage is used as default
      */
     public abstract function setDescription($description, $language = null);
-    
+
     /**
-     * 
+     *
      * adds a new field definition
      * @param FieldDefinitionCreate $fieldDef
      */
     public abstract function addFieldDefinition(/*FieldDefinitionCreate*/ $fieldDef);
-    
+
     /**
-     * 
+     *
      * if set this value overrides the current user as creator
      * @var int
      */
     public $creatorId = null;
-    
+
     /**
      * If set this value overrides the current time for creation
      * @var int (unix timestamp)

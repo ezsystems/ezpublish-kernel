@@ -73,34 +73,34 @@ abstract class ContentTypeUpdate extends ValueObject
      * @var bool
      */
     public $defaultAlwaysAvailable;
-    
+
     /**
      * set a content type name for the given language
      * @param string $name
      * @param string $language if not given the initialLanguage is used as default
      */
     public abstract function setName($name, $language = null);
-        
+
     /**
      * set a content type description for the given language
      * @param string $description
      * @param string $language if not given the initialLanguage is used as default
      */
     public abstract function setDescription($description, $language = null);
-    
+
      
     /**
-     * 
+     *
      * if set this value overrides the current user as creator
      * @var int
      */
     public $modifierId = null;
-    
+
     /**
      * If set this value overrides the current time for creation
      * @var int (unix timestamp)
      */
     public $modified = null;
-        
+
 }
 ?>

@@ -27,7 +27,7 @@ abstract class PolicyCreate extends ValueObject
     public $function;
 
     /**
-     * 
+     *
      * adds a limitation with the given identifier and list of values
      * @param string identifier - the identifier of the limitation. Example identifiers
      *        Class, Section, ParentOwner, ParentClass, ParentGroup, ParentDepth, Language, Subtree, SiteAccess

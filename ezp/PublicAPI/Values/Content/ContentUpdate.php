@@ -12,14 +12,14 @@ namespace ezp\PublicAPI\Values\Content;
 use ezp\PublicAPI\Values\ValueObject;
 
 /**
- * 
+ *
  * With this class data can be provided to update version independent fields of the content.
- * It is used in content update methods. 
+ * It is used in content update methods.
  *
  */
 class ContentUpdate extends ValueObject
 {
- 
+
     /**
      * If set this value changes the owner id of the content object
      * @var integer
@@ -44,7 +44,7 @@ class ContentUpdate extends ValueObject
      * @var string
      */
     public $mainLanguageCode;
-    
+
     /**
      * If set this value changes the always available flag
      * @var boolean
@@ -52,12 +52,12 @@ class ContentUpdate extends ValueObject
     public $alwaysAvailable;
 
     /**
-     * 
+     *
      * if set it changes the remoteId
      * @var string
      */
     public $remoteId;
-    
+
 
 }
 ?>

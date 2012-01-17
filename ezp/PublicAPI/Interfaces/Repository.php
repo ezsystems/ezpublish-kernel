@@ -22,28 +22,28 @@ interface Repository
      * @return User
      */
     public function getUser();
-    
+
     /**
-     * 
+     *
      * sets the current user to the user with the given user id
      * @param User $user
      */
     public function setCurrentUser( /*User*/ $user );
 
     /**
-     * 
-     * 
+     *
+     *
      * @param string $module
      * @param string $function
      * @param \ezp\PublicAPI\Values\User\User $user
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
     public function hasAccess($module, $function, User $user = null);
-    
+
     /**
-     * 
+     *
      * indicates if the current user is allowed to perform an action given by the function on the given
-     * objects, 
+     * objects,
      * @param string $module
      * @param string $function
      * @param ValueObject $value

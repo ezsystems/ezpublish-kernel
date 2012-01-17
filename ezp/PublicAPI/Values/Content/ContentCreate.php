@@ -5,12 +5,12 @@ use ezp\PublicAPI\Values\ContentType\ContentType;
 use ezp\PublicAPI\Values\ValueObject;
 
 /**
- * This class is used for creating a new content object 
- * @property-write array $fields TBD
+ * This class is used for creating a new content object
+ * @property-write FieldsCollection $fields
  */
 abstract class ContentCreate extends ValueObject
 {
-	
+
     /**
      * The content type for which the new content is created
      * @var ContentType
@@ -43,11 +43,11 @@ abstract class ContentCreate extends ValueObject
     public $remoteId = null;
 
     /**
-      * the main language code for the content. This language will also
-      * be used for as initial language for the first created version. 
-      * It is also used as default language for added fields.
-      * @var string
-      */
+     * the main language code for the content. This language will also
+     * be used for as initial language for the first created version.
+     * It is also used as default language for added fields.
+     * @var string
+     */
     public $mainLanguageCode;
 
 
@@ -56,18 +56,18 @@ abstract class ContentCreate extends ValueObject
      * @var integer - the time stamp
      */
     public $modified = null;
-    
+
     /**
      * Adds a field to the field collection.
      * This method could also be implemented by a magic setter so that
      * $fielfs[$fieldDefIdentifer][$language] = $value or without language $fielfs[$fieldDefIdentifer] = $value
      * is an aquivalent call.
      * @param string $fieldIdentifier the identifier of the field definition
-     * @param mixed $value Either a plain value which is understandable by the corresponding 
+     * @param mixed $value Either a plain value which is understandable by the corresponding
      *        field type or an instance of a Value class provided by the field type
      * @param string $language If not ghiven on a translatable field the initial language is used,
      */
     public abstract function setField($fieldDefIdentifier, $value, $language = null);
-    
+
 }
 ?>

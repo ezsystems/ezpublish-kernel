@@ -9,18 +9,18 @@ use ezp\PublicAPI\Values\ValueObject;
  * are providing a set of concrete validators.
  */
 abstract class Validator extends ValueObject {
-	
-	/**
-	 * The name of the validator
-	 * @var string
-	 */
-	public $name;
-	
-	/**
-	 * a map of the parameters of the validator
-	 * 
-	 * @var array
-	 */
-	public $parameters;
-	
+
+    /**
+     * The name of the validator
+     * @var string
+     */
+    public $name;
+
+    /**
+     * a map of the parameters of the validator
+     *
+     * @var array
+     */
+    public $parameters;
+
 }

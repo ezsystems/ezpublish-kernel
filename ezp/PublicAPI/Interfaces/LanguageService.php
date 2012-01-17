@@ -22,7 +22,7 @@ interface LanguageService
      * @throws ezp\Base\Exception\Forbidden if the locale already exists
      */
     public function create( $languageCode, $name, $isEnabled = true );
- 
+
     /**
      * Changes the name of the language in the content repository
      *
@@ -38,7 +38,7 @@ interface LanguageService
      * @throws ezp\Base\Exception\Unauthorized If user does not have access to content translations
      */
     public function enable($languageCode);
-    
+
     /**
      * disables a language
      *
@@ -46,7 +46,7 @@ interface LanguageService
      * @throws ezp\Base\Exception\Unauthorized If user does not have access to content translations
      */
     public function disable($languageCode);
-    
+
     /**
      * Loads a Language from its id ($languageId)
      *
@@ -83,5 +83,5 @@ interface LanguageService
      */
     public function delete( $languageCode );
 
- }
+}
 ?>

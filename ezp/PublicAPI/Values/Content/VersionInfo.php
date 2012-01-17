@@ -16,7 +16,7 @@ abstract class VersionInfo extends ValueObject
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
     const STATUS_ARCHIVED = 2;
-		
+
     /**
      * Version ID.
      *
@@ -42,14 +42,14 @@ abstract class VersionInfo extends ValueObject
     public abstract function getContentInfo();
 
     /**
-     * 
+     *
      * Returns the name computed from the name schema in the given language.
      * If no language is given the name in initial language of the version if present, otherwise null.
      * @param string $languageCode
      */
-	public abstract function getName($languageCode = null);
-    
-    
+    public abstract function getName($languageCode = null);
+
+
     /**
      * @var int
      */

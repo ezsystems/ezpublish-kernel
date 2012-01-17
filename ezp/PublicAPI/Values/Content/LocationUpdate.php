@@ -2,7 +2,7 @@
 namespace ezp\PublicAPI\Values\Content;
 use ezp\PublicAPI\Values\ValueObject;
 /**
- * 
+ *
  * This class is used for updating location meta data.
  *
  */
@@ -45,5 +45,5 @@ class LocationUpdate extends ValueObject {
      * @var mixed
      */
     public $sortOrder;
-	
+
 }

@@ -5,15 +5,15 @@
  */
 namespace ezp\Persistence\Storage\Legacy\Content\FieldValue;
 use ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
+ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
+ezp\Persistence\Content\Type\FieldDefinition,
+ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
 
 /**
- * 
+ *
  * This interface is for converting fields and fielddefinitions to the legacy storage format
- * 
- * @package FieldTypeProviderInterface               
+ *
+ * @package FieldTypeProviderInterface
  */
 interface LegacyFieldConverter
 {

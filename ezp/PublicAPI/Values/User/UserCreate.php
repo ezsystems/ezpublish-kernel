@@ -9,33 +9,33 @@ use ezp\PublicAPI\Values\Content\ContentCreate;
  */
 abstract class UserCreate extends ContentCreate {
 
-	/**
-	 * User login
-	 *
-	 * @var string
-	 */
-	public $login;
+    /**
+     * User login
+     *
+     * @var string
+     */
+    public $login;
 
-	/**
-	 * User E-Mail address
-	 *
-	 * @var string
-	 */
-	public $email;
+    /**
+     * User E-Mail address
+     *
+     * @var string
+     */
+    public $email;
 
-	/**
-	 * the plain password
-	 *
-	 * @var string
-	 */
-	public $password;
+    /**
+     * the plain password
+     *
+     * @var string
+     */
+    public $password;
 
-	/**
-	 *
-	 * indicates if the user is enabled after creation
-	 * @var boolean
-	 */
-	public $enabled = true;
+    /**
+     *
+     * indicates if the user is enabled after creation
+     * @var boolean
+     */
+    public $enabled = true;
 
 
 }

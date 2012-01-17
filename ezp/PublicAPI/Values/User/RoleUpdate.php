@@ -22,7 +22,7 @@ class RoleUpdate extends ValueObject
      * @var string
      */
     public $description;
-    
+
 }
 ?>
 

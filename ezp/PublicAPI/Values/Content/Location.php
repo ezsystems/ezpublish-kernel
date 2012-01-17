@@ -133,10 +133,10 @@ abstract class Location extends ValueObject
      * @var mixed
      */
     public $sortOrder;
-    
+
     /**
      * the number of chidren visible to the authenticated user which has loaded this instance.
-     * 
+     *
      * @var integer
      */
     public $childCount;
