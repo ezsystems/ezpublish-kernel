@@ -43,7 +43,7 @@ interface ContentService {
      * @param int $contentId
      * @return ContentInfo
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to read the content
-     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given id does not exist
+     * @throws ezp\PublicAPI\Interfaces\NotFoundException - if the content with the given id does not exist
      */
     public function loadContent($contentId);
 
@@ -52,7 +52,7 @@ interface ContentService {
      * @param string $remoteId
      * @return ContentInfo
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to create the content in the given location
-     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given remote id does not exist
+     * @throws ezp\PublicAPI\Interfaces\NotFoundException - if the content with the given remote id does not exist
      */
     public function loadContentByRemoteId($remoteId);
 
@@ -61,7 +61,7 @@ interface ContentService {
      * @param ContentInfo $contentInfo
      * @param int $versionNo the version number. If not given the current version is returned.
      * @return VersionInfo
-     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the version with the given number does not exist
+     * @throws ezp\PublicAPI\Interfaces\NotFoundException - if the version with the given number does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersionInfo(/*ContentInfo*/ $contentInfo, $versionNo = null);
@@ -71,7 +71,7 @@ interface ContentService {
      * @param int $contentId
      * @param int $versionNo the version number. If not given the current version is returned.
      * @return VersionInfo
-     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the version with the given number does not exist
+     * @throws ezp\PublicAPI\Interfaces\NotFoundException - if the version with the given number does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersionInfoById($contentId , $versionNo = null);
@@ -82,7 +82,7 @@ interface ContentService {
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      * @return Version
-     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if version with the given number does not exist
+     * @throws ezp\PublicAPI\Interfaces\NotFoundException - if version with the given number does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersionByContentInfo(/*ContentInfo*/ $contentInfo, array $languages = null, $versionNo = null);
@@ -102,7 +102,7 @@ interface ContentService {
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      * @return Version
-     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content or version with the given id does not exist
+     * @throws ezp\PublicAPI\Interfaces\NotFoundException - if the content or version with the given id does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersion($contentId, array $languages = null, $versionNo = null);
@@ -116,7 +116,7 @@ interface ContentService {
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      * @return Version
-     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content or version with the given remote id does not exist
+     * @throws ezp\PublicAPI\Interfaces\NotFoundException - if the content or version with the given remote id does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersionByRemoteId($remoteId, array $languages = null, $versionNo = null);
