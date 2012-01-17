@@ -35,7 +35,7 @@ interface Repository
      *
      * @param string $module
      * @param string $function
-     * @param \ezp\PublicAPI\Values\User\User $user
+     * @param User $user
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
     public function hasAccess($module, $function, User $user = null);

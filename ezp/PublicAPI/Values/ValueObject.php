@@ -6,7 +6,7 @@ namespace ezp\PublicAPI\Values;
 use ezp\Base\Exception\PropertyNotFound;
 
 /**
- * 
+ *
  * The base class for all values
  * @package ezp\PublicAPI\Values
  */
@@ -20,7 +20,7 @@ abstract class ValueObject
     public function __construct( array $properties = array() )
     {
         foreach ( $properties as $property => $value )
-            $this->$property = $value;
+        $this->$property = $value;
     }
 
     /**
@@ -47,6 +47,6 @@ abstract class ValueObject
     {
         throw new PropertyNotFound( $name, get_class( $this ) );
     }
-	
+
 }
 ?>

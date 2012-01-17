@@ -23,11 +23,11 @@ interface FieldType {
      *
      * this method is called on occuring events. Implementations can perform corresponding actions
      * @param string $event - prePublish, postPublish, preCreate, postCreate
-     * @param ezp\PublicAPI\Interfaces\Repository $repository
+     * @param Repository $repository
      * @param $fieldDef - the field definition of the field
      * @param $field - the field for which an action is performed
      */
-    public function handleEvent($event, Repository $repository, FieldDefinition $fieldDef, Field  $field);
+    public function handleEvent($event, /*Repository*/ $repository, FieldDefinition $fieldDef, Field  $field);
 
     /**
      * returns a map of allowed setting including a default value used when not given in the field definition

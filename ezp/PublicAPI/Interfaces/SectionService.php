@@ -10,6 +10,11 @@ use ezp\PublicAPI\Values\Content\Section;
 
 use ezp\PublicAPI\Values\Content\Location;
 
+use ezp\PublicAPI\Interfaces\Exception\Forbidden;
+
+use ezp\PublicAPI\Interfaces\Exception\NotFound;
+
+use ezp\PublicAPI\Interfaces\Exception\Unauthorized;
 
 /**
  * Section service, used for section operations
@@ -24,8 +29,8 @@ interface SectionService
      * @param string $name
      *
      * @return Section The newly create section
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to create a section
-     * @throws ezp\Base\Exception\Forbidden If the new identifier already exists
+     * @throws Unauthorized If the current user user is not allowed to create a section
+     * @throws Forbidden If the new identifier already exists
      */
     public function createSection( $identifier, $name );
 
@@ -34,9 +39,9 @@ interface SectionService
      *
      * @param Section $section
      * @return Section
-     * @throws ezp\Base\Exception\NotFound if section could not be found
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to create a section
-     * @throws ezp\Base\Exception\Forbidden If the new identifier already exists
+     * @throws NotFound if section could not be found
+     * @throws Unauthorized If the current user user is not allowed to create a section
+     * @throws Forbidden If the new identifier already exists
      */
     public function updateSection( /*Section*/ $section );
 
@@ -45,8 +50,8 @@ interface SectionService
      *
      * @param int $sectionId
      * @return Section
-     * @throws ezp\Base\Exception\NotFound if section could not be found
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to read a section
+     * @throws NotFound if section could not be found
+     * @throws Unauthorized If the current user user is not allowed to read a section
      */
     public function loadSection( $sectionId );
 
@@ -54,7 +59,7 @@ interface SectionService
      * Loads all sections
      *
      * @return array of {@link Section}
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to read a section
+     * @throws Unauthorized If the current user user is not allowed to read a section
      */
     public function loadSections();
 
@@ -63,8 +68,8 @@ interface SectionService
      *
      * @param string $sectionIdentifier
      * @return Section
-     * @throws ezp\Base\Exception\NotFound if section could not be found
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to read a section
+     * @throws NotFound if section could not be found
+     * @throws Unauthorized If the current user user is not allowed to read a section
      */
     public function loadSectionByIdentifier( $sectionIdentifier );
 
@@ -82,7 +87,7 @@ interface SectionService
      *
      * @param ContentInfo $content
      * @param Section $section
-     * @throws ezp\Base\Exception\Forbidden If user does not have access to view provided object
+     * @throws Forbidden If user does not have access to view provided object
      */
     public function assignSection( /*ContentInfo*/ $content, /*Section*/ $section );
 
@@ -94,7 +99,7 @@ interface SectionService
      * @param Location $startingPoint
      * @param Section $section
      * @return array  a list (string) of descendants which are not changed due to permissions
-     * @throws ezp\Base\Exception\Unauthorized If the current user is not allowed to assign a section to this location
+     * @throws Unauthorized If the current user is not allowed to assign a section to this location
      *
      */
     public function assignSectionToSubtree( /*Location*/ $startingPoint, /*Section*/ $section );
@@ -104,9 +109,9 @@ interface SectionService
      *
      * @param Section $section
      * @return void
-     * @throws ezp\Base\Exception\NotFound If the specified section is not found
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to delete a section
-     * @throws ezp\Base\Exception\Forbidden  if section can not be deleted
+     * @throws NotFound If the specified section is not found
+     * @throws Unauthorized If the current user user is not allowed to delete a section
+     * @throws Forbidden  if section can not be deleted
      *         because it is still assigned to some contents.
      */
     public function deleteSection( /*Section*/ $section );

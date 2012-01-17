@@ -12,6 +12,12 @@ use ezp\PublicAPI\Values\Content\ContentInfo;
 
 use ezp\PublicAPI\Values\Content\Location;
 
+use ezp\PublicAPI\Interfaces\Exception\Forbidden;
+
+use ezp\PublicAPI\Interfaces\Exception\NotFound;
+
+use ezp\PublicAPI\Interfaces\Exception\Unauthorized;
+
 /**
  * Location service, used for complex subtree operations
  * @example Examples/location.php
@@ -28,8 +34,8 @@ interface LocationService
      * @return Location The newly created location of the copied subtree
      * @todo enhancment - this method should return a result structure containing the new location and a list
      *       of locations which are not copied due to permission denials.
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed copy the subtree to the given parent location
-     * @throws ezp\Base\Exception\Forbidden  if the target location is a sub location of the given location
+     * @throws Unauthorized If the current user user is not allowed copy the subtree to the given parent location
+     * @throws Forbidden  if the target location is a sub location of the given location
      */
     public function copySubtree( /*Location*/ $subtree,  /*Location*/ $targetParentLocation );
 
@@ -37,17 +43,17 @@ interface LocationService
      * Loads a location object from its $locationId
      * @param integer $locationId
      * @return Location
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to read this location
-     * @throws ezp\Base\Exception\NotFound If the specified location is not found
+     * @throws Unauthorized If the current user user is not allowed to read this location
+     * @throws NotFound If the specified location is not found
      */
     public function loadLocation( $locationId );
 
     /**
      * Loads a location object from its $remoteId
      * @param string $remoteId
-     * @return \ezp\PublicAPI\Values\Content\Location
-     * @throws \ezp\Base\Exception\Unauthorized If the current user user is not allowed to read this location
-     * @throws \ezp\Base\Exception\NotFound If the specified location is not found
+     * @return Location
+     * @throws Unauthorized If the current user user is not allowed to read this location
+     * @throws NotFound If the specified location is not found
      */
     public function loadLocationByRemoteId( $remotenId );
 
@@ -67,8 +73,8 @@ interface LocationService
      * @param ContentInfo $contentInfo
      * @param LocationCreate $location
      * @return Location the newly created Location
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to create this location
-     * @throws ezp\Base\Exception\Forbidden  if the content is already below the specified parent
+     * @throws Unauthorized If the current user user is not allowed to create this location
+     * @throws Forbidden  if the content is already below the specified parent
      *                                        or the parent is a sub location of the location the content
      *                                        or if set the remoteId existis already
      */
@@ -79,8 +85,8 @@ interface LocationService
      * @param Location $location
      * @param LocationUpdate $locationUpdate
      * @return Location the updated Location
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to update this location
-     * @throws ezp\Base\Exception\Forbidden   if if set the remoteId existis already
+     * @throws Unauthorized If the current user user is not allowed to update this location
+     * @throws Forbidden   if if set the remoteId existis already
      */
     public function updateLocation( /*Location*/ $location, /*LocationUpdate*/ $locationUpdate );
 
@@ -90,7 +96,7 @@ interface LocationService
      * @param Location $location1
      * @param Location $location2
      * @return void
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to swap content
+     * @throws Unauthorized If the current user user is not allowed to swap content
      */
     public function swapLoaction( /*Location*/ $location1,  /*Location*/ $location2 );
 
@@ -99,7 +105,7 @@ interface LocationService
      *
      * @param Location $location
      * @return Location $location, with updated hidden value
-     * @throws \ezp\Base\Exception\Unauthorized If the current user user is not allowed to hide this location
+     * @throws Unauthorized If the current user user is not allowed to hide this location
      */
     public function hideLocation( /*Location*/ $location );
 
@@ -109,7 +115,7 @@ interface LocationService
      *
      * @param Location $location
      * @return Location $location, with updated hidden value
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to unhide this location
+     * @throws Unauthorized If the current user user is not allowed to unhide this location
      */
     public function unhideLocation( /*Location*/ $location );
 
@@ -120,7 +126,7 @@ interface LocationService
      * @param Location $location
      * @param Location $newParentLocation
      * @return void
-     * @throws ezp\Base\Exception\Unauthorized If the current user user is not allowed to move this location to the target
+     * @throws Unauthorized If the current user user is not allowed to move this location to the target
      */
     public function moveSubtree( /*Location*/ $location, /*Location*/ $newParentLocation );
 
@@ -134,7 +140,7 @@ interface LocationService
      *
      * @param Location $location
      * @param boolean $overridePermissions
-     * @throws ezp\Base\Exception\Unauthorized If the current user is not allowed to delete this location
+     * @throws Unauthorized If the current user is not allowed to delete this location
      *
      */
     public function deleteLocation( /*Location*/ $location, $overridePermissions = true );
