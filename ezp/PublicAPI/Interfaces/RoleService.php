@@ -151,7 +151,7 @@ interface RoleService {
      * @param string $function
      * @return PolicyCreate
      */
-    public function newRoleCreate( $module, $function);
+    public function newPolicyCreate( $module, $function);
 
     /**
      * instanciates a policy update class
