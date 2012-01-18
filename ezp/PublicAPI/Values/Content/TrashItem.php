@@ -1,5 +1,5 @@
 <?php
-namespace ezp\PubklicAPI\Values\Content;
+namespace ezp\PublicAPI\Values\Content;
 
 use ezp\PublicAPI\Values\Content\Location;
 
