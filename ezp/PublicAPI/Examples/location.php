@@ -23,7 +23,8 @@ echo  $location->contentInfo->name . '\n';
 // get the 10 first childs in the sort settings of the home location
 $childLocations = $locationService->loadLocationChildren( $location, 0, 10 );
 
-foreach($childLocations as $child) {
+foreach( $childLocations as $child )
+{
 	// print a + if the child location has children
     if($child->childCount > 0) 
         echo "+ ";
@@ -44,13 +45,14 @@ echo $publishedVersion->names[$otherLanguageCode];
 // get the 10 first childs in the sort settings of the home location
 $childLocations = $locationService->loadLocationChildren( $location, 0, 10 );
 
-foreach($childLocations as $child) {
+foreach( $childLocations as $child )
+{
 	// print a + if the child location has children
     if($child->childCount > 0) 
         echo "+ ";
     else 
         echo "  ";
-    $publishedChildVersion = $contentService->loadVersionInfo($child->contentInfo);
+    $publishedChildVersion = $contentService->loadVersionInfo( $child->contentInfo );
     echo $publishedChildVersion->names[$otherLanguageCode];
 }
 

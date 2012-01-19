@@ -1,9 +1,8 @@
 <?php
-use ezp\PublicAPI\Values\Content\LocationCreate;
-use ezp\PublicAPI\Values\Content\ContentCreate;
-use ezp\PublicAPI\Interfaces\ContentTypeService;
-use ezp\PublicAPI\Interfaces\ContentService;
-use ezp\PublicAPI\Interfaces\Repository;
+use ezp\PublicAPI\Values\Content\LocationCreate,
+    ezp\PublicAPI\Values\Content\ContentCreate,
+    ezp\PublicAPI\Values\Content\VersionInfo,
+    ezp\PublicAPI\Interfaces\Repository;
 
 /**
  * assumed as injected
@@ -23,26 +22,29 @@ $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
 
 // construct the creation structure with the content type and the main language of the content
 // the main language is also the default language for the fields
-$contentCreate = $contentService->newContentCreate($contentType,'eng-US');
+$contentCreate = $contentService->newContentCreate( $contentType, 'eng-US' );
 
 // set title field in the main language
-$contentCreate->setField('title','Title');
+$contentCreate->setField( 'title', 'Title' );
+
 // set summary field in php array style
 $contentCreate->fields['summary'] = "<p>this is a summary</p>";
 
 // set authors field of the article
 $authors = array();
-$authors[] = new ezp\Content\FieldType\Author\Author('John Doe','john.doe@example.net');
-$authors[] = new ezp\Content\FieldType\Author\Author('Bud Spencer','bud.spencer@example.net');
-$contentCreate->setField('author',new ezp\Content\FieldType\Author\Value($authors));
+$authors[] = new ezp\Content\FieldType\Author\Author( 'John Doe', 'john.doe@example.net' );
+$authors[] = new ezp\Content\FieldType\Author\Author( 'Bud Spencer', 'bud.spencer@example.net' );
+$contentCreate->setField( 'author', new ezp\Content\FieldType\Author\Value( $authors ) );
+
 // set image for the article
-$contentCreate->setField('image',new ezp\Content\FieldType\Image\Value("/tmp/myimage.jpg","my alternative text"));
+$contentCreate->setField( 'image', new ezp\Content\FieldType\Image\Value( "/tmp/myimage.jpg","my alternative text" ) );
+
 // set a remote id for the content
 $contentCreate->remoteId = "12345";
 
 // create the content instance with a default location create structure
 $parentLocationId = 123;
-$version = $contentService->createContentDraft($contentCreate, array($locationService->newLocationCreate($parentLocationId)));
+$version = $contentService->createContentDraft( $contentCreate, array( $locationService->newLocationCreate( $parentLocationId ) ) );
 
 // print the new created info data
 $contentId = $version->contentId;
@@ -51,7 +53,7 @@ echo $contentId;
 $locations = $version->contentInfo->locations;
 
 // publish the content
-$contentService->publishDraft($version->versionInfo);
+$contentService->publishDraft( $version->versionInfo );
 
 // now there is one location with parentId 123 in the returned array
 $locations = $version->contentInfo->locations;
@@ -62,7 +64,8 @@ $locations = $version->contentInfo->locations;
 
 // translating the content object (4.x)
 // load the content info object (note this info object differes from the one in the draft after publishing)
-$contentInfo = $contentService->loadContent($version->contentId);
+$contentInfo = $contentService->loadContent( $version->contentId );
+
 // create a draft from the before published content
 $versionInfo = $contentService->createDraftFromContent( $contentInfo );
 
@@ -73,11 +76,12 @@ $versionUpdate->fields['title'] = 'Titel';
 // .... as with creation see above
 
 // update the draft
-$version = $contentService->updateVersion($versionInfo,$versionUpdate);
+$version = $contentService->updateVersion( $versionInfo, $versionUpdate );
 
 // read the fields of the version
 
-foreach ( $version->getFields() as $field) {
+foreach ( $version->getFields() as $field)
+{
 	echo "Field '{$field->identifier}','{$field->language}': {$field->value}\n";
 }
 
@@ -101,12 +105,10 @@ $contentService->updateContent( $contentInfo, $contentUpdate );
  */ 
 
 // delete the version (draft)
-
-$contentService->deleteVersion($version->versionInfo);
+$contentService->deleteVersion( $version->versionInfo );
 
 // delete the content object
-
-$contentService->deleteContent($version->contentInfo);
+$contentService->deleteContent( $version->contentInfo );
 
 /**
  * Load all drafts of the current user
@@ -191,10 +193,11 @@ $contentInfo = $contentService->loadContent( 23 );
 
 // List of content versions
 $versionInfos = $contentService->loadVersions( $contentInfo );
-
-foreach( $versionInfos as $versionInfo) {
-	if($versionInfo->status == VersionInfo::STATUS_ARCHIVED) {
-		$contentService->deleteVersion($versionInfo);
+foreach( $versionInfos as $versionInfo )
+{
+	if( $versionInfo->status == VersionInfo::STATUS_ARCHIVED )
+    {
+		$contentService->deleteVersion( $versionInfo );
 	}
 }
 
@@ -203,10 +206,10 @@ foreach( $versionInfos as $versionInfo) {
  */
 
 // load the latesst version
-$versionInfo = $contentService->loadVersionInfoById(23);
+$versionInfo = $contentService->loadVersionInfoById( 23 );
 
 // Instantiate a location create struct
-$locationCreate = $locationService->newLocationCreate(123);
+$locationCreate = $locationService->newLocationCreate( 123 );
 
 // Copy content in latest version
 $version = $contentService->copyContent( $versionInfo->contentInfo, $locationCreate, $versionInfo );
