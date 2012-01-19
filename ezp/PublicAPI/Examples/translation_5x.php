@@ -17,9 +17,10 @@ $repository = null;
 $contentService = $repository->getContentService();
 
 // load the source version info of a content object
-$versionInfo = $contentService->loadVersionInfoById($CONTENT_ID);
+$versionInfo = $contentService->loadVersionInfoById( $contentId );
+
 // create a draft from the before published content
-$draft = $contentService->createDraftFromContent($versionInfo->contentInfo,$versionInfo);
+$draft = $contentService->createDraftFromContent( $versionInfo->contentInfo, $versionInfo );
 
 /**
  * Translate one language
@@ -30,13 +31,14 @@ $translationInfo->sourceVersion = $versionInfo;
 $translationInfo->destinationLanguage = 'ger-DE';
 $translationInfo->destinationVersion = $draft;
 
-$translation = $contentService->newTranslation($translationInfo);
+$translation = $contentService->newTranslation( $translationInfo );
 $translation->fields['title'] = 'Titel';
 // .....
 
-$draft = $contentService->translateVersion($translation);
+$draft = $contentService->translateVersion( $translation );
+
 // publish the version
-$newPublishedVersion = $contentService->publishDraft($draft->versionInfo);
+$newPublishedVersion = $contentService->publishDraft( $draft->versionInfo );
 
 
 /**
@@ -51,9 +53,9 @@ $versionUpdate->fields['title']['ger-DE'] = 'Titel';
 $versionUpdate->fields['title']['fra-FR'] = 'Titre';
 // ..
 
-$draft = $contentService->updateVersion($draft,$versionUpdate);
+$draft = $contentService->updateVersion( $draft, $versionUpdate );
 
-$newPublishedVersion = $contentService->publishDraft($draft->versionInfo);
+$newPublishedVersion = $contentService->publishDraft( $draft->versionInfo );
 
 $translationInfo = $contentService->newTranslation();
 $translationInfo->sourceLanguage = 'eng-US';
@@ -61,7 +63,7 @@ $translationInfo->sourceVersion = $versionInfo;
 $translationInfo->destinationLanguage = 'ger-DE';
 $translationInfo->destinationVersion = $newPublishedVersion;
 
-$contentService->addTranslationInfo($translationInfo);
+$contentService->addTranslationInfo( $translationInfo );
 
 $translationInfo = $contentService->newTranslation();
 $translationInfo->sourceLanguage = 'eng-US';
@@ -69,4 +71,4 @@ $translationInfo->sourceVersion = $versionInfo;
 $translationInfo->destinationLanguage = 'fra-FR';
 $translationInfo->destinationVersion = $newPublishedVersion;
 
-$contentService->addTranslationInfo($translationInfo);
+$contentService->addTranslationInfo( $translationInfo );
