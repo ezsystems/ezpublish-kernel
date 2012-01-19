@@ -26,7 +26,7 @@
 				<li><span class="field">example:</span> <a href="../__examplesource/exsource_research_publicapi_ezp_PublicAPI_Examples_user.php_8f793001790c0a17cf1b0090b81c8188.html">example</a></li>
 			</ul>
 		<p class="notes">
-			Located in <a class="field" href="_Interfaces---UserService.php.html">/Interfaces/UserService.php</a> (line <span class="field">25</span>)
+			Located in <a class="field" href="_Interfaces---UserService.php.html">/Interfaces/UserService.php</a> (line <span class="field">22</span>)
 		</p>
 		
 				
@@ -47,7 +47,7 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																																																																																																																												
+																																																																																																																																												
 												<div class="method-definition">
 											<span class="method-result">void</span>
 										<a href="#assignUserToUserGroup" title="details" class="method-name">assignUserToUserGroup</a>
@@ -56,12 +56,12 @@
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/User.html">User</a></span>
 										<a href="#createUser" title="details" class="method-name">createUser</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserCreate.html">UserCreate</a></span>&nbsp;<span class="var-name">$userCreate</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$parentGroups</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserCreateStruct.html">UserCreateStruct</a></span>&nbsp;<span class="var-name">$userCreateStruct</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$parentGroups</span>)
 									</div>
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>
 										<a href="#createUserGroup" title="details" class="method-name">createUserGroup</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupCreate.html">UserGroupCreate</a></span>&nbsp;<span class="var-name">$userGroupCreate</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>&nbsp;<span class="var-name">$parentGroup</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupCreateStruct.html">UserGroupCreateStruct</a></span>&nbsp;<span class="var-name">$userGroupCreateStruct</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>&nbsp;<span class="var-name">$parentGroup</span>)
 									</div>
 																<div class="method-definition">
 											<span class="method-result">void</span>
@@ -99,14 +99,24 @@
 											(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>&nbsp;<span class="var-name">$userGroup</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>&nbsp;<span class="var-name">$newParent</span>)
 									</div>
 																<div class="method-definition">
-											<span class="method-result"><a href="../ezp-PublicAPI-Values/UserCreate.html">UserCreate</a></span>
-										<a href="#newUserCreate" title="details" class="method-name">newUserCreate</a>
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/UserCreateStruct.html">UserCreateStruct</a></span>
+										<a href="#newUserCreateStruct" title="details" class="method-name">newUserCreateStruct</a>
 											(<span class="var-type">string</span>&nbsp;<span class="var-name">$login</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$email</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$password</span>, <span class="var-type">$mainLanguageCode</span>&nbsp;<span class="var-name">$mainLanguageCode</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span> = <span class="var-default">null</span>])
 									</div>
 																<div class="method-definition">
-											<span class="method-result"><a href="../ezp-PublicAPI-Values/UserGroupCreate.html">UserGroupCreate</a></span>
-										<a href="#newUserGroupCreate" title="details" class="method-name">newUserGroupCreate</a>
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/UserGroupCreateStruct.html">UserGroupCreateStruct</a></span>
+										<a href="#newUserGroupCreateStruct" title="details" class="method-name">newUserGroupCreateStruct</a>
 											(<span class="var-type">$mainLanguageCode</span>&nbsp;<span class="var-name">$mainLanguageCode</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/UserGroupUpdateStruct.html">UserGroupUpdateStruct</a></span>
+										<a href="#newUserGroupUpdateStruct" title="details" class="method-name">newUserGroupUpdateStruct</a>
+										()
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/UserUpdateStruct.html">UserUpdateStruct</a></span>
+										<a href="#newUserUpdateStruct" title="details" class="method-name">newUserUpdateStruct</a>
+										()
 									</div>
 																<div class="method-definition">
 											<span class="method-result">void</span>
@@ -116,12 +126,12 @@
 																<div class="method-definition">
 											<span class="method-result">void</span>
 										<a href="#updateUser" title="details" class="method-name">updateUser</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/User.html">User</a></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserUpdate.html">UserUpdate</a></span>&nbsp;<span class="var-name">$userUpdate</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/User.html">User</a></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserUpdateStruct.html">UserUpdateStruct</a></span>&nbsp;<span class="var-name">$userUpdateStruct</span>)
 									</div>
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>
 										<a href="#updateUserGroup" title="details" class="method-name">updateUserGroup</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>&nbsp;<span class="var-name">$userGroup</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupUpdate.html">UserGroupUpdate</a></span>&nbsp;<span class="var-name">$userGroupUpdate</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>&nbsp;<span class="var-name">$userGroup</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupUpdateStruct.html">UserGroupUpdateStruct</a></span>&nbsp;<span class="var-name">$userGroupUpdateStruct</span>)
 									</div>
 								</div>
 		</div>
@@ -140,10 +150,10 @@
 			<A NAME='method_detail'></A>
 
 <a name="methodassignUserToUserGroup" id="assignUserToUserGroup"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">assignUserToUserGroup</span> (line <span class="line-number">141</span>)
+		<span class="method-title">assignUserToUserGroup</span> (line <span class="line-number">166</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -173,10 +183,10 @@
 			
 	</div>
 <a name="methodcreateUser" id="createUser"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">createUser</span> (line <span class="line-number">99</span>)
+		<span class="method-title">createUser</span> (line <span class="line-number">112</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -192,13 +202,13 @@
 		<span class="method-name">
 			createUser
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserCreate.html">UserCreate</a></span>&nbsp;<span class="var-name">$userCreate</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$parentGroups</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserCreateStruct.html">UserCreateStruct</a></span>&nbsp;<span class="var-name">$userCreateStruct</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$parentGroups</span>)
 			</div>
 	
 			<ul class="parameters">
 					<li>
-				<span class="var-type"><a href="../ezp-PublicAPI-Values/UserCreate.html">UserCreate</a></span>
-				<span class="var-name">$userCreate</span><span class="var-description">: the data used for creating the user</span>			</li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/UserCreateStruct.html">UserCreateStruct</a></span>
+				<span class="var-name">$userCreateStruct</span><span class="var-description">: the data used for creating the user</span>			</li>
 					<li>
 				<span class="var-type">array</span>
 				<span class="var-name">$parentGroups</span><span class="var-description">: the groups of type <a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a> which are assigned to the user after creation</span>			</li>
@@ -207,17 +217,17 @@
 			
 	</div>
 <a name="methodcreateUserGroup" id="createUserGroup"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
 		<span class="method-title">createUserGroup</span> (line <span class="line-number">38</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Creates a new user group using the data provided in the ContentCreate parameter  In 4.x in the content type parameter in the profile is ignored <ul><li>the content type is determined via configuration and can be set to null.</li></ul></p>
+<p class="short-description">Creates a new user group using the data provided in the ContentCreateStruct parameter  In 4.x in the content type parameter in the profile is ignored <ul><li>the content type is determined via configuration and can be set to null.</li></ul></p>
 <p class="description"><p>The returned version is published.</p></p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> IllegalArgumentException if the input structure has invalid data</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\IllegalArgumentException if the input structure has invalid data</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -227,13 +237,13 @@
 		<span class="method-name">
 			createUserGroup
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupCreate.html">UserGroupCreate</a></span>&nbsp;<span class="var-name">$userGroupCreate</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>&nbsp;<span class="var-name">$parentGroup</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupCreateStruct.html">UserGroupCreateStruct</a></span>&nbsp;<span class="var-name">$userGroupCreateStruct</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>&nbsp;<span class="var-name">$parentGroup</span>)
 			</div>
 	
 			<ul class="parameters">
 					<li>
-				<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupCreate.html">UserGroupCreate</a></span>
-				<span class="var-name">$userGroupCreate</span><span class="var-description">: a structure for setting all necessary data to create this user group</span>			</li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupCreateStruct.html">UserGroupCreateStruct</a></span>
+				<span class="var-name">$userGroupCreateStruct</span><span class="var-description">: a structure for setting all necessary data to create this user group</span>			</li>
 					<li>
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>
 				<span class="var-name">$parentGroup</span>			</li>
@@ -242,10 +252,10 @@
 			
 	</div>
 <a name="methoddeleteUser" id="deleteUser"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteUser</span> (line <span class="line-number">123</span>)
+		<span class="method-title">deleteUser</span> (line <span class="line-number">144</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -272,15 +282,14 @@
 			
 	</div>
 <a name="methoddeleteUserGroup" id="deleteUserGroup"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteUserGroup</span> (line <span class="line-number">65</span>)
+		<span class="method-title">deleteUserGroup</span> (line <span class="line-number">73</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">removes a user group</p>
-<p class="description"><p>the users which are not assigned to other groups will be deleted</p></p>
+<p class="short-description">removes a user group  the users which are not assigned to other groups will be deleted</p>
 	<ul class="tags">
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group</li>
@@ -304,10 +313,10 @@
 			
 	</div>
 <a name="methodloadSubUserGroups" id="loadSubUserGroups"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadSubUserGroups</span> (line <span class="line-number">56</span>)
+		<span class="method-title">loadSubUserGroups</span> (line <span class="line-number">62</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -336,10 +345,10 @@
 			
 	</div>
 <a name="methodloadUser" id="loadUser"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadUser</span> (line <span class="line-number">107</span>)
+		<span class="method-title">loadUser</span> (line <span class="line-number">123</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -366,10 +375,10 @@
 			
 	</div>
 <a name="methodloadUserByCredentials" id="loadUserByCredentials"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadUserByCredentials</span> (line <span class="line-number">116</span>)
+		<span class="method-title">loadUserByCredentials</span> (line <span class="line-number">135</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -399,10 +408,10 @@
 			
 	</div>
 <a name="methodloadUserGroup" id="loadUserGroup"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadUserGroup</span> (line <span class="line-number">47</span>)
+		<span class="method-title">loadUserGroup</span> (line <span class="line-number">50</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -430,10 +439,10 @@
 			
 	</div>
 <a name="methodmoveUserGroup" id="moveUserGroup"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">moveUserGroup</span> (line <span class="line-number">75</span>)
+		<span class="method-title">moveUserGroup</span> (line <span class="line-number">84</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -463,11 +472,11 @@
 		
 			
 	</div>
-<a name="methodnewUserCreate" id="newUserCreate"><!-- --></a>
-<div class="oddrow">
+<a name="methodnewUserCreateStruct" id="newUserCreateStruct"><!-- --></a>
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">newUserCreate</span> (line <span class="line-number">161</span>)
+		<span class="method-title">newUserCreateStruct</span> (line <span class="line-number">189</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -477,9 +486,9 @@
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result"><a href="../ezp-PublicAPI-Values/UserCreate.html">UserCreate</a></span>
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/UserCreateStruct.html">UserCreateStruct</a></span>
 		<span class="method-name">
-			newUserCreate
+			newUserCreateStruct
 		</span>
 					(<span class="var-type">string</span>&nbsp;<span class="var-name">$login</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$email</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$password</span>, <span class="var-type">$mainLanguageCode</span>&nbsp;<span class="var-name">$mainLanguageCode</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span> = <span class="var-default">null</span>])
 			</div>
@@ -504,11 +513,11 @@
 		
 			
 	</div>
-<a name="methodnewUserGroupCreate" id="newUserGroupCreate"><!-- --></a>
-<div class="evenrow">
+<a name="methodnewUserGroupCreateStruct" id="newUserGroupCreateStruct"><!-- --></a>
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">newUserGroupCreate</span> (line <span class="line-number">169</span>)
+		<span class="method-title">newUserGroupCreateStruct</span> (line <span class="line-number">199</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -518,9 +527,9 @@
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result"><a href="../ezp-PublicAPI-Values/UserGroupCreate.html">UserGroupCreate</a></span>
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/UserGroupCreateStruct.html">UserGroupCreateStruct</a></span>
 		<span class="method-name">
-			newUserGroupCreate
+			newUserGroupCreateStruct
 		</span>
 					(<span class="var-type">$mainLanguageCode</span>&nbsp;<span class="var-name">$mainLanguageCode</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span> = <span class="var-default">null</span>])
 			</div>
@@ -536,17 +545,65 @@
 		
 			
 	</div>
-<a name="methodunAssignUssrFromUserGroup" id="unAssignUssrFromUserGroup"><!-- --></a>
+<a name="methodnewUserGroupUpdateStruct" id="newUserGroupUpdateStruct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">newUserGroupUpdateStruct</span> (line <span class="line-number">213</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a new user group update struct</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/UserGroupUpdateStruct.html">UserGroupUpdateStruct</a></span>
+		<span class="method-name">
+			newUserGroupUpdateStruct
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodnewUserUpdateStruct" id="newUserUpdateStruct"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">unAssignUssrFromUserGroup</span> (line <span class="line-number">150</span>)
+		<span class="method-title">newUserUpdateStruct</span> (line <span class="line-number">206</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a new user  update struct</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/UserUpdateStruct.html">UserUpdateStruct</a></span>
+		<span class="method-name">
+			newUserUpdateStruct
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
+<a name="methodunAssignUssrFromUserGroup" id="unAssignUssrFromUserGroup"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">unAssignUssrFromUserGroup</span> (line <span class="line-number">176</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Removes a user group from the user</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the user is not in the given user group</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\IllegalArgumentException if the user is not in the given user group</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -571,15 +628,15 @@
 			
 	</div>
 <a name="methodupdateUser" id="updateUser"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateUser</span> (line <span class="line-number">133</span>)
+		<span class="method-title">updateUser</span> (line <span class="line-number">156</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Updates a user.</p>
-<p class="description"><p>4.x: If the versionUpdate is set in the user update structure, this method internally creates a content draft, updates ts with the provided data  and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.</p></p>
+<p class="description"><p>4.x: If the versionUpdateStruct is set in the user update structure, this method internally creates a content draft, updates ts with the provided data  and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.</p></p>
 	<ul class="tags">
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to update the user</li>
 				<li><span class="field">access:</span> public</li>
@@ -590,7 +647,7 @@
 		<span class="method-name">
 			updateUser
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/User.html">User</a></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserUpdate.html">UserUpdate</a></span>&nbsp;<span class="var-name">$userUpdate</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/User.html">User</a></span>&nbsp;<span class="var-name">$user</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserUpdateStruct.html">UserUpdateStruct</a></span>&nbsp;<span class="var-name">$userUpdateStruct</span>)
 			</div>
 	
 			<ul class="parameters">
@@ -598,22 +655,22 @@
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/User.html">User</a></span>
 				<span class="var-name">$user</span>			</li>
 					<li>
-				<span class="var-type"><a href="../ezp-PublicAPI-Values/UserUpdate.html">UserUpdate</a></span>
-				<span class="var-name">$userUpdate</span>			</li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/UserUpdateStruct.html">UserUpdateStruct</a></span>
+				<span class="var-name">$userUpdateStruct</span>			</li>
 				</ul>
 		
 			
 	</div>
 <a name="methodupdateUserGroup" id="updateUserGroup"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateUserGroup</span> (line <span class="line-number">89</span>)
+		<span class="method-title">updateUserGroup</span> (line <span class="line-number">99</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">updates the group profile with fields and meta data.</p>
-<p class="description"><p>4.x: If the versionUpdate is set in $userGroupUpdate, this method internally creates a content draft, updates ts with the provided data  and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.</p></p>
+<p class="description"><p>4.x: If the versionUpdateStruct is set in $userGroupUpdateStruct, this method internally creates a content draft, updates ts with the provided data  and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.</p></p>
 	<ul class="tags">
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to move the user group</li>
@@ -625,7 +682,7 @@
 		<span class="method-name">
 			updateUserGroup
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>&nbsp;<span class="var-name">$userGroup</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupUpdate.html">UserGroupUpdate</a></span>&nbsp;<span class="var-name">$userGroupUpdate</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>&nbsp;<span class="var-name">$userGroup</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupUpdateStruct.html">UserGroupUpdateStruct</a></span>&nbsp;<span class="var-name">$userGroupUpdateStruct</span>)
 			</div>
 	
 			<ul class="parameters">
@@ -633,8 +690,8 @@
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroup.html">UserGroup</a></span>
 				<span class="var-name">$userGroup</span>			</li>
 					<li>
-				<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupUpdate.html">UserGroupUpdate</a></span>
-				<span class="var-name">$userGroupUpdate</span>			</li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/UserGroupUpdateStruct.html">UserGroupUpdateStruct</a></span>
+				<span class="var-name">$userGroupUpdateStruct</span>			</li>
 				</ul>
 		
 			
@@ -645,7 +702,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Tue, 17 Jan 2012 16:03:54 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Thu, 19 Jan 2012 17:12:54 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

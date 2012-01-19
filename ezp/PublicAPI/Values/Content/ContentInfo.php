@@ -71,13 +71,6 @@ class ContentInfo extends ValueObject
      */
     public $currentVersionNo;
 
-
-    /**
-     * The location list of the content
-     * @var array an array of {@link Location}
-     */
-    public $locations;
-
     /**
      * Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
      * @var boolean

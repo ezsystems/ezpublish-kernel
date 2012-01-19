@@ -8,6 +8,7 @@ use ezp\PublicAPI\Values\Content\ContentInfo;
 /**
  * This class holds version information data. It also contains the coresponding {@link ContentInfo} to
  * which the version belongs to.
+ * 
  * @property-read array $names returns an array with language code keys and name values
  * @property-read ContentInfo $contentInfo calls getContentInfo()
  */
@@ -45,6 +46,7 @@ abstract class VersionInfo extends ValueObject
      *
      * Returns the name computed from the name schema in the given language.
      * If no language is given the name in initial language of the version if present, otherwise null.
+     * 
      * @param string $languageCode
      */
     public abstract function getName($languageCode = null);

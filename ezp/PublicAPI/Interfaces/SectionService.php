@@ -5,14 +5,14 @@
 namespace ezp\PublicAPI\Interfaces;
 
 use ezp\PublicAPI\Values\Content\ContentInfo;
-
 use ezp\PublicAPI\Values\Content\Section;
-
 use ezp\PublicAPI\Values\Content\Location;
+use ezp\PublicAPI\Values\Content\SectionUpdateStruct;
 
 
 /**
  * Section service, used for section operations
+ * 
  * @package ezp\PublicAPI\Interfaces
  */
 interface SectionService
@@ -24,8 +24,9 @@ interface SectionService
      * @param string $name
      *
      * @return Section The newly create section
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If the new identifier already exists
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier already exists
      */
     public function createSection( $identifier, $name );
 
@@ -33,18 +34,23 @@ interface SectionService
      * Updates the given in the content repository
      *
      * @param Section $section
+     * @param SectionUpdateStruct $sectionUpdateStruct
+     * 
      * @return Section
+     * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if section could not be found
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If the new identifier already exists
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier already exists (if set in the update struct)
      */
-    public function updateSection( /*Section*/ $section );
+    public function updateSection( /*Section*/ $section, /*SectionUpdateStruct*/ $sectionUpdateStruct );
 
     /**
      * Loads a Section from its id ($sectionId)
      *
      * @param int $sectionId
+     * 
      * @return Section
+     * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if section could not be found
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
      */
@@ -54,6 +60,7 @@ interface SectionService
      * Loads all sections
      *
      * @return array of {@link Section}
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
      */
     public function loadSections();
@@ -62,7 +69,9 @@ interface SectionService
      * Loads a Section from its identifier ($sectionIdentifier)
      *
      * @param string $sectionIdentifier
+     * 
      * @return Section
+     * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if section could not be found
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
      */
@@ -72,6 +81,7 @@ interface SectionService
      * Counts the contents which $section is assigned to
      *
      * @param Section $section
+     * 
      * @return int
      */
     public function countAssignedContents( /*Section*/ $section );
@@ -82,7 +92,8 @@ interface SectionService
      *
      * @param ContentInfo $content
      * @param Section $section
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If user does not have access to view provided object
+     * 
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to view provided object
      */
     public function assignSection( /*ContentInfo*/ $content, /*Section*/ $section );
 
@@ -93,8 +104,10 @@ interface SectionService
      *
      * @param Location $startingPoint
      * @param Section $section
+     * 
      * @return array  a list (string) of descendants which are not changed due to permissions
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to this location
+     * 
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to the starting point
      *
      */
     public function assignSectionToSubtree( /*Location*/ $startingPoint, /*Section*/ $section );
@@ -103,10 +116,10 @@ interface SectionService
      * Deletes $section from content repository
      *
      * @param Section $section
-     * @return void
+     * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException If the specified section is not found
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to delete a section
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException  if section can not be deleted
+     * @throws ezp\PublicAPI\Interfaces\BadStateException  if section can not be deleted
      *         because it is still assigned to some contents.
      */
     public function deleteSection( /*Section*/ $section );

@@ -2,18 +2,16 @@
 namespace ezp\PublicAPI\Values\Content;
 
 use ezp\PublicAPI\Values\ValueObject;
-
 use ezp\PublicAPI\Values\Content\ContentInfo;
 
 /**
  * This class represents a location in the repository
+ * 
  * @property-read ContentInfo $contentInfo calls getContentInfo()
  * @property-read int $contentId calls getContentInfo()->contentId
  */
 abstract class Location extends ValueObject
 {
-    // Following constants borrowed from eZContentObjectTreeNode, for data compatibility.
-    // Actual names ought to be changed to better match current concepts.
     const SORT_FIELD_PATH = 1;
     const SORT_FIELD_PUBLISHED = 2;
     const SORT_FIELD_MODIFIED = 3;

@@ -1,5 +1,5 @@
 <?php
-namespace ezp\Persistence\Content\Query\Criterion;
+namespace ezp\PublicAPI\Values\Content\Query\Criterion;
 
 /**
  * This class does...
