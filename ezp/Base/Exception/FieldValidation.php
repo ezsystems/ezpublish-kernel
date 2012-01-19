@@ -22,9 +22,10 @@ class FieldValidation extends InvalidArgumentException implements Exception
 
     /**
      * Constructs a FieldValidation exception
+     *
      * @param string $what What did not validate ?
      * @param string|array $validationErrors The validation error(s) that occurred
-     * @param \Exception $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $what, $validationErrors, PhpException $previous = null )
     {

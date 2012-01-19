@@ -13,6 +13,11 @@ use Exception as PHPException;
 /**
  * Bad Request Exception implementation
  *
+ * 10.4.1 400 Bad Request
+ *
+ * The request could not be understood by the server due to malformed syntax. The client SHOULD NOT repeat the request
+ * without modifications.
+ *
  * Use:
  *   throw new BadRequest( 'Oauth Token', 'http header' );
  *
@@ -24,7 +29,7 @@ class BadRequest extends Http
      *
      * @param string $missing
      * @param string $from
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $missing, $from, PHPException $previous = null )
     {

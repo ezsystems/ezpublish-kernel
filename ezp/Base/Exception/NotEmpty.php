@@ -25,7 +25,7 @@ class NotEmpty extends InvalidArgumentException implements Exception
      *
      * @param string $container
      * @param mixed $identifier
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $container, $identifier, PHPException $previous = null )
     {

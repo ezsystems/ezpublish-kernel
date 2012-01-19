@@ -37,7 +37,7 @@ class PropertyPermission extends InvalidArgumentException implements Exception
      * @param string $propertyName
      * @param string $mode
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $propertyName, $mode = self::READ, $className = null, PHPException $previous = null )
     {

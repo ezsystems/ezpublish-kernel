@@ -25,7 +25,7 @@ class BadContentType extends InvalidArgumentException implements Exception
      *
      * @param string $excepted
      * @param string $got
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $excepted, $got, PHPException $previous = null )
     {

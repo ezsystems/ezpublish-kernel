@@ -13,6 +13,8 @@ use Exception as PHPException;
 /**
  * Expired Exception implementation
  *
+ * @todo Use something else then http BAD_REQUEST.
+ *
  * Use:
  *   throw new Expired( 'Oauth Token' );
  *
@@ -23,7 +25,7 @@ class Expired extends Http
      * Generates: '{$expired}' has expired
      *
      * @param string $expired
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $expired, PHPException $previous = null )
     {

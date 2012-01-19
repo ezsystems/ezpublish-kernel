@@ -26,7 +26,7 @@ class MissingClass extends LogicException implements Exception
      *
      * @param string $className
      * @param string|null $classType Optional string to specify what kind of class this is
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $className, $classType = null, PHPException $previous = null )
     {

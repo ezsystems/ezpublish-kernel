@@ -26,7 +26,7 @@ class InvalidArgumentValue extends InvalidArgumentException implements Exception
      * @param string $argumentName
      * @param mixed $value
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $argumentName, $value, $className = null, PHPException $previous = null )
     {

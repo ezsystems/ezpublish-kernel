@@ -27,7 +27,7 @@ class PropertyType extends InvalidArgumentException implements Exception
      * @param string $propertyName
      * @param string $type
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $propertyName, $type, $className = null, PHPException $previous = null )
     {

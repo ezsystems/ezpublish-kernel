@@ -26,7 +26,7 @@ class MethodNotFound extends BadMethodCallException implements Exception
      *
      * @param string $method
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $method, $className = null, PHPException $previous = null )
     {

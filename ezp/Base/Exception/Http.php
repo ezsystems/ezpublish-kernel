@@ -37,9 +37,11 @@ abstract class Http extends RuntimeException implements Exception
     const SERVICE_UNAVAILABLE = 503;
 
     /**
+     * Constructs a Http Exception
+     *
      * @param string $message
      * @param int $code Must be one of the available constants on this class
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $message, $code, PHPException $previous = null )
     {

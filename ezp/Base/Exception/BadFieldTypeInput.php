@@ -18,6 +18,13 @@ use ezp\Base\Exception,
  */
 class BadFieldTypeInput extends InvalidArgumentException implements Exception
 {
+    /**
+     * Constructs a BadFieldTypeInput exception
+     *
+     * @param mixed $value The value that had wrong type
+     * @param string|null $fieldClass Optional class name for field type
+     * @param \Exception|null $previous
+     */
     public function __construct( $value, $fieldClass = null, PhpException $previous = null )
     {
         $type = ( is_object( $value ) ? get_class( $value ): gettype( $value ) );

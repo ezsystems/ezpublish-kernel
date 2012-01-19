@@ -26,7 +26,7 @@ class BadConfiguration extends LogicException implements Exception
      *
      * @param string $setting
      * @param string|null $consequence Optional string to explain consequence of configuration mistake
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $setting, $consequence = null, PHPException $previous = null )
     {

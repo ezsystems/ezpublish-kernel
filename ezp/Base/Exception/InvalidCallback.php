@@ -22,10 +22,10 @@ use ezp\Base\Exception,
 class InvalidCallback extends BadFunctionCallException implements Exception
 {
     /**
-     * Generates: Invalid callback: $callback
+     * Generates: "Invalid callback: $callback"
      *
      * @param string|array $callback
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
     public function __construct( $callback, PHPException $previous = null )
     {
