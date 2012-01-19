@@ -23,6 +23,37 @@ use ezp\Base\Exception\InvalidArgumentValue,
 class BinaryRepository
 {
     /**
+     * BinaryStorage backends instances
+     * Uninstanciated ones have false as a value
+     * @var \ezp\Io\Handler[]
+     */
+    private $backends = array();
+
+    /**
+     * Default BinaryStorage backend identifier
+     * @var string
+     */
+    private $defaultBackend;
+
+    /**
+     * Default backend override value
+     * @var string
+     */
+    private static $defaultBackendOverride;
+
+    /**
+     * Backends list override value
+     * @var array
+     */
+    private static $backendsOverride;
+
+    /**
+     * Bbackends configuration override value
+     * @var array
+     */
+    private static $backendsConfigurationOverride;
+
+    /**
      * Constructs the binary repository, either with the default or with override parameters
      * @param string $defaultBackendOverride Override identifier for the default backend
      * @param array $backendsOverride Override of the backends list
@@ -253,35 +284,4 @@ class BinaryRepository
         }
         $this->backends[$identifier] = new $backendClass;
     }
-
-    /**
-     * BinaryStorage backends instances
-     * Uninstanciated ones have false as a value
-     * @var \ezp\Io\Handler[]
-     */
-    private $backends = array();
-
-    /**
-     * Default BinaryStorage backend identifier
-     * @var string
-     */
-    private $defaultBackend;
-
-    /**
-     * Default backend override value
-     * @var string
-     */
-    private static $defaultBackendOverride;
-
-    /**
-     * Backends list override value
-     * @var array
-     */
-    private static $backendsOverride;
-
-    /**
-     * Bbackends configuration override value
-     * @var array
-     */
-    private static $backendsConfigurationOverride;
 }

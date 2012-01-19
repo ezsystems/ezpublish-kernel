@@ -32,6 +32,18 @@ use ezp\Io\Handler as IoHandlerInterface,
 class Legacy implements IoHandlerInterface
 {
     /**
+     * File resource provider
+     * @see getFileResourceProvider
+     */
+    private $fileResourceProvider = null;
+
+    /**
+     * Cluster handler instance
+     * @var eZClusterFileHandlerInterface
+     */
+    private $clusterHandler = null;
+
+    /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
      * @param \ezp\Io\BinaryFileCreateStruct $file
@@ -237,17 +249,5 @@ class Legacy implements IoHandlerInterface
             $this->clusterHandler = eZClusterFileHandler::instance();
         return $this->clusterHandler;
     }
-
-    /**
-     * File resource provider
-     * @see getFileResourceProvider
-     */
-    private $fileResourceProvider = null;
-
-    /**
-     * Cluster handler instance
-     * @var eZClusterFileHandlerInterface
-     */
-    private $clusterHandler = null;
 }
 ?>

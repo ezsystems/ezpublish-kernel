@@ -73,9 +73,9 @@ class Type extends FieldType
             $this->getValue()->setState(
                 array(
                     'fieldId' => $subject->id,
-                    'contentId' => $subject->contentId,
-                    'versionNo' => $subject->versionNo,
-                    'versionStatus' => $subject->versionStatus,
+                    'contentId' => $subject->getVersion()->contentId,
+                    'versionNo' => $subject->getVersion()->versionNo,
+                    'versionStatus' => $subject->getVersion()->status,
                     'languageCode' => $subject->language,
                     'isTranslatable' => $subject->getFieldDefinition()->isTranslatable
                 )

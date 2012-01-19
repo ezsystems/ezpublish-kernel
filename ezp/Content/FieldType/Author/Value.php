@@ -47,19 +47,16 @@ class Value extends BaseValue implements ValueInterface
      */
     public function __toString()
     {
-        $string = '';
-        if ( count( $this->authors ) > 0 )
-        {
-            $authorNames = array();
-            foreach ( $this->authors as $author )
-            {
-                $authorNames[] = $author->name;
-            }
+        if ( empty( $this->authors ) )
+            return "";
 
-            $string = implode( ', ', $authorNames );
+        $authorNames = array();
+        foreach ( $this->authors as $author )
+        {
+            $authorNames[] = $author->name;
         }
 
-        return $string;
+        return implode( ', ', $authorNames );
     }
 
     /**
@@ -67,12 +64,6 @@ class Value extends BaseValue implements ValueInterface
      */
     public function getTitle()
     {
-        $title = '';
-        if ( count( $this->authors ) > 0 )
-        {
-            $title = $this->authors[0]->name;
-        }
-
-        return $title;
+        return isset( $this->authors[0] ) ? $this->authors[0]->name : "";
     }
 }

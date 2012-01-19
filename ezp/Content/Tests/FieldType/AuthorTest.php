@@ -123,7 +123,6 @@ class AuthorTest extends PHPUnit_Framework_TestCase
         self::assertSame( $this->authors, $value->authors->getArrayCopy() );
     }
 
-
     /**
      * @covers \ezp\Content\FieldType\Author\Value::fromString
      * @expectedException \ezp\Base\Exception\Logic

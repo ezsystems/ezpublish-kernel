@@ -10,7 +10,6 @@
 namespace ezp\Content\FieldType\XmlText\Input;
 
 use ezp\Base\Repository,
-    ezp\Base\Exception\InvalidArgumentType,
     ezp\Content\Version,
     ezp\Content\FieldType\XmlText\Input\Parser as InputParserInterface,
     ezp\Content\FieldType\XmlText\Input\Parser\Base as BaseInputParser,
@@ -22,6 +21,18 @@ use ezp\Base\Repository,
  */
 class Handler
 {
+    /**
+     * XmlText parser
+     * @var \ezp\Content\FieldType\XmlText\Input\Parser
+     */
+    protected $parser;
+
+    /**
+     * DOMDocument, as processed
+     * @var \DOMDocument
+     */
+    protected $document;
+
     /**
      * Construct a new Simplified InputHandler$xmlString
      *
@@ -72,21 +83,13 @@ class Handler
 
     /**
      * Processes $xmlString and indexes the external data it references
-     *
      * @param string $xmlString
      * @param \ezp\Base\Repository $repository
-     * @param mixed $contentId The contentId of the Content this xml string belongs to
-     * @param mixed $versionNo The versionNo of the Content\Version this xml string belongs to
+     * @param \ezp\Content\Version $version
      * @return bool
      */
-    public function process( $xmlString, Repository $repository, $contentId, $versionNo )
+    public function process( $xmlString, Repository $repository, Version $version )
     {
-        if ( !is_scalar( $contentId ) )
-            throw new InvalidArgumentType( '$contentId', 'scalar', $contentId );
-
-        if ( !is_scalar( $versionNo ) )
-            throw new InvalidArgumentType( '$versionNo', 'scalar', $versionNo );
-
         $this->parser->setOption( BaseInputParser::OPT_CHECK_EXTERNAL_DATA, true );
 
         $document = $this->parser->process( $xmlString );
@@ -97,19 +100,18 @@ class Handler
         }
         $this->document = $document;
 
-
         $service = $repository->getInternalFieldTypeService();
 
         // related content
-        foreach ( $this->parser->getRelatedContentIdArray() as $relationContentId )
+        foreach ( $this->parser->getRelatedContentIdArray() as $contentId )
         {
-            $service->addRelation( Relation::ATTRIBUTE, $contentId, $versionNo, $relationContentId );
+            $service->addRelation( Relation::ATTRIBUTE, $version->contentId, $version->versionNo, $contentId );
         }
 
         // linked content
-        foreach ( $this->parser->getLinkedContentIdArray() as $linkContentId )
+        foreach ( $this->parser->getLinkedContentIdArray() as $contentId )
         {
-            $service->addRelation( Relation::LINK, $contentId, $versionNo, $linkContentId );
+            $service->addRelation( Relation::LINK, $version->contentId, $version->versionNo, $contentId );
         }
 
         return true;
@@ -181,17 +183,5 @@ class Handler
             return false;
         }
     }
-
-    /**
-     * XmlText parser
-     * @var \ezp\Content\FieldType\XmlText\Input\Parser
-     */
-    protected $parser;
-
-    /**
-     * DOMDocument, as processed
-     * @var \DOMDocument
-     */
-    protected $document;
 }
 ?>

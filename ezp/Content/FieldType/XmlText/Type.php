@@ -119,7 +119,7 @@ EOF;
         //    return $value;
 
         $handler = $value->getInputHandler( $value );
-        $handler->process( $value->text, $repository, $field->contentId, $field->versionNo );
+        $handler->process( $value->text, $repository, $field->version );
 
         $value->setRawText( $handler->getDocumentAsXml() );
     }

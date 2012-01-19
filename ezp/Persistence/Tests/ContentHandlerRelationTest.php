@@ -378,7 +378,6 @@ class ContentHandlerRelationTest extends HandlerTest
             )
         );
 
-
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id );
         self::assertEquals( 2, count( $reverseRelations ) );
 
@@ -414,7 +413,6 @@ class ContentHandlerRelationTest extends HandlerTest
                 )
             )
         );
-
 
         $reverseRelations = $this->persistenceHandler->contentHandler()->loadReverseRelations( $this->content2->id );
         self::assertEquals( 2, count( $reverseRelations ) );

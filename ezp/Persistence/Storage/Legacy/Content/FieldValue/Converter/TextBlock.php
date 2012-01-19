@@ -11,7 +11,6 @@ namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
 use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Content\FieldType\TextBlock\Value as TextBlockValue,
@@ -63,15 +62,12 @@ class TextBlock implements Converter
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 'textColumns' => $storageDef->dataInt1
             )
         );
-        $fieldDef->defaultValue = new FieldValue(
-            array( 'data' => new TextBlockValue )
-        );
+        $fieldDef->defaultValue->data = new TextBlockValue;
     }
 
     /**

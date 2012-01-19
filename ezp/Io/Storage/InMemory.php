@@ -22,6 +22,24 @@ use ezp\Io\Handler as IoHandlerInterface,
 
 class InMemory implements IoHandlerInterface
 {
+    /**
+     * Files storage
+     * @var array
+     */
+    private $storage;
+
+    /**
+     * Actual file data
+     * @var array(filepath=>binaryData)
+     */
+    private $data;
+
+    /**
+     * File data resources (handles)
+     * @var resource[]
+     */
+    private $resources = array();
+
     public function __construct()
     {
         $this->storage = array();
@@ -195,22 +213,4 @@ class InMemory implements IoHandlerInterface
         }
         return base64_decode( $this->data[$path] );
     }
-
-    /**
-     * Files storage
-     * @var array
-     */
-    private $storage;
-
-    /**
-     * Actual file data
-     * @var array(filepath=>binaryData)
-     */
-    private $data;
-
-    /**
-     * File data resources (handles)
-     * @var resource[]
-     */
-    private $resources = array();
 }

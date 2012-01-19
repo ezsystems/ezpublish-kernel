@@ -626,7 +626,6 @@ class UserHandlerTest extends HandlerTest
         $this->assertEquals( 3, count( $list ) );
     }
 
-
     /**
      * Test loadPoliciesByUserId function
      *

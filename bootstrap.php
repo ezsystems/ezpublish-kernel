@@ -7,7 +7,6 @@
  * @version //autogentag//
  */
 
-
 use ezp\Base\Autoloader,
     ezp\Base\Configuration;
 

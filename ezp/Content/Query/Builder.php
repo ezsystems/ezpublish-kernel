@@ -53,6 +53,36 @@ use ezp\Persistence\Content\Query\Criterion,
  */
 class Builder
 {
+    /**
+     * The internal criteria array
+     * @var \ezp\Persistence\Content\Query\Criterion[]
+     */
+    private $criteria = array();
+
+    /**
+     * SortClause objects array
+     * @var \ezp\Persistence\Content\Query\SortClause[]
+     */
+    private $sortClauses = array();
+
+    /**
+     * Sort clause builder
+     * @var \ezp\Content\Query\SortClauseBuilder
+     */
+    public $sort;
+
+    /**
+     * Query offset, starting from 0
+     * @var int
+     */
+    public $offset = 0;
+
+    /**
+     * Query limit, as a number of items
+     * @var int|null
+     */
+    public $limit;
+
     public function __construct()
     {
         $this->sort = new SortClauseBuilder();
@@ -158,11 +188,9 @@ class Builder
         {
             case 'or':
                 return call_user_func_array( array( $this, 'lOr' ), $arguments );
-                break;
 
             case 'and':
                 return call_user_func_array( array( $this, 'lAnd' ), $arguments );
-                break;
 
             default:
                 throw new PropertyNotFound( $method, __CLASS__ );
@@ -257,34 +285,4 @@ class Builder
 
         return $query;
     }
-
-    /**
-     * The internal criteria array
-     * @var \ezp\Persistence\Content\Query\Criterion[]
-     */
-    private $criteria = array();
-
-    /**
-     * SortClause objects array
-     * @var \ezp\Persistence\Content\Query\SortClause[]
-     */
-    private $sortClauses = array();
-
-    /**
-     * Sort clause builder
-     * @var \ezp\Content\Query\SortClauseBuilder
-     */
-    public $sort;
-
-    /**
-     * Query offset, starting from 0
-     * @var int
-     */
-    public $offset = 0;
-
-    /**
-     * Query limit, as a number of items
-     * @var int|null
-     */
-    public $limit;
 }

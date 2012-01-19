@@ -233,7 +233,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
         $fieldMock = $this->getMockBuilder( 'ezp\\Content\\Field' )
             ->setConstructorArgs(
                 array(
-                    $this->getMockBuilder( 'ezp\\Content\\Version\\Concrete' )
+                    $this->getMockBuilder( 'ezp\\Content\\Version' )
                         ->disableOriginalConstructor()
                         ->getMock(),
                     $fieldDefMock

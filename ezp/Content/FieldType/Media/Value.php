@@ -147,27 +147,21 @@ class Value extends BaseValue implements ValueInterface
         {
             case 'filename':
                 return basename( $this->file->path );
-                break;
 
             case 'mimeType':
                 return $this->file->contentType->__toString();
-                break;
 
             case 'mimeTypeCategory':
                 return $this->file->contentType->type;
-                break;
 
             case 'mimeTypePart':
                 return $this->file->contentType->subType;
-                break;
 
             case 'filesize':
                 return $this->file->size;
-                break;
 
             case 'filepath':
                 return $this->file->path;
-                break;
 
             default:
                 throw new PropertyNotFound( $name, get_class( $this ) );

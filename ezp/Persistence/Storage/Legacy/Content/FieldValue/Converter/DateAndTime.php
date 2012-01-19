@@ -11,7 +11,6 @@ namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
 use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
     ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints,
     ezp\Persistence\Content\Type\FieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Content\FieldType\DateAndTime\Type as DateAndTimeType,
@@ -85,7 +84,6 @@ class DateAndTime implements Converter
         $useSeconds = (bool)$storageDef->dataInt2;
         $dateInterval = $this->getDateIntervalFromXML( $storageDef->dataText5 );
 
-        $fieldDef->fieldTypeConstraints = new FieldTypeConstraints;
         $fieldDef->fieldTypeConstraints->fieldSettings = new FieldSettings(
             array(
                 'defaultType' => $storageDef->dataInt1,
@@ -111,9 +109,7 @@ class DateAndTime implements Converter
             default:
                 $date = null;
         }
-        $fieldDef->defaultValue = new FieldValue(
-            array( 'data' => new DateAndTimeValue( $date ) )
-        );
+        $fieldDef->defaultValue->data = new DateAndTimeValue( $date );
     }
 
     /**

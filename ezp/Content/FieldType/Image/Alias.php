@@ -138,36 +138,28 @@ class Alias extends ValueObject
         {
             case 'timestamp':
                 return $this->modified->getTimestamp();
-                break;
 
             case 'mimeType':
                 return $this->fileInfo->getContentType();
-                break;
 
             case 'filename':
                 return $this->fileInfo->getFilename();
-                break;
 
             case 'suffix':
                 return $this->fileInfo->getExtension();
-                break;
 
             case 'dirpath':
                 return $this->fileInfo->getPath();
-                break;
 
             case 'basename':
                 return $this->fileInfo->getBasename( $this->fileInfo->getExtension() );
-                break;
 
             case 'fullPath':
             case 'url':
                 return $this->fileInfo->getPathname();
-                break;
 
             case 'filesize':
                 return $this->fileInfo->getSize();
-                break;
 
             default:
                 throw new PropertyNotFound( $name, __CLASS__ );

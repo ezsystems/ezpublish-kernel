@@ -8,7 +8,9 @@
  */
 
 namespace ezp\Persistence\Content\Type;
-use ezp\Persistence\ValueObject;
+use ezp\Persistence\ValueObject,
+    ezp\Persistence\Content\FieldTypeConstraints,
+    ezp\Persistence\Content\FieldValue;
 
 /**
  * @todo Do we need a FieldDefitinitionCreateStruct?
@@ -109,5 +111,15 @@ class FieldDefinition extends ValueObject
      * @var bool
      */
     public $isSearchable;
+
+    /**
+     * Constructor
+     */
+    public function __construct( array $properties = array() )
+    {
+        $this->fieldTypeConstraints = new FieldTypeConstraints;
+        $this->defaultValue = new FieldValue;
+        parent::__construct( $properties );
+    }
 }
 ?>

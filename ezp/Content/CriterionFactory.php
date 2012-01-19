@@ -27,6 +27,12 @@ use ezp\Persistence\Content\Query\Criterion,
 class CriterionFactory
 {
     /**
+     * The Criterion class we are building.
+     * @var string
+     */
+    private $criterionClass;
+
+    /**
      * Constructs a criterion factory for $criterion
      *
      * @param string $criterionClass The Criterion we are creating a factory for
@@ -230,11 +236,5 @@ class CriterionFactory
     {
         return call_user_func( array( $this->criterionClass, 'createFromQueryBuilder' ), $target, $operator, $value );
     }
-
-    /**
-     * The Criterion class we are building.
-     * @var string
-     */
-    private $criterionClass;
 }
 ?>

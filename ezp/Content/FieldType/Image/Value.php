@@ -70,8 +70,7 @@ class Value extends BaseValue implements ValueInterface
      */
     public static function fromString( $stringValue )
     {
-        $value = new static( $stringValue );
-        return $value;
+        return new static( $stringValue );
     }
 
     /**
@@ -97,27 +96,21 @@ class Value extends BaseValue implements ValueInterface
         {
             case 'filename':
                 return basename( $this->file->path );
-                break;
 
             case 'mimeType':
                 return $this->file->contentType->__toString();
-                break;
 
             case 'mimeTypeCategory':
                 return $this->file->contentType->type;
-                break;
 
             case 'mimeTypePart':
                 return $this->file->contentType->subType;
-                break;
 
             case 'filesize':
                 return $this->file->size;
-                break;
 
             case 'filepath':
                 return $this->file->path;
-                break;
 
             default:
                 throw new PropertyNotFound( $name, get_class() );
@@ -128,13 +121,6 @@ class Value extends BaseValue implements ValueInterface
      */
     public function getTitle()
     {
-        if ( !empty( $this->alternativeText ) )
-        {
-            return $this->alternativeText;
-        }
-        else
-        {
-            return $this->originalFilename;
-        }
+        return !empty( $this->alternativeText ) ? $this->alternativeText : $this->originalFilename;
     }
 }

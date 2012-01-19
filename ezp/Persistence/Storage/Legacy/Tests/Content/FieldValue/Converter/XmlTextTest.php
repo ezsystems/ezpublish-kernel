@@ -15,7 +15,6 @@ use ezp\Content\FieldType\XmlText\Value as XmlTextValue,
     ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
     ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter,
     ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
-    ezp\Persistence\Content\FieldTypeConstraints,
     PHPUnit_Framework_TestCase,
     DOMDocument;
 
