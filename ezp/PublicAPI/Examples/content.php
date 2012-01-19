@@ -7,25 +7,19 @@ use ezp\PublicAPI\Interfaces\Repository;
 
 /**
  * assumed as injected
- * @var Repository $repository
+ * @var ezp\PublicAPI\Interfaces\Repository $repository
  */
 $repository = null;
 
-/**
- * @var ContentTypeService $contentTypeService
- */
-$contentTypeService = $repository->getContentTypeService();
-
-/**
- * @var ContentService $contentService
- */
 $contentService = $repository->getContentService();
+$locationService = $repository->getLocationService();
+$contentTypeService = $repository->getContentTypeService();
 
 /**
  * create a new instance of a content object of type article
  */
+$contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
 
-$contentType = $contentTypeService->loadContentTypeByIdentifier('article');
 
 // construct the creation structure with the content type and the main language of the content
 // the main language is also the default language for the fields
