@@ -26,7 +26,7 @@
 				<li><span class="field">example:</span> <a href="../__examplesource/exsource_earch_publicapi_ezp_PublicAPI_Examples_content.php_3f38b23d1d0c178556c44f4b40282aa1.html">example</a></li>
 			</ul>
 		<p class="notes">
-			Located in <a class="field" href="_Interfaces---ContentService.php.html">/Interfaces/ContentService.php</a> (line <span class="field">39</span>)
+			Located in <a class="field" href="_Interfaces---ContentService.php.html">/Interfaces/ContentService.php</a> (line <span class="field">28</span>)
 		</p>
 		
 				
@@ -47,7 +47,7 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																																																																																																																																																																																																																																																				
+																																																																																																																																																																																																																																																												
 												<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Relation.html">Relation</a></span>
 										<a href="#addRelation" title="details" class="method-name">addRelation</a>
@@ -61,12 +61,12 @@
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
 										<a href="#copyContent" title="details" class="method-name">copyContent</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>&nbsp;<span class="var-name">$locationCreate</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span> = <span class="var-default">null</span>])
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreateStruct.html">LocationCreateStruct</a></span>&nbsp;<span class="var-name">$locationCreateStruct</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span> = <span class="var-default">null</span>])
 									</div>
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
 										<a href="#createContentDraft" title="details" class="method-name">createContentDraft</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span>&nbsp;<span class="var-name">$contentCreate</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$locationCreate</span> = <span class="var-default">array()</span>])
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentCreateStruct.html">ContentCreateStruct</a></span>&nbsp;<span class="var-name">$contentCreateStruct</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$locationCreateStructs</span> = <span class="var-default">array()</span>])
 									</div>
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
@@ -99,19 +99,19 @@
 											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Query.html">Query</a></span>&nbsp;<span class="var-name">$query</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$fieldFilters</span>, [<span class="var-type">boolean</span>&nbsp;<span class="var-name">$filterOnUserPermissions</span> = <span class="var-default">true</span>])
 									</div>
 																<div class="method-definition">
+											<span class="method-result">array</span>
+										<a href="#loadContentDrafts" title="details" class="method-name">loadContentDrafts</a>
+											([<span class="var-type">User</span>&nbsp;<span class="var-name">$user</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
-										<a href="#loadContent" title="details" class="method-name">loadContent</a>
+										<a href="#loadContentInfo" title="details" class="method-name">loadContentInfo</a>
 											(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentId</span>)
 									</div>
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
-										<a href="#loadContentByRemoteId" title="details" class="method-name">loadContentByRemoteId</a>
+										<a href="#loadContentInfoByRemoteId" title="details" class="method-name">loadContentInfoByRemoteId</a>
 											(<span class="var-type">string</span>&nbsp;<span class="var-name">$remoteId</span>)
-									</div>
-																<div class="method-definition">
-											<span class="method-result">array</span>
-										<a href="#loadContentDrafts" title="details" class="method-name">loadContentDrafts</a>
-											([<span class="var-type">User</span>&nbsp;<span class="var-name">$user</span> = <span class="var-default">null</span>])
 									</div>
 																<div class="method-definition">
 											<span class="method-result">array</span>
@@ -164,9 +164,14 @@
 											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>)
 									</div>
 																<div class="method-definition">
-											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span>
-										<a href="#newContentCreate" title="details" class="method-name">newContentCreate</a>
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentCreateStruct.html">ContentCreateStruct</a></span>
+										<a href="#newContentCreateStruct" title="details" class="method-name">newContentCreateStruct</a>
 											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$mainLanguageCode</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentUpdateStruct.html">ContentUpdateStruct</a></span>
+										<a href="#newContentUpdateStruct" title="details" class="method-name">newContentUpdateStruct</a>
+										()
 									</div>
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Translation.html">Translation</a></span>
@@ -174,8 +179,8 @@
 										()
 									</div>
 																<div class="method-definition">
-											<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>
-										<a href="#newVersionUpdate" title="details" class="method-name">newVersionUpdate</a>
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionUpdateStruct.html">VersionUpdateStruct</a></span>
+										<a href="#newVersionUpdateStruct" title="details" class="method-name">newVersionUpdateStruct</a>
 										()
 									</div>
 																<div class="method-definition">
@@ -191,12 +196,12 @@
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
 										<a href="#updateContent" title="details" class="method-name">updateContent</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentUpdate.html">ContentUpdate</a></span>&nbsp;<span class="var-name">$contentUpdate</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentUpdateStruct.html">ContentUpdateStruct</a></span>&nbsp;<span class="var-name">$contentUpdateStruct</span>)
 									</div>
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Version.html">Version</a></span>
 										<a href="#updateVersion" title="details" class="method-name">updateVersion</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>&nbsp;<span class="var-name">$versionUpdate</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdateStruct.html">VersionUpdateStruct</a></span>&nbsp;<span class="var-name">$versionUpdateStruct</span>)
 									</div>
 								</div>
 		</div>
@@ -215,17 +220,17 @@
 			<A NAME='method_detail'></A>
 
 <a name="methodaddRelation" id="addRelation"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">addRelation</span> (line <span class="line-number">283</span>)
+		<span class="method-title">addRelation</span> (line <span class="line-number">333</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Adds a relation of type common</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the newly created relation</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit this version</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -250,10 +255,10 @@
 			
 	</div>
 <a name="methodaddTranslationInfo" id="addTranslationInfo"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">addTranslationInfo</span> (line <span class="line-number">300</span>)
+		<span class="method-title">addTranslationInfo</span> (line <span class="line-number">355</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -281,10 +286,10 @@
 			
 	</div>
 <a name="methodcopyContent" id="copyContent"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">copyContent</span> (line <span class="line-number">232</span>)
+		<span class="method-title">copyContent</span> (line <span class="line-number">273</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -299,7 +304,7 @@
 		<span class="method-name">
 			copyContent
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>&nbsp;<span class="var-name">$locationCreate</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span> = <span class="var-default">null</span>])
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreateStruct.html">LocationCreateStruct</a></span>&nbsp;<span class="var-name">$locationCreateStruct</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span> = <span class="var-default">null</span>])
 			</div>
 	
 			<ul class="parameters">
@@ -307,8 +312,8 @@
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
 				<span class="var-name">$contentInfo</span>			</li>
 					<li>
-				<span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>
-				<span class="var-name">$locationCreate</span><span class="var-description">: the target location where the content is copied to</span>			</li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreateStruct.html">LocationCreateStruct</a></span>
+				<span class="var-name">$locationCreateStruct</span><span class="var-description">: the target location where the content is copied to</span>			</li>
 					<li>
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
 				<span class="var-name">$versionInfo</span>			</li>
@@ -317,10 +322,10 @@
 			
 	</div>
 <a name="methodcreateContentDraft" id="createContentDraft"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">createContentDraft</span> (line <span class="line-number">139</span>)
+		<span class="method-title">createContentDraft</span> (line <span class="line-number">153</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -328,9 +333,8 @@
 <p class="description"><p>If a different userId is given in the input it is assigned to the given user  but this required special rights for the authenticated user  (this is useful for content staging where the transfer process does not  have to authenticate with the user which created the content object in the source server).  The user has to publish the draft if it should be visible.  In 4.x at least one location has to be provided in the location creation array.</p></p>
 	<ul class="tags">
 				<li><span class="field">return:</span> - the newly created content draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\InvalidArgumentException if the input is not valid or          if the provided remoteId existis in the system or (4.x) there is no location provided</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to create the content in the given location</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If the provided remoteId existis in the system or (4.x) there is no location provided</li>
-				<li><span class="field">throws:</span> InvalidArgumentException if the input is not valid</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -339,25 +343,25 @@
 		<span class="method-name">
 			createContentDraft
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span>&nbsp;<span class="var-name">$contentCreate</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$locationCreate</span> = <span class="var-default">array()</span>])
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentCreateStruct.html">ContentCreateStruct</a></span>&nbsp;<span class="var-name">$contentCreateStruct</span>, [<span class="var-type">array</span>&nbsp;<span class="var-name">$locationCreateStructs</span> = <span class="var-default">array()</span>])
 			</div>
 	
 			<ul class="parameters">
 					<li>
-				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span>
-				<span class="var-name">$contentCreate</span>			</li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentCreateStruct.html">ContentCreateStruct</a></span>
+				<span class="var-name">$contentCreateStruct</span>			</li>
 					<li>
 				<span class="var-type">array</span>
-				<span class="var-name">$locationCreate</span><span class="var-description">: an array of <a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a> for each location parent under which a location should be created for the nontent</span>			</li>
+				<span class="var-name">$locationCreateStructs</span><span class="var-description">: an array of <a href="../ezp-PublicAPI-Values/LocationCreateStruct.html">LocationCreateStruct</a> for each location parent under which a location should be created for the nontent</span>			</li>
 				</ul>
 		
 			
 	</div>
 <a name="methodcreateDraftFromContent" id="createDraftFromContent"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">createDraftFromContent</span> (line <span class="line-number">168</span>)
+		<span class="method-title">createDraftFromContent</span> (line <span class="line-number">190</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -365,7 +369,7 @@
 <p class="description"><p>4.x: The draft is created with the initialLanguge code of the source version or if not present with the main language.  It can be changed on updating the version.</p></p>
 	<ul class="tags">
 				<li><span class="field">return:</span> - the newly created version</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if there is no published version or the version info points to a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\BadStateException if there is no published version or the version info points to a draft</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create the draft</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -390,10 +394,10 @@
 			
 	</div>
 <a name="methoddeleteContent" id="deleteContent"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteContent</span> (line <span class="line-number">156</span>)
+		<span class="method-title">deleteContent</span> (line <span class="line-number">175</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -420,16 +424,16 @@
 			
 	</div>
 <a name="methoddeleteRelation" id="deleteRelation"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteRelation</span> (line <span class="line-number">292</span>)
+		<span class="method-title">deleteRelation</span> (line <span class="line-number">344</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Removes a relation of type COMMON from a draft.</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed edit this version</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -454,17 +458,17 @@
 			
 	</div>
 <a name="methoddeleteVersion" id="deleteVersion"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteVersion</span> (line <span class="line-number">213</span>)
+		<span class="method-title">deleteVersion</span> (line <span class="line-number">248</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">removes the given version</p>
 	<ul class="tags">
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to remove this version</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the version is in state published</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\BadStateException if the version is in state published</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -485,10 +489,10 @@
 			
 	</div>
 <a name="methodfindContent" id="findContent"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">findContent</span> (line <span class="line-number">244</span>)
+		<span class="method-title">findContent</span> (line <span class="line-number">287</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -522,10 +526,10 @@
 			
 	</div>
 <a name="methodfindSingle" id="findSingle"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">findSingle</span> (line <span class="line-number">257</span>)
+		<span class="method-title">findSingle</span> (line <span class="line-number">301</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -559,73 +563,11 @@
 		
 			
 	</div>
-<a name="methodloadContent" id="loadContent"><!-- --></a>
-<div class="oddrow">
-	
-	<div class="method-header">
-		<span class="method-title">loadContent</span> (line <span class="line-number">48</span>)
-	</div> 
-	
-	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Loads a content info object - to load fields use loadVersion</p>
-	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given id does not exist</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to read the content</li>
-				<li><span class="field">access:</span> public</li>
-			</ul>
-	
-	<div class="method-signature">
-		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
-		<span class="method-name">
-			loadContent
-		</span>
-					(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentId</span>)
-			</div>
-	
-			<ul class="parameters">
-					<li>
-				<span class="var-type">int</span>
-				<span class="var-name">$contentId</span>			</li>
-				</ul>
-		
-			
-	</div>
-<a name="methodloadContentByRemoteId" id="loadContentByRemoteId"><!-- --></a>
+<a name="methodloadContentDrafts" id="loadContentDrafts"><!-- --></a>
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadContentByRemoteId</span> (line <span class="line-number">57</span>)
-	</div> 
-	
-	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Loads a content info object for the given remoteId - to load fields use loadVersion</p>
-	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given remote id does not exist</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to create the content in the given location</li>
-				<li><span class="field">access:</span> public</li>
-			</ul>
-	
-	<div class="method-signature">
-		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
-		<span class="method-name">
-			loadContentByRemoteId
-		</span>
-					(<span class="var-type">string</span>&nbsp;<span class="var-name">$remoteId</span>)
-			</div>
-	
-			<ul class="parameters">
-					<li>
-				<span class="var-type">string</span>
-				<span class="var-name">$remoteId</span>			</li>
-				</ul>
-		
-			
-	</div>
-<a name="methodloadContentDrafts" id="loadContentDrafts"><!-- --></a>
-<div class="oddrow">
-	
-	<div class="method-header">
-		<span class="method-title">loadContentDrafts</span> (line <span class="line-number">176</span>)
+		<span class="method-title">loadContentDrafts</span> (line <span class="line-number">200</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -652,16 +594,77 @@
 		
 			
 	</div>
-<a name="methodloadIncomingRelations" id="loadIncomingRelations"><!-- --></a>
-<div class="evenrow">
+<a name="methodloadContentInfo" id="loadContentInfo"><!-- --></a>
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadIncomingRelations</span> (line <span class="line-number">273</span>)
+		<span class="method-title">loadContentInfo</span> (line <span class="line-number">40</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Loads all incoming relations for a content object. The  relations come only</p>
-<p class="description"><p>from published versions of the source content objects</p></p>
+<p class="short-description">Loads a content info object - to load fields use loadVersion</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given id does not exist</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to read the content</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+		<span class="method-name">
+			loadContentInfo
+		</span>
+					(<span class="var-type">int</span>&nbsp;<span class="var-name">$contentId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">int</span>
+				<span class="var-name">$contentId</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadContentInfoByRemoteId" id="loadContentInfoByRemoteId"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadContentInfoByRemoteId</span> (line <span class="line-number">52</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Loads a content info object for the given remoteId - to load fields use loadVersion</p>
+	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given remote id does not exist</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to create the content in the given location</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+		<span class="method-name">
+			loadContentInfoByRemoteId
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$remoteId</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$remoteId</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadIncomingRelations" id="loadIncomingRelations"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadIncomingRelations</span> (line <span class="line-number">320</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Loads all incoming relations for a content object. The  relations come only  from published versions of the source content objects</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> an array of <a href="../ezp-PublicAPI-Values/Relation.html">Relation</a></li>
 				<li><span class="field">access:</span> public</li>
@@ -684,10 +687,10 @@
 			
 	</div>
 <a name="methodloadOutgoingRelations" id="loadOutgoingRelations"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadOutgoingRelations</span> (line <span class="line-number">265</span>)
+		<span class="method-title">loadOutgoingRelations</span> (line <span class="line-number">310</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -714,10 +717,10 @@
 			
 	</div>
 <a name="methodloadTranslationInfos" id="loadTranslationInfos"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadTranslationInfos</span> (line <span class="line-number">309</span>)
+		<span class="method-title">loadTranslationInfos</span> (line <span class="line-number">367</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -747,10 +750,10 @@
 			
 	</div>
 <a name="methodloadVersion" id="loadVersion"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersion</span> (line <span class="line-number">108</span>)
+		<span class="method-title">loadVersion</span> (line <span class="line-number">118</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -784,10 +787,10 @@
 			
 	</div>
 <a name="methodloadVersionByContentInfo" id="loadVersionByContentInfo"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionByContentInfo</span> (line <span class="line-number">88</span>)
+		<span class="method-title">loadVersionByContentInfo</span> (line <span class="line-number">92</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -821,10 +824,10 @@
 			
 	</div>
 <a name="methodloadVersionByRemoteId" id="loadVersionByRemoteId"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionByRemoteId</span> (line <span class="line-number">122</span>)
+		<span class="method-title">loadVersionByRemoteId</span> (line <span class="line-number">133</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -859,10 +862,10 @@
 			
 	</div>
 <a name="methodloadVersionByVersionInfo" id="loadVersionByVersionInfo"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionByVersionInfo</span> (line <span class="line-number">97</span>)
+		<span class="method-title">loadVersionByVersionInfo</span> (line <span class="line-number">104</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -892,10 +895,10 @@
 			
 	</div>
 <a name="methodloadVersionInfo" id="loadVersionInfo"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionInfo</span> (line <span class="line-number">67</span>)
+		<span class="method-title">loadVersionInfo</span> (line <span class="line-number">65</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -926,10 +929,10 @@
 			
 	</div>
 <a name="methodloadVersionInfoById" id="loadVersionInfoById"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersionInfoById</span> (line <span class="line-number">77</span>)
+		<span class="method-title">loadVersionInfoById</span> (line <span class="line-number">78</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -960,10 +963,10 @@
 			
 	</div>
 <a name="methodloadVersions" id="loadVersions"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadVersions</span> (line <span class="line-number">221</span>)
+		<span class="method-title">loadVersions</span> (line <span class="line-number">259</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -990,11 +993,11 @@
 		
 			
 	</div>
-<a name="methodnewContentCreate" id="newContentCreate"><!-- --></a>
-<div class="evenrow">
+<a name="methodnewContentCreateStruct" id="newContentCreateStruct"><!-- --></a>
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">newContentCreate</span> (line <span class="line-number">319</span>)
+		<span class="method-title">newContentCreateStruct</span> (line <span class="line-number">378</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1004,9 +1007,9 @@
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentCreate.html">ContentCreate</a></span>
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentCreateStruct.html">ContentCreateStruct</a></span>
 		<span class="method-name">
-			newContentCreate
+			newContentCreateStruct
 		</span>
 					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentType.html">ContentType</a></span>&nbsp;<span class="var-name">$contentType</span>, <span class="var-type">string</span>&nbsp;<span class="var-name">$mainLanguageCode</span>)
 			</div>
@@ -1022,11 +1025,35 @@
 		
 			
 	</div>
+<a name="methodnewContentUpdateStruct" id="newContentUpdateStruct"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">newContentUpdateStruct</span> (line <span class="line-number">391</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">instanciates a new content update struct</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/ContentUpdateStruct.html">ContentUpdateStruct</a></span>
+		<span class="method-name">
+			newContentUpdateStruct
+		</span>
+				()
+			</div>
+	
+		
+			
+	</div>
 <a name="methodnewTranslation" id="newTranslation"><!-- --></a>
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">newTranslation</span> (line <span class="line-number">332</span>)
+		<span class="method-title">newTranslation</span> (line <span class="line-number">397</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1046,11 +1073,11 @@
 		
 			
 	</div>
-<a name="methodnewVersionUpdate" id="newVersionUpdate"><!-- --></a>
+<a name="methodnewVersionUpdateStruct" id="newVersionUpdateStruct"><!-- --></a>
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">newVersionUpdate</span> (line <span class="line-number">326</span>)
+		<span class="method-title">newVersionUpdateStruct</span> (line <span class="line-number">385</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1060,9 +1087,9 @@
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/VersionUpdateStruct.html">VersionUpdateStruct</a></span>
 		<span class="method-name">
-			newVersionUpdate
+			newVersionUpdateStruct
 		</span>
 				()
 			</div>
@@ -1074,14 +1101,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">publishDraft</span> (line <span class="line-number">205</span>)
+		<span class="method-title">publishDraft</span> (line <span class="line-number">238</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Publishes a draft</p>
 	<ul class="tags">
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to publish this version</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -1105,7 +1132,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">translateVersion</span> (line <span class="line-number">187</span>)
+		<span class="method-title">translateVersion</span> (line <span class="line-number">215</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -1113,7 +1140,7 @@
 	<ul class="tags">
 				<li><span class="field">return:</span> the version with the translated fields</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update this version</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the given destiantioon version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\BadStateException if the given destiantioon version is not a draft</li>
 				<li><span class="field">access:</span> public</li>
 				<li><span class="field">example:</span> <a href="../__examplesource/exsource_ublicapi_ezp_PublicAPI_Examples_translation_5x.php_92f589669b57dd063de930642dadacbc.html">example</a></li>
 			</ul>
@@ -1138,14 +1165,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateContent</span> (line <span class="line-number">149</span>)
+		<span class="method-title">updateContent</span> (line <span class="line-number">166</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">Updates the metadata (see <a href="../ezp-PublicAPI-Values/ContentUpdate.html">ContentUpdate</a>) of a content object - to update fields use updateVersion</p>
+<p class="short-description">Updates the metadata (see <a href="../ezp-PublicAPI-Values/ContentUpdateStruct.html">ContentUpdateStruct</a>) of a content object - to update fields use updateVersion</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the content info with the updated attributes</li>
-				<li><span class="field">throws:</span> InvalidArgumentException if the input is not valid</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\InvalidArgumentException if the input is not valid</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to update the content meta data</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -1155,7 +1182,7 @@
 		<span class="method-name">
 			updateContent
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentUpdate.html">ContentUpdate</a></span>&nbsp;<span class="var-name">$contentUpdate</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/ContentUpdateStruct.html">ContentUpdateStruct</a></span>&nbsp;<span class="var-name">$contentUpdateStruct</span>)
 			</div>
 	
 			<ul class="parameters">
@@ -1163,8 +1190,8 @@
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
 				<span class="var-name">$contentInfo</span>			</li>
 					<li>
-				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentUpdate.html">ContentUpdate</a></span>
-				<span class="var-name">$contentUpdate</span>			</li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentUpdateStruct.html">ContentUpdateStruct</a></span>
+				<span class="var-name">$contentUpdateStruct</span>			</li>
 				</ul>
 		
 			
@@ -1173,14 +1200,14 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateVersion</span> (line <span class="line-number">197</span>)
+		<span class="method-title">updateVersion</span> (line <span class="line-number">228</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Updates the fields of a draft.</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the version with the updated fields</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the version is not a draft</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update this version</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -1190,7 +1217,7 @@
 		<span class="method-name">
 			updateVersion
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>&nbsp;<span class="var-name">$versionUpdate</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>&nbsp;<span class="var-name">$versionInfo</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdateStruct.html">VersionUpdateStruct</a></span>&nbsp;<span class="var-name">$versionUpdateStruct</span>)
 			</div>
 	
 			<ul class="parameters">
@@ -1198,8 +1225,8 @@
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionInfo.html">VersionInfo</a></span>
 				<span class="var-name">$versionInfo</span>			</li>
 					<li>
-				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdate.html">VersionUpdate</a></span>
-				<span class="var-name">$versionUpdate</span>			</li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/VersionUpdateStruct.html">VersionUpdateStruct</a></span>
+				<span class="var-name">$versionUpdateStruct</span>			</li>
 				</ul>
 		
 			
@@ -1210,7 +1237,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Tue, 17 Jan 2012 16:03:41 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Thu, 19 Jan 2012 17:12:41 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

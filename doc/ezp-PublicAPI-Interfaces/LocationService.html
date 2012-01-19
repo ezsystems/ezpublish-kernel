@@ -26,7 +26,7 @@
 				<li><span class="field">example:</span> <a href="../__examplesource/exsource_arch_publicapi_ezp_PublicAPI_Examples_location.php_7bfb0d00640eb6a1e30904ff3ba41db5.html">example</a></li>
 			</ul>
 		<p class="notes">
-			Located in <a class="field" href="_Interfaces---LocationService.php.html">/Interfaces/LocationService.php</a> (line <span class="field">21</span>)
+			Located in <a class="field" href="_Interfaces---LocationService.php.html">/Interfaces/LocationService.php</a> (line <span class="field">19</span>)
 		</p>
 		
 				
@@ -47,7 +47,7 @@
 		</div>
 		<div class="info-box-body">			
 			<div class="method-summary">
-																																																																																																												
+																																																																																																																												
 												<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>
 										<a href="#copySubtree" title="details" class="method-name">copySubtree</a>
@@ -56,7 +56,7 @@
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>
 										<a href="#createLocation" title="details" class="method-name">createLocation</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$locationCreate</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>&nbsp;<span class="var-name">$location</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$locationCreateStruct</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreateStruct.html">LocationCreateStruct</a></span>&nbsp;<span class="var-name">$location</span>)
 									</div>
 																<div class="method-definition">
 											<span class="method-result">void</span>
@@ -84,18 +84,28 @@
 											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>&nbsp;<span class="var-name">$location</span>, [<span class="var-type">int</span>&nbsp;<span class="var-name">$offset</span> = <span class="var-default">0</span>], [<span class="var-type">int</span>&nbsp;<span class="var-name">$limit</span> = <span class="var-default">-1</span>])
 									</div>
 																<div class="method-definition">
+											<span class="method-result">array</span>
+										<a href="#loadLocations" title="details" class="method-name">loadLocations</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>&nbsp;<span class="var-name">$rootLocation</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>
+										<a href="#loadMainLocation" title="details" class="method-name">loadMainLocation</a>
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>)
+									</div>
+																<div class="method-definition">
 											<span class="method-result">void</span>
 										<a href="#moveSubtree" title="details" class="method-name">moveSubtree</a>
 											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>&nbsp;<span class="var-name">$location</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>&nbsp;<span class="var-name">$newParentLocation</span>)
 									</div>
 																<div class="method-definition">
-											<span class="method-result"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>
-										<a href="#newLocationCreate" title="details" class="method-name">newLocationCreate</a>
+											<span class="method-result"><a href="../ezp-PublicAPI-Values/LocationCreateStruct.html">LocationCreateStruct</a></span>
+										<a href="#newLocationCreateStruct" title="details" class="method-name">newLocationCreateStruct</a>
 											(<span class="var-type">int</span>&nbsp;<span class="var-name">$parentLocationId</span>)
 									</div>
 																<div class="method-definition">
-											<span class="method-result"><a href="../ezp-PublicAPI-Values/LocationUpdate.html">LocationUpdate</a></span>
-										<a href="#newLocationUpdate" title="details" class="method-name">newLocationUpdate</a>
+											<span class="method-result">LocationUpdateStruct</span>
+										<a href="#newLocationUpdateStruct" title="details" class="method-name">newLocationUpdateStruct</a>
 										()
 									</div>
 																<div class="method-definition">
@@ -111,7 +121,7 @@
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>
 										<a href="#updateLocation" title="details" class="method-name">updateLocation</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>&nbsp;<span class="var-name">$location</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationUpdate.html">LocationUpdate</a></span>&nbsp;<span class="var-name">$locationUpdate</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>&nbsp;<span class="var-name">$location</span>, <span class="var-type">LocationUpdateStruct</span>&nbsp;<span class="var-name">$locationUpdateStruct</span>)
 									</div>
 								</div>
 		</div>
@@ -130,10 +140,10 @@
 			<A NAME='method_detail'></A>
 
 <a name="methodcopySubtree" id="copySubtree"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">copySubtree</span> (line <span class="line-number">35</span>)
+		<span class="method-title">copySubtree</span> (line <span class="line-number">37</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -142,7 +152,7 @@
 				<li><span class="field">return:</span> The newly created location of the copied subtree</li>
 				<li><span class="field">todo:</span> enhancment - this method should return a result structure containing the new location and a list        of locations which are not copied due to permission denials.</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException  if the target location is a sub location of the given location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\IllegalArgumentException  if the target location is a sub location of the given location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -166,17 +176,17 @@
 			
 	</div>
 <a name="methodcreateLocation" id="createLocation"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">createLocation</span> (line <span class="line-number">76</span>)
+		<span class="method-title">createLocation</span> (line <span class="line-number">112</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Creates the new $location in the content repository for the given content</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the newly created Location</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException  if the content is already below the specified parent                                         or the parent is a sub location of the location the content                                         or if set the remoteId existis already</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\IllegalArgumentException  if the content is already below the specified parent                                         or the parent is a sub location of the location the content                                         or if set the remoteId existis already</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create this location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -186,7 +196,7 @@
 		<span class="method-name">
 			createLocation
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$locationCreate</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>&nbsp;<span class="var-name">$location</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, <span class="var-type"></span>&nbsp;<span class="var-name">$locationCreateStruct</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreateStruct.html">LocationCreateStruct</a></span>&nbsp;<span class="var-name">$location</span>)
 			</div>
 	
 			<ul class="parameters">
@@ -194,20 +204,20 @@
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
 				<span class="var-name">$contentInfo</span>			</li>
 					<li>
-				<span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/LocationCreateStruct.html">LocationCreateStruct</a></span>
 				<span class="var-name">$location</span>			</li>
 					<li>
 				<span class="var-type"></span>
-				<span class="var-name">$locationCreate</span>			</li>
+				<span class="var-name">$locationCreateStruct</span>			</li>
 				</ul>
 		
 			
 	</div>
 <a name="methoddeleteLocation" id="deleteLocation"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteLocation</span> (line <span class="line-number">141</span>)
+		<span class="method-title">deleteLocation</span> (line <span class="line-number">184</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -238,10 +248,10 @@
 			
 	</div>
 <a name="methodhideLocation" id="hideLocation"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">hideLocation</span> (line <span class="line-number">105</span>)
+		<span class="method-title">hideLocation</span> (line <span class="line-number">146</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -269,10 +279,10 @@
 			
 	</div>
 <a name="methodloadLocation" id="loadLocation"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadLocation</span> (line <span class="line-number">44</span>)
+		<span class="method-title">loadLocation</span> (line <span class="line-number">49</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -300,10 +310,10 @@
 			
 	</div>
 <a name="methodloadLocationByRemoteId" id="loadLocationByRemoteId"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadLocationByRemoteId</span> (line <span class="line-number">53</span>)
+		<span class="method-title">loadLocationByRemoteId</span> (line <span class="line-number">61</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -334,10 +344,10 @@
 			
 	</div>
 <a name="methodloadLocationChildren" id="loadLocationChildren"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadLocationChildren</span> (line <span class="line-number">63</span>)
+		<span class="method-title">loadLocationChildren</span> (line <span class="line-number">96</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -369,11 +379,75 @@
 		
 			
 	</div>
-<a name="methodmoveSubtree" id="moveSubtree"><!-- --></a>
+<a name="methodloadLocations" id="loadLocations"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">loadLocations</span> (line <span class="line-number">84</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Loads the locations for the given content object. If a $rootLocation is given only  locations of the content which are descendants of the root location are returnd  The location list is also filtered by permissions on reading locations.</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> an array of <a href="../ezp-PublicAPI-Values/Location.html">Location</a></li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">array</span>
+		<span class="method-name">
+			loadLocations
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>, [<span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>&nbsp;<span class="var-name">$rootLocation</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>
+				<span class="var-name">$rootLocation</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodloadMainLocation" id="loadMainLocation"><!-- --></a>
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">moveSubtree</span> (line <span class="line-number">126</span>)
+		<span class="method-title">loadMainLocation</span> (line <span class="line-number">72</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">loads the main loaction of a content object</p>
+	<ul class="tags">
+				<li><span class="field">return:</span> (in 5.x the return value also can be null if the content has no location)</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read this location</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>
+		<span class="method-name">
+			loadMainLocation
+		</span>
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>&nbsp;<span class="var-name">$contentInfo</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/ContentInfo.html">ContentInfo</a></span>
+				<span class="var-name">$contentInfo</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodmoveSubtree" id="moveSubtree"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">moveSubtree</span> (line <span class="line-number">169</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -402,11 +476,11 @@
 		
 			
 	</div>
-<a name="methodnewLocationCreate" id="newLocationCreate"><!-- --></a>
-<div class="oddrow">
+<a name="methodnewLocationCreateStruct" id="newLocationCreateStruct"><!-- --></a>
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">newLocationCreate</span> (line <span class="line-number">149</span>)
+		<span class="method-title">newLocationCreateStruct</span> (line <span class="line-number">194</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -416,9 +490,9 @@
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result"><a href="../ezp-PublicAPI-Values/LocationCreate.html">LocationCreate</a></span>
+		<span class="method-result"><a href="../ezp-PublicAPI-Values/LocationCreateStruct.html">LocationCreateStruct</a></span>
 		<span class="method-name">
-			newLocationCreate
+			newLocationCreateStruct
 		</span>
 					(<span class="var-type">int</span>&nbsp;<span class="var-name">$parentLocationId</span>)
 			</div>
@@ -431,11 +505,11 @@
 		
 			
 	</div>
-<a name="methodnewLocationUpdate" id="newLocationUpdate"><!-- --></a>
-<div class="evenrow">
+<a name="methodnewLocationUpdateStruct" id="newLocationUpdateStruct"><!-- --></a>
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">newLocationUpdate</span> (line <span class="line-number">155</span>)
+		<span class="method-title">newLocationUpdateStruct</span> (line <span class="line-number">201</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -445,9 +519,9 @@
 			</ul>
 	
 	<div class="method-signature">
-		<span class="method-result"><a href="../ezp-PublicAPI-Values/LocationUpdate.html">LocationUpdate</a></span>
+		<span class="method-result">LocationUpdateStruct</span>
 		<span class="method-name">
-			newLocationUpdate
+			newLocationUpdateStruct
 		</span>
 				()
 			</div>
@@ -456,10 +530,10 @@
 			
 	</div>
 <a name="methodswapLoaction" id="swapLoaction"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">swapLoaction</span> (line <span class="line-number">96</span>)
+		<span class="method-title">swapLoaction</span> (line <span class="line-number">135</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -489,10 +563,10 @@
 			
 	</div>
 <a name="methodunhideLocation" id="unhideLocation"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">unhideLocation</span> (line <span class="line-number">115</span>)
+		<span class="method-title">unhideLocation</span> (line <span class="line-number">158</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -520,17 +594,17 @@
 			
 	</div>
 <a name="methodupdateLocation" id="updateLocation"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateLocation</span> (line <span class="line-number">86</span>)
+		<span class="method-title">updateLocation</span> (line <span class="line-number">125</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Updates $location in the content repository</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> the updated Location</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException   if if set the remoteId existis already</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\IllegalArgumentException   if if set the remoteId existis already</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to update this location</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -540,7 +614,7 @@
 		<span class="method-name">
 			updateLocation
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>&nbsp;<span class="var-name">$location</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/LocationUpdate.html">LocationUpdate</a></span>&nbsp;<span class="var-name">$locationUpdate</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>&nbsp;<span class="var-name">$location</span>, <span class="var-type">LocationUpdateStruct</span>&nbsp;<span class="var-name">$locationUpdateStruct</span>)
 			</div>
 	
 			<ul class="parameters">
@@ -548,8 +622,8 @@
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/Location.html">Location</a></span>
 				<span class="var-name">$location</span>			</li>
 					<li>
-				<span class="var-type"><a href="../ezp-PublicAPI-Values/LocationUpdate.html">LocationUpdate</a></span>
-				<span class="var-name">$locationUpdate</span>			</li>
+				<span class="var-type">LocationUpdateStruct</span>
+				<span class="var-name">$locationUpdateStruct</span>			</li>
 				</ul>
 		
 			
@@ -560,7 +634,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Tue, 17 Jan 2012 16:03:51 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Thu, 19 Jan 2012 17:12:50 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

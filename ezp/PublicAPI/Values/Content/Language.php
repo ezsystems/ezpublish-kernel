@@ -8,25 +8,29 @@ use ezp\PublicAPI\Values\ValueObject;
  *
  */
 class Language extends ValueObject {
+    
     /**
      * The language id (auto generated)
      */
     public $id;
+    
     /**
-     *
-     * the locale code
+     * the languageCode code
+     * 
      * @var string
      */
-    public $locale;
+    public $languageCode;
+    
     /**
-     *
      * Human readable name of the language
+     * 
      * @var string
      */
     public $name;
+    
     /**
-     *
      * indicates if the langiuage is enabled or not.
+     * 
      * @var boolean
      */
     public $enabled;

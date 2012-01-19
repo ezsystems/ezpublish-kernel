@@ -88,7 +88,7 @@
 																<div class="method-definition">
 											<span class="method-result"><a href="../ezp-PublicAPI-Values/Section.html">Section</a></span>
 										<a href="#updateSection" title="details" class="method-name">updateSection</a>
-											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Section.html">Section</a></span>&nbsp;<span class="var-name">$section</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Section.html">Section</a></span>&nbsp;<span class="var-name">$section</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/SectionUpdateStruct.html">SectionUpdateStruct</a></span>&nbsp;<span class="var-name">$sectionUpdateStruct</span>)
 									</div>
 								</div>
 		</div>
@@ -110,13 +110,13 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">assignSection</span> (line <span class="line-number">87</span>)
+		<span class="method-title">assignSection</span> (line <span class="line-number">98</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">assigns the content to the given section  this method overrides the current assigned section</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If user does not have access to view provided object</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to view provided object</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -143,14 +143,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">assignSectionToSubtree</span> (line <span class="line-number">100</span>)
+		<span class="method-title">assignSectionToSubtree</span> (line <span class="line-number">113</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Assigns $section to the contents held by $startingPoint location and  all contents held by descendants locations of $startingPoint to which the user has  the permission to assign a section</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> a list (string) of descendants which are not changed due to permissions</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to this location</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to the starting point</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -177,7 +177,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">countAssignedContents</span> (line <span class="line-number">77</span>)
+		<span class="method-title">countAssignedContents</span> (line <span class="line-number">87</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -206,14 +206,14 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">createSection</span> (line <span class="line-number">30</span>)
+		<span class="method-title">createSection</span> (line <span class="line-number">31</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Creates the a new Section in the content repository</p>
 	<ul class="tags">
 				<li><span class="field">return:</span> The newly create section</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If the new identifier already exists</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier already exists</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -241,7 +241,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">deleteSection</span> (line <span class="line-number">112</span>)
+		<span class="method-title">deleteSection</span> (line <span class="line-number">125</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -249,7 +249,7 @@
 	<ul class="tags">
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException If the specified section is not found</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to delete a section</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException  if section can not be deleted          because it is still assigned to some contents.</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\BadStateException  if section can not be deleted          because it is still assigned to some contents.</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -273,7 +273,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadSection</span> (line <span class="line-number">51</span>)
+		<span class="method-title">loadSection</span> (line <span class="line-number">57</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -304,7 +304,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadSectionByIdentifier</span> (line <span class="line-number">69</span>)
+		<span class="method-title">loadSectionByIdentifier</span> (line <span class="line-number">78</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -335,7 +335,7 @@
 <div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadSections</span> (line <span class="line-number">59</span>)
+		<span class="method-title">loadSections</span> (line <span class="line-number">66</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -361,7 +361,7 @@
 <div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateSection</span> (line <span class="line-number">41</span>)
+		<span class="method-title">updateSection</span> (line <span class="line-number">45</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -369,7 +369,7 @@
 	<ul class="tags">
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\NotFoundException if section could not be found</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException If the new identifier already exists</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier already exists (if set in the update struct)</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -378,13 +378,16 @@
 		<span class="method-name">
 			updateSection
 		</span>
-					(<span class="var-type"><a href="../ezp-PublicAPI-Values/Section.html">Section</a></span>&nbsp;<span class="var-name">$section</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/Section.html">Section</a></span>&nbsp;<span class="var-name">$section</span>, <span class="var-type"><a href="../ezp-PublicAPI-Values/SectionUpdateStruct.html">SectionUpdateStruct</a></span>&nbsp;<span class="var-name">$sectionUpdateStruct</span>)
 			</div>
 	
 			<ul class="parameters">
 					<li>
 				<span class="var-type"><a href="../ezp-PublicAPI-Values/Section.html">Section</a></span>
 				<span class="var-name">$section</span>			</li>
+					<li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/SectionUpdateStruct.html">SectionUpdateStruct</a></span>
+				<span class="var-name">$sectionUpdateStruct</span>			</li>
 				</ul>
 		
 			
@@ -395,7 +398,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Tue, 17 Jan 2012 16:03:53 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Thu, 19 Jan 2012 17:12:52 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

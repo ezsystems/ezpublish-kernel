@@ -23,7 +23,7 @@
         		<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Language service, used for language operations</p>
 		<p class="notes">
-			Located in <a class="field" href="_Interfaces---LanguageService.php.html">/Interfaces/LanguageService.php</a> (line <span class="field">18</span>)
+			Located in <a class="field" href="_Interfaces---LanguageService.php.html">/Interfaces/LanguageService.php</a> (line <span class="field">13</span>)
 		</p>
 		
 				
@@ -102,16 +102,16 @@
 			<A NAME='method_detail'></A>
 
 <a name="methodcreate" id="create"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">create</span> (line <span class="line-number">30</span>)
+		<span class="method-title">create</span> (line <span class="line-number">27</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Creates the a new Language in the content repository</p>
 	<ul class="tags">
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException if the locale already exists</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\IllegalArgumentException if the locale already exists</li>
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
@@ -139,17 +139,17 @@
 			
 	</div>
 <a name="methoddelete" id="delete"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">delete</span> (line <span class="line-number">90</span>)
+		<span class="method-title">delete</span> (line <span class="line-number">95</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
 <p class="short-description">Deletes  a language from content repository</p>
 	<ul class="tags">
 				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations</li>
-				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\ForbiddenException          if language can not be deleted          because it is still assigned to some content / type / (...).</li>
+				<li><span class="field">throws:</span> ezp\PublicAPI\Interfaces\IllegalArgumentException          if language can not be deleted          because it is still assigned to some content / type / (...).</li>
 				<li><span class="field">access:</span> public</li>
 			</ul>
 	
@@ -170,7 +170,7 @@
 			
 	</div>
 <a name="methoddisable" id="disable"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
 		<span class="method-title">disable</span> (line <span class="line-number">54</span>)
@@ -200,10 +200,10 @@
 			
 	</div>
 <a name="methodenable" id="enable"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">enable</span> (line <span class="line-number">46</span>)
+		<span class="method-title">enable</span> (line <span class="line-number">45</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -230,10 +230,10 @@
 			
 	</div>
 <a name="methodload" id="load"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">load</span> (line <span class="line-number">63</span>)
+		<span class="method-title">load</span> (line <span class="line-number">65</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -260,10 +260,10 @@
 			
 	</div>
 <a name="methodloadAll" id="loadAll"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadAll</span> (line <span class="line-number">70</span>)
+		<span class="method-title">loadAll</span> (line <span class="line-number">72</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -285,10 +285,10 @@
 			
 	</div>
 <a name="methodloadByLanguageCode" id="loadByLanguageCode"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">loadByLanguageCode</span> (line <span class="line-number">79</span>)
+		<span class="method-title">loadByLanguageCode</span> (line <span class="line-number">83</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -315,10 +315,10 @@
 			
 	</div>
 <a name="methodupdateName" id="updateName"><!-- --></a>
-<div class="oddrow">
+<div class="evenrow">
 	
 	<div class="method-header">
-		<span class="method-title">updateName</span> (line <span class="line-number">38</span>)
+		<span class="method-title">updateName</span> (line <span class="line-number">36</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
@@ -353,7 +353,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Tue, 17 Jan 2012 16:03:50 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Thu, 19 Jan 2012 17:12:50 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

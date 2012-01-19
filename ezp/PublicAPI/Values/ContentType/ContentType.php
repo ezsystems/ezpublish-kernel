@@ -132,11 +132,9 @@ abstract class ContentType extends ValueObject
 
     /**
      * URL alias schema
-     * Same as {@link \ezp\Persistence\Content\Type::$nameSchema}.
      * If nothing is provided, $nameSchema will be used instead.
      *
      * @var string
-     * @see \ezp\Persistence\Content\Type::$nameSchema
      */
     public $urlAliasSchema;
 

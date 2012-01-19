@@ -1,22 +1,18 @@
 <?php
 namespace  ezp\PublicAPI\Interfaces;
 
-use ezp\PublicAPI\Values\User\PolicyUpdate;
-
+use ezp\PublicAPI\Values\User\PolicyUpdateStruct;
 use ezp\PublicAPI\Values\User\Policy;
-
-use ezp\PublicAPI\Values\User\RoleUpdate;
-
-use ezp\PublicAPI\Values\User\PolicyCreate;
-
+use ezp\PublicAPI\Values\User\RoleUpdateStruct;
+use ezp\PublicAPI\Values\User\PolicyCreateStruct;
 use ezp\PublicAPI\Values\User\Role;
-
-use ezp\PublicAPI\Values\User\RoleCreate;
-
-
+use ezp\PublicAPI\Values\User\RoleCreateStruct;
 
 /**
  * This service provides methods for managing Roles and Policies
+ * 
+ * @todo add get roles for user including limitations
+ * 
  * @package ezp\PublicAPI\Interfaces
  */
 interface RoleService {
@@ -24,55 +20,70 @@ interface RoleService {
     /**
      * Creates a new Role
      *
-     * @param RoleCreate $role
+     * @param RoleCreateStruct $roleCreateStruct
+     * 
      * @return Role
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if the name of the role already exists
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException if the name of the role already exists
      */
-    public function createRole(/*RoleCreate*/ $role);
+    public function createRole(/*RoleCreateStruct*/ $roleCreateStruct);
 
     /**
      * Updates the name and (5.x) description of the role
      * @param Role $role
-     * @param RoleUpdate $roleUpdate
+     * @param RoleUpdateStruct $roleUpdateStruct
+     * 
      * @return Role
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if the name of the role already exists
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException if the name of the role already exists
      */
-    public function updateRole(/*Role*/ $role, /*RoleUpdate*/ $update);
+    public function updateRole(/*Role*/ $role, /*RoleUpdateStruct*/ $update);
 
     /**
      * adds a new policy to the role
      * @param Role $role
-     * @param PolicyCreate $policy
+     * @param PolicyCreateStruct $policyCreateStruct
+     * 
      * @return Role
+     * 
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to add  a policy
      */
-    public function addPolicy(/*Role*/ $role, /*PolicyCreate*/ $policy);
+    public function addPolicy(/*Role*/ $role, /*PolicyCreateStruct*/ $policyCreateStruct);
 
     /**
      * removes a policy from the role
+     * 
      * @param Role $role
      * @param Policy $policy the policy to remove from the role
+     * 
      * @return Role the updated role
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove a policy
      */
     public function removePolicy(/*Role*/ $role, /*Policy*/ $policy);
 
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitaions are replaced by the ones in $roleUpdate
-     * @param PolicyUpdate $policyUpdate
+     * the limitaions are replaced by the ones in $roleUpdateStruct
+     * 
+     * @param PolicyUpdateStruct $policyUpdateStruct
      * @param Policy $policy
+     * 
      * @return Policy
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to uŸdate a policy
      */
-    public function updatePolicy(/*Policy*/ $policy, /*PolicyUpdate*/ $policyUpdate);
+    public function updatePolicy(/*Policy*/ $policy, /*PolicyUpdateStruct*/ $policyUpdateStruct);
 
     /**
      * loads a role for the given name
+     * 
      * @param string $name
+     * 
      * @return Role
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read this role
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if a role with the given name was not found
      */
@@ -80,40 +91,51 @@ interface RoleService {
 
     /**
      * loads all roles
+     * 
      * @return array an array of {@link Role}
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read the roles
      */
     public function loadRoles();
 
     /**
      * deletes the given role
+     * 
      * @param  Role $role
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to delete this role
      */
     public function deleteRole(/*Role*/ $role);
 
     /**
-     *
      * loads all policies from roles which are assigned to a user or to user groups to which the user belongs
+     * 
      * @param $userId
+     * 
      * @return array an array of {@link Policy}
+     * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if a user with the given id was not found
      */
     public function loadPoliciesByUserId($userId);
 
     /**
-     *
      * assigns a role to the given user group
+     * 
+     * @todo add limitations
+     * 
      * @param Role $role
      * @param UserGroup $userGroup
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign a role
      */
     public function assignRoleToUserGroup(/*Role*/ $role, /*UserGroup*/ $userGroup);
 
     /**
      * removes a role from the given user group.
+     * 
      * @param Role $role
      * @param UserGroup $userGroup
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove a role
      * @throws InvalidArgumentException  If the role is not assigned to the given user group
      */
@@ -121,8 +143,12 @@ interface RoleService {
 
     /**
      * assigns a role to the given user
+     * 
+     * @todo add limitations
+     * 
      * @param Role $role
      * @param User $user
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign a role
      */
      
@@ -130,8 +156,10 @@ interface RoleService {
 
     /**
      * removes a role from the given user.
+     * 
      * @param Role $role
      * @param User $user
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove a role
      * @throws InvalidArgumentException If the role is not assigned to the user
      */
@@ -140,22 +168,34 @@ interface RoleService {
 
     /**
      * instanciates a role create class
+     * 
      * @param string $name
-     * @return RoleCreate
+     * 
+     * @return RoleCreateStruct
      */
-    public function newRoleCreate($name);
+    public function newRoleCreateStruct($name);
 
     /**
      * instanciates a policy create class
+     * 
      * @param string $module
      * @param string $function
-     * @return PolicyCreate
+     * 
+     * @return PolicyCreateStruct
      */
-    public function newRoleCreate( $module, $function);
+    public function newPolicyCreateStruct( $module, $function);
 
     /**
      * instanciates a policy update class
-     * @return PolicyUpdate
+     * 
+     * @return PolicyUpdateStruct
      */
-    public function newPolicyUpdate();
+    public function newPolicyUpdateStruct();
+    
+    /**
+     * instanciates a policy update class
+     * 
+     * @return RoleUpdateStruct
+     */
+    public function newRoleUpdateStruct();
 }

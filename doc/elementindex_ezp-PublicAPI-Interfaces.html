@@ -28,6 +28,7 @@
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#f">f</a>
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#g">g</a>
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#h">h</a>
+	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#i">i</a>
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#l">l</a>
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#m">m</a>
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#n">n</a>
@@ -78,7 +79,7 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodassignContentTypeGroup">ContentTypeService::assignContentTypeGroup()</a> in ContentTypeService.php</div>
-							<div class="index-item-description">Un-Link a content type from a group ( remove a group from a type )</div>
+							<div class="index-item-description">assign a content type to a content type group.</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">assignRoleToUser</span>
@@ -124,11 +125,24 @@
 	</div>
 	<dl>
 			<dt class="field">
+						BadStateException
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/BadStateException.html">BadStateException</a> in BadStateException.php</div>
+							<div class="index-item-description">This Exception is thrown if a method is called with an value referencing an object which is not in the right state</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">beginTransaction</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/Repository.html#methodbeginTransaction">Repository::beginTransaction()</a> in Repository.php</div>
 							<div class="index-item-description">Begin transaction</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">BadStateException.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/_Interfaces---BadStateException.php.html">BadStateException.php</a> in BadStateException.php</div>
 					</dd>
 		</dl>
 	<a name="c"></a>
@@ -268,7 +282,7 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UserService.html#methodcreateUserGroup">UserService::createUserGroup()</a> in UserService.php</div>
-							<div class="index-item-description">Creates a new user group using the data provided in the ContentCreate parameter  In 4.x in the content type parameter in the profile is ignored <ul><li>the content type is determined via configuration and can be set to null.</li></ul></div>
+							<div class="index-item-description">Creates a new user group using the data provided in the ContentCreateStruct parameter  In 4.x in the content type parameter in the profile is ignored <ul><li>the content type is determined via configuration and can be set to null.</li></ul></div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">ContentService.php</span>
@@ -365,7 +379,7 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UserService.html#methoddeleteUserGroup">UserService::deleteUserGroup()</a> in UserService.php</div>
-							<div class="index-item-description">removes a user group</div>
+							<div class="index-item-description">removes a user group  the users which are not assigned to other groups will be deleted</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">deleteVersion</span>
@@ -550,6 +564,21 @@
 							<div class="index-item-description">Hides the $location and marks invisible all descendants of $location.</div>
 					</dd>
 		</dl>
+	<a name="i"></a>
+	<div class="index-letter-section">
+		<div style="float: left" class="index-letter-title">i</div>
+		<div style="float: right"><a href="#top">top</a></div>
+		<div style="clear: both"></div>
+	</div>
+	<dl>
+			<dt class="field">
+						IllegalArgumentException
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/IllegalArgumentException.html">IllegalArgumentException</a> in IllegalArgumentException.php</div>
+							<div class="index-item-description">This exception is throen if a service method is called with an illegal or non appriprite value</div>
+					</dd>
+		</dl>
 	<a name="l"></a>
 	<div class="index-letter-section">
 		<div style="float: left" class="index-letter-title">l</div>
@@ -598,25 +627,25 @@
 							<div class="index-item-description">Loads a Language by its languageCode ($localeCode)</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">loadContent</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodloadContent">ContentService::loadContent()</a> in ContentService.php</div>
-							<div class="index-item-description">Loads a content info object - to load fields use loadVersion</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">loadContentByRemoteId</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodloadContentByRemoteId">ContentService::loadContentByRemoteId()</a> in ContentService.php</div>
-							<div class="index-item-description">Loads a content info object for the given remoteId - to load fields use loadVersion</div>
-					</dd>
-			<dt class="field">
 						<span class="method-title">loadContentDrafts</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodloadContentDrafts">ContentService::loadContentDrafts()</a> in ContentService.php</div>
 							<div class="index-item-description">Load drafts for the given user or if null for the authenticated user</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">loadContentInfo</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodloadContentInfo">ContentService::loadContentInfo()</a> in ContentService.php</div>
+							<div class="index-item-description">Loads a content info object - to load fields use loadVersion</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">loadContentInfoByRemoteId</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodloadContentInfoByRemoteId">ContentService::loadContentInfoByRemoteId()</a> in ContentService.php</div>
+							<div class="index-item-description">Loads a content info object for the given remoteId - to load fields use loadVersion</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">loadContentType</span>
@@ -679,7 +708,7 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodloadIncomingRelations">ContentService::loadIncomingRelations()</a> in ContentService.php</div>
-							<div class="index-item-description">Loads all incoming relations for a content object. The  relations come only</div>
+							<div class="index-item-description">Loads all incoming relations for a content object. The  relations come only  from published versions of the source content objects</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">loadLocation</span>
@@ -701,6 +730,20 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/LocationService.html#methodloadLocationChildren">LocationService::loadLocationChildren()</a> in LocationService.php</div>
 							<div class="index-item-description">Load children which are readable by the current user of a location object sorted by sortField and sortOrder</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">loadLocations</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/LocationService.html#methodloadLocations">LocationService::loadLocations()</a> in LocationService.php</div>
+							<div class="index-item-description">Loads the locations for the given content object. If a $rootLocation is given only  locations of the content which are descendants of the root location are returnd  The location list is also filtered by permissions on reading locations.</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">loadMainLocation</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/LocationService.html#methodloadMainLocation">LocationService::loadMainLocation()</a> in LocationService.php</div>
+							<div class="index-item-description">loads the main loaction of a content object</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">loadOutgoingRelations</span>
@@ -886,88 +929,102 @@
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/_Interfaces---NotFoundException.php.html">NotFoundException.php</a> in NotFoundException.php</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newContentCreate</span>
+						<span class="method-title">newContentCreateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodnewContentCreate">ContentService::newContentCreate()</a> in ContentService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodnewContentCreateStruct">ContentService::newContentCreateStruct()</a> in ContentService.php</div>
 							<div class="index-item-description">instanciates a new content type creat class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newContentTypeCreate</span>
+						<span class="method-title">newContentTypeCreateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewContentTypeCreate">ContentTypeService::newContentTypeCreate()</a> in ContentTypeService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewContentTypeCreateStruct">ContentTypeService::newContentTypeCreateStruct()</a> in ContentTypeService.php</div>
 							<div class="index-item-description">instanciates a new content type create class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newContentTypeGroupCreate</span>
+						<span class="method-title">newContentTypeGroupCreateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewContentTypeGroupCreate">ContentTypeService::newContentTypeGroupCreate()</a> in ContentTypeService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewContentTypeGroupCreateStruct">ContentTypeService::newContentTypeGroupCreateStruct()</a> in ContentTypeService.php</div>
 							<div class="index-item-description">instanciates a new content type group create class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newContentTypeGroupUpdate</span>
+						<span class="method-title">newContentTypeGroupUpdateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewContentTypeGroupUpdate">ContentTypeService::newContentTypeGroupUpdate()</a> in ContentTypeService.php</div>
-							<div class="index-item-description">instanciates a new content type update class</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewContentTypeGroupUpdateStruct">ContentTypeService::newContentTypeGroupUpdateStruct()</a> in ContentTypeService.php</div>
+							<div class="index-item-description">instanciates a new content type update struct</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newContentTypeUpdate</span>
+						<span class="method-title">newContentTypeUpdateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewContentTypeUpdate">ContentTypeService::newContentTypeUpdate()</a> in ContentTypeService.php</div>
-							<div class="index-item-description">instanciates a new content type update class</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewContentTypeUpdateStruct">ContentTypeService::newContentTypeUpdateStruct()</a> in ContentTypeService.php</div>
+							<div class="index-item-description">instanciates a new content type update struct</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newFieldDefinitionCreate</span>
+						<span class="method-title">newContentUpdateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewFieldDefinitionCreate">ContentTypeService::newFieldDefinitionCreate()</a> in ContentTypeService.php</div>
-							<div class="index-item-description">instanciates a field definition create class</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodnewContentUpdateStruct">ContentService::newContentUpdateStruct()</a> in ContentService.php</div>
+							<div class="index-item-description">instanciates a new content update struct</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newFieldDefinitionUpdate</span>
+						<span class="method-title">newFieldDefinitionCreateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewFieldDefinitionUpdate">ContentTypeService::newFieldDefinitionUpdate()</a> in ContentTypeService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewFieldDefinitionCreateStruct">ContentTypeService::newFieldDefinitionCreateStruct()</a> in ContentTypeService.php</div>
+							<div class="index-item-description">instanciates a field definition create struct</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">newFieldDefinitionUpdateStruct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodnewFieldDefinitionUpdateStruct">ContentTypeService::newFieldDefinitionUpdateStruct()</a> in ContentTypeService.php</div>
 							<div class="index-item-description">instanciates a field definition update class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newLocationCreate</span>
+						<span class="method-title">newLocationCreateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/LocationService.html#methodnewLocationCreate">LocationService::newLocationCreate()</a> in LocationService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/LocationService.html#methodnewLocationCreateStruct">LocationService::newLocationCreateStruct()</a> in LocationService.php</div>
 							<div class="index-item-description">instanciates a new location create class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newLocationUpdate</span>
+						<span class="method-title">newLocationUpdateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/LocationService.html#methodnewLocationUpdate">LocationService::newLocationUpdate()</a> in LocationService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/LocationService.html#methodnewLocationUpdateStruct">LocationService::newLocationUpdateStruct()</a> in LocationService.php</div>
 							<div class="index-item-description">instanciates a new location update class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newPolicyUpdate</span>
+						<span class="method-title">newPolicyCreateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodnewPolicyUpdate">RoleService::newPolicyUpdate()</a> in RoleService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodnewPolicyCreateStruct">RoleService::newPolicyCreateStruct()</a> in RoleService.php</div>
+							<div class="index-item-description">instanciates a policy create class</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">newPolicyUpdateStruct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodnewPolicyUpdateStruct">RoleService::newPolicyUpdateStruct()</a> in RoleService.php</div>
 							<div class="index-item-description">instanciates a policy update class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newRoleCreate</span>
+						<span class="method-title">newRoleCreateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodnewRoleCreate">RoleService::newRoleCreate()</a> in RoleService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodnewRoleCreateStruct">RoleService::newRoleCreateStruct()</a> in RoleService.php</div>
 							<div class="index-item-description">instanciates a role create class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newRoleCreate</span>
+						<span class="method-title">newRoleUpdateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodnewRoleCreate">RoleService::newRoleCreate()</a> in RoleService.php</div>
-							<div class="index-item-description">instanciates a policy create class</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodnewRoleUpdateStruct">RoleService::newRoleUpdateStruct()</a> in RoleService.php</div>
+							<div class="index-item-description">instanciates a policy update class</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">newTranslation</span>
@@ -977,24 +1034,38 @@
 							<div class="index-item-description">instanciates a Translation class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newUserCreate</span>
+						<span class="method-title">newUserCreateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UserService.html#methodnewUserCreate">UserService::newUserCreate()</a> in UserService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UserService.html#methodnewUserCreateStruct">UserService::newUserCreateStruct()</a> in UserService.php</div>
 							<div class="index-item-description">instanciates a user create class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newUserGroupCreate</span>
+						<span class="method-title">newUserGroupCreateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UserService.html#methodnewUserGroupCreate">UserService::newUserGroupCreate()</a> in UserService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UserService.html#methodnewUserGroupCreateStruct">UserService::newUserGroupCreateStruct()</a> in UserService.php</div>
 							<div class="index-item-description">instanciates a user group create class</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">newVersionUpdate</span>
+						<span class="method-title">newUserGroupUpdateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodnewVersionUpdate">ContentService::newVersionUpdate()</a> in ContentService.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UserService.html#methodnewUserGroupUpdateStruct">UserService::newUserGroupUpdateStruct()</a> in UserService.php</div>
+							<div class="index-item-description">instanciates a new user group update struct</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">newUserUpdateStruct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UserService.html#methodnewUserUpdateStruct">UserService::newUserUpdateStruct()</a> in UserService.php</div>
+							<div class="index-item-description">instanciates a new user  update struct</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">newVersionUpdateStruct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodnewVersionUpdateStruct">ContentService::newVersionUpdateStruct()</a> in ContentService.php</div>
 							<div class="index-item-description">instanciates a new version update class</div>
 					</dd>
 			<dt class="field">
@@ -1167,12 +1238,6 @@
 	</div>
 	<dl>
 			<dt class="field">
-						<span class="include-title">UnauthorizedException.php</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/_Interfaces---UnauthorizedException.php.html">UnauthorizedException.php</a> in UnauthorizedException.php</div>
-					</dd>
-			<dt class="field">
 						<span class="include-title">UserService.php</span>
 					</dt>
 		<dd class="index-item-body">
@@ -1183,7 +1248,7 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentTypeService.html#methodunassignContentTypeGroup">ContentTypeService::unassignContentTypeGroup()</a> in ContentTypeService.php</div>
-							<div class="index-item-description">Link a content type to a group.</div>
+							<div class="index-item-description">Unassign a content type from a group.</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">unassignRoleFromUser</span>
@@ -1207,13 +1272,6 @@
 							<div class="index-item-description">Removes a user group from the user</div>
 					</dd>
 			<dt class="field">
-						UnauthorizedException
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/UnauthorizedException.html">UnauthorizedException</a> in UnauthorizedException.php</div>
-							<div class="index-item-description">This Exception is thrown if the current user is not allowed to perform an action in the reposittory.</div>
-					</dd>
-			<dt class="field">
 						<span class="method-title">unhideLocation</span>
 					</dt>
 		<dd class="index-item-body">
@@ -1225,7 +1283,7 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodupdateContent">ContentService::updateContent()</a> in ContentService.php</div>
-							<div class="index-item-description">Updates the metadata (see <a href="ezp-PublicAPI-Values/ContentUpdate.html">ContentUpdate</a>) of a content object - to update fields use updateVersion</div>
+							<div class="index-item-description">Updates the metadata (see <a href="ezp-PublicAPI-Values/ContentUpdateStruct.html">ContentUpdateStruct</a>) of a content object - to update fields use updateVersion</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">updateContentTypeDraft</span>
@@ -1267,7 +1325,7 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodupdatePolicy">RoleService::updatePolicy()</a> in RoleService.php</div>
-							<div class="index-item-description">Updates the limitations of a policy. The module and function cannot be changed and</div>
+							<div class="index-item-description">Updates the limitations of a policy. The module and function cannot be changed and  the limitaions are replaced by the ones in $roleUpdateStruct</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">updateRole</span>
@@ -1322,6 +1380,7 @@
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#f">f</a>
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#g">g</a>
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#h">h</a>
+	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#i">i</a>
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#l">l</a>
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#m">m</a>
 	<a class="index-letter" href="elementindex_ezp-PublicAPI-Interfaces.html#n">n</a>

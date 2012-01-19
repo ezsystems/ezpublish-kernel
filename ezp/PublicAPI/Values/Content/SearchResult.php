@@ -12,6 +12,7 @@ class SearchResult extends ValueObject
 {
     /**
      * the query this result is based on
+     * 
      * @var Query
      */
     public $query;

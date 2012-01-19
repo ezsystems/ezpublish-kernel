@@ -1,0 +1,525 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+  <html xmlns="http://www.w3.org/1999/xhtml">
+		<head>
+			<!-- template designed by Marco Von Ballmoos -->
+			<title>Docs For Class ContentTypeCreateStruct</title>
+			<link rel="stylesheet" href="../media/stylesheet.css" />
+			<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1'/>
+		</head>
+		<body>
+			<div class="page-body">			
+<h2 class="class-name">Class ContentTypeCreateStruct</h2>
+
+<a name="sec-description"></a>
+<div class="info-box">
+	<div class="info-box-title">Description</div>
+	<div class="nav-bar">
+					<span class="disabled">Description</span> |
+													<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+						|											<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+						
+					</div>
+	<div class="info-box-body">
+        		<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">this clss is used for creating content types</p>
+	<ul class="tags">
+				<li><span class="field">property-write:</span> $names $names[$language]: calls setName($language)</li>
+				<li><span class="field">property-write:</span> $descriptions $descriptions[$language]: calls setDescription($language)</li>
+				<li><span class="field">abstract:</span> </li>
+			</ul>
+		<p class="notes">
+			Located in <a class="field" href="_Values---ContentType---ContentTypeCreateStruct.php.html">/Values/ContentType/ContentTypeCreateStruct.php</a> (line <span class="field">19</span>)
+		</p>
+		
+				
+		<pre><a href="../ezp-PublicAPI-Values/ValueObject.html">ValueObject</a>
+   |
+   --ContentTypeCreateStruct</pre>
+	
+			</div>
+</div>
+
+
+
+	<a name="sec-var-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variable Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+						<span class="disabled">Vars</span> (<a href="#sec-vars">details</a>)
+							| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+								</div>
+		<div class="info-box-body">
+			<div class="var-summary">
+																																																																																																								<div class="var-title">
+					<span class="var-type">int</span>
+					<a href="#$created" title="details" class="var-name">$created</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">int</span>
+					<a href="#$creatorId" title="details" class="var-name">$creatorId</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">bool</span>
+					<a href="#$defaultAlwaysAvailable" title="details" class="var-name">$defaultAlwaysAvailable</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$defaultSortField" title="details" class="var-name">$defaultSortField</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$defaultSortOrder" title="details" class="var-name">$defaultSortOrder</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$identifier" title="details" class="var-name">$identifier</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">mixed</span>
+					<a href="#$initialLanguageCode" title="details" class="var-name">$initialLanguageCode</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">bool</span>
+					<a href="#$isContainer" title="details" class="var-name">$isContainer</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$nameSchema" title="details" class="var-name">$nameSchema</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$remoteId" title="details" class="var-name">$remoteId</a>
+				</div>
+																<div class="var-title">
+					<span class="var-type">string</span>
+					<a href="#$urlAliasSchema" title="details" class="var-name">$urlAliasSchema</a>
+				</div>
+											</div>
+		</div>
+	</div>
+
+	<a name="sec-method-summary"></a>
+	<div class="info-box">
+		<div class="info-box-title">Method Summary</span></div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+																		<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+				 
+				|
+						<span class="disabled">Methods</span> (<a href="#sec-methods">details</a>)
+		</div>
+		<div class="info-box-body">			
+			<div class="method-summary">
+																												
+												<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#addFieldDefinition" title="details" class="method-name">addFieldDefinition</a>
+											(<span class="var-type">FieldDefinitionCreate</span>&nbsp;<span class="var-name">$fieldDef</span>)
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#setDescription" title="details" class="method-name">setDescription</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$description</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$language</span> = <span class="var-default">null</span>])
+									</div>
+																<div class="method-definition">
+											<span class="method-result">void</span>
+										<a href="#setName" title="details" class="method-name">setName</a>
+											(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$language</span> = <span class="var-default">null</span>])
+									</div>
+								</div>
+		</div>
+	</div>		
+
+	<a name="sec-vars"></a>
+	<div class="info-box">
+		<div class="info-box-title">Variables</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+										<a href="#sec-var-summary">Vars</a> (<span class="disabled">details</span>)
+						
+			
+										| 
+									<a href="#sec-method-summary">Methods</a> (<a href="#sec-methods">details</a>)
+							
+					</div>
+		<div class="info-box-body">
+			<a name="var$created" id="$created"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">int</span>
+			<span class="var-name">$created</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number">124</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">If set this value overrides the current time for creation</p>
+	<ul class="tags">
+				<li><span class="field">var:</span> (unix timestamp)</li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$creatorId" id="$creatorId"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">int</span>
+			<span class="var-name">$creatorId</span>
+			 = <span class="var-default"> null</span>			(line <span class="line-number">118</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">if set this value overrides the current user as creator</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$defaultAlwaysAvailable" id="$defaultAlwaysAvailable"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">bool</span>
+			<span class="var-name">$defaultAlwaysAvailable</span>
+			 = <span class="var-default"> true</span>			(line <span class="line-number">89</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">if an instance of acontent type is created the always available flag is set  by default this this value.</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$defaultSortField" id="$defaultSortField"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$defaultSortField</span>
+			 = <span class="var-default"> Location::SORT_FIELD_PUBLISHED</span>			(line <span class="line-number">71</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Specifies which property the child locations should be sorted on by default when created</p>
+<p class="description"><p>Valid values are found at Location::SORT_FIELD_*</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$defaultSortOrder" id="$defaultSortOrder"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$defaultSortOrder</span>
+			 = <span class="var-default"> Location::SORT_ORDER_DESC</span>			(line <span class="line-number">80</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Specifies whether the sort order should be ascending or descending by default when created</p>
+<p class="description"><p>Valid values are Location::SORT_ORDER_*</p></p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$identifier" id="$identifier"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$identifier</span>
+						(line <span class="line-number">26</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">String identifier of a type</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$initialLanguageCode" id="$initialLanguageCode"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">mixed</span>
+			<span class="var-name">$initialLanguageCode</span>
+						(line <span class="line-number">33</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Initial language Code.</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$isContainer" id="$isContainer"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">bool</span>
+			<span class="var-name">$isContainer</span>
+			 = <span class="var-default"> false</span>			(line <span class="line-number">61</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Determines if the type is a container</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$nameSchema" id="$nameSchema"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$nameSchema</span>
+						(line <span class="line-number">54</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">Name schema</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$remoteId" id="$remoteId"><!-- --></A>
+<div class="oddrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$remoteId</span>
+						(line <span class="line-number">40</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">The renote id</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+<a name="var$urlAliasSchema" id="$urlAliasSchema"><!-- --></A>
+<div class="evenrow">
+
+	<div class="var-header">
+		<span class="var-title">
+			<span class="var-type">string</span>
+			<span class="var-name">$urlAliasSchema</span>
+						(line <span class="line-number">47</span>)
+		</span>
+	</div>
+
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">URL alias schema</p>
+	<ul class="tags">
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	
+		
+		
+
+</div>
+						
+		</div>
+	</div>
+	
+	<a name="sec-methods"></a>
+	<div class="info-box">
+		<div class="info-box-title">Methods</div>
+		<div class="nav-bar">
+			<a href="#sec-description">Description</a> |
+															<a href="#sec-var-summary">Vars</a> (<a href="#sec-vars">details</a>)
+																	<a href="#sec-method-summary">Methods</a> (<span class="disabled">details</span>)
+						
+		</div>
+		<div class="info-box-body">
+			<A NAME='method_detail'></A>
+
+<a name="methodaddFieldDefinition" id="addFieldDefinition"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">addFieldDefinition</span> (line <span class="line-number">112</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">adds a new field definition</p>
+	<ul class="tags">
+				<li><span class="field">abstract:</span> </li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			addFieldDefinition
+		</span>
+					(<span class="var-type">FieldDefinitionCreate</span>&nbsp;<span class="var-name">$fieldDef</span>)
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">FieldDefinitionCreate</span>
+				<span class="var-name">$fieldDef</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodsetDescription" id="setDescription"><!-- --></a>
+<div class="evenrow">
+	
+	<div class="method-header">
+		<span class="method-title">setDescription</span> (line <span class="line-number">105</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">set a content type description for the given language</p>
+	<ul class="tags">
+				<li><span class="field">abstract:</span> </li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setDescription
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$description</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$language</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$description</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$language</span><span class="var-description">: if not given the initialLanguage is used as default</span>			</li>
+				</ul>
+		
+			
+	</div>
+<a name="methodsetName" id="setName"><!-- --></a>
+<div class="oddrow">
+	
+	<div class="method-header">
+		<span class="method-title">setName</span> (line <span class="line-number">97</span>)
+	</div> 
+	
+	<!-- ========== Info from phpDoc block ========= -->
+<p class="short-description">set a content type name for the given language</p>
+	<ul class="tags">
+				<li><span class="field">abstract:</span> </li>
+				<li><span class="field">access:</span> public</li>
+			</ul>
+	
+	<div class="method-signature">
+		<span class="method-result">void</span>
+		<span class="method-name">
+			setName
+		</span>
+					(<span class="var-type">string</span>&nbsp;<span class="var-name">$name</span>, [<span class="var-type">string</span>&nbsp;<span class="var-name">$language</span> = <span class="var-default">null</span>])
+			</div>
+	
+			<ul class="parameters">
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$name</span>			</li>
+					<li>
+				<span class="var-type">string</span>
+				<span class="var-name">$language</span><span class="var-description">: if not given the initialLanguage is used as default</span>			</li>
+				</ul>
+		
+			
+	</div>
+							<h4>Inherited Methods</h4>
+				<a name='inherited_methods'><!-- --></a>	
+									<!-- =========== Summary =========== -->
+					<p>Inherited From <span class="classname"><a href="../ezp-PublicAPI-Values/ValueObject.html">ValueObject</a></span></p>
+					<blockquote>
+													<span class="method-name"><a href="../ezp-PublicAPI-Values/ValueObject.html#method__construct">ValueObject::__construct()</a></span><br>
+													<span class="method-name"><a href="../ezp-PublicAPI-Values/ValueObject.html#method__get">ValueObject::__get()</a></span><br>
+													<span class="method-name"><a href="../ezp-PublicAPI-Values/ValueObject.html#method__set">ValueObject::__set()</a></span><br>
+											</blockquote>
+										
+		</div>
+	</div>
+
+
+	<p class="notes" id="credit">
+		Documentation generated on Thu, 19 Jan 2012 17:12:45 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+	</p>
+	</div></body>
+</html>

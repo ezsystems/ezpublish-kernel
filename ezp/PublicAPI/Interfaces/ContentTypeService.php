@@ -4,30 +4,21 @@
  */
 namespace ezp\PublicAPI\Interfaces;
 
-use ezp\PublicAPI\Values\ContentType\FieldDefinitionUpdate;
-
+use ezp\PublicAPI\Values\ContentType\FieldDefinitionUpdateStruct;
 use ezp\PublicAPI\Values\ContentType\FieldDefinition;
-
-use ezp\PublicAPI\Values\ContentType\FieldDefinitionCreate;
-
+use ezp\PublicAPI\Values\ContentType\FieldDefinitionCreateStruct;
 use ezp\PublicAPI\Values\ContentType\ContentType;
-
 use ezp\PublicAPI\Values\ContentType\ContentTypeDraft;
-
 use ezp\PublicAPI\Values\ContentType\ContentTypeGroup;
-
 use ezp\PublicAPI\Values\User\User;
-
-use ezp\Values\ContentType\ContentTypeUpdate;
-
-use ezp\PublicAPI\Values\Content\ContentType\ContentTypeCreate;
-
-use ezp\PublicAPI\Values\ContentType\ContentTypeGroupUpdate;
-
-use ezp\VPublicAPI\alues\ContentType\ContentTypeGroupCreate;
+use ezp\Values\ContentType\ContentTypeUpdateStruct;
+use ezp\PublicAPI\Values\Content\ContentType\ContentTypeCreateStruct;
+use ezp\PublicAPI\Values\ContentType\ContentTypeGroupUpdateStruct;
+use ezp\VPublicAPI\alues\ContentType\ContentTypeGroupCreateStruct;
 
 /**
  * @example Examples/contenttype.php
+ * 
  * @package ezp\PublicAPI\Interfaces
  */
 interface ContentTypeService
@@ -35,18 +26,22 @@ interface ContentTypeService
     /**
      * Create a Content Type Group object
      *
-     * @param ContentTypeGroupCreate $groupCreate
+     * @param ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct
+     * 
      * @return ContentTypeGroup
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create a content type group
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If a group with the same identifier already exists
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If a group with the same identifier already exists
      */
-    public function createContentTypeGroup(/*ContentTypeGroupCreate*/  $contentTypeGroupCreate );
+    public function createContentTypeGroup(/*ContentTypeGroupCreateStruct*/  $contentTypeGroupCreateStruct );
 
     /**
      * Get a Content Type Group object by id
      *
      * @param int $contentTypeGroupId
+     * 
      * @return ContentTypeGroup
+     * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException If group can not be found
      */
     public function loadContentTypeGroup( $contentTypeGroupId );
@@ -55,6 +50,7 @@ interface ContentTypeService
      * Get a Content Type Group object by identifier
      *
      * @param string $contentTypeGroupIdentifier
+     * 
      * @return ContentTypeGroup
      * @throws ezp\PublicAPI\Interfaces\NotFoundException If group can not be found
      */
@@ -69,12 +65,14 @@ interface ContentTypeService
 
     /**
      * Update a Content Type Group object
+     * 
      * @param ContentTypeGroup $contentTypeGroup the content type group to be updated
-     * @param ContentTypeGroupUpdate $contentTypeGroupUpdate
+     * @param ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create a content type group
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If the given identifier (if set) already exists
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the given identifier (if set) already exists
      */
-    public function updateContentTypeGroup(/*ContentTypeGroup*/ $contentTypeGroup, /*ContentTypeGroupUpdate*/ $contentTypeGroupUpdate );
+    public function updateContentTypeGroup(/*ContentTypeGroup*/ $contentTypeGroup, /*ContentTypeGroupStruct*/ $contentTypeGroupUpdateStruct );
 
     /**
      * Delete a Content Type Group. If the paramter $deleteObjects is set to true
@@ -83,8 +81,9 @@ interface ContentTypeService
      *
      * @param ContentTypeGroup
      * @param boolean $deleteObjects indicates if content object should be deleted if exist
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to delete a content type group
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If the parameter $deleteObjects is set to false and a to be deleted content type
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the parameter $deleteObjects is set to false and a to be deleted content type
      *                                       has instances
      */
     public function deleteContentTypeGroup( /*ContentTypeGroup*/ $contentTypeGroup, $deleteObjects = false );
@@ -92,19 +91,23 @@ interface ContentTypeService
     /**
      * Create a Content Type object. The content type is created in the state STATUS_DRAFT.
      *
-     * @param ContentTypeCreate $contentTypeCreate
+     * @param ContentTypeCreateStruct $contentTypeCreateStruct
      * @param array $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
+     * 
      * @return ContentTypeDraft
-     * @throws InvalidArgumentException If an identifier of a field definition is used in several fields
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If the identifier or remoteId in the content type create struct already exists
+     * 
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the identifier or remoteId in the content type create struct already exists
+     *         or there is a dublicate field identifier
      */
-    public function createContentType( /*ContentTypeCreate*/ $contentTypeCreate, array $contentTypeGroups );
+    public function createContentType( /*ContentTypeCreateStruct*/ $contentTypeCreateStruct, array $contentTypeGroups );
 
     /**
      * Get a Content Type object by id
      *
      * @param int $contentTypeId
+     * 
      * @return ContentType
+     * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException If a content type with the given id and status DEFINED can not be found
      */
     public function loadContentType( $contentTypeId );
@@ -113,7 +116,9 @@ interface ContentTypeService
      * Get a Content Type object by identifier
      *
      * @param string $identifier
+     * 
      * @return ContentType
+     * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException If content type with the given identifier and status DEFINED can not be found
      */
     public function loadContentTypeByIdentifier( $identifier );
@@ -122,7 +127,9 @@ interface ContentTypeService
      * Get a Content Type object by id
      *
      * @param string $remoteId
+     * 
      * @return ContentType
+     * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException If content type with the given remote id and status DEFINED can not be found
      */
     public function loadContentTypeByRemoteId( $remoteId );
@@ -132,7 +139,9 @@ interface ContentTypeService
      * Get a Content Type object draft by id
      *
      * @param int $contentTypeId
+     * 
      * @return ContentTypeDraft
+     * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException If the content type draft owned by the current user can not be found
      */
     public function loadContentTypeDraft( $contentTypeId );
@@ -141,6 +150,7 @@ interface ContentTypeService
      * Get Content Type objects which belong to the given content type group
      *
      * @param ContentTypeGroup $contentTypeGroup
+     * 
      * @return array an array of {@link ContentType} which have status DEFINED
      */
     public function loadContentTypes(/*ContentTypeGroup*/ $contentTypeGroup );
@@ -148,10 +158,13 @@ interface ContentTypeService
     /**
      * Creates a draft from an existing content type. This is a complete copy of the content
      * type wiich has the state STATUS_DRAFT.
+     * 
      * @param ContentType $contentType
+     * 
      * @return ContentTypeDraft
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit a content type
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If there is already a draft assigned to another user
+     * @throws ezp\PublicAPI\Interfaces\BadStateException If there is already a draft assigned to another user
      */
     public function createContentTypeDraft(/*ContentType*/ $contentType);
 
@@ -162,18 +175,20 @@ interface ContentTypeService
      * Does not update fields (fieldDefinitions), use {@link updateFieldDefinition()} to update them.
      *
      * @param ContentTypeDraft $contentTypeDraft
-     * @param ContentTypeUpdate $contentTypeUpdate
+     * @param ContentTypeUpdateStruct $contentTypeUpdateStruct
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update a content type
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user
      */
-    public function updateContentTypeDraft(/*ContentTypeDraft*/ $contentTypeDraft, /*ContentTypeUpdate*/ $contentTypeUpdate );
+    public function updateContentTypeDraft(/*ContentTypeDraft*/ $contentTypeDraft, /*ContentTypeUpdateStruct*/ $contentTypeUpdateStruct );
 
     /**
      * Delete a Content Type object. If $deleteObjects is set to true all object instances of this content type are deleted.
      *
      * @param ContentType $contentType
      * @param boolean $deleteObjects indicates if content object should be deleted if exist
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException $deleteObjects is set to false and there exist content objects of this type
+     * 
+     * @throws ezp\PublicAPI\Interfaces\BadStateException $deleteObjects is set to false and there exist content objects of this type
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to delete a content type
      */
     public function deleteContentType( /*ContentType*/ $contentType , $deleteObjects = false);
@@ -186,29 +201,33 @@ interface ContentTypeService
      *
      * @param ContentType $contentType
      * @param User $user if null the current user is used
+     * 
      * @return ContentType
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to copy a content type
      */
     public function copyContentType(/*ContentType*/ $contentType, /*User*/ $user = null );
 
     /**
-     * Un-Link a content type from a group ( remove a group from a type )
+     * assign a content type to a content type group.
      *
      * @param ContentType $contentType
      * @param ContentTypeGroup $contentTypeGroup
-     * @throws InvalidArgumentValue If the content type is not assigned thi the given group.
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to unlink a content type
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If $contentTypeGroup is the last group assigned to the content type
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the content type is already assigned the given group
      */
     public function assignContentTypeGroup( /*ContentType*/ $contentType, /*ContentTypeGroup*/ $contentTypeGroup );
 
     /**
-     * Link a content type to a group.
+     * Unassign a content type from a group.
      *
      * @param ContentType $contentType
      * @param ContentTypeGroup $contentTypeGroup
+     * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to link a content type
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If the content type is already assigned thi the given group
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the content type is not assigned this the given group.
+     * @throws ezp\PublicAPI\Interfaces\BadStateException If $contentTypeGroup is the last group assigned to the content type
      */
     public function unassignContentTypeGroup( /*ContentType*/ $contentType, /*ContentTypeGroup*/ $contentTypeGroup );
 
@@ -216,18 +235,20 @@ interface ContentTypeService
      * Adds a new field definition to an existing content type. The content type must be in state DRAFT.
      *
      * @param ContentTypeDraft $contentTypeDraft
-     * @param FieldDefinitionCreate $fieldDefinitionCreate
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException if the identifier in already exists in the content type
+     * @param FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
+     * 
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException if the identifier in already exists in the content type
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit a content type
      */
-    public function addFieldDefinition( /*ContentTypeDraft*/ $contentTypeDraft, /*FieldDefinitionCreate*/ $fieldDefinitionCreate  );
+    public function addFieldDefinition( /*ContentTypeDraft*/ $contentTypeDraft, /*FieldDefinitionCreateStruct*/ $fieldDefinitionCreateStruct  );
 
     /**
      * Remove a field definition from an existing Type.
      *
      * @param ContentTypeDraft $contentTypeDraft
      * @param FieldDefinition $fieldDefinition
-     * @throws InvalidArgumentException If the given field definition does not belong to the given type
+     * 
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the given field definition does not belong to the given type
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit a content type
      */
     public function removeFieldDefinition( /*ContentTypeDraft*/ $contentTypeDraft, /*FieldDefinition*/ $fieldDefinition  );
@@ -237,12 +258,13 @@ interface ContentTypeService
      *
      * @param ContentTypeDraft $contentTypeDraft the content type draft
      * @param FieldDefinition $fieldDefinition the field definition which should be updated
-     * @param FieldDefinitionUpdate $fieldDefinitionUpdate
+     * @param FieldDefinitionUpdateStruct $fieldDefinitionStruct
+     * 
      * @throws InvalidArgumentException If the field id in the update struct is not found or does not belong to the content type
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit a content type
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException  If the given identifier is used in an existing field of the given content type
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException  If the given identifier is used in an existing field of the given content type
      */
-    public function updateFieldDefinition( /*ContentTypeDraft*/ $contentTypeDraft, /*FieldDefinition*/ $fieldDefinition, /*FieldDefinitionUpdate*/ $fieldDefinitionUpdate  );
+    public function updateFieldDefinition( /*ContentTypeDraft*/ $contentTypeDraft, /*FieldDefinition*/ $fieldDefinition, /*FieldDefinitionUpdateStruct*/ $fieldDefinitionUpdateStruct  );
 
     /**
      * Publish the content type and update content objects.
@@ -250,52 +272,59 @@ interface ContentTypeService
      * This method updates content objects, depending on the changed field definitions.
      *
      * @param ContentTypeDraft $contentTypeDraft
-     * @throws ezp\PublicAPI\Interfaces\ForbiddenException If the content type has no draft
+     * 
+     * @throws ezp\PublicAPI\Interfaces\BadStateException If the content type has no draft
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to publish a content type
      */
     public function publishContentTypeDraft( /*ContentType*/ $contentTypeDraft  );
 
     /**
-     *
      * instanciates a new content type group create class
+     * 
      * @param string $identifier
-     * @return ContentTypeGroupCreate
+     * 
+     * @return ContentTypeGroupCreateStruct
      */
-    public function newContentTypeGroupCreate($identifier);
+    public function newContentTypeGroupCreateStruct($identifier);
 
     /**
-     *
      * instanciates a new content type create class
+     * 
      * @param string $identifier
-     * @return ContentTypeCreate
+     * 
+     * @return ContentTypeCreateStruct
      */
-    public function newContentTypeCreate($identifier);
+    public function newContentTypeCreateStruct($identifier);
 
     /**
-     *
-     * instanciates a new content type update class
-     * @return ContentTypeUpdate
+     * instanciates a new content type update struct
+     * 
+     * @return ContentTypeUpdateStruct
      */
-    public function newContentTypeUpdate();
+    public function newContentTypeUpdateStruct();
 
     /**
-     * instanciates a new content type update class
-     * @return ContentTypeGroupUpdate
+     * instanciates a new content type update struct
+     * 
+     * @return ContentTypeGroupUpdateStruct
      */
-    public function newContentTypeGroupUpdate();
+    public function newContentTypeGroupUpdateStruct();
 
     /**
-     * instanciates a field definition create class
+     * instanciates a field definition create struct
+     * 
      * @param string $fieldTypeIdentifier the required  field type identifier
      * @param string $identifier the required identifier for the field definition
-     * @return FieldDefinitionCreate
+     * 
+     * @return FieldDefinitionCreateStruct
      */
-    public function newFieldDefinitionCreate($identifier, $fieldTypeIdentifier );
+    public function newFieldDefinitionCreateStruct($identifier, $fieldTypeIdentifier );
 
     /**
      * instanciates a field definition update class
-     * @return FieldDefinitionUpdate
+     * 
+     * @return FieldDefinitionUpdateStruct
      */
-    public function newFieldDefinitionUpdate();
+    public function newFieldDefinitionUpdateStruct();
 
 }

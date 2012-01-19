@@ -1,7 +1,7 @@
 <?php
 namespace ezp\PublicAPI\Values\Content\Query\Criterion;
-use ezp\Persistence\Content\Query\Criterion,
-    InvalidArgumentException;
+
+use ezp\PublicAPI\Values\Content\Query\Criterion;
 
 /**
  *
