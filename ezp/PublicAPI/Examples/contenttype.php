@@ -1,4 +1,12 @@
 <?php
+/**
+ * assumed as injected
+ * @var ezp\PublicAPI\Interfaces\Repository $repository
+ */
+$repository = null;
+
+$contentTypeService = $repository->getContentTypeService();
+
    // create a new content type group
    
    // make a new instance of a ContentTypeGroupCreate class
@@ -86,7 +94,7 @@
       
    // creates the content type in the given group and fields and publishes it
    $contentTypeDraft = $contentTypeService->createContentType(
-       $contentType, array( $contentTypeGroup ));
+       $contentTypeCreate, array( $contentTypeGroup ));
     
    $contentTypeService->publishContentTypeDraft($contentTypeDraft);
    
@@ -127,7 +135,7 @@
    );
    $fieldDefinitionUpdate->setValidator($intValidator);
    
-   $contentTypeService->updateFieldDefinition($contentType,$fieldDefinitionUpdate);
+   $contentTypeService->updateFieldDefinition( $contentType, $fieldDefinition, $fieldDefinitionUpdate );
    
    // now publish the made changes
    $contentTypeService->publishContentTypeDraft($contentType);
