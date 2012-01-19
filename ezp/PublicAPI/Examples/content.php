@@ -64,7 +64,8 @@ $locations = $version->contentInfo->locations;
 // load the content info object (note this info object differes from the one in the draft after publishing)
 $contentInfo = $contentService->loadContent($version->contentId);
 // create a draft from the before published content
-$versionInfo = $contentService->createDraftFromVersion(contentInfo);
+$versionInfo = $contentService->createDraftFromContent( $contentInfo );
+
 // instantiate a version update value object
 $versionUpdate = $contentService->newVersionUpdate();
 $versionUpdate->initialLanguageId = 'ger-DE';
@@ -111,7 +112,7 @@ $contentService->deleteContent($version->contentInfo);
  * Load all drafts of the current user
  */
 
-foreach ( $contentService->loadDrafts() as $versionInfo )
+foreach ( $contentService->loadContentDrafts() as $versionInfo )
 {
     foreach ( $versionInfo->names as $language => $name )
     {
@@ -208,7 +209,7 @@ $versionInfo = $contentService->loadVersionInfoById(23);
 $locationCreate = $locationService->newLocationCreate(123);
 
 // Copy content in latest version
-$version = $contentService->copy( $versionInfo->contentInfo, $locationCreate, $versionInfo );
+$version = $contentService->copyContent( $versionInfo->contentInfo, $locationCreate, $versionInfo );
 
 
 /**
@@ -225,7 +226,7 @@ $query->criterion = new \ezp\PublicAPI\Values\Content\Query\Criterion\LogicalAnd
 );
 
 // Search for matching versions
-$searchResult = $contentService->find( $query, array() );
+$searchResult = $contentService->findContent( $query, array() );
 
 // Dump version number for all found versions
 foreach ( $searchResult->items as $version )
@@ -286,5 +287,5 @@ $contentInfo = $contentService->loadContent( 42 );
 $versionInfo = $contentService->loadVersionInfo( $contentInfo);
 
 // Remove a relation
-$contentService->removeRelation( $version, 23 );
+$contentService->deleteRelation( $version, 23 );
 

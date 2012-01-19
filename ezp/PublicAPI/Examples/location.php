@@ -21,7 +21,7 @@ $location = $locationService->loadLocation( $homeLocation );
 echo  $location->contentInfo->name . '\n';
 
 // get the 10 first childs in the sort settings of the home location
-$childLocations = $locationService->getLocationChildren($location,0,10);
+$childLocations = $locationService->loadLocationChildren( $location, 0, 10 );
 
 foreach($childLocations as $child) {
 	// print a + if the child location has children
