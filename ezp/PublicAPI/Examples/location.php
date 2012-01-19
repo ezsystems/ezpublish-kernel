@@ -2,7 +2,21 @@
 // browsing locations in the main language
 
 use ezp\PublicAPI\Values\Content\Location;
-$location = $locationService->loadLocation($HOME_LOCATION);
+
+/**
+ * assumed as injected
+ * @var ezp\PublicAPI\Interfaces\Repository $repository
+ */
+$repository = null;
+
+$contentService = $repository->getContentService();
+$locationService = $repository->getLocationService();
+
+/**
+ * Get the Home location ( $homeLocation is a int )
+ */
+$location = $locationService->loadLocation( $homeLocation );
+
 // print out the computed name of the content object in the main language
 echo  $location->contentInfo->name . '\n';
 
@@ -19,13 +33,16 @@ foreach($childLocations as $child) {
 }
 
 // browsing locations in a specific language
-$location = $locationService->load($HOME_LOCATION);
+$location = $locationService->loadLocation( $homeLocation );
+
 // load the published version
-$publishedVersion = $contentService->loadVersionInfo($location->contentInfo);
+$publishedVersion = $contentService->loadVersionInfo( $location->contentInfo );
+
+$otherLanguageCode = 'ger-GB';
 echo $publishedVersion->names[$otherLanguageCode];
 
 // get the 10 first childs in the sort settings of the home location
-$childLocations = $locationService->getLocationChildren($location,0,10);
+$childLocations = $locationService->loadLocationChildren( $location, 0, 10 );
 
 foreach($childLocations as $child) {
 	// print a + if the child location has children
@@ -39,10 +56,10 @@ foreach($childLocations as $child) {
 
 // create a new loaction for a content object
 
-$contentInfo = $contentService->loadContent($CONTENT_ID);
-$locationCreate = $loactionService->newLocationCreate($PARENT_ID);
-$locationCreate->priority=3;
-$locationService->create($contentInfo,$locationCreate);
+$contentInfo = $contentService->loadContent( $contentId );
+$locationCreate = $locationService->newLocationCreate( $parentId );
+$locationCreate->priority = 3;
+$locationService->createLocation( $contentInfo, $locationCreate );
 
 
 
