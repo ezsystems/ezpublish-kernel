@@ -10,7 +10,7 @@ $contentTypeService = $repository->getContentTypeService();
 // create a new content type group
 
 // make a new instance of a ContentTypeGroupCreate class
-$contentTypeGroupCreate = $contentTypeService->newContentTypeGroupCreate( "newgroup" )
+$contentTypeGroupCreate = $contentTypeService->newContentTypeGroupCreateStruct( "newgroup" )
 ;
 // create the group
 // 5.x only - add human readable names and descriptions in multi languages
@@ -25,7 +25,7 @@ $contentTypeGroup = $contentTypeService->createContentTypeGroup( $contentTypeGro
 
 // create a new content type
 // make a new instance of a ContentTypeCreate class
-$contentTypeCreate =  $contentTypeService->newContentTypeCreate( "newtype" );
+$contentTypeCreate =  $contentTypeService->newContentTypeCreateStruct( "newtype" );
 
 $contentTypeCreate->remoteId = "myRemoteId-1234567890";
 $contentTypeCreate->defaultAlwaysAvailable = true;
@@ -41,7 +41,7 @@ $contentTypeCreate->initialLanguageId = "eng-US";
 
 // add field definitions
 // make a new instance of a FieldDefinitionCreate class
-$fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreate( "ezstring", "name" );
+$fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct( "ezstring", "name" );
 $fieldDefinitionCreate->setDefaultValue(
    new \ezp\Content\FieldType\TextLine\Value( "New Name" )
 );
@@ -68,7 +68,7 @@ $contentTypeCreate->addFieldDefinition( $fieldDefinitionCreate );
 // add second field definitions
 
 // make a new instance of a FieldDefinitionCreate class
-$fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreate( "ezinteger", "number" );
+$fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct( "ezinteger", "number" );
 
 $fieldDefinitionCreate->setDefaultValue(
    new \ezp\Content\FieldType\Integer\Value( 2 )
@@ -104,13 +104,13 @@ $contentTypeService->publishContentTypeDraft($contentTypeDraft);
 // create a new draft
 $contentTypeDraft = $contentTypeService->createContentTypeDraft( $contentType );
 
-$contentTypeUpdate = $contentTypeService->newContentTypeUpdate();
+$contentTypeUpdate = $contentTypeService->newContentTypeUpdateStruct();
 $contentTypeUpdate->isContainer = true;
 $contentTypeService->updateContentTypeDraft( $contentTypeDraft, $contentTypeUpdate );
 // after this call the content type has still status draft
 
 // add a third fielddefinition
-$fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreate( "ezboolean", "checkbox" );
+$fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct( "ezboolean", "checkbox" );
 $fieldDefinitionCreate->setName( "englishNameOfMyNewField3", "eng-US" );
 $fieldDefinitionCreate->setDescription( "this is a description of my new field 3", "eng-US" );
 $fieldDefinitionCreate->setName( "deutscherNameMeinesNeuenFeldes3","ger-DE" );

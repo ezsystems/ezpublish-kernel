@@ -1,7 +1,5 @@
 <?php
-use ezp\PublicAPI\Values\Content\LocationCreate,
-    ezp\PublicAPI\Values\Content\ContentCreate,
-    ezp\PublicAPI\Values\Content\VersionInfo,
+use ezp\PublicAPI\Values\Content\VersionInfo,
     ezp\PublicAPI\Interfaces\Repository;
 
 /**
@@ -22,7 +20,7 @@ $contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
 
 // construct the creation structure with the content type and the main language of the content
 // the main language is also the default language for the fields
-$contentCreate = $contentService->newContentCreate( $contentType, 'eng-US' );
+$contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
 // set title field in the main language
 $contentCreate->setField( 'title', 'Title' );
@@ -44,7 +42,7 @@ $contentCreate->remoteId = "12345";
 
 // create the content instance with a default location create structure
 $parentLocationId = 123;
-$version = $contentService->createContentDraft( $contentCreate, array( $locationService->newLocationCreate( $parentLocationId ) ) );
+$version = $contentService->createContentDraft( $contentCreate, array( $locationService->newLocationCreateStruct( $parentLocationId ) ) );
 
 // print the new created info data
 $contentId = $version->contentId;
@@ -64,13 +62,13 @@ $locations = $version->contentInfo->locations;
 
 // translating the content object (4.x)
 // load the content info object (note this info object differes from the one in the draft after publishing)
-$contentInfo = $contentService->loadContent( $version->contentId );
+$contentInfo = $contentService->loadContentInfo( $version->contentId );
 
 // create a draft from the before published content
 $versionInfo = $contentService->createDraftFromContent( $contentInfo );
 
 // instantiate a version update value object
-$versionUpdate = $contentService->newVersionUpdate();
+$versionUpdate = $contentService->newVersionUpdateStruct();
 $versionUpdate->initialLanguageId = 'ger-DE';
 $versionUpdate->fields['title'] = 'Titel';
 // .... as with creation see above
@@ -90,7 +88,7 @@ foreach ( $version->getFields() as $field)
  */
 
 // Create the content update struct
-$contentUpdate = $contentService->newContentUpdate();
+$contentUpdate = $contentService->newContentUpdateStruct();
 
 // Change the main language and alwaysAvailableFlag
 $contentUpdate->mainLanguageCode = 'ger-DE';
@@ -127,7 +125,7 @@ foreach ( $contentService->loadContentDrafts() as $versionInfo )
  */
 
 // Load the content info by it's remote id
-$contentInfo = $contentService->loadContentByRemoteId( 'remote-id' );
+$contentInfo = $contentService->loadContentInfoByRemoteId( 'remote-id' );
 
 // Load the version info instance
 $versionInfo = $contentService->loadVersionInfo( $contentInfo );
@@ -138,7 +136,7 @@ $versionInfo = $contentService->loadVersionInfo( $contentInfo );
  */
 
 // Load a content info instance
-$contentInfo = $contentService->loadContent( 42 );
+$contentInfo = $contentService->loadContentInfo( 42 );
 
 // Load a specific version
 $versionInfo = $contentService->loadVersionInfo( $contentInfo, 3 );
@@ -149,7 +147,7 @@ $versionInfo = $contentService->loadVersionInfo( $contentInfo, 3 );
  */
 
 // Load a content info instance
-$contentInfo = $contentService->loadContent( 42 );
+$contentInfo = $contentService->loadContentInfo( 42 );
 
 // Load the latest version for this content object
 $version = $contentService->loadVersionByContentInfo( $contentInfo );
@@ -189,7 +187,7 @@ $version = $contentService->loadVersion( 42, $language, 17 );
  */
 
 // Load a content info for a specific content id
-$contentInfo = $contentService->loadContent( 23 );
+$contentInfo = $contentService->loadContentInfo( 23 );
 
 // List of content versions
 $versionInfos = $contentService->loadVersions( $contentInfo );
@@ -209,7 +207,7 @@ foreach( $versionInfos as $versionInfo )
 $versionInfo = $contentService->loadVersionInfoById( 23 );
 
 // Instantiate a location create struct
-$locationCreate = $locationService->newLocationCreate( 123 );
+$locationCreate = $locationService->newLocationCreateStruct( 123 );
 
 // Copy content in latest version
 $version = $contentService->copyContent( $versionInfo->contentInfo, $locationCreate, $versionInfo );
@@ -253,7 +251,7 @@ $contentService->addRelation( $versionInfo, 23 );
  */
 
 // Load the content info instance
-$contentInfo = $contentService->loadContentByRemoteId( 'remote' );
+$contentInfo = $contentService->loadContentInfoByRemoteId( 'remote' );
 
 // Load the latest version info for the content object
 $versionInfo = $contentService->loadVersionInfo( $contentInfo );
@@ -270,7 +268,7 @@ foreach ( $contentService->loadOutgoingRelations( $versionInfo ) as $relation )
  */
 
 // Load the used content info object
-$contentInfo = $contentService->loadContent( 17 );
+$contentInfo = $contentService->loadContentInfo( 17 );
 
 // Load the incoming relations for the content info object
 foreach ( $contentService->loadIncomingRelations( $contentInfo ) as $relation )
@@ -284,7 +282,7 @@ foreach ( $contentService->loadIncomingRelations( $contentInfo ) as $relation )
  */
 
 // Load the content info instance
-$contentInfo = $contentService->loadContent( 42 );
+$contentInfo = $contentService->loadContentInfo( 42 );
 
 // Load specific version info
 $versionInfo = $contentService->loadVersionInfo( $contentInfo);

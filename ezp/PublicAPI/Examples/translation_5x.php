@@ -8,21 +8,29 @@
  * 
  */
 
+/**
+ * assumed as injected
+ * @var ezp\PublicAPI\Interfaces\Repository $repository
+ */
+$repository = null;
+
+$contentService = $repository->getContentService();
+
 // load the source version info of a content object
 $versionInfo = $contentService->loadVersionInfoById($CONTENT_ID);
 // create a draft from the before published content
-$draft = $contentService->createDraftFromVersion($versionInfo->contentInfo,$versionInfo);
+$draft = $contentService->createDraftFromContent($versionInfo->contentInfo,$versionInfo);
 
 /**
  * Translate one language
  */
-$translationInfo = new TranslationInfo;
+$translationInfo = $contentService->newTranslation();
 $translationInfo->sourceLanguage = 'eng-US';
 $translationInfo->sourceVersion = $versionInfo;
 $translationInfo->destinationLanguage = 'ger-DE';
 $translationInfo->destinationVersion = $draft;
 
-$translation = $contentService->newTranslation($tranlationInfo);
+$translation = $contentService->newTranslation($translationInfo);
 $translation->fields['title'] = 'Titel';
 // .....
 
@@ -37,7 +45,7 @@ $newPublishedVersion = $contentService->publishDraft($draft->versionInfo);
 
 
 
-$versionUpdate = new VersionUpdate();
+$versionUpdate = $contentService->newVersionUpdateStruct();
 $versionUpdate->fields['title']['ger-DE'] = 'Titel';
 // ...
 $versionUpdate->fields['title']['fra-FR'] = 'Titre';
@@ -47,7 +55,7 @@ $draft = $contentService->updateVersion($draft,$versionUpdate);
 
 $newPublishedVersion = $contentService->publishDraft($draft->versionInfo);
 
-$translationInfo = new TranslationInfo;
+$translationInfo = $contentService->newTranslation();
 $translationInfo->sourceLanguage = 'eng-US';
 $translationInfo->sourceVersion = $versionInfo;
 $translationInfo->destinationLanguage = 'ger-DE';
@@ -55,7 +63,7 @@ $translationInfo->destinationVersion = $newPublishedVersion;
 
 $contentService->addTranslationInfo($translationInfo);
 
-$translationInfo = new TranslationInfo;
+$translationInfo = $contentService->newTranslation();
 $translationInfo->sourceLanguage = 'eng-US';
 $translationInfo->sourceVersion = $versionInfo;
 $translationInfo->destinationLanguage = 'fra-FR';

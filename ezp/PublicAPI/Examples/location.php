@@ -58,8 +58,8 @@ foreach( $childLocations as $child )
 
 // create a new loaction for a content object
 
-$contentInfo = $contentService->loadContent( $contentId );
-$locationCreate = $locationService->newLocationCreate( $parentId );
+$contentInfo = $contentService->loadContentInfo( $contentId );
+$locationCreate = $locationService->newLocationCreateStruct( $parentId );
 $locationCreate->priority = 3;
 $locationService->createLocation( $contentInfo, $locationCreate );
 
