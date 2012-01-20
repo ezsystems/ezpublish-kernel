@@ -54,7 +54,7 @@
 												<div class="method-definition">
 											<span class="method-result">void</span>
 										<a href="#addLimitation" title="details" class="method-name">addLimitation</a>
-											(<span class="var-type">string</span>&nbsp;<span class="var-name">$identifier</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$values</span>)
+											(<span class="var-type"><a href="../ezp-PublicAPI-Values/Limitation.html">Limitation</a></span>&nbsp;<span class="var-name">$limitation</span>)
 									</div>
 								</div>
 		</div>
@@ -73,14 +73,15 @@
 			<A NAME='method_detail'></A>
 
 <a name="methodaddLimitation" id="addLimitation"><!-- --></a>
-<div class="evenrow">
+<div class="oddrow">
 	
 	<div class="method-header">
-		<span class="method-title">addLimitation</span> (line <span class="line-number">18</span>)
+		<span class="method-title">addLimitation</span> (line <span class="line-number">17</span>)
 	</div> 
 	
 	<!-- ========== Info from phpDoc block ========= -->
-<p class="short-description">adds a limitation with the given identifier and list of values</p>
+<p class="short-description">adds a limitation to the policy - if a Limitation exists with the same identifer</p>
+<p class="description"><p>the existing limitation is replaced</p></p>
 	<ul class="tags">
 				<li><span class="field">abstract:</span> </li>
 				<li><span class="field">access:</span> public</li>
@@ -91,16 +92,13 @@
 		<span class="method-name">
 			addLimitation
 		</span>
-					(<span class="var-type">string</span>&nbsp;<span class="var-name">$identifier</span>, <span class="var-type">array</span>&nbsp;<span class="var-name">$values</span>)
+					(<span class="var-type"><a href="../ezp-PublicAPI-Values/Limitation.html">Limitation</a></span>&nbsp;<span class="var-name">$limitation</span>)
 			</div>
 	
 			<ul class="parameters">
 					<li>
-				<span class="var-type">array</span>
-				<span class="var-name">$values</span>			</li>
-					<li>
-				<span class="var-type">string</span>
-				<span class="var-name">$identifier</span><span class="var-description">: identifier - the identifier of the limitation. Example identifiers         Class, Section, ParentOwner, ParentClass, ParentGroup, ParentDepth, Language, Subtree, SiteAccess</span>			</li>
+				<span class="var-type"><a href="../ezp-PublicAPI-Values/Limitation.html">Limitation</a></span>
+				<span class="var-name">$limitation</span>			</li>
 				</ul>
 		
 			
@@ -120,7 +118,7 @@
 
 
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 19 Jan 2012 17:12:51 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Fri, 20 Jan 2012 12:37:51 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</div></body>
 </html>

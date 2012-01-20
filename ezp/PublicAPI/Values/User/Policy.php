@@ -1,6 +1,8 @@
 <?php
 namespace ezp\PublicAPI\Values\User;
+
 use ezp\PublicAPI\Values\ValueObject;
+use ezp\PubklicAPI\Values\User\Limitation;
 
 /**
  * This class represents a policy value
@@ -41,7 +43,7 @@ abstract class Policy extends ValueObject
 
     /**
      *
-     * @return array an array of limitations
+     * @return array an array of {@link Limitation}
      */
     public abstract function getLimitations();
 }

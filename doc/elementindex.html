@@ -104,7 +104,7 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/PolicyUpdateStruct.html#methodaddLimitation">PolicyUpdateStruct::addLimitation()</a> in PolicyUpdateStruct.php</div>
-							<div class="index-item-description">adds a limitation with the given identifier and list of values</div>
+							<div class="index-item-description">adds a limitation to the policy - if a Limitation exists with the same identifer</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">addPolicy</span>
@@ -264,14 +264,14 @@
 						<span class="var-title">$contentUpdateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserUpdateStruct.html#var$contentUpdateStruct">UserUpdateStruct::$contentUpdateStruct</a> in UserUpdateStruct.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserGroupUpdateStruct.html#var$contentUpdateStruct">UserGroupUpdateStruct::$contentUpdateStruct</a> in UserGroupUpdateStruct.php</div>
 							<div class="index-item-description">the update structure  for the profile meta data</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$contentUpdateStruct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserGroupUpdateStruct.html#var$contentUpdateStruct">UserGroupUpdateStruct::$contentUpdateStruct</a> in UserGroupUpdateStruct.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserUpdateStruct.html#var$contentUpdateStruct">UserUpdateStruct::$contentUpdateStruct</a> in UserUpdateStruct.php</div>
 							<div class="index-item-description">the update structure  for the profile meta data</div>
 					</dd>
 			<dt class="field">
@@ -285,8 +285,8 @@
 						<span class="var-title">$created</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroup.html#var$created">ContentTypeGroup::$created</a> in ContentTypeGroup.php</div>
-							<div class="index-item-description">Created date (timestamp)</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeCreateStruct.html#var$created">ContentTypeCreateStruct::$created</a> in ContentTypeCreateStruct.php</div>
+							<div class="index-item-description">If set this value overrides the current time for creation</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$created</span>
@@ -299,42 +299,21 @@
 						<span class="var-title">$created</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#var$created">ContentType::$created</a> in ContentType.php</div>
+							<div class="index-item-description">Creation date (timestamp) of the content type</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$created</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/VersionInfo.html#var$created">VersionInfo::$created</a> in VersionInfo.php</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$created</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeCreateStruct.html#var$created">ContentTypeCreateStruct::$created</a> in ContentTypeCreateStruct.php</div>
-							<div class="index-item-description">If set this value overrides the current time for creation</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$created</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#var$created">ContentType::$created</a> in ContentType.php</div>
-							<div class="index-item-description">Creation date (timestamp) of the content type</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$creatorId</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#var$creatorId">ContentType::$creatorId</a> in ContentType.php</div>
-							<div class="index-item-description">Creator user id of the content type</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$creatorId</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroup.html#var$creatorId">ContentTypeGroup::$creatorId</a> in ContentTypeGroup.php</div>
-							<div class="index-item-description">Creator user id</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$creatorId</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeCreateStruct.html#var$creatorId">ContentTypeCreateStruct::$creatorId</a> in ContentTypeCreateStruct.php</div>
-							<div class="index-item-description">if set this value overrides the current user as creator</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroup.html#var$created">ContentTypeGroup::$created</a> in ContentTypeGroup.php</div>
+							<div class="index-item-description">Created date (timestamp)</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$creatorId</span>
@@ -347,8 +326,29 @@
 						<span class="var-title">$creatorId</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#var$creatorId">ContentType::$creatorId</a> in ContentType.php</div>
+							<div class="index-item-description">Creator user id of the content type</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$creatorId</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeCreateStruct.html#var$creatorId">ContentTypeCreateStruct::$creatorId</a> in ContentTypeCreateStruct.php</div>
+							<div class="index-item-description">if set this value overrides the current user as creator</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$creatorId</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/VersionInfo.html#var$creatorId">VersionInfo::$creatorId</a> in VersionInfo.php</div>
 							<div class="index-item-description">Creator user ID.</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$creatorId</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroup.html#var$creatorId">ContentTypeGroup::$creatorId</a> in ContentTypeGroup.php</div>
+							<div class="index-item-description">Creator user id</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$criteria</span>
@@ -435,6 +435,12 @@
 							<div class="index-item-description">this class represents a content type value</div>
 					</dd>
 			<dt class="field">
+						CONTENTTYPE
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#constCONTENTTYPE">Limitation::CONTENTTYPE</a> in Limitation.php</div>
+					</dd>
+			<dt class="field">
 						ContentTypeCreateStruct
 					</dt>
 		<dd class="index-item-body">
@@ -482,6 +488,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentTypeId.html">ContentTypeId</a> in ContentTypeId.php</div>
 							<div class="index-item-description">A criterion that matches content based on its ContentType id</div>
+					</dd>
+			<dt class="field">
+						ContentTypeLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeLimitation.html">ContentTypeLimitation</a> in ContentTypeLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
 					</dd>
 			<dt class="field">
 						ContentTypeService
@@ -590,26 +603,7 @@
 						<span class="method-title">createFromQueryBuilder</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/CriterionInterface.html#methodcreateFromQueryBuilder">CriterionInterface::createFromQueryBuilder()</a> in CriterionInterface.php</div>
-							<div class="index-item-description">Creates a new Criterion for $target with operator $operator on $value</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">createFromQueryBuilder</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/FullText.html#methodcreateFromQueryBuilder">FullText::createFromQueryBuilder()</a> in FullText.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">createFromQueryBuilder</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ParentLocationId.html#methodcreateFromQueryBuilder">ParentLocationId::createFromQueryBuilder()</a> in ParentLocationId.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">createFromQueryBuilder</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LocationId.html#methodcreateFromQueryBuilder">LocationId::createFromQueryBuilder()</a> in LocationId.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/UrlAlias.html#methodcreateFromQueryBuilder">UrlAlias::createFromQueryBuilder()</a> in UrlAlias.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">createFromQueryBuilder</span>
@@ -621,13 +615,56 @@
 						<span class="method-title">createFromQueryBuilder</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/FullText.html#methodcreateFromQueryBuilder">FullText::createFromQueryBuilder()</a> in FullText.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">createFromQueryBuilder</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/RemoteId.html#methodcreateFromQueryBuilder">RemoteId::createFromQueryBuilder()</a> in RemoteId.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">createFromQueryBuilder</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/CriterionInterface.html#methodcreateFromQueryBuilder">CriterionInterface::createFromQueryBuilder()</a> in CriterionInterface.php</div>
+							<div class="index-item-description">Creates a new Criterion for $target with operator $operator on $value</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">createFromQueryBuilder</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LocationId.html#methodcreateFromQueryBuilder">LocationId::createFromQueryBuilder()</a> in LocationId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">createFromQueryBuilder</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/SectionId.html#methodcreateFromQueryBuilder">SectionId::createFromQueryBuilder()</a> in SectionId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">createFromQueryBuilder</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentTypeId.html#methodcreateFromQueryBuilder">ContentTypeId::createFromQueryBuilder()</a> in ContentTypeId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">createFromQueryBuilder</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentTypeGroupId.html#methodcreateFromQueryBuilder">ContentTypeGroupId::createFromQueryBuilder()</a> in ContentTypeGroupId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">createFromQueryBuilder</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ParentLocationId.html#methodcreateFromQueryBuilder">ParentLocationId::createFromQueryBuilder()</a> in ParentLocationId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">createFromQueryBuilder</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Subtree.html#methodcreateFromQueryBuilder">Subtree::createFromQueryBuilder()</a> in Subtree.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">createFromQueryBuilder</span>
@@ -640,30 +677,6 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentId.html#methodcreateFromQueryBuilder">ContentId::createFromQueryBuilder()</a> in ContentId.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">createFromQueryBuilder</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/UrlAlias.html#methodcreateFromQueryBuilder">UrlAlias::createFromQueryBuilder()</a> in UrlAlias.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">createFromQueryBuilder</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentTypeGroupId.html#methodcreateFromQueryBuilder">ContentTypeGroupId::createFromQueryBuilder()</a> in ContentTypeGroupId.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">createFromQueryBuilder</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Subtree.html#methodcreateFromQueryBuilder">Subtree::createFromQueryBuilder()</a> in Subtree.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">createFromQueryBuilder</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/SectionId.html#methodcreateFromQueryBuilder">SectionId::createFromQueryBuilder()</a> in SectionId.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">createLocation</span>
@@ -719,6 +732,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/CriterionInterface.html">CriterionInterface</a> in CriterionInterface.php</div>
 							<div class="index-item-description">Base interface for Criterion implementations</div>
+					</dd>
+			<dt class="field">
+						CustomLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/CustomLimitation.html">CustomLimitation</a> in CustomLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">content.php</span>
@@ -839,6 +859,18 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="eZPublicAPI/_Values---ContentType---ContentTypeUpdateStruct.php.html">ContentTypeUpdateStruct.php</a> in ContentTypeUpdateStruct.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">ContentTypeLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---ContentTypeLimitation.php.html">ContentTypeLimitation.php</a> in ContentTypeLimitation.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">CustomLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---CustomLimitation.php.html">CustomLimitation.php</a> in CustomLimitation.php</div>
 					</dd>
 		</dl>
 	<a name="d"></a>
@@ -1514,6 +1546,13 @@
 						<span class="method-title">getDescription</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinition.html#methodgetDescription">FieldDefinition::getDescription()</a> in FieldDefinition.php</div>
+							<div class="index-item-description">this method returns the name of the field in the given language</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getDescription</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroup.html#methodgetDescription">ContentTypeGroup::getDescription()</a> in ContentTypeGroup.php</div>
 							<div class="index-item-description">5.x only</div>
 					</dd>
@@ -1525,11 +1564,11 @@
 							<div class="index-item-description">this method returns the name of the content type in the given language</div>
 					</dd>
 			<dt class="field">
-						<span class="method-title">getDescription</span>
+						<span class="method-title">getDescriptions</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinition.html#methodgetDescription">FieldDefinition::getDescription()</a> in FieldDefinition.php</div>
-							<div class="index-item-description">this method returns the name of the field in the given language</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinition.html#methodgetDescriptions">FieldDefinition::getDescriptions()</a> in FieldDefinition.php</div>
+							<div class="index-item-description">This method returns the human readable description of the field</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getDescriptions</span>
@@ -1544,13 +1583,6 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#methodgetDescriptions">ContentType::getDescriptions()</a> in ContentType.php</div>
 							<div class="index-item-description">This method returns the human readable description of the content type</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">getDescriptions</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinition.html#methodgetDescriptions">FieldDefinition::getDescriptions()</a> in FieldDefinition.php</div>
-							<div class="index-item-description">This method returns the human readable description of the field</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getErrorCode</span>
@@ -1615,6 +1647,83 @@
 							<div class="index-item-description">returns a field value for the given value  $version-&gt;fields[$fieldDefId][$languageCode] is an equivalent call  if no language is given on a translatable field this method returns  the value of the initial language of the version if present, otherwise null.</div>
 					</dd>
 			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationLimitation.html#methodgetIdentifier">LocationLimitation::getIdentifier()</a> in LocationLimitation.php</div>
+							<div class="index-item-description">(non-PHPdoc)</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#methodgetIdentifier">Limitation::getIdentifier()</a> in Limitation.php</div>
+							<div class="index-item-description">returns the limitation identifer (one of the defined constants) or a custom limitation</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/StatusLimitation.html#methodgetIdentifier">StatusLimitation::getIdentifier()</a> in StatusLimitation.php</div>
+							<div class="index-item-description">(non-PHPdoc)</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/SubtreeLimitation.html#methodgetIdentifier">SubtreeLimitation::getIdentifier()</a> in SubtreeLimitation.php</div>
+							<div class="index-item-description">(non-PHPdoc)</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LanguageLimitation.html#methodgetIdentifier">LanguageLimitation::getIdentifier()</a> in LanguageLimitation.php</div>
+							<div class="index-item-description">(non-PHPdoc)</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/SiteaccessLimitation.html#methodgetIdentifier">SiteaccessLimitation::getIdentifier()</a> in SiteaccessLimitation.php</div>
+							<div class="index-item-description">(non-PHPdoc)</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/SectionLimitation.html#methodgetIdentifier">SectionLimitation::getIdentifier()</a> in SectionLimitation.php</div>
+							<div class="index-item-description">(non-PHPdoc)</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ParentContentTypeLimitation.html#methodgetIdentifier">ParentContentTypeLimitation::getIdentifier()</a> in ParentContentTypeLimitation.php</div>
+							<div class="index-item-description">(non-PHPdoc)</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/OwnerLimitation.html#methodgetIdentifier">OwnerLimitation::getIdentifier()</a> in OwnerLimitation.php</div>
+							<div class="index-item-description">(non-PHPdoc)</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/CustomLimitation.html#methodgetIdentifier">CustomLimitation::getIdentifier()</a> in CustomLimitation.php</div>
+							<div class="index-item-description">(non-PHPdoc)</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getIdentifier</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeLimitation.html#methodgetIdentifier">ContentTypeLimitation::getIdentifier()</a> in ContentTypeLimitation.php</div>
+							<div class="index-item-description">(non-PHPdoc)</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">getIndexColumn</span>
 					</dt>
 		<dd class="index-item-body">
@@ -1626,6 +1735,13 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="FieldTypeProviderInterface/FieldStorage.html#methodgetIndexData">FieldStorage::getIndexData()</a> in FieldStorage.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getLimitation</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/RoleAssignment.html#methodgetLimitation">RoleAssignment::getLimitation()</a> in RoleAssignment.php</div>
+							<div class="index-item-description">returns the limitation of the role assignment</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getLimitations</span>
@@ -1644,8 +1760,8 @@
 						<span class="method-title">getName</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/VersionInfo.html#methodgetName">VersionInfo::getName()</a> in VersionInfo.php</div>
-							<div class="index-item-description">Returns the name computed from the name schema in the given language.</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroup.html#methodgetName">ContentTypeGroup::getName()</a> in ContentTypeGroup.php</div>
+							<div class="index-item-description">5.x only</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getName</span>
@@ -1665,15 +1781,15 @@
 						<span class="method-title">getName</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroup.html#methodgetName">ContentTypeGroup::getName()</a> in ContentTypeGroup.php</div>
-							<div class="index-item-description">5.x only</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/VersionInfo.html#methodgetName">VersionInfo::getName()</a> in VersionInfo.php</div>
+							<div class="index-item-description">Returns the name computed from the name schema in the given language.</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getNames</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinition.html#methodgetNames">FieldDefinition::getNames()</a> in FieldDefinition.php</div>
-							<div class="index-item-description">This method returns the human readable name of this field in all provided languages  of the content type</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#methodgetNames">ContentType::getNames()</a> in ContentType.php</div>
+							<div class="index-item-description">This method returns the human readable name in all provided languages  of the content type</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getNames</span>
@@ -1686,8 +1802,8 @@
 						<span class="method-title">getNames</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#methodgetNames">ContentType::getNames()</a> in ContentType.php</div>
-							<div class="index-item-description">This method returns the human readable name in all provided languages  of the content type</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinition.html#methodgetNames">FieldDefinition::getNames()</a> in FieldDefinition.php</div>
+							<div class="index-item-description">This method returns the human readable name of this field in all provided languages  of the content type</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getPolicies</span>
@@ -1711,11 +1827,39 @@
 							<div class="index-item-description">returns the outgoing relations</div>
 					</dd>
 			<dt class="field">
+						<span class="method-title">getRole</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/RoleAssignment.html#methodgetRole">RoleAssignment::getRole()</a> in RoleAssignment.php</div>
+							<div class="index-item-description">returns the role to which the user or user group is assigned to</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getRoleAssignments</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodgetRoleAssignments">RoleService::getRoleAssignments()</a> in RoleService.php</div>
+							<div class="index-item-description">returns the assigned user and user groups to this role</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">getRoleAssignments</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Role.html#methodgetRoleAssignments">Role::getRoleAssignments()</a> in Role.php</div>
 							<div class="index-item-description">returns a list of users and user groups assigned to this Role</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getRoleAssignmentsForUser</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodgetRoleAssignmentsForUser">RoleService::getRoleAssignmentsForUser()</a> in RoleService.php</div>
+							<div class="index-item-description">returns the roles assigned to the given user</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getRoleAssignmentsForUserGroup</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/RoleService.html#methodgetRoleAssignmentsForUserGroup">RoleService::getRoleAssignmentsForUserGroup()</a> in RoleService.php</div>
+							<div class="index-item-description">returns the roles assigned to the given user group</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getSectionService</span>
@@ -1728,25 +1872,13 @@
 						<span class="method-title">getSpecifications</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentTypeGroupId.html#methodgetSpecifications">ContentTypeGroupId::getSpecifications()</a> in ContentTypeGroupId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getSpecifications</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Subtree.html#methodgetSpecifications">Subtree::getSpecifications()</a> in Subtree.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">getSpecifications</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Status.html#methodgetSpecifications">Status::getSpecifications()</a> in Status.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">getSpecifications</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/SectionId.html#methodgetSpecifications">SectionId::getSpecifications()</a> in SectionId.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">getSpecifications</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/UserMetadata.html#methodgetSpecifications">UserMetadata::getSpecifications()</a> in UserMetadata.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getSpecifications</span>
@@ -1758,19 +1890,61 @@
 						<span class="method-title">getSpecifications</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/UserMetadata.html#methodgetSpecifications">UserMetadata::getSpecifications()</a> in UserMetadata.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getSpecifications</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LocationId.html#methodgetSpecifications">LocationId::getSpecifications()</a> in LocationId.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getSpecifications</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/DateMetadata.html#methodgetSpecifications">DateMetadata::getSpecifications()</a> in DateMetadata.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentId.html#methodgetSpecifications">ContentId::getSpecifications()</a> in ContentId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getSpecifications</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ParentLocationId.html#methodgetSpecifications">ParentLocationId::getSpecifications()</a> in ParentLocationId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getSpecifications</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Status.html#methodgetSpecifications">Status::getSpecifications()</a> in Status.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getSpecifications</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentTypeId.html#methodgetSpecifications">ContentTypeId::getSpecifications()</a> in ContentTypeId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getSpecifications</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/RemoteId.html#methodgetSpecifications">RemoteId::getSpecifications()</a> in RemoteId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getSpecifications</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/FullText.html#methodgetSpecifications">FullText::getSpecifications()</a> in FullText.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getSpecifications</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Field.html#methodgetSpecifications">Field::getSpecifications()</a> in Field.php</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getSpecifications</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/DateMetadata.html#methodgetSpecifications">DateMetadata::getSpecifications()</a> in DateMetadata.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getSpecifications</span>
@@ -1783,37 +1957,7 @@
 						<span class="method-title">getSpecifications</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentTypeId.html#methodgetSpecifications">ContentTypeId::getSpecifications()</a> in ContentTypeId.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">getSpecifications</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentTypeGroupId.html#methodgetSpecifications">ContentTypeGroupId::getSpecifications()</a> in ContentTypeGroupId.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">getSpecifications</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentId.html#methodgetSpecifications">ContentId::getSpecifications()</a> in ContentId.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">getSpecifications</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/FullText.html#methodgetSpecifications">FullText::getSpecifications()</a> in FullText.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">getSpecifications</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ParentLocationId.html#methodgetSpecifications">ParentLocationId::getSpecifications()</a> in ParentLocationId.php</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">getSpecifications</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/RemoteId.html#methodgetSpecifications">RemoteId::getSpecifications()</a> in RemoteId.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/SectionId.html#methodgetSpecifications">SectionId::getSpecifications()</a> in SectionId.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getTrashService</span>
@@ -1828,6 +1972,20 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/Repository.html#methodgetUser">Repository::getUser()</a> in Repository.php</div>
 							<div class="index-item-description">Get current user</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getUser</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserRoleAssignment.html#methodgetUser">UserRoleAssignment::getUser()</a> in UserRoleAssignment.php</div>
+							<div class="index-item-description">returns the user to which the role is assigned to</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">getUserGroup</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserGroupRoleAssignment.html#methodgetUserGroup">UserGroupRoleAssignment::getUserGroup()</a> in UserGroupRoleAssignment.php</div>
+							<div class="index-item-description">returns the user group to which the role is assigned to</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">getUserService</span>
@@ -2210,7 +2368,7 @@
 						<span class="var-title">$isMainLocation</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdate.html#var$isMainLocation">LocationUpdate::$isMainLocation</a> in LocationUpdateStruct.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdateStruct.html#var$isMainLocation">LocationUpdateStruct::$isMainLocation</a> in LocationUpdateStruct.php</div>
 							<div class="index-item-description">if set to true this location will set as new main location for the content.</div>
 					</dd>
 			<dt class="field">
@@ -2321,15 +2479,15 @@
 						<span class="var-title">$languageCode</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Language.html#var$languageCode">Language::$languageCode</a> in Language.php</div>
-							<div class="index-item-description">the languageCode code</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Field.html#var$languageCode">Field::$languageCode</a> in Field.php</div>
+							<div class="index-item-description">the language code</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$languageCode</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Field.html#var$languageCode">Field::$languageCode</a> in Field.php</div>
-							<div class="index-item-description">the language code</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Language.html#var$languageCode">Language::$languageCode</a> in Language.php</div>
+							<div class="index-item-description">the languageCode code</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$languageCodes</span>
@@ -2346,17 +2504,24 @@
 							<div class="index-item-description">Query limit</div>
 					</dd>
 			<dt class="field">
-						<span class="var-title">$login</span>
+						<span class="var-title">$limitationValues</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserCreateStruct.html#var$login">UserCreateStruct::$login</a> in UserCreateStruct.php</div>
-							<div class="index-item-description">User login</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#var$limitationValues">Limitation::$limitationValues</a> in Limitation.php</div>
+							<div class="index-item-description">An integer list of ids or identifiers for which the limitation shoul be applied</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$login</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/User.html#var$login">User::$login</a> in User.php</div>
+							<div class="index-item-description">User login</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$login</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserCreateStruct.html#var$login">UserCreateStruct::$login</a> in UserCreateStruct.php</div>
 							<div class="index-item-description">User login</div>
 					</dd>
 			<dt class="field">
@@ -2391,6 +2556,19 @@
 							<div class="index-item-description">This class represents a language in the repository.</div>
 					</dd>
 			<dt class="field">
+						LANGUAGE
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#constLANGUAGE">Limitation::LANGUAGE</a> in Limitation.php</div>
+					</dd>
+			<dt class="field">
+						LanguageLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LanguageLimitation.html">LanguageLimitation</a> in LanguageLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
+					</dd>
+			<dt class="field">
 						LanguageService
 					</dt>
 		<dd class="index-item-body">
@@ -2409,6 +2587,13 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Operator.html#constLIKE">Operator::LIKE</a> in Operator.php</div>
+					</dd>
+			<dt class="field">
+						Limitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html">Limitation</a> in Limitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
 					</dd>
 			<dt class="field">
 						LINK
@@ -2705,6 +2890,12 @@
 							<div class="index-item-description">This class represents a location in the repository</div>
 					</dd>
 			<dt class="field">
+						LOCATION
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#constLOCATION">Limitation::LOCATION</a> in Limitation.php</div>
+					</dd>
+			<dt class="field">
 						LocationCreateStruct
 					</dt>
 		<dd class="index-item-body">
@@ -2724,6 +2915,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LocationId.html">LocationId</a> in LocationId.php</div>
 							<div class="index-item-description">A criterion that matches content based on its own location id</div>
+					</dd>
+			<dt class="field">
+						LocationLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationLimitation.html">LocationLimitation</a> in LocationLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
 					</dd>
 			<dt class="field">
 						LocationPath
@@ -2754,10 +2952,10 @@
 							<div class="index-item-description">Location service, used for complex subtree operations</div>
 					</dd>
 			<dt class="field">
-						LocationUpdate
+						LocationUpdateStruct
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdate.html">LocationUpdate</a> in LocationUpdateStruct.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdateStruct.html">LocationUpdateStruct</a> in LocationUpdateStruct.php</div>
 							<div class="index-item-description">This class is used for updating location meta data.</div>
 					</dd>
 			<dt class="field">
@@ -2877,6 +3075,24 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="eZPublicAPI/_Values---Content---Query---SortClause---LocationPriority.php.html">LocationPriority.php</a> in LocationPriority.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">LanguageLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---LanguageLimitation.php.html">LanguageLimitation.php</a> in LanguageLimitation.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">LocationLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---LocationLimitation.php.html">LocationLimitation.php</a> in LocationLimitation.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">Limitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation.php.html">Limitation.php</a> in Limitation.php</div>
 					</dd>
 		</dl>
 	<a name="m"></a>
@@ -3079,15 +3295,8 @@
 						<span class="var-title">$name</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Role.html#var$name">Role::$name</a> in Role.php</div>
-							<div class="index-item-description">Name of the role</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$name</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/RoleUpdateStruct.html#var$name">RoleUpdateStruct::$name</a> in RoleUpdateStruct.php</div>
-							<div class="index-item-description">Name of the role</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Section.html#var$name">Section::$name</a> in Section.php</div>
+							<div class="index-item-description">Name of the section</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$name</span>
@@ -3095,6 +3304,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentInfo.html#var$name">ContentInfo::$name</a> in ContentInfo.php</div>
 							<div class="index-item-description">the computed name (via name schema) in the main language of the content object</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$name</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/RoleUpdateStruct.html#var$name">RoleUpdateStruct::$name</a> in RoleUpdateStruct.php</div>
+							<div class="index-item-description">Name of the role</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$name</span>
@@ -3114,8 +3330,8 @@
 						<span class="var-title">$name</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Section.html#var$name">Section::$name</a> in Section.php</div>
-							<div class="index-item-description">Name of the section</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Language.html#var$name">Language::$name</a> in Language.php</div>
+							<div class="index-item-description">Human readable name of the language</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$name</span>
@@ -3128,15 +3344,8 @@
 						<span class="var-title">$name</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Language.html#var$name">Language::$name</a> in Language.php</div>
-							<div class="index-item-description">Human readable name of the language</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$nameSchema</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeCreateStruct.html#var$nameSchema">ContentTypeCreateStruct::$nameSchema</a> in ContentTypeCreateStruct.php</div>
-							<div class="index-item-description">Name schema</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Role.html#var$name">Role::$name</a> in Role.php</div>
+							<div class="index-item-description">Name of the role</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$nameSchema</span>
@@ -3151,6 +3360,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeUpdateStruct.html#var$nameSchema">ContentTypeUpdateStruct::$nameSchema</a> in ContentTypeUpdateStruct.php</div>
 							<div class="index-item-description">If set the name schema is changed to this value</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$nameSchema</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeCreateStruct.html#var$nameSchema">ContentTypeCreateStruct::$nameSchema</a> in ContentTypeCreateStruct.php</div>
+							<div class="index-item-description">Name schema</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">NotFoundException.php</span>
@@ -3257,6 +3473,13 @@
 							<div class="index-item-description">instanciates a policy update class</div>
 					</dd>
 			<dt class="field">
+						<span class="method-title">newTranlationInfo</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Interfaces/ContentService.html#methodnewTranlationInfo">ContentService::newTranlationInfo()</a> in ContentService.php</div>
+							<div class="index-item-description">instanciating a new TranslationInfo</div>
+					</dd>
+			<dt class="field">
 						<span class="method-title">newTranslation</span>
 					</dt>
 		<dd class="index-item-body">
@@ -3338,15 +3561,15 @@
 						<span class="var-title">$ownerId</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentInfo.html#var$ownerId">ContentInfo::$ownerId</a> in ContentInfo.php</div>
-							<div class="index-item-description">the owner of this content object</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentCreateStruct.html#var$ownerId">ContentCreateStruct::$ownerId</a> in ContentCreateStruct.php</div>
+							<div class="index-item-description">The owner of the content. If not given the current authenticated user is set as owner.</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$ownerId</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentCreateStruct.html#var$ownerId">ContentCreateStruct::$ownerId</a> in ContentCreateStruct.php</div>
-							<div class="index-item-description">The owner of the content. If not given the current authenticated user is set as owner.</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentInfo.html#var$ownerId">ContentInfo::$ownerId</a> in ContentInfo.php</div>
+							<div class="index-item-description">the owner of this content object</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$ownerId</span>
@@ -3366,14 +3589,33 @@
 						OWNER
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#constOWNER">Limitation::OWNER</a> in Limitation.php</div>
+					</dd>
+			<dt class="field">
+						OWNER
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/UserMetadata.html#constOWNER">UserMetadata::OWNER</a> in UserMetadata.php</div>
 							<div class="index-item-description">UserMetadata target: Owner user</div>
+					</dd>
+			<dt class="field">
+						OwnerLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/OwnerLimitation.html">OwnerLimitation</a> in OwnerLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">Operator.php</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/_Values---Content---Query---Criterion---Operator.php.html">Operator.php</a> in Operator.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">OwnerLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---OwnerLimitation.php.html">OwnerLimitation.php</a> in OwnerLimitation.php</div>
 					</dd>
 		</dl>
 	<a name="p"></a>
@@ -3415,15 +3657,15 @@
 						<span class="var-title">$password</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserUpdateStruct.html#var$password">UserUpdateStruct::$password</a> in UserUpdateStruct.php</div>
-							<div class="index-item-description">if set the password is updated with this plain password</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserCreateStruct.html#var$password">UserCreateStruct::$password</a> in UserCreateStruct.php</div>
+							<div class="index-item-description">the plain password</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$password</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserCreateStruct.html#var$password">UserCreateStruct::$password</a> in UserCreateStruct.php</div>
-							<div class="index-item-description">the plain password</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserUpdateStruct.html#var$password">UserUpdateStruct::$password</a> in UserUpdateStruct.php</div>
+							<div class="index-item-description">if set the password is updated with this plain password</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$passwordHash</span>
@@ -3443,13 +3685,6 @@
 						<span class="var-title">$position</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinitionCreateStruct.html#var$position">FieldDefinitionCreateStruct::$position</a> in FieldDefinitionCreateStruct.php</div>
-							<div class="index-item-description">the position of the field definition in the content typr  if not set the field is added at the end</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$position</span>
-					</dt>
-		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinition.html#var$position">FieldDefinition::$position</a> in FieldDefinition.php</div>
 							<div class="index-item-description">the position of the field definition in the content typr</div>
 					</dd>
@@ -3461,11 +3696,11 @@
 							<div class="index-item-description">if set the position of the field in the content type</div>
 					</dd>
 			<dt class="field">
-						<span class="var-title">$priority</span>
+						<span class="var-title">$position</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdate.html#var$priority">LocationUpdate::$priority</a> in LocationUpdateStruct.php</div>
-							<div class="index-item-description">If set the location priority is changed to the new value</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinitionCreateStruct.html#var$position">FieldDefinitionCreateStruct::$position</a> in FieldDefinitionCreateStruct.php</div>
+							<div class="index-item-description">the position of the field definition in the content typr  if not set the field is added at the end</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$priority</span>
@@ -3473,6 +3708,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationCreateStruct.html#var$priority">LocationCreateStruct::$priority</a> in LocationCreateStruct.php</div>
 							<div class="index-item-description">Location priority</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$priority</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdateStruct.html#var$priority">LocationUpdateStruct::$priority</a> in LocationUpdateStruct.php</div>
+							<div class="index-item-description">If set the location priority is changed to the new value</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$priority</span>
@@ -3493,7 +3735,27 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentInfo.html#var$published">ContentInfo::$published</a> in ContentInfo.php</div>
+							<div class="index-item-description">true if there exists a published version 0 otherwise</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$publishedDate</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentInfo.html#var$publishedDate">ContentInfo::$publishedDate</a> in ContentInfo.php</div>
 							<div class="index-item-description">Content publication date</div>
+					</dd>
+			<dt class="field">
+						PARENTCONTENTTYPE
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#constPARENTCONTENTTYPE">Limitation::PARENTCONTENTTYPE</a> in Limitation.php</div>
+					</dd>
+			<dt class="field">
+						ParentContentTypeLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ParentContentTypeLimitation.html">ParentContentTypeLimitation</a> in ParentContentTypeLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
 					</dd>
 			<dt class="field">
 						ParentLocationId
@@ -3542,6 +3804,12 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="eZPublicAPI/_Values---Content---Query---Criterion---ParentLocationId.php.html">ParentLocationId.php</a> in ParentLocationId.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">ParentContentTypeLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---ParentContentTypeLimitation.php.html">ParentContentTypeLimitation.php</a> in ParentContentTypeLimitation.php</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">Policy.php</span>
@@ -3622,15 +3890,8 @@
 						<span class="var-title">$remoteId</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdate.html#var$remoteId">LocationUpdate::$remoteId</a> in LocationUpdateStruct.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdateStruct.html#var$remoteId">LocationUpdateStruct::$remoteId</a> in LocationUpdateStruct.php</div>
 							<div class="index-item-description">if set the location gets a new remoteId.</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$remoteId</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentCreateStruct.html#var$remoteId">ContentCreateStruct::$remoteId</a> in ContentCreateStruct.php</div>
-							<div class="index-item-description">Remote identifier used as a custom identifier for the object</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$remoteId</span>
@@ -3638,6 +3899,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeUpdateStruct.html#var$remoteId">ContentTypeUpdateStruct::$remoteId</a> in ContentTypeUpdateStruct.php</div>
 							<div class="index-item-description">If set the remote ID is changed to this value</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$remoteId</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentCreateStruct.html#var$remoteId">ContentCreateStruct::$remoteId</a> in ContentCreateStruct.php</div>
+							<div class="index-item-description">Remote identifier used as a custom identifier for the object</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$remoteId</span>
@@ -3729,11 +3997,25 @@
 							<div class="index-item-description">This class represents a role</div>
 					</dd>
 			<dt class="field">
+						RoleAssignment
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/RoleAssignment.html">RoleAssignment</a> in RoleAssignment.php</div>
+							<div class="index-item-description">The base class for all values</div>
+					</dd>
+			<dt class="field">
 						RoleCreateStruct
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/RoleCreateStruct.html">RoleCreateStruct</a> in RoleCreateStruct.php</div>
 							<div class="index-item-description">This class is used to create a new role</div>
+					</dd>
+			<dt class="field">
+						RoleLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/RoleLimitation.html">RoleLimitation</a> in RoleLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
 					</dd>
 			<dt class="field">
 						RoleService
@@ -3769,10 +4051,22 @@
 			<div class="index-item-details"><a href="eZPublicAPI/_Values---Content---Relation.php.html">Relation.php</a> in Relation.php</div>
 					</dd>
 			<dt class="field">
+						<span class="include-title">RoleLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---RoleLimitation.php.html">RoleLimitation.php</a> in RoleLimitation.php</div>
+					</dd>
+			<dt class="field">
 						<span class="include-title">Role.php</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Role.php.html">Role.php</a> in Role.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">RoleAssignment.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---RoleAssignment.php.html">RoleAssignment.php</a> in RoleAssignment.php</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">RoleCreateStruct.php</span>
@@ -3798,15 +4092,15 @@
 						<span class="var-title">$sectionId</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentCreateStruct.html#var$sectionId">ContentCreateStruct::$sectionId</a> in ContentCreateStruct.php</div>
-							<div class="index-item-description">The section the content is assigned to.</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentInfo.html#var$sectionId">ContentInfo::$sectionId</a> in ContentInfo.php</div>
+							<div class="index-item-description">the section to which the content is assigned</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$sectionId</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentInfo.html#var$sectionId">ContentInfo::$sectionId</a> in ContentInfo.php</div>
-							<div class="index-item-description">the section to which the content is assigned</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentCreateStruct.html#var$sectionId">ContentCreateStruct::$sectionId</a> in ContentCreateStruct.php</div>
+							<div class="index-item-description">The section the content is assigned to.</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$sortClauses</span>
@@ -3826,15 +4120,15 @@
 						<span class="var-title">$sortField</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Location.html#var$sortField">Location::$sortField</a> in Location.php</div>
-							<div class="index-item-description">Specifies which property the child locations should be sorted on.</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdateStruct.html#var$sortField">LocationUpdateStruct::$sortField</a> in LocationUpdateStruct.php</div>
+							<div class="index-item-description">If set the sortField is changed.</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$sortField</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdate.html#var$sortField">LocationUpdate::$sortField</a> in LocationUpdateStruct.php</div>
-							<div class="index-item-description">If set the sortField is changed.</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Location.html#var$sortField">Location::$sortField</a> in Location.php</div>
+							<div class="index-item-description">Specifies which property the child locations should be sorted on.</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$sortOrder</span>
@@ -3847,15 +4141,15 @@
 						<span class="var-title">$sortOrder</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdate.html#var$sortOrder">LocationUpdate::$sortOrder</a> in LocationUpdateStruct.php</div>
-							<div class="index-item-description">if set the sortOrder is changed.</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationCreateStruct.html#var$sortOrder">LocationCreateStruct::$sortOrder</a> in LocationCreateStruct.php</div>
+							<div class="index-item-description">Specifies whether the sort order should be ascending or descending.</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$sortOrder</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationCreateStruct.html#var$sortOrder">LocationCreateStruct::$sortOrder</a> in LocationCreateStruct.php</div>
-							<div class="index-item-description">Specifies whether the sort order should be ascending or descending.</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/LocationUpdateStruct.html#var$sortOrder">LocationUpdateStruct::$sortOrder</a> in LocationUpdateStruct.php</div>
+							<div class="index-item-description">if set the sortOrder is changed.</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$sourceContentId</span>
@@ -3886,11 +4180,11 @@
 							<div class="index-item-description">the source version this translation is based on</div>
 					</dd>
 			<dt class="field">
-						<span class="var-title">$state</span>
+						<span class="var-title">$status</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentInfo.html#var$state">ContentInfo::$state</a> in ContentInfo.php</div>
-							<div class="index-item-description">true if there exists a published version 0 otherwise</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#var$status">ContentType::$status</a> in ContentType.php</div>
+							<div class="index-item-description">The status of the content type.</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$status</span>
@@ -3898,13 +4192,6 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/VersionInfo.html#var$status">VersionInfo::$status</a> in VersionInfo.php</div>
 							<div class="index-item-description">One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$status</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#var$status">ContentType::$status</a> in ContentType.php</div>
-							<div class="index-item-description">The status of the content type.</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$subGroupCount</span>
@@ -3934,6 +4221,12 @@
 							<div class="index-item-description">This class represents a section</div>
 					</dd>
 			<dt class="field">
+						SECTION
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#constSECTION">Limitation::SECTION</a> in Limitation.php</div>
+					</dd>
+			<dt class="field">
 						SectionId
 					</dt>
 		<dd class="index-item-body">
@@ -3946,6 +4239,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/SectionIdentifier.html">SectionIdentifier</a> in SectionIdentifier.php</div>
 							<div class="index-item-description">Sets sort direction on Section identifier for a content query</div>
+					</dd>
+			<dt class="field">
+						SectionLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/SectionLimitation.html">SectionLimitation</a> in SectionLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
 					</dd>
 			<dt class="field">
 						SectionName
@@ -3979,8 +4279,8 @@
 						<span class="method-title">setDescription</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroupCreateStruct.html#methodsetDescription">ContentTypeGroupCreateStruct::setDescription()</a> in ContentTypeGroupCreateStruct.php</div>
-							<div class="index-item-description">5.x only  set a content type description for the given language</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinitionUpdateStruct.html#methodsetDescription">FieldDefinitionUpdateStruct::setDescription()</a> in FieldDefinitionUpdateStruct.php</div>
+							<div class="index-item-description">set a  fie definition description for the given language</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">setDescription</span>
@@ -3993,8 +4293,15 @@
 						<span class="method-title">setDescription</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinitionCreateStruct.html#methodsetDescription">FieldDefinitionCreateStruct::setDescription()</a> in FieldDefinitionCreateStruct.php</div>
-							<div class="index-item-description">set a  fie definition description for the given language</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroupUpdateStruct.html#methodsetDescription">ContentTypeGroupUpdateStruct::setDescription()</a> in ContentTypeGroupUpdateStruct.php</div>
+							<div class="index-item-description">5.x only  set a content type description for the given language</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">setDescription</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroupCreateStruct.html#methodsetDescription">ContentTypeGroupCreateStruct::setDescription()</a> in ContentTypeGroupCreateStruct.php</div>
+							<div class="index-item-description">5.x only  set a content type description for the given language</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">setDescription</span>
@@ -4007,22 +4314,8 @@
 						<span class="method-title">setDescription</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinitionUpdateStruct.html#methodsetDescription">FieldDefinitionUpdateStruct::setDescription()</a> in FieldDefinitionUpdateStruct.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinitionCreateStruct.html#methodsetDescription">FieldDefinitionCreateStruct::setDescription()</a> in FieldDefinitionCreateStruct.php</div>
 							<div class="index-item-description">set a  fie definition description for the given language</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">setDescription</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroupUpdateStruct.html#methodsetDescription">ContentTypeGroupUpdateStruct::setDescription()</a> in ContentTypeGroupUpdateStruct.php</div>
-							<div class="index-item-description">5.x only  set a content type description for the given language</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">setField</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Translation.html#methodsetField">Translation::setField()</a> in Translation.php</div>
-							<div class="index-item-description">Adds a translated field to the field collection in the given language  This method is also be implemented by ArrayAccess so that  $fielfs[$fieldDefIdentifer] = $value is an equivalent call</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">setField</span>
@@ -4030,6 +4323,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentCreateStruct.html#methodsetField">ContentCreateStruct::setField()</a> in ContentCreateStruct.php</div>
 							<div class="index-item-description">Adds a field to the field collection.</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">setField</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Translation.html#methodsetField">Translation::setField()</a> in Translation.php</div>
+							<div class="index-item-description">Adds a translated field to the field collection in the given language  This method is also be implemented by ArrayAccess so that  $fielfs[$fieldDefIdentifer] = $value is an equivalent call</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">setField</span>
@@ -4056,6 +4356,13 @@
 						<span class="method-title">setName</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroupCreateStruct.html#methodsetName">ContentTypeGroupCreateStruct::setName()</a> in ContentTypeGroupCreateStruct.php</div>
+							<div class="index-item-description">5.x only  set a content type group name for the given language</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">setName</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinitionCreateStruct.html#methodsetName">FieldDefinitionCreateStruct::setName()</a> in FieldDefinitionCreateStruct.php</div>
 							<div class="index-item-description">set a field definition name for the given language</div>
 					</dd>
@@ -4070,15 +4377,8 @@
 						<span class="method-title">setName</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroupUpdateStruct.html#methodsetName">ContentTypeGroupUpdateStruct::setName()</a> in ContentTypeGroupUpdateStruct.php</div>
-							<div class="index-item-description">5.x only  set a content type group name for the given language</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">setName</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroupCreateStruct.html#methodsetName">ContentTypeGroupCreateStruct::setName()</a> in ContentTypeGroupCreateStruct.php</div>
-							<div class="index-item-description">5.x only  set a content type group name for the given language</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeUpdateStruct.html#methodsetName">ContentTypeUpdateStruct::setName()</a> in ContentTypeUpdateStruct.php</div>
+							<div class="index-item-description">set a content type name for the given language</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">setName</span>
@@ -4091,8 +4391,8 @@
 						<span class="method-title">setName</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeUpdateStruct.html#methodsetName">ContentTypeUpdateStruct::setName()</a> in ContentTypeUpdateStruct.php</div>
-							<div class="index-item-description">set a content type name for the given language</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeGroupUpdateStruct.html#methodsetName">ContentTypeGroupUpdateStruct::setName()</a> in ContentTypeGroupUpdateStruct.php</div>
+							<div class="index-item-description">5.x only  set a content type group name for the given language</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">setValidator</span>
@@ -4107,6 +4407,19 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/FieldDefinitionCreateStruct.html#methodsetValidator">FieldDefinitionCreateStruct::setValidator()</a> in FieldDefinitionCreateStruct.php</div>
 							<div class="index-item-description">sets a validator which has to be supported by the field type</div>
+					</dd>
+			<dt class="field">
+						SITEACCESS
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#constSITEACCESS">Limitation::SITEACCESS</a> in Limitation.php</div>
+					</dd>
+			<dt class="field">
+						SiteaccessLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/SiteaccessLimitation.html">SiteaccessLimitation</a> in SiteaccessLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
 					</dd>
 			<dt class="field">
 						SortClause
@@ -4226,6 +4539,19 @@
 							<div class="index-item-description">A criterion that matches content based on its status</div>
 					</dd>
 			<dt class="field">
+						STATUS
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#constSTATUS">Limitation::STATUS</a> in Limitation.php</div>
+					</dd>
+			<dt class="field">
+						StatusLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/StatusLimitation.html">StatusLimitation</a> in StatusLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
+					</dd>
+			<dt class="field">
 						STATUS_ARCHIVED
 					</dt>
 		<dd class="index-item-body">
@@ -4255,13 +4581,13 @@
 						STATUS_DRAFT
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/VersionInfo.html#constSTATUS_DRAFT">VersionInfo::STATUS_DRAFT</a> in VersionInfo.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#constSTATUS_DRAFT">ContentType::STATUS_DRAFT</a> in ContentType.php</div>
 					</dd>
 			<dt class="field">
 						STATUS_DRAFT
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#constSTATUS_DRAFT">ContentType::STATUS_DRAFT</a> in ContentType.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/VersionInfo.html#constSTATUS_DRAFT">VersionInfo::STATUS_DRAFT</a> in VersionInfo.php</div>
 					</dd>
 			<dt class="field">
 						STATUS_MODIFIED
@@ -4290,11 +4616,24 @@
 							<div class="index-item-description">Allows custom field types to store data in an external source (e.g. another DB table).</div>
 					</dd>
 			<dt class="field">
+						SUBTREE
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/Limitation.html#constSUBTREE">Limitation::SUBTREE</a> in Limitation.php</div>
+					</dd>
+			<dt class="field">
 						Subtree
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Subtree.html">Subtree</a> in Subtree.php</div>
 							<div class="index-item-description">Criterion that matches content that belongs to a given (list of) Subtree(s)</div>
+					</dd>
+			<dt class="field">
+						SubtreeLimitation
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/SubtreeLimitation.html">SubtreeLimitation</a> in SubtreeLimitation.php</div>
+							<div class="index-item-description">This class represents a Limitation apllied to a policy</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">swapLoaction</span>
@@ -4362,6 +4701,30 @@
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="eZPublicAPI/_Values---Content---SectionUpdateStruct.php.html">SectionUpdateStruct.php</a> in SectionUpdateStruct.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">SectionLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---SectionLimitation.php.html">SectionLimitation.php</a> in SectionLimitation.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">SiteaccessLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---SiteaccessLimitation.php.html">SiteaccessLimitation.php</a> in SiteaccessLimitation.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">StatusLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---StatusLimitation.php.html">StatusLimitation.php</a> in StatusLimitation.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">SubtreeLimitation.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---Limitation---SubtreeLimitation.php.html">SubtreeLimitation.php</a> in SubtreeLimitation.php</div>
 					</dd>
 		</dl>
 	<a name="t"></a>
@@ -4555,13 +4918,6 @@
 						<span class="var-title">$urlAliasSchema</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeCreateStruct.html#var$urlAliasSchema">ContentTypeCreateStruct::$urlAliasSchema</a> in ContentTypeCreateStruct.php</div>
-							<div class="index-item-description">URL alias schema</div>
-					</dd>
-			<dt class="field">
-						<span class="var-title">$urlAliasSchema</span>
-					</dt>
-		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeUpdateStruct.html#var$urlAliasSchema">ContentTypeUpdateStruct::$urlAliasSchema</a> in ContentTypeUpdateStruct.php</div>
 							<div class="index-item-description">If set the URL alias schema is changed to this value</div>
 					</dd>
@@ -4571,6 +4927,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentType.html#var$urlAliasSchema">ContentType::$urlAliasSchema</a> in ContentType.php</div>
 							<div class="index-item-description">URL alias schema  If nothing is provided, $nameSchema will be used instead.</div>
+					</dd>
+			<dt class="field">
+						<span class="var-title">$urlAliasSchema</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/ContentTypeCreateStruct.html#var$urlAliasSchema">ContentTypeCreateStruct::$urlAliasSchema</a> in ContentTypeCreateStruct.php</div>
+							<div class="index-item-description">URL alias schema</div>
 					</dd>
 			<dt class="field">
 						<span class="var-title">$userId</span>
@@ -4751,6 +5114,13 @@
 							<div class="index-item-description">This class is used to create a new user group in the repository</div>
 					</dd>
 			<dt class="field">
+						UserGroupRoleAssignment
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserGroupRoleAssignment.html">UserGroupRoleAssignment</a> in UserGroupRoleAssignment.php</div>
+							<div class="index-item-description">The base class for all values</div>
+					</dd>
+			<dt class="field">
 						UserGroupUpdateStruct
 					</dt>
 		<dd class="index-item-body">
@@ -4763,6 +5133,13 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/UserMetadata.html">UserMetadata</a> in UserMetadata.php</div>
 							<div class="index-item-description">A criterion that matches content based on one of the user metadata (owner,  creator, modifier)</div>
+					</dd>
+			<dt class="field">
+						UserRoleAssignment
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/UserRoleAssignment.html">UserRoleAssignment</a> in UserRoleAssignment.php</div>
+							<div class="index-item-description">The base class for all values</div>
 					</dd>
 			<dt class="field">
 						UserService
@@ -4815,10 +5192,22 @@
 			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---UserGroupCreateStruct.php.html">UserGroupCreateStruct.php</a> in UserGroupCreateStruct.php</div>
 					</dd>
 			<dt class="field">
+						<span class="include-title">UserGroupRoleAssignment.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---UserGroupRoleAssignment.php.html">UserGroupRoleAssignment.php</a> in UserGroupRoleAssignment.php</div>
+					</dd>
+			<dt class="field">
 						<span class="include-title">UserGroupUpdateStruct.php</span>
 					</dt>
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---UserGroupUpdateStruct.php.html">UserGroupUpdateStruct.php</a> in UserGroupUpdateStruct.php</div>
+					</dd>
+			<dt class="field">
+						<span class="include-title">UserRoleAssignment.php</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="eZPublicAPI/_Values---User---UserRoleAssignment.php.html">UserRoleAssignment.php</a> in UserRoleAssignment.php</div>
 					</dd>
 			<dt class="field">
 						<span class="include-title">UserUpdateStruct.php</span>
@@ -4974,6 +5363,13 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ParentLocationId.html#method__construct">ParentLocationId::__construct()</a> in ParentLocationId.php</div>
+							<div class="index-item-description">Creates a new ParentLocationId criterion</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/RemoteId.html#method__construct">RemoteId::__construct()</a> in RemoteId.php</div>
 							<div class="index-item-description">Creates a new remoteId criterion</div>
 					</dd>
@@ -4988,29 +5384,8 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/SectionIdentifier.html#method__construct">SectionIdentifier::__construct()</a> in SectionIdentifier.php</div>
-							<div class="index-item-description">Constructs a new SectionIdentifier SortClause</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ParentLocationId.html#method__construct">ParentLocationId::__construct()</a> in ParentLocationId.php</div>
-							<div class="index-item-description">Creates a new ParentLocationId criterion</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LogicalOr.html#method__construct">LogicalOr::__construct()</a> in LogicalOr.php</div>
 							<div class="index-item-description">Creates a new OR logic criterion.</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LogicalNot.html#method__construct">LogicalNot::__construct()</a> in LogicalNot.php</div>
-							<div class="index-item-description">Creates a new NOT logic criterion.</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__construct</span>
@@ -5023,6 +5398,27 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LogicalAnd.html#method__construct">LogicalAnd::__construct()</a> in LogicalAnd.php</div>
+							<div class="index-item-description">Creates a new AND logic criterion.</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LogicalNot.html#method__construct">LogicalNot::__construct()</a> in LogicalNot.php</div>
+							<div class="index-item-description">Creates a new NOT logic criterion.</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/SectionIdentifier.html#method__construct">SectionIdentifier::__construct()</a> in SectionIdentifier.php</div>
+							<div class="index-item-description">Constructs a new SectionIdentifier SortClause</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/SectionName.html#method__construct">SectionName::__construct()</a> in SectionName.php</div>
 							<div class="index-item-description">Constructs a new SectionName SortClause</div>
 					</dd>
@@ -5030,8 +5426,8 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/SortClause.html#method__construct">SortClause::__construct()</a> in SortClause.php</div>
-							<div class="index-item-description">Constructs a new SortClause on $sortTarget in direction $sortDirection</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/UrlAlias.html#method__construct">UrlAlias::__construct()</a> in UrlAlias.php</div>
+							<div class="index-item-description">Creates a new UrlAlias Criterion</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__construct</span>
@@ -5051,22 +5447,8 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/UrlAlias.html#method__construct">UrlAlias::__construct()</a> in UrlAlias.php</div>
-							<div class="index-item-description">Creates a new UrlAlias Criterion</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Subtree.html#method__construct">Subtree::__construct()</a> in Subtree.php</div>
 							<div class="index-item-description">Creates a new SubTree criterion</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Specifications.html#method__construct">Specifications::__construct()</a> in Specifications.php</div>
-							<div class="index-item-description">Creates a new Specifications object</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__construct</span>
@@ -5079,6 +5461,20 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/SortClause.html#method__construct">SortClause::__construct()</a> in SortClause.php</div>
+							<div class="index-item-description">Constructs a new SortClause on $sortTarget in direction $sortDirection</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Specifications.html#method__construct">Specifications::__construct()</a> in Specifications.php</div>
+							<div class="index-item-description">Creates a new Specifications object</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/ContentId.html#method__construct">ContentId::__construct()</a> in ContentId.php</div>
 							<div class="index-item-description">Creates a new ContentId criterion</div>
 					</dd>
@@ -5086,8 +5482,15 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LogicalAnd.html#method__construct">LogicalAnd::__construct()</a> in LogicalAnd.php</div>
-							<div class="index-item-description">Creates a new AND logic criterion.</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LocationPriority.html#method__construct">LocationPriority::__construct()</a> in LocationPriority.php</div>
+							<div class="index-item-description">Constructs a new LocationPriority SortClause</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values/CustomLimitation.html#method__construct">CustomLimitation::__construct()</a> in CustomLimitation.php</div>
+							<div class="index-item-description">constructs a custom limitation for the given limitation name</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__construct</span>
@@ -5102,13 +5505,6 @@
 		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/DateMetadata.html#method__construct">DateMetadata::__construct()</a> in DateMetadata.php</div>
 							<div class="index-item-description">Creates a new DateMetadata criterion on $metadata</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/DateModified.html#method__construct">DateModified::__construct()</a> in DateModified.php</div>
-							<div class="index-item-description">Constructs a new DateCreated SortClause</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__construct</span>
@@ -5142,27 +5538,6 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LocationPriority.html#method__construct">LocationPriority::__construct()</a> in LocationPriority.php</div>
-							<div class="index-item-description">Constructs a new LocationPriority SortClause</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Field.html#method__construct">Field::__construct()</a> in Field.php</div>
-							<div class="index-item-description">Creates a new Field Criterion.</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LocationPath.html#method__construct">LocationPath::__construct()</a> in LocationPath.php</div>
-							<div class="index-item-description">Constructs a new LocationPath SortClause</div>
-					</dd>
-			<dt class="field">
-						<span class="method-title">__construct</span>
-					</dt>
-		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LocationPathString.html#method__construct">LocationPathString::__construct()</a> in LocationPathString.php</div>
 							<div class="index-item-description">Constructs a new LocationPathString SortClause</div>
 					</dd>
@@ -5170,8 +5545,8 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/FieldSortClause.html#method__construct">FieldSortClause::__construct()</a> in FieldSortClause.php</div>
-							<div class="index-item-description">Constructs a new Field SortClause on Type $typeIdentifier and Field $fieldIdentifier</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/DateModified.html#method__construct">DateModified::__construct()</a> in DateModified.php</div>
+							<div class="index-item-description">Constructs a new DateCreated SortClause</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__construct</span>
@@ -5184,6 +5559,20 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LocationPath.html#method__construct">LocationPath::__construct()</a> in LocationPath.php</div>
+							<div class="index-item-description">Constructs a new LocationPath SortClause</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/Field.html#method__construct">Field::__construct()</a> in Field.php</div>
+							<div class="index-item-description">Creates a new Field Criterion.</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
 			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/LocationDepth.html#method__construct">LocationDepth::__construct()</a> in LocationDepth.php</div>
 							<div class="index-item-description">Constructs a new LocationDepth SortClause</div>
 					</dd>
@@ -5191,14 +5580,21 @@
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/FieldSortClauseTarget.html#method__construct">FieldSortClauseTarget::__construct()</a> in FieldSortClauseTarget.php</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/FullText.html#method__construct">FullText::__construct()</a> in FullText.php</div>
+							<div class="index-item-description">Creates a FullText criterion on $text, using the IN Operator</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__construct</span>
 					</dt>
 		<dd class="index-item-body">
-			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/FullText.html#method__construct">FullText::__construct()</a> in FullText.php</div>
-							<div class="index-item-description">Creates a FullText criterion on $text, using the IN Operator</div>
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/FieldSortClause.html#method__construct">FieldSortClause::__construct()</a> in FieldSortClause.php</div>
+							<div class="index-item-description">Constructs a new Field SortClause on Type $typeIdentifier and Field $fieldIdentifier</div>
+					</dd>
+			<dt class="field">
+						<span class="method-title">__construct</span>
+					</dt>
+		<dd class="index-item-body">
+			<div class="index-item-details"><a href="ezp-PublicAPI-Values-Content-Query/FieldSortClauseTarget.html#method__construct">FieldSortClauseTarget::__construct()</a> in FieldSortClauseTarget.php</div>
 					</dd>
 			<dt class="field">
 						<span class="method-title">__get</span>

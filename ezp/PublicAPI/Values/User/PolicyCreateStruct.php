@@ -1,6 +1,7 @@
 <?php
 namespace ezp\PublicAPI\Values\User;
 use ezp\PublicAPI\Values\ValueObject;
+use ezp\PubklicAPI\Values\User\Limitation;
 
 /**
  * This class is used to create a policy
@@ -29,11 +30,9 @@ abstract class PolicyCreateStruct extends ValueObject
     /**
      *
      * adds a limitation with the given identifier and list of values
-     * @param string identifier - the identifier of the limitation. Example identifiers
-     *        Class, Section, ParentOwner, ParentClass, ParentGroup, ParentDepth, Language, Subtree, SiteAccess
-     * @param array $values
+     * @param Limitation $limitation
      */
-    public abstract function addLimitation($identifier,array $values);
+    public abstract function addLimitation(/*Limitation*/ $limitation);
 }
 ?>
 

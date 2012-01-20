@@ -42,11 +42,5 @@ abstract class Role extends ValueObject
      */
     public abstract function getPolicy($module, $function);
 
-    /**
-     *
-     * returns a list of users and user groups assigned to this Role
-     * @return mixed[]
-     */
-    public abstract function getRoleAssignments();
 }
 ?>

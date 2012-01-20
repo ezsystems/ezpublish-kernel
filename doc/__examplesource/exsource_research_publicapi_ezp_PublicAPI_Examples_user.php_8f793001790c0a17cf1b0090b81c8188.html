@@ -11,25 +11,31 @@
 						<h1>example</h1>
 <div class="listing">
 <div class="src-code"><ol><li><div class="src-line"><span class="src-php">&lt;?php</span></div></li>
+<li><div class="src-line"><span class="src-doc">/**</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;assumed&nbsp;as&nbsp;injected</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*&nbsp;</span><span class="src-doc-coretag">@var&nbsp;</span><span class="src-doc-type">ezp\PublicAPI\Interfaces\Repository&nbsp;</span><span class="src-doc-var">$repository&nbsp;</span></div></li>
+<li><div class="src-line"><span class="src-doc">&nbsp;*/</span></div></li>
+<li><div class="src-line"><span class="src-var">$repository&nbsp;</span>=&nbsp;<span class="src-id">null</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line">&nbsp;</div></li>
 <li><div class="src-line"><span class="src-comm">//&nbsp;create&nbsp;a&nbsp;new&nbsp;user</span></div></li>
 <li><div class="src-line">&nbsp;</div></li>
 <li><div class="src-line"><span class="src-var">$userService&nbsp;</span>=&nbsp;<span class="src-var">$repository</span><span class="src-sym">-&gt;</span><span class="src-id">getUserService</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
 <li><div class="src-line"><span class="src-var">$contentService&nbsp;</span>=&nbsp;<span class="src-var">$repository</span><span class="src-sym">-&gt;</span><span class="src-id">getContentService</span><span class="src-sym">(</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
 <li><div class="src-line">&nbsp;</div></li>
 <li><div class="src-line"><span class="src-comm">//&nbsp;load&nbsp;Members&nbsp;Group&nbsp;in&nbsp;default&nbsp;installation</span></div></li>
-<li><div class="src-line"><span class="src-var">$userGroup&nbsp;</span>=&nbsp;<span class="src-var">$userService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/UserService.html#methodloadUserGroup">loadUserGroup</a><span class="src-sym">(</span><span class="src-num">12</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$userGroup&nbsp;</span>=&nbsp;<span class="src-var">$userService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/UserService.html#methodloadUserGroup">loadUserGroup</a><span class="src-sym">(&nbsp;</span><span class="src-num">12&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
 <li><div class="src-line">&nbsp;</div></li>
 <li><div class="src-line"><span class="src-comm">//&nbsp;in&nbsp;4.x&nbsp;the&nbsp;content&nbsp;type&nbsp;is&nbsp;take&nbsp;from&nbsp;configuration&nbsp;-&nbsp;will&nbsp;be&nbsp;changed&nbsp;in&nbsp;the&nbsp;future</span></div></li>
 <li><div class="src-line">&nbsp;</div></li>
-<li><div class="src-line"><span class="src-var">$userCreate&nbsp;</span>=&nbsp;<span class="src-var">$userService</span><span class="src-sym">-&gt;</span><span class="src-id">newUserCreate</span><span class="src-sym">(</span><span class="src-str">&quot;jdoe&quot;</span><span class="src-sym">,</span><span class="src-str">&quot;john.doe@example.org&quot;</span><span class="src-sym">,</span><span class="src-str">&quot;newpassword&quot;</span><span class="src-sym">,</span><span class="src-str">&quot;eng-US&quot;</span><span class="src-sym">,</span><span class="src-comm">/*content&nbsp;type*/</span><span class="src-id">null</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$userCreate&nbsp;</span>=&nbsp;<span class="src-var">$userService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/UserService.html#methodnewUserCreateStruct">newUserCreateStruct</a><span class="src-sym">(&nbsp;</span><span class="src-str">&quot;jdoe&quot;</span><span class="src-sym">,&nbsp;</span><span class="src-str">&quot;john.doe@example.org&quot;</span><span class="src-sym">,&nbsp;</span><span class="src-str">&quot;newpassword&quot;</span><span class="src-sym">,&nbsp;</span><span class="src-str">&quot;eng-US&quot;</span><span class="src-sym">,&nbsp;</span><span class="src-comm">/*content&nbsp;type*/</span><span class="src-id">null&nbsp;</span><span class="src-sym">)</span><span class="src-sym">;</span></div></li>
 <li><div class="src-line"><span class="src-var">$userCreate</span><span class="src-sym">-&gt;</span><span class="src-id">fields</span><span class="src-sym">[</span><span class="src-str">'first_name'</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-str">'John'</span><span class="src-sym">;</span></div></li>
 <li><div class="src-line"><span class="src-var">$userCreate</span><span class="src-sym">-&gt;</span><span class="src-id">fields</span><span class="src-sym">[</span><span class="src-str">'last_name'</span><span class="src-sym">]&nbsp;</span>=&nbsp;<span class="src-str">'Doe'</span><span class="src-sym">;</span></div></li>
 <li><div class="src-line">&nbsp;</div></li>
-<li><div class="src-line"><span class="src-var">$user&nbsp;</span>=&nbsp;<span class="src-var">$userService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/UserService.html#methodcreateUser">createUser</a><span class="src-sym">(</span><span class="src-var">$userCreate</span><span class="src-sym">,</span><span class="src-key">array</span><span class="src-sym">(</span><span class="src-var">$userGroup</span><span class="src-sym">))</span><span class="src-sym">;</span></div></li>
+<li><div class="src-line"><span class="src-var">$user&nbsp;</span>=&nbsp;<span class="src-var">$userService</span><span class="src-sym">-&gt;</span><a href="../ezp-PublicAPI-Interfaces/UserService.html#methodcreateUser">createUser</a><span class="src-sym">(&nbsp;</span><span class="src-var">$userCreate</span><span class="src-sym">,&nbsp;</span><span class="src-key">array</span><span class="src-sym">(&nbsp;</span><span class="src-var">$userGroup&nbsp;</span><span class="src-sym">)&nbsp;)</span><span class="src-sym">;</span></div></li>
 </ol></div>
 </div>
 	<p class="notes" id="credit">
-		Documentation generated on Thu, 19 Jan 2012 17:12:54 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
+		Documentation generated on Fri, 20 Jan 2012 12:37:54 +0100 by <a href="http://www.phpdoc.org" target="_blank">phpDocumentor 1.4.4</a>
 	</p>
 	</body>
 </html>

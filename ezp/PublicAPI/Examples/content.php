@@ -47,14 +47,22 @@ $version = $contentService->createContentDraft( $contentCreate, array( $location
 // print the new created info data
 $contentId = $version->contentId;
 echo $contentId;
-// 4.x. the location array is empty because the location are created on publish for the first time
-$locations = $version->contentInfo->locations;
 
+// 4.x. the location array is empty because the location are created on publish for the first time
+// this method will throw an exception
+try 
+{
+    $locations = $locationService->getLocations($contentInfo);
+}
+catch(BadStateException $e) 
+{
+    echo "yes this content object has no location by now";
+}
 // publish the content
 $contentService->publishDraft( $version->versionInfo );
 
 // now there is one location with parentId 123 in the returned array
-$locations = $version->contentInfo->locations;
+$locations = $locationService->getLocations($contentInfo);
 
 /**
  * translate the article
@@ -88,14 +96,14 @@ foreach ( $version->getFields() as $field)
  */
 
 // Create the content update struct
-$contentUpdate = $contentService->newContentUpdateStruct();
+$contentUpdateStruct = $contentService->newContentUpdateStruct();
 
 // Change the main language and alwaysAvailableFlag
-$contentUpdate->mainLanguageCode = 'ger-DE';
-$contentUpdate->alwaysAvailbale = false;
+$contentUpdateStruct->mainLanguageCode = 'ger-DE';
+$contentUpdateStruct->alwaysAvailbale = false;
 
 // Update the content
-$contentService->updateContent( $contentInfo, $contentUpdate );
+$contentService->updateContent( $contentInfo, $contentUpdateStruct );
 
 
 /**

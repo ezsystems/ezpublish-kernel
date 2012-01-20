@@ -10,12 +10,12 @@ abstract class PolicyUpdateStruct extends ValueObject
 {
     /**
      *
-     * adds a limitation with the given identifier and list of values
-     * @param string identifier - the identifier of the limitation. Example identifiers
-     *        Class, Section, ParentOwner, ParentClass, ParentGroup, ParentDepth, Language, Subtree, SiteAccess
-     * @param array $values
+     * adds a limitation to the policy - if a Limitation exists with the same identifer
+     * the existing limitation is replaced 
+     * @param Limitation $limitation
      */
-    public abstract function addLimitation($identifier,array $values);
+    public abstract function addLimitation(/*Limitation*/ $limitation);
+    
 }
 ?>
 

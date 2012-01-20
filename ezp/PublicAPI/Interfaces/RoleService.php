@@ -7,6 +7,8 @@ use ezp\PublicAPI\Values\User\RoleUpdateStruct;
 use ezp\PublicAPI\Values\User\PolicyCreateStruct;
 use ezp\PublicAPI\Values\User\Role;
 use ezp\PublicAPI\Values\User\RoleCreateStruct;
+use ezp\PublicAPI\Values\User\RoleAssignment;
+use ezp\PubklicAPI\Values\User\Limitation\RoleLimitation;
 
 /**
  * This service provides methods for managing Roles and Policies
@@ -121,14 +123,13 @@ interface RoleService {
     /**
      * assigns a role to the given user group
      * 
-     * @todo add limitations
-     * 
      * @param Role $role
      * @param UserGroup $userGroup
+     * @param RoleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign a role
      */
-    public function assignRoleToUserGroup(/*Role*/ $role, /*UserGroup*/ $userGroup);
+    public function assignRoleToUserGroup(/*Role*/ $role, /*UserGroup*/ $userGroup,/*RoleLimitation*/ $roleLimitation = null);
 
     /**
      * removes a role from the given user group.
@@ -148,12 +149,12 @@ interface RoleService {
      * 
      * @param Role $role
      * @param User $user
+     * @param RoleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign a role
      */
-     
-    public function assignRoleToUser(/*Role*/ $role, /*User*/ $user);
-
+    public function assignRoleToUser(/*Role*/ $role, /*User*/ $user,/*RoleLimitation*/ $roleLimitation = null);
+    
     /**
      * removes a role from the given user.
      * 
@@ -165,6 +166,39 @@ interface RoleService {
      */
     public function unassignRoleFromUser(/*Role*/ $role, /*User*/ $user);
 
+    /**
+     * returns the assigned user and user groups to this role
+     * 
+     * @param Role $role
+     * 
+     * @return array an array of {@link RoleAssignment}
+     * 
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read a role
+     */
+    public function getRoleAssignments(/*Role*/ $role);
+    
+    /**
+     * returns the roles assigned to the given user
+     * 
+     * @param $user
+     * 
+     * @return array an array of {@link UserRoleAssignment}
+     * 
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read a user
+     */
+    public function getRoleAssignmentsForUser(/*User*/ $user);
+    
+    /**
+     * returns the roles assigned to the given user group
+     * 
+     * @param $userGroup
+     * 
+     * @return array an array of {@link UserGroupRoleAssignment}
+     * 
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read a user group
+     */
+    public function getRoleAssignmentsForUserGroup(/*UseGroupr*/ $userGroup);
+    
 
     /**
      * instanciates a role create class

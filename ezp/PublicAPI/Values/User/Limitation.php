@@ -1,0 +1,36 @@
+<?php
+namespace ezp\PubklicAPI\Values\User;
+
+use ezp\PublicAPI\Values\ValueObject;
+/**
+ * This class represents a Limitation apllied to a policy
+ */
+abstract class Limitation extends ValueObject {
+    
+    // consts for BC
+    const CONTENTTYPE = "Class";
+    const LANGUAGE = "Language";
+    const LOCATION = "Node";
+    const OWNER = "Owner";
+    const PARENTCONTENTTYPE = "ParentClass";
+    const SECTION = "Section";
+    const SITEACCESS = "SiteAccess";
+    const STATUS = "Status";
+    const SUBTREE = "Subtree";
+    
+    /**
+     * 
+     * returns the limitation identifer (one of the defined constants) or a custom limitation
+     * @return string
+     */
+    public abstract function getIdentifier();
+    
+    /**
+     * 
+     * An integer list of ids or identifiers for which the limitation shoul be applied
+     * @var array of mixed
+     */
+    public $limitationValues;
+    
+    
+}
