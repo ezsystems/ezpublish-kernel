@@ -23,6 +23,7 @@ interface UserService {
 
     /**
      * Creates a new user group using the data provided in the ContentCreateStruct parameter
+     *
      * In 4.x in the content type parameter in the profile is ignored
      * - the content type is determined via configuration and can be set to null.
      * The returned version is published.
@@ -35,7 +36,7 @@ interface UserService {
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group
      * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException if the input structure has invalid data
      */
-    public function createUserGroup(/*UserGroupCreateStruct*/ $userGroupCreateStruct, /*UserGroup*/ $parentGroup);
+    public function createUserGroup( UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup );
 
     /**
      * Loads a user group for the given id
@@ -47,10 +48,10 @@ interface UserService {
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
      */
-    public function loadUserGroup($id);
+    public function loadUserGroup( $id );
 
     /**
-     * loads the sub groups of a user group
+     * Loads the sub groups of a user group
      * 
      * @param UserGroup $userGroup
      * 
@@ -59,21 +60,22 @@ interface UserService {
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read the user group
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
      */
-    public function loadSubUserGroups(/*UserGroup*/ $userGroup);
+    public function loadSubUserGroups( UserGroup $userGroup );
 
     /**
-     * removes a user group
-     * the users which are not assigned to other groups will be deleted
+     * Removes a user group
+     *
+     * the users which are not assigned to other groups will be deleted.
      * 
      * @param UserGroup $userGroup
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
      */
-    public function deleteUserGroup(/*UserGroup*/ $userGroup);
+    public function deleteUserGroup( UserGroup $userGroup );
 
     /**
-     * moves the user group to another parent
+     * Moves the user group to another parent
      * 
      * @param UserGroup $userGroup
      * @param UserGroup $newParent
@@ -81,10 +83,11 @@ interface UserService {
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to move the user group
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
      */
-    public function moveUserGroup(/*UserGroup*/ $userGroup, /*UserGroup*/ $newParent);
+    public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent );
 
     /**
-     * updates the group profile with fields and meta data.
+     * Updates the group profile with fields and meta data
+     *
      * 4.x: If the versionUpdateStruct is set in $userGroupUpdateStruct, this method internally creates a content draft, updates ts with the provided data
      * and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.
      *
@@ -96,20 +99,20 @@ interface UserService {
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to move the user group
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
      */
-    public function updateUserGroup(/*UserGroup*/ $userGroup, /*UserGroupUpdateStruct*/ $userGroupUpdateStruct);
+    public function updateUserGroup( UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct );
 
     /**
-     * Create a new user. The created user is published by this method.
+     * Create a new user. The created user is published by this method
      * 
      * @param UserCreateStruct $userCreateStruct the data used for creating the user
-     * @param  array $parentGroups the groups of type {@link UserGroup} which are assigned to the user after creation
+     * @param array $parentGroups the groups of type {@link UserGroup} which are assigned to the user after creation
      * 
      * @return User
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to move the user group
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if a user group was not found
      */
-    public function createUser(/*UserCreateStruct*/ $userCreateStruct, array $parentGroups);
+    public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups );
 
     /**
      * Loads a user
@@ -120,7 +123,7 @@ interface UserService {
      * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if a user with the given id was not found
      */
-    public function loadUser($userId);
+    public function loadUser( $userId );
 
     /**
      * Loads a user for the given login and password
@@ -132,19 +135,20 @@ interface UserService {
      * 
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if a user with the given credentials was not found
      */
-    public function loadUserByCredentials($login,$password);
+    public function loadUserByCredentials( $login, $password );
 
     /**
-     * This method deletes a user.
+     * This method deletes a user
      * 
      * @param User $user
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to delete the user
      */
-    public function deleteUser(/*User*/ $user);
+    public function deleteUser( User $user );
 
     /**
-     * Updates a user.
+     * Updates a user
+     *
      * 4.x: If the versionUpdateStruct is set in the user update structure, this method internally creates a content draft, updates ts with the provided data
      * and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.
      * 
@@ -153,60 +157,63 @@ interface UserService {
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to update the user
      */
-    public function updateUser(/*User*/ $user, /*UserUpdateStruct*/ $userUpdateStruct);
+    public function updateUser( User $user, UserUpdateStruct $userUpdateStruct );
 
     /**
-     * Assigns a new user group to the user. If the user is already in the given user group this method does nothing.
+     * Assigns a new user group to the user
+     *
+     * If the user is already in the given user group this method does nothing.
      * 
      * @param User $user
      * @param UserGroup $userGroup
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
      */
-    public function assignUserToUserGroup(/*User*/ $user, /*UserGroup*/ $userGroup);
+    public function assignUserToUserGroup( User $user, UserGroup $userGroup );
 
     /**
      * Removes a user group from the user
+     *
      * @param User $user
      * @param UserGroup $userGroup
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException if the user is not in the given user group
      */
-    public function unAssignUssrFromUserGroup(/*User*/ $user, /*UserGroup*/ $userGroup);
+    public function unAssignUssrFromUserGroup( User $user, UserGroup $userGroup );
 
     /**
-     * instanciates a user create class
+     * Instantiate a user create class
      * 
      * @param string $login the login of the new user
      * @param string $email the email of the new user
      * @param string $password the plain password of the new user
-     * @param $mainLanguageCode the main language for the underlying content object
+     * @param string $mainLanguageCode the main language for the underlying content object
      * @param ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
      * 
      * @return UserCreateStruct
      */
-    public function newUserCreateStruct($login, $email, $password, $mainLanguageCode, $contentType = null);
+    public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null );
 
     /**
-     * instanciates a user group create class
+     * Instantiate a user group create class
      * 
-     * @param $mainLanguageCode the main language for the underlying content object
-     * @param ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
+     * @param string $mainLanguageCode The main language for the underlying content object
+     * @param null|ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
      * 
      * @return UserGroupCreateStruct
      */
-    public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null);
+    public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null );
     
     /**
-     * instanciates a new user  update struct
+     * Instantiate a new user update struct
      * 
      * @return UserUpdateStruct
      */
     public function newUserUpdateStruct();
     
     /**
-     * instanciates a new user group update struct
+     * Instantiate a new user group update struct
      * 
      * @return UserGroupUpdateStruct
      */
