@@ -391,10 +391,16 @@ interface ContentService {
     public function newContentUpdateStruct();
 
     /**
+     * instanciating a new TranslationInfo
+     * @return TranslationInfo
+     */
+    public function newTranlationInfo();
+    
+    /**
      * instanciates a Translation class
      * @return Translation
      */
-    public function newTranslation();
+    public function newTranslation($translationInfo);
 
 
 }

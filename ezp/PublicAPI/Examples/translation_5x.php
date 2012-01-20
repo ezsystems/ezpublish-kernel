@@ -25,7 +25,7 @@ $draft = $contentService->createDraftFromContent( $versionInfo->contentInfo, $ve
 /**
  * Translate one language
  */
-$translationInfo = $contentService->newTranslation();
+$translationInfo = $contentService->newTranslationInfo();
 $translationInfo->sourceLanguage = 'eng-US';
 $translationInfo->sourceVersion = $versionInfo;
 $translationInfo->destinationLanguage = 'ger-DE';
@@ -57,7 +57,7 @@ $draft = $contentService->updateVersion( $draft, $versionUpdate );
 
 $newPublishedVersion = $contentService->publishDraft( $draft->versionInfo );
 
-$translationInfo = $contentService->newTranslation();
+$translationInfo = $contentService->newTranslationInfo();
 $translationInfo->sourceLanguage = 'eng-US';
 $translationInfo->sourceVersion = $versionInfo;
 $translationInfo->destinationLanguage = 'ger-DE';
@@ -65,7 +65,7 @@ $translationInfo->destinationVersion = $newPublishedVersion;
 
 $contentService->addTranslationInfo( $translationInfo );
 
-$translationInfo = $contentService->newTranslation();
+$translationInfo = $contentService->newTranslationInfo();
 $translationInfo->sourceLanguage = 'eng-US';
 $translationInfo->sourceVersion = $versionInfo;
 $translationInfo->destinationLanguage = 'fra-FR';

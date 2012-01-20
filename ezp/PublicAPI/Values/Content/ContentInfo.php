@@ -24,7 +24,7 @@ class ContentInfo extends ValueObject
      *
      * @var boolean Constant.
      */
-    public $state;
+    public $published;
 
     /**
      * the computed name (via name schema) in the main language of the content object
@@ -61,7 +61,7 @@ class ContentInfo extends ValueObject
      * Content publication date
      * @var int Unix timestamp
      */
-    public $published;
+    public $publishedDate;
 
     /**
      * Current Version number is the version number of the published version or the version number of

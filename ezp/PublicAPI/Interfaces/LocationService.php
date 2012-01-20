@@ -68,6 +68,7 @@ interface LocationService
      * @return Location (in 5.x the return value also can be null if the content has no location)
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read this location
+     * @throws ezp\PublicAPI\Interfaces\BadStateException if there is no published version yet
      */
     public Function loadMainLocation(/*ContentInfo*/ $contentInfo);
     
@@ -80,6 +81,8 @@ interface LocationService
      * @param Location $rootLocation
      * 
      * @return array an array of {@link Location}
+     * 
+     * @throws ezp\PublicAPI\Interfaces\BadStateException if there is no published version yet
      */
     public function loadLocations(/*ContentInfo*/ $contentInfo, /*Location*/ $rootLocation = null);
     
