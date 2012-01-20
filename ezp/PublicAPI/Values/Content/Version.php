@@ -9,8 +9,8 @@ use ezp\PublicAPI\Values\Content\VersionInfo;
  *
  * this class represents a version including metadata and content
  *
- * @property-read ContentInfo $contentInfo convenience getter for $versionInfo->ccntentInfo
- * @property-read int $contentId convenience getter for retrieving the contentId: $versionInfo->contentInfo->contentId
+ * @property-read Content $content convenience getter for $versionInfo->ccntentInfo
+ * @property-read int $contentId convenience getter for retrieving the contentId: $versionInfo->Content->contentId
  * @property-read VersionInfo $versionInfo calls getVersionInfo()
  * @property-read array $fields access fields
  * @property-read array $relations calls getRelations()

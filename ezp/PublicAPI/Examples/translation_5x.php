@@ -20,7 +20,7 @@ $contentService = $repository->getContentService();
 $versionInfo = $contentService->loadVersionInfoById( $contentId );
 
 // create a draft from the before published content
-$draft = $contentService->createDraftFromContent( $versionInfo->contentInfo, $versionInfo );
+$draft = $contentService->createDraftFromContent( $versionInfo->Content, $versionInfo );
 
 /**
  * Translate one language

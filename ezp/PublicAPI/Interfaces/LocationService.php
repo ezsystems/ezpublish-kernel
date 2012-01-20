@@ -6,7 +6,7 @@ namespace ezp\PublicAPI\Interfaces;
 
 use ezp\PublicAPI\Values\Content\LocationUpdateStruct;
 use ezp\PublicAPI\Values\Content\LocationCreateStruct;
-use ezp\PublicAPI\Values\Content\ContentInfo;
+use ezp\PublicAPI\Values\Content\Content;
 use ezp\PublicAPI\Values\Content\Location;
 
 /**
@@ -58,33 +58,33 @@ interface LocationService
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read this location
      * @throws ezp\PublicAPI\Interfaces\NotFoundException If the specified location is not found
      */
-    public function loadLocationByRemoteId( $remotenId );
+    public function loadLocationByRemoteId( $remoteId );
 
     /**
      * loads the main loaction of a content object
      * 
-     * @param ContentInfo $contentInfo
+     * @param Content $content
      * 
      * @return Location (in 5.x the return value also can be null if the content has no location)
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read this location
      * @throws ezp\PublicAPI\Interfaces\BadStateException if there is no published version yet
      */
-    public Function loadMainLocation(/*ContentInfo*/ $contentInfo);
+    public Function loadMainLocation(/*Content*/ $content);
     
     /**
      * Loads the locations for the given content object. If a $rootLocation is given only 
      * locations of the content which are descendants of the root location are returnd
      * The location list is also filtered by permissions on reading locations.
      * 
-     * @param ContentInfo $contentInfo
+     * @param Content $content
      * @param Location $rootLocation
      * 
      * @return array an array of {@link Location}
      * 
      * @throws ezp\PublicAPI\Interfaces\BadStateException if there is no published version yet
      */
-    public function loadLocations(/*ContentInfo*/ $contentInfo, /*Location*/ $rootLocation = null);
+    public function loadLocations(/*Content*/ $content, /*Location*/ $rootLocation = null);
     
     /**
      * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
@@ -101,7 +101,7 @@ interface LocationService
     /**
      * Creates the new $location in the content repository for the given content
      *
-     * @param ContentInfo $contentInfo
+     * @param Content $content
      * 
      * @param LocationCreateStruct $location
      * 
@@ -112,7 +112,7 @@ interface LocationService
      *                                        or the parent is a sub location of the location the content
      *                                        or if set the remoteId existis already
      */
-    public function createLocation(/*ContentInfo*/ $contentInfo, /*LocationCreate*/ $locationCreateStruct );
+    public function createLocation(/*Content*/ $content, /*LocationCreate*/ $locationCreateStruct );
 
     /**
      * Updates $location in the content repository
@@ -135,7 +135,7 @@ interface LocationService
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to swap content
      */
-    public function swapLoaction( /*Location*/ $location1,  /*Location*/ $location2 );
+    public function swapLocation( /*Location*/ $location1,  /*Location*/ $location2 );
 
     /**
      * Hides the $location and marks invisible all descendants of $location.

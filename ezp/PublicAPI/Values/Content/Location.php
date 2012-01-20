@@ -2,13 +2,13 @@
 namespace ezp\PublicAPI\Values\Content;
 
 use ezp\PublicAPI\Values\ValueObject;
-use ezp\PublicAPI\Values\Content\ContentInfo;
+use ezp\PublicAPI\Values\Content\Content;
 
 /**
  * This class represents a location in the repository
  * 
- * @property-read ContentInfo $contentInfo calls getContentInfo()
- * @property-read int $contentId calls getContentInfo()->contentId
+ * @property-read Content $content calls getContent()
+ * @property-read int $contentId calls getContent()->contentId
  */
 abstract class Location extends ValueObject
 {
@@ -70,11 +70,11 @@ abstract class Location extends ValueObject
     public $remoteId;
 
     /**
-     * ContentInfo - the content meta data
+     * Content - the content meta data
      *
-     * @return ContentInfo
+     * @return Content
      */
-    public abstract function getContentInfo();
+    public abstract function getContent();
 
     /**
      * Parent ID.

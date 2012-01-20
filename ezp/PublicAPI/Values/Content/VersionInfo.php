@@ -3,14 +3,14 @@ namespace ezp\PublicAPI\Values\Content;
 
 use ezp\PublicAPI\Values\ValueObject;
 
-use ezp\PublicAPI\Values\Content\ContentInfo;
+use ezp\PublicAPI\Values\Content\Content;
 
 /**
- * This class holds version information data. It also contains the coresponding {@link ContentInfo} to
+ * This class holds version information data. It also contains the coresponding {@link Content} to
  * which the version belongs to.
  * 
  * @property-read array $names returns an array with language code keys and name values
- * @property-read ContentInfo $contentInfo calls getContentInfo()
+ * @property-read Content $content calls getContent()
  */
 abstract class VersionInfo extends ValueObject
 {
@@ -36,11 +36,11 @@ abstract class VersionInfo extends ValueObject
     public $versionNo;
 
     /**
-     * ContentInfo of the content this version belongs to.
+     * Content of the content this version belongs to.
      *
-     * @return ContentInfo
+     * @return Content
      */
-    public abstract function getContentInfo();
+    public abstract function getContent();
 
     /**
      *

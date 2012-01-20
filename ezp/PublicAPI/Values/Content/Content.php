@@ -11,7 +11,7 @@ use ezp\PublicAPI\Values\Content\Location;
  * @property-read $contentType calls {@link getContentType()}
  *
  */
-class ContentInfo extends ValueObject
+class Content extends ValueObject
 {
     /**
      * The unique id of the content object

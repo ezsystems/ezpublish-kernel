@@ -12,11 +12,15 @@ abstract class Limitation extends ValueObject {
     const LANGUAGE = "Language";
     const LOCATION = "Node";
     const OWNER = "Owner";
+    const PARENTOWNER = "ParentOwner";
     const PARENTCONTENTTYPE = "ParentClass";
+    const PARENTDEPTH = "ParentDepth";
     const SECTION = "Section";
     const SITEACCESS = "SiteAccess";
-    const STATUS = "Status";
+    const STATE = "State";
     const SUBTREE = "Subtree";
+    const USERGROUP = "Group";
+    const PARENTUSERGROUP = "ParentGroup";
     
     /**
      * 

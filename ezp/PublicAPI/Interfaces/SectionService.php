@@ -4,7 +4,7 @@
  */
 namespace ezp\PublicAPI\Interfaces;
 
-use ezp\PublicAPI\Values\Content\ContentInfo;
+use ezp\PublicAPI\Values\Content\Content;
 use ezp\PublicAPI\Values\Content\Section;
 use ezp\PublicAPI\Values\Content\Location;
 use ezp\PublicAPI\Values\Content\SectionUpdateStruct;
@@ -90,12 +90,12 @@ interface SectionService
      * assigns the content to the given section
      * this method overrides the current assigned section
      *
-     * @param ContentInfo $content
+     * @param Content $content
      * @param Section $section
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to view provided object
      */
-    public function assignSection( /*ContentInfo*/ $content, /*Section*/ $section );
+    public function assignSection( /*Content*/ $content, /*Section*/ $section );
 
     /**
      * Assigns $section to the contents held by $startingPoint location and

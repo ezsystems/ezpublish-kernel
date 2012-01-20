@@ -15,34 +15,35 @@ $contentTypeService = $repository->getContentTypeService();
 /**
  * create a new instance of a content object of type article
  */
-$contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
 
+$contentType = $contentTypeService->loadContentTypeByIdentifier( 'article' );
+// $contentType is read only output value
 
 // construct the creation structure with the content type and the main language of the content
 // the main language is also the default language for the fields
-$contentCreate = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
+$contentCreateStruct = $contentService->newContentCreateStruct( $contentType, 'eng-US' );
 
 // set title field in the main language
-$contentCreate->setField( 'title', 'Title' );
+$contentCreateStruct->setField( 'title', 'Title' );
 
 // set summary field in php array style
-$contentCreate->fields['summary'] = "<p>this is a summary</p>";
+$contentCreateStruct->fields['summary'] = "<p>this is a summary</p>";
 
 // set authors field of the article
 $authors = array();
 $authors[] = new ezp\Content\FieldType\Author\Author( 'John Doe', 'john.doe@example.net' );
 $authors[] = new ezp\Content\FieldType\Author\Author( 'Bud Spencer', 'bud.spencer@example.net' );
-$contentCreate->setField( 'author', new ezp\Content\FieldType\Author\Value( $authors ) );
+$contentCreateStruct->setField( 'author', new ezp\Content\FieldType\Author\Value( $authors ) );
 
 // set image for the article
-$contentCreate->setField( 'image', new ezp\Content\FieldType\Image\Value( "/tmp/myimage.jpg","my alternative text" ) );
+$contentCreateStruct->setField( 'image', new ezp\Content\FieldType\Image\Value( "/tmp/myimage.jpg","my alternative text" ) );
 
 // set a remote id for the content
-$contentCreate->remoteId = "12345";
+$contentCreateStruct->remoteId = "12345";
 
 // create the content instance with a default location create structure
 $parentLocationId = 123;
-$version = $contentService->createContentDraft( $contentCreate, array( $locationService->newLocationCreateStruct( $parentLocationId ) ) );
+$version = $contentService->createContentDraft( $contentCreateStruct , array( $locationService->newLocationCreateStruct( $parentLocationId ) ) );
 
 // print the new created info data
 $contentId = $version->contentId;
@@ -52,7 +53,7 @@ echo $contentId;
 // this method will throw an exception
 try 
 {
-    $locations = $locationService->getLocations($contentInfo);
+    $locations = $locationService->getLocations($content);
 }
 catch(BadStateException $e) 
 {
@@ -62,7 +63,7 @@ catch(BadStateException $e)
 $contentService->publishDraft( $version->versionInfo );
 
 // now there is one location with parentId 123 in the returned array
-$locations = $locationService->getLocations($contentInfo);
+$locations = $locationService->getLocations($content);
 
 /**
  * translate the article
@@ -70,10 +71,10 @@ $locations = $locationService->getLocations($contentInfo);
 
 // translating the content object (4.x)
 // load the content info object (note this info object differes from the one in the draft after publishing)
-$contentInfo = $contentService->loadContentInfo( $version->contentId );
+$content = $contentService->loadContent( $version->contentId );
 
 // create a draft from the before published content
-$versionInfo = $contentService->createDraftFromContent( $contentInfo );
+$versionInfo = $contentService->createDraftFromContent( $content );
 
 // instantiate a version update value object
 $versionUpdate = $contentService->newVersionUpdateStruct();
@@ -103,7 +104,7 @@ $contentUpdateStruct->mainLanguageCode = 'ger-DE';
 $contentUpdateStruct->alwaysAvailbale = false;
 
 // Update the content
-$contentService->updateContent( $contentInfo, $contentUpdateStruct );
+$contentService->updateContent( $content, $contentUpdateStruct );
 
 
 /**
@@ -114,7 +115,7 @@ $contentService->updateContent( $contentInfo, $contentUpdateStruct );
 $contentService->deleteVersion( $version->versionInfo );
 
 // delete the content object
-$contentService->deleteContent( $version->contentInfo );
+$contentService->deleteContent( $version->Content );
 
 /**
  * Load all drafts of the current user
@@ -133,10 +134,10 @@ foreach ( $contentService->loadContentDrafts() as $versionInfo )
  */
 
 // Load the content info by it's remote id
-$contentInfo = $contentService->loadContentInfoByRemoteId( 'remote-id' );
+$content = $contentService->loadContentByRemoteId( 'remote-id' );
 
 // Load the version info instance
-$versionInfo = $contentService->loadVersionInfo( $contentInfo );
+$versionInfo = $contentService->loadVersionInfo( $content );
 
 
 /**
@@ -144,10 +145,10 @@ $versionInfo = $contentService->loadVersionInfo( $contentInfo );
  */
 
 // Load a content info instance
-$contentInfo = $contentService->loadContentInfo( 42 );
+$content = $contentService->loadContent( 42 );
 
 // Load a specific version
-$versionInfo = $contentService->loadVersionInfo( $contentInfo, 3 );
+$versionInfo = $contentService->loadVersionInfo( $content, 3 );
 
 
 /**
@@ -155,10 +156,10 @@ $versionInfo = $contentService->loadVersionInfo( $contentInfo, 3 );
  */
 
 // Load a content info instance
-$contentInfo = $contentService->loadContentInfo( 42 );
+$content = $contentService->loadContent( 42 );
 
 // Load the latest version for this content object
-$version = $contentService->loadVersionByContentInfo( $contentInfo );
+$version = $contentService->loadVersionByContent( $content );
 
 /**
  * Load the latest version with all languages (short form)
@@ -177,7 +178,7 @@ $languages = array( 'eng-US', 'ger-DE' );
 // Load the latest version for this content object
 $version = $contentService->loadVersion( 42, $languages );
 
-var_dump( $version->contentInfo->mainLanguage );
+var_dump( $version->Content->mainLanguage );
 
 
 /**
@@ -195,10 +196,10 @@ $version = $contentService->loadVersion( 42, $language, 17 );
  */
 
 // Load a content info for a specific content id
-$contentInfo = $contentService->loadContentInfo( 23 );
+$content = $contentService->loadContent( 23 );
 
 // List of content versions
-$versionInfos = $contentService->loadVersions( $contentInfo );
+$versionInfos = $contentService->loadVersions( $content );
 foreach( $versionInfos as $versionInfo )
 {
 	if( $versionInfo->status == VersionInfo::STATUS_ARCHIVED )
@@ -218,7 +219,7 @@ $versionInfo = $contentService->loadVersionInfoById( 23 );
 $locationCreate = $locationService->newLocationCreateStruct( 123 );
 
 // Copy content in latest version
-$version = $contentService->copyContent( $versionInfo->contentInfo, $locationCreate, $versionInfo );
+$version = $contentService->copyContent( $versionInfo->Content, $locationCreate, $versionInfo );
 
 
 /**
@@ -259,10 +260,10 @@ $contentService->addRelation( $versionInfo, 23 );
  */
 
 // Load the content info instance
-$contentInfo = $contentService->loadContentInfoByRemoteId( 'remote' );
+$content = $contentService->loadContentByRemoteId( 'remote' );
 
 // Load the latest version info for the content object
-$versionInfo = $contentService->loadVersionInfo( $contentInfo );
+$versionInfo = $contentService->loadVersionInfo( $content );
 
 // Now load all outgoing relations
 foreach ( $contentService->loadOutgoingRelations( $versionInfo ) as $relation )
@@ -276,10 +277,10 @@ foreach ( $contentService->loadOutgoingRelations( $versionInfo ) as $relation )
  */
 
 // Load the used content info object
-$contentInfo = $contentService->loadContentInfo( 17 );
+$content = $contentService->loadContent( 17 );
 
 // Load the incoming relations for the content info object
-foreach ( $contentService->loadIncomingRelations( $contentInfo ) as $relation )
+foreach ( $contentService->loadIncomingRelations( $content ) as $relation )
 {
     echo $relation->sourceContentId, ' --> ', $relation->destinationContentId, PHP_EOL;
 }
@@ -290,10 +291,10 @@ foreach ( $contentService->loadIncomingRelations( $contentInfo ) as $relation )
  */
 
 // Load the content info instance
-$contentInfo = $contentService->loadContentInfo( 42 );
+$content = $contentService->loadContent( 42 );
 
 // Load specific version info
-$versionInfo = $contentService->loadVersionInfo( $contentInfo);
+$versionInfo = $contentService->loadVersionInfo( $content);
 
 // Remove a relation
 $contentService->deleteRelation( $version, 23 );
