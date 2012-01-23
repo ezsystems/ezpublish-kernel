@@ -3,8 +3,8 @@ namespace ezp\PubklicAPI\Values\User\Limitation;
 
 use ezp\PubklicAPI\Values\User\Limitation;
 
-class CustomLimitation extends Limitation {
-    
+class CustomLimitation extends Limitation
+{
     /**
      * 
      * the custom limitation name
