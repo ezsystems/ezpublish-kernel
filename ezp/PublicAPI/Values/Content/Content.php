@@ -2,8 +2,10 @@
 namespace ezp\PublicAPI\Values\Content;
 
 use ezp\PublicAPI\Values\ContentType\ContentType;
-
 use ezp\PublicAPI\Values\Content\Location;
+use ezp\PublicAPI\Values\ValueObject;
+
+
 
 /**
  *
@@ -11,7 +13,7 @@ use ezp\PublicAPI\Values\Content\Location;
  * @property-read $contentType calls {@link getContentType()}
  *
  */
-class Content extends ValueObject
+abstract class Content extends ValueObject
 {
     /**
      * The unique id of the content object
@@ -84,10 +86,10 @@ class Content extends ValueObject
     public $remoteId;
 
     /**
-     * The main language of the content.
-     * @var mixed
+     * The main language code of the content.
+     * @var string
      */
-    public $mainLanguage;
+    public $mainLanguageCode;
 
 }
 ?>

@@ -1,9 +1,14 @@
 <?php
+
 namespace ezp\PublicAPI\Values\User;
 
 use ezp\PublicAPI\Values\ValueObject;
-use ezp\PubklicAPI\Values\User\Limitation\RoleLimitation;
+use ezp\PublicAPI\Values\User\Limitation\RoleLimitation;
+use ezp\PublicAPI\Values\User\Role;
 
+/**
+ * This value object represents an assignment to a role inlcuding a limitation
+ */
 abstract class RoleAssignment extends ValueObject {
 
     /**
@@ -19,3 +24,5 @@ abstract class RoleAssignment extends ValueObject {
     abstract function getRole();
 
 }
+
+
