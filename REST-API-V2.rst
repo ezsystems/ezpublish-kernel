@@ -87,7 +87,7 @@ To create a new content object do:
     [ContentCreate_]
 
 This method creates a new draft assigned to a user given in the body or to the authenticated user (if not given).
-It returns a ContentVersion_ which contains the content metadata, version meta data and the fields. 
+It returns a Version_ which contains the content metadata, version meta data and the fields. 
 
 To update a draft call:
 
@@ -140,7 +140,7 @@ or:
 
      GET <URI>/content/objects/<ID>?languages=<language_code>,...
 
-In the second it is possible to retrieve more than on language.
+In the second it is possible to retrieve more than one language.
 
 
 To update the content meta data (version independent) call:
@@ -193,16 +193,18 @@ In the content module there are the root collections objects, locations, trash a
 /content/objects/views                                -                   list views              create a new view and return -            
                                                                                                   the results
 /content/objects/view/<ID>                            -                   get view results        replace view                 delete view
-/content/objects/<ID>                                 -                   load content in current update content meta data     delete content
-                                                                          version
+/content/objects/<ID>                                 -                   load content info       update content meta data     delete content
 /content/objects/<ID>/translations                    create translation  list translations       -                            -            
 /content/objects/<ID>/languages                       -                   list languages of cont. -                            -              
 /content/objects/<ID>/languages/<lang_code>           -                   load content in the     -                            delete language
                                                                           given language                                       from content   
+/content/objects/<ID>/currentversion                  -                   load content in current -                            -             
+                                                                          version
 /content/objects/<ID>/versions                        create a new draft  load all versions       -                            -            
                                                       from an existing    (version infos)
                                                       version 
 /content/objects/<ID>/versions/<versionNo>            -                   get a specific version  update a version/draft       delete version
+/content/objects/<ID>/versions/<versionNo>/info       -                   get a version info      -                            -             
 /user/users/<ID>/drafts                               -                   list all drafts owned   -                            delete all drafts
                                                                           by the user                                          of the user
 /content/objects/<ID>/locations                       -                   load locations of cont- create a new location for    delete all locations
@@ -267,7 +269,7 @@ Creating Content
               The user has to publish the content if it should be visible.
 :Request format: application/json
 :Parameters:
-        :fields:            comma separated list of fields which should be returned in the response (see ContentVersion_)
+        :fields:            comma separated list of fields which should be returned in the response (see Version_)
         :responseGroups:    alternative: comma separated lists of predefined field groups (see REST API Spec v1)
 :Inputschema:    ContentCreate_
 :Response:       201 Location: /content/objects/<ID>/versions/<version_nr> 
@@ -316,7 +318,7 @@ Load Content
 :Method: GET
 :Description: Loads the content object for the given id in its current version (i.e the current published version or if not exists the draft of the authenticated user)
 :Parameters:
-    :fields: comma separated list of fields which should be returned in the response (see ContentVersion_)
+    :fields: comma separated list of fields which should be returned in the response (see Version_)
     :responseGroups: comma separated lists of predefined field groups (see REST API Spec v1)
     :languages: (comma separated list) restricts the output of translatable fields to the given languages
 :Response: 200 Version_
@@ -511,7 +513,7 @@ Create a Draft from an archived or published Version
 :Parameters:
     :srcVersion: the source version from which data is copied to the new draft - if not given the current published version is used
 :Inputschema:
-:Response: 201 Location: /content/objects/<ID>/versions/<new-versionNo> ContentVersionInfo_
+:Response: 201 Location: /content/objects/<ID>/versions/<new-versionNo> VersionInfo_
 :Error Codes:
     :401: If the user is not authorized to update this object  
     :404: If the content object was not found
@@ -1644,6 +1646,7 @@ Multi Language Value JSON Schema
 --------------------------------
 
 ::
+
     {
         "name":"MLValue",
         "properties": {
