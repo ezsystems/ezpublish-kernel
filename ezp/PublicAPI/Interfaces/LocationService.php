@@ -28,7 +28,11 @@ interface LocationService
      *
      * @return Location The newly created location of the copied subtree
      *
+<<<<<<< HEAD
      * @todo enhancement - this method should return a result structure containing the new location and a list
+=======
+     * @todo enhancment - this method should return a result structure containing the new location and a list
+>>>>>>> Whitespaces + doc fixes
      *       of locations which are not copied due to permission denials.
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
@@ -73,8 +77,14 @@ interface LocationService
     public Function loadMainLocation(/*Content*/ $content);
 
     /**
+<<<<<<< HEAD
      * Loads the locations for the given content object. If a $rootLocation is given only
      * locations of the content which are descendants of the root location are returnd
+=======
+     * Loads the locations for the given content object.
+     *
+     * If a $rootLocation is given, only locations that belong to this location re returned.
+>>>>>>> Whitespaces + doc fixes
      * The location list is also filtered by permissions on reading locations.
      *
      * @param Content $content
@@ -188,7 +198,11 @@ interface LocationService
 
 
     /**
+<<<<<<< HEAD
      * instantiates a new location create class
+=======
+     * instanciates a new location create class
+>>>>>>> Whitespaces + doc fixes
      *
      * @param int $parentLocationId the parent under which the new location should be created
      *
