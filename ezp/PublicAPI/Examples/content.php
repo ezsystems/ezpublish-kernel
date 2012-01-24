@@ -51,11 +51,11 @@ echo $contentId;
 
 // 4.x. the location array is empty because the location are created on publish for the first time
 // this method will throw an exception
-try 
+try
 {
     $locations = $locationService->getLocations($content);
 }
-catch(BadStateException $e) 
+catch(BadStateException $e)
 {
     echo "yes this content object has no location by now";
 }
@@ -101,7 +101,7 @@ $contentUpdateStruct = $contentService->newContentUpdateStruct();
 
 // Change the main language and alwaysAvailableFlag
 $contentUpdateStruct->mainLanguageCode = 'ger-DE';
-$contentUpdateStruct->alwaysAvailbale = false;
+$contentUpdateStruct->alwaysAvailable = false;
 
 // Update the content
 $contentService->updateContent( $content, $contentUpdateStruct );
@@ -109,7 +109,7 @@ $contentService->updateContent( $content, $contentUpdateStruct );
 
 /**
  * deleting the version and content
- */ 
+ */
 
 // delete the version (draft)
 $contentService->deleteVersion( $version->versionInfo );
@@ -185,7 +185,7 @@ var_dump( $version->Content->mainLanguage );
  * Load a specific version in german
  */
 
-$language = array( 'de' );
+$language = array( 'ger-DE' );
 
 // Load this version
 $version = $contentService->loadVersion( 42, $language, 17 );
@@ -212,7 +212,7 @@ foreach( $versionInfos as $versionInfo )
  * Copy content object only with latest version
  */
 
-// load the latesst version
+// load the latest version
 $versionInfo = $contentService->loadVersionInfoById( 23 );
 
 // Instantiate a location create struct

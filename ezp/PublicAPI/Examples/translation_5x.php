@@ -2,10 +2,9 @@
 /**
  * in 5.x it is possible to add multiple translations in one version
  * the information which versions and language are translated can be put into the repository
- * via a translation info. THis approach assumes that the acual translation process is done
+ * via a translation info. This approach assumes that the actual translation process is done
  * via a workflow engine. By storing the source version and source language it is possible
  * to trigger new translation workflows if fields in the source language have changed.
- * 
  */
 
 /**

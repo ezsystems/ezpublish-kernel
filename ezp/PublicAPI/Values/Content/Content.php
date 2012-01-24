@@ -9,7 +9,7 @@ use ezp\PublicAPI\Values\ValueObject;
 
 /**
  *
- * This class provides all version indepndent information of the content object.
+ * This class provides all version independent information of the content object.
  * @property-read $contentType calls {@link getContentType()}
  *
  */
