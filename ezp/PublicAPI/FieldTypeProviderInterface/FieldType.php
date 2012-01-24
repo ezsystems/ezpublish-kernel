@@ -5,6 +5,7 @@
  */
 namespace ezp\PublicAPI\FieldTypeProviderInterface;
 use ezp\PublicAPI\Interfaces\Repository;
+use ezp\PublicAPI\FieldTypeProviderInterface\Value;
 
 /**
  * The field type interface which all field types have to implement.
@@ -66,8 +67,42 @@ interface FieldType {
      * @throws InvalidArgumentType if the parameter is not of the supported value sub type
      * @throws InvalidArgumentValue if the value does not match the expected structure
      */
-    public function acceptValue(Value $value);
+    public function acceptValue($value);
 
+    /**
+    * Converts an hash to the Value defined by the field type
+    * 
+     * @param array $hash
+     * 
+     * @return Value
+     */
+    public function fromHash(array $hash);
 
-
+    /**
+     * Converts a Value to a hash
+     * 
+     * @param Value $value
+     * 
+     * @return array
+     */
+    public function toHash(Value $value);
+    
+    /**
+     * converts a Value to a persistence value
+     * 
+     * @param Value $value
+     * 
+     * @return FieldValue
+     */
+    public function toPersistenceValue(Value $value);
+    
+    /**
+     * converts a persistence field value to a Value
+     * 
+     * @param FieldValue $fieldValue
+     * 
+     * @return Value
+     */
+    public function fromPersistenceValue(FieldValue $fieldValue);
+    
 }
