@@ -86,7 +86,7 @@ interface ContentService {
      *
      * @return Version
      *
-     * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if version with the given number does not exist
+     * @throws ezp\PublicAPI\Interfaces\NotFoundException - if version with the given number does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
     public function loadVersionByContent(/*Content*/ $content, array $languages = null, $versionNo = null);
@@ -142,13 +142,13 @@ interface ContentService {
      * In 4.x at least one location has to be provided in the location creation array.
      *
      * @param ContentCreateStruct $contentCreateStruct
-     * @param array $locationCreateStructs an array of {@link LocationCreateStruct} for each location parent under which a location should be created for the nontent
+     * @param array $locationCreateStructs an array of {@link LocationCreateStruct} for each location parent under which a location should be created for the content
      *
      * @return Version - the newly created content draft
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to create the content in the given location
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create the content in the given location
      * @throws ezp\PublicAPI\Interfaces\InvalidArgumentException if the input is not valid or
-     *         if the provided remoteId existis in the system or (4.x) there is no location provided
+     *         if the provided remoteId exists in the system or (4.x) there is no location provided
      */
     public function createContentDraft(/*ContentCreateStruct*/ $contentCreateStruct, array $locationCreateStructs = array());
 
@@ -259,7 +259,7 @@ interface ContentService {
     public function loadVersions(/*Content*/ $content);
 
     /**
-     * copies the the content to a new location. If no version is given,
+     * copies the content to a new location. If no version is given,
      * all versions are copied, otherwise only the given version.
      *
      * @param Content $content
@@ -270,16 +270,15 @@ interface ContentService {
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to copy the content to the given location
      */
-    public function copyContent(/*Content*/ $content,/*LocationCreate*/ $locationCreateStruct,/*VersionInfo*/ $versionInfo = null);
+    public function copyContent(/*Content*/ $content,/*LocationCreateStruct*/ $locationCreateStruct,/*VersionInfo*/ $versionInfo = null);
 
     /**
-     *
      * finds content objects for the given query.
      * @TODO define structs for the field filters
      *
      * @param Query $query
      * @param array  $fieldFilters - a map of filters for the returned fields.
-     *        Currently supported: <code>array("languages" => aaray(<language1>,..))</code>.
+     *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
      * @return SearchResult
@@ -310,7 +309,7 @@ interface ContentService {
     public function loadOutgoingRelations(/*VersionInfo*/ $versionInfo);
 
     /**
-     * Loads all incoming relations for a content object. The  relations come only
+     * Loads all incoming relations for a content object. The relations come only
      * from published versions of the source content objects
      *
      * @param Content $content
@@ -345,14 +344,14 @@ interface ContentService {
 
     /**
      * 5.x add translation information to the content object
-     *  
+     *
      * @example Examples/translation_5x.php
      *
-     * @param TranslationInfo $translatio9nInfo
+     * @param TranslationInfo $translationInfo
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed add a trnaslation info
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed add a translation info
      */
-    public function addTranslationInfo(/*TranslationInfo*/ $translatio9nInfo);
+    public function addTranslationInfo(/*TranslationInfo*/ $translationInfo);
 
     /**
      * 5.x lists the translations done on this content object
@@ -368,9 +367,9 @@ interface ContentService {
 
 
     /**
-     * instanciates a new content type creat class
+     * Instantiates a new content create struct object
      *
-     * @param  ContentType $contentType
+     * @param ContentType $contentType
      * @param string $mainLanguageCode
      *
      * @return ContentCreateStruct
@@ -378,26 +377,26 @@ interface ContentService {
     public function newContentCreateStruct(/*ContentType*/ $contentType, $mainLanguageCode);
 
     /**
-     * instanciates a new version update class
+     * Instantiates a new version update class
      *
      * @return VersionUpdateStruct
      */
     public function newVersionUpdateStruct();
 
     /**
-     * instanciates a new content update struct
+     * Instantiates a new content update struct
      * @return ContentUpdateStruct
      */
     public function newContentUpdateStruct();
 
     /**
-     * instanciating a new TranslationInfo
+     * Instantiates a new TranslationInfo object
      * @return TranslationInfo
      */
-    public function newTranlationInfo();
-    
+    public function newTranslationInfo();
+
     /**
-     * instanciates a Translation class
+     * Instantiates a Translation object
      * @return Translation
      */
     public function newTranslation($translationInfo);
