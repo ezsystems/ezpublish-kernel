@@ -18,7 +18,6 @@ use ezp\PublicAPI\Values\Content\Location;
  */
 interface LocationService
 {
-
     /**
      * Copies the subtree starting from $subtree as a new subtree of $targetLocation
      * Only the items on which the user has read access are copied.
@@ -28,11 +27,7 @@ interface LocationService
      *
      * @return Location The newly created location of the copied subtree
      *
-<<<<<<< HEAD
      * @todo enhancement - this method should return a result structure containing the new location and a list
-=======
-     * @todo enhancment - this method should return a result structure containing the new location and a list
->>>>>>> Whitespaces + doc fixes
      *       of locations which are not copied due to permission denials.
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
@@ -74,17 +69,12 @@ interface LocationService
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read this location
      * @throws ezp\PublicAPI\Interfaces\BadStateException if there is no published version yet
      */
-    public Function loadMainLocation(/*Content*/ $content);
+    public function loadMainLocation( /*Content*/ $content );
 
     /**
-<<<<<<< HEAD
-     * Loads the locations for the given content object. If a $rootLocation is given only
-     * locations of the content which are descendants of the root location are returnd
-=======
      * Loads the locations for the given content object.
      *
-     * If a $rootLocation is given, only locations that belong to this location re returned.
->>>>>>> Whitespaces + doc fixes
+     * If a $rootLocation is given, only locations that belong to this location are returned.
      * The location list is also filtered by permissions on reading locations.
      *
      * @param Content $content
@@ -94,7 +84,7 @@ interface LocationService
      *
      * @throws ezp\PublicAPI\Interfaces\BadStateException if there is no published version yet
      */
-    public function loadLocations(/*Content*/ $content, /*Location*/ $rootLocation = null);
+    public function loadLocations( /*Content*/ $content, /*Location*/ $rootLocation = null );
 
     /**
      * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
@@ -122,7 +112,7 @@ interface LocationService
      *                                        or the parent is a sub location of the location the content
      *                                        or if set the remoteId existis already
      */
-    public function createLocation(/*Content*/ $content, /*LocationCreate*/ $locationCreateStruct );
+    public function createLocation( /*Content*/ $content, /*LocationCreate*/ $locationCreateStruct );
 
     /**
      * Updates $location in the content repository
@@ -198,20 +188,16 @@ interface LocationService
 
 
     /**
-<<<<<<< HEAD
-     * instantiates a new location create class
-=======
-     * instanciates a new location create class
->>>>>>> Whitespaces + doc fixes
+     * Instantiates a new location create class
      *
      * @param int $parentLocationId the parent under which the new location should be created
      *
      * @return LocationCreateStruct
      */
-    public function newLocationCreateStruct($parentLocationId);
+    public function newLocationCreateStruct( $parentLocationId );
 
     /**
-     * instanciates a new location update class
+     * Instantiates a new location update class
      *
      * @return LocationUpdateStruct
      */

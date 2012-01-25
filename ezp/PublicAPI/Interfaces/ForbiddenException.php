@@ -9,8 +9,8 @@ use ezp\PublicAPI\Interfaces\Exception;
  * would have permission to perform this action.
  * @package ezp\PublicAPI\Interfaces
  */
-abstract class ForbiddenException extends RuntimeException implements Exception {
-    
+abstract class ForbiddenException extends RuntimeException implements Exception
+{
     /**
      * returns an additional error code which indicates why an action could not be performed
      * @return integer an error code

@@ -24,6 +24,26 @@ use ezp\PublicAPI\Values\Content\Query\Criterion,
 class UserMetadata extends Criterion implements CriterionInterface
 {
     /**
+     * UserMetadata target: Owner user
+     */
+    const OWNER = 'owner';
+
+    /**
+     * UserMetadata target: Owner user group
+     */
+    const GROUP = 'group';
+
+    /**
+     * UserMetadata target: Creator
+     */
+    const CREATOR = 'creator';
+
+    /**
+     * UserMetadata target: Modifier
+     */
+    const MODIFIER = 'modifier';
+
+    /**
      * Creates a new UserMetadata criterion on $metadata
      *
      * @param string $target One of UserMetadata::OWNER, UserMetadata::GROUP, UserMetadata::CREATED or UserMetadata::MODIFIED
@@ -50,25 +70,4 @@ class UserMetadata extends Criterion implements CriterionInterface
             ),
         );
     }
-
-    /**
-     * UserMetadata target: Owner user
-     */
-    const OWNER = 'owner';
-
-    /**
-     * UserMetadata target: Owner user group
-     */
-    const GROUP = 'group';
-
-    /**
-     * UserMetadata target: Creator
-     */
-    const CREATOR = 'creator';
-
-    /**
-     * UserMetadata target: Modifier
-     */
-    const MODIFIER = 'modifier';
 }
-?>

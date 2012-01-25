@@ -38,7 +38,7 @@ interface Repository
      * @param User $user
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
-    public function hasAccess($module, $function, User $user = null);
+    public function hasAccess( $module, $function, User $user = null );
 
     /**
      *
@@ -49,7 +49,7 @@ interface Repository
      * @param ValueObject $value
      * @param ValueObject $target
      */
-    public function canUser($module,$function,ValueObject $value, ValueObject $target);
+    public function canUser( $module,$function,ValueObject $value, ValueObject $target );
 
     /**
      * Get Content Service
@@ -117,7 +117,6 @@ interface Repository
      * @return \ezp\PublicAPI\Interfaces\UserService
      */
     public function getUserService();
-
 
     /**
      * Begin transaction

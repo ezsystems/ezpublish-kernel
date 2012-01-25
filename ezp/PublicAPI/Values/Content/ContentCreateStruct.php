@@ -10,7 +10,6 @@ use ezp\PublicAPI\Values\ValueObject;
  */
 abstract class ContentCreateStruct extends ValueObject
 {
-
     /**
      * The content type for which the new content is created
      *
@@ -32,7 +31,6 @@ abstract class ContentCreateStruct extends ValueObject
      * @var int
      */
     public $ownerId = null;
-
 
     /**
      * Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
@@ -57,7 +55,6 @@ abstract class ContentCreateStruct extends ValueObject
      */
     public $mainLanguageCode;
 
-
     /**
      * Modification date. If not given the current timestamp is used.
      *
@@ -79,7 +76,5 @@ abstract class ContentCreateStruct extends ValueObject
      *
      * @param string $language If not given on a translatable field the initial language is used
      */
-    public abstract function setField($fieldDefIdentifier, $value, $language = null);
-
+    public abstract function setField( $fieldDefIdentifier, $value, $language = null );
 }
-?>

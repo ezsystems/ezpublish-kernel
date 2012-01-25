@@ -7,8 +7,8 @@ use ezp\PublicAPI\Values\ValueObject;
  * This class is used to create a new Location for a content object
  *
  */
-abstract class LocationCreateStruct extends ValueObject {
-
+abstract class LocationCreateStruct extends ValueObject
+{
     /**
      * Location priority
      *
@@ -33,11 +33,10 @@ abstract class LocationCreateStruct extends ValueObject {
      */
     public $remoteId;
 
-
     /**
      * Indicates if the newly created location should be set as main location.
      * On creating a new content object with only one location this parameter is ignored.
-     * 
+     *
      * @var boolean
      */
     public $isMainLocation = false;
@@ -65,5 +64,4 @@ abstract class LocationCreateStruct extends ValueObject {
      * @var int
      */
     public $parentLocationId;
-
 }

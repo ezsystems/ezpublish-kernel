@@ -10,24 +10,23 @@ use ezp\PublicAPI\Values\ValueObject;
  */
 class ContentUpdateStruct extends ValueObject
 {
-
     /**
      * If set this value changes the owner id of the content object
-     * 
+     *
      * @var integer
      */
     public $ownerId = null;
 
     /**
      * if set this value overrides the publication date of the content. (Used in staging scenarios)
-     * 
+     *
      * @var integer Unix timestamp
      */
     public $published = null;
 
     /**
      * If set this value overrides the modification date. (Used for staging scenarios).
-     * 
+     *
      * @var integer Unix timestamp
      */
     public $modified;
@@ -41,18 +40,15 @@ class ContentUpdateStruct extends ValueObject
 
     /**
      * If set this value changes the always available flag
-     * 
+     *
      * @var boolean
      */
     public $alwaysAvailable;
 
     /**
      * if set this value  changes the remoteId
-     * 
+     *
      * @var string
      */
     public $remoteId;
-
-
 }
-?>

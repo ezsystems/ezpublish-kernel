@@ -9,7 +9,7 @@ use ezp\PublicAPI\Values\Content\Location;
 
 /**
  * this clss is used for creating content types
- * 
+ *
  * @property-write $names $names[$language] calls setName($language)
  * @property-write $name calls setName() for setting a namein the initial language
  * @property-write $descriptions $descriptions[$language] calls setDescription($language)
@@ -20,46 +20,45 @@ abstract class ContentTypeCreateStruct extends ValueObject
 {
     /**
      * String identifier of a type
-     * 
+     *
      * @var string
      */
     public $identifier;
 
     /**
      * Initial language Code.
-     * 
+     *
      * @var mixed
      */
     public $initialLanguageCode;
 
     /**
      * The renote id
-     * 
+     *
      * @var string
      */
     public $remoteId;
 
     /**
      * URL alias schema
-     * 
+     *
      * @var string
      */
     public $urlAliasSchema;
 
     /**
      * Name schema
-     * 
+     *
      * @var string
      */
     public $nameSchema;
 
     /**
      * Determines if the type is a container
-     * 
+     *
      * @var bool
      */
     public $isContainer = false;
-
 
     /**
      * Specifies which property the child locations should be sorted on by default when created
@@ -79,7 +78,6 @@ abstract class ContentTypeCreateStruct extends ValueObject
      */
     public $defaultSortOrder = Location::SORT_ORDER_DESC;
 
-
     /**
      * if an instance of acontent type is created the always available flag is set
      * by default this this value.
@@ -90,26 +88,26 @@ abstract class ContentTypeCreateStruct extends ValueObject
 
     /**
      * set a content type name for the given language
-     * 
+     *
      * @param string $name
      * @param string $language if not given the initialLanguage is used as default
      */
-    public abstract function setName($name, $language = null);
+    public abstract function setName( $name, $language = null );
 
     /**
      * set a content type description for the given language
-     * 
+     *
      * @param string $description
      * @param string $language if not given the initialLanguage is used as default
      */
-    public abstract function setDescription($description, $language = null);
+    public abstract function setDescription( $description, $language = null );
 
     /**
      * adds a new field definition
-     * 
+     *
      * @param FieldDefinitionCreate $fieldDef
      */
-    public abstract function addFieldDefinition(/*FieldDefinitionCreate*/ $fieldDef);
+    public abstract function addFieldDefinition( /*FieldDefinitionCreate*/ $fieldDef );
 
     /**
      * if set this value overrides the current user as creator
@@ -122,6 +120,4 @@ abstract class ContentTypeCreateStruct extends ValueObject
      * @var int (unix timestamp)
      */
     public $created = null;
-
 }
-?>

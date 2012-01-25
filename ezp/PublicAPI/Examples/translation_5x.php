@@ -44,8 +44,6 @@ $newPublishedVersion = $contentService->publishDraft( $draft->versionInfo );
  * Translate more than one language at once (low level)
  */
 
-
-
 $versionUpdate = $contentService->newVersionUpdateStruct();
 $versionUpdate->fields['title']['ger-DE'] = 'Titel';
 // ...

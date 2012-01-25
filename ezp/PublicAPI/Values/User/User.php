@@ -63,7 +63,4 @@ abstract class User extends Version
      * @var int
      */
     public $maxLogin = 0;
-
 }
-?>
-

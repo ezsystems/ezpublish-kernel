@@ -22,17 +22,17 @@ class BinaryFileCreateStruct
     /**
      * Original file name
      * @var string
-     */ 
+     */
     public $originalFileName;
-    
+
     /**
      * The size of the file
      * @var int
      */
     public $size;
-    
+
     /**
-     * 
+     *
      * the input stream
      * @var resource
      */

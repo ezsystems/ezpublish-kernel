@@ -6,7 +6,8 @@ use ezp\PublicAPI\Values\ValueObject;
  * This class is used for updating location meta data.
  *
  */
-class LocationUpdateStruct extends ValueObject {
+class LocationUpdateStruct extends ValueObject
+{
     /**
      * If set the location priority is changed to the new value
      *
@@ -16,16 +17,15 @@ class LocationUpdateStruct extends ValueObject {
 
     /**
      * if set the location gets a new remoteId.
-     * 
+     *
      * @var mixed
      */
     public $remoteId;
 
-
     /**
      * if set to true this location will set as new main location for the content.
      * If set to false this parameter is ignored.
-     * 
+     *
      * @var mixed|true
      */
     public $isMainLocation;
@@ -47,5 +47,4 @@ class LocationUpdateStruct extends ValueObject {
      * @var mixed
      */
     public $sortOrder;
-
 }

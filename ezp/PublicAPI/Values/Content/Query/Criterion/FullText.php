@@ -48,4 +48,3 @@ class FullText extends Criterion implements CriterionInterface
         return new self( $value );
     }
 }
-?>

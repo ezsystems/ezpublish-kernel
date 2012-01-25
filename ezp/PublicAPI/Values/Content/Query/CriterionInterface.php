@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * @package ezp\PublicAPI\Values\Content\Query
  */
 namespace ezp\PublicAPI\Values\Content\Query;
@@ -54,4 +54,3 @@ interface CriterionInterface
      */
     public function getSpecifications();
 }
-?>

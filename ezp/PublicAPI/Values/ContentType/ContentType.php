@@ -65,7 +65,7 @@ abstract class ContentType extends ValueObject
      * @param string $languageCode
      * @return string the name for the given language or null if none existis.
      */
-    public abstract function getName($languageCode);
+    public abstract function getName( $languageCode );
 
     /**
      *  This method returns the human readable description of the content type
@@ -84,8 +84,7 @@ abstract class ContentType extends ValueObject
      * @param string $languageCode
      * @return string the description for the given language or null if none existis.
      */
-    public abstract function getDescription($languageCode);
-
+    public abstract function getDescription( $languageCode );
 
     /**
      * String identifier of a content type
@@ -172,7 +171,6 @@ abstract class ContentType extends ValueObject
      */
     public $defaultAlwaysAvailable = true;
 
-
     /**
      * Specifies which property the child locations should be sorted on by default when created
      *
@@ -210,8 +208,5 @@ abstract class ContentType extends ValueObject
      * @param $fieldDefinitionIdentifier
      * @return FieldDefinition
      */
-    public abstract function getFieldDefinition($fieldDefinitionIdentifier);
-
-
+    public abstract function getFieldDefinition( $fieldDefinitionIdentifier );
 }
-?>

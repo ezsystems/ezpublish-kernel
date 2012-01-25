@@ -18,4 +18,3 @@ class LogicalAnd extends LogicalOperator
         parent::__construct( $criteria );
     }
 }
-?>

@@ -8,8 +8,8 @@ use ezp\PublicAPI\Values\ValueObject;
  * It consists of a name and a set of paraameters. This field type implementations
  * are providing a set of concrete validators.
  */
-abstract class Validator extends ValueObject {
-
+abstract class Validator extends ValueObject
+{
     /**
      * The name of the validator
      * @var string
@@ -22,5 +22,4 @@ abstract class Validator extends ValueObject {
      * @var array
      */
     public $parameters;
-
 }

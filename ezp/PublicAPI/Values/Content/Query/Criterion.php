@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * @package ezp\PublicAPI\Values\Content\Query
  *
  */
@@ -14,6 +14,24 @@ use ezp\PublicAPI\Values\Content\Query\Criterion\Operator\Specifications,
  */
 abstract class Criterion
 {
+    /**
+     * The operator used by the Criterion
+     * @var string
+     */
+    public $operator;
+
+    /**
+     * The value(s) matched by the criteria
+     * @var array(int|string)
+     */
+    public $value;
+
+    /**
+     * The target used by the criteria (field, metadata...)
+     * @var string
+     */
+    public $target;
+
     /**
      * Performs operator validation based on the Criterion specifications returned by {@see getSpecifications()}
      * @param string|null $target The target the Criterion applies to: metadata identifier, field identifier...
@@ -106,21 +124,21 @@ abstract class Criterion
         // the callback code will return true as soon as an accepted value type is found
         if ( $valueTypes & Specifications::TYPE_INTEGER )
         {
-            $callback = function( $value ) use ($callback)
+            $callback = function( $value ) use ( $callback )
             {
                 return is_numeric( $value ) || $callback( $value );
             };
         }
         if ( $valueTypes & Specifications::TYPE_STRING )
         {
-            $callback = function( $value ) use ($callback)
+            $callback = function( $value ) use ( $callback )
             {
                 return is_string( $value ) || $callback( $value );
             };
         }
         if ( $valueTypes & Specifications::TYPE_BOOLEAN )
         {
-            $callback = function( $value ) use ($callback)
+            $callback = function( $value ) use ( $callback )
             {
                 return is_bool( $value ) || $callback( $value );
             };
@@ -133,23 +151,4 @@ abstract class Criterion
     {
         return new static( $target, $operator, $value );
     }
-
-    /**
-     * The operator used by the Criterion
-     * @var string
-     */
-    public $operator;
-
-    /**
-     * The value(s) matched by the criteria
-     * @var array(int|string)
-     */
-    public $value;
-
-    /**
-     * The target used by the criteria (field, metadata...)
-     * @var string
-     */
-    public $target;
 }
-?>

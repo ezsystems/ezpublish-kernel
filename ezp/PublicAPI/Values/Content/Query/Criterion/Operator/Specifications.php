@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * @package ezp\PublicAPI\Values\Content\Query
  */
 namespace ezp\PublicAPI\Values\Content\Query\Criterion\Operator;
@@ -13,21 +13,6 @@ namespace ezp\PublicAPI\Values\Content\Query\Criterion\Operator;
  */
 class Specifications
 {
-    /**
-     * Creates a new Specifications object
-     * @pparam string $operator The specified operator, as one of the Operator::* constants
-     * @param string $valueFormat The accepted value format, either {@see self::FORMAT_ARRAY} or {@see self::FORMAT_SINGLE}
-     * @param int $valueTypes The supported value types, as a bit field of the {@see self::TYPES_*} constants
-     * @param integer $valueCount The required number of values, when the accepted format is {@see self::FORMAT_ARRAY}
-     */
-    public function __construct( $operator, $valueFormat, $valueTypes = null, $valueCount = null )
-    {
-        $this->operator = $operator;
-        $this->valueFormat = $valueFormat;
-        $this->valueTypes = $valueTypes;
-        $this->valueCount = $valueCount;
-    }
-
     /**
      * Criterion input type description constants.
      */
@@ -69,5 +54,19 @@ class Specifications
      * @var integer
      */
     public $valueCount;
+
+    /**
+     * Creates a new Specifications object
+     * @pparam string $operator The specified operator, as one of the Operator::* constants
+     * @param string $valueFormat The accepted value format, either {@see self::FORMAT_ARRAY} or {@see self::FORMAT_SINGLE}
+     * @param int $valueTypes The supported value types, as a bit field of the {@see self::TYPES_*} constants
+     * @param integer $valueCount The required number of values, when the accepted format is {@see self::FORMAT_ARRAY}
+     */
+    public function __construct( $operator, $valueFormat, $valueTypes = null, $valueCount = null )
+    {
+        $this->operator = $operator;
+        $this->valueFormat = $valueFormat;
+        $this->valueTypes = $valueTypes;
+        $this->valueCount = $valueCount;
+    }
 }
-?>

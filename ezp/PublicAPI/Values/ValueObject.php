@@ -79,4 +79,3 @@ abstract class ValueObject
     }
 
 }
-?>

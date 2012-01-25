@@ -26,6 +26,16 @@ use ezp\PublicAPI\Values\Content\Query\Criterion,
 class DateMetadata extends Criterion implements CriterionInterface
 {
     /**
+     * DateMetadata target: modification date
+     */
+    const MODIFIED = 'modified';
+
+    /**
+     * DateMetadata target: creation date
+     */
+    const CREATED = 'created';
+
+    /**
      * Creates a new DateMetadata criterion on $metadata
      *
      * @param string $target One of DateMetadata::CREATED or DateMetadata::MODIFIED
@@ -67,15 +77,4 @@ class DateMetadata extends Criterion implements CriterionInterface
             ),
         );
     }
-
-    /**
-     * DateMetadata target: modification date
-     */
-    const MODIFIED = 'modified';
-
-    /**
-     * DateMetadata target: creation date
-     */
-    const CREATED = 'created';
 }
-?>

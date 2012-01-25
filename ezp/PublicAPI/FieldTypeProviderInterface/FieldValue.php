@@ -22,5 +22,4 @@ class FieldValue extends ValueObject
      * @var mixed
      */
     public $sortKey;
-
 }

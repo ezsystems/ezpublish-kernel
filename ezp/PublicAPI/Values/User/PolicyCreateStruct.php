@@ -8,7 +8,6 @@ use ezp\PubklicAPI\Values\User\Limitation;
  */
 abstract class PolicyCreateStruct extends ValueObject
 {
-
     /**
      * Name of module, associated with the Policy
      *
@@ -32,7 +31,5 @@ abstract class PolicyCreateStruct extends ValueObject
      * adds a limitation with the given identifier and list of values
      * @param Limitation $limitation
      */
-    public abstract function addLimitation(/*Limitation*/ $limitation);
+    public abstract function addLimitation( /*Limitation*/ $limitation );
 }
-?>
-

@@ -7,11 +7,11 @@ namespace ezp\PublicAPI\Values\IO;
  */
 class ContentType
 {
-    
-    public function __construct($mimetype) {
+    public function __construct( $mimetype )
+    {
         //@todo implement converstion from <type>/<subtype>
     }
-    
+
     /**
      * The type (audio, video, text, image)
      * @var string
@@ -31,5 +31,4 @@ class ContentType
     {
         return "$this->type/$this->subType";
     }
-
 }

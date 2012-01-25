@@ -36,14 +36,12 @@ class Relation extends ValueObject
      */
     const ATTRIBUTE = 8;
 
-
     /**
      * Id of the relation
      *
      * @var mixed
      */
     public $id;
-
 
     /**
      * Source Content Type Field Definition Id.
@@ -56,7 +54,7 @@ class Relation extends ValueObject
 
     /**
      * the content of the source of the relation
-     * 
+     *
      * @var Content
      */
     public $sourceContent;

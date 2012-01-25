@@ -6,7 +6,7 @@ use ezp\PublicAPI\Values\Content\Content;
 
 /**
  * This class represents a location in the repository
- * 
+ *
  * @property-read Content $content calls getContent()
  * @property-read int $contentId calls getContent()->contentId
  */
@@ -139,4 +139,3 @@ abstract class Location extends ValueObject
      */
     public $childCount;
 }
-?>

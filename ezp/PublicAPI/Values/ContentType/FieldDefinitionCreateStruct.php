@@ -10,15 +10,14 @@ use ezp\PublicAPI\Values\ValueObject;
  * @property-write $descriptions $descriptions[$language] calls setDescription($language)
  * @property-write $description calls setDescription() for setting a description in an initial language
  */
-abstract class FieldDefinitionCreateStruct extends ValueObject {
-
+abstract class FieldDefinitionCreateStruct extends ValueObject
+{
     /**
      * String identifier of the field type
      *
      * @var string
      */
     public $fieldTypeIdentifier;
-
 
     /**
      * Readable string identifier of a field definition
@@ -29,19 +28,19 @@ abstract class FieldDefinitionCreateStruct extends ValueObject {
 
     /**
      * set a field definition name for the given language
-     * 
+     *
      * @param string $name
      * @param string $language
      */
-    public abstract function setName($name, $language);
+    public abstract function setName( $name, $language );
 
     /**
      * set a  fie definition description for the given language
-     * 
+     *
      * @param string $description
      * @param string $language
      */
-    public abstract function setDescription($description, $language);
+    public abstract function setDescription( $description, $language );
 
     /**
      * Field group name
@@ -53,11 +52,10 @@ abstract class FieldDefinitionCreateStruct extends ValueObject {
     /**
      * the position of the field definition in the content typr
      * if not set the field is added at the end
-     * 
+     *
      * @var int
      */
     public $position;
-
 
     /**
      * Indicates if the field is translatable
@@ -82,17 +80,17 @@ abstract class FieldDefinitionCreateStruct extends ValueObject {
 
     /**
      * sets a validator which has to be supported by the field type
-     * 
+     *
      * @param Validator $validator
      */
-    public abstract function setValidator(/*Validator*/ $validator);
+    public abstract function setValidator( /*Validator*/ $validator );
 
     /**
      * sets a field settings map supported by the field type
-     * 
+     *
      * @param array $fieldSettings
      */
-    public abstract function setFieldSettings(array $fieldSettings);
+    public abstract function setFieldSettings( array $fieldSettings );
 
     /**
      * Default value of the field
@@ -107,6 +105,4 @@ abstract class FieldDefinitionCreateStruct extends ValueObject {
      * @var bool
      */
     public $isSearchable;
-
-
 }

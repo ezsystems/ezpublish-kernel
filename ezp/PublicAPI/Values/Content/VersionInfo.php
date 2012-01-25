@@ -8,7 +8,7 @@ use ezp\PublicAPI\Values\Content\Content;
 /**
  * This class holds version information data. It also contains the coresponding {@link Content} to
  * which the version belongs to.
- * 
+ *
  * @property-read array $names returns an array with language code keys and name values
  * @property-read Content $content calls getContent()
  */
@@ -46,11 +46,10 @@ abstract class VersionInfo extends ValueObject
      *
      * Returns the name computed from the name schema in the given language.
      * If no language is given the name in initial language of the version if present, otherwise null.
-     * 
+     *
      * @param string $languageCode
      */
-    public abstract function getName($languageCode = null);
-
+    public abstract function getName( $languageCode = null );
 
     /**
      * @var int
@@ -76,7 +75,6 @@ abstract class VersionInfo extends ValueObject
      */
     public $status;
 
-
     /**
      * In 4.x this is the language code which is used for labeling a translation.
      *
@@ -93,4 +91,3 @@ abstract class VersionInfo extends ValueObject
      */
     public $languageCodes = array();
 }
-?>

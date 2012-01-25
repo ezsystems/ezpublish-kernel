@@ -30,20 +30,25 @@ $contentCreateStruct->setField( 'title', 'Title' );
 $contentCreateStruct->fields['summary'] = "<p>this is a summary</p>";
 
 // set authors field of the article
-$authors = array();
-$authors[] = new ezp\Content\FieldType\Author\Author( 'John Doe', 'john.doe@example.net' );
-$authors[] = new ezp\Content\FieldType\Author\Author( 'Bud Spencer', 'bud.spencer@example.net' );
-$contentCreateStruct->setField( 'author', new ezp\Content\FieldType\Author\Value( $authors ) );
+$contentCreateStruct->setField(
+    'author',
+    new \ezp\Content\FieldType\Author\Value(
+        array(
+            new \ezp\Content\FieldType\Author\Author( 'John Doe', 'john.doe@example.net' ),
+            new \ezp\Content\FieldType\Author\Author( 'Bud Spencer', 'bud.spencer@example.net' ),
+        )
+    )
+);
 
 // set image for the article
-$contentCreateStruct->setField( 'image', new ezp\Content\FieldType\Image\Value( "/tmp/myimage.jpg","my alternative text" ) );
+$contentCreateStruct->setField( 'image', new \ezp\Content\FieldType\Image\Value( "/tmp/myimage.jpg","my alternative text" ) );
 
 // set a remote id for the content
 $contentCreateStruct->remoteId = "12345";
 
 // create the content instance with a default location create structure
 $parentLocationId = 123;
-$version = $contentService->createContentDraft( $contentCreateStruct , array( $locationService->newLocationCreateStruct( $parentLocationId ) ) );
+$version = $contentService->createContentDraft( $contentCreateStruct, array( $locationService->newLocationCreateStruct( $parentLocationId ) ) );
 
 // print the new created info data
 $contentId = $version->contentId;
@@ -53,9 +58,9 @@ echo $contentId;
 // this method will throw an exception
 try
 {
-    $locations = $locationService->getLocations($content);
+    $locations = $locationService->getLocations( $content );
 }
-catch(BadStateException $e)
+catch ( BadStateException $e )
 {
     echo "yes this content object has no location by now";
 }
@@ -63,7 +68,7 @@ catch(BadStateException $e)
 $contentService->publishDraft( $version->versionInfo );
 
 // now there is one location with parentId 123 in the returned array
-$locations = $locationService->getLocations($content);
+$locations = $locationService->getLocations( $content );
 
 /**
  * translate the article
@@ -87,9 +92,9 @@ $version = $contentService->updateVersion( $versionInfo, $versionUpdate );
 
 // read the fields of the version
 
-foreach ( $version->getFields() as $field)
+foreach ( $version->getFields() as $field )
 {
-	echo "Field '{$field->identifier}','{$field->language}': {$field->value}\n";
+    echo "Field '{$field->identifier}','{$field->language}': {$field->value}\n";
 }
 
 /**
@@ -200,12 +205,12 @@ $content = $contentService->loadContent( 23 );
 
 // List of content versions
 $versionInfos = $contentService->loadVersions( $content );
-foreach( $versionInfos as $versionInfo )
+foreach ( $versionInfos as $versionInfo )
 {
-	if( $versionInfo->status == VersionInfo::STATUS_ARCHIVED )
+    if ( $versionInfo->status == VersionInfo::STATUS_ARCHIVED )
     {
-		$contentService->deleteVersion( $versionInfo );
-	}
+       $contentService->deleteVersion( $versionInfo );
+    }
 }
 
 /**
@@ -294,8 +299,7 @@ foreach ( $contentService->loadIncomingRelations( $content ) as $relation )
 $content = $contentService->loadContent( 42 );
 
 // Load specific version info
-$versionInfo = $contentService->loadVersionInfo( $content);
+$versionInfo = $contentService->loadVersionInfo( $content );
 
 // Remove a relation
 $contentService->deleteRelation( $version, 23 );
-

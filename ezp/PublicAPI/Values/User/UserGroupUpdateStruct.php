@@ -9,8 +9,8 @@ use ezp\PublicAPI\Values\ValueObject;
  * This class is used to update a user in the repository
  *
  */
-class UserGroupUpdateStruct extends ValueObject {
-
+class UserGroupUpdateStruct extends ValueObject
+{
     /**
      * the update structure  for the profile version
      * @var VersionUpdateStruct
@@ -22,7 +22,4 @@ class UserGroupUpdateStruct extends ValueObject {
      * @var ContentUpdateStruct
      */
     public $contentUpdateStruct = null;
-
-
 }
-

@@ -1,14 +1,13 @@
 <?php
 namespace ezp\PublicAPI\Values\User;
 
-
 use ezp\PublicAPI\Values\Content\ContentCreateStruct;
 
 /**
  * This class is used to create a new user in the repository
  */
-abstract class UserCreateStruct extends ContentCreateStruct {
-
+abstract class UserCreateStruct extends ContentCreateStruct
+{
     /**
      * User login
      *
@@ -36,6 +35,4 @@ abstract class UserCreateStruct extends ContentCreateStruct {
      * @var boolean
      */
     public $enabled = true;
-
-
 }

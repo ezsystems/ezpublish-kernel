@@ -5,8 +5,6 @@ use ezp\PublicAPI\Values\ContentType\ContentType;
 use ezp\PublicAPI\Values\Content\Location;
 use ezp\PublicAPI\Values\ValueObject;
 
-
-
 /**
  *
  * This class provides all version independent information of the content object.
@@ -90,6 +88,4 @@ abstract class Content extends ValueObject
      * @var string
      */
     public $mainLanguageCode;
-
 }
-?>

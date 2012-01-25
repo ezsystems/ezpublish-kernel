@@ -23,14 +23,14 @@ echo  $location->contentInfo->name . '\n';
 // get the 10 first childs in the sort settings of the home location
 $childLocations = $locationService->loadLocationChildren( $location, 0, 10 );
 
-foreach( $childLocations as $child )
+foreach ( $childLocations as $child )
 {
-	// print a + if the child location has children
-    if($child->childCount > 0) 
+    // print a + if the child location has children
+    if ( $child->childCount > 0 )
         echo "+ ";
-    else 
+    else
         echo "  ";
-    echo  $child->contentInfo->name . '\n';       
+    echo  $child->contentInfo->name . '\n';
 }
 
 // browsing locations in a specific language
@@ -45,12 +45,12 @@ echo $publishedVersion->names[$otherLanguageCode];
 // get the 10 first childs in the sort settings of the home location
 $childLocations = $locationService->loadLocationChildren( $location, 0, 10 );
 
-foreach( $childLocations as $child )
+foreach ( $childLocations as $child )
 {
-	// print a + if the child location has children
-    if($child->childCount > 0) 
+    // print a + if the child location has children
+    if ( $child->childCount > 0 )
         echo "+ ";
-    else 
+    else
         echo "  ";
     $publishedChildVersion = $contentService->loadVersionInfo( $child->contentInfo );
     echo $publishedChildVersion->names[$otherLanguageCode];
@@ -62,6 +62,3 @@ $contentInfo = $contentService->loadContentInfo( $contentId );
 $locationCreate = $locationService->newLocationCreateStruct( $parentId );
 $locationCreate->priority = 3;
 $locationService->createLocation( $contentInfo, $locationCreate );
-
-
-

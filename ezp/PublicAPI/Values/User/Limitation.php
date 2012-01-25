@@ -5,8 +5,8 @@ use ezp\PublicAPI\Values\ValueObject;
 /**
  * This class represents a Limitation apllied to a policy
  */
-abstract class Limitation extends ValueObject {
-    
+abstract class Limitation extends ValueObject
+{
     // consts for BC
     const CONTENTTYPE = "Class";
     const LANGUAGE = "Language";
@@ -21,20 +21,18 @@ abstract class Limitation extends ValueObject {
     const SUBTREE = "Subtree";
     const USERGROUP = "Group";
     const PARENTUSERGROUP = "ParentGroup";
-    
+
     /**
-     * 
+     *
      * returns the limitation identifer (one of the defined constants) or a custom limitation
      * @return string
      */
     public abstract function getIdentifier();
-    
+
     /**
-     * 
+     *
      * An integer list of ids or identifiers for which the limitation shoul be applied
      * @var array of mixed
      */
     public $limitationValues;
-    
-    
 }

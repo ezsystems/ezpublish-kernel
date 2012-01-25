@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  *
  * @package ezp\PublicAPI\Values\Content\Query
  */

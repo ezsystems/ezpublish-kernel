@@ -95,9 +95,10 @@ $contentTypeCreate->addFieldDefinition( $fieldDefinitionCreate );
 
 // creates the content type in the given group and fields and publishes it
 $contentTypeDraft = $contentTypeService->createContentType(
-   $contentTypeCreate, array( $contentTypeGroup ));
+   $contentTypeCreate, array( $contentTypeGroup )
+);
 
-$contentTypeService->publishContentTypeDraft($contentTypeDraft);
+$contentTypeService->publishContentTypeDraft( $contentTypeDraft );
 
 // update a content tyoe
 
@@ -114,7 +115,7 @@ $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct( "e
 $fieldDefinitionCreate->setName( "englishNameOfMyNewField3", "eng-US" );
 $fieldDefinitionCreate->setDescription( "this is a description of my new field 3", "eng-US" );
 $fieldDefinitionCreate->setName( "deutscherNameMeinesNeuenFeldes3","ger-DE" );
-$fieldDefinitionCreate->setDescription("Das ist die Bescreibung meines dritten neuen Feldes","ger-DE");
+$fieldDefinitionCreate->setDescription( "Das ist die Bescreibung meines dritten neuen Feldes","ger-DE" );
 $fieldDefinitionCreate->isRequired = false;
 $fieldDefinitionCreate->isSearchable = false;
 $fieldDefinitionCreate->fieldGroup = "TestCategory";
@@ -140,6 +141,3 @@ $contentTypeService->updateFieldDefinition( $contentType, $fieldDefinition, $fie
 
 // now publish the made changes
 $contentTypeService->publishContentTypeDraft( $contentType );
-
-
-
