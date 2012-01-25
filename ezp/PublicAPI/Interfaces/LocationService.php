@@ -28,7 +28,7 @@ interface LocationService
      *
      * @return Location The newly created location of the copied subtree
      *
-     * @todo enhancment - this method should return a result structure containing the new location and a list
+     * @todo enhancement - this method should return a result structure containing the new location and a list
      *       of locations which are not copied due to permission denials.
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
@@ -172,7 +172,7 @@ interface LocationService
     public function moveSubtree( /*Location*/ $location, /*Location*/ $newParentLocation );
 
     /**
-     * Deletes the $locations and all descendants of $location.
+     * Deletes $location and all its descendants.
      * If $overridePermissions is set to false and a user has no permission to delete a descendant
      * it is not deleted and the location path to this item is left untouched i.e. only the
      * locations on which the user has permission to delete are deleted.

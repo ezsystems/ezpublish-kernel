@@ -57,7 +57,7 @@ interface Repository
      * Get service object to perform operations on Content objects and it's aggregate members.
      *
      *
-     * @return ContentService
+     * @return \ezp\PublicAPI\Interfaces\ContentService
      */
     public function getContentService();
 
@@ -66,7 +66,7 @@ interface Repository
      *
      * Get service object to perform operations on Content language objects
      *
-     * @return LanguageService
+     * @return \ezp\PublicAPI\Interfaces\LanguageService
      */
     public function getContentLanguageService();
 
@@ -76,7 +76,7 @@ interface Repository
      * Get service object to perform operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
-     * @return ContentTypeService
+     * @return \ezp\PublicAPI\Interfaces\ContentTypeService
      */
     public function getContentTypeService();
 
@@ -85,7 +85,7 @@ interface Repository
      *
      * Get service object to perform operations on Location objects and subtrees
      *
-     * @return LocationService
+     * @return \ezp\PublicAPI\Interfaces\LocationService
      */
     public function getLocationService();
 
@@ -95,7 +95,7 @@ interface Repository
      * Trash service allows to perform operations related to location trash
      * (trash/untrash, load/list from trash...)
      *
-     * @return TrashService
+     * @return \ezp\PublicAPI\Interfaces\TrashService
      */
     public function getTrashService();
 
@@ -104,7 +104,7 @@ interface Repository
      *
      * Get Section service that lets you manipulate section objects
      *
-     * @return SectionService
+     * @return \ezp\PublicAPI\Interfaces\SectionService
      */
     public function getSectionService();
 
@@ -114,7 +114,7 @@ interface Repository
      * Get service object to perform operations on User objects and it's aggregate members.
      * ( UserGroups, UserRole, UserRolePolicy & UserRolePolicyLimitation )
      *
-     * @return UserService
+     * @return \ezp\PublicAPI\Interfaces\UserService
      */
     public function getUserService();
 

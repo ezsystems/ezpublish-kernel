@@ -32,7 +32,7 @@ interface ContentService {
      *
      * @param int $contentId
      *
-     * @return Content
+     * @return \ezp\PublicAPI\Values\Content\Content
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to read the content
      * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given id does not exist
@@ -44,7 +44,7 @@ interface ContentService {
      *
      * @param string $remoteId
      *
-     * @return Content
+     * @return \ezp\PublicAPI\Values\Content\Content
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to create the content in the given location
      * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content with the given remote id does not exist
@@ -57,7 +57,7 @@ interface ContentService {
      * @param Content $content
      * @param int $versionNo the version number. If not given the current version is returned.
      *
-     * @return VersionInfo
+     * @return \ezp\PublicAPI\Values\Content\VersionInfo
      *
      * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the version with the given number does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
@@ -70,7 +70,7 @@ interface ContentService {
      * @param int $contentId
      * @param int $versionNo the version number. If not given the current version is returned.
      *
-     * @return VersionInfo
+     * @return \ezp\PublicAPI\Values\Content\VersionInfo
      *
      * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the version with the given number does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
@@ -84,7 +84,7 @@ interface ContentService {
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      *
-     * @return Version
+     * @return \ezp\PublicAPI\Values\Content\Version
      *
      * @throws ezp\PublicAPI\Interfaces\NotFoundException - if version with the given number does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
@@ -97,7 +97,7 @@ interface ContentService {
      * @param VersionInfo $versionInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
      *
-     * @return Version
+     * @return \ezp\PublicAPI\Values\Content\Version
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
      */
@@ -110,7 +110,7 @@ interface ContentService {
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      *
-     * @return Version
+     * @return \ezp\PublicAPI\Values\Content\Version
      *
      * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content or version with the given id does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
@@ -125,7 +125,7 @@ interface ContentService {
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      *
-     * @return Version
+     * @return \ezp\PublicAPI\Values\Content\Version
      *
      * @throws ezp\PublicAPI\Interfaces\NotFoundExceptoin - if the content or version with the given remote id does not exist
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load this version
@@ -144,7 +144,7 @@ interface ContentService {
      * @param ContentCreateStruct $contentCreateStruct
      * @param array $locationCreateStructs an array of {@link LocationCreateStruct} for each location parent under which a location should be created for the content
      *
-     * @return Version - the newly created content draft
+     * @return \ezp\PublicAPI\Values\Content\Version - the newly created content draft
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create the content in the given location
      * @throws ezp\PublicAPI\Interfaces\InvalidArgumentException if the input is not valid or
@@ -158,7 +158,7 @@ interface ContentService {
      * @param Content $content
      * @param ContentUpdateStruct $contentUpdateStruct
      *
-     * @return Content the content with the updated attributes
+     * @return \ezp\PublicAPI\Values\Content\Content the content with the updated attributes
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowd to update the content meta data
      * @throws ezp\PublicAPI\Interfaces\InvalidArgumentException if the input is not valid
@@ -182,7 +182,7 @@ interface ContentService {
      * @param Content $content
      * @param VersionInfo $versionInfo
      *
-     * @return VersionInfo - the newly created version
+     * @return \ezp\PublicAPI\Values\Content\VersionInfo - the newly created version
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create the draft
      * @throws ezp\PublicAPI\Interfaces\BadStateException if there is no published version or the version info points to a draft
@@ -193,7 +193,7 @@ interface ContentService {
      * Load drafts for the given user or if null for the authenticated user
      * @param User $user
      *
-     * @return array the drafts ({@link VersionInfo}) owned by the given user
+     * @return \ezp\PublicAPI\Values\Content\VersionInfo the drafts ({@link VersionInfo}) owned by the given user
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to load the draft list
      */
@@ -207,7 +207,7 @@ interface ContentService {
      *
      * @param Translation $translation
      *
-     * @return Version the version with the translated fields
+     * @return \ezp\PublicAPI\Values\Content\Version the version with the translated fields
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update this version
      * @throws ezp\PublicAPI\Interfaces\BadStateException if the given destiantioon version is not a draft
@@ -220,7 +220,7 @@ interface ContentService {
      * @param VersionInfo $versionInfo
      * @param VersionUpdateStruct $versionUpdateStruct
      *
-     * @return Version the version with the updated fields
+     * @return \ezp\PublicAPI\Values\Content\Version the version with the updated fields
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update this version
      * @throws ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft
@@ -252,7 +252,7 @@ interface ContentService {
      *
      * @param Content $content
      *
-     * @return array an array of {@link VersionInfo} sorted by creation date
+     * @return \ezp\PublicAPI\Values\Content\VersionInfo[] an array of {@link VersionInfo} sorted by creation date
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to list versions
      */
@@ -266,7 +266,7 @@ interface ContentService {
      * @param LocationCreateStruct $locationCreateStruct the target location where the content is copied to
      * @param VersionInfo $versionInfo
      *
-     * @return Version
+     * @return \ezp\PublicAPI\Values\Content\Version
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to copy the content to the given location
      */
@@ -281,7 +281,7 @@ interface ContentService {
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
-     * @return SearchResult
+     * @return \ezp\PublicAPI\Values\Content\SearchResult
      */
     public function findContent( /*Query*/ $query, array $fieldFilters,  $filterOnUserPermissions = true );
 
@@ -295,7 +295,7 @@ interface ContentService {
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to read the found content object
      * @TODO throw an exception if the found object count is > 1
      *
-     * @return SearchResult
+     * @return \ezp\PublicAPI\Values\Content\SearchResult
      */
     public function findSingle( /*Query*/ $query, array $fieldFilters, $filterOnUserPermissions = true );
 
@@ -304,7 +304,7 @@ interface ContentService {
      *
      * @param $versionInfo
      *
-     * @return array an array of {@link Relation}
+     * @return \ezp\PublicAPI\Values\Content\Relation[] an array of {@link Relation}
      */
     public function loadOutgoingRelations(/*VersionInfo*/ $versionInfo);
 
@@ -314,7 +314,7 @@ interface ContentService {
      *
      * @param Content $content
      *
-     * @return array an array of {@link Relation}
+     * @return \ezp\PublicAPI\Values\Content\Relation[] an array of {@link Relation}
      */
     public function loadIncomingRelations(/*Content*/ $content);
 
@@ -324,7 +324,7 @@ interface ContentService {
      * @param VersionInfo $versionInfo
      * @param Content $destination the destination of the relation
      *
-     * @return Relation the newly created relation
+     * @return \ezp\PublicAPI\Values\Content\Relation the newly created relation
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit this version
      * @throws ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft
@@ -361,7 +361,7 @@ interface ContentService {
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed read trnaslation infos
      *
-     * @return TranslationInfo
+     * @return \ezp\PublicAPI\Values\Content\TranslationInfo
      */
     public function loadTranslationInfos(/*Content*/ $content, array $filter = array() );
 
@@ -372,32 +372,32 @@ interface ContentService {
      * @param ContentType $contentType
      * @param string $mainLanguageCode
      *
-     * @return ContentCreateStruct
+     * @return \ezp\PublicAPI\Values\Content\ContentCreateStruct
      */
     public function newContentCreateStruct(/*ContentType*/ $contentType, $mainLanguageCode);
 
     /**
      * Instantiates a new version update class
      *
-     * @return VersionUpdateStruct
+     * @return \ezp\PublicAPI\Values\Content\VersionUpdateStruct
      */
     public function newVersionUpdateStruct();
 
     /**
      * Instantiates a new content update struct
-     * @return ContentUpdateStruct
+     * @return \ezp\PublicAPI\Values\Content\ContentUpdateStruct
      */
     public function newContentUpdateStruct();
 
     /**
      * Instantiates a new TranslationInfo object
-     * @return TranslationInfo
+     * @return \ezp\PublicAPI\Values\Content\TranslationInfo
      */
     public function newTranslationInfo();
 
     /**
      * Instantiates a Translation object
-     * @return Translation
+     * @return \ezp\PublicAPI\Values\Content\Translation
      */
     public function newTranslation($translationInfo);
 
