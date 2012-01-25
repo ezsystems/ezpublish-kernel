@@ -1,6 +1,7 @@
 <?php
 namespace ezp\PublicAPI\Values\Content;
 use ezp\PublicAPI\Values\ValueObject;
+use ezp\PublicAPI\Values\Content\Content;
 
 /**
  * Class representing a relation between content.
@@ -49,23 +50,23 @@ class Relation extends ValueObject
      * For relation not of type RelationType::COMMON this field denotes the field definition id
      * of the attribute where the realtion is anchored.
      *
-     * @var mixed
+     * @var string
      */
-    public $sourceFieldDefinitionId;
+    public $sourceFieldDefinitionIdentifier;
 
     /**
-     * the content id of the source of the relation
+     * the content of the source of the relation
      * 
-     * @var mixed
+     * @var Content
      */
-    public $sourceContentId;
+    public $sourceContent;
 
     /**
-     * Destination Content ID
+     * Destination Content
      *
-     * @var mixed
+     * @var Content
      */
-    public $destinationContentId;
+    public $destinationContent;
 
     /**
      * The realtion type bitmask

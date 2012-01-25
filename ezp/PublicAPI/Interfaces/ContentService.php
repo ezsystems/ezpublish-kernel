@@ -134,7 +134,7 @@ interface ContentService {
 
     /**
      * Creates a new content draft assigned to the authenticated user.
-     * If a different userId is given in the input it is assigned to the given user
+     * If a different userId is given in $contentCreateStruct it is assigned to the given user
      * but this required special rights for the authenticated user
      * (this is useful for content staging where the transfer process does not
      * have to authenticate with the user which created the content object in the source server).
@@ -323,14 +323,14 @@ interface ContentService {
      * Adds a relation of type common
      *
      * @param VersionInfo $versionInfo
-     * @param int $destinationId the destination of the relation
+     * @param Content $destination the destination of the relation
      *
      * @return Relation the newly created relation
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit this version
      * @throws ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft
      */
-    public function addRelation(/*VersionInfo*/ $versionInfo, $destinationId);
+    public function addRelation(/*VersionInfo*/ $versionInfo,/*Content*/ $destination);
 
     /**
      * Removes a relation of type COMMON from a draft.
