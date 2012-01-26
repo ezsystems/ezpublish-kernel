@@ -10,9 +10,9 @@
     <testsuite name="ezp\Base">
       <directory>ezp/Base/Tests</directory>
     </testsuite>
-    <!-- testsuite name="ezp\Publish\PublicAPI\Tests\Suite">
+    <testsuite name="ezp\Publish\PublicAPI">
       <directory>ezp/Publish/PublicAPI/Tests</directory>
-    </testsuite -->
+    </testsuite>
   </testsuites>
   <filter>
     <whitelist>
