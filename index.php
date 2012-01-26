@@ -43,7 +43,9 @@ $serviceContainer = require 'bootstrap.php';
 ignore_user_abort( true );
 
 // Ask for result, this will execute controller based on request object setup in bootstrap.php
-echo $serviceContainer->get( 'repository' )->getUser();
+$sectionService = $serviceContainer->getRepository()->getSectionService();
+$section = $sectionService->loadSection( 1 )
+echo $section->name;
 
 
 
