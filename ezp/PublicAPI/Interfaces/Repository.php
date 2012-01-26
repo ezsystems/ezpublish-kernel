@@ -28,7 +28,7 @@ interface Repository
      * sets the current user to the user with the given user id
      * @param User $user
      */
-    public function setCurrentUser( /*User*/ $user );
+    public function setCurrentUser( User $user );
 
     /**
      *
@@ -41,15 +41,15 @@ interface Repository
     public function hasAccess( $module, $function, User $user = null );
 
     /**
+     * Indicates if the current user is allowed to perform an action given by the function on the given
+     * objects
      *
-     * indicates if the current user is allowed to perform an action given by the function on the given
-     * objects,
      * @param string $module
      * @param string $function
      * @param ValueObject $value
      * @param ValueObject $target
      */
-    public function canUser( $module,$function,ValueObject $value, ValueObject $target );
+    public function canUser( $module, $function, ValueObject $value, ValueObject $target );
 
     /**
      * Get Content Service
