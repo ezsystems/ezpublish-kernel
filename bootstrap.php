@@ -24,8 +24,8 @@ require __DIR__ . '/ezp/Base/ClassLoader.php';
 $loader = new ClassLoader( $settings['base']['ClassLoader']['Repositories'], ClassLoader::MODE_PSR_0_STRICT );
 spl_autoload_register( array( $loader, 'load' ) );
 
-// Zeta
-require 'ezc/Base/base.php';
+// Zeta Components
+require $settings['base']['ClassLoader']['ezcBase'];
 spl_autoload_register( array( 'ezcBase', 'autoload' ) );
 
 

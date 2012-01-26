@@ -23,7 +23,9 @@ return array(
             // Hash with class name prefix and folder name, needed for ClassLoader and Configuration system
             // as well as router (key)
             'Repositories' => array( 'ezp' => __DIR__ . '/ezp',
-                                     'Vendor\SomeApp' => __DIR__ . '/Vendor/SomeApp' ),
+                                     /*'Vendor\SomeApp' => __DIR__ . '/Vendor/SomeApp'*/ ),
+            // The location of eZ / Zeta Components ezcBase needed for auto loading ezc stuff
+            'ezcBase' => 'ezc/Base/base.php',
         ),
         'Configuration' => array(
             // Default value for Configuration cache $useCache param
