@@ -6,7 +6,7 @@ namespace ezp\PublicAPI\Interfaces;
 
 use ezp\PublicAPI\Values\Content\Location;
 use ezp\PublicAPI\Values\Content\SearchResult;
-use ezp\PubklicAPI\Values\Content\TrashItem;
+use ezp\PublicAPI\Values\Content\TrashItem;
 
 /**
  * Location service, used for complex subtree operations
