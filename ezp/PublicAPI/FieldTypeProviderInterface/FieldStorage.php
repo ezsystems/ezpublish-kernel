@@ -83,14 +83,14 @@ interface FieldStorage
     /**
      * @param array $fieldId Array of field Ids
      * @param array $context
-     * @return bool
+     * @return boolean
      */
     public function deleteFieldData( array $fieldId, array $context );
 
     /**
      * Checks if field type has external data to deal with
      *
-     * @return bool
+     * @return boolean
      */
     public function hasFieldData();
 

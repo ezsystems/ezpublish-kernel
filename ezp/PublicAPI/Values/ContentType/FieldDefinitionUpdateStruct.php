@@ -97,7 +97,7 @@ abstract class FieldDefinitionUpdateStruct extends ValueObject
     /**
      * If set the the searchable flag is set to this value.
      *
-     * @var bool
+     * @var boolean
      */
     public $isSearchable;
 }

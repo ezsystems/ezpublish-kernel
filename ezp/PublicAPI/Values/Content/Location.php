@@ -48,7 +48,7 @@ abstract class Location extends ValueObject
     /**
      * Indicates that the Location entity has been explicitly marked as hidden.
      *
-     * @var bool
+     * @var boolean
      */
     public $hidden;
 
@@ -56,7 +56,7 @@ abstract class Location extends ValueObject
      * Indicates that the Location is implicitly marked as hidden by a parent
      * location.
      *
-     * @var bool
+     * @var boolean
      */
     public $invisible;
 

@@ -43,7 +43,7 @@ abstract class ContentTypeUpdateStruct extends ValueObject
     /**
      * If set the container fllag is set to this value
      *
-     * @var bool
+     * @var boolean
      */
     public $isContainer;
 
@@ -71,7 +71,7 @@ abstract class ContentTypeUpdateStruct extends ValueObject
     /**
      * If set the default always available flag is set to this value
      *
-     * @var bool
+     * @var boolean
      */
     public $defaultAlwaysAvailable;
 

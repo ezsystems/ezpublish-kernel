@@ -35,7 +35,7 @@ abstract class ContentCreateStruct extends ValueObject
     /**
      * Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
      *
-     * @var bool
+     * @var boolean
      */
     public $alwaysAvailable = true;
 

@@ -102,7 +102,7 @@ abstract class FieldDefinitionCreateStruct extends ValueObject
     /**
      * Indicates if th the content is searchable by this attribute
      *
-     * @var bool
+     * @var boolean
      */
     public $isSearchable;
 }

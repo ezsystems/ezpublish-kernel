@@ -29,7 +29,7 @@ class UserUpdateStruct extends ValueObject
      * Flag to signal if user is enabled or not
      * If set the enabled status is changed to this value
      *
-     * @var bool
+     * @var boolean
      */
     public $isEnabled = null;
 

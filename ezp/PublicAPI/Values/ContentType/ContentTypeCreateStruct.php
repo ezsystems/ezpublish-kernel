@@ -56,7 +56,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
     /**
      * Determines if the type is a container
      *
-     * @var bool
+     * @var boolean
      */
     public $isContainer = false;
 
@@ -82,7 +82,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
      * if an instance of acontent type is created the always available flag is set
      * by default this this value.
      *
-     * @var bool
+     * @var boolean
      */
     public $defaultAlwaysAvailable = true;
 

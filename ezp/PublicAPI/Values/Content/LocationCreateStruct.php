@@ -22,7 +22,7 @@ abstract class LocationCreateStruct extends ValueObject
     /**
      * Indicates that the Location entity has been explicitly marked as hidden.
      *
-     * @var bool
+     * @var boolean
      */
     public $hidden = false;
 
