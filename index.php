@@ -44,7 +44,7 @@ ignore_user_abort( true );
 
 // Ask for result, this will execute controller based on request object setup in bootstrap.php
 $sectionService = $serviceContainer->getRepository()->getSectionService();
-$section = $sectionService->loadSection( 1 )
+$section = $sectionService->loadSection( 1 );
 echo $section->name;
 
 
