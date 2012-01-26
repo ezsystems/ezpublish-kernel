@@ -263,14 +263,14 @@ interface ContentService {
      * all versions are copied, otherwise only the given version.
      *
      * @param Content $content
-     * @param LocationCreateStruct $locationCreateStruct the target location where the content is copied to
+     * @param LocationCreateStruct $destinationLocationCreateStruct the target location where the content is copied to
      * @param VersionInfo $versionInfo
      *
      * @return Version
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to copy the content to the given location
      */
-    public function copyContent(/*Content*/ $content,/*LocationCreateStruct*/ $locationCreateStruct,/*VersionInfo*/ $versionInfo = null);
+    public function copyContent(/*Content*/ $content,/*LocationCreateStruct*/ $destinationLocationCreateStruct,/*VersionInfo*/ $versionInfo = null);
 
     /**
      * finds content objects for the given query.
@@ -319,7 +319,8 @@ interface ContentService {
     public function loadIncomingRelations(/*Content*/ $content);
 
     /**
-     * Adds a relation of type common
+     * Adds a relation of type common. The source of the relation is the content and version
+     * referenced by $versionInfo.
      *
      * @param VersionInfo $versionInfo
      * @param Content $destination the destination of the relation
@@ -335,12 +336,13 @@ interface ContentService {
      * Removes a relation of type COMMON from a draft.
      *
      * @param VersionInfo $versionInfo
-     * @param int $destinationId
+     * @param Content $destination
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed edit this version
      * @throws ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException if there is no relation of type COMMON for the given destination
      */
-    public function deleteRelation(/*VersionInfo*/ $versionInfo, $destinationId);
+    public function deleteRelation(/*VersionInfo*/ $versionInfo, /*Content*/ $destinationId);
 
     /**
      * 5.x add translation information to the content object

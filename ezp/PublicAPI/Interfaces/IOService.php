@@ -16,9 +16,9 @@ interface IOService {
      *
      * @param array $uploadedFile The $_POST hash of an uploaded file
      * 
-     * @return ezp\PublicAPI\Values\IO\BinaryFileCreateStruct
+     * @return \ezp\PublicAPI\Values\IO\BinaryFileCreateStruct
      * 
-     * @throws ezp\PublicAPI\Interfaces\InvalidArgumentException When given an invalid uploaded file
+     * @throws \ezp\PublicAPI\Interfaces\InvalidArgumentException When given an invalid uploaded file
      */
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile);
     
@@ -27,7 +27,7 @@ interface IOService {
      *
      * @param string $localFile Path to local file
      * 
-     * @return ezp\PublicAPI\Values\IO\BinaryFileCreateStruct
+     * @return \ezp\PublicAPI\Values\IO\BinaryFileCreateStruct
      * 
      * @throws InvalidArgumentException When given a non existing / unreadable file
      */
@@ -36,11 +36,11 @@ interface IOService {
      /**
      * Creates a  binary file in the the repository
      *
-     * @param ezp\PublicAPI\Values\IO\BinaryFileCreateStruct $binaryFile
+     * @param \ezp\PublicAPI\Values\IO\BinaryFileCreateStruct $binaryFileCreateStruct
      * 
-     * @return ezp\PublicAPI\Values\IO\BinaryFile The created BinaryFile object
+     * @return \ezp\PublicAPI\Values\IO\BinaryFile The created BinaryFile object
      */
-    public function createBinaryFile( BinaryFileCreateStruct $binaryFile );
+    public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct );
         
      /**
      * Deletes the BinaryFile with $path
@@ -52,13 +52,13 @@ interface IOService {
      /**
      * Loads the binary file with $id
      *
-     * @param string $id
+     * @param string $binaryFileid
      * 
-     * @return ezp\PublicAPI\Values\IO\BinaryFile
+     * @return \ezp\PublicAPI\Values\IO\BinaryFile
      * 
-     * @throws ezp\PublicAPI\Interfaces\NotFoundExcption
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundExcption
      */
-    public function loadBinaryFile( $id );
+    public function loadBinaryFile( $binaryFileid );
     
  
      /**
