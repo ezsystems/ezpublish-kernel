@@ -4,7 +4,9 @@
 #How to get started
 * Clone this repo
 * Clone ezp-next next to it
-* Symlink ezp/Persistance and ezp/Io into the ezp/ folder of this project (and remember to not add these folders using git to this repo.. tip: always use "git add -u" if you need to add to staging index)
+* clone research next to it
+* Symlink ezp-next: ezp/Persistance and ezp/Io into the ezp/ folder of this project
+* Symlink reasearch: publicapi/ezp/PublicAPI into ezp/ folder of this project
 * Somehow (temporary) symlink or copy the "PublicAPI" interface folder to ezp\ folder	
 * Copy config.php-DEVELOPMENT to config.php
 * Execute index.php (httpd or cli) verify that it at least manages to get to *echo $serviceContainer->get( 'repository' )->...* line (currently line 46) in index.php
@@ -27,6 +29,6 @@ ezp\Io\Storage\InMemory ("In-Memory" Storage Engine(for unit tests):)
 
 #Things that are temporary
 * This repository
-* The need for symlinks to ezp-next (eventualy they should be merged)
+* The need for symlinks to ezp-next and research (eventualy they should be merged)
 * (Might be that the layout of the files will change later)
 

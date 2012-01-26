@@ -1,2 +1,4 @@
 ezp/Io
 ezp/Persistence
+ezp/PublicAPI
+config.php
