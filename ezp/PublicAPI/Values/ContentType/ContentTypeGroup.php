@@ -62,7 +62,6 @@ class ContentTypeGroup extends ValueObject
      */
     public $modifierId;
 
-
     /**
      * 5.x only
      * This method returns the human readable name in all provided languages
@@ -83,7 +82,7 @@ class ContentTypeGroup extends ValueObject
      * @param string $languageCode
      * @return string the name for the given language or null if none existis.
      */
-    public abstract function getName($languageCode);
+    public abstract function getName( $languageCode );
 
     /**
      *  5.x only
@@ -103,9 +102,5 @@ class ContentTypeGroup extends ValueObject
      * @param string $languageCode
      * @return string the description for the given language or null if none existis.
      */
-    public abstract function getDescription($languageCode);
-
-
-
+    public abstract function getDescription( $languageCode );
 }
-?>

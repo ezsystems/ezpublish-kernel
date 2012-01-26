@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ *
  * @package ezp\PublicAPI\Values\Content\Query
  */
 namespace ezp\PublicAPI\Values\Content\Query\Criterion;
@@ -22,4 +22,3 @@ abstract class Operator
     const BETWEEN = "between";
     const LIKE = "like";
 }
-?>

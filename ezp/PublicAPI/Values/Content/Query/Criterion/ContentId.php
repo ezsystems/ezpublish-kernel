@@ -40,4 +40,3 @@ class ContentId extends Criterion implements CriterionInterface
         return new self( $value );
     }
 }
-?>

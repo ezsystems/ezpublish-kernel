@@ -4,6 +4,7 @@ use ezp\PublicAPI\Values\ValueObject;
 
 /**
  * This class is used for updating a content type
+ *
  * @property-write $names $names[$language] calls setName($language)
  * @property-write $name calls setName() for setting a namein the initial language
  * @property-write $descriptions $descriptions[$language] calls setDescription($language)
@@ -11,9 +12,8 @@ use ezp\PublicAPI\Values\ValueObject;
  */
 abstract class ContentTypeUpdateStruct extends ValueObject
 {
-
     /**
-     *if set the identifier of a type is changed to this value
+     * If set the identifier of a type is changed to this value
      *
      * @var string
      */
@@ -43,7 +43,7 @@ abstract class ContentTypeUpdateStruct extends ValueObject
     /**
      * If set the container fllag is set to this value
      *
-     * @var bool
+     * @var boolean
      */
     public $isContainer;
 
@@ -55,56 +55,53 @@ abstract class ContentTypeUpdateStruct extends ValueObject
     public $initialLanguageId;
 
     /**
-     *
      * If set the default sort field is changed to this value
+     *
      * @var mixed
      */
     public $defaultSortField;
 
     /**
      * If set the default sort order is set to this value
-     * 
+     *
      * @var mixed
      */
     public $defaultSortOrder;
 
     /**
-     * if set the default always available flag is set to this value
+     * If set the default always available flag is set to this value
      *
-     * @var bool
+     * @var boolean
      */
     public $defaultAlwaysAvailable;
 
     /**
-     * set a content type name for the given language
-     * 
-     * @param string $name
-     * @param string $language if not given the initialLanguage is used as default
-     */
-    public abstract function setName($name, $language = null);
-
-    /**
-     * set a content type description for the given language
-     * 
-     * @param string $description
-     * @param string $language if not given the initialLanguage is used as default
-     */
-    public abstract function setDescription($description, $language = null);
-
-     
-    /**
-    * if set this value overrides the current user as creator
-     * 
+     * If set this value overrides the current user as creator
+     *
      * @var int
      */
     public $modifierId = null;
 
     /**
      * If set this value overrides the current time for creation
-     * 
+     *
      * @var int (unix timestamp)
      */
     public $modified = null;
 
+    /**
+     * set a content type name for the given language
+     *
+     * @param string $name
+     * @param string $language if not given the initialLanguage is used as default
+     */
+    public abstract function setName( $name, $language = null );
+
+    /**
+     * set a content type description for the given language
+     *
+     * @param string $description
+     * @param string $language if not given the initialLanguage is used as default
+     */
+    public abstract function setDescription( $description, $language = null );
 }
-?>

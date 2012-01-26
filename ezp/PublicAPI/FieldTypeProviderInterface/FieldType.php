@@ -12,8 +12,8 @@ use ezp\PublicAPI\FieldTypeProviderInterface\Value;
  *
  * @package FieldTypeProviderInterface
  */
-interface FieldType {
-
+interface FieldType
+{
     /**
      *
      * @return the field type identifier for this field type
@@ -28,7 +28,7 @@ interface FieldType {
      * @param $fieldDef - the field definition of the field
      * @param $field - the field for which an action is performed
      */
-    public function handleEvent($event, /*Repository*/ $repository, FieldDefinition $fieldDef, Field  $field);
+    public function handleEvent( $event, /*Repository*/ $repository, FieldDefinition $fieldDef, Field  $field );
 
     /**
      * returns a map of allowed setting including a default value used when not given in the field definition
@@ -57,7 +57,7 @@ interface FieldType {
      * @param $fieldDef
      * @param $field
      */
-    public function validate(FieldDefinition $fieldDef, Field $field);
+    public function validate( FieldDefinition $fieldDef, Field $field );
 
     /**
      *
@@ -67,42 +67,41 @@ interface FieldType {
      * @throws InvalidArgumentType if the parameter is not of the supported value sub type
      * @throws InvalidArgumentValue if the value does not match the expected structure
      */
-    public function acceptValue($value);
+    public function acceptValue( $value );
 
     /**
     * Converts an hash to the Value defined by the field type
-    * 
+    *
      * @param array $hash
-     * 
+     *
      * @return Value
      */
-    public function fromHash(array $hash);
+    public function fromHash( array $hash );
 
     /**
      * Converts a Value to a hash
-     * 
+     *
      * @param Value $value
-     * 
+     *
      * @return array
      */
-    public function toHash(Value $value);
-    
+    public function toHash( Value $value );
+
     /**
      * converts a Value to a persistence value
-     * 
+     *
      * @param Value $value
-     * 
+     *
      * @return FieldValue
      */
-    public function toPersistenceValue(Value $value);
-    
+    public function toPersistenceValue( Value $value );
+
     /**
      * converts a persistence field value to a Value
-     * 
+     *
      * @param FieldValue $fieldValue
-     * 
+     *
      * @return Value
      */
-    public function fromPersistenceValue(FieldValue $fieldValue);
-    
+    public function fromPersistenceValue( FieldValue $fieldValue );
 }

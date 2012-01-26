@@ -9,8 +9,8 @@ use ezp\PublicAPI\Values\ValueObject;
 /**
  * This class represents a user group
  */
-abstract class UserGroup extends Version {
-
+abstract class UserGroup extends Version
+{
     /**
      * The id of the user group
      *
@@ -31,7 +31,4 @@ abstract class UserGroup extends Version {
      * @var integer
      */
     public $subGroupCount;
-
-
-
 }

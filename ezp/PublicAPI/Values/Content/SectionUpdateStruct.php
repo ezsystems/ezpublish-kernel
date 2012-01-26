@@ -8,7 +8,6 @@ use ezp\PublicAPI\Values\ValueObject;
  */
 class SectionUpdateStruct extends ValueObject
 {
-
     /**
      * If set the Unique identifier of the section is changes
      *
@@ -23,5 +22,3 @@ class SectionUpdateStruct extends ValueObject
      */
     public $name;
 }
-?>
-

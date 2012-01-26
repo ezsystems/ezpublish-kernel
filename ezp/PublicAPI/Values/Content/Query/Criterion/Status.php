@@ -13,6 +13,21 @@ use ezp\PublicAPI\Values\Content\Query\Criterion,
 class Status extends Criterion implements CriterionInterface
 {
     /**
+     * Status constant: draft
+     */
+    const STATUS_DRAFT = "draft";
+
+    /**
+     * Status constant: published
+     */
+    const STATUS_PUBLISHED = "published";
+
+    /**
+     * Status constant: archived
+     */
+    const STATUS_ARCHIVED = "archived";
+
+    /**
      * Creates a new Status criterion
      *
      * @param string|string[] $value Status: self::STATUS_ARCHIVED, self::STATUS_DRAFT, self::STATUS_PUBLISHED
@@ -57,20 +72,4 @@ class Status extends Criterion implements CriterionInterface
     {
         return new self( $value );
     }
-
-    /**
-     * Status constant: draft
-     */
-    const STATUS_DRAFT = "draft";
-
-    /**
-     * Status constant: published
-     */
-    const STATUS_PUBLISHED = "published";
-
-    /**
-     * Status constant: archived
-     */
-    const STATUS_ARCHIVED = "archived";
 }
-?>

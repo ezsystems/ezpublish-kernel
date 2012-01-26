@@ -11,6 +11,12 @@ use ezp\PublicAPI\Values\Content\Query\Criterion;
 abstract class LogicalOperator extends Criterion
 {
     /**
+     * The set of criteria combined by the logical operator
+     * @var array(Criterion)
+     */
+    public $criteria = array();
+
+    /**
      * Creates a Logic operation with the given criteria
      *
      * @param array(Criterion) $criteria
@@ -26,11 +32,4 @@ abstract class LogicalOperator extends Criterion
             $this->criteria[] = $criterion;
         }
     }
-
-    /**
-     * The set of criteria combined by the logical operator
-     * @var array(Criterion)
-     */
-    public $criteria = array();
 }
-?>

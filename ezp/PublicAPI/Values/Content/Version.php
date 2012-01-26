@@ -37,8 +37,7 @@ abstract class Version extends ValueObject
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
      */
-    public abstract function getFieldValue($fieldDefId,$languageCode = null);
-
+    public abstract function getFieldValue( $fieldDefId,$languageCode = null );
 
     /**
      * returns the outgoing relations
@@ -60,6 +59,5 @@ abstract class Version extends ValueObject
      * @param string $languageCode
      * @return array an array of {@link Field}
      */
-    public abstract function getFieldsByLanguage($languageCode);
+    public abstract function getFieldsByLanguage( $languageCode );
 }
-?>

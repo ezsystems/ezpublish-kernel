@@ -18,4 +18,3 @@ class LogicalOr extends LogicalOperator
         parent::__construct( $criteria );
     }
 }
-?>

@@ -44,7 +44,7 @@ class FieldDefinition extends ValueObject
      * @param string $languageCode
      * @return string the name for the given language or null if none existis.
      */
-    public abstract function getName($languageCode);
+    public abstract function getName( $languageCode );
 
     /**
      *  This method returns the human readable description of the field
@@ -63,8 +63,7 @@ class FieldDefinition extends ValueObject
      * @param string $languageCode
      * @return string the description for the given language or null if none existis.
      */
-    public abstract function getDescription($languageCode);
-
+    public abstract function getDescription( $languageCode );
 
     /**
      * Field group name
@@ -130,8 +129,7 @@ class FieldDefinition extends ValueObject
     /**
      * Indicates if th the content is searchable by this attribute
      *
-     * @var bool
+     * @var boolean
      */
     public $isSearchable;
 }
-?>

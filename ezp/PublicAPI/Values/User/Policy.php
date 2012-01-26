@@ -47,4 +47,3 @@ abstract class Policy extends ValueObject
      */
     public abstract function getLimitations();
 }
-?>

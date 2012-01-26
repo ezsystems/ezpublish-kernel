@@ -28,7 +28,7 @@ interface Repository
      * sets the current user to the user with the given user id
      * @param User $user
      */
-    public function setCurrentUser( /*User*/ $user );
+    public function setCurrentUser( User $user );
 
     /**
      *
@@ -38,18 +38,18 @@ interface Repository
      * @param User $user
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
-    public function hasAccess($module, $function, User $user = null);
+    public function hasAccess( $module, $function, User $user = null );
 
     /**
+     * Indicates if the current user is allowed to perform an action given by the function on the given
+     * objects
      *
-     * indicates if the current user is allowed to perform an action given by the function on the given
-     * objects,
      * @param string $module
      * @param string $function
      * @param ValueObject $value
      * @param ValueObject $target
      */
-    public function canUser($module,$function,ValueObject $value, ValueObject $target);
+    public function canUser( $module, $function, ValueObject $value, ValueObject $target );
 
     /**
      * Get Content Service
@@ -57,7 +57,7 @@ interface Repository
      * Get service object to perform operations on Content objects and it's aggregate members.
      *
      *
-     * @return ContentService
+     * @return \ezp\PublicAPI\Interfaces\ContentService
      */
     public function getContentService();
 
@@ -66,7 +66,7 @@ interface Repository
      *
      * Get service object to perform operations on Content language objects
      *
-     * @return LanguageService
+     * @return \ezp\PublicAPI\Interfaces\LanguageService
      */
     public function getContentLanguageService();
 
@@ -76,7 +76,7 @@ interface Repository
      * Get service object to perform operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
-     * @return ContentTypeService
+     * @return \ezp\PublicAPI\Interfaces\ContentTypeService
      */
     public function getContentTypeService();
 
@@ -85,7 +85,7 @@ interface Repository
      *
      * Get service object to perform operations on Location objects and subtrees
      *
-     * @return LocationService
+     * @return \ezp\PublicAPI\Interfaces\LocationService
      */
     public function getLocationService();
 
@@ -95,7 +95,7 @@ interface Repository
      * Trash service allows to perform operations related to location trash
      * (trash/untrash, load/list from trash...)
      *
-     * @return TrashService
+     * @return \ezp\PublicAPI\Interfaces\TrashService
      */
     public function getTrashService();
 
@@ -104,7 +104,7 @@ interface Repository
      *
      * Get Section service that lets you manipulate section objects
      *
-     * @return SectionService
+     * @return \ezp\PublicAPI\Interfaces\SectionService
      */
     public function getSectionService();
 
@@ -113,7 +113,7 @@ interface Repository
      *
      * Get service object to perform operations on Users and UserGroup
      *
-     * @return UserService
+     * @return \ezp\PublicAPI\Interfaces\UserService
      */
     public function getUserService();
 

@@ -6,7 +6,7 @@ use ezp\PublicAPI\Values\Content\Content;
 
 /**
  * This class represents a location in the repository
- * 
+ *
  * @property-read Content $content calls getContent()
  * @property-read int $contentId calls getContent()->contentId
  */
@@ -48,7 +48,7 @@ abstract class Location extends ValueObject
     /**
      * Indicates that the Location entity has been explicitly marked as hidden.
      *
-     * @var bool
+     * @var boolean
      */
     public $hidden;
 
@@ -56,7 +56,7 @@ abstract class Location extends ValueObject
      * Indicates that the Location is implicitly marked as hidden by a parent
      * location.
      *
-     * @var bool
+     * @var boolean
      */
     public $invisible;
 
@@ -139,4 +139,3 @@ abstract class Location extends ValueObject
      */
     public $childCount;
 }
-?>

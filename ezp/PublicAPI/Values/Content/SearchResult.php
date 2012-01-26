@@ -1,7 +1,6 @@
 <?php
 namespace ezp\PublicAPI\Values\Content;
 
-
 use ezp\PublicAPI\Value\ValueObject;
 
 /**
@@ -12,7 +11,7 @@ class SearchResult extends ValueObject
 {
     /**
      * the query this result is based on
-     * 
+     *
      * @var Query
      */
     public $query;

@@ -9,7 +9,8 @@ class SectionLimitation extends RoleLimitation
      * (non-PHPdoc)
      * @see User/ezp\PubklicAPI\Values\User.Limitation::getIdentifier()
      */
-    public function getIdentifier() {
+    public function getIdentifier()
+    {
         return Limitation::SECTION;
     }
 }

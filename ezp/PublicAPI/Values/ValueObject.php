@@ -10,7 +10,7 @@ use ezp\Base\Exception\PropertyNotFound,
  * The base class for all value objects and structs
  *
  * Supports readonly properties by marking them as protected.
- * In this case they will only be writable using constructor, and needs to be documented
+ * In this case they will only be writable using constructor, and need to be documented
  * using @property-read <type> <$var> in class doc in addition to inline property doc.
  * Writable properties must be public and must be documented inline.
  *
@@ -19,9 +19,10 @@ use ezp\Base\Exception\PropertyNotFound,
 abstract class ValueObject
 {
     /**
-     * Construct object optionally with set of properties
+     * Construct object optionally with a set of properties
      *
-     * Readonly properties must be set using $properties as they are not writable anymore after object has been created.
+     * Readonly properties values must be set using $properties as they are not writable anymore
+     * after object has been created.
      *
      * @param array $properties
      */
@@ -78,4 +79,3 @@ abstract class ValueObject
     }
 
 }
-?>

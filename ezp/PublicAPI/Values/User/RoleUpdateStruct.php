@@ -8,7 +8,6 @@ use ezp\PublicAPI\Values\ValueObject;
  */
 class RoleUpdateStruct extends ValueObject
 {
-
     /**
      * Name of the role
      *
@@ -22,8 +21,4 @@ class RoleUpdateStruct extends ValueObject
      * @var string
      */
     public $description;
-
 }
-?>
-
-

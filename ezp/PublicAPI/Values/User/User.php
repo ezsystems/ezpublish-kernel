@@ -50,7 +50,7 @@ abstract class User extends Version
      *
      * User can not login if false
      *
-     * @var bool
+     * @var boolean
      */
     public $isEnabled = false;
 
@@ -63,7 +63,4 @@ abstract class User extends Version
      * @var int
      */
     public $maxLogin = 0;
-
 }
-?>
-

@@ -9,8 +9,8 @@ use ezp\PublicAPI\Values\ValueObject;
  * This class is used to update a user in the repository
  *
  */
-class UserUpdateStruct extends ValueObject {
-
+class UserUpdateStruct extends ValueObject
+{
     /**
      * if set the email address is updated with this value
      *
@@ -29,7 +29,7 @@ class UserUpdateStruct extends ValueObject {
      * Flag to signal if user is enabled or not
      * If set the enabled status is changed to this value
      *
-     * @var bool
+     * @var boolean
      */
     public $isEnabled = null;
 
@@ -52,6 +52,4 @@ class UserUpdateStruct extends ValueObject {
      * @var ContentUpdateStruct
      */
     public $contentUpdateStruct = null;
-
-
 }

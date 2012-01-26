@@ -49,4 +49,3 @@ class ParentLocationId extends Criterion implements CriterionInterface
         return new self( $value );
     }
 }
-?>

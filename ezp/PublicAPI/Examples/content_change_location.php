@@ -21,10 +21,11 @@ $location = $locationService->loadMainLocation( $content );
 $targetLocation = $locationService->loadLocation( $targetParentFolderId );
 
 // move $content's $location to $targetLocation
-try {
+try
+{
     $targetLocationService = $locationService->moveSubtree( $location, $targetLocation );
-} catch( Exception $e ) {
+}
+catch ( Exception $e )
+{
     // error handling
 }
-
-?>

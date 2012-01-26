@@ -9,8 +9,8 @@ use ezp\PublicAPI\Values\User\Role;
 /**
  * This value object represents an assignment to a role inlcuding a limitation
  */
-abstract class RoleAssignment extends ValueObject {
-
+abstract class RoleAssignment extends ValueObject
+{
     /**
      * returns the limitation of the role assignment
      * @return RoleLimitation
@@ -22,7 +22,4 @@ abstract class RoleAssignment extends ValueObject {
      * @return Role
      */
     abstract function getRole();
-
 }
-
-
