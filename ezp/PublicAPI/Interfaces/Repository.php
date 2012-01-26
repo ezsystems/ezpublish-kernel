@@ -21,7 +21,7 @@ interface Repository
      *
      * @return User
      */
-    public function getUser();
+    public function getCurrentUser();
 
     /**
      *
@@ -111,14 +111,19 @@ interface Repository
     /**
      * Get User Service
      *
-     * Get service object to perform operations on User objects and it's aggregate members.
-     * ( UserGroups, UserRole, UserRolePolicy & UserRolePolicyLimitation )
+     * Get service object to perform operations on Users and UserGroup
      *
      * @return UserService
      */
     public function getUserService();
 
-
+    /**
+     * Get RoleService
+     * 
+     * @return RoleService
+     */
+    public function getRoleService();
+    
     /**
      * Begin transaction
      *
