@@ -4,6 +4,8 @@
  */
 namespace ezp\PublicAPI\Interfaces;
 
+use ezp\PublicAPI\Values\Content\SectionCreateStruct;
+
 use ezp\PublicAPI\Values\Content\Content;
 use ezp\PublicAPI\Values\Content\Section;
 use ezp\PublicAPI\Values\Content\Location;
@@ -20,15 +22,14 @@ interface SectionService
     /**
      * Creates the a new Section in the content repository
      *
-     * @param string $identifier
-     * @param string $name
+     * @param SectionCreateStruct $sectionCreateStruct
      *
      * @return Section The newly create section
      * 
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier already exists
+     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
      */
-    public function createSection( $identifier, $name );
+    public function createSection(SectionCreateStruct $sectionCreateStruct );
 
     /**
      * Updates the given in the content repository
