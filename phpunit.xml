@@ -1,0 +1,26 @@
+<phpunit
+  backupGlobals="false"
+  backupStaticAttributes="false"
+  bootstrap="bootstrap.php"
+  convertErrorsToExceptions="true"
+  convertNoticesToExceptions="true"
+  convertWarningsToExceptions="true"
+  >
+  <testsuites>
+    <!-- testsuite name="ezp\Base">
+      <directory>ezp/Base/Tests</directory>
+    </testsuite -->
+    <testsuite name="ezp\Publish\PublicAPI\Tests\Suite">
+      <directory>ezp/Publish/PublicAPI/Tests</directory>
+    </testsuite>
+  </testsuites>
+  <filter>
+    <whitelist>
+      <directory suffix=".php">ezp</directory>
+      <exclude>
+        <!-- directory suffix=".php">ezp/Base/Tests</directory -->
+        <directory suffix=".php">doc</directory>
+      </exclude>
+    </whitelist>
+  </filter>
+</phpunit>
