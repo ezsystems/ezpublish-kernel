@@ -7,12 +7,12 @@
   convertWarningsToExceptions="true"
   >
   <testsuites>
-    <!-- testsuite name="ezp\Base">
+    <testsuite name="ezp\Base">
       <directory>ezp/Base/Tests</directory>
-    </testsuite -->
-    <testsuite name="ezp\Publish\PublicAPI\Tests\Suite">
-      <directory>ezp/Publish/PublicAPI/Tests</directory>
     </testsuite>
+    <!-- testsuite name="ezp\Publish\PublicAPI\Tests\Suite">
+      <directory>ezp/Publish/PublicAPI/Tests</directory>
+    </testsuite -->
   </testsuites>
   <filter>
     <whitelist>
