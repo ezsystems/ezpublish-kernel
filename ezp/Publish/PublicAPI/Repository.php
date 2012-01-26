@@ -8,14 +8,22 @@
  */
 
 namespace ezp\Publish\PublicAPI;
-use ezp\Persistence\Handler as PersistenceHandler,
-    ezp\Base\Exception\BadConfiguration,
+use ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\Logic,
     ezp\Io\Handler as IoHandler,
+    ezp\Persistence\Handler as PersistenceHandler,
     ezp\PublicAPI\Interfaces\Repository as RepositoryInterface,
+    ezp\PublicAPI\Interfaces\ContentService,
+    ezp\PublicAPI\Interfaces\ContentTypeService,
+    ezp\PublicAPI\Interfaces\LanguageService,
+    ezp\PublicAPI\Interfaces\LocationService,
+    ezp\PublicAPI\Interfaces\RoleService,
+    ezp\PublicAPI\Interfaces\SectionService,
+    ezp\PublicAPI\Interfaces\UserService,
     ezp\PublicAPI\Values\ValueObject,
-    ezp\PublicAPI\Values\User\User;
+    ezp\PublicAPI\Values\User\User,
+    RuntimeException;
 
 /**
  * Repository class
@@ -58,7 +66,7 @@ class Repository implements RepositoryInterface
      *
      * @param \ezp\Persistence\Handler $handler
      * @param \ezp\Io\Handler $ioHandler
-     * @param \ezp\User|null $user
+     * @param User|null $user
      */
     public function __construct( PersistenceHandler $persistenceHandler, IoHandler $ioHandler, User $user = null )
     {
@@ -66,7 +74,7 @@ class Repository implements RepositoryInterface
         $this->ioHandler = $ioHandler;
 
         if ( $user !== null )
-            $this->setUser( $user );
+            $this->setCurrentUser( $user );
        else
            throw new Logic( "@todo Need to get anon user", "repository needs to have a user object" );
     }
@@ -74,9 +82,9 @@ class Repository implements RepositoryInterface
     /**
      * Get current user
      *
-     * @return \ezp\User
+     * @return User
      */
-    function getUser()
+    function getCurrentUser()
     {
         return $this->user;
     }
@@ -84,10 +92,10 @@ class Repository implements RepositoryInterface
     /**
      * Set current user
      *
-     * @param \ezp\User $user
-     * @throws \ezp\Base\Exception\InvalidArgumentValue If provided user does not have a valid id value
-     * @todo throw something if $user is not persisted to backend (not stored)
-     * @return \ezp\User Old user
+     * @param User $user
+     * @return User Old user
+     *
+     * @throws InvalidArgumentValue If provided user does not have a valid id value
      */
     function setCurrentUser( User $user )
     {
@@ -189,26 +197,20 @@ class Repository implements RepositoryInterface
      * Get Content Service
      *
      * Get service object to perform operations on Content objects and it's aggregate members.
-     * ( ContentLocation, ContentVersion, ContentField )
      *
-     * @return \ezp\Content\Service
+     *
+     * @return \ezp\PublicAPI\Interfaces\ContentService
      */
-    public function getContentService()
-    {
-        return $this->service( 'ezp\\Content\\Service' );
-    }
+    public function getContentService(){}
 
     /**
      * Get Content Language Service
      *
      * Get service object to perform operations on Content language objects
      *
-     * @return \ezp\Content\Language\Service
+     * @return \ezp\PublicAPI\Interfaces\LanguageService
      */
-    public function getContentLanguageService()
-    {
-        return $this->service( 'ezp\\Content\\Language\\Service' );
-    }
+    public function getContentLanguageService(){}
 
     /**
      * Get Content Type Service
@@ -216,24 +218,18 @@ class Repository implements RepositoryInterface
      * Get service object to perform operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
-     * @return \ezp\Content\Type\Service
+     * @return \ezp\PublicAPI\Interfaces\ContentTypeService
      */
-    public function getContentTypeService()
-    {
-        return $this->service( 'ezp\\Content\\Type\\Service' );
-    }
+    public function getContentTypeService(){}
 
     /**
      * Get Content Location Service
      *
      * Get service object to perform operations on Location objects and subtrees
      *
-     * @return \ezp\Content\Location\Service
+     * @return \ezp\PublicAPI\Interfaces\LocationService
      */
-    public function getLocationService()
-    {
-        return $this->service( 'ezp\\Content\\Location\\Service' );
-    }
+    public function getLocationService(){}
 
     /**
      * Get Content Trash service
@@ -241,63 +237,34 @@ class Repository implements RepositoryInterface
      * Trash service allows to perform operations related to location trash
      * (trash/untrash, load/list from trash...)
      *
-     * @return type \ezp\Content\Location\Trash\Service
+     * @return \ezp\PublicAPI\Interfaces\TrashService
      */
-    public function getTrashService()
-    {
-        return $this->service( 'ezp\\Content\\Location\\Trash\\Service' );
-    }
+    public function getTrashService(){}
 
     /**
      * Get Content Section Service
      *
      * Get Section service that lets you manipulate section objects
      *
-     * @return \ezp\Content\Section\Service
+     * @return \ezp\PublicAPI\Interfaces\SectionService
      */
-    public function getSectionService()
-    {
-        return $this->service( 'ezp\\Content\\Section\\Service' );
-    }
-
-    /**
-     * Get Io Service
-     *
-     * Get service object to perform operations on binary files
-     *
-     * @return \ezp\Io\Service
-     */
-    public function getIoService()
-    {
-        return $this->service( 'ezp\\Io\\Service' );
-    }
+    public function getSectionService(){}
 
     /**
      * Get User Service
      *
-     * Get service object to perform operations on User objects and it's aggregate members.
-     * ( UserGroups, UserRole, UserRolePolicy & UserRolePolicyLimitation )
+     * Get service object to perform operations on Users and UserGroup
      *
-     * @return \ezp\User\Service
+     * @return \ezp\PublicAPI\Interfaces\UserService
      */
-    public function getUserService()
-    {
-        return $this->service( 'ezp\\User\\Service' );
-    }
+    public function getUserService(){}
 
     /**
-     * Get internal field type service.
+     * Get RoleService
      *
-     * Internal api for use by certain Field types
-     *
-     * @internal
-     * @access private
-     * @return \ezp\Content\FieldType\Service
+     * @return \ezp\PublicAPI\Interfaces\RoleService
      */
-    public function getInternalFieldTypeService()
-    {
-        return $this->service( 'ezp\\Content\\FieldType\\Service' );
-    }
+    public function getRoleService(){}
 
     /**
      * Begin transaction
