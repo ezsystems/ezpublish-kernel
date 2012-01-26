@@ -14,13 +14,13 @@ use ezp\Base\Exception\BadConfiguration,
     ezp\Io\Handler as IoHandler,
     ezp\Persistence\Handler as PersistenceHandler,
     ezp\PublicAPI\Interfaces\Repository as RepositoryInterface,
-    ezp\PublicAPI\Interfaces\ContentService,
-    ezp\PublicAPI\Interfaces\ContentTypeService,
-    ezp\PublicAPI\Interfaces\LanguageService,
-    ezp\PublicAPI\Interfaces\LocationService,
-    ezp\PublicAPI\Interfaces\RoleService,
-    ezp\PublicAPI\Interfaces\SectionService,
-    ezp\PublicAPI\Interfaces\UserService,
+    ezp\Publish\PublicAPI\ContentService,
+    ezp\Publish\PublicAPI\ContentTypeService,
+    ezp\Publish\PublicAPI\LanguageService,
+    ezp\Publish\PublicAPI\LocationService,
+    ezp\Publish\PublicAPI\RoleService,
+    ezp\Publish\PublicAPI\SectionService,
+    ezp\Publish\PublicAPI\UserService,
     ezp\PublicAPI\Values\ValueObject,
     ezp\PublicAPI\Values\User\User,
     RuntimeException;
@@ -53,11 +53,11 @@ class Repository implements RepositoryInterface
     protected $user;
 
     /**
-     * Instances of services
+     * Instance of section service
      *
-     * @var Service[]
+     * @var SectionService
      */
-    protected $services = array();
+    protected $sectionService;
 
     /**
      * Constructor
@@ -76,7 +76,10 @@ class Repository implements RepositoryInterface
         if ( $user !== null )
             $this->setCurrentUser( $user );
        else
-           throw new Logic( "@todo Need to get anon user", "repository needs to have a user object" );
+       {
+           // @todo No requirement for user for the time being
+           //throw new Logic( "@todo Need to get anon user", "repository needs to have a user object" );
+       }
     }
 
     /**
@@ -248,7 +251,14 @@ class Repository implements RepositoryInterface
      *
      * @return \ezp\PublicAPI\Interfaces\SectionService
      */
-    public function getSectionService(){}
+    public function getSectionService()
+    {
+	if ( $this->sectionService !== null )
+	    return $this->sectionService;
+    
+	$this->sectionService = new SectionService( $this, $this->persistenceHandler );
+	return $this->sectionService;
+    }
 
     /**
      * Get User Service
