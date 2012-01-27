@@ -7,6 +7,7 @@ namespace ezp\Publish\PublicAPI\Content;
 use ezp\PublicAPI\Values\Content\SectionCreateStruct;
 
 use ezp\Base\Exception\NotFound;
+use ezp\Base\Exception\InvalidArgumentValue;
 use ezp\PublicAPI\Values\Content\Content;
 use ezp\PublicAPI\Values\Content\Section;
 use ezp\PublicAPI\Values\Content\Location;
@@ -54,7 +55,27 @@ class SectionService implements SectionServiceInterface
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
      * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
      */
-    public function createSection( SectionCreateStruct $sectionCreateStruct ){}
+    public function createSection( SectionCreateStruct $sectionCreateStruct )
+    {
+        if ( $sectionCreateStruct->name === null )
+            throw new InvalidArgumentValue( "name", "null" );
+
+        if ( $sectionCreateStruct->identifier === null )
+            throw new InvalidArgumentValue( "identifier", "null" );
+
+        try
+        {
+            $existingSection = $this->handler->sectionHandler()->loadByIdentifier( $sectionCreateStruct->identifier );
+            if ( $existingSection !== null )
+                throw new IllegalArgumentException( "identifer", $sectionCreateStruct->identifier );
+        }
+        catch ( NotFound $e ) {}
+
+        return $this->handler->sectionHandler()->create(
+            $sectionCreateStruct->name,
+            $sectionCreateStruct->identifier
+        );
+    }
 
     /**
      * Updates the given in the content repository
@@ -178,6 +199,12 @@ class SectionService implements SectionServiceInterface
      * @throws ezp\PublicAPI\Interfaces\BadStateException  if section can not be deleted
      *         because it is still assigned to some contents.
      */
-    public function deleteSection( /*Section*/ $section ){}
+    public function deleteSection( /*Section*/ $section )
+    {
+        $section = $this->loadSection( $section->id );
+        if ( $section === null )
+            throw new NotFound( "Section", $section->id );
 
+        $this->handler->sectionHandler()->delete( $section->id );
+    }
 }
