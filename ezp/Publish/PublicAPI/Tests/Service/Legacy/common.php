@@ -8,9 +8,8 @@
  */
 
 namespace ezp\Content\Tests\Service\Legacy;
-use ezp\Base\ServiceContainer,
-    ezp\Base\Configuration,
-    ezp\Io\Storage\InMemory as InMemoryIoHandler,
+use ezp\Publish\PublicAPI\Repository,
+    ezp\Io\Storage\Legacy as LegacyIoHandler,
     ezp\Persistence\Storage\Legacy\Handler as LegacyPersistenceHandler,
     ReflectionMethod;
 
@@ -172,13 +171,4 @@ $legacyHandler = new LegacyPersistenceHandler(
         }
     }
 
-// Get Service Container
-    $sc = new ServiceContainer(
-        Configuration::getInstance('service')->getAll(),
-        array(
-            '@persistence_handler' => $legacyHandler,
-            '@io_handler' => new InMemoryIoHandler(),
-        )
-    );
-
-return $sc->getRepository();
+return new Repository( $legacyHandler, new LegacyIoHandler() );
