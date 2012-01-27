@@ -4,7 +4,7 @@
 * pear: PHPUnit
 * pear: eZ Components
 * PHP 5 Module: php5_sqlit
-* Database: And sqlite3 if not installed by above stage
+* Database: sqlite3 if not installed by above stage
 
 
 #How to get started
@@ -13,7 +13,6 @@
 * clone research next to it
 * Symlink ezp-next: ezp/Persistance and ezp/Io into the ezp/ folder of this project
 * Symlink reasearch: publicapi/ezp/PublicAPI into ezp/ folder of this project
-* Somehow (temporary) symlink or copy the "PublicAPI" interface folder to ezp\ folder	
 * Copy config.php-DEVELOPMENT to config.php
 * Execute "$ php index.php" (cli) to verify that it manages to output some text
 * Execute "$ phpunit" to see current status of missing tests / implementations
