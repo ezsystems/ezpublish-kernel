@@ -1,91 +1,63 @@
 <?php
 namespace ezp\PublicAPI\Values\Content;
 
-use ezp\PublicAPI\Values\ContentType\ContentType;
-use ezp\PublicAPI\Values\Content\Location;
 use ezp\PublicAPI\Values\ValueObject;
+
+use ezp\PublicAPI\Values\Content\VersionInfo;
 
 /**
  *
- * This class provides all version independent information of the content object.
- * @property-read $contentType calls {@link getContentType()}
+ * this class represents a content object in a specific version
+ *
+ * @property-read ContentInfo $contentInfo convenience getter for $versionInfo->contentInfo
+ * @property-read int $contentId convenience getter for retrieving the contentId: $versionInfo->content->contentId
+ * @property-read VersionInfo $versionInfo calls getVersionInfo()
+ * @property-read array $fields access fields
+ * @property-read array $relations calls getRelations()
  *
  */
 abstract class Content extends ValueObject
 {
     /**
-     * The unique id of the content object
-     * @var int
-     */
-    public $contentId;
-
-    /**
-     * true if there exists a published version 0 otherwise
+     * returns the VersionInfo for this version
      *
-     * @var boolean Constant.
+     * @return VersionInfo
      */
-    public $published;
+    public abstract function getVersionInfo();
 
     /**
-     * the computed name (via name schema) in the main language of the content object
-     * @var string
-     */
-    public $name;
-
-    /**
-     * The content type of this content object
-     * @return ContentType
-     */
-    public abstract function getContentType();
-
-    /**
-     * the section to which the content is assigned
-     * @var int
-     */
-    public $sectionId;
-
-    /**
-     * the owner of this content object
+     * returns a field value for the given value
+     * $version->fields[$fieldDefId][$languageCode] is an equivalent call
+     * if no language is given on a translatable field this method returns
+     * the value of the initial language of the version if present, otherwise null.
+     * On non translatable fields this method ignores the languageCode parameter.
      *
-     * @var int
-     */
-    public $ownerId;
-
-    /**
-     * Content modification date
-     * @var int Unix timestamp
-     */
-    public $modified;
-
-    /**
-     * Content publication date
-     * @var int Unix timestamp
-     */
-    public $publishedDate;
-
-    /**
-     * Current Version number is the version number of the published version or the version number of
-     * a newly created draft (which is 1).
+     * @param string $fieldDefId
+     * @param string $languageCode
      *
-     * @var int
+     * @return mixed a primitive type or a field type Value object depending on the field type.
      */
-    public $currentVersionNo;
+    public abstract function getFieldValue( $fieldDefId,$languageCode = null );
 
     /**
-     * Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
-     * @var boolean
+     * returns the outgoing relations
+     *
+     * @return array an array of {@link Relation}
      */
-    public $alwaysAvailable;
+    public abstract function getRelations();
 
     /**
-     * Remote identifier used as a custom identifier for the object
-     * @var string
+     * This method returns the complete fields collection
+     *
+     * @return array an array of {@link Field}
      */
-    public $remoteId;
+    public abstract function getFields();
 
     /**
-     * The main language code of the content.
-     * @var string
+     * This method returns the fields for a given language
+     *
+     * @param string $languageCode
+     * @return array an array of {@link Field}
      */
-    public $mainLanguageCode;
+    public abstract function getFieldsByLanguage( $languageCode );
 }

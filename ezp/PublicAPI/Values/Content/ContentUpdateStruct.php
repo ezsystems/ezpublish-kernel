@@ -1,54 +1,37 @@
 <?php
 namespace ezp\PublicAPI\Values\Content;
 use ezp\PublicAPI\Values\ValueObject;
-
 /**
+ * This class is used for updating the fields of a content object draft
  *
- * With this class data can be provided to update version independent fields of the content.
- * It is used in content update methods.
- *
+ * @property-write array $fields
  */
-class ContentUpdateStruct extends ValueObject
+abstract class ContentUpdateStruct extends ValueObject
 {
     /**
-     * If set this value changes the owner id of the content object
-     *
-     * @var integer
+     * @var integer modifier of the new version. If not set the current authenticated user is used.
      */
-    public $ownerId = null;
+    public $userId;
+
 
     /**
-     * if set this value overrides the publication date of the content. (Used in staging scenarios)
-     *
-     * @var integer Unix timestamp
-     */
-    public $published = null;
-
-    /**
-     * If set this value overrides the modification date. (Used for staging scenarios).
-     *
-     * @var integer Unix timestamp
-     */
-    public $modified;
-
-    /**
-     * if set the main language of the content object is changed.
+     * The language code of the version. In 4.x this code will be used as the language code of the translation
+     * (which is shown in the admin interface).
+     * It is also used as default language for added fields.
      *
      * @var string
      */
-    public $mainLanguageCode;
+    public $initialLanguageCode;
 
     /**
-     * If set this value changes the always available flag
+     * Adds a field to the field collection.
+     * This method could also be implemented by ArrayAccess so that
+     * $fielfs[$fieldDefIdentifer][$language] = $value or without language $fielfs[$fieldDefIdentifer] = $value
+     * is an aquivalent call.
      *
-     * @var boolean
+     * @param string $fieldDefIdentifier the identifier of the field definition
+     * @param mixed $value Either a plain value which is understandable by the field type or an instance of a Value class provided by the field type
+     * @param string $language If not ghiven on a translatable field the initial language is used,
      */
-    public $alwaysAvailable;
-
-    /**
-     * if set this value  changes the remoteId
-     *
-     * @var string
-     */
-    public $remoteId;
+    public abstract function setField( $fieldDefIdentifier, $value, $language = false );
 }

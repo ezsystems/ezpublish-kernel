@@ -6,7 +6,7 @@ namespace ezp\PublicAPI\Interfaces;
 
 use ezp\PublicAPI\Values\Content\LocationUpdateStruct;
 use ezp\PublicAPI\Values\Content\LocationCreateStruct;
-use ezp\PublicAPI\Values\Content\Content;
+use ezp\PublicAPI\Values\Content\ContentInfo;
 use ezp\PublicAPI\Values\Content\Location;
 
 /**
@@ -30,10 +30,10 @@ interface LocationService
      * @todo enhancement - this method should return a result structure containing the new location and a list
      *       of locations which are not copied due to permission denials.
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
-     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException  if the target location is a sub location of the given location
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
+     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException  if the target location is a sub location of the given location
      */
-    public function copySubtree( /*Location*/ $subtree,  /*Location*/ $targetParentLocation );
+    public function copySubtree( Location $subtree,  Location $targetParentLocation );
 
     /**
      * Loads a location object from its $locationId
@@ -62,14 +62,14 @@ interface LocationService
     /**
      * loads the main loaction of a content object
      *
-     * @param Content $content
+     * @param ContentInfo $contentInfo
      *
      * @return Location (in 5.x the return value also can be null if the content has no location)
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws ezp\PublicAPI\Interfaces\BadStateException if there is no published version yet
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read this location
+     * @throws \ezp\PublicAPI\Interfaces\BadStateException if there is no published version yet
      */
-    public function loadMainLocation( /*Content*/ $content );
+    public function loadMainLocation( ContentInfo $contentInfo );
 
     /**
      * Loads the locations for the given content object.
@@ -77,14 +77,14 @@ interface LocationService
      * If a $rootLocation is given, only locations that belong to this location are returned.
      * The location list is also filtered by permissions on reading locations.
      *
-     * @param Content $content
+     * @param ContentInfo $contentInfo
      * @param Location $rootLocation
      *
      * @return array an array of {@link Location}
      *
      * @throws ezp\PublicAPI\Interfaces\BadStateException if there is no published version yet
      */
-    public function loadLocations( /*Content*/ $content, /*Location*/ $rootLocation = null );
+    public function loadLocations( Content $contentInfo, Location $rootLocation = null );
 
     /**
      * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
@@ -96,23 +96,23 @@ interface LocationService
      *
      * @return array of {@link Location}
      */
-    public function loadLocationChildren( /*Location*/ $location, $offset = 0, $limit = -1 );
+    public function loadLocationChildren( Location $location, $offset = 0, $limit = -1 );
 
     /**
      * Creates the new $location in the content repository for the given content
      *
-     * @param Content $content
+     * @param ContentInfo $contentInfo
      *
      * @param LocationCreateStruct $location
      *
      * @return Location the newly created Location
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create this location
-     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException  if the content is already below the specified parent
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create this location
+     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException  if the content is already below the specified parent
      *                                        or the parent is a sub location of the location the content
      *                                        or if set the remoteId existis already
      */
-    public function createLocation( /*Content*/ $content, /*LocationCreate*/ $locationCreateStruct );
+    public function createLocation( ContentInfo $content, LocationCreateStruct $locationCreateStruct );
 
     /**
      * Updates $location in the content repository
@@ -125,7 +125,7 @@ interface LocationService
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to update this location
      * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException   if if set the remoteId existis already
      */
-    public function updateLocation( /*Location*/ $location, /*LocationUpdate*/ $locationUpdateStruct );
+    public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct );
 
     /**
      * Swaps the contents hold by the $location1 and $location2
@@ -135,7 +135,7 @@ interface LocationService
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to swap content
      */
-    public function swapLocation( /*Location*/ $location1,  /*Location*/ $location2 );
+    public function swapLocation( Location $location1,  Location $location2 );
 
     /**
      * Hides the $location and marks invisible all descendants of $location.
@@ -146,7 +146,7 @@ interface LocationService
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to hide this location
      */
-    public function hideLocation( /*Location*/ $location );
+    public function hideLocation( Location $location );
 
     /**
      * Unhides the $location and marks visible all descendants of $locations
@@ -158,7 +158,7 @@ interface LocationService
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to unhide this location
      */
-    public function unhideLocation( /*Location*/ $location );
+    public function unhideLocation( Location $location );
 
     /**
      * Moves the subtree to $newParentLocation  If a user has the permission to move the location to a target location
@@ -169,7 +169,7 @@ interface LocationService
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to move this location to the target
      */
-    public function moveSubtree( /*Location*/ $location, /*Location*/ $newParentLocation );
+    public function moveSubtree( Location $location, Location $newParentLocation );
 
     /**
      * Deletes $location and all its descendants.
@@ -184,7 +184,7 @@ interface LocationService
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to delete this location
      */
-    public function deleteLocation( /*Location*/ $location, $overridePermissions = true );
+    public function deleteLocation( Location $location, $overridePermissions = true );
 
 
     /**

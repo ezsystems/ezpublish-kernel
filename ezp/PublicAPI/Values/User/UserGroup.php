@@ -9,7 +9,7 @@ use ezp\PublicAPI\Values\ValueObject;
 /**
  * This class represents a user group
  */
-abstract class UserGroup extends Version
+abstract class UserGroup extends Content
 {
     /**
      * The id of the user group

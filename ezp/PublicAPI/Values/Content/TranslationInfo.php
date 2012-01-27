@@ -8,6 +8,7 @@ use ezp\PublicAPI\Values\Content\VersionInfo;
 /**
  *
  * 5.x this class is used for reading and writing translation informations into the repository
+ * @property-read ContentInfo $contentInfo returns $sourceVersionInfo->getContentInfo() 
  *
  */
 class TranslationInfo extends ValueObject
@@ -31,12 +32,12 @@ class TranslationInfo extends ValueObject
      *
      * @var VersionInfo
      */
-    public $srcVersion;
+    public $srcVersionInfo;
 
     /**
      * the destination version this translation is placed in
      *
      * @var VersionInfo
      */
-    public $destinationVersion;
+    public $destinationVersionInfo;
 }

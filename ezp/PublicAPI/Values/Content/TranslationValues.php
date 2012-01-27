@@ -5,17 +5,8 @@ namespace ezp\PublicAPI\Values\Content;
  *
  * @property-write FieldCollection $fields
  */
-abstract class Translation extends ValueObject
+abstract class TranslationValues extends ValueObject
 {
-    /**
-     * @var TranlationInfo
-     */
-    public $translationInfo;
-
-    /**
-     * @var integer modifier of the new version. If not set the current authenticated user is used.
-     */
-    public $userId;
 
     /**
      * Adds a translated field to the field collection in the given language

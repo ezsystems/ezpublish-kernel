@@ -7,7 +7,7 @@ use ezp\PublicAPI\Values\Content\Content;
 /**
  * This class represents a location in the repository
  *
- * @property-read Content $content calls getContent()
+ * @property-read ContentInfo $contentInfo calls getContentInfo()
  * @property-read int $contentId calls getContent()->contentId
  */
 abstract class Location extends ValueObject
@@ -70,11 +70,11 @@ abstract class Location extends ValueObject
     public $remoteId;
 
     /**
-     * Content - the content meta data
+     * ContentInfo - the content info
      *
-     * @return Content
+     * @return ContentInfo
      */
-    public abstract function getContent();
+    public abstract function getContentInfo();
 
     /**
      * Parent ID.

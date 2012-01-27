@@ -8,7 +8,7 @@ use ezp\PublicAPI\Values\Content\Version;
 /**
  * This class represents a user value
  */
-abstract class User extends Version
+abstract class User extends Content
 {
     /**
      * User ID

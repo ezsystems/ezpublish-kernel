@@ -6,7 +6,7 @@ use ezp\PublicAPI\Values\Content\Content;
 /**
  * Class representing a relation between content.
  */
-class Relation extends ValueObject
+abstract class Relation extends ValueObject
 {
     /**
      * The relation type COMMON is a general relation between object set by a user.
@@ -53,19 +53,19 @@ class Relation extends ValueObject
     public $sourceFieldDefinitionIdentifier;
 
     /**
-     * the content of the source of the relation
+     * the content of the source content of the relation
      *
-     * @var Content
+     * @return ContentInfo
      */
-    public $sourceContent;
+    public abstract function getSourceContentInfo();
 
     /**
-     * Destination Content
+     * the content of the destination content of the relation
      *
-     * @var Content
+     * @return ContentInfo
      */
-    public $destinationContent;
-
+    public abstract function getDestinationContentInfo();
+    
     /**
      * The relation type bitmask
      *
