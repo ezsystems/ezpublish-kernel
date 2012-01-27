@@ -25,7 +25,6 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        var_dump( get_class( $this ) );
         parent::setUp();
         $this->repository = static::getRepository();
     }

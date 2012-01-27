@@ -19,7 +19,6 @@ class SectionTest extends InMemorySectionTest
 
     protected static function getRepository()
     {
-        self::markTestIncomplete( "@todo Fix setup of repository++" );
         return include 'common.php';
     }
 }

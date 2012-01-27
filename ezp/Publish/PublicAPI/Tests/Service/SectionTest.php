@@ -10,6 +10,8 @@
 namespace ezp\Publish\PublicAPI\Tests\Service;
 use ezp\Publish\PublicAPI\Tests\Service\Base as BaseServiceTest,
     ezp\PublicAPI\Values\Content\Section,
+    ezp\PublicAPI\Values\Content\SectionCreateStruct,
+    ezp\PublicAPI\Values\Content\SectionUpdateStruct,
     ezp\Base\Exception\NotFound;
 
 /**
@@ -18,28 +20,22 @@ use ezp\Publish\PublicAPI\Tests\Service\Base as BaseServiceTest,
  */
 class SectionTest extends BaseServiceTest
 {
-    protected function setUp()
-    {
-        parent::setUp();
-        self::markTestSkipped( "@todo SKipping?" );
-    }
-
     /**
      * Test service function for creating sections
      * @covers \ezp\Publish\PublicAPI\Content\SectionService::create
      */
     public function testCreate()
     {
-        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $section = new Section();
-        $section->identifier = 'test';
-        $section->name = 'Test';
-
+        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
         $service = $this->repository->getSectionService();
-        $newSection = $service->create( $section );
+        $struct = new SectionCreateStruct();
+        $struct->identifier = 'test';
+        $struct->name = 'Test';
+
+        $newSection = $service->createSection( $struct );
         //self::assertEquals( $newSection->id, 2 );
-        self::assertEquals( $newSection->identifier, $section->identifier );
-        self::assertEquals( $newSection->name, $section->name );
+        self::assertEquals( $newSection->identifier, $struct->identifier );
+        self::assertEquals( $newSection->name, $struct->name );
     }
 
     /**
@@ -49,12 +45,13 @@ class SectionTest extends BaseServiceTest
      */
     public function testCreateForbidden()
     {
-        $section = new Section();
-        $section->identifier = 'test';
-        $section->name = 'Test';
-
+        self::markTestIncomplete( "@todo: Re add when permissions are re added" );
         $service = $this->repository->getSectionService();
-        $newSection = $service->create( $section );
+        $struct = new SectionCreateStruct();
+        $struct->identifier = 'test';
+        $struct->name = 'Test';
+
+        $newSection = $service->createSection( $struct );
     }
 
     /**
@@ -63,17 +60,12 @@ class SectionTest extends BaseServiceTest
      */
     public function testLoad()
     {
-        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $section = new Section();
-        $section->identifier = 'test';
-        $section->name = 'Test';
-
+        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
         $service = $this->repository->getSectionService();
-        $section = $service->create( $section );
-        $newSection = $service->load( $section->id );
-        //self::assertEquals( $newSection->id, 2 );
-        self::assertEquals( $newSection->identifier, $section->identifier );
-        self::assertEquals( $newSection->name, $section->name );
+        $section = $service->loadSection( 1 );
+        self::assertEquals( 1, $section->id );
+        self::assertEquals( 'standard', $section->identifier );
+        self::assertEquals( 'Standard', $section->name );
     }
 
     /**
@@ -85,7 +77,7 @@ class SectionTest extends BaseServiceTest
     public function testLoadNotFound()
     {
         $service = $this->repository->getSectionService();
-        $service->load( 999 );
+        $service->loadSection( 999 );
     }
 
     /**
@@ -94,15 +86,17 @@ class SectionTest extends BaseServiceTest
      */
     public function testUpdate()
     {
-        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
+        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
         $service = $this->repository->getSectionService();
-        $tempSection = $service->load( 1 );
-        $tempSection->identifier = 'test';
-        $tempSection->name = 'Test';
-        $service->update( $tempSection );
-        $section = $service->load( 1 );
-        self::assertEquals( $tempSection->identifier, $section->identifier );
-        self::assertEquals( $tempSection->name, $section->name );
+        $tempSection = $service->loadSection( 1 );
+        $struct = new SectionUpdateStruct();
+        $struct->identifier = 'test';
+        $struct->name = 'Test';
+
+        $service->updateSection( $tempSection, $struct );
+        $section = $service->loadSection( 1 );
+        self::assertEquals( $struct->identifier, $section->identifier );
+        self::assertEquals( $struct->name, $section->name );
     }
 
     /**
@@ -113,9 +107,10 @@ class SectionTest extends BaseServiceTest
      */
     public function testUpdateForbidden()
     {
+        self::markTestIncomplete( "@todo: Re add when permissions are re added" );
         $service = $this->repository->getSectionService();
-        $section = $service->load( 1 );
-        $service->update( $section );
+        $section = $service->loadSection( 1 );
+        $service->updateSection( $section, new SectionUpdateStruct() );
     }
 
     /**
@@ -125,18 +120,18 @@ class SectionTest extends BaseServiceTest
      */
     public function testDelete()
     {
-        $this->repository->setUser( $this->repository->getUserService()->load( 14 ) );
-        $section = new Section();
-        $section->identifier = 'test';
-        $section->name = 'Test';
-
+        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
         $service = $this->repository->getSectionService();
-        $section = $service->create( $section );
-        $service->delete( $section );
+        $struct = new SectionCreateStruct();
+        $struct->identifier = 'test';
+        $struct->name = 'Test';
+
+        $newSection = $service->createSection( $struct );
+        $service->deleteSection( $newSection );
 
         try
         {
-            $service->load( $section->id );
+            $service->loadSection( $newSection->id );
             self::fail( 'Section is still returned after being deleted' );
         }
         catch ( NotFound $e )
@@ -152,12 +147,13 @@ class SectionTest extends BaseServiceTest
      */
     public function testDeleteForbidden()
     {
-        $section = new Section();
-        $section->identifier = 'test';
-        $section->name = 'Test';
-
+        self::markTestIncomplete( "@todo: Re add when permissions are re added" );
         $service = $this->repository->getSectionService();
-        $section = $service->create( $section );
-        $service->delete( $section );
+        $struct = new SectionCreateStruct();
+        $struct->identifier = 'test';
+        $struct->name = 'Test';
+
+        $newSection = $service->createSection( $struct );
+        $service->deleteSection( $newSection );
     }
 }
