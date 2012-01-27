@@ -162,7 +162,7 @@ interface ContentService
      * @throws \ezp\PublicAPI\Interfaces\InvalidArgumentException if the input is not valid or
      *         if the provided remoteId exists in the system or (4.x) there is no location provided
      */
-    public function createContentDraft( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() );
+    public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() );
 
     /**
      * Updates the metadata. 
@@ -416,11 +416,11 @@ interface ContentService
     public function newContentCreateStruct( ContentType $contentType, $mainLanguageCode );
 
     /**
-     * Instantiates a new version update class
+     * Instantiates a new content meta data update struct
      *
-     * @return \ezp\PublicAPI\Values\Content\VersionUpdateStruct
+     * @return \ezp\PublicAPI\Values\Content\ContentMetadataUpdateStruct
      */
-    public function newVersionUpdateStruct();
+    public function newContentMetadataUpdateStruct();
 
     /**
      * Instantiates a new content update struct
