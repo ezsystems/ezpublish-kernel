@@ -27,7 +27,7 @@ abstract class ContentUpdateStruct extends ValueObject
      * Adds a field to the field collection.
      * This method could also be implemented by ArrayAccess so that
      * $fielfs[$fieldDefIdentifer][$language] = $value or without language $fielfs[$fieldDefIdentifer] = $value
-     * is an aquivalent call.
+     * is an equivalent call.
      *
      * @param string $fieldDefIdentifier the identifier of the field definition
      * @param mixed $value Either a plain value which is understandable by the field type or an instance of a Value class provided by the field type
