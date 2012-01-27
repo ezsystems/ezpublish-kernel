@@ -18,8 +18,12 @@
     <whitelist>
       <directory suffix=".php">ezp</directory>
       <exclude>
-        <!-- directory suffix=".php">ezp/Base/Tests</directory -->
-        <directory suffix=".php">doc</directory>
+          <directory suffix=".php">ezp/Base/Tests</directory>
+          <directory suffix=".php">ezp/Publish/PublicAPI/Tests</directory>
+          <directory suffix=".php">ezp/Persistence/Tests</directory>
+          <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests</directory>
+          <directory suffix=".php">ezp/Io/Tests</directory>
+          <directory suffix=".php">doc</directory>
       </exclude>
     </whitelist>
   </filter>

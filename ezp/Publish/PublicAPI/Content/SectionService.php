@@ -2,7 +2,7 @@
 /**
  * @package ezp\Publish\PublicAPI
  */
-namespace ezp\Publish\PublicAPI;
+namespace ezp\Publish\PublicAPI\Content;
 
 use ezp\PublicAPI\Values\Content\SectionCreateStruct;
 

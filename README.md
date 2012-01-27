@@ -32,3 +32,12 @@ ezp\Io\Storage\InMemory ("In-Memory" Storage Engine(for unit tests):)
 * The need for symlinks to ezp-next and research (eventualy they should be merged)
 * (Might be that the layout of the files will change later)
 
+
+#How to add Service unit tests from ezp-next (using both InMemory and Legacy Storage Handlers)
+* cp ../ezp-next/ezp/Content/Tests/Service/<serviceTest> ezp/Publish/PublicAPI/Tests/Service/<serviceTest>
+* cd ../ezp-next && git checkout legacyServiceTesting
+* cp ../ezp-next/ezp/Content/Tests/Service/Legacy/<serviceTest> ezp/Publish/PublicAPI/Tests/Service/Legacy/<serviceTest>
+* git checkout master && cd ../publicapi
+
+
+
