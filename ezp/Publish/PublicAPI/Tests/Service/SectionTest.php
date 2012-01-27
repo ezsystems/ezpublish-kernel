@@ -45,7 +45,7 @@ class SectionTest extends BaseServiceTest
      */
     public function testCreateForbidden()
     {
-        self::markTestIncomplete( "@todo: Re add when permissions are re added" );
+        self::markTestSkipped( "@todo: Re add when permissions are re added" );
         $service = $this->repository->getSectionService();
         $struct = new SectionCreateStruct();
         $struct->identifier = 'test';
@@ -107,7 +107,7 @@ class SectionTest extends BaseServiceTest
      */
     public function testUpdateForbidden()
     {
-        self::markTestIncomplete( "@todo: Re add when permissions are re added" );
+        self::markTestSkipped( "@todo: Re add when permissions are re added" );
         $service = $this->repository->getSectionService();
         $section = $service->loadSection( 1 );
         $service->updateSection( $section, new SectionUpdateStruct() );
@@ -147,7 +147,7 @@ class SectionTest extends BaseServiceTest
      */
     public function testDeleteForbidden()
     {
-        self::markTestIncomplete( "@todo: Re add when permissions are re added" );
+        self::markTestSkipped( "@todo: Re add when permissions are re added" );
         $service = $this->repository->getSectionService();
         $struct = new SectionCreateStruct();
         $struct->identifier = 'test';
