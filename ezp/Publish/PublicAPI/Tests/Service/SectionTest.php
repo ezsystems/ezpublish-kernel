@@ -100,6 +100,20 @@ class SectionTest extends BaseServiceTest
         self::assertEquals( 'standard', $section->identifier );
         self::assertEquals( 'Standard', $section->name );
     }
+    
+    /**
+     * Test service function for loading sections
+     * @covers \ezp\Publish\PublicAPI\Content\SectionService::loadSectionByIdentifier
+     */
+    public function testLoadByIdentifier()
+    {
+        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
+        $service = $this->repository->getSectionService();
+        $section = $service->loadSectionByIdentifier( 'standard' );
+        self::assertEquals( 1, $section->id );
+        self::assertEquals( 'standard', $section->identifier );
+        self::assertEquals( 'Standard', $section->name );
+    }
 
     /**
      * Test service function for loading all sections
