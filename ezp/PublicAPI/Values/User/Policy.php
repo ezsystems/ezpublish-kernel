@@ -2,7 +2,7 @@
 namespace ezp\PublicAPI\Values\User;
 
 use ezp\PublicAPI\Values\ValueObject;
-use ezp\PubklicAPI\Values\User\Limitation;
+use ezp\PublicAPI\Values\User\Limitation;
 
 /**
  * This class represents a policy value

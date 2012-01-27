@@ -120,7 +120,7 @@ interface Repository
     /**
      * Get RoleService
      * 
-     * @return RoleService
+     * @return \ezp\PublicAPI\Interfaces\RoleService
      */
     public function getRoleService();
     

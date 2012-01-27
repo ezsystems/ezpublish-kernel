@@ -1,13 +1,13 @@
 <?php
-namespace ezp\PubklicAPI\Values\User\Limitation;
+namespace ezp\PublicAPI\Values\User\Limitation;
 
-use ezp\PubklicAPI\Values\User\Limitation;
+use ezp\PublicAPI\Values\User\Limitation;
 
 class OwnerLimitation extends Limitation
 {
     /**
      * (non-PHPdoc)
-     * @see User/ezp\PubklicAPI\Values\User.Limitation::getIdentifier()
+     * @see User/ezp\PublicAPI\Values\User.Limitation::getIdentifier()
      */
     public function getIdentifier()
     {

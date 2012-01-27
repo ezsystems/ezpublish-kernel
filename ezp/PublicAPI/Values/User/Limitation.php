@@ -1,5 +1,5 @@
 <?php
-namespace ezp\PubklicAPI\Values\User;
+namespace ezp\PublicAPI\Values\User;
 
 use ezp\PublicAPI\Values\ValueObject;
 /**

@@ -8,7 +8,7 @@ use ezp\PublicAPI\Values\User\PolicyCreateStruct;
 use ezp\PublicAPI\Values\User\Role;
 use ezp\PublicAPI\Values\User\RoleCreateStruct;
 use ezp\PublicAPI\Values\User\RoleAssignment;
-use ezp\PubklicAPI\Values\User\Limitation\RoleLimitation;
+use ezp\PublicAPI\Values\User\Limitation\RoleLimitation;
 
 /**
  * This service provides methods for managing Roles and Policies
@@ -75,7 +75,7 @@ interface RoleService
      *
      * @return Policy
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to uŸdate a policy
+     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to uï¿½date a policy
      */
     public function updatePolicy( /*Policy*/ $policy, /*PolicyUpdateStruct*/ $policyUpdateStruct );
 
