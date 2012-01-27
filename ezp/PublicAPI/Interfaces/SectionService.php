@@ -42,7 +42,7 @@ interface SectionService
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
      * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier already exists (if set in the update struct)
      */
-    public function updateSection( /*Section*/ $section, /*SectionUpdateStruct*/ $sectionUpdateStruct );
+    public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct );
 
     /**
      * Loads a Section from its id ($sectionId)
@@ -90,12 +90,12 @@ interface SectionService
      * assigns the content to the given section
      * this method overrides the current assigned section
      *
-     * @param Content $content
+     * @param ContentInfo $contentInfo
      * @param Section $section
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to view provided object
      */
-    public function assignSection( /*Content*/ $content, /*Section*/ $section );
+    public function assignSection( ContentInfo $contentInfo, Section $section );
 
     /**
      * Assigns $section to the contents held by $startingPoint location and
@@ -110,7 +110,7 @@ interface SectionService
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to the starting point
      *
      */
-    public function assignSectionToSubtree( /*Location*/ $startingPoint, /*Section*/ $section );
+    public function assignSectionToSubtree( Location $startingPoint, Section $section );
 
     /**
      * Deletes $section from content repository
@@ -122,6 +122,20 @@ interface SectionService
      * @throws ezp\PublicAPI\Interfaces\BadStateException  if section can not be deleted
      *         because it is still assigned to some contents.
      */
-    public function deleteSection( /*Section*/ $section );
+    public function deleteSection( Section $section );
 
+    /**
+     * instanciates a new SectionCreateStruct
+     * 
+     * @return SectionCreateStruct
+     */
+    public function newSectionCreateStruct();
+    
+    /**
+     * instanciates a new SectionUpdateStruct
+     * 
+     * @return SectionUpdateStruct
+     */
+    public function newSectionUpdateStruct();
+    
 }
