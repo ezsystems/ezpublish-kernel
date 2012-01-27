@@ -148,7 +148,25 @@ class SectionService implements SectionServiceInterface
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
      */
-    public function loadSections(){}
+    public function loadSections()
+    {
+        $returnArray = array();
+
+        $allSections = $this->handler->sectionHandler()->loadAll();
+        if ( is_array( $allSections ) )
+        {
+            foreach ( $allSections as $section )
+            {
+                $returnArray[] = new Section( (array) $section );
+            }
+        }
+        else if ( $allSections !== null )
+        {
+            $returnArray[] = new Section( (array) $allSections );
+        }
+
+        return $returnArray;
+    }
 
     /**
      * Loads a Section from its identifier ($sectionIdentifier)

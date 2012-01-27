@@ -69,6 +69,22 @@ class SectionTest extends BaseServiceTest
     }
 
     /**
+     * Test service function for loading all sections
+     * @covers \ezp\Publish\PublicAPI\Content\SectionService::loadAll
+     */
+    public function testLoadAll()
+    {
+        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
+        $service = $this->repository->getSectionService();
+        $sections = $service->loadSections();
+
+        self::assertInternalType( 'array', $sections );
+
+        $sectionsCount = count( $sections );
+        self::assertGreaterThan( 0, $sectionsCount );
+    }
+
+    /**
      * Test service function for loading sections
      *
      * @covers \ezp\Publish\PublicAPI\Content\SectionService::load
