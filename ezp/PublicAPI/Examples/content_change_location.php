@@ -18,14 +18,20 @@ $locationService = $repository->getLocationService();
 
 $content = $contentService->loadContentInfo( $contentId );
 $location = $locationService->loadMainLocation( $content );
-$targetLocation = $locationService->loadLocation( $targetParentFolderId );
+$targetParentLocation = $locationService->loadLocation( $targetParentFolderId );
 
 // move $content's $location to $targetLocation
 try
 {
-    $targetLocationService = $locationService->moveSubtree( $location, $targetLocation );
+    $locationService->moveSubtree( $location, $targetParentLocation );
 }
-catch ( Exception $e )
+catch ( \ezp\PublicAPI\Interfaces\UnauthorizedException $e )
 {
-    // error handling
+    $currentUser = $repository->getCurrentUser();
+    echo "Current user " . $currentUser->login .
+        " isn't allowed to move content " . $content->name .
+        " to " . $targetParentLocation->pathString;
 }
+
+echo "Content " . $content->name .
+    " moved to " . $targetParentLocation->pathString;
