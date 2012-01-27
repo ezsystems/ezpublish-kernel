@@ -140,6 +140,22 @@ class SectionTest extends BaseServiceTest
     }
 
     /**
+     * Test service function for counting the contents which section is assigned to
+     *
+     * @covers \ezp\Publish\PublicAPI\Content\SectionService::delete
+     */
+    public function testCountAssignedContents()
+    {
+        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
+        $service = $this->repository->getSectionService();
+        $section = $service->loadSection( 1 );
+        $contentCount = $service->countAssignedContents( $section );
+        
+        self::assertInternalType( 'integer', $contentCount );
+        self::assertGreaterThan( 0, $contentCount );
+    }
+
+    /**
      * Test service function for deleting sections
      *
      * @covers \ezp\Publish\PublicAPI\Content\SectionService::delete

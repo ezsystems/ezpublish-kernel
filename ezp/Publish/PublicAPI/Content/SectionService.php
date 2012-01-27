@@ -161,7 +161,10 @@ class SectionService implements SectionServiceInterface
      *
      * @return int
      */
-    public function countAssignedContents( /*Section*/ $section ){}
+    public function countAssignedContents( /*Section*/ $section )
+    {
+        return $this->handler->sectionHandler()->assignmentsCount( $section->id );
+    }
 
     /**
      * assigns the content to the given section
