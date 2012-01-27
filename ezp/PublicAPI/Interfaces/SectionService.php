@@ -26,6 +26,7 @@ interface SectionService
      *
      * @return Section The newly create section
      *
+     * @throws \ezp\PublicAPI\Interfaces\PropertyType If property is of wrong type
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
      */
@@ -39,6 +40,7 @@ interface SectionService
      *
      * @return Section
      *
+     * @throws \ezp\PublicAPI\Interfaces\PropertyType If property is of wrong type
      * @throws \ezp\PublicAPI\Interfaces\NotFoundException if section could not be found
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier already exists (if set in the update struct)
