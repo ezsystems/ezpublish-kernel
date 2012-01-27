@@ -86,12 +86,13 @@ class SectionHandlerTest extends HandlerTest
     {
         $sectionHandler = $this->persistenceHandler->sectionHandler();
 
-        $sectionHandler->update( $this->section->id, 'Change', 'change' );
+        $updatedSection = $sectionHandler->update( $this->section->id, 'Change', 'change' );
 
         $section = $sectionHandler->load( $this->section->id );
         $this->assertEquals( $this->section->id, $section->id );
         $this->assertEquals( 'Change', $section->name );
         $this->assertEquals( 'change', $section->identifier );
+        $this->assertEquals( $updatedSection, $section );
     }
 
     /**

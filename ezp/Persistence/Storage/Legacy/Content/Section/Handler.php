@@ -59,6 +59,7 @@ class Handler implements BaseSectionHandler
      * @param mixed $id
      * @param string $name
      * @param string $identifier
+     * @return \ezp\Persistence\Content\Section
      */
     public function update( $id, $name, $identifier )
     {

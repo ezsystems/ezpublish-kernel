@@ -68,6 +68,7 @@ class SectionHandler implements SectionHandlerInterface
                 'identifier' => $identifier
             )
         );
+        return $this->load( $id );
     }
 
     /**
