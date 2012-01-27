@@ -19,10 +19,10 @@ interface LanguageService
      * @param string $name
      * @param bool $isEnabled
      *
-     * @return Language
+     * @return \ezp\PublicAPI\Values\Content\Language
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
-     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException if the locale already exists
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if the locale already exists
      */
     public function create( $languageCode, $name, $isEnabled = true );
 
@@ -31,7 +31,7 @@ interface LanguageService
      *
      * @param string $languageCode the unique indentifier of the language to be changed
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
      */
     public function updateName( $languageCode, $newName );
 
@@ -40,7 +40,7 @@ interface LanguageService
      *
      * @param string $languageCode the unique indentifier of the language to be changed
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
      */
     public function enable( $languageCode );
 
@@ -49,7 +49,7 @@ interface LanguageService
      *
      * @param string $languageCode the unique indentifier of the language to be changed
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
      */
     public function disable( $languageCode );
 
@@ -58,9 +58,9 @@ interface LanguageService
      *
      * @param int $languageId
      *
-     * @return Language
+     * @return \ezp\PublicAPI\Values\Content\Language
      *
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if language could not be found
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if language could not be found
      */
     public function load( $languageId );
 
@@ -76,9 +76,9 @@ interface LanguageService
      *
      * @param string $languageCode
      *
-     * @return Language
+     * @return \ezp\PublicAPI\Values\Content\Language
      *
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if language could not be found
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if language could not be found
      */
     public function loadByLanguageCode( $languageCode );
 
@@ -87,10 +87,10 @@ interface LanguageService
      *
      * @param string $languageCode
      *
-     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException
+     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException
      *         if language can not be deleted
      *         because it is still assigned to some content / type / (...).
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
      */
     public function delete( $languageCode );
 }
