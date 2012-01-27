@@ -90,8 +90,6 @@ class SectionService implements SectionServiceInterface
             $sectionUpdateStruct->name !== null ? $sectionUpdateStruct->name : $section->name,
             $sectionUpdateStruct->identifier !== null ? $sectionUpdateStruct->identifier : $section->identifier
         );
-
-        return $this->loadSection( $section->id );
     }
 
     /**
