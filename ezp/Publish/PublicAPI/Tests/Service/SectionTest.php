@@ -93,8 +93,8 @@ class SectionTest extends BaseServiceTest
         $struct->identifier = 'test';
         $struct->name = 'Test';
 
-        $service->updateSection( $tempSection, $struct );
-        $section = $service->loadSection( 1 );
+        $section = $service->updateSection( $tempSection, $struct );
+
         self::assertEquals( $struct->identifier, $section->identifier );
         self::assertEquals( $struct->name, $section->name );
     }
