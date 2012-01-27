@@ -1,5 +1,11 @@
 ##Public API implementation repo for NetGen and eZ
 
+#Dependencies
+* pear: PHPUnit
+* pear: eZ Components
+* PHP 5 Module: php5_sqlit
+* Database: And sqlite3 if not installed by above stage
+
 
 #How to get started
 * Clone this repo
@@ -9,7 +15,8 @@
 * Symlink reasearch: publicapi/ezp/PublicAPI into ezp/ folder of this project
 * Somehow (temporary) symlink or copy the "PublicAPI" interface folder to ezp\ folder	
 * Copy config.php-DEVELOPMENT to config.php
-* Execute index.php (httpd or cli) verify that it at least manages to get to *echo $serviceContainer->get( 'repository' )->...* line (currently line 46) in index.php
+* Execute "$ php index.php" (cli) to verify that it manages to output some text
+* Execute "$ phpunit" to see current status of missing tests / implementations
 
 
 #Directory Layout
@@ -38,6 +45,9 @@ ezp\Io\Storage\InMemory ("In-Memory" Storage Engine(for unit tests):)
 * cd ../ezp-next && git checkout legacyServiceTesting
 * cp ../ezp-next/ezp/Content/Tests/Service/Legacy/<serviceTest> ezp/Publish/PublicAPI/Tests/Service/Legacy/<serviceTest>
 * git checkout master && cd ../publicapi
+* Addapt to new Interface
+
+
 
 
 
