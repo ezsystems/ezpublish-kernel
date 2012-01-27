@@ -48,10 +48,15 @@ foreach ( $settings['base']['ClassLoader']['Repositories'] as $ns => $nsPath )
 
 $configManager->setGlobalDirs( $paths, 'modules' );
 
-return new ServiceContainer(
+$sc = new ServiceContainer(
     $configManager->getConfiguration('service')->getAll(),
     array(
         '@classLoader' => $loader,
         '@configuration' => $configManager,
     )
 );
+
+// Temp stuff for unit tests
+ServiceContainer::$instance = $sc;
+
+return $sc;
