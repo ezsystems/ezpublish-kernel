@@ -1,5 +1,5 @@
 <?php
-namespace ezp\PublicAPI\Interfaces\Exception;
+namespace ezp\PublicAPI\Interfaces;
 
 use ezp\PublicAPI\Interfaces\Exception;
 
