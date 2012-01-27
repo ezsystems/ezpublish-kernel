@@ -92,6 +92,17 @@ class Handler implements BaseSectionHandler
     }
 
     /**
+     * Get all section data
+     *
+     * @return \ezp\Persistence\Content\Section[]
+     */
+    public function loadAll()
+    {
+        $rows = $this->sectionGateway->loadAllSectionData();
+        return $this->createSectionFromArray( reset( $rows ) );
+    }
+
+    /**
      * Get section data by identifier
      *
      * @param string $identifier

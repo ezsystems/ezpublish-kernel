@@ -39,9 +39,16 @@ interface Handler
      *
      * @param mixed $id
      * @return \ezp\Persistence\Content\Section
-     * @throws \ezp\Base\Exception\NotFound If role is not found
+     * @throws \ezp\Base\Exception\NotFound If section is not found
      */
     public function load( $id );
+
+    /**
+     * Get all section data
+     *
+     * @return \ezp\Persistence\Content\Section[]
+     */
+    public function loadAll();
 
     /**
      * Get section data by identifier

@@ -64,6 +64,32 @@ class SectionHandlerTest extends HandlerTest
     }
 
     /**
+     * Test load function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\SectionHandler::loadAll
+     */
+    public function testLoadAll()
+    {
+        $section = $this->persistenceHandler->sectionHandler()->loadAll();
+        $this->assertTrue( $section[0] instanceof Section );
+        $this->assertEquals( 'Standard', $section[0]->name );
+        $this->assertEquals( 'standard', $section[0]->identifier );
+    }
+
+    /**
+     * Test load function
+     *
+     * @covers ezp\Persistence\Storage\InMemory\SectionHandler::loadByIdentifier
+     */
+    public function testLoadByIdentifier()
+    {
+        $section = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $this->section->identifier );
+        $this->assertTrue( $section instanceof Section );
+        $this->assertEquals( 'Test', $section->name );
+        $this->assertEquals( 'test', $section->identifier );
+    }
+
+    /**
      * Test create function
      *
      * @covers ezp\Persistence\Storage\InMemory\SectionHandler::create

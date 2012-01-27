@@ -80,6 +80,16 @@ class SectionHandler implements SectionHandlerInterface
     }
 
     /**
+     * Get all section data
+     *
+     * @return \ezp\Persistence\Content\Section[]
+     */
+    public function loadAll()
+    {
+        return $this->backend->find( 'Content\\Section' );
+    }
+
+    /**
      * Get section data by identifier
      *
      * @param string $identifier

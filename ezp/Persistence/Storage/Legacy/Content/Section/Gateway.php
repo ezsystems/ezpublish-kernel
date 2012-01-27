@@ -42,9 +42,16 @@ abstract class Gateway
     abstract public function loadSectionData( $id );
 
     /**
+     * Loads data for all sections
+     *
+     * @return string[][]
+     */
+    abstract public function loadAllSectionData();
+
+    /**
      * Loads data for section with $identifier
      *
-     * @param int $identifier
+     * @param string $identifier
      * @return string[][]
      */
     abstract public function loadSectionDataByIdentifier( $identifier );

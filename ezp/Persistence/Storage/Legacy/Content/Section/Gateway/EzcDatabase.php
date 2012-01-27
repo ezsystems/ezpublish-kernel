@@ -124,6 +124,28 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads data for all sections
+     *
+     * @return string[][]
+     */
+    public function loadAllSectionData()
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->quoteColumn( 'identifier' ),
+            $this->dbHandler->quoteColumn( 'name' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezsection' )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Loads data for section with $identifier
      *
      * @param int $identifier
