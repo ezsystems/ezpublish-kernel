@@ -178,7 +178,14 @@ class SectionService implements SectionServiceInterface
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if section could not be found
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
      */
-    public function loadSectionByIdentifier( $sectionIdentifier ){}
+    public function loadSectionByIdentifier( $sectionIdentifier )
+    {
+        $sectionArray = (array) $this->handler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
+        if ( $sectionArray === null )
+            throw new NotFound( "Section", $sectionIdentifier );
+
+        return new Section( $sectionArray );
+    }
 
     /**
      * Counts the contents which $section is assigned to
