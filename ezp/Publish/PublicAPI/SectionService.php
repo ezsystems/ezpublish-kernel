@@ -6,6 +6,7 @@ namespace ezp\Publish\PublicAPI;
 
 use ezp\PublicAPI\Values\Content\SectionCreateStruct;
 
+use ezp\Base\Exception\NotFound;
 use ezp\PublicAPI\Values\Content\Content;
 use ezp\PublicAPI\Values\Content\Section;
 use ezp\PublicAPI\Values\Content\Location;
@@ -67,7 +68,31 @@ class SectionService implements SectionServiceInterface
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
      * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier already exists (if set in the update struct)
      */
-    public function updateSection( /*Section*/ $section, /*SectionUpdateStruct*/ $sectionUpdateStruct ){}
+    public function updateSection( /*Section*/ $section, /*SectionUpdateStruct*/ $sectionUpdateStruct )
+    {
+        if ( $sectionUpdateStruct->identifier !== null )
+        {
+            try
+            {
+                $existingSection = $this->handler->sectionHandler()->loadByIdentifier( $sectionUpdateStruct->identifier );
+                if ( $existingSection !== null )
+                    throw new IllegalArgumentException( "identifer", $sectionUpdateStruct->identifier );
+            }
+            catch ( NotFound $e ) {}
+        }
+
+        $section = $this->loadSection( $section->id );
+        if ( $section === null )
+            throw new NotFound( "Section", $section->id );
+
+        $this->handler->sectionHandler()->update(
+            $section->id,
+            $sectionUpdateStruct->name !== null ? $sectionUpdateStruct->name : $section->name,
+            $sectionUpdateStruct->identifier !== null ? $sectionUpdateStruct->identifier : $section->identifier
+        );
+
+        return $this->loadSection( $section->id );
+    }
 
     /**
      * Loads a Section from its id ($sectionId)

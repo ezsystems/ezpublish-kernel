@@ -47,7 +47,13 @@ $sectionService = $serviceContainer->getRepository()->getSectionService();
 $section = $sectionService->loadSection( 1 );
 echo $section->name;
 
+$sectionUpdateStruct = new ezp\PublicAPI\Values\Content\SectionUpdateStruct();
+$sectionUpdateStruct->name = 'Standard 2';
+$sectionUpdateStruct->identifier = 'standard_2';
 
+$section = $sectionService->updateSection( $section, $sectionUpdateStruct );
+echo $section->name;
+echo $section->identifier;
 
 /* @todo: Should be moved to a debug class using shutdown event
 echo "\n<br /><small>Page Generated in: " . ( microtime(true) - $request->microTime ) * 1000 . " microseconds";
