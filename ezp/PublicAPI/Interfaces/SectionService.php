@@ -7,6 +7,7 @@ namespace ezp\PublicAPI\Interfaces;
 use ezp\PublicAPI\Values\Content\SectionCreateStruct;
 
 use ezp\PublicAPI\Values\Content\Content;
+use ezp\PublicAPI\Values\Content\ContentInfo;
 use ezp\PublicAPI\Values\Content\Section;
 use ezp\PublicAPI\Values\Content\Location;
 use ezp\PublicAPI\Values\Content\SectionUpdateStruct;
@@ -84,7 +85,7 @@ interface SectionService
      *
      * @return int
      */
-    public function countAssignedContents( /*Section*/ $section );
+    public function countAssignedContents( Section $section );
 
     /**
      * assigns the content to the given section
@@ -110,7 +111,7 @@ interface SectionService
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to the starting point
      *
      */
-    public function assignSectionToSubtree( Location $startingPoint, Section $section );
+    public function assignSectionToSubTree( Location $startingPoint, Section $section );
 
     /**
      * Deletes $section from content repository
