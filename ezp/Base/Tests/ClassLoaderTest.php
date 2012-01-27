@@ -21,9 +21,16 @@ class ClassLoaderTest extends \PHPUnit_Framework_TestCase
      *
      * @covers \ezp\Base\ClassLoader::load
      */
-    public function testMultipleRepositories()
+    public function testReturnValuesOnFailure()
     {
+        $loader = new ClassLoader( array( 'ezp' => 'ezp',
+                                          'xyz' => 'xyz/Pasta' ) );
 
-        self::markTestIncomplete( "@todo: Test this" );
+        self::assertFalse( $loader->load( "ezp\\Pizza\\Box" ) );
+        self::assertFalse( $loader->load( "\\ezp\\Pizza\\Box" ) );
+        self::assertFalse( $loader->load( "xyz\\Pizza\\Box" ) );
+        self::assertFalse( $loader->load( "\\xyz\\Pizza\\Box" ) );
+        self::assertNull( $loader->load( "NotHere\\Pizza\\Box" ) );// void
+        self::assertNull( $loader->load( "\\NotHere\\Pizza\\Box" ) );// void
     }
 }
