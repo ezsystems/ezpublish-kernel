@@ -136,6 +136,46 @@ class SectionHandlerTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::loadByIdentifier
+     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::createSectionFromArray
+     */
+    public function testLoadByIdentifier()
+    {
+        $handler = $this->getSectionHandler();
+
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadSectionDataByIdentifier' )
+            ->with(
+                $this->equalTo( 'new_section' )
+            )->will(
+                $this->returnValue(
+                    array(
+                        array(
+                            'id' => '23',
+                            'identifier' => 'new_section',
+                            'name' => 'New Section',
+                        ),
+                    )
+                )
+            );
+
+        $sectionRef = new Section();
+        $sectionRef->id = 23;
+        $sectionRef->name = 'New Section';
+        $sectionRef->identifier = 'new_section';
+
+        $result = $handler->loadByIdentifier( 'new_section' );
+
+        $this->assertEquals(
+            $sectionRef,
+            $result
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::delete
      */
     public function testDelete()

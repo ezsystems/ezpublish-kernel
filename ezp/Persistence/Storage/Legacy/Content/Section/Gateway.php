@@ -42,6 +42,14 @@ abstract class Gateway
     abstract public function loadSectionData( $id );
 
     /**
+     * Loads data for section with $identifier
+     *
+     * @param int $identifier
+     * @return string[][]
+     */
+    abstract public function loadSectionDataByIdentifier( $identifier );
+
+    /**
      * Counts the number of content objects assigned to section with $id
      *
      * @param int $id

@@ -132,6 +132,28 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
+     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase::loadSectionDataByIdentifier
+     */
+    public function testLoadSectionDataByIdentifier()
+    {
+        $gateway = $this->getDatabaseGateway();
+
+        $result = $gateway->loadSectionDataByIdentifier( 'users' );
+
+        $this->assertEquals(
+            array(
+                array(
+                    'id' => '2',
+                    'identifier' => 'users',
+                    'name' => 'Users',
+                )
+            ),
+            $result
+        );
+    }
+
+    /**
+     * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase::countContentObjectsInSection
      */
     public function testCountContentObjectsInSection()

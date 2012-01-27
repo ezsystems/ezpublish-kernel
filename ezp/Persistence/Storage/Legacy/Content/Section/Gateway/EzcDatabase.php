@@ -124,6 +124,34 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads data for section with $identifier
+     *
+     * @param int $identifier
+     * @return string[][]
+     */
+    public function loadSectionDataByIdentifier( $identifier )
+    {
+        $query = $this->dbHandler->createSelectQuery();
+        $query->select(
+            $this->dbHandler->quoteColumn( 'id' ),
+            $this->dbHandler->quoteColumn( 'identifier' ),
+            $this->dbHandler->quoteColumn( 'name' )
+        )->from(
+            $this->dbHandler->quoteTable( 'ezsection' )
+        )->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'identifier' ),
+                $query->bindValue( $identifier, null, \PDO::PARAM_STR )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Counts the number of content objects assigned to section with $id
      *
      * @param int $id

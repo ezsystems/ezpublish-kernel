@@ -99,8 +99,13 @@ class Handler implements BaseSectionHandler
      */
     public function loadByIdentifier( $identifier )
     {
-        throw new \RuntimeException( "@TODO Implement" );
-        //throw new NotFound( "Section", $identifier );
+        $rows = $this->sectionGateway->loadSectionDataByIdentifier( $identifier );
+
+        if ( empty( $rows ) )
+        {
+            throw new NotFound( "Section", $identifier );
+        }
+        return $this->createSectionFromArray( reset( $rows ) );
     }
 
     /**
