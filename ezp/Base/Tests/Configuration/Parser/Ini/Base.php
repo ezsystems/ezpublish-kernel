@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: ezp\Base\Tests\IniParserTest class
+ * File contains: Test class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -12,7 +12,7 @@ use ezp\Base\Configuration,
     PHPUnit_Framework_TestCase;
 
 /**
- * Test case for Parser\Ini class
+ * Abstract test case for Parser\Ini class
  */
 abstract class Base extends PHPUnit_Framework_TestCase
 {
@@ -49,7 +49,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 [test]
 HashBoomer=enabled##!';
         $expects = array( 'test' => array( 'HashBoomer' => 'enabled' ) );
-        $result = $this->parser->parse( $iniString );
+        $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );
         $this->assertEquals(
             $expects,
             $result,
@@ -87,7 +87,7 @@ String=Test';
                 'String' => 'Test',
             )
         );
-        $result = $this->parser->parse( $iniString );
+        $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );
         $this->assertSame(
             $expects,
             $result,
@@ -111,7 +111,7 @@ Mixed[]=44
 Mixed[]=4.4
 Mixed[]=4,4';
         $expects = array( 'test' => array( 'Mixed' => array( true, false, 'string', 44, 4.4, '4,4' ) ) );
-        $result = $this->parser->parse( $iniString );
+        $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );
         $this->assertSame(
             $expects,
             $result,
@@ -130,7 +130,7 @@ Mixed[]=4,4';
 [test]
 empty-array[]';
         $expects = array( 'test' => array( 'empty-array' => array( Configuration::TEMP_INI_UNSET_VAR ) ) );
-        $result = $this->parser->parse( $iniString );
+        $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );
         $this->assertEquals(
             $expects,
             $result,
@@ -182,7 +182,7 @@ conditions[three][three][three]=subTen
             )
         );
 
-        $result = $this->parser->parse( $iniString );
+        $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );
         $this->assertEquals(
             $expects,
             $result,
@@ -210,7 +210,7 @@ two[one][]
              )
         );
 
-        $result = $this->parser->parse( $iniString );
+        $result = $this->parser->parse( 'DoesNotExist.ini', $iniString );
         $this->assertEquals(
             $expects,
             $result,

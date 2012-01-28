@@ -28,7 +28,7 @@ return array(
             'ezcBase' => 'ezc/Base/base.php',
         ),
         'Configuration' => array(
-            // Disable cache, default true
+            // Disable cache, default false
             'UseCache' => false,
 
             // List of parser classes where key is file suffix

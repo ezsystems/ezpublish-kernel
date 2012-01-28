@@ -10,7 +10,8 @@
  */
 
 namespace ezp\Base;
-use ezp\Base\Exception\BadConfiguration,
+use ezp\Base\Configuration\Parser,
+    ezp\Base\Exception\BadConfiguration,
     ezp\Base\Exception\InvalidArgumentValue,
     ezcPhpGenerator;
 
@@ -50,7 +51,6 @@ class Configuration
 
     /**
      * The instance path array, scoped in the order they should be parsed
-     * Set by {@link Override::initPaths()}
      *
      * @var array
      */
@@ -169,7 +169,7 @@ class Configuration
             $useCache =
                 isset( $this->globalConfiguration['base']['Configuration']['UseCache'] )
                 ? $this->globalConfiguration['base']['Configuration']['UseCache']
-                : true;
+                : false;
         }
 
         if ( $hasCache === null && $useCache )
@@ -340,8 +340,10 @@ class Configuration
         $configurationFileData = array();
         foreach ( $sourceFiles as $fileName => $suffix )
         {
-            $parser = new $parsers[$suffix]( $fileName, $this->globalConfiguration );
-            $configurationFileData[$fileName] = $parser->parse( file_get_contents( $fileName ) );
+            if ( !$parsers[$suffix] instanceof Parser )
+                $parsers[$suffix] = new $parsers[$suffix]( $this->globalConfiguration );
+
+            $configurationFileData[$fileName] = $parsers[$suffix]->parse( $fileName, file_get_contents( $fileName ) );
         }
 
         // Post processing to unset array self::TEMP_INI_UNSET_VAR values as set by parser to indicate array clearing

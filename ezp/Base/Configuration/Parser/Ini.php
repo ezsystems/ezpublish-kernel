@@ -46,13 +46,6 @@ class Ini implements Parser
     const TEMP_INI_KEY_VAR = '__KEY__';
 
     /**
-     * File name as needed by writer
-     *
-     * @var string
-     */
-    protected $file;
-
-    /**
      * Defines if strict mode should be used (parse_ini_string), otherwise use ezcConfigurationIniReader
      *
      * @var boolean
@@ -70,15 +63,12 @@ class Ini implements Parser
     protected $dirPermission = 0755;
 
     /**
-     * Construct an instance for a specific file
+     * Construct an instance of Ini Parser
      *
-     * @param string $file A valid file name, file must exist!
      * @param array $globalConfiguration
      */
-    public function __construct( $file, array $globalConfiguration )
+    public function __construct( array $globalConfiguration )
     {
-        $this->file = $file;
-
         if ( isset( $globalConfiguration['base']['Configuration']['IniParserStrict'] ) )
             $this->strictMode = $globalConfiguration['base']['Configuration']['IniParserStrict'];
 
@@ -94,10 +84,11 @@ class Ini implements Parser
      *
      * @todo Change impl to use exceptions instead of trigger_error in most cases
      *
+     * @param string $fileName A valid file name
      * @param string $fileContent
      * @return array
      */
-    public function parse( $fileContent )
+    public function parse( $fileName, $fileContent )
     {
         if ( !$this->strictMode )
         {
@@ -108,7 +99,7 @@ class Ini implements Parser
         if ( $configurationData === false )
         {
             trigger_error(
-                "parse_ini_string( {$this->file} ) failed, see warning for line number. ",
+                "parse_ini_string( {$fileName} ) failed, see warning for line number. ",
                 E_USER_NOTICE
             );
             return array();
@@ -408,16 +399,17 @@ class Ini implements Parser
      *
      * @see ezp\Base\Configuration\Parser::parse() For $configurationData definition
      * @todo Test..
+     * @param string $fileName A valid file name, will be overwritten if it exists
      * @param array $configurationData
      */
-    public function write( array $configurationData )
+    public function write( $fileName, array $configurationData )
     {
-        if ( !is_writable( $this->file ) )
+        if ( !is_writable( $fileName ) )
         {
-            throw new Logic( "{$this->file} is not writable", "can not save configuration data!" );
+            throw new Logic( "{$fileName} is not writable", "can not save configuration data!" );
         }
 
-        if ( strpos( $this->file, '.php', 1 ) !== false )
+        if ( strpos( $fileName, '.php', 1 ) !== false )
         {
             $iniStr = "<?php /* #?ini charset=\"utf-8\"?\n";
         }
@@ -464,7 +456,7 @@ class Ini implements Parser
                 }
             }
         }
-        file_put_contents( $this->file, $iniStr, LOCK_EX );
+        file_put_contents( $fileName, $iniStr, LOCK_EX );
     }
 }
 
