@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Publish\PublicAPI\Tests\Service;
+namespace ezp\Publish\PublicAPI\Tests\Service\Section;
 use ezp\Publish\PublicAPI\Tests\Service\Base as BaseServiceTest,
     ezp\PublicAPI\Values\Content\Section,
     ezp\PublicAPI\Values\Content\SectionCreateStruct,
@@ -18,7 +18,7 @@ use ezp\Publish\PublicAPI\Tests\Service\Base as BaseServiceTest,
  * Test case for Section Service using InMemory storage class
  *
  */
-class SectionTest extends BaseServiceTest
+abstract class Base extends BaseServiceTest
 {
     /**
      * Test a new class and default values on properties

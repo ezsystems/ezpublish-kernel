@@ -7,17 +7,16 @@
  * @version //autogentag//
  */
 
-namespace ezp\Publish\PublicAPI\Tests\Service\Legacy;
-use ezp\Publish\PublicAPI\Tests\Service\SectionTest as InMemorySectionTest;
+namespace ezp\Publish\PublicAPI\Tests\Service\Section\Legacy;
+use ezp\Publish\PublicAPI\Tests\Service\Section\Base as BaseSectionServiceTest;
 
 /**
  * Test case for Section Service using Legacy storage class
  *
  */
-class SectionTest extends InMemorySectionTest
+class SectionTest extends BaseSectionServiceTest
 {
-
-    protected static function getRepository()
+    protected function getRepository()
     {
         return include 'common.php';
     }

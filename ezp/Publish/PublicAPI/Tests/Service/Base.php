@@ -8,10 +8,7 @@
  */
 
 namespace ezp\Publish\PublicAPI\Tests\Service;
-use ezp\Publish\PublicAPI\Repository,
-    ezp\Io\Storage\InMemory as InMemoryIoHandler,
-    ezp\Persistence\Storage\InMemory\Handler as InMemoryPersistenceHandler,
-    PHPUnit_Framework_TestCase;
+use PHPUnit_Framework_TestCase;
 
 /**
  * Base test case for tests on services
@@ -40,8 +37,5 @@ abstract class Base extends PHPUnit_Framework_TestCase
      *
      * @return \ezp\Publish\PublicAPI\Repository
      */
-    protected static function getRepository()
-    {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIoHandler() );
-    }
+    abstract protected function getRepository();
 }
