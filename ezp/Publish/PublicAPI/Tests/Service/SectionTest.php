@@ -21,6 +21,39 @@ use ezp\Publish\PublicAPI\Tests\Service\Base as BaseServiceTest,
 class SectionTest extends BaseServiceTest
 {
     /**
+     * Test a new class and default values on properties
+     * @covers \ezp\PublicAPI\Values\Content\Section::__construct
+     */
+    public function testNewClass()
+    {
+        $section = new Section();
+        self::assertEquals( $section->id, null );
+        self::assertEquals( $section->identifier, null );
+        self::assertEquals( $section->name, null );
+    }
+
+    /**
+     * @expectedException ezp\Base\Exception\PropertyNotFound
+     * @covers \ezp\PublicAPI\Values\Content\Section::__get
+     */
+    public function testMissingProperty()
+    {
+        $section = new Section();
+        $value = $section->notDefined;
+    }
+
+    /**
+     * @expectedException ezp\Base\Exception\PropertyPermission
+     * @covers \ezp\PublicAPI\Values\Content\Section::__set
+     */
+    public function testReadOnlyProperty()
+    {
+    	self::markTestSkipped( 'ID is a public property, will not fail' );
+        $section = new Section();
+        $section->id = 22;
+    }
+
+    /**
      * Test service function for creating sections
      * @covers \ezp\Publish\PublicAPI\Content\SectionService::create
      */
@@ -67,6 +100,36 @@ class SectionTest extends BaseServiceTest
         self::assertEquals( 'standard', $section->identifier );
         self::assertEquals( 'Standard', $section->name );
     }
+    
+    /**
+     * Test service function for loading sections
+     * @covers \ezp\Publish\PublicAPI\Content\SectionService::loadSectionByIdentifier
+     */
+    public function testLoadByIdentifier()
+    {
+        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
+        $service = $this->repository->getSectionService();
+        $section = $service->loadSectionByIdentifier( 'standard' );
+        self::assertEquals( 1, $section->id );
+        self::assertEquals( 'standard', $section->identifier );
+        self::assertEquals( 'Standard', $section->name );
+    }
+
+    /**
+     * Test service function for loading all sections
+     * @covers \ezp\Publish\PublicAPI\Content\SectionService::loadAll
+     */
+    public function testLoadAll()
+    {
+        //$this->repository->setCurrentUser( $this->repository->getUserService()->loadUser( 14 ) );
+        $service = $this->repository->getSectionService();
+        $sections = $service->loadSections();
+
+        self::assertInternalType( 'array', $sections );
+
+        $sectionsCount = count( $sections );
+        self::assertGreaterThan( 0, $sectionsCount );
+    }
 
     /**
      * Test service function for loading sections
@@ -93,8 +156,8 @@ class SectionTest extends BaseServiceTest
         $struct->identifier = 'test';
         $struct->name = 'Test';
 
-        $service->updateSection( $tempSection, $struct );
-        $section = $service->loadSection( 1 );
+        $section = $service->updateSection( $tempSection, $struct );
+
         self::assertEquals( $struct->identifier, $section->identifier );
         self::assertEquals( $struct->name, $section->name );
     }

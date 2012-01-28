@@ -9,6 +9,7 @@ use ezp\PublicAPI\Values\Content\SectionCreateStruct;
 use ezp\Base\Exception\NotFound;
 use ezp\Base\Exception\InvalidArgumentValue;
 use ezp\PublicAPI\Values\Content\Content;
+use ezp\PublicAPI\Values\Content\ContentInfo;
 use ezp\PublicAPI\Values\Content\Section;
 use ezp\PublicAPI\Values\Content\Location;
 use ezp\PublicAPI\Values\Content\SectionUpdateStruct;
@@ -71,10 +72,12 @@ class SectionService implements SectionServiceInterface
         }
         catch ( NotFound $e ) {}
 
-        return $this->handler->sectionHandler()->create(
+        $createdSection = (array) $this->handler->sectionHandler()->create(
             $sectionCreateStruct->name,
             $sectionCreateStruct->identifier
         );
+
+        return new Section( $createdSection );
     }
 
     /**
@@ -89,7 +92,7 @@ class SectionService implements SectionServiceInterface
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
      * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier already exists (if set in the update struct)
      */
-    public function updateSection( /*Section*/ $section, /*SectionUpdateStruct*/ $sectionUpdateStruct )
+    public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
         if ( $sectionUpdateStruct->identifier !== null )
         {
@@ -106,11 +109,16 @@ class SectionService implements SectionServiceInterface
         if ( $section === null )
             throw new NotFound( "Section", $section->id );
 
-        $this->handler->sectionHandler()->update(
+        $updatedSection = (array) $this->handler->sectionHandler()->update(
             $section->id,
             $sectionUpdateStruct->name !== null ? $sectionUpdateStruct->name : $section->name,
             $sectionUpdateStruct->identifier !== null ? $sectionUpdateStruct->identifier : $section->identifier
         );
+
+        if ( $updatedSection === null )
+            throw new NotFound( "Section", $section->id );
+
+        return new Section( $updatedSection );
     }
 
     /**
@@ -125,12 +133,12 @@ class SectionService implements SectionServiceInterface
      */
     public function loadSection( $sectionId )
     {
-        $section = $this->handler->sectionHandler()->load( $sectionId );
+        $sectionArray = (array) $this->handler->sectionHandler()->load( $sectionId );
 
-        if ( $section === null )
+        if ( $sectionArray === null )
             throw new NotFound( "Section", $sectionId );
 
-        return $section;
+        return new Section( $sectionArray );
     }
 
     /**
@@ -140,7 +148,25 @@ class SectionService implements SectionServiceInterface
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
      */
-    public function loadSections(){}
+    public function loadSections()
+    {
+        $returnArray = array();
+
+        $allSections = $this->handler->sectionHandler()->loadAll();
+        if ( is_array( $allSections ) )
+        {
+            foreach ( $allSections as $section )
+            {
+                $returnArray[] = new Section( (array) $section );
+            }
+        }
+        else if ( $allSections !== null )
+        {
+            $returnArray[] = new Section( (array) $allSections );
+        }
+
+        return $returnArray;
+    }
 
     /**
      * Loads a Section from its identifier ($sectionIdentifier)
@@ -152,7 +178,14 @@ class SectionService implements SectionServiceInterface
      * @throws ezp\PublicAPI\Interfaces\NotFoundException if section could not be found
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
      */
-    public function loadSectionByIdentifier( $sectionIdentifier ){}
+    public function loadSectionByIdentifier( $sectionIdentifier )
+    {
+        $sectionArray = (array) $this->handler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
+        if ( $sectionArray === null )
+            throw new NotFound( "Section", $sectionIdentifier );
+
+        return new Section( $sectionArray );
+    }
 
     /**
      * Counts the contents which $section is assigned to
@@ -161,7 +194,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return int
      */
-    public function countAssignedContents( /*Section*/ $section )
+    public function countAssignedContents( Section $section )
     {
         return $this->handler->sectionHandler()->assignmentsCount( $section->id );
     }
@@ -170,12 +203,12 @@ class SectionService implements SectionServiceInterface
      * assigns the content to the given section
      * this method overrides the current assigned section
      *
-     * @param Content $content
+     * @param ContentInfo $contentInfo
      * @param Section $section
      *
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to view provided object
      */
-    public function assignSection( /*Content*/ $content, /*Section*/ $section ){}
+    public function assignSection( ContentInfo $contentInfo, Section $section ){}
 
     /**
      * Assigns $section to the contents held by $startingPoint location and
@@ -190,7 +223,7 @@ class SectionService implements SectionServiceInterface
      * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to the starting point
      *
      */
-    public function assignSectionToSubtree( /*Location*/ $startingPoint, /*Section*/ $section ){}
+    public function assignSectionToSubTree( Location $startingPoint, Section $section ){}
 
     /**
      * Deletes $section from content repository
@@ -202,12 +235,26 @@ class SectionService implements SectionServiceInterface
      * @throws ezp\PublicAPI\Interfaces\BadStateException  if section can not be deleted
      *         because it is still assigned to some contents.
      */
-    public function deleteSection( /*Section*/ $section )
+    public function deleteSection( Section $section )
     {
-        $section = $this->loadSection( $section->id );
-        if ( $section === null )
+        $loadedSection = $this->loadSection( $section->id );
+        if ( $loadedSection === null )
             throw new NotFound( "Section", $section->id );
 
         $this->handler->sectionHandler()->delete( $section->id );
     }
+
+    /**
+     * instanciates a new SectionCreateStruct
+     * 
+     * @return SectionCreateStruct
+     */
+    public function newSectionCreateStruct(){}
+    
+    /**
+     * instanciates a new SectionUpdateStruct
+     * 
+     * @return SectionUpdateStruct
+     */
+    public function newSectionUpdateStruct(){}
 }
