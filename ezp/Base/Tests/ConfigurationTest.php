@@ -45,6 +45,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     /**
      * Test Configuration
      *
+     * @covers \ezp\Base\Configuration::load
      * @covers \ezp\Base\Configuration::parse
      */
     public function testParserExecution()
@@ -56,5 +57,84 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
                 $this->equalTo( file_get_contents( __DIR__ . '/Configuration/test.ini' ) )
             )->will( $this->returnValue( array() ) );
         $this->configuration->load();
+    }
+
+    /**
+     * Test Configuration
+     *
+     * @covers \ezp\Base\Configuration::load
+     * @covers \ezp\Base\Configuration::parse
+     */
+    public function testParsing()
+    {
+        $config = array(
+            'Test' => array(
+                'String' => 'test ',
+                'Int' => 42,
+                'Bool' => true,
+                'Array' => array( 1 ),
+            )
+        );
+        $this->parserMock->expects( $this->once() )
+            ->method( 'parse' )
+            ->will( $this->returnValue( $config ) );
+        $this->configuration->load();
+
+        self::assertSame( $config, $this->configuration->getAll() );
+    }
+
+    /**
+     * Test Configuration
+     *
+     * @covers \ezp\Base\Configuration::load
+     * @covers \ezp\Base\Configuration::parse
+     * @covers \ezp\Base\Configuration::recursiveArrayClearing
+     */
+    public function testParsingAndArrayClearing()
+    {
+        $config = array(
+            'Test' => array(
+                'String' => 'test ',
+                'Int' => 42,
+                'Bool' => true,
+                'Array' => array( Configuration::TEMP_INI_UNSET_VAR ),
+            )
+        );
+        $this->parserMock->expects( $this->once() )
+            ->method( 'parse' )
+            ->will( $this->returnValue( $config ) );
+        $this->configuration->load();
+
+        $config['Test']['Array'] = array();// Change array to excepted return value
+        self::assertSame( $config, $this->configuration->getAll() );
+    }
+
+    /**
+     * Test Configuration
+     *
+     * @covers \ezp\Base\Configuration::load
+     * @covers \ezp\Base\Configuration::parse
+     * @covers \ezp\Base\Configuration::recursiveArrayClearing
+     */
+    public function testParsingAndRecursiveArrayClearing()
+    {
+        $config = array(
+            'Test' => array(
+                'String' => 'test ',
+                'Int' => 42,
+                'Bool' => true,
+                'Array' => array(
+                    'one' => array( 1 ),
+                    'clear' => array( Configuration::TEMP_INI_UNSET_VAR ),
+                ),
+            )
+        );
+        $this->parserMock->expects( $this->once() )
+            ->method( 'parse' )
+            ->will( $this->returnValue( $config ) );
+        $this->configuration->load();
+
+        $config['Test']['Array']['clear'] = array();// Change array to excepted return value
+        self::assertSame( $config, $this->configuration->getAll() );
     }
 }

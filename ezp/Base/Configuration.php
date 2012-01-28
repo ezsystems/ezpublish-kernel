@@ -365,7 +365,6 @@ class Configuration
     /**
      * Recursively clear array values
      *
-     * @todo NEEDS testing!
      * @param array $iniArray
      * @param array|null $configurationPiece
      */
