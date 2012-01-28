@@ -7,23 +7,36 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Tests;
-use ezp\Base\Configuration\Parser\Ini,
-    ezp\Base\Configuration;
+namespace ezp\Base\Tests\Configuration\Parser\Ini;
+use ezp\Base\Configuration,
+    PHPUnit_Framework_TestCase;
 
 /**
  * Test case for Parser\Ini class
- *
  */
-class IniParserTest extends \PHPUnit_Framework_TestCase
+abstract class Base extends PHPUnit_Framework_TestCase
 {
+    /**
+     * @var \ezp\Base\Configuration\Parser\Ini $parser
+     */
     protected $parser;
 
+    /**
+     * Setup parser test
+     */
     public function setUp()
     {
         parent::setUp();
-        $this->parser = new Ini( null, array() );
+        $this->parser = $this->getParser();
     }
+
+    /**
+     * Setup parser with settings
+     *
+     * @abstract
+     * @return \ezp\Base\Configuration\Parser\Ini
+     */
+    abstract protected function getParser();
 
     /**
      * Test that ending hash boom is stripped out
@@ -36,18 +49,11 @@ class IniParserTest extends \PHPUnit_Framework_TestCase
 [test]
 HashBoomer=enabled##!';
         $expects = array( 'test' => array( 'HashBoomer' => 'enabled' ) );
-        $result = $this->parser->parseFilePhp( $iniString );
+        $result = $this->parser->parse( $iniString );
         $this->assertEquals(
             $expects,
             $result,
-            'parse_ini_string based ini parser did not strip hash boom'
-        );
-
-        $result = $this->parser->parseFileEzc( $iniString );
-        $this->assertEquals(
-            $expects,
-            $result,
-            'ezcConfigurationIniReader based ini parser did not strip hash boom'
+            'ini parser did not strip hash boom'
         );
     }
 
@@ -81,18 +87,11 @@ String=Test';
                 'String' => 'Test',
             )
         );
-        $result = $this->parser->parseFilePhp( $iniString );
+        $result = $this->parser->parse( $iniString );
         $this->assertSame(
             $expects,
             $result,
-            'parse_ini_string based ini parser did not cast type properly'
-        );
-
-        $result = $this->parser->parseFileEzc( $iniString );
-        $this->assertSame(
-            $expects,
-            $result,
-            'ezcConfigurationIniReader based ini parser did not cast type properly'
+            'ini parser did not cast type properly'
         );
     }
 
@@ -112,18 +111,11 @@ Mixed[]=44
 Mixed[]=4.4
 Mixed[]=4,4';
         $expects = array( 'test' => array( 'Mixed' => array( true, false, 'string', 44, 4.4, '4,4' ) ) );
-        $result = $this->parser->parseFilePhp( $iniString );
+        $result = $this->parser->parse( $iniString );
         $this->assertSame(
             $expects,
             $result,
-            'parse_ini_string based ini parser did not cast type properly'
-        );
-
-        $result = $this->parser->parseFileEzc( $iniString );
-        $this->assertSame(
-            $expects,
-            $result,
-            'ezcConfigurationIniReader based ini parser did not cast type properly'
+            'ini parser did not cast type properly'
         );
     }
 
@@ -138,18 +130,11 @@ Mixed[]=4,4';
 [test]
 empty-array[]';
         $expects = array( 'test' => array( 'empty-array' => array( Configuration::TEMP_INI_UNSET_VAR ) ) );
-        $result = $this->parser->parseFilePhp( $iniString );
+        $result = $this->parser->parse( $iniString );
         $this->assertEquals(
             $expects,
             $result,
-            'parse_ini_string based ini parser did not return empty array'
-        );
-
-        $result = $this->parser->parseFileEzc( $iniString );
-        $this->assertEquals(
-            $expects,
-            $result,
-            'ezcConfigurationIniReader based ini parser did not return empty array'
+            'ini parser did not return empty array'
         );
     }
 
@@ -197,18 +182,11 @@ conditions[three][three][three]=subTen
             )
         );
 
-        $result = $this->parser->parseFileEzc( $iniString );
+        $result = $this->parser->parse( $iniString );
         $this->assertEquals(
             $expects,
             $result,
-            'ezcConfigurationIniReader based ini parser did not parse complex hash'
-        );
-
-        $result = $this->parser->parseFilePhp( $iniString );
-        $this->assertEquals(
-            $expects,
-            $result,
-            'parse_ini_string based ini parser did not parse complex hash'
+            'ini parser did not parse complex hash'
         );
     }
 
@@ -232,18 +210,11 @@ two[one][]
              )
         );
 
-        $result = $this->parser->parseFileEzc( $iniString );
+        $result = $this->parser->parse( $iniString );
         $this->assertEquals(
             $expects,
             $result,
-            'ezcConfigurationIniReader based ini parser did not properly clear array'
-        );
-
-        $result = $this->parser->parseFilePhp( $iniString );
-        $this->assertEquals(
-            $expects,
-            $result,
-            'parse_ini_string based ini parser did not properly clear array'
+            'ini parser did not properly clear array'
         );
     }
 }

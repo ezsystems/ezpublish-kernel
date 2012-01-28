@@ -89,6 +89,8 @@ class Ini implements Parser
     /**
      * Parse file and return raw configuration data
      *
+     * @todo Change impl to use exceptions instead of trigger_error in most cases
+     *
      * @param string $fileContent
      * @return array
      */
@@ -103,8 +105,7 @@ class Ini implements Parser
         if ( $configurationData === false )
         {
             trigger_error(
-                "parse_ini_string( {$this->file} ) failed, see warning for line number. " .
-                "Falling back to ezcConfigurationIniReader",
+                "parse_ini_string( {$this->file} ) failed, see warning for line number. ",
                 E_USER_NOTICE
             );
             return array();
@@ -118,11 +119,10 @@ class Ini implements Parser
      * This parser is stricter then ezcConfigurationIniReader and does not support many of
      * the ini files eZ Publish use because things like regex as ini variable and so on.
      *
-     * @access internal
      * @param string $fileContent
      * @return array|false Data structure for parsed ini file or false if it fails
      */
-    public function parseFilePhp( $fileContent )
+    protected function parseFilePhp( $fileContent )
     {
         // First some pre processing to normalize result with ezc result (avoid 'true' becoming '1')
         $fileContent = str_replace(
@@ -163,11 +163,12 @@ class Ini implements Parser
     /**
      * Parse configuration file using ezcConfigurationIniReader
      *
-     * @access internal
+     * @todo Change impl to use exceptions instead of trigger_error
+     *
      * @param string $fileContent
      * @return array Data structure for parsed ini file
      */
-    public function parseFileEzc( $fileContent )
+    protected function parseFileEzc( $fileContent )
     {
         // First some pre processing to normalize result with parse_ini_string result
         $fileContent = str_replace( array( "\r\n", "\r" ), "\n", $fileContent . "\n" );
