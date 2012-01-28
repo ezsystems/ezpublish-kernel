@@ -1,8 +1,7 @@
 ##Public API implementation repo for NetGen and eZ
 
 #Dependencies
-* pear: PHPUnit
-* pear: eZ Components
+* pear: PHPUnit & eZ Components
 * PHP 5 Module: php5_sqlit
 * Database: sqlite3 if not installed by above stage
 
@@ -30,7 +29,7 @@ ezp\Persistence\Storage\InMemory ("In-Memory" Storage Engine(for unit tests))
 
 ezp\Io (Io Interface)
 ezp\Io\Storage\Legacy (Legacy Storage Engine)
-ezp\Io\Storage\InMemory ("In-Memory" Storage Engine(for unit tests):)
+ezp\Io\Storage\InMemory ("In-Memory" Storage Engine(for unit tests))
 
 
 #Things that are temporary
@@ -40,11 +39,10 @@ ezp\Io\Storage\InMemory ("In-Memory" Storage Engine(for unit tests):)
 
 
 #How to add Service unit tests from ezp-next (using both InMemory and Legacy Storage Handlers)
-* cp ../ezp-next/ezp/Content/Tests/Service/<serviceTest> ezp/Publish/PublicAPI/Tests/Service/<serviceTest>
-* cd ../ezp-next && git checkout legacyServiceTesting
-* cp ../ezp-next/ezp/Content/Tests/Service/Legacy/<serviceTest> ezp/Publish/PublicAPI/Tests/Service/Legacy/<serviceTest>
-* git checkout master && cd ../publicapi
-* Addapt to new Interface
+* cp ../ezp-next/ezp/Content/Tests/Service/<serviceTest> ezp/Publish/PublicAPI/Tests/Service/<Service>Base.php
+* Make it abstract and addopt to inherit from ezp/Publish/PublicAPI/Tests/Service/Base.php
+* Copy existing SectionTest.php in both InMemory/ and Legacy/ folder to <Service>Test.php and addapt it to extend class from above. 
+* Addapt tests to new Interface
 
 #Things to remember when writing unit tests
 * Check return class name type
