@@ -70,12 +70,6 @@ class ServiceContainer
     private $settings;
 
     /**
-     * Temp stuff for unit tests
-     * @var ServiceContainer
-     */
-    public static $instance;
-
-    /**
      * Construct object with optional configuration overrides
      *
      * @param array $settings Services settings
