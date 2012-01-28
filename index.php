@@ -54,9 +54,3 @@ $sectionUpdateStruct->identifier = 'standard_2';
 $section = $sectionService->updateSection( $section, $sectionUpdateStruct );
 echo $section->name;
 echo $section->identifier;
-
-/* @todo: Should be moved to a debug class using shutdown event
-echo "\n<br /><small>Page Generated in: " . ( microtime(true) - $request->microTime ) * 1000 . " microseconds";
-echo ', memory usage: ' . number_format( memory_get_usage() / 1024, 4 ) . ', peak: ' . number_format( memory_get_peak_usage() / 1024, 4 );
-echo ', debug: '. ( ezp\system\Configuration::getInstance()->get( 'autoload', 'development-mode' ) ? 'On' : 'Off' );
-echo '</small>';*/
