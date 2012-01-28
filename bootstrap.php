@@ -57,7 +57,4 @@ $sc = new ServiceContainer(
     )
 );
 
-// Temp stuff for unit tests
-ServiceContainer::$instance = $sc;
-
 return $sc;

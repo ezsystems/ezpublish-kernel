@@ -8,9 +8,10 @@
  */
 
 namespace ezp\Publish\PublicAPI\Tests\Service;
-use PHPUnit_Framework_TestCase,
-    ezp\Base\ServiceContainer,
-    ezp\Base\Configuration;
+use ezp\Publish\PublicAPI\Repository,
+    ezp\Io\Storage\InMemory as InMemoryIoHandler,
+    ezp\Persistence\Storage\InMemory\Handler as InMemoryPersistenceHandler,
+    PHPUnit_Framework_TestCase;
 
 /**
  * Base test case for tests on services
@@ -23,6 +24,9 @@ abstract class Base extends PHPUnit_Framework_TestCase
      */
     protected $repository;
 
+    /**
+     * Setup test
+     */
     protected function setUp()
     {
         parent::setUp();
@@ -32,26 +36,12 @@ abstract class Base extends PHPUnit_Framework_TestCase
     /**
      * Generate \ezp\Publish\PublicAPI\Repository
      *
-     * Makes it possible to inject different repository handlers
+     * Makes it possible to inject different Io / Persistence handlers
      *
      * @return \ezp\Publish\PublicAPI\Repository
      */
     protected static function getRepository()
     {
-        /*
-         * For legacy storage engine it will be something like bellow.
-         * BUT: Scheme & data will have to be inserted and data needs to be synced with data.json in InMemory SE
-         *
-         *   $dns = ( isset( $_ENV['DATABASE'] ) && $_ENV['DATABASE'] ) ? $_ENV['DATABASE'] : 'sqlite://:memory:';
-         *   $sc = new ServiceContainer(
-         *       Configuration::getInstance('service')->getAll(),
-         *       array(
-         *           '@persistence_handler' => new \ezp\Persistence\Storage\Legacy\Handler( array( 'dns' => $dns ) )
-         *       )
-         *   );
-         * @var /ezp/Base/ServiceContainer $sc
-         */
-        $sc = ServiceContainer::$instance;
-        return $sc->getRepository();
+        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIoHandler() );
     }
 }
