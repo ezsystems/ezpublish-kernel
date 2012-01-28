@@ -27,13 +27,13 @@ interface UserService
      * - the content type is determined via configuration and can be set to null.
      * The returned version is published.
      *
-     * @param UserGroupCreateStruct $userGroupCreateStruct a structure for setting all necessary data to create this user group
-     * @param UserGroup $parentGroup
+     * @param \ezp\PublicAPI\Values\User\UserGroupCreateStruct $userGroupCreateStruct a structure for setting all necessary data to create this user group
+     * @param \ezp\PublicAPI\Values\User\UserGroup $parentGroup
      *
-     * @return UserGroup
+     * @return \ezp\PublicAPI\Values\User\UserGroup
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException if the input structure has invalid data
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group
+     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if the input structure has invalid data
      */
     public function createUserGroup( UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup );
 
@@ -42,22 +42,22 @@ interface UserService
      *
      * @param int $id
      *
-     * @return UserGroup
+     * @return \ezp\PublicAPI\Values\User\UserGroup
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
      */
     public function loadUserGroup( $id );
 
     /**
      * Loads the sub groups of a user group
      *
-     * @param UserGroup $userGroup
+     * @param \ezp\PublicAPI\Values\User\UserGroup $userGroup
      *
-     * @return array an array of {@link UserGroup}
+     * @return array an array of {@link \ezp\PublicAPI\Values\User\UserGroup}
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read the user group
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read the user group
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
      */
     public function loadSubUserGroups( UserGroup $userGroup );
 
@@ -66,21 +66,21 @@ interface UserService
      *
      * the users which are not assigned to other groups will be deleted.
      *
-     * @param UserGroup $userGroup
+     * @param \ezp\PublicAPI\Values\User\UserGroup $userGroup
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a user group
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
      */
     public function deleteUserGroup( UserGroup $userGroup );
 
     /**
      * Moves the user group to another parent
      *
-     * @param UserGroup $userGroup
-     * @param UserGroup $newParent
+     * @param \ezp\PublicAPI\Values\User\UserGroup $userGroup
+     * @param \ezp\PublicAPI\Values\User\UserGroup $newParent
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to move the user group
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to move the user group
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
      */
     public function moveUserGroup( UserGroup $userGroup, UserGroup $newParent );
 
@@ -90,26 +90,26 @@ interface UserService
      * 4.x: If the versionUpdateStruct is set in $userGroupUpdateStruct, this method internally creates a content draft, updates ts with the provided data
      * and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.
      *
-     * @param UserGroup $userGroup
-     * @param UserGroupUpdateStruct $userGroupUpdateStruct
+     * @param \ezp\PublicAPI\Values\User\UserGroup $userGroup
+     * @param \ezp\PublicAPI\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct
      *
-     * @return UserGroup
+     * @return \ezp\PublicAPI\Values\User\UserGroup
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to move the user group
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to move the user group
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if the user group with the given id was not found
      */
     public function updateUserGroup( UserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct );
 
     /**
      * Create a new user. The created user is published by this method
      *
-     * @param UserCreateStruct $userCreateStruct the data used for creating the user
-     * @param array $parentGroups the groups of type {@link UserGroup} which are assigned to the user after creation
+     * @param \ezp\PublicAPI\Values\User\UserCreateStruct $userCreateStruct the data used for creating the user
+     * @param array $parentGroups the groups of type {@link \ezp\PublicAPI\Values\User\UserGroup} which are assigned to the user after creation
      *
-     * @return User
+     * @return \ezp\PublicAPI\Values\User\User
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to move the user group
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if a user group was not found
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to move the user group
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if a user group was not found
      */
     public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups );
 
@@ -118,9 +118,9 @@ interface UserService
      *
      * @param integer $userId
      *
-     * @return User
+     * @return \ezp\PublicAPI\Values\User\User
      *
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if a user with the given id was not found
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if a user with the given id was not found
      */
     public function loadUser( $userId );
 
@@ -130,18 +130,18 @@ interface UserService
      * @param string $login
      * @param string $password the plain password
      *
-     * @return User
+     * @return \ezp\PublicAPI\Values\User\User
      *
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if a user with the given credentials was not found
+     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if a user with the given credentials was not found
      */
     public function loadUserByCredentials( $login, $password );
 
     /**
      * This method deletes a user
      *
-     * @param User $user
+     * @param \ezp\PublicAPI\Values\User\User $user
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to delete the user
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to delete the user
      */
     public function deleteUser( User $user );
 
@@ -151,10 +151,10 @@ interface UserService
      * 4.x: If the versionUpdateStruct is set in the user update structure, this method internally creates a content draft, updates ts with the provided data
      * and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.
      *
-     * @param User $user
-     * @param UserUpdateStruct
+     * @param \ezp\PublicAPI\Values\User\User $user
+     * @param \ezp\PublicAPI\Values\User\UserUpdateStruct
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to update the user
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to update the user
      */
     public function updateUser( User $user, UserUpdateStruct $userUpdateStruct );
 
@@ -163,21 +163,21 @@ interface UserService
      *
      * If the user is already in the given user group this method does nothing.
      *
-     * @param User $user
-     * @param UserGroup $userGroup
+     * @param \ezp\PublicAPI\Values\User\User $user
+     * @param \ezp\PublicAPI\Values\User\UserGroup $userGroup
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
      */
     public function assignUserToUserGroup( User $user, UserGroup $userGroup );
 
     /**
      * Removes a user group from the user
      *
-     * @param User $user
-     * @param UserGroup $userGroup
+     * @param \ezp\PublicAPI\Values\User\User $user
+     * @param \ezp\PublicAPI\Values\User\UserGroup $userGroup
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
-     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException if the user is not in the given user group
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
+     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if the user is not in the given user group
      */
     public function unAssignUssrFromUserGroup( User $user, UserGroup $userGroup );
 
@@ -190,7 +190,7 @@ interface UserService
      * @param string $mainLanguageCode the main language for the underlying content object
      * @param ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
      *
-     * @return UserCreateStruct
+     * @return \ezp\PublicAPI\Values\User\UserCreateStruct
      */
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null );
 
@@ -198,23 +198,23 @@ interface UserService
      * Instantiate a user group create class
      *
      * @param string $mainLanguageCode The main language for the underlying content object
-     * @param null|ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
+     * @param null|\ezp\PublicAPI\Values\ContentType\ContentType $contentType 5.x the content type for the underlying content object. In 4.x it is ignored and taken from the configuration
      *
-     * @return UserGroupCreateStruct
+     * @return \ezp\PublicAPI\Values\User\UserGroupCreateStruct
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null );
 
     /**
      * Instantiate a new user update struct
      *
-     * @return UserUpdateStruct
+     * @return \ezp\PublicAPI\Values\User\UserUpdateStruct
      */
     public function newUserUpdateStruct();
 
     /**
      * Instantiate a new user group update struct
      *
-     * @return UserGroupUpdateStruct
+     * @return \ezp\PublicAPI\Values\User\UserGroupUpdateStruct
      */
     public function newUserGroupUpdateStruct();
 }
