@@ -28,7 +28,7 @@ return array(
             'ezcBase' => 'ezc/Base/base.php',
         ),
         'Configuration' => array(
-            // Default value for Configuration cache $useCache param
+            // Disable cache, default true
             'UseCache' => false,
 
             // List of parser classes where key is file suffix
@@ -37,16 +37,16 @@ return array(
                 '.ini.append.php' => 'ezp\\Base\\Configuration\\Parser\\Ini',
             ),
 
-            // Default false
+            // Enable strict ini parsing using parse_ini_string(), default false using eZ/Zeta Components INI Reader
             'IniParserStrict' => true,
 
-            // Switch for development mode or not
+            // Switch for development mode or not, default false
             'DevelopmentMode' => true,
 
-            // File Permissions
+            // File Permissions, default 0644
             'CacheFilePermission' => 0644,
 
-            // Dir permissions
+            // Dir permissions, default 0755
             'CacheDirPermission' => 0755,
 
             // Paths and scopes to read ini settings from

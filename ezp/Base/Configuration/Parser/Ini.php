@@ -73,17 +73,20 @@ class Ini implements Parser
      * Construct an instance for a specific file
      *
      * @param string $file A valid file name, file must exist!
-     * @param array $configuration
+     * @param array $globalConfiguration
      */
-    public function __construct( $file, array $configuration )
+    public function __construct( $file, array $globalConfiguration )
     {
         $this->file = $file;
-        if ( isset( $configuration['base']['Configuration']['IniParserStrict'] ) )
-            $this->strictMode = $configuration['base']['Configuration']['IniParserStrict'];
-        if ( isset( $configuration['base']['Configuration']['CacheFilePermission'] ) )
-            $this->filePermission = $configuration['base']['Configuration']['CacheFilePermission'];
-        if ( isset( $configuration['base']['Configuration']['CacheDirPermission'] ) )
-            $this->dirPermission = $configuration['base']['Configuration']['CacheDirPermission'];
+
+        if ( isset( $globalConfiguration['base']['Configuration']['IniParserStrict'] ) )
+            $this->strictMode = $globalConfiguration['base']['Configuration']['IniParserStrict'];
+
+        if ( isset( $globalConfiguration['base']['Configuration']['CacheFilePermission'] ) )
+            $this->filePermission = $globalConfiguration['base']['Configuration']['CacheFilePermission'];
+
+        if ( isset( $globalConfiguration['base']['Configuration']['CacheDirPermission'] ) )
+            $this->dirPermission = $globalConfiguration['base']['Configuration']['CacheDirPermission'];
     }
 
     /**

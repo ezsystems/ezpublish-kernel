@@ -69,10 +69,18 @@ class ConfigurationManager
      *
      * @param array $globalConfiguration
      */
-    public function __construct( array $globalConfiguration )
+    public function __construct(
+        array $globalConfiguration,
+        array $globalPaths = array(
+             'base' => array( 'settings/' ),
+             'modules' => array( 'ezp/Base/settings/' ),
+             'access' => array(),
+             'global' => array( 'settings/override/' ),
+        )
+    )
     {
         $this->globalConfiguration = $globalConfiguration;
-        $this->globalPaths =& $this->globalConfiguration['base']['Configuration']['Paths'];
+        $this->globalPaths = $globalPaths;
     }
 
     /**

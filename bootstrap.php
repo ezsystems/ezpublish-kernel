@@ -30,7 +30,8 @@ spl_autoload_register( array( 'ezcBase', 'autoload' ) );
 
 
 $configManager = new ConfigurationManager(
-    $settings
+    $settings,
+    $settings['base']['Configuration']['Paths']
 );
 
 // Access matching before we get active modules or opposite?

@@ -86,6 +86,16 @@ class Configuration
     protected $globalConfiguration;
 
     /**
+     * @var int
+     */
+    protected $filePermission = 0644;
+
+    /**
+     * @var int
+     */
+    protected $dirPermission = 0755;
+
+    /**
      * Create instance of Configuration
      *
      * @param string $moduleName The name of the module (and in case of ini files, same as ini filename w/o suffix)
@@ -97,6 +107,12 @@ class Configuration
         $this->moduleName = $moduleName;
         $this->paths = $paths;
         $this->globalConfiguration = $globalConfiguration;
+
+        if ( isset( $globalConfiguration['base']['Configuration']['CacheFilePermission'] ) )
+            $this->filePermission = $globalConfiguration['base']['Configuration']['CacheFilePermission'];
+
+        if ( isset( $globalConfiguration['base']['Configuration']['CacheDirPermission'] ) )
+            $this->dirPermission = $globalConfiguration['base']['Configuration']['CacheDirPermission'];
     }
 
     /**
@@ -237,8 +253,8 @@ class Configuration
         }
 
         // Check modified time if dev mode
-        if ( isset( $this->globalConfigurationData['base']['Configuration']['DevelopmentMode'] )
-          && $this->globalConfigurationData['base']['Configuration']['DevelopmentMode'] )
+        if ( isset( $this->globalConfiguration['base']['Configuration']['DevelopmentMode'] )
+          && $this->globalConfiguration['base']['Configuration']['DevelopmentMode'] )
         {
             $currentTime = time();
             foreach ( $cacheData['files'] as $inputFile )
@@ -385,7 +401,9 @@ class Configuration
         {
             // Create ini dir if it does not exist
             if ( !file_exists( self::CONFIG_CACHE_DIR ) )
-                mkdir( self::CONFIG_CACHE_DIR, $this->globalConfiguration['base']['Configuration']['CacheDirPermission'], true );
+            {
+                mkdir( self::CONFIG_CACHE_DIR, $this->dirPermission, true );
+            }
 
             // Create cache hash
             $cachedFile = self::CONFIG_CACHE_DIR . $cacheName . '.php';
@@ -402,7 +420,7 @@ class Configuration
             $generator->finish();
 
             // make sure file has correct file permissions
-            chmod( $cachedFile, $this->globalConfiguration['base']['Configuration']['CacheFilePermission'] );
+            chmod( $cachedFile, $this->filePermission );
         }
         catch ( Exception $e )
         {
