@@ -7,11 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Publish\PublicAPI\Tests\Service\Section\InMemory;
-use ezp\Publish\PublicAPI\Tests\Service\Section\Base as BaseSectionServiceTest,
-    ezp\Publish\PublicAPI\Repository,
-    ezp\Io\Storage\InMemory as InMemoryIoHandler,
-    ezp\Persistence\Storage\InMemory\Handler as InMemoryPersistenceHandler;
+namespace ezp\Publish\PublicAPI\Tests\Service\Legacy;
+use ezp\Publish\PublicAPI\Tests\Service\SectionBase as BaseSectionServiceTest;
 
 /**
  * Test case for Section Service using Legacy storage class
@@ -21,6 +18,6 @@ class SectionTest extends BaseSectionServiceTest
 {
     protected function getRepository()
     {
-        return new Repository( new InMemoryPersistenceHandler(), new InMemoryIoHandler() );
+        return include 'common.php';
     }
 }
