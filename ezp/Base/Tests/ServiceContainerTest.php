@@ -1,6 +1,6 @@
 <?php
 /**
- * File contains: ezp\Base\Tests\ServiceContainerTest class
+ * File contains: Test class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
@@ -8,13 +8,13 @@
  */
 
 namespace ezp\Base\Tests;
-use ezp\Base\ServiceContainer;
+use ezp\Base\ServiceContainer,
+    PHPUnit_Framework_TestCase;
 
 /**
- * Test case for ServiceContainer class
- *
+ * Test class
  */
-class ServiceContainerTest extends \PHPUnit_Framework_TestCase
+class ServiceContainerTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @covers \ezp\Base\ServiceContainer::get
