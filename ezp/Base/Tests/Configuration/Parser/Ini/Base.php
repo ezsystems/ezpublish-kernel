@@ -165,6 +165,8 @@ conditions[][][]=subSeven
 conditions[three][three][three]=subEight
 conditions[three][three][three3]=subNine
 conditions[three][three][three]=subTen
+conditions[events][pre_request][]=outputFn
+
 ';
         $expects = array(
             'test' => array(
@@ -178,6 +180,7 @@ conditions[three][three][three]=subTen
                     array( array( 'subSix' ) ),
                     array( array( 'subSeven' ) ),
                     'three' => array( 'three' => array( 'three' => 'subTen', 'three3' => 'subNine' ) ),
+                    'events' => array( 'pre_request' => array( 'outputFn' ) )
                 )
             )
         );
