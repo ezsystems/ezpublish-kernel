@@ -19,7 +19,7 @@ $contentService = $repository->getContentService();
 $versionInfo = $contentService->loadVersionInfoById( $contentId );
 
 // create a draft from the before published content
-$draft = $contentService->createDraftFromContent( $versionInfo->Content, $versionInfo );
+$draft = $contentService->createDraftFromContent( $versionInfo->contentInfo, $versionInfo );
 
 /**
  * Translate one language
@@ -30,29 +30,29 @@ $translationInfo->sourceVersion = $versionInfo;
 $translationInfo->destinationLanguage = 'ger-DE';
 $translationInfo->destinationVersion = $draft;
 
-$translation = $contentService->newTranslation( $translationInfo );
+$translation = $contentService->newTranslation();
 $translation->fields['title'] = 'Titel';
 // .....
 
-$draft = $contentService->translateVersion( $translation );
+$draft = $contentService->translateVersion( $translationInfo, $translation );
 
 // publish the version
-$newPublishedVersion = $contentService->publishDraft( $draft->versionInfo );
+$newPublishedVersion = $contentService->publishContent( $draft->versionInfo );
 
 
 /**
  * Translate more than one language at once (low level)
  */
 
-$versionUpdate = $contentService->newVersionUpdateStruct();
-$versionUpdate->fields['title']['ger-DE'] = 'Titel';
+$contentUpdate = $contentService->newVersionUpdateStruct();
+$contentUpdate->fields['title']['ger-DE'] = 'Titel';
 // ...
-$versionUpdate->fields['title']['fra-FR'] = 'Titre';
+$contentUpdate->fields['title']['fra-FR'] = 'Titre';
 // ..
 
-$draft = $contentService->updateVersion( $draft, $versionUpdate );
+$draft = $contentService->updateContent( $draft, $contentUpdate );
 
-$newPublishedVersion = $contentService->publishDraft( $draft->versionInfo );
+$newPublishedVersion = $contentService->publishContent( $draft->versionInfo );
 
 $translationInfo = $contentService->newTranslationInfo();
 $translationInfo->sourceLanguage = 'eng-US';

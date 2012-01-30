@@ -4,6 +4,7 @@
  */
 namespace ezp\PublicAPI\Interfaces;
 
+use ezp\PublicAPI\Values\Content\ContentUpdateStruct;
 use ezp\PublicAPI\Values\ContentType\ContentType;
 use ezp\PublicAPI\Values\Content\Query;
 use ezp\PublicAPI\Values\Content\TranslationInfo;
@@ -203,7 +204,7 @@ interface ContentService
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create the draft
      * @throws \ezp\PublicAPI\Interfaces\BadStateException if there is no published version or the version info points to a draft
      */
-    public function createDraftFromContent( ContentInfo $contentInfo, VersionInfo $versionInfo = null );
+    public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null );
 
     /**
      * Load drafts for a user. 
@@ -243,22 +244,24 @@ interface ContentService
      * Updates the fields of a draft.
      *
      * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
-     * @param \ezp\PublicAPI\Values\Content\ContentUpdateStruct $contnetUpdateStruct
+     * @param \ezp\PublicAPI\Values\Content\ContentUpdateStruct $contentUpdateStruct
      *
      * @return \ezp\PublicAPI\Values\Content\Content the content draft with the updated fields
      *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update this version
      * @throws \ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft
      */
-    public function updateContent( VersionInfo $versionInfo, ContentUpdateStruct $contnetUpdateStruct );
+    public function updateContent( VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct );
 
     /**
      * Publishes a content version
      *
      * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
      *
+     * @return \ezp\PublicAPI\Values\Content\Content
+     *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to publish this version
-     * @throws \ezp\PublicAPI\Interfaces\BadStateException if the version is already in published state
+     * @throws \ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft
      */
     public function publishVersion( VersionInfo $versionInfo );
 
@@ -362,7 +365,7 @@ interface ContentService
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit this version
      * @throws \ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft
      */
-    public function addRelation( VersionInfo $versionInfo, ContentInfo $destination );
+    public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent );
 
     /**
      * Removes a relation of type COMMON from a draft.
@@ -374,7 +377,7 @@ interface ContentService
      * @throws \ezp\PublicAPI\Interfaces\BadStateException if the version is not a draft
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if there is no relation of type COMMON for the given destination
      */
-    public function deleteRelation( VersionInfo $versionInfo, ContentInfo $destination);
+    public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent);
 
     /**
      * add translation information to the content object
@@ -436,7 +439,7 @@ interface ContentService
 
     /**
      * Instantiates a Translation object
-     * @return \ezp\PublicAPI\Values\Content\Translation
+     * @return \ezp\PublicAPI\Values\Content\TranslationValues
      */
-    public function newTranslation();
+    public function newTranslationValues();
 }

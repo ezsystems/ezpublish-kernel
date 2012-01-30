@@ -98,20 +98,6 @@ interface SectionService
      */
     public function assignSection( ContentInfo $contentInfo, Section $section );
 
-    /**
-     * Assigns $section to the contents held by $startingPoint location and
-     * all contents held by descendants locations of $startingPoint to which the user has
-     * the permission to assign a section
-     *
-     * @param Location $startingPoint
-     * @param Section $section
-     *
-     * @return array  a list (string) of descendants which are not changed due to permissions
-     *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to the starting point
-     *
-     */
-    public function assignSectionToSubTree( Location $startingPoint, Section $section );
 
     /**
      * Deletes $section from content repository

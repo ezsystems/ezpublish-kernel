@@ -62,13 +62,13 @@ abstract class ContentInfo extends ValueObject
 
     /**
      * Content modification date
-     * @var int Unix timestamp
+     * @var DateTime
      */
     public $modifiedDate;
 
     /**
      * Content publication date
-     * @var int Unix timestamp
+     * @var DateTime
      */
     public $publishedDate;
 

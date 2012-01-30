@@ -93,4 +93,10 @@ interface LanguageService
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
      */
     public function delete( $languageCode );
+    
+    /**
+     * 
+     * @return \ezp\PublicAPI\Values\Content\Language
+     */
+    public function getDefaultLanguageCode();
 }

@@ -58,9 +58,9 @@ abstract class ContentCreateStruct extends ValueObject
     /**
      * Modification date. If not given the current timestamp is used.
      *
-     * @var integer - the time stamp
+     * @var DateTime
      */
-    public $modified = null;
+    public $modifiedDate;
 
     /**
      * Adds a field to the field collection.

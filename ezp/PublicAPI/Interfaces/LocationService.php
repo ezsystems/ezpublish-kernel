@@ -179,18 +179,11 @@ interface LocationService
     /**
      * Deletes $location and all its descendants.
      * 
-     * If $overridePermissions is set to false and a user has no permission to delete a descendant
-     * it is not deleted and the location path to this item is left untouched i.e. only the
-     * locations on which the user has permission to delete are deleted.
-     * Otherwise if $overridePermissions is set to true (default) the method deletes all descendants
-     * regardles of the permission settings.
-     *
      * @param \ezp\PublicAPI\Values\Content\Location $location
-     * @param boolean $overridePermissions
      *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to delete this location
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to delete this location or a descendant
      */
-    public function deleteLocation( Location $location, $overridePermissions = true );
+    public function deleteLocation( Location $location );
 
 
     /**

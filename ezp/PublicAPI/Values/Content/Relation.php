@@ -30,11 +30,11 @@ abstract class Relation extends ValueObject
     const LINK = 4;
 
     /**
-     * the relation type ATTRIBUTE is set for a relation which is part of an relation attribute value
+     * the relation type FIELD is set for a relation which is part of an relation attribute value
      *
      * @var int
      */
-    const ATTRIBUTE = 8;
+    const FIELD = 8;
 
     /**
      * Id of the relation
@@ -69,7 +69,7 @@ abstract class Relation extends ValueObject
     /**
      * The relation type bitmask
      *
-     * @see Relation::COMMON, Relation::EMBED, Relation::LINK, Relation::ATTRIBUTE
+     * @see Relation::COMMON, Relation::EMBED, Relation::LINK, Relation::FIELD
      *
      * @var int
      */

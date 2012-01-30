@@ -14,7 +14,7 @@ use ezp\PublicAPI\Values\User\User;
 use ezp\Values\ContentType\ContentTypeUpdateStruct;
 use ezp\PublicAPI\Values\Content\ContentType\ContentTypeCreateStruct;
 use ezp\PublicAPI\Values\ContentType\ContentTypeGroupUpdateStruct;
-use ezp\VPublicAPI\alues\ContentType\ContentTypeGroupCreateStruct;
+use ezp\PublicAPI\Values\ContentType\ContentTypeGroupCreateStruct;
 
 /**
  * @example Examples/contenttype.php
@@ -26,9 +26,9 @@ interface ContentTypeService
     /**
      * Create a Content Type Group object
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeGroupCreateStruct $contentTypeGroupCreateStruct
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentTypeGroup
+     * @return \ezp\PublicAPI\Values\ContentType\ContentTypeGroup
      *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create a content type group
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException If a group with the same identifier already exists
@@ -40,7 +40,7 @@ interface ContentTypeService
      *
      * @param int $contentTypeGroupId
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentTypeGroup
+     * @return \ezp\PublicAPI\Values\ContentType\ContentTypeGroup
      *
      * @throws \ezp\PublicAPI\Interfaces\NotFoundException If group can not be found
      */
@@ -51,7 +51,7 @@ interface ContentTypeService
      *
      * @param string $contentTypeGroupIdentifier
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentTypeGroup
+     * @return \ezp\PublicAPI\Values\ContentType\ContentTypeGroup
      * @throws \ezp\PublicAPI\Interfaces\NotFoundException If group can not be found
      */
     public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier );
@@ -66,8 +66,8 @@ interface ContentTypeService
     /**
      * Update a Content Type Group object
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeGroup $contentTypeGroup the content type group to be updated
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeGroup $contentTypeGroup the content type group to be updated
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
      *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to create a content type group
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException If the given identifier (if set) already exists
@@ -81,7 +81,7 @@ interface ContentTypeService
      * this method deletes also all content types in this group which
      * are not assigned to other groups including the content object instances.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeGroup
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeGroup
      * @param boolean $deleteObjects indicates if content object should be deleted if exist
      *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to delete a content type group
@@ -95,10 +95,10 @@ interface ContentTypeService
      * 
      * The content type is created in the state STATUS_DRAFT.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeCreateStruct $contentTypeCreateStruct
      * @param array $contentTypeGroups Required array of {@link ContentTypeGroup} to link type with (must contain one)
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentTypeDraft
+     * @return \ezp\PublicAPI\Values\ContentType\ContentTypeDraft
      *
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException If the identifier or remoteId in the content type create struct already exists
      *         or there is a dublicate field identifier
@@ -110,7 +110,7 @@ interface ContentTypeService
      *
      * @param int $contentTypeId
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentType
+     * @return \ezp\PublicAPI\Values\ContentType\ContentType
      *
      * @throws \ezp\PublicAPI\Interfaces\NotFoundException If a content type with the given id and status DEFINED can not be found
      */
@@ -121,7 +121,7 @@ interface ContentTypeService
      *
      * @param string $identifier
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentType
+     * @return \ezp\PublicAPI\Values\ContentType\ContentType
      *
      * @throws \ezp\PublicAPI\Interfaces\NotFoundException If content type with the given identifier and status DEFINED can not be found
      */
@@ -132,7 +132,7 @@ interface ContentTypeService
      *
      * @param string $remoteId
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentType
+     * @return \ezp\PublicAPI\Values\ContentType\ContentType
      *
      * @throws \ezp\PublicAPI\Interfaces\NotFoundException If content type with the given remote id and status DEFINED can not be found
      */
@@ -143,7 +143,7 @@ interface ContentTypeService
      *
      * @param int $contentTypeId
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentTypeDraft
+     * @return \ezp\PublicAPI\Values\ContentType\ContentTypeDraft
      *
      * @throws \ezp\PublicAPI\Interfaces\NotFoundException If the content type draft owned by the current user can not be found
      */
@@ -152,7 +152,7 @@ interface ContentTypeService
     /**
      * Get Content Type objects which belong to the given content type group
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeGroup $contentTypeGroup
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
      * @return array an array of {@link ContentType} which have status DEFINED
      */
@@ -164,9 +164,9 @@ interface ContentTypeService
      * This is a complete copy of the content
      * type wiich has the state STATUS_DRAFT.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentType $contentType
+     * @param \ezp\PublicAPI\Values\ContentType\ContentType $contentType
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentTypeDraft
+     * @return \ezp\PublicAPI\Values\ContentType\ContentTypeDraft
      *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to edit a content type
      * @throws \ezp\PublicAPI\Interfaces\BadStateException If there is already a draft assigned to another user
@@ -178,8 +178,8 @@ interface ContentTypeService
      *
      * Does not update fields (fieldDefinitions), use {@link updateFieldDefinition()} to update them.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeDraft $contentTypeDraft
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
      *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to update a content type
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException If the given identifier or remoteId already exists or there is no draft assigned to the authenticated user
@@ -191,7 +191,7 @@ interface ContentTypeService
      * 
      * If $deleteObjects is set to true all object instances of this content type are deleted.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentType $contentType
+     * @param \ezp\PublicAPI\Values\ContentType\ContentType $contentType
      * @param boolean $deleteObjects indicates if content object should be deleted if exist
      *
      * @throws \ezp\PublicAPI\Interfaces\BadStateException $deleteObjects is set to false and there exist content objects of this type
@@ -205,10 +205,10 @@ interface ContentTypeService
      * New Type will have $userId as creator / modifier, created / modified should be updated with current time,
      * updated remoteId and identifier should be appended with '_' + unique string.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentType $contentType
+     * @param \ezp\PublicAPI\Values\ContentType\ContentType $contentType
      * @param \ezp\PublicAPI\Values\User\User $user if null the current user is used
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentType
+     * @return \ezp\PublicAPI\Values\ContentType\ContentType
      *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to copy a content type
      */
@@ -217,8 +217,8 @@ interface ContentTypeService
     /**
      * assign a content type to a content type group.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentType $contentType
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeGroup $contentTypeGroup
+     * @param \ezp\PublicAPI\Values\ContentType\ContentType $contentType
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to unlink a content type
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException If the content type is already assigned the given group
@@ -228,8 +228,8 @@ interface ContentTypeService
     /**
      * Unassign a content type from a group.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentType $contentType
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeGroup $contentTypeGroup
+     * @param \ezp\PublicAPI\Values\ContentType\ContentType $contentType
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeGroup $contentTypeGroup
      *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to link a content type
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException If the content type is not assigned this the given group.
@@ -242,7 +242,7 @@ interface ContentTypeService
      * 
      * The content type must be in state DRAFT.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \ezp\PublicAPI\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      *
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if the identifier in already exists in the content type
@@ -253,7 +253,7 @@ interface ContentTypeService
     /**
      * Remove a field definition from an existing Type.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \ezp\PublicAPI\Values\ContentType\FieldDefinition $fieldDefinition
      *
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException If the given field definition does not belong to the given type
@@ -264,7 +264,7 @@ interface ContentTypeService
     /**
      * Update a field definition
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeDraft $contentTypeDraft the content type draft
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeDraft $contentTypeDraft the content type draft
      * @param \ezp\PublicAPI\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
      * @param \ezp\PublicAPI\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionStruct
      *
@@ -279,7 +279,7 @@ interface ContentTypeService
      *
      * This method updates content objects, depending on the changed field definitions.
      *
-     * @param \ezp\VPublicAPI\alues\ContentType\ContentTypeDraft $contentTypeDraft
+     * @param \ezp\PublicAPI\Values\ContentType\ContentTypeDraft $contentTypeDraft
      *
      * @throws \ezp\PublicAPI\Interfaces\BadStateException If the content type has no draft
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the user is not allowed to publish a content type
@@ -291,7 +291,7 @@ interface ContentTypeService
      *
      * @param string $identifier
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentTypeGroupCreateStruct
+     * @return \ezp\PublicAPI\Values\ContentType\ContentTypeGroupCreateStruct
      */
     public function newContentTypeGroupCreateStruct( $identifier );
 
@@ -300,21 +300,21 @@ interface ContentTypeService
      *
      * @param string $identifier
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentTypeCreateStruct
+     * @return \ezp\PublicAPI\Values\ContentType\ContentTypeCreateStruct
      */
     public function newContentTypeCreateStruct( $identifier );
 
     /**
      * instanciates a new content type update struct
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentTypeUpdateStruct
+     * @return \ezp\PublicAPI\Values\ContentType\ContentTypeUpdateStruct
      */
     public function newContentTypeUpdateStruct();
 
     /**
      * instanciates a new content type update struct
      *
-     * @return \ezp\VPublicAPI\alues\ContentType\ContentTypeGroupUpdateStruct
+     * @return \ezp\PublicAPI\Values\ContentType\ContentTypeGroupUpdateStruct
      */
     public function newContentTypeGroupUpdateStruct();
 
