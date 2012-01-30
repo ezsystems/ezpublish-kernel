@@ -57,7 +57,7 @@ class Backend
      *
      * @param string $type
      * @param array $data
-     * @param bool $autoIncrement
+     * @param boolean $autoIncrement
      * @return object
      * @throws InvalidArgumentValue On invalid $type
      * @throws Logic If $autoIncrement is false but $data does not include an id
@@ -160,8 +160,8 @@ class Backend
      * @param string $type
      * @param int|string $id
      * @param array $data
-     * @param bool $union Specifies if data should be merged with existing data or not
-     * @return bool False if data does not exist and can not be updated
+     * @param boolean $union Specifies if data should be merged with existing data or not
+     * @return boolean False if data does not exist and can not be updated
      * @uses updateByMatch()
      */
     public function update( $type, $id, array $data, $union = true )
@@ -178,8 +178,8 @@ class Backend
      * @param string $type
      * @param array $match A flat array with property => value to match against
      * @param array $data
-     * @param bool $union Specifies if data should be merged with existing data or not
-     * @return bool False if data does not exist and can not be updated
+     * @param boolean $union Specifies if data should be merged with existing data or not
+     * @return boolean False if data does not exist and can not be updated
      * @throws InvalidArgumentValue On invalid $type
      */
     public function updateByMatch( $type, array $match, array $data, $union = true )

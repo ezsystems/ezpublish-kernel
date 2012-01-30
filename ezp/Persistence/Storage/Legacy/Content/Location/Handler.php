@@ -128,7 +128,7 @@ class Handler implements BaseLocationHandler
 
             foreach ( $parentLocations[$child['contentobject_id']] as $createStruct )
             {
-                // @TODO: Map original location IDs to newly created locations
+                // @todo: Map original location IDs to newly created locations
                 // for all elements below the "root" node.
                 $this->create( $createStruct );
             }

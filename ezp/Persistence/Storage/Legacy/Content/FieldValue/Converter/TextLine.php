@@ -43,7 +43,7 @@ class TextLine implements Converter
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
         $fieldValue->data = new TextLineValue( $value->dataText );
-        // TODO: Feel there is room for some improvement here, to generalize this code across field types.
+        // @todo: Feel there is room for some improvement here, to generalize this code across field types.
         $fieldValue->sortKey = array( 'sort_key_string' => $value->sortKeyString );
     }
 

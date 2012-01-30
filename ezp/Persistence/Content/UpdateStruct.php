@@ -60,7 +60,7 @@ class UpdateStruct extends ValueObject
     public $modified;
 
     /**
-     * TODO: Document
+     * @todo: Document
      *
      * @var mixed
      */

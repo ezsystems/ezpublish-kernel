@@ -21,6 +21,8 @@ use ezp\Base\Repository,
 /**
  * Io\Service class
  *
+ * @deprecated Remove when IoService Interface has been implemented
+ *
  * Differs from other Services in that it uses different handler, namely {@link \ezp\Io\Handler}
  */
 class Service extends BaseService

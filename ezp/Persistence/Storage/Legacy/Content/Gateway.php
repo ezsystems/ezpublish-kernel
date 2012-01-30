@@ -41,7 +41,7 @@ abstract class Gateway
      *
      * @param Version $version;
      * @param \ezp\Persistence\Content\Field[] $fields
-     * @param bool $alwaysAvailable
+     * @param boolean $alwaysAvailable
      * @return int ID
      */
     abstract public function insertVersion( Version $version, array $fields, $alwaysAvailable );
@@ -134,7 +134,7 @@ abstract class Gateway
      *
      * @param int $contentId
      * @return int[]
-     * @TODO This method does hardly belong here. Maybe put it into
+     * @todo This method does hardly belong here. Maybe put it into
      *       Location\Handler? But that hinders inter-operability.
      */
     abstract public function getAllLocationIds( $contentId );

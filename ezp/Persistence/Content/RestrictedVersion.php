@@ -75,7 +75,7 @@ class RestrictedVersion extends ValueObject
     public $contentId;
 
     /**
-     * TODO: Document
+     * @todo: Document
      *
      * @var mixed
      */

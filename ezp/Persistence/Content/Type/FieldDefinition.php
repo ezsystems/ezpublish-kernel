@@ -106,9 +106,9 @@ class FieldDefinition extends ValueObject
     public $defaultValue;
 
     /**
-     * TODO: Document
+     * @todo: Document
      *
-     * @var bool
+     * @var boolean
      */
     public $isSearchable;
 

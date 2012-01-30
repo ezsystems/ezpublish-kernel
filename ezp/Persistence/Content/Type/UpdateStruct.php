@@ -115,7 +115,7 @@ class UpdateStruct extends ValueObject
     public $sortOrder;
 
     /**
-     * TODO: Document.
+     * @todo: Document.
      *
      * @var bool
      */

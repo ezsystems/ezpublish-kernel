@@ -38,7 +38,6 @@ class CreateStruct extends ValueObject
     /**
      * contentId, contentVersion and mainLocationId are allowed to be left empty
      * when used on with this struct as these values are created by the create method.
-     * @todo Use custom create struct and api?
      *
      * @var \ezp\Persistence\Content\Location\CreateStruct[]
      */
@@ -57,7 +56,7 @@ class CreateStruct extends ValueObject
     public $fields = array();
 
     /**
-     * @var bool Always available flag
+     * @var boolean Always available flag
      */
     public $alwaysAvailable = false;
 

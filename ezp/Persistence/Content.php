@@ -91,7 +91,7 @@ class Content extends ValueObject
     public $locations = array();
 
     /**
-     * @var bool Always available flag
+     * @var boolean Always available flag
      */
     public $alwaysAvailable = false;
 

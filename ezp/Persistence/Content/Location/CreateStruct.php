@@ -55,7 +55,7 @@ class CreateStruct extends ValueObject
 
     /**
      * version of the corresponding {@link Content}.
-     * @todo Rename to $contentVersionNo (should that be Nu?)
+     * @todo Rename to $contentVersionNo?
      *
      * @var int Content version.
      */

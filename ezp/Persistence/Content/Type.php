@@ -181,9 +181,9 @@ class Type extends ValueObject
     public $fieldDefinitions = array();
 
     /**
-     * TODO: Document.
+     * @todo: Document.
      *
-     * @var bool
+     * @var boolean
      */
     public $defaultAlwaysAvailable = false;
 }

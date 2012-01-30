@@ -58,7 +58,7 @@ class MaskGenerator
      * Generates a language indicator from $locale and $alwaysAvailable
      *
      * @param string $locale
-     * @param bool $alwaysAvailable
+     * @param boolean $alwaysAvailable
      * @return int
      */
     public function generateLanguageIndicator( $locale, $alwaysAvailable )

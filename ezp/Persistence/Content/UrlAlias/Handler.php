@@ -26,7 +26,7 @@ interface Handler
       * @param string $path
       * @param string $locationId
       * @param string $languageName
-      * @param bool $alwaysAvailable
+      * @param boolean $alwaysAvailable
       */
      public function storeUrlAliasPath( $path, $locationId, $languageName = null, $alwaysAvailable = false );
 
@@ -40,7 +40,7 @@ interface Handler
       * @param int $locationId
       * @param boolean $forwarding
       * @param string $languageName
-      * @param bool $alwaysAvailable
+      * @param boolean $alwaysAvailable
       * @return boolean
       */
      public function createCustomUrlAlias( $alias, $locationId, $forwarding = false, $languageName = null, $alwaysAvailable = false );
@@ -139,7 +139,7 @@ interface Handler
      * @abstract
      * @param string $urlText
      * @param int $locationId
-     * @param bool $locationHasMoved
+     * @param boolean $locationHasMoved
      * @return string
      */
     public function adjustToUniqueUrlText( $urlText, $locationId, $locationHasMoved = false );

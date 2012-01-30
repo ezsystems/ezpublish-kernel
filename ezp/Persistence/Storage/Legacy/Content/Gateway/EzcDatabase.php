@@ -167,7 +167,7 @@ class EzcDatabase extends Gateway
      * Generates a language mask for $version
      *
      * @param \ezp\Persistence\Content\Field[] $fields
-     * @param bool $alwaysAvailable
+     * @param boolean $alwaysAvailable
      * @return int
      */
     protected function generateLanguageMask( array $fields, $alwaysAvailable )
@@ -193,7 +193,7 @@ class EzcDatabase extends Gateway
      *
      * @param Version $version
      * @param \ezp\Persistence\Content\Field[] $fields
-     * @param bool $alwaysAvailable
+     * @param boolean $alwaysAvailable
      * @return int ID
      */
     public function insertVersion( Version $version, array $fields, $alwaysAvailable )
@@ -461,7 +461,7 @@ class EzcDatabase extends Gateway
      *
      * @param Field $field
      * @param StorageFieldValue $value
-     * @param bool $alwaysAvailable
+     * @param boolean $alwaysAvailable
      * @return void
      */
     public function updateField( Field $field, StorageFieldValue $value )
@@ -695,7 +695,7 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @return int[]
-     * @TODO This method does hardly belong here. Maybe put it into
+     * @todo This method does hardly belong here. Maybe put it into
      *       Location\Handler? But that hinders inter-operability.
      */
     public function getAllLocationIds( $contentId )

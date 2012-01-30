@@ -18,6 +18,6 @@ use ezp\Persistence\Content,
  */
 abstract class Gateway
 {
-    // @TODO: Add methods
+    // @todo: Add methods (or remove?)
 }
 

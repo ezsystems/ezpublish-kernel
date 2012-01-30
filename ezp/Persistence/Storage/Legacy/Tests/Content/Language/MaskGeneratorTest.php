@@ -70,7 +70,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
 
     /**
      * @param string $locale
-     * @param bool $alwaysAvailable
+     * @param boolean $alwaysAvailable
      * @param int $expectedIndicator
      * @return void
      * @covers ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator::generateLanguageIndicator

@@ -85,7 +85,7 @@ class Version extends ValueObject
     public $contentId;
 
     /**
-     * TODO: Document
+     * @todo: Document
      *
      * @var mixed
      */
