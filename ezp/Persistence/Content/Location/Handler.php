@@ -129,6 +129,10 @@ interface Handler
      * Set section on all content objects in the subtree.
      * Only main locations will be updated
      *
+     * @todo This can be confusing (regarding permissions and main/multi location).
+     * So method is for the time being not in PublicAPI so people can instead
+     * write scripts using their own logic against the assignSectionToContent() api.
+     *
      * @param mixed $locationId
      * @param mixed $sectionId
      * @return boolean
