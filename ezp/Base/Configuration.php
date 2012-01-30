@@ -372,7 +372,6 @@ class Configuration
     {
         foreach ( $iniArray as $setting => $settingValue )
         {
-            // @todo Add array clearing support on two & three dimensional arrays (incl unit tests)
             if ( isset( $settingValue[0] ) && $settingValue[0] === self::TEMP_INI_UNSET_VAR )
             {
                 array_shift( $settingValue );
