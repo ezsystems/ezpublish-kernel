@@ -18,6 +18,16 @@ use ezp\Persistence\Content,
  */
 abstract class Gateway
 {
-    // @todo: Add methods (or remove?)
+    /**
+     * Returns a list of object satisfying the $criterion.
+     *
+     * @param Criterion $criterion
+     * @param int $offset
+     * @param int|null $limit
+     * @param \ezp\Persistence\Content\Query\SortClause[] $sort
+     * @param string[] $translations
+     * @return mixed[][]
+     */
+    abstract public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, array $translations = null );
 }
 
