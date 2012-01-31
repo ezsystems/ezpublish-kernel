@@ -273,7 +273,6 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $contentTypeId
      * @return \ezp\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
-     * @todo Can be optimized in gateway?
      */
     public function createDraft( $modifierId, $contentTypeId )
     {
@@ -292,7 +291,6 @@ class Handler implements BaseContentTypeHandler
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      * @return Type
-     * @todo Can be optimized in gateway?
      */
     public function copy( $userId, $contentTypeId, $status )
     {
