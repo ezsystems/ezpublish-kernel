@@ -3,6 +3,8 @@
  * @package ezp\PublicAPI\Interfaces
  */
 namespace ezp\PublicAPI\Interfaces;
+
+use ezp\PublicAPI\Values\Content\LanguageCreateStruct;
 use ezp\PublicAPI\Values\Content\Language;
 
 /**
@@ -18,13 +20,11 @@ interface LanguageService
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if the languageCode already exists
      *
-     * @param string $languageCode
-     * @param string $name
-     * @param bool $isEnabled
+     * @param \ezp\PublicAPI\Values\Content\LanguageCreateStruct $languageCreateStruct
      *
      * @return \ezp\PublicAPI\Values\Content\Language
      */
-    public function createLanguage( $languageCode, $name, $isEnabled = true );
+    public function createLanguage( LanguageCreateStruct $languageCreateStruct );
 
     /**
      * Changes the name of the language in the content repository
