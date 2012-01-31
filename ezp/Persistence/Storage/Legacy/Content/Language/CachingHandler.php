@@ -148,9 +148,6 @@ class CachingHandler implements BaseLanguageHandler, Lookup
     /**
      * Delete a language
      *
-     * @todo Might throw an exception if the language is still associated with
-     *       some content / types / (...) ?
-     *
      * @param mixed $id
      */
     public function delete( $id )
