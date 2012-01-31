@@ -323,7 +323,6 @@ class Mapper
      *
      * @param string[][] $rows
      * @return RestrictedVersion[]
-     * @todo This method works on language codes for now.
      */
     public function extractVersionListFromRows( array $rows )
     {
