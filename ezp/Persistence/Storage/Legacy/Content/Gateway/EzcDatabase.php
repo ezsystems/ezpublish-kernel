@@ -95,7 +95,6 @@ class EzcDatabase extends Gateway
      *
      * @param \ezp\Persistence\Content\CreateStruct $struct
      * @return int ID
-     * @todo Oracle sequences?
      */
     public function insertContentObject( CreateStruct $struct )
     {
@@ -695,8 +694,6 @@ class EzcDatabase extends Gateway
      *
      * @param int $contentId
      * @return int[]
-     * @todo This method does hardly belong here. Maybe put it into
-     *       Location\Handler? But that hinders inter-operability.
      */
     public function getAllLocationIds( $contentId )
     {

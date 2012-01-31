@@ -134,8 +134,6 @@ abstract class Gateway
      *
      * @param int $contentId
      * @return int[]
-     * @todo This method does hardly belong here. Maybe put it into
-     *       Location\Handler? But that hinders inter-operability.
      */
     abstract public function getAllLocationIds( $contentId );
 
