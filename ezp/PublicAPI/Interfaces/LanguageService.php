@@ -15,88 +15,92 @@ interface LanguageService
     /**
      * Creates the a new Language in the content repository
      *
+     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if the languageCode already exists
+     *
      * @param string $languageCode
      * @param string $name
      * @param bool $isEnabled
      *
      * @return \ezp\PublicAPI\Values\Content\Language
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
-     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if the locale already exists
      */
-    public function create( $languageCode, $name, $isEnabled = true );
+    public function createLanguage( $languageCode, $name, $isEnabled = true );
 
     /**
      * Changes the name of the language in the content repository
      *
-     * @param string $languageCode the unique indentifier of the language to be changed
-     *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     *
+     * @param \ezp\PublicAPI\Values\Content\Language $language
+     * @param string $newName
+     * 
+     * @return \ezp\PublicAPI\Values\Content\Language
      */
-    public function updateName( $languageCode, $newName );
+    public function updateLanguageName( Language $language, $newName );
 
     /**
      * enables a language
      *
-     * @param string $languageCode the unique indentifier of the language to be changed
-     *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     *
+     * @param \ezp\PublicAPI\Values\Content\Language $language
      */
-    public function enable( $languageCode );
+    public function enableLanguage( $language );
 
     /**
      * disables a language
      *
-     * @param string $languageCode the unique indentifier of the language to be changed
-     *
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     *
+     * @param \ezp\PublicAPI\Values\Content\Language $language
      */
-    public function disable( $languageCode );
+    public function disableLanguage( $language );
 
     /**
-     * Loads a Language from its id ($languageId)
-     *
-     * @param int $languageId
-     *
-     * @return \ezp\PublicAPI\Values\Content\Language
+     * Loads a Language from its language code ($languageCode)
      *
      * @throws \ezp\PublicAPI\Interfaces\NotFoundException if language could not be found
+     *
+     * @param string $languageCode
+     *
+     * @return \ezp\PublicAPI\Values\Content\Language
      */
-    public function load( $languageId );
+    public function loadLanguage( $languageCode );
 
     /**
      * Loads all Languages
      *
-     * @return array an aray of {@link Language}
+     * @return array an aray of {@link  \ezp\PublicAPI\Values\Content\Language}
      */
-    public function loadAll();
+    public function loadLanguages();
 
     /**
-     * Loads a Language by its languageCode ($localeCode)
-     *
-     * @param string $languageCode
-     *
-     * @return \ezp\PublicAPI\Values\Content\Language
+     * Loads a Language by its id ($languageId)
      *
      * @throws \ezp\PublicAPI\Interfaces\NotFoundException if language could not be found
+     *
+     * @param int $languageId
+     *
+     * @return \ezp\PublicAPI\Values\Content\Language
      */
-    public function loadByLanguageCode( $languageCode );
+    public function loadLanguageById( $languageId );
 
     /**
      * Deletes  a language from content repository
-     *
-     * @param string $languageCode
      *
      * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException
      *         if language can not be deleted
      *         because it is still assigned to some content / type / (...).
      * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     *
+     * @param Language $language
      */
-    public function delete( $languageCode );
+    public function deleteLanguage( $language );
     
     /**
+     * returns a configured default language code
      * 
-     * @return \ezp\PublicAPI\Values\Content\Language
+     * @return \ezp\PublicAPI\Values\Content\LanguageCode
      */
     public function getDefaultLanguageCode();
 }
