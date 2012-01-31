@@ -18,18 +18,18 @@
 
 
 #Directory Layout
-ezp\Base (Common code needed by all bellow)
+* [ezp/Base](/ezsystems/publicapi/tree/master/ezp/Base/)  *Common code needed by all bellow*
 
-ezp\PublicAPI (Public API Interface)
-ezp\Publish\PublicAPI (Public API Implementation)
+* [ezp/PublicAPI](/ezsystems/publicapi/tree/master/ezp/PublicAPI/)  *Public API Interface*
+* [ezp/PublicAPI/Publish](/ezsystems/publicapi/tree/master/ezp/Publish/PublicAPI/)  *Public API implementation*
 
-ezp\Persistence (Persistence Interface)
-ezp\Persistence\Storage\Legacy (Legacy Storage Engine)
-ezp\Persistence\Storage\InMemory ("In-Memory" Storage Engine(for unit tests))
+* [ezp/Persistence](/ezsystems/publicapi/tree/master/ezp/Persistence/)  *Persistence Interface (private api for now)*
+* [ezp/Persistence/Storage/Legacy](/ezsystems/publicapi/tree/master/ezp/Persistence/Storage/Legacy/)  *Legacy storage Engine*
+* [ezp/Persistence/Storage/InMemory](/ezsystems/publicapi/tree/master/ezp/Persistence/Storage/InMemory/)  *InMemory storage engine (for unit testing)*
 
-ezp\Io (Io Interface)
-ezp\Io\Storage\Legacy (Legacy Storage Engine)
-ezp\Io\Storage\InMemory ("In-Memory" Storage Engine(for unit tests))
+* [ezp/Io](/ezsystems/publicapi/tree/master/ezp/Io/)  *Io Interface (for files)*
+* [ezp/Io/Storage/Legacy](/ezsystems/publicapi/tree/master/ezp/Io/Storage/Legacy/)  *Legacy Io Handler*
+* [ezp/Io/Storage/InMemory](/ezsystems/publicapi/tree/master/ezp/Io/Storage/InMemory/)  *InMemory Io handler (for unit testing)*
 
 
 #Things that are temporary
