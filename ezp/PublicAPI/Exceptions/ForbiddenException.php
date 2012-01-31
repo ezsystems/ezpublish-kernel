@@ -1,15 +1,13 @@
 <?php
-namespace ezp\PublicAPI\Interfaces;
-
-use ezp\PublicAPI\Interfaces\Exception;
+namespace ezp\PublicAPI\Exceptions;
 
 /**
  * An Exception which is thrown if an operation cannot be performed by a service
  * although the current user
  * would have permission to perform this action.
- * @package ezp\PublicAPI\Interfaces
+ * @package ezp\PublicAPI\Exceptions
  */
-abstract class ForbiddenException extends RuntimeException implements Exception
+abstract class ForbiddenException extends RuntimeException
 {
     /**
      * returns an additional error code which indicates why an action could not be performed

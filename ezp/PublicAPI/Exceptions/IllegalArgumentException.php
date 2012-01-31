@@ -1,5 +1,5 @@
 <?php
-namespace ezp\PublicAPI\Interfaces;
+namespace ezp\PublicAPI\Exceptions;
 /**
  *
  * This exception is throen if a service method is called with an illegal or non appriprite value
