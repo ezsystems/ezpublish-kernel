@@ -56,7 +56,10 @@ class Handler implements BaseContentHandler
      * Creates a new content handler.
      *
      * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
-     * @todo Fix param docs
+     * @param \ezp\Persistence\Storage\Legacy\Content\Location\Gateway $locationGateway
+     * @param \ezp\Persistence\Storage\Legacy\Content\Mapper $mapper
+     * @param \ezp\Persistence\Storage\Legacy\Content\FieldHandler $fieldHandler
+     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
      */
     public function __construct(
         Gateway $contentGateway,
