@@ -9,10 +9,10 @@
  * @uses ezcConfiguration As fallback if parse_ini_string() fails
  */
 
-namespace ezp\Base\Configuration\Parser;
-use ezp\Base\Configuration,
-    ezp\Base\Configuration\Parser,
-    ezp\Base\Exception\Logic,
+namespace eZ\Publish\Core\Base\Configuration\Parser;
+use eZ\Publish\Core\Base\Configuration,
+    eZ\Publish\Core\Base\Configuration\Parser,
+    eZ\Publish\Core\Base\Exception\Logic,
     ezcConfiguration,
     ezcConfigurationIniReader;
 
@@ -397,7 +397,7 @@ class Ini implements Parser
     /**
      * Store raw configuration data to file
      *
-     * @see ezp\Base\Configuration\Parser::parse() For $configurationData definition
+     * @see eZ\Publish\Core\Base\Configuration\Parser::parse() For $configurationData definition
      * @todo Test..
      * @param string $fileName A valid file name, will be overwritten if it exists
      * @param array $configurationData

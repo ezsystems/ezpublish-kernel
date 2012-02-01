@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base;
+namespace eZ\Publish\Core\Base;
 
 /**
  * Provides the Exception interface for eZ Publish
  *
  * Makes it possible to catch eZ Publish exceptions.
  *
- * @use: class MyException extends SomeSplException implements ezp\Base\Exception
+ * @use: class MyException extends SomeSplException implements eZ\Publish\Core\Base\Exception
  *
  */
 interface Exception

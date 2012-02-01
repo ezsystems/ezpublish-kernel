@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Tests;
-use ezp\Base\ClassLoader,
+namespace eZ\Publish\Core\Base\Tests;
+use eZ\Publish\Core\Base\ClassLoader,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -19,7 +19,7 @@ class ClassLoaderTest extends PHPUnit_Framework_TestCase
     /**
      * Test multiple code repositories support
      *
-     * @covers \ezp\Base\ClassLoader::load
+     * @covers \eZ\Publish\Core\Base\ClassLoader::load
      */
     public function testReturnValuesOnFailure()
     {

@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Exception;
-use ezp\Base\Exception,
+namespace eZ\Publish\Core\Base\Exception;
+use eZ\Publish\Core\Base\Exception,
     Exception as PHPException,
     RuntimeException;
 

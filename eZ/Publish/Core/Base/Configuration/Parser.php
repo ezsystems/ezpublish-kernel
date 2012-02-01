@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Configuration;
+namespace eZ\Publish\Core\Base\Configuration;
 
 /**
  * Configuration Interfaces for configuration parser & writer

@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Publish\PublicAPI;
-use ezp\Base\Exception\BadConfiguration,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\Logic,
+use eZ\Publish\Core\Base\Exception\BadConfiguration,
+    eZ\Publish\Core\Base\Exception\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exception\Logic,
     ezp\Io\Handler as IoHandler,
     ezp\Persistence\Handler as PersistenceHandler,
     ezp\PublicAPI\Interfaces\Repository as RepositoryInterface,
@@ -134,8 +134,8 @@ class Repository implements RepositoryInterface
      * @param ValueObject $value
      * @param ValueObject $target
      * @return boolean
-     * @throws \ezp\Base\Exception\InvalidArgumentValue On invalid $function value
-     * @throws \ezp\Base\Exception\Logic On limitation used in policies but not in $model::defintion()
+     * @throws \eZ\Publish\Core\Base\Exception\InvalidArgumentValue On invalid $function value
+     * @throws \eZ\Publish\Core\Base\Exception\Logic On limitation used in policies but not in $model::defintion()
      */
     public function canUser( $module, $function, ValueObject $value, ValueObject $target )
     {

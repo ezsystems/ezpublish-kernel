@@ -9,8 +9,8 @@
  * @uses ezcPhpGenerator To generate INI cache
  */
 
-namespace ezp\Base;
-use ezp\Base\Exception\InvalidArgumentValue;
+namespace eZ\Publish\Core\Base;
+use eZ\Publish\Core\Base\Exception\InvalidArgumentValue;
 
 /**
  * Configuration manager class
@@ -88,7 +88,7 @@ class ConfigurationManager
      *
      * @uses load() Used the first time an instance is created
      * @param string $moduleName The name of the module (w/o .ini suffix as we would want to support other formats in the future)
-     * @return \ezp\Base\Configuration
+     * @return \eZ\Publish\Core\Base\Configuration
      */
     public function getConfiguration( $moduleName = 'base' )
     {

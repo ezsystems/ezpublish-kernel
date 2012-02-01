@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base;
-use ezp\Base\ConfigurationManager,
-    ezp\Base\Exception\BadConfiguration,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\MissingClass,
+namespace eZ\Publish\Core\Base;
+use eZ\Publish\Core\Base\ConfigurationManager,
+    eZ\Publish\Core\Base\Exception\BadConfiguration,
+    eZ\Publish\Core\Base\Exception\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exception\MissingClass,
     ReflectionClass;
 
 /**
@@ -21,13 +21,13 @@ use ezp\Base\ConfigurationManager,
  *
  * Usage:
  *
- *     $sc = new ezp\Base\ServiceContainer( Configuration::getInstance('service')->getAll() );
+ *     $sc = new eZ\Publish\Core\Base\ServiceContainer( Configuration::getInstance('service')->getAll() );
  *     $sc->getRepository->getContentService()...;
  *
  * Or overriding $dependencies (in unit tests):
  * ( $dependencies keys should have same value as service.ini "arguments" values explained bellow )
  *
- *     $sc = new ezp\Base\ServiceContainer(
+ *     $sc = new eZ\Publish\Core\Base\ServiceContainer(
  *         Configuration::getInstance('service')->getAll(),
  *         array(
  *             '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler()
@@ -39,7 +39,7 @@ use ezp\Base\ConfigurationManager,
  *
  *     [repository]
  *     shared=true
- *     class=ezp\Base\Repository
+ *     class=eZ\Publish\Core\Base\Repository
  *     arguments[persistence_handler]=@inmemory_persistence_handler
  *
  *     [inmemory_persistence_handler]
@@ -47,7 +47,7 @@ use ezp\Base\ConfigurationManager,
  *     class=ezp\Persistence\Storage\InMemory\Handler
  *
  *     @todo Update service.ini reference bellow
- *     # @see \ezp\Base\settings\service.ini For more options and examples.
+ *     # @see \eZ\Publish\Core\Base\settings\service.ini For more options and examples.
  *
  * "arguments" values in service.ini can start with either @ in case of other services being dependency, $ if a
  * predefined global variable is to be used ( currently: $_SERVER, $_REQUEST, $_COOKIE, $_FILES and $serviceContainer )
@@ -92,7 +92,7 @@ class ServiceContainer
      * Alias with type hints for $repo->get( 'configuration' );
      *
      * @uses get()
-     * @return \ezp\Base\ConfigurationManager
+     * @return \eZ\Publish\Core\Base\ConfigurationManager
      */
     public function getConfigurationManager()
     {

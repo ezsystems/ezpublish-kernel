@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Tests\Configuration\Parser\Ini;
-use ezp\Base\Configuration\Parser\Ini as IniParser,
-    ezp\Base\Tests\Configuration\Parser\Ini\Base;
+namespace eZ\Publish\Core\Base\Tests\Configuration\Parser\Ini;
+use eZ\Publish\Core\Base\Configuration\Parser\Ini as IniParser,
+    eZ\Publish\Core\Base\Tests\Configuration\Parser\Ini\Base;
 
 /**
  * Test case for Parser\Ini class

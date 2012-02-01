@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Tests;
-use ezp\Base\ServiceContainer,
+namespace eZ\Publish\Core\Base\Tests;
+use eZ\Publish\Core\Base\ServiceContainer,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -17,7 +17,7 @@ use ezp\Base\ServiceContainer,
 class ServiceContainerTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @covers \ezp\Base\ServiceContainer::get
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      */
     public function testSimpleService()
     {
@@ -34,7 +34,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Base\ServiceContainer::get
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      */
     public function testArgumentsService()
     {
@@ -55,7 +55,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Base\ServiceContainer::get
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      */
     public function testComplexService()
     {
@@ -82,7 +82,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Base\ServiceContainer::get
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      */
     public function testComplexServiceCustomDependencies()
     {
@@ -108,7 +108,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Base\ServiceContainer::get
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      */
     public function testComplexServiceUsingVariables()
     {
@@ -126,7 +126,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Base\ServiceContainer::get
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      */
     public function testSimpleServiceUsingHash()
     {
@@ -150,7 +150,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Base\ServiceContainer::get
+     * @covers \eZ\Publish\Core\Base\ServiceContainer::get
      */
     public function testComplexServiceUsingHash()
     {

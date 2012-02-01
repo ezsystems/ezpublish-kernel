@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base\Tests;
-use ezp\Base\Configuration,
+namespace eZ\Publish\Core\Base\Tests;
+use eZ\Publish\Core\Base\Configuration,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -17,7 +17,7 @@ use ezp\Base\Configuration,
 class ConfigurationTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Base\Configuration $configuration
+     * @var \eZ\Publish\Core\Base\Configuration $configuration
      */
     protected $configuration;
 
@@ -33,7 +33,7 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        $this->parserMock = $this->getMock( 'ezp\Base\Configuration\Parser' );
+        $this->parserMock = $this->getMock( 'eZ\Publish\Core\Base\Configuration\Parser' );
 
         $this->configuration = new Configuration(
             'test',
@@ -45,8 +45,8 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     /**
      * Test Configuration
      *
-     * @covers \ezp\Base\Configuration::load
-     * @covers \ezp\Base\Configuration::parse
+     * @covers \eZ\Publish\Core\Base\Configuration::load
+     * @covers \eZ\Publish\Core\Base\Configuration::parse
      */
     public function testParserExecution()
     {
@@ -62,8 +62,8 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     /**
      * Test Configuration
      *
-     * @covers \ezp\Base\Configuration::load
-     * @covers \ezp\Base\Configuration::parse
+     * @covers \eZ\Publish\Core\Base\Configuration::load
+     * @covers \eZ\Publish\Core\Base\Configuration::parse
      */
     public function testParsing()
     {
@@ -86,9 +86,9 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     /**
      * Test Configuration
      *
-     * @covers \ezp\Base\Configuration::load
-     * @covers \ezp\Base\Configuration::parse
-     * @covers \ezp\Base\Configuration::recursiveArrayClearing
+     * @covers \eZ\Publish\Core\Base\Configuration::load
+     * @covers \eZ\Publish\Core\Base\Configuration::parse
+     * @covers \eZ\Publish\Core\Base\Configuration::recursiveArrayClearing
      */
     public function testParsingAndArrayClearing()
     {
@@ -112,9 +112,9 @@ class ConfigurationTest extends PHPUnit_Framework_TestCase
     /**
      * Test Configuration
      *
-     * @covers \ezp\Base\Configuration::load
-     * @covers \ezp\Base\Configuration::parse
-     * @covers \ezp\Base\Configuration::recursiveArrayClearing
+     * @covers \eZ\Publish\Core\Base\Configuration::load
+     * @covers \eZ\Publish\Core\Base\Configuration::parse
+     * @covers \eZ\Publish\Core\Base\Configuration::recursiveArrayClearing
      */
     public function testParsingAndRecursiveArrayClearing()
     {

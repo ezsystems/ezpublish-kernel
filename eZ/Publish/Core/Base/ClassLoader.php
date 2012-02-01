@@ -7,18 +7,18 @@
  * @version //autogentag//
  */
 
-namespace ezp\Base;
+namespace eZ\Publish\Core\Base;
 
 /**
  * Provides PSR-0 ClassLoader
  *
  * Use:
  * require 'ezp/Base/ClassLoader.php'
- * spl_autoload_register( array( new ezp\Base\ClassLoader(
+ * spl_autoload_register( array( new eZ\Publish\Core\Base\ClassLoader(
  *     array(
  *         'Vendor\\Module' => 'Vendor/Module'
  *     )[,
- *     ezp\Base\ClassLoader::MODE_PSR_0_STRICT] // optional strict mode where underscore is ignored
+ *     eZ\Publish\Core\Base\ClassLoader::MODE_PSR_0_STRICT] // optional strict mode where underscore is ignored
  * ), 'load' ) );
  */
 class ClassLoader

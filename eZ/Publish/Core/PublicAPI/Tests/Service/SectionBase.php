@@ -12,7 +12,7 @@ use ezp\Publish\PublicAPI\Tests\Service\Base as BaseServiceTest,
     ezp\PublicAPI\Values\Content\Section,
     ezp\PublicAPI\Values\Content\SectionCreateStruct,
     ezp\PublicAPI\Values\Content\SectionUpdateStruct,
-    ezp\Base\Exception\NotFound;
+    eZ\Publish\Core\Base\Exception\NotFound;
 
 /**
  * Test case for Section Service using InMemory storage class
@@ -33,7 +33,7 @@ abstract class SectionBase extends BaseServiceTest
     }
 
     /**
-     * @expectedException ezp\Base\Exception\PropertyNotFound
+     * @expectedException eZ\Publish\Core\Base\Exception\PropertyNotFound
      * @covers \ezp\PublicAPI\Values\Content\Section::__get
      */
     public function testMissingProperty()
@@ -43,7 +43,7 @@ abstract class SectionBase extends BaseServiceTest
     }
 
     /**
-     * @expectedException ezp\Base\Exception\PropertyPermission
+     * @expectedException eZ\Publish\Core\Base\Exception\PropertyPermission
      * @covers \ezp\PublicAPI\Values\Content\Section::__set
      */
     public function testReadOnlyProperty()
@@ -74,7 +74,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for creating sections
      * @covers \ezp\Publish\PublicAPI\Content\SectionService::create
-     * @expectedException \ezp\Base\Exception\Forbidden
+     * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
      */
     public function testCreateForbidden()
     {
@@ -135,7 +135,7 @@ abstract class SectionBase extends BaseServiceTest
      * Test service function for loading sections
      *
      * @covers \ezp\Publish\PublicAPI\Content\SectionService::load
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\Core\Base\Exception\NotFound
      */
     public function testLoadNotFound()
     {
@@ -166,7 +166,7 @@ abstract class SectionBase extends BaseServiceTest
      * Test service function for update sections
      *
      * @covers \ezp\Publish\PublicAPI\Content\SectionService::update
-     * @expectedException \ezp\Base\Exception\Forbidden
+     * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
      */
     public function testUpdateForbidden()
     {
@@ -222,7 +222,7 @@ abstract class SectionBase extends BaseServiceTest
      * Test service function for deleting sections
      *
      * @covers \ezp\Publish\PublicAPI\Content\SectionService::delete
-     * @expectedException \ezp\Base\Exception\Forbidden
+     * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
      */
     public function testDeleteForbidden()
     {

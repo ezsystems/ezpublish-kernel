@@ -6,8 +6,8 @@ namespace ezp\Publish\PublicAPI\Content;
 
 use ezp\PublicAPI\Values\Content\SectionCreateStruct;
 
-use ezp\Base\Exception\NotFound;
-use ezp\Base\Exception\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exception\NotFound;
+use eZ\Publish\Core\Base\Exception\InvalidArgumentValue;
 use ezp\PublicAPI\Values\Content\Content;
 use ezp\PublicAPI\Values\Content\ContentInfo;
 use ezp\PublicAPI\Values\Content\Section;
