@@ -1,6 +1,6 @@
 <?php
 /**
- * File containing the bootstrapping of ezp
+ * File containing the bootstrapping of eZ Publish 5.x
  *
  * Returns instance of Service Container setup with configuration service and setups autoloader.
  *
@@ -10,9 +10,9 @@
  */
 
 
-use ezp\Base\ClassLoader,
-    ezp\Base\ConfigurationManager,
-    ezp\Base\ServiceContainer;
+use eZ\Publish\Core\Base\ClassLoader,
+    eZ\Publish\Core\Base\ConfigurationManager,
+    eZ\Publish\Core\Base\ServiceContainer;
 
 // Setup autoloaders
 if ( !( $settings = include( __DIR__ . '/config.php' ) ) )
@@ -20,7 +20,7 @@ if ( !( $settings = include( __DIR__ . '/config.php' ) ) )
     die( 'Could not find config.php, please copy config.php-DEVELOPMENT to config.php customize to your needs!' );
 }
 
-require __DIR__ . '/ezp/Base/ClassLoader.php';
+require __DIR__ . '/eZ/Publish/Core/Base/ClassLoader.php';
 $loader = new ClassLoader( $settings['base']['ClassLoader']['Repositories'], ClassLoader::MODE_PSR_0_STRICT );
 spl_autoload_register( array( $loader, 'load' ) );
 
@@ -38,7 +38,7 @@ $configManager = new ConfigurationManager(
 // anyway access matching should use event filters hence be optional.
 
 // Setup configuration for modules
-$paths = array();
+/*$paths = array();
 foreach ( $settings['base']['ClassLoader']['Repositories'] as $ns => $nsPath )
 {
     foreach ( glob( "{$nsPath}/*", GLOB_ONLYDIR ) as $path )//@todo Take from configuration
@@ -47,7 +47,7 @@ foreach ( $settings['base']['ClassLoader']['Repositories'] as $ns => $nsPath )
     }
 }
 
-$configManager->setGlobalDirs( $paths, 'modules' );
+$configManager->setGlobalDirs( $paths, 'modules' );*/
 
 $sc = new ServiceContainer(
     $configManager->getConfiguration('service')->getAll(),

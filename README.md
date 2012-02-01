@@ -11,7 +11,7 @@
 * Clone ezp-next next to it
 * clone research next to it
 * Symlink ezp-next: ezp/Persistance and ezp/Io into the ezp/ folder of this project
-* Symlink reasearch: publicapi/ezp/PublicAPI into ezp/ folder of this project
+* Symlink reasearch: publicapi/eZ/Publish/API into eZ/Publish/API folder of this project
 * Copy config.php-DEVELOPMENT to config.php
 * Execute "$ php index.php" (cli) to verify that it manages to output some text
 * Execute "$ phpunit" to see current status of missing tests / implementations

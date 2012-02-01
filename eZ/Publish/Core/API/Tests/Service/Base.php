@@ -1,13 +1,13 @@
 <?php
 /**
- * File contains: ezp\Content\Tests\BaseServiceTest class
+ * File contains: Abstract Base service test class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Publish\PublicAPI\Tests\Service;
+namespace eZ\Publish\Core\API\Tests\Service;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -17,7 +17,7 @@ use PHPUnit_Framework_TestCase;
 abstract class Base extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Publish\PublicAPI\Repository
+     * @var \eZ\Publish\Core\API\Repository
      */
     protected $repository;
 
@@ -31,11 +31,11 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Generate \ezp\Publish\PublicAPI\Repository
+     * Generate \eZ\Publish\Core\API\Repository
      *
      * Makes it possible to inject different Io / Persistence handlers
      *
-     * @return \ezp\Publish\PublicAPI\Repository
+     * @return \eZ\Publish\Core\API\Repository
      */
     abstract protected function getRepository();
 }

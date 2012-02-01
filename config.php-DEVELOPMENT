@@ -1,6 +1,6 @@
 <?php
 /**
- * ezp config.php file
+ * eZ Publish 5.x config.php file
  *
  * Returns global application settings
  * Usually contain settings needed to setup services needed for ezp startup.
@@ -22,7 +22,8 @@ return array(
         'ClassLoader' => array(
             // Hash with class name prefix and folder name, needed for ClassLoader and Configuration system
             // as well as router (key)
-            'Repositories' => array( 'ezp' => __DIR__ . '/ezp',
+            'Repositories' => array( 'eZ' => __DIR__ . '/eZ',
+                                     //'ezp' => __DIR__ . '/../ezp-next/ezp',
                                      /*'Vendor\SomeApp' => __DIR__ . '/Vendor/SomeApp'*/ ),
             // The location of eZ / Zeta Components ezcBase needed for auto loading ezc stuff
             'ezcBase' => 'ezc/Base/base.php',
@@ -33,8 +34,8 @@ return array(
 
             // List of parser classes where key is file suffix
             'Parsers' => array(
-                '.ini' => 'ezp\\Base\\Configuration\\Parser\\Ini',
-                '.ini.append.php' => 'ezp\\Base\\Configuration\\Parser\\Ini',
+                '.ini' => 'eZ\\Publish\\Core\\Base\\Configuration\\Parser\\Ini',
+                '.ini.append.php' => 'eZ\\Publish\\Core\\Base\\Configuration\\Parser\\Ini',
             ),
 
             // Enable strict ini parsing using parse_ini_string(), default false using eZ/Zeta Components INI Reader
@@ -52,7 +53,7 @@ return array(
             // Paths and scopes to read ini settings from
             'Paths' => array(
                  'base' => array( 'settings/' ),
-                 'modules' => array( 'ezp/Base/settings/' ),
+                 'modules' => array( 'eZ/Publish/Core/settings/' ),
                  'access' => array(),
                  'global' => array( 'settings/override/' ),
             ),

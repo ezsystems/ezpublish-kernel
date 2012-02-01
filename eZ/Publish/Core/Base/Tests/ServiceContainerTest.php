@@ -24,12 +24,12 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(
                 'BService' => array(
-                    'class' => 'ezp\\Base\\Tests\\B'
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B'
                 )
             )
         );
         $b = $sc->get('BService');
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\B', $b );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $b );
         self::assertFalse( $b->factoryExecuted );
     }
 
@@ -41,16 +41,16 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(
                 'BService' => array(
-                    'class' => 'ezp\\Base\\Tests\\B',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B',
                  ),
                 'CService' => array(
-                    'class' => 'ezp\\Base\\Tests\\C',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\C',
                     'arguments' => array( '@BService' ),
                 )
             )
         );
         $c = $sc->get('CService');
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\C', $c );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\C', $c );
         self::assertEquals( '', $c->string );
     }
 
@@ -62,23 +62,23 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(
                 'AService' => array(
-                    'class' => 'ezp\\Base\\Tests\\A',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\A',
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
                 'BService' => array(
-                    'class' => 'ezp\\Base\\Tests\\B',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\B',
                  ),
                 'CService' => array(
-                    'class' => 'ezp\\Base\\Tests\\C',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\C',
                     'arguments' => array( '@BService' ),
                 )
             )
         );
         $a = $sc->get('AService');
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\A', $a );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\A', $a );
         self::assertEquals( '__', $a->string );
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\B', $a->b );
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\C', $a->c );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $a->b );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\C', $a->c );
     }
 
     /**
@@ -89,11 +89,11 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(
                 'AService' => array(
-                    'class' => 'ezp\\Base\\Tests\\A',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\A',
                     'arguments' => array( '@BService', '@CService', '__' ),
                 ),
                 'CService' => array(
-                    'class' => 'ezp\\Base\\Tests\\C',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\C',
                     'factory' => 'factory',
                     'arguments' => array( '@BService', 'B', 'S' ),
                 )
@@ -101,10 +101,10 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             array( '@BService' => new B )
         );
         $a = $sc->get('AService');
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\A', $a );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\A', $a );
         self::assertEquals( '__', $a->string );
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\B', $a->b );
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\C', $a->c );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\B', $a->b );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\C', $a->c );
     }
 
     /**
@@ -115,14 +115,14 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(
                 'DService' => array(
-                    'class' => 'ezp\\Base\\Tests\\D',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\D',
                     'arguments' => array( '$serviceContainer', '$_SERVER', '$B' ),
                 ),
             ),
             array( '$B' => new B )
         );
         $d = $sc->get('DService');
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\D', $d );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\D', $d );
     }
 
     /**
@@ -133,7 +133,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(
                 'EService' => array(
-                    'class' => 'ezp\\Base\\Tests\\E',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\E',
                     'arguments' => array(
                         array(
                             'bool' => true,
@@ -146,7 +146,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
             )
         );
         $obj = $sc->get('EService');
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\E', $obj );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\E', $obj );
     }
 
     /**
@@ -157,7 +157,7 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
         $sc = new ServiceContainer(
             array(
                 'F' => array(
-                    'class' => 'ezp\\Base\\Tests\\F',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\F',
                     'arguments' => array(
                         array(
                             'sc' => '$serviceContainer',
@@ -167,14 +167,14 @@ class ServiceContainerTest extends PHPUnit_Framework_TestCase
                     ),
                 ),
                 'C' => array(
-                    'class' => 'ezp\\Base\\Tests\\C',
+                    'class' => 'eZ\\Publish\\Core\\Base\\Tests\\C',
                     'arguments' => array( '@B' ),
                 )
             ),
             array( '@B' => new B )
         );
         $obj = $sc->get('F');
-        self::assertInstanceOf( 'ezp\\Base\\Tests\\F', $obj );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Base\\Tests\\F', $obj );
     }
 }
 

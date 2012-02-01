@@ -1,17 +1,17 @@
 <?php
 /**
- * File contains: ezp\Publish\PublicAPI\Tests\Service\SectionTest class
+ * File contains: eZ\Publish\Core\API\Tests\Service\SectionTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Publish\PublicAPI\Tests\Service;
-use ezp\Publish\PublicAPI\Tests\Service\Base as BaseServiceTest,
-    ezp\PublicAPI\Values\Content\Section,
-    ezp\PublicAPI\Values\Content\SectionCreateStruct,
-    ezp\PublicAPI\Values\Content\SectionUpdateStruct,
+namespace eZ\Publish\Core\API\Tests\Service;
+use eZ\Publish\Core\API\Tests\Service\Base as BaseServiceTest,
+    eZ\Publish\API\Values\Content\Section,
+    eZ\Publish\API\Values\Content\SectionCreateStruct,
+    eZ\Publish\API\Values\Content\SectionUpdateStruct,
     eZ\Publish\Core\Base\Exception\NotFound;
 
 /**
@@ -22,7 +22,7 @@ abstract class SectionBase extends BaseServiceTest
 {
     /**
      * Test a new class and default values on properties
-     * @covers \ezp\PublicAPI\Values\Content\Section::__construct
+     * @covers \eZ\Publish\API\Values\Content\Section::__construct
      */
     public function testNewClass()
     {
@@ -33,8 +33,8 @@ abstract class SectionBase extends BaseServiceTest
     }
 
     /**
-     * @expectedException eZ\Publish\Core\Base\Exception\PropertyNotFound
-     * @covers \ezp\PublicAPI\Values\Content\Section::__get
+     * @expectedException ezp\Base\Exception\PropertyNotFound
+     * @covers \eZ\Publish\API\Values\Content\Section::__get
      */
     public function testMissingProperty()
     {
@@ -44,7 +44,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * @expectedException eZ\Publish\Core\Base\Exception\PropertyPermission
-     * @covers \ezp\PublicAPI\Values\Content\Section::__set
+     * @covers \eZ\Publish\API\Values\Content\Section::__set
      */
     public function testReadOnlyProperty()
     {
@@ -55,7 +55,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for creating sections
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::create
+     * @covers \eZ\Publish\Core\API\Content\SectionService::create
      */
     public function testCreate()
     {
@@ -73,7 +73,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for creating sections
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::create
+     * @covers \eZ\Publish\Core\API\Content\SectionService::create
      * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
      */
     public function testCreateForbidden()
@@ -89,7 +89,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for loading sections
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::load
+     * @covers \eZ\Publish\Core\API\Content\SectionService::load
      */
     public function testLoad()
     {
@@ -103,7 +103,7 @@ abstract class SectionBase extends BaseServiceTest
     
     /**
      * Test service function for loading sections
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::loadSectionByIdentifier
+     * @covers \eZ\Publish\Core\API\Content\SectionService::loadSectionByIdentifier
      */
     public function testLoadByIdentifier()
     {
@@ -117,7 +117,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for loading all sections
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::loadAll
+     * @covers \eZ\Publish\Core\API\Content\SectionService::loadAll
      */
     public function testLoadAll()
     {
@@ -134,7 +134,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for loading sections
      *
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::load
+     * @covers \eZ\Publish\Core\API\Content\SectionService::load
      * @expectedException \eZ\Publish\Core\Base\Exception\NotFound
      */
     public function testLoadNotFound()
@@ -145,7 +145,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for update sections
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::update
+     * @covers \eZ\Publish\Core\API\Content\SectionService::update
      */
     public function testUpdate()
     {
@@ -165,7 +165,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for update sections
      *
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::update
+     * @covers \eZ\Publish\Core\API\Content\SectionService::update
      * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
      */
     public function testUpdateForbidden()
@@ -179,7 +179,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for deleting sections
      *
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::delete
+     * @covers \eZ\Publish\Core\API\Content\SectionService::delete
      */
     public function testDelete()
     {
@@ -205,7 +205,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for counting the contents which section is assigned to
      *
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::delete
+     * @covers \eZ\Publish\Core\API\Content\SectionService::delete
      */
     public function testCountAssignedContents()
     {
@@ -221,7 +221,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for deleting sections
      *
-     * @covers \ezp\Publish\PublicAPI\Content\SectionService::delete
+     * @covers \eZ\Publish\Core\API\Content\SectionService::delete
      * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
      */
     public function testDeleteForbidden()

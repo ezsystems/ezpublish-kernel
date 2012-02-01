@@ -7,22 +7,22 @@
   convertWarningsToExceptions="true"
   >
   <testsuites>
-    <testsuite name="ezp\Base">
-      <directory>ezp/Base/Tests</directory>
+    <testsuite name="eZ\Publish\Core\Base">
+      <directory>eZ/Publish/Core/Base/Tests</directory>
     </testsuite>
-    <testsuite name="ezp\Publish\PublicAPI">
-      <directory>ezp/Publish/PublicAPI/Tests</directory>
+    <testsuite name="eZ\Publish\Core\API">
+      <directory>eZ/Publish/Core/API/Tests</directory>
     </testsuite>
   </testsuites>
   <filter>
     <whitelist>
-      <directory suffix=".php">ezp</directory>
+      <directory suffix=".php">eZ</directory>
       <exclude>
-          <directory suffix=".php">ezp/Base/Tests</directory>
-          <directory suffix=".php">ezp/Publish/PublicAPI/Tests</directory>
-          <directory suffix=".php">ezp/Persistence/Tests</directory>
-          <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests</directory>
-          <directory suffix=".php">ezp/Io/Tests</directory>
+          <directory suffix=".php">eZ/Publish/Core/Base/Tests</directory>
+          <directory suffix=".php">eZ/Publish/Core/API/Tests</directory>
+          <!-- directory suffix=".php">ezp/Persistence/Tests</directory -->
+          <!-- directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests</directory -->
+          <!-- directory suffix=".php">ezp/Io/Tests</directory -->
           <directory suffix=".php">doc</directory>
       </exclude>
     </whitelist>

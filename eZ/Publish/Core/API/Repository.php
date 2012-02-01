@@ -7,22 +7,22 @@
  * @version //autogentag//
  */
 
-namespace ezp\Publish\PublicAPI;
+namespace eZ\Publish\Core\API;
 use eZ\Publish\Core\Base\Exception\BadConfiguration,
     eZ\Publish\Core\Base\Exception\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exception\Logic,
     ezp\Io\Handler as IoHandler,
     ezp\Persistence\Handler as PersistenceHandler,
-    ezp\PublicAPI\Interfaces\Repository as RepositoryInterface,
-    ezp\Publish\PublicAPI\Content\ContentService,
-    ezp\Publish\PublicAPI\Content\LanguageService,
-    ezp\Publish\PublicAPI\Content\LocationService,
-    ezp\Publish\PublicAPI\Content\SectionService,
-    ezp\Publish\PublicAPI\ContentType\ContentTypeService,
-    ezp\Publish\PublicAPI\User\RoleService,
-    ezp\Publish\PublicAPI\User\UserService,
-    ezp\PublicAPI\Values\ValueObject,
-    ezp\PublicAPI\Values\User\User,
+    eZ\Publish\API\Interfaces\Repository as RepositoryInterface,
+    eZ\Publish\Core\API\Content\ContentService,
+    eZ\Publish\Core\API\Content\LanguageService,
+    eZ\Publish\Core\API\Content\LocationService,
+    eZ\Publish\Core\API\Content\SectionService,
+    eZ\Publish\Core\API\ContentType\ContentTypeService,
+    eZ\Publish\Core\API\User\RoleService,
+    eZ\Publish\Core\API\User\UserService,
+    eZ\Publish\API\Values\ValueObject,
+    eZ\Publish\API\Values\User\User,
     RuntimeException;
 
 /**
@@ -202,7 +202,7 @@ class Repository implements RepositoryInterface
      * Get service object to perform operations on Content objects and it's aggregate members.
      *
      *
-     * @return \ezp\PublicAPI\Interfaces\ContentService
+     * @return \eZ\Publish\API\Interfaces\ContentService
      */
     public function getContentService(){}
 
@@ -211,7 +211,7 @@ class Repository implements RepositoryInterface
      *
      * Get service object to perform operations on Content language objects
      *
-     * @return \ezp\PublicAPI\Interfaces\LanguageService
+     * @return \eZ\Publish\API\Interfaces\LanguageService
      */
     public function getContentLanguageService(){}
 
@@ -221,7 +221,7 @@ class Repository implements RepositoryInterface
      * Get service object to perform operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
-     * @return \ezp\PublicAPI\Interfaces\ContentTypeService
+     * @return \eZ\Publish\API\Interfaces\ContentTypeService
      */
     public function getContentTypeService(){}
 
@@ -230,7 +230,7 @@ class Repository implements RepositoryInterface
      *
      * Get service object to perform operations on Location objects and subtrees
      *
-     * @return \ezp\PublicAPI\Interfaces\LocationService
+     * @return \eZ\Publish\API\Interfaces\LocationService
      */
     public function getLocationService(){}
 
@@ -240,7 +240,7 @@ class Repository implements RepositoryInterface
      * Trash service allows to perform operations related to location trash
      * (trash/untrash, load/list from trash...)
      *
-     * @return \ezp\PublicAPI\Interfaces\TrashService
+     * @return \eZ\Publish\API\Interfaces\TrashService
      */
     public function getTrashService(){}
 
@@ -249,7 +249,7 @@ class Repository implements RepositoryInterface
      *
      * Get Section service that lets you manipulate section objects
      *
-     * @return \ezp\PublicAPI\Interfaces\SectionService
+     * @return \eZ\Publish\API\Interfaces\SectionService
      */
     public function getSectionService()
     {
@@ -265,14 +265,14 @@ class Repository implements RepositoryInterface
      *
      * Get service object to perform operations on Users and UserGroup
      *
-     * @return \ezp\PublicAPI\Interfaces\UserService
+     * @return \eZ\Publish\API\Interfaces\UserService
      */
     public function getUserService(){}
 
     /**
      * Get RoleService
      *
-     * @return \ezp\PublicAPI\Interfaces\RoleService
+     * @return \eZ\Publish\API\Interfaces\RoleService
      */
     public function getRoleService(){}
 

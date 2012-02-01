@@ -1,31 +1,33 @@
 <?php
 /**
- * @package ezp\Publish\PublicAPI
+ * @package eZ\Publish\Core\API
  */
-namespace ezp\Publish\PublicAPI\Content;
+namespace eZ\Publish\Core\API\Content;
 
-use ezp\PublicAPI\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Values\Content\SectionCreateStruct;
 
 use eZ\Publish\Core\Base\Exception\NotFound;
 use eZ\Publish\Core\Base\Exception\InvalidArgumentValue;
-use ezp\PublicAPI\Values\Content\Content;
-use ezp\PublicAPI\Values\Content\ContentInfo;
-use ezp\PublicAPI\Values\Content\Section;
-use ezp\PublicAPI\Values\Content\Location;
-use ezp\PublicAPI\Values\Content\SectionUpdateStruct;
-use ezp\PublicAPI\Interfaces\SectionService as SectionServiceInterface;
+use ezp\Base\Exception\InvalidArgumentValue as PersistenceInvalidArgumentValue;
+use ezp\Base\Exception\NotFound as PersistenceNotFound;
+use eZ\Publish\API\Values\Content\Content;
+use eZ\Publish\API\Values\Content\ContentInfo;
+use eZ\Publish\API\Values\Content\Section;
+use eZ\Publish\API\Values\Content\Location;
+use eZ\Publish\API\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Interfaces\SectionService as SectionServiceInterface;
 use ezp\Persistence\Handler;
-use ezp\PublicAPI\Interfaces\Repository as RepositoryInterface;
+use eZ\Publish\API\Interfaces\Repository as RepositoryInterface;
 
 /**
  * Section service, used for section operations
  *
- * @package ezp\Publish\PublicAPI
+ * @package eZ\Publish\Core\API
  */
 class SectionService implements SectionServiceInterface
 {
     /**
-     * @var \ezp\PublicAPI\Interfaces\Repository
+     * @var \eZ\Publish\API\Interfaces\Repository
      */
     protected $repository;
 
@@ -37,7 +39,7 @@ class SectionService implements SectionServiceInterface
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \ezp\PublicAPI\Interfaces\Repository $repository
+     * @param \eZ\Publish\API\Interfaces\Repository $repository
      * @param \ezp\Persistence\Handler $handler
      */
     public function __construct( RepositoryInterface $repository, Handler $handler )
@@ -53,8 +55,8 @@ class SectionService implements SectionServiceInterface
      *
      * @return Section The newly create section
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
+     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
+     * @throws eZ\Publish\API\Interfaces\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
      */
     public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
@@ -70,7 +72,7 @@ class SectionService implements SectionServiceInterface
             if ( $existingSection !== null )
                 throw new IllegalArgumentException( "identifer", $sectionCreateStruct->identifier );
         }
-        catch ( NotFound $e ) {}
+        catch ( PersistenceNotFound $e ) {}
 
         $createdSection = (array) $this->handler->sectionHandler()->create(
             $sectionCreateStruct->name,
@@ -88,9 +90,9 @@ class SectionService implements SectionServiceInterface
      *
      * @return Section
      *
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if section could not be found
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws ezp\PublicAPI\Interfaces\IllegalArgumentException If the new identifier already exists (if set in the update struct)
+     * @throws eZ\Publish\API\Interfaces\NotFoundException if section could not be found
+     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
+     * @throws eZ\Publish\API\Interfaces\IllegalArgumentException If the new identifier already exists (if set in the update struct)
      */
     public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
@@ -102,7 +104,7 @@ class SectionService implements SectionServiceInterface
                 if ( $existingSection !== null )
                     throw new IllegalArgumentException( "identifer", $sectionUpdateStruct->identifier );
             }
-            catch ( NotFound $e ) {}
+            catch ( PersistenceNotFound $e ) {}
         }
 
         $section = $this->loadSection( $section->id );
@@ -128,15 +130,19 @@ class SectionService implements SectionServiceInterface
      *
      * @return Section
      *
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if section could not be found
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
+     * @throws eZ\Publish\API\Interfaces\NotFoundException if section could not be found
+     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
      */
     public function loadSection( $sectionId )
     {
-        $sectionArray = (array) $this->handler->sectionHandler()->load( $sectionId );
-
-        if ( $sectionArray === null )
-            throw new NotFound( "Section", $sectionId );
+        try
+        {
+            $sectionArray = (array) $this->handler->sectionHandler()->load( $sectionId );
+        }
+        catch ( PersistenceNotFound $e )
+        {
+            throw new NotFound( "Section", $sectionId, $e );
+        }
 
         return new Section( $sectionArray );
     }
@@ -146,7 +152,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return array of {@link Section}
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
+     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
      */
     public function loadSections()
     {
@@ -175,8 +181,8 @@ class SectionService implements SectionServiceInterface
      *
      * @return Section
      *
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException if section could not be found
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
+     * @throws eZ\Publish\API\Interfaces\NotFoundException if section could not be found
+     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
@@ -206,7 +212,7 @@ class SectionService implements SectionServiceInterface
      * @param ContentInfo $contentInfo
      * @param Section $section
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to view provided object
+     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If user does not have access to view provided object
      */
     public function assignSection( ContentInfo $contentInfo, Section $section ){}
 
@@ -220,7 +226,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return array  a list (string) of descendants which are not changed due to permissions
      *
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to the starting point
+     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to the starting point
      *
      */
     public function assignSectionToSubTree( Location $startingPoint, Section $section ){}
@@ -230,16 +236,21 @@ class SectionService implements SectionServiceInterface
      *
      * @param Section $section
      *
-     * @throws ezp\PublicAPI\Interfaces\NotFoundException If the specified section is not found
-     * @throws ezp\PublicAPI\Interfaces\UnauthorizedException If the current user user is not allowed to delete a section
-     * @throws ezp\PublicAPI\Interfaces\BadStateException  if section can not be deleted
+     * @throws eZ\Publish\API\Interfaces\NotFoundException If the specified section is not found
+     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to delete a section
+     * @throws eZ\Publish\API\Interfaces\BadStateException  if section can not be deleted
      *         because it is still assigned to some contents.
      */
     public function deleteSection( Section $section )
     {
-        $loadedSection = $this->loadSection( $section->id );
-        if ( $loadedSection === null )
-            throw new NotFound( "Section", $section->id );
+        try
+        {
+            $this->handler->sectionHandler()->load( $section->id );
+        }
+        catch ( PersistenceNotFound $e )
+        {
+            throw new NotFound( "Section", $section->id, $e );
+        }
 
         $this->handler->sectionHandler()->delete( $section->id );
     }

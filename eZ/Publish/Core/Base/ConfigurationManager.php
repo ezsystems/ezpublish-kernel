@@ -73,7 +73,7 @@ class ConfigurationManager
         array $globalConfiguration,
         array $globalPaths = array(
              'base' => array( 'settings/' ),
-             'modules' => array( 'ezp/Base/settings/' ),
+             'modules' => array( 'eZ/Publish/Core/settings/' ),
              'access' => array(),
              'global' => array( 'settings/override/' ),
         )

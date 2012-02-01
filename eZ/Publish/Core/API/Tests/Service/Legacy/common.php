@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Content\Tests\Service\Legacy;
-use ezp\Publish\PublicAPI\Repository,
+namespace eZ\Publish\Core\API\Tests\Service\Legacy;
+use eZ\Publish\Core\API\Repository,
     ezp\Io\Storage\Legacy as LegacyIoHandler,
     ezp\Persistence\Storage\Legacy\Handler as LegacyPersistenceHandler,
     ReflectionMethod;
