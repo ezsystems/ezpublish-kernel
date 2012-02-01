@@ -1,5 +1,5 @@
 <?php
-namespace eZ\Publish\API\Exceptions;
+namespace ezp\PublicAPI\Exceptions;
 /**
  * This Exception is thrown on create or update content one or more given fields are not valid
  */

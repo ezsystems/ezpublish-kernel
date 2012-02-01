@@ -2,7 +2,7 @@
 /**
  * @package FieldTypeProviderInterface
  */
-namespace eZ\Publish\API\FieldTypeProviderInterface;
+namespace ezp\PublicAPI\FieldTypeProviderInterface;
 use ezp\Persistence\Content\Field;
 
 /**

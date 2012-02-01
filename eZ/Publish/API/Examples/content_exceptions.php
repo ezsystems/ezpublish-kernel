@@ -13,11 +13,11 @@
  * 3. Using a more specialized  exception thrown when contentCreate() is called
  */
 
-use eZ\Publish\API\Interfaces\Repository;
+use ezp\PublicAPI\Interfaces\Repository;
 
 /**
  * Assumed as injected
- * @var eZ\Publish\API\Interfaces\Repository
+ * @var ezp\PublicAPI\Interfaces\Repository
  */
 $repository = new Repository;
 

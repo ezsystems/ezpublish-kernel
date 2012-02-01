@@ -1,17 +1,17 @@
 <?php
 /**
  *
- * @package eZ\Publish\API\Values\Content\Query
+ * @package ezp\PublicAPI\Values\Content\Query
  *
  */
-namespace eZ\Publish\API\Values\Content\Query;
+namespace ezp\PublicAPI\Values\Content\Query;
 
-use eZ\Publish\API\Values\Content\Query,
+use ezp\PublicAPI\Values\Content\Query,
     InvalidArgumentException;
 
 /**
  * This class is the base for SortClause classes, used to set sorting of content queries
- * @package eZ\Publish\API\Values\Content\Query
+ * @package ezp\PublicAPI\Values\Content\Query
  */
 abstract class SortClause
 {

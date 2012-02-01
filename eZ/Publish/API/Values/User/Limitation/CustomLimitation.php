@@ -1,7 +1,7 @@
 <?php
-namespace eZ\Publish\API\Values\User\Limitation;
+namespace ezp\PublicAPI\Values\User\Limitation;
 
-use eZ\Publish\API\Values\User\Limitation;
+use ezp\PublicAPI\Values\User\Limitation;
 
 class CustomLimitation extends Limitation
 {
@@ -23,7 +23,7 @@ class CustomLimitation extends Limitation
 
     /**
      * (non-PHPdoc)
-     * @see User/eZ\Publish\API\Values\User.Limitation::getIdentifier()
+     * @see User/ezp\PublicAPI\Values\User.Limitation::getIdentifier()
      */
     public function getIdentifier()
     {

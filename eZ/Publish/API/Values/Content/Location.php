@@ -1,13 +1,13 @@
 <?php
-namespace eZ\Publish\API\Values\Content;
+namespace ezp\PublicAPI\Values\Content;
 
-use eZ\Publish\API\Values\ValueObject;
-use eZ\Publish\API\Values\Content\Content;
+use ezp\PublicAPI\Values\ValueObject;
+use ezp\PublicAPI\Values\Content\Content;
 
 /**
  * This class represents a location in the repository
  *
- * @property-read eZ\Publish\API\Values\Content\ContentInfo $contentInfo calls getContentInfo()
+ * @property-read ezp\PublicAPI\Values\Content\ContentInfo $contentInfo calls getContentInfo()
  * @property-read int $contentId calls getContent()->contentId
  * @property-read int $id the id of the location
  * @property-read int $priority Position of the Location among its siblings when sorted using priority
@@ -84,7 +84,7 @@ abstract class Location extends ValueObject
     /**
      * returns the content info of the content object of this location
      *
-     * @return eZ\Publish\API\Values\Content\ContentInfo
+     * @return ezp\PublicAPI\Values\Content\ContentInfo
      */
     public abstract function getContentInfo();
 

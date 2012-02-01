@@ -1,11 +1,11 @@
 <?php
-namespace eZ\Publish\API\Exceptions;
+namespace ezp\PublicAPI\Exceptions;
 
 /**
  * An Exception which is thrown if an operation cannot be performed by a service
  * although the current user
  * would have permission to perform this action.
- * @package eZ\Publish\API\Exceptions
+ * @package ezp\PublicAPI\Exceptions
  */
 abstract class ForbiddenException extends RuntimeException
 {

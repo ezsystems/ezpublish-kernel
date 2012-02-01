@@ -1,8 +1,8 @@
 <?php
-namespace eZ\Publish\API\Values\Content\Query\SortClause;
+namespace ezp\PublicAPI\Values\Content\Query\SortClause;
 
-use eZ\Publish\API\Values\Content\Query,
-    eZ\Publish\API\Values\Content\Query\SortClause;
+use ezp\PublicAPI\Values\Content\Query,
+    ezp\PublicAPI\Values\Content\Query\SortClause;
 
 /**
  * Sets sort direction on Content name for a content query

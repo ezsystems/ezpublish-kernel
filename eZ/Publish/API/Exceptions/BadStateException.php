@@ -1,5 +1,5 @@
 <?php
-namespace eZ\Publish\API\Exceptions;
+namespace ezp\PublicAPI\Exceptions;
 /**
  * This Exception is thrown if a method is called with an value referencing an object which is not in the right state
  */

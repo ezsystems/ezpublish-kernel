@@ -1,6 +1,6 @@
 <?php
-namespace eZ\Publish\API\Values\ContentType;
-use eZ\Publish\API\Values\ValueObject;
+namespace ezp\PublicAPI\Values\ContentType;
+use ezp\PublicAPI\Values\ValueObject;
 
 /**
  * This clas is used for updating a content type group

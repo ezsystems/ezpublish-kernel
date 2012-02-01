@@ -1,8 +1,8 @@
 <?php
-namespace eZ\Publish\API\Values\Content\Query\Criterion;
-use eZ\Publish\API\Values\Content\Query\Criterion,
-    eZ\Publish\API\Values\Content\Query\Criterion\Operator\Specifications,
-    eZ\Publish\API\Values\Content\Query\CriterionInterface;
+namespace ezp\PublicAPI\Values\Content\Query\Criterion;
+use ezp\PublicAPI\Values\Content\Query\Criterion,
+    ezp\PublicAPI\Values\Content\Query\Criterion\Operator\Specifications,
+    ezp\PublicAPI\Values\Content\Query\CriterionInterface;
 
 /**
  * A criterion that matches content based on its id

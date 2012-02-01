@@ -1,6 +1,6 @@
 <?php
-namespace eZ\Publish\API\Values\User;
-use eZ\Publish\API\Values\ValueObject;
+namespace ezp\PublicAPI\Values\User;
+use ezp\PublicAPI\Values\ValueObject;
 
 /**
  * This class is used to update a role

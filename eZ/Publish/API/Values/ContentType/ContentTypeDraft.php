@@ -1,5 +1,5 @@
 <?php
-namespace eZ\Publish\API\Values\ContentType;
+namespace ezp\PublicAPI\Values\ContentType;
 
 /**
  *

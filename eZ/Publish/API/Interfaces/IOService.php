@@ -1,12 +1,12 @@
 <?php
-namespace eZ\Publish\API\Interfaces;
+namespace ezp\PublicAPI\Interfaces;
 
-use eZ\Publish\API\Values\IO\BinaryFile;
+use ezp\PublicAPI\Values\IO\BinaryFile;
 
 /**
  * The io service for managing binary files
  *
- * @package eZ\Publish\API\Interfaces
+ * @package ezp\PublicAPI\Interfaces
  *
  */
 interface IOService
@@ -14,31 +14,31 @@ interface IOService
     /**
      * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile
      * 
-     * @throws \eZ\Publish\API\Exceptions\InvalidArgumentException When given an invalid uploaded file
+     * @throws \ezp\PublicAPI\Exceptions\InvalidArgumentException When given an invalid uploaded file
      *
      * @param array $uploadedFile The $_POST hash of an uploaded file
      * 
-     * @return \eZ\Publish\API\Values\IO\BinaryFileCreateStruct
+     * @return \ezp\PublicAPI\Values\IO\BinaryFileCreateStruct
      */
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile );
 
     /**
      * Creates a BinaryFileCreateStruct object from $localFile
      * 
-     * @throws \eZ\Publish\API\Exceptions\InvalidArgumentException When given a non existing / unreadable file
+     * @throws \ezp\PublicAPI\Exceptions\InvalidArgumentException When given a non existing / unreadable file
      *
      * @param string $localFile Path to local file
      * 
-     * @return \eZ\Publish\API\Values\IO\BinaryFileCreateStruct
+     * @return \ezp\PublicAPI\Values\IO\BinaryFileCreateStruct
      */
     public function newBinaryCreateStructFromLocalFile( $localFile );
 
     /**
      * Creates a  binary file in the the repository
      *
-     * @param \eZ\Publish\API\Values\IO\BinaryFileCreateStruct $binaryFileCreateStruct
+     * @param \ezp\PublicAPI\Values\IO\BinaryFileCreateStruct $binaryFileCreateStruct
      * 
-     * @return \eZ\Publish\API\Values\IO\BinaryFile The created BinaryFile object
+     * @return \ezp\PublicAPI\Values\IO\BinaryFile The created BinaryFile object
      */
     public function createBinaryFile( BinaryFileCreateStruct $binaryFileCreateStruct );
         
@@ -52,11 +52,11 @@ interface IOService
     /**
      * Loads the binary file with $id
      * 
-     * @throws \eZ\Publish\API\Exceptions\NotFoundExcption
+     * @throws \ezp\PublicAPI\Exceptions\NotFoundExcption
      *
      * @param string $binaryFileid
      * 
-     * @return \eZ\Publish\API\Values\IO\BinaryFile
+     * @return \ezp\PublicAPI\Values\IO\BinaryFile
      */
     public function loadBinaryFile( $binaryFileid );
     

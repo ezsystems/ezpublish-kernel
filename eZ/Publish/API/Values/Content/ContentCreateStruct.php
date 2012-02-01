@@ -1,8 +1,8 @@
 <?php
-namespace eZ\Publish\API\Values\Content;
+namespace ezp\PublicAPI\Values\Content;
 
-use eZ\Publish\API\Values\ContentType\ContentType;
-use eZ\Publish\API\Values\ValueObject;
+use ezp\PublicAPI\Values\ContentType\ContentType;
+use ezp\PublicAPI\Values\ValueObject;
 
 /**
  * This class is used for creating a new content object

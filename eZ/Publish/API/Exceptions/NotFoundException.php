@@ -1,10 +1,10 @@
 <?php
-namespace eZ\Publish\API\Exceptions;
+namespace ezp\PublicAPI\Exceptions;
 
 /**
  * This Exception is thrown if an object referencenced by an id or identifier
  * could not be found in the repository.
- * @package eZ\Publish\API\Exceptions
+ * @package ezp\PublicAPI\Exceptions
  *
  */
 abstract class NotFoundException extends RuntimeException

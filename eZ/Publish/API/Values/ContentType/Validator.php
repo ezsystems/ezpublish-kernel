@@ -1,7 +1,7 @@
 <?php
-namespace eZ\Publish\API\Values\ContentType;
+namespace ezp\PublicAPI\Values\ContentType;
 
-use eZ\Publish\API\Values\ValueObject;
+use ezp\PublicAPI\Values\ValueObject;
 
 /**
  * This class represents a validatoor provided by a field type.

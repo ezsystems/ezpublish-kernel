@@ -1,5 +1,5 @@
 <?php
-namespace eZ\Publish\API\Values\Content;
+namespace ezp\PublicAPI\Values\Content;
 /**
  * This value object is used for adding a translation to a version
  *

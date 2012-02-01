@@ -2,15 +2,15 @@
 /**
  *
  *
- * @package eZ\Publish\API\Values\Content\Query
+ * @package ezp\PublicAPI\Values\Content\Query
  */
-namespace eZ\Publish\API\Values\Content\Query\SortClause\Target;
+namespace ezp\PublicAPI\Values\Content\Query\SortClause\Target;
 
-use eZ\Publish\API\Values\Content\Query\SortClause\Target as SortClauseTarget;
+use ezp\PublicAPI\Values\Content\Query\SortClause\Target as SortClauseTarget;
 
 /**
  * Struct that stores extra target informations for a SortClause object
- * @package eZ\Publish\API\Values\Content\Query
+ * @package ezp\PublicAPI\Values\Content\Query
  */
 class FieldSortClauseTarget extends SortClauseTarget
 {
