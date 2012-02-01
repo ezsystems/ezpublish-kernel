@@ -1,0 +1,24 @@
+    <refentry id="{@id}">
+     <refnamediv>
+      <refname>The eZ Publish Public PHP API</refname>
+      <refpurpose></refpurpose>
+     </refnamediv>
+     <refsynopsisdiv>
+      <author>
+      cba
+       <authorblurb>
+        {@link mailto:cba@ez.no}
+       </authorblurb>
+      </author>
+     </refsynopsisdiv>
+     {@toc}
+     <refsect1 id="{@id intro}">
+      <title>Concepts</title>
+      <para>
+       The public API is a set of service interfaces which operate on simple value objects. 
+       The value objects are abstract classes with public properties and abstract methods for retrieving or setting
+       aggrate objects (where getters may be implemented with lazy loading). For all abstract methods there is an equivalent
+       magic setter or getter. That means that each magic getter or setter is documented by the corresponding method.  
+      </para>
+     </refsect1>
+    </refentry>
