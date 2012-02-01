@@ -1,8 +1,8 @@
 <?php
-namespace ezp\PublicAPI\Values\Content\Query\SortClause;
+namespace eZ\Publish\API\Values\Content\Query\SortClause;
 
-use ezp\PublicAPI\Values\Content\Query,
-    ezp\PublicAPI\Values\Content\Query\SortClause;
+use eZ\Publish\API\Values\Content\Query,
+    eZ\Publish\API\Values\Content\Query\SortClause;
 
 /**
  * Sets sort direction on the location path date for a content query

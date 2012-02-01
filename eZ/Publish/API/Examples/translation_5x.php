@@ -9,7 +9,7 @@
 
 /**
  * assumed as injected
- * @var ezp\PublicAPI\Interfaces\Repository $repository
+ * @var eZ\Publish\API\Interfaces\Repository $repository
  */
 $repository = null;
 

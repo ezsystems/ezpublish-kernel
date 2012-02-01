@@ -1,7 +1,7 @@
 <?php
 
-namespace ezp\PublicAPI\Values\User;
-use ezp\PublicAPI\Values\ValueObject;
+namespace eZ\Publish\API\Values\User;
+use eZ\Publish\API\Values\ValueObject;
 
 /**
  * This class represents a role
@@ -9,7 +9,7 @@ use ezp\PublicAPI\Values\ValueObject;
  * @property-read int $id the internal id of the role
  * @property-read string $name the name of the role
  * @property-read string $description the description of the role
- * @property-read array $policies an array of the policies {@link \ezp\PublicAPI\Values\User\Policy} of the role.
+ * @property-read array $policies an array of the policies {@link \eZ\Publish\API\Values\User\Policy} of the role.
  */
 abstract class Role extends ValueObject
 {
@@ -38,13 +38,13 @@ abstract class Role extends ValueObject
 
     /**
      * returns the list of policies of this role
-     * @return array an array of {@link \ezp\PublicAPI\Values\UserPolicy}
+     * @return array an array of {@link \eZ\Publish\API\Values\UserPolicy}
      */
     public abstract function getPolicies();
 
     /**
      * returns the policy for the given module and function
-     * @return \ezp\PublicAPI\Values\UserPolicy
+     * @return \eZ\Publish\API\Values\UserPolicy
      */
     public abstract function getPolicy( $module, $function );
 }

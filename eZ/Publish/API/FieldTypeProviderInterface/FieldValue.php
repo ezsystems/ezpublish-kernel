@@ -1,5 +1,5 @@
 <?php
-namespace ezp\PublicAPI\FieldTypeProviderInterface;
+namespace eZ\Publish\API\FieldTypeProviderInterface;
 /**
  */
 class FieldValue extends ValueObject

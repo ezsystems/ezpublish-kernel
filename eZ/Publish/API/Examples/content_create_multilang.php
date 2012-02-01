@@ -3,11 +3,11 @@
  * @example Create a content in multiple languages at once
  */
 
-use ezp\PublicAPI\Interfaces\Repository;
+use eZ\Publish\API\Interfaces\Repository;
 
 /**
  * Assumed as injected
- * @var ezp\PublicAPI\Interfaces\Repository
+ * @var eZ\Publish\API\Interfaces\Repository
  */
 $repository = new Repository;
 

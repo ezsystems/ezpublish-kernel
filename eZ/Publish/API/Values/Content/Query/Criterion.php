@@ -1,16 +1,16 @@
 <?php
 /**
  *
- * @package ezp\PublicAPI\Values\Content\Query
+ * @package eZ\Publish\API\Values\Content\Query
  *
  */
-namespace ezp\PublicAPI\Values\Content\Query;
-use ezp\PublicAPI\Values\Content\Query\Criterion\Operator\Specifications,
-    ezp\PublicAPI\Values\Content\Query\Criterion\Operator,
+namespace eZ\Publish\API\Values\Content\Query;
+use eZ\Publish\API\Values\Content\Query\Criterion\Operator\Specifications,
+    eZ\Publish\API\Values\Content\Query\Criterion\Operator,
     InvalidArgumentException;
 
 /**
- * @package ezp\PublicAPI\Values\Content\Query
+ * @package eZ\Publish\API\Values\Content\Query
  */
 abstract class Criterion
 {

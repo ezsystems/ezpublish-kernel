@@ -1,14 +1,14 @@
 <?php
-namespace ezp\PublicAPI\Values\Content;
+namespace eZ\Publish\API\Values\Content;
 
-use ezp\PublicAPI\Values\ContentType\ContentType;
-use ezp\PublicAPI\Values\Content\Location;
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Values\ContentType\ContentType;
+use eZ\Publish\API\Values\Content\Location;
+use eZ\Publish\API\Values\ValueObject;
 
 /**
  * This class provides all version independent information of the content object.
  * 
- * @property-read ezp\PublicAPI\Values\ContentType\ContentType $contentType calls {@link getContentType()}
+ * @property-read eZ\Publish\API\Values\ContentType\ContentType $contentType calls {@link getContentType()}
  * @property-read int $contentId The unique id of the content object
  * @property-read string $name the computed name (via name schema) in the main language of the content object
  * @property-read int $sectionId the section to which the content is assigned

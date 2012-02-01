@@ -1,19 +1,19 @@
 <?php
 /**
- * @package ezp\PublicAPI\Interfaces
+ * @package eZ\Publish\API\Interfaces
  */
-namespace ezp\PublicAPI\Interfaces;
+namespace eZ\Publish\API\Interfaces;
 
-use ezp\PublicAPI\Values\Content\ContentUpdateStruct;
-use ezp\PublicAPI\Values\ContentType\ContentType;
-use ezp\PublicAPI\Values\Content\Query;
-use ezp\PublicAPI\Values\Content\TranslationInfo;
-use ezp\PublicAPI\Values\Content\TranslationValues;
-use ezp\PublicAPI\Values\Content\ContentCreateStruct;
-use ezp\PublicAPI\Values\Content\ContentMetaDataUpdateStruct;
-use ezp\PublicAPI\Values\Content\VersionInfo;
-use ezp\PublicAPI\Values\Content\Content;
-use ezp\PublicAPI\Values\Content\ContentInfo;
+use eZ\Publish\API\Values\Content\ContentUpdateStruct;
+use eZ\Publish\API\Values\ContentType\ContentType;
+use eZ\Publish\API\Values\Content\Query;
+use eZ\Publish\API\Values\Content\TranslationInfo;
+use eZ\Publish\API\Values\Content\TranslationValues;
+use eZ\Publish\API\Values\Content\ContentCreateStruct;
+use eZ\Publish\API\Values\Content\ContentMetaDataUpdateStruct;
+use eZ\Publish\API\Values\Content\VersionInfo;
+use eZ\Publish\API\Values\Content\Content;
+use eZ\Publish\API\Values\Content\ContentInfo;
 
 
 /**
@@ -21,7 +21,7 @@ use ezp\PublicAPI\Values\Content\ContentInfo;
  *
  * @example Examples/content.php
  *
- * @package ezp\PublicAPI\Interfaces
+ * @package eZ\Publish\API\Interfaces
  */
 interface ContentService
 {
@@ -31,12 +31,12 @@ interface ContentService
      * 
      * To load fields use loadContent
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to read the content
-     * @throws \ezp\PublicAPI\Exceptions\NotFoundExceptoin - if the content with the given id does not exist
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to read the content
+     * @throws \eZ\Publish\API\Exceptions\NotFoundExceptoin - if the content with the given id does not exist
      *
      * @param int $contentId
      *
-     * @return \ezp\PublicAPI\Values\Content\ContentInfo
+     * @return \eZ\Publish\API\Values\Content\ContentInfo
      */
     public function loadContentInfo( $contentId );
 
@@ -45,12 +45,12 @@ interface ContentService
      * 
      * To load fields use loadContent
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowd to create the content in the given location
-     * @throws \ezp\PublicAPI\Exceptions\NotFoundExceptoin - if the content with the given remote id does not exist
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowd to create the content in the given location
+     * @throws \eZ\Publish\API\Exceptions\NotFoundExceptoin - if the content with the given remote id does not exist
      *
      * @param string $remoteId
      *
-     * @return \ezp\PublicAPI\Values\Content\ContentInfo
+     * @return \eZ\Publish\API\Values\Content\ContentInfo
      */
     public function loadContenInfotByRemoteId( $remoteId );
 
@@ -59,13 +59,13 @@ interface ContentService
      * 
      * If no version number is given, the method returns the current version
      *
-     * @throws \ezp\PublicAPI\Exceptions\NotFoundExceptoin - if the version with the given number does not exist
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to load this version
+     * @throws \eZ\Publish\API\Exceptions\NotFoundExceptoin - if the version with the given number does not exist
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $contentInfo
      * @param int $versionNo the version number. If not given the current version is returned.
      *
-     * @return \ezp\PublicAPI\Values\Content\VersionInfo
+     * @return \eZ\Publish\API\Values\Content\VersionInfo
      */
     public function loadVersionInfo( ContentInfo $contentInfo, $versionNo = null );
 
@@ -74,13 +74,13 @@ interface ContentService
      * 
      * If no version number is given, the method returns the current version
      *
-     * @throws \ezp\PublicAPI\Exceptions\NotFoundExceptoin - if the version with the given number does not exist
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to load this version
+     * @throws \eZ\Publish\API\Exceptions\NotFoundExceptoin - if the version with the given number does not exist
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param int $contentId
      * @param int $versionNo the version number. If not given the current version is returned.
      *
-     * @return \ezp\PublicAPI\Values\Content\VersionInfo
+     * @return \eZ\Publish\API\Values\Content\VersionInfo
      */
     public function loadVersionInfoById( $contentId, $versionNo = null );
 
@@ -89,26 +89,26 @@ interface ContentService
      * 
      * If no version number is given, the method returns the current version
      *
-     * @throws \ezp\PublicAPI\Exceptions\NotFoundException - if version with the given number does not exist
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to load this version
+     * @throws \eZ\Publish\API\Exceptions\NotFoundException - if version with the given number does not exist
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $contentInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      *
-     * @return \ezp\PublicAPI\Values\Content\Content
+     * @return \eZ\Publish\API\Values\Content\Content
      */
     public function loadContentByContentInfo( ContentInfo $contentInfo, array $languages = null, $versionNo = null );
 
     /**
      * loads content in the version given by version info.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to load this version
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
-     * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Values\Content\VersionInfo $versionInfo
      * @param array $languages A language filter for fields. If not given all languages are returned
      *
-     * @return \ezp\PublicAPI\Values\Content\Content
+     * @return \eZ\Publish\API\Values\Content\Content
      */
     public function loadContentByVersionInfo( VersionInfo $versionInfo, array $languages = null );
 
@@ -117,14 +117,14 @@ interface ContentService
      * 
      * If no version number is given, the method returns the current version
      *
-     * @throws \ezp\PublicAPI\Exceptions\NotFoundExceptoin - if the content or version with the given id does not exist
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to load this version
+     * @throws \eZ\Publish\API\Exceptions\NotFoundExceptoin - if the content or version with the given id does not exist
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param int $contentId
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      *
-     * @return \ezp\PublicAPI\Values\Content\Content
+     * @return \eZ\Publish\API\Values\Content\Content
      */
     public function loadContent( $contentId, array $languages = null, $versionNo = null );
 
@@ -133,14 +133,14 @@ interface ContentService
      * 
      * If no version is given, the method returns the current version
      *
-     * @throws \ezp\PublicAPI\Exceptions\NotFoundExceptoin - if the content or version with the given remote id does not exist
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to load this version
+     * @throws \eZ\Publish\API\Exceptions\NotFoundExceptoin - if the content or version with the given remote id does not exist
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param string $remoteId
      * @param array $languages A language filter for fields. If not given all languages are returned
      * @param int $versionNo the version number. If not given the current version is returned.
      *
-     * @return \ezp\PublicAPI\Values\Content\Content
+     * @return \eZ\Publish\API\Values\Content\Content
      */
     public function loadVersionByRemoteId( $remoteId, array $languages = null, $versionNo = null );
 
@@ -154,16 +154,16 @@ interface ContentService
      * The user has to publish the draft if it should be visible.
      * In 4.x at least one location has to be provided in the location creation array.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
-     * @throws \ezp\PublicAPI\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system 
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
+     * @throws \eZ\Publish\API\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system
      *                                                            or (4.x) there is no location provided
-     * @throws \ezp\PublicAPI\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
-     * @throws \ezp\PublicAPI\Exceptions\ContentValidationException if a required field is missing
+     * @throws \eZ\Publish\API\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
+     * @throws \eZ\Publish\API\Exceptions\ContentValidationException if a required field is missing
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentCreateStruct $contentCreateStruct
-     * @param array $locationCreateStructs an array of {@link \ezp\PublicAPI\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
+     * @param \eZ\Publish\API\Values\Content\ContentCreateStruct $contentCreateStruct
+     * @param array $locationCreateStructs an array of {@link \eZ\Publish\API\Values\Content\LocationCreateStruct} for each location parent under which a location should be created for the content
      *
-     * @return \ezp\PublicAPI\Values\Content\Content - the newly created content draft
+     * @return \eZ\Publish\API\Values\Content\Content - the newly created content draft
      */
     public function createContent( ContentCreateStruct $contentCreateStruct, array $locationCreateStructs = array() );
 
@@ -172,22 +172,22 @@ interface ContentService
      * 
      * (see {@link ContentMetadataUpdateStruct}) of a content object - to update fields use updateContent
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowd to update the content meta data
-     * @throws \ezp\PublicAPI\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already existis
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowd to update the content meta data
+     * @throws \eZ\Publish\API\Exceptions\InvalidArgumentException if the remoteId in $contentMetadataUpdateStruct is set but already existis
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
-     * @param \ezp\PublicAPI\Values\Content\ContentMetadataUpdateStruct $contentMetadataUpdateStruct
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Values\Content\ContentMetadataUpdateStruct $contentMetadataUpdateStruct
      *
-     * @return \ezp\PublicAPI\Values\Content\Content the content with the updated attributes
+     * @return \eZ\Publish\API\Values\Content\Content the content with the updated attributes
      */
     public function updateContentMetadata( ContentInfo $contentInfo, ContentMetaDataUpdateStruct $contentMetadataUpdateStruct );
 
     /**
      * deletes a content object including all its versions and locations including their subtrees.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowd to delete the content (in one of the locations of the given content object)
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowd to delete the content (in one of the locations of the given content object)
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $contentInfo
      */
     public function deleteContent( ContentInfo $contentInfo );
 
@@ -198,13 +198,13 @@ interface ContentService
      * 4.x: The draft is created with the initialLanguge code of the source version or if not present with the main language.
      * It can be changed on updating the version.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to create the draft
-     * @throws \ezp\PublicAPI\Exceptions\BadStateException if there is no published version or the version info points to a draft
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to create the draft
+     * @throws \eZ\Publish\API\Exceptions\BadStateException if there is no published version or the version info points to a draft
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
-     * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Values\Content\VersionInfo $versionInfo
      *
-     * @return \ezp\PublicAPI\Values\Content\Content - the newly created content draft
+     * @return \eZ\Publish\API\Values\Content\Content - the newly created content draft
      */
     public function createContentDraft( ContentInfo $contentInfo, VersionInfo $versionInfo = null );
 
@@ -213,11 +213,11 @@ interface ContentService
      * 
      * If no user is given the drafts for the authenticated user a returned
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
      * 
      * @param User $user
      *
-     * @return \ezp\PublicAPI\Values\Content\VersionInfo the drafts ({@link VersionInfo}) owned by the given user
+     * @return \eZ\Publish\API\Values\Content\VersionInfo the drafts ({@link VersionInfo}) owned by the given user
      */
     public function loadContentDrafts( User $user = null );
 
@@ -229,16 +229,16 @@ interface ContentService
      *
      * @example Examples/translation_5x.php
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \ezp\PublicAPI\Exceptions\BadStateException if the given destiantioon version is not a draft
-     * @throws \ezp\PublicAPI\Exceptions\ContentValidationException if a required field is set to an empty value
-     * @throws \ezp\PublicAPI\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to update this version
+     * @throws \eZ\Publish\API\Exceptions\BadStateException if the given destiantioon version is not a draft
+     * @throws \eZ\Publish\API\Exceptions\ContentValidationException if a required field is set to an empty value
+     * @throws \eZ\Publish\API\Exceptions\ContentFieldValidationException if a field in the $translationValues is not valid
      *
-     * @param \ezp\PublicAPI\Values\Content\TranslationInfo $translationInfo 
-     * @param \ezp\PublicAPI\Values\Content\TranslationValues $translationValues 
-     * @param \ezp\PublicAPI\Values\User\User $user If set, this user is taken as modifier of the version 
+     * @param \eZ\Publish\API\Values\Content\TranslationInfo $translationInfo
+     * @param \eZ\Publish\API\Values\Content\TranslationValues $translationValues
+     * @param \eZ\Publish\API\Values\User\User $user If set, this user is taken as modifier of the version
      *
-     * @return \ezp\PublicAPI\Values\Content\Content the content draft with the translated fields
+     * @return \eZ\Publish\API\Values\Content\Content the content draft with the translated fields
      * 
      * @since 5.0
      */
@@ -247,51 +247,51 @@ interface ContentService
     /**
      * Updates the fields of a draft.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to update this version
-     * @throws \ezp\PublicAPI\Exceptions\BadStateException if the version is not a draft
-     * @throws \ezp\PublicAPI\Exceptions\ContentFieldValidationException if a field in the $contentUpdateStruct is not valid
-     * @throws \ezp\PublicAPI\Exceptions\ContentValidationException if a required field is set to an empty value
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to update this version
+     * @throws \eZ\Publish\API\Exceptions\BadStateException if the version is not a draft
+     * @throws \eZ\Publish\API\Exceptions\ContentFieldValidationException if a field in the $contentUpdateStruct is not valid
+     * @throws \eZ\Publish\API\Exceptions\ContentValidationException if a required field is set to an empty value
      *
-     * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
-     * @param \ezp\PublicAPI\Values\Content\ContentUpdateStruct $contentUpdateStruct
+     * @param \eZ\Publish\API\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Values\Content\ContentUpdateStruct $contentUpdateStruct
      *
-     * @return \ezp\PublicAPI\Values\Content\Content the content draft with the updated fields
+     * @return \eZ\Publish\API\Values\Content\Content the content draft with the updated fields
      */
     public function updateContent( VersionInfo $versionInfo, ContentUpdateStruct $contentUpdateStruct );
 
     /**
      * Publishes a content version
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to publish this version
-     * @throws \ezp\PublicAPI\Exceptions\BadStateException if the version is not a draft
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to publish this version
+     * @throws \eZ\Publish\API\Exceptions\BadStateException if the version is not a draft
      *
-     * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Values\Content\VersionInfo $versionInfo
      *
-     * @return \ezp\PublicAPI\Values\Content\Content
+     * @return \eZ\Publish\API\Values\Content\Content
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to publish this version
-     * @throws \ezp\PublicAPI\Exceptions\BadStateException if the version is not a draft
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to publish this version
+     * @throws \eZ\Publish\API\Exceptions\BadStateException if the version is not a draft
      */
     public function publishVersion( VersionInfo $versionInfo );
 
     /**
      * removes the given version
      *
-     * @throws \ezp\PublicAPI\Exceptions\BadStateException if the version is in state published
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to remove this version
+     * @throws \eZ\Publish\API\Exceptions\BadStateException if the version is in state published
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to remove this version
      *
-     * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Values\Content\VersionInfo $versionInfo
      */
     public function deleteVersion( VersionInfo $versionInfo );
 
     /**
      * Loads all versions for the given content
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to list versions
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to list versions
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $contentInfo
      *
-     * @return \ezp\PublicAPI\Values\Content\VersionInfo[] an array of {@link \ezp\PublicAPI\Values\Content\VersionInfo} sorted by creation date
+     * @return \eZ\Publish\API\Values\Content\VersionInfo[] an array of {@link \eZ\Publish\API\Values\Content\VersionInfo} sorted by creation date
      */
     public function loadVersions( ContentInfo $contentInfo );
 
@@ -299,13 +299,13 @@ interface ContentService
      * copies the content to a new location. If no version is given,
      * all versions are copied, otherwise only the given version.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to copy the content to the given location
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to copy the content to the given location
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
-     * @param \ezp\PublicAPI\Values\Content\LocationCreateStruct $destinationLocationCreateStruct the target location where the content is copied to
-     * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Values\Content\LocationCreateStruct $destinationLocationCreateStruct the target location where the content is copied to
+     * @param \eZ\Publish\API\Values\Content\VersionInfo $versionInfo
      *
-     * @return \ezp\PublicAPI\Values\Content\Content
+     * @return \eZ\Publish\API\Values\Content\Content
      */
     public function copyContent( ContentInfo $contentInfo, LocationCreateStruct $destinationLocationCreateStruct, VersionInfo $versionInfo = null);
 
@@ -314,39 +314,39 @@ interface ContentService
      * 
      * @TODO define structs for the field filters
      *
-     * @param \ezp\PublicAPI\Values\Content\Query $query
+     * @param \eZ\Publish\API\Values\Content\Query $query
      * @param array  $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
-     * @return \ezp\PublicAPI\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Values\Content\SearchResult
      */
     public function findContent( Query $query, array $fieldFilters,  $filterOnUserPermissions = true );
 
     /**
      * Performs a query for a single content object
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to read the found content object
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to read the found content object
      * @TODO throw an exception if the found object count is > 1
      * 
      * @TODO define structs for the field filters
-     * @param \ezp\PublicAPI\Values\Content\Query $query
+     * @param \eZ\Publish\API\Values\Content\Query $query
      * @param array  $fieldFilters - a map of filters for the returned fields.
      *        Currently supported: <code>array("languages" => array(<language1>,..))</code>.
      * @param boolean $filterOnUserPermissions if true only the objects which is the user allowed to read are returned.
      *
-     * @return \ezp\PublicAPI\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Values\Content\SearchResult
      */
     public function findSingle( Query $query, array $fieldFilters, $filterOnUserPermissions = true );
 
     /**
      * load all outgoing relations for the given version
      * 
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to read this version
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
-     * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Values\Content\VersionInfo $versionInfo
      *
-     * @return \ezp\PublicAPI\Values\Content\Relation[] an array of {@link Relation}
+     * @return \eZ\Publish\API\Values\Content\Relation[] an array of {@link Relation}
      */
     public function loadRelations( VersionInfo $versionInfo );
 
@@ -356,39 +356,39 @@ interface ContentService
      * The relations come only
      * from published versions of the source content objects
      * 
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to read this version
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $contentInfo
      *
-     * @return \ezp\PublicAPI\Values\Content\Relation[] an array of {@link Relation}
+     * @return \eZ\Publish\API\Values\Content\Relation[] an array of {@link Relation}
      */
     public function loadReverseRelations( ContentInfo $content );
 
     /**
      * Adds a relation of type common. 
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed to edit this version
-     * @throws \ezp\PublicAPI\Exceptions\BadStateException if the version is not a draft
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed to edit this version
+     * @throws \eZ\Publish\API\Exceptions\BadStateException if the version is not a draft
      * 
      * The source of the relation is the content and version
      * referenced by $versionInfo.
      *
-     * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $destination the destination of the relation
+     * @param \eZ\Publish\API\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $destination the destination of the relation
      *
-     * @return \ezp\PublicAPI\Values\Content\Relation the newly created relation
+     * @return \eZ\Publish\API\Values\Content\Relation the newly created relation
      */
     public function addRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent );
 
     /**
      * Removes a relation of type COMMON from a draft.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed edit this version
-     * @throws \ezp\PublicAPI\Exceptions\BadStateException if the version is not a draft
-     * @throws \ezp\PublicAPI\Exceptions\IllegalArgumentException if there is no relation of type COMMON for the given destination
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed edit this version
+     * @throws \eZ\Publish\API\Exceptions\BadStateException if the version is not a draft
+     * @throws \eZ\Publish\API\Exceptions\IllegalArgumentException if there is no relation of type COMMON for the given destination
      *
-     * @param \ezp\PublicAPI\Values\Content\VersionInfo $versionInfo
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $destination
+     * @param \eZ\Publish\API\Values\Content\VersionInfo $versionInfo
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $destination
      */
     public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent);
 
@@ -397,9 +397,9 @@ interface ContentService
      * 
      * @example Examples/translation_5x.php
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed add a translation info
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed add a translation info
      *
-     * @param \ezp\PublicAPI\Values\Content\TranslationInfo $translationInfo
+     * @param \eZ\Publish\API\Values\Content\TranslationInfo $translationInfo
      *
      * @since 5.0
      */
@@ -408,13 +408,13 @@ interface ContentService
     /**
      * lists the translations done on this content object
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowed read trnaslation infos
+     * @throws \eZ\Publish\API\Exceptions\UnauthorizedException if the user is not allowed read trnaslation infos
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Values\Content\ContentInfo $contentInfo
      * @param array $filter 
      * @todo TBD - filter by sourceversion destination version and languages
      *
-     * @return \ezp\PublicAPI\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
+     * @return \eZ\Publish\API\Values\Content\TranslationInfo[] an array of {@link TranslationInfo}
      * 
      * @since 5.0
      */
@@ -424,35 +424,35 @@ interface ContentService
     /**
      * Instantiates a new content create struct object
      *
-     * @param \ezp\PublicAPI\Values\ContentType\ContentType $contentType
+     * @param \eZ\Publish\API\Values\ContentType\ContentType $contentType
      * @param string $mainLanguageCode
      *
-     * @return \ezp\PublicAPI\Values\Content\ContentCreateStruct
+     * @return \eZ\Publish\API\Values\Content\ContentCreateStruct
      */
     public function newContentCreateStruct( ContentType $contentType, $mainLanguageCode );
 
     /**
      * Instantiates a new content meta data update struct
      *
-     * @return \ezp\PublicAPI\Values\Content\ContentMetadataUpdateStruct
+     * @return \eZ\Publish\API\Values\Content\ContentMetadataUpdateStruct
      */
     public function newContentMetadataUpdateStruct();
 
     /**
      * Instantiates a new content update struct
-     * @return \ezp\PublicAPI\Values\Content\ContentUpdateStruct
+     * @return \eZ\Publish\API\Values\Content\ContentUpdateStruct
      */
     public function newContentUpdateStruct();
 
     /**
      * Instantiates a new TranslationInfo object
-     * @return \ezp\PublicAPI\Values\Content\TranslationInfo
+     * @return \eZ\Publish\API\Values\Content\TranslationInfo
      */
     public function newTranslationInfo();
 
     /**
      * Instantiates a Translation object
-     * @return \ezp\PublicAPI\Values\Content\TranslationValues
+     * @return \eZ\Publish\API\Values\Content\TranslationValues
      */
     public function newTranslationValues();
 }

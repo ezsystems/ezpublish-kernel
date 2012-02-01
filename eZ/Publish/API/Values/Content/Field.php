@@ -1,7 +1,7 @@
 <?php
-namespace ezp\PublicAPI\Values\Content;
+namespace eZ\Publish\API\Values\Content;
 
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Values\ValueObject;
 
 /**
  * This class represents a field of a content object

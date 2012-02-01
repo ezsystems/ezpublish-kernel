@@ -1,7 +1,7 @@
 <?php
-namespace ezp\PublicAPI\Values\ContentType;
+namespace eZ\Publish\API\Values\ContentType;
 
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Values\ValueObject;
 
 /**
  * this class is used to create a field definition

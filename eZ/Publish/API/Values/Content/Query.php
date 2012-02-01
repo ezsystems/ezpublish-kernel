@@ -1,9 +1,9 @@
 <?php
-namespace ezp\PublicAPI\Values\Content;
+namespace eZ\Publish\API\Values\Content;
 
-use ezp\PublicAPI\Values\ValueObject;
-use ezp\PublicAPI\Values\Content\Query\Criterion;
-use ezp\PublicAPI\Values\Content\Query\SortClause;
+use eZ\Publish\API\Values\ValueObject;
+use eZ\Publish\API\Values\Content\Query\Criterion;
+use eZ\Publish\API\Values\Content\Query\SortClause;
 
 /**
  * This class is used to perform a query

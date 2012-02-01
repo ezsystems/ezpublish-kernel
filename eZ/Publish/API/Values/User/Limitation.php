@@ -1,7 +1,7 @@
 <?php
-namespace ezp\PublicAPI\Values\User;
+namespace eZ\Publish\API\Values\User;
 
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Values\ValueObject;
 /**
  * This class represents a Limitation apllied to a policy
  */

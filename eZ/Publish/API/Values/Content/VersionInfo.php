@@ -1,9 +1,9 @@
 <?php
-namespace ezp\PublicAPI\Values\Content;
+namespace eZ\Publish\API\Values\Content;
 
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Values\ValueObject;
 
-use ezp\PublicAPI\Values\Content\ContentInfo;
+use eZ\Publish\API\Values\Content\ContentInfo;
 
 /**
  * This class holds version information data. It also contains the coresponding {@link Content} to

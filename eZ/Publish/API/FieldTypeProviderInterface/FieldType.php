@@ -3,9 +3,9 @@
  * @package FieldTypeProviderInterface
  * @author christianbacher
  */
-namespace ezp\PublicAPI\FieldTypeProviderInterface;
-use ezp\PublicAPI\Interfaces\Repository;
-use ezp\PublicAPI\FieldTypeProviderInterface\Value;
+namespace eZ\Publish\API\FieldTypeProviderInterface;
+use eZ\Publish\API\Interfaces\Repository;
+use eZ\Publish\API\FieldTypeProviderInterface\Value;
 
 /**
  * The field type interface which all field types have to implement.

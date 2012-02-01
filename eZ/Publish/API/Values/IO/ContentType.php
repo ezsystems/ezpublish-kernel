@@ -1,5 +1,5 @@
 <?php
-namespace ezp\PublicAPI\Values\IO;
+namespace eZ\Publish\API\Values\IO;
 
 /**
  * This struct describes a file content type, as described in RFC 2045, RFC 2046,

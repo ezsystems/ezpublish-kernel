@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\PublicAPI\Values\ContentType;
-use ezp\PublicAPI\Values\ValueObject;
+namespace eZ\Publish\API\Values\ContentType;
+use eZ\Publish\API\Values\ValueObject;
 
 /**
  * This class represents a content type group value

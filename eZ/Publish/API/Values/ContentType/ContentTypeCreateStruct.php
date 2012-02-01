@@ -1,11 +1,11 @@
 <?php
-namespace ezp\PublicAPI\Values\ContentType;
+namespace eZ\Publish\API\Values\ContentType;
 
-use ezp\PublicAPI\Values\ContentType\FieldDefinitionCreate;
+use eZ\Publish\API\Values\ContentType\FieldDefinitionCreate;
 
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Values\ValueObject;
 
-use ezp\PublicAPI\Values\Content\Location;
+use eZ\Publish\API\Values\Content\Location;
 
 /**
  * this clss is used for creating content types

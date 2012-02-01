@@ -1,7 +1,7 @@
 <?php
-namespace ezp\PublicAPI\Values\Content;
+namespace eZ\Publish\API\Values\Content;
 
-use ezp\PublicAPI\Values\Content\Location;
+use eZ\Publish\API\Values\Content\Location;
 
 /**
  *

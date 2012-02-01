@@ -1,10 +1,10 @@
 <?php
-use ezp\PublicAPI\Values\Content\VersionInfo,
-    ezp\PublicAPI\Interfaces\Repository;
+use eZ\Publish\API\Values\Content\VersionInfo,
+    eZ\Publish\API\Interfaces\Repository;
 
 /**
  * assumed as injected
- * @var ezp\PublicAPI\Interfaces\Repository $repository
+ * @var eZ\Publish\API\Interfaces\Repository $repository
  */
 $repository = null;
 
@@ -251,11 +251,11 @@ $version = $contentService->copyContent( $versionInfo->contentInfo, $locationCre
  */
 
 // Create a simple search query
-$query = new \ezp\PublicAPI\Values\Content\Query();
-$query->criterion = new \ezp\PublicAPI\Values\Content\Query\Criterion\LogicalAnd(
+$query = new \eZ\Publish\API\Values\Content\Query();
+$query->criterion = new \eZ\Publish\API\Values\Content\Query\Criterion\LogicalAnd(
     array(
-        new \ezp\PublicAPI\Values\Content\Query\Criterion\Field( 'title', \ezp\PublicAPI\Values\Content\Query\Criterion\Operator::LIKE, '*foo*' ),
-        new \ezp\PublicAPI\Values\Content\Query\Criterion\Field( 'abstract', \ezp\PublicAPI\Values\Content\Query\Criterion\Operator::LIKE, '*foo*' )
+        new \eZ\Publish\API\Values\Content\Query\Criterion\Field( 'title', \eZ\Publish\API\Values\Content\Query\Criterion\Operator::LIKE, '*foo*' ),
+        new \eZ\Publish\API\Values\Content\Query\Criterion\Field( 'abstract', \eZ\Publish\API\Values\Content\Query\Criterion\Operator::LIKE, '*foo*' )
     )
 );
 
