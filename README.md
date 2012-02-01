@@ -10,18 +10,18 @@
 * Clone this repo
 * Clone ezp-next next to it
 * clone research next to it
-* Symlink ezp-next: ezp/Persistance and ezp/Io into the ezp/ folder of this project
 * Symlink reasearch: publicapi/eZ/Publish/API into eZ/Publish/API folder of this project
 * Copy config.php-DEVELOPMENT to config.php
+* Modify config.php so ezp classes point to ezp-next/ezp (see commented out example in config.php)
 * Execute "$ php index.php" (cli) to verify that it manages to output some text
 * Execute "$ phpunit" to see current status of missing tests / implementations
 
 
 #Directory Layout
-* [ezp/Base](/ezsystems/publicapi/tree/master/ezp/Base/)  *Common code needed by all bellow*
+* [eZ/Publish/Core/Base](/ezsystems/publicapi/tree/master/eZ/Publish/Core/Base/)  *Common code needed by all bellow*
 
-* [ezp/PublicAPI](/ezsystems/publicapi/tree/master/ezp/PublicAPI/)  *Public API Interface*
-* [ezp/PublicAPI/Publish](/ezsystems/publicapi/tree/master/ezp/Publish/PublicAPI/)  *Public API implementation*
+* [eZ/Publish/API](/ezsystems/publicapi/tree/master/eZ/Publish/API/)  *Public API Interface*
+* [eZ/Publish/Core/API](/ezsystems/publicapi/tree/master/eZ/Publish/Core/API/)  *Public API implementation*
 
 * [ezp/Persistence](/ezsystems/publicapi/tree/master/ezp/Persistence/)  *Persistence Interface (private api for now)*
 * [ezp/Persistence/Storage/Legacy](/ezsystems/publicapi/tree/master/ezp/Persistence/Storage/Legacy/)  *Legacy storage Engine*
