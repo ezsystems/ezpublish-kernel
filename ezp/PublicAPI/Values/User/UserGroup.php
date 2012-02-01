@@ -8,6 +8,10 @@ use ezp\PublicAPI\Values\ValueObject;
 
 /**
  * This class represents a user group
+ * 
+ * @property-read int $id
+ * @property-read int $parentId
+ * @property-read int $subGroupCount
  */
 abstract class UserGroup extends Content
 {

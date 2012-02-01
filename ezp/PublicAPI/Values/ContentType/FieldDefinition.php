@@ -8,6 +8,16 @@ use ezp\PublicAPI\Value\ValueObject;
  * @property-read $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read $fieldSettings calls getFieldSettings()
  * @property-read $validators calls getValidators()
+ * @property-read int $id the id of the field definition
+ * @property-read string $identifier the identifier of the field definition
+ * @property-read string $fieldGroup the field group name
+ * @property-read int $position the position of the field definition in the content typr
+ * @property-read string $fieldType String identifier of the field type
+ * @property-read boolean $isTranslatable indicatats if fields of this definition are translatable
+ * @property-read boolean $isRequired indicates if this field is required in the content object
+ * @property-read boolean $isSearchable indicates if the field is searchable
+ * @property-read boolean $isInfoCollector indicates if this field is used for information collection
+ * @property-read $defaultValue the default value of the field
  */
 class FieldDefinition extends ValueObject
 {
@@ -16,14 +26,14 @@ class FieldDefinition extends ValueObject
      *
      * @var mixed
      */
-    public $id;
+    protected $id;
 
     /**
      * Readable string identifier of a field definition
      *
      * @var string
      */
-    public $identifier;
+    protected $identifier;
 
     /**
      * This method returns the human readable name of this field in all provided languages
@@ -70,42 +80,42 @@ class FieldDefinition extends ValueObject
      *
      * @var string
      */
-    public $fieldGroup;
+    protected $fieldGroup;
 
     /**
      * the position of the field definition in the content typr
      *
      * @var int
      */
-    public $position;
+    protected $position;
 
     /**
      * String identifier of the field type
      *
      * @var string
      */
-    public $fieldType;
+    protected $fieldType;
 
     /**
-     * If the field type is translatable
+     * If the field is translatable
      *
      * @var boolean
      */
-    public $isTranslatable;
+    protected $isTranslatable;
 
     /**
      * Is the field required
      *
      * @var boolean
      */
-    public $isRequired;
+    protected $isRequired;
 
     /**
-     * the flag if this attribute is used for information collection
+     * the flag if this field is used for information collection
      *
      * @var boolean
      */
-    public $isInfoCollector;
+    protected $isInfoCollector;
 
     /**
      * this method returns the validators of this field definition supported by the field type
@@ -124,12 +134,12 @@ class FieldDefinition extends ValueObject
      *
      * @var mixed
      */
-    public $defaultValue;
+    protected $defaultValue;
 
     /**
      * Indicates if th the content is searchable by this attribute
      *
      * @var boolean
      */
-    public $isSearchable;
+    protected $isSearchable;
 }

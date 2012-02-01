@@ -5,6 +5,10 @@ use ezp\PublicAPI\Values\ValueObject;
 
 /**
  * This class represents a section
+ * 
+ * @property-read int $id the id of the section
+ * @property-read string $identifier the identifier of the section
+ * @property-read string $name human readable name of the section
  */
 class Section extends ValueObject
 {
@@ -13,19 +17,19 @@ class Section extends ValueObject
      *
      * @var int
      */
-    public $id;
+    protected $id;
 
     /**
      * Unique identifier of the section
      *
      * @var string
      */
-    public $identifier;
+    protected $identifier;
 
     /**
      * Name of the section
      *
      * @var string
      */
-    public $name;
+    protected $name;
 }

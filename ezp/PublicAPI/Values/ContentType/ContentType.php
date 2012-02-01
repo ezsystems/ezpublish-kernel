@@ -8,13 +8,27 @@ use ezp\PublicAPI\Values\ContentType\FieldDefinition;
 use ezp\PublicAPI\Values\ContentType\ContentTypeGroup;
 
 /**
- *
  * this class represents a content type value
+ * 
  * @property-read array $names calls getNames() or on access getName($language)
  * @property-read array $descriptions calls getDescriptions() or on access getDescription($language)
  * @property-read array $contentTypeGroups calls getContentTypeGroups
  * @property-read array $fieldDefinitions calls getFieldDefinitions() or on access getFieldDefinition($fieldDefIdentifier)
- *
+ * @property-read int $id the id of the content type
+ * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
+ * @property-read string $identifier the identifier of the content type
+ * @property-read DateTime $createdDate the date of the creation of this content type
+ * @property-read DateTime $modificationDate the date of the last modification of this content type
+ * @property-read int $creatorId the user id of the creator of this content type
+ * @property-read int $modifierId the user id of the user which has last modified this content type
+ * @property-read string $remoteId a global unique id of the content object
+ * @property-read string $urlAliasSchema URL alias schema. If nothing is provided, $nameSchema will be used instead.
+ * @property-read string $nameSchema  The name schema.
+ * @property-read boolean $isContainer Determines if the type is allowd to have children
+ * @property-read string $mainLanguageCode the main language of the content type names and description used for fallback.
+ * @property-read boolean $defaultAlwaysAvailable if an instance of acontent type is created the always available flag is set by default this this value.
+ * @property-read int $defaultSortField Specifies which property the child locations should be sorted on by default when created. Valid values are found at {@link Location::SORT_FIELD_*}
+ * @property-read int $defaultSortOrder Specifies whether the sort order should be ascending or descending by default when created. Valid values are {@link Location::SORT_ORDER_*}
  */
 abstract class ContentType extends ValueObject
 {
@@ -38,13 +52,13 @@ abstract class ContentType extends ValueObject
      *
      * @var mixed
      */
-    public $id;
+    protected $id;
 
     /**
      * The status of the content type.
      * @var int One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
      */
-    public $status;
+    protected $status;
 
     /**
      * This method returns the human readable name in all provided languages
@@ -91,28 +105,28 @@ abstract class ContentType extends ValueObject
      *
      * @var string
      */
-    public $identifier;
+    protected $identifier;
 
     /**
-     * Creation date (timestamp) of the content type
+     * Creation date of the content type
      *
-     * @var int
+     * @var DateTime
      */
-    public $created;
+    protected $createdDate;
 
     /**
-     * Modification date (timestamp) of the content type
+     * Modification date of the content type
      *
-     * @var int
+     * @var DateTime
      */
-    public $modified;
+    protected $modifiedDate;
 
     /**
      * Creator user id of the content type
      *
      * @var mixed
      */
-    public $creatorId;
+    protected $creatorId;
 
     /**
      * Modifier user id of the content type
@@ -120,22 +134,21 @@ abstract class ContentType extends ValueObject
      * @var mixed
      *
      */
-    public $modifierId;
+    protected $modifierId;
 
     /**
      * Unique remote ID of the content type
      *
      * @var string
      */
-    public $remoteId;
+    protected $remoteId;
 
     /**
-     * URL alias schema
-     * If nothing is provided, $nameSchema will be used instead.
+     * URL alias schema. If nothing is provided, $nameSchema will be used instead.
      *
      * @var string
      */
-    public $urlAliasSchema;
+    protected $urlAliasSchema;
 
     /**
      * Name schema.
@@ -147,21 +160,21 @@ abstract class ContentType extends ValueObject
      *
      * @var string
      */
-    public $nameSchema;
+    protected $nameSchema;
 
     /**
      * Determines if the type is a container
      *
      * @var boolean
      */
-    public $isContainer;
+    protected $isContainer;
 
     /**
      * Main language
      *
      * @var mixed
      */
-    public $mainLanguageCode;
+    protected $mainLanguageCode;
 
     /**
      * if an instance of acontent type is created the always available flag is set
@@ -169,7 +182,7 @@ abstract class ContentType extends ValueObject
      *
      * @var boolean
      */
-    public $defaultAlwaysAvailable = true;
+    protected $defaultAlwaysAvailable = true;
 
     /**
      * Specifies which property the child locations should be sorted on by default when created
@@ -178,7 +191,7 @@ abstract class ContentType extends ValueObject
      *
      * @var mixed
      */
-    public $defaultSortField;
+    protected $defaultSortField;
 
     /**
      * Specifies whether the sort order should be ascending or descending by default when created
@@ -187,7 +200,7 @@ abstract class ContentType extends ValueObject
      *
      * @var mixed
      */
-    public $defaultSortOrder;
+    protected $defaultSortOrder;
 
     /**
      * This method returns the content type groups this content type is assigned to

@@ -31,5 +31,5 @@ abstract class PolicyCreateStruct extends ValueObject
      * adds a limitation with the given identifier and list of values
      * @param Limitation $limitation
      */
-    public abstract function addLimitation( /*Limitation*/ $limitation );
+    public abstract function addLimitation( Limitation $limitation );
 }

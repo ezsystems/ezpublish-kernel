@@ -6,10 +6,20 @@ use ezp\PublicAPI\Values\Content\Location;
 use ezp\PublicAPI\Values\ValueObject;
 
 /**
- *
  * This class provides all version independent information of the content object.
- * @property-read $contentType calls {@link getContentType()}
- *
+ * 
+ * @property-read ezp\PublicAPI\Values\ContentType\ContentType $contentType calls {@link getContentType()}
+ * @property-read int $contentId The unique id of the content object
+ * @property-read string $name the computed name (via name schema) in the main language of the content object
+ * @property-read int $sectionId the section to which the content is assigned
+ * @property-read int $currentVersionNo Current Version number is the version number of the published version or the version number of a newly created draft (which is 1).
+ * @property-read boolean $published true if there exists a published version false otherwise
+ * @property-read int $ownerId the user id of the owner of the content
+ * @property-read DateTime $modifiedDate Content modification date
+ * @property-read DateTime $publishedDate date of the last publish operation
+ * @property-read boolean $alwaysAvailable Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
+ * @property-read string $remoteId a global unique id of the content object
+ * @property-read string $mainLanguageCode The main language code of the content. If the availble flag is set to true the content is shown in this language if the requested language does not exist.
  */
 abstract class ContentInfo extends ValueObject
 {
@@ -17,13 +27,13 @@ abstract class ContentInfo extends ValueObject
      * The unique id of the content object
      * @var int
      */
-    public $contentId;
+    protected $contentId;
 
     /**
      * the computed name (via name schema) in the main language of the content object
      * @var string
      */
-    public $name;
+    protected $name;
 
     /**
      * The content type of this content object
@@ -35,7 +45,7 @@ abstract class ContentInfo extends ValueObject
      * the section to which the content is assigned
      * @var int
      */
-    public $sectionId;
+    protected $sectionId;
 
     /**
      * Current Version number is the version number of the published version or the version number of
@@ -43,7 +53,7 @@ abstract class ContentInfo extends ValueObject
      *
      * @var int
      */
-    public $currentVersionNo;
+    protected $currentVersionNo;
     
 
     /**
@@ -51,42 +61,42 @@ abstract class ContentInfo extends ValueObject
      *
      * @var boolean Constant.
      */
-    public $published;
+    protected $published;
     
     /**
      * the owner of this content object
      *
      * @var int
      */
-    public $ownerId;
+    protected $ownerId;
 
     /**
      * Content modification date
      * @var DateTime
      */
-    public $modifiedDate;
+    protected $modifiedDate;
 
     /**
-     * Content publication date
+     * Content protectedation date
      * @var DateTime
      */
-    public $publishedDate;
+    protected $publishedDate;
 
     /**
      * Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
      * @var boolean
      */
-    public $alwaysAvailable;
+    protected $alwaysAvailable;
 
     /**
      * Remote identifier used as a custom identifier for the object
      * @var string
      */
-    public $remoteId;
+    protected $remoteId;
 
     /**
      * The main language code of the content.
      * @var string
      */
-    public $mainLanguageCode;
+    protected $mainLanguageCode;
 }

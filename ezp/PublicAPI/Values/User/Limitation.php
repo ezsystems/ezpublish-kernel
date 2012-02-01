@@ -31,7 +31,7 @@ abstract class Limitation extends ValueObject
 
     /**
      *
-     * An integer list of ids or identifiers for which the limitation shoul be applied
+     * An integer list of ids or identifiers for which the limitation should be applied
      * @var array of mixed
      */
     public $limitationValues;

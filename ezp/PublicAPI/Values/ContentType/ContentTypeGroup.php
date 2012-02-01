@@ -11,10 +11,16 @@ namespace ezp\PublicAPI\Values\ContentType;
 use ezp\PublicAPI\Values\ValueObject;
 
 /**
- *
  * This class represents a content type group value
+ * 
  * @property-read names calls getNames() or on access getName($language)
  * @property-read descriptions calls getDescriptions() or on access getDescription($language)
+ * @property-read int $id the id of the content type group
+ * @property-read string $identifier the identifier of the content type group
+ * @property-read DateTime $createdDate the date of the creation of this content type group
+ * @property-read DateTime $modificationDate the date of the last modification of this content type group
+ * @property-read int $creatorId the user id of the creator of this content type group
+ * @property-read int $modifierId the user id of the user which has last modified this content type group
  *
  */
 class ContentTypeGroup extends ValueObject
@@ -24,35 +30,35 @@ class ContentTypeGroup extends ValueObject
      *
      * @var mixed
      */
-    public $id;
+    protected $id;
 
     /**
      * Readable string identifier of a group
      *
      * @var string
      */
-    public $identifier;
+    protected $identifier;
 
     /**
      * Created date (timestamp)
      *
-     * @var int
+     * @var DateTime
      */
-    public $created;
+    protected $createdDate;
 
     /**
      * Modified date (timestamp)
      *
-     * @var int
+     * @var DateTime
      */
-    public $modified;
+    protected $modifiedDate;
 
     /**
      * Creator user id
      *
      * @var mixed
      */
-    public $creatorId;
+    protected $creatorId;
 
     /**
      * Modifier user id
@@ -60,7 +66,7 @@ class ContentTypeGroup extends ValueObject
      * @var mixed
      *
      */
-    public $modifierId;
+    protected $modifierId;
 
     /**
      * 5.x only

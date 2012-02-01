@@ -6,6 +6,12 @@ use ezp\PublicAPI\Values\User\Limitation;
 
 /**
  * This class represents a policy value
+ * 
+ * @property-read int $id internal id of the policy
+ * @property-read int $roleId the role id this policy belongs to
+ * @property-read string $module Name of module, associated with the Policy
+ * @property-read string $function  Name of the module function Or all functions with '*'
+ * @property-read array $limitations an array of \ezp\PublicAPI\Values\User\Limitation 
  */
 abstract class Policy extends ValueObject
 {
@@ -14,14 +20,14 @@ abstract class Policy extends ValueObject
      *
      * @var mixed
      */
-    public $id;
+    protected $id;
 
     /**
      * the ID of the role this policy belongs to
      *
      * @var mixed
      */
-    public $roleId;
+    protected $roleId;
 
     /**
      * Name of module, associated with the Policy
@@ -30,7 +36,7 @@ abstract class Policy extends ValueObject
      *
      * @var string
      */
-    public $module;
+    protected $module;
 
     /**
      * Name of the module function Or all functions with '*'
@@ -39,11 +45,11 @@ abstract class Policy extends ValueObject
      *
      * @var string
      */
-    public $function;
+    protected $function;
 
     /**
      *
-     * @return array an array of {@link Limitation}
+     * @return array an array of {@link \ezp\PublicAPI\Values\User\Limitation }
      */
     public abstract function getLimitations();
 }

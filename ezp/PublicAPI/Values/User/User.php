@@ -7,6 +7,14 @@ use ezp\PublicAPI\Values\Content\Version;
 
 /**
  * This class represents a user value
+ * 
+ * @property-read int $id the user id which is equal to the underlying content id
+ * @property-read string $login 
+ * @property-read string $email
+ * @property-read string $passwordHash 
+ * @property-read string $hashAlgorithm Hash algorithm used to has the password
+ * @property-read boolean $enabled User can not login if false
+ * @property-read int maxLogin Max number of time user is allowed to login
  */
 abstract class User extends Content
 {
@@ -15,35 +23,35 @@ abstract class User extends Content
      *
      * @var mixed
      */
-    public $id;
+    protected $id;
 
     /**
      * User login
      *
      * @var string
      */
-    public $login;
+    protected $login;
 
     /**
      * User E-Mail address
      *
      * @var string
      */
-    public $email;
+    protected $email;
 
     /**
      * User password hash
      *
      * @var string
      */
-    public $passwordHash;
+    protected $passwordHash;
 
     /**
      * Hash algorithm used to has the password
      *
      * @var int
      */
-    public $hashAlgorithm;
+    protected $hashAlgorithm;
 
     /**
      * Flag to signal if user is enabled or not
@@ -52,7 +60,7 @@ abstract class User extends Content
      *
      * @var boolean
      */
-    public $isEnabled = false;
+    protected $isEnabled = false;
 
     /**
      * Max number of time user is allowed to login
@@ -62,5 +70,5 @@ abstract class User extends Content
      *
      * @var int
      */
-    public $maxLogin = 0;
+    protected $maxLogin;
 }

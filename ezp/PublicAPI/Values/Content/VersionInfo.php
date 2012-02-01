@@ -11,6 +11,14 @@ use ezp\PublicAPI\Values\Content\ContentInfo;
  *
  * @property-read array $names returns an array with language code keys and name values
  * @property-read ContentInfo $contentInfo calls getContentInfo()
+ * @property-read int $id the internal id of the version
+ * @property-read int $versionNo the version number of this version (which only increments in scope of a single Content object)
+ * @property-read DateTime $modifiedDate the last modified date of this version
+ * @property-read DateTime $createdDate the creation date of this version
+ * @property-read int $creatorId the user id of the user which created this version
+ * @property-read int $status the status of this version. One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
+ * @property-read string $initialLanguageCode the language code of the version. This value is used to flag a version as a translation to specific language
+ * @property-read array $languageCodes a collection of all languages which exist in this version.
  */
 abstract class VersionInfo extends ValueObject
 {
@@ -23,7 +31,7 @@ abstract class VersionInfo extends ValueObject
      *
      * @var mixed
      */
-    public $id;
+    protected $id;
 
     /**
      * Version number.
@@ -33,7 +41,7 @@ abstract class VersionInfo extends ValueObject
      *
      * @var int
      */
-    public $versionNo;
+    protected $versionNo;
 
     /**
      * Content of the content this version belongs to.
@@ -52,35 +60,37 @@ abstract class VersionInfo extends ValueObject
     public abstract function getName( $languageCode = null );
 
     /**
-     * @var int
+     * the last modified date of this version
+     * 
+     * @var DateTime
      */
-    public $modified;
+    protected $modifiedDate;
 
     /**
      * Creator user ID.
      *
-     * @var mixed
-     */
-    public $creatorId;
-
-    /**
      * @var int
      */
-    public $created;
+    protected $creatorId;
+
+    /**
+     * @var DateTime
+     */
+    protected $createdDate;
 
     /**
      * One of VersionInfo::STATUS_DRAFT, VersionInfo::STATUS_PUBLISHED, VersionInfo::STATUS_ARCHIVED
      *
      * @var int Constant.
      */
-    public $status;
+    protected $status;
 
     /**
      * In 4.x this is the language code which is used for labeling a translation.
      *
      * @var string
      */
-    public $initialLanguageCode;
+    protected $initialLanguageCode;
 
     /**
      * List of languages in this version
@@ -89,5 +99,5 @@ abstract class VersionInfo extends ValueObject
      *
      * @var string[]
      */
-    public $languageCodes = array();
+    protected $languageCodes = array();
 }

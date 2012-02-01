@@ -6,6 +6,10 @@ use ezp\PublicAPI\Values\ValueObject;
 /**
  * This class represents a language in the repository.
  *
+ * @property-read int $id the language id
+ * @property read string $languageCode the language code in
+ * @property-read string $name human readable name of the language
+ * @property-read boolean $enabled indicates if the langiuage is enabled or not.
  */
 class Language extends ValueObject
 {
