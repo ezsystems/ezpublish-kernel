@@ -4,20 +4,20 @@
  */
 namespace eZ\Publish\Core\API\Content;
 
-use eZ\Publish\API\Values\Content\SectionCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 
 use eZ\Publish\Core\Base\Exception\NotFound;
 use eZ\Publish\Core\Base\Exception\InvalidArgumentValue;
 use ezp\Base\Exception\InvalidArgumentValue as PersistenceInvalidArgumentValue;
 use ezp\Base\Exception\NotFound as PersistenceNotFound;
-use eZ\Publish\API\Values\Content\Content;
-use eZ\Publish\API\Values\Content\ContentInfo;
-use eZ\Publish\API\Values\Content\Section;
-use eZ\Publish\API\Values\Content\Location;
-use eZ\Publish\API\Values\Content\SectionUpdateStruct;
-use eZ\Publish\API\Interfaces\SectionService as SectionServiceInterface;
+use eZ\Publish\API\Repository\Values\Content\Content;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Section;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
 use ezp\Persistence\Handler;
-use eZ\Publish\API\Interfaces\Repository as RepositoryInterface;
+use eZ\Publish\API\Repository\Repository  as RepositoryInterface;
 
 /**
  * Section service, used for section operations
@@ -27,7 +27,7 @@ use eZ\Publish\API\Interfaces\Repository as RepositoryInterface;
 class SectionService implements SectionServiceInterface
 {
     /**
-     * @var \eZ\Publish\API\Interfaces\Repository
+     * @var \eZ\Publish\API\Repository\Repository
      */
     protected $repository;
 
@@ -39,7 +39,7 @@ class SectionService implements SectionServiceInterface
     /**
      * Setups service with reference to repository object that created it & corresponding handler
      *
-     * @param \eZ\Publish\API\Interfaces\Repository $repository
+     * @param \eZ\Publish\API\Repository\Repository  $repository
      * @param \ezp\Persistence\Handler $handler
      */
     public function __construct( RepositoryInterface $repository, Handler $handler )
@@ -55,8 +55,8 @@ class SectionService implements SectionServiceInterface
      *
      * @return Section The newly create section
      *
-     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws eZ\Publish\API\Interfaces\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
+     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to create a section
+     * @throws eZ\Publish\API\Repository\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
      */
     public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
@@ -90,9 +90,9 @@ class SectionService implements SectionServiceInterface
      *
      * @return Section
      *
-     * @throws eZ\Publish\API\Interfaces\NotFoundException if section could not be found
-     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws eZ\Publish\API\Interfaces\IllegalArgumentException If the new identifier already exists (if set in the update struct)
+     * @throws eZ\Publish\API\Repository\NotFoundException if section could not be found
+     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to create a section
+     * @throws eZ\Publish\API\Repository\IllegalArgumentException If the new identifier already exists (if set in the update struct)
      */
     public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
@@ -130,8 +130,8 @@ class SectionService implements SectionServiceInterface
      *
      * @return Section
      *
-     * @throws eZ\Publish\API\Interfaces\NotFoundException if section could not be found
-     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
+     * @throws eZ\Publish\API\Repository\NotFoundException if section could not be found
+     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to read a section
      */
     public function loadSection( $sectionId )
     {
@@ -152,7 +152,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return array of {@link Section}
      *
-     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
+     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to read a section
      */
     public function loadSections()
     {
@@ -181,8 +181,8 @@ class SectionService implements SectionServiceInterface
      *
      * @return Section
      *
-     * @throws eZ\Publish\API\Interfaces\NotFoundException if section could not be found
-     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to read a section
+     * @throws eZ\Publish\API\Repository\NotFoundException if section could not be found
+     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to read a section
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
@@ -212,7 +212,7 @@ class SectionService implements SectionServiceInterface
      * @param ContentInfo $contentInfo
      * @param Section $section
      *
-     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If user does not have access to view provided object
+     * @throws eZ\Publish\API\Repository\UnauthorizedException If user does not have access to view provided object
      */
     public function assignSection( ContentInfo $contentInfo, Section $section ){}
 
@@ -226,7 +226,7 @@ class SectionService implements SectionServiceInterface
      *
      * @return array  a list (string) of descendants which are not changed due to permissions
      *
-     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user is not allowed to assign a section to the starting point
+     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user is not allowed to assign a section to the starting point
      *
      */
     public function assignSectionToSubTree( Location $startingPoint, Section $section ){}
@@ -236,9 +236,9 @@ class SectionService implements SectionServiceInterface
      *
      * @param Section $section
      *
-     * @throws eZ\Publish\API\Interfaces\NotFoundException If the specified section is not found
-     * @throws eZ\Publish\API\Interfaces\UnauthorizedException If the current user user is not allowed to delete a section
-     * @throws eZ\Publish\API\Interfaces\BadStateException  if section can not be deleted
+     * @throws eZ\Publish\API\Repository\NotFoundException If the specified section is not found
+     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to delete a section
+     * @throws eZ\Publish\API\Repository\BadStateException  if section can not be deleted
      *         because it is still assigned to some contents.
      */
     public function deleteSection( Section $section )

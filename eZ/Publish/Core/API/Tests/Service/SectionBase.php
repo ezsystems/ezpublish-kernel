@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\API\Tests\Service;
 use eZ\Publish\Core\API\Tests\Service\Base as BaseServiceTest,
-    eZ\Publish\API\Values\Content\Section,
-    eZ\Publish\API\Values\Content\SectionCreateStruct,
-    eZ\Publish\API\Values\Content\SectionUpdateStruct,
+    eZ\Publish\API\Repository\Values\Content\Section,
+    eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
+    eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
     eZ\Publish\Core\Base\Exception\NotFound;
 
 /**
@@ -22,7 +22,7 @@ abstract class SectionBase extends BaseServiceTest
 {
     /**
      * Test a new class and default values on properties
-     * @covers \eZ\Publish\API\Values\Content\Section::__construct
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__construct
      */
     public function testNewClass()
     {
@@ -34,7 +34,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * @expectedException ezp\Base\Exception\PropertyNotFound
-     * @covers \eZ\Publish\API\Values\Content\Section::__get
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__get
      */
     public function testMissingProperty()
     {
@@ -44,7 +44,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * @expectedException eZ\Publish\Core\Base\Exception\PropertyPermission
-     * @covers \eZ\Publish\API\Values\Content\Section::__set
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__set
      */
     public function testReadOnlyProperty()
     {

@@ -13,7 +13,7 @@ use eZ\Publish\Core\Base\Exception\BadConfiguration,
     eZ\Publish\Core\Base\Exception\Logic,
     ezp\Io\Handler as IoHandler,
     ezp\Persistence\Handler as PersistenceHandler,
-    eZ\Publish\API\Interfaces\Repository as RepositoryInterface,
+    eZ\Publish\API\Repository\Repository  as RepositoryInterface,
     eZ\Publish\Core\API\Content\ContentService,
     eZ\Publish\Core\API\Content\LanguageService,
     eZ\Publish\Core\API\Content\LocationService,
@@ -21,8 +21,8 @@ use eZ\Publish\Core\Base\Exception\BadConfiguration,
     eZ\Publish\Core\API\ContentType\ContentTypeService,
     eZ\Publish\Core\API\User\RoleService,
     eZ\Publish\Core\API\User\UserService,
-    eZ\Publish\API\Values\ValueObject,
-    eZ\Publish\API\Values\User\User,
+    eZ\Publish\API\Repository\Values\ValueObject,
+    eZ\Publish\API\Repository\Values\User\User,
     RuntimeException;
 
 /**
@@ -202,7 +202,7 @@ class Repository implements RepositoryInterface
      * Get service object to perform operations on Content objects and it's aggregate members.
      *
      *
-     * @return \eZ\Publish\API\Interfaces\ContentService
+     * @return \eZ\Publish\API\Repository\ContentService
      */
     public function getContentService(){}
 
@@ -211,7 +211,7 @@ class Repository implements RepositoryInterface
      *
      * Get service object to perform operations on Content language objects
      *
-     * @return \eZ\Publish\API\Interfaces\LanguageService
+     * @return \eZ\Publish\API\Repository\LanguageService
      */
     public function getContentLanguageService(){}
 
@@ -221,7 +221,7 @@ class Repository implements RepositoryInterface
      * Get service object to perform operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
-     * @return \eZ\Publish\API\Interfaces\ContentTypeService
+     * @return \eZ\Publish\API\Repository\ContentTypeService
      */
     public function getContentTypeService(){}
 
@@ -230,7 +230,7 @@ class Repository implements RepositoryInterface
      *
      * Get service object to perform operations on Location objects and subtrees
      *
-     * @return \eZ\Publish\API\Interfaces\LocationService
+     * @return \eZ\Publish\API\Repository\LocationService
      */
     public function getLocationService(){}
 
@@ -240,7 +240,7 @@ class Repository implements RepositoryInterface
      * Trash service allows to perform operations related to location trash
      * (trash/untrash, load/list from trash...)
      *
-     * @return \eZ\Publish\API\Interfaces\TrashService
+     * @return \eZ\Publish\API\Repository\TrashService
      */
     public function getTrashService(){}
 
@@ -249,7 +249,7 @@ class Repository implements RepositoryInterface
      *
      * Get Section service that lets you manipulate section objects
      *
-     * @return \eZ\Publish\API\Interfaces\SectionService
+     * @return \eZ\Publish\API\Repository\SectionService
      */
     public function getSectionService()
     {
@@ -265,14 +265,14 @@ class Repository implements RepositoryInterface
      *
      * Get service object to perform operations on Users and UserGroup
      *
-     * @return \eZ\Publish\API\Interfaces\UserService
+     * @return \eZ\Publish\API\Repository\UserService
      */
     public function getUserService(){}
 
     /**
      * Get RoleService
      *
-     * @return \eZ\Publish\API\Interfaces\RoleService
+     * @return \eZ\Publish\API\Repository\RoleService
      */
     public function getRoleService(){}
 

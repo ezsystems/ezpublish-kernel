@@ -108,7 +108,7 @@ class ServiceContainer
      * Alias with type hints for $repo->get( 'repository' );
      *
      * @uses get()
-     * @return \eZ\Publish\API\Interfaces\Repository
+     * @return \eZ\Publish\API\Repository\Repository
      */
     public function getRepository()
     {
