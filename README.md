@@ -9,8 +9,8 @@
 #How to get started
 * Clone this repo
 * Clone ezp-next next to it
-* clone research next to it
-* Symlink reasearch: publicapi/eZ/Publish/API into eZ/Publish/API folder of this project
+* Symlink: ../ezp-next/eZ/Publish/API into eZ/Publish/API folder of this project
+* Symlink: ../ezp-next/eZ/Publish/SPI into eZ/Publish/SPI folder of this project
 * Copy config.php-DEVELOPMENT to config.php
 * Modify config.php so ezp classes point to ezp-next/ezp (see commented out example in config.php)
 * Execute "$ php index.php" (cli) to verify that it manages to output some text
