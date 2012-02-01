@@ -1,11 +1,11 @@
 <?php
 // browsing locations in the main language
 
-use ezp\PublicAPI\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * assumed as injected
- * @var ezp\PublicAPI\Interfaces\Repository $repository
+ * @var eZ\Publish\API\Repository\Repository $repository
  */
 $repository = null;
 

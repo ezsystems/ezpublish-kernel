@@ -1,6 +1,6 @@
 <?php
-namespace ezp\PublicAPI\Values\User;
-use ezp\PublicAPI\Values\ValueObject;
+namespace eZ\Publish\API\Repository\Values\User;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used for updating a policy. The limitations of the policy are replaced

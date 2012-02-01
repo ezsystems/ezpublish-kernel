@@ -9,7 +9,7 @@ $contentId = 50; // Id of the content we'll be moving
 $targetParentFolderId = 100; // Id of the location we'll be moving it to
 
 /**
- * @var ezp\PublicAPI\Interfaces\Repository
+ * @var eZ\Publish\API\Repository\Repository
  */
 $repository = null;
 
@@ -25,7 +25,7 @@ try
 {
     $locationService->moveSubtree( $location, $targetParentLocation );
 }
-catch ( \ezp\PublicAPI\Interfaces\UnauthorizedException $e )
+catch ( \eZ\Publish\API\Repository\Exceptions\UnauthorizedException $e )
 {
     $currentUser = $repository->getCurrentUser();
     echo "Current user " . $currentUser->login .

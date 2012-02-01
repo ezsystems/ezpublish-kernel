@@ -3,9 +3,9 @@
  * @package FieldTypeProviderInterface
  * @author christianbacher
  */
-namespace ezp\PublicAPI\FieldTypeProviderInterface;
-use ezp\PublicAPI\Interfaces\Repository;
-use ezp\PublicAPI\FieldTypeProviderInterface\Value;
+namespace eZ\Publish\SPI\FieldType;
+use eZ\Publish\API\Repository\Repository;
+use eZ\Publish\SPI\FieldType\Value;
 
 /**
  * The field type interface which all field types have to implement.
@@ -28,7 +28,7 @@ interface FieldType
      * @param $fieldDef - the field definition of the field
      * @param $field - the field for which an action is performed
      */
-    public function handleEvent( $event, /*Repository*/ $repository, FieldDefinition $fieldDef, Field  $field );
+    public function handleEvent( $event, Repository $repository, FieldDefinition $fieldDef, Field  $field );
 
     /**
      * returns a map of allowed setting including a default value used when not given in the field definition

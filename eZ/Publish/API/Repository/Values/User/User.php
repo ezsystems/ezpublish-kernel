@@ -1,9 +1,9 @@
 <?php
-namespace ezp\PublicAPI\Values\User;
+namespace eZ\Publish\API\Repository\Values\User;
 
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
-use ezp\PublicAPI\Values\Content\Version;
+use eZ\Publish\API\Repository\Values\Content\Version;
 
 /**
  * This class represents a user value

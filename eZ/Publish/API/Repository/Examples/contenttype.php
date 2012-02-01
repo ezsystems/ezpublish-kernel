@@ -1,7 +1,7 @@
 <?php
 /**
  * assumed as injected
- * @var ezp\PublicAPI\Interfaces\Repository $repository
+ * @var eZ\Publish\API\Repository\Repository $repository
  */
 $repository = null;
 

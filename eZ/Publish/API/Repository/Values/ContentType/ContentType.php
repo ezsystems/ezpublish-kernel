@@ -1,11 +1,11 @@
 <?php
-namespace ezp\PublicAPI\Values\ContentType;
+namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
-use ezp\PublicAPI\Values\ContentType\FieldDefinition;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 
-use ezp\PublicAPI\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
 /**
  * this class represents a content type value

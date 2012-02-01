@@ -1,6 +1,6 @@
 <?php
-namespace ezp\PublicAPI\Values\ContentType;
-use ezp\PublicAPI\Value\ValueObject;
+namespace eZ\Publish\API\Repository\Values\ContentType;
+use eZ\Publish\API\Repository\Value\ValueObject;
 /**
  *
  * This class represents a field definiton

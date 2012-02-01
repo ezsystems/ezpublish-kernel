@@ -1,15 +1,15 @@
 <?php
-namespace ezp\PublicAPI\Values\Content;
-use ezp\PublicAPI\Values\ValueObject;
-use ezp\PublicAPI\Values\Content\ContentInfo;
+namespace eZ\Publish\API\Repository\Values\Content;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 
 /**
  * Class representing a relation between content.
  * 
  * @property-read int $id the internal id of the relation
  * @property-read string $sourceFieldDefinitionIdentifier the field definition identifier of the field where this relation is anchored if the relation is of type EMBED, LINK, or ATTRIBUTE
- * @property-read \ezp\PublicAPI\Values\Content\ContentInfo $sourceContentInfo - calls {@link getSourceContentInfo()}
- * @property-read \ezp\PublicAPI\Values\Content\ContentInfo $destinationContentInfo - calls {@link getDestinationContentInfo()}
+ * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $sourceContentInfo - calls {@link getSourceContentInfo()}
+ * @property-read \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContentInfo - calls {@link getDestinationContentInfo()}
  * @property-read int $type The relation type bitmask containing one or more of Relation::COMMON, Relation::EMBED, Relation::LINK, Relation::FIELD
  */
 abstract class Relation extends ValueObject
@@ -61,14 +61,14 @@ abstract class Relation extends ValueObject
     /**
      * the content of the source content of the relation
      *
-     * @return \ezp\PublicAPI\Values\Content\ContentInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     public abstract function getSourceContentInfo();
 
     /**
      * the content of the destination content of the relation
      *
-     * @return \ezp\PublicAPI\Values\Content\ContentInfo
+     * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
     public abstract function getDestinationContentInfo();
     

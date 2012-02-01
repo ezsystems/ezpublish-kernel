@@ -1,5 +1,5 @@
 <?php
-namespace ezp\PublicAPI\Values\IO;
+namespace eZ\Publish\API\Repository\Values\IO;
 
 /**
  * This class provides an abstract access to binary files.

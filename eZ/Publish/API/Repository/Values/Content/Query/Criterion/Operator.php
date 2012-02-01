@@ -1,15 +1,15 @@
 <?php
 /**
  *
- * @package ezp\PublicAPI\Values\Content\Query
+ * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-namespace ezp\PublicAPI\Values\Content\Query\Criterion;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * Operators struct
  *
  * Note that the method is abstract as there is no point in instanciating it
- * @package ezp\PublicAPI\Values\Content\Query
+ * @package eZ\Publish\API\Repository\Values\Content\Query
  */
 abstract class Operator
 {

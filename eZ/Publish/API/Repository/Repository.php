@@ -1,17 +1,17 @@
 <?php
 /**
- * @package ezp\PublicAPI\Interfaces
+ * @package eZ\Publish\API\Repository
  */
-namespace ezp\PublicAPI\Interfaces;
+namespace eZ\Publish\API\Repository;
 
 
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
-use ezp\PublicAPI\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\User;
 
 /**
  * Repository class
- * @package ezp\PublicAPI\Interfaces
+ * @package eZ\Publish\API\Repository
  */
 interface Repository
 {
@@ -19,14 +19,14 @@ interface Repository
     /**
      * Get current user
      *
-     * @return \ezp\PublicAPI\Values\User\User
+     * @return \eZ\Publish\API\Repository\Values\User\User
      */
     public function getCurrentUser();
 
     /**
      *
      * sets the current user to the user with the given user id
-     * @param \ezp\PublicAPI\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
     public function setCurrentUser( User $user );
 
@@ -35,7 +35,7 @@ interface Repository
      *
      * @param string $module
      * @param string $function
-     * @param \ezp\PublicAPI\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
     public function hasAccess( $module, $function, User $user = null );
@@ -46,8 +46,8 @@ interface Repository
      *
      * @param string $module
      * @param string $function
-     * @param \ezp\PublicAPI\Values\ValueObject $value
-     * @param \ezp\PublicAPI\Values\ValueObject $target
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $value
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $target
      */
     public function canUser( $module, $function, ValueObject $value, ValueObject $target );
 
@@ -57,7 +57,7 @@ interface Repository
      * Get service object to perform operations on Content objects and it's aggregate members.
      *
      *
-     * @return \ezp\PublicAPI\Interfaces\ContentService
+     * @return \eZ\Publish\API\Repository\ContentService
      */
     public function getContentService();
 
@@ -66,7 +66,7 @@ interface Repository
      *
      * Get service object to perform operations on Content language objects
      *
-     * @return \ezp\PublicAPI\Interfaces\LanguageService
+     * @return \eZ\Publish\API\Repository\LanguageService
      */
     public function getContentLanguageService();
 
@@ -76,7 +76,7 @@ interface Repository
      * Get service object to perform operations on Content Type objects and it's aggregate members.
      * ( Group, Field & FieldCategory )
      *
-     * @return \ezp\PublicAPI\Interfaces\ContentTypeService
+     * @return \eZ\Publish\API\Repository\ContentTypeService
      */
     public function getContentTypeService();
 
@@ -85,7 +85,7 @@ interface Repository
      *
      * Get service object to perform operations on Location objects and subtrees
      *
-     * @return \ezp\PublicAPI\Interfaces\LocationService
+     * @return \eZ\Publish\API\Repository\LocationService
      */
     public function getLocationService();
 
@@ -95,7 +95,7 @@ interface Repository
      * Trash service allows to perform operations related to location trash
      * (trash/untrash, load/list from trash...)
      *
-     * @return \ezp\PublicAPI\Interfaces\TrashService
+     * @return \eZ\Publish\API\Repository\TrashService
      */
     public function getTrashService();
 
@@ -104,7 +104,7 @@ interface Repository
      *
      * Get Section service that lets you manipulate section objects
      *
-     * @return \ezp\PublicAPI\Interfaces\SectionService
+     * @return \eZ\Publish\API\Repository\SectionService
      */
     public function getSectionService();
 
@@ -113,14 +113,14 @@ interface Repository
      *
      * Get service object to perform operations on Users and UserGroup
      *
-     * @return \ezp\PublicAPI\Interfaces\UserService
+     * @return \eZ\Publish\API\Repository\UserService
      */
     public function getUserService();
 
     /**
      * Get RoleService
      * 
-     * @return \ezp\PublicAPI\Interfaces\RoleService
+     * @return \eZ\Publish\API\Repository\RoleService
      */
     public function getRoleService();
     

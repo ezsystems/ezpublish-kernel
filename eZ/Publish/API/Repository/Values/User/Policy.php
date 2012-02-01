@@ -1,8 +1,8 @@
 <?php
-namespace ezp\PublicAPI\Values\User;
+namespace eZ\Publish\API\Repository\Values\User;
 
-use ezp\PublicAPI\Values\ValueObject;
-use ezp\PublicAPI\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * This class represents a policy value
@@ -11,7 +11,7 @@ use ezp\PublicAPI\Values\User\Limitation;
  * @property-read int $roleId the role id this policy belongs to
  * @property-read string $module Name of module, associated with the Policy
  * @property-read string $function  Name of the module function Or all functions with '*'
- * @property-read array $limitations an array of \ezp\PublicAPI\Values\User\Limitation 
+ * @property-read array $limitations an array of \eZ\Publish\API\Repository\Values\User\Limitation 
  */
 abstract class Policy extends ValueObject
 {
@@ -49,7 +49,7 @@ abstract class Policy extends ValueObject
 
     /**
      *
-     * @return array an array of {@link \ezp\PublicAPI\Values\User\Limitation }
+     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Limitation }
      */
     public abstract function getLimitations();
 }

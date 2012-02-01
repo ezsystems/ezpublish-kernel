@@ -1,14 +1,14 @@
 <?php
 /**
  *
- * @package ezp\PublicAPI\Values\Content\Query
+ * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-namespace ezp\PublicAPI\Values\Content\Query;
+namespace eZ\Publish\API\Repository\Values\Content\Query;
 
 
 /**
  * Base interface for Criterion implementations
- * @package ezp\PublicAPI\Values\Content\Query
+ * @package eZ\Publish\API\Repository\Values\Content\Query
  */
 interface CriterionInterface
 {
@@ -27,7 +27,7 @@ interface CriterionInterface
      * Criterion description function.
      *
      * Returns the combination of the Criterion's supported operator/value,
-     * as an array of ezp\PublicAPI\Values\Content\Query\Criterion\Operator\Specifications objects
+     * as an array of eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications objects
      * - Operator is one supported Operator, as an Operator::* constant
      * - ValueType is the type of input value this operator requires, either array or single
      * - SupportedTypes is an array of types the operator will accept
@@ -50,7 +50,7 @@ interface CriterionInterface
      *     )
      * )*
      * </code>
-     * @return \ezp\PublicAPI\Values\Content\Query\Criterion\Operator\Specifications[]
+     * @return \eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator\Specifications[]
      */
     public function getSpecifications();
 }

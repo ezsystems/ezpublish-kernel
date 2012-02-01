@@ -1,7 +1,7 @@
 <?php
-namespace ezp\PublicAPI\Values\Content;
+namespace eZ\Publish\API\Repository\Values\Content;
 
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used to create a new Location for a content object

@@ -1,17 +1,17 @@
 <?php
 /**
- * @package ezp\PublicAPI\Interfaces
+ * @package eZ\Publish\API\Repository
  */
-namespace ezp\PublicAPI\Interfaces;
+namespace eZ\Publish\API\Repository;
 
-use ezp\PublicAPI\Values\Content\Location;
-use ezp\PublicAPI\Values\Content\SearchResult;
-use ezp\PublicAPI\Values\Content\TrashItem;
+use eZ\Publish\API\Repository\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\SearchResult;
+use eZ\Publish\API\Repository\Values\Content\TrashItem;
 
 /**
  * Location service, used for complex subtree operations
  *
- * @package ezp\PublicAPI\Interfaces
+ * @package eZ\Publish\API\Repository
  */
 interface TrashService
 {
@@ -20,12 +20,12 @@ interface TrashService
      * 
      * Note that $id is identical to original location, which has been previously trashed
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowd to read the trashed location
-     * @throws \ezp\PublicAPI\Exceptions\NotFoundException - if the location with the given id does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to read the trashed location
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the location with the given id does not exist
      *
      * @param integer $trashItemId
      *
-     * @return \ezp\PublicAPI\Values\Content\TrashItem
+     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
     public function loadTrashItem( $trashItemId );
 
@@ -34,25 +34,25 @@ interface TrashService
      * 
      * Content is left untouched.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowd to trash the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to trash the given location
      *
-     * @param \ezp\PublicAPI\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return \ezp\PublicAPI\Values\Content\TrashItem
+     * @return \eZ\Publish\API\Repository\Values\Content\TrashItem
      */
     public function trash( Location $location );
 
     /**
      * Recovers the $trashedLocation at its original place if possible.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowd to recover the trash item at the parent location location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to recover the trash item at the parent location location
      * 
      * If $newParentLocation is provided, $trashedLocation will be restored under it.
      *
-     * @param \ezp\PublicAPI\Values\Content\TrashItem $trashItem
-     * @param \ezp\PublicAPI\Values\Content\LocationCreate $newParentLocation
+     * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreate $newParentLocation
      *
-     * @return \ezp\PublicAPI\Values\Content\Location the newly created or recovered location
+     * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
     public function recover( TrashItem $trashItem, LocationCreate $newParentLocation = null );
 
@@ -62,7 +62,7 @@ interface TrashService
      * All locations contained in the trash will be removed. Content objects will be removed
      * if all locations of the content are gone.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowd to empty the trash
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to empty the trash
      */
     public function emptyTrash();
 
@@ -71,9 +71,9 @@ interface TrashService
      * 
      * The corresponding content object will be removed
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the user is not allowd to delete this trash item
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to delete this trash item
      *
-     * @param \ezp\PublicAPI\Values\Content\TrashItem $trashItem
+     * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
      */
     public function deleteTrashItem( TrashItem $trashItem );
 
@@ -82,9 +82,9 @@ interface TrashService
      * 
      * $query allows to filter/sort the elements to be contained in the collection.
      *
-     * @param \ezp\PublicAPI\Values\Content\Query $query
+     * @param \eZ\Publish\API\Repository\Values\Content\Query $query
      *
-     * @return \ezp\PublicAPI\Values\Content\SearchResult
+     * @return \eZ\Publish\API\Repository\Values\Content\SearchResult
      */
     public function findTrashItems( Query $query );
 }

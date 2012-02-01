@@ -1,9 +1,9 @@
 <?php
-namespace ezp\PublicAPI\Values\User;
+namespace eZ\Publish\API\Repository\Values\User;
 
-use ezp\PublicAPI\Values\Content\VersionUpdateStruct;
-use ezp\PublicAPI\Values\Content\ContentUpdateStruct;
-use ezp\PublicAPI\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\Content\VersionUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentUpdateStruct;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used to update a user in the repository

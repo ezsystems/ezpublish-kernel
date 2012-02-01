@@ -1,15 +1,15 @@
 <?php
 /**
  *
- * @package ezp\PublicAPI\Values\Content\Query
+ * @package eZ\Publish\API\Repository\Values\Content\Query
  */
-namespace ezp\PublicAPI\Values\Content\Query\Criterion\Operator;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion\Operator;
 
 /**
  * This class is used by Criteria to describe which operators they support
  *
  * Instances of this class are returned in an array by the {@see Criterion::getSpecifications()} method
- * @package ezp\PublicAPI\Values\Content\Query
+ * @package eZ\Publish\API\Repository\Values\Content\Query
  */
 class Specifications
 {

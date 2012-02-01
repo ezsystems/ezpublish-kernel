@@ -1,20 +1,20 @@
 <?php
 /**
- * @package ezp\PublicAPI\Interfaces
+ * @package eZ\Publish\API\Repository
  */
-namespace ezp\PublicAPI\Interfaces;
+namespace eZ\Publish\API\Repository;
 
-use ezp\PublicAPI\Values\Content\LocationUpdateStruct;
-use ezp\PublicAPI\Values\Content\LocationCreateStruct;
-use ezp\PublicAPI\Values\Content\ContentInfo;
-use ezp\PublicAPI\Values\Content\Location;
+use eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use eZ\Publish\API\Repository\Values\Content\ContentInfo;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Location service, used for complex subtree operations
  *
  * @example Examples/location.php
  *
- * @package ezp\PublicAPI\Interfaces
+ * @package eZ\Publish\API\Repository
  */
 interface LocationService
 {
@@ -23,13 +23,13 @@ interface LocationService
      * 
      * Only the items on which the user has read access are copied.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
-     * @throws \ezp\PublicAPI\Exceptions\IllegalArgumentException  if the target location is a sub location of the given location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  if the target location is a sub location of the given location
      *
-     * @param \ezp\PublicAPI\Values\Content\Location $subtree - the subtree denoted by the location to copy
-     * @param \ezp\PublicAPI\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $subtree - the subtree denoted by the location to copy
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $targetParentLocation - the target parent location for the copy operation
      *
-     * @return \ezp\PublicAPI\Values\Content\Location The newly created location of the copied subtree
+     * @return \eZ\Publish\API\Repository\Values\Content\Location The newly created location of the copied subtree
      *
      * @todo enhancement - this method should return a result structure containing the new location and a list
      *       of locations which are not copied due to permission denials.
@@ -39,36 +39,36 @@ interface LocationService
     /**
      * Loads a location object from its $locationId
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \ezp\PublicAPI\Exceptions\NotFoundException If the specified location is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
      * @param integer $locationId
      *
-     * @return \ezp\PublicAPI\Values\Content\Location
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
     public function loadLocation( $locationId );
 
     /**
      * Loads a location object from its $remoteId
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \ezp\PublicAPI\Exceptions\NotFoundException If the specified location is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified location is not found
      *
      * @param string $remoteId
      *
-     * @return \ezp\PublicAPI\Values\Content\Location
+     * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
     public function loadLocationByRemoteId( $remoteId );
 
     /**
      * loads the main loaction of a content object
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
-     * @throws \ezp\PublicAPI\Exceptions\BadStateException if there is no published version yet
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @return \ezp\PublicAPI\Values\Content\Location (in 5.x the return value also can be null if the content has no location)
+     * @return \eZ\Publish\API\Repository\Values\Content\Location (in 5.x the return value also can be null if the content has no location)
      */
     public function loadMainLocation( ContentInfo $contentInfo );
 
@@ -78,10 +78,10 @@ interface LocationService
      * If a $rootLocation is given, only locations that belong to this location are returned.
      * The location list is also filtered by permissions on reading locations.
      *
-     * @throws \ezp\PublicAPI\Exceptions\BadStateException if there is no published version yet
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
-     * @param \ezp\PublicAPI\Values\Content\Location $rootLocation
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $rootLocation
      *
      * @return array an array of {@link Location}
      */
@@ -90,7 +90,7 @@ interface LocationService
     /**
      * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
      *
-     * @param \ezp\PublicAPI\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
      * @param int $offset the start offset for paging
      * @param int $limit the number of locations returned. If $limit = -1 all children starting at $offset are returned
@@ -101,16 +101,16 @@ interface LocationService
 
     /**
      * Creates the new $location in the content repository for the given content
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
-     * @throws \ezp\PublicAPI\Exceptions\IllegalArgumentException  if the content is already below the specified parent
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  if the content is already below the specified parent
      *                                        or the parent is a sub location of the location the content
      *                                        or if set the remoteId existis already
      *
-     * @param \ezp\PublicAPI\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @param \ezp\PublicAPI\Values\Content\LocationCreateStruct $location
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $location
      *
-     * @return \ezp\PublicAPI\Values\Content\Location the newly created Location
+     * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
      *
      */
     public function createLocation( ContentInfo $content, LocationCreateStruct $locationCreateStruct );
@@ -118,34 +118,34 @@ interface LocationService
     /**
      * Updates $location in the content repository
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user user is not allowed to update this location
-     * @throws \ezp\PublicAPI\Exceptions\IllegalArgumentException   if if set the remoteId existis already
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to update this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException   if if set the remoteId existis already
      *
-     * @param \ezp\PublicAPI\Values\Content\Location $location
-     * @param \ezp\PublicAPI\Values\Content\LocationUpdateStruct $locationUpdateStruct
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct
      *
-     * @return \ezp\PublicAPI\Values\Content\Location the updated Location
+     * @return \eZ\Publish\API\Repository\Values\Content\Location the updated Location
      */
     public function updateLocation( Location $location, LocationUpdateStruct $locationUpdateStruct );
 
     /**
      * Swaps the contents hold by the $location1 and $location2
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user user is not allowed to swap content
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to swap content
      *
-     * @param \ezp\PublicAPI\Values\Content\Location $location1
-     * @param \ezp\PublicAPI\Values\Content\Location $location2
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location1
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location2
      */
     public function swapLocation( Location $location1,  Location $location2 );
 
     /**
      * Hides the $location and marks invisible all descendants of $location.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user user is not allowed to hide this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to hide this location
      *
-     * @param \ezp\PublicAPI\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return \ezp\PublicAPI\Values\Content\Location $location, with updated hidden value
+     * @return \eZ\Publish\API\Repository\Values\Content\Location $location, with updated hidden value
      */
     public function hideLocation( Location $location );
 
@@ -155,11 +155,11 @@ interface LocationService
      * This method and marks visible all descendants of $locations
      * until a hidden location is found.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user user is not allowed to unhide this location
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to unhide this location
      *
-     * @param \ezp\PublicAPI\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      *
-     * @return \ezp\PublicAPI\Values\Content\Location $location, with updated hidden value
+     * @return \eZ\Publish\API\Repository\Values\Content\Location $location, with updated hidden value
      */
     public function unhideLocation( Location $location );
 
@@ -169,19 +169,19 @@ interface LocationService
      * If a user has the permission to move the location to a target location
      * he can do it regardless of an existing descendant on which the user has no permission.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user user is not allowed to move this location to the target
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to move this location to the target
      *
-     * @param \ezp\PublicAPI\Values\Content\Location $location
-     * @param \ezp\PublicAPI\Values\Content\Location $newParentLocation
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $newParentLocation
      */
     public function moveSubtree( Location $location, Location $newParentLocation );
 
     /**
      * Deletes $location and all its descendants.
      *
-     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If the current user is not allowed to delete this location or a descendant
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete this location or a descendant
      * 
-     * @param \ezp\PublicAPI\Values\Content\Location $location
+     * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
     public function deleteLocation( Location $location );
 
@@ -191,14 +191,14 @@ interface LocationService
      *
      * @param int $parentLocationId the parent under which the new location should be created
      *
-     * @return \ezp\PublicAPI\Values\Content\LocationCreateStruct
+     * @return \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct
      */
     public function newLocationCreateStruct( $parentLocationId );
 
     /**
      * Instantiates a new location update class
      *
-     * @return \ezp\PublicAPI\Values\Content\LocationUpdateStruct
+     * @return \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct
      */
     public function newLocationUpdateStruct();
 }

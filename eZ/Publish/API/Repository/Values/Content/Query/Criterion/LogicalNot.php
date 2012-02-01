@@ -1,6 +1,6 @@
 <?php
-namespace ezp\PublicAPI\Values\Content\Query\Criterion;
-use ezp\PublicAPI\Values\Content\Query\Criterion;
+namespace eZ\Publish\API\Repository\Values\Content\Query\Criterion;
+use eZ\Publish\API\Repository\Values\Content\Query\Criterion;
 
 /**
  * A NOT logical criterion

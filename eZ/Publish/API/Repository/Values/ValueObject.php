@@ -1,8 +1,8 @@
 <?php
 /**
- * @package ezp\PublicAPI\Values
+ * @package eZ\Publish\API\Repository\Values
  */
-namespace ezp\PublicAPI\Values;
+namespace eZ\Publish\API\Repository\Values;
 use ezp\Base\Exception\PropertyNotFound,
     ezp\Base\Exception\PropertyPermission;// @todo rename to PropertyReadOnly?
 
@@ -14,7 +14,7 @@ use ezp\Base\Exception\PropertyNotFound,
  * using @property-read <type> <$var> in class doc in addition to inline property doc.
  * Writable properties must be public and must be documented inline.
  *
- * @package ezp\PublicAPI\Values
+ * @package eZ\Publish\API\Repository\Values
  */
 abstract class ValueObject
 {
