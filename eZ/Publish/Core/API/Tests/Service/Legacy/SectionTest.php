@@ -18,6 +18,13 @@ class SectionTest extends BaseSectionServiceTest
 {
     protected function getRepository()
     {
-        return include 'common.php';
+        try
+        {
+            return include 'common.php';
+        }
+        catch ( \Exception $e )
+        {
+            $this->markTestIncomplete(  $e->getMessage() );
+        }
     }
 }

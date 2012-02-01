@@ -47,7 +47,7 @@ $sectionService = $serviceContainer->getRepository()->getSectionService();
 $section = $sectionService->loadSection( 1 );
 echo $section->name;
 
-$sectionUpdateStruct = new eZ\Publish\API\Values\Content\SectionUpdateStruct();
+$sectionUpdateStruct = new eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct();
 $sectionUpdateStruct->name = 'Standard 2';
 $sectionUpdateStruct->identifier = 'standard_2';
 
