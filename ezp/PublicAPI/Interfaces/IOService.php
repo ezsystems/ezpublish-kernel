@@ -13,23 +13,23 @@ interface IOService
 {
     /**
      * Creates a BinaryFileCreateStruct object from the uploaded file $uploadedFile
+     * 
+     * @throws \ezp\PublicAPI\Exceptions\InvalidArgumentException When given an invalid uploaded file
      *
      * @param array $uploadedFile The $_POST hash of an uploaded file
      * 
      * @return \ezp\PublicAPI\Values\IO\BinaryFileCreateStruct
-     * 
-     * @throws \ezp\PublicAPI\Interfaces\InvalidArgumentException When given an invalid uploaded file
      */
     public function newBinaryCreateStructFromUploadedFile( array $uploadedFile );
 
     /**
      * Creates a BinaryFileCreateStruct object from $localFile
+     * 
+     * @throws \ezp\PublicAPI\Exceptions\InvalidArgumentException When given a non existing / unreadable file
      *
      * @param string $localFile Path to local file
      * 
      * @return \ezp\PublicAPI\Values\IO\BinaryFileCreateStruct
-     * 
-     * @throws InvalidArgumentException When given a non existing / unreadable file
      */
     public function newBinaryCreateStructFromLocalFile( $localFile );
 
@@ -51,12 +51,12 @@ interface IOService
 
     /**
      * Loads the binary file with $id
+     * 
+     * @throws \ezp\PublicAPI\Exceptions\NotFoundExcption
      *
      * @param string $binaryFileid
      * 
      * @return \ezp\PublicAPI\Values\IO\BinaryFile
-     * 
-     * @throws \ezp\PublicAPI\Interfaces\NotFoundExcption
      */
     public function loadBinaryFile( $binaryFileid );
     

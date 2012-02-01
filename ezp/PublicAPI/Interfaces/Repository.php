@@ -19,14 +19,14 @@ interface Repository
     /**
      * Get current user
      *
-     * @return User
+     * @return \ezp\PublicAPI\Values\User\User
      */
     public function getCurrentUser();
 
     /**
      *
      * sets the current user to the user with the given user id
-     * @param User $user
+     * @param \ezp\PublicAPI\Values\User\User $user
      */
     public function setCurrentUser( User $user );
 
@@ -35,7 +35,7 @@ interface Repository
      *
      * @param string $module
      * @param string $function
-     * @param User $user
+     * @param \ezp\PublicAPI\Values\User\User $user
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
     public function hasAccess( $module, $function, User $user = null );
@@ -46,8 +46,8 @@ interface Repository
      *
      * @param string $module
      * @param string $function
-     * @param ValueObject $value
-     * @param ValueObject $target
+     * @param \ezp\PublicAPI\Values\ValueObject $value
+     * @param \ezp\PublicAPI\Values\ValueObject $target
      */
     public function canUser( $module, $function, ValueObject $value, ValueObject $target );
 

@@ -22,49 +22,49 @@ interface RoleService
     /**
      * Creates a new Role
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to create a role
+     * @throws \ezp\PublicAPI\Exceptions\IllegalArgumentException if the name of the role already exists
+     *
      * @param \ezp\PublicAPI\Values\User\RoleCreateStruct $roleCreateStruct
      *
      * @return \ezp\PublicAPI\Values\User\Role
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to create a role
-     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if the name of the role already exists
      */
     public function createRole( RoleCreateStruct $roleCreateStruct );
 
     /**
      * Updates the name and (5.x) description of the role
+     *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
+     * @throws \ezp\PublicAPI\Exceptions\IllegalArgumentException if the name of the role already exists
      * 
      * @param \ezp\PublicAPI\Values\User\Role $role
      * @param \ezp\PublicAPI\Values\User\RoleUpdateStruct $roleUpdateStruct
      *
      * @return \ezp\PublicAPI\Values\User\Role
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to update a role
-     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if the name of the role already exists
      */
     public function updateRole( Role $role, RoleUpdateStruct $update );
 
     /**
      * adds a new policy to the role
+     *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
      * 
      * @param \ezp\PublicAPI\Values\User\Role $role
      * @param \ezp\PublicAPI\Values\User\PolicyCreateStruct $policyCreateStruct
      *
      * @return \ezp\PublicAPI\Values\User\Role
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to add  a policy
      */
     public function addPolicy( Role $role, PolicyCreateStruct $policyCreateStruct );
 
     /**
      * removes a policy from the role
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a policy
+     *
      * @param \ezp\PublicAPI\Values\User\Role $role
      * @param \ezp\PublicAPI\Values\User\Policy $policy the policy to remove from the role
      *
      * @return \ezp\PublicAPI\Values\User\Role the updated role
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove a policy
      */
     public function removePolicy( Role $role, Policy $policy );
 
@@ -72,132 +72,132 @@ interface RoleService
      * Updates the limitations of a policy. The module and function cannot be changed and
      * the limitaions are replaced by the ones in $roleUpdateStruct
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to u�date a policy
+     *
      * @param \ezp\PublicAPI\Values\User\PolicyUpdateStruct $policyUpdateStruct
      * @param \ezp\PublicAPI\Values\User\Policy $policy
      *
      * @return \ezp\PublicAPI\Values\User\Policy
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to u�date a policy
      */
     public function updatePolicy( Policy $policy, PolicyUpdateStruct $policyUpdateStruct );
 
     /**
      * loads a role for the given name
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to read this role
+     * @throws \ezp\PublicAPI\Exceptions\NotFoundException if a role with the given name was not found
+     *
      * @param string $name
      *
      * @return \ezp\PublicAPI\Values\User\Role
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read this role
-     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if a role with the given name was not found
      */
     public function loadRole( $name );
 
     /**
      * loads all roles
      *
-     * @return array an array of {@link \ezp\PublicAPI\Values\User\Role}
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the roles
      *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read the roles
+     * @return array an array of {@link \ezp\PublicAPI\Values\User\Role}
      */
     public function loadRoles();
 
     /**
      * deletes the given role
      *
-     * @param \ezp\PublicAPI\Values\User\Role $role
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to delete this role
      *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to delete this role
+     * @param \ezp\PublicAPI\Values\User\Role $role
      */
     public function deleteRole( Role $role );
 
     /**
      * loads all policies from roles which are assigned to a user or to user groups to which the user belongs
      *
+     * @throws \ezp\PublicAPI\Exceptions\NotFoundException if a user with the given id was not found
+     *
      * @param $userId
      *
      * @return array an array of {@link Policy}
-     *
-     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if a user with the given id was not found
      */
     public function loadPoliciesByUserId( $userId );
 
     /**
      * assigns a role to the given user group
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
+     *
      * @param \ezp\PublicAPI\Values\User\Role $role
      * @param \ezp\PublicAPI\Values\User\UserGroup $userGroup
      * @param \ezp\PublicAPI\Values\User\RoleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign a role
      */
     public function assignRoleToUserGroup( Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null );
 
     /**
      * removes a role from the given user group.
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
+     * @throws \ezp\PublicAPI\Exceptions\InvalidArgumentException  If the role is not assigned to the given user group
+     *
      * @param \ezp\PublicAPI\Values\User\Role $role
      * @param \ezp\PublicAPI\Values\User\UserGroup $userGroup
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \ezp\PublicAPI\Interfaces\InvalidArgumentException  If the role is not assigned to the given user group
      */
     public function unassignRoleFromUserGroup( Role $role, UserGroup $userGroup );
 
     /**
      * assigns a role to the given user
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign a role
+     *
      * @todo add limitations
      *
      * @param \ezp\PublicAPI\Values\User\Role $role
      * @param \ezp\PublicAPI\Values\User\User $user
      * @param \ezp\PublicAPI\Values\User\RoleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to assign a role
      */
     public function assignRoleToUser( Role $role, User $user, RoleLimitation $roleLimitation = null );
 
     /**
      * removes a role from the given user.
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove a role
+     * @throws \ezp\PublicAPI\Exceptions\InvalidArgumentException If the role is not assigned to the user
+     *
      * @param \ezp\PublicAPI\Values\User\Role $role
      * @param \ezp\PublicAPI\Values\User\User $user
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to remove a role
-     * @throws \ezp\PublicAPI\Interfaces\InvalidArgumentException If the role is not assigned to the user
      */
     public function unassignRoleFromUser( Role $role, User $user );
 
     /**
      * returns the assigned user and user groups to this role
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a role
+     *
      * @param \ezp\PublicAPI\Values\User\Role $role
      *
      * @return array an array of {@link RoleAssignment}
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read a role
      */
     public function getRoleAssignments( Role $role );
 
     /**
      * returns the roles assigned to the given user
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user
+     *
      * @param \ezp\PublicAPI\Values\User\User $user
      *
      * @return array an array of {@link UserRoleAssignment}
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read a user
      */
     public function getRoleAssignmentsForUser( User $user );
 
     /**
      * returns the roles assigned to the given user group
      *
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException if the authenticated user is not allowed to read a user group
+     *
      * @param \ezp\PublicAPI\Values\User\UserGroup $userGroup
      *
      * @return array an array of {@link UserGroupRoleAssignment}
-     *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException if the authenticated user is not allowed to read a user group
      */
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup );
 

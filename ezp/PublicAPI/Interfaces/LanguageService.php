@@ -17,8 +17,8 @@ interface LanguageService
     /**
      * Creates the a new Language in the content repository
      *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
-     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException if the languageCode already exists
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Exceptions\IllegalArgumentException if the languageCode already exists
      *
      * @param \ezp\PublicAPI\Values\Content\LanguageCreateStruct $languageCreateStruct
      *
@@ -29,7 +29,7 @@ interface LanguageService
     /**
      * Changes the name of the language in the content repository
      *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If user does not have access to content translations
      *
      * @param \ezp\PublicAPI\Values\Content\Language $language
      * @param string $newName
@@ -41,7 +41,7 @@ interface LanguageService
     /**
      * enables a language
      *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If user does not have access to content translations
      *
      * @param \ezp\PublicAPI\Values\Content\Language $language
      */
@@ -50,7 +50,7 @@ interface LanguageService
     /**
      * disables a language
      *
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If user does not have access to content translations
      *
      * @param \ezp\PublicAPI\Values\Content\Language $language
      */
@@ -59,7 +59,7 @@ interface LanguageService
     /**
      * Loads a Language from its language code ($languageCode)
      *
-     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if language could not be found
+     * @throws \ezp\PublicAPI\Exceptions\NotFoundException if language could not be found
      *
      * @param string $languageCode
      *
@@ -77,7 +77,7 @@ interface LanguageService
     /**
      * Loads a Language by its id ($languageId)
      *
-     * @throws \ezp\PublicAPI\Interfaces\NotFoundException if language could not be found
+     * @throws \ezp\PublicAPI\Exceptions\NotFoundException if language could not be found
      *
      * @param int $languageId
      *
@@ -88,10 +88,10 @@ interface LanguageService
     /**
      * Deletes  a language from content repository
      *
-     * @throws \ezp\PublicAPI\Interfaces\IllegalArgumentException
+     * @throws \ezp\PublicAPI\Exceptions\IllegalArgumentException
      *         if language can not be deleted
      *         because it is still assigned to some content / type / (...).
-     * @throws \ezp\PublicAPI\Interfaces\UnauthorizedException If user does not have access to content translations
+     * @throws \ezp\PublicAPI\Exceptions\UnauthorizedException If user does not have access to content translations
      *
      * @param Language $language
      */
