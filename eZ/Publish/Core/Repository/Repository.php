@@ -7,20 +7,20 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\API;
+namespace eZ\Publish\Core\Repository;
 use eZ\Publish\Core\Base\Exception\BadConfiguration,
     eZ\Publish\Core\Base\Exception\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exception\Logic,
     eZ\Publish\SPI\Io\Handler as IoHandler,
     eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\API\Repository\Repository  as RepositoryInterface,
-    eZ\Publish\Core\API\Content\ContentService,
-    eZ\Publish\Core\API\Content\LanguageService,
-    eZ\Publish\Core\API\Content\LocationService,
-    eZ\Publish\Core\API\Content\SectionService,
-    eZ\Publish\Core\API\ContentType\ContentTypeService,
-    eZ\Publish\Core\API\User\RoleService,
-    eZ\Publish\Core\API\User\UserService,
+    eZ\Publish\Core\Repository\ContentService,
+    eZ\Publish\Core\Repository\LanguageService,
+    eZ\Publish\Core\Repository\LocationService,
+    eZ\Publish\Core\Repository\SectionService,
+    eZ\Publish\Core\Repository\ContentTypeService,
+    eZ\Publish\Core\Repository\RoleService,
+    eZ\Publish\Core\Repository\UserService,
     eZ\Publish\API\Repository\Values\ValueObject,
     eZ\Publish\API\Repository\Values\User\User,
     RuntimeException;

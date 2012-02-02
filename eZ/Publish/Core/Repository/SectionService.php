@@ -1,8 +1,8 @@
 <?php
 /**
- * @package eZ\Publish\Core\API
+ * @package eZ\Publish\Core\Repository
  */
-namespace eZ\Publish\Core\API\Content;
+namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 
@@ -22,7 +22,7 @@ use eZ\Publish\API\Repository\Repository  as RepositoryInterface;
 /**
  * Section service, used for section operations
  *
- * @package eZ\Publish\Core\API
+ * @package eZ\Publish\Core\Repository
  */
 class SectionService implements SectionServiceInterface
 {

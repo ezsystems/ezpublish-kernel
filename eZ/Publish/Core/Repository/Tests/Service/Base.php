@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\API\Tests\Service;
+namespace eZ\Publish\Core\Repository\Tests\Service;
 use PHPUnit_Framework_TestCase;
 
 /**
@@ -17,7 +17,7 @@ use PHPUnit_Framework_TestCase;
 abstract class Base extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \eZ\Publish\Core\API\Repository
+     * @var \eZ\Publish\Core\Repository\Repository
      */
     protected $repository;
 
@@ -31,11 +31,11 @@ abstract class Base extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Generate \eZ\Publish\Core\API\Repository
+     * Generate \eZ\Publish\Core\Repository\Repository
      *
      * Makes it possible to inject different Io / Persistence handlers
      *
-     * @return \eZ\Publish\Core\API\Repository
+     * @return \eZ\Publish\Core\Repository\Repository
      */
     abstract protected function getRepository();
 }

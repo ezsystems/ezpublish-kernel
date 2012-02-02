@@ -1,14 +1,14 @@
 <?php
 /**
- * File contains: eZ\Publish\Core\API\Tests\Service\SectionTest class
+ * File contains: eZ\Publish\Core\Repository\Tests\Service\SectionTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\API\Tests\Service;
-use eZ\Publish\Core\API\Tests\Service\Base as BaseServiceTest,
+namespace eZ\Publish\Core\Repository\Tests\Service;
+use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Section,
     eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
     eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
@@ -55,7 +55,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for creating sections
-     * @covers \eZ\Publish\Core\API\Content\SectionService::create
+     * @covers \eZ\Publish\Core\Repository\SectionService::create
      */
     public function testCreate()
     {
@@ -73,7 +73,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for creating sections
-     * @covers \eZ\Publish\Core\API\Content\SectionService::create
+     * @covers \eZ\Publish\Core\Repository\SectionService::create
      * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
      */
     public function testCreateForbidden()
@@ -89,7 +89,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for loading sections
-     * @covers \eZ\Publish\Core\API\Content\SectionService::load
+     * @covers \eZ\Publish\Core\Repository\SectionService::load
      */
     public function testLoad()
     {
@@ -103,7 +103,7 @@ abstract class SectionBase extends BaseServiceTest
     
     /**
      * Test service function for loading sections
-     * @covers \eZ\Publish\Core\API\Content\SectionService::loadSectionByIdentifier
+     * @covers \eZ\Publish\Core\Repository\SectionService::loadSectionByIdentifier
      */
     public function testLoadByIdentifier()
     {
@@ -117,7 +117,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for loading all sections
-     * @covers \eZ\Publish\Core\API\Content\SectionService::loadAll
+     * @covers \eZ\Publish\Core\Repository\SectionService::loadAll
      */
     public function testLoadAll()
     {
@@ -134,7 +134,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for loading sections
      *
-     * @covers \eZ\Publish\Core\API\Content\SectionService::load
+     * @covers \eZ\Publish\Core\Repository\SectionService::load
      * @expectedException \eZ\Publish\Core\Base\Exception\NotFound
      */
     public function testLoadNotFound()
@@ -145,7 +145,7 @@ abstract class SectionBase extends BaseServiceTest
 
     /**
      * Test service function for update sections
-     * @covers \eZ\Publish\Core\API\Content\SectionService::update
+     * @covers \eZ\Publish\Core\Repository\SectionService::update
      */
     public function testUpdate()
     {
@@ -165,7 +165,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for update sections
      *
-     * @covers \eZ\Publish\Core\API\Content\SectionService::update
+     * @covers \eZ\Publish\Core\Repository\SectionService::update
      * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
      */
     public function testUpdateForbidden()
@@ -179,7 +179,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for deleting sections
      *
-     * @covers \eZ\Publish\Core\API\Content\SectionService::delete
+     * @covers \eZ\Publish\Core\Repository\SectionService::delete
      */
     public function testDelete()
     {
@@ -205,7 +205,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for counting the contents which section is assigned to
      *
-     * @covers \eZ\Publish\Core\API\Content\SectionService::delete
+     * @covers \eZ\Publish\Core\Repository\SectionService::delete
      */
     public function testCountAssignedContents()
     {
@@ -221,7 +221,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for deleting sections
      *
-     * @covers \eZ\Publish\Core\API\Content\SectionService::delete
+     * @covers \eZ\Publish\Core\Repository\SectionService::delete
      * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
      */
     public function testDeleteForbidden()
