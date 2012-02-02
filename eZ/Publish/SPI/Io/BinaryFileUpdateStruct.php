@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Io;
+namespace eZ\Publish\SPI\Io;
 
 /**
  * Update struct for BinaryFile objects

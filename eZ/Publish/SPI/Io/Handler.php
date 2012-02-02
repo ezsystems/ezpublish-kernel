@@ -1,16 +1,16 @@
 <?php
 /**
- * File containing the ezp\Io\Handler interface
+ * File containing the eZ\Publish\SPI\Io\Handler interface
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Io;
+namespace eZ\Publish\SPI\Io;
 
-use ezp\Io\BinaryFile,
-    ezp\Io\BinaryFileUpdateStruct,
-    ezp\Io\BinaryFileCreateStruct;
+use eZ\Publish\SPI\Io\BinaryFile,
+    eZ\Publish\SPI\Io\BinaryFileUpdateStruct,
+    eZ\Publish\SPI\Io\BinaryFileCreateStruct;
 
 /**
  * Backend interface for handling of binary files I/O
@@ -21,8 +21,8 @@ interface Handler
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @param \ezp\Io\BinaryFileCreateStruct $file
-     * @return \ezp\Io\BinaryFile The newly created BinaryFile object
+     * @param \eZ\Publish\SPI\Io\BinaryFileCreateStruct $file
+     * @return \eZ\Publish\SPI\Io\BinaryFile The newly created BinaryFile object
      *
      * @throws \ezp\Base\Exception\PathExists If the target path already exists
      */
@@ -40,8 +40,8 @@ interface Handler
      * Updates the file identified by $path with data from $updateFile
      *
      * @param string $path
-     * @param \ezp\Io\BinaryFileUpdateStruct $updateFile
-     * @return \ezp\Io\BinaryFile The updated BinaryFile
+     * @param \eZ\Publish\SPI\Io\BinaryFileUpdateStruct $updateFile
+     * @return \eZ\Publish\SPI\Io\BinaryFile The updated BinaryFile
      *
      * @throws \ezp\Base\Exception\NotFound If the source path doesn't exist
      * @throws \ezp\Base\Exception\PathExists If the target path already exists
@@ -60,7 +60,7 @@ interface Handler
      * Loads the BinaryFile identified by $path
      *
      * @param string $path
-     * @return \ezp\Io\BinaryFile
+     * @return \eZ\Publish\SPI\Io\BinaryFile
      * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function load( $path );

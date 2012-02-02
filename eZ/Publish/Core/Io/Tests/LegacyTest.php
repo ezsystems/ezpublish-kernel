@@ -1,20 +1,18 @@
 <?php
 /**
- * File containing the ezp\Io\Tests\Storage\BinaryRepositoryLegacyTest class
+ * File containing the eZ\Publish\Core\Io\Tests\Storage\BinaryRepositoryLegacyTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Io\Tests\Storage;
-use ezp\Base\ServiceContainer,
-    ezp\Base\Configuration,
-    ezp\Io\Storage\Legacy,
-    ezp\Io\BinaryFile,
-    ezp\Io\BinaryFileCreateStruct,
-    ezp\Io\BinaryFileUpdateStruct,
-    ezp\Io\Tests\BinaryRepositoryTest,
+namespace eZ\Publish\Core\Io\Tests\Storage;
+use eZ\Publish\Core\Io\Legacy\Legacy,
+    eZ\Publish\SPI\Io\BinaryFile,
+    eZ\Publish\SPI\Io\BinaryFileCreateStruct,
+    eZ\Publish\SPI\Io\BinaryFileUpdateStruct,
+    eZ\Publish\Core\Io\Tests\BinaryRepositoryTest,
     eZClusterFileHandler,
     ezcBaseFile;
 
@@ -24,7 +22,10 @@ use ezp\Base\ServiceContainer,
  */
 class LegacyTest extends BinaryRepositoryTest
 {
-    public function setUp()
+    /**
+     * @return \eZ\Publish\SPI\Io\Handler
+     */
+    protected function getIoHandler()
     {
         // Include mock dependencies
         $dependenciesPath = __DIR__ . DIRECTORY_SEPARATOR . basename( __FILE__, '.php' ) . DIRECTORY_SEPARATOR;
@@ -50,16 +51,7 @@ class LegacyTest extends BinaryRepositoryTest
             include 'ezpublish/kernel/classes/ezclusterfilehandler.php';
             include 'ezpublish/kernel/classes/clusterfilehandlers/ezfsfilehandler.php';
         }
-
-        $sc = new ServiceContainer(
-            Configuration::getInstance('service')->getAll(),
-            array(
-                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
-                '@io_handler' => new Legacy(),
-            )
-        );
-        $this->binaryService = $sc->getRepository()->getIoService();
-        $this->imageInputPath = realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'ezplogo.gif';
+        return new Legacy();
     }
 
     public function tearDown()
@@ -68,6 +60,7 @@ class LegacyTest extends BinaryRepositoryTest
         {
             ezcBaseFile::removeRecursive( 'var/test' );
         }
+        parent::tearDown();
     }
 
     /**

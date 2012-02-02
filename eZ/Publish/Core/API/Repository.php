@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\API;
 use eZ\Publish\Core\Base\Exception\BadConfiguration,
     eZ\Publish\Core\Base\Exception\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exception\Logic,
-    ezp\Io\Handler as IoHandler,
+    eZ\Publish\SPI\Io\Handler as IoHandler,
     eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\API\Repository\Repository  as RepositoryInterface,
     eZ\Publish\Core\API\Content\ContentService,
@@ -65,7 +65,7 @@ class Repository implements RepositoryInterface
      * Construct repository object with provided storage engine
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param \ezp\Io\Handler $ioHandler
+     * @param \eZ\Publish\SPI\Io\Handler $ioHandler
      * @param User|null $user
      */
     public function __construct( PersistenceHandler $persistenceHandler, IoHandler $ioHandler, User $user = null )

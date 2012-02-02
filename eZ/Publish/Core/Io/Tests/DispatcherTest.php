@@ -1,21 +1,19 @@
 <?php
 /**
- * File containing the ezp\Io\Tests\Storage\BinaryRepositoryLegacyTest class
+ * File containing the eZ\Publish\Core\Io\Tests\Storage\BinaryRepositoryLegacyTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Io\Tests\Storage;
-use ezp\Base\ServiceContainer,
-    ezp\Base\Configuration,
-    ezp\Io\Storage\Dispatcher,
-    ezp\Io\Storage\InMemory,
-    ezp\Io\BinaryFile,
-    ezp\Io\BinaryFileCreateStruct,
-    ezp\Io\BinaryFileUpdateStruct,
-    ezp\Io\Tests\BinaryRepositoryTest;
+namespace eZ\Publish\Core\Io\Tests\Storage;
+use eZ\Publish\Core\Io\Dispatcher\Dispatcher,
+    eZ\Publish\Core\Io\InMemory\InMemory,
+    eZ\Publish\SPI\Io\BinaryFile,
+    eZ\Publish\SPI\Io\BinaryFileCreateStruct,
+    eZ\Publish\SPI\Io\BinaryFileUpdateStruct,
+    eZ\Publish\Core\Io\Tests\BinaryRepositoryTest;
 
 /**
  * @fixme This class should be named LegacyTest according to the file name or
@@ -24,44 +22,36 @@ use ezp\Base\ServiceContainer,
 class DispatcherTest extends BinaryRepositoryTest
 {
     /**
-     * @var \ezp\Io\Storage\InMemory
+     * @var \eZ\Publish\SPI\Io\Handler
      */
     protected $defaultBackend;
 
     /**
-     * @var \ezp\Io\Storage\InMemory
+     * @var \eZ\Publish\SPI\Io\Handler
      */
     protected $alternativeBackend;
 
     /**
-     * Setup dispatcher handler for testing
+     * @return \eZ\Publish\SPI\Io\Handler
      */
-    public function setUp()
+    protected function getIoHandler()
     {
         $this->defaultBackend = new InMemory();
         $this->alternativeBackend = new InMemory();
-        $sc = new ServiceContainer(
-            Configuration::getInstance('service')->getAll(),
+        return new Dispatcher(
             array(
-                '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler(),
-                '@io_handler' => new Dispatcher(
+                'default' => $this->defaultBackend,
+                'handlers' => array(
                     array(
-                        'default' => $this->defaultBackend,
-                        'handlers' => array(
-                            array(
-                                'handler' => $this->alternativeBackend,
-                                // match conditions:
-                                'prefix' => 'var/test/',
-                                'suffix' => '.gif,.jpg',
-                                'contains' => 'image-versioned'
-                            )
-                        )
+                        'handler' => $this->alternativeBackend,
+                        // match conditions:
+                        'prefix' => 'var/test/',
+                        'suffix' => '.gif,.jpg',
+                        'contains' => 'image-versioned'
                     )
                 )
             )
         );
-        $this->binaryService = $sc->getRepository()->getIoService();
-        $this->imageInputPath = realpath( __DIR__ . DIRECTORY_SEPARATOR . '..' ) . DIRECTORY_SEPARATOR . 'ezplogo.gif';
     }
 
     /**
