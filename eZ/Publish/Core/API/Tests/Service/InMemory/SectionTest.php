@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\API\Tests\Service\InMemory;
 use eZ\Publish\Core\API\Tests\Service\SectionBase as BaseSectionServiceTest,
     eZ\Publish\Core\API\Repository,
-    eZ\Publish\Core\Io\InMemory\InMemory as InMemoryIoHandler,
+    eZ\Publish\Core\Io\InMemory\Handler as InMemoryIoHandler,
     eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
 
 /**

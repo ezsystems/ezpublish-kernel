@@ -14,7 +14,7 @@ use eZ\Publish\SPI\Io\BinaryFile,
     ezp\Io\ContentType,
     DateTime;
 
-abstract class BinaryRepositoryTest extends \PHPUnit_Framework_TestCase
+abstract class Base extends \PHPUnit_Framework_TestCase
 {
     /**
      * Binary IoHanlder

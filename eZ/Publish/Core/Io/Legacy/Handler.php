@@ -14,7 +14,6 @@ use eZ\Publish\SPI\Io\Handler as IoHandlerInterface,
     eZ\Publish\SPI\Io\BinaryFileCreateStruct,
     eZ\Publish\SPI\Io\BinaryFileUpdateStruct,
     ezp\Io\ContentType,
-    eZ\Publish\Core\Io\Legacy\FileResourceAdapter,
     ezp\Io\Exception\PathExists,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\NotFound,
@@ -29,7 +28,7 @@ use eZ\Publish\SPI\Io\Handler as IoHandlerInterface,
  * - mtime can not be modified, and will always automatically be set depending on the server time upon each write operation
  */
 
-class Legacy implements IoHandlerInterface
+class Handler implements IoHandlerInterface
 {
     /**
      * File resource provider

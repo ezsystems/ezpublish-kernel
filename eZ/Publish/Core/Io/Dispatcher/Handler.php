@@ -18,7 +18,7 @@ use ezp\Base\Exception\InvalidArgumentType,
  * Handler interface for handling of binary files I/O
  */
 
-class Dispatcher implements IoHandlerInterface
+class Handler implements IoHandlerInterface
 {
     /**
      * Io\Storage handler instances, {@see __construct()}

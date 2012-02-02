@@ -20,7 +20,7 @@ use eZ\Publish\SPI\Io\Handler as IoHandlerInterface,
  * Backend interface for handling of binary files I/O
  */
 
-class InMemory implements IoHandlerInterface
+class Handler implements IoHandlerInterface
 {
     /**
      * Files storage
