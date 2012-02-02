@@ -7,37 +7,32 @@
   convertWarningsToExceptions="true"
   >
   <testsuites>
-    <testsuite name="ezp\Base">
-      <directory>ezp/Base/Tests</directory>
+    <testsuite name="eZ\Publish\Core\Base">
+      <directory>eZ/Publish/Core/Base/Tests</directory>
     </testsuite>
-    <testsuite name="ezp\Content">
-      <directory>ezp/Content/Tests</directory>
+    <testsuite name="eZ\Publish\Core\API">
+      <directory>eZ/Publish/Core/API/Tests</directory>
     </testsuite>
-    <testsuite name="ezp\Persistence">
-      <directory>ezp/Persistence/Tests</directory>
+    <!-- testsuite name="ezp\Publish\Core\Persistence\InMemory">
+      <directory>ezp/Publish/Core/Persistence/InMemory/Tests</directory>
     </testsuite>
-    <testsuite name="ezp\Persistence\Storage\Legacy">
-      <directory>ezp/Persistence/Storage/Legacy/Tests</directory>
+    <testsuite name="ezp\Publish\Core\Persistence\Legacy">
+      <directory>ezp/Publish/Core/Persistence/Legacy/Tests</directory>
     </testsuite>
-    <testsuite name="ezp\User">
-      <directory>ezp/User/Tests</directory>
-    </testsuite>
-    <testsuite name="ezp\Io">
-      <directory>ezp/Io/Tests</directory>
-    </testsuite>
+    <testsuite name="ezp\Publish\Core\Io">
+      <directory>ezp/Publish/Core/Io/Tests</directory>
+    </testsuite -->
   </testsuites>
   <filter>
     <whitelist>
-      <directory suffix=".php">ezp</directory>
+      <directory suffix=".php">eZ</directory>
       <exclude>
-        <directory suffix=".php">ezp/Base/Tests</directory>
-        <directory suffix=".php">ezp/Content/Tests</directory>
-        <directory suffix=".php">ezp/Persistence/Tests</directory>
-        <directory suffix=".php">ezp/Users/Tests</directory>
-        <directory suffix=".php">ezp/Io/Tests</directory>
-        <directory suffix=".php">ezp/Persistence/Storage/Legacy/Tests</directory>
-        <directory suffix=".php">doc</directory>
-        <file>ezp/index.php</file>
+          <directory suffix=".php">eZ/Publish/Core/Base/Tests</directory>
+          <directory suffix=".php">eZ/Publish/Core/API/Tests</directory>
+          <directory suffix=".php">ezp/Publish/Core/Persistence/InMemory/Tests</directory>
+          <directory suffix=".php">ezp/Publish/Core/Persistence/Legacy/Tests</directory>
+          <directory suffix=".php">ezp/Publish/Core/Io/Tests</directory>
+          <directory suffix=".php">doc</directory>
       </exclude>
     </whitelist>
   </filter>
