@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Type\ContentTypeUpdaterTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentTypeUpdaterTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Type;
-use ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater,
-    ezp\Persistence\Content,
-    ezp\Persistence\Content\Type;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Type;
 
 /**
  * Test case for Content Type Updater.
@@ -20,34 +20,34 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * Content gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGatewayMock;
 
     /**
      * FieldValue converter registry mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $converterRegistryMock;
 
     /**
      * Search handler mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Search\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
      */
     protected $searchHandlerMock;
 
     /**
      * Content Updater to test
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater
+     * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
     protected $contentUpdater;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
      */
     public function testCtor()
     {
@@ -67,8 +67,8 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater::determineActions
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater::hasFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::determineActions
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::hasFieldDefinition
      */
     public function testDetermineActions()
     {
@@ -82,7 +82,7 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
             ->will(
                 $this->returnValue(
                     ( $converterMock = $this->getMock(
-                        '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+                        '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
                     ) )
                 )
             );
@@ -114,7 +114,7 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
         $updater = $this->getContentUpdater();
 
         $actionA = $this->getMockForAbstractClass(
-            '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\ContentUpdater\\Action',
+            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater\\Action',
             array(),
             '',
             false
@@ -123,11 +123,11 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
             ->method( 'apply' )
             ->with(
                 $this->isInstanceOf(
-                    '\\ezp\\Persistence\\Content'
+                    '\\eZ\\Publish\\SPI\\Persistence\\Content'
                 )
             );
         $actionB = $this->getMockForAbstractClass(
-            '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\ContentUpdater\\Action',
+            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater\\Action',
             array(),
             '',
             false
@@ -136,7 +136,7 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
             ->method( 'apply' )
             ->with(
                 $this->isInstanceOf(
-                    '\\ezp\\Persistence\\Content'
+                    '\\eZ\\Publish\\SPI\\Persistence\\Content'
                 )
             );
 
@@ -159,7 +159,7 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a fixture for the from Type
      *
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     protected function getFromTypeFixture()
     {
@@ -183,7 +183,7 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a fixture for the to Type
      *
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     protected function getToTypeFixture()
     {
@@ -203,14 +203,14 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content Gateway mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getContentGatewayMock()
     {
         if ( !isset( $this->contentGatewayMock ) )
         {
             $this->contentGatewayMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
             );
         }
         return $this->contentGatewayMock;
@@ -219,14 +219,14 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a FieldValue Converter registry mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected function getConverterRegistryMock()
     {
         if ( !isset( $this->converterRegistryMock ) )
         {
             $this->converterRegistryMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
             );
         }
         return $this->converterRegistryMock;
@@ -235,14 +235,14 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Search Handler mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Search\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
      */
     protected function getSearchHandlerMock()
     {
         if ( !isset( $this->searchHandlerMock ) )
         {
             $this->searchHandlerMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Search\\Handler',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\Handler',
                 array(),
                 array(),
                 '',
@@ -255,7 +255,7 @@ class ContentUpdaterTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns the content updater to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
     protected function getContentUpdater()
     {

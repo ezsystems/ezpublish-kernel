@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Language\Gateway;
-use ezp\Persistence\Storage\Legacy\Content\Language\Gateway,
-    ezp\Persistence\Content\Language,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway,
+    eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     ezcQuery;
 
 /**
@@ -21,14 +21,14 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @param ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new EzcDatabase Section Gateway
      *
-     * @param ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      */
     public function __construct ( EzcDbHandler $dbHandler )
     {
@@ -74,7 +74,7 @@ class EzcDatabase extends Gateway
      * Sets columns in $query from $language
      *
      * @param \ezcQuery $query
-     * @param \ezp\Persistence\Content\Language $language
+     * @param \eZ\Publish\SPI\Persistence\Content\Language $language
      * @return void
      */
     protected function setCommonLanguageColumns( ezcQuery $query, Language $language )

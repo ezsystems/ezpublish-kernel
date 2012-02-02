@@ -8,19 +8,19 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Gateway;
-use ezp\Persistence\Storage\Legacy\Content\Gateway,
-    ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\Language,
-    ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler,
-    ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
-    ezp\Persistence\Content,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\Version,
-    ezp\Persistence\Content\Field,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\Field,
     ezp\Content as ContentDo,
     ezp\Content\Version as VersionDo,
     ezcQueryUpdate;
@@ -40,21 +40,21 @@ class EzcDatabase extends Gateway
     /**
      * Query builder.
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     * @var eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
      */
     protected $queryBuilder;
 
     /**
      * Caching language handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
      */
     protected $languageHandler;
 
     /**
      * Language mask generator
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
     protected $languageMaskGenerator;
 
@@ -62,8 +62,8 @@ class EzcDatabase extends Gateway
      * Creates a new gateway based on $db
      *
      * @param EzcDbHandler $db
-     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder $queryBuilder
-     * @param \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder $queryBuilder
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator $languageMaskGenerator
      */
     public function __construct(
         EzcDbHandler $db,
@@ -93,7 +93,7 @@ class EzcDatabase extends Gateway
     /**
      * Inserts a new content object.
      *
-     * @param \ezp\Persistence\Content\CreateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
      * @return int ID
      */
     public function insertContentObject( CreateStruct $struct )
@@ -165,7 +165,7 @@ class EzcDatabase extends Gateway
     /**
      * Generates a language mask for $version
      *
-     * @param \ezp\Persistence\Content\Field[] $fields
+     * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      * @param boolean $alwaysAvailable
      * @return int
      */
@@ -191,7 +191,7 @@ class EzcDatabase extends Gateway
      * Inserts a new version.
      *
      * @param Version $version
-     * @param \ezp\Persistence\Content\Field[] $fields
+     * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      * @param boolean $alwaysAvailable
      * @return int ID
      */

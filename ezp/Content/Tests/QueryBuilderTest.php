@@ -34,7 +34,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf( 'ezp\\Content\\CriterionFactory', $factory );
         // $factory->operator( $param1, $param2 )
         $criterion = call_user_func_array( array( $factory, $operator ), $parameters );
-        self::assertInstanceOf( 'ezp\\Persistence\\Content\\Query\\Criterion', $criterion );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion', $criterion );
     }
 
     public static function providerForTestCriterionGetter()
@@ -123,9 +123,9 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
     public static function providerForTestLogical()
     {
         return array(
-            array( 'or', 2, 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalOr', 2 ),
-            array( 'and', 2, 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalAnd', 2 ),
-            array( 'not', 1, 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalNot', 1 ),
+            array( 'or', 2, 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\LogicalOr', 2 ),
+            array( 'and', 2, 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\LogicalAnd', 2 ),
+            array( 'not', 1, 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\LogicalNot', 1 ),
         );
     }
 
@@ -137,7 +137,7 @@ class QueryBuilderTest extends \PHPUnit_Framework_TestCase
 
         self::assertInstanceOf( 'ezp\\Content\\Query', $query );
         self::assertEquals( 1, count( $query->sortClauses ) );
-        self::assertInstanceOf( 'ezp\\Persistence\\Content\\Query\\SortClause', $query->sortClauses[0] );
-        self::assertInstanceOf( 'ezp\\Persistence\\Content\\Query\\SortClause\\DateModified', $query->sortClauses[0] );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\SortClause', $query->sortClauses[0] );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\SortClause\\DateModified', $query->sortClauses[0] );
     }
 }

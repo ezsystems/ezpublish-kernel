@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use ezp\Persistence\Fields\Storage,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\SPI\Persistence\Fields\Storage,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     ezp\Content\FieldType\Media\Value as MediaValue,
     ezp\Io\ContentType;
 
@@ -22,7 +22,7 @@ class MediaStorage implements Storage
     const MEDIA_TABLE = 'ezmedia';
 
     /**
-     * @see \ezp\Persistence\Fields\Storage
+     * @see \eZ\Publish\SPI\Persistence\Fields\Storage
      */
     public function storeFieldData( Field $field, array $context )
     {
@@ -35,11 +35,11 @@ class MediaStorage implements Storage
 
     /**
      * Populates $field value property based on the external data.
-     * $field->value is a {@link ezp\Persistence\Content\FieldValue} object.
+     * $field->value is a {@link eZ\Publish\SPI\Persistence\Content\FieldValue} object.
      * This value holds the data as a {@link ezp\Content\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link ezp\Content\FieldType\TextLine\Value} object).
      *
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      * @return void
      */
@@ -87,7 +87,7 @@ class MediaStorage implements Storage
     }
 
     /**
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function copyFieldData( Field $field, array $context )
@@ -96,7 +96,7 @@ class MediaStorage implements Storage
     }
 
     /**
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function getIndexData( Field $field, array $context )
@@ -109,7 +109,7 @@ class MediaStorage implements Storage
      *
      * @param $fieldId
      * @param $versionNo
-     * @param \ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @return void|array Hash with columns as keys or void if no entry can be found
      */
     private function fetch( $fieldId, $versionNo, EzcDbHandler $dbHandler )
@@ -135,8 +135,8 @@ class MediaStorage implements Storage
     /**
      * Inserts a new entry in ezmedia table with $field value data
      *
-     * @param \ezp\Persistence\Content\Field $field
-     * @param \ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @return void
      */
     private function insert( Field $field, EzcDbHandler $dbHandler )
@@ -194,8 +194,8 @@ class MediaStorage implements Storage
     /**
      * Updates an existing entry in ezmedia table with $field value data
      *
-     * @param \ezp\Persistence\Content\Field $field
-     * @param \ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @return void
      */
     private function update( Field $field, EzcDbHandler $dbHandler )
@@ -252,7 +252,7 @@ class MediaStorage implements Storage
      *
      * @param type $fieldId
      * @param type $version
-     * @param \ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @return bool
      */
     private function mediaExists( $fieldId, $version, EzcDbHandler $dbHandler )

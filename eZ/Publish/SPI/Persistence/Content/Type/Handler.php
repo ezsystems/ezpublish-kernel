@@ -7,27 +7,27 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Type;
-use ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\CreateStruct,
-    ezp\Persistence\Content\Type\UpdateStruct,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    ezp\Persistence\Content\Type\Group;
+namespace eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group;
 
 /**
  */
 interface Handler
 {
     /**
-     * @param \ezp\Persistence\Content\Type\Group\CreateStruct $group
-     * @return \ezp\Persistence\Content\Type\Group
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct $group
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function createGroup( GroupCreateStruct $group );
 
     /**
-     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $group
      */
     public function updateGroup( GroupUpdateStruct $group );
 
@@ -39,19 +39,19 @@ interface Handler
 
     /**
      * @param mixed $groupId
-     * @return \ezp\Persistence\Content\Type\Group
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function loadGroup( $groupId );
 
     /**
-     * @return \ezp\Persistence\Content\Type\Group[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
      */
     public function loadAllGroups();
 
     /**
      * @param mixed $groupId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @return \ezp\Persistence\Content\Type[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Type[]
      */
     public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED );
 
@@ -60,7 +60,7 @@ interface Handler
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If type with provided status is not found
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED );
@@ -69,21 +69,21 @@ interface Handler
      * Load a (defined) content type by identifier
      *
      * @param string $identifier
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If defined type is not found
      */
     public function loadByIdentifier( $identifier );
 
     /**
-     * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
-     * @return \ezp\Persistence\Content\Type
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $contentType
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function create( CreateStruct $contentType );
 
     /**
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $contentType
      */
     public function update( $contentTypeId, $status, UpdateStruct $contentType );
 
@@ -100,7 +100,7 @@ interface Handler
      *
      * @param mixed $modifierId
      * @param mixed $contentTypeId
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
      */
     public function createDraft( $modifierId, $contentTypeId );
@@ -114,7 +114,7 @@ interface Handler
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
      */
     public function copy( $userId, $contentTypeId, $status );
@@ -150,8 +150,8 @@ interface Handler
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @return \ezp\Persistence\Content\Type\FieldDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      * @throws \ezp\Base\Exception\NotFound If type is not found
      * @todo Add FieldDefintion\CreateStruct?
      */
@@ -182,7 +182,7 @@ interface Handler
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @return void
      * @throws \ezp\Base\Exception\NotFound If field is not found
      * @todo Add FieldDefintion\UpdateStruct?

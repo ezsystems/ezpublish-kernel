@@ -8,9 +8,9 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content;
+namespace eZ\Publish\Core\Persistence\Legacy\Content;
 
-use ezp\Persistence\ValueObject;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 class StorageFieldValue extends ValueObject
 {

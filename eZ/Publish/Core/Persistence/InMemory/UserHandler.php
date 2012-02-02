@@ -7,19 +7,19 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\InMemory;
-use ezp\Persistence\User\Handler as UserHandlerInterface,
-    ezp\Persistence\User,
-    ezp\Persistence\User\Role,
-    ezp\Persistence\User\RoleUpdateStruct,
-    ezp\Persistence\User\Policy,
-    ezp\Persistence\Content,
+namespace eZ\Publish\Core\Persistence\InMemory;
+use eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
+    eZ\Publish\SPI\Persistence\User,
+    eZ\Publish\SPI\Persistence\User\Role,
+    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
+    eZ\Publish\SPI\Persistence\User\Policy,
+    eZ\Publish\SPI\Persistence\Content,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\NotFoundWithType,
-    ezp\Persistence\Storage\InMemory\Handler,
-    ezp\Persistence\Storage\InMemory\Backend;
+    eZ\Publish\Core\Persistence\InMemory\Handler,
+    eZ\Publish\Core\Persistence\InMemory\Backend;
 
 /**
  * Storage Engine handler for user module
@@ -55,8 +55,8 @@ class UserHandler implements UserHandlerInterface
      * The User struct used to create the user will contain an ID which is used
      * to reference the user.
      *
-     * @param \ezp\Persistence\User $user
-     * @return \ezp\Persistence\User
+     * @param \eZ\Publish\SPI\Persistence\User $user
+     * @return \eZ\Publish\SPI\Persistence\User
      * @throws \ezp\Base\Exception\Logic If no id was provided or if it already exists
      */
     public function create( User $user )
@@ -69,7 +69,7 @@ class UserHandler implements UserHandlerInterface
      * Load user with user ID.
      *
      * @param mixed $userId
-     * @return \ezp\Persistence\User
+     * @return \eZ\Publish\SPI\Persistence\User
      */
     public function load( $userId )
     {
@@ -81,7 +81,7 @@ class UserHandler implements UserHandlerInterface
      *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
-     * @return \ezp\Persistence\User[]
+     * @return \eZ\Publish\SPI\Persistence\User[]
      */
     public function loadByLogin( $login, $alsoMatchEmail = false )
     {
@@ -104,7 +104,7 @@ class UserHandler implements UserHandlerInterface
     /**
      * Update the user information specified by the user struct
      *
-     * @param \ezp\Persistence\User $user
+     * @param \eZ\Publish\SPI\Persistence\User $user
      */
     public function update( User $user )
     {
@@ -126,8 +126,8 @@ class UserHandler implements UserHandlerInterface
     /**
      * Create new role
      *
-     * @param \ezp\Persistence\User\Role $role
-     * @return \ezp\Persistence\User\Role
+     * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function createRole( Role $role )
     {
@@ -145,7 +145,7 @@ class UserHandler implements UserHandlerInterface
      * Load a specified role by id
      *
      * @param mixed $roleId
-     * @return \ezp\Persistence\User\Role
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      * @throws \ezp\Base\Exception\NotFound If role is not found
      */
     public function loadRole( $roleId )
@@ -170,7 +170,7 @@ class UserHandler implements UserHandlerInterface
      * Load roles assigned to a user/group
      *
      * @param mixed $groupId
-     * @return \ezp\Persistence\User\Role[]
+     * @return \eZ\Publish\SPI\Persistence\User\Role[]
      * @throws \ezp\Base\Exception\NotFound If user (it's content object atm) is not found
      * @throws \ezp\Base\Exception\NotFoundWithType If group is not of user_group Content Type
      */
@@ -198,7 +198,7 @@ class UserHandler implements UserHandlerInterface
     /**
      * Update role
      *
-     * @param \ezp\Persistence\User\RoleUpdateStruct $role
+     * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
      */
     public function updateRole( RoleUpdateStruct $role )
     {
@@ -221,8 +221,8 @@ class UserHandler implements UserHandlerInterface
      * Adds a policy to a role
      *
      * @param mixed $roleId
-     * @param \ezp\Persistence\User\Policy $policy
-     * @return \ezp\Persistence\User\Policy
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     * @return \eZ\Publish\SPI\Persistence\User\Policy
      * @todo Throw on invalid Role Id?
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
@@ -240,7 +240,7 @@ class UserHandler implements UserHandlerInterface
      *
      * Replaces limitations values with new values.
      *
-     * @param \ezp\Persistence\User\Policy $policy
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
     public function updatePolicy( Policy $policy )
@@ -269,7 +269,7 @@ class UserHandler implements UserHandlerInterface
      * Returns the user policies associated with the user (including inherited policies from user groups)
      *
      * @param mixed $userId
-     * @return \ezp\Persistence\User\Policy[]
+     * @return \eZ\Publish\SPI\Persistence\User\Policy[]
      * @throws \ezp\Base\Exception\NotFound If user (it's content object atm) is not found
      * @throws \ezp\Base\Exception\NotFoundWithType If user is not of user Content Type
      */
@@ -323,7 +323,7 @@ class UserHandler implements UserHandlerInterface
 
     /**
      * @throws \ezp\Base\Exception\NotFoundWithType
-     * @param \ezp\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @param array $policies
      * @throws \ezp\Base\Exception\NotFoundWithType If $content is not of user_group Content Type
      */
@@ -427,4 +427,3 @@ class UserHandler implements UserHandlerInterface
         $this->backend->update( 'User\\Role', $roleId, (array)$role );
     }
 }
-?>

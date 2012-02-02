@@ -30,7 +30,7 @@ use eZ\Publish\Core\Base\ConfigurationManager,
  *     $sc = new eZ\Publish\Core\Base\ServiceContainer(
  *         Configuration::getInstance('service')->getAll(),
  *         array(
- *             '@persistence_handler' => new \ezp\Persistence\Storage\InMemory\Handler()
+ *             '@persistence_handler' => new \eZ\Publish\Core\Persistence\InMemory\Handler()
  *         )
  *     );
  *     $sc->getRepository->getContentService()...;
@@ -44,7 +44,7 @@ use eZ\Publish\Core\Base\ConfigurationManager,
  *
  *     [inmemory_persistence_handler]
  *     shared=true
- *     class=ezp\Persistence\Storage\InMemory\Handler
+ *     class=eZ\Publish\Core\Persistence\InMemory\Handler
  *
  *     @todo Update service.ini reference bellow
  *     # @see \eZ\Publish\Core\Base\settings\service.ini For more options and examples.

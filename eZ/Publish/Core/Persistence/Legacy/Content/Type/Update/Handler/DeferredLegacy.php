@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler;
-use ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler,
-    ezp\Persistence\Storage\Legacy\Content\Type\Gateway,
-    ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
 
 /**
  * DeferredLegacy based type update handler
@@ -18,7 +18,7 @@ use ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler,
 class DeferredLegacy extends Handler
 {
     /**
-     * ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      *
      * @var mixed
      */
@@ -27,7 +27,7 @@ class DeferredLegacy extends Handler
     /**
      * Creates a new content type update handler
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Type\Gateway $contentTypeGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
      */
     public function __construct( Gateway $contentTypeGateway )
     {
@@ -37,8 +37,8 @@ class DeferredLegacy extends Handler
     /**
      * Updates existing content objects from $fromType to $toType
      *
-     * @param \ezp\Persistence\Content\Type $fromType
-     * @param \ezp\Persistence\Content\Type $toType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
      * @return void
      */
     public function updateContentObjects( $fromType, $toType )
@@ -48,7 +48,7 @@ class DeferredLegacy extends Handler
     /**
      * Deletes $fromType and all of its field definitions
      *
-     * @param \ezp\Persistence\Content\Type $fromType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $fromType
      * @return void
      */
     public function deleteOldType( $fromType )
@@ -58,7 +58,7 @@ class DeferredLegacy extends Handler
     /**
      * Publishes $toType to $newStatus
      *
-     * @param \ezp\Persistence\Content\Type $toType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type $toType
      * @param int $newStatus
      * @return void
      */

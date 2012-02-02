@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use ezp\Persistence\Fields\Storage,
-    ezp\Persistence\Content\Field;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\SPI\Persistence\Fields\Storage,
+    eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Description of BinaryFileStorage
@@ -20,8 +20,8 @@ class BinaryFileStorage implements Storage
      * Allows custom field types to store data in an external source (e.g. another DB table).
      *
      * Stores value for $field in an external data source.
-     * The whole {@link ezp\Persistence\Content\Field} ValueObject is passed and its value
-     * is accessible through the {@link ezp\Persistence\Content\FieldValue} 'value' property.
+     * The whole {@link eZ\Publish\SPI\Persistence\Content\Field} ValueObject is passed and its value
+     * is accessible through the {@link eZ\Publish\SPI\Persistence\Content\FieldValue} 'value' property.
      * This value holds the data filled by the user as a {@link ezp\Content\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link ezp\Content\FieldType\TextLine\Value} object).
      *
@@ -36,7 +36,7 @@ class BinaryFileStorage implements Storage
      *   - connection (the connection handler)
      * For example, using Legacy storage engine, $context will be:
      *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \ezp\Persistence\Storage\Legacy\EzcDbHandler} object handler (for DB connection),
+     *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
      *                  to be used accordingly to
      * The context array provides some context for the field handler about the
      * currently used storage engine.
@@ -45,11 +45,11 @@ class BinaryFileStorage implements Storage
      *   - connection (the connection handler)
      * For example, using Legacy storage engine, $context will be:
      *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \ezp\Persistence\Storage\Legacy\EzcDbHandler} object handler (for DB connection),
+     *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
      *                  to be used accordingly to
      *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
      *
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      * @return void
      * @todo Check if it's insert or update query
@@ -91,11 +91,11 @@ class BinaryFileStorage implements Storage
 
     /**
      * Populates $field value property based on the external data.
-     * $field->value is a {@link ezp\Persistence\Content\FieldValue} object.
+     * $field->value is a {@link eZ\Publish\SPI\Persistence\Content\FieldValue} object.
      * This value holds the data as a {@link ezp\Content\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link ezp\Content\FieldType\TextLine\Value} object).
      *
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      * @return void
      */
@@ -125,7 +125,7 @@ class BinaryFileStorage implements Storage
     }
 
     /**
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function copyFieldData( Field $field, array $context )
@@ -134,7 +134,7 @@ class BinaryFileStorage implements Storage
     }
 
     /**
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function getIndexData( Field $field, array $context )

@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\User\Role\Gateway;
-use ezp\Persistence\Storage\Legacy\User\Role\Gateway,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\User\Policy,
-    ezp\Persistence\User\RoleUpdateStruct,
-    ezp\Persistence\User\Role;
+namespace eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\SPI\Persistence\User\Policy,
+    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
+    eZ\Publish\SPI\Persistence\User\Role;
 
 /**
  * Base class for content type gateways.

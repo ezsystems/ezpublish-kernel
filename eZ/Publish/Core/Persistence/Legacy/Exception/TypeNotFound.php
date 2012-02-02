@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Exception;
+namespace eZ\Publish\Core\Persistence\Legacy\Exception;
 use ezp\Base\Exception\NotFound;
 
 /**
@@ -25,7 +25,7 @@ class TypeNotFound extends NotFound
     public function __construct( $typeId, $status )
     {
         parent::__construct(
-            'ezp\\Persistence\\Content\\Type',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type',
             sprintf( 'ID: %s, Status: %s', $typeId, $status )
         );
     }

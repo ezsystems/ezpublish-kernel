@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use ezp\Persistence\Fields\Storage,
-    ezp\Persistence\Content\Field,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\SPI\Persistence\Fields\Storage,
+    eZ\Publish\SPI\Persistence\Content\Field,
     ezp\Base\Exception\Logic,
     PDO;
 
@@ -19,7 +19,7 @@ use ezp\Persistence\Fields\Storage,
 class KeywordStorage implements Storage
 {
     /**
-     * @see \ezp\Persistence\Fields\Storage
+     * @see \eZ\Publish\SPI\Persistence\Fields\Storage
      */
     public function storeFieldData( Field $field, array $context )
     {
@@ -121,11 +121,11 @@ class KeywordStorage implements Storage
 
     /**
      * Populates $field value property based on the external data.
-     * $field->value is a {@link ezp\Persistence\Content\FieldValue} object.
+     * $field->value is a {@link eZ\Publish\SPI\Persistence\Content\FieldValue} object.
      * This value holds the data as a {@link ezp\Content\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link ezp\Content\FieldType\TextLine\Value} object).
      *
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      * @return void
      */
@@ -180,7 +180,7 @@ class KeywordStorage implements Storage
     }
 
     /**
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function copyFieldData( Field $field, array $context )
@@ -188,7 +188,7 @@ class KeywordStorage implements Storage
     }
 
     /**
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function getIndexData( Field $field, array $context )

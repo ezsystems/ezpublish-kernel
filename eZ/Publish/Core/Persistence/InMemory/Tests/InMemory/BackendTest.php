@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\InMemory\BackendTest class
+ * File contains: eZ\Publish\Core\Persistence\InMemory\BackendTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests\InMemory;
+namespace eZ\Publish\Core\Persistence\InMemory\Tests\InMemory;
 use PHPUnit_Framework_TestCase,
     stdClass,
-    ezp\Persistence\Storage\InMemory\Backend;
+    eZ\Publish\Core\Persistence\InMemory\Backend;
 
 /**
  * Test case for Handler using in memory storage.
@@ -39,7 +39,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * @param mixed $type Wrong type to create
      * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @dataProvider providerForWrongType
-     * @covers ezp\Persistence\Storage\InMemory\Backend::create
+     * @covers eZ\Publish\Core\Persistence\InMemory\Backend::create
      */
     public function testCreateWrongType( $type )
     {
@@ -52,7 +52,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * @param mixed $type Wrong type to load
      * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @dataProvider providerForWrongType
-     * @covers ezp\Persistence\Storage\InMemory\Backend::load
+     * @covers eZ\Publish\Core\Persistence\InMemory\Backend::load
      */
     public function testLoadWrongType( $type )
     {
@@ -65,7 +65,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * @param mixed $type Wrong type to find
      * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @dataProvider providerForWrongType
-     * @covers ezp\Persistence\Storage\InMemory\Backend::find
+     * @covers eZ\Publish\Core\Persistence\InMemory\Backend::find
      */
     public function testFindWrongType( $type )
     {
@@ -78,7 +78,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * @param mixed $type Wrong type to count
      * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @dataProvider providerForWrongType
-     * @covers ezp\Persistence\Storage\InMemory\Backend::count
+     * @covers eZ\Publish\Core\Persistence\InMemory\Backend::count
      */
     public function testCountWrongType( $type )
     {
@@ -91,7 +91,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * @param mixed $type Wrong type to update
      * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @dataProvider providerForWrongType
-     * @covers ezp\Persistence\Storage\InMemory\Backend::update
+     * @covers eZ\Publish\Core\Persistence\InMemory\Backend::update
      */
     public function testUpdateWrongType( $type )
     {
@@ -104,7 +104,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
      * @param mixed $type Wrong type to delete
      * @expectedException ezp\Base\Exception\InvalidArgumentValue
      * @dataProvider providerForWrongType
-     * @covers ezp\Persistence\Storage\InMemory\Backend::delete
+     * @covers eZ\Publish\Core\Persistence\InMemory\Backend::delete
      */
     public function testDeleteWrongType( $type )
     {
@@ -114,7 +114,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
     /**
      * Test creating content
      *
-     * @covers ezp\Persistence\Storage\InMemory\Backend::create
+     * @covers eZ\Publish\Core\Persistence\InMemory\Backend::create
      */
     public function testCreate()
     {
@@ -127,7 +127,7 @@ class BackendTest extends PHPUnit_Framework_TestCase
     /**
      * Test creating multiple content
      *
-     * @covers ezp\Persistence\Storage\InMemory\Backend::create
+     * @covers eZ\Publish\Core\Persistence\InMemory\Backend::create
      */
     public function testCreateMultiple()
     {

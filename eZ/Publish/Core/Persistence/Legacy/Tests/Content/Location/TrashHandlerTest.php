@@ -1,20 +1,20 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Trash\TrashHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Trash\TrashHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Location;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content,
-    ezp\Persistence\Storage\Legacy\Content\Location\Trash\Handler,
-    ezp\Persistence,
-    ezp\Persistence\Content\Location\Trashed,
-    ezp\Persistence\Content\Location\Trash\UpdateStruct,
-    ezp\Persistence\Content\Location\Trash\CreateStruct;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash\Handler,
+    eZ\Publish\SPI\Persistence,
+    eZ\Publish\SPI\Persistence\Content\Location\Trashed,
+    eZ\Publish\SPI\Persistence\Content\Location\Trash\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\Trash\CreateStruct;
 
 /**
  * Test case for TrashHandlerTest
@@ -24,14 +24,14 @@ class TrashHandlerTest extends TestCase
     /**
      * Mocked location gateway instance
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
 
     /**
      * Mocked location mapper instance
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapper;
 
@@ -49,8 +49,8 @@ class TrashHandlerTest extends TestCase
     {
         $dbHandler = $this->getDatabaseHandler();
         return new Handler(
-            $this->locationGateway = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Gateway' ),
-            $this->locationMapper = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' )
+            $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway' ),
+            $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper' )
         );
     }
 

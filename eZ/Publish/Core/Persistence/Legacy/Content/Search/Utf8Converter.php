@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Search;
-use ezp\Persistence\Fields\Storage;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
+use eZ\Publish\SPI\Persistence\Fields\Storage;
 
 /**
  * Class for converting UTF-8 charecters to their decimal code points and vice

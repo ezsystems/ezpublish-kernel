@@ -8,9 +8,9 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Exception\NotFound;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound;
 
 class Registry
 {
@@ -25,7 +25,7 @@ class Registry
      * Register $converter for $typeName
      *
      * @param string $typeName
-     * @param \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter $converter
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter $converter
      * @return void
      */
     public function register( $typeName, Converter $converter )
@@ -37,8 +37,8 @@ class Registry
      * Returns converter for $typeName
      *
      * @param string $typeName
-     * @throws ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Exception\NotFound
-     * @return \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter
+     * @throws eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
      */
     public function getConverter( $typeName )
     {

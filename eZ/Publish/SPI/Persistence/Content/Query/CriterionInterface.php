@@ -1,13 +1,13 @@
 <?php
 /**
- * File containing the ezp\Persistence\Content\Query\CriterionInterface interface.
+ * File containing the eZ\Publish\SPI\Persistence\Content\Query\CriterionInterface interface.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Query;
+namespace eZ\Publish\SPI\Persistence\Content\Query;
 
 /**
  * Base interface for Criterion implementations
@@ -29,7 +29,7 @@ interface CriterionInterface
      * Criterion description function.
      *
      * Returns the combination of the Criterion's supported operator/value,
-     * as an array of ezp\Persistence\Content\Query\Criterion\Operator\Specifications objects
+     * as an array of eZ\Publish\SPI\Persistence\Content\Query\Criterion\Operator\Specifications objects
      * - Operator is one supported Operator, as an Operator::* constant
      * - ValueType is the type of input value this operator requires, either array or single
      * - SupportedTypes is an array of types the operator will accept
@@ -52,7 +52,7 @@ interface CriterionInterface
      *     )
      * )*
      * </code>
-     * @return \ezp\Persistence\Content\Query\Criterion\Operator\Specifications[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Query\Criterion\Operator\Specifications[]
      */
     public function getSpecifications();
 }

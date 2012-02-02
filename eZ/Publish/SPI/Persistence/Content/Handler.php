@@ -8,13 +8,13 @@
  *
  */
 
-namespace ezp\Persistence\Content;
-use ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\UpdateStruct,
+namespace eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
     // @todo We must verify whether we want to type cast on the "Criterion" interface or abstract class
-    ezp\Persistence\Content\Query\Criterion as AbstractCriterion,
-    ezp\Persistence\Content\RestrictedVersion,
-    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion as AbstractCriterion,
+    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * The Content Handler interface defines content operations on the storage engine.
@@ -33,8 +33,8 @@ interface Handler
      *
      * Will contain always a complete list of fields.
      *
-     * @param \ezp\Persistence\Content\CreateStruct $content Content creation struct.
-     * @return \ezp\Persistence\Content Content value object
+     * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $content Content creation struct.
+     * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
     public function create( CreateStruct $content );
 
@@ -46,7 +46,7 @@ interface Handler
      *
      * @param mixed $contentId
      * @param int $srcVersion
-     * @return \ezp\Persistence\Content\Version
+     * @return \eZ\Publish\SPI\Persistence\Content\Version
      * @throws \ezp\Base\Exception\NotFound Thrown if $contentId and/or $srcVersion are invalid
      */
     public function createDraftFromVersion( $contentId, $srcVersion );
@@ -65,7 +65,7 @@ interface Handler
      * @param int|string $id
      * @param int|string $version
      * @param string[] $translations
-     * @return \ezp\Persistence\Content Content value object
+     * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
     public function load( $id, $version, $translations = null );
 
@@ -111,8 +111,8 @@ interface Handler
     /**
      * Updates a content object entity with data and identifier $content
      *
-     * @param \ezp\Persistence\Content\UpdateStruct $content
-     * @return \ezp\Persistence\Content
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function update( UpdateStruct $content );
 
@@ -131,7 +131,7 @@ interface Handler
      * Return the versions for $contentId
      *
      * @param int $contentId
-     * @return \ezp\Persistence\Content\RestrictedVersion[]
+     * @return \eZ\Publish\SPI\Persistence\Content\RestrictedVersion[]
      */
     public function listVersions( $contentId );
 
@@ -143,7 +143,7 @@ interface Handler
      *
      * @param mixed $contentId
      * @param int|false $version Copy all versions if left false
-     * @return \ezp\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      * @throws \ezp\Base\Exception\NotFound If content or version is not found
      */
     public function copy( $contentId, $version );
@@ -154,8 +154,8 @@ interface Handler
      *
      * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
      *
-     * @param  \ezp\Persistence\Content\Relation\CreateStruct $relation
-     * @return \ezp\Persistence\Content\Relation
+     * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
     public function addRelation( RelationCreateStruct $relation );
 
@@ -174,7 +174,7 @@ interface Handler
      * @param mixed $sourceContentId Source Content ID
      * @param mixed|null $sourceContentVersionNo Source Content Version, null if not specified
      * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
-     * @return \ezp\Persistence\Content\Relation[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null );
 
@@ -185,7 +185,7 @@ interface Handler
      *
      * @param mixed $destinationContentId Destination Content ID
      * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
-     * @return \ezp\Persistence\Content\Relation[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadReverseRelations( $destinationContentId, $type = null );
 
@@ -195,9 +195,9 @@ interface Handler
      *
      * The UpdateStruct will also contain an array of Content name indexed by Locale.
      *
-     * @param \ezp\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
      *
-     * @return \ezp\Persistence\Content The published Content
+     * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
     public function publish( UpdateStruct $updateStruct );
 }

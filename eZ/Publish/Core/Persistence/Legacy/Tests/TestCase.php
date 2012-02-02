@@ -1,13 +1,13 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\TestCase class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\TestCase class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests;
 
 /**
  * Base test case for database related tests
@@ -72,15 +72,15 @@ class TestCase extends \PHPUnit_Framework_TestCase
             switch ( $this->db )
             {
                 case 'pgsql':
-                    $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler\Pgsql( $connection );
+                    $this->handler = new \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql( $connection );
                     break;
 
                 case 'sqlite':
-                    $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler\Sqlite( $connection );
+                    $this->handler = new \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite( $connection );
                     break;
 
                 default:
-                    $this->handler = new \ezp\Persistence\Storage\Legacy\EzcDbHandler( $connection );
+                    $this->handler = new \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler( $connection );
             }
         }
 

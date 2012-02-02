@@ -8,13 +8,13 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content;
-use ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Content,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\Version,
-    ezp\Persistence\Content\Field;
+namespace eZ\Publish\Core\Persistence\Legacy\Content;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Base class for contentg gateways
@@ -31,7 +31,7 @@ abstract class Gateway
     /**
      * Inserts a new content object.
      *
-     * @param \ezp\Persistence\Content\CreateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
      * @return int ID
      */
     abstract public function insertContentObject( CreateStruct $struct );
@@ -40,7 +40,7 @@ abstract class Gateway
      * Inserts a new version.
      *
      * @param Version $version;
-     * @param \ezp\Persistence\Content\Field[] $fields
+     * @param \eZ\Publish\SPI\Persistence\Content\Field[] $fields
      * @param boolean $alwaysAvailable
      * @return int ID
      */

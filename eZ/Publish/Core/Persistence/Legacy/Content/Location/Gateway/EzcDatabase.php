@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Location\Gateway;
-use ezp\Persistence\Storage\Legacy\Content\Location\Gateway,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Content,
-    ezp\Persistence\Content\Location,
-    ezp\Persistence\Content\Location\UpdateStruct,
-    ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Content\Query\SortClause,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Query\SortClause,
     ezp\Content\Query;
 
 /**
@@ -405,9 +405,9 @@ class EzcDatabase extends Gateway
     /**
      * Creates a new location in given $parentNode
      *
-     * @param \ezp\Persistence\Content\Location\CreateStruct $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
-     * @return \ezp\Persistence\Content\Location
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function create( CreateStruct $createStruct, array $parentNode, $published = false )
     {
@@ -693,7 +693,7 @@ class EzcDatabase extends Gateway
     /**
      * Updates an existing location.
      *
-     * @param \ezp\Persistence\Content\Location\UpdateStruct $location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
      * @return boolean
      */

@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Exception;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception;
 
 /**
  * Exception thrown if no converter for a type was found

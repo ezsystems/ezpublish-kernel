@@ -14,8 +14,8 @@ use ezp\Base\Exception\Forbidden,
     ezp\Base\Service as BaseService,
     ezp\Content,
     ezp\Content\Language,
-    ezp\Persistence\Content\Language as LanguageValueObject,
-    ezp\Persistence\Content\Language\CreateStruct as LanguageCreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Language as LanguageValueObject,
+    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct as LanguageCreateStruct;
 
 /**
  * Language service, used for language operations
@@ -124,7 +124,7 @@ class Service extends BaseService
     /**
      * Build DO based on VO
      *
-     * @param \ezp\Persistence\Content\Language $vo
+     * @param \eZ\Publish\SPI\Persistence\Content\Language $vo
      * @return \ezp\Content\Language
      */
     protected function buildDomainObject( LanguageValueObject $vo )

@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Location\Trash;
-use ezp\Persistence\Content\Location,
-    ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Content\Location\UpdateStruct,
-    ezp\Persistence\Content\Query\Criterion;
+namespace eZ\Publish\SPI\Persistence\Content\Location\Trash;
+use eZ\Publish\SPI\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion;
 
 /**
  * The Trash Handler interface defines operations on Location elements in the storage engine.
@@ -24,7 +24,7 @@ interface Handler
      * $id is the same as original location (which has been previously trashed)
      *
      * @param int $id
-     * @return \ezp\Persistence\Content\Location\Trashed
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      * @throws \ezp\Base\Exception\NotFound
      */
     public function load( $id );
@@ -36,7 +36,7 @@ interface Handler
      * objects are left untouched.
      *
      * @param mixed $locationId
-     * @return \ezp\Persistence\Content\Location\Trashed
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      */
     public function trashSubtree( $locationId );
 
@@ -61,11 +61,11 @@ interface Handler
      * sorted with SortClause objects contained in $sort (if any).
      * If no criterion is provided (null), no filter is applied
      *
-     * @param \ezp\Persistence\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $criterion
      * @param $offset Offset to start listing from, 0 by default
      * @param $limit Limit for the listing. Null by default (no limit)
-     * @param \ezp\Persistence\Content\Query\SortClause[] $sort
-     * @return \ezp\Persistence\Content\Location\Trashed[]
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\SortClause[] $sort
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
     public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null );
 

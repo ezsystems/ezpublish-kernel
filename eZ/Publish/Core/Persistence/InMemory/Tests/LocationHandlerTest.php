@@ -1,19 +1,19 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\LocationHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\LocationHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests;
-use ezp\Persistence\Content\Location as LocationValue,
-    ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Content\CreateStruct as ContentCreateStruct,
-    ezp\Persistence\Content\Query\Criterion\ContentId,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
+namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+use eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct as ContentCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     ezp\Base\Exception\NotFound,
     ezp\Content\Location,
     ezp\Content\FieldType\TextLine\Value as TextLineValue;
@@ -31,12 +31,12 @@ class LocationHandlerTest extends HandlerTest
     protected $entriesGenerated = 5;
 
     /**
-     * @var \ezp\Persistence\Content\Location[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     protected $locations;
 
     /**
-     * @var \ezp\Persistence\Content[]
+     * @var \eZ\Publish\SPI\Persistence\Content[]
      */
     protected $contents;
 
@@ -163,7 +163,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::load
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::load
      * @group locationHandler
      */
     public function testLoad()
@@ -184,7 +184,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::create
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::create
      * @group locationHandler
      */
     public function testCreate()
@@ -218,7 +218,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Test removeSubtree function with no children
      *
-     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::removeSubtree
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::removeSubtree
      * @group locationHandler
      */
     public function testRemoveSubtreeNoChildren()
@@ -239,7 +239,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Test removeSubtree function with children
      *
-     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::removeSubtree
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::removeSubtree
      * @group locationHandler
      */
     public function testRemoveSubtreeChildren()
@@ -278,7 +278,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Test copySubtree function with no children
      *
-     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::copySubtree
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::copySubtree
      * @group locationHandler
      */
     public function testCopySubtreeNoChildren()
@@ -304,7 +304,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Test copySubtree function with children
      *
-     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::copySubtree
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::copySubtree
      * @group locationHandler
      */
     public function testCopySubtreeChildren()
@@ -379,7 +379,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Tests loadByParentId function with no children
      *
-     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::loadByParentId
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::loadByParentId
      * @group locationHandler
      */
     public function testLoadByParentIdNoChildren()
@@ -390,7 +390,7 @@ class LocationHandlerTest extends HandlerTest
     /**
      * Tests loadByParentId function with children
      *
-     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::loadByParentId
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::loadByParentId
      * @group locationHandler
      */
     public function testLoadByParentIdChildren()
@@ -405,7 +405,7 @@ class LocationHandlerTest extends HandlerTest
      * Tests loadByParentId function on unexisting id
      *
      * @expectedException \ezp\Base\Exception\NotFound
-     * @covers \ezp\Persistence\Storage\InMemory\LocationHandler::loadByParentId
+     * @covers \eZ\Publish\Core\Persistence\InMemory\LocationHandler::loadByParentId
      * @group locationHandler
      */
     public function testLoadByParentIdNotExisting()

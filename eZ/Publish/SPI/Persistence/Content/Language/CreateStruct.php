@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Content\Language;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Struct containing accessible properties when creating Language entities.

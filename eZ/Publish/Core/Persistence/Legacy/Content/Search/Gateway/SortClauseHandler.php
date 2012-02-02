@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
-use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Content\Query\SortClause,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\SPI\Persistence\Content\Query\SortClause,
     ezp\Content\Query,
     ezcQuerySelect;
 
@@ -22,7 +22,7 @@ abstract class SortClauseHandler
     /**
      * Database handler
      *
-     * @var ezp\Persistence\Storage\Legacy\EzcDbHandler
+     * @var eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $dbHandler;
 

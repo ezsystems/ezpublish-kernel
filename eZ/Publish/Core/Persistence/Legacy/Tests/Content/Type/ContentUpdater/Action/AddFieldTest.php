@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Type\ContentUpdater\Action\AddFieldTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\Action\AddFieldTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Type\ContentUpdater\Action;
-use ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action\AddField,
-    ezp\Persistence\Content,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\Action;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue;
 
 /**
  * Test case for Content Type Updater.
@@ -20,27 +20,27 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Content gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGatewayMock;
 
     /**
      * FieldValue converter mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
      */
     protected $fieldValueConverterMock;
 
     /**
      * AddField action to test
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action\AddField
+     * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField
      */
     protected $addFieldAction;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
      */
     public function testCtor()
     {
@@ -65,7 +65,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField::apply
      */
     public function testApply()
     {
@@ -84,7 +84,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( $content ),
                 $this->equalTo( $this->getFieldReference() ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
                 )
             )->will( $this->returnValue( 23 ) );
 
@@ -96,7 +96,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
             'Field not added to content'
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Field',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Field',
             $content->version->fields[0]
         );
         $this->assertEquals(
@@ -108,7 +108,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content fixture
      *
-     * @return \ezp\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     protected function getContentFixture()
     {
@@ -122,14 +122,14 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content Gateway mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getContentGatewayMock()
     {
         if ( !isset( $this->contentGatewayMock ) )
         {
             $this->contentGatewayMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
             );
         }
         return $this->contentGatewayMock;
@@ -138,14 +138,14 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a FieldValue converter mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
      */
     protected function getFieldValueConverterMock()
     {
         if ( !isset( $this->fieldValueConverterMock ) )
         {
             $this->fieldValueConverterMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
             );
         }
         return $this->fieldValueConverterMock;
@@ -154,7 +154,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a FieldDefinition fixture
      *
-     * @return \ezp\Persistence\Content\Type\FieldDefinition
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
     protected function getFieldDefinitionFixture()
     {
@@ -168,7 +168,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a reference Field
      *
-     * @return \ezp\Persistence\Content\Field
+     * @return \eZ\Publish\SPI\Persistence\Content\Field
      */
     public function getFieldReference()
     {
@@ -183,7 +183,7 @@ class AddFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns the AddField action to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action\AddField
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\AddField
      */
     protected function getAddFieldAction()
     {

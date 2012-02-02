@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Query\Criterion;
+namespace eZ\Publish\SPI\Persistence\Content\Query\Criterion;
 
 /**
  * This struct is used to reference a ContentType Field in content queries / criteria

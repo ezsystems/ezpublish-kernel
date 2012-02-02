@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\SortClauseHandler;
-use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\SortClauseHandler,
-    ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Content\Query\SortClause,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\SPI\Persistence\Content\Query\SortClause,
     ezcQuerySelect;
 
 /**

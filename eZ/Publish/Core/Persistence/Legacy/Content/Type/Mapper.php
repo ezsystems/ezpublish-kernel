@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Type;
-use ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\CreateStruct,
-    ezp\Persistence\Content\Type\UpdateStruct,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry as ConverterRegistry;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\Type\Group,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry as ConverterRegistry;
 
 /**
  * Mapper for Content Type Handler.
@@ -27,7 +27,7 @@ class Mapper
     /**
      * Converter registry
      *
-     * @var \ezp\Persistence\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\SPI\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $converterRegistry;
 
@@ -44,7 +44,7 @@ class Mapper
     /**
      * Creates a Group from its create struct.
      *
-     * @param \ezp\Persistence\Content\Type\Group\CreateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct $struct
      * @return Group
      * @todo $description is not supported by database, yet
      */
@@ -70,7 +70,7 @@ class Mapper
      * Extracts Group objects from theb given $rows.
      *
      * @param array $rows
-     * @return \ezp\Persistence\Content\Type\Group[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
      */
     public function extractGroupsFromRows( array $rows )
     {
@@ -168,7 +168,7 @@ class Mapper
      * Creates a FieldDefinition from the data in $row.
      *
      * @param array $row
-     * @return \ezp\Persistence\Content\Type\FieldDefinition
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      * @todo Handle field definition conversion.
      */
     protected function extractFieldFromRow( array $row )
@@ -199,7 +199,7 @@ class Mapper
      * Extracts a StorageFieldDefinition from $row
      *
      * @param array $row
-     * @return \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
      */
     protected function extractStorageFieldFromRow( array $row )
     {
@@ -227,7 +227,7 @@ class Mapper
      * Maps properties from $struct to $type.
      *
      * @param Type $type
-     * @param \ezp\Persistence\Content\Type\CreateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $struct
      * @return void
      */
     public function createTypeFromCreateStruct( CreateStruct $createStruct )
@@ -260,7 +260,7 @@ class Mapper
      * Creates a create struct from an existing $type.
      *
      * @param Type $type
-     * @return \ezp\Persistence\Content\Type\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct
      */
     public function createCreateStructFromType( Type $type )
     {
@@ -291,8 +291,8 @@ class Mapper
     /**
      * Maps $fieldDef to the legacy storage specific StorageFieldDefinition
      *
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDef
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
      */
     public function toStorageFieldDefinition(
@@ -310,8 +310,8 @@ class Mapper
     /**
      * Maps a FieldDefinition from the given $storageFieldDef
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      * @return void
      */
     public function toFieldDefinition(

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence;
+namespace eZ\Publish\SPI\Persistence;
 
 /**
  * UrlAlias models one url alias path element separated by '/' in urls.

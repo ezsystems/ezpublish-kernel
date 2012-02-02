@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Content\Relation;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content\Relation;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * CreateStruct representing a relation between content.

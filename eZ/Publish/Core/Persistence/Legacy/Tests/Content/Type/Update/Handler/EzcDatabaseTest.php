@@ -1,18 +1,18 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Type\ContentTypeHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentTypeHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Type\UpdateHandler;
-use ezp\Persistence\Content\Type,
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\UpdateHandler;
+use eZ\Publish\SPI\Persistence\Content\Type,
 
-    ezp\Persistence\Storage\Legacy\Content\Type\Gateway,
-    ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater,
-    ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler\EzcDatabase;
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase;
 
 /**
  * Test case for Content Type Handler.
@@ -22,20 +22,20 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected $gatewayMock;
 
     /**
      * Content Updater mock
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater
+     * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
     protected $contentUpdaterMock;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler\EzcDatabase::updateContentObjects
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase::updateContentObjects
      */
     public function testUpdateContentObjects()
     {
@@ -47,10 +47,10 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'determineActions' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
                 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
                 )
             )->will( $this->returnValue( array() ) );
 
@@ -68,7 +68,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler\EzcDatabase::deleteOldType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase::deleteOldType
      */
     public function testDeleteOldType()
     {
@@ -102,7 +102,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler\EzcDatabase::publishNewType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase::publishNewType
      */
     public function testPublishNewType()
     {
@@ -123,7 +123,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns an arra with 'from' and 'to' types
      *
-     * @return \ezp\Persistence\Content\Type[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Type[]
      */
     protected function getTypeFixtures()
     {
@@ -143,7 +143,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns the Update Handler to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler\EzcDatabase
      */
     protected function getUpdateHandler()
     {
@@ -156,14 +156,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a gateway mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected function getGatewayMock()
     {
         if ( !isset( $this->gatewayMock ) )
         {
             $this->gatewayMock = $this->getMockForAbstractClass(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Gateway'
             );
         }
         return $this->gatewayMock;
@@ -172,14 +172,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content Updater mock
      *
-     * @return ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater
+     * @return eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater
      */
     protected function getContentUpdaterMock()
     {
         if ( !isset( $this->contentUpdaterMock ) )
         {
             $this->contentUpdaterMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\ContentUpdater',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\ContentUpdater',
                 array(),
                 array(),
                 '',

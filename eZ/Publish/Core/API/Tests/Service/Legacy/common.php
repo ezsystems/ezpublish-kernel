@@ -10,7 +10,7 @@
 namespace eZ\Publish\Core\API\Tests\Service\Legacy;
 use eZ\Publish\Core\API\Repository,
     ezp\Io\Storage\Legacy as LegacyIoHandler,
-    ezp\Persistence\Storage\Legacy\Handler as LegacyPersistenceHandler,
+    eZ\Publish\Core\Persistence\Legacy\Handler as LegacyPersistenceHandler,
     ReflectionMethod;
 
 
@@ -26,48 +26,48 @@ $legacyHandler = new LegacyPersistenceHandler(
         'dsn' => $dsn,
         'defer_type_update' => false,
         'external_storage' => array(
-            'ezauthor' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezbinaryfile' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\BinaryFileStorage',
-            'ezboolean' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezcountry' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezdatetime' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezemail' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezfloat' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            //'ezimage' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\ImageStorage',
-            'ezinteger' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            //'ezkeyword' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\KeywordStorage',
-            'ezmedia' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\MediaStorage',
-            //'ezobjectrelationlist' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\ObjectRelationListStorage',
-            'ezpage' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezselection' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezstring' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezsrrating' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'eztext' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezurl' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\UrlStorage',
-            'ezuser' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage',
-            'ezxmltext' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage'
+            'ezauthor' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'ezbinaryfile' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\BinaryFileStorage',
+            'ezboolean' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'ezcountry' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'ezdatetime' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'ezemail' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'ezfloat' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            //'ezimage' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ImageStorage',
+            'ezinteger' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            //'ezkeyword' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\KeywordStorage',
+            'ezmedia' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\MediaStorage',
+            //'ezobjectrelationlist' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ObjectRelationListStorage',
+            'ezpage' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'ezselection' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'ezstring' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'ezsrrating' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'eztext' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'ezurl' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\UrlStorage',
+            'ezuser' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage',
+            'ezxmltext' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage'
         ),
         'field_converter' => array(
-            'ezauthor' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine',
-            'ezbinaryfile' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\BinaryFile',
-            'ezboolean' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\CheckBox',
-            'ezcountry' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Country',
-            'ezdatetime' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Integer',
-            'ezemail' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine',
-            //'ezfloat' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Float',
-            //'ezimage' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Image',
-            'ezinteger' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Integer',
-            'ezkeyword' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine',
-            'ezmedia' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Media',
-            //'ezobjectrelationlist' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\ObjectRelationList',
-            'ezpage' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine',
-            'ezselection' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection',
-            'ezstring' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine',
-            'ezsrrating' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Rating',
-            'eztext' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine',
-            'ezurl' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Url',
-            'ezuser' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Integer',
-            'ezxmltext' => 'ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\XmlText',
+            'ezauthor' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
+            'ezbinaryfile' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\BinaryFile',
+            'ezboolean' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\CheckBox',
+            'ezcountry' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country',
+            'ezdatetime' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer',
+            'ezemail' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
+            //'ezfloat' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Float',
+            //'ezimage' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Image',
+            'ezinteger' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer',
+            'ezkeyword' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
+            'ezmedia' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media',
+            //'ezobjectrelationlist' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\ObjectRelationList',
+            'ezpage' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
+            'ezselection' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection',
+            'ezstring' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
+            'ezsrrating' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Rating',
+            'eztext' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine',
+            'ezurl' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url',
+            'ezuser' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Integer',
+            'ezxmltext' => 'eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText',
          )
     )
 );
@@ -79,16 +79,16 @@ $legacyHandler = new LegacyPersistenceHandler(
 
 
 // Find Persistence dir
-    if ( file_exists( 'ezp/Persistence/' ) )
-        $dir = "ezp/Persistence";
-    else if ( file_exists( 'extension/api/ezp/Persistence/' ) )
-        $dir = "extension/api/ezp/Persistence";
+    if ( file_exists( 'eZ/Publish/Core/Persistence/' ) )
+        $legacyHandlerDir = "eZ/Publish/Core/Persistence";
+    else if ( file_exists( 'extension/api/eZ/Publish/Core/Persistence/' ) )
+        $legacyHandlerDir = "extension/api/eZ/Publish/Core/Persistence";
     else
         throw new \Exception( 'Could not find Legacy dir, skipping' );
 
 
 // Insert Schema
-    $schema = $dir . '/Storage/Legacy/Tests/_fixtures/schema.' . $db . '.sql';
+    $schema = $legacyHandlerDir . '/Legacy/Tests/_fixtures/schema.' . $db . '.sql';
     $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $schema ) ) );
     foreach ( $queries as $query )
     {
@@ -164,7 +164,7 @@ $legacyHandler = new LegacyPersistenceHandler(
     else if ( $db === 'pgsql' )
     {
         // Update PostgreSQL sequences
-        $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $dir . '/Storage/Legacy/Tests/_fixtures/setval.pgsql.sql' ) ) );
+        $queries = array_filter( preg_split( '(;\\s*$)m', file_get_contents( $legacyHandlerDir . '/Legacy/Tests/_fixtures/setval.pgsql.sql' ) ) );
         foreach ( $queries as $query )
         {
             $handler->exec( $query );

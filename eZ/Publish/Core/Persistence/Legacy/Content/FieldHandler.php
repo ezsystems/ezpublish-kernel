@@ -8,15 +8,15 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content;
-use ezp\Persistence\Content,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\Version,
-    ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Storage\Legacy\Content\FieldHandler,
-    ezp\Persistence\Storage\Legacy\Content\Mapper,
-    ezp\Persistence\Storage\Legacy\Content\Type\Gateway as TypeGateway,
-    ezp\Persistence\Storage\Legacy\Content\Gateway;
+namespace eZ\Publish\Core\Persistence\Legacy\Content;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway as TypeGateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 /**
  * Field Handler.
@@ -26,38 +26,38 @@ class FieldHandler
     /**
      * Content Gateway
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGateway;
 
     /**
      * Content Type Gateway
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected $typeGateway;
 
     /**
      * Content Mapper
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected $mapper;
 
     /**
      * Storage Handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\StorageHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected $storageHandler;
 
     /**
      * Creates a new Field Handler
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Type\Gateway $typeGateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Mapper $mapper
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageHandler $storageHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $typeGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler $storageHandler
      */
     public function __construct(
         Gateway $contentGateway,

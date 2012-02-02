@@ -12,7 +12,7 @@ use eZ\Publish\Core\Base\Exception\BadConfiguration,
     eZ\Publish\Core\Base\Exception\InvalidArgumentValue,
     eZ\Publish\Core\Base\Exception\Logic,
     ezp\Io\Handler as IoHandler,
-    ezp\Persistence\Handler as PersistenceHandler,
+    eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\API\Repository\Repository  as RepositoryInterface,
     eZ\Publish\Core\API\Content\ContentService,
     eZ\Publish\Core\API\Content\LanguageService,
@@ -64,7 +64,7 @@ class Repository implements RepositoryInterface
      *
      * Construct repository object with provided storage engine
      *
-     * @param \ezp\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Handler $handler
      * @param \ezp\Io\Handler $ioHandler
      * @param User|null $user
      */

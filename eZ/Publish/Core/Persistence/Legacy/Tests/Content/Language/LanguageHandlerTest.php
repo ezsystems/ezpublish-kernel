@@ -1,18 +1,18 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Language\LanguageHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\LanguageHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Language;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Content\Language,
-    ezp\Persistence\Storage\Legacy\Content\Language\Handler,
-    ezp\Persistence\Storage\Legacy\Content\Language\Gateway,
-    ezp\Persistence\Storage\Legacy\Content\Language\Mapper;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper;
 
 /**
  * Test case for Language Handler
@@ -22,27 +22,27 @@ class LanguageHandlerTest extends TestCase
     /**
      * Language handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
     protected $languageHandler;
 
     /**
      * Language gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway
      */
     protected $gatewayMock;
 
     /**
      * Language mapper mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper
      */
     protected $mapperMock;
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::create
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::create
      */
     public function testCreate()
     {
@@ -53,7 +53,7 @@ class LanguageHandlerTest extends TestCase
             ->method( 'createLanguageFromCreateStruct' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Language\CreateStruct'
+                    'eZ\Publish\SPI\Persistence\Content\Language\CreateStruct'
                 )
             )->will( $this->returnValue( new Language() ) );
 
@@ -62,7 +62,7 @@ class LanguageHandlerTest extends TestCase
             ->method( 'insertLanguage' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Language'
+                    'eZ\Publish\SPI\Persistence\Content\Language'
                 )
             )->will( $this->returnValue( 2 ) );
 
@@ -71,7 +71,7 @@ class LanguageHandlerTest extends TestCase
         $result = $handler->create( $createStruct );
 
         $this->assertInstanceOf(
-            'ezp\Persistence\Content\Language',
+            'eZ\Publish\SPI\Persistence\Content\Language',
             $result
         );
         $this->assertEquals(
@@ -83,7 +83,7 @@ class LanguageHandlerTest extends TestCase
     /**
      * Returns a Language CreateStruct
      *
-     * @return \ezp\Persistence\Content\Language\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct
      */
     protected function getCreateStructFixture()
     {
@@ -92,7 +92,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::update
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::update
      */
     public function testUpdate()
     {
@@ -101,7 +101,7 @@ class LanguageHandlerTest extends TestCase
         $gatewayMock = $this->getGatewayMock();
         $gatewayMock->expects( $this->once() )
             ->method( 'updateLanguage' )
-            ->with( $this->isInstanceOf( 'ezp\Persistence\Content\Language' ) );
+            ->with( $this->isInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language' ) );
 
         $handler->update( $this->getLanguageFixture() );
     }
@@ -109,7 +109,7 @@ class LanguageHandlerTest extends TestCase
     /**
      * Returns a Language
      *
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     protected function getLanguageFixture()
     {
@@ -118,7 +118,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::load
      */
     public function testLoad()
     {
@@ -139,14 +139,14 @@ class LanguageHandlerTest extends TestCase
         $result = $handler->load( 2 );
 
         $this->assertInstanceOf(
-            'ezp\Persistence\Content\Language',
+            'eZ\Publish\SPI\Persistence\Content\Language',
             $result
         );
     }
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::load
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadFailure()
@@ -171,7 +171,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::loadAll
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadAll
      */
     public function testLoadAll()
     {
@@ -198,7 +198,7 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::delete
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::delete
      */
     public function testDelete()
     {
@@ -215,7 +215,7 @@ class LanguageHandlerTest extends TestCase
     /**
      * Returns the language handler to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
     protected function getLanguageHandler()
     {
@@ -232,14 +232,14 @@ class LanguageHandlerTest extends TestCase
     /**
      * Returns a language mapper mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\Mapper
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper
      */
     protected function getMapperMock()
     {
         if ( !isset( $this->mapperMock ) )
         {
             $this->mapperMock = $this->getMock(
-                'ezp\Persistence\Storage\Legacy\Content\Language\Mapper'
+                'eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper'
             );
         }
         return $this->mapperMock;
@@ -248,14 +248,14 @@ class LanguageHandlerTest extends TestCase
     /**
      * Returns a mock for the language gateway
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway
      */
     protected function getGatewayMock()
     {
         if ( !isset( $this->gatewayMock ) )
         {
             $this->gatewayMock = $this->getMockForAbstractClass(
-                'ezp\Persistence\Storage\Legacy\Content\Language\Gateway'
+                'eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway'
             );
         }
         return $this->gatewayMock;

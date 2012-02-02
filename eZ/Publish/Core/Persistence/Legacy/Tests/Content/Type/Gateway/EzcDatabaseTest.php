@@ -1,39 +1,39 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Type\Gateway\EzcDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway\EzcDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Type\Gateway;
-use ezp\Persistence\Storage\Legacy\Tests\Content\LanguageAwareTestCase,
-    ezp\Persistence\Storage\Legacy\Tests\Content\Type\Gateway,
-    ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase,
-    ezp\Persistence\Storage\Legacy\Content\Language\Cache as LanguageCache,
-    ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
+    eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache as LanguageCache,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator as LanguageMaskGenerator,
 
     // For SORT_ORDER_* constants
-    ezp\Persistence\Content\Location,
-    ezp\Persistence\Content\Language,
+    eZ\Publish\SPI\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\Language,
 
-    ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\UpdateStruct,
-    ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
+    eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 /**
- * Test case for ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase.
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase.
  */
 class EzcDatabaseTest extends LanguageAwareTestCase
 {
     /**
      * The EzcDatabase gateway to test
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase
      */
     protected $gateway;
 
@@ -46,7 +46,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::__construct
      */
     public function testCtor()
     {
@@ -62,7 +62,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::insertGroup
      */
     public function testInsertGroup()
     {
@@ -125,7 +125,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::updateGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::updateGroup
      */
     public function testUpdateGroup()
     {
@@ -195,7 +195,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns a Group update struct fixture.
      *
-     * @return \ezp\Persistence\Content\Type\Group\UpdateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct
      */
     protected function getGroupUpdateStructFixture()
     {
@@ -219,7 +219,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::countTypesInGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::countTypesInGroup
      */
     public function testCountTypesInGroup()
     {
@@ -241,7 +241,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::countGroupsForType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::countGroupsForType
      */
     public function testCountGroupsForType()
     {
@@ -263,7 +263,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroup
      */
     public function testDeleteGroup()
     {
@@ -288,8 +288,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadGroupData
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadGroupData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
      * @return void
      */
     public function testLoadGroupData()
@@ -317,8 +317,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadAllGroupsData
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadAllGroupsData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::createGroupLoadQuery
      * @return void
      */
     public function testLoadAllGroupsData()
@@ -350,7 +350,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadTypesDataForGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadTypesDataForGroup
      */
     public function testLoadTypesDataForGroup()
     {
@@ -369,9 +369,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::getLoadTypeQuery
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getLoadTypeQuery
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns
      */
     public function testLoadTypeData()
     {
@@ -403,9 +403,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::getLoadTypeQuery
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadTypeData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::getLoadTypeQuery
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::selectColumns
      */
     public function testLoadTypeDataByIdentifier()
     {
@@ -456,9 +456,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @dataProvider getTypeCreationExpectations
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertType
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertTypeNameData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::insertType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::insertTypeNameData
      */
     public function testInsertType( $column, $expectation )
     {
@@ -495,8 +495,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @dataProvider getTypeCreationContentClassNameExpectations
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertType
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::insertType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
      */
     public function testInsertTypeContentClassName( $column, $expectation )
     {
@@ -558,8 +558,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertFieldDefinition
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::setCommonFieldColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::insertFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::setCommonFieldColumns
      */
     public function testInsertFieldDefinition()
     {
@@ -705,7 +705,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinition
      */
     public function testDeleteFieldDefinition()
     {
@@ -728,8 +728,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::updateFieldDefinition
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::setCommonFieldColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::updateFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::setCommonFieldColumns
      */
     public function testUpdateFieldDefinition()
     {
@@ -808,8 +808,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertGroupAssignement
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::loadGroupData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::insertGroupAssignement
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::loadGroupData
      */
     public function testInsertGroupAssignement()
     {
@@ -843,7 +843,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignement
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignement
      */
     public function testDeleteGroupAssignement()
     {
@@ -868,8 +868,8 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::updateType
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::updateType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::setCommonTypeColumns
      * @dataProvider getTypeUpdateExpectations
      */
     public function testUpdateType( $fieldName, $expectedValue )
@@ -902,9 +902,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteTypeNameData
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::insertTypeNameData
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::updateType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteTypeNameData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::insertTypeNameData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::updateType
      */
     public function testUpdateTypeName()
     {
@@ -970,9 +970,9 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * Returns a ezp\Persistence\Content\Type\UpdateStruct fixture.
+     * Returns a eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct fixture.
      *
-     * @return \ezp\Persistence\Content\Type\UpdateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct
      */
     protected function getTypeUpdateFixture()
     {
@@ -1003,7 +1003,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::countInstancesOfType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::countInstancesOfType
      * @return void
      */
     public function testCountInstancesOfTypeExist()
@@ -1023,7 +1023,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::countInstancesOfType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::countInstancesOfType
      * @return void
      */
     public function testCountInstancesOfTypeNotExist()
@@ -1044,7 +1044,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinitionsForType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinitionsForType
      */
     public function testDeleteFieldDefinitionsForTypeExisting()
     {
@@ -1086,7 +1086,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinitionsForType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteFieldDefinitionsForType
      */
     public function testDeleteFieldDefinitionsForTypeNotExisting()
     {
@@ -1111,7 +1111,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignementsForType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignementsForType
      */
     public function testDeleteGroupAssignementsForTypeExisting()
     {
@@ -1136,7 +1136,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignementsForType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteGroupAssignementsForType
      */
     public function testDeleteGroupAssignementsForTypeNotExisting()
     {
@@ -1161,7 +1161,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteType
      */
     public function testDeleteTypeExisting()
     {
@@ -1186,7 +1186,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::deleteType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::deleteType
      */
     public function testDeleteTypeNotExisting()
     {
@@ -1211,7 +1211,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::publishTypeAndFields
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::publishTypeAndFields
      */
     public function testPublishTypeAndFields()
     {
@@ -1257,7 +1257,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::isFieldTranslatable
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::isFieldTranslatable
      */
     public function testIsFieldTranslatableTrue()
     {
@@ -1274,7 +1274,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase::isFieldTranslatable
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase::isFieldTranslatable
      */
     public function testIsFieldTranslatableFalse()
     {
@@ -1292,7 +1292,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns the EzcDatabase gateway to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway\EzcDatabase
      */
     protected function getGateway()
     {
@@ -1309,7 +1309,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
     /**
      * Returns a Language MaskGenerator
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
     protected function getLanguageMaskGenerator()
     {

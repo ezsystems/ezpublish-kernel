@@ -3,7 +3,7 @@
  * @package FieldTypeProviderInterface
  */
 namespace eZ\Publish\SPI\FieldType;
-use ezp\Persistence\Content\Field;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Interface for setting field type data.
@@ -17,7 +17,7 @@ use ezp\Persistence\Content\Field;
  *   - connection (the connection handler)
  * For example, using Legacy storage engine, $context will be:
  *   - identifier = 'LegacyStorage'
- *   - connection = {@link \ezp\Persistence\Storage\Legacy\EzcDbHandler} object handler (for DB connection),
+ *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
  *                  to be used accordingly to
  *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
  *
@@ -30,8 +30,8 @@ interface FieldStorage
      * Allows custom field types to store data in an external source (e.g. another DB table).
      *
      * Stores value for $field in an external data source.
-     * The whole {@link ezp\Persistence\Content\Field} object is passed and its value
-     * is accessible through the {@link ezp\Persistence\Content\FieldValue} 'value' property.
+     * The whole {@link eZ\Publish\SPI\Persistence\Content\Field} object is passed and its value
+     * is accessible through the {@link eZ\Publish\SPI\Persistence\Content\FieldValue} 'value' property.
      * This value holds the data filled by the user as a {@link ezp\Content\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link ezp\Content\FieldType\TextLine\Value} object).
      *
@@ -46,7 +46,7 @@ interface FieldStorage
      *   - connection (the connection handler)
      * For example, using Legacy storage engine, $context will be:
      *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \ezp\Persistence\Storage\Legacy\EzcDbHandler} object handler (for DB connection),
+     *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
      *                  to be used accordingly to
      * The context array provides some context for the field handler about the
      * currently used storage engine.
@@ -55,14 +55,14 @@ interface FieldStorage
      *   - connection (the connection handler)
      * For example, using Legacy storage engine, $context will be:
      *   - identifier = 'LegacyStorage'
-     *   - connection = {@link \ezp\Persistence\Storage\Legacy\EzcDbHandler} object handler (for DB connection),
+     *   - connection = {@link \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler} object handler (for DB connection),
      *                  to be used accordingly to
      *                  {@link http://incubator.apache.org/zetacomponents/documentation/trunk/Database/tutorial.html ezcDatabase} usage
      *
      * This method might return true if $field needs to be updated after storage done here (to store a PK for instance).
      * In any other case, this method must not return anything (null).
      *
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      * @return null|true
      */
@@ -70,11 +70,11 @@ interface FieldStorage
 
     /**
      * Populates $field value property based on the external data.
-     * $field->value is a {@link ezp\Persistence\Content\FieldValue} object.
+     * $field->value is a {@link eZ\Publish\SPI\Persistence\Content\FieldValue} object.
      * This value holds the data as a {@link ezp\Content\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link ezp\Content\FieldType\TextLine\Value} object).
      *
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      * @return void
      */
@@ -95,13 +95,13 @@ interface FieldStorage
     public function hasFieldData();
 
     /**
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function copyFieldData( Field $field, array $context );
 
     /**
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function getIndexData( Field $field, array $context );

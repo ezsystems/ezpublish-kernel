@@ -1,17 +1,17 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Language\CachingLanguageHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\CachingLanguageHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Language;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Content\Language,
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\SPI\Persistence\Content\Language,
     ezp\Base\Exception,
-    ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler;
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler;
 
 /**
  * Test case for caching Language Handler
@@ -21,27 +21,27 @@ class CachingLanguageHandlerTest extends TestCase
     /**
      * Language handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
     protected $languageHandler;
 
     /**
      * Inner language handler mock
      *
-     * @var \ezp\Persistence\Content\Language\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected $innerHandlerMock;
 
     /**
      * Language cache mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
     protected $languageCacheMock;
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
      */
     public function testCtorPropertyInnerHandler()
     {
@@ -56,7 +56,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::__construct
      */
     public function testCtorPropertyLanguageCache()
     {
@@ -71,7 +71,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::getById
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::getById
      */
     public function testGetById()
     {
@@ -87,14 +87,14 @@ class CachingLanguageHandlerTest extends TestCase
         $handler = $this->getLanguageHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Language',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Language',
             $handler->getById( 23 )
         );
     }
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::getByLocale
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::getByLocale
      */
     public function testGetByLocale()
     {
@@ -110,14 +110,14 @@ class CachingLanguageHandlerTest extends TestCase
         $handler = $this->getLanguageHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Language',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Language',
             $handler->getByLocale( 'eng-GB' )
         );
     }
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::create
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::create
      */
     public function testCreate()
     {
@@ -133,7 +133,7 @@ class CachingLanguageHandlerTest extends TestCase
             ->method( 'create' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\Persistence\Content\Language\CreateStruct'
+                    'eZ\Publish\SPI\Persistence\Content\Language\CreateStruct'
                 )
             )->will( $this->returnValue( $languageFixture ) );
 
@@ -155,7 +155,7 @@ class CachingLanguageHandlerTest extends TestCase
     /**
      * Returns a Language CreateStruct
      *
-     * @return \ezp\Persistence\Content\Language\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct
      */
     protected function getCreateStructFixture()
     {
@@ -165,7 +165,7 @@ class CachingLanguageHandlerTest extends TestCase
     /**
      * Returns a Language
      *
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     protected function getLanguageFixture()
     {
@@ -177,7 +177,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::update
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::update
      */
     public function testUpdate()
     {
@@ -202,7 +202,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::load
      */
     public function testLoad()
     {
@@ -226,7 +226,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::load
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::load
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadFailure()
@@ -248,7 +248,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\Handler::loadAll
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadAll
      */
     public function testLoadAll()
     {
@@ -271,7 +271,7 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler::delete
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::delete
      */
     public function testDelete()
     {
@@ -295,7 +295,7 @@ class CachingLanguageHandlerTest extends TestCase
     /**
      * Returns the language handler to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\CachingHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler
      */
     protected function getLanguageHandler()
     {
@@ -312,14 +312,14 @@ class CachingLanguageHandlerTest extends TestCase
     /**
      * Returns a mock for the inner language handler
      *
-     * @return \ezp\Persistence\Content\Language\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected function getInnerLanguageHandlerMock()
     {
         if ( !isset( $this->innerHandlerMock ) )
         {
             $this->innerHandlerMock = $this->getMock(
-                'ezp\Persistence\Content\Language\Handler'
+                'eZ\Publish\SPI\Persistence\Content\Language\Handler'
             );
         }
         return $this->innerHandlerMock;
@@ -328,14 +328,14 @@ class CachingLanguageHandlerTest extends TestCase
     /**
      * Returns a mock for the language cache
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
     protected function getLanguageCacheMock()
     {
         if ( !isset( $this->languageCacheMock ) )
         {
             $this->languageCacheMock = $this->getMock(
-                'ezp\Persistence\Storage\Legacy\Content\Language\Cache'
+                'eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache'
             );
         }
         return $this->languageCacheMock;
@@ -357,7 +357,7 @@ class CachingLanguageHandlerTest extends TestCase
     /**
      * Returns an array with 2 languages
      *
-     * @return \ezp\Persistence\Content\Language[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     protected function getLanguagesFixture()
     {

@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Selection\Value as SelectionValue,
     ezp\Content\FieldType\FieldSettings,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection as SelectionConverter,
-    ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
-    ezp\Persistence\Content\FieldTypeConstraints,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection as SelectionConverter,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     PHPUnit_Framework_TestCase,
     DOMDocument,
     DOMXPath;
@@ -26,7 +26,7 @@ use ezp\Content\FieldType\Selection\Value as SelectionValue,
 class SelectionTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection
      */
     protected $converter;
 
@@ -50,7 +50,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -77,7 +77,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toFieldValue
      */
     public function testToFieldValueMultiple()
     {
@@ -110,7 +110,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -143,7 +143,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toFieldValue
      */
     public function testToFieldValueEmpty()
     {
@@ -174,7 +174,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionMultiple()
     {
@@ -235,7 +235,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionSingle()
     {
@@ -296,7 +296,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toFieldDefinition
      */
     public function testToFieldDefinitionMultiple()
     {
@@ -328,7 +328,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Selection::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Selection::toFieldDefinition
      */
     public function testToFieldDefinitionSingle()
     {

@@ -13,8 +13,8 @@ use ezp\Content\Version,
     ezp\Content\FieldType\FieldSettings,
     ezp\Content\FieldType\Value,
     ezp\Content\FieldType\Validator,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints,
+    eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceFieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     ezp\Base\Observer,
     ezp\Base\Observable,
     ezp\Base\Repository,
@@ -254,7 +254,7 @@ abstract class FieldType implements Observer
      * validator is populated to $constraints.
      *
      * @internal
-     * @param \ezp\Persistence\Content\FieldTypeConstraints $fieldTypeConstraints
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints $fieldTypeConstraints
      * @param \ezp\Content\FieldType\Validator $validator
      * @return void
      */

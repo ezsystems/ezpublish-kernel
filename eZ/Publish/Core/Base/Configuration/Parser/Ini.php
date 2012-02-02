@@ -459,5 +459,3 @@ class Ini implements Parser
         file_put_contents( $fileName, $iniStr, LOCK_EX );
     }
 }
-
-?>

@@ -1,20 +1,20 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\ContentHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\ContentHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests;
-use ezp\Persistence\Content,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Relation as RelationValue,
-    ezp\Persistence\Content\Query\Criterion\ContentId,
+namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
     ezp\Base\Exception\NotFound,
     ezp\Content as ContentDomainObject,
     ezp\Content\Version,
@@ -99,7 +99,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::create
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::create
      * @group contentHandler
      */
     public function testCreate()
@@ -129,7 +129,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( ContentDomainObject::STATUS_DRAFT, $content->status );
 
-        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Version', $content->version );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Version', $content->version );
         $this->assertEquals( 14, $content->version->creatorId );
         $this->assertEquals( 'test', $content->version->name );
         $this->assertEquals( Version::STATUS_DRAFT, $content->version->status );
@@ -137,7 +137,7 @@ class ContentHandlerTest extends HandlerTest
         $this->assertEquals( 1, count( $content->version->fields ) );
 
         $field = $content->version->fields[0];
-        $this->assertInstanceOf( 'ezp\\Persistence\\Content\\Field', $field );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field', $field );
         $this->assertEquals( 'ezstring', $field->type );
         $this->assertEquals( 'eng-GB', $field->language );
         $this->assertEquals( 'Welcome', $field->value->data->text );
@@ -147,7 +147,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test delete function
      *
-     * @covers \ezp\Persistence\Storage\InMemory\ContentHandler::delete
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::delete
      * @group contentHandler
      */
     public function testDelete()
@@ -177,7 +177,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test copy function
      *
-     * @covers \ezp\Persistence\Storage\InMemory\ContentHandler::copy
+     * @covers \eZ\Publish\Core\Persistence\InMemory\ContentHandler::copy
      * @group contentHandler
      */
     public function testCopyVersion1()
@@ -204,7 +204,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test copy function
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::copy
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::copy
      * @group contentHandler
      */
     public function testCopyVersion2()
@@ -232,7 +232,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test copy function
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::copy
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::copy
      * @group contentHandler
      */
     public function testCopyAllVersions()
@@ -265,7 +265,7 @@ class ContentHandlerTest extends HandlerTest
     /**
      * Test update function
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::update
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::update
      * @group contentHandler
      */
     public function testUpdate()
@@ -302,7 +302,7 @@ class ContentHandlerTest extends HandlerTest
      * Tests creatDraftFromVersion()
      *
      * @group contentHandler
-     * @covers \ezp\Persistence\Content\Handler::createDraftFromVersion
+     * @covers \eZ\Publish\SPI\Persistence\Content\Handler::createDraftFromVersion
      */
     public function testCreateDraftFromVersion()
     {

@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Type;
-use ezp\Persistence\Storage\Legacy\Content,
-    ezp\Persistence\Storage\Legacy\Content\Search\Handler as SearchHandler,
-    ezp\Persistence\Storage\Legacy\Content\Gateway as ContentGateway,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry,
-    ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater,
-    ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Query\Criterion;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
+use eZ\Publish\Core\Persistence\Legacy\Content,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler as SearchHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater,
+    eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion;
 
 /**
  * Class to update content objects to a new type version
@@ -25,29 +25,29 @@ class ContentUpdater
     /**
      * Content gateway
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGateway;
 
     /**
      * FieldValue converter registry
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $converterRegistry;
 
     /**
      * Search handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Search\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
      */
     protected $searchHandler;
 
     /**
      * Creates a new content updater
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Type\Gateway $contentTypeGateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      */
     public function __construct(
         SearchHandler $searchHandler,

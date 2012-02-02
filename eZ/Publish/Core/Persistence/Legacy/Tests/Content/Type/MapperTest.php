@@ -1,27 +1,27 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Type\MapperTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\MapperTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Type;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\Type\Mapper,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
 
     // Needed for $sortOrder and $sortField properties
-    ezp\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\Location,
 
-    ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\CreateStruct,
-    ezp\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
 
-    ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Type\Group,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct;
 
 /**
  * Test case for Mapper.
@@ -30,7 +30,7 @@ class MapperTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::createGroupFromCreateStruct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createGroupFromCreateStruct
      */
     public function testCreateGroupFromCreateStruct()
     {
@@ -41,7 +41,7 @@ class MapperTest extends TestCase
         $group = $mapper->createGroupFromCreateStruct( $createStruct );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Type\\Group',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group',
             $group
         );
         $this->assertPropertiesCorrect(
@@ -65,7 +65,7 @@ class MapperTest extends TestCase
     /**
      * Returns a GroupCreateStruct fixture.
      *
-     * @return \ezp\Persistence\Content\Type\Group\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct
      */
     protected function getGroupCreateStructFixture()
     {
@@ -90,7 +90,7 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::createTypeFromCreateStruct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createTypeFromCreateStruct
      */
     public function testTypeFromCreateStruct()
     {
@@ -112,7 +112,7 @@ class MapperTest extends TestCase
     /**
      * Returns a CreateStruct fixture.
      *
-     * @return \ezp\Persistence\Content\Type\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct
      */
     protected function getContenTypeCreateStructFixture()
     {
@@ -159,7 +159,7 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::createCreateStructFromType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::createCreateStructFromType
      */
     public function testCreateStructFromType()
     {
@@ -231,7 +231,7 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractGroupsFromRows
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractGroupsFromRows
      */
     public function testExtractGroupsFromRows()
     {
@@ -256,10 +256,10 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractTypesFromRows
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractTypeFromRow
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractStorageFieldFromRow
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::extractFieldFromRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractTypesFromRows
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractTypeFromRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractStorageFieldFromRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::extractFieldFromRow
      */
     public function testExtractTypesFromRowsSingle()
     {
@@ -335,22 +335,22 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::toStorageFieldDefinition
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::toStorageFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
         $converterMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
         $converterMock->expects( $this->once() )
             ->method( 'toStorageFieldDefinition' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\FieldDefinition'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
                 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
                 )
             );
 
@@ -369,22 +369,22 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Mapper::toFieldDefinition
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper::toFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition
      */
     public function testToFieldDefinition()
     {
         $converterMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
         $converterMock->expects( $this->once() )
             ->method( 'toFieldDefinition' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
                 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\FieldDefinition'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
                 )
             );
 
@@ -409,7 +409,7 @@ class MapperTest extends TestCase
     protected function getNonConvertingMapper()
     {
         $mapper = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Mapper',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper',
             array( 'toFieldDefinition' ),
             array( $this->getConverterRegistryMock() )
         );
@@ -418,7 +418,7 @@ class MapperTest extends TestCase
             ->method( 'toFieldDefinition' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
                 )
             )->will(
                 $this->returnCallback(
@@ -434,12 +434,12 @@ class MapperTest extends TestCase
     /**
      * Returns a converter registry mock
      *
-     * @return ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @return eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected function getConverterRegistryMock()
     {
         return $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
         );
     }
 

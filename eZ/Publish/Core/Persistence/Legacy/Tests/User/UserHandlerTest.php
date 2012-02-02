@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\User\UserHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\User\UserHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\User;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\User,
-    ezp\Persistence;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\User;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\User,
+    eZ\Publish\SPI\Persistence;
 
 /**
  * Test case for UserHandlerTest

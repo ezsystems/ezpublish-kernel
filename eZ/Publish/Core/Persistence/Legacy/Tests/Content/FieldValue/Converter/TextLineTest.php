@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Content\FieldType\FieldSettings,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine as TextLineConverter,
-    ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
-    ezp\Persistence\Content\FieldTypeConstraints,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine as TextLineConverter,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -24,7 +24,7 @@ use ezp\Content\FieldType\TextLine\Value as TextLineValue,
 class TextLineTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine
      */
     protected $converter;
 
@@ -37,7 +37,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -55,7 +55,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -74,7 +74,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionWithValidator()
     {
@@ -112,7 +112,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionNoValidator()
     {
@@ -142,7 +142,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\TextLine::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\TextLine::toFieldDefinition
      */
     public function testToFieldDefinition()
     {

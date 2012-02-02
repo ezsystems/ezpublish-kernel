@@ -8,15 +8,15 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content;
-use ezp\Persistence\Content,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Version,
-    ezp\Persistence\Content\RestrictedVersion,
-    ezp\Persistence\Storage\Legacy\Content\Location\Mapper as LocationMapper,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry;
+namespace eZ\Publish\Core\Persistence\Legacy\Content;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry;
 
 /**
  *
@@ -26,21 +26,21 @@ class Mapper
     /**
      * FieldValue converter registry
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $converterRegistry;
 
     /**
      * Location mapper
      *
-     * @var \ezp\Persistence\Storage\Persistence\Converter\Location\Mapper
+     * @var \eZ\Publish\SPI\Persistence\Storage\Persistence\Converter\Location\Mapper
      */
     protected $locationMapper;
 
     /**
      * Creates a new mapper.
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry $converterRegistry
      */
     public function __construct( LocationMapper $locationMapper, Registry $converterRegistry )
     {
@@ -51,7 +51,7 @@ class Mapper
     /**
      * Creates a Content from the given $struct
      *
-     * @param \ezp\Persistence\Content\CreateStruct $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct
      * @return Content
      */
     public function createContentFromCreateStruct( CreateStruct $struct )
@@ -75,7 +75,7 @@ class Mapper
     /**
      * Creates a Location\CreateStruct for the given $content
      *
-     * @param \ezp\Persistence\Content $content
+     * @param \eZ\Publish\SPI\Persistence\Content $content
      * @return Content\Location\CreateStruct
      */
     public function createLocationCreateStruct( Content $content )
@@ -297,7 +297,7 @@ class Mapper
      * @param array $row
      * @param string $type
      * @return FieldValue
-     * @throws ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @throws eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      *         if the necessary converter for $type could not be found.
      */
     protected function extractFieldValueFromRow( array $row, $type )
@@ -361,8 +361,8 @@ class Mapper
     /**
      * Creates CreateStruct from $content
      *
-     * @param ezp\Persistence\Content $content
-     * @return ezp\Persistence\Content\CreateStruct
+     * @param eZ\Publish\SPI\Persistence\Content $content
+     * @return eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
     public function createCreateStructFromContent( Content $content )
     {

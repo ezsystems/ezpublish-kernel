@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Language;
-use ezp\Persistence\Content\Language,
-    ezp\Persistence\Content\Language\Handler as BaseLanguageHandler,
-    ezp\Persistence\Content\Language\CreateStruct;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler,
+    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
  * Language Handler
@@ -20,14 +20,14 @@ class CachingHandler implements BaseLanguageHandler, Lookup
     /**
      * Inner Language handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler
      */
     protected $innerHandler;
 
     /**
      * Language cache
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
     protected $languageCache;
 
@@ -41,7 +41,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
     /**
      * Creates a caching handler around $innerHandler
      *
-     * @param \ezp\Persistence\Content\Language\Handler $innerHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\Handler $innerHandler
      */
     public function __construct( BaseLanguageHandler $innerHandler, Cache $languageCache )
     {
@@ -71,7 +71,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
      * Returns the Language with $id from the cache
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound
      *         if the Language could not be found
      */
@@ -85,7 +85,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
      * Returns the Language with $locale from the cache
      *
      * @param string $locale
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound
      *         if the Language could not be found
      */
@@ -98,8 +98,8 @@ class CachingHandler implements BaseLanguageHandler, Lookup
     /**
      * Create a new language
      *
-     * @param \ezp\Persistence\Content\Language\CreateStruct $struct
-     * @return \ezp\Persistence\Content\Language
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function create( CreateStruct $struct )
     {
@@ -112,7 +112,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
     /**
      * Update language
      *
-     * @param \ezp\Persistence\Content\Language $language
+     * @param \eZ\Publish\SPI\Persistence\Content\Language $language
      */
     public function update( Language $language )
     {
@@ -125,7 +125,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
      * Get language by id
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound If language could not be found by $id
      */
     public function load( $id )
@@ -137,7 +137,7 @@ class CachingHandler implements BaseLanguageHandler, Lookup
     /**
      * Get all languages
      *
-     * @return \ezp\Persistence\Content\Language[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     public function loadAll()
     {

@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler;
-use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
-    ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
-    ezp\Persistence\Content\Query\Criterion,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
     ezcQuerySelect;
 
 /**

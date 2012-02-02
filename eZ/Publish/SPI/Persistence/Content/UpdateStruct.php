@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Content;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  */
@@ -43,7 +43,7 @@ class UpdateStruct extends ValueObject
     /**
      * Contains fields to be updated.
      *
-     * @var \ezp\Persistence\Content\Field[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Field[]
      */
     public $fields = array();
 

@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Content;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Struct containing properties for a Version entity without its fields.

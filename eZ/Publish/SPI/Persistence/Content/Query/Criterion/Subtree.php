@@ -8,10 +8,10 @@
  *
  */
 
-namespace ezp\Persistence\Content\Query\Criterion;
-use ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Content\Query\Criterion\Operator\Specifications,
-    ezp\Persistence\Content\Query\CriterionInterface,
+namespace eZ\Publish\SPI\Persistence\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Operator\Specifications,
+    eZ\Publish\SPI\Persistence\Content\Query\CriterionInterface,
     InvalidArgumentException;
 
 /**

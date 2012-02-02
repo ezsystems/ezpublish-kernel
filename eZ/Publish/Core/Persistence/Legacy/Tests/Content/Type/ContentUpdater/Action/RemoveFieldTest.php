@@ -1,15 +1,15 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Type\ContentUpdater\Action\RemoveFieldTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\Action\RemoveFieldTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Type\ContentUpdater\Action;
-use ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action\RemoveField,
-    ezp\Persistence\Content;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentUpdater\Action;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField,
+    eZ\Publish\SPI\Persistence\Content;
 
 /**
  * Test case for Content Type Updater.
@@ -19,20 +19,20 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Content gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGatewayMock;
 
     /**
      * RemoveField action to test
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action\RemoveField
+     * @var eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField
      */
     protected $removeFieldAction;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater::__construct
      */
     public function testCtor()
     {
@@ -52,7 +52,7 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField::apply
      */
     public function testApply()
     {
@@ -72,7 +72,7 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content fixture
      *
-     * @return \ezp\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     protected function getContentFixture()
     {
@@ -99,14 +99,14 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Content Gateway mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getContentGatewayMock()
     {
         if ( !isset( $this->contentGatewayMock ) )
         {
             $this->contentGatewayMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
             );
         }
         return $this->contentGatewayMock;
@@ -115,7 +115,7 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a FieldDefinition fixture
      *
-     * @return \ezp\Persistence\Content\Type\FieldDefinition
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
     protected function getFieldDefinitionFixture()
     {
@@ -129,7 +129,7 @@ class RemoveFieldTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns the RemoveField action to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action\RemoveField
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action\RemoveField
      */
     protected function getRemoveFieldAction()
     {

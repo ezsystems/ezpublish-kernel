@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\User;
-use ezp\Persistence\User,
-    ezp\Persistence\User\Handler as BaseUserHandler,
-    ezp\Persistence\User\Role,
-    ezp\Persistence\User\RoleUpdateStruct,
-    ezp\Persistence\User\Policy,
-    ezp\Persistence\Storage\Legacy\User\Role\Gateway as RoleGateway,
+namespace eZ\Publish\Core\Persistence\Legacy\User;
+use eZ\Publish\SPI\Persistence\User,
+    eZ\Publish\SPI\Persistence\User\Handler as BaseUserHandler,
+    eZ\Publish\SPI\Persistence\User\Role,
+    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
+    eZ\Publish\SPI\Persistence\User\Policy,
+    eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway as RoleGateway,
     RuntimeException;
 
 /**
@@ -25,29 +25,29 @@ class Handler implements BaseUserHandler
     /**
      * Gaateway for storing user data
      *
-     * @var \ezp\Persistence\Storage\Legacy\User\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\User\Gateway
      */
     protected $userGateway;
 
     /**
      * Gaateway for storing role data
      *
-     * @var \ezp\Persistence\Storage\Legacy\User\Role\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway
      */
     protected $roleGateway;
 
     /**
      * Mapper for user related objects
      *
-     * @var \ezp\Persistence\Storage\Legacy\User\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\User\Mapper
      */
     protected $mapper;
 
     /**
      * Construct from userGateway
      *
-     * @param \ezp\Persistence\Storage\Legacy\User\Gateway $userGateway
-     * @param \ezp\Persistence\Storage\Legacy\User\Role\Gateway $roleGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\User\Gateway $userGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\User\Role\Gateway $roleGateway
      * @return void
      */
     public function __construct( Gateway $userGateway, RoleGateway $roleGateway, Mapper $mapper )
@@ -63,8 +63,8 @@ class Handler implements BaseUserHandler
      * The User struct used to create the user will contain an ID which is used
      * to reference the user.
      *
-     * @param \ezp\Persistence\User $user
-     * @return \ezp\Persistence\User
+     * @param \eZ\Publish\SPI\Persistence\User $user
+     * @return \eZ\Publish\SPI\Persistence\User
      */
     public function create( User $user )
     {
@@ -76,7 +76,7 @@ class Handler implements BaseUserHandler
      * Load user with user ID.
      *
      * @param mixed $userId
-     * @return \ezp\Persistence\User
+     * @return \eZ\Publish\SPI\Persistence\User
      */
     public function load( $userId )
     {
@@ -95,7 +95,7 @@ class Handler implements BaseUserHandler
      *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
-     * @return \ezp\Persistence\User[]
+     * @return \eZ\Publish\SPI\Persistence\User[]
      */
     public function loadByLogin( $login, $alsoMatchEmail = false )
     {
@@ -112,7 +112,7 @@ class Handler implements BaseUserHandler
     /**
      * Update the user information specified by the user struct
      *
-     * @param \ezp\Persistence\User $user
+     * @param \eZ\Publish\SPI\Persistence\User $user
      */
     public function update( User $user )
     {
@@ -132,8 +132,8 @@ class Handler implements BaseUserHandler
     /**
      * Create new role
      *
-     * @param \ezp\Persistence\User\Role $role
-     * @return \ezp\Persistence\User\Role
+     * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function createRole( Role $role )
     {
@@ -151,7 +151,7 @@ class Handler implements BaseUserHandler
      * Load a specified role by id
      *
      * @param mixed $roleId
-     * @return \ezp\Persistence\User\Role
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      * @throws \ezp\Base\Exception\NotFound If role is not found
      */
     public function loadRole( $roleId )
@@ -170,7 +170,7 @@ class Handler implements BaseUserHandler
      * Load roles assigned to a user/group (not including inherited roles)
      *
      * @param mixed $groupId
-     * @return \ezp\Persistence\User\Role[]
+     * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
     public function loadRolesByGroupId( $groupId )
     {
@@ -182,7 +182,7 @@ class Handler implements BaseUserHandler
     /**
      * Update role
      *
-     * @param \ezp\Persistence\User\RoleUpdateStruct $role
+     * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
      */
     public function updateRole( RoleUpdateStruct $role )
     {
@@ -203,8 +203,8 @@ class Handler implements BaseUserHandler
      * Adds a policy to a role
      *
      * @param mixed $roleId
-     * @param \ezp\Persistence\User\Policy $policy
-     * @return \ezp\Persistence\User\Policy
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
     public function addPolicy( $roleId, Policy $policy )
     {
@@ -218,7 +218,7 @@ class Handler implements BaseUserHandler
      *
      * Replaces limitations values with new values.
      *
-     * @param \ezp\Persistence\User\Policy $policy
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      */
     public function updatePolicy( Policy $policy )
     {
@@ -245,7 +245,7 @@ class Handler implements BaseUserHandler
      * Returns the user policies associated with the user (including inherited policies from user groups)
      *
      * @param mixed $userId
-     * @return \ezp\Persistence\User\Policy[]
+     * @return \eZ\Publish\SPI\Persistence\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId )
     {

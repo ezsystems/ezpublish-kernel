@@ -1,15 +1,15 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\HandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\HandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Handler;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Handler;
 
 /**
  * Test case for Repository Handler
@@ -17,7 +17,7 @@ use ezp\Persistence\Storage\Legacy\Tests\TestCase,
 class HandlerTest extends TestCase
 {
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::contentHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
      * @return void
      */
     public function testContentHandler()
@@ -26,17 +26,17 @@ class HandlerTest extends TestCase
         $contentHandler = $handler->contentHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Handler',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Handler',
             $contentHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler',
             $contentHandler
         );
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::contentHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
      * @return void
      */
     public function testContentHandlerTwice()
@@ -52,8 +52,8 @@ class HandlerTest extends TestCase
     /**
      * Issue #97
      *
-     * @covers ezp\Persistence\Storage\Legacy\Handler::contentHandler
-     * @covers ezp\Persistence\Storage\Legacy\Handler::getStorageRegistry
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getStorageRegistry
      * @return void
      */
     public function testStorageRegistryReused()
@@ -79,7 +79,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::getFieldValueConverterRegistry
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getFieldValueConverterRegistry
      * @return void
      */
     public function testGetFieldValueConverterRegistry()
@@ -88,13 +88,13 @@ class HandlerTest extends TestCase
         $registry = $handler->getFieldValueConverterRegistry();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry',
             $registry
         );
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::getFieldValueConverterRegistry
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getFieldValueConverterRegistry
      * @return void
      */
     public function testGetFieldValueConverterRegistryTwice()
@@ -108,7 +108,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::getStorageRegistry
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getStorageRegistry
      * @return void
      */
     public function testGetStorageRegistry()
@@ -117,13 +117,13 @@ class HandlerTest extends TestCase
         $registry = $handler->getStorageRegistry();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageRegistry',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageRegistry',
             $registry
         );
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::getStorageRegistry
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getStorageRegistry
      * @return void
      */
     public function testGetStorageRegistryTwice()
@@ -137,7 +137,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::searchHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::searchHandler
      * @return void
      */
     public function testSearchHandler()
@@ -146,17 +146,17 @@ class HandlerTest extends TestCase
         $searchHandler = $handler->searchHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Search\\Handler',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Search\\Handler',
             $searchHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Search\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Search\\Handler',
             $searchHandler
         );
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::searchHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::searchHandler
      * @return void
      */
     public function testSearchHandlerTwice()
@@ -170,7 +170,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::contentTypeHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
      * @return void
      */
     public function testContentTypeHandler()
@@ -179,37 +179,36 @@ class HandlerTest extends TestCase
         $contentTypeHandler = $handler->contentTypeHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Type\\Handler',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Handler',
             $contentTypeHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
             $contentTypeHandler
         );
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::contentLanguageHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentLanguageHandler
      * @return void
      */
     public function testContentLanguageHandler()
     {
-        $this->markTestSkipped( 'Not testable due to broken DI.' );
         $handler = $this->getHandlerFixture();
         $contentLanguageHandler = $handler->contentLanguageHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Language\\Handler',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Language\\Handler',
             $contentLanguageHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Language\\CachingHandler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Language\\CachingHandler',
             $contentLanguageHandler
         );
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::contentTypeHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::contentTypeHandler
      * @return void
      */
     public function testContentTypeHandlerTwice()
@@ -223,7 +222,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::locationHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
      * @return void
      */
     public function testLocationHandler()
@@ -232,17 +231,17 @@ class HandlerTest extends TestCase
         $locationHandler = $handler->locationHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Location\\Handler',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Handler',
             $locationHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Handler',
             $locationHandler
         );
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::locationHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::locationHandler
      * @return void
      */
     public function testLocationHandlerTwice()
@@ -256,7 +255,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::userHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
      * @return void
      */
     public function testUserHandler()
@@ -265,17 +264,17 @@ class HandlerTest extends TestCase
         $userHandler = $handler->userHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\User\\Handler',
+            'eZ\\Publish\\SPI\\Persistence\\User\\Handler',
             $userHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\User\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\User\\Handler',
             $userHandler
         );
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::userHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::userHandler
      * @return void
      */
     public function testUserHandlerTwice()
@@ -289,7 +288,7 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::sectionHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
      * @return void
      */
     public function testSectionHandler()
@@ -298,17 +297,17 @@ class HandlerTest extends TestCase
         $sectionHandler = $handler->sectionHandler();
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Section\\Handler',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Section\\Handler',
             $sectionHandler
         );
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Section\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Section\\Handler',
             $sectionHandler
         );
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::sectionHandler
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::sectionHandler
      * @return void
      */
     public function testSectionHandlerTwice()
@@ -336,13 +335,13 @@ class HandlerTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Handler::getDatabase
+     * @covers eZ\Publish\Core\Persistence\Legacy\Handler::getDatabase
      * @return void
      */
     public function testDatabaseInstance()
     {
         $method = new \ReflectionMethod(
-            'ezp\\Persistence\\Storage\\Legacy\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Handler',
             'getDatabase'
         );
         $method->setAccessible( true );

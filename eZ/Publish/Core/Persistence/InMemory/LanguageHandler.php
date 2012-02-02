@@ -8,13 +8,13 @@
  *
  */
 
-namespace ezp\Persistence\Storage\InMemory;
-use ezp\Persistence\Content\Language\Handler as LanguageHandlerInterface,
-    ezp\Persistence\Content\Language,
-    ezp\Persistence\Content\Language\CreateStruct;
+namespace eZ\Publish\Core\Persistence\InMemory;
+use eZ\Publish\SPI\Persistence\Content\Language\Handler as LanguageHandlerInterface,
+    eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
- * @see ezp\Persistence\Content\Section\Handler
+ * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
  */
 class LanguageHandler implements LanguageHandlerInterface
 {
@@ -43,8 +43,8 @@ class LanguageHandler implements LanguageHandlerInterface
     /**
      * Create a new language
      *
-     * @param \ezp\Persistence\Content\Language\CreateStruct $struct
-     * @return \ezp\Persistence\Content\Language
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function create( CreateStruct $struct )
     {
@@ -54,7 +54,7 @@ class LanguageHandler implements LanguageHandlerInterface
     /**
      * Update language
      *
-     * @param \ezp\Persistence\Content\Language $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\Language $struct
      */
     public function update( Language $struct )
     {
@@ -69,7 +69,7 @@ class LanguageHandler implements LanguageHandlerInterface
      * Get language by id
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound If language could not be found by $id
      */
     public function load( $id )
@@ -80,7 +80,7 @@ class LanguageHandler implements LanguageHandlerInterface
     /**
      * Get all languages
      *
-     * @return \ezp\Persistence\Content\Language[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     public function loadAll()
     {
@@ -104,4 +104,3 @@ class LanguageHandler implements LanguageHandlerInterface
         $this->backend->delete( 'Content\\Language', $id );
     }
 }
-?>

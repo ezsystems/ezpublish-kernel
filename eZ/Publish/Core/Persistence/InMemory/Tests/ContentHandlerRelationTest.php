@@ -1,24 +1,24 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\ContentHandlerRelationTest class
+ * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\ContentHandlerRelationTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests;
-use ezp\Persistence\Content,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Relation as RelationValue,
-    ezp\Persistence\Content\Query\Criterion\ContentId,
+namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\Relation as RelationValue,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
     ezp\Base\Exception\NotFound,
     ezp\Content\Relation,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
-    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * Test case for relations operation in ContentHandler using in memory storage.
@@ -129,7 +129,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test addRelation function
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::addRelation
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::addRelation
      */
     public function testAddRelation1()
     {
@@ -151,7 +151,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test addRelation function with a version
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::addRelation
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::addRelation
      */
     public function testAddRelation2()
     {
@@ -175,7 +175,7 @@ class ContentHandlerRelationTest extends HandlerTest
      * Test addRelation function with unexisting source content ID
      *
      * @expectedException ezp\Base\Exception\NotFound
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::addRelation
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::addRelation
      */
     public function testAddRelationSourceDoesNotExist1()
     {
@@ -195,7 +195,7 @@ class ContentHandlerRelationTest extends HandlerTest
      * Test addRelation function with unexisting source content version
      *
      * @expectedException ezp\Base\Exception\NotFound
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::addRelation
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::addRelation
      */
     public function testAddRelationSourceDoesNotExist2()
     {
@@ -214,7 +214,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test loadRelations function
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadRelations
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadRelations
      */
     public function testLoadRelations()
     {
@@ -229,7 +229,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test loadRelations function with a type
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadRelations
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadRelations
      */
     public function testLoadRelationsWithType1()
     {
@@ -244,7 +244,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test loadRelations function with combined types
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadRelations
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadRelations
      */
     public function testLoadRelationsWithType2()
     {
@@ -259,7 +259,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test loadRelations function with no associated results
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadRelations
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadRelations
      */
     public function testLoadRelationsWithTypeNoResult1()
     {
@@ -275,7 +275,7 @@ class ContentHandlerRelationTest extends HandlerTest
     /**
      * Test loadRelations function with no associated results
      *
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadRelations
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadRelations
      */
     public function testLoadRelationsWithTypeNoResult2()
     {
@@ -289,7 +289,7 @@ class ContentHandlerRelationTest extends HandlerTest
     }
 
     /**
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadReverseRelations
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadReverseRelations
      */
     public function testLoadReverseRelationsOneEntry()
     {
@@ -312,7 +312,7 @@ class ContentHandlerRelationTest extends HandlerTest
     }
 
     /**
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadReverseRelations
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadReverseRelations
      */
     public function testLoadReverseRelationsOneEntryMatchingType()
     {
@@ -335,7 +335,7 @@ class ContentHandlerRelationTest extends HandlerTest
     }
 
     /**
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadReverseRelations
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadReverseRelations
      */
     public function testLoadReverseRelationsOneEntryNoMatchingType()
     {
@@ -354,7 +354,7 @@ class ContentHandlerRelationTest extends HandlerTest
     }
 
     /**
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadReverseRelations
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadReverseRelations
      */
     public function testLoadReverseRelationsTwoEntries()
     {
@@ -390,7 +390,7 @@ class ContentHandlerRelationTest extends HandlerTest
     }
 
     /**
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::loadReverseRelations
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::loadReverseRelations
      */
     public function testLoadReverseRelationsTwoEntriesDifferentTypes()
     {
@@ -427,7 +427,7 @@ class ContentHandlerRelationTest extends HandlerTest
     }
 
     /**
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::removeRelation
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::removeRelation
      */
     public function testRemoveRelation()
     {
@@ -451,7 +451,7 @@ class ContentHandlerRelationTest extends HandlerTest
     }
     /**
      * @expectedException ezp\Base\Exception\NotFound
-     * @covers ezp\Persistence\Storage\InMemory\ContentHandler::removeRelation
+     * @covers eZ\Publish\Core\Persistence\InMemory\ContentHandler::removeRelation
      */
     public function testRemoveRelationDoesNotExist()
     {

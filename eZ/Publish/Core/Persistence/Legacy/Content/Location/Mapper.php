@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Location;
-use ezp\Persistence\Content\Location;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
  * Mapper for Location objects
@@ -25,7 +25,7 @@ class Mapper
      * @param array $rows
      * @param string $prefix
      * @param Location $location
-     * @return \ezp\Persistence\Content\Location
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function createLocationFromRow( array $data, $prefix = '', Location $location = null )
     {

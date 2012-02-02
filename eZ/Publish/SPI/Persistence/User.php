@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence;
+namespace eZ\Publish\SPI\Persistence;
 
 /**
  */

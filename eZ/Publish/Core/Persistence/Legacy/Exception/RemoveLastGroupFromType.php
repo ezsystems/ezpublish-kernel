@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Exception;
+namespace eZ\Publish\Core\Persistence\Legacy\Exception;
 
 /**
  * Exception thrown when a Type is to be unlinked from its last Group.

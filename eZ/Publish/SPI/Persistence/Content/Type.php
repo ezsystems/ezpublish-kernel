@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content;
-use ezp\Persistence\ValueObject,
-    ezp\Persistence\Content\Location;
+namespace eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\ValueObject,
+    eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
  * @todo What about sort_field and sort_order?
@@ -114,11 +114,11 @@ class Type extends ValueObject
 
     /**
      * URL alias schema
-     * Same as {@link \ezp\Persistence\Content\Type::$nameSchema}.
+     * Same as {@link \eZ\Publish\SPI\Persistence\Content\Type::$nameSchema}.
      * If nothing is provided, $nameSchema will be used instead.
      *
      * @var string
-     * @see \ezp\Persistence\Content\Type::$nameSchema
+     * @see \eZ\Publish\SPI\Persistence\Content\Type::$nameSchema
      */
     public $urlAliasSchema;
 
@@ -176,7 +176,7 @@ class Type extends ValueObject
     /**
      * Content fields in this type
      *
-     * @var \ezp\Persistence\Content\Type\FieldDefinition[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition[]
      */
     public $fieldDefinitions = array();
 

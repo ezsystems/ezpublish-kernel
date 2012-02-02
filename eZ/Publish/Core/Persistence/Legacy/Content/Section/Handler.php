@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Section;
-use ezp\Persistence\Content\Section\Handler as BaseSectionHandler,
-    ezp\Persistence\Content\Section,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Section;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as BaseSectionHandler,
+    eZ\Publish\SPI\Persistence\Content\Section,
     ezp\Base\Exception\NotFound;
 
 /**
@@ -20,14 +20,14 @@ class Handler implements BaseSectionHandler
     /**
      * Section Gateway
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Section\Gateway $sectionGateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway $sectionGateway
      */
     protected $sectionGateway;
 
     /**
      * Creates a new Section Handler
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Section\Gateway $sectionGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway $sectionGateway
      */
     public function __construct( Gateway $sectionGateway  )
     {
@@ -39,7 +39,7 @@ class Handler implements BaseSectionHandler
      *
      * @param string $name
      * @param string $identifier
-     * @return \ezp\Persistence\Content\Section
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function create( $name, $identifier )
     {
@@ -59,7 +59,7 @@ class Handler implements BaseSectionHandler
      * @param mixed $id
      * @param string $name
      * @param string $identifier
-     * @return \ezp\Persistence\Content\Section
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function update( $id, $name, $identifier )
     {
@@ -77,7 +77,7 @@ class Handler implements BaseSectionHandler
      * Get section data
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Section
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      * @throws \ezp\Base\Exception\NotFound If section is not found
      */
     public function load( $id )
@@ -94,7 +94,7 @@ class Handler implements BaseSectionHandler
     /**
      * Get all section data
      *
-     * @return \ezp\Persistence\Content\Section[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Section[]
      */
     public function loadAll()
     {
@@ -106,7 +106,7 @@ class Handler implements BaseSectionHandler
      * Get section data by identifier
      *
      * @param string $identifier
-     * @return \ezp\Persistence\Content\Section
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      * @throws \ezp\Base\Exception\NotFound If section is not found
      */
     public function loadByIdentifier( $identifier )
@@ -124,7 +124,7 @@ class Handler implements BaseSectionHandler
      * Creates a Section from the given $data
      *
      * @param array $data
-     * @return \ezp\Persistence\Content\Section
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     protected function createSectionFromArray( array $data )
     {

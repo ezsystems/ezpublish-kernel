@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Query\Criterion;
+namespace eZ\Publish\SPI\Persistence\Content\Query\Criterion;
 
 /**
  * Operators struct

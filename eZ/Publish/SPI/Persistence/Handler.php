@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence;
+namespace eZ\Publish\SPI\Persistence;
 
 /**
  * The main handler for Storage Engine
@@ -16,42 +16,42 @@ namespace ezp\Persistence;
 interface Handler
 {
     /**
-     * @return \ezp\Persistence\Content\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function contentHandler();
 
     /**
-     * @return \ezp\Persistence\Content\Search\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Handler
      */
     public function searchHandler();
 
     /**
-     * @return \ezp\Persistence\Content\Type\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler();
 
     /**
-     * @return \ezp\Persistence\Content\Language\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     public function contentLanguageHandler();
 
     /**
-     * @return \ezp\Persistence\Content\Location\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function locationHandler();
 
     /**
-     * @return \ezp\Persistence\Content\Location\Trash\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     public function trashHandler();
 
     /**
-     * @return \ezp\Persistence\User\Handler
+     * @return \eZ\Publish\SPI\Persistence\User\Handler
      */
     public function userHandler();
 
     /**
-     * @return \ezp\Persistence\Content\Section\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     public function sectionHandler();
 

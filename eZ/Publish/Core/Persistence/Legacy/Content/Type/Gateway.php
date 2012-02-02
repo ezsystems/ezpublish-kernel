@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Type;
-use ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\UpdateStruct,
-    ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 /**
  * Base class for content type gateways.
@@ -30,7 +30,7 @@ abstract class Gateway
     /**
      * Updates a group with data in $group.
      *
-     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $group
      * @return void
      */
     abstract public function updateGroup( GroupUpdateStruct $group );
@@ -117,8 +117,8 @@ abstract class Gateway
      *
      * @param mixed $typeId
      * @param int $version
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return mixed Field definition ID
      */
     abstract public function insertFieldDefinition(
@@ -141,8 +141,8 @@ abstract class Gateway
      *
      * @param mixed $typeId
      * @param int $version
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
      */
     abstract public function updateFieldDefinition(
@@ -155,7 +155,7 @@ abstract class Gateway
      *
      * @param mixed $type
      * @param int $version
-     * @param \ezp\Persistence\Content\Type\UpdateStruct $updateStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
      * @return void
      */
     abstract public function updateType( $typeId, $version, UpdateStruct $updateStruct );

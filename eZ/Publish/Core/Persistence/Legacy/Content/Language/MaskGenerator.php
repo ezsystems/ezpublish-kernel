@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Language;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 
 /**
  * Language MaskGenerator
@@ -17,14 +17,14 @@ class MaskGenerator
     /**
      * Language lookup
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Lookup
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Lookup
      */
     protected $languageLookup;
 
     /**
      * Creates a new Language MaskGenerator
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Language\Lookup $languageLookup
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Lookup $languageLookup
      */
     public function __construct( Lookup $languageLookup )
     {

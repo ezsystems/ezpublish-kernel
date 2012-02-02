@@ -8,17 +8,17 @@
  *
  */
 
-namespace ezp\Persistence\Storage\InMemory;
-use ezp\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface,
-    ezp\Persistence\Content\Location\Trashed as TrashedValue,
-    ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Content\Location as LocationValue,
-    ezp\Persistence\Content\Query\Criterion,
+namespace eZ\Publish\Core\Persistence\InMemory;
+use eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as TrashHandlerInterface,
+    eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedValue,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
     ezp\Base\Exception\NotFound,
     ezp\Content\Location\Exception\ParentNotFound;
 
 /**
- * @see ezp\Persistence\Content\Location\Trash\Handler
+ * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
  */
 class TrashHandler implements TrashHandlerInterface
 {
@@ -45,7 +45,7 @@ class TrashHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Trash\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     public function load( $id )
     {
@@ -53,7 +53,7 @@ class TrashHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Trash\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     public function trashSubtree( $locationId )
     {
@@ -73,7 +73,7 @@ class TrashHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Trash\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     private function trash( $locationId )
     {
@@ -100,7 +100,7 @@ class TrashHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Trash\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     public function untrashLocation( $trashedId, $newParentId )
     {
@@ -133,7 +133,7 @@ class TrashHandler implements TrashHandlerInterface
      * Will return all trashed locations, regardless criterion filter or sort clauses provided.
      * Offset/Limit is however supported
      *
-     * @see ezp\Persistence\Content\Location\Trash\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
     {
@@ -145,7 +145,7 @@ class TrashHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Trash\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     public function emptyTrash()
     {
@@ -171,7 +171,7 @@ class TrashHandler implements TrashHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Trash\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     public function emptyOne( $trashedId )
     {

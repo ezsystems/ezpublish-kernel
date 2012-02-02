@@ -1,18 +1,18 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\SearchHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\SearchHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests;
-use ezp\Persistence\Content,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Query\Criterion\ContentId,
+namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
     ezp\Content\FieldType\TextLine\Value as TextLineValue,
     ezp\Base\Exception\NotFound;
 
@@ -90,7 +90,7 @@ class SearchHandlerTest extends HandlerTest
     /**
      * Test findSingle function
      *
-     * @covers ezp\Persistence\Storage\InMemory\SearchHandler::findSingle
+     * @covers eZ\Publish\Core\Persistence\InMemory\SearchHandler::findSingle
      */
     public function testFindSingle()
     {
@@ -99,6 +99,6 @@ class SearchHandlerTest extends HandlerTest
         $this->assertEquals( $this->contentId, $content->id );
         $this->assertEquals( 14, $content->ownerId );
         $this->assertEquals( "test", $content->version->name );
-        $this->assertInstanceOf( "ezp\\Persistence\\Content\\Version", $content->version );
+        $this->assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\Version", $content->version );
     }
 }

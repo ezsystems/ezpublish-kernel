@@ -7,16 +7,16 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Location;
-use ezp\Persistence\Content\Location,
-    ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Content\Location\UpdateStruct,
-    ezp\Persistence\Content\Location\Handler as BaseLocationHandler,
-    ezp\Persistence\Storage\Legacy\Content\Handler as ContentHandler,
-    ezp\Persistence\Storage\Legacy\Content\Mapper as ContentMapper,
-    ezp\Persistence\Storage\Legacy\Content\Location\Gateway as LocationGateway,
-    ezp\Persistence\Storage\Legacy\Content\Location\Mapper as LocationMapper;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\Handler as BaseLocationHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
@@ -26,35 +26,35 @@ class Handler implements BaseLocationHandler
     /**
      * Gaateway for handling location data
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
 
     /**
      * Location locationMapper
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapper;
 
     /**
      * Content handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
     protected $contentHandler;
 
     /**
      * Content locationMapper
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected $contentMapper;
 
     /**
      * Construct from userGateway
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Location\Gateway $locationGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
      * @return void
      */
     public function __construct(
@@ -85,7 +85,7 @@ class Handler implements BaseLocationHandler
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
-     * @return \ezp\Persistence\Content\Location
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function load( $locationId )
     {
@@ -224,7 +224,7 @@ class Handler implements BaseLocationHandler
     /**
      * Updates an existing location.
      *
-     * @param \ezp\Persistence\Content\Location\UpdateStruct $location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
      * @return boolean
      */
@@ -236,8 +236,8 @@ class Handler implements BaseLocationHandler
     /**
      * Creates a new location rooted at $location->parentId.
      *
-     * @param \ezp\Persistence\Content\Location\CreateStruct $locationStruct
-     * @return \ezp\Persistence\Content\Location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $locationStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function create( CreateStruct $locationStruct )
     {

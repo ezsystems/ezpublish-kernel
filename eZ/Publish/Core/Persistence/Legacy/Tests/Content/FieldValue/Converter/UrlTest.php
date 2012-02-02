@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Url\Value as UrlValue,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Url as UrlConverter,
-    ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url as UrlConverter,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -22,7 +22,7 @@ use ezp\Content\FieldType\Url\Value as UrlValue,
 class UrlTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Url
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url
      */
     protected $converter;
 
@@ -35,7 +35,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group url
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Url::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -52,7 +52,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group url
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Url::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -75,7 +75,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group url
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Url::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
@@ -85,7 +85,7 @@ class UrlTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group url
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Url::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Url::toFieldDefinition
      */
     public function testToFieldDefinition()
     {

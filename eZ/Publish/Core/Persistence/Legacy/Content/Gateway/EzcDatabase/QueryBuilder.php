@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase;
-use ezp\Persistence\Storage\Legacy\EzcDbHandler;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 class QueryBuilder
 {

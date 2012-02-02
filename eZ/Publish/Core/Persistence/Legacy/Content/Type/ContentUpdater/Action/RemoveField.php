@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action;
-use ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action,
-    ezp\Persistence\Content,
-    ezp\Persistence\Storage\Legacy\Content\Gateway as ContentGateway,
-    ezp\Persistence\Content\Type\FieldDefinition;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\Core\Persistence\Legacy\Content\Gateway as ContentGateway,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
  * Action to remove a field from content objects
@@ -28,8 +28,8 @@ class RemoveField extends Action
     /**
      * Creates a new action
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
-     * @param \ezp\Persistence\Content\Type\FieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
     public function __construct(
         ContentGateway $contentGateway,

@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Language;
-use ezp\Persistence\Content\Language,
-    ezp\Persistence\Content\Language\CreateStruct;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
  * Language Mapper
@@ -19,8 +19,8 @@ class Mapper
     /**
      * Creates a Language from $struct
      *
-     * @param \ezp\Persistence\Content\Language\CreateStruct $struct
-     * @return \ezp\Persistence\Content\Language
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function createLanguageFromCreateStruct( CreateStruct $struct )
     {
@@ -37,7 +37,7 @@ class Mapper
      * Extracts Language objects from $rows
      *
      * @param array $rows
-     * @return \ezp\Persistence\Content\Language[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     public function extractLanguagesFromRows( array $rows )
     {

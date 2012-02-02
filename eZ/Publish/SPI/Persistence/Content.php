@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence;
+namespace eZ\Publish\SPI\Persistence;
 
 /**
  */
@@ -78,15 +78,15 @@ class Content extends ValueObject
      * The loaded version
      *
      * The Version, containing version information and all
-     * {@link \ezp\Persistence\Content\Field}s in this version (in all languages).
+     * {@link \eZ\Publish\SPI\Persistence\Content\Field}s in this version (in all languages).
      * Non-translatable fields will only occur once!
      *
-     * @var \ezp\Persistence\Content\Version
+     * @var \eZ\Publish\SPI\Persistence\Content\Version
      */
     public $version;
 
     /**
-     * @var \ezp\Persistence\Content\Location[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     public $locations = array();
 

@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Author\Value as AuthorValue,
     ezp\Content\FieldType\Author\Author,
     ezp\Content\FieldType\FieldSettings,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Author as AuthorConverter,
-    ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author as AuthorConverter,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     PHPUnit_Framework_TestCase,
     DOMDocument;
 
@@ -28,7 +28,7 @@ use ezp\Content\FieldType\Author\Value as AuthorValue,
 class AuthorTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Author
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author
      */
     protected $converter;
 
@@ -55,7 +55,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Author::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -91,7 +91,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Author::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author::toFieldValue
      */
     public function testToFieldValue()
     {

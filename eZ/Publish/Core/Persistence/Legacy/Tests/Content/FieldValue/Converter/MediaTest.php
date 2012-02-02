@@ -7,16 +7,16 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Media\Type as MediaType,
     ezp\Content\FieldType\Media\Value as MediaTypeValue,
     ezp\Content\FieldType\FieldSettings,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Media as MediaTypeConverter,
-    ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
-    ezp\Persistence\Content\FieldTypeConstraints,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media as MediaTypeConverter,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     ezp\Base\BinaryRepository;
 
 /**
@@ -25,7 +25,7 @@ use ezp\Content\FieldType\Media\Type as MediaType,
 class MediaTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\MediaType
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\MediaType
      */
     protected $converter;
 
@@ -37,7 +37,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
 
     /**
      * Persistence field value to use in tests
-     * @var \ezp\Persistence\Content\FieldValue
+     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
     protected $persistenceMediaValue;
 
@@ -62,7 +62,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Media::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -79,7 +79,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Media::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -95,7 +95,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Media::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
@@ -131,7 +131,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Media::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Media::toFieldDefinition
      */
     public function testToFieldDefinition()
     {

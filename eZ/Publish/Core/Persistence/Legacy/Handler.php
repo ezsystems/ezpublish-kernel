@@ -7,31 +7,30 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy;
-use ezp\Persistence\Handler as HandlerInterface,
-    ezp\Persistence\Storage\Legacy\Content,
-    ezp\Persistence\Storage\Legacy\Content\Type,
-    ezp\Persistence\Storage\Legacy\Content\Handler as ContentHandler,
-    ezp\Persistence\Storage\Legacy\Content\FieldHandler as ContentFieldHandler,
-    ezp\Persistence\Storage\Legacy\Content\Type\Handler as TypeHandler,
-    ezp\Persistence\Storage\Legacy\Content\Type\Mapper as TypeMapper,
-    ezp\Persistence\Storage\Legacy\Content\Language\Mapper as LanguageMapper,
-    ezp\Persistence\Storage\Legacy\Content\Location\Handler as LocationHandler,
-    ezp\Persistence\Storage\Legacy\Content\Location\Mapper as LocationMapper,
-    ezp\Persistence\Storage\Legacy\Content\Mapper as ContentMapper,
-    ezp\Persistence\Storage\Legacy\Content\StorageRegistry,
-    ezp\Persistence\Storage\Legacy\Content\StorageHandler,
-    ezp\Persistence\Storage\Legacy\Content\Search\TransformationProcessor,
-    ezp\Persistence\Storage\Legacy\Content\Search\TransformationParser,
-    ezp\Persistence\Storage\Legacy\Content\Search\TransformationPcreCompiler,
-    ezp\Persistence\Storage\Legacy\Content\Search\Utf8Converter,
-    ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
-    ezp\Persistence\Storage\Legacy\Content\Search\Gateway\SortClauseHandler,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler\Pgsql,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler\Sqlite,
-    ezp\Persistence\Storage\Legacy\User,
-    ezp\Persistence\Storage\Legacy\User\Mapper as UserMapper,
-    ezp\Base\Configuration,
+namespace eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
+    eZ\Publish\Core\Persistence\Legacy\Content,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type,
+    eZ\Publish\Core\Persistence\Legacy\Content\Handler as ContentHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler as ContentFieldHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler as TypeHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper as TypeMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper as LanguageMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler as LocationHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationParser,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationPcreCompiler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\Utf8Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\SortClauseHandler,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite,
+    eZ\Publish\Core\Persistence\Legacy\User,
+    eZ\Publish\Core\Persistence\Legacy\User\Mapper as UserMapper,
     ezcDbFactory;
 
 /**
@@ -45,21 +44,21 @@ class Handler implements HandlerInterface
     /**
      * Content handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
     protected $contentHandler;
 
     /**
      * Content mapper
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected $contentMapper;
 
     /**
      * Field value converter registry
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $fieldValueConverterRegistry;
 
@@ -80,14 +79,14 @@ class Handler implements HandlerInterface
     /**
      * Field handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected $fieldHandler;
 
     /**
      * Search handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Search\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
      */
     protected $searchHandler;
 
@@ -101,35 +100,35 @@ class Handler implements HandlerInterface
     /**
      * Content Type gateway
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected $contentTypeGateway;
 
     /**
      * Content Type update handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler
      */
     protected $typeUpdateHandler;
 
     /**
      * Location handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler
      */
     protected $locationHandler;
 
     /**
      * Location gateway
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
 
     /**
      * Location mapper
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapper;
 
@@ -150,35 +149,35 @@ class Handler implements HandlerInterface
     /**
      * Content gateway
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGateway;
 
     /**
      * Language handler
      *
-     * @var \ezp\Persistence\Content\Language\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected $languageHandler;
 
     /**
      * Language cache
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
     protected $languageCache;
 
     /**
      * Language mask generator
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
     protected $languageMaskGenerator;
 
     /**
      * Configurator
      *
-     * @var \ezp\Persistence\Storage\Legacy\Configurator
+     * @var \eZ\Publish\Core\Persistence\Legacy\Configurator
      */
     protected $configurator;
 
@@ -224,7 +223,7 @@ class Handler implements HandlerInterface
      *
      * The flag 'defer_type_update' defines if content types should be
      * published immediatly (false), when the
-     * {@link \ezp\Persistence\Content\Type\Handler::publish()} method is
+     * {@link \eZ\Publish\SPI\Persistence\Content\Type\Handler::publish()} method is
      * called, or if a background process should be triggered (true), which is
      * then executed by the old eZ Publish core.
      *
@@ -232,7 +231,7 @@ class Handler implements HandlerInterface
      * expected. The referred class is instantiated and the resulting object is
      * used to store/restore/delete/… data in external storages (e.g. another
      * database or a web service). The classes must comply to the
-     * {@link \ezp\Persistence\Fields\Storage} interface. Note that due to the
+     * {@link \eZ\Publish\SPI\Persistence\Fields\Storage} interface. Note that due to the
      * configuration mechanism and missing proper DI, the classes may not
      * expect any constructor parameters!
      *
@@ -240,14 +239,14 @@ class Handler implements HandlerInterface
      * field type names to classes. Each of the classes is instantiated and
      * used to convert content fields and content type field definitions to the
      * legacy storage engine. The given class names must derive the
-     * {@link \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter}
+     * {@link \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter}
      * class. As for 'external_storage' classes, none of the classes may expect
      * parameters in its constructor, due to missing proper DI.
      *
      * Through the 'transformation_rule_files' array, a list of files with
      * full text transformation rules is given. These files are read by an
      * instance of
-     * {@link \ezp\Persistence\Storage\Legacy\Converter\Search\TransformationProcessor}
+     * {@link \eZ\Publish\Core\Persistence\Legacy\Converter\Search\TransformationProcessor}
      * and then used for normalization in the full text search.
      *
      * @param array $config
@@ -260,7 +259,7 @@ class Handler implements HandlerInterface
     /**
      * Returns the Zeta Database handler
      *
-     * @return \ezp\Persistence\Storage\Legacy\EzcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected function getDatabase()
     {
@@ -287,7 +286,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function contentHandler()
     {
@@ -306,7 +305,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a content mapper
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected function getContentMapper()
     {
@@ -323,7 +322,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a content gateway
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getContentGateway()
     {
@@ -342,7 +341,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a field handler
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\FieldHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected function getFieldHandler()
     {
@@ -361,7 +360,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a language mask generator
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
     protected function getLanguageMaskGenerator()
     {
@@ -377,7 +376,7 @@ class Handler implements HandlerInterface
     /**
      * Returns the field value converter registry
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     public function getFieldValueConverterRegistry()
     {
@@ -412,7 +411,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a storage handler
      *
-     * @return \ezp\Persistence\Storage\Legacy\StorageHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\StorageHandler
      */
     protected function getStorageHandler()
     {
@@ -452,7 +451,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Search\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Handler
      */
     public function searchHandler()
     {
@@ -504,7 +503,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Type\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler()
     {
@@ -522,7 +521,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a Content Type update handler
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler
      */
     protected function getTypeUpdateHandler()
     {
@@ -552,7 +551,7 @@ class Handler implements HandlerInterface
     /**
      * Returns the content type gateway
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected function getContentTypeGateway()
     {
@@ -567,7 +566,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Language\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     public function contentLanguageHandler()
     {
@@ -587,7 +586,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a Language cache
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
     protected function getLanguageCache()
     {
@@ -599,7 +598,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Location\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function locationHandler()
     {
@@ -618,7 +617,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a location gateway
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase
      */
     protected function getLocationGateway()
     {
@@ -632,7 +631,7 @@ class Handler implements HandlerInterface
     /**
      * Returns a location mapper
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected function getLocationMapper()
     {
@@ -644,7 +643,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\User\Handler
+     * @return \eZ\Publish\SPI\Persistence\User\Handler
      */
     public function userHandler()
     {
@@ -660,7 +659,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Section\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     public function sectionHandler()
     {
@@ -674,7 +673,7 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Location\Trash\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     public function trashHandler()
     {

@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Type;
-use ezp\Persistence\ValueObject,
-    ezp\Persistence\Content\FieldTypeConstraints,
-    ezp\Persistence\Content\FieldValue;
+namespace eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\ValueObject,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
+    eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * @todo Do we need a FieldDefitinitionCreateStruct?
@@ -94,14 +94,14 @@ class FieldDefinition extends ValueObject
      *   - validators
      *   - fieldSettings
      *
-     * @var \ezp\Persistence\Content\FieldTypeConstraints
+     * @var \eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints
      */
     public $fieldTypeConstraints;
 
     /**
      * Default value of the field
      *
-     * @var \ezp\Persistence\Content\FieldValue
+     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
     public $defaultValue;
 

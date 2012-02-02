@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\User;
-use ezp\Persistence\User,
-    ezp\Persistence\User\Role,
-    ezp\Persistence\User\RoleUpdateStruct,
-    ezp\Persistence\User\Policy;
+namespace eZ\Publish\SPI\Persistence\User;
+use eZ\Publish\SPI\Persistence\User,
+    eZ\Publish\SPI\Persistence\User\Role,
+    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
+    eZ\Publish\SPI\Persistence\User\Policy;
 
 /**
  * Storage Engine handler for user module
@@ -26,8 +26,8 @@ interface Handler
      * The User struct used to create the user will contain an ID which is used
      * to reference the user.
      *
-     * @param \ezp\Persistence\User $user
-     * @return \ezp\Persistence\User
+     * @param \eZ\Publish\SPI\Persistence\User $user
+     * @return \eZ\Publish\SPI\Persistence\User
      */
     public function create( User $user );
 
@@ -35,7 +35,7 @@ interface Handler
      * Load user with user ID.
      *
      * @param mixed $userId
-     * @return \ezp\Persistence\User
+     * @return \eZ\Publish\SPI\Persistence\User
      * @throws \ezp\Base\Exception\NotFound If user is not found
      */
     public function load( $userId );
@@ -45,14 +45,14 @@ interface Handler
      *
      * @param string $login
      * @param boolean $alsoMatchEmail Also match user email, caller must verify that $login is a valid email address.
-     * @return \ezp\Persistence\User[]
+     * @return \eZ\Publish\SPI\Persistence\User[]
      */
     public function loadByLogin( $login, $alsoMatchEmail = false );
 
     /**
      * Update the user information specified by the user struct
      *
-     * @param \ezp\Persistence\User $user
+     * @param \eZ\Publish\SPI\Persistence\User $user
      */
     public function update( User $user );
 
@@ -67,8 +67,8 @@ interface Handler
     /**
      * Create new role
      *
-     * @param \ezp\Persistence\User\Role $role
-     * @return \ezp\Persistence\User\Role
+     * @param \eZ\Publish\SPI\Persistence\User\Role $role
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function createRole( Role $role );
 
@@ -76,7 +76,7 @@ interface Handler
      * Load a specified role by id
      *
      * @param mixed $roleId
-     * @return \ezp\Persistence\User\Role
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      * @throws \ezp\Base\Exception\NotFound If role is not found
      */
     public function loadRole( $roleId );
@@ -87,14 +87,14 @@ interface Handler
      * @param mixed $groupId
      *              In legacy storage engine this is the content object id a role is assigned to.
      *              By the nature of legacy storage engine, it is therefor possible to use $userId as well here.
-     * @return \ezp\Persistence\User\Role[]
+     * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
     public function loadRolesByGroupId( $groupId );
 
     /**
      * Update role
      *
-     * @param \ezp\Persistence\User\RoleUpdateStruct $role
+     * @param \eZ\Publish\SPI\Persistence\User\RoleUpdateStruct $role
      */
     public function updateRole( RoleUpdateStruct $role );
 
@@ -109,8 +109,8 @@ interface Handler
      * Adds a policy to a role
      *
      * @param mixed $roleId
-     * @param \ezp\Persistence\User\Policy $policy
-     * @return \ezp\Persistence\User\Policy
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
+     * @return \eZ\Publish\SPI\Persistence\User\Policy
      * @todo Throw on invalid Role Id?
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
@@ -121,7 +121,7 @@ interface Handler
      *
      * Replaces limitations values with new values.
      *
-     * @param \ezp\Persistence\User\Policy $policy
+     * @param \eZ\Publish\SPI\Persistence\User\Policy $policy
      * @throws \ezp\Base\Exception\InvalidArgumentValue If $policy->limitation is empty (null, empty string/array..)
      */
     public function updatePolicy( Policy $policy );
@@ -141,7 +141,7 @@ interface Handler
      *
      * @param mixed $userId
      *              In legacy storage engine this is the content object id roles are assigned to in ezuser_role.
-     * @return \ezp\Persistence\User\Policy[]
+     * @return \eZ\Publish\SPI\Persistence\User\Policy[]
      */
     public function loadPoliciesByUserId( $userId );
 

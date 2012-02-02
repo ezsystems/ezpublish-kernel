@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Content\Search;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content\Search;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  */
@@ -25,7 +25,7 @@ class Result extends ValueObject
     /**
      * Content objects returned by the search
      *
-     * @var \ezp\Persistence\Content[]
+     * @var \eZ\Publish\SPI\Persistence\Content[]
      */
     public $content = array();
 }

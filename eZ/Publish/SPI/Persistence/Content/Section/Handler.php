@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Section;
+namespace eZ\Publish\SPI\Persistence\Content\Section;
 
 /**
  */
@@ -18,7 +18,7 @@ interface Handler
      *
      * @param string $name
      * @param string $identifier
-     * @return \ezp\Persistence\Content\Section
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      * @todo Should validate that $identifier is unique??
      * @todo What about translatable $name?
      */
@@ -30,7 +30,7 @@ interface Handler
      * @param mixed $id
      * @param string $name
      * @param string $identifier
-     * @return \ezp\Persistence\Content\Section
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      */
     public function update( $id, $name, $identifier );
 
@@ -38,7 +38,7 @@ interface Handler
      * Get section data
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Section
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      * @throws \ezp\Base\Exception\NotFound If section is not found
      */
     public function load( $id );
@@ -46,7 +46,7 @@ interface Handler
     /**
      * Get all section data
      *
-     * @return \ezp\Persistence\Content\Section[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Section[]
      */
     public function loadAll();
 
@@ -54,7 +54,7 @@ interface Handler
      * Get section data by identifier
      *
      * @param string $identifier
-     * @return \ezp\Persistence\Content\Section
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      * @throws \ezp\Base\Exception\NotFound If section is not found
      */
     public function loadByIdentifier( $identifier );

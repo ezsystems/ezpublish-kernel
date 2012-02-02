@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\EzcDbHandler;
-use ezp\Persistence\Storage\Legacy\EzcDbHandler;
+namespace eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 /**
  * Wrapper class for the zeta components database handler, providing some

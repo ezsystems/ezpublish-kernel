@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Content;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Class representing a relation between content.

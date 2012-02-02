@@ -11,7 +11,7 @@ namespace eZ\Publish\Core\API\Tests\Service\InMemory;
 use eZ\Publish\Core\API\Tests\Service\SectionBase as BaseSectionServiceTest,
     eZ\Publish\Core\API\Repository,
     ezp\Io\Storage\InMemory as InMemoryIoHandler,
-    ezp\Persistence\Storage\InMemory\Handler as InMemoryPersistenceHandler;
+    eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryPersistenceHandler;
 
 /**
  * Test case for Section Service using Legacy storage class

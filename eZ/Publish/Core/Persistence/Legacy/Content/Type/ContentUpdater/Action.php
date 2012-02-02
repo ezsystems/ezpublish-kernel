@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater;
-use ezp\Persistence\Content,
-    ezp\Persistence\Storage\Legacy\Content\Gatway as ContentGateway;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\Core\Persistence\Legacy\Content\Gatway as ContentGateway;
 
 /**
  * Updater action base class
@@ -19,14 +19,14 @@ abstract class Action
     /**
      * Content gateway
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGateway;
 
     /**
      * Creates a new action
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      */
     public function __construct( ContentGateway $contentGateway )
     {

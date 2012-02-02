@@ -1,27 +1,27 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Section\Gateway\EzcDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section\Gateway\EzcDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Section\Gateway;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase,
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase,
 
-    ezp\Persistence\Content\Section;
+    eZ\Publish\SPI\Persistence\Content\Section;
 
 /**
- * Test case for ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase.
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase.
  */
 class EzcDatabaseTest extends TestCase
 {
     /**
      * Database gateway to test.
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase
+     * @var eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase
      */
     protected $databaseGateway;
 
@@ -41,7 +41,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::__construct
      */
     public function testCtor()
     {
@@ -57,7 +57,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase::insertSection
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::insertSection
      */
     public function testInsertSection()
     {
@@ -84,7 +84,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase::updateSection
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::updateSection
      */
     public function testUpdateSection()
     {
@@ -110,7 +110,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase::loadSectionData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::loadSectionData
      */
     public function testLoadSectionData()
     {
@@ -132,7 +132,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase::loadSectionDataByIdentifier
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::loadSectionDataByIdentifier
      */
     public function testLoadSectionDataByIdentifier()
     {
@@ -154,7 +154,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase::countContentObjectsInSection
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::countContentObjectsInSection
      */
     public function testCountContentObjectsInSection()
     {
@@ -174,7 +174,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase::deleteSection
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::deleteSection
      */
     public function testDeleteSection()
     {
@@ -208,7 +208,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase::assignSectionToContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase::assignSectionToContent
      * @depends testCountContentObjectsInSection
      */
     public function testAssignSectionToContent()
@@ -232,7 +232,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Returns a ready to test EzcDatabase gateway
      *
-     * @return ezp\Persistence\Storage\Legacy\Content\Section\Gateway\EzcDatabase
+     * @return eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway\EzcDatabase
      */
     protected function getDatabaseGateway()
     {

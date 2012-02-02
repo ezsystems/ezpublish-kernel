@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy;
+namespace eZ\Publish\Core\Persistence\Legacy;
 use ezcDbHandler as ezcDbHandlerWrapped,
     ezcQuerySelect;
 

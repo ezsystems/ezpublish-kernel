@@ -1,19 +1,19 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\TrashHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\TrashHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests;
-use ezp\Persistence\Content\Location\Trashed as TrashedValue,
-    ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Content\CreateStruct as ContentCreateStruct,
-    ezp\Persistence\Content\Query\Criterion\ContentId,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
+namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+use eZ\Publish\SPI\Persistence\Content\Location\Trashed as TrashedValue,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct as ContentCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     ezp\Base\Exception\NotFound,
     ezp\Content\Location,
     ezp\Content\FieldType\TextLine\Value as TextLineValue;
@@ -31,12 +31,12 @@ class TrashHandlerTest extends HandlerTest
     protected $entriesGenerated = 5;
 
     /**
-     * @var \ezp\Persistence\Content\Location[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     protected $locations;
 
     /**
-     * @var \ezp\Persistence\Content[]
+     * @var \eZ\Publish\SPI\Persistence\Content[]
      */
     protected $contents;
 
@@ -69,7 +69,7 @@ class TrashHandlerTest extends HandlerTest
     protected $contentToDelete = array();
 
     /**
-     * @var \ezp\Persistence\Content\Location\Trash\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     protected $trashHandler;
 
@@ -171,7 +171,7 @@ class TrashHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers \ezp\Persistence\Storage\InMemory\TrashHandler::load
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::load
      * @group trashHandler
      */
     public function testLoad()
@@ -181,7 +181,7 @@ class TrashHandlerTest extends HandlerTest
         unset( $trashed );
 
         $trashed = $this->trashHandler->load( $trashedId );
-        self::assertInstanceOf( 'ezp\\Persistence\\Content\\Location\\Trashed', $trashed );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\Trashed', $trashed );
         foreach ( $this->locations[0] as $property => $value )
         {
             self::assertEquals( $value, $trashed->$property, "Property {$property} did not match");
@@ -190,7 +190,7 @@ class TrashHandlerTest extends HandlerTest
 
     /**
      * @expectedException \ezp\Base\Exception\NotFound
-     * @covers \ezp\Persistence\Storage\InMemory\TrashHandler::load
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::load
      * @group trashHandler
      */
     public function testLoadNonExistent()
@@ -200,7 +200,7 @@ class TrashHandlerTest extends HandlerTest
 
     /**
      * @group trashHandler
-     * @covers \ezp\Persistence\Storage\InMemory\TrashHandler::trashSubtree
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::trashSubtree
      */
     public function testTrashSubtree()
     {
@@ -209,7 +209,7 @@ class TrashHandlerTest extends HandlerTest
 
     /**
      * @group trashHandler
-     * @covers \ezp\Persistence\Storage\InMemory\TrashHandler::untrashLocation
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::untrashLocation
      */
     public function testUntrashLocation()
     {
@@ -218,7 +218,7 @@ class TrashHandlerTest extends HandlerTest
 
     /**
      * @group trashHandler
-     * @covers \ezp\Persistence\Storage\InMemory\TrashHandler::listTrashed
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::listTrashed
      */
     public function testListTrashed()
     {
@@ -227,7 +227,7 @@ class TrashHandlerTest extends HandlerTest
 
     /**
      * @group trashHandler
-     * @covers \ezp\Persistence\Storage\InMemory\TrashHandler::emptyTrash
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::emptyTrash
      */
     public function testEmptyTrash()
     {
@@ -236,7 +236,7 @@ class TrashHandlerTest extends HandlerTest
 
     /**
      * @group trashHandler
-     * @covers \ezp\Persistence\Storage\InMemory\TrashHandler::emptyOne
+     * @covers \eZ\Publish\Core\Persistence\InMemory\TrashHandler::emptyOne
      */
     public function testEmptyOne()
     {

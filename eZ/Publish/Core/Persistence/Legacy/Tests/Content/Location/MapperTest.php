@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\LocationHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\LocationHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Location;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\Location\Mapper,
-    ezp\Persistence\Content\Location\Trashed;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper,
+    eZ\Publish\SPI\Persistence\Content\Location\Trashed;
 
 /**
  * Test case for Location\Mapper
@@ -76,7 +76,7 @@ class LocationHandlerTest extends TestCase
 
     /**
      * @dataProvider getLoadLocationValues
-     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Mapper::createLocationFromRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateLocationFromRow( $field, $value )
     {
@@ -95,7 +95,7 @@ class LocationHandlerTest extends TestCase
 
     /**
      * @dataProvider getLoadLocationValues
-     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Mapper::createLocationFromRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateTrashedFromRow( $field, $value )
     {
@@ -118,7 +118,7 @@ class LocationHandlerTest extends TestCase
     /**
      * @return void
      * @dataProvider getLoadLocationValues
-     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Mapper::createLocationFromRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper::createLocationFromRow
      */
     public function testCreateLocationFromRowWithPrefix( $field, $value )
     {

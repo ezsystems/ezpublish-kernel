@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence;
+namespace eZ\Publish\SPI\Persistence;
 use ezp\Base\Exception\PropertyNotFound;
 
 /**

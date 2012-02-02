@@ -1,14 +1,14 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\SectionHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\SectionHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests;
-use ezp\Persistence\Content\Section,
+namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+use eZ\Publish\SPI\Persistence\Content\Section,
     ezp\Base\Exception\NotFound;
 
 /**
@@ -53,7 +53,7 @@ class SectionHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Storage\InMemory\SectionHandler::load
+     * @covers eZ\Publish\Core\Persistence\InMemory\SectionHandler::load
      */
     public function testLoad()
     {
@@ -66,7 +66,7 @@ class SectionHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Storage\InMemory\SectionHandler::loadAll
+     * @covers eZ\Publish\Core\Persistence\InMemory\SectionHandler::loadAll
      */
     public function testLoadAll()
     {
@@ -79,7 +79,7 @@ class SectionHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Storage\InMemory\SectionHandler::loadByIdentifier
+     * @covers eZ\Publish\Core\Persistence\InMemory\SectionHandler::loadByIdentifier
      */
     public function testLoadByIdentifier()
     {
@@ -92,7 +92,7 @@ class SectionHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers ezp\Persistence\Storage\InMemory\SectionHandler::create
+     * @covers eZ\Publish\Core\Persistence\InMemory\SectionHandler::create
      */
     public function testCreate()
     {
@@ -106,7 +106,7 @@ class SectionHandlerTest extends HandlerTest
     /**
      * Test update function
      *
-     * @covers ezp\Persistence\Storage\InMemory\SectionHandler::update
+     * @covers eZ\Publish\Core\Persistence\InMemory\SectionHandler::update
      */
     public function testUpdate()
     {
@@ -124,7 +124,7 @@ class SectionHandlerTest extends HandlerTest
     /**
      * Test delete function
      *
-     * @covers ezp\Persistence\Storage\InMemory\SectionHandler::delete
+     * @covers eZ\Publish\Core\Persistence\InMemory\SectionHandler::delete
      */
     public function testDelete()
     {

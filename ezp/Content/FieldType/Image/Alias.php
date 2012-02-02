@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\FieldType\Image;
-use ezp\Persistence\ValueObject,
+use eZ\Publish\SPI\Persistence\ValueObject,
     ezp\Base\Exception\PropertyNotFound;
 
 /**

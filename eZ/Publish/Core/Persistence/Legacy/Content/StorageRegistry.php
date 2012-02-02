@@ -8,10 +8,10 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content;
-use ezp\Persistence\Fields\Storage,
-    ezp\Persistence\Storage\Legacy\Exception,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\NullStorage;
+namespace eZ\Publish\Core\Persistence\Legacy\Content;
+use eZ\Publish\SPI\Persistence\Fields\Storage,
+    eZ\Publish\Core\Persistence\Legacy\Exception,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\NullStorage;
 
 /**
  * Registry for external storages

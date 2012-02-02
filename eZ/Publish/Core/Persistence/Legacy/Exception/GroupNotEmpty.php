@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Exception;
+namespace eZ\Publish\Core\Persistence\Legacy\Exception;
 
 /**
  * Exception thrown if a Content\Type\Group is to be deleted which is not

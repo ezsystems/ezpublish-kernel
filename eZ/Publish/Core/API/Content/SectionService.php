@@ -16,7 +16,7 @@ use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
-use ezp\Persistence\Handler;
+use eZ\Publish\SPI\Persistence\Handler;
 use eZ\Publish\API\Repository\Repository  as RepositoryInterface;
 
 /**
@@ -32,7 +32,7 @@ class SectionService implements SectionServiceInterface
     protected $repository;
 
     /**
-     * @var \ezp\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $handler;
 
@@ -40,7 +40,7 @@ class SectionService implements SectionServiceInterface
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \eZ\Publish\API\Repository\Repository  $repository
-     * @param \ezp\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Handler $handler
      */
     public function __construct( RepositoryInterface $repository, Handler $handler )
     {

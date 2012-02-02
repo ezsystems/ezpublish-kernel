@@ -286,7 +286,7 @@ class Service extends BaseService
         }
 
         if ( !$vo instanceof TypeValue )
-            throw new Logic( "typeHandler->loadByIdentifier() did not return ezp\\Persistence\\Content\\Type" );
+            throw new Logic( "typeHandler->loadByIdentifier() did not return eZ\\Publish\\SPI\\Persistence\\Content\\Type" );
 
         return $vo->id;
     }

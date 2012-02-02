@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\FieldValueConverterRegistryTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValueConverterRegistryTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry;
 
 /**
  * Test case for FieldValue Converter Registry
@@ -19,7 +19,7 @@ class FieldValueConverterRegistryTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry::register
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry::register
      */
     public function testRegister()
     {
@@ -40,7 +40,7 @@ class FieldValueConverterRegistryTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry::getConverter
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry::getConverter
      */
     public function testGetStorage()
     {
@@ -59,9 +59,9 @@ class FieldValueConverterRegistryTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry::getConverter
-     * @covers ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Exception\NotFound
-     * @expectedException ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry::getConverter
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
+     * @expectedException eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Exception\NotFound
      * @expectedExceptionMessage FieldValue Converter for type "not-found" not found.
      */
     public function testGetNotFound()
@@ -79,7 +79,7 @@ class FieldValueConverterRegistryTest extends TestCase
     protected function getFieldValueConverterMock()
     {
         return $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
     }
 

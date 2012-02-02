@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Language;
-use ezp\Persistence\Content\Language;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language;
 
 /**
  * Language Handler

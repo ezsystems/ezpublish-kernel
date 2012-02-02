@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content;
-use ezp\Persistence\Content\Field;
+namespace eZ\Publish\Core\Persistence\Legacy\Content;
+use eZ\Publish\SPI\Persistence\Content\Field;
 
 /**
  * Handler for external storages
@@ -19,7 +19,7 @@ class StorageHandler
     /**
      * Storage registry
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\StorageRegistry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
      */
     protected $storageRegistry;
 

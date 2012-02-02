@@ -31,8 +31,8 @@ class SortClauseBuilderTest extends \PHPUnit_Framework_TestCase
     {
         array_push( $extraParameters, Query::SORT_ASC );
         $sortClause = call_user_func_array( array( $this->sb, $sortClauseCall ), $extraParameters );
-        self::assertInstanceOf( 'ezp\\Persistence\\Content\\Query\\SortClause', $sortClause );
-        self::assertInstanceOf( "ezp\\Persistence\\Content\\Query\\SortClause\\$sortClauseClass", $sortClause );
+        self::assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\SortClause', $sortClause );
+        self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\Query\\SortClause\\$sortClauseClass", $sortClause );
         self::assertEquals( $sortClauseField, $sortClause->target );
         self::assertEquals( Query::SORT_ASC, $sortClause->direction );
 

@@ -13,13 +13,13 @@
     <testsuite name="eZ\Publish\Core\API">
       <directory>eZ/Publish/Core/API/Tests</directory>
     </testsuite>
-    <!-- testsuite name="ezp\Publish\Core\Persistence\InMemory">
-      <directory>ezp/Publish/Core/Persistence/InMemory/Tests</directory>
+    <testsuite name="eZ\Publish\Core\Persistence\InMemory">
+      <directory>eZ/Publish/Core/Persistence/InMemory/Tests</directory>
     </testsuite>
-    <testsuite name="ezp\Publish\Core\Persistence\Legacy">
-      <directory>ezp/Publish/Core/Persistence/Legacy/Tests</directory>
+    <testsuite name="eZ\Publish\Core\Persistence\Legacy">
+      <directory>eZ/Publish/Core/Persistence/Legacy/Tests</directory>
     </testsuite>
-    <testsuite name="ezp\Publish\Core\Io">
+    <!--testsuite name="ezp\Publish\Core\Io">
       <directory>ezp/Publish/Core/Io/Tests</directory>
     </testsuite -->
   </testsuites>
@@ -29,9 +29,9 @@
       <exclude>
           <directory suffix=".php">eZ/Publish/Core/Base/Tests</directory>
           <directory suffix=".php">eZ/Publish/Core/API/Tests</directory>
-          <directory suffix=".php">ezp/Publish/Core/Persistence/InMemory/Tests</directory>
-          <directory suffix=".php">ezp/Publish/Core/Persistence/Legacy/Tests</directory>
-          <directory suffix=".php">ezp/Publish/Core/Io/Tests</directory>
+          <directory suffix=".php">eZ/Publish/Core/Persistence/InMemory/Tests</directory>
+          <directory suffix=".php">eZ/Publish/Core/Persistence/Legacy/Tests</directory>
+          <directory suffix=".php">eZ/Publish/Core/Io/Tests</directory>
           <directory suffix=".php">doc</directory>
       </exclude>
     </whitelist>

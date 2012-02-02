@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway;
-use ezp\Persistence\Storage\Legacy\Content\Search\Gateway,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
-    ezp\Persistence\Content,
-    ezp\Persistence\Content\Search,
-    ezp\Persistence\Content\Query\Criterion,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Search,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
     ezcQuerySelect;
 
 /**
@@ -45,7 +45,7 @@ class EzcDatabase extends Gateway
     /**
      * Content load query builder
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
+     * @var eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder
      */
     protected $queryBuilder;
 
@@ -74,7 +74,7 @@ class EzcDatabase extends Gateway
      * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit
-     * @param \ezp\Persistence\Content\Query\SortClause[] $sort
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\SortClause[] $sort
      * @param string[] $translations
      * @return mixed[][]
      */

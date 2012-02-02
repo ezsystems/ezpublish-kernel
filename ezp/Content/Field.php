@@ -17,7 +17,7 @@ use ezp\Base\Model,
     ezp\Base\Repository,
     ezp\Content\Version,
     ezp\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Field as FieldVO,
+    eZ\Publish\SPI\Persistence\Content\Field as FieldVO,
     ezp\Content\FieldType\Value as FieldValue,
     ezp\Content\FieldType\OnPublish as OnPublishFieldType,
     ezp\Content\FieldType\OnCreate as OnCreateFieldType;

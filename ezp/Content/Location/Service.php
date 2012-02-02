@@ -23,9 +23,9 @@ use ezp\Base\Exception,
     ezp\Content\Proxy as ProxyContent,
     ezp\Content\Query,
     ezp\Content\Query\Builder,
-    ezp\Persistence\Content\Location as LocationValue,
-    ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Content\Location\UpdateStruct;
+    eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 
 /**
  * Location service, used for complex subtree operations
@@ -357,7 +357,7 @@ class Service extends BaseService
 
     /**
      * Builds Location domain object from $vo ValueObject returned by Persistence API
-     * @param \ezp\Persistence\Location $vo Location value object (extending \ezp\Persistence\ValueObject)
+     * @param \eZ\Publish\SPI\Persistence\Location $vo Location value object (extending \eZ\Publish\SPI\Persistence\ValueObject)
      *                                      returned by persistence
      * @return \ezp\Content\Location
      * @throws \ezp\Base\Exception\InvalidArgumentType

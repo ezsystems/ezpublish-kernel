@@ -7,11 +7,11 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\User;
-use ezp\Persistence\User,
-    ezp\Persistence\User\Role,
-    ezp\Persistence\User\RoleUpdateStruct,
-    ezp\Persistence\User\Policy,
+namespace eZ\Publish\Core\Persistence\Legacy\User;
+use eZ\Publish\SPI\Persistence\User,
+    eZ\Publish\SPI\Persistence\User\Role,
+    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
+    eZ\Publish\SPI\Persistence\User\Policy,
     RuntimeException;
 
 /**
@@ -24,7 +24,7 @@ class Mapper
      * Map user data into user object
      *
      * @param array $data
-     * @return \ezp\Persistence\User
+     * @return \eZ\Publish\SPI\Persistence\User
      */
     public function mapUser( array $data )
     {
@@ -44,7 +44,7 @@ class Mapper
      * Map policy data to an array of policies
      *
      * @param array $data
-     * @return \ezp\Persistence\User\Policy
+     * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
     public function mapPolicies( array $data )
     {
@@ -87,7 +87,7 @@ class Mapper
      * Map role data to a role
      *
      * @param array $data
-     * @return \ezp\Persistence\User\Role
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     public function mapRole( array $data )
     {
@@ -115,7 +115,7 @@ class Mapper
      * Map data for a set of roles
      *
      * @param array $data
-     * @return \ezp\Persistence\User\Role[]
+     * @return \eZ\Publish\SPI\Persistence\User\Role[]
      */
     public function mapRoles( array $data )
     {

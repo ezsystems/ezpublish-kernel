@@ -8,13 +8,13 @@
  *
  */
 
-namespace ezp\Persistence\Storage\InMemory;
-use ezp\Persistence\Content\Section\Handler as SectionHandlerInterface,
+namespace eZ\Publish\Core\Persistence\InMemory;
+use eZ\Publish\SPI\Persistence\Content\Section\Handler as SectionHandlerInterface,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\Logic;
 
 /**
- * @see ezp\Persistence\Content\Section\Handler
+ * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
  */
 class SectionHandler implements SectionHandlerInterface
 {
@@ -41,7 +41,7 @@ class SectionHandler implements SectionHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Section\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     public function create( $name, $identifier )
     {
@@ -55,7 +55,7 @@ class SectionHandler implements SectionHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Section\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     public function update( $id, $name, $identifier )
     {
@@ -72,7 +72,7 @@ class SectionHandler implements SectionHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Section\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     public function load( $id )
     {
@@ -82,7 +82,7 @@ class SectionHandler implements SectionHandlerInterface
     /**
      * Get all section data
      *
-     * @return \ezp\Persistence\Content\Section[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Section[]
      */
     public function loadAll()
     {
@@ -93,7 +93,7 @@ class SectionHandler implements SectionHandlerInterface
      * Get section data by identifier
      *
      * @param string $identifier
-     * @return \ezp\Persistence\Content\Section
+     * @return \eZ\Publish\SPI\Persistence\Content\Section
      * @throws \ezp\Base\Exception\NotFound If section is not found
      */
     public function loadByIdentifier( $identifier )
@@ -108,7 +108,7 @@ class SectionHandler implements SectionHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Section\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     public function delete( $id )
     {
@@ -116,7 +116,7 @@ class SectionHandler implements SectionHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Section\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     public function assign( $sectionId, $contentId )
     {
@@ -140,4 +140,3 @@ class SectionHandler implements SectionHandlerInterface
         return $this->backend->count( 'Content', array( 'sectionId' => $sectionId ) );
     }
 }
-?>

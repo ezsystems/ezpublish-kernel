@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Content\FieldType\Author;
-use ezp\Persistence\ValueObject;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Value object for an author

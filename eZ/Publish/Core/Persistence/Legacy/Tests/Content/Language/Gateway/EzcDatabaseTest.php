@@ -1,27 +1,27 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Language\Gateway\EzcDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway\EzcDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Language\Gateway;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase,
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase,
 
-    ezp\Persistence\Content\Language;
+    eZ\Publish\SPI\Persistence\Content\Language;
 
 /**
- * Test case for ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase.
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase.
  */
 class EzcDatabaseTest extends TestCase
 {
     /**
      * Database gateway to test.
      *
-     * @var ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase
+     * @var eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
      */
     protected $databaseGateway;
 
@@ -41,7 +41,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::__construct
      */
     public function testCtor()
     {
@@ -57,8 +57,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::insertLanguage
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::setCommonLanguageColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::insertLanguage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::setCommonLanguageColumns
      */
     public function testInsertLanguage()
     {
@@ -85,7 +85,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Returns a Language fixture
      *
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     protected function getLanguageFixture()
     {
@@ -100,8 +100,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::updateLanguage
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::setCommonLanguageColumns
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::updateLanguage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::setCommonLanguageColumns
      */
     public function testUpdateLanguage()
     {
@@ -130,8 +130,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::loadLanguageData
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::createFindQuery
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::loadLanguageData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::createFindQuery
      */
     public function testLoadLanguageData()
     {
@@ -154,8 +154,8 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::loadAllLanguagesData
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::createFindQuery
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::loadAllLanguagesData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::createFindQuery
      */
     public function testLoadAllLanguagesData()
     {
@@ -184,7 +184,7 @@ class EzcDatabaseTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase::deleteLanguage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase::deleteLanguage
      */
     public function testDeleteLanguage()
     {
@@ -219,7 +219,7 @@ class EzcDatabaseTest extends TestCase
     /**
      * Returns a ready to test EzcDatabase gateway
      *
-     * @return ezp\Persistence\Storage\Legacy\Content\Language\Gateway\EzcDatabase
+     * @return eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway\EzcDatabase
      */
     protected function getDatabaseGateway()
     {

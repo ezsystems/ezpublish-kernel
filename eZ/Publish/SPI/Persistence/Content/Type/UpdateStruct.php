@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Type;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  *

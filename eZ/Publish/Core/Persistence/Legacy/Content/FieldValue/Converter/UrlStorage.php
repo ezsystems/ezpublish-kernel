@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use ezp\Persistence\Fields\Storage,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\SPI\Persistence\Fields\Storage,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
     ezp\Content\FieldType\Url\Value as UrlValue,
     ezp\Io\ContentType;
 
@@ -22,7 +22,7 @@ class UrlStorage implements Storage
     const URL_TABLE = "ezurl";
 
     /**
-     * @see \ezp\Persistence\Fields\Storage
+     * @see \eZ\Publish\SPI\Persistence\Fields\Storage
      */
     public function storeFieldData( Field $field, array $context )
     {
@@ -40,11 +40,11 @@ class UrlStorage implements Storage
 
     /**
      * Populates $field value property based on the external data.
-     * $field->value is a {@link ezp\Persistence\Content\FieldValue} object.
+     * $field->value is a {@link eZ\Publish\SPI\Persistence\Content\FieldValue} object.
      * This value holds the data as a {@link ezp\Content\FieldType\Value} based object,
      * according to the field type (e.g. for TextLine, it will be a {@link ezp\Content\FieldType\TextLine\Value} object).
      *
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      * @return void
      */
@@ -75,7 +75,7 @@ class UrlStorage implements Storage
     }
 
     /**
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function copyFieldData( Field $field, array $context )
@@ -83,7 +83,7 @@ class UrlStorage implements Storage
     }
 
     /**
-     * @param \ezp\Persistence\Content\Field $field
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
      * @param array $context
      */
     public function getIndexData( Field $field, array $context )
@@ -94,7 +94,7 @@ class UrlStorage implements Storage
      * Fetches a row in ezurl table referenced by its $id
      *
      * @param mixed $id
-     * @param \ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @return null|array Hash with columns as keys or null if no entry can be found
      */
     private function fetchById( $id, EzcDbHandler $dbHandler )
@@ -121,7 +121,7 @@ class UrlStorage implements Storage
      * Fetches a row in ezurl table referenced by $link
      *
      * @param string $link
-     * @param \ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @return null|array Hash with columns as keys or null if no entry can be found
      */
     private function fetchByLink( $link, EzcDbHandler $dbHandler )
@@ -147,8 +147,8 @@ class UrlStorage implements Storage
     /**
      * Inserts a new entry in ezurl table with $field value data
      *
-     * @param \ezp\Persistence\Content\Field $field
-     * @param \ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param \eZ\Publish\SPI\Persistence\Content\Field $field
+     * @param \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      * @return mixed
      */
     private function insert( Field $field, EzcDbHandler $dbHandler )

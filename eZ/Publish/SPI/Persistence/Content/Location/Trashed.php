@@ -8,9 +8,9 @@
  *
  */
 
-namespace ezp\Persistence\Content\Location;
+namespace eZ\Publish\SPI\Persistence\Content\Location;
 
-use ezp\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
  * Struct containing accessible properties on TrashedLocation entities.

@@ -1,23 +1,23 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\FieldHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Content,
-    ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Version,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\FieldHandler,
-    ezp\Persistence\Storage\Legacy\Content\Mapper,
-    ezp\Persistence\Storage\Legacy\Content\Gateway;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Gateway;
 
 /**
  * Test case for Content Handler
@@ -27,34 +27,34 @@ class FieldHandlerTest extends TestCase
     /**
      * Gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGatewayMock;
 
     /**
      * Type gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected $typeGatewayMock;
 
     /**
      * Mapper mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected $mapperMock;
 
     /**
      * Storage handler mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\StorageHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected $storageHandlerMock;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\FieldHandler::createNewFields
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::createNewFields
      */
     public function testCreateNewFields()
     {
@@ -68,7 +68,7 @@ class FieldHandlerTest extends TestCase
             ->method( 'convertToStorageValue' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Field'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Field'
                 )
             )->will(
                 $this->returnValue( new StorageFieldValue() )
@@ -77,21 +77,21 @@ class FieldHandlerTest extends TestCase
         $contentGatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'insertNewField' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content' ),
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ),
-                $this->isInstanceOf( 'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue' )
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
+                $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue' )
             )->will( $this->returnValue( 42 ) );
 
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
 
         $fieldHandler->createNewFields( $this->getContentFixture() );
     }
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\FieldHandler::loadExternalFieldData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::loadExternalFieldData
      */
     public function testLoadExternalFieldData()
     {
@@ -101,14 +101,14 @@ class FieldHandlerTest extends TestCase
 
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'getFieldData' )
-            ->with( $this->isInstanceOf( 'ezp\Persistence\Content\Field' ) );
+            ->with( $this->isInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Field' ) );
 
         $fieldHandler->loadExternalFieldData( $this->getContentFixture() );
     }
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\FieldHandler::updateFields
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
      */
     public function testUpdateFieldsTranslatable()
     {
@@ -123,30 +123,30 @@ class FieldHandlerTest extends TestCase
         $mapperMock = $this->getMapperMock();
         $mapperMock->expects( $this->exactly( 2 ) )
             ->method( 'convertToStorageValue' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) )
             ->will( $this->returnValue( new StorageFieldValue() ) );
 
         $contentGatewayMock = $this->getContentGatewayMock();
         $contentGatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'updateField' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
                 )
             );
 
         $storageHandlerMock = $this->getStorageHandlerMock();
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
 
         $fieldHandler->updateFields( $this->getUpdateStructFixture() );
     }
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\FieldHandler::updateFields
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::updateFields
      */
     public function testUpdateFieldsNonTranslatable()
     {
@@ -161,31 +161,31 @@ class FieldHandlerTest extends TestCase
         $mapperMock = $this->getMapperMock();
         $mapperMock->expects( $this->exactly( 2 ) )
             ->method( 'convertToStorageValue' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) )
             ->will( $this->returnValue( new StorageFieldValue() ) );
 
         $contentGatewayMock = $this->getContentGatewayMock();
         $contentGatewayMock->expects( $this->exactly( 2 ) )
             ->method( 'updateNonTranslatableField' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
                 ),
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\UpdateStruct' )
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' )
             );
 
         $storageHandlerMock = $this->getStorageHandlerMock();
         $storageHandlerMock->expects( $this->exactly( 2 ) )
             ->method( 'storeFieldData' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ) );
 
         $fieldHandler->updateFields( $this->getUpdateStructFixture() );
     }
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\FieldHandler::deleteFields
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler::deleteFields
      */
     public function testDeleteFields()
     {
@@ -215,7 +215,7 @@ class FieldHandlerTest extends TestCase
     /**
      * Returns a Content fixture
      *
-     * @return \ezp\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     protected function getContentFixture()
     {
@@ -242,7 +242,7 @@ class FieldHandlerTest extends TestCase
     /**
      * Returns an UpdateStruct fixture
      *
-     * @return \ezp\Persistence\Content\UpdateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\UpdateStruct
      */
     protected function getUpdateStructFixture()
     {
@@ -259,7 +259,7 @@ class FieldHandlerTest extends TestCase
     /**
      * Returns a FieldHandler to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\FieldHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected function getFieldHandler()
     {
@@ -274,14 +274,14 @@ class FieldHandlerTest extends TestCase
     /**
      * Returns a StorageHandler mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\StorageHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected function getStorageHandlerMock()
     {
         if ( !isset( $this->storageHandlerMock ) )
         {
             $this->storageHandlerMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageHandler',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageHandler',
                 array(),
                 array(),
                 '',
@@ -294,14 +294,14 @@ class FieldHandlerTest extends TestCase
     /**
      * Returns a Mapper mock.
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected function getMapperMock()
     {
         if ( !isset( $this->mapperMock ) )
         {
             $this->mapperMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Mapper',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
                 array(),
                 array(),
                 '',
@@ -314,14 +314,14 @@ class FieldHandlerTest extends TestCase
     /**
      * Returns a Content Type gateway mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected function getTypeGatewayMock()
     {
         if ( !isset( $this->typeGatewayMock ) )
         {
             $this->typeGatewayMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Gateway'
             );
         }
         return $this->typeGatewayMock;
@@ -330,14 +330,14 @@ class FieldHandlerTest extends TestCase
     /**
      * Returns a mock object for the Content Gateway.
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getContentGatewayMock()
     {
         if ( !isset( $this->contentGatewayMock ) )
         {
             $this->contentGatewayMock = $this->getMockForAbstractClass(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
             );
         }
         return $this->contentGatewayMock;

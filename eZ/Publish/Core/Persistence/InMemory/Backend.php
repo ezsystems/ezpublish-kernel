@@ -7,14 +7,13 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\InMemory;
+namespace eZ\Publish\Core\Persistence\InMemory;
 use ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\Logic,
     ezp\Base\Exception\NotFound,
-    ezp\Content\FieldType\Factory,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\FieldTypeConstraints,
-    ezp\Persistence\ValueObject;
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
+    eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * The Storage Engine backend for in memory storage
@@ -40,7 +39,7 @@ class Backend
      *     new Backend( json_decode( file_get_contents( __DIR__ . '/data.json' ), true ) );
      *
      * @param array $data Data where key is type like "Content" or "Content\\Type" which then have to map to
-     *                    Value objects in ezp\Persistence\*, data is an array of hash values with same structure as
+     *                    Value objects in eZ\Publish\SPI\Persistence\*, data is an array of hash values with same structure as
      *                    the corresponding value object.
      *                    Foreign keys: In some cases value objects does not contain these as they are internal, so this
      *                                  needs to be handled in InMemory handlers by assigning keys like "_typeId" on
@@ -396,7 +395,7 @@ class Backend
      */
     protected function toValue( $type, array $data, array $joinInfo = array() )
     {
-        $className = "ezp\\Persistence\\$type";
+        $className = "eZ\\Publish\\SPI\\Persistence\\$type";
         $obj = new $className;
         foreach ( $obj as $prop => &$value )
         {
@@ -404,7 +403,7 @@ class Backend
             {
                 if ( $type === "Content\\Field" && $prop === "value" && ! $data["value"] instanceof FieldValue )
                 {
-                    $fieldValueClassName = Factory::getFieldTypeNamespace( $obj->type ) . "\\Value";
+                    $fieldValueClassName = $this->getFieldTypeNamespace( $obj ) . "\\Value";
                     $fieldTypeValue = new $fieldValueClassName;
                     foreach ( $data["value"] as $fieldValuePropertyName => $fieldValuePropertyValue )
                     {
@@ -433,7 +432,7 @@ class Backend
     /**
      * Creates value objects on join properties
      *
-     * @param \ezp\Persistence\ValueObject $item
+     * @param \eZ\Publish\SPI\Persistence\ValueObject $item
      * @param array $joinInfo See {@link find()}
      * @return ValueObject
      */
@@ -463,4 +462,40 @@ class Backend
         }
         return $item;
     }
+
+    /**
+     * @param $obj
+     * @return string
+     */
+    protected function getFieldTypeNamespace( $obj )
+    {
+        if ( isset( $this->tempFieldTypeMapping[ $obj->type ] ) )
+            return $this->tempFieldTypeMapping[ $obj->type ];
+
+        throw new \Exception( "Following FieldType is not supported by InMemory storage {$obj->type}" );
+    }
+
+    /**
+     * @var array
+     */
+    private $tempFieldTypeMapping = array(
+        'ezstring' => 'ezp\Content\FieldType\TextLine',
+        'ezinteger' => 'ezp\Content\FieldType\Integer',
+        'ezauthor' => 'ezp\Content\FieldType\Author',
+        'ezfloat' => 'ezp\Content\FieldType\Float',
+        'eztext' => 'ezp\Content\FieldType\TextBlock',
+        'ezboolean' => 'ezp\Content\FieldType\Checkbox',
+        'ezdatetime' => 'ezp\Content\FieldType\DateAndTime',
+        'ezkeyword' => 'ezp\Content\FieldType\Keyword',
+        'ezurl' => 'ezp\Content\FieldType\Url',
+        'ezcountry' => 'ezp\Content\FieldType\Country',
+        'ezbinaryfile' => 'ezp\Content\FieldType\BinaryFile',
+        'ezmedia' => 'ezp\Content\FieldType\Media',
+        'ezxmltext' => 'ezp\Content\FieldType\XmlText',
+        'ezobjectrelationlist' => 'ezp\Content\FieldType\RelationList',
+        'ezselection' => 'ezp\Content\FieldType\Selection',
+        'ezsrrating' => 'ezp\Content\FieldType\Rating',
+        'ezimage' => 'ezp\Content\FieldType\Image',
+        'ezobjectrelation' => 'ezp\Content\FieldType\Relation',
+    );
 }

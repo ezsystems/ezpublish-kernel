@@ -10,7 +10,7 @@
 namespace ezp\Content\FieldType;
 use ezp\Base\Configuration,
     ezp\Base\Exception\MissingClass,
-    ezp\Persistence\Content\FieldValue;
+    eZ\Publish\SPI\Persistence\Content\FieldValue;
 
 /**
  * FieldType Factory class

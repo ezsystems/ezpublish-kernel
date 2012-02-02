@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     ezp\Content\FieldType\Float\Value as FloatValue,
     ezp\Content\FieldType\FieldSettings;
 
@@ -27,8 +27,8 @@ class Float implements Converter
     /**
      * Converts data from $value to $storageFieldValue
      *
-     * @param \ezp\Persistence\Content\FieldValue $value
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue $storageFieldValue
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
@@ -39,8 +39,8 @@ class Float implements Converter
     /**
      * Converts data from $value to $fieldValue
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue $value
-     * @param \ezp\Persistence\Content\FieldValue $fieldValue
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
@@ -51,8 +51,8 @@ class Float implements Converter
     /**
      * Converts field definition data in $fieldDef into $storageFieldDef
      *
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDef
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
@@ -74,8 +74,8 @@ class Float implements Converter
     /**
      * Converts field definition data in $storageDef into $fieldDef
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageDef
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {

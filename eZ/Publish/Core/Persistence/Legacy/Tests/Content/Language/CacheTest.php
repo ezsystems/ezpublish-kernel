@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Language\CacheTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\CacheTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Language;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\Language\Cache,
-    ezp\Persistence\Content\Language,
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache,
+    eZ\Publish\SPI\Persistence\Content\Language,
     ezp\Base\Exception;
 
 /**
@@ -21,13 +21,13 @@ class CachingTest extends TestCase
     /**
      * Language cache
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
     protected $cache;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Cache::store
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::store
      */
     public function testStore()
     {
@@ -55,7 +55,7 @@ class CachingTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Cache::remove
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::remove
      */
     public function testRemove()
     {
@@ -80,7 +80,7 @@ class CachingTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Cache::getById
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getById
      */
     public function testGetById()
     {
@@ -98,7 +98,7 @@ class CachingTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Cache::getById
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getById
      * @expectedException ezp\Base\Exception\NotFound
      */
     public function testGetByIdFailure()
@@ -113,7 +113,7 @@ class CachingTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Cache::getByLocale
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getByLocale
      */
     public function testGetByLocale()
     {
@@ -131,7 +131,7 @@ class CachingTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Cache::getByLocale
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getByLocale
      * @expectedException ezp\Base\Exception\NotFound
      */
     public function testGetByLocaleFailure()
@@ -161,7 +161,7 @@ class CachingTest extends TestCase
     /**
      * Returns the language cache to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\Cache
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache
      */
     protected function getCache()
     {
@@ -175,7 +175,7 @@ class CachingTest extends TestCase
     /**
      * Returns language fixture
      *
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     protected function getLanguageFixture()
     {

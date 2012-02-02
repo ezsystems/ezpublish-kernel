@@ -1,28 +1,28 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Type\ContentTypeHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type\ContentTypeHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Type;
-use ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\CreateStruct,
-    ezp\Persistence\Content\Type\UpdateStruct,
-    ezp\Persistence\Content\Type\FieldDefinition,
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
 
-    ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
 
-    ezp\Persistence\Storage\Legacy\Exception,
+    eZ\Publish\Core\Persistence\Legacy\Exception,
 
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\Type\Handler,
-    ezp\Persistence\Storage\Legacy\Content\Type\Mapper,
-    ezp\Persistence\Storage\Legacy\Content\Type\Gateway;
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
 
 /**
  * Test case for Content Type Handler.
@@ -32,27 +32,27 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected $gatewayMock;
 
     /**
      * Mapper mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper
      */
     protected $mapperMock;
 
     /**
      * Update\Handler mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler
      */
     protected $updateHandlerMock;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::__construct
      */
     public function testCtor()
     {
@@ -77,7 +77,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::createGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::createGroup
      */
     public function testCreateGroup()
     {
@@ -88,7 +88,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'createGroupFromCreateStruct' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\Group\\CreateStruct'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group\\CreateStruct'
                 )
             )
             ->will(
@@ -100,7 +100,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'insertGroup' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\Group'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group'
                 )
             )
             ->will( $this->returnValue( 23 ) );
@@ -111,7 +111,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Type\\Group',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group',
             $group
         );
         $this->assertEquals(
@@ -122,7 +122,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::updateGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::updateGroup
      */
     public function testUpdateGroup()
     {
@@ -136,12 +136,12 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'updateGroup' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\Group\\UpdateStruct'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group\\UpdateStruct'
                 )
             );
 
         $handlerMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
             array( 'loadGroup' ),
             array( $gatewayMock, $mapperMock, $this->getUpdateHandlerMock() )
         );
@@ -158,14 +158,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Type\\Group',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\Group',
             $res
         );
     }
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::deleteGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::deleteGroup
      */
     public function testDeleteGroupSuccess()
     {
@@ -184,9 +184,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::deleteGroup
-     * @covers ezp\Persistence\Storage\Legacy\Exception\GroupNotEmpty
-     * @expectedException ezp\Persistence\Storage\Legacy\Exception\GroupNotEmpty
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::deleteGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty
+     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty
      * @expectedExceptionMessage Group with ID "23" is not empty.
      */
     public function testDeleteGroupFailure()
@@ -205,7 +205,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadGroup
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadGroup
      */
     public function testLoadGroup()
     {
@@ -232,7 +232,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadAllGroups
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadAllGroups
      */
     public function testLoadAllGroups()
     {
@@ -258,7 +258,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadContentTypes
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadContentTypes
      */
     public function testLoadContentTypes()
     {
@@ -285,8 +285,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::load
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadFromRows
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
      */
     public function testLoad()
     {
@@ -321,9 +321,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::load
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadFromRows
-     * @expectedException \ezp\Persistence\Storage\Legacy\Exception\TypeNotFound
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
+     * @expectedException \eZ\Publish\Core\Persistence\Legacy\Exception\TypeNotFound
      */
     public function testLoadNotFound()
     {
@@ -352,8 +352,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::load
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadFromRows
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::load
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
      */
     public function testLoadDefaultVersion()
     {
@@ -387,8 +387,8 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadByIdentifier
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::loadFromRows
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadByIdentifier
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::loadFromRows
      */
     public function testLoadByIdentifier()
     {
@@ -422,7 +422,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::create
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::create
      */
     public function testCreate()
     {
@@ -441,7 +441,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'insertType' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
                 )
             )
             ->will( $this->returnValue( 23 ) );
@@ -457,23 +457,23 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->with(
                 $this->equalTo( 23 ),
                 $this->equalTo( 1 ),
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type\\FieldDefinition' ),
-                $this->isInstanceOf( 'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition' )
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition' ),
+                $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition' )
             )
             ->will( $this->returnValue( 42 ) );
 
         $mapperMock->expects( $this->exactly( 2 ) )
             ->method( 'toStorageFieldDefinition' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type\\FieldDefinition' ),
-                $this->isInstanceOf( 'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition' )
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition' ),
+                $this->isInstanceOf( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition' )
             );
 
         $handler = $this->getHandler();
         $type = $handler->create( $createStructFix );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Type',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type',
             $type,
             'Incorrect type returned from create()'
         );
@@ -503,7 +503,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::update
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::update
      */
     public function testUpdate()
     {
@@ -514,12 +514,12 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 23 ),
                 $this->equalTo( 1 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\UpdateStruct'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\UpdateStruct'
                 )
             );
 
         $handlerMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
             array( 'load' ),
             array( $gatewayMock, $this->getMapperMock(), $this->getUpdateHandlerMock() )
         );
@@ -536,14 +536,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Type',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type',
             $res
         );
     }
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::delete
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
      */
     public function testDeleteSuccess()
     {
@@ -572,9 +572,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::delete
-     * @covers ezp\Persistence\Storage\Legacy\Exception\TypeStillHasContent
-     * @expectedException ezp\Persistence\Storage\Legacy\Exception\TypeStillHasContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::delete
+     * @covers eZ\Publish\Core\Persistence\Legacy\Exception\TypeStillHasContent
+     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\TypeStillHasContent
      * @expectedExceptionMessage Type with ID "23" in status "0" still has content instances and can therefore not be deleted.
      */
     public function testDeleteFailure()
@@ -600,7 +600,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::createDraft
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::createDraft
      */
     public function testCreateVersion()
     {
@@ -610,14 +610,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'createCreateStructFromType' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
                 )
             )->will(
                 $this->returnValue( new CreateStruct() )
             );
 
         $handlerMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
             array( 'load', 'create' ),
             array( $gatewayMock, $mapperMock, $this->getUpdateHandlerMock() )
         );
@@ -656,14 +656,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Type',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type',
             $res
         );
     }
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::copy
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::copy
      */
     public function testCopy()
     {
@@ -673,14 +673,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'createCreateStructFromType' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type'
                 )
             )->will(
                 $this->returnValue( new CreateStruct() )
             );
 
         $handlerMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
             array( 'load', 'create' ),
             array( $gatewayMock, $mapperMock, $this->getUpdateHandlerMock() )
         );
@@ -725,14 +725,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Type',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Type',
             $res
         );
     }
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::link
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::link
      */
     public function testLink()
     {
@@ -755,7 +755,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::unlink
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::unlink
      */
     public function testUnlinkSuccess()
     {
@@ -785,9 +785,9 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::unlink
-     * @covers ezp\Persistence\Storage\Legacy\Exception\RemoveLastGroupFromType
-     * @expectedException ezp\Persistence\Storage\Legacy\Exception\RemoveLastGroupFromType
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::unlink
+     * @covers eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType
+     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\RemoveLastGroupFromType
      * @expectedExceptionMessage Type with ID "23" in status "1" cannot be unlinked from its last group.
      */
     public function testUnlinkFailure()
@@ -810,7 +810,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::addFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::addFieldDefinition
      */
     public function testAddFieldDefinition()
     {
@@ -821,10 +821,10 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'toStorageFieldDefinition' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\FieldDefinition'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
                 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
                 )
             );
 
@@ -835,10 +835,10 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 23 ),
                 $this->equalTo( 1 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\FieldDefinition'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
                 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
                 )
             )->will(
                 $this->returnValue( 42 )
@@ -857,7 +857,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::removeFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::removeFieldDefinition
      */
     public function testRemoveFieldDefinition()
     {
@@ -878,7 +878,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::updateFieldDefinition
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::updateFieldDefinition
      */
     public function testUpdateFieldDefinition()
     {
@@ -889,10 +889,10 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
             ->method( 'toStorageFieldDefinition' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\FieldDefinition'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
                 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldDefinition'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldDefinition'
                 )
             );
 
@@ -903,7 +903,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
                 $this->equalTo( 23 ),
                 $this->equalTo( 1 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Type\\FieldDefinition'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Type\\FieldDefinition'
                 )
             );
 
@@ -917,7 +917,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::publish
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::publish
      */
     public function testPublish()
     {
@@ -939,18 +939,18 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $updateHandlerMock->expects( $this->once() )
             ->method( 'updateContentObjects' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' ),
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' )
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type' )
             );
         $updateHandlerMock->expects( $this->once() )
             ->method( 'deleteOldType' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' )
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type' )
             );
         $updateHandlerMock->expects( $this->once() )
             ->method( 'publishNewType' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type' ),
                 $this->equalTo( 0 )
             );
 
@@ -959,7 +959,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Type\Handler::publish
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler::publish
      */
     public function testPublishNoOldType()
     {
@@ -991,7 +991,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
         $updateHandlerMock->expects( $this->once() )
             ->method( 'publishNewType' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Type' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Type' ),
                 $this->equalTo( 0 )
             );
 
@@ -1001,7 +1001,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a handler to test, based on mock objects
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
      */
     protected function getHandler()
     {
@@ -1016,12 +1016,12 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
      * Returns a handler to test with $methods mocked
      *
      * @param array $methods
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Handler
      */
     protected function getPartlyMockedHandler( array $methods )
     {
         return $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Handler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Handler',
             $methods,
             array(
                 $this->getGatewayMock(),
@@ -1034,14 +1034,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a gateway mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected function getGatewayMock()
     {
         if ( !isset( $this->gatewayMock ) )
         {
             $this->gatewayMock = $this->getMockForAbstractClass(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Gateway'
             );
         }
         return $this->gatewayMock;
@@ -1050,14 +1050,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a mapper mock
      *
-     * @return ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Mapper
+     * @return eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper
      */
     protected function getMapperMock( $methods = array() )
     {
         if ( !isset( $this->mapperMock ) )
         {
             $this->mapperMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Mapper',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Mapper',
                 $methods,
                 array(),
                 '',
@@ -1070,14 +1070,14 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a Update\Handler mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler
      */
     public function getUpdateHandlerMock()
     {
         if ( !isset( $this->updateHandlerMock ) )
         {
             $this->updateHandlerMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Update\\Handler',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Update\\Handler',
                 array(),
                 array(),
                 '',
@@ -1090,7 +1090,7 @@ class ContentTypeHandlerTest extends \PHPUnit_Framework_TestCase
     /**
      * Returns a CreateStruct fixture.
      *
-     * @return \ezp\Persistence\Content\Type\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct
      */
     protected function getContenTypeCreateStructFixture()
     {

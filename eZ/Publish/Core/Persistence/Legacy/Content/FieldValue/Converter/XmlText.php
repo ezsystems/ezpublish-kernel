@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     ezp\Content\FieldType\XmlText\Value as XmlTextValue,
     ezp\Content\FieldType\FieldSettings;
 
@@ -21,8 +21,8 @@ class XmlText implements Converter
     /**
      * Converts data from $value to $storageFieldValue
      *
-     * @param \ezp\Persistence\Content\FieldValue $value
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue $storageFieldValue
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $storageFieldValue
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
@@ -32,8 +32,8 @@ class XmlText implements Converter
     /**
      * Converts data from $value to $fieldValue
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue $value
-     * @param \ezp\Persistence\Content\FieldValue $fieldValue
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $value
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $fieldValue
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
@@ -43,8 +43,8 @@ class XmlText implements Converter
     /**
      * Converts field definition data from $fieldDefinition into $storageFieldDefinition
      *
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDefinition
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDefinition, StorageFieldDefinition $storageDefinition )
     {
@@ -55,8 +55,8 @@ class XmlText implements Converter
     /**
      * Converts field definition data from $storageDefinition into $fieldDefinition
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageDefinition
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDefinition, FieldDefinition $fieldDefinition )
     {

@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\ConfiguratorTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\ConfiguratorTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Configurator,
-    ezp\Persistence\Storage\Legacy\Content;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Configurator,
+    eZ\Publish\Core\Persistence\Legacy\Content;
 
 /**
  * Test case for Configurator
@@ -19,7 +19,7 @@ class ConfiguratorTest extends TestCase
 {
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Configurator::__construct
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Configurator::__construct
      */
     public function testCtor()
     {
@@ -36,7 +36,7 @@ class ConfiguratorTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Configurator::getDsn
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Configurator::getDsn
      */
     public function testGetDsn()
     {
@@ -53,7 +53,7 @@ class ConfiguratorTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Configurator::getDsn
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Configurator::getDsn
      * @expectedException \RuntimeException
      */
     public function testGetDsnFailure()
@@ -67,7 +67,7 @@ class ConfiguratorTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Configurator::shouldDeferTypeUpdates
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Configurator::shouldDeferTypeUpdates
      */
     public function testShouldDeferTypeUpdates()
     {
@@ -82,7 +82,7 @@ class ConfiguratorTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Configurator::shouldDeferTypeUpdates
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Configurator::shouldDeferTypeUpdates
      */
     public function testShouldDeferTypeUpdatesFalse()
     {
@@ -97,7 +97,7 @@ class ConfiguratorTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Configurator::shouldDeferTypeUpdates
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Configurator::shouldDeferTypeUpdates
      */
     public function testShouldDeferTypeUpdatesNotSet()
     {
@@ -112,13 +112,13 @@ class ConfiguratorTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Configurator::configureExternalStorages
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Configurator::configureExternalStorages
      */
     public function testConfigureExternalStorages()
     {
         $storageRegistry = new Content\StorageRegistry();
         $storageMock = $this->getMock(
-            'ezp\\Persistence\\Fields\\Storage',
+            'eZ\\Publish\\SPI\\Persistence\\Fields\\Storage',
             array(),
             array(),
             'SomeFanvyStorageMockClass',
@@ -147,13 +147,13 @@ class ConfiguratorTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Configurator::configureFieldConverter
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Configurator::configureFieldConverter
      */
     public function testConfigureFieldConverters()
     {
         $converterRegistry = new Content\FieldValue\Converter\Registry();
         $storageMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter',
             array(),
             array(),
             'SomeFanvyFieldConverterMockClass',
@@ -182,12 +182,12 @@ class ConfiguratorTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Configurator::configureTransformationRules
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Configurator::configureTransformationRules
      */
     public function testConfigureTransformationRules()
     {
         $processorMock = $this->getMock(
-            '\ezp\Persistence\Storage\Legacy\Content\Search\TransformationProcessor',
+            '\eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor',
             array(),
             array(),
             '',

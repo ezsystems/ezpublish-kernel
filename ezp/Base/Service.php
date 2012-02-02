@@ -11,8 +11,8 @@ namespace ezp\Base;
 use ezp\Base\Model,
     ezp\Base\Repository,
     ezp\Base\Exception\PropertyNotFound,
-    ezp\Persistence\Handler,
-    ezp\Persistence\ValueObject;
+    eZ\Publish\SPI\Persistence\Handler,
+    eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Abstract Repository Services
@@ -26,7 +26,7 @@ abstract class Service
     protected $repository;
 
     /**
-     * @var \ezp\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $handler;
 
@@ -34,7 +34,7 @@ abstract class Service
      * Setups service with reference to repository object that created it & corresponding handler
      *
      * @param \ezp\Base\Repository $repository
-     * @param \ezp\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Handler $handler
      */
     public function __construct( Repository $repository, Handler $handler )
     {
@@ -45,7 +45,7 @@ abstract class Service
     /**
      * General method to fill in property values in struct from model->property values
      *
-     * @param \ezp\Persistence\ValueObject $struct
+     * @param \eZ\Publish\SPI\Persistence\ValueObject $struct
      * @param \ezp\Base\Model $do
      * @param array $optionalProperties List of properties that is optional
      * @throws \ezp\Base\Exception\PropertyNotFound If property is missing, has a value of null
@@ -93,7 +93,7 @@ abstract class Service
      *     - creatorId
      *     - modifierId
      *
-     * @param \ezp\Persistence\ValueObject $struct
+     * @param \eZ\Publish\SPI\Persistence\ValueObject $struct
      * @param string $property
      * @return bool False if no property was set by convention
      */

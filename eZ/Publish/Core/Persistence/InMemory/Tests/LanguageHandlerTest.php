@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\SectionHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\SectionHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests;
-use ezp\Persistence\Content\Language,
-    ezp\Persistence\Content\Language\CreateStruct,
-    ezp\Persistence\Tests\HandlerTest,
+namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+use eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
+    eZ\Publish\Core\Persistence\InMemory\Tests\HandlerTest,
     ezp\Base\Exception\NotFound;
 
 /**
@@ -20,12 +20,12 @@ use ezp\Persistence\Content\Language,
 class LanguageHandlerTest extends HandlerTest
 {
     /**
-     * @var \ezp\Persistence\Content\Language
+     * @var \eZ\Publish\SPI\Persistence\Content\Language
      */
     protected $language;
 
     /**
-     * @var \ezp\Persistence\Content\Language\Handler
+     * @var \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     protected $handler;
 
@@ -78,12 +78,12 @@ class LanguageHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Storage\InMemory\LanguageHandler::load
+     * @covers eZ\Publish\Core\Persistence\InMemory\LanguageHandler::load
      */
     public function testLoad()
     {
         $language = $this->handler->load( $this->language->id );
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $language );
+        $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $language );
         $this->assertEquals( 'eng-US', $language->locale );
         $this->assertEquals( 'English (American)', $language->name );
         $this->assertTrue( $language->isEnabled );
@@ -92,19 +92,19 @@ class LanguageHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Storage\InMemory\LanguageHandler::loadAll
+     * @covers eZ\Publish\Core\Persistence\InMemory\LanguageHandler::loadAll
      */
     public function testLoadAll()
     {
         $languages = $this->handler->loadAll();
 
         $this->assertEquals( 2, count( $languages ) );
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $languages['eng-GB'] );
+        $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $languages['eng-GB'] );
         $this->assertEquals( 'eng-GB', $languages['eng-GB']->locale );
         $this->assertEquals( 'English (United Kingdom)', $languages['eng-GB']->name );
         $this->assertTrue( $languages['eng-GB']->isEnabled );
 
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $languages['eng-US'] );
+        $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $languages['eng-US'] );
         $this->assertEquals( 'eng-US', $languages['eng-US']->locale );
         $this->assertEquals( 'English (American)', $languages['eng-US']->name );
         $this->assertTrue( $languages['eng-US']->isEnabled );
@@ -118,7 +118,7 @@ class LanguageHandlerTest extends HandlerTest
         $languages = $this->handler->loadAll();
 
         $this->assertEquals( 3, count( $languages ) );
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $languages['nor-NB'] );
+        $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $languages['nor-NB'] );
         $this->assertEquals( 'nor-NB', $languages['nor-NB']->locale );
         $this->assertEquals( 'Norwegian Bokmål', $languages['nor-NB']->name );
         $this->assertFalse( $languages['nor-NB']->isEnabled );
@@ -127,7 +127,7 @@ class LanguageHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers ezp\Persistence\Storage\InMemory\LanguageHandler::create
+     * @covers eZ\Publish\Core\Persistence\InMemory\LanguageHandler::create
      */
     public function testCreate()
     {
@@ -137,7 +137,7 @@ class LanguageHandlerTest extends HandlerTest
         $struct->isEnabled = false;
         $language = $this->handler->create( $struct );
 
-        $this->assertInstanceOf( 'ezp\Persistence\Content\Language', $language );
+        $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $language );
         $this->assertEquals( $this->language->id +1, $language->id );
         $this->assertEquals( 'nor-NB', $language->locale );
         $this->assertEquals( 'Norwegian Bokmål', $language->name );
@@ -147,7 +147,7 @@ class LanguageHandlerTest extends HandlerTest
     /**
      * Test update function
      *
-     * @covers ezp\Persistence\Storage\InMemory\LanguageHandler::update
+     * @covers eZ\Publish\Core\Persistence\InMemory\LanguageHandler::update
      */
     public function testUpdate()
     {
@@ -167,7 +167,7 @@ class LanguageHandlerTest extends HandlerTest
     /**
      * Test delete function
      *
-     * @covers ezp\Persistence\Storage\InMemory\LanguageHandler::delete
+     * @covers eZ\Publish\Core\Persistence\InMemory\LanguageHandler::delete
      */
     public function testDelete()
     {

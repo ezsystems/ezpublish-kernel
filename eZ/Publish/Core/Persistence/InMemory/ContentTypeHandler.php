@@ -8,23 +8,23 @@
  *
  */
 
-namespace ezp\Persistence\Storage\InMemory;
-use ezp\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
-    ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\CreateStruct,
-    ezp\Persistence\Content\Type\UpdateStruct,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    ezp\Persistence\Content\Type\Group,
+namespace eZ\Publish\Core\Persistence\InMemory;
+use eZ\Publish\SPI\Persistence\Content\Type\Handler as ContentTypeHandlerInterface,
+    eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group,
     ezp\Base\Exception\NotFound,
     ezp\Base\Exception\BadRequest,
-    ezp\Persistence\Storage\InMemory\Handler,
-    ezp\Persistence\Storage\InMemory\Backend,
+    eZ\Publish\Core\Persistence\InMemory\Handler,
+    eZ\Publish\Core\Persistence\InMemory\Backend,
     RuntimeException;
 
 /**
- * @see \ezp\Persistence\Content\Type\Handler
+ * @see \eZ\Publish\SPI\Persistence\Content\Type\Handler
  *
  * @todo Validate $status arguments
  */
@@ -53,8 +53,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @param \ezp\Persistence\Content\Type\Group\CreateStruct $group
-     * @return \ezp\Persistence\Content\Type\Group
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct $group
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function createGroup( GroupCreateStruct $group )
     {
@@ -63,7 +63,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $group
      */
     public function updateGroup( GroupUpdateStruct $group )
     {
@@ -107,7 +107,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
 
     /**
      * @param mixed $groupId
-     * @return \ezp\Persistence\Content\Type\Group
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function loadGroup( $groupId )
     {
@@ -115,7 +115,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Type\Group[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group[]
      */
     public function loadAllGroups()
     {
@@ -125,7 +125,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @param mixed $groupId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @return \ezp\Persistence\Content\Type[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Type[]
      */
     public function loadContentTypes( $groupId, $status = Type::STATUS_DEFINED )
     {
@@ -146,7 +146,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If type with provided status is not found
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
@@ -172,7 +172,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * Load a (defined) content type by identifier
      *
      * @param string $identifier
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If defined type is not found
      */
     public function loadByIdentifier( $identifier )
@@ -195,8 +195,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     }
 
     /**
-     * @param \ezp\Persistence\Content\Type\CreateStruct $contentType
-     * @return \ezp\Persistence\Content\Type
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $contentType
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function create( CreateStruct $contentType )
     {
@@ -216,7 +216,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
     /**
      * @param mixed $typeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $contentType
      */
     public function update( $typeId, $status, UpdateStruct $contentType )
     {
@@ -251,7 +251,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $modifierId
      * @param mixed $contentTypeId
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
      */
     public function createDraft( $modifierId, $contentTypeId )
@@ -284,7 +284,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      * @param mixed $userId
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If user or type with provided status is not found
      */
     public function copy( $userId, $contentTypeId, $status )
@@ -377,8 +377,8 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @return \ezp\Persistence\Content\Type\FieldDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      * @throws \ezp\Base\Exception\NotFound If type is not found
      * @todo Add FieldDefintion\CreateStruct?
      */
@@ -431,7 +431,7 @@ class ContentTypeHandler implements ContentTypeHandlerInterface
      *
      * @param mixed $contentTypeId
      * @param int $status One of Type::STATUS_DEFINED|Type::STATUS_DRAFT|Type::STATUS_MODIFIED
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @return void
      * @throws \ezp\Base\Exception\NotFound If field is not found
      */

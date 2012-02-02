@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Language;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
 
 /**
  * Language Lookup interface
@@ -18,7 +18,7 @@ interface Lookup
      * Returns the Language with $id from the cache
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound
      *         if the Language could not be found
      */
@@ -28,7 +28,7 @@ interface Lookup
      * Returns the Language with $locale from the cache
      *
      * @param string $locale
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound
      *         if the Language could not be found
      */

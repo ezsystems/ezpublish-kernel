@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\User\Gateway;
-use ezp\Persistence\Storage\Legacy\User\Gateway,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\User;
+namespace eZ\Publish\Core\Persistence\Legacy\User\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\User\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\SPI\Persistence\User;
 
 /**
  * User gateway implementation using the zeta database component.

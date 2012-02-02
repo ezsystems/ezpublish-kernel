@@ -187,7 +187,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
             ->will( $this->returnValue( $sortingInfo ) );
 
         $fieldVo = $this->stub->toFieldValue();
-        self::assertInstanceOf( "ezp\\Persistence\\Content\\FieldValue", $fieldVo );
+        self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\FieldValue", $fieldVo );
         self::assertEquals( $fieldValue, $fieldVo->data );
         self::assertSame( $sortingInfo, $fieldVo->sortKey );
     }

@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Location;
-use ezp\Persistence\Content,
-    ezp\Persistence\Content\Location\UpdateStruct,
-    ezp\Persistence\Content\Location\CreateStruct;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Location;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 
 /**
  * Base class for location gateways.
@@ -124,9 +124,9 @@ abstract class Gateway
     /**
      * Creates a new location in given $parentNode
      *
-     * @param \ezp\Persistence\Content\Location\CreateStruct $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $createStruct
      * @param array $parentNode
-     * @return \ezp\Persistence\Content\Location
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     abstract public function create( CreateStruct $createStruct, array $parentNode );
 
@@ -143,7 +143,7 @@ abstract class Gateway
     /**
      * Updates an existing location.
      *
-     * @param \ezp\Persistence\Content\Location\UpdateStruct $location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
      * @return boolean
      */

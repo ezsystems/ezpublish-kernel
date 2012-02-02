@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Search;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
-use ezp\Persistence\Content,
-    ezp\Persistence\Content\Search\Handler as BaseSearchHandler,
-    ezp\Persistence\Content\Search\Result,
-    ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Storage\Legacy\Exception,
-    ezp\Persistence\Storage\Legacy\Content\Mapper as ContentMapper,
-    ezp\Persistence\Storage\Legacy\Content\FieldHandler;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Search\Handler as BaseSearchHandler,
+    eZ\Publish\SPI\Persistence\Content\Search\Result,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\Core\Persistence\Legacy\Exception,
+    eZ\Publish\Core\Persistence\Legacy\Content\Mapper as ContentMapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler;
 
 /**
  * The Content Search handler retrieves sets of of Content objects, based on a
@@ -43,30 +43,30 @@ class Handler extends BaseSearchHandler
     /**
      * Content locator gateway.
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Search\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway
      */
     protected $gateway;
 
     /**
      * Content mapper
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected $contentMapper;
 
     /**
      * FieldHandler
      *
-     * @var \ezp\Persistence\Storage\Legacy\FieldHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\FieldHandler
      */
     protected $fieldHandler;
 
     /**
      * Creates a new content handler.
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Search\Gateway $gateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Mapper $contentMapper
-     * @param \ezp\Persistence\Storage\Legacy\Content\FieldHandler $fieldHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway $gateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $contentMapper
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
      */
     public function __construct( Gateway $gateway, ContentMapper $contentMapper, FieldHandler $fieldHandler )
     {
@@ -82,12 +82,12 @@ class Handler extends BaseSearchHandler
      * translations with the listed language codes will be retrieved. If not,
      * all translations will be retrieved.
      *
-     * @param \ezp\Persistence\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $criterion
      * @param int $offset
      * @param int|null $limit
-     * @param \ezp\Persistence\Content\Query\SortClause[] $sort
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\SortClause[] $sort
      * @param string[] $translations
-     * @return ezp\Persistence\Content\Search\Result
+     * @return eZ\Publish\SPI\Persistence\Content\Search\Result
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, $translations = null )
     {
@@ -120,7 +120,7 @@ class Handler extends BaseSearchHandler
      *
      * @param Criterion $criterion
      * @param string[] $translations
-     * @return \ezp\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function findSingle( Criterion $criterion, $translations = null )
     {
@@ -139,7 +139,7 @@ class Handler extends BaseSearchHandler
     /**
      * Indexes a content object
      *
-     * @param ezp\Persistence\Content $content
+     * @param eZ\Publish\SPI\Persistence\Content $content
      * @return void
      */
     public function indexContent( Content $content )

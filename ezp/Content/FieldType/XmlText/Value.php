@@ -10,7 +10,7 @@
 namespace ezp\Content\FieldType\XmlText;
 use ezp\Content\FieldType\ValueInterface,
     ezp\Content\FieldType\Value as BaseValue,
-    ezp\Persistence\Content\FieldValue as PersistenceFieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceFieldValue,
     ezp\Content\FieldType\XmlText\Input\Handler as InputHandler,
     ezp\Content\FieldType\XmlText\Input\Parser\Simplified as SimplifiedInputParser,
     ezp\Content\FieldType\XmlText\Input\Parser\OnlineEditor as OnlineEditorParser,

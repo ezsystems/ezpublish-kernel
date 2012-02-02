@@ -1,16 +1,16 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\StorageRegistryTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\StorageRegistryTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\StorageRegistry,
-    ezp\Persistence\Fields\Storage;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
+    eZ\Publish\SPI\Persistence\Fields\Storage;
 
 /**
  * Test case for StorageRegistry
@@ -19,7 +19,7 @@ class StorageRegistryTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageRegistry::register
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::register
      */
     public function testRegister()
     {
@@ -40,7 +40,7 @@ class StorageRegistryTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageRegistry::getStorage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::getStorage
      */
     public function testGetStorage()
     {
@@ -59,14 +59,14 @@ class StorageRegistryTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageRegistry::getStorage
-     * @covers ezp\Persistence\Storage\Legacy\Exception\StorageNotFound
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry::getStorage
+     * @covers eZ\Publish\Core\Persistence\Legacy\Exception\StorageNotFound
      */
     public function testGetNotFound()
     {
         $registry = new StorageRegistry();
         self::assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\NullStorage',
             $registry->getStorage( 'not-found' )
         );
     }
@@ -79,7 +79,7 @@ class StorageRegistryTest extends TestCase
     protected function getStorageMock()
     {
         return $this->getMock(
-            'ezp\\Persistence\\Fields\\Storage'
+            'eZ\\Publish\\SPI\\Persistence\\Fields\\Storage'
         );
     }
 

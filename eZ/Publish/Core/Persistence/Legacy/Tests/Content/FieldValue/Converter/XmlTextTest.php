@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\XmlText\Value as XmlTextValue,
     ezp\Content\FieldType\FieldSettings,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter,
-    ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText as XmlTextConverter,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     PHPUnit_Framework_TestCase,
     DOMDocument;
 
@@ -27,7 +27,7 @@ use ezp\Content\FieldType\XmlText\Value as XmlTextValue,
 class XmlTextTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Author
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Author
      */
     protected $converter;
 
@@ -55,7 +55,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\XmlText::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -91,7 +91,7 @@ class XmlTextTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\XmlText::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\XmlText::toFieldValue
      */
     public function testToFieldValue()
     {

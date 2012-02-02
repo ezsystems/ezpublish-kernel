@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Content;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  */
@@ -39,7 +39,7 @@ class CreateStruct extends ValueObject
      * contentId, contentVersion and mainLocationId are allowed to be left empty
      * when used on with this struct as these values are created by the create method.
      *
-     * @var \ezp\Persistence\Content\Location\CreateStruct[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct[]
      */
     public $locations = array();
 

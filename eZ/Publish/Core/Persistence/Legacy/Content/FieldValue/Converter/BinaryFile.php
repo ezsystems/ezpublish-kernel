@@ -7,12 +7,12 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter;
-use ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter;
+use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition;
 
 class BinaryFile implements Converter
 {
@@ -22,8 +22,8 @@ class BinaryFile implements Converter
      * Converts data from $value to $storageFieldValue.
      * Nothing has to be stored for eZBinaryFile, as everything has to be stored in an external table.
      *
-     * @param \ezp\Persistence\Content\FieldValue $value
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
      */
     public function toStorageValue( FieldValue $value, StorageFieldValue $storageFieldValue )
     {
@@ -33,8 +33,8 @@ class BinaryFile implements Converter
     /**
      * Converts data from $value to $fieldValue
      *
-     * @param \ezp\Persistence\Content\FieldValue $value
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldValue $fieldValue
+     * @param \eZ\Publish\SPI\Persistence\Content\FieldValue $value
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue $fieldValue
      */
     public function toFieldValue( StorageFieldValue $value, FieldValue $fieldValue )
     {
@@ -44,8 +44,8 @@ class BinaryFile implements Converter
     /**
      * Converts field definition data in $fieldDef into $storageFieldDef
      *
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDef
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
      */
     public function toStorageFieldDefinition( FieldDefinition $fieldDef, StorageFieldDefinition $storageDef )
     {
@@ -58,8 +58,8 @@ class BinaryFile implements Converter
     /**
      * Converts field definition data in $storageDef into $fieldDef
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageDef
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDef
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDef
      */
     public function toFieldDefinition( StorageFieldDefinition $storageDef, FieldDefinition $fieldDef )
     {

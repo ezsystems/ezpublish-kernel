@@ -99,7 +99,7 @@ class Builder
      */
     public function __get( $property )
     {
-        $class = "ezp\\Persistence\\Content\\Query\\Criterion\\" . ucfirst( $property );
+        $class = "eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\" . ucfirst( $property );
         if ( !class_exists( $class ) )
         {
             throw new InvalidArgumentException( "Criterion $class not found" );
@@ -141,7 +141,7 @@ class Builder
      */
     public function lOr( Criterion $elementOne, Criterion $elementTwo )
     {
-        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalOr' );
+        $criterionFactory = new CriterionFactory( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\LogicalOr' );
         return call_user_func_array( array( $criterionFactory, 'logicalOr' ), func_get_args() );
     }
 
@@ -156,7 +156,7 @@ class Builder
      */
     public function lAnd( Criterion $elementOne, Criterion $elementTwo )
     {
-        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalAnd' );
+        $criterionFactory = new CriterionFactory( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\LogicalAnd' );
         return call_user_func_array( array( $criterionFactory, 'logicalAnd' ), func_get_args() );
     }
 
@@ -170,7 +170,7 @@ class Builder
      */
     public function not( Criterion $criterion )
     {
-        $criterionFactory = new CriterionFactory( 'ezp\\Persistence\\Content\\Query\\Criterion\\LogicalNot' );
+        $criterionFactory = new CriterionFactory( 'eZ\\Publish\\SPI\\Persistence\\Content\\Query\\Criterion\\LogicalNot' );
         return $criterionFactory->logicalNot( $criterion );
     }
 

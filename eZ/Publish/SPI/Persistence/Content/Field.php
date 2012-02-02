@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Content;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  */
@@ -39,7 +39,7 @@ class Field extends ValueObject
     /**
      * Value of the field
      *
-     * @var \ezp\Persistence\Content\FieldValue
+     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue
      */
     public $value;
 

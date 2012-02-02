@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\UrlAlias;
+namespace eZ\Publish\SPI\Persistence\Content\UrlAlias;
 
 /**
  * The UrlAlias Handler interface provides nice urls management.

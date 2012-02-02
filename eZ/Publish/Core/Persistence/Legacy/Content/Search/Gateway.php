@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Search;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search;
 
-use ezp\Persistence\Content,
-    ezp\Persistence\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion;
 
 /**
  * The Content Search Gateway provides the implementation for one database to
@@ -24,7 +24,7 @@ abstract class Gateway
      * @param Criterion $criterion
      * @param int $offset
      * @param int|null $limit
-     * @param \ezp\Persistence\Content\Query\SortClause[] $sort
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\SortClause[] $sort
      * @param string[] $translations
      * @return mixed[][]
      */

@@ -7,22 +7,22 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\InMemory;
+namespace eZ\Publish\Core\Persistence\InMemory;
 
-use ezp\Persistence\Content,
-    ezp\Persistence\Content\Search\Handler as SearchHandlerInterface,
-    ezp\Persistence\Content\Search\Result,
-    ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Content\Query\Criterion\ContentId,
-    ezp\Persistence\Content\Query\Criterion\ContentTypeId,
-    ezp\Persistence\Content\Query\Criterion\LocationId,
-    ezp\Persistence\Content\Query\Criterion\RemoteId,
-    ezp\Persistence\Content\Query\Criterion\SectionId,
-    ezp\Persistence\Content\Query\Criterion\UserMetadata,
-    ezp\Persistence\Content\Query\Criterion\ParentLocationId,
-    ezp\Persistence\Content\Query\Criterion\LogicalAnd,
-    ezp\Persistence\Content\Query\Criterion\Operator,
-    ezp\Persistence\Content\Query\Criterion\Subtree,
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Search\Handler as SearchHandlerInterface,
+    eZ\Publish\SPI\Persistence\Content\Search\Result,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentTypeId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LocationId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\RemoteId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\SectionId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\UserMetadata,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Operator,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Subtree,
     ezp\Base\Exception\NotFound,
     Exception;
 
@@ -72,7 +72,7 @@ class SearchHandler extends SearchHandlerInterface
     }
 
     /**
-     * @see \ezp\Persistence\Content\Search\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Search\Handler
      */
     public function find( Criterion $criterion, $offset = 0, $limit = null, array $sort = null, $translations = null )
     {
@@ -121,7 +121,7 @@ class SearchHandler extends SearchHandlerInterface
     }
 
     /**
-     * @see \ezp\Persistence\Content\Search\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Search\Handler
      */
     public function findSingle( Criterion $criterion, $translations = null )
     {
@@ -133,7 +133,7 @@ class SearchHandler extends SearchHandlerInterface
     }
 
     /**
-     * @see \ezp\Persistence\Content\Search\Handler
+     * @see \eZ\Publish\SPI\Persistence\Content\Search\Handler
      */
     public function indexContent( Content $content )
     {

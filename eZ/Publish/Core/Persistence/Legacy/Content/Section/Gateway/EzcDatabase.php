@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Section\Gateway;
-use ezp\Persistence\Storage\Legacy\Content\Section\Gateway,
-    ezp\Persistence\Content\Section,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway,
+    eZ\Publish\SPI\Persistence\Content\Section,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 /**
  * Section Handler
@@ -20,14 +20,14 @@ class EzcDatabase extends Gateway
     /**
      * Database handler
      *
-     * @param ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      */
     protected $dbHandler;
 
     /**
      * Creates a new EzcDatabase Section Gateway
      *
-     * @param ezp\Persistence\Storage\Legacy\EzcDbHandler $dbHandler
+     * @param eZ\Publish\Core\Persistence\Legacy\EzcDbHandler $dbHandler
      */
     public function __construct ( EzcDbHandler $dbHandler )
     {

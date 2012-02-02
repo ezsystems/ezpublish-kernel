@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Location;
-use ezp\Persistence\Content\Location,
-    ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Content\Location\UpdateStruct;
+namespace eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
@@ -22,7 +22,7 @@ interface Handler
      * Loads the data for the location identified by $locationId.
      *
      * @param int $locationId
-     * @return \ezp\Persistence\Content\Location
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      * @throws \ezp\Base\Exception\NotFound
      */
     public function load( $locationId );
@@ -97,7 +97,7 @@ interface Handler
     /**
      * Updates an existing location.
      *
-     * @param \ezp\Persistence\Content\Location\UpdateStruct $location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct $location
      * @param int $locationId
      * @return boolean
      */
@@ -106,8 +106,8 @@ interface Handler
     /**
      * Creates a new location rooted at $location->parentId.
      *
-     * @param \ezp\Persistence\Content\Location\CreateStruct $location
-     * @return \ezp\Persistence\Content\Location
+     * @param \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct $location
+     * @return \eZ\Publish\SPI\Persistence\Content\Location
      */
     public function create( CreateStruct $location );
 

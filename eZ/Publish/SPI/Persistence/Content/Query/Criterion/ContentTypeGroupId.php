@@ -1,16 +1,16 @@
 <?php
 /**
- * File containing the ezp\Persistence\Content\Query\Criterion\ContentTypeGroup
+ * File containing the eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentTypeGroup
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Query\Criterion;
-use ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Content\Query\Criterion\Operator\Specifications,
-    ezp\Persistence\Content\Query\CriterionInterface;
+namespace eZ\Publish\SPI\Persistence\Content\Query\Criterion;
+use eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Operator\Specifications,
+    eZ\Publish\SPI\Persistence\Content\Query\CriterionInterface;
 
 /**
  * A criterion that will match content based on its ContentTypeGroup id.

@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Section;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Section;
 
 /**
  * Section Handler

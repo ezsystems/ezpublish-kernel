@@ -52,7 +52,7 @@ abstract class Model implements Observable, ModelState
     /**
      * Value object that serves as the property store
      *
-     * @var \ezp\Persistence\ValueObject
+     * @var \eZ\Publish\SPI\Persistence\ValueObject
      */
     protected $properties;
 

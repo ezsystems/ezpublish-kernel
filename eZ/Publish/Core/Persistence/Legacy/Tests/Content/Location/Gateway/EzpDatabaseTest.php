@@ -1,22 +1,22 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Location\Gateway\EzpDatabaseTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway\EzpDatabaseTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Location\Gateway;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Content,
-    ezp\Persistence\Content\Location,
-    ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase,
-    ezp\Persistence;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Location\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase,
+    eZ\Publish\SPI\Persistence;
 
 /**
- * Test case for ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase
+ * Test case for eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase
  */
 class EzpDatabaseTest extends TestCase
 {
@@ -305,7 +305,7 @@ class EzpDatabaseTest extends TestCase
     }
 
     /**
-     * @covers ezp\Persistence\Storage\Legacy\Content\Location\Gateway\EzcDatabase::getMainNodeId
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway\EzcDatabase::getMainNodeId
      * @depends testCreateLocation
      */
     public function testGetMainNodeId()

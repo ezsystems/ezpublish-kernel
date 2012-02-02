@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Country\Value as CountryValue,
     ezp\Content\FieldType\FieldSettings,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Country as CountryConverter,
-    ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
-    ezp\Persistence\Content\FieldTypeConstraints,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country as CountryConverter,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
     PHPUnit_Framework_TestCase,
     DOMDocument,
     DOMXPath;
@@ -26,7 +26,7 @@ use ezp\Content\FieldType\Country\Value as CountryValue,
 class CountryTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Country
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country
      */
     protected $converter;
 
@@ -39,7 +39,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group country
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Country::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -55,7 +55,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group country
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Country::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toFieldValue
      * @covers \ezp\Content\FieldType\Country\Value::getCountriesInfo
      */
     public function testToFieldValue()
@@ -89,7 +89,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group country
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Country::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionMultiple()
     {
@@ -126,7 +126,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group country
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Country::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinitionSingle()
     {
@@ -158,7 +158,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group country
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Country::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toFieldDefinition
      */
     public function testToFieldDefinitionMultiple()
     {
@@ -186,7 +186,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group country
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Country::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toFieldDefinition
      */
     public function testToFieldDefinitionSingle()
     {

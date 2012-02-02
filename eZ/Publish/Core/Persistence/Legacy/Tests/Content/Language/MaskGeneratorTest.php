@@ -1,17 +1,17 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Language\MaskGeneratorTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\MaskGeneratorTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Language;
-use ezp\Persistence\Storage\Legacy\Tests\Content\LanguageAwareTestCase,
-    ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator,
-    ezp\Persistence\Storage\Legacy\Content\Language\Cache,
-    ezp\Persistence\Content\Language,
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
+use eZ\Publish\Core\Persistence\Legacy\Tests\Content\LanguageAwareTestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache,
+    eZ\Publish\SPI\Persistence\Content\Language,
     ezp\Base\Exception;
 
 /**
@@ -24,7 +24,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      * @param array $languages
      * @param int $expectedMask
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator::generateLanguageMask
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::generateLanguageMask
      * @dataProvider getLanguageMaskData
      */
     public function testGenerateLanguageMask( array $languages, $expectedMask )
@@ -73,7 +73,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      * @param boolean $alwaysAvailable
      * @param int $expectedIndicator
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator::generateLanguageIndicator
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::generateLanguageIndicator
      * @dataProvider getLanguageIndicatorData
      */
     public function testGenerateLanguageIndicator(
@@ -110,7 +110,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
      */
     public function testIsLanguageAlwaysAvailable()
     {
@@ -129,7 +129,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
      */
     public function testIsLanguageAlwaysAvailableOtherLanguage()
     {
@@ -148,7 +148,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator::isLanguageAlwaysAvailable
      */
     public function testIsLanguageAlwaysAvailableNoDefault()
     {
@@ -167,7 +167,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     /**
      * Returns the mask generator to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
     protected function getMaskGenerator()
     {

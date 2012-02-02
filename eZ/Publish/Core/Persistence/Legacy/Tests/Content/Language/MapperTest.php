@@ -1,17 +1,17 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Language\MapperTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language\MapperTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Language;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\Language\Mapper,
-    ezp\Persistence\Content\Language,
-    ezp\Persistence\Content\Language\CreateStruct;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Language;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper,
+    eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
  * Test case for Mapper
@@ -20,7 +20,7 @@ class MapperTest extends TestCase
 {
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Mapper::createLanguageFromCreateStruct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::createLanguageFromCreateStruct
      */
     public function testCreateLanguageFromCreateStruct()
     {
@@ -39,7 +39,7 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Language\Mapper::extractLanguagesFromRows
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper::extractLanguagesFromRows
      */
     public function testExtractLanguagesFromRows()
     {
@@ -71,7 +71,7 @@ class MapperTest extends TestCase
     /**
      * Returns reference for the extraction from rows
      *
-     * @return \ezp\Persistence\Content\Language[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     protected function getExtractReference()
     {
@@ -93,7 +93,7 @@ class MapperTest extends TestCase
     /**
      * Returns a Language CreateStruct fixture
      *
-     * @return ezp\Persistence\Content\Language\CreateStruct
+     * @return eZ\Publish\SPI\Persistence\Content\Language\CreateStruct
      */
     protected function getCreateStructFixture()
     {
@@ -109,7 +109,7 @@ class MapperTest extends TestCase
     /**
      * Returns a Language fixture
      *
-     * @return ezp\Persistence\Content\Language
+     * @return eZ\Publish\SPI\Persistence\Content\Language
      */
     protected function getLanguageFixture()
     {

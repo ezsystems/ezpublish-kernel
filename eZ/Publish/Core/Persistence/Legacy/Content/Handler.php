@@ -8,16 +8,16 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content;
-use ezp\Persistence\Storage\Legacy\Content\Gateway,
-    ezp\Persistence\Storage\Legacy\Content\Mapper,
-    ezp\Persistence\Storage\Legacy\Content\Location\Gateway as LocationGateway,
-    ezp\Persistence\Content\Handler as BaseContentHandler,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Content\RestrictedVersion,
-    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+namespace eZ\Publish\Core\Persistence\Legacy\Content;
+use eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
+    eZ\Publish\SPI\Persistence\Content\Handler as BaseContentHandler,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
  * The Content Handler stores Content and ContentType objects.
@@ -27,14 +27,14 @@ class Handler implements BaseContentHandler
     /**
      * Content gateway.
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $contentGateway;
 
     /**
      * Location gateway.
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
 
@@ -48,18 +48,18 @@ class Handler implements BaseContentHandler
     /**
      * FieldHandler
      *
-     * @var \ezp\Persistence\Storage\Legacy\FieldHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\FieldHandler
      */
     protected $fieldHandler;
 
     /**
      * Creates a new content handler.
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Location\Gateway $locationGateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Mapper $mapper
-     * @param \ezp\Persistence\Storage\Legacy\Content\FieldHandler $fieldHandler
-     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Mapper $mapper
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler $fieldHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
      */
     public function __construct(
         Gateway $contentGateway,
@@ -82,8 +82,8 @@ class Handler implements BaseContentHandler
      *
      * Will contain always a complete list of fields.
      *
-     * @param \ezp\Persistence\Content\CreateStruct $struct Content creation struct.
-     * @return \ezp\Persistence\Content Content value object
+     * @param \eZ\Publish\SPI\Persistence\Content\CreateStruct $struct Content creation struct.
+     * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
     public function create( CreateStruct $struct )
     {
@@ -137,8 +137,8 @@ class Handler implements BaseContentHandler
      * - Updates the content object using the provided update struct
      * - Updates the node assignments
      *
-     * @param \ezp\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
-     * @return \ezp\Persistence\Content The published Content
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct An UpdateStruct with id, versionNo and name array
+     * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
     public function publish( UpdateStruct $updateStruct )
     {
@@ -173,7 +173,7 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @param int|bool $srcVersion
-     * @return \ezp\Persistence\Content\Version
+     * @return \eZ\Publish\SPI\Persistence\Content\Version
      */
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
@@ -221,7 +221,7 @@ class Handler implements BaseContentHandler
      * @param int|string $id
      * @param int|string $version
      * @param string[] $translations
-     * @return \ezp\Persistence\Content Content value object
+     * @return \eZ\Publish\SPI\Persistence\Content Content value object
      */
     public function load( $id, $version, $translations = null )
     {
@@ -291,8 +291,8 @@ class Handler implements BaseContentHandler
     /**
      * Updates a content object entity with data and identifier $content
      *
-     * @param \ezp\Persistence\Content\UpdateStruct $content
-     * @return \ezp\Persistence\Content
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct $content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function update( UpdateStruct $content )
     {
@@ -339,7 +339,7 @@ class Handler implements BaseContentHandler
      * Return the versions for $contentId
      *
      * @param int $contentId
-     * @return ezp\Persistence\Content\RestrictedVersion[]
+     * @return eZ\Publish\SPI\Persistence\Content\RestrictedVersion[]
      */
     public function listVersions( $contentId )
     {
@@ -355,7 +355,7 @@ class Handler implements BaseContentHandler
      *
      * @param int $contentId
      * @param int|false $version Copy all versions if left false
-     * @return \ezp\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      * @throws \ezp\Base\Exception\NotFound If content or version is not found
      */
     public function copy( $contentId, $version )
@@ -367,7 +367,7 @@ class Handler implements BaseContentHandler
      * Creates a copy of the latest published version of $contentId
      *
      * @param mixed $contentId
-     * @return \ezp\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     public function createCopy( $contentId )
     {
@@ -391,8 +391,8 @@ class Handler implements BaseContentHandler
      *
      * @todo Should the existence verifications happen here or is this supposed to be handled at a higher level?
      *
-     * @param  \ezp\Persistence\Content\Relation\CreateStruct $relation
-     * @return \ezp\Persistence\Content\Relation
+     * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
     public function addRelation( RelationCreateStruct $relation )
     {
@@ -417,7 +417,7 @@ class Handler implements BaseContentHandler
      * @param mixed $sourceContentId Source Content ID
      * @param mixed|null $sourceContentVersionNo Source Content Version, null if not specified
      * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
-     * @return \ezp\Persistence\Content\Relation[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
     {
@@ -431,7 +431,7 @@ class Handler implements BaseContentHandler
      *
      * @param mixed $destinationContentId Destination Content ID
      * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
-     * @return \ezp\Persistence\Content\Relation[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadReverseRelations( $destinationContentId, $type = null )
     {

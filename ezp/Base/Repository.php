@@ -8,7 +8,7 @@
  */
 
 namespace ezp\Base;
-use ezp\Persistence\Handler as PersistenceHandler,
+use eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     RuntimeException,
     DomainException,
     ezp\Base\Configuration,
@@ -30,7 +30,7 @@ class Repository
     /**
      * Repository Handler object
      *
-     * @var \ezp\Persistence\Handler
+     * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $persistenceHandler;
 
@@ -60,7 +60,7 @@ class Repository
      *
      * Construct repository object with provided storage engine
      *
-     * @param \ezp\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Handler $handler
      * @param \ezp\Io\Handler $ioHandler
      * @param \ezp\User|null $user
      */

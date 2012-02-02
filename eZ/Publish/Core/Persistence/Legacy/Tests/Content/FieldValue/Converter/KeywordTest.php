@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\FieldValue\Converter;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
 use ezp\Content\FieldType\Keyword\Value as KeywordValue,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Keyword as KeywordConverter,
-    ezp\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword as KeywordConverter,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition as PersistenceFieldDefinition,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -22,7 +22,7 @@ use ezp\Content\FieldType\Keyword\Value as KeywordValue,
 class KeywordTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Keyword
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword
      */
     protected $converter;
 
@@ -35,7 +35,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group keyword
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Keyword::toStorageValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword::toStorageValue
      */
     public function testToStorageValue()
     {
@@ -55,7 +55,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group keyword
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Keyword::toFieldValue
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -72,7 +72,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group keyword
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Keyword::toStorageFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword::toStorageFieldDefinition
      */
     public function testToStorageFieldDefinition()
     {
@@ -82,7 +82,7 @@ class KeywordTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group keyword
-     * @covers \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Keyword::toFieldDefinition
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Keyword::toFieldDefinition
      */
     public function testToFieldDefinition()
     {

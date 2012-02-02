@@ -8,15 +8,15 @@
  *
  */
 
-namespace ezp\Persistence\Storage\InMemory;
-use ezp\Persistence\Content\Location\Handler as LocationHandlerInterface,
-    ezp\Persistence\Content\Location\CreateStruct,
-    ezp\Persistence\Content\Location\UpdateStruct,
-    ezp\Persistence\Content\Location as LocationValue,
+namespace eZ\Publish\Core\Persistence\InMemory;
+use eZ\Publish\SPI\Persistence\Content\Location\Handler as LocationHandlerInterface,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location as LocationValue,
     ezp\Base\Exception\NotFound;
 
 /**
- * @see ezp\Persistence\Content\Location\Handler
+ * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
  */
 class LocationHandler implements LocationHandlerInterface
 {
@@ -47,7 +47,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function load( $locationId )
     {
@@ -55,7 +55,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function copySubtree( $sourceId, $destinationParentId )
     {
@@ -84,7 +84,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function move( $sourceId, $destinationParentId )
     {
@@ -126,14 +126,14 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function markSubtreeModified( $locationId, $timeStamp = null )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function hide( $id )
     {
@@ -150,7 +150,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function unHide( $id )
     {
@@ -195,7 +195,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function swap( $locationId1, $locationId2 )
     {
@@ -224,7 +224,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function update( UpdateStruct $location, $locationId )
     {
@@ -236,7 +236,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function create( CreateStruct $locationStruct )
     {
@@ -274,7 +274,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function removeSubtree( $locationId )
     {
@@ -294,7 +294,7 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function setSectionForSubtree( $locationId, $sectionId )
     {
@@ -318,42 +318,42 @@ class LocationHandler implements LocationHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function storeUrlAliasPath( $path, $locationId, $languageName = null, $alwaysAvailable = false )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function createCustomUrlAlias( $alias, $locationId, $forwarding = false, $languageName = null, $alwaysAvailable = false )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function createUrlHistoryEntry( $historicUrl, $locationId )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function listUrlsForLocation( $locationId, $urlType )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function removeUrlsForLocation( $locationId, array $urlIdentifier )
     {
     }
 
     /**
-     * @see ezp\Persistence\Content\Location\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function getPath( $locationId, $language )
     {
@@ -402,7 +402,7 @@ class LocationHandler implements LocationHandlerInterface
      *
      * @todo Requires approbation
      * @param mixed $locationId
-     * @return \ezp\Persistence\Content\Location[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Location[]
      */
     public function loadByParentId( $locationId )
     {
@@ -444,7 +444,7 @@ class LocationHandler implements LocationHandlerInterface
 
     /**
      * Returns pathIdentificationString for provided location value object
-     * @param ezp\Persistence\Content\Location $vo
+     * @param eZ\Publish\SPI\Persistence\Content\Location $vo
      * @return string
      */
     private function getPathIdentificationString( LocationValue $vo )

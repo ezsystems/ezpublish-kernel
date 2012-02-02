@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action;
-use ezp\Persistence\Storage\Legacy\Content\Type\ContentUpdater\Action,
-    ezp\Persistence\Content,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\Gateway,
-    ezp\Persistence\Content\Type\FieldDefinition;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\ContentUpdater\Action,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition;
 
 /**
  * Action to add a field to content objects
@@ -30,15 +30,15 @@ class AddField extends Action
     /**
      * Field value converter
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter
      */
     protected $fieldValueConverter;
 
     /**
      * Creates a new action
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Gateway $contentGateway
-     * @param \ezp\Persistence\Content\Type\FieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Gateway $contentGateway
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition
      */
     public function __construct(
         Gateway $contentGateway,

@@ -1,30 +1,30 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\ContentHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ContentHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Content,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Version,
-    ezp\Persistence\Content\RestrictedVersion,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Storage\Legacy\Content\Mapper,
-    ezp\Persistence\Storage\Legacy\Content\Gateway,
-    ezp\Persistence\Storage\Legacy\Content\Location,
-    ezp\Persistence\Storage\Legacy\Content\Type,
-    ezp\Persistence\Storage\Legacy\Content\StorageRegistry,
-    ezp\Persistence\Storage\Legacy\Content\Handler;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\Version,
+    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
+    eZ\Publish\Core\Persistence\Legacy\Content\Handler;
 
 /**
  * Test case for Content Handler
@@ -34,48 +34,48 @@ class ContentHandlerTest extends TestCase
     /**
      * Content handler to test
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
     protected $contentHandler;
 
     /**
      * Gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected $gatewayMock;
 
     /**
      * Location gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGatewayMock;
 
     /**
      * Type gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected $typeGatewayMock;
 
     /**
      * Mapper mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected $mapperMock;
 
     /**
      * Field handler mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected $fieldHandlerMock;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::__construct
      */
     public function testCtor()
     {
@@ -101,7 +101,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::create
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::create
      * @todo Current method way to complex to test, refactor!
      */
     public function testCreate()
@@ -117,7 +117,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'createContentFromCreateStruct' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\CreateStruct'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct'
                 )
             )->will(
                 $this->returnValue( new Content() )
@@ -126,7 +126,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'createVersionForContent' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content'
+                    'eZ\\Publish\\SPI\\Persistence\\Content'
                 )
             )->will(
                 $this->returnValue( new Version() )
@@ -135,34 +135,34 @@ class ContentHandlerTest extends TestCase
             ->method( 'createLocationCreateStruct' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content'
+                    'eZ\\Publish\\SPI\\Persistence\\Content'
                 )
             )->will(
-                $this->returnValue( new \ezp\Persistence\Content\Location\CreateStruct() )
+                $this->returnValue( new \eZ\Publish\SPI\Persistence\Content\Location\CreateStruct() )
             );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertContentObject' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\CreateStruct' )
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct' )
             )->will( $this->returnValue( 23 ) );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertVersion' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Version' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Version' ),
                 $this->isType( 'array' )
             )->will( $this->returnValue( 1 ) );
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'createNewFields' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
 
         $locationMock->expects( $this->once() )
             ->method( 'createNodeAssignment' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\Location\\CreateStruct'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\Location\\CreateStruct'
                 ),
                 $this->equalTo( 42 ),
                 $this->equalTo( 3 ) // Location\Gateway::NODE_ASSIGNMENT_OP_CODE_CREATE
@@ -173,7 +173,7 @@ class ContentHandlerTest extends TestCase
         // @TODO Make subsequent tests
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content',
+            'eZ\\Publish\\SPI\\Persistence\\Content',
             $res,
             'Content not created'
         );
@@ -183,7 +183,7 @@ class ContentHandlerTest extends TestCase
             'Content ID not set correctly'
         );
         $this->assertInstanceOf(
-            '\\ezp\\Persistence\\Content\\Version',
+            '\\eZ\\Publish\\SPI\\Persistence\\Content\\Version',
             $res->version,
             'Version infos not created'
         );
@@ -201,7 +201,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::publish
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::publish
      */
     public function testPublish()
     {
@@ -246,7 +246,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createDraftFromVersion
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::createDraftFromVersion
      */
     public function testCreateDraftFromVersion()
     {
@@ -264,23 +264,23 @@ class ContentHandlerTest extends TestCase
         $mapperMock->expects( $this->once() )
             ->method( 'createVersionForContent' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ),
                 $this->equalTo( 3 )
             )->will( $this->returnValue( new Version() ) );
 
         $gatewayMock->expects( $this->once() )
             ->method( 'insertVersion' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\Version' ) )
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Version' ) )
             ->will( $this->returnValue( 42 ) );
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'createNewFields' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
 
         $result = $handler->createDraftFromVersion( 23, 2 );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content\\Version',
+            'eZ\\Publish\\SPI\\Persistence\\Content\\Version',
             $result
         );
         $this->assertEquals(
@@ -291,7 +291,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
      */
     public function testLoad()
     {
@@ -318,7 +318,7 @@ class ContentHandlerTest extends TestCase
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'loadExternalFieldData' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content' ) );
 
         $result = $handler->load( 23, 2, array( 'eng-GB' ) );
 
@@ -330,7 +330,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::load
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::load
      * @expectedException ezp\Base\Exception\NotFound
      */
     public function testLoadErrorNotFound()
@@ -351,7 +351,7 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a Content for {@link testCreateDraftFromVersion()}
      *
-     * @return \ezp\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      */
     protected function getContentFixtureForDraft()
     {
@@ -369,7 +369,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::update
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::update
      */
     public function testUpdateContent()
     {
@@ -380,15 +380,15 @@ class ContentHandlerTest extends TestCase
 
         $gatewayMock->expects( $this->once() )
             ->method( 'updateContent' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\UpdateStruct' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' ) );
         $gatewayMock->expects( $this->once() )
             ->method( 'updateVersion' )
-            ->with( $this->isInstanceOf( 'ezp\\Persistence\\Content\\UpdateStruct' ) );
+            ->with( $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' ) );
 
         $fieldHandlerMock->expects( $this->once() )
             ->method( 'updateFields' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\UpdateStruct' )
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\UpdateStruct' )
             );
 
         $handler->expects( $this->at( 0 ) )
@@ -428,7 +428,7 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a CreateStruct fixture.
      *
-     * @return \ezp\Persistence\Content\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
     public function getCreateStructFixture()
     {
@@ -460,7 +460,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::listVersions
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::listVersions
      */
     public function testListVersions()
     {
@@ -489,7 +489,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::delete
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::delete
      */
     public function testDelete()
     {
@@ -534,7 +534,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createCopy
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::createCopy
      */
     public function testCreateCopy()
     {
@@ -558,7 +558,7 @@ class ContentHandlerTest extends TestCase
             ->method( 'createCreateStructFromContent' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content'
+                    'eZ\\Publish\\SPI\\Persistence\\Content'
                 )
             )->will(
                 $this->returnValue( new CreateStruct() )
@@ -568,21 +568,21 @@ class ContentHandlerTest extends TestCase
             ->method( 'create' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\CreateStruct'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\CreateStruct'
                 )
             )->will( $this->returnValue( new Content() ) );
 
         $result = $handler->createCopy( 23 );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Content',
+            'eZ\\Publish\\SPI\\Persistence\\Content',
             $result
         );
     }
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::createCopy
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::createCopy
      * @expectedException ezp\Base\Exception\NotFound
      */
     public function testCreateCopyErrorNotFound()
@@ -603,7 +603,7 @@ class ContentHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Handler::setStatus
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Handler::setStatus
      */
     public function testSetStatus()
     {
@@ -625,7 +625,7 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns the handler to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
     protected function getContentHandler()
     {
@@ -645,12 +645,12 @@ class ContentHandlerTest extends TestCase
      * Returns the handler to test with $methods mocked
      *
      * @param string[] $methods
-     * @return \ezp\Persistence\Storage\Legacy\Content\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Handler
      */
     protected function getPartlyMockedHandler( array $methods )
     {
         return $this->getMock(
-            '\\ezp\\Persistence\\Storage\\Legacy\\Content\\Handler',
+            '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler',
             $methods,
             array(
                 $this->getGatewayMock(),
@@ -664,14 +664,14 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a FieldHandler mock.
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\FieldHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected function getFieldHandlerMock()
     {
         if ( !isset( $this->fieldHandlerMock ) )
         {
             $this->fieldHandlerMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldHandler',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldHandler',
                 array(),
                 array(),
                 '',
@@ -684,14 +684,14 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a Mapper mock.
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected function getMapperMock()
     {
         if ( !isset( $this->mapperMock ) )
         {
             $this->mapperMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Mapper',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
                 array(),
                 array(),
                 '',
@@ -704,14 +704,14 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a Location Gateway mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected function getLocationGatewayMock()
     {
         if ( !isset( $this->locationGatewayMock ) )
         {
             $this->locationGatewayMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway'
             );
         }
         return $this->locationGatewayMock;
@@ -720,14 +720,14 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a Content Type gateway mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected function getTypeGatewayMock()
     {
         if ( !isset( $this->typeGatewayMock ) )
         {
             $this->typeGatewayMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Type\\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Type\\Gateway'
             );
         }
         return $this->typeGatewayMock;
@@ -736,14 +736,14 @@ class ContentHandlerTest extends TestCase
     /**
      * Returns a mock object for the Content Gateway.
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Gateway
      */
     protected function getGatewayMock()
     {
         if ( !isset( $this->gatewayMock ) )
         {
             $this->gatewayMock = $this->getMockForAbstractClass(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Gateway'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Gateway'
             );
         }
         return $this->gatewayMock;

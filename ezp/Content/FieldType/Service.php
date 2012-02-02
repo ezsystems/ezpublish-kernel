@@ -11,7 +11,7 @@ namespace ezp\Content\FieldType;
 use ezp\Base\Service as BaseService,
     ezp\Content\Relation,
     ezp\Content\Proxy,
-    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct,
     ezp\Base\Exception\Logic;
 
 /**

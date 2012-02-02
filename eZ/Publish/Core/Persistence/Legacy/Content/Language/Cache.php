@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Language;
-use ezp\Persistence\Content\Language,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language,
     ezp\Base\Exception;
 
 /**
@@ -33,7 +33,7 @@ class Cache
     /**
      * Stores the $language into the cache
      *
-     * @param \ezp\Persistence\Content\Language $language
+     * @param \eZ\Publish\SPI\Persistence\Content\Language $language
      * @return void
      */
     public function store( Language $language )
@@ -64,7 +64,7 @@ class Cache
      * Returns the Language with $id from the cache
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound
      *         if the Language could not be found
      */
@@ -81,7 +81,7 @@ class Cache
      * Returns the Language with $locale from the cache
      *
      * @param string $locale
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound
      *         if the Language could not be found
      */
@@ -97,7 +97,7 @@ class Cache
     /**
      * Returns all languages in the cache
      *
-     * @return \ezp\Persistence\Content\Language[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     public function getAll()
     {

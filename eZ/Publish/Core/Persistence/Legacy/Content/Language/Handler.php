@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Language;
-use ezp\Persistence\Content\Language,
-    ezp\Persistence\Content\Language\Handler as BaseLanguageHandler,
-    ezp\Persistence\Content\Language\CreateStruct,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\SPI\Persistence\Content\Language\Handler as BaseLanguageHandler,
+    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct,
     ezp\Base\Exception;
 
 /**
@@ -21,22 +21,22 @@ class Handler implements BaseLanguageHandler
     /**
      * Language Gateway
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Gateway $languageGateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway $languageGateway
      */
     protected $languageGateway;
 
     /**
      * Language Mapper
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\Mapper $languageMapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper $languageMapper
      */
     protected $languageMapper;
 
     /**
      * Creates a new Language Handler
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Language\Gateway $languageGateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Language\Mapper $languageMapper
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Gateway $languageGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Language\Mapper $languageMapper
      */
     public function __construct( Gateway $languageGateway, Mapper $languageMapper )
     {
@@ -47,8 +47,8 @@ class Handler implements BaseLanguageHandler
     /**
      * Create a new language
      *
-     * @param \ezp\Persistence\Content\Language\CreateStruct $struct
-     * @return \ezp\Persistence\Content\Language
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function create( CreateStruct $struct )
     {
@@ -62,7 +62,7 @@ class Handler implements BaseLanguageHandler
     /**
      * Update language
      *
-     * @param \ezp\Persistence\Content\Language $language
+     * @param \eZ\Publish\SPI\Persistence\Content\Language $language
      */
     public function update( Language $language )
     {
@@ -73,7 +73,7 @@ class Handler implements BaseLanguageHandler
      * Get language by id
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound If language could not be found by $id
      */
     public function load( $id )
@@ -91,7 +91,7 @@ class Handler implements BaseLanguageHandler
     /**
      * Get all languages
      *
-     * @return \ezp\Persistence\Content\Language[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     public function loadAll()
     {

@@ -7,17 +7,17 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Type\Gateway;
-use ezp\Persistence\Storage\Legacy\Content\Type\Gateway,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Storage\Legacy\Content\Language,
-    ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator,
-    ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\UpdateStruct,
-    ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway;
+use eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language,
+    eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator,
+    eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     ezcQuery,
     ezcQuerySelect;
 
@@ -92,7 +92,7 @@ class EzcDatabase extends Gateway
     /**
      * Language mask generator
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Language\MaskGenerator
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Language\MaskGenerator
      */
     protected $languageMaskGenerator;
 
@@ -147,7 +147,7 @@ class EzcDatabase extends Gateway
     /**
      * Updates a group with data in $group.
      *
-     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $group
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $group
      * @return void
      */
     public function updateGroup( GroupUpdateStruct $group )
@@ -563,8 +563,8 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return mixed Field definition ID
      */
     public function insertFieldDefinition(
@@ -598,8 +598,8 @@ class EzcDatabase extends Gateway
      * Set common columns for insert/update of FieldDefinition.
      *
      * @param \ezcQuery $q
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
      */
     protected function setCommonFieldColumns(
@@ -722,8 +722,8 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
-     * @param \ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition $storageFieldDef
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition $storageFieldDef
      * @return void
      * @todo Handle StorageFieldDefinition
      */
@@ -788,7 +788,7 @@ class EzcDatabase extends Gateway
      *
      * @param mixed $typeId
      * @param int $status
-     * @param \ezp\Persistence\Content\Type\UpdateStruct $updateStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $updateStruct
      * @return void
      */
     public function updateType( $typeId, $status, UpdateStruct $updateStruct )

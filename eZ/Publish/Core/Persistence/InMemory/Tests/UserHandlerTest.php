@@ -1,18 +1,18 @@
 <?php
 /**
- * File contains: ezp\Persistence\Tests\SectionHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\InMemory\Tests\SectionHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Tests;
-use ezp\Persistence\User,
-    ezp\Persistence\User\Role,
-    ezp\Persistence\User\RoleUpdateStruct,
-    ezp\Persistence\User\Policy,
-    ezp\Persistence\User\Handler as UserHandlerInterface,
+namespace eZ\Publish\Core\Persistence\InMemory\Tests;
+use eZ\Publish\SPI\Persistence\User,
+    eZ\Publish\SPI\Persistence\User\Role,
+    eZ\Publish\SPI\Persistence\User\RoleUpdateStruct,
+    eZ\Publish\SPI\Persistence\User\Policy,
+    eZ\Publish\SPI\Persistence\User\Handler as UserHandlerInterface,
     ezp\Base\Exception\NotFound;
 
 /**
@@ -24,12 +24,12 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::load
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::load
      */
     public function testLoad()
     {
         $obj = $this->persistenceHandler->userHandler()->load( 10 );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User', $obj );
         $this->assertEquals( 10, $obj->id );
         $this->assertEquals( 'nospam@ez.no', $obj->email );
         $this->assertEquals( 'anonymous', $obj->login );
@@ -38,7 +38,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::load
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::load
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadUnExistingUserId()
@@ -49,20 +49,20 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadByLogin function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadByLogin
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadByLogin
      */
     public function testLoadByLogin()
     {
         $users = $this->persistenceHandler->userHandler()->loadByLogin( 'anonymous' );
         $this->assertEquals( 1, count( $users ) );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User', $users[0] );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User', $users[0] );
         $this->assertEquals( 10, $users[0]->id );
         $this->assertEquals( 'nospam@ez.no', $users[0]->email );
         $this->assertEquals( 'anonymous', $users[0]->login );
 
         $users = $this->persistenceHandler->userHandler()->loadByLogin( 'anonymous', true );
         $this->assertEquals( 1, count( $users ) );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User', $users[0] );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User', $users[0] );
         $this->assertEquals( 10, $users[0]->id );
         $this->assertEquals( 'nospam@ez.no', $users[0]->email );
         $this->assertEquals( 'anonymous', $users[0]->login );
@@ -71,7 +71,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadByLogin function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadByLogin
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadByLogin
      */
     public function testLoadByLoginWithEmail()
     {
@@ -80,7 +80,7 @@ class UserHandlerTest extends HandlerTest
 
         $users = $this->persistenceHandler->userHandler()->loadByLogin( 'nospam@ez.no', true );
         $this->assertEquals( 1, count( $users ) );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User', $users[0] );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User', $users[0] );
         $this->assertEquals( 10, $users[0]->id );
         $this->assertEquals( 'nospam@ez.no', $users[0]->email );
         $this->assertEquals( 'anonymous', $users[0]->login );
@@ -89,7 +89,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadByLogin function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadByLogin
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadByLogin
      */
     public function testLoadByLoginUnExistingUser()
     {
@@ -102,7 +102,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::create
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::create
      */
     public function testCreate()
     {
@@ -114,7 +114,7 @@ class UserHandlerTest extends HandlerTest
         $obj->login = 'unit';
         $obj->passwordHash = 'SomeRandomStuffShouldHaveBeenHash';
         $obj = $handler->create( $obj );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User', $obj );
         $this->assertEquals( 1, $obj->id );
         $this->assertEquals( 'unit@ez.no', $obj->email );
         $this->assertEquals( 2, $obj->hashAlgorithm );
@@ -125,7 +125,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::create
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::create
      * @expectedException \ezp\Base\Exception\Logic
      */
     public function testCreateMissingId()
@@ -142,7 +142,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::create
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::create
      * @expectedException \ezp\Base\Exception\Logic
      */
     public function testCreateExistingId()
@@ -160,7 +160,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test update function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::update
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::update
      */
     public function testUpdate()
     {
@@ -169,7 +169,7 @@ class UserHandlerTest extends HandlerTest
         $obj->email = 'unit@ez.no';
         $handler->update( $obj );
         $obj = $handler->load( 10 );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User', $obj );
         $this->assertEquals( 10, $obj->id );
         $this->assertEquals( 'unit@ez.no', $obj->email );
         $this->assertEquals( 2, $obj->hashAlgorithm );
@@ -179,7 +179,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test delete function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::delete
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::delete
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDelete()
@@ -193,13 +193,13 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test create function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::createRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::createRole
      */
     public function testCreateRole()
     {
         $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 'test', $obj->name );
         $this->assertEquals( 3, count( $obj->policies ) );
         $this->assertEquals( $obj->id, $obj->policies[0]->roleId );
@@ -208,14 +208,14 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRole
      */
     public function testLoadRole()
     {
         $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
         $obj = $handler->loadRole( $obj->id );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 'test', $obj->name );
         $this->assertEquals( 3, count( $obj->policies ) );
     }
@@ -223,7 +223,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test load function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRole
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadRoleNotFound()
@@ -235,7 +235,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadRolesByGroupId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadRolesByGroupId
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRolesByGroupId
      */
     public function testLoadRolesByGroupId()
     {
@@ -249,7 +249,7 @@ class UserHandlerTest extends HandlerTest
                                                      'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
         $list = $handler->loadRolesByGroupId( 4 );
         $this->assertEquals( 1, count( $list ) );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $list[0] );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $list[0] );
         $role = $list[0];
         $this->assertEquals( 'Foo', $role->policies[3]->module );
         $this->assertEquals( 'Bar', $role->policies[3]->function );
@@ -259,7 +259,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadRolesByGroupId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadRolesByGroupId
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRolesByGroupId
      */
     public function testLoadRolesByGroupIdEmpty()
     {
@@ -274,7 +274,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadRolesByGroupId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadRolesByGroupId
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRolesByGroupId
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadRolesByGroupIdNotFound()
@@ -286,7 +286,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadRolesByGroupId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadRolesByGroupId
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadRolesByGroupId
      * @expectedException \ezp\Base\Exception\NotFoundWithType
      */
     public function testLoadRolesByGroupIdNotFoundWithCorrectType()
@@ -298,13 +298,13 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test update function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::updateRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::updateRole
      */
     public function testUpdateRole()
     {
         $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $id = $obj->id;
 
         $struct = new RoleUpdateStruct();
@@ -312,7 +312,7 @@ class UserHandlerTest extends HandlerTest
         $struct->name = 'newName';
         $handler->updateRole( $struct );
         $obj = $handler->loadRole( $id );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( $id, $obj->id );
         $this->assertEquals( 'newName', $obj->name );
         $this->assertEquals( 3, count( $obj->policies ) );
@@ -321,16 +321,16 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test delete function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::deleteRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::deleteRole
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testDeleteRole()
     {
         $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
 
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $handler->loadRole( 1 ) );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $handler->loadRole( 1 ) );
 
         $handler->deleteRole( 1 );
         $handler->loadRole( 1 );//exception
@@ -339,13 +339,13 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test addPolicy function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::addPolicy
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::addPolicy
      */
     public function testAddPolicy()
     {
         $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
         $id = $obj->id;
 
@@ -353,9 +353,9 @@ class UserHandlerTest extends HandlerTest
                                                      'function' => 'Bar',
                                                      'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
         $obj = $handler->loadRole( $id );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 4, count( $obj->policies ) );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $obj->policies[3] );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Policy', $obj->policies[3] );
         $this->assertEquals( 'Foo', $obj->policies[3]->module );
         $this->assertEquals( $id, $obj->policies[3]->roleId );
         $this->assertEquals( 'Bar', $obj->policies[3]->function );
@@ -366,13 +366,13 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test updatePolicy function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::updatePolicy
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::updatePolicy
      */
     public function testUpdatePolicy()
     {
         $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
         $this->assertEquals( 'content', $obj->policies[0]->module );
         $this->assertEquals( 'write', $obj->policies[0]->function );
@@ -384,9 +384,9 @@ class UserHandlerTest extends HandlerTest
         $handler->updatePolicy( $policy );
 
         $obj = $handler->loadRole( $id );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $obj->policies[0] );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Policy', $obj->policies[0] );
         $this->assertEquals( 'content', $obj->policies[0]->module );
         $this->assertEquals( 'write', $obj->policies[0]->function );
         $this->assertEquals( array( 'Node' => array( 2, 45 ) ), $obj->policies[0]->limitations );
@@ -395,26 +395,26 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test removePolicy function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::removePolicy
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::removePolicy
      */
     public function testRemovePolicy()
     {
         $handler = $this->persistenceHandler->userHandler();
         $obj = $handler->createRole( self::getRole() );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 3, count( $obj->policies ) );
         $id = $obj->id;
 
         $handler->removePolicy( $id, $obj->policies[2]->id );
         $obj = $handler->loadRole( $id );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertEquals( 2, count( $obj->policies ) );
     }
 
     /**
      * Test assignRole function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::assignRole
      */
     public function testAssignRole()
     {
@@ -422,14 +422,14 @@ class UserHandlerTest extends HandlerTest
         $obj = $handler->createRole( self::getRole() );
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
         $obj = $handler->loadRole( $obj->id );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertTrue( in_array( 42, $obj->groupIds ), 'Role was not properly assigned to User Group with id: 42' );
     }
 
     /**
      * Test assignRole function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::assignRole
      * @expectedException \ezp\Base\Exception\NotFoundWithType
      */
     public function testAssignRoleWrongGroupType()
@@ -442,7 +442,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test assignRole function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::assignRole
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testAssignRoleGroupNotFound()
@@ -455,7 +455,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test assignRole function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::assignRole
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testAssignRoleRoleNotFound()
@@ -467,7 +467,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test assignRole function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::assignRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::assignRole
      * @expectedException \ezp\Base\Exception\InvalidArgumentValue
      */
     public function testAssignRoleAlreadyAssigned()
@@ -481,7 +481,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test unAssignRole function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::unAssignRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::unAssignRole
      */
     public function testUnAssignRole()
     {
@@ -490,19 +490,19 @@ class UserHandlerTest extends HandlerTest
         $handler->assignRole( 42, $obj->id );// 42: Anonymous Users
 
         $obj = $handler->loadRole( $obj->id );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertTrue( in_array( 42, $obj->groupIds ), 'Role was not properly assigned to User Group with id: 42' );
 
         $handler->unAssignRole( 42, $obj->id );// 42: Anonymous Users
         $obj = $handler->loadRole( $obj->id );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Role', $obj );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Role', $obj );
         $this->assertFalse( in_array( 42, $obj->groupIds ), 'Role was not properly assigned to User Group with id: 42' );
     }
 
     /**
      * Test unAssignRole function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::unAssignRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::unAssignRole
      * @expectedException \ezp\Base\Exception\NotFoundWithType
      */
     public function testUnAssignRoleWrongGroupType()
@@ -515,7 +515,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test unAssignRole function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::unAssignRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::unAssignRole
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testUnAssignRoleGroupNotFound()
@@ -528,7 +528,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test unAssignRole function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::unAssignRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::unAssignRole
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testUnAssignRoleRoleNotFound()
@@ -540,7 +540,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test unAssignRole function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::unAssignRole
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::unAssignRole
      * @expectedException \ezp\Base\Exception\InvalidArgumentValue
      */
     public function testUnAssignRoleNotAssigned()
@@ -553,7 +553,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadPoliciesByUserId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadPoliciesByUserId
      */
     public function testLoadPoliciesByUserId()
     {
@@ -572,7 +572,7 @@ class UserHandlerTest extends HandlerTest
                                                      'limitations' => array( 'Limit' => array( 'Test' ) ) ) ) );
         $list = $handler->loadPoliciesByUserId( 10 );
         $this->assertEquals( 4, count( $list ) );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $list[3] );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Policy', $list[3] );
         $this->assertEquals( 'Foo', $list[3]->module );
         $this->assertEquals( 'Bar', $list[3]->function );
         $this->assertEquals( array( 'Test' ), $list[3]->limitations['Limit'] );
@@ -581,7 +581,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadPoliciesByUserId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadPoliciesByUserId
      */
     public function testLoadPoliciesByUserIdDeep()
     {
@@ -601,7 +601,7 @@ class UserHandlerTest extends HandlerTest
 
         $list = $handler->loadPoliciesByUserId( 10 );// 10: Anonymous User
         $this->assertEquals( 4, count( $list ) );
-        $this->assertInstanceOf( 'ezp\\Persistence\\User\\Policy', $list[3] );
+        $this->assertInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\User\\Policy', $list[3] );
         $this->assertEquals( 'tag', $list[3]->module );
         $this->assertEquals( '*', $list[3]->function );
         $this->assertEquals( '*', $list[3]->limitations );
@@ -610,7 +610,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadPoliciesByUserId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadPoliciesByUserId
      */
     public function testLoadPoliciesByUserIdDuplicates()
     {
@@ -629,7 +629,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadPoliciesByUserId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadPoliciesByUserId
      * @expectedException \ezp\Base\Exception\NotFound
      */
     public function testLoadPoliciesByUserIdNotFound()
@@ -640,7 +640,7 @@ class UserHandlerTest extends HandlerTest
     /**
      * Test loadPoliciesByUserId function
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadPoliciesByUserId
      * @expectedException \ezp\Base\Exception\NotFoundWithType
      */
     public function testLoadPoliciesByUserIdNotFoundWithType()
@@ -653,7 +653,7 @@ class UserHandlerTest extends HandlerTest
      *
      * Make sure several policies that have same values are not merged (when not same entity)
      *
-     * @covers ezp\Persistence\Storage\InMemory\UserHandler::loadPoliciesByUserId
+     * @covers eZ\Publish\Core\Persistence\InMemory\UserHandler::loadPoliciesByUserId
      */
     public function testLoadPoliciesByUserIdWithSameValuePolicies()
     {
@@ -680,7 +680,7 @@ class UserHandlerTest extends HandlerTest
     /**
      *  Create Role with content/write/SubTree:/1/2/, content/read/* and user/*\/* policy
      *
-     * @return \ezp\Persistence\User\Role
+     * @return \eZ\Publish\SPI\Persistence\User\Role
      */
     protected static function getRole()
     {

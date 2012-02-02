@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\User;
-use ezp\Persistence\User;
+namespace eZ\Publish\Core\Persistence\Legacy\User;
+use eZ\Publish\SPI\Persistence\User;
 
 /**
  * Base class for user gateways.

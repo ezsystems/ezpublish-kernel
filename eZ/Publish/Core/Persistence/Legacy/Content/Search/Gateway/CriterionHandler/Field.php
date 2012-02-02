@@ -7,14 +7,14 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler;
-use ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler,
-    ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter,
-    ezp\Persistence\Storage\Legacy\EzcDbHandler,
-    ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Content\Query\Criterion\FieldIdentifierStruct,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry,
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler;
+use eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\FieldIdentifierStruct,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
     ezp\Base\Exception,
     ezcQuerySelect;
 
@@ -26,7 +26,7 @@ class Field extends CriterionHandler
     /**
      * DB handler to fetch additional field information
      *
-     * @var \ezp\Persistence\Storage\Legacy\EzcDatabase
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDatabase
      */
     protected $dbHandler;
 

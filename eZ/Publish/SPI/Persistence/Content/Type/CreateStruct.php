@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Type;
-use ezp\Persistence\ValueObject,
-    ezp\Persistence\Content\Location;
+namespace eZ\Publish\SPI\Persistence\Content\Type;
+use eZ\Publish\SPI\Persistence\ValueObject,
+    eZ\Publish\SPI\Persistence\Content\Location;
 
 /**
  *
@@ -146,7 +146,7 @@ class CreateStruct extends ValueObject
     /**
      * Content fields in this type
      *
-     * @var \ezp\Persistence\Content\Type\FieldDefinition[]
+     * @var \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition[]
      */
     public $fieldDefinitions = array();
 

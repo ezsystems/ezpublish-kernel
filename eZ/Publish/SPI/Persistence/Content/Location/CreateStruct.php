@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Location;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content\Location;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 class CreateStruct extends ValueObject
 {

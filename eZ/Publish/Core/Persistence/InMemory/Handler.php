@@ -7,8 +7,8 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\InMemory;
-use ezp\Persistence\Handler as HandlerInterface,
+namespace eZ\Publish\Core\Persistence\InMemory;
+use eZ\Publish\SPI\Persistence\Handler as HandlerInterface,
     ezp\Base\Exception\MissingClass,
     RuntimeException;
 
@@ -28,7 +28,7 @@ class Handler implements HandlerInterface
     /**
      * Instance of in-memory backend that reads data from js files into memory and writes to memory
      *
-     * @var \ezp\Persistence\Storage\InMemory\Backend
+     * @var \eZ\Publish\Core\Persistence\InMemory\Backend
      */
     protected $backend;
 
@@ -41,67 +41,67 @@ class Handler implements HandlerInterface
     }
 
     /**
-     * @return \ezp\Persistence\Content\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function contentHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\ContentHandler' );
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\Content\Search\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Search\Handler
      */
     public function searchHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\SearchHandler' );
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\SearchHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\Content\Type\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Handler
      */
     public function contentTypeHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\ContentTypeHandler' );
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\ContentTypeHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\Content\Language\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Language\Handler
      */
     public function contentLanguageHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\LanguageHandler' );
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\LanguageHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\Content\Location\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Handler
      */
     public function locationHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\LocationHandler' );
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\LocationHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\User\Handler
+     * @return \eZ\Publish\SPI\Persistence\User\Handler
      */
     public function userHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\UserHandler' );
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\UserHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\Content\Section\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Section\Handler
      */
     public function sectionHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\SectionHandler' );
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\SectionHandler' );
     }
 
     /**
-     * @return \ezp\Persistence\Content\Location\Trash\Handler
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler
      */
     public function trashHandler()
     {
-        return $this->serviceHandler( 'ezp\\Persistence\\Storage\\InMemory\\TrashHandler' );
+        return $this->serviceHandler( 'eZ\\Publish\\Core\\Persistence\\InMemory\\TrashHandler' );
     }
 
     /**

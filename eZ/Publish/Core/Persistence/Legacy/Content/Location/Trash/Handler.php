@@ -7,15 +7,15 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Location\Trash;
-use ezp\Persistence\Content\Location\Trash,
-    ezp\Persistence\Content\Location\Trashed,
-    ezp\Persistence\Content\Location\Trash\CreateStruct,
-    ezp\Persistence\Content\Location\Trash\UpdateStruct,
-    ezp\Persistence\Content\Location\Trash\Handler as BaseTrashHandler,
-    ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Storage\Legacy\Content\Location\Gateway as LocationGateway,
-    ezp\Persistence\Storage\Legacy\Content\Location\Mapper as LocationMapper;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Location\Trash;
+use eZ\Publish\SPI\Persistence\Content\Location\Trash,
+    eZ\Publish\SPI\Persistence\Content\Location\Trashed,
+    eZ\Publish\SPI\Persistence\Content\Location\Trash\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\Trash\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\Trash\Handler as BaseTrashHandler,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway as LocationGateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper as LocationMapper;
 
 /**
  * The Location Handler interface defines operations on Location elements in the storage engine.
@@ -25,22 +25,22 @@ class Handler implements BaseTrashHandler
     /**
      * Gaateway for handling location data
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
 
     /**
      * Mapper for handling location data
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapper;
 
     /**
      * Construct from userGateway
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Location\Gateway $locationGateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Location\Mapper $locationMapper
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway $locationGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper $locationMapper
      * @return void
      */
     public function __construct( LocationGateway $locationGateway, LocationMapper $locationMapper )
@@ -54,7 +54,7 @@ class Handler implements BaseTrashHandler
      * $id is the same as original location (which has been previously trashed)
      *
      * @param int $id
-     * @return \ezp\Persistence\Content\Location\Trashed
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed
      */
     public function load( $id )
     {
@@ -102,11 +102,11 @@ class Handler implements BaseTrashHandler
      * sorted with SortClause objects contained in $sort (if any).
      * If no criterion is provided (null), no filter is applied
      *
-     * @param \ezp\Persistence\Content\Query\Criterion $criterion
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\Criterion $criterion
      * @param $offset Offset to start listing from, 0 by default
      * @param $limit Limit for the listing. Null by default (no limit)
-     * @param \ezp\Persistence\Content\Query\SortClause[] $sort
-     * @return \ezp\Persistence\Content\Location\Trashed[]
+     * @param \eZ\Publish\SPI\Persistence\Content\Query\SortClause[] $sort
+     * @return \eZ\Publish\SPI\Persistence\Content\Location\Trashed[]
      */
     public function listTrashed( Criterion $criterion = null, $offset = 0, $limit = null, array $sort = null )
     {

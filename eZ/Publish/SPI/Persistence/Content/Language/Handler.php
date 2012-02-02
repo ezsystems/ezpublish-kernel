@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Content\Language;
-use ezp\Persistence\Content\Language,
-    ezp\Persistence\Content\Language\CreateStruct;
+namespace eZ\Publish\SPI\Persistence\Content\Language;
+use eZ\Publish\SPI\Persistence\Content\Language,
+    eZ\Publish\SPI\Persistence\Content\Language\CreateStruct;
 
 /**
  * Language Handler interface
@@ -19,15 +19,15 @@ interface Handler
     /**
      * Create a new language
      *
-     * @param \ezp\Persistence\Content\Language\CreateStruct $struct
-     * @return \ezp\Persistence\Content\Language
+     * @param \eZ\Publish\SPI\Persistence\Content\Language\CreateStruct $struct
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      */
     public function create( CreateStruct $struct );
 
     /**
      * Update language
      *
-     * @param \ezp\Persistence\Content\Language $struct
+     * @param \eZ\Publish\SPI\Persistence\Content\Language $struct
      */
     public function update( Language $struct );
 
@@ -35,7 +35,7 @@ interface Handler
      * Get language by id
      *
      * @param mixed $id
-     * @return \ezp\Persistence\Content\Language
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound If language could not be found by $id
      */
     public function load( $id );
@@ -45,7 +45,7 @@ interface Handler
      *
      * Return list of languages where key of hash is locale.
      *
-     * @return \ezp\Persistence\Content\Language[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     public function loadAll();
 

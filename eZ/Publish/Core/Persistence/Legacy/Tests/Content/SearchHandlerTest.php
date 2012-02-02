@@ -1,20 +1,20 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\ContentSearchHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\ContentSearchHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
-    ezp\Persistence\Storage\Legacy\Content,
-    ezp\Persistence\Storage\Legacy\FieldHandler,
-    ezp\Persistence\Content as ContentObject,
-    ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\Gateway\EzcDatabase\QueryBuilder,
+    eZ\Publish\Core\Persistence\Legacy\Content,
+    eZ\Publish\Core\Persistence\Legacy\FieldHandler,
+    eZ\Publish\SPI\Persistence\Content as ContentObject,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence;
 
 /**
  * Test case for ContentSearchHandler
@@ -26,7 +26,7 @@ class ContentSearchHandlerTest extends TestCase
     /**
      * Field registry mock
      *
-     * @var \ezp\Persistence\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\SPI\Persistence\Content\FieldValue\Converter\Registry
      */
     protected $fieldRegistry;
 
@@ -70,7 +70,7 @@ class ContentSearchHandlerTest extends TestCase
      * on.
      *
      * @param array $fullTextSearchConfiguration
-     * @return \ezp\Persistence\Storage\Legacy\Content\Search\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler
      */
     protected function getContentSearchHandler( array $fullTextSearchConfiguration = array() )
     {
@@ -138,7 +138,7 @@ class ContentSearchHandlerTest extends TestCase
                         new Content\Search\Gateway\CriterionHandler\Field(
                             $this->getDatabaseHandler(),
                             $this->fieldRegistry = $this->getMock(
-                                '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+                                '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
                             )
                         ),
                     )
@@ -154,12 +154,12 @@ class ContentSearchHandlerTest extends TestCase
     /**
      * Returns a content mapper mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected function getContentMapperMock()
     {
         $mapperMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\Mapper',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper',
             array( 'extractContentFromRows' ),
             array(),
             '',
@@ -192,12 +192,12 @@ class ContentSearchHandlerTest extends TestCase
     /**
      * Returns a content field handler mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\FieldHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldHandler
      */
     protected function getContentFieldHandlerMock()
     {
         return $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldHandler',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldHandler',
             array( 'loadExternalFieldData' ),
             array(),
             '',
@@ -208,8 +208,8 @@ class ContentSearchHandlerTest extends TestCase
     /**
      * Bug #80
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase::find
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
      */
     public function testFindWithoutOffsetLimit()
     {
@@ -226,8 +226,8 @@ class ContentSearchHandlerTest extends TestCase
     /**
      * Bug #81, bug #82
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase::find
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
      */
     public function testFindWithZeroLimit()
     {
@@ -247,8 +247,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase::find
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
      */
     public function testFindWithExistingLanguageFields()
     {
@@ -270,8 +270,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase::find
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase::find
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::find
      */
     public function testFindWithMissingLanguageFields()
     {
@@ -293,9 +293,9 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::findSingle
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriteriaConverter
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriteriaConverter
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler
      */
     public function testFindSingle()
     {
@@ -307,8 +307,8 @@ class ContentSearchHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException ezp\Persistence\Storage\Legacy\Exception\InvalidObjectCount
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::findSingle
+     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\InvalidObjectCount
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
      */
     public function testFindSingleTooMany()
     {
@@ -317,8 +317,8 @@ class ContentSearchHandlerTest extends TestCase
     }
 
     /**
-     * @expectedException ezp\Persistence\Storage\Legacy\Exception\InvalidObjectCount
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Handler::findSingle
+     * @expectedException eZ\Publish\Core\Persistence\Legacy\Exception\InvalidObjectCount
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Handler::findSingle
      */
     public function testFindSingleZero()
     {
@@ -328,8 +328,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\ContentId
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testContentIdFilter()
     {
@@ -353,8 +353,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\ContentId
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testContentIdFilterCount()
     {
@@ -372,8 +372,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\LogicalAnd
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LogicalAnd
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testContentAndCombinatorFilter()
     {
@@ -404,8 +404,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\LogicalOr
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LogicalOr
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testContentOrCombinatorFilter()
     {
@@ -436,8 +436,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\LogicalNot
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LogicalNot
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testContentNotCombinatorFilter()
     {
@@ -470,8 +470,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\Subtree
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Subtree
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testContentSubtreeFilterIn()
     {
@@ -497,8 +497,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\Subtree
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Subtree
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testContentSubtreeFilterEq()
     {
@@ -522,8 +522,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeId
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testContentTypeFilter()
     {
@@ -547,8 +547,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeGroupId
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ContentTypeGroupId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testContentTypeGroupFilter()
     {
@@ -572,8 +572,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testDateMetadataFilterModifiedGreater()
     {
@@ -599,8 +599,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testDateMetadataFilterModifiedGreaterOrEqual()
     {
@@ -626,8 +626,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testDateMetadataFilterModifiedIn()
     {
@@ -653,8 +653,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testDateMetadataFilterModifiedBetween()
     {
@@ -680,8 +680,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\DateMetadata
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testDateMetadataFilterCreatedBetween()
     {
@@ -707,8 +707,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\LocationId
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LocationId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testLocationIdFilter()
     {
@@ -732,8 +732,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\ParentLocationId
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\ParentLocationId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testParentLocationIdFilter()
     {
@@ -757,8 +757,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\RemoteId
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\RemoteId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testRemoteIdFilter()
     {
@@ -782,8 +782,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\SectionId
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\SectionId
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testSectionFilter()
     {
@@ -807,8 +807,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\Status
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Status
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testStatusFilter()
     {
@@ -832,14 +832,14 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testFieldFilter()
     {
         $locator = $this->getContentSearchHandler();
 
-        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter = $this->getMock( '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter' );
         $converter
             ->expects( $this->once() )
             ->method( 'getIndexColumn' )
@@ -871,14 +871,14 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testFieldFilterIn()
     {
         $locator = $this->getContentSearchHandler();
 
-        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter = $this->getMock( '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter' );
         $converter
             ->expects( $this->once() )
             ->method( 'getIndexColumn' )
@@ -910,14 +910,14 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testFieldFilterBetween()
     {
         $locator = $this->getContentSearchHandler();
 
-        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter = $this->getMock( '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter' );
         $converter
             ->expects( $this->once() )
             ->method( 'getIndexColumn' )
@@ -949,15 +949,15 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\Field
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\LogicalOr
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\Field
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\LogicalOr
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testFieldFilterOr()
     {
         $locator = $this->getContentSearchHandler();
 
-        $converter = $this->getMock( '\\ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter' );
+        $converter = $this->getMock( '\\eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter' );
         $converter
             ->expects( $this->at( 0 ) )
             ->method( 'getIndexColumn' )
@@ -1009,8 +1009,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\FullText
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testFullTextFilter()
     {
@@ -1034,8 +1034,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\FullText
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testFullTextWildcardFilter()
     {
@@ -1059,8 +1059,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\FullText
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testFullTextDisabledWildcardFilter()
     {
@@ -1088,8 +1088,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\FullText
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testFullTextFilterStopwordRemoval()
     {
@@ -1113,8 +1113,8 @@ class ContentSearchHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\CriterionHandler\FullText
-     * @covers \ezp\Persistence\Storage\Legacy\Content\Search\Gateway\EzcDatabase
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\CriterionHandler\FullText
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Search\Gateway\EzcDatabase
      */
     public function testFullTextFilterNoStopwordRemoval()
     {

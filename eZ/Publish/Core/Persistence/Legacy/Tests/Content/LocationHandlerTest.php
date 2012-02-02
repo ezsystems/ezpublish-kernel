@@ -1,19 +1,19 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\LocationHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\LocationHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content,
-    ezp\Persistence\Storage\Legacy\Content\Location\Handler,
-    ezp\Persistence,
-    ezp\Persistence\Content\Location\UpdateStruct,
-    ezp\Persistence\Content\Location\CreateStruct;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content,
+    eZ\Publish\Core\Persistence\Legacy\Content\Location\Handler,
+    eZ\Publish\SPI\Persistence,
+    eZ\Publish\SPI\Persistence\Content\Location\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct;
 
 /**
  * Test case for LocationHandlerTest
@@ -23,14 +23,14 @@ class LocationHandlerTest extends TestCase
     /**
      * Mocked location gateway instance
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Gateway
      */
     protected $locationGateway;
 
     /**
      * Mocked location mapper instance
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapper;
 
@@ -48,10 +48,10 @@ class LocationHandlerTest extends TestCase
     {
         $dbHandler = $this->getDatabaseHandler();
         return new Handler(
-            $this->locationGateway = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Gateway' ),
-            $this->locationMapper = $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper' ),
-            $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Handler', array(), array(), '', false ),
-            $this->getMock( 'ezp\\Persistence\\Storage\\Legacy\\Content\\Mapper', array(), array(), '', false )
+            $this->locationGateway = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Gateway' ),
+            $this->locationMapper = $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper' ),
+            $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Handler', array(), array(), '', false ),
+            $this->getMock( 'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Mapper', array(), array(), '', false )
         );
     }
 
@@ -75,11 +75,11 @@ class LocationHandlerTest extends TestCase
             ->expects( $this->once() )
             ->method( 'createLocationFromRow' )
             ->with( array( 'node_id' => 77 ) )
-            ->will( $this->returnValue( new \ezp\Persistence\Content\Location() ) );
+            ->will( $this->returnValue( new \eZ\Publish\SPI\Persistence\Content\Location() ) );
 
         $location = $handler->load( 77 );
 
-        $this->assertTrue( $location instanceof \ezp\Persistence\Content\Location );
+        $this->assertTrue( $location instanceof \eZ\Publish\SPI\Persistence\Content\Location );
     }
 
     public function testMoveSubtree()

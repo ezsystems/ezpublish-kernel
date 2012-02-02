@@ -8,7 +8,7 @@
  *
  */
 
-namespace ezp\Persistence\Storage\Legacy\Exception;
+namespace eZ\Publish\Core\Persistence\Legacy\Exception;
 
 /**
  * Exception thrown no storage for a type was found

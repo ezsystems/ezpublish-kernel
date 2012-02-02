@@ -1,10 +1,10 @@
 <?php
 
-use ezp\Persistence\Content,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\Location,
-    ezp\Persistence\Content\Version;
+use eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\Location,
+    eZ\Publish\SPI\Persistence\Content\Version;
 
 $content = new Content();
 $content->id = 226;

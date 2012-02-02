@@ -1,18 +1,18 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\Section\SectionHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section\SectionHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content\Section;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Content\Section,
-    ezp\Persistence\Storage\Legacy\Content\Section\Handler,
-    ezp\Persistence\Storage\Legacy\Content\Section\Gateway,
-    ezp\Persistence\Storage\Legacy\Content\Section\Mapper;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\Section;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\SPI\Persistence\Content\Section,
+    eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler,
+    eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway,
+    eZ\Publish\Core\Persistence\Legacy\Content\Section\Mapper;
 
 /**
  * Test case for Section Handler
@@ -22,20 +22,20 @@ class SectionHandlerTest extends TestCase
     /**
      * Section handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Section\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler
      */
     protected $sectionHandler;
 
     /**
      * Section gateway mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Section\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway
      */
     protected $gatewayMock;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::create
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::create
      */
     public function testCreate()
     {
@@ -65,7 +65,7 @@ class SectionHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::update
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::update
      */
     public function testUpdate()
     {
@@ -96,8 +96,8 @@ class SectionHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::load
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::createSectionFromArray
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::load
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionFromArray
      */
     public function testLoad()
     {
@@ -136,8 +136,8 @@ class SectionHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::loadByIdentifier
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::createSectionFromArray
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::loadByIdentifier
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::createSectionFromArray
      */
     public function testLoadByIdentifier()
     {
@@ -176,7 +176,7 @@ class SectionHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::delete
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::delete
      */
     public function testDelete()
     {
@@ -200,7 +200,7 @@ class SectionHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::delete
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::delete
      * @expectedException RuntimeException
      */
     public function testDeleteFailure()
@@ -222,7 +222,7 @@ class SectionHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Section\Handler::assign
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler::assign
      */
     public function testAssign()
     {
@@ -243,7 +243,7 @@ class SectionHandlerTest extends TestCase
     /**
      * Returns the section handler to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Section\Handler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Section\Handler
      */
     protected function getSectionHandler()
     {
@@ -259,14 +259,14 @@ class SectionHandlerTest extends TestCase
     /**
      * Returns a mock for the section gateway
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Section\Gateway
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway
      */
     protected function getGatewayMock()
     {
         if ( !isset( $this->gatewayMock ) )
         {
             $this->gatewayMock = $this->getMockForAbstractClass(
-                'ezp\Persistence\Storage\Legacy\Content\Section\Gateway'
+                'eZ\Publish\Core\Persistence\Legacy\Content\Section\Gateway'
             );
         }
         return $this->gatewayMock;

@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy;
-use ezp\Persistence\Storage\Legacy\Content\StorageRegistry,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry,
-    ezp\Persistence\Storage\Legacy\Content\Search\TransformationProcessor;
+namespace eZ\Publish\Core\Persistence\Legacy;
+use eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
+    eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor;
 
 /**
  * Configurator for the Handler
@@ -21,7 +21,7 @@ class Configurator
      * Configuration array
      *
      * as described in
-     * {@link \ezp\Persistence\Storage\Legacy\Handler}.
+     * {@link \eZ\Publish\Core\Persistence\Legacy\Handler}.
      *
      * @var string[][]
      */
@@ -65,7 +65,7 @@ class Configurator
     /**
      * Configurs the storage registry
      *
-     * @param \ezp\Persistence\Storage\Legacy\StorageRegistry $registry
+     * @param \eZ\Publish\Core\Persistence\Legacy\StorageRegistry $registry
      * @return void
      */
     public function configureExternalStorages( StorageRegistry $registry )
@@ -82,7 +82,7 @@ class Configurator
     /**
      * Configures the field value converter registry
      *
-     * @param \ezp\Persistence\Storage\Legacy\FieldValue\Converter\Registry $registry
+     * @param \eZ\Publish\Core\Persistence\Legacy\FieldValue\Converter\Registry $registry
      * @return void
      */
     public function configureFieldConverter( Registry $registry )
@@ -99,7 +99,7 @@ class Configurator
     /**
      * Configures the search transformation processor
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Search\TransformationProcessor $processor
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Search\TransformationProcessor $processor
      * @return void
      */
     public function configureTransformationRules( TransformationProcessor $processor )

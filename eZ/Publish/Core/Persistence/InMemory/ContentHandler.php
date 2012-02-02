@@ -8,23 +8,23 @@
  *
  */
 
-namespace ezp\Persistence\Storage\InMemory;
-use ezp\Persistence\Content\Handler as ContentHandlerInterface,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\UpdateStruct,
-    ezp\Persistence\Content\RestrictedVersion,
-    ezp\Persistence\Content\Query\Criterion,
-    ezp\Persistence\Content\Query\Criterion\ContentId,
-    ezp\Persistence\Content\Query\Criterion\Operator,
-    ezp\Persistence\Content\FieldValue,
+namespace eZ\Publish\Core\Persistence\InMemory;
+use eZ\Publish\SPI\Persistence\Content\Handler as ContentHandlerInterface,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Operator,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     ezp\Content,
     ezp\Content\Version,
     ezp\Base\Exception\NotFound,
     RuntimeException,
-    ezp\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
+    eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct as RelationCreateStruct;
 
 /**
- * @see ezp\Persistence\Content\Handler
+ * @see eZ\Publish\SPI\Persistence\Content\Handler
  */
 class ContentHandler implements ContentHandlerInterface
 {
@@ -51,7 +51,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function create( CreateStruct $content )
     {
@@ -110,7 +110,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function createDraftFromVersion( $contentId, $srcVersion )
     {
@@ -168,7 +168,7 @@ class ContentHandler implements ContentHandlerInterface
      *
      * @param int $contentId
      * @param int|false $versionNo Copy all versions if left false
-     * @return \ezp\Persistence\Content
+     * @return \eZ\Publish\SPI\Persistence\Content
      * @throws \ezp\Base\Exception\NotFound If content or version is not found
      * @todo Language support
      */
@@ -258,7 +258,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function load( $id, $version, $translations = null )
     {
@@ -284,7 +284,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function setStatus( $contentId, $status, $version )
     {
@@ -298,7 +298,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function setObjectState( $contentId, $stateGroup, $state )
     {
@@ -306,7 +306,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function getObjectState( $contentId, $stateGroup )
     {
@@ -314,7 +314,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function update( UpdateStruct $content )
     {
@@ -349,7 +349,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function delete( $contentId )
     {
@@ -381,7 +381,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function trash( $contentId )
     {
@@ -389,7 +389,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      */
     public function untrash( $contentId )
     {
@@ -397,7 +397,7 @@ class ContentHandler implements ContentHandlerInterface
     }
 
     /**
-     * @see ezp\Persistence\Content\Handler
+     * @see eZ\Publish\SPI\Persistence\Content\Handler
      * @throws \ezp\Base\Exception\NotFound If no version found
      */
     public function listVersions( $contentId )
@@ -425,8 +425,8 @@ class ContentHandler implements ContentHandlerInterface
      * Creates a relation between $sourceContentId in $sourceContentVersionNo
      * and $destinationContentId with a specific $type.
      *
-     * @param  \ezp\Persistence\Content\Relation\CreateStruct $relation
-     * @return \ezp\Persistence\Content\Relation
+     * @param  \eZ\Publish\SPI\Persistence\Content\Relation\CreateStruct $relation
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation
      */
     public function addRelation( RelationCreateStruct $relation )
     {
@@ -476,7 +476,7 @@ class ContentHandler implements ContentHandlerInterface
      * @param mixed $sourceContentId Source Content ID
      * @param mixed|null $sourceContentVersionNo Source Content Version, null if not specified
      * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
-     * @return \ezp\Persistence\Content\Relation[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadRelations( $sourceContentId, $sourceContentVersionNo = null, $type = null )
     {
@@ -509,7 +509,7 @@ class ContentHandler implements ContentHandlerInterface
      *
      * @param mixed $destinationContentId Destination Content ID
      * @param int|null $type {@see \ezp\Content\Relation::COMMON, \ezp\Content\Relation::EMBED, \ezp\Content\Relation::LINK, \ezp\Content\Relation::ATTRIBUTE}
-     * @return \ezp\Persistence\Content\Relation[]
+     * @return \eZ\Publish\SPI\Persistence\Content\Relation[]
      */
     public function loadReverseRelations( $destinationContentId, $type = null )
     {
@@ -533,9 +533,9 @@ class ContentHandler implements ContentHandlerInterface
      * Performs the publishing operations required to set the version identified by $updateStruct->versionNo and
      * $updateStruct->id as the published one.
      *
-     * @param \ezp\Persistence\Content\UpdateStruct An UpdateStruct with id and versionNo
+     * @param \eZ\Publish\SPI\Persistence\Content\UpdateStruct An UpdateStruct with id and versionNo
      *
-     * @return \ezp\Persistence\Content The published Content
+     * @return \eZ\Publish\SPI\Persistence\Content The published Content
      */
     public function publish( UpdateStruct $updateStruct )
     {

@@ -10,7 +10,7 @@
 namespace ezp\Content;
 use ezp\Base\Model,
     ezp\Base\ModelDefinition,
-    ezp\Persistence\Content\Language as LanguageValue;
+    eZ\Publish\SPI\Persistence\Content\Language as LanguageValue;
 
 /**
  * This class represents a Language object

@@ -1,24 +1,24 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\MapperTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\MapperTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\Mapper,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter,
-    ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldValue,
-    ezp\Persistence\Content,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Content\RestrictedVersion,
-    ezp\Persistence\Content\CreateStruct,
-    ezp\Persistence\Content\Location\CreateStruct as LocationCreateStruct;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\Mapper,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
+    eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
+    eZ\Publish\SPI\Persistence\Content,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\SPI\Persistence\Content\RestrictedVersion,
+    eZ\Publish\SPI\Persistence\Content\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Location\CreateStruct as LocationCreateStruct;
 
 /**
  * Test case for Mapper
@@ -28,20 +28,20 @@ class MapperTest extends TestCase
     /**
      * Location mapper mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected $locationMapperMock;
 
     /**
      * Value converter registry mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected $valueConverterRegistryMock;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::__construct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::__construct
      */
     public function testCtor()
     {
@@ -58,7 +58,7 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createContentFromCreateStruct
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createContentFromCreateStruct
      */
     public function testCreateContentFromCreateStruct()
     {
@@ -77,9 +77,9 @@ class MapperTest extends TestCase
     }
 
     /**
-     * Returns a ezp\Persistence\Content\CreateStruct fixture
+     * Returns a eZ\Publish\SPI\Persistence\Content\CreateStruct fixture
      *
-     * @return \ezp\Persistence\Content\CreateStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\CreateStruct
      */
     protected function getCreateStructFixture()
     {
@@ -107,7 +107,7 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createVersionForContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createVersionForContent
      */
     public function testCreateVersionFromContent()
     {
@@ -190,22 +190,22 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::convertToStorageValue
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageFieldValue
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::convertToStorageValue
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
      */
     public function testConvertToStorageValue()
     {
         $convMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
         $convMock->expects( $this->once() )
             ->method( 'toStorageValue' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Content\\FieldValue'
+                    'eZ\\Publish\\SPI\\Persistence\\Content\\FieldValue'
                 ),
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
                 )
             )->will( $this->returnValue( new StorageFieldValue() ) );
 
@@ -221,7 +221,7 @@ class MapperTest extends TestCase
         $res = $mapper->convertToStorageValue( $field );
 
         $this->assertInstanceOf(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue',
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue',
             $res
         );
     }
@@ -229,13 +229,13 @@ class MapperTest extends TestCase
     /**
      * @return void
      * @todo Load referencing locations!
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractContentFromRows
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractContentFromRow
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractVersionFromRow
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::mapCommonVersionFields
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractFieldFromRow
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractFieldValueFromRow
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageFieldValue
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractVersionFromRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::mapCommonVersionFields
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldFromRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractFieldValueFromRow
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue
      */
     public function testExtractContentFromRows()
     {
@@ -246,13 +246,13 @@ class MapperTest extends TestCase
             ->will( $this->returnValue( new Content\Location() ) );
 
         $convMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
         $convMock->expects( $this->exactly( 12 ) )
             ->method( 'toFieldValue' )
             ->with(
                 $this->isInstanceOf(
-                    'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageFieldValue'
+                    'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageFieldValue'
                 )
             )->will(
                 $this->returnValue(
@@ -285,7 +285,7 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractContentFromRows
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractContentFromRows
      */
     public function testExtractContentFromRowsMultipleVersions()
     {
@@ -295,7 +295,7 @@ class MapperTest extends TestCase
             ->will( $this->returnValue( new Content\Location() ) );
 
         $convMock = $this->getMock(
-            'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter'
+            'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter'
         );
         $convMock->expects( $this->any() )
             ->method( 'toFieldValue' )
@@ -337,7 +337,7 @@ class MapperTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::extractVersionListFromRows
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::extractVersionListFromRows
      */
     public function testExtractVersionListFromRows()
     {
@@ -355,7 +355,7 @@ class MapperTest extends TestCase
 
     /**
      * @return CreateStruct
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createCreateStructFromContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      */
     public function testCreateCreateStructFromContent()
     {
@@ -366,7 +366,7 @@ class MapperTest extends TestCase
         $struct = $mapper->createCreateStructFromContent( $content );
 
         $this->assertInstanceOf(
-            'ezp\Persistence\Content\CreateStruct',
+            'eZ\Publish\SPI\Persistence\Content\CreateStruct',
             $struct
         );
         return array(
@@ -380,7 +380,7 @@ class MapperTest extends TestCase
 
     /**
      * @return CreateStruct
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createCreateStructFromContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
     public function testCreateCreateStructFromContentBasicProperties( $data )
@@ -395,7 +395,7 @@ class MapperTest extends TestCase
 
     /**
      * @return CreateStruct
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createCreateStructFromContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
     public function testCreateCreateStructFromContentParentLocationsEmpty( $data )
@@ -408,7 +408,7 @@ class MapperTest extends TestCase
 
     /**
      * @return CreateStruct
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createCreateStructFromContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
     public function testCreateCreateStructFromContentFieldCount( $data )
@@ -421,7 +421,7 @@ class MapperTest extends TestCase
 
     /**
      * @return CreateStruct
-     * @covers ezp\Persistence\Storage\Legacy\Content\Mapper::createCreateStructFromContent
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Mapper::createCreateStructFromContent
      * @depends testCreateCreateStructFromContent
      */
     public function testCreateCreateStructFromContentFieldsNoId( $data )
@@ -517,7 +517,7 @@ class MapperTest extends TestCase
     /**
      * Returns a Mapper
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Mapper
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Mapper
      */
     protected function getMapper( $locationMapper = null, $valueConverter = null )
     {
@@ -530,14 +530,14 @@ class MapperTest extends TestCase
     /**
      * Returns a location mapper mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\Location\Mapper
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\Location\Mapper
      */
     protected function getLocationMapperMock()
     {
         if ( !isset( $this->locationMapperMock ) )
         {
             $this->locationMapperMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\Location\\Mapper',
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\Location\\Mapper',
                 array(),
                 array(),
                 '',
@@ -550,14 +550,14 @@ class MapperTest extends TestCase
     /**
      * Returns a FieldValue converter registry mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\FieldValue\Converter\Registry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Registry
      */
     protected function getValueConverterRegistryMock()
     {
         if ( !isset( $this->valueConverterRegistryMock ) )
         {
             $this->valueConverterRegistryMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\FieldValue\\Converter\\Registry'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\FieldValue\\Converter\\Registry'
             );
         }
         return $this->valueConverterRegistryMock;

@@ -7,25 +7,25 @@
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Content\Type;
-use ezp\Persistence\Content\Type,
-    ezp\Persistence\Content\Type\Handler as BaseContentTypeHandler,
-    ezp\Persistence\Content\Type\CreateStruct,
-    ezp\Persistence\Content\Type\UpdateStruct,
-    ezp\Persistence\Content\Type\FieldDefinition,
-    ezp\Persistence\Content\Type\Group,
-    ezp\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
-    ezp\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
-    ezp\Persistence\Storage\Legacy\Content\StorageFieldDefinition,
-    ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler as UpdateHandler,
-    ezp\Persistence\Storage\Legacy\Exception;
+namespace eZ\Publish\Core\Persistence\Legacy\Content\Type;
+use eZ\Publish\SPI\Persistence\Content\Type,
+    eZ\Publish\SPI\Persistence\Content\Type\Handler as BaseContentTypeHandler,
+    eZ\Publish\SPI\Persistence\Content\Type\CreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
+    eZ\Publish\SPI\Persistence\Content\Type\Group,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct as GroupCreateStruct,
+    eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct as GroupUpdateStruct,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
+    eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler as UpdateHandler,
+    eZ\Publish\Core\Persistence\Legacy\Exception;
 
 /**
  */
 class Handler implements BaseContentTypeHandler
 {
     /**
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Gateway
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway
      */
     protected $contentTypeGateway;
 
@@ -39,16 +39,16 @@ class Handler implements BaseContentTypeHandler
     /**
      * Content Type update handler
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler
      */
     protected $updateHandler;
 
     /**
      * Creates a new content type handler.
      *
-     * @param \ezp\Persistence\Storage\Legacy\Content\Type\Gateway $contentTypeGateway
-     * @param \ezp\Persistence\Storage\Legacy\Content\Type\Mapper $mapper
-     * @param \ezp\Persistence\Storage\Legacy\Content\Type\Update\Handler $updateHandler
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Gateway $contentTypeGateway
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Mapper $mapper
+     * @param \eZ\Publish\Core\Persistence\Legacy\Content\Type\Update\Handler $updateHandler
      */
     public function __construct(
         Gateway $contentTypeGateway,
@@ -61,7 +61,7 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * @param \ezp\Persistence\Content\Type\Group\CreateStruct $createStruct
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\CreateStruct $createStruct
      * @return Group
      */
     public function createGroup( GroupCreateStruct $createStruct )
@@ -78,8 +78,8 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * @param \ezp\Persistence\Content\Type\Group\UpdateStruct $struct
-     * @return \ezp\Persistence\Content\Type\Group
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\Group\UpdateStruct $struct
+     * @return \eZ\Publish\SPI\Persistence\Content\Type\Group
      */
     public function updateGroup( GroupUpdateStruct $struct )
     {
@@ -91,7 +91,7 @@ class Handler implements BaseContentTypeHandler
 
     /**
      * @param mixed $groupId
-     * @throws \ezp\Persistence\Storage\Legacy\Exception\GroupNotEmpty
+     * @throws \eZ\Publish\Core\Persistence\Legacy\Exception\GroupNotEmpty
      *         if a non-empty group is to be deleted.
      */
     public function deleteGroup( $groupId )
@@ -138,7 +138,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param int $contentTypeId
      * @param int $status
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function load( $contentTypeId, $status = Type::STATUS_DEFINED )
     {
@@ -152,7 +152,7 @@ class Handler implements BaseContentTypeHandler
      * Load a (defined) content type by identifier
      *
      * @param string $identifier
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If defined type is not found
      */
     public function loadByIdentifier( $identifier )
@@ -169,7 +169,7 @@ class Handler implements BaseContentTypeHandler
      * @param array $rows
      * @param mixed $typeIdentifier
      * @param int $status
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     protected function loadFromRows( array $rows, $typeIdentifier, $status )
     {
@@ -184,8 +184,8 @@ class Handler implements BaseContentTypeHandler
     }
 
     /**
-     * @param \ezp\Persistence\Content\Type\CreateStruct $createStruct
-     * @return \ezp\Persistence\Content\Type
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\CreateStruct $createStruct
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      */
     public function create( CreateStruct $createStruct )
     {
@@ -222,7 +222,7 @@ class Handler implements BaseContentTypeHandler
     /**
      * @param mixed $typeId
      * @param int $status
-     * @param \ezp\Persistence\Content\Type\UpdateStruct $contentType
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\UpdateStruct $contentType
      * @return Type
      * @todo Maintain contentclass_name
      */
@@ -271,7 +271,7 @@ class Handler implements BaseContentTypeHandler
      *
      * @param mixed $modifierId
      * @param mixed $contentTypeId
-     * @return \ezp\Persistence\Content\Type
+     * @return \eZ\Publish\SPI\Persistence\Content\Type
      * @throws \ezp\Base\Exception\NotFound If type with defined status is not found
      */
     public function createDraft( $modifierId, $contentTypeId )
@@ -353,7 +353,7 @@ class Handler implements BaseContentTypeHandler
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @return void
      */
     public function addFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )
@@ -396,7 +396,7 @@ class Handler implements BaseContentTypeHandler
      * field (default) values.
      *
      * @param mixed $contentTypeId
-     * @param \ezp\Persistence\Content\Type\FieldDefinition $fieldDefinition
+     * @param \eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition $fieldDefinition
      * @return void
      */
     public function updateFieldDefinition( $contentTypeId, $status, FieldDefinition $fieldDefinition )

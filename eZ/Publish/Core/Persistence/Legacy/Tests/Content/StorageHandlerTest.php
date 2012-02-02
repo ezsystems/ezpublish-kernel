@@ -1,18 +1,18 @@
 <?php
 /**
- * File contains: ezp\Persistence\Storage\Legacy\Tests\Content\StorageHandlerTest class
+ * File contains: eZ\Publish\Core\Persistence\Legacy\Tests\Content\StorageHandlerTest class
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace ezp\Persistence\Storage\Legacy\Tests\Content;
-use ezp\Persistence\Storage\Legacy\Tests\TestCase,
-    ezp\Persistence\Storage\Legacy\Content\StorageHandler,
-    ezp\Persistence\Content\Field,
-    ezp\Persistence\Content\FieldValue,
-    ezp\Persistence\Storage\Legacy\Content\StorageRegistry;
+namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content;
+use eZ\Publish\Core\Persistence\Legacy\Tests\TestCase,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler,
+    eZ\Publish\SPI\Persistence\Content\Field,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
+    eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry;
 
 /**
  * Test case for Content Handler
@@ -22,27 +22,27 @@ class StorageHandlerTest extends TestCase
     /**
      * StorageRegistry mock
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\StorageRegistry
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
      */
     protected $storageRegistryMock;
 
     /**
      * StorageHandler to test
      *
-     * @var \ezp\Persistence\Storage\Legacy\Content\StorageHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected $storageHandler;
 
     /**
      * Mock for external storage
      *
-     * @var \ezp\Persistence\Fields\Storage
+     * @var \eZ\Publish\SPI\Persistence\Fields\Storage
      */
     protected $storageMock;
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageHandler::storeFieldData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::storeFieldData
      */
     public function testStoreFieldData()
     {
@@ -52,7 +52,7 @@ class StorageHandlerTest extends TestCase
         $storageMock->expects( $this->once() )
             ->method( 'storeFieldData' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
                 $this->equalTo( $this->getContextMock() )
             );
 
@@ -72,7 +72,7 @@ class StorageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageHandler::getFieldData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::getFieldData
      */
     public function testGetFieldDataAvailable()
     {
@@ -85,7 +85,7 @@ class StorageHandlerTest extends TestCase
         $storageMock->expects( $this->once() )
             ->method( 'getFieldData' )
             ->with(
-                $this->isInstanceOf( 'ezp\\Persistence\\Content\\Field' ),
+                $this->isInstanceOf( 'eZ\\Publish\\SPI\\Persistence\\Content\\Field' ),
                 $this->equalTo( $this->getContextMock() )
             );
 
@@ -105,7 +105,7 @@ class StorageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageHandler::getFieldData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::getFieldData
      */
     public function testGetFieldDataNotAvailable()
     {
@@ -134,7 +134,7 @@ class StorageHandlerTest extends TestCase
 
     /**
      * @return void
-     * @covers ezp\Persistence\Storage\Legacy\Content\StorageHandler::deleteFieldData
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler::deleteFieldData
      */
     public function testDeleteFieldData()
     {
@@ -160,7 +160,7 @@ class StorageHandlerTest extends TestCase
     /**
      * Returns the StorageHandler to test
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\StorageHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageHandler
      */
     protected function getStorageHandler()
     {
@@ -187,14 +187,14 @@ class StorageHandlerTest extends TestCase
     /**
      * Returns a StorageRegistry mock
      *
-     * @return \ezp\Persistence\Storage\Legacy\Content\StorageRegistry
+     * @return \eZ\Publish\Core\Persistence\Legacy\Content\StorageRegistry
      */
     protected function getStorageRegistryMock()
     {
         if ( !isset( $this->storageRegistryMock ) )
         {
             $this->storageRegistryMock = $this->getMock(
-                'ezp\\Persistence\\Storage\\Legacy\\Content\\StorageRegistry'
+                'eZ\\Publish\\Core\\Persistence\\Legacy\\Content\\StorageRegistry'
             );
         }
         return $this->storageRegistryMock;
@@ -203,14 +203,14 @@ class StorageHandlerTest extends TestCase
     /**
      * Returns a Storage mock
      *
-     * @return \ezp\Persistence\Fields\Storage
+     * @return \eZ\Publish\SPI\Persistence\Fields\Storage
      */
     protected function getStorageMock()
     {
         if ( !isset( $this->storageMock ) )
         {
             $this->storageMock = $this->getMock(
-                'ezp\\Persistence\\Fields\\Storage'
+                'eZ\\Publish\\SPI\\Persistence\\Fields\\Storage'
             );
         }
         return $this->storageMock;

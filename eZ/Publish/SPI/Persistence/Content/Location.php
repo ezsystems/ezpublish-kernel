@@ -8,8 +8,8 @@
  *
  */
 
-namespace ezp\Persistence\Content;
-use ezp\Persistence\ValueObject;
+namespace eZ\Publish\SPI\Persistence\Content;
+use eZ\Publish\SPI\Persistence\ValueObject;
 
 /**
  * Struct containing accessible properties on Location entities.
@@ -76,7 +76,7 @@ class Location extends ValueObject
     public $remoteId;
 
     /**
-     * ID of the corresponding {@link \ezp\Persistence\Content}.
+     * ID of the corresponding {@link \eZ\Publish\SPI\Persistence\Content}.
      *
      * @var mixed Content ID.
      */
