@@ -41,6 +41,15 @@ interface Handler
     public function load( $id );
 
     /**
+     * Get language by Language Code (eg: eng-GB)
+     *
+     * @param string $languageCode
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
+     * @throws \ezp\Base\Exception\NotFound If language could not be found by $languageCode
+     */
+    public function loadByLanguageCode( $languageCode );
+
+    /**
      * Get all languages
      *
      * Return list of languages where key of hash is language code.

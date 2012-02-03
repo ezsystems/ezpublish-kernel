@@ -142,6 +142,28 @@ class EzcDatabase extends Gateway
     }
 
     /**
+     * Loads data for the Language with Language Code (eg: eng-GB)
+     *
+     * @param string $languageCode
+     * @return string[][]
+     */
+    public function loadLanguageDataByLanguageCode( $languageCode )
+    {
+        $query = $this->createFindQuery();
+        $query->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'locale' ),
+                $query->bindValue( $languageCode, null, \PDO::PARAM_STR )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
      * Creates a Language find query
      *
      * @return \ezcQuerySelect

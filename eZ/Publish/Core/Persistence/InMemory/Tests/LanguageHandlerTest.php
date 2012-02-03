@@ -90,6 +90,20 @@ class LanguageHandlerTest extends HandlerTest
     }
 
     /**
+     * Test load function by language code
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\LanguageHandler::loadByLanguageCode
+     */
+    public function testLoadByLanguageCode()
+    {
+        $language = $this->handler->loadByLanguageCode( $this->language->languageCode );
+        $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $language );
+        $this->assertEquals( 'eng-US', $language->languageCode );
+        $this->assertEquals( 'English (American)', $language->name );
+        $this->assertTrue( $language->isEnabled );
+    }
+
+    /**
      * Test load function
      *
      * @covers eZ\Publish\Core\Persistence\InMemory\LanguageHandler::loadAll

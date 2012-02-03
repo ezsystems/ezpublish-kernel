@@ -248,6 +248,52 @@ class CachingLanguageHandlerTest extends TestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::loadByLanguageCode
+     */
+    public function testLoadByLanguageCode()
+    {
+        $this->expectCacheInitialize();
+
+        $handler = $this->getLanguageHandler();
+        $cacheMock = $this->getLanguageCacheMock();
+
+        $cacheMock->expects( $this->once() )
+            ->method( 'getByLocale' )
+            ->with( $this->equalTo( 'eng-US' ) )
+            ->will( $this->returnValue( $this->getLanguageFixture() ) );
+
+        $result = $handler->loadByLanguageCode( 'eng-US' );
+
+        $this->assertEquals(
+            $this->getLanguageFixture(),
+            $result
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::loadByLanguageCode
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadByLanguageCodeFailure()
+    {
+        $this->expectCacheInitialize();
+
+        $handler = $this->getLanguageHandler();
+        $cacheMock = $this->getLanguageCacheMock();
+
+        $cacheMock->expects( $this->once() )
+            ->method( 'getByLocale' )
+            ->with( $this->equalTo( 'eng-US' ) )
+            ->will( $this->throwException(
+                new Exception\NotFound( 'Language', 'eng-US' )
+            ) );
+
+        $result = $handler->loadByLanguageCode( 'eng-US' );
+    }
+
+    /**
+     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadAll
      */
     public function testLoadAll()

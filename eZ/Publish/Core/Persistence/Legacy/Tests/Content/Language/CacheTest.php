@@ -144,6 +144,10 @@ class CachingTest extends TestCase
         $cache->getByLocale( $languageFixture->languageCode );
     }
 
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getAll
+     */
     public function testGetAll()
     {
         $cache = $this->getCache();

@@ -135,6 +135,19 @@ class CachingHandler implements BaseLanguageHandler, Lookup
     }
 
     /**
+     * Get language by Language Code (eg: eng-GB)
+     *
+     * @param string $languageCode
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
+     * @throws \ezp\Base\Exception\NotFound If language could not be found by $languageCode
+     */
+    public function loadByLanguageCode( $languageCode )
+    {
+        $this->initializeCache();
+        return $this->languageCache->getByLocale( $languageCode );
+    }
+
+    /**
      * Get all languages
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]
