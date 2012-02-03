@@ -85,7 +85,7 @@ interface LocationService
      *
      * @return array an array of {@link Location}
      */
-    public function loadLocations( Content $contentInfo, Location $rootLocation = null );
+    public function loadLocations( ContentInfo $contentInfo, Location $rootLocation = null );
 
     /**
      * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
@@ -108,12 +108,12 @@ interface LocationService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $location
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $locationCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created Location
      *
      */
-    public function createLocation( ContentInfo $content, LocationCreateStruct $locationCreateStruct );
+    public function createLocation( ContentInfo $contentInfo, LocationCreateStruct $locationCreateStruct );
 
     /**
      * Updates $location in the content repository

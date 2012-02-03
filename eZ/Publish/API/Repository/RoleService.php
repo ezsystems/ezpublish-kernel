@@ -9,6 +9,8 @@ use eZ\Publish\API\Repository\Values\User\Role;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
+use eZ\Publish\API\Repository\Values\User\User;
+use eZ\Publish\API\Repository\Values\User\UserGroup;
 
 /**
  * This service provides methods for managing Roles and Policies
@@ -42,7 +44,7 @@ interface RoleService
      *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
-    public function updateRole( Role $role, RoleUpdateStruct $update );
+    public function updateRole( Role $role, RoleUpdateStruct $roleUpdateStruct );
 
     /**
      * adds a new policy to the role
@@ -129,7 +131,7 @@ interface RoleService
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
-     * @param \eZ\Publish\API\Repository\Values\User\RoleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
     public function assignRoleToUserGroup( Role $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null );
 
@@ -153,7 +155,7 @@ interface RoleService
      *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\User $user
-     * @param \eZ\Publish\API\Repository\Values\User\RoleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
     public function assignRoleToUser( Role $role, User $user, RoleLimitation $roleLimitation = null );
 

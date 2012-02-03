@@ -2,6 +2,8 @@
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\IO\BinaryFile;
+use eZ\Publish\API\Repository\Values\IO\BinaryFileCreateStruct;
+
 
 /**
  * The io service for managing binary files
@@ -45,7 +47,7 @@ interface IOService
     /**
      * Deletes the BinaryFile with $path
      *
-     * @param BinaryFile $binaryFile
+     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
      */
     public function deleteBinaryFile( BinaryFile $binaryFile );
 
@@ -64,7 +66,7 @@ interface IOService
      /**
      * Returns a read (mode: rb) file resource to the binary file identified by $path
      *
-     * @param BinaryFile $binaryFile
+     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
      *
      * @return resource
      */
@@ -73,7 +75,7 @@ interface IOService
     /**
      * Returns the content of the binary file
      *
-     * @param BinaryFile $binaryFile
+     * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile
      *
      * @return string
      */

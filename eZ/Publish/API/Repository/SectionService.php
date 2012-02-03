@@ -5,7 +5,6 @@
 namespace eZ\Publish\API\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Section;
@@ -25,7 +24,7 @@ interface SectionService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
      *
-     * @param SectionCreateStruct $sectionCreateStruct
+     * @param \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $sectionCreateStruct
      *
      * @return Section The newly create section
      */

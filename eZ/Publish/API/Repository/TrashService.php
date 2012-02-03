@@ -7,6 +7,8 @@ namespace eZ\Publish\API\Repository;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\SearchResult;
 use eZ\Publish\API\Repository\Values\Content\TrashItem;
+use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
+use \eZ\Publish\API\Repository\Values\Content\Query;
 
 /**
  * Location service, used for complex subtree operations
@@ -50,11 +52,11 @@ interface TrashService
      * If $newParentLocation is provided, $trashedLocation will be restored under it.
      *
      * @param \eZ\Publish\API\Repository\Values\Content\TrashItem $trashItem
-     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreate $newParentLocation
+     * @param \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct $newParentLocation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location the newly created or recovered location
      */
-    public function recover( TrashItem $trashItem, LocationCreate $newParentLocation = null );
+    public function recover( TrashItem $trashItem, LocationCreateStruct $newParentLocation = null );
 
     /**
      * Empties trash.
