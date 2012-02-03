@@ -153,7 +153,7 @@ class CachingTest extends TestCase
         $cache->store( $languageFixture );
 
         $this->assertSame(
-            array( $languageFixture ),
+            array( $languageFixture->locale => $languageFixture ),
             $cache->getAll()
         );
     }

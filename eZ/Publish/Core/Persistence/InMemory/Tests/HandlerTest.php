@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\InMemory\Tests;
-use ezp\Base\ServiceContainer,
+use eZ\Publish\Core\Persistence\InMemory\Handler as InMemoryHandler,
     PHPUnit_Framework_TestCase;
 
 /**
@@ -30,6 +30,6 @@ abstract class HandlerTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         // Get in-memory Handler instance
-        $this->persistenceHandler = new \eZ\Publish\Core\Persistence\InMemory\Handler();
+        $this->persistenceHandler = new InMemoryHandler();
     }
 }

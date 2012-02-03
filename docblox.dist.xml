@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- docblox run -v --ignore doc/*,ezp/*/Tests/*,ezp/Persistence/Storage/*/Tests/*,eZ/Publish/Core/*/Tests/* -d . -t /var/www/engineering/ezp-next-pages/doc/ -->
+<docblox>
+  <parser>
+    <target>doc/apidoc</target>
+  </parser>
+  <transformer>
+    <target>doc/apidoc</target>
+  </transformer>
+  <files>
+    <directory>.</directory>
+    <ignore>doc/*</ignore>
+    <ignore>ezp/*/Tests/*</ignore>
+    <ignore>ezp/Persistence/Storage/*/Tests/*</ignore>
+    <ignore>eZ/Publish/Core/*/Tests/*</ignore>
+  </files>
+</docblox>

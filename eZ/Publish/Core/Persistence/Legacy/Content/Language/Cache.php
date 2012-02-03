@@ -95,12 +95,12 @@ class Cache
     }
 
     /**
-     * Returns all languages in the cache
+     * Returns all languages in the cache with locale as key
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */
     public function getAll()
     {
-        return array_values( $this->mapById );
+        return $this->mapByLocale;
     }
 }
