@@ -32,7 +32,7 @@ interface ContentService
      * To load fields use loadContent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read the content
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin - if the content with the given id does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given id does not exist
      *
      * @param int $contentId
      *
@@ -46,7 +46,7 @@ interface ContentService
      * To load fields use loadContent
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowd to create the content in the given location
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin - if the content with the given remote id does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content with the given remote id does not exist
      *
      * @param string $remoteId
      *
@@ -59,7 +59,7 @@ interface ContentService
      * 
      * If no version number is given, the method returns the current version
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin - if the version with the given number does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the version with the given number does not exist
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
@@ -74,7 +74,7 @@ interface ContentService
      * 
      * If no version number is given, the method returns the current version
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin - if the version with the given number does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the version with the given number does not exist
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param int $contentId
@@ -117,7 +117,7 @@ interface ContentService
      * 
      * If no version number is given, the method returns the current version
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin - if the content or version with the given id does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content or version with the given id does not exist
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param int $contentId
@@ -133,7 +133,7 @@ interface ContentService
      * 
      * If no version is given, the method returns the current version
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundExceptoin - if the content or version with the given remote id does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException - if the content or version with the given remote id does not exist
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load this version
      *
      * @param string $remoteId
@@ -155,7 +155,7 @@ interface ContentService
      * In 4.x at least one location has to be provided in the location creation array.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create the content in the given location
-     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException if there is a provided remoteId which exists in the system 
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if there is a provided remoteId which exists in the system 
      *                                                            or (4.x) there is no location provided
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $contentCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
@@ -373,8 +373,8 @@ interface ContentService
      * The source of the relation is the content and version
      * referenced by $versionInfo.
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destination the destination of the relation
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent the destination of the relation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation the newly created relation
      */
@@ -387,8 +387,8 @@ interface ContentService
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if the version is not a draft
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if there is no relation of type COMMON for the given destination
      *
-     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $versionInfo
-     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destination
+     * @param \eZ\Publish\API\Repository\Values\Content\VersionInfo $sourceVersion
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $destinationContent
      */
     public function deleteRelation( VersionInfo $sourceVersion, ContentInfo $destinationContent);
 
