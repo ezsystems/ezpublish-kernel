@@ -131,7 +131,11 @@ class SectionServiceStub implements SectionService
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
-        // TODO: Implement loadSectionByIdentifier() method.
+        if ( isset( $this->identifiers[$sectionIdentifier] ) )
+        {
+            return $this->sections[$this->identifiers[$sectionIdentifier]];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**

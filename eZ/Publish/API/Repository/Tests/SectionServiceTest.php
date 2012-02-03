@@ -206,11 +206,25 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSectionByIdentifier()
-     * 
      */
     public function testLoadSectionByIdentifier()
     {
-        $this->markTestIncomplete( "Test for SectionService::loadSectionByIdentifier() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $sectionId = $sectionService->createSection( $sectionCreate )->id;
+
+        $section = $sectionService->loadSectionByIdentifier( 'uniqueKey' );
+        /* END: Use Case */
+
+        $this->assertEquals( $sectionId, $section->id );
     }
 
     /**
@@ -222,7 +236,14 @@ class SectionServiceTest extends BaseTest
      */
     public function testLoadSectionByIdentifierThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for SectionService::loadSectionByIdentifier() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        // This call should fail with a NotFoundException
+        $section = $sectionService->loadSectionByIdentifier( 'someUnknownSectionIdentifier' );
+        /* END: Use Case */
     }
 
     /**
