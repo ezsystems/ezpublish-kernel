@@ -7,7 +7,7 @@ namespace eZ\Publish\API\Repository\Exceptions;
  * @package eZ\Publish\API\Repository\Exceptions
  *
  */
-abstract class NotFoundException extends RuntimeException
+abstract class NotFoundException extends \RuntimeException
 {
 }
 
