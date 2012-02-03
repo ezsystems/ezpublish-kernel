@@ -46,7 +46,7 @@ class CachingTest extends TestCase
         );
         $this->assertAttributeEquals(
             array(
-                $languageFixture->locale => $languageFixture,
+                $languageFixture->languageCode => $languageFixture,
             ),
             'mapByLocale',
             $cache
@@ -125,7 +125,7 @@ class CachingTest extends TestCase
 
         $this->assertSame(
             $languageFixture,
-            $cache->getByLocale( $languageFixture->locale )
+            $cache->getByLocale( $languageFixture->languageCode )
         );
     }
 
@@ -141,9 +141,13 @@ class CachingTest extends TestCase
         $languageFixture = $this->getLanguageFixture();
 
         // $cache->store( $languageFixture );
-        $cache->getByLocale( $languageFixture->locale );
+        $cache->getByLocale( $languageFixture->languageCode );
     }
 
+    /**
+     * @return void
+     * @covers eZ\Publish\Core\Persistence\Legacy\Content\Language\Cache::getAll
+     */
     public function testGetAll()
     {
         $cache = $this->getCache();
@@ -153,7 +157,7 @@ class CachingTest extends TestCase
         $cache->store( $languageFixture );
 
         $this->assertSame(
-            array( $languageFixture->locale => $languageFixture ),
+            array( $languageFixture->languageCode => $languageFixture ),
             $cache->getAll()
         );
     }
@@ -182,7 +186,7 @@ class CachingTest extends TestCase
         $langUs = new Language();
 
         $langUs->id = 2;
-        $langUs->locale = 'eng-US';
+        $langUs->languageCode = 'eng-US';
         $langUs->name = 'English (American)';
         $langUs->isEnabled = true;
 

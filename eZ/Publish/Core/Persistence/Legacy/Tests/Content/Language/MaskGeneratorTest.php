@@ -69,7 +69,7 @@ class MaskGeneratorTest extends LanguageAwareTestCase
     }
 
     /**
-     * @param string $locale
+     * @param string $languageCode
      * @param boolean $alwaysAvailable
      * @param int $expectedIndicator
      * @return void
@@ -77,13 +77,13 @@ class MaskGeneratorTest extends LanguageAwareTestCase
      * @dataProvider getLanguageIndicatorData
      */
     public function testGenerateLanguageIndicator(
-        $locale, $alwaysAvailable, $expectedIndicator )
+        $languageCode, $alwaysAvailable, $expectedIndicator )
     {
         $generator = $this->getMaskGenerator();
 
         $this->assertSame(
             $expectedIndicator,
-            $generator->generateLanguageIndicator( $locale, $alwaysAvailable )
+            $generator->generateLanguageIndicator( $languageCode, $alwaysAvailable )
         );
     }
 

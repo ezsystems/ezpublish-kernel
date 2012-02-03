@@ -89,6 +89,25 @@ class Handler implements BaseLanguageHandler
     }
 
     /**
+     * Get language by Language Code (eg: eng-GB)
+     *
+     * @param string $languageCode
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
+     * @throws \ezp\Base\Exception\NotFound If language could not be found by $languageCode
+     */
+    public function loadByLanguageCode( $languageCode )
+    {
+        $rows = $this->languageGateway->loadLanguageDataByLanguageCode( $languageCode );
+        $languages = $this->languageMapper->extractLanguagesFromRows( $rows );
+
+        if ( count( $languages ) < 1 )
+        {
+            throw new Exception\NotFound( 'Language', $languageCode );
+        }
+        return reset( $languages );
+    }
+
+    /**
      * Get all languages
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]

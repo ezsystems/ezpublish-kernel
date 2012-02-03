@@ -81,7 +81,7 @@ class BackendDataTest extends PHPUnit_Framework_TestCase
             $this->backend->create(
                 "Content\\Language",
                 array(
-                    "locale" => "lan-{$i}",
+                    "languageCode" => "lan-{$i}",
                     "isEnabled" => true,
                     "name" => "lang{$i}"
                 )

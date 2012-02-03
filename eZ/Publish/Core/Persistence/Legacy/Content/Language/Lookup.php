@@ -25,12 +25,12 @@ interface Lookup
     public function getById( $id );
 
     /**
-     * Returns the Language with $locale from the cache
+     * Returns the Language with $languageCode from the cache
      *
-     * @param string $locale
+     * @param string $languageCode
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound
      *         if the Language could not be found
      */
-    public function getByLocale( $locale );
+    public function getByLocale( $languageCode );
 }

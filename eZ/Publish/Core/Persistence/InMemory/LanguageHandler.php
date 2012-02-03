@@ -78,6 +78,22 @@ class LanguageHandler implements LanguageHandlerInterface
     }
 
     /**
+     * Get language by Language Code (eg: eng-GB)
+     *
+     * @param string $languageCode
+     * @return \eZ\Publish\SPI\Persistence\Content\Language
+     * @throws \ezp\Base\Exception\NotFound If language could not be found by $languageCode
+     */
+    public function loadByLanguageCode( $languageCode )
+    {
+        $languages = $this->backend->find( 'Content\\Language', array( 'languageCode' => $languageCode ) );
+        if ( empty( $languages ) )
+            throw new \ezp\Base\Exception\NotFound( 'Content\\Language', $languageCode );
+
+        return $languages[0];
+    }
+
+    /**
      * Get all languages
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]
@@ -87,7 +103,7 @@ class LanguageHandler implements LanguageHandlerInterface
         $languages = array();
         foreach ( $this->backend->find( 'Content\\Language', array() ) as  $language )
         {
-            $languages[$language->locale] = $language;
+            $languages[$language->languageCode] = $language;
         }
         return $languages;
     }

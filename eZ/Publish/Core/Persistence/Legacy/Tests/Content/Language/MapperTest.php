@@ -33,7 +33,7 @@ class MapperTest extends TestCase
         $this->assertStructsEqual(
             $this->getLanguageFixture(),
             $result,
-            array( 'locale', 'name', 'isEnabled' )
+            array( 'languageCode', 'name', 'isEnabled' )
         );
     }
 
@@ -77,13 +77,13 @@ class MapperTest extends TestCase
     {
         $langUs = new Language();
         $langUs->id = 2;
-        $langUs->locale = 'eng-US';
+        $langUs->languageCode = 'eng-US';
         $langUs->name = 'English (American)';
         $langUs->isEnabled = true;
 
         $langGb = new Language();
         $langGb->id = 4;
-        $langGb->locale = 'eng-GB';
+        $langGb->languageCode = 'eng-GB';
         $langGb->name = 'English (United Kingdom)';
         $langGb->isEnabled = true;
 
@@ -99,7 +99,7 @@ class MapperTest extends TestCase
     {
         $struct = new CreateStruct();
 
-        $struct->locale = 'de-DE';
+        $struct->languageCode = 'de-DE';
         $struct->name = 'Deutsch (Deutschland)';
         $struct->isEnabled = true;
 
@@ -115,7 +115,7 @@ class MapperTest extends TestCase
     {
         $struct = new Language();
 
-        $struct->locale = 'de-DE';
+        $struct->languageCode = 'de-DE';
         $struct->name = 'Deutsch (Deutschland)';
         $struct->isEnabled = true;
 

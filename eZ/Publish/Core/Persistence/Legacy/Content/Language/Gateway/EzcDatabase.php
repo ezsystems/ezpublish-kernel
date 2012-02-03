@@ -81,7 +81,7 @@ class EzcDatabase extends Gateway
     {
         $query->set(
             $this->dbHandler->quoteColumn( 'locale' ),
-            $query->bindValue( $language->locale )
+            $query->bindValue( $language->languageCode )
         )->set(
             $this->dbHandler->quoteColumn( 'name' ),
             $query->bindValue( $language->name )
@@ -132,6 +132,28 @@ class EzcDatabase extends Gateway
             $query->expr->eq(
                 $this->dbHandler->quoteColumn( 'id' ),
                 $query->bindValue( $id, null, \PDO::PARAM_INT )
+            )
+        );
+
+        $statement = $query->prepare();
+        $statement->execute();
+
+        return $statement->fetchAll( \PDO::FETCH_ASSOC );
+    }
+
+    /**
+     * Loads data for the Language with Language Code (eg: eng-GB)
+     *
+     * @param string $languageCode
+     * @return string[][]
+     */
+    public function loadLanguageDataByLanguageCode( $languageCode )
+    {
+        $query = $this->createFindQuery();
+        $query->where(
+            $query->expr->eq(
+                $this->dbHandler->quoteColumn( 'locale' ),
+                $query->bindValue( $languageCode, null, \PDO::PARAM_STR )
             )
         );
 

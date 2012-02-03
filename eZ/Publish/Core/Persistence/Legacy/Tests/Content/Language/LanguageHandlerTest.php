@@ -171,6 +171,59 @@ class LanguageHandlerTest extends TestCase
 
     /**
      * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadByLanguageCode
+     */
+    public function testLoadByLanguageCode()
+    {
+        $handler = $this->getLanguageHandler();
+        $mapperMock = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadLanguageDataByLanguageCode' )
+            ->with( $this->equalTo( 'eng-US' ) )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractLanguagesFromRows' )
+            ->with( $this->equalTo( array() ) )
+            ->will( $this->returnValue( array( new Language() ) ) );
+
+        $result = $handler->loadByLanguageCode( 'eng-US' );
+
+        $this->assertInstanceOf(
+            'eZ\Publish\SPI\Persistence\Content\Language',
+            $result
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadByLanguageCode
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadByLanguageCodeFailure()
+    {
+        $handler = $this->getLanguageHandler();
+        $mapperMock = $this->getMapperMock();
+        $gatewayMock = $this->getGatewayMock();
+
+        $gatewayMock->expects( $this->once() )
+            ->method( 'loadLanguageDataByLanguageCode' )
+            ->with( $this->equalTo( 'eng-US' ) )
+            ->will( $this->returnValue( array() ) );
+
+        $mapperMock->expects( $this->once() )
+            ->method( 'extractLanguagesFromRows' )
+            ->with( $this->equalTo( array() ) )
+            // No language extracted
+            ->will( $this->returnValue( array() ) );
+
+        $result = $handler->loadByLanguageCode( 'eng-US' );
+    }
+
+    /**
+     * @return void
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\Handler::loadAll
      */
     public function testLoadAll()

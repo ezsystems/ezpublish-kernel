@@ -40,6 +40,14 @@ abstract class Gateway
     abstract public function loadLanguageData( $id );
 
     /**
+     * Loads data for the Language with Language Code (eg: eng-GB)
+     *
+     * @param string $languageCode
+     * @return string[][]
+     */
+    abstract public function loadLanguageDataByLanguageCode( $languageCode );
+
+    /**
      * Loads the data for all languages
      *
      * @return string[][]

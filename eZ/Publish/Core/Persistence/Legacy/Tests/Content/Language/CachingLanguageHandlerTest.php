@@ -171,7 +171,7 @@ class CachingLanguageHandlerTest extends TestCase
     {
         $language = new Language();
         $language->id = 8;
-        $language->locale = 'de-DE';
+        $language->languageCode = 'de-DE';
         return $language;
     }
 
@@ -244,6 +244,52 @@ class CachingLanguageHandlerTest extends TestCase
             ) );
 
         $result = $handler->load( 2 );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::loadByLanguageCode
+     */
+    public function testLoadByLanguageCode()
+    {
+        $this->expectCacheInitialize();
+
+        $handler = $this->getLanguageHandler();
+        $cacheMock = $this->getLanguageCacheMock();
+
+        $cacheMock->expects( $this->once() )
+            ->method( 'getByLocale' )
+            ->with( $this->equalTo( 'eng-US' ) )
+            ->will( $this->returnValue( $this->getLanguageFixture() ) );
+
+        $result = $handler->loadByLanguageCode( 'eng-US' );
+
+        $this->assertEquals(
+            $this->getLanguageFixture(),
+            $result
+        );
+    }
+
+    /**
+     * @return void
+     * @covers \eZ\Publish\Core\Persistence\Legacy\Content\Language\CachingHandler::loadByLanguageCode
+     * @expectedException \ezp\Base\Exception\NotFound
+     */
+    public function testLoadByLanguageCodeFailure()
+    {
+        $this->expectCacheInitialize();
+
+        $handler = $this->getLanguageHandler();
+        $cacheMock = $this->getLanguageCacheMock();
+
+        $cacheMock->expects( $this->once() )
+            ->method( 'getByLocale' )
+            ->with( $this->equalTo( 'eng-US' ) )
+            ->will( $this->throwException(
+                new Exception\NotFound( 'Language', 'eng-US' )
+            ) );
+
+        $result = $handler->loadByLanguageCode( 'eng-US' );
     }
 
     /**
@@ -363,13 +409,13 @@ class CachingLanguageHandlerTest extends TestCase
     {
         $langUs = new Language();
         $langUs->id = 2;
-        $langUs->locale = 'eng-US';
+        $langUs->languageCode = 'eng-US';
         $langUs->name = 'English (American)';
         $langUs->isEnabled = true;
 
         $langGb = new Language();
         $langGb->id = 4;
-        $langGb->locale = 'eng-GB';
+        $langGb->languageCode = 'eng-GB';
         $langGb->name = 'English (United Kingdom)';
         $langGb->isEnabled = true;
 

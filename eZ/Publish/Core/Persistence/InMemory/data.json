@@ -25,7 +25,7 @@
 
     ],
     "Content\\Language" : [
-        {"id": 2, "locale": "eng-GB", "isEnabled": true, "name": "English (United Kingdom)" }
+        {"id": 2, "languageCode": "eng-GB", "isEnabled": true, "name": "English (United Kingdom)" }
     ],
     "Content\\Location" : [
         {"id": 1,  "remoteId": "remoteIDForLocation1", "contentId": 0,  "parentId": 0,  "pathIdentificationString": "", "mainLocationId": 1,  "depth": 0, "pathString": "/1/", "modifiedSubLocation": 1312473387, "priority": 0, "hidden": false, "invisible": false,  "sortField": 1, "sortOrder": 1},

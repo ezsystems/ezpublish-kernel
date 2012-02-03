@@ -997,7 +997,7 @@ class EzcDatabaseTest extends LanguageAwareTestCase
                     new Language(
                         array(
                             'id' => 2,
-                            'locale' => 'eng-US',
+                            'languageCode' => 'eng-US',
                         )
                     )
                 )

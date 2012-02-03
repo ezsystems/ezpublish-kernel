@@ -44,13 +44,13 @@ class LanguageHandlerTest extends HandlerTest
         }
 
         $struct = new CreateStruct();
-        $struct->locale = 'eng-GB';
+        $struct->languageCode = 'eng-GB';
         $struct->name = 'English (United Kingdom)';
         $struct->isEnabled = true;
         $this->handler->create( $struct );
 
         $struct = new CreateStruct();
-        $struct->locale = 'eng-US';
+        $struct->languageCode = 'eng-US';
         $struct->name = 'English (American)';
         $struct->isEnabled = true;
         $this->language = $this->handler->create( $struct );
@@ -84,7 +84,21 @@ class LanguageHandlerTest extends HandlerTest
     {
         $language = $this->handler->load( $this->language->id );
         $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $language );
-        $this->assertEquals( 'eng-US', $language->locale );
+        $this->assertEquals( 'eng-US', $language->languageCode );
+        $this->assertEquals( 'English (American)', $language->name );
+        $this->assertTrue( $language->isEnabled );
+    }
+
+    /**
+     * Test load function by language code
+     *
+     * @covers eZ\Publish\Core\Persistence\InMemory\LanguageHandler::loadByLanguageCode
+     */
+    public function testLoadByLanguageCode()
+    {
+        $language = $this->handler->loadByLanguageCode( $this->language->languageCode );
+        $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $language );
+        $this->assertEquals( 'eng-US', $language->languageCode );
         $this->assertEquals( 'English (American)', $language->name );
         $this->assertTrue( $language->isEnabled );
     }
@@ -100,17 +114,17 @@ class LanguageHandlerTest extends HandlerTest
 
         $this->assertEquals( 2, count( $languages ) );
         $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $languages['eng-GB'] );
-        $this->assertEquals( 'eng-GB', $languages['eng-GB']->locale );
+        $this->assertEquals( 'eng-GB', $languages['eng-GB']->languageCode );
         $this->assertEquals( 'English (United Kingdom)', $languages['eng-GB']->name );
         $this->assertTrue( $languages['eng-GB']->isEnabled );
 
         $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $languages['eng-US'] );
-        $this->assertEquals( 'eng-US', $languages['eng-US']->locale );
+        $this->assertEquals( 'eng-US', $languages['eng-US']->languageCode );
         $this->assertEquals( 'English (American)', $languages['eng-US']->name );
         $this->assertTrue( $languages['eng-US']->isEnabled );
 
         $struct = new CreateStruct();
-        $struct->locale = 'nor-NB';
+        $struct->languageCode = 'nor-NB';
         $struct->name = 'Norwegian Bokmål';
         $struct->isEnabled = false;
         $this->handler->create( $struct );
@@ -119,7 +133,7 @@ class LanguageHandlerTest extends HandlerTest
 
         $this->assertEquals( 3, count( $languages ) );
         $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $languages['nor-NB'] );
-        $this->assertEquals( 'nor-NB', $languages['nor-NB']->locale );
+        $this->assertEquals( 'nor-NB', $languages['nor-NB']->languageCode );
         $this->assertEquals( 'Norwegian Bokmål', $languages['nor-NB']->name );
         $this->assertFalse( $languages['nor-NB']->isEnabled );
     }
@@ -132,14 +146,14 @@ class LanguageHandlerTest extends HandlerTest
     public function testCreate()
     {
         $struct = new CreateStruct();
-        $struct->locale = 'nor-NB';
+        $struct->languageCode = 'nor-NB';
         $struct->name = 'Norwegian Bokmål';
         $struct->isEnabled = false;
         $language = $this->handler->create( $struct );
 
         $this->assertInstanceOf( 'eZ\Publish\SPI\Persistence\Content\Language', $language );
         $this->assertEquals( $this->language->id +1, $language->id );
-        $this->assertEquals( 'nor-NB', $language->locale );
+        $this->assertEquals( 'nor-NB', $language->languageCode );
         $this->assertEquals( 'Norwegian Bokmål', $language->name );
         $this->assertFalse( $language->isEnabled );
     }
@@ -152,7 +166,7 @@ class LanguageHandlerTest extends HandlerTest
     public function testUpdate()
     {
         $language = $this->handler->load( $this->language->id );
-        $language->locale = 'Changed';
+        $language->languageCode = 'Changed';
         $language->name = 'Changed';
         $language->isEnabled = false;
         $this->handler->update( $language );
@@ -160,7 +174,7 @@ class LanguageHandlerTest extends HandlerTest
         $language = $this->handler->load( $this->language->id );
         $this->assertEquals( $this->language->id, $language->id );
         $this->assertEquals( 'Changed', $language->name );
-        $this->assertEquals( 'Changed', $language->locale );
+        $this->assertEquals( 'Changed', $language->languageCode );
         $this->assertFalse( $language->isEnabled );
     }
 

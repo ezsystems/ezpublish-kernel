@@ -26,7 +26,7 @@ class Mapper
     {
         $language = new Language();
 
-        $language->locale = $struct->locale;
+        $language->languageCode = $struct->languageCode;
         $language->name = $struct->name;
         $language->isEnabled = $struct->isEnabled;
 
@@ -48,7 +48,7 @@ class Mapper
             $language = new Language();
 
             $language->id = (int)$row['id'];
-            $language->locale = $row['locale'];
+            $language->languageCode = $row['locale'];
             $language->name = $row['name'];
             $language->isEnabled = !( (int)$row['disabled'] );
 
