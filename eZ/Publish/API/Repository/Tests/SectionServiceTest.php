@@ -90,7 +90,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
-     * 
      */
     public function testUpdateSection()
     {
@@ -325,11 +324,18 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::newSectionUpdateStruct()
-     * 
      */
     public function testNewSectionUpdateStruct()
     {
-        $this->markTestIncomplete( "Test for SectionService::newSectionUpdateStruct() is not implemented." );
+        $repository = $this->getRepository();
+
+        ///* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
+        ///* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct', $sectionUpdate );
     }
 
 }

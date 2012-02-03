@@ -49,7 +49,7 @@ class SectionServiceStub implements SectionService
     {
         if ( isset( $this->sections[$sectionCreateStruct->identifier] ) )
         {
-            throw new IllegalArgumentExceptionStub();
+            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
 
         $this->sections[$sectionCreateStruct->identifier] = new Section(
@@ -179,7 +179,7 @@ class SectionServiceStub implements SectionService
      */
     public function newSectionUpdateStruct()
     {
-        // TODO: Implement newSectionUpdateStruct() method.
+        return new SectionUpdateStruct();
     }
 
 }
