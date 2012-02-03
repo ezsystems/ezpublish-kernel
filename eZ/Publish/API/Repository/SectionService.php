@@ -26,7 +26,7 @@ interface SectionService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $sectionCreateStruct
      *
-     * @return Section The newly create section
+     * @return \eZ\Publish\API\Repository\Values\Content\Section The newly create section
      */
     public function createSection(SectionCreateStruct $sectionCreateStruct );
 

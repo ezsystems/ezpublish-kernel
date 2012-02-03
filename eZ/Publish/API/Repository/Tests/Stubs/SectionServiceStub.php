@@ -16,6 +16,7 @@ use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\SectionService}
@@ -29,6 +30,11 @@ class SectionServiceStub implements SectionService
      * @var integer
      */
     private $nextId = 0;
+
+    /**
+     * @var array
+     */
+    private $identifiers = array();
 
     /**
      * @var \eZ\Publish\API\Repository\Values\Content\Section[]
@@ -47,12 +53,12 @@ class SectionServiceStub implements SectionService
      */
     public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
-        if ( isset( $this->sections[$sectionCreateStruct->identifier] ) )
+        if ( isset( $this->identifiers[$sectionCreateStruct->identifier] ) )
         {
             throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
         }
 
-        $this->sections[$sectionCreateStruct->identifier] = new Section(
+        $section = new Section(
             array(
                 'id'          =>  ++$this->nextId,
                 'name'        =>  $sectionCreateStruct->name,
@@ -60,7 +66,10 @@ class SectionServiceStub implements SectionService
             )
         );
 
-        return $this->sections[$sectionCreateStruct->identifier];
+        $this->sections[$section->id]            = $section;
+        $this->identifiers[$section->identifier] = $section->id;
+
+        return $section;
     }
 
     /**
@@ -91,7 +100,11 @@ class SectionServiceStub implements SectionService
      */
     public function loadSection( $sectionId )
     {
-        // TODO: Implement loadSection() method.
+        if ( isset( $this->sections[$sectionId] ) )
+        {
+            return $this->sections[$sectionId];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**

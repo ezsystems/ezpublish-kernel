@@ -125,11 +125,25 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSection()
-     * 
      */
     public function testLoadSection()
     {
-        $this->markTestIncomplete( "Test for SectionService::loadSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $sectionId = $sectionService->createSection( $sectionCreate )->id;
+
+        $section = $sectionService->loadSection( $sectionId );
+        /* END: Use Case */
+
+        $this->assertEquals( 'uniqueKey', $section->identifier );
     }
 
     /**
@@ -141,7 +155,14 @@ class SectionServiceTest extends BaseTest
      */
     public function testLoadSectionThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for SectionService::loadSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        // This call should fail with a NotFoundException
+        $sectionService->loadSection( PHP_INT_MAX );
+        /* END: Use Case */
     }
 
     /**
