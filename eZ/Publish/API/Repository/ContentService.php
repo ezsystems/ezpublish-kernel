@@ -14,7 +14,8 @@ use eZ\Publish\API\Repository\Values\Content\ContentMetaDataUpdateStruct;
 use eZ\Publish\API\Repository\Values\Content\VersionInfo;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-
+use \eZ\Publish\API\Repository\Values\User\User;
+use \eZ\Publish\API\Repository\Values\Content\LocationCreateStruct;
 
 /**
  * This class provides service methods for managing content
@@ -215,7 +216,7 @@ interface ContentService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to load the draft list
      * 
-     * @param User $user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo the drafts ({@link VersionInfo}) owned by the given user
      */
@@ -351,18 +352,18 @@ interface ContentService
     public function loadRelations( VersionInfo $versionInfo );
 
     /**
-     * Loads all incoming relations for a content object. 
-     * 
+     * Loads all incoming relations for a content object.
+     *
      * The relations come only
      * from published versions of the source content objects
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to read this version
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Relation[] an array of {@link Relation}
      */
-    public function loadReverseRelations( ContentInfo $content );
+    public function loadReverseRelations( ContentInfo $contentInfo );
 
     /**
      * Adds a relation of type common. 
@@ -408,7 +409,7 @@ interface ContentService
     /**
      * lists the translations done on this content object
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read trnaslation infos
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed read translation infos
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      * @param array $filter 
