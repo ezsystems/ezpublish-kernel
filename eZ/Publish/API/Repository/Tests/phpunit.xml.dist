@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phpunit bootstrap="bootstrap.php">
+    <php>
+        <const name="EZ_PUBLIC_API_REPOSITORY" value="\ezp\PublicAPI\InMemory\Repository" />
+    </php>
+    <testsuites>
+        <testsuite name="PublicAPI TestSuite">
+            <directory>.</directory>
+        </testsuite>
+    </testsuites>
+    <filter>
+        <whitelist>
+            <directory suffix=".php">ezp</directory>
+        </whitelist>
+    </filter>
+</phpunit>
