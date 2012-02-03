@@ -36,4 +36,3 @@ class Section extends ValueObject
      */
     public $name;
 }
-?>

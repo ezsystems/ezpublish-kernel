@@ -61,4 +61,3 @@ class Field extends ValueObject
             $this->value = clone $this->value;
     }
 }
-?>

@@ -28,4 +28,3 @@ class RoleUpdateStruct extends ValueObject
      */
     public $name;
 }
-?>

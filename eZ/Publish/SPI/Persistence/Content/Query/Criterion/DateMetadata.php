@@ -86,4 +86,3 @@ class DateMetadata extends Criterion implements CriterionInterface
      */
     const CREATED = 'created';
 }
-?>

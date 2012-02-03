@@ -25,4 +25,3 @@ abstract class Operator
     const BETWEEN = "between";
     const LIKE = "like";
 }
-?>

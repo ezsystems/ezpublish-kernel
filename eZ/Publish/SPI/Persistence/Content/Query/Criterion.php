@@ -155,4 +155,3 @@ abstract class Criterion
         return new static( $target, $operator, $value );
     }
 }
-?>

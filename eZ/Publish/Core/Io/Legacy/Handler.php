@@ -249,4 +249,3 @@ class Handler implements IoHandlerInterface
         return $this->clusterHandler;
     }
 }
-?>

@@ -90,4 +90,3 @@ class RestrictedVersion extends ValueObject
      */
     public $languageIds = array();
 }
-?>

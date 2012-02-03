@@ -147,4 +147,3 @@ class Location extends ValueObject
      */
     public $sortOrder;
 }
-?>

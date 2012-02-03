@@ -205,4 +205,3 @@ interface Handler
      */
     public function publish( $contentTypeId );
 }
-?>

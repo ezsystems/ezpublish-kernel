@@ -86,4 +86,3 @@ interface Handler
      */
     public function assignmentsCount( $sectionId );
 }
-?>

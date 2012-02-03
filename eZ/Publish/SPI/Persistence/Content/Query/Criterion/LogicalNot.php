@@ -30,4 +30,3 @@ class LogicalNot extends LogicalOperator
         parent::__construct( array( $criterion ) );
     }
 }
-?>

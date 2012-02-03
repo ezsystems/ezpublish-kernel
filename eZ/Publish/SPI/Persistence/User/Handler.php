@@ -183,4 +183,3 @@ interface Handler
      */
     public function unAssignRole( $groupId, $roleId );
 }
-?>

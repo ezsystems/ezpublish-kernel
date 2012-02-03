@@ -67,4 +67,3 @@ class User extends ValueObject
      */
     public $maxLogin = 0;
 }
-?>

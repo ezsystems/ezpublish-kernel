@@ -122,4 +122,3 @@ class FieldDefinition extends ValueObject
         parent::__construct( $properties );
     }
 }
-?>

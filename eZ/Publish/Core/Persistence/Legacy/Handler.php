@@ -701,4 +701,3 @@ class Handler implements HandlerInterface
         $this->getDatabase()->rollback();
     }
 }
-?>

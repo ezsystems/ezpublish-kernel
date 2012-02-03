@@ -69,4 +69,3 @@ class Policy extends ValueObject
      */
     public $limitations;
 }
-?>

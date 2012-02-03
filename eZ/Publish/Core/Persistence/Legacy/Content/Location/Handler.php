@@ -312,4 +312,3 @@ class Handler implements BaseLocationHandler
         $this->locationGateway->setSectionForSubtree( $nodeData['path_string'], $sectionId );
     }
 }
-?>

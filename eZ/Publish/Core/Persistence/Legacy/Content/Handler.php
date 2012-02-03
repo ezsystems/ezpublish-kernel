@@ -438,4 +438,3 @@ class Handler implements BaseContentHandler
         throw new \Exception( "@TODO: Not implemented yet." );
     }
 }
-?>

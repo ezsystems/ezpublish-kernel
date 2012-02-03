@@ -82,4 +82,3 @@ class Status extends Criterion implements CriterionInterface
      */
     const STATUS_ARCHIVED = "archived";
 }
-?>

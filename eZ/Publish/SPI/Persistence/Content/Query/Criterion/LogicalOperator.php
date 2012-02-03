@@ -42,4 +42,3 @@ abstract class LogicalOperator extends Criterion
      */
     public $criteria = array();
 }
-?>

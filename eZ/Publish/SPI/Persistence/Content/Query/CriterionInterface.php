@@ -56,4 +56,3 @@ interface CriterionInterface
      */
     public function getSpecifications();
 }
-?>

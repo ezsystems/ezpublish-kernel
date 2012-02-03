@@ -181,4 +181,3 @@ class Handler implements BaseSectionHandler
         return $this->sectionGateway->countContentObjectsInSection( $sectionId );
     }
 }
-?>

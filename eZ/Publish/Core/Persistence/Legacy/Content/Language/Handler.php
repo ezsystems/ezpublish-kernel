@@ -131,4 +131,3 @@ class Handler implements BaseLanguageHandler
         $this->languageGateway->deleteLanguage( $id );
     }
 }
-?>

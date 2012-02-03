@@ -107,4 +107,3 @@ class Content extends ValueObject
      */
     public $initialLanguageId;
 }
-?>

@@ -67,4 +67,3 @@ interface Handler
      */
     public function rollback();
 }
-?>

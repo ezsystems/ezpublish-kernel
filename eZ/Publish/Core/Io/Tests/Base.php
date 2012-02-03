@@ -289,4 +289,3 @@ abstract class Base extends \PHPUnit_Framework_TestCase
             $this->markTestSkipped( "allow_url_fopen must be 'On' for this test." );
     }
 }
-?>
