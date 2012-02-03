@@ -44,7 +44,7 @@ class EzcDbHandler
      *
      * @param string $method
      * @param array $parameters
-     * @return void
+     * @return mixed
      */
     public function __call( $method, $parameters )
     {
@@ -54,9 +54,9 @@ class EzcDbHandler
     /**
      * Creates an alias for $tableName, $columnName in $query.
      *
-     * @param ezcDbQuery $query
+     * @param \ezcQuerySelect $query
      * @param string $columnName
-     * @param string $tableName
+     * @param string|null $tableName
      * @return string
      */
     public function aliasedColumn( ezcQuerySelect $query, $columnName, $tableName = null )
@@ -106,6 +106,8 @@ class EzcDbHandler
      * be null. In case for sequence based RDBMS this method can return a
      * proper value for the given column.
      *
+     * @param string $table
+     * @param string $column
      * @return mixed
      */
     public function getAutoIncrementValue( $table, $column )

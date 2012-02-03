@@ -8,6 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests;
+use eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql as EzcDbHandlerPgsql,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite as EzcDbHandlerSqlite,
+    eZ\Publish\Core\Persistence\Legacy\EzcDbHandler;
 
 /**
  * Base test case for database related tests
@@ -24,7 +27,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     /**
      * Database handler -- to not be constructed twice for one test
      *
-     * @var \ezcDbHandler
+     * @var \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     protected $handler;
 
@@ -62,7 +65,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
      * environment variable "DATABASE" and defaults to an in-memory SQLite
      * database.
      *
-     * @return \ezcDbHandler
+     * @return \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler
      */
     public function getDatabaseHandler()
     {
@@ -72,15 +75,15 @@ class TestCase extends \PHPUnit_Framework_TestCase
             switch ( $this->db )
             {
                 case 'pgsql':
-                    $this->handler = new \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Pgsql( $connection );
+                    $this->handler = new EzcDbHandlerPgsql( $connection );
                     break;
 
                 case 'sqlite':
-                    $this->handler = new \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler\Sqlite( $connection );
+                    $this->handler = new EzcDbHandlerSqlite( $connection );
                     break;
 
                 default:
-                    $this->handler = new \eZ\Publish\Core\Persistence\Legacy\EzcDbHandler( $connection );
+                    $this->handler = new EzcDbHandler( $connection );
             }
         }
 

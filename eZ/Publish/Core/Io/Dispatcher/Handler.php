@@ -54,7 +54,7 @@ class Handler implements IoHandlerInterface
     {
         if ( empty( $config['default'] ) || !$config['default'] instanceof IoHandlerInterface )
         {
-            throw new InvalidArgumentType( "\$config['default']", "ezp\\Io\\Handler" );
+            throw new InvalidArgumentType( "\$config['default']", "eZ\\Publish\\SPI\\Io\\Handler" );
         }
         else if ( empty( $config['handlers'] ) )
         {
@@ -70,7 +70,7 @@ class Handler implements IoHandlerInterface
             }
             else if ( empty( $handler['handler'] ) || !$handler['handler'] instanceof IoHandlerInterface )
             {
-                throw new InvalidArgumentType( "\$config['handlers'][$key]['handler']", "ezp\\Io\\Handler" );
+                throw new InvalidArgumentType( "\$config['handlers'][$key]['handler']", "eZ\\Publish\\SPI\\Io\\Handler" );
             }
         }
 

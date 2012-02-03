@@ -11,8 +11,8 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\User\User;
-use ezp\Values\ContentType\ContentTypeUpdateStruct;
-use eZ\Publish\API\Repository\Values\Content\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
