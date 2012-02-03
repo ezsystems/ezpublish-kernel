@@ -81,7 +81,7 @@ class EzcDatabase extends Gateway
     {
         $query->set(
             $this->dbHandler->quoteColumn( 'locale' ),
-            $query->bindValue( $language->locale )
+            $query->bindValue( $language->languageCode )
         )->set(
             $this->dbHandler->quoteColumn( 'name' ),
             $query->bindValue( $language->name )

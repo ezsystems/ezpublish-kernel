@@ -91,7 +91,7 @@ class EzcDatabaseTest extends TestCase
     {
         $language = new Language();
 
-        $language->locale = 'de-DE';
+        $language->languageCode = 'de-DE';
         $language->name = 'Deutsch (Deutschland)';
         $language->isEnabled = true;
 

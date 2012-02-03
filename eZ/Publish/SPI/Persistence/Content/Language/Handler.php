@@ -43,7 +43,7 @@ interface Handler
     /**
      * Get all languages
      *
-     * Return list of languages where key of hash is locale.
+     * Return list of languages where key of hash is language code.
      *
      * @return \eZ\Publish\SPI\Persistence\Content\Language[]
      */

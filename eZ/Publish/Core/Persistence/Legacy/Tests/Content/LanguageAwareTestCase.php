@@ -32,13 +32,13 @@ abstract class LanguageAwareTestCase extends TestCase
 
         $languageUs = new Language();
         $languageUs->id = 2;
-        $languageUs->locale = 'eng-US';
+        $languageUs->languageCode = 'eng-US';
 
         $cache->store( $languageUs );
 
         $languageGb = new Language();
         $languageGb->id = 4;
-        $languageGb->locale = 'eng-GB';
+        $languageGb->languageCode = 'eng-GB';
 
         $cache->store( $languageGb );
 
@@ -53,9 +53,9 @@ abstract class LanguageAwareTestCase extends TestCase
         $langLookup->expects( $this->any() )
             ->method( 'getByLocale' )
             ->will( $this->returnCallback(
-                function ( $locale ) use ( $cache )
+                function ( $languageCode ) use ( $cache )
                 {
-                    return $cache->getByLocale( $locale );
+                    return $cache->getByLocale( $languageCode );
                 }
         ) );
 

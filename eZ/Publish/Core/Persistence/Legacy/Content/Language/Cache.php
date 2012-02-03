@@ -39,7 +39,7 @@ class Cache
     public function store( Language $language )
     {
         $this->mapById[$language->id] = $language;
-        $this->mapByLocale[$language->locale] = $language;
+        $this->mapByLocale[$language->languageCode] = $language;
     }
 
     /**
@@ -51,11 +51,11 @@ class Cache
     public function remove( $id )
     {
         unset( $this->mapById[$id] );
-        foreach ( $this->mapByLocale as $locale => $language )
+        foreach ( $this->mapByLocale as $languageCode => $language )
         {
             if ( $language->id == $id )
             {
-                unset( $this->mapByLocale[$locale] );
+                unset( $this->mapByLocale[$languageCode] );
             }
         }
     }
@@ -78,20 +78,20 @@ class Cache
     }
 
     /**
-     * Returns the Language with $locale from the cache
+     * Returns the Language with $languageCode from the cache
      *
-     * @param string $locale
+     * @param string $languageCode
      * @return \eZ\Publish\SPI\Persistence\Content\Language
      * @throws \ezp\Base\Exception\NotFound
      *         if the Language could not be found
      */
-    public function getByLocale( $locale )
+    public function getByLocale( $languageCode )
     {
-        if ( !isset( $this->mapByLocale[$locale] ) )
+        if ( !isset( $this->mapByLocale[$languageCode] ) )
         {
-            throw new Exception\NotFound( 'Language', $locale );
+            throw new Exception\NotFound( 'Language', $languageCode );
         }
-        return $this->mapByLocale[$locale];
+        return $this->mapByLocale[$languageCode];
     }
 
     /**

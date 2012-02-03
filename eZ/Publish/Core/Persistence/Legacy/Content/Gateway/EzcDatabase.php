@@ -893,7 +893,7 @@ class EzcDatabase extends Gateway
                 $qSelect->expr->lAnd(
                     $qSelect->expr->eq( $this->dbHandler->quoteColumn( 'contentobject_id' ), $qSelect->bindValue( $contentId ) ),
                     $qSelect->expr->eq( $this->dbHandler->quoteColumn( 'content_version' ), $qSelect->bindValue( $version ) ),
-                    $qSelect->expr->eq( $this->dbHandler->quoteColumn( 'content_translation' ), $qSelect->bindValue( $language->locale ) )
+                    $qSelect->expr->eq( $this->dbHandler->quoteColumn( 'content_translation' ), $qSelect->bindValue( $language->languageCode ) )
                 )
             );
         $stmt = $qSelect->prepare();
@@ -914,7 +914,7 @@ class EzcDatabase extends Gateway
                 $q->expr->lAnd(
                     $q->expr->eq( $this->dbHandler->quoteColumn( 'contentobject_id' ), $q->bindValue( $contentId ) ),
                     $q->expr->eq( $this->dbHandler->quoteColumn( 'content_version' ), $q->bindValue( $version ) ),
-                    $q->expr->eq( $this->dbHandler->quoteColumn( 'content_translation' ), $q->bindValue( $language->locale ) )
+                    $q->expr->eq( $this->dbHandler->quoteColumn( 'content_translation' ), $q->bindValue( $language->languageCode ) )
                 )
             );
         }
@@ -930,10 +930,10 @@ class EzcDatabase extends Gateway
             $q->bindValue( $language->id, null, \PDO::PARAM_INT )
         )->set(
             $this->dbHandler->quoteColumn( 'content_translation' ),
-            $q->bindValue( $language->locale )
+            $q->bindValue( $language->languageCode )
         )->set(
             $this->dbHandler->quoteColumn( 'real_translation' ),
-            $q->bindValue( $language->locale )
+            $q->bindValue( $language->languageCode )
         )->set(
             $this->dbHandler->quoteColumn( 'name' ),
             $q->bindValue( $name )

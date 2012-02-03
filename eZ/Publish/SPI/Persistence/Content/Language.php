@@ -28,7 +28,7 @@ class Language extends ValueObject
      *
      * @var string
      */
-    public $locale;
+    public $languageCode;
 
     /**
      * Human readable language name

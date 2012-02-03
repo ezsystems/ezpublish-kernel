@@ -171,7 +171,7 @@ class CachingLanguageHandlerTest extends TestCase
     {
         $language = new Language();
         $language->id = 8;
-        $language->locale = 'de-DE';
+        $language->languageCode = 'de-DE';
         return $language;
     }
 
@@ -363,13 +363,13 @@ class CachingLanguageHandlerTest extends TestCase
     {
         $langUs = new Language();
         $langUs->id = 2;
-        $langUs->locale = 'eng-US';
+        $langUs->languageCode = 'eng-US';
         $langUs->name = 'English (American)';
         $langUs->isEnabled = true;
 
         $langGb = new Language();
         $langGb->id = 4;
-        $langGb->locale = 'eng-GB';
+        $langGb->languageCode = 'eng-GB';
         $langGb->name = 'English (United Kingdom)';
         $langGb->isEnabled = true;
 
