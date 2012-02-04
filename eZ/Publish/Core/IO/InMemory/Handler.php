@@ -12,8 +12,8 @@ use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
     eZ\Publish\SPI\IO\BinaryFile,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
     eZ\Publish\SPI\IO\BinaryFileCreateStruct,
-    ezp\Base\Exception\NotFound,
-    ezp\Io\Exception\PathExists,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     DateTime;
 
 /**
@@ -24,7 +24,7 @@ class Handler implements IoHandlerInterface
 {
     /**
      * Files storage
-     * @var array
+     * @var \eZ\Publish\SPI\IO\BinaryFile[]
      */
     private $storage;
 
@@ -48,43 +48,49 @@ class Handler implements IoHandlerInterface
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $file
-     * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @throws \ezp\Base\Exception\PathExists If the target path already exists
+     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createFilestruct
+     *
+     * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
      */
-    public function create( BinaryFileCreateStruct $file )
+    public function create( BinaryFileCreateStruct $createFilestruct )
     {
-        if ( isset( $this->storage[$file->path] ) )
+        if ( isset( $this->storage[$createFilestruct->path] ) )
         {
-            throw new PathExists( $file->path );
+            throw new InvalidArgumentException(
+                "\$createFilestruct->path",
+                "file '{$createFilestruct->path}' already exists"
+            );
         }
 
-        $this->data[$file->path] = base64_encode( fread( $file->getInputStream(), $file->size ) );
+        $this->data[$createFilestruct->path] = base64_encode(
+            fread( $createFilestruct->getInputStream(), $createFilestruct->size )
+        );
 
         $binaryFile = new BinaryFile();
-        $binaryFile->path = $file->path;
-        $binaryFile->mimeType = $file->mimeType;
+        $binaryFile->path = $createFilestruct->path;
+        $binaryFile->mimeType = $createFilestruct->mimeType;
         $binaryFile->ctime = new DateTime;
         $binaryFile->mtime = clone $binaryFile->ctime;
-        $binaryFile->originalFile = $file->originalFile;
-        $binaryFile->size = $file->size;
-        $this->storage[$binaryFile->path] = $binaryFile;
+        $binaryFile->originalFile = $createFilestruct->originalFile;
+        $binaryFile->size = $createFilestruct->size;
 
-        return $this->storage[$binaryFile->path];
+        return $this->storage[$binaryFile->path] = $binaryFile;
     }
 
     /**
      * Deletes the existing BinaryFile with path $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the file doesn't exist
+     *
      * @param string $path
-     * @throws \ezp\Base\Exception\NotFound If the file doesn't exist
      */
     public function delete( $path )
     {
         if ( !isset( $this->storage[$path] ) )
         {
-            throw new NotFound( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $path );
         }
 
         unset( $this->storage[$path] );
@@ -94,30 +100,34 @@ class Handler implements IoHandlerInterface
     /**
      * Updates the file identified by $path with data from $updateFile
      *
-     * @param string $path
-     * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFile
-     * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the source path doesn't exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @throws \ezp\Base\Exception\NotFound If the source path doesn't exist
-     * @throws \ezp\Base\Exception\PathExists If the target path already exists
+     * @param string $path
+     * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFileStruct
+     *
+     * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
      */
-    public function update( $path, BinaryFileUpdateStruct $updateFile )
+    public function update( $path, BinaryFileUpdateStruct $updateFileStruct )
     {
         if ( !isset( $this->storage[$path] ) )
         {
-            throw new NotFound( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $path );
         }
 
         // path
-        if ( $updateFile->path !== null && $updateFile->path != $path )
+        if ( $updateFileStruct->path !== null && $updateFileStruct->path != $path )
         {
-            if ( isset( $this->storage[$updateFile->path] ) )
+            if ( isset( $this->storage[$updateFileStruct->path] ) )
             {
-                throw new PathExists( $updateFile->path );
+                throw new InvalidArgumentException(
+                    "\$updateFileStruct->path",
+                    "file '{$updateFileStruct->path}' already exists"
+                );
             }
 
             $oldPath = $path;
-            $newPath = $updateFile->path;
+            $newPath = $updateFileStruct->path;
 
             $this->storage[$newPath] = $this->storage[$oldPath];
             $this->data[$newPath] = $this->data[$oldPath];
@@ -130,24 +140,24 @@ class Handler implements IoHandlerInterface
             $path = $newPath;
         }
 
-        $resource = $updateFile->getInputStream();
+        $resource = $updateFileStruct->getInputStream();
         if ( $resource !== null )
         {
-            $this->data[$path] = base64_encode( fread( $resource, $updateFile->size ) );
-            if ( $updateFile->size !== null )
+            $this->data[$path] = base64_encode( fread( $resource, $updateFileStruct->size ) );
+            if ( $updateFileStruct->size !== null )
             {
-                $this->storage[$path]->size = $updateFile->size;
+                $this->storage[$path]->size = $updateFileStruct->size;
             }
         }
 
-        if ( $updateFile->mtime !== null && $updateFile->mtime !== $this->storage[$path]->mtime )
+        if ( $updateFileStruct->mtime !== null && $updateFileStruct->mtime !== $this->storage[$path]->mtime )
         {
-            $this->storage[$path]->mtime = $updateFile->mtime;
+            $this->storage[$path]->mtime = $updateFileStruct->mtime;
         }
 
-        if ( $updateFile->ctime !== null && $updateFile->ctime !== $this->storage[$path]->ctime )
+        if ( $updateFileStruct->ctime !== null && $updateFileStruct->ctime !== $this->storage[$path]->ctime )
         {
-            $this->storage[$path]->ctime = $updateFile->ctime;
+            $this->storage[$path]->ctime = $updateFileStruct->ctime;
         }
 
         return $this->storage[$path];
@@ -157,7 +167,8 @@ class Handler implements IoHandlerInterface
      * Checks if the BinaryFile with path $path exists
      *
      * @param string $path
-     * @return bool
+     *
+     * @return boolean
      */
     public function exists( $path )
     {
@@ -167,15 +178,17 @@ class Handler implements IoHandlerInterface
     /**
      * Loads the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
+     *
      * @param string $path
+     *
      * @return \eZ\Publish\SPI\IO\BinaryFile
-     * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function load( $path )
     {
         if ( !isset( $this->storage[$path] ) )
         {
-            throw new NotFound( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $path );
         }
         return $this->storage[$path];
     }
@@ -183,15 +196,17 @@ class Handler implements IoHandlerInterface
     /**
      * Returns a file resource to the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
+     *
      * @param string $path
+     *
      * @return resource
-     * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function getFileResource( $path )
     {
         if ( !isset( $this->storage[$path] ) )
         {
-            throw new NotFound( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $path );
         }
         $uri = 'data://' . $this->storage[$path]->mimeType . ';base64,' . $this->data[$path];
 
@@ -201,15 +216,17 @@ class Handler implements IoHandlerInterface
     /**
      * Returns the contents of the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
+     *
      * @param string $path
+     *
      * @return string
-     * @throws \ezp\Base\Exception\NotFound if the file couldn't be found
      */
     public function getFileContents( $path )
     {
         if ( !isset( $this->storage[$path] ) )
         {
-            throw new NotFound( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $path );
         }
         return base64_decode( $this->data[$path] );
     }

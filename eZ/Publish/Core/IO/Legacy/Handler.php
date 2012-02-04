@@ -13,9 +13,8 @@ use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
     eZ\Publish\SPI\IO\BinaryFile,
     eZ\Publish\SPI\IO\BinaryFileCreateStruct,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
-    ezp\Io\Exception\PathExists,
-    ezp\Base\Exception\InvalidArgumentValue,
-    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
     eZClusterFileHandler,
     DateTime,
     finfo;
@@ -38,48 +37,53 @@ class Handler implements IoHandlerInterface
 
     /**
      * Cluster handler instance
-     * @var eZClusterFileHandlerInterface
+     * @var \eZClusterFileHandlerInterface
      */
     private $clusterHandler = null;
 
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $file
-     * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @throws \ezp\Base\Exception\PathExists If the target path already exists
+     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createFilestruct
+     *
+     * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
      */
-    public function create( BinaryFileCreateStruct $file )
+    public function create( BinaryFileCreateStruct $createFilestruct )
     {
-        if ( $this->exists( $file->path ) )
+        if ( $this->exists( $createFilestruct->path ) )
         {
-            throw new PathExists( $file->path );
+            throw new InvalidArgumentException(
+                "\$createFilestruct->path",
+                "file '{$createFilestruct->path}' already exists"
+            );
         }
 
         // @todo Build a path / scope mapper
         $scope = 'todo';
         $this->getClusterHandler()->fileStoreContents(
-            $file->path,
-            fread( $file->getInputStream(), $file->size ),
-            $file->mimeType,
+            $createFilestruct->path,
+            fread( $createFilestruct->getInputStream(), $createFilestruct->size ),
+            $createFilestruct->mimeType,
             $scope
         );
 
-        return $this->load( $file->path );
+        return $this->load( $createFilestruct->path );
     }
 
     /**
      * Deletes the existing BinaryFile with path $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the file doesn't exist
+     *
      * @param string $path
-     * @throws \ezp\Base\Exception\NotFound If the file doesn't exist
      */
     public function delete( $path )
     {
         if ( !$this->getClusterHandler()->fileExists( $path ) )
         {
-            throw new NotFound( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $path );
         }
 
         $this->getClusterHandler()->fileDelete( $path );
@@ -88,38 +92,42 @@ class Handler implements IoHandlerInterface
     /**
      * Updates the file identified by $path with data from $updateFile
      *
-     * @param string $path
-     * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFile
-     * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the source path doesn't exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @throws \ezp\Base\Exception\NotFound If the source path doesn't exist
-     * @throws \ezp\Base\Exception\PathExists If the target path already exists
+     * @param string $path
+     * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFileStruct
+     *
+     * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
      */
-    public function update( $path, BinaryFileUpdateStruct $updateFile )
+    public function update( $path, BinaryFileUpdateStruct $updateFileStruct )
     {
         $clusterHandler = $this->getClusterHandler();
         if ( !$clusterHandler->fileExists( $path ) )
         {
-            throw new NotFound( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $path );
         }
 
         // path
-        if ( $updateFile->path !== null && $updateFile->path != $path )
+        if ( $updateFileStruct->path !== null && $updateFileStruct->path != $path )
         {
-            if ( $clusterHandler->fileExists( $updateFile->path ) )
+            if ( $clusterHandler->fileExists( $updateFileStruct->path ) )
             {
-                throw new PathExists( $updateFile->path );
+                throw new InvalidArgumentException(
+                    "\$updateFileStruct->path",
+                    "file '{$updateFileStruct->path}' already exists"
+                );
             }
-            $clusterHandler->fileMove( $path, $updateFile->path );
+            $clusterHandler->fileMove( $path, $updateFileStruct->path );
 
             // update the path we are working on
-            $path = $updateFile->path;
+            $path = $updateFileStruct->path;
         }
 
-        $resource = $updateFile->getInputStream();
+        $resource = $updateFileStruct->getInputStream();
         if ( $resource !== null )
         {
-            $binaryUpdateData = fread( $resource, $updateFile->size );
+            $binaryUpdateData = fread( $resource, $updateFileStruct->size );
             $clusterFile = eZClusterFileHandler::instance( $path );
             $metaData = $clusterFile->metaData;
             $scope = isset( $metaData['scope'] ) ? $metaData['scope'] : false;
@@ -136,7 +144,8 @@ class Handler implements IoHandlerInterface
      * Checks if the BinaryFile with path $path exists
      *
      * @param string $path
-     * @return bool
+     *
+     * @return boolean
      */
     public function exists( $path )
     {
@@ -146,15 +155,17 @@ class Handler implements IoHandlerInterface
     /**
      * Loads the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
+     *
      * @param string $path
+     *
      * @return \eZ\Publish\SPI\IO\BinaryFile
-     * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function load( $path )
     {
         if ( !$this->exists( $path ) )
         {
-            throw new NotFound( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $path );
         }
 
         $clusterFile = eZClusterFileHandler::instance( $path );
@@ -190,27 +201,31 @@ class Handler implements IoHandlerInterface
     /**
      * Returns a file resource to the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
+     *
      * @param string $path
+     *
      * @return resource
-     * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function getFileResource( $path )
     {
-        return $this->getFileResourceProvider()->getResource( $this->load( $path ) );
+        return $this->getFileResourceProvider()->getResource( $this->load( $path ) );// @todo incorrect object provided to getResource?
     }
 
     /**
      * Returns the contents of the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
+     *
      * @param string $path
+     *
      * @return string
-     * @throws \ezp\Base\Exception\NotFound if the file couldn't be found
      */
     public function getFileContents( $path )
     {
         if ( !$this->getClusterHandler()->fileExists( $path ) )
         {
-            throw new NotFound( 'BinaryFile', $path );
+            throw new NotFoundException( 'BinaryFile', $path );
         }
 
         return $this->getClusterHandler()->fileFetchContents( $path );
@@ -251,18 +266,20 @@ class Handler implements IoHandlerInterface
     /**
      * Returns a mimeType from a file path, using fileinfo
      *
-     * @throws \ezp\Base\Exception\NotFound If file does not exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If file does not exist
+     *
      * @param string $path
+     *
      * @return string
      */
     protected static function getMimeTypeFromPath( $path )
     {
-        if ( file_exists( $path ) )
+        if ( !file_exists( $path ) )
         {
-            $finfo = new finfo( FILEINFO_MIME_TYPE );
-            return $finfo->file( $path );
+            throw new NotFoundException( 'BinaryFile', $path );
         }
 
-        throw new NotFound( 'File', $path );
+        $finfo = new finfo( FILEINFO_MIME_TYPE );
+        return $finfo->file( $path );
     }
 }

@@ -8,11 +8,10 @@
 
 namespace eZ\Publish\Core\IO\Dispatcher;
 
-use ezp\Base\Exception\InvalidArgumentType,
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
     eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
-    eZ\Publish\SPI\IO\BinaryFileCreateStruct,
-    DateTime;
+    eZ\Publish\SPI\IO\BinaryFileCreateStruct;
 
 /**
  * Handler interface for handling of binary files I/O
@@ -46,7 +45,7 @@ class Handler implements IoHandlerInterface
      *                   )
      *               )
      *
-     * @throws \ezp\Base\Exception\InvalidArgumentType If $config does not contain default handler that implements
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $config does not contain default handler that implements
      *         Handler, handlers is unset or empty (hence you could have used default directly), one of the 'patterns'
      *         is unset or empty (hence it could have been default) or a 'handler' item does not implement Handler
      */
@@ -54,11 +53,11 @@ class Handler implements IoHandlerInterface
     {
         if ( empty( $config['default'] ) || !$config['default'] instanceof IoHandlerInterface )
         {
-            throw new InvalidArgumentType( "\$config['default']", "eZ\\Publish\\SPI\\IO\\Handler" );
+            throw new InvalidArgumentException( "\$config['default']", "must be of type eZ\\Publish\\SPI\\IO\\Handler" );
         }
         else if ( empty( $config['handlers'] ) )
         {
-            throw new InvalidArgumentType( "\$config['handlers']", "array" );
+            throw new InvalidArgumentException( "\$config['handlers']", "must be of type array" );
         }
 
         // Validate handlers so it does not need to be done on every call to getHandler()
@@ -66,11 +65,17 @@ class Handler implements IoHandlerInterface
         {
             if ( empty( $handler['contains'] ) && empty( $handler['prefix'] ) && empty( $handler['suffix'] ) )
             {
-                throw new InvalidArgumentType( "\$config['handlers'][$key][contains|prefix|suffix]", "string" );
+                throw new InvalidArgumentException(
+                    "\$config['handlers'][$key][contains|prefix|suffix]",
+                    "either of these must be present and of type string"
+                );
             }
             else if ( empty( $handler['handler'] ) || !$handler['handler'] instanceof IoHandlerInterface )
             {
-                throw new InvalidArgumentType( "\$config['handlers'][$key]['handler']", "eZ\\Publish\\SPI\\IO\\Handler" );
+                throw new InvalidArgumentException(
+                    "\$config['handlers'][$key]['handler']",
+                    "must be of type eZ\\Publish\\SPI\\IO\\Handler"
+                );
             }
         }
 
@@ -80,44 +85,50 @@ class Handler implements IoHandlerInterface
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $file
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
+     *
+     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createFilestruct
+     *
      * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
-     * @uses \eZ\Publish\SPI\IO\Handler::create() To create the binary file in handler
      */
-    public function create( BinaryFileCreateStruct $file )
+    public function create( BinaryFileCreateStruct $createFilestruct )
     {
-        return $this->getHandler( $file->path )->create( $file );
+        return $this->getHandler( $createFilestruct->path )->create( $createFilestruct );
     }
 
     /**
      * Deletes the existing BinaryFile with path $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the file doesn't exist
+     *
      * @param string $path
-     * @uses \eZ\Publish\SPI\IO\Handler::delete() To delete the binary file in handler
      */
     public function delete( $path )
     {
-        return $this->getHandler( $path )->delete( $path );
+        $this->getHandler( $path )->delete( $path );
     }
 
     /**
      * Updates the file identified by $path with data from $updateFile
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the source path doesn't exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
+     *
      * @param string $path
-     * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFile
+     * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFileStruct
+     *
      * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
-     * @uses \eZ\Publish\SPI\IO\Handler::update() To update the binary file in handler
      */
-    public function update( $path, BinaryFileUpdateStruct $updateFile )
+    public function update( $path, BinaryFileUpdateStruct $updateFileStruct )
     {
-        if ( $path === $updateFile->path )
-            return $this->getHandler( $path )->update( $path, $updateFile );
+        if ( $path === $updateFileStruct->path )
+            return $this->getHandler( $path )->update( $path, $updateFileStruct );
 
         // When file path has changed, check if we should move from one handler to another
         $oldHandler = $this->getHandler( $path );
-        $newHandler = $this->getHandler( $updateFile->path);
+        $newHandler = $this->getHandler( $updateFileStruct->path);
         if ( $oldHandler === $newHandler )
-            return $oldHandler->update( $path, $updateFile );
+            return $oldHandler->update( $path, $updateFileStruct );
 
         // Move file from old to new handler
         throw new \Exception( '@TODO: Moving from one io handler to another one is not implemented!' );
@@ -137,8 +148,8 @@ class Handler implements IoHandlerInterface
      * Checks if the BinaryFile with path $path exists
      *
      * @param string $path
-     * @return bool
-     * @uses \eZ\Publish\SPI\IO\Handler::exists() To see if file exists in handler
+     *
+     * @return boolean
      */
     public function exists( $path )
     {
@@ -148,9 +159,11 @@ class Handler implements IoHandlerInterface
     /**
      * Loads the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
+     *
      * @param string $path
+     *
      * @return \eZ\Publish\SPI\IO\BinaryFile
-     * @uses \eZ\Publish\SPI\IO\Handler::load() To load the binary file from handler
      */
     public function load( $path )
     {
@@ -160,9 +173,11 @@ class Handler implements IoHandlerInterface
     /**
      * Returns a file resource to the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
+     *
      * @param string $path
+     *
      * @return resource
-     * @uses \eZ\Publish\SPI\IO\Handler::getFileResource() To get the binary file resource from handler
      */
     public function getFileResource( $path )
     {
@@ -172,9 +187,11 @@ class Handler implements IoHandlerInterface
     /**
      * Returns the contents of the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
+     *
      * @param string $path
+     *
      * @return string
-     * @uses \eZ\Publish\SPI\IO\Handler::getFileContents() To get the binary file content from handler
      */
     public function getFileContents( $path )
     {
@@ -187,6 +204,7 @@ class Handler implements IoHandlerInterface
      * @internal Depends on {@link $config} being validated by {@link __construct()}!
      *
      * @param string $path
+     *
      * @return \eZ\Publish\SPI\IO\Handler
      */
     private function getHandler( $path )

@@ -21,65 +21,75 @@ interface Handler
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $file
-     * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @throws \ezp\Base\Exception\PathExists If the target path already exists
+     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $createFilestruct
+     *
+     * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
      */
-    public function create( BinaryFileCreateStruct $file );
+    public function create( BinaryFileCreateStruct $createFilestruct );
 
     /**
      * Deletes the existing BinaryFile with path $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the file doesn't exist
+     *
      * @param string $path
-     * @throws \ezp\Base\Exception\NotFound If the file doesn't exist
      */
     public function delete( $path );
 
     /**
      * Updates the file identified by $path with data from $updateFile
      *
-     * @param string $path
-     * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFile
-     * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the source path doesn't exist
+     * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If the target path already exists
      *
-     * @throws \ezp\Base\Exception\NotFound If the source path doesn't exist
-     * @throws \ezp\Base\Exception\PathExists If the target path already exists
+     * @param string $path
+     * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFileStruct
+     *
+     * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
      */
-    public function update( $path, BinaryFileUpdateStruct $updateFile );
+    public function update( $path, BinaryFileUpdateStruct $updateFileStruct );
 
     /**
      * Checks if the BinaryFile with path $path exists
      *
      * @param string $path
-     * @return bool
+     *
+     * @return boolean
      */
-    public function exists( $file );
+    public function exists( $path );
 
     /**
      * Loads the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
+     *
      * @param string $path
+     *
      * @return \eZ\Publish\SPI\IO\BinaryFile
-     * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function load( $path );
 
     /**
      * Returns a file resource to the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If no file identified by $path exists
+     *
      * @param string $path
+     *
      * @return resource
-     * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function getFileResource( $path );
 
     /**
      * Returns the contents of the BinaryFile identified by $path
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the file couldn't be found
+     *
      * @param string $path
+     *
      * @return string
-     * @throws \ezp\Base\Exception\NotFound if the file couldn't be found
      */
     public function getFileContents( $path );
 }
