@@ -8,9 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Base\Exception;
-use eZ\Publish\Core\Base\Exception,
-    Exception as PHPException,
-    InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
+    Exception;
 
 /**
  * Invalid Argument Type Exception implementation
@@ -18,7 +17,7 @@ use eZ\Publish\Core\Base\Exception,
  * @use: throw new InvalidArgument( 'nodes', 'array' );
  *
  */
-class InvalidArgumentValue extends InvalidArgumentException implements Exception
+class InvalidArgumentValue extends InvalidArgumentException
 {
     /**
      * Generates: Argument '{$argumentName}' got invalid value '{$value}'
@@ -26,9 +25,9 @@ class InvalidArgumentValue extends InvalidArgumentException implements Exception
      * @param string $argumentName
      * @param mixed $value
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
-    public function __construct( $argumentName, $value, $className = null, PHPException $previous = null )
+    public function __construct( $argumentName, $value, $className = null, Exception $previous = null )
     {
         parent::__construct(
             "Argument '{$argumentName}' got invalid value '" . var_export( $value, true ) . "'" .

@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Exception;
-use eZ\Publish\Core\Base\Exception,
-    Exception as PHPException,
+use Exception,
     LogicException;
 
 /**
@@ -19,16 +18,16 @@ use eZ\Publish\Core\Base\Exception,
  *   throw new Logic( "readWriteProperties", "property {$property} could not be found." );
  *
  */
-class Logic extends LogicException implements Exception
+class Logic extends LogicException implements \ezp\Base\Exception
 {
     /**
      * Generates: '$what' has a logic error[, $consequence]
      *
      * @param string $what
      * @param string|null $consequence Optional string to explain consequence of configuration mistake
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
-    public function __construct( $what, $consequence = null, PHPException $previous = null )
+    public function __construct( $what, $consequence = null, Exception $previous = null )
     {
         if ( $consequence === null )
             parent::__construct( "'{$what}' has a logic error", 0, $previous );

@@ -8,9 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Base\Exception;
-use eZ\Publish\Core\Base\Exception,
-    Exception as PHPException,
-    InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
+    Exception;
 
 /**
  * Property Permission Exception implementation
@@ -19,7 +18,7 @@ use eZ\Publish\Core\Base\Exception,
  *   throw new PropertyPermission( 'nodeId', PropertyPermission::READ, __CLASS__ );
  *
  */
-class PropertyPermission extends InvalidArgumentException implements Exception
+class PropertyPermission extends InvalidArgumentException
 {
     /**
      * Used when the property is not readable
@@ -37,9 +36,9 @@ class PropertyPermission extends InvalidArgumentException implements Exception
      * @param string $propertyName
      * @param string $mode
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
-    public function __construct( $propertyName, $mode = self::READ, $className = null, PHPException $previous = null )
+    public function __construct( $propertyName, $mode = self::READ, $className = null, Exception $previous = null )
     {
         if ( $className === null )
             parent::__construct( "Property '{$propertyName}' is not {$mode}", 0, $previous );

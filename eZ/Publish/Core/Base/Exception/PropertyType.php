@@ -8,9 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Base\Exception;
-use eZ\Publish\Core\Base\Exception,
-    Exception as PHPException,
-    InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
+    Exception;
 
 /**
  * Property Type Exception implementation
@@ -19,7 +18,7 @@ use eZ\Publish\Core\Base\Exception,
  *   throw new PropertyType( 'nodeId', 'int', __CLASS__ );
  *
  */
-class PropertyType extends InvalidArgumentException implements Exception
+class PropertyType extends InvalidArgumentException
 {
     /**
      * Generates: Property '{$propertyName}' can only be of type '{$type}'
@@ -27,9 +26,9 @@ class PropertyType extends InvalidArgumentException implements Exception
      * @param string $propertyName
      * @param string $type
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
-    public function __construct( $propertyName, $type, $className = null, PHPException $previous = null )
+    public function __construct( $propertyName, $type, $className = null, \Exception $previous = null )
     {
         if ( $className === null )
             parent::__construct( "Property '{$propertyName}' must be of type '{$type}'", 0, $previous );

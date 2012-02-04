@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Exception;
-use eZ\Publish\Core\Base\Exception,
-    Exception as PHPException,
+use Exception,
     LogicException;
 
 /**
@@ -19,16 +18,16 @@ use eZ\Publish\Core\Base\Exception,
  *   throw new MissingClass( $className, 'field type' );
  *
  */
-class MissingClass extends LogicException implements Exception
+class MissingClass extends LogicException implements \ezp\Base\Exception
 {
     /**
      * Generates: Could not find[ {$classType}] class '{$className}'
      *
      * @param string $className
      * @param string|null $classType Optional string to specify what kind of class this is
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
-    public function __construct( $className, $classType = null, PHPException $previous = null )
+    public function __construct( $className, $classType = null, Exception $previous = null )
     {
         if ( $classType === null )
             parent::__construct( "Could not find class '{$className}'", 0, $previous );

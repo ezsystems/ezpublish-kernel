@@ -8,9 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Base\Exception;
-use eZ\Publish\Core\Base\Exception,
-    Exception as PHPException,
-    InvalidArgumentException;
+use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
+    Exception;
 
 /**
  * Property Not Found Exception implementation
@@ -19,16 +18,16 @@ use eZ\Publish\Core\Base\Exception,
  *   throw new PropertyNotFound( 'nodeId', __CLASS__ );
  *
  */
-class PropertyNotFound extends InvalidArgumentException implements Exception
+class PropertyNotFound extends InvalidArgumentException
 {
     /**
      * Generates: Property '{$propertyName}' not found
      *
      * @param string $propertyName
      * @param string|null $className Optionally to specify class in abstract/parent classes
-     * @param PHPException|null $previous
+     * @param \Exception|null $previous
      */
-    public function __construct( $propertyName, $className = null, PHPException $previous = null )
+    public function __construct( $propertyName, $className = null, Exception $previous = null )
     {
         if ( $className === null )
             parent::__construct( "Property '{$propertyName}' not found", 0, $previous );

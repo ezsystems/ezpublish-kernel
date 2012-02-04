@@ -8,7 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Base\Exception;
-use Exception as PHPException;
+use eZ\Publish\API\Repository\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exception\Httpable,
+    Exception;
 
 /**
  * Not Found Exception implementation
@@ -17,20 +19,8 @@ use Exception as PHPException;
  *   throw new NotFound( 'Content', 42 );
  *
  */
-class NotFound extends \ezp\Base\Exception\Http
+class NotFoundException extends NotFoundException implements Httpable
 {
-    /**
-     * What was not found
-     * @var string
-     */
-    public $what;
-
-    /**
-     * Identifier of what was not found
-     * @var mixed
-     */
-    public $identifier;
-
     /**
      * Generates: Could not find '{$what}' with identifier '{$identifier}'
      *
@@ -38,10 +28,8 @@ class NotFound extends \ezp\Base\Exception\Http
      * @param mixed $identifier
      * @param \Exception|null $previous
      */
-    public function __construct( $what, $identifier, PHPException $previous = null )
+    public function __construct( $what, $identifier, Exception $previous = null )
     {
-        $this->what = $what;
-        $this->identifier = var_export( $identifier, true );
-        parent::__construct( "Could not find '{$what}' with identifier '" . $this->identifier . "'", self::NOT_FOUND, $previous );
+        parent::__construct( "Could not find '{$what}' with identifier '" . $identifier . "'", self::NOT_FOUND, $previous );
     }
 }
