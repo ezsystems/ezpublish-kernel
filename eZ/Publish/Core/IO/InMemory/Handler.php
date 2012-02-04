@@ -64,7 +64,7 @@ class Handler implements IoHandlerInterface
 
         $binaryFile = new BinaryFile();
         $binaryFile->path = $file->path;
-        $binaryFile->contentType = $file->contentType;
+        $binaryFile->mimeType = $file->mimeType;
         $binaryFile->ctime = new DateTime;
         $binaryFile->mtime = clone $binaryFile->ctime;
         $binaryFile->originalFile = $file->originalFile;
@@ -193,7 +193,7 @@ class Handler implements IoHandlerInterface
         {
             throw new NotFound( 'BinaryFile', $path );
         }
-        $uri = 'data://' . (string)$this->storage[$path]->contentType . ';base64,' . $this->data[$path];
+        $uri = 'data://' . $this->storage[$path]->mimeType . ';base64,' . $this->data[$path];
 
         return fopen( $uri, 'rb' );
     }

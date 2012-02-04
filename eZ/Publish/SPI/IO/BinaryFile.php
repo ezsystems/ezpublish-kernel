@@ -19,42 +19,49 @@ class BinaryFile
 {
     /**
      * Relative path to the file
+     *
      * @var string
      */
     public $path;
 
     /**
      * File size, in bytes
+     *
      * @var int
      */
     public $size;
 
     /**
      * File modification time
+     *
      * @var \DateTime
      */
     public $mtime;
 
     /**
      * File creation time
+     *
      * @var \DateTime
      */
     public $ctime;
 
     /**
-     * File contentType (image/jpeg, audio/mp3, etc)
-     * @var \eZ\Publish\SPI\IO\ContentType
+     * File mime type (aka contentType, like image/jpeg, audio/mp3, etc)
+     *
+     * @var string
      */
-    public $contentType;
+    public $mimeType;
 
     /**
      * HTTP URI to the binary file
+     *
      * @var string
      */
     public $uri;
 
     /**
      * Original file name
+     *
      * @var string
      */
     public $originalFile;

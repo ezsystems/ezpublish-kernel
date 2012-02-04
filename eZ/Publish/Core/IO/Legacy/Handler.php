@@ -13,12 +13,12 @@ use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
     eZ\Publish\SPI\IO\BinaryFile,
     eZ\Publish\SPI\IO\BinaryFileCreateStruct,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
-    ezp\Io\ContentType,
     ezp\Io\Exception\PathExists,
     ezp\Base\Exception\InvalidArgumentValue,
     ezp\Base\Exception\NotFound,
     eZClusterFileHandler,
-    DateTime;
+    DateTime,
+    finfo;
 
 /**
  * Legacy Io/Storage handler, based on eZ Cluster
@@ -62,7 +62,7 @@ class Handler implements IoHandlerInterface
         $this->getClusterHandler()->fileStoreContents(
             $file->path,
             fread( $file->getInputStream(), $file->size ),
-            (string)$file->contentType,
+            $file->mimeType,
             $scope
         );
 
@@ -175,12 +175,11 @@ class Handler implements IoHandlerInterface
         // will only work with some ClusterFileHandlers (DB based ones, not with FS ones)
         if ( isset( $metaData['datatype'] ) )
         {
-            list( $type, $subType ) = explode( '/', $metaData['datatype'] );
-            $file->contentType = new ContentType( $type, $subType );
+            $file->mimeType = $metaData['datatype'];
         }
         else
         {
-            $file->contentType = ContentType::getFromPath( $path );
+            $file->mimeType = self::getMimeTypeFromPath( $path );
         }
 
         $file->uri = $file->path;
@@ -247,5 +246,23 @@ class Handler implements IoHandlerInterface
         if ( $this->clusterHandler === null )
             $this->clusterHandler = eZClusterFileHandler::instance();
         return $this->clusterHandler;
+    }
+
+    /**
+     * Returns a mimeType from a file path, using fileinfo
+     *
+     * @throws \ezp\Base\Exception\NotFound If file does not exist
+     * @param string $path
+     * @return string
+     */
+    protected static function getMimeTypeFromPath( $path )
+    {
+        if ( file_exists( $path ) )
+        {
+            $finfo = new finfo( FILEINFO_MIME_TYPE );
+            return $finfo->file( $path );
+        }
+
+        throw new NotFound( 'File', $path );
     }
 }

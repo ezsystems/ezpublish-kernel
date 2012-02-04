@@ -9,14 +9,21 @@
 
 namespace eZ\Publish\SPI\IO;
 
+use eZ\Publish\SPI\IO\BinaryFile;
+
 /**
  * Update struct for BinaryFile objects
  */
-
 class BinaryFileUpdateStruct extends BinaryFile
 {
     /**
+     * @var resource
+     */
+    private $inputStream;
+
+    /**
      * Returns the file's input resource
+     *
      * @return resource
      */
     public function getInputStream()
@@ -26,12 +33,11 @@ class BinaryFileUpdateStruct extends BinaryFile
 
     /**
      * Sets the file's input resource
+     *
      * @param resource $inputStream
      */
     public function setInputStream( $inputStream )
     {
         $this->inputStream = $inputStream;
     }
-
-    private $inputStream;
 }
