@@ -7,11 +7,6 @@ namespace eZ\Publish\API\Repository\Values\IO;
  */
 class ContentType
 {
-    public function __construct( $mimetype )
-    {
-        //@todo implement converstion from <type>/<subtype>
-    }
-
     /**
      * The type (audio, video, text, image)
      * @var string
@@ -25,7 +20,19 @@ class ContentType
     public $subType;
 
     /**
+     * Create object and set properties based on $mimeType
+     *
+     * @param $mimetype
+     */
+    public function __construct( $mimetype )
+    {
+        list( $this->type, $this->subType ) = explode( '/', $mimetype );
+    }
+
+    /**
      * Returns the ContentType's string representation: type/subtype
+     *
+     * @return string
      */
     public function __toString()
     {
