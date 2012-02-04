@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\IO\Tests\Storage;
-use eZ\Publish\Core\IO\Legacy\Handler as Legacy,
+use eZ\Publish\Core\IO\LegacyHandler as Legacy,
     eZ\Publish\SPI\IO\BinaryFile,
     eZ\Publish\SPI\IO\BinaryFileCreateStruct,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
@@ -67,7 +67,7 @@ class LegacyTest extends BaseHandlerTest
      */
     public function testUpdateMtime()
     {
-        self::markTestSkipped( "Not supported by Legacy io handler, aka incomplete" );
+        self::markTestIncomplete( "Not supported by Legacy io handler, aka incomplete" );
     }
 
     /**
@@ -75,6 +75,6 @@ class LegacyTest extends BaseHandlerTest
      */
     public function testUpdateCtime()
     {
-        self::markTestSkipped( "Not supported by Legacy io handler, aka incomplete" );
+        self::markTestIncomplete( "Not supported by Legacy io handler, aka incomplete" );
     }
 }

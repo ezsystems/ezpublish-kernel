@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\Legacy;
+namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
     eZ\Publish\SPI\IO\BinaryFile,
@@ -27,7 +27,7 @@ use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
  * - mtime can not be modified, and will always automatically be set depending on the server time upon each write operation
  */
 
-class Handler implements IoHandlerInterface
+class LegacyHandler implements IoHandlerInterface
 {
     /**
      * File resource provider

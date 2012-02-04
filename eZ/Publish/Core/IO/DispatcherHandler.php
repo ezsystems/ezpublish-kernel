@@ -6,7 +6,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\Dispatcher;
+namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
     eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
  * Handler interface for handling of binary files I/O
  */
 
-class Handler implements IoHandlerInterface
+class DispatcherHandler implements IoHandlerInterface
 {
     /**
      * Io\Storage handler instances, {@see __construct()}

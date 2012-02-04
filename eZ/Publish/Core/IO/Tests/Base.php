@@ -11,8 +11,8 @@ namespace eZ\Publish\Core\IO\Tests;
 use eZ\Publish\SPI\IO\BinaryFile,
     eZ\Publish\SPI\IO\BinaryFileCreateStruct,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
-    ezp\Io\ContentType,
-    DateTime;
+    DateTime,
+    finfo;
 
 abstract class Base extends \PHPUnit_Framework_TestCase
 {
@@ -29,12 +29,6 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     protected $imageInputPath;
 
     /**
-     * Repository file available for testing
-     * @var BinaryFile
-     */
-    protected $testFile;
-
-    /**
      * Setup test
      */
     public function setUp()
@@ -42,7 +36,6 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         parent::setUp();
         $this->ioHandler = $this->getIoHandler();
         $this->imageInputPath = __DIR__ . DIRECTORY_SEPARATOR . 'ezplogo.gif';
-        self::markTestIncomplete( "Needs to be rewritten to test handler instead of Service" );
     }
 
     /**
@@ -59,131 +52,54 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         unset( $this->ioHandler );
     }
 
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::create
+     */
     public function testCreate()
     {
         $repositoryPath = 'var/test/storage/images/ezplogo.gif';
-        $binaryFile = $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->ioHandler->create( $struct );
 
-        self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $binaryFile );
+
+        self::assertInstanceOf( 'eZ\Publish\SPI\IO\BinaryFile', $binaryFile );
         self::assertEquals( $repositoryPath, $binaryFile->path );
         self::assertEquals( 1928, $binaryFile->size );
         self::assertInstanceOf( 'DateTime', $binaryFile->mtime );
         self::assertNotEquals( 0, $binaryFile->mtime->getTimestamp() );
-        self::assertEquals( new ContentType( 'image', 'gif' ), $binaryFile->contentType );
+        self::assertEquals( 'image/gif', $binaryFile->mimeType );
     }
 
     /**
-     * @expectedException ezp\Io\Exception\PathExists
+     * @covers \eZ\Publish\SPI\Io\Handler::create
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testCreatePathExists()
     {
         $repositoryPath = 'var/test/storage/images/testCreateFileExists.gif';
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
 
-        $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
-        $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
-    }
-
-    public function testExists()
-    {
-        $repositoryPath = 'var/test/storage/exists.gif';
-
-        self::assertFalse( $this->binaryService->exists( $repositoryPath ) );
-
-        $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
-
-        self::assertTrue( $this->binaryService->exists( $repositoryPath ) );
-    }
-
-    public function testDelete()
-    {
-        $repositoryPath = 'var/test/storage/delete.gif';
-
-        $binaryFileCreateStruct = $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
-
-        self::assertTrue( $this->binaryService->exists( $repositoryPath ) );
-
-        $this->binaryService->delete( $repositoryPath );
-
-        self::assertFalse( $this->binaryService->exists( $repositoryPath ) );
+        $binaryFile = $this->ioHandler->create( $struct );
+        $binaryFile = $this->ioHandler->create( $struct );
     }
 
     /**
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @covers \eZ\Publish\SPI\Io\Handler::update
      */
-    public function testDeleteNonExistingFile()
-    {
-        $this->binaryService->delete( 'var/test/storage/deleteNonExisting.gif' );
-    }
-
-    /**
-     * @expectedException ezp\Base\Exception\NotFound
-     */
-    public function testLoadNonExistinFile()
-    {
-        $this->binaryService->load( 'var/test/storage/loadNotFound.png' );
-    }
-
-    public function testLoad()
-    {
-        $repositoryPath = 'var/test/storage/load.gif';
-        $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
-
-        $loadedFile = $this->binaryService->load( $repositoryPath );
-
-        self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $loadedFile );
-
-        self::assertEquals( 'var/test/storage/load.gif', $loadedFile->path );
-        self::assertEquals( 1928, $loadedFile->size );
-        self::assertInstanceOf( 'DateTime', $loadedFile->mtime );
-        self::assertInstanceOf( 'DateTime', $loadedFile->ctime );
-        self::assertEquals( new ContentType( 'image', 'gif' ), $loadedFile->contentType );
-    }
-
-    /**
-     * @expectedException ezp\Base\Exception\NotFound
-     */
-    public function testGetFileResourceNonExistinFile()
-    {
-        $this->binaryService->getFileResource( 'var/test/testGetFileResourceNonExistinFile.png' );
-    }
-
-    public function testGetFileResource()
-    {
-        $this->urlFopenPrecheck();
-        $repositoryPath = 'var/test/storage/getfileresource.gif';
-        $binaryFile = $this->createFileWithPath( $repositoryPath );
-
-        $resource = $this->binaryService->getFileResource( $repositoryPath );
-
-        $storedDataSum = md5( fread( $resource, $binaryFile->size ) );
-        $originalDataSum = md5( file_get_contents( $this->imageInputPath ) );
-        self::assertEquals( $originalDataSum, $storedDataSum );
-    }
-
-    /**
-     * @expectedException ezp\Base\Exception\NotFound
-     */
-    public function testUpdateNonExistingSource()
-    {
-        $updateStruct = new BinaryFileUpdateStruct();
-        $updateStruct->path = 'var/test/testUpdateSourceNotFoundTarget.png';
-
-        $this->binaryService->update( 'var/test/testUpdateSourceNotFoundSource.png', $updateStruct );
-    }
-
     public function testUpdate()
     {
         $this->urlFopenPrecheck();
         $firstPath = 'var/test/update-before.gif';
         $secondPath = 'var/test/update-after.png';
 
-        $binaryFile = $this->createFileWithPath( $firstPath );
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $firstPath );
+        $binaryFile = $this->ioHandler->create( $struct );
 
-        self::assertTrue( $this->binaryService->exists( $firstPath ) );
-        self::assertFalse( $this->binaryService->exists( $secondPath ) );
+        self::assertTrue( $this->ioHandler->exists( $firstPath ) );
+        self::assertFalse( $this->ioHandler->exists( $secondPath ) );
         self::assertEquals(
             md5_file( $this->imageInputPath ),
-            md5( fread( $this->binaryService->getFileResource( $firstPath ), $binaryFile->size ) )
+            md5( fread( $this->ioHandler->getFileResource( $firstPath ), $binaryFile->size ) )
         );
 
         $newFilePath = __DIR__ . DIRECTORY_SEPARATOR . 'ezplogo2.png';
@@ -192,27 +108,31 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         $updateStruct->setInputStream( fopen( $newFilePath, 'rb' ) );
         $updateStruct->size = filesize( $newFilePath );
 
-        $updatedFile = $this->binaryService->update( $firstPath, $updateStruct );
+        $updatedFile = $this->ioHandler->update( $firstPath, $updateStruct );
 
-        self::assertFalse( $this->binaryService->exists( $firstPath ), "$firstPath should not exist" );
-        self::assertTrue( $this->binaryService->exists( $secondPath ), "$secondPath should exist" );
+        self::assertFalse( $this->ioHandler->exists( $firstPath ), "$firstPath should not exist" );
+        self::assertTrue( $this->ioHandler->exists( $secondPath ), "$secondPath should exist" );
         self::assertEquals( $updateStruct->size, $updatedFile->size );
         self::assertEquals(
             md5_file( $newFilePath ),
-            md5( fread( $this->binaryService->getFileResource( $secondPath ), $updatedFile->size ) )
+            md5( fread( $this->ioHandler->getFileResource( $secondPath ), $updatedFile->size ) )
         );
     }
 
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::update
+     */
     public function testUpdateMtime()
     {
         $path = 'var/test/updateMtime.gif';
-        $binaryFile = clone $this->createFileWithPath( $path );
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $path );
+        $binaryFile = $this->ioHandler->create( $struct );
 
         $newMtime = new DateTime( 'last week' );
         $updateStruct = new BinaryFileUpdateStruct();
         $updateStruct->mtime = $newMtime;
 
-        $updatedBinaryFile = $this->binaryService->update( $path, $updateStruct );
+        $updatedBinaryFile = $this->ioHandler->update( $path, $updateStruct );
         self::assertEquals( $binaryFile->path, $updatedBinaryFile->path );
         self::assertEquals( $binaryFile->ctime, $updatedBinaryFile->ctime );
         self::assertEquals( $binaryFile->size, $updatedBinaryFile->size );
@@ -220,16 +140,20 @@ abstract class Base extends \PHPUnit_Framework_TestCase
         self::assertEquals( $newMtime, $updatedBinaryFile->mtime );
     }
 
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::update
+     */
     public function testUpdateCtime()
     {
         $path = 'var/test/updateMtime.gif';
-        $binaryFile = clone $this->createFileWithPath( $path );
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $path );
+        $binaryFile = clone $this->ioHandler->create( $struct );
 
         $newCtime = new DateTime( 'last week' );
         $updateStruct = new BinaryFileUpdateStruct();
         $updateStruct->ctime = $newCtime;
 
-        $updatedBinaryFile = $this->binaryService->update( $path, $updateStruct );
+        $updatedBinaryFile = $this->ioHandler->update( $path, $updateStruct );
         self::assertEquals( $binaryFile->path, $updatedBinaryFile->path );
         self::assertEquals( $binaryFile->mtime, $updatedBinaryFile->mtime );
         self::assertEquals( $binaryFile->size, $updatedBinaryFile->size );
@@ -238,52 +162,207 @@ abstract class Base extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException ezp\Io\Exception\PathExists
+     * @covers \eZ\Publish\SPI\Io\Handler::update
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testUpdateNonExistingSource()
+    {
+        $updateStruct = new BinaryFileUpdateStruct();
+        $updateStruct->path = 'var/test/testUpdateSourceNotFoundTarget.png';
+
+        $this->ioHandler->update( 'var/test/testUpdateSourceNotFoundSource.png', $updateStruct );
+    }
+
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::update
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException
      */
     public function testUpdateTargetExists()
     {
         $firstPath = 'var/test/testUpdateTargetExists-1.gif';
         $secondPath = 'var/test/testUpdateTargetExists-2.png';
 
-        $binaryFile = $this->createFileWithPath( $firstPath );
-        $binaryFile = $this->createFileWithPath( $secondPath );
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $firstPath );
+        $binaryFile = $this->ioHandler->create( $struct );
 
-        self::assertTrue( $this->binaryService->exists( $firstPath ) );
-        self::assertTrue( $this->binaryService->exists( $secondPath ) );
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $secondPath );
+        $binaryFile = $this->ioHandler->create( $struct );
+
+        self::assertTrue( $this->ioHandler->exists( $firstPath ) );
+        self::assertTrue( $this->ioHandler->exists( $secondPath ) );
 
         $updateStruct = new BinaryFileUpdateStruct();
         $updateStruct->path = $secondPath;
 
-        $this->binaryService->update( $firstPath, $updateStruct );
-    }
-
-    public function testGetFileContents()
-    {
-        $path = 'var/test/testGetFileContents.gif';
-        $this->createFileWithPath( $path );
-
-        self::assertEquals( file_get_contents( $this->imageInputPath ), $this->binaryService->getFileContents( $path ) );
+        $this->ioHandler->update( $firstPath, $updateStruct );
     }
 
     /**
-     * @expectedException ezp\Base\Exception\NotFound
+     * @covers \eZ\Publish\SPI\Io\Handler::exists
+     */
+    public function testExists()
+    {
+        $repositoryPath = 'var/test/storage/exists.gif';
+
+        self::assertFalse( $this->ioHandler->exists( $repositoryPath ) );
+
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->ioHandler->create( $struct );
+
+        self::assertTrue( $this->ioHandler->exists( $repositoryPath ) );
+    }
+
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::delete
+     */
+    public function testDelete()
+    {
+        $repositoryPath = 'var/test/storage/delete.gif';
+
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->ioHandler->create( $struct );
+
+        self::assertTrue( $this->ioHandler->exists( $repositoryPath ) );
+
+        $this->ioHandler->delete( $repositoryPath );
+
+        self::assertFalse( $this->ioHandler->exists( $repositoryPath ) );
+    }
+
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::delete
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testDeleteNonExistingFile()
+    {
+        $this->ioHandler->delete( 'var/test/storage/deleteNonExisting.gif' );
+    }
+
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::load
+     */
+    public function testLoad()
+    {
+        $repositoryPath = 'var/test/storage/load.gif';
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->ioHandler->create( $struct );
+
+        $loadedFile = $this->ioHandler->load( $repositoryPath );
+
+        self::assertInstanceOf( 'eZ\Publish\SPI\IO\BinaryFile', $loadedFile );
+
+        self::assertEquals( 'var/test/storage/load.gif', $loadedFile->path );
+        self::assertEquals( 1928, $loadedFile->size );
+        self::assertInstanceOf( 'DateTime', $loadedFile->mtime );
+        self::assertInstanceOf( 'DateTime', $loadedFile->ctime );
+        self::assertEquals( 'image/gif', $loadedFile->mimeType );
+    }
+
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::load
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     */
+    public function testLoadNonExistinFile()
+    {
+        $this->ioHandler->load( 'var/test/storage/loadNotFound.png' );
+    }
+
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::getFileResource
+     */
+    public function testGetFileResource()
+    {
+        $this->urlFopenPrecheck();
+        $repositoryPath = 'var/test/storage/getfileresource.gif';
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->ioHandler->create( $struct );
+
+        $resource = $this->ioHandler->getFileResource( $repositoryPath );
+
+        $storedDataSum = md5( fread( $resource, $binaryFile->size ) );
+        $originalDataSum = md5( file_get_contents( $this->imageInputPath ) );
+        self::assertEquals( $originalDataSum, $storedDataSum );
+    }
+
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::getFileResource
+     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
+     */
+    public function testGetFileResourceNonExistinFile()
+    {
+        $this->ioHandler->getFileResource( 'var/test/testGetFileResourceNonExistinFile.png' );
+    }
+
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::getFileContents
+     */
+    public function testGetFileContents()
+    {
+        $repositoryPath = 'var/test/testGetFileContents.gif';
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->ioHandler->create( $struct );
+
+        self::assertEquals( file_get_contents( $this->imageInputPath ), $this->ioHandler->getFileContents( $repositoryPath ) );
+    }
+
+    /**
+     * @covers \eZ\Publish\SPI\Io\Handler::getFileContents
+     * @expectedException eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testGetFileContentsNonExistingFile()
     {
-        $this->binaryService->getFileContents( 'var/test/testGetFileContentsNonExistingFile.gif' );
+        $this->ioHandler->getFileContents( 'var/test/testGetFileContentsNonExistingFile.gif' );
     }
 
     /**
-     * Creates a new BinaryFile on the repository using $this->inputImagePath as the source
-     * @param string $path Path to create the file at on the repository
-     * @return BinaryFile The created file
+     * Creates a BinaryFile object from $localFile
+     *
+     * @throws \Exception When given a non existing / unreadable file
+     * @param string $localFile Path to local file
+     * @param string $repositoryPath The path the file must be stored as
+     * @return \eZ\Publish\SPI\IO\BinaryFileCreateStruct
      */
-    private function createFileWithPath( $path )
+    protected function getCreateStructFromLocalFile( $localFile, $repositoryPath )
     {
-        return $this->binaryService->createFromLocalFile( $this->imageInputPath, $path );
+        if ( !file_exists( $localFile ) || !is_readable( $localFile ) )
+        {
+            throw new \Exception( "Could not find/read file: {$localFile}" );
+        }
+
+        $struct = new BinaryFileCreateStruct();
+        $struct->originalFile = basename( $localFile );
+        $struct->size = filesize( $localFile );
+        $struct->mimeType = self::getMimeTypeFromPath( $localFile );
+        $struct->path = $repositoryPath;
+
+        $inputStream = fopen( $localFile, 'rb' );
+        $struct->setInputStream( $inputStream );
+
+        return $struct;
     }
 
-    private function urlFopenPrecheck()
+    /**
+     * Returns a mimeType from a file path, using fileinfo
+     *
+     * @throws \Exception If file does not exist
+     * @param string $path
+     * @return string
+     */
+    protected static function getMimeTypeFromPath( $path )
+    {
+        if ( !file_exists( $path ) )
+        {
+            throw new \Exception( "Could not fine file: {$path}" );
+        }
+
+        $finfo = new finfo( FILEINFO_MIME_TYPE );
+        return $finfo->file( $path );
+    }
+
+    /**
+     * Reusable function for tests that needs allow_url_fopen, skip if disabled
+     */
+    protected function urlFopenPrecheck()
     {
         if ( ini_get( "allow_url_fopen" ) != 1 )
             $this->markTestSkipped( "allow_url_fopen must be 'On' for this test." );

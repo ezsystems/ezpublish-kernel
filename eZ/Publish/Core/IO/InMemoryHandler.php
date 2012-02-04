@@ -6,7 +6,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\InMemory;
+namespace eZ\Publish\Core\IO;
 
 use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
     eZ\Publish\SPI\IO\BinaryFile,
@@ -20,7 +20,7 @@ use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
  * Backend interface for handling of binary files I/O
  */
 
-class Handler implements IoHandlerInterface
+class InMemoryHandler implements IoHandlerInterface
 {
     /**
      * Files storage

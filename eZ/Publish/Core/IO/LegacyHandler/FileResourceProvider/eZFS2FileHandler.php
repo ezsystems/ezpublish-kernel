@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\IO\Legacy\FileResourceProvider;
+namespace eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider;
 
-use eZ\Publish\Core\IO\Legacy\FileResourceProvider;
+use eZ\Publish\Core\IO\LegacyHandler\FileResourceProvider\eZFSFileHandler;
 
 /**
  * This class provides file resource functionnality for a cluster file

@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-use eZ\Publish\API\Repository\Exceptions\NotFoundException,
+use eZ\Publish\API\Repository\Exceptions\NotFoundException as APINotFoundException,
     eZ\Publish\Core\Base\Exceptions\Httpable,
     Exception;
 
@@ -19,7 +19,7 @@ use eZ\Publish\API\Repository\Exceptions\NotFoundException,
  *   throw new NotFound( 'Content', 42 );
  *
  */
-class NotFoundException extends NotFoundException implements Httpable
+class NotFoundException extends APINotFoundException implements Httpable
 {
     /**
      * Generates: Could not find '{$what}' with identifier '{$identifier}'

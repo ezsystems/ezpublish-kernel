@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\IO\Tests\Storage;
-use eZ\Publish\Core\IO\Dispatcher\Handler as Dispatcher,
-    eZ\Publish\Core\IO\InMemory\Handler as InMemory,
+use eZ\Publish\Core\IO\DispatcherHandler as Dispatcher,
+    eZ\Publish\Core\IO\InMemoryHandler as InMemory,
     eZ\Publish\SPI\IO\BinaryFile,
     eZ\Publish\SPI\IO\BinaryFileCreateStruct,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
@@ -59,7 +59,8 @@ class DispatcherTest extends BaseHandlerTest
     public function testDispatcherDefaultBackendCreate()
     {
         $repositoryPath = 'var/test/storage/images/ezplogo.gif';
-        $binaryFile = $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->ioHandler->create( $struct );
         $binaryFile2 = $this->defaultBackend->load( $repositoryPath );
 
         self::assertEquals( $binaryFile, $binaryFile2 );
@@ -67,12 +68,13 @@ class DispatcherTest extends BaseHandlerTest
 
     /**
      * Test that file is created in default handler
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDispatcherDefaultBackendCreateNotFound()
     {
         $repositoryPath = 'var/test/storage/images/ezplogo.gif';
-        $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->ioHandler->create( $struct );
         $this->alternativeBackend->load( $repositoryPath );
     }
 
@@ -82,7 +84,8 @@ class DispatcherTest extends BaseHandlerTest
     public function testDispatcherAlternativeBackendCreate()
     {
         $repositoryPath = 'var/test/storage/image-versioned/ezplogo.gif';
-        $binaryFile = $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->ioHandler->create( $struct );
         $binaryFile2 = $this->alternativeBackend->load( $repositoryPath );
 
         self::assertEquals( $binaryFile, $binaryFile2 );
@@ -90,12 +93,13 @@ class DispatcherTest extends BaseHandlerTest
 
     /**
      * Test that file is created in alternative handler
-     * @expectedException \ezp\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
     public function testDispatcherAlternativeBackendCreateNotFound()
     {
         $repositoryPath = 'var/test/storage/image-versioned/ezplogo.gif';
-        $this->binaryService->createFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $struct = $this->getCreateStructFromLocalFile( $this->imageInputPath, $repositoryPath );
+        $binaryFile = $this->ioHandler->create( $struct );
         $this->defaultBackend->load( $repositoryPath );
     }
 }

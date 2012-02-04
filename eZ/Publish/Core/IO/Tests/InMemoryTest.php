@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\IO\Tests\Storage;
-use eZ\Publish\Core\IO\InMemory\Handler as InMemory,
+use eZ\Publish\Core\IO\InMemoryHandler as InMemory,
     eZ\Publish\SPI\IO\BinaryFile,
     eZ\Publish\SPI\IO\BinaryFileCreateStruct,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
