@@ -107,9 +107,9 @@ class IOServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\IOService::loadBinaryFile()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundExcption
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      */
-    public function testLoadBinaryFileThrowsNotFoundExcption()
+    public function testLoadBinaryFileThrowsNotFoundException()
     {
         $this->markTestIncomplete( "Test for IOService::loadBinaryFile() is not implemented." );
     }
