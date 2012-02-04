@@ -9,9 +9,9 @@
 
 namespace eZ\Publish\Core\Base;
 use eZ\Publish\Core\Base\ConfigurationManager,
-    eZ\Publish\Core\Base\Exception\BadConfiguration,
-    eZ\Publish\Core\Base\Exception\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exception\MissingClass,
+    eZ\Publish\Core\Base\Exceptions\BadConfiguration,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\MissingClass,
     ReflectionClass;
 
 /**

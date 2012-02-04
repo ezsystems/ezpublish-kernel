@@ -11,8 +11,8 @@
 
 namespace eZ\Publish\Core\Base;
 use eZ\Publish\Core\Base\Configuration\Parser,
-    eZ\Publish\Core\Base\Exception\BadConfiguration,
-    eZ\Publish\Core\Base\Exception\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\BadConfiguration,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
     ezcPhpGenerator;
 
 /**
@@ -306,7 +306,7 @@ class Configuration
      * @param array $sourceFiles ByRef value or source files that has been/is going to be parsed
      *                           files you pass in will not be checked if they exists.
      * @return array Data structure for parsed ini files
-     * @throws eZ\Publish\Core\Base\Exception\BadConfiguration If no parser have been defined
+     * @throws eZ\Publish\Core\Base\Exceptions\BadConfiguration If no parser have been defined
      */
     protected function parse( array $configurationPaths, array &$sourceFiles )
     {

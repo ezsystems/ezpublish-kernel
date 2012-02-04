@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Exception;
+namespace eZ\Publish\Core\Base\Exceptions;
 use Exception,
     LogicException;
 

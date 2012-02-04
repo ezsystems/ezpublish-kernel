@@ -6,8 +6,8 @@ namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 
-use eZ\Publish\Core\Base\Exception\NotFound;
-use eZ\Publish\Core\Base\Exception\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\NotFound;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 use ezp\Base\Exception\InvalidArgumentValue as PersistenceInvalidArgumentValue;
 use ezp\Base\Exception\NotFound as PersistenceNotFound;
 use eZ\Publish\API\Repository\Values\Content\Content;

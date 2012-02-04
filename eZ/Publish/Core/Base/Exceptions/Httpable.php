@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Exception;
+namespace eZ\Publish\Core\Base\Exceptions;
 
 /**
  * Interface for exceptions that maps to http status codes

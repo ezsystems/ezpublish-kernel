@@ -12,7 +12,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Section,
     eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
     eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
-    eZ\Publish\Core\Base\Exception\NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFound;
 
 /**
  * Test case for Section Service using InMemory storage class
@@ -43,7 +43,7 @@ abstract class SectionBase extends BaseServiceTest
     }
 
     /**
-     * @expectedException eZ\Publish\Core\Base\Exception\PropertyPermission
+     * @expectedException eZ\Publish\Core\Base\Exceptions\PropertyPermission
      * @covers \eZ\Publish\API\Repository\Values\Content\Section::__set
      */
     public function testReadOnlyProperty()
@@ -74,7 +74,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for creating sections
      * @covers \eZ\Publish\Core\Repository\SectionService::create
-     * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\Forbidden
      */
     public function testCreateForbidden()
     {
@@ -135,7 +135,7 @@ abstract class SectionBase extends BaseServiceTest
      * Test service function for loading sections
      *
      * @covers \eZ\Publish\Core\Repository\SectionService::load
-     * @expectedException \eZ\Publish\Core\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound
      */
     public function testLoadNotFound()
     {
@@ -166,7 +166,7 @@ abstract class SectionBase extends BaseServiceTest
      * Test service function for update sections
      *
      * @covers \eZ\Publish\Core\Repository\SectionService::update
-     * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\Forbidden
      */
     public function testUpdateForbidden()
     {
@@ -222,7 +222,7 @@ abstract class SectionBase extends BaseServiceTest
      * Test service function for deleting sections
      *
      * @covers \eZ\Publish\Core\Repository\SectionService::delete
-     * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\Forbidden
      */
     public function testDeleteForbidden()
     {

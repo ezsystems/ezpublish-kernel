@@ -7,9 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Base\Exception;
+namespace eZ\Publish\Core\Base\Exceptions;
 use eZ\Publish\API\Repository\Exceptions\NotFoundException,
-    eZ\Publish\Core\Base\Exception\Httpable,
+    eZ\Publish\Core\Base\Exceptions\Httpable,
     Exception;
 
 /**
