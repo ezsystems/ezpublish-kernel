@@ -7,13 +7,13 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Io\Tests\Storage;
-use eZ\Publish\Core\Io\Dispatcher\Handler as Dispatcher,
-    eZ\Publish\Core\Io\InMemory\Handler as InMemory,
-    eZ\Publish\SPI\Io\BinaryFile,
-    eZ\Publish\SPI\Io\BinaryFileCreateStruct,
-    eZ\Publish\SPI\Io\BinaryFileUpdateStruct,
-    eZ\Publish\Core\Io\Tests\Base as BaseHandlerTest;
+namespace eZ\Publish\Core\IO\Tests\Storage;
+use eZ\Publish\Core\IO\Dispatcher\Handler as Dispatcher,
+    eZ\Publish\Core\IO\InMemory\Handler as InMemory,
+    eZ\Publish\SPI\IO\BinaryFile,
+    eZ\Publish\SPI\IO\BinaryFileCreateStruct,
+    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
+    eZ\Publish\Core\IO\Tests\Base as BaseHandlerTest;
 
 /**
  * Handler test
@@ -21,17 +21,17 @@ use eZ\Publish\Core\Io\Dispatcher\Handler as Dispatcher,
 class DispatcherTest extends BaseHandlerTest
 {
     /**
-     * @var \eZ\Publish\SPI\Io\Handler
+     * @var \eZ\Publish\SPI\IO\Handler
      */
     protected $defaultBackend;
 
     /**
-     * @var \eZ\Publish\SPI\Io\Handler
+     * @var \eZ\Publish\SPI\IO\Handler
      */
     protected $alternativeBackend;
 
     /**
-     * @return \eZ\Publish\SPI\Io\Handler
+     * @return \eZ\Publish\SPI\IO\Handler
      */
     protected function getIoHandler()
     {

@@ -1,15 +1,15 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\Io\Legacy\FileResourceProvider\eZFS2FileHandler class.
+ * File containing the eZ\Publish\Core\IO\Legacy\FileResourceProvider\eZFS2FileHandler class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Io\Legacy\FileResourceProvider;
+namespace eZ\Publish\Core\IO\Legacy\FileResourceProvider;
 
-use eZ\Publish\Core\Io\Legacy\FileResourceProvider;
+use eZ\Publish\Core\IO\Legacy\FileResourceProvider;
 
 /**
  * This class provides file resource functionnality for a cluster file

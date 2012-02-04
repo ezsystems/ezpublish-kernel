@@ -1,17 +1,17 @@
 <?php
 /**
- * File containing the eZ\Publish\SPI\Io\Handler interface
+ * File containing the eZ\Publish\SPI\IO\Handler interface
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Io\Dispatcher;
+namespace eZ\Publish\Core\IO\Dispatcher;
 
 use ezp\Base\Exception\InvalidArgumentType,
-    eZ\Publish\SPI\Io\Handler as IoHandlerInterface,
-    eZ\Publish\SPI\Io\BinaryFileUpdateStruct,
-    eZ\Publish\SPI\Io\BinaryFileCreateStruct,
+    eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
+    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
+    eZ\Publish\SPI\IO\BinaryFileCreateStruct,
     DateTime;
 
 /**
@@ -54,7 +54,7 @@ class Handler implements IoHandlerInterface
     {
         if ( empty( $config['default'] ) || !$config['default'] instanceof IoHandlerInterface )
         {
-            throw new InvalidArgumentType( "\$config['default']", "eZ\\Publish\\SPI\\Io\\Handler" );
+            throw new InvalidArgumentType( "\$config['default']", "eZ\\Publish\\SPI\\IO\\Handler" );
         }
         else if ( empty( $config['handlers'] ) )
         {
@@ -70,7 +70,7 @@ class Handler implements IoHandlerInterface
             }
             else if ( empty( $handler['handler'] ) || !$handler['handler'] instanceof IoHandlerInterface )
             {
-                throw new InvalidArgumentType( "\$config['handlers'][$key]['handler']", "eZ\\Publish\\SPI\\Io\\Handler" );
+                throw new InvalidArgumentType( "\$config['handlers'][$key]['handler']", "eZ\\Publish\\SPI\\IO\\Handler" );
             }
         }
 
@@ -80,9 +80,9 @@ class Handler implements IoHandlerInterface
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @param \eZ\Publish\SPI\Io\BinaryFileCreateStruct $file
-     * @return \eZ\Publish\SPI\Io\BinaryFile The newly created BinaryFile object
-     * @uses \eZ\Publish\SPI\Io\Handler::create() To create the binary file in handler
+     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $file
+     * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
+     * @uses \eZ\Publish\SPI\IO\Handler::create() To create the binary file in handler
      */
     public function create( BinaryFileCreateStruct $file )
     {
@@ -93,7 +93,7 @@ class Handler implements IoHandlerInterface
      * Deletes the existing BinaryFile with path $path
      *
      * @param string $path
-     * @uses \eZ\Publish\SPI\Io\Handler::delete() To delete the binary file in handler
+     * @uses \eZ\Publish\SPI\IO\Handler::delete() To delete the binary file in handler
      */
     public function delete( $path )
     {
@@ -104,9 +104,9 @@ class Handler implements IoHandlerInterface
      * Updates the file identified by $path with data from $updateFile
      *
      * @param string $path
-     * @param \eZ\Publish\SPI\Io\BinaryFileUpdateStruct $updateFile
-     * @return \eZ\Publish\SPI\Io\BinaryFile The updated BinaryFile
-     * @uses \eZ\Publish\SPI\Io\Handler::update() To update the binary file in handler
+     * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFile
+     * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
+     * @uses \eZ\Publish\SPI\IO\Handler::update() To update the binary file in handler
      */
     public function update( $path, BinaryFileUpdateStruct $updateFile )
     {
@@ -138,7 +138,7 @@ class Handler implements IoHandlerInterface
      *
      * @param string $path
      * @return bool
-     * @uses \eZ\Publish\SPI\Io\Handler::exists() To see if file exists in handler
+     * @uses \eZ\Publish\SPI\IO\Handler::exists() To see if file exists in handler
      */
     public function exists( $path )
     {
@@ -149,8 +149,8 @@ class Handler implements IoHandlerInterface
      * Loads the BinaryFile identified by $path
      *
      * @param string $path
-     * @return \eZ\Publish\SPI\Io\BinaryFile
-     * @uses \eZ\Publish\SPI\Io\Handler::load() To load the binary file from handler
+     * @return \eZ\Publish\SPI\IO\BinaryFile
+     * @uses \eZ\Publish\SPI\IO\Handler::load() To load the binary file from handler
      */
     public function load( $path )
     {
@@ -162,7 +162,7 @@ class Handler implements IoHandlerInterface
      *
      * @param string $path
      * @return resource
-     * @uses \eZ\Publish\SPI\Io\Handler::getFileResource() To get the binary file resource from handler
+     * @uses \eZ\Publish\SPI\IO\Handler::getFileResource() To get the binary file resource from handler
      */
     public function getFileResource( $path )
     {
@@ -174,7 +174,7 @@ class Handler implements IoHandlerInterface
      *
      * @param string $path
      * @return string
-     * @uses \eZ\Publish\SPI\Io\Handler::getFileContents() To get the binary file content from handler
+     * @uses \eZ\Publish\SPI\IO\Handler::getFileContents() To get the binary file content from handler
      */
     public function getFileContents( $path )
     {
@@ -187,7 +187,7 @@ class Handler implements IoHandlerInterface
      * @internal Depends on {@link $config} being validated by {@link __construct()}!
      *
      * @param string $path
-     * @return \eZ\Publish\SPI\Io\Handler
+     * @return \eZ\Publish\SPI\IO\Handler
      */
     private function getHandler( $path )
     {

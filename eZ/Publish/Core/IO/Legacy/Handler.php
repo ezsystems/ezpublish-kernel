@@ -1,18 +1,18 @@
 <?php
 /**
- * File containing the eZ\Publish\Core\Io\Legacy class.
+ * File containing the eZ\Publish\Core\IO\Legacy class.
  *
  * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
  * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Io\Legacy;
+namespace eZ\Publish\Core\IO\Legacy;
 
-use eZ\Publish\SPI\Io\Handler as IoHandlerInterface,
-    eZ\Publish\SPI\Io\BinaryFile,
-    eZ\Publish\SPI\Io\BinaryFileCreateStruct,
-    eZ\Publish\SPI\Io\BinaryFileUpdateStruct,
+use eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
+    eZ\Publish\SPI\IO\BinaryFile,
+    eZ\Publish\SPI\IO\BinaryFileCreateStruct,
+    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
     ezp\Io\ContentType,
     ezp\Io\Exception\PathExists,
     ezp\Base\Exception\InvalidArgumentValue,
@@ -45,8 +45,8 @@ class Handler implements IoHandlerInterface
     /**
      * Creates and stores a new BinaryFile based on the BinaryFileCreateStruct $file
      *
-     * @param \eZ\Publish\SPI\Io\BinaryFileCreateStruct $file
-     * @return \eZ\Publish\SPI\Io\BinaryFile The newly created BinaryFile object
+     * @param \eZ\Publish\SPI\IO\BinaryFileCreateStruct $file
+     * @return \eZ\Publish\SPI\IO\BinaryFile The newly created BinaryFile object
      *
      * @throws \ezp\Base\Exception\PathExists If the target path already exists
      */
@@ -89,8 +89,8 @@ class Handler implements IoHandlerInterface
      * Updates the file identified by $path with data from $updateFile
      *
      * @param string $path
-     * @param \eZ\Publish\SPI\Io\BinaryFileUpdateStruct $updateFile
-     * @return \eZ\Publish\SPI\Io\BinaryFile The updated BinaryFile
+     * @param \eZ\Publish\SPI\IO\BinaryFileUpdateStruct $updateFile
+     * @return \eZ\Publish\SPI\IO\BinaryFile The updated BinaryFile
      *
      * @throws \ezp\Base\Exception\NotFound If the source path doesn't exist
      * @throws \ezp\Base\Exception\PathExists If the target path already exists
@@ -147,7 +147,7 @@ class Handler implements IoHandlerInterface
      * Loads the BinaryFile identified by $path
      *
      * @param string $path
-     * @return \eZ\Publish\SPI\Io\BinaryFile
+     * @return \eZ\Publish\SPI\IO\BinaryFile
      * @throws \ezp\Base\Exception\NotFound If no file identified by $path exists
      */
     public function load( $path )
@@ -220,7 +220,7 @@ class Handler implements IoHandlerInterface
     /**
      * Returns the appropriate FileResourceProvider depending on the cluster handler in use
      *
-     * @return \eZ\Publish\Core\Io\Legacy\FileResourceProvider
+     * @return \eZ\Publish\Core\IO\Legacy\FileResourceProvider
      */
     private function getFileResourceProvider()
     {

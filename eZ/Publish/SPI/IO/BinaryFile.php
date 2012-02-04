@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\SPI\Io;
+namespace eZ\Publish\SPI\IO;
 
 /**
  * This class provides an abstract access to binary files.
@@ -43,7 +43,7 @@ class BinaryFile
 
     /**
      * File contentType (image/jpeg, audio/mp3, etc)
-     * @var \eZ\Publish\SPI\Io\ContentType
+     * @var \eZ\Publish\SPI\IO\ContentType
      */
     public $contentType;
 

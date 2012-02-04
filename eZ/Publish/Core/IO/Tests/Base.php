@@ -7,10 +7,10 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\Core\Io\Tests;
-use eZ\Publish\SPI\Io\BinaryFile,
-    eZ\Publish\SPI\Io\BinaryFileCreateStruct,
-    eZ\Publish\SPI\Io\BinaryFileUpdateStruct,
+namespace eZ\Publish\Core\IO\Tests;
+use eZ\Publish\SPI\IO\BinaryFile,
+    eZ\Publish\SPI\IO\BinaryFileCreateStruct,
+    eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
     ezp\Io\ContentType,
     DateTime;
 
@@ -18,7 +18,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
 {
     /**
      * Binary IoHanlder
-     * @var \eZ\Publish\SPI\Io\Handler
+     * @var \eZ\Publish\SPI\IO\Handler
      */
     protected $ioHandler;
 
@@ -47,7 +47,7 @@ abstract class Base extends \PHPUnit_Framework_TestCase
 
     /**
      * @abstract
-     * @return \eZ\Publish\SPI\Io\Handler
+     * @return \eZ\Publish\SPI\IO\Handler
      */
     abstract protected function getIoHandler();
 
