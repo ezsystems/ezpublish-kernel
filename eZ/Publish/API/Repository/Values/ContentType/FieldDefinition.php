@@ -1,6 +1,6 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\ContentType;
-use eZ\Publish\API\Repository\Value\ValueObject;
+use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  *
  * This class represents a field definiton
