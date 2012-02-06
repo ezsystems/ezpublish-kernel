@@ -6,8 +6,9 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 class ContentTypeLimitation extends Limitation
 {
     /**
-     * (non-PHPdoc)
-     * @see User/eZ\Publish\API\Repository\Values\User.Limitation::getIdentifier()
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation::getIdentifier()
+     *
+     * @return string
      */
     public function getIdentifier()
     {

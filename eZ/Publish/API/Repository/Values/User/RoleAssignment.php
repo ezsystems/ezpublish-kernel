@@ -17,13 +17,13 @@ abstract class RoleAssignment extends ValueObject
     /**
      * returns the limitation of the role assignment
      * 
-     * @return RoleLimitation
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation
      */
     public abstract function getLimitation();
 
     /**
      * returns the role to which the user or user group is assigned to
-     * @return Role
+     * @return \eZ\Publish\API\Repository\Values\User\Role
      */
     public abstract function getRole();
 }

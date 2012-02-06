@@ -2,7 +2,6 @@
 namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
-use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * This class represents a policy value
