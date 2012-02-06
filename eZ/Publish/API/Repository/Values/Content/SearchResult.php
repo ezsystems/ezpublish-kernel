@@ -1,7 +1,7 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\Content;
 
-use eZ\Publish\API\Repository\Value\ValueObject;
+use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  *

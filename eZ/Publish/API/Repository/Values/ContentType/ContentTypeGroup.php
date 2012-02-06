@@ -23,7 +23,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read int $modifierId the user id of the user which has last modified this content type group
  *
  */
-class ContentTypeGroup extends ValueObject
+abstract class ContentTypeGroup extends ValueObject
 {
     /**
      * Primary key
