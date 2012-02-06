@@ -67,6 +67,13 @@ class Repository implements RepositoryInterface
     protected $roleService;
 
     /**
+     * Instance of language service
+     *
+     * @var LanguageService
+     */
+    protected $languageService;
+
+    /**
      * Constructor
      *
      * Construct repository object with provided storage engine
@@ -220,7 +227,14 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\LanguageService
      */
-    public function getContentLanguageService(){}
+    public function getContentLanguageService()
+    {
+        if ( $this->languageService !== null )
+            return $this->languageService;
+
+        $this->languageService = new LanguageService( $this, $this->persistenceHandler );
+        return $this->languageService;
+    }
 
     /**
      * Get Content Type Service
