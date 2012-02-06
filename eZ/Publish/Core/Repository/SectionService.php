@@ -5,19 +5,22 @@
 namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-
-use eZ\Publish\Core\Base\Exception\NotFound;
-use eZ\Publish\Core\Base\Exception\InvalidArgumentValue;
-use ezp\Base\Exception\InvalidArgumentValue as PersistenceInvalidArgumentValue;
-use ezp\Base\Exception\NotFound as PersistenceNotFound;
 use eZ\Publish\API\Repository\Values\Content\Content;
 use eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use eZ\Publish\API\Repository\Values\Content\Section;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+
 use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
+use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;
-use eZ\Publish\API\Repository\Repository  as RepositoryInterface;
+
+use ezp\Base\Exception\NotFound;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\IllegalArgumentException;
+use eZ\Publish\Core\Base\Exceptions\NotFoundException;
+use eZ\Publish\Core\Base\Exceptions\BadStateException;
+use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 
 /**
  * Section service, used for section operations
@@ -34,7 +37,7 @@ class SectionService implements SectionServiceInterface
     /**
      * @var \eZ\Publish\SPI\Persistence\Handler
      */
-    protected $handler;
+    protected $persistenceHandler;
 
     /**
      * Setups service with reference to repository object that created it & corresponding handler
@@ -45,130 +48,148 @@ class SectionService implements SectionServiceInterface
     public function __construct( RepositoryInterface $repository, Handler $handler )
     {
         $this->repository = $repository;
-        $this->handler = $handler;
+        $this->persistenceHandler = $handler;
     }
 
     /**
-     * Creates the a new Section in the content repository
+     * Creates a new Section in the content repository
      *
-     * @param SectionCreateStruct $sectionCreateStruct
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
      *
-     * @return Section The newly create section
+     * @param \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct $sectionCreateStruct
      *
-     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws eZ\Publish\API\Repository\IllegalArgumentException If the new identifier in $sectionCreateStruct already exists
+     * @return \eZ\Publish\API\Repository\Values\Content\Section The newly created section
      */
     public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
-        if ( $sectionCreateStruct->name === null )
-            throw new InvalidArgumentValue( "name", "null" );
+        if ( empty( $sectionCreateStruct->name ) )
+            throw new InvalidArgumentValue( "name", $sectionCreateStruct->name, "SectionCreateStruct" );
 
-        if ( $sectionCreateStruct->identifier === null )
-            throw new InvalidArgumentValue( "identifier", "null" );
+        if ( empty( $sectionCreateStruct->identifier ) )
+            throw new InvalidArgumentValue( "identifier", $sectionCreateStruct->identifier, "SectionCreateStruct" );
 
         try
         {
-            $existingSection = $this->handler->sectionHandler()->loadByIdentifier( $sectionCreateStruct->identifier );
+            $existingSection = $this->loadSectionByIdentifier( $sectionCreateStruct->identifier );
             if ( $existingSection !== null )
-                throw new IllegalArgumentException( "identifer", $sectionCreateStruct->identifier );
+                throw new IllegalArgumentException( "identifier", $sectionCreateStruct->identifier );
         }
-        catch ( PersistenceNotFound $e ) {}
+        catch ( NotFoundException $e ) {}
 
-        $createdSection = (array) $this->handler->sectionHandler()->create(
+        $createdSection = $this->persistenceHandler->sectionHandler()->create(
             $sectionCreateStruct->name,
             $sectionCreateStruct->identifier
         );
 
-        return new Section( $createdSection );
+        return new Section( array(
+            'id'         => $createdSection->id,
+            'identifier' => $createdSection->identifier,
+            'name'       => $createdSection->name
+        ) );
     }
 
     /**
-     * Updates the given in the content repository
+     * Updates the given section in the content repository
      *
-     * @param Section $section
-     * @param SectionUpdateStruct $sectionUpdateStruct
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the new identifier already exists (if set in the update struct)
      *
-     * @return Section
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
+     * @param \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct $sectionUpdateStruct
      *
-     * @throws eZ\Publish\API\Repository\NotFoundException if section could not be found
-     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to create a section
-     * @throws eZ\Publish\API\Repository\IllegalArgumentException If the new identifier already exists (if set in the update struct)
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
     public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
-        if ( $sectionUpdateStruct->identifier !== null )
+        if ( empty( $section->id ) )
+            throw new InvalidArgumentValue( "id", $section->id, "Section" );
+
+        if ( !empty( $sectionUpdateStruct->identifier ) )
         {
             try
             {
-                $existingSection = $this->handler->sectionHandler()->loadByIdentifier( $sectionUpdateStruct->identifier );
+                $existingSection = $this->loadSectionByIdentifier( $sectionUpdateStruct->identifier );
                 if ( $existingSection !== null )
-                    throw new IllegalArgumentException( "identifer", $sectionUpdateStruct->identifier );
+                    throw new IllegalArgumentException( "identifier", $sectionUpdateStruct->identifier );
             }
-            catch ( PersistenceNotFound $e ) {}
+            catch ( NotFoundException $e ) {}
         }
 
+        // try to see if section really exists before updating
+        // will throw exception if no section available
+        // @todo is this required
         $section = $this->loadSection( $section->id );
-        if ( $section === null )
-            throw new NotFound( "Section", $section->id );
 
-        $updatedSection = (array) $this->handler->sectionHandler()->update(
+        $updatedSection = $this->persistenceHandler->sectionHandler()->update(
             $section->id,
             $sectionUpdateStruct->name !== null ? $sectionUpdateStruct->name : $section->name,
             $sectionUpdateStruct->identifier !== null ? $sectionUpdateStruct->identifier : $section->identifier
         );
 
-        if ( $updatedSection === null )
-            throw new NotFound( "Section", $section->id );
-
-        return new Section( $updatedSection );
+        return new Section( array(
+            'id'         => $updatedSection->id,
+            'identifier' => $updatedSection->identifier,
+            'name'       => $updatedSection->name
+        ) );
     }
 
     /**
      * Loads a Section from its id ($sectionId)
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
+     *
      * @param int $sectionId
      *
-     * @return Section
-     *
-     * @throws eZ\Publish\API\Repository\NotFoundException if section could not be found
-     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to read a section
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
     public function loadSection( $sectionId )
     {
+        if ( empty( $sectionId ) )
+            throw new InvalidArgumentValue( "sectionId", $sectionId );
+
         try
         {
-            $sectionArray = (array) $this->handler->sectionHandler()->load( $sectionId );
+            $section = $this->persistenceHandler->sectionHandler()->load( $sectionId );
         }
-        catch ( PersistenceNotFound $e )
+        catch ( NotFound $e )
         {
-            throw new NotFound( "Section", $sectionId, $e );
+            throw new NotFoundException( "section", $sectionId, $e );
         }
 
-        return new Section( $sectionArray );
+        return new Section( array(
+            'id'         => $section->id,
+            'identifier' => $section->identifier,
+            'name'       => $section->name
+        ) );
     }
 
     /**
      * Loads all sections
      *
-     * @return array of {@link Section}
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
      *
-     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to read a section
+     * @return array of {@link \eZ\Publish\API\Repository\Values\Content\Section}
      */
     public function loadSections()
     {
+        $allSections = $this->persistenceHandler->sectionHandler()->loadAll();
+        if ( $allSections === null )
+            return array();
+
         $returnArray = array();
 
-        $allSections = $this->handler->sectionHandler()->loadAll();
-        if ( is_array( $allSections ) )
+        if ( !is_array( $allSections ) )
+            $allSections = array( $allSections );
+
+        foreach ( $allSections as $section )
         {
-            foreach ( $allSections as $section )
-            {
-                $returnArray[] = new Section( (array) $section );
-            }
-        }
-        else if ( $allSections !== null )
-        {
-            $returnArray[] = new Section( (array) $allSections );
+            $returnArray[] = new Section( array(
+                'id'         => $section->id,
+                'identifier' => $section->identifier,
+                'name'       => $section->name
+            ) );
         }
 
         return $returnArray;
@@ -177,95 +198,112 @@ class SectionService implements SectionServiceInterface
     /**
      * Loads a Section from its identifier ($sectionIdentifier)
      *
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if section could not be found
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read a section
+     *
      * @param string $sectionIdentifier
      *
-     * @return Section
-     *
-     * @throws eZ\Publish\API\Repository\NotFoundException if section could not be found
-     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to read a section
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
-        $sectionArray = (array) $this->handler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
-        if ( $sectionArray === null )
-            throw new NotFound( "Section", $sectionIdentifier );
+        if ( empty( $sectionIdentifier ) )
+            throw new InvalidArgumentValue( "sectionIdentifier", $sectionIdentifier );
 
-        return new Section( $sectionArray );
+        try
+        {
+            $section = $this->persistenceHandler->sectionHandler()->loadByIdentifier( $sectionIdentifier );
+        }
+        catch ( NotFound $e )
+        {
+            throw new NotFoundException( "section", $sectionIdentifier, $e );
+        }
+
+        return new Section( array(
+            'id'         => $section->id,
+            'identifier' => $section->identifier,
+            'name'       => $section->name
+        ) );
     }
 
     /**
      * Counts the contents which $section is assigned to
      *
-     * @param Section $section
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      *
      * @return int
      */
     public function countAssignedContents( Section $section )
     {
-        return $this->handler->sectionHandler()->assignmentsCount( $section->id );
+        if ( empty( $section->id ) )
+            throw new InvalidArgumentValue( "id", $section->id, "Section" );
+
+        return $this->persistenceHandler->sectionHandler()->assignmentsCount( $section->id );
     }
 
     /**
      * assigns the content to the given section
      * this method overrides the current assigned section
      *
-     * @param ContentInfo $contentInfo
-     * @param Section $section
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to view provided object
      *
-     * @throws eZ\Publish\API\Repository\UnauthorizedException If user does not have access to view provided object
+     * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
-    public function assignSection( ContentInfo $contentInfo, Section $section ){}
+    public function assignSection( ContentInfo $contentInfo, Section $section )
+    {
+        if ( empty( $contentInfo->contentId ) )
+            throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
 
-    /**
-     * Assigns $section to the contents held by $startingPoint location and
-     * all contents held by descendants locations of $startingPoint to which the user has
-     * the permission to assign a section
-     *
-     * @param Location $startingPoint
-     * @param Section $section
-     *
-     * @return array  a list (string) of descendants which are not changed due to permissions
-     *
-     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user is not allowed to assign a section to the starting point
-     *
-     */
-    public function assignSectionToSubTree( Location $startingPoint, Section $section ){}
+        if ( empty( $section->id ) )
+            throw new InvalidArgumentValue( "id", $section->id, "Section" );
+
+        $this->persistenceHandler->sectionHandler()->assign( $section->id, $contentInfo->contentId );
+    }
 
     /**
      * Deletes $section from content repository
      *
-     * @param Section $section
-     *
-     * @throws eZ\Publish\API\Repository\NotFoundException If the specified section is not found
-     * @throws eZ\Publish\API\Repository\UnauthorizedException If the current user user is not allowed to delete a section
-     * @throws eZ\Publish\API\Repository\BadStateException  if section can not be deleted
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If the specified section is not found
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete a section
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If section can not be deleted
      *         because it is still assigned to some contents.
+     *
+     * @param \eZ\Publish\API\Repository\Values\Content\Section $section
      */
     public function deleteSection( Section $section )
     {
-        try
-        {
-            $this->handler->sectionHandler()->load( $section->id );
-        }
-        catch ( PersistenceNotFound $e )
-        {
-            throw new NotFound( "Section", $section->id, $e );
-        }
+        if ( empty( $section->id ) )
+            throw new InvalidArgumentValue( "id", $section->id, "Section" );
 
-        $this->handler->sectionHandler()->delete( $section->id );
+        // try to load the section and see if it exists before deleting
+        // will throw the exception if it doesn't exist
+        // @todo is this required
+        $this->loadSection( $section->id );
+
+        if ( $this->countAssignedContents( $section ) > 0 )
+            throw new BadStateException( "section" );
+
+        $this->persistenceHandler->sectionHandler()->delete( $section->id );
     }
 
     /**
      * instanciates a new SectionCreateStruct
-     * 
-     * @return SectionCreateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
-    public function newSectionCreateStruct(){}
-    
+    public function newSectionCreateStruct()
+    {
+        return new SectionCreateStruct();
+    }
+
     /**
      * instanciates a new SectionUpdateStruct
-     * 
-     * @return SectionUpdateStruct
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
-    public function newSectionUpdateStruct(){}
+    public function newSectionUpdateStruct()
+    {
+        return new SectionUpdateStruct();
+    }
 }

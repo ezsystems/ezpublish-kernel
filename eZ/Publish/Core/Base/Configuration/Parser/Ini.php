@@ -12,7 +12,7 @@
 namespace eZ\Publish\Core\Base\Configuration\Parser;
 use eZ\Publish\Core\Base\Configuration,
     eZ\Publish\Core\Base\Configuration\Parser,
-    eZ\Publish\Core\Base\Exception\Logic,
+    eZ\Publish\Core\Base\Exceptions\Logic,
     ezcConfiguration,
     ezcConfigurationIniReader;
 

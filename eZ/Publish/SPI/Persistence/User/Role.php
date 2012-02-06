@@ -46,4 +46,3 @@ class Role extends ValueObject
      */
     public $groupIds = array();
 }
-?>

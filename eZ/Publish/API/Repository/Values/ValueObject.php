@@ -78,4 +78,33 @@ abstract class ValueObject
         throw new PropertyNotFound( $property, get_class( $this ) );
     }
 
+
+    /**
+     * Magic isset function handling isset() to non public properties
+     *
+     * Returns true for all (public/)protected/private properties.
+     *
+     * @param string $property Name of the property
+     *
+     * @return boolean
+     */
+    public function __isset( $property )
+    {
+        return property_exists( $this, $property );
+    }
+
+    /**
+     * Magic unset function handling unset() to non public properties
+     *
+     * Throws PropertyNotFound exception on all writes to undefined properties so typos are not silently accepted and
+     * throws PropertyPermission exception on readonly (protected) properties.
+     *
+     * @param string $property Name of the property
+     *
+     * @return boolean
+     */
+    public function __unset( $property )
+    {
+        $this->__set( $property, null );
+    }
 }

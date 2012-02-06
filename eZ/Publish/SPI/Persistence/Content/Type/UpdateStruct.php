@@ -121,4 +121,3 @@ class UpdateStruct extends ValueObject
      */
     public $defaultAlwaysAvailable;
 }
-?>

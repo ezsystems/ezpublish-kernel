@@ -54,7 +54,7 @@ interface IOService
     /**
      * Loads the binary file with $id
      * 
-     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundExcption
+     * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
      *
      * @param string $binaryFileid
      * 

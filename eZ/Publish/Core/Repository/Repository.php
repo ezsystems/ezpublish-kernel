@@ -8,10 +8,10 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use eZ\Publish\Core\Base\Exception\BadConfiguration,
-    eZ\Publish\Core\Base\Exception\InvalidArgumentValue,
-    eZ\Publish\Core\Base\Exception\Logic,
-    eZ\Publish\SPI\Io\Handler as IoHandler,
+use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\Logic,
+    eZ\Publish\SPI\IO\Handler as IoHandler,
     eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
     eZ\Publish\API\Repository\Repository  as RepositoryInterface,
     eZ\Publish\Core\Repository\ContentService,
@@ -65,7 +65,7 @@ class Repository implements RepositoryInterface
      * Construct repository object with provided storage engine
      *
      * @param \eZ\Publish\SPI\Persistence\Handler $handler
-     * @param \eZ\Publish\SPI\Io\Handler $ioHandler
+     * @param \eZ\Publish\SPI\IO\Handler $ioHandler
      * @param User|null $user
      */
     public function __construct( PersistenceHandler $persistenceHandler, IoHandler $ioHandler, User $user = null )
@@ -134,8 +134,8 @@ class Repository implements RepositoryInterface
      * @param ValueObject $value
      * @param ValueObject $target
      * @return boolean
-     * @throws \eZ\Publish\Core\Base\Exception\InvalidArgumentValue On invalid $function value
-     * @throws \eZ\Publish\Core\Base\Exception\Logic On limitation used in policies but not in $model::defintion()
+     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid $function value
+     * @throws \eZ\Publish\Core\Base\Exceptions\Logic On limitation used in policies but not in $model::defintion()
      */
     public function canUser( $module, $function, ValueObject $value, ValueObject $target )
     {

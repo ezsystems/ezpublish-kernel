@@ -293,4 +293,3 @@ class Handler implements BaseUserHandler
         $this->userGateway->removeRole( $groupId, $roleId );
     }
 }
-?>

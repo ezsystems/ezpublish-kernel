@@ -73,4 +73,3 @@ class Specifications
         $this->valueCount = $valueCount;
     }
 }
-?>

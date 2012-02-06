@@ -64,4 +64,3 @@ class CreateStruct extends ValueObject
      */
     public $modifierId;
 }
-?>

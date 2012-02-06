@@ -51,4 +51,3 @@ abstract class ValueObject
         throw new PropertyNotFound( $name, get_class( $this ) );
     }
 }
-?>

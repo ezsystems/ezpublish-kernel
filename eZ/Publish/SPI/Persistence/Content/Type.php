@@ -187,4 +187,3 @@ class Type extends ValueObject
      */
     public $defaultAlwaysAvailable = false;
 }
-?>

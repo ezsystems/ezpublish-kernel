@@ -79,4 +79,3 @@ class UserMetadata extends Criterion implements CriterionInterface
      */
     const MODIFIER = 'modifier';
 }
-?>

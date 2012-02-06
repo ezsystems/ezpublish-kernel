@@ -12,7 +12,8 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Section,
     eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
     eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
-    eZ\Publish\Core\Base\Exception\NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    ezp\Base\Exception\PropertyPermission;
 
 /**
  * Test case for Section Service using InMemory storage class
@@ -33,6 +34,7 @@ abstract class SectionBase extends BaseServiceTest
     }
 
     /**
+     * Test retrieving missing property
      * @expectedException ezp\Base\Exception\PropertyNotFound
      * @covers \eZ\Publish\API\Repository\Values\Content\Section::__get
      */
@@ -43,14 +45,43 @@ abstract class SectionBase extends BaseServiceTest
     }
 
     /**
-     * @expectedException eZ\Publish\Core\Base\Exception\PropertyPermission
+     * Test setting read only property
+     * @expectedException ezp\Base\Exception\PropertyPermission
      * @covers \eZ\Publish\API\Repository\Values\Content\Section::__set
      */
     public function testReadOnlyProperty()
     {
-    	self::markTestSkipped( 'ID is a public property, will not fail' );
         $section = new Section();
         $section->id = 22;
+    }
+
+    /**
+     * Test if property exists
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__isset
+     */
+    public function testIsPropertySet()
+    {
+        $section = new Section();
+        $value = isset( $section->notDefined );
+        self::assertEquals( false, $value );
+
+        $value = isset( $section->id );
+        self::assertEquals( true, $value );
+    }
+
+    /**
+     * Test unsetting a property
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__unset
+     */
+    public function testUnsetProperty()
+    {
+        $section = new Section( array( 'id' => 1 ) );
+        try
+        {
+            unset( $section->id );
+            self::fail( 'Unsetting read-only property succeeded' );
+        }
+        catch ( PropertyPermission $e ) {}
     }
 
     /**
@@ -74,7 +105,7 @@ abstract class SectionBase extends BaseServiceTest
     /**
      * Test service function for creating sections
      * @covers \eZ\Publish\Core\Repository\SectionService::create
-     * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\Forbidden
      */
     public function testCreateForbidden()
     {
@@ -100,7 +131,7 @@ abstract class SectionBase extends BaseServiceTest
         self::assertEquals( 'standard', $section->identifier );
         self::assertEquals( 'Standard', $section->name );
     }
-    
+
     /**
      * Test service function for loading sections
      * @covers \eZ\Publish\Core\Repository\SectionService::loadSectionByIdentifier
@@ -135,7 +166,7 @@ abstract class SectionBase extends BaseServiceTest
      * Test service function for loading sections
      *
      * @covers \eZ\Publish\Core\Repository\SectionService::load
-     * @expectedException \eZ\Publish\Core\Base\Exception\NotFound
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadNotFound()
     {
@@ -166,7 +197,7 @@ abstract class SectionBase extends BaseServiceTest
      * Test service function for update sections
      *
      * @covers \eZ\Publish\Core\Repository\SectionService::update
-     * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\Forbidden
      */
     public function testUpdateForbidden()
     {
@@ -197,7 +228,7 @@ abstract class SectionBase extends BaseServiceTest
             $service->loadSection( $newSection->id );
             self::fail( 'Section is still returned after being deleted' );
         }
-        catch ( NotFound $e )
+        catch ( NotFoundException $e )
         {
         }
     }
@@ -213,7 +244,7 @@ abstract class SectionBase extends BaseServiceTest
         $service = $this->repository->getSectionService();
         $section = $service->loadSection( 1 );
         $contentCount = $service->countAssignedContents( $section );
-        
+
         self::assertInternalType( 'integer', $contentCount );
         self::assertGreaterThan( 0, $contentCount );
     }
@@ -222,7 +253,7 @@ abstract class SectionBase extends BaseServiceTest
      * Test service function for deleting sections
      *
      * @covers \eZ\Publish\Core\Repository\SectionService::delete
-     * @expectedException \eZ\Publish\Core\Base\Exception\Forbidden
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\Forbidden
      */
     public function testDeleteForbidden()
     {

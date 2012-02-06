@@ -110,4 +110,3 @@ class Version extends ValueObject
      */
     public $fields = array();
 }
-?>

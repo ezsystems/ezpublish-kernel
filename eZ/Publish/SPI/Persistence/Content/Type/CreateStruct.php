@@ -170,4 +170,3 @@ class CreateStruct extends ValueObject
         }
     }
 }
-?>

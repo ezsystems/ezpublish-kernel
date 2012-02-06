@@ -65,4 +65,3 @@ class Subtree extends Criterion implements CriterionInterface
         return new self( $value );
     }
 }
-?>

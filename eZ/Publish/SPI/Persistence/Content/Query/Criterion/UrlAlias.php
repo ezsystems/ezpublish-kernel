@@ -66,4 +66,3 @@ class UrlAlias extends Criterion implements CriterionInterface
         return new self( $operator, $value );
     }
 }
-?>

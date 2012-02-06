@@ -48,4 +48,3 @@ class Field extends Criterion implements CriterionInterface
         );
     }
 }
-?>

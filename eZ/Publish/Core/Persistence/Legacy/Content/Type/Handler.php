@@ -441,4 +441,3 @@ class Handler implements BaseContentTypeHandler
         $this->updateHandler->publishNewType( $toType, 0 );
     }
 }
-?>

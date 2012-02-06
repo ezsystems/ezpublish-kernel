@@ -71,4 +71,3 @@ class Group extends ValueObject
      */
     public $modifierId;
 }
-?>

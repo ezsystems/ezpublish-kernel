@@ -10,7 +10,7 @@
  */
 
 namespace eZ\Publish\Core\Base;
-use eZ\Publish\Core\Base\Exception\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
 
 /**
  * Configuration manager class

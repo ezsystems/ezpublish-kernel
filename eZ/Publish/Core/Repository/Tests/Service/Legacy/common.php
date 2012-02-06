@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service\Legacy;
 use eZ\Publish\Core\Repository\Repository,
-    eZ\Publish\Core\Io\Legacy\Handler as LegacyIoHandler,
+    eZ\Publish\Core\IO\LegacyHandler as LegacyIoHandler,
     eZ\Publish\Core\Persistence\Legacy\Handler as LegacyPersistenceHandler,
     ReflectionMethod;
 

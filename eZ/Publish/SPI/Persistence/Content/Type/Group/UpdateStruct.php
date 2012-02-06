@@ -57,4 +57,3 @@ class UpdateStruct extends ValueObject
      */
     public $modifierId;
 }
-?>

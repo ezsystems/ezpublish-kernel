@@ -66,4 +66,3 @@ class UpdateStruct extends ValueObject
      */
     public $initialLanguageId = false;
 }
-?>

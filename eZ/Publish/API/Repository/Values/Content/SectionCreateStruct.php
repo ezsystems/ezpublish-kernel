@@ -23,5 +23,3 @@ class SectionCreateStruct extends ValueObject
      */
     public $name;
 }
-?>
-
