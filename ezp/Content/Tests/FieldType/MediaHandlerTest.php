@@ -8,14 +8,14 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Media\Handler as MediaHandler,
-    ezp\Content\FieldType\Media\Type as MediaType,
+use eZ\Publish\Core\Repository\FieldType\Media\Handler as MediaHandler,
+    eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
     ezp\Io\FileInfo,
     ezp\Base\BinaryRepository,
     PHPUnit_Framework_TestCase;
 
 /**
- * Test case for {@link \ezp\Content\FieldType\Media\Handler}
+ * Test case for {@link \eZ\Publish\Core\Repository\FieldType\Media\Handler}
  */
 class MediaHandlerTest extends PHPUnit_Framework_TestCase
 {
@@ -33,7 +33,7 @@ class MediaHandlerTest extends PHPUnit_Framework_TestCase
 
     /**
      * Binary file handler object
-     * @var \ezp\Content\FieldType\Media\Handler
+     * @var \eZ\Publish\Core\Repository\FieldType\Media\Handler
      */
     protected $handler;
 
@@ -49,7 +49,7 @@ class MediaHandlerTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType\Media\Handler
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Handler
      */
     public function testGetPluginsPageByType()
     {

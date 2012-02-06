@@ -8,11 +8,11 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Author\Type as AuthorType,
-    ezp\Content\FieldType\Author\Value as AuthorValue,
-    ezp\Content\FieldType\Author\Author,
-    ezp\Content\FieldType\Author\AuthorCollection,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\Author\Type as AuthorType,
+    eZ\Publish\Core\Repository\FieldType\Author\Value as AuthorValue,
+    eZ\Publish\Core\Repository\FieldType\Author\Author,
+    eZ\Publish\Core\Repository\FieldType\Author\AuthorCollection,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -23,7 +23,7 @@ use ezp\Content\FieldType\Factory,
 class AuthorTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Content\FieldType\Author\Author[]
+     * @var \eZ\Publish\Core\Repository\FieldType\Author\Author[]
      */
     private $authors;
 
@@ -47,19 +47,19 @@ class AuthorTest extends PHPUnit_Framework_TestCase
      * This test will make sure a correct mapping for the field type string has
      * been made.
      *
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Author\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Author\\Type",
             Factory::build( "ezauthor" ),
             "Author object not returned for 'ezauthor', incorrect mapping? "
         );
     }
 
     /**
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testAuthorSupportedValidators()
     {
@@ -68,17 +68,17 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Author\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::canParseValue
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      */
     public function testCanParseValueInvalidType()
     {
         $ft = new AuthorType;
-        $ft->setValue( $this->getMock( 'ezp\\Content\\FieldType\\Value' ) );
+        $ft->setValue( $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Author\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::canParseValue
      * @expectedException \ezp\Base\Exception\BadFieldTypeInput
      */
     public function testCanParseValueInvalidFormat()
@@ -90,7 +90,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Author\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Type::canParseValue
      */
     public function testCanParseValueValidFormat()
     {
@@ -104,27 +104,27 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Author\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
         $value = new AuthorValue;
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\Author\\AuthorCollection', $value->authors );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\AuthorCollection', $value->authors );
         self::assertSame( array(), $value->authors->getArrayCopy() );
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Author\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
         $value = new AuthorValue( $this->authors );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\Author\\AuthorCollection', $value->authors );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Author\\AuthorCollection', $value->authors );
         self::assertSame( $this->authors, $value->authors->getArrayCopy() );
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Author\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::fromString
      * @expectedException \ezp\Base\Exception\Logic
      */
     public function testBuildFieldValueFromString()
@@ -133,7 +133,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Author\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::__toString
      */
     public function testFieldValueToString()
     {
@@ -149,7 +149,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Author\Value::getTitle
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\Value::getTitle
      */
     public function testFieldValueTitle()
     {
@@ -158,7 +158,7 @@ class AuthorTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Author\AuthorCollection::offsetSet
+     * @covers \eZ\Publish\Core\Repository\FieldType\Author\AuthorCollection::offsetSet
      */
     public function testAddAuthor()
     {

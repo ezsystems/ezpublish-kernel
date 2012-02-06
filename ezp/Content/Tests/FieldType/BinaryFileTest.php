@@ -8,10 +8,10 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\BinaryFile\Type as BinaryFileType,
-    ezp\Content\FieldType\BinaryFile\Value as BinaryFileValue,
-    ezp\Content\FieldType\BinaryFile\Handler as BinaryFileHandler,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\BinaryFile\Type as BinaryFileType,
+    eZ\Publish\Core\Repository\FieldType\BinaryFile\Value as BinaryFileValue,
+    eZ\Publish\Core\Repository\FieldType\BinaryFile\Handler as BinaryFileHandler,
     ezp\Io\FileInfo,
     ezp\Base\BinaryRepository,
     PHPUnit_Framework_TestCase,
@@ -45,12 +45,12 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testBuildFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\BinaryFile\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\Type",
             Factory::build( "ezbinaryfile" ),
             "BinaryFile object not returned for 'ezbinaryfile', incorrect mapping? "
         );
@@ -59,20 +59,20 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testBinaryFileSupportedValidators()
     {
         $ft = new BinaryFileType;
         self::assertSame(
-            array( 'ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator' ),
+            array( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator' ),
             $ft->allowedValidators(),
             "The set of allowed validators does not match what is expected."
         );
     }
 
     /**
-     * @covers \ezp\Content\FieldType\BinaryFile\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::canParseValue
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
      * @group binaryFile
@@ -89,7 +89,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\BinaryFile\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::canParseValue
      * @expectedException ezp\Base\Exception\InvalidArgumentType
      * @group fieldType
      * @group binaryFile
@@ -100,13 +100,13 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'canParseValue' );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, $this->getMock( 'ezp\\Content\\FieldType\\Value' ) );
+        $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType\BinaryFile\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Type::canParseValue
      */
     public function testCanParseValueValidFormat()
     {
@@ -124,23 +124,23 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType\BinaryFile\Value::getHandler
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::getHandler
      */
     public function testValueGetHandler()
     {
         $value = new BinaryFileValue;
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\BinaryFile\\Handler', $value->getHandler() );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\Handler', $value->getHandler() );
     }
 
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType\BinaryFile\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::fromString
      */
     public function testBuildFieldValueFromString()
     {
         $value = BinaryFileValue::fromString( $this->imagePath );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\BinaryFile\\Value', $value );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\Value', $value );
         self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $value->file );
         self::assertSame( $this->imageFileInfo->getBasename(), $value->originalFilename );
         self::assertSame( $value->originalFilename, $value->file->originalFile );
@@ -149,7 +149,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType\BinaryFile\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::__toString
      */
     public function testFieldValueToString()
     {
@@ -162,7 +162,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType\BinaryFile\Value::__get
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::__get
      */
     public function testVirtualLegacyProperty()
     {
@@ -178,7 +178,7 @@ class BinaryFileTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group binaryFile
-     * @covers \ezp\Content\FieldType\BinaryFile\Value::__get
+     * @covers \eZ\Publish\Core\Repository\FieldType\BinaryFile\Value::__get
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testInvalidVirtualProperty()

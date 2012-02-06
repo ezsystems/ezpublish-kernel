@@ -13,8 +13,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
-    ezp\Content\FieldType\Author\Value as AuthorValue,
-    ezp\Content\FieldType\Author\Author as AuthorItem,
+    eZ\Publish\Core\Repository\FieldType\Author\Value as AuthorValue,
+    eZ\Publish\Core\Repository\FieldType\Author\Author as AuthorItem,
     DOMDocument;
 
 class Author implements Converter
@@ -80,7 +80,7 @@ class Author implements Converter
     /**
      * Generates XML string from $authorValue to be stored in storage engine
      *
-     * @param \ezp\Content\FieldType\Author\Value $authorValue
+     * @param \eZ\Publish\Core\Repository\FieldType\Author\Value $authorValue
      * @return string The generated XML string
      */
     private function generateXmlString( AuthorValue $authorValue )
@@ -110,7 +110,7 @@ class Author implements Converter
      * Restores an author Value object from $xmlString
      *
      * @param string $xmlString XML String stored in storage engine
-     * @return \ezp\Content\FieldType\Author\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\Author\Value
      */
     private function restoreValueFromXmlString( $xmlString )
     {

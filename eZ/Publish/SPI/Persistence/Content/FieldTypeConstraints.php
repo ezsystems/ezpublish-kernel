@@ -15,9 +15,9 @@ class FieldTypeConstraints extends ValueObject
     /**
      * Array of validators.
      * Key is the FQN fo the validator class.
-     * Value is a hash like described in {@link \ezp\Content\FieldType\Validator::$constraints}
+     * Value is a hash like described in {@link \eZ\Publish\Core\Repository\FieldType\Validator::$constraints}
      *
-     * @see \ezp\Content\FieldType\Validator::$constraints
+     * @see \eZ\Publish\Core\Repository\FieldType\Validator::$constraints
      * @var array
      */
     public $validators;
@@ -27,8 +27,8 @@ class FieldTypeConstraints extends ValueObject
      * and set in {@link \ezp\Content\Type\FieldDefinition}.
      * Collection is indexed by setting name.
      *
-     * @see \ezp\Content\FieldType::$fieldSettings
-     * @var \ezp\Content\FieldType\FieldSettings
+     * @see \eZ\Publish\Core\Repository\FieldType::$fieldSettings
+     * @var \eZ\Publish\Core\Repository\FieldType\FieldSettings
      */
     public $fieldSettings;
 }

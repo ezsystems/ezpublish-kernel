@@ -13,8 +13,8 @@ use eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\Type\FieldDefinition,
-    ezp\Content\FieldType\FieldSettings,
-    ezp\Content\FieldType\Selection\Value as SelectionValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings,
+    eZ\Publish\Core\Repository\FieldType\Selection\Value as SelectionValue,
     DOMDocument;
 
 class Selection implements Converter

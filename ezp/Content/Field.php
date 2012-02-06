@@ -18,16 +18,16 @@ use ezp\Base\Model,
     ezp\Content\Version,
     ezp\Content\Type\FieldDefinition,
     eZ\Publish\SPI\Persistence\Content\Field as FieldVO,
-    ezp\Content\FieldType\Value as FieldValue,
-    ezp\Content\FieldType\OnPublish as OnPublishFieldType,
-    ezp\Content\FieldType\OnCreate as OnCreateFieldType;
+    eZ\Publish\Core\Repository\FieldType\Value as FieldValue,
+    eZ\Publish\Core\Repository\FieldType\OnPublish as OnPublishFieldType,
+    eZ\Publish\Core\Repository\FieldType\OnCreate as OnCreateFieldType;
 
 /**
  * This class represents a Content's field
  *
  * @property-read mixed $id
  * @property-ready string $type
- * @property \ezp\Content\FieldType\Value $value Value for current field
+ * @property \eZ\Publish\Core\Repository\FieldType\Value $value Value for current field
  * @property string $type
  * @property mixed $language
  * @property-read int $versionNo
@@ -68,7 +68,7 @@ class Field extends Model implements Observer
     protected $fieldDefinition;
 
     /**
-     * @var \ezp\Content\FieldType\Value
+     * @var \eZ\Publish\Core\Repository\FieldType\Value
      */
     protected $value;
 
@@ -132,7 +132,7 @@ class Field extends Model implements Observer
     /**
      * Returns current field value as FieldValue object
      *
-     * @return \ezp\Content\FieldType\Value
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
      */
     public function getValue()
     {
@@ -142,7 +142,7 @@ class Field extends Model implements Observer
     /**
      * Assigns FieldValue object $inputValue to current field
      *
-     * @param \ezp\Content\FieldType\Value $inputValue
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $inputValue
      * @todo Make validate optional.
      */
     public function setValue( FieldValue $inputValue )
@@ -158,8 +158,8 @@ class Field extends Model implements Observer
      *
      * @todo Change so validate does not throw exceptions for logical validation errors.
      *
-     * @param \ezp\Content\FieldType\FieldValue $inputValue
-     * @return \ezp\Content\FieldType\FieldValue
+     * @param \eZ\Publish\Core\Repository\FieldType\FieldValue $inputValue
+     * @return \eZ\Publish\Core\Repository\FieldType\FieldValue
      * @throws \ezp\Base\Exception\FieldValidation
      */
     protected function validateValue( FieldValue $inputValue )

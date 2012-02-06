@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use ezp\Content\FieldType\Rating\Value as RatingValue,
+use eZ\Publish\Core\Repository\FieldType\Rating\Value as RatingValue,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -76,7 +76,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Rating\\Value", $fieldValue->data );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Value", $fieldValue->data );
         self::assertSame( false, $fieldValue->data->isDisabled );
     }
 
@@ -92,7 +92,7 @@ class RatingTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Rating\\Value", $fieldValue->data );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Rating\\Value", $fieldValue->data );
         self::assertSame( true, $fieldValue->data->isDisabled );
     }
 

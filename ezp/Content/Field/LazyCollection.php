@@ -11,10 +11,10 @@ namespace ezp\Content\Field;
 use ezp\Base\Collection\LazyType,
     ezp\Content\Service as ContentService,
     ezp\Content\Version,
-    ezp\Content\FieldType\Factory as FieldTypeFactory,
+    eZ\Publish\Core\Repository\FieldType\Factory as FieldTypeFactory,
     ezp\Base\Exception\Logic as LogicException,
     ezp\Base\Exception\InvalidArgumentType,
-    ezp\Content\FieldType\Value as FieldValue;
+    eZ\Publish\Core\Repository\FieldType\Value as FieldValue;
 
 /**
  * Field Collection class. Fields are indexed by field identifier
@@ -37,7 +37,7 @@ class LazyCollection extends LazyType
      * Tries to assign $value as field value to a Field object identified by $identifier
      *
      * @param string $identifier Field identifier
-     * @param \ezp\Content\FieldType\Value $value Field value object
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value Field value object
      * @throws \ezp\Base\Exception\Logic If any field identified by $identifier doesn't exist in the collection
      * @throws \ezp\Base\Exception\InvalidArgumentType If $value is not a field value object
      * @todo Direct string assignation ? If we decide to implement this, magic should be done here

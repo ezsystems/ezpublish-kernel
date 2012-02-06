@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\DateAndTime\Type as DateAndTime,
-    ezp\Content\FieldType\DateAndTime\Value as DateAndTimeValue,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\DateAndTime\Type as DateAndTime,
+    eZ\Publish\Core\Repository\FieldType\DateAndTime\Value as DateAndTimeValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject,
     DateTime;
@@ -23,12 +23,12 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testBuildFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\DateAndTime\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Type",
             Factory::build( "ezdatetime" ),
             "DateAndTime object not returned for 'ezstring', incorrect mapping? "
         );
@@ -37,7 +37,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testDateAndTimeSupportedValidators()
     {
@@ -52,7 +52,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedSettings
      */
     public function testDateAndTimeAllowedSettings()
     {
@@ -67,13 +67,13 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType\DateAndTime\Type::getDefaultValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::getDefaultValue
      */
     public function testDefaultValue()
     {
         $ft = new DateAndTime();
         self::assertInstanceOf(
-            'ezp\\Content\\FieldType\\DateAndTime\\Value',
+            'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value',
             $ft->getValue()
         );
         self::assertInstanceOf( 'DateTime', $ft->getValue()->value );
@@ -81,7 +81,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\DateAndTime\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::canParseValue
      * @expectedException ezp\Base\Exception\InvalidArgumentType
      * @group fieldType
      * @group dateTime
@@ -92,11 +92,11 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'canParseValue' );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, $this->getMock( 'ezp\\Content\\FieldType\\Value' ) );
+        $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
     /**
-     * @covers \ezp\Content\FieldType\DateAndTime\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::canParseValue
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
      * @group dateTime
@@ -115,7 +115,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType\DateAndTime\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::canParseValue
      */
     public function testCanParseValueValidFormat()
     {
@@ -131,7 +131,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType\DateAndTime\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -142,14 +142,14 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
         $fieldValue = $ft->toFieldValue();
 
         self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
         self::assertSame( array( 'sort_key_int' => $fv->value->getTimestamp() ), $fieldValue->sortKey );
     }
 
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType\DateAndTime\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -161,7 +161,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType\DateAndTime\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::__construct
      */
     public function testBuildFieldValueWithStringParam()
     {
@@ -173,7 +173,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType\DateAndTime\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -185,13 +185,13 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType\DateAndTime\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::fromString
      */
     public function testBuildFieldValueFromString()
     {
         $timestamp = 1048633200;
         $fv = DateAndTimeValue::fromString( "@$timestamp" );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\DateAndTime\\Value', $fv );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value', $fv );
         self::assertSame( $timestamp, $fv->value->getTimestamp() );
     }
 
@@ -199,7 +199,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group dateTime
      * @expectedException \ezp\Base\Exception\InvalidArgumentValue
-     * @covers \ezp\Content\FieldType\DateAndTime\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::fromString
      */
     public function testBuildFieldValueFromInvalidString()
     {
@@ -209,7 +209,7 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \ezp\Content\FieldType\DateAndTime\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value::__toString
      */
     public function testFieldValueToString()
     {

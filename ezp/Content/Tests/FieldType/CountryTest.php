@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Country\Type as Country,
-    ezp\Content\FieldType\Country\Value as CountryValue,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\Country\Type as Country,
+    eZ\Publish\Core\Repository\FieldType\Country\Value as CountryValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -21,12 +21,12 @@ class CountryTest extends PHPUnit_Framework_TestCase
      * been made.
      *
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Country\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Type",
             Factory::build( "ezcountry" ),
             "Country object not returned for 'ezcountry', incorrect mapping? "
         );
@@ -34,7 +34,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testCountrySupportedValidators()
     {
@@ -44,7 +44,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Country\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::canParseValue
      */
     public function testCanParseValueValidFormatSingle()
     {
@@ -59,7 +59,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Country\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::canParseValue
      */
     public function testCanParseValueValidFormatMultiple()
     {
@@ -74,7 +74,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Country\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -85,13 +85,13 @@ class CountryTest extends PHPUnit_Framework_TestCase
         $fieldValue = $ft->toFieldValue();
 
         self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Country\Value::__construct
-     * @covers \ezp\Content\FieldType\Country\Value::getCountriesInfo
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::getCountriesInfo
      */
     public function testBuildFieldValueWithParam()
     {
@@ -118,14 +118,14 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Country\Value::fromString
-     * @covers \ezp\Content\FieldType\Country\Value::getCountriesInfo
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::getCountriesInfo
      */
     public function testBuildFieldValueFromString()
     {
         $country = "Belgium";
         $value = CountryValue::fromString( $country );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Country\\Value", $value );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", $value );
         self::assertSame(
             array(
                 "BE" => array(
@@ -141,7 +141,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Country\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::__toString
      */
     public function testFieldValueToString()
     {
@@ -168,11 +168,11 @@ class CountryTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @dataProvider providerForConstructorOK
-     * @covers \ezp\Content\FieldType\Country\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::__construct
      */
     public function testConstructorCorrectValues( $value )
     {
-        $this->assertInstanceOf( "ezp\\Content\\FieldType\\Country\\Value", new CountryValue( $value ) );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", new CountryValue( $value ) );
     }
 
     public function providerForConstructorOK()
@@ -202,13 +202,13 @@ class CountryTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @dataProvider providerForConstructorKO
-     * @expectedException \ezp\Content\FieldType\Country\Exception\InvalidValue
+     * @expectedException \eZ\Publish\Core\Repository\FieldType\Country\Exception\InvalidValue
      * @expectedExceptionMessage is not a valid value country identifier.
-     * @covers \ezp\Content\FieldType\Country\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::__construct
      */
     public function testConstructorWrongValues( $value )
     {
-        $this->assertInstanceOf( "ezp\\Content\\FieldType\\Country\\Value", new CountryValue( $value ) );
+        $this->assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", new CountryValue( $value ) );
     }
 
     public function providerForConstructorKO()

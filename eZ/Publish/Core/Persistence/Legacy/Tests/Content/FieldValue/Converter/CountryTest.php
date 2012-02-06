@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use ezp\Content\FieldType\Country\Value as CountryValue,
-    ezp\Content\FieldType\FieldSettings,
+use eZ\Publish\Core\Repository\FieldType\Country\Value as CountryValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -56,7 +56,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
      * @group fieldType
      * @group country
      * @covers \eZ\Publish\Core\Persistence\Legacy\Content\FieldValue\Converter\Country::toFieldValue
-     * @covers \ezp\Content\FieldType\Country\Value::getCountriesInfo
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Value::getCountriesInfo
      */
     public function testToFieldValue()
     {
@@ -66,7 +66,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
         $fieldValue = new FieldValue;
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Country\\Value", $fieldValue->data );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Country\\Value", $fieldValue->data );
         self::assertSame(
             array(
                 "BE" => array(
@@ -173,7 +173,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef
         );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertTrue(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );
@@ -201,7 +201,7 @@ class CountryTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef
         );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertFalse(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );

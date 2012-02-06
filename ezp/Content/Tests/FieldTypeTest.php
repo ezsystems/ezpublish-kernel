@@ -8,8 +8,8 @@
  */
 
 namespace ezp\Content\Tests;
-use ezp\Content\FieldType\TextLine\Value as TextLineValue,
-    ezp\Content\FieldType\TextLine\StringLengthValidator,
+use eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
+    eZ\Publish\Core\Repository\FieldType\TextLine\StringLengthValidator,
     ezp\Content\Type\Concrete as ConcreteType,
     ezp\Content\Type\FieldDefinition,
     ezp\Base\Exception\BadFieldTypeInput,
@@ -19,7 +19,7 @@ use ezp\Content\FieldType\TextLine\Value as TextLineValue,
 class FieldTypeTest extends PHPUnit_Framework_TestCase
 {
     /**
-     * @var \ezp\Content\FieldType
+     * @var \eZ\Publish\Core\Repository\FieldType
      */
     protected $stub;
 
@@ -43,7 +43,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         $this->stub = $this->getMockBuilder(
-            'ezp\\Content\\FieldType'
+            'eZ\\Publish\\Core\\Repository\\FieldType'
         )->getMockForAbstractClass();
 
         $this->refStub = new ReflectionObject( $this->stub );
@@ -64,18 +64,18 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType::__construct
      */
     public function testConstructor()
     {
         $refFieldSettings = $this->refStub->getProperty( 'fieldSettings' );
         $refFieldSettings->setAccessible( true );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $refFieldSettings->getValue( $this->stub ) );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $refFieldSettings->getValue( $this->stub ) );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::initializeSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType::initializeSettings
      */
     public function testInitializeSettings()
     {
@@ -87,19 +87,19 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::getFieldTypeSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType::getFieldTypeSettings
      */
     public function testGetFieldTypeSettings()
     {
         $this->stub->initializeSettings( $this->allowedSettings );
         $fieldTypeSettings = $this->stub->getFieldTypeSettings();
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldTypeSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldTypeSettings );
         self::assertSame( $this->allowedSettings, $fieldTypeSettings->getArrayCopy() );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedSettings
      */
     public function testAllowedSettings()
     {
@@ -109,7 +109,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testAllowedValidators()
     {
@@ -118,11 +118,11 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::setValue
+     * @covers \eZ\Publish\Core\Repository\FieldType::setValue
      */
     public function testSetValue()
     {
-        $mockValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
+        $mockValue = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
         $mockValue->bountyHunter = 'Boba Fett';
         $mockValue->jediMaster = 'Obi-Wan Kenobi';
         $this->stub
@@ -136,12 +136,12 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::setValue
+     * @covers \eZ\Publish\Core\Repository\FieldType::setValue
      * @expectedException \ezp\Base\Exception\BadFieldTypeInput
      */
     public function testSetValueInvalid()
     {
-        $mockValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
+        $mockValue = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
         $this->stub
             ->expects( $this->once() )
             ->method( 'canParseValue' )
@@ -152,11 +152,11 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::getValue
+     * @covers \eZ\Publish\Core\Repository\FieldType::getValue
      */
     public function testGetValue()
     {
-        $mockValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
+        $mockValue = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
         $mockValue->bountyHunter = 'Han Solo';
         $mockValue->jediMaster = 'Yoda';
         $this->stub
@@ -170,11 +170,11 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType::toFieldValue
      */
     public function testToFieldValue()
     {
-        $fieldValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
+        $fieldValue = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
         $sortingInfo = array( 'sort_key_string' => "The Force is strong" );
         $this->stub
             ->expects( $this->once() )
@@ -194,7 +194,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::fillConstraintsFromValidator
+     * @covers \eZ\Publish\Core\Repository\FieldType::fillConstraintsFromValidator
      */
     public function testFillConstraintsFromValidator()
     {
@@ -211,7 +211,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
         $validator->maxStringLength = 20;
         $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef->fieldTypeConstraints, $validator );
         $expectedValidatorConstraints = array(
-            'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator' => array(
+            'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\StringLengthValidator' => array(
                 'maxStringLength' => 20,
                 'minStringLength' => false
             ),
@@ -222,7 +222,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::fillConstraintsFromValidator
+     * @covers \eZ\Publish\Core\Repository\FieldType::fillConstraintsFromValidator
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      */
     public function testFillConstraintsFromUnsupportedValidator()
@@ -233,17 +233,17 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
         $fieldDef->identifier = 'title';
         $fieldDef->setDefaultValue( new TextLineValue( 'New article' ) );
 
-        $validator = $this->getMockForAbstractClass( 'ezp\\Content\\FieldType\\Validator' );
+        $validator = $this->getMockForAbstractClass( 'eZ\\Publish\\Core\\Repository\\FieldType\\Validator' );
         $fieldDef->getType()->fillConstraintsFromValidator( $fieldDef->fieldTypeConstraints, $validator );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::update
+     * @covers \eZ\Publish\Core\Repository\FieldType::update
      */
     public function testUpdateFieldSetValueEvent()
     {
-        $mockValue = $this->getMock( 'ezp\\Content\\FieldType\\Value' );
+        $mockValue = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
         $mockValue->foo = 'bar';
         $this->stub
             ->expects( $this->once() )
@@ -262,7 +262,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::update
+     * @covers \eZ\Publish\Core\Repository\FieldType::update
      * @expectedException \ezp\Base\Exception\InvalidArgumentValue
      */
     public function testUpdateFieldSetValueEventWithoutValue()
@@ -275,7 +275,7 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::update
+     * @covers \eZ\Publish\Core\Repository\FieldType::update
      * @expectedException \ezp\Base\Exception\InvalidArgumentValue
      */
     public function testUpdateFieldSetValueEventWithoutValidValue()

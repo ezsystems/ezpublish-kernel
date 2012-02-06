@@ -8,10 +8,10 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Media\Type as MediaType,
-    ezp\Content\FieldType\Media\Value as MediaValue,
-    ezp\Content\FieldType\Media\Handler as MediaHandler,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
+    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaValue,
+    eZ\Publish\Core\Repository\FieldType\Media\Handler as MediaHandler,
     ezp\Io\FileInfo,
     ezp\Base\BinaryRepository,
     PHPUnit_Framework_TestCase,
@@ -45,12 +45,12 @@ class MediaTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testBuildFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Media\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Media\\Type",
             Factory::build( "ezmedia" ),
             "BinaryFile object not returned for 'ezmedia', incorrect mapping? "
         );
@@ -59,13 +59,13 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testMediaSupportedValidators()
     {
         $ft = new MediaType;
         self::assertSame(
-            array( 'ezp\\Content\\FieldType\\BinaryFile\\FileSizeValidator' ),
+            array( 'eZ\\Publish\\Core\\Repository\\FieldType\\BinaryFile\\FileSizeValidator' ),
             $ft->allowedValidators(),
             "The set of allowed validators does not match what is expected."
         );
@@ -74,7 +74,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedSettings
      */
     public function testMediaAllowedSettings()
     {
@@ -87,7 +87,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Media\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::canParseValue
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
      * @group ezmedia
@@ -104,7 +104,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Media\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::canParseValue
      * @expectedException ezp\Base\Exception\InvalidArgumentType
      * @group fieldType
      * @group ezmedia
@@ -115,13 +115,13 @@ class MediaTest extends PHPUnit_Framework_TestCase
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'canParseValue' );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, $this->getMock( 'ezp\\Content\\FieldType\\Value' ) );
+        $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType\Media\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::canParseValue
      */
     public function testCanParseValueValidFormat()
     {
@@ -139,23 +139,23 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType\Media\Value::getHandler
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::getHandler
      */
     public function testValueGetHandler()
     {
         $value = new MediaValue;
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\Media\\Handler', $value->getHandler() );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Media\\Handler', $value->getHandler() );
     }
 
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType\Media\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::fromString
      */
     public function testBuildFieldValueFromString()
     {
         $value = MediaValue::fromString( $this->mediaPath );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\Media\\Value', $value );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Media\\Value', $value );
         self::assertInstanceOf( 'ezp\\Io\\BinaryFile', $value->file );
         self::assertSame( $this->mediaFileInfo->getBasename(), $value->originalFilename );
         self::assertSame( $value->originalFilename, $value->file->originalFile );
@@ -164,7 +164,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType\Media\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::__toString
      */
     public function testFieldValueToString()
     {
@@ -177,7 +177,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType\Media\Value::__get
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::__get
      */
     public function testVirtualLegacyProperty()
     {
@@ -193,7 +193,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType\Media\Value::__get
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Value::__get
      * @expectedException \ezp\Base\Exception\PropertyNotFound
      */
     public function testInvalidVirtualProperty()
@@ -205,7 +205,7 @@ class MediaTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezmedia
-     * @covers \ezp\Content\FieldType\Media\Type::onFieldSetValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Media\Type::onFieldSetValue
      */
     public function testOnFieldSetValue()
     {

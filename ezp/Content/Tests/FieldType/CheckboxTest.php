@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Checkbox\Type as Checkbox,
-    ezp\Content\FieldType\Checkbox\Value as CheckboxValue,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\Checkbox\Type as Checkbox,
+    eZ\Publish\Core\Repository\FieldType\Checkbox\Value as CheckboxValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -22,12 +22,12 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group ezboolean
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testBuildFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Checkbox\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox\\Type",
             Factory::build( "ezboolean" ),
             "Checkbox object not returned for 'ezstring', incorrect mapping? "
         );
@@ -36,7 +36,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testCheckboxSupportedValidators()
     {
@@ -51,7 +51,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \ezp\Content\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedSettings
      */
     public function testCheckboxAllowedSettings()
     {
@@ -66,7 +66,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \ezp\Content\FieldType\Checkbox\Type::getDefaultValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::getDefaultValue
      */
     public function testDefaultValueWithDefaultSetting()
     {
@@ -80,7 +80,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Checkbox\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::canParseValue
      * @expectedException \ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
      * @group ezboolean
@@ -95,7 +95,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Checkbox\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::canParseValue
      * @expectedException \ezp\Base\Exception\InvalidArgumentType
      * @group fieldType
      * @group ezboolean
@@ -106,13 +106,13 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $ref = new ReflectionObject( $ft );
         $refMethod = $ref->getMethod( 'canParseValue' );
         $refMethod->setAccessible( true );
-        $refMethod->invoke( $ft, $this->getMock( 'ezp\\Content\\FieldType\\Value' ) );
+        $refMethod->invoke( $ft, $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' ) );
     }
 
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \ezp\Content\FieldType\Checkbox\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::canParseValue
      */
     public function testCanParseValueValidFormat()
     {
@@ -128,7 +128,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \ezp\Content\FieldType\Checkbox\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -137,14 +137,14 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $fieldValue = $ft->toFieldValue();
 
         self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
         self::assertSame( array( 'sort_key_int' => 1 ), $fieldValue->sortKey );
     }
 
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \ezp\Content\FieldType\Checkbox\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -156,7 +156,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \ezp\Content\FieldType\Checkbox\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -167,7 +167,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \ezp\Content\FieldType\Checkbox\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Value::fromString
      */
     public function testBuildFieldValueFromString()
     {
@@ -176,7 +176,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         $stringFalse = "0";
         $stringFalse2 = "";
         $value = CheckboxValue::fromString( $stringTrue );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\Checkbox\\Value', $value );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\Checkbox\\Value', $value );
         self::assertTrue( $value->bool );
         self::assertTrue( CheckboxValue::fromString( $stringTrue2 )->bool );
         self::assertFalse( CheckboxValue::fromString( $stringFalse )->bool );
@@ -186,7 +186,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \ezp\Content\FieldType\Checkbox\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Value::__toString
      */
     public function testFieldValueToString()
     {

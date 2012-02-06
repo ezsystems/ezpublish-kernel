@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\TextLine\Type as TextLine,
-    ezp\Content\FieldType\TextLine\Value as TextLineValue,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\TextLine\Type as TextLine,
+    eZ\Publish\Core\Repository\FieldType\TextLine\Value as TextLineValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -22,12 +22,12 @@ class TextLineTest extends PHPUnit_Framework_TestCase
      *
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testBuildFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\TextLine\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Type",
             Factory::build( "ezstring" ),
             "TextLine object not returned for 'ezstring', incorrect mapping? "
         );
@@ -36,13 +36,13 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testTextLineSupportedValidators()
     {
         $ft = new TextLine();
         self::assertSame(
-            array( 'ezp\\Content\\FieldType\\TextLine\\StringLengthValidator' ),
+            array( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\StringLengthValidator' ),
             $ft->allowedValidators(),
             "The set of allowed validators does not match what is expected."
         );
@@ -51,7 +51,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Content\FieldType::allowedSettings
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedSettings
      */
     public function testTextLineAllowedSettings()
     {
@@ -64,7 +64,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \ezp\Content\FieldType\TextLine\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::canParseValue
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
      * @group textLine
@@ -81,7 +81,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Content\FieldType\TextLine\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::canParseValue
      */
     public function testCanParseValueValidFormat()
     {
@@ -97,7 +97,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Content\FieldType\TextLine\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -108,14 +108,14 @@ class TextLineTest extends PHPUnit_Framework_TestCase
         $fieldValue = $ft->toFieldValue();
 
         self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
         self::assertSame( array( 'sort_key_string' => $string ), $fieldValue->sortKey );
     }
 
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Content\FieldType\TextLine\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -127,7 +127,7 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Content\FieldType\TextLine\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -138,20 +138,20 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Content\FieldType\TextLine\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Value::fromString
      */
     public function testBuildFieldValueFromString()
     {
         $string = "Most programmers don't wear strings. Most...";
         $value = TextLineValue::fromString( $string );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\TextLine\\Value', $value );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\TextLine\\Value', $value );
         self::assertSame( $string, $value->text );
     }
 
     /**
      * @group fieldType
      * @group textLine
-     * @covers \ezp\Content\FieldType\TextLine\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Value::__toString
      */
     public function testFieldValueToString()
     {

@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Tests\FieldType\XmlText;
 
-use ezp\Content\FieldType\XmlText\Input\Handler as InputHandler,
+use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Handler as InputHandler,
     ezp\Content\Relation,
 
     PHPUnit_Framework_TestCase,
@@ -60,7 +60,7 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
 
         $persistenceHandler = $this->getMock( 'eZ\\Publish\\SPI\\Persistence\\Handler' );
 
-        $fieldTypeService = $this->getMockBuilder( 'ezp\\Content\\FieldType\\Service' )
+        $fieldTypeService = $this->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\FieldType\\Service' )
             ->setConstructorArgs( array( $repository, $persistenceHandler ) )
             ->getMock();
 
@@ -105,11 +105,11 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Returns a mock object for {@see \ezp\Content\FieldType\XmlText\Input\Parser}
-     * @return \ezp\Content\FieldType\XmlText\Input\Parser
+     * Returns a mock object for {@see \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser}
+     * @return \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser
      */
     public function getInputParserMock()
     {
-        return $this->getMock( 'ezp\\Content\\FieldType\\XmlText\\Input\\Parser' );
+        return $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Input\\Parser' );
     }
 }

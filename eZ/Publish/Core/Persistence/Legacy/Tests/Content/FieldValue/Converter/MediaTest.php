@@ -8,9 +8,9 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use ezp\Content\FieldType\Media\Type as MediaType,
-    ezp\Content\FieldType\Media\Value as MediaTypeValue,
-    ezp\Content\FieldType\FieldSettings,
+use eZ\Publish\Core\Repository\FieldType\Media\Type as MediaType,
+    eZ\Publish\Core\Repository\FieldType\Media\Value as MediaTypeValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -150,7 +150,7 @@ class MediaTest extends \PHPUnit_Framework_TestCase
             ),
             $fieldDef->fieldTypeConstraints->validators
         );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertSame(
             array( 'mediaType' => MediaType::TYPE_HTML5_VIDEO ),
             $fieldDef->fieldTypeConstraints->fieldSettings->getArrayCopy()

@@ -9,7 +9,7 @@
 
 namespace ezp\Content\Tests\FieldType\XmlText;
 
-use ezp\Content\FieldType\XmlText\Input\Parser\Simplified as Parser,
+use eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser\Simplified as Parser,
     ezp\Content\Relation,
 
     PHPUnit_Framework_TestCase,
@@ -21,7 +21,7 @@ class SimplifiedTest extends PHPUnit_Framework_TestCase
     {
         $this->parser = new Parser();
         $handler = $this
-            ->getMockBuilder( 'ezp\\Content\\FieldType\\XmlText\\Input\\Handler' )
+            ->getMockBuilder( 'eZ\\Publish\\Core\\Repository\\FieldType\\XmlText\\Input\\Handler' )
             ->setConstructorArgs( array( $this->parser ) )
             ->getMock();
     }
@@ -42,7 +42,7 @@ class SimplifiedTest extends PHPUnit_Framework_TestCase
 ' ) );
     }
     /**
-     * @var \ezp\Content\FieldType\XmlText\Input\Parser
+     * @var \eZ\Publish\Core\Repository\FieldType\XmlText\Input\Parser
      */
     private $parser;
 }

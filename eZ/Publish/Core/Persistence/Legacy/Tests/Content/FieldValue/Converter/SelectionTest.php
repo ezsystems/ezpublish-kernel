@@ -8,8 +8,8 @@
  */
 
 namespace eZ\Publish\Core\Persistence\Legacy\Tests\Content\FieldValue\Converter;
-use ezp\Content\FieldType\Selection\Value as SelectionValue,
-    ezp\Content\FieldType\FieldSettings,
+use eZ\Publish\Core\Repository\FieldType\Selection\Value as SelectionValue,
+    eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldValue,
     eZ\Publish\Core\Persistence\Legacy\Content\StorageFieldDefinition,
@@ -98,7 +98,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Selection\\Value", $fieldValue->data );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Selection\\Value", $fieldValue->data );
         $this->assertEquals(
             new SelectionValue(
                 array( "Choice0", "Choice1", "Choice3" )
@@ -131,7 +131,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Selection\\Value", $fieldValue->data );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Selection\\Value", $fieldValue->data );
         $this->assertEquals(
             new SelectionValue(
                 array( "Choice0" )
@@ -164,7 +164,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
         );
 
         $this->converter->toFieldValue( $storageFieldValue, $fieldValue );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Selection\\Value", $fieldValue->data );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Selection\\Value", $fieldValue->data );
         $this->assertEquals(
             new SelectionValue(),
             $fieldValue->data
@@ -311,7 +311,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef
         );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertTrue(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );
@@ -343,7 +343,7 @@ class SelectionTest extends PHPUnit_Framework_TestCase
             ),
             $fieldDef
         );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings", $fieldDef->fieldTypeConstraints->fieldSettings );
         self::assertFalse(
             $fieldDef->fieldTypeConstraints->fieldSettings["isMultiple"]
         );

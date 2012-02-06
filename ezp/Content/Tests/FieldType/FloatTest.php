@@ -8,9 +8,9 @@
  */
 
 namespace ezp\Content\Tests\FieldType;
-use ezp\Content\FieldType\Factory,
-    ezp\Content\FieldType\Float\Type as Float,
-    ezp\Content\FieldType\Float\Value as FloatValue,
+use eZ\Publish\Core\Repository\FieldType\Factory,
+    eZ\Publish\Core\Repository\FieldType\Float\Type as Float,
+    eZ\Publish\Core\Repository\FieldType\Float\Value as FloatValue,
     PHPUnit_Framework_TestCase,
     ReflectionObject;
 
@@ -21,12 +21,12 @@ class FloatTest extends PHPUnit_Framework_TestCase
      * been made.
      *
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Factory::build
+     * @covers \eZ\Publish\Core\Repository\FieldType\Factory::build
      */
     public function testFactory()
     {
         self::assertInstanceOf(
-            "ezp\\Content\\FieldType\\Float\\Type",
+            "eZ\\Publish\\Core\\Repository\\FieldType\\Float\\Type",
             Factory::build( "ezfloat" ),
             "Float object not returned for 'ezfloat', incorrect mapping? "
         );
@@ -34,20 +34,20 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType::allowedValidators
+     * @covers \eZ\Publish\Core\Repository\FieldType::allowedValidators
      */
     public function testFloatSupportedValidators()
     {
         $ft = new Float();
         self::assertSame(
-            array( "ezp\\Content\\FieldType\\Float\\FloatValueValidator" ),
+            array( "eZ\\Publish\\Core\\Repository\\FieldType\\Float\\FloatValueValidator" ),
             $ft->allowedValidators(),
             "The set of allowed validators does not match what is expected."
         );
     }
 
     /**
-     * @covers \ezp\Content\FieldType\Float\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Type::canParseValue
      * @expectedException ezp\Base\Exception\BadFieldTypeInput
      * @group fieldType
      */
@@ -62,7 +62,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Float\Type::canParseValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Type::canParseValue
      */
     public function testCanParseValueValidFormat()
     {
@@ -77,7 +77,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Float\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Type::toFieldValue
      */
     public function testToFieldValue()
     {
@@ -88,12 +88,12 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
         self::assertSame( $fv, $fieldValue->data );
         self::assertSame( array( "sort_key_string" => "", "sort_key_int" => 0 ), $fieldValue->sortKey );
-        self::assertInstanceOf( 'ezp\\Content\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Float\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Value::__construct
      */
     public function testBuildFieldValueWithParam()
     {
@@ -103,7 +103,7 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Float\Value::__construct
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Value::__construct
      */
     public function testBuildFieldValueWithoutParam()
     {
@@ -113,19 +113,19 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Float\Value::fromString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Value::fromString
      */
     public function testBuildFieldValueFromString()
     {
         $float = 4200.42;
         $value = FloatValue::fromString( $float );
-        self::assertInstanceOf( "ezp\\Content\\FieldType\\Float\\Value", $value );
+        self::assertInstanceOf( "eZ\\Publish\\Core\\Repository\\FieldType\\Float\\Value", $value );
         self::assertSame( $float, $value->value );
     }
 
     /**
      * @group fieldType
-     * @covers \ezp\Content\FieldType\Float\Value::__toString
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Value::__toString
      */
     public function testFieldValueToString()
     {
