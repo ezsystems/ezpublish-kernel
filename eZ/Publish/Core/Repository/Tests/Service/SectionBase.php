@@ -12,7 +12,7 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Section,
     eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
     eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFound;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
 /**
  * Test case for Section Service using InMemory storage class
@@ -100,7 +100,7 @@ abstract class SectionBase extends BaseServiceTest
         self::assertEquals( 'standard', $section->identifier );
         self::assertEquals( 'Standard', $section->name );
     }
-    
+
     /**
      * Test service function for loading sections
      * @covers \eZ\Publish\Core\Repository\SectionService::loadSectionByIdentifier
@@ -135,7 +135,7 @@ abstract class SectionBase extends BaseServiceTest
      * Test service function for loading sections
      *
      * @covers \eZ\Publish\Core\Repository\SectionService::load
-     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFound
+     * @expectedException \eZ\Publish\Core\Base\Exceptions\NotFoundException
      */
     public function testLoadNotFound()
     {
@@ -197,7 +197,7 @@ abstract class SectionBase extends BaseServiceTest
             $service->loadSection( $newSection->id );
             self::fail( 'Section is still returned after being deleted' );
         }
-        catch ( NotFound $e )
+        catch ( NotFoundException $e )
         {
         }
     }
@@ -213,7 +213,7 @@ abstract class SectionBase extends BaseServiceTest
         $service = $this->repository->getSectionService();
         $section = $service->loadSection( 1 );
         $contentCount = $service->countAssignedContents( $section );
-        
+
         self::assertInternalType( 'integer', $contentCount );
         self::assertGreaterThan( 0, $contentCount );
     }
