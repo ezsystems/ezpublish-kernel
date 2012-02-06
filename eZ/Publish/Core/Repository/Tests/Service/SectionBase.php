@@ -48,7 +48,6 @@ abstract class SectionBase extends BaseServiceTest
      */
     public function testReadOnlyProperty()
     {
-    	self::markTestSkipped( 'ID is a public property, will not fail' );
         $section = new Section();
         $section->id = 22;
     }
