@@ -12,7 +12,8 @@ use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
     eZ\Publish\API\Repository\Values\Content\Section,
     eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
     eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
-    eZ\Publish\Core\Base\Exceptions\NotFoundException;
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    ezp\Base\Exception\PropertyPermission;
 
 /**
  * Test case for Section Service using InMemory storage class
@@ -33,6 +34,7 @@ abstract class SectionBase extends BaseServiceTest
     }
 
     /**
+     * Test retrieving missing property
      * @expectedException ezp\Base\Exception\PropertyNotFound
      * @covers \eZ\Publish\API\Repository\Values\Content\Section::__get
      */
@@ -43,13 +45,43 @@ abstract class SectionBase extends BaseServiceTest
     }
 
     /**
-     * @expectedException eZ\Publish\Core\Base\Exceptions\PropertyPermission
+     * Test setting read only property
+     * @expectedException ezp\Base\Exception\PropertyPermission
      * @covers \eZ\Publish\API\Repository\Values\Content\Section::__set
      */
     public function testReadOnlyProperty()
     {
         $section = new Section();
         $section->id = 22;
+    }
+
+    /**
+     * Test if property exists
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__isset
+     */
+    public function testIsPropertySet()
+    {
+        $section = new Section();
+        $value = isset( $section->notDefined );
+        self::assertEquals( false, $value );
+
+        $value = isset( $section->id );
+        self::assertEquals( true, $value );
+    }
+
+    /**
+     * Test unsetting a property
+     * @covers \eZ\Publish\API\Repository\Values\Content\Section::__unset
+     */
+    public function testUnsetProperty()
+    {
+        $section = new Section( array( 'id' => 1 ) );
+        try
+        {
+            unset( $section->id );
+            self::fail( 'Unsetting read-only property succeeded' );
+        }
+        catch ( PropertyPermission $e ) {}
     }
 
     /**
