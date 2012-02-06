@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\LanguageService as LanguageServiceInterface,
     eZ\Publish\Core\Base\ConfigurationManager,
     eZ\Publish\Core\Base\Exceptions\NotFound,
     eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
-    eZ\Publish\API\Repository\Exceptions\IllegalArgumentException,
+    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
     ezp\Base\Exception\NotFound as PersistenceNotFound;
 
 /**
