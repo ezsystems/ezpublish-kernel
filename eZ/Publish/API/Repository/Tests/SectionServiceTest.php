@@ -242,7 +242,7 @@ class SectionServiceTest extends BaseTest
         $sectionService = $repository->getSectionService();
 
         // This call should fail with a NotFoundException
-        $section = $sectionService->loadSectionByIdentifier( 'someUnknownSectionIdentifier' );
+        $sectionService->loadSectionByIdentifier( 'someUnknownSectionIdentifier' );
         /* END: Use Case */
     }
 
@@ -263,7 +263,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
-     * 
      */
     public function testCountAssignedContents()
     {
@@ -275,7 +274,6 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::assignSection()
-     * 
      */
     public function testAssignSection()
     {
