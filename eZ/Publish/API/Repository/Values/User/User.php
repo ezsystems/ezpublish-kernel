@@ -3,7 +3,7 @@ namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 
-use eZ\Publish\API\Repository\Values\Content\Version;
+use eZ\Publish\API\Repository\Values\Content\Content;
 
 /**
  * This class represents a user value
