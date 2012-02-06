@@ -8,7 +8,7 @@
 
 namespace eZ\Publish\Core\IO;
 
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     eZ\Publish\SPI\IO\Handler as IoHandlerInterface,
     eZ\Publish\SPI\IO\BinaryFileUpdateStruct,
     eZ\Publish\SPI\IO\BinaryFileCreateStruct;
@@ -20,66 +20,69 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
 class DispatcherHandler implements IoHandlerInterface
 {
     /**
-     * Io\Storage handler instances, {@see __construct()}
+     * Default Io\Storage handler instance
+     *
+     * @var \eZ\Publish\SPI\IO\Handler
+     */
+    private $defaultHandler;
+
+    /**
+     * Alternative Io\Storage handler instances, {@see __construct()}
      *
      * @var array
      */
-    private $config = array();
+    private $alternativeHandlers = array();
 
     /**
      * Creates new object and validates $config param
      *
-     * @param array $config Structure of handlers that follows the following format:
-     *     array( 'handlers' => array( 'handler' => Handler, .. ), 'default' => Handler )
+     * @param IoHandlerInterface $defaultHandler
+     * @param array $alternativeHandlers Structure of handlers that follows the following format:
+     *     array( array( 'handler' => Handler, .. ), .. )
      *     ie:
      *               array(
-     *                   'default' => $handler1,
-     *                   'handlers' => array(
-     *                       array(
-     *                           'handler' => $handler2,
-     *                           // match conditions:
-     *                           'prefix' => 'var/original/',
-     *                           'suffix' => '.gif,.jpg',
-     *                           'contains' => 'image-versioned'
-     *                       )
-     *                   )
+     *                   array(
+     *                       'handler' => $handler1,
+     *                       // match conditions:
+     *                       'prefix' => 'var/original/',
+     *                       'suffix' => '.gif,.jpg',
+     *                       'contains' => 'image-versioned'
+     *                   ),
+     *                   (...)
      *               )
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\InvalidArgumentException If $config does not contain default handler that implements
      *         Handler, handlers is unset or empty (hence you could have used default directly), one of the 'patterns'
      *         is unset or empty (hence it could have been default) or a 'handler' item does not implement Handler
      */
-    public function __construct( array $config = array() )
+    public function __construct( IoHandlerInterface $defaultHandler, array $alternativeHandlers )
     {
-        if ( empty( $config['default'] ) || !$config['default'] instanceof IoHandlerInterface )
-        {
-            throw new InvalidArgumentException( "\$config['default']", "must be of type eZ\\Publish\\SPI\\IO\\Handler" );
-        }
-        else if ( empty( $config['handlers'] ) )
+        if ( empty( $alternativeHandlers ) )
         {
             throw new InvalidArgumentException( "\$config['handlers']", "must be of type array" );
         }
 
         // Validate handlers so it does not need to be done on every call to getHandler()
-        foreach ( $config['handlers'] as $key => $handler )
+        foreach ( $alternativeHandlers as $key => $handlerConfig )
         {
-            if ( empty( $handler['contains'] ) && empty( $handler['prefix'] ) && empty( $handler['suffix'] ) )
+            if ( empty( $handlerConfig['contains'] ) && empty( $handlerConfig['prefix'] ) && empty( $handlerConfig['suffix'] ) )
             {
                 throw new InvalidArgumentException(
-                    "\$config['handlers'][$key][contains|prefix|suffix]",
+                    "\$alternativeHandlers[$key][contains|prefix|suffix]",
                     "either of these must be present and of type string"
                 );
             }
-            else if ( empty( $handler['handler'] ) || !$handler['handler'] instanceof IoHandlerInterface )
+            else if ( empty( $handlerConfig['handler'] ) || !$handlerConfig['handler'] instanceof IoHandlerInterface )
             {
                 throw new InvalidArgumentException(
-                    "\$config['handlers'][$key]['handler']",
+                    "\$alternativeHandlers[$key]['handler']",
                     "must be of type eZ\\Publish\\SPI\\IO\\Handler"
                 );
             }
         }
 
-        $this->config = $config;
+        $this->defaultHandler = $defaultHandler;
+        $this->alternativeHandlers = $alternativeHandlers;
     }
 
     /**
@@ -209,24 +212,23 @@ class DispatcherHandler implements IoHandlerInterface
      */
     private function getHandler( $path )
     {
-        if ( empty( $this->config['handlers'] ) )
-            return $this->config['default'];
-
-        foreach ( $this->config['handlers'] as $handler )
+        foreach ( $this->alternativeHandlers as $handlerConfig )
         {
             // Match handler using strpos & strstr for speed, and to avoid having regex in ini files
-            if ( !empty( $handler['contains'] ) && strpos( $path, $handler['contains'] ) === false )
+            if ( !empty( $handlerConfig['contains'] ) && strpos( $path, $handlerConfig['contains'] ) === false )
             {
                 continue;
             }
-            else if ( !empty( $handler['prefix'] ) && strpos( $path, $handler['prefix'] ) !== 0 )
+
+            if ( !empty( $handlerConfig['prefix'] ) && strpos( $path, $handlerConfig['prefix'] ) !== 0 )
             {
                 continue;
             }
-            else if ( !empty( $handler['suffix'] ) )
+
+            if ( !empty( $handlerConfig['suffix'] ) )
             {
                 $suffixMatch = false;
-                foreach ( explode( ',', $handler['suffix'] ) as $suffix )
+                foreach ( explode( ',', $handlerConfig['suffix'] ) as $suffix )
                 {
                     if ( strstr( $path, $suffix ) === $suffix )
                     {
@@ -240,9 +242,9 @@ class DispatcherHandler implements IoHandlerInterface
             }
             // Everything matched (incl one of suffixes), and since __construct made sure not all where empty
             // it should be fairly safe to return this handler
-            return $handler['handler'];
+            return $handlerConfig['handler'];
         }
 
-        return $this->config['default'];
+        return $this->defaultHandler;
     }
 }
