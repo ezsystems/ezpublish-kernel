@@ -141,6 +141,7 @@ class SectionServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
      */
     public function testLoadSectionThrowsNotFoundException()
     {
@@ -394,6 +395,7 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSectionByIdentifier()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
     public function testLoadSectionByIdentifier()
     {
@@ -402,8 +404,7 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate = $sectionService->newSectionCreateStruct();
-
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
         $sectionCreate->name       = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
@@ -421,6 +422,7 @@ class SectionServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSectionByIdentifier()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
      */
     public function testLoadSectionByIdentifierThrowsNotFoundException()
     {
@@ -485,11 +487,26 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
      */
     public function testDeleteSection()
     {
-        $this->markTestIncomplete( "Test for SectionService::deleteSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $section = $sectionService->createSection( $sectionCreate );
+
+        // Delete the newly created section
+        $sectionService->deleteSection( $section );
+        /* END: Use Case */
+
+        $this->assertEquals( 0, count( $sectionService->loadSections() ) );
     }
 
     /**

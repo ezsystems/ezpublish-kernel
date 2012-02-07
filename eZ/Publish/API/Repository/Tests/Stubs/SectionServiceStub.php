@@ -195,7 +195,7 @@ class SectionServiceStub implements SectionService
      */
     public function deleteSection( Section $section )
     {
-        // TODO: Implement deleteSection() method.
+        unset( $this->sections[$section->id], $this->identifiers[$section->identifier] );
     }
 
     /**
