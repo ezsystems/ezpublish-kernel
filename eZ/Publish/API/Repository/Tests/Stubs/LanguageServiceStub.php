@@ -10,9 +10,11 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
 use \eZ\Publish\API\Repository\LanguageService;
-
 use \eZ\Publish\API\Repository\Values\Content\Language;
 use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\LanguageService}
@@ -28,6 +30,16 @@ class LanguageServiceStub implements LanguageService
     private $nextId = 0;
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\Language[]
+     */
+    private $languages = array();
+
+    /**
+     * @var array
+     */
+    private $codes = array();
+
+    /**
      * Creates the a new Language in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
@@ -39,7 +51,12 @@ class LanguageServiceStub implements LanguageService
      */
     public function createLanguage( LanguageCreateStruct $languageCreateStruct )
     {
-        return new Language(
+        if ( isset( $this->codes[$languageCreateStruct->languageCode] ) )
+        {
+            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+
+        $language = new Language(
             array(
                 'id'            =>  ++$this->nextId,
                 'name'          =>  $languageCreateStruct->name,
@@ -47,6 +64,11 @@ class LanguageServiceStub implements LanguageService
                 'languageCode'  =>  $languageCreateStruct->languageCode
             )
         );
+
+        $this->languages[$language->id]       = $language;
+        $this->codes[$language->languageCode] = $language->id;
+
+        return $language;
     }
 
     /**

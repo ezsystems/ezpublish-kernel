@@ -104,7 +104,6 @@ class LanguageServiceTest extends BaseTest
                 $language->languageCode
             )
         );
-        $this->assertNotNull( $language->id );
     }
 
     /**
@@ -128,7 +127,21 @@ class LanguageServiceTest extends BaseTest
      */
     public function testCreateLanguageThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for LanguageService::createLanguage() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        $createStruct               = new LanguageCreateStruct();
+        $createStruct->enabled      = true;
+        $createStruct->name         = 'Norwegian';
+        $createStruct->languageCode = 'nor-NO';
+
+        $languageService->createLanguage( $createStruct );
+
+        // This call should fail with an IllegalArgumentException, because nor-NO already exists
+        $languageService->createLanguage( $createStruct );
+        /* END: Use Case */
     }
 
     /**
