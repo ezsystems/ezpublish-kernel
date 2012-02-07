@@ -85,7 +85,20 @@ class SectionServiceStub implements SectionService
      */
     public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
-        // TODO: Implement updateSection() method.
+        $updatedSection = new Section(
+            array(
+                'id'          =>  $section->id,
+                'name'        =>  ( $sectionUpdateStruct->name ? $sectionUpdateStruct->name : $section->name ),
+                'identifier'  =>  ( $sectionUpdateStruct->identifier ? $sectionUpdateStruct->identifier : $section->identifier )
+            )
+        );
+
+        unset( $this->identifiers[$section->identifier] );
+
+        $this->sections[$updatedSection->id]            = $updatedSection;
+        $this->identifiers[$updatedSection->identifier] = $updatedSection->id;
+
+        return $updatedSection;
     }
 
     /**

@@ -19,10 +19,31 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 class SectionServiceTest extends BaseTest
 {
     /**
+     * Test for the newSectionCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::newSectionCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
+     */
+    public function testNewSectionCreateStruct()
+    {
+        $repository = $this->getRepository();
+
+        ///* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate = $sectionService->newSectionCreateStruct();
+        ///* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionCreateStruct', $sectionCreate );
+    }
+
+    /**
      * Test for the createSection() method.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testNewSectionCreateStruct
      */
     public function testCreateSection()
     {
@@ -48,6 +69,7 @@ class SectionServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
      * @expectedException eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
     public function testCreateSectionThrowsUnauthorizedException()
     {
@@ -60,6 +82,7 @@ class SectionServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::createSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
     public function testCreateSectionThrowsIllegalArgumentException()
     {
@@ -86,45 +109,11 @@ class SectionServiceTest extends BaseTest
     }
 
     /**
-     * Test for the updateSection() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
-     */
-    public function testUpdateSection()
-    {
-        $this->markTestIncomplete( "Test for SectionService::updateSection() is not implemented." );
-    }
-
-    /**
-     * Test for the updateSection() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testUpdateSectionThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for SectionService::updateSection() is not implemented." );
-    }
-
-    /**
-     * Test for the updateSection() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
-     */
-    public function testUpdateSectionThrowsIllegalArgumentException()
-    {
-        $this->markTestIncomplete( "Test for SectionService::updateSection() is not implemented." );
-    }
-
-    /**
      * Test for the loadSection() method.
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::loadSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
     public function testLoadSection()
     {
@@ -175,6 +164,92 @@ class SectionServiceTest extends BaseTest
     public function testLoadSectionThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for SectionService::loadSection() is not implemented." );
+    }
+
+    /**
+     * Test for the newSectionUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::newSectionUpdateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
+     */
+    public function testNewSectionUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        ///* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
+        ///* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct', $sectionUpdate );
+    }
+
+    /**
+     * Test for the updateSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSection
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testNewSectionUpdateStruct
+     */
+    public function testUpdateSection()
+    {
+        $repository = $this->getRepository();
+
+        $sectionService            = $repository->getSectionService();
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test section one';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $sectionId = $sectionService->createSection( $sectionCreate )->id;
+
+        ///* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $section = $sectionService->loadSection( $sectionId );
+
+        $sectionUpdate = $sectionService->newSectionUpdateStruct();
+
+        $sectionUpdate->name       = 'New section name';
+        $sectionUpdate->identifier = 'newUniqueKey';
+
+        $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
+        ///* END: Use Case */
+
+        // Verify that service returns an instance of Section
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Section', $updatedSection );
+
+        // Verify that the service also persists the changes
+        $updatedSection = $sectionService->loadSection( $sectionId );
+
+        $this->assertEquals( 'New section name', $updatedSection->name );
+    }
+
+    /**
+     * Test for the updateSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     */
+    public function testUpdateSectionThrowsUnauthorizedException()
+    {
+        $this->markTestIncomplete( "Test for SectionService::updateSection() is not implemented." );
+    }
+
+    /**
+     * Test for the updateSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
+     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     */
+    public function testUpdateSectionThrowsIllegalArgumentException()
+    {
+        $this->markTestIncomplete( "Test for SectionService::updateSection() is not implemented." );
     }
 
     /**
@@ -339,44 +414,4 @@ class SectionServiceTest extends BaseTest
     {
         $this->markTestIncomplete( "Test for SectionService::deleteSection() is not implemented." );
     }
-
-    /**
-     * Test for the newSectionCreateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::newSectionCreateStruct()
-     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
-     */
-    public function testNewSectionCreateStruct()
-    {
-        $repository = $this->getRepository();
-
-        ///* BEGIN: Use Case */
-        $sectionService = $repository->getSectionService();
-
-        $sectionCreate = $sectionService->newSectionCreateStruct();
-        ///* END: Use Case */
-
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionCreateStruct', $sectionCreate );
-    }
-
-    /**
-     * Test for the newSectionUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::newSectionUpdateStruct()
-     */
-    public function testNewSectionUpdateStruct()
-    {
-        $repository = $this->getRepository();
-
-        ///* BEGIN: Use Case */
-        $sectionService = $repository->getSectionService();
-
-        $sectionUpdate = $sectionService->newSectionUpdateStruct();
-        ///* END: Use Case */
-
-        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct', $sectionUpdate );
-    }
-
 }
