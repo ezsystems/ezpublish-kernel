@@ -53,7 +53,7 @@ interface ContentService
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public function loadContenInfotByRemoteId( $remoteId );
+    public function loadContentInfoByRemoteId( $remoteId );
 
     /**
      * loads a version info of the given content object. 
