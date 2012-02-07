@@ -42,6 +42,11 @@ class SectionServiceStub implements SectionService
     private $sections = array();
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo[]
+     */
+    private $assignedContents = array();
+
+    /**
      * Creates the a new Section in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
@@ -166,7 +171,11 @@ class SectionServiceStub implements SectionService
      */
     public function countAssignedContents( Section $section )
     {
-        // TODO: Implement countAssignedContents() method.
+        if ( isset( $this->assignedContents[$section->id] ) )
+        {
+            return count( $this->assignedContents[$section->id] );
+        }
+        return 0;
     }
 
     /**

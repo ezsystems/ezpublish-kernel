@@ -449,17 +449,6 @@ class SectionServiceTest extends BaseTest
     }
 
     /**
-     * Test for the countAssignedContents() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
-     */
-    public function testCountAssignedContents()
-    {
-        $this->markTestIncomplete( "Test for SectionService::countAssignedContents() is not implemented." );
-    }
-
-    /**
      * Test for the assignSection() method.
      *
      * @return void
@@ -480,6 +469,44 @@ class SectionServiceTest extends BaseTest
     public function testAssignSectionThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for SectionService::assignSection() is not implemented." );
+    }
+
+    /**
+     * Test for the countAssignedContents() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
+     */
+    public function testCountAssignedContents()
+    {
+        $this->markTestIncomplete( "Test for SectionService::countAssignedContents() is not implemented." );
+    }
+
+    /**
+     * Test for the countAssignedContents() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
+     */
+    public function testCountAssignedContentsReturnsZeroByDefault()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $section = $sectionService->createSection( $sectionCreate );
+
+        // The number of assigned contents should be zero
+        $assignedContents = $sectionService->countAssignedContents( $section );
+        /* END: Use Case */
+
+        $this->assertSame( 0, $assignedContents );
     }
 
     /**
