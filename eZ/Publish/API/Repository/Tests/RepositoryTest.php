@@ -94,11 +94,11 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getContentLanguageService()
-     * 
      */
     public function testGetContentLanguageService()
     {
-        $this->markTestIncomplete( "Test for Repository::getContentLanguageService() is not implemented." );
+        $repository = $this->getRepository();
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\LanguageService', $repository->getContentLanguageService() );
     }
 
     /**

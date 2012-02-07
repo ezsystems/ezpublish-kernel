@@ -27,6 +27,11 @@ class RepositoryStub implements Repository
     private $sectionService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\LanguageServiceStub
+     */
+    private $languageService;
+
+    /**
      * Get current user
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -96,7 +101,11 @@ class RepositoryStub implements Repository
      */
     public function getContentLanguageService()
     {
-        // TODO: Implement getContentLanguageService() method.
+        if ( null === $this->languageService )
+        {
+            $this->languageService = new LanguageServiceStub();
+        }
+        return $this->languageService;
     }
 
     /**
