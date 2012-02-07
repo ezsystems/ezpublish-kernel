@@ -23,15 +23,15 @@ abstract class Limitation extends ValueObject
     const PARENTUSERGROUP = "ParentGroup";
 
     /**
+     * Returns the limitation identifer (one of the defined constants) or a custom limitation
      *
-     * returns the limitation identifer (one of the defined constants) or a custom limitation
      * @return string
      */
     public abstract function getIdentifier();
 
     /**
-     *
      * An integer list of ids or identifiers for which the limitation should be applied
+     *
      * @var array of mixed
      */
     public $limitationValues;

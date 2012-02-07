@@ -6,8 +6,9 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 class SubtreeLimitation extends RoleLimitation
 {
     /**
-     * (non-PHPdoc)
-     * @see User/eZ\Publish\API\Repository\Values\User.Limitation::getIdentifier()
+     * @see \eZ\Publish\API\Repository\Values\User\Limitation::getIdentifier()
+     *
+     * @return string
      */
     public function getIdentifier()
     {

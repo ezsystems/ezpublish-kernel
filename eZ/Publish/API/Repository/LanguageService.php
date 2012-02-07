@@ -45,7 +45,7 @@ interface LanguageService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      */
-    public function enableLanguage( $language );
+    public function enableLanguage( Language $language );
 
     /**
      * disables a language
@@ -54,7 +54,7 @@ interface LanguageService
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      */
-    public function disableLanguage( $language );
+    public function disableLanguage( Language $language );
 
     /**
      * Loads a Language from its language code ($languageCode)
@@ -93,14 +93,14 @@ interface LanguageService
      *         because it is still assigned to some content / type / (...).
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
      *
-     * @param Language $language
+     * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      */
-    public function deleteLanguage( $language );
-    
+    public function deleteLanguage( Language $language );
+
     /**
      * returns a configured default language code
      * 
-     * @return \eZ\Publish\API\Repository\Values\Content\LanguageCode
+     * @return string
      */
     public function getDefaultLanguageCode();
 }

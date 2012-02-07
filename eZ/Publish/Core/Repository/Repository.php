@@ -60,6 +60,20 @@ class Repository implements RepositoryInterface
     protected $sectionService;
 
     /**
+     * Instance of role service
+     *
+     * @var RoleService
+     */
+    protected $roleService;
+
+    /**
+     * Instance of language service
+     *
+     * @var LanguageService
+     */
+    protected $languageService;
+
+    /**
      * Constructor
      *
      * Construct repository object with provided storage engine
@@ -213,7 +227,14 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\LanguageService
      */
-    public function getContentLanguageService(){}
+    public function getContentLanguageService()
+    {
+        if ( $this->languageService !== null )
+            return $this->languageService;
+
+        $this->languageService = new LanguageService( $this, $this->persistenceHandler );
+        return $this->languageService;
+    }
 
     /**
      * Get Content Type Service
@@ -253,11 +274,11 @@ class Repository implements RepositoryInterface
      */
     public function getSectionService()
     {
-	if ( $this->sectionService !== null )
-	    return $this->sectionService;
-    
-	$this->sectionService = new SectionService( $this, $this->persistenceHandler );
-	return $this->sectionService;
+        if ( $this->sectionService !== null )
+            return $this->sectionService;
+
+        $this->sectionService = new SectionService( $this, $this->persistenceHandler );
+        return $this->sectionService;
     }
 
     /**
@@ -274,7 +295,14 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\RoleService
      */
-    public function getRoleService(){}
+    public function getRoleService()
+    {
+        if ( $this->roleService !== null )
+            return $this->roleService;
+
+        $this->roleService = new RoleService( $this, $this->persistenceHandler );
+        return $this->roleService;
+    }
 
     /**
      * Begin transaction

@@ -1,5 +1,8 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\Content;
+
+use eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * This value object is used for adding a translation to a version
  *
