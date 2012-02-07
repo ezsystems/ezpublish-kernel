@@ -515,10 +515,27 @@ class SectionServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testDeleteSection
      */
     public function testDeleteSectionThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for SectionService::deleteSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $section = $sectionService->createSection( $sectionCreate );
+
+        // Delete the newly created section
+        $sectionService->deleteSection( $section );
+
+        // This call should fail with a NotFoundException
+        $sectionService->deleteSection( $section );
+        /* END: Use Case */
     }
 
     /**

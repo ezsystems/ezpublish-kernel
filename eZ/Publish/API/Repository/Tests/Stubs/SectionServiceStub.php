@@ -195,6 +195,10 @@ class SectionServiceStub implements SectionService
      */
     public function deleteSection( Section $section )
     {
+        if ( false === isset( $this->sections[$section->id] ) )
+        {
+            throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
+        }
         unset( $this->sections[$section->id], $this->identifiers[$section->identifier] );
     }
 
