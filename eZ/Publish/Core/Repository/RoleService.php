@@ -544,10 +544,10 @@ class RoleService implements RoleServiceInterface
         {
             foreach ( $roleCreateStruct->policies as $policy )
             {
-                /* @var $policy APIPolicy */
+                /* @var $policy APIPolicyCreateStruct */
                 $policiesToCreate[] = $this->buildPersistancePolicyObject( $policy->module,
                                                                            $policy->function,
-                                                                           $policy->getLimitations() );
+                                                                           $policy->limitations );
             }
         }
 
