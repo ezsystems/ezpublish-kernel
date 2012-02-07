@@ -20,7 +20,7 @@ use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
 class InvalidArgumentValue extends InvalidArgumentException
 {
     /**
-     * Generates: Argument '{$argumentName}' got invalid value '{$value}'
+     * Generates: "Argument '{$argumentName}' is invalid: '{$value}'[ in class '{$className}']"
      *
      * @param string $argumentName
      * @param mixed $value
@@ -30,9 +30,8 @@ class InvalidArgumentValue extends InvalidArgumentException
     public function __construct( $argumentName, $value, $className = null, Exception $previous = null )
     {
         parent::__construct(
-            "Argument '{$argumentName}' got invalid value '" . var_export( $value, true ) . "'" .
-            ( $className !== null ? " on class '{$className}'" : "" ),
-            0,
+            $argumentName,
+            "'" . var_export( $value, true ) . "'" .( $className ? " in class '{$className}'" : "" ),
             $previous
         );
     }
