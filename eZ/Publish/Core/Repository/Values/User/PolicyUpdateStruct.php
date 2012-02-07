@@ -10,20 +10,12 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 class PolicyUpdateStruct extends APIPolicyUpdateStruct
 {
     /**
-     * List of limitations added to policy
-     * @todo move to abstract class
-     *
-     * @var array
-     */
-    protected $limitations = array();
-
-    /**
-     *
-     * adds a limitation to the policy - if a Limitation exists with the same identifer
+     * Adds a limitation to the policy - if a Limitation exists with the same identifer
      * the existing limitation is replaced
+     *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      */
-    public function addLimitation( /*Limitation*/ $limitation )
+    public function addLimitation( Limitation $limitation )
     {
         $limitationIdentifier = $limitation->getIdentifier();
         $this->limitations[$limitationIdentifier] = $limitation;
