@@ -4,6 +4,7 @@ namespace eZ\Publish\API\Repository\Values\Content;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\Content\Location;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use DateTime;
 
 /**
  * This class provides all version independent information of the content object.
@@ -19,7 +20,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read DateTime $publishedDate date of the last publish operation
  * @property-read boolean $alwaysAvailable Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
  * @property-read string $remoteId a global unique id of the content object
- * @property-read string $mainLanguageCode The main language code of the content. If the availble flag is set to true the content is shown in this language if the requested language does not exist.
+ * @property-read string $mainLanguageCode The main language code of the content. If the available flag is set to true the content is shown in this language if the requested language does not exist.
  */
 abstract class ContentInfo extends ValueObject
 {
