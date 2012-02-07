@@ -52,8 +52,7 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate = $sectionService->newSectionCreateStruct();
-
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
         $sectionCreate->name       = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
@@ -91,15 +90,13 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreateOne = $sectionService->newSectionCreateStruct();
-
+        $sectionCreateOne             = $sectionService->newSectionCreateStruct();
         $sectionCreateOne->name       = 'Test section one';
         $sectionCreateOne->identifier = 'uniqueKey';
 
         $sectionService->createSection( $sectionCreateOne );
 
-        $sectionCreateTwo = $sectionService->newSectionCreateStruct();
-
+        $sectionCreateTwo             = $sectionService->newSectionCreateStruct();
         $sectionCreateTwo->name       = 'Test section two';
         $sectionCreateTwo->identifier = 'uniqueKey';
 
@@ -122,8 +119,7 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $sectionCreate = $sectionService->newSectionCreateStruct();
-
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
         $sectionCreate->name       = 'Test Section';
         $sectionCreate->identifier = 'uniqueKey';
 
@@ -207,8 +203,7 @@ class SectionServiceTest extends BaseTest
 
         $section = $sectionService->loadSection( $sectionId );
 
-        $sectionUpdate = $sectionService->newSectionUpdateStruct();
-
+        $sectionUpdate             = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->name       = 'New section name';
         $sectionUpdate->identifier = 'newUniqueKey';
 
@@ -240,8 +235,7 @@ class SectionServiceTest extends BaseTest
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
 
-        $section = $sectionService->loadSection( $sectionId );
-
+        $section             = $sectionService->loadSection( $sectionId );
         $sectionUpdate       = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->name = 'New section name';
 

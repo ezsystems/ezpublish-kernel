@@ -11,6 +11,8 @@ namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
+use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
+
 /**
  * Test case for operations in the LanguageService using in memory storage.
  *
@@ -23,11 +25,49 @@ class LanguageServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
-     * 
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentLanguageService
      */
     public function testCreateLanguage()
     {
-        $this->markTestIncomplete( "Test for LanguageService::createLanguage() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        $createStruct               = new LanguageCreateStruct();
+        $createStruct->enabled      = true;
+        $createStruct->name         = 'English';
+        $createStruct->languageCode = 'eng-US';
+
+        $language = $languageService->createLanguage( $createStruct );
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $language );
+    }
+
+    /**
+     * Test for the createLanguage() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
+     */
+    public function testCreateLanguageSetsIdPropertyOnReturnedLanguage()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        $createStruct               = new LanguageCreateStruct();
+        $createStruct->enabled      = true;
+        $createStruct->name         = 'English';
+        $createStruct->languageCode = 'eng-US';
+
+        $language = $languageService->createLanguage( $createStruct );
+        /* END: Use Case */
+
+        $this->assertNotNull( $language->id );
     }
 
     /**

@@ -23,6 +23,11 @@ use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
 class LanguageServiceStub implements LanguageService
 {
     /**
+     * @var integer
+     */
+    private $nextId = 0;
+
+    /**
      * Creates the a new Language in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
@@ -34,7 +39,11 @@ class LanguageServiceStub implements LanguageService
      */
     public function createLanguage( LanguageCreateStruct $languageCreateStruct )
     {
-        // TODO: Implement createLanguage() method.
+        return new Language(
+            array(
+                'id'  =>  ++$this->nextId
+            )
+        );
     }
 
     /**
