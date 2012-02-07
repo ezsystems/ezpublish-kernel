@@ -38,6 +38,7 @@ abstract class Base
 
     /**
      * Parser options constants, to be used with setOption
+     *
      * @var string
      * @see setOption()
      */
@@ -53,7 +54,8 @@ abstract class Base
     const OPT_DOM_DOCUMENT_CLASS = 'DOMDocumentClass';
     const OPT_CHECK_EXTERNAL_DATA = 'checkExternalData';
 
-    /** Properties of elements that come from the input.
+    /**
+     * Properties of elements that come from the input.
      *
      * Each array element describes a tag that comes from the input. Arrays index is
      * a tag's name. Each element is an array that may contain the following members:
@@ -74,36 +76,38 @@ abstract class Base
     protected $InputTags = array();
 
     /**
-    * Properties of elements that are produced in the output.
-    *
-    * Each array element describes a tag presented in the output. Arrays index is
-    * a tag's name. Each element is an array that may contain the following members:
-    * - parsingHandler: "Parsing handler" called at parse pass 1 before processing tag's children.
-    * - initHandler: "Init handler" called at pass 2 before proccessing tag's children.
-    * - structHandler: "Structure handler" called at pass 2 after proccessing tag's children,
-    *                  but before schema validity check. It can be used to implement structure
-    *                  transformations.
-    * - publishHandler: "Publish handler" called at pass 2 after schema validity check, so it is called
-    *                  in case the element has it's guaranteed place in the DOM tree.
-    * - attributes: an array that describes attributes transformations. Array's index is the
-    *              original name of an attribute, and the value is the new name.
-    * - requiredInputAttributes: attributes that are required in the input tag. If they are not presented
-    *                            it raises invalid input flag.
-    *
-    * <code>
-    * public $OutputTags = array(
-    *    'custom'    => array( 'parsingHandler' => 'parsingHandlerCustom',
-    *                          'initHandler' => 'initHandlerCustom',
-    *                          'structHandler' => 'structHandlerCustom',
-    *                          'publishHandler' => 'publishHandlerCustom',
-    *                          'attributes' => array( 'title' => 'name' ) ),
-    * );
-    * @var array
-.   */
+     * Properties of elements that are produced in the output.
+     *
+     * Each array element describes a tag presented in the output. Arrays index is
+     * a tag's name. Each element is an array that may contain the following members:
+     * - parsingHandler: "Parsing handler" called at parse pass 1 before processing tag's children.
+     * - initHandler: "Init handler" called at pass 2 before proccessing tag's children.
+     * - structHandler: "Structure handler" called at pass 2 after proccessing tag's children,
+     *                  but before schema validity check. It can be used to implement structure
+     *                  transformations.
+     * - publishHandler: "Publish handler" called at pass 2 after schema validity check, so it is called
+     *                  in case the element has it's guaranteed place in the DOM tree.
+     * - attributes: an array that describes attributes transformations. Array's index is the
+     *              original name of an attribute, and the value is the new name.
+     * - requiredInputAttributes: attributes that are required in the input tag. If they are not presented
+     *                            it raises invalid input flag.
+     *
+     * <code>
+     * public $OutputTags = array(
+     *    'custom'    => array( 'parsingHandler' => 'parsingHandlerCustom',
+     *                          'initHandler' => 'initHandlerCustom',
+     *                          'structHandler' => 'structHandlerCustom',
+     *                          'publishHandler' => 'publishHandlerCustom',
+     *                          'attributes' => array( 'title' => 'name' ) ),
+     * );
+     *
+     * @var array
+     */
     protected $OutputTags = array();
 
     /**
      * List of XmlText namespaces
+     *
      * @var array
      */
     protected $Namespaces = array( 'image' => 'http://ez.no/namespaces/ezpublish3/image/',
@@ -113,6 +117,7 @@ abstract class Base
 
     /**
      * Parser options list
+     *
      * @var mixed[string]
      */
     protected $options = array(
@@ -131,18 +136,21 @@ abstract class Base
 
     /**
      * XmlSchema object
+     *
      * @var \ezp\Content\FieldType\XmlText\Schema
      */
     protected $XMLSchema;
 
     /**
      * DOM document object
+     *
      * @var \DOMDocument
      */
     protected $Document = null;
 
     /**
      * Processing messages
+     *
      * @var string[]
      * @see getMessages()
      */
@@ -150,12 +158,14 @@ abstract class Base
 
     /**
      * Parent nodes stack
+     *
      * @var string[]
      */
     protected $ParentStack = array();
 
     /**
      * Boolean holding the validity status of the input string
+     *
      * @var boolean
      * @see isInputValid()
      */
@@ -163,24 +173,28 @@ abstract class Base
 
     /**
      * Boolean used to interrupt the process between steps
+     *
      * @var boolean
      */
     protected $QuitProcess = false;
 
     /**
      * Array of Url objects ids
+     *
      * @var integer[]
      */
     protected $urlIDArray = array();
 
     /**
      * Array of related Content objects id
+     *
      * @var integer[]
      */
     protected $relatedObjectIDArray = array();
 
     /**
      * Array of linked Content objects id
+     *
      * @var integer[]
      */
     protected $linkedObjectIDArray = array();
@@ -190,6 +204,7 @@ abstract class Base
 
     /**
      * Input handler
+     *
      * @var \ezp\Content\FieldType\XmlText\Input\Handler
      */
     protected $handler;
@@ -214,6 +229,7 @@ abstract class Base
 
     /**
      * Sets the input handler for the parser to $handler
+     *
      * @param \ezp\Content\FieldType\XmlText\Input\Handler $handler
      */
     public function setHandler( InputHandler $handler )
@@ -223,6 +239,7 @@ abstract class Base
 
     /**
      * Sets the parser option $option to $value
+     *
      * @param string $option One of self::OPT_*
      * @param mixed $value
      * @throws \ezp\Base\Exception\BadConfiguration If the option is unknown or the value incorrect
@@ -239,6 +256,7 @@ abstract class Base
 
     /**
      * Gets the parser option $option
+     *
      * @param string $option One of self::OPT_*
      * @throws \ezp\Base\Exception\BadConfiguration If the option is unknown or the value incorrect
      */
@@ -264,6 +282,7 @@ abstract class Base
 
     /**
      * Processes $text
+     *
      * @param string $text
      * @param bool $createRootNode
      * @return DOMDocument
@@ -321,6 +340,7 @@ abstract class Base
 
     /**
      * Creates the DOMDocument object holding the XML text
+     *
      * @param bool $createRootNode wether or not to create the root <section> node
      * @return \DOMDocument
      */
@@ -647,6 +667,7 @@ abstract class Base
 
     /**
      * Helper functions for pass 1
+     *
      * @return array
      */
     private function parseAttributes( $attributeString )
@@ -679,6 +700,7 @@ abstract class Base
 
     /**
      * Sets attributes from $attributes on $element
+     *
      * @param DOMElement $element
      * @param array $attributes
      */
@@ -1013,6 +1035,7 @@ abstract class Base
 
     /**
      * Removes all attributes from $element
+     *
      * @param DOMElement $element
      */
     private function removeAllAttributes( DOMElement $element )
@@ -1026,6 +1049,7 @@ abstract class Base
 
     /**
      * Check if the element is allowed to exist in this document and remove it if not.
+     *
      * @param DOMElement $element
      */
     private function processBySchemaPresence( DOMNode $element )
@@ -1069,6 +1093,7 @@ abstract class Base
 
     /**
      * Check that $element has a correct position in the tree and fix it if not.
+     *
      * @param DOMElement $element
      */
     protected function processBySchemaTree( $element )
@@ -1335,6 +1360,7 @@ abstract class Base
 
     /**
      * Returns the XML processing messages
+     *
      * @return array
      */
     public function getMessages()
@@ -1344,6 +1370,7 @@ abstract class Base
 
     /**
      * Returns the validity status of the processed XML String
+     *
      * @return bool
      */
     public function isValid()

@@ -89,11 +89,11 @@ class Repository implements RepositoryInterface
 
         if ( $user !== null )
             $this->setCurrentUser( $user );
-       else
-       {
-           // @todo No requirement for user for the time being
-           //throw new Logic( "@todo Need to get anon user", "repository needs to have a user object" );
-       }
+        else
+        {
+            // @todo No requirement for user for the time being
+            //throw new Logic( "@todo Need to get anon user", "repository needs to have a user object" );
+        }
     }
 
     /**

@@ -259,26 +259,26 @@ abstract class FieldType implements Observer
      * @return void
      */
     public final function fillConstraintsFromValidator( FieldTypeConstraints $fieldTypeConstraints, Validator $validator )
-     {
-         $validatorClass = get_class( $validator );
-         if ( !in_array( $validatorClass, $this->allowedValidators() ) )
-             throw new InvalidArgumentType( '$validator', implode( ', ', $this->allowedValidators() ) );
+    {
+        $validatorClass = get_class( $validator );
+        if ( !in_array( $validatorClass, $this->allowedValidators() ) )
+            throw new InvalidArgumentType( '$validator', implode( ', ', $this->allowedValidators() ) );
 
-         $fieldTypeConstraints->validators = array(
-             $validatorClass => $validator->getValidatorConstraints()
-         ) + $fieldTypeConstraints->validators;
-     }
+        $fieldTypeConstraints->validators = array(
+            $validatorClass => $validator->getValidatorConstraints()
+        ) + $fieldTypeConstraints->validators;
+    }
 
     /**
-      * Called when subject has been updated
-      * Supported events:
-      *   - field/setValue Should be triggered when a field has been set a value. Will inject the value in the field type
-      *
-      * @param \ezp\Base\Observable $subject
-      * @param string $event
-      * @param array $arguments
-      * @throws \ezp\Base\Exception\InvalidArgumentValue
-      */
+     * Called when subject has been updated
+     * Supported events:
+     *   - field/setValue Should be triggered when a field has been set a value. Will inject the value in the field type
+     *
+     * @param \ezp\Base\Observable $subject
+     * @param string $event
+     * @param array $arguments
+     * @throws \ezp\Base\Exception\InvalidArgumentValue
+     */
     public function update( Observable $subject, $event = 'update', array $arguments = null )
     {
         switch ( $event )
@@ -324,24 +324,24 @@ abstract class FieldType implements Observer
         }
     }
 
-     /**
-      * This method is called when a "field/setValue" event is triggered by $subject.
-      * Override this method if you need to manipulate $value when "field/setValue" event is triggered.
-      * By default, it injects $value in the field type, without any manipulation.
-      * When overriding this method, the parent must always be called:
-      * <code>
-      * protected function onFieldSetValue( Observable $subject, Value $value )
-      * {
-      *     parent::onFieldSetValue( $subject, $value );
-      *     // Do something with $value and $subject
-      * }
-      * </code>
-      *
-      * @param \ezp\Base\Observable $subject
-      * @param \ezp\Content\FieldType\Value $value
-      */
-     protected function onFieldSetValue( Observable $subject, Value $value )
-     {
-         $this->setValue( $value );
-     }
+    /**
+     * This method is called when a "field/setValue" event is triggered by $subject.
+     * Override this method if you need to manipulate $value when "field/setValue" event is triggered.
+     * By default, it injects $value in the field type, without any manipulation.
+     * When overriding this method, the parent must always be called:
+     * <code>
+     * protected function onFieldSetValue( Observable $subject, Value $value )
+     * {
+     *     parent::onFieldSetValue( $subject, $value );
+     *     // Do something with $value and $subject
+     * }
+     * </code>
+     *
+     * @param \ezp\Base\Observable $subject
+     * @param \ezp\Content\FieldType\Value $value
+     */
+    protected function onFieldSetValue( Observable $subject, Value $value )
+    {
+        $this->setValue( $value );
+    }
 }

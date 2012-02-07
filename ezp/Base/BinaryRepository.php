@@ -18,43 +18,48 @@ use ezp\Base\Exception\InvalidArgumentValue,
 
 /**
  * Repository class
- *
  */
 class BinaryRepository
 {
     /**
      * BinaryStorage backends instances
      * Uninstanciated ones have false as a value
+     *
      * @var \ezp\Io\Handler[]
      */
     private $backends = array();
 
     /**
      * Default BinaryStorage backend identifier
+     *
      * @var string
      */
     private $defaultBackend;
 
     /**
      * Default backend override value
+     *
      * @var string
      */
     private static $defaultBackendOverride;
 
     /**
      * Backends list override value
+     *
      * @var array
      */
     private static $backendsOverride;
 
     /**
      * Bbackends configuration override value
+     *
      * @var array
      */
     private static $backendsConfigurationOverride;
 
     /**
      * Constructs the binary repository, either with the default or with override parameters
+     *
      * @param string $defaultBackendOverride Override identifier for the default backend
      * @param array $backendsOverride Override of the backends list
      * @param array $backendsConfigurationOverride
@@ -106,6 +111,7 @@ class BinaryRepository
 
     /**
      * Sets global override options for the BinaryRepository
+     *
      * @param string $defaultBackendOverride Override identifier for the default backend
      * @param array $backendsOverride Override of the backends list
      * @param array $backendsConfigurationOverride Override of the backends configuration
@@ -119,6 +125,7 @@ class BinaryRepository
 
     /**
      * Creates a BinaryFile object from the uploaded file $uploadedFile
+     *
      * @param array $uploadedFile The _POST hash of an uploaded file
      * @param string $repositoryPath The path the file must be stored as
      * @return \ezp\Io\BinaryFile
@@ -142,6 +149,7 @@ class BinaryRepository
 
     /**
      * Creates a BinaryFile object from $localFile
+     *
      * @param string $localFile
      * @param string $repositoryPath The path the file must be stored as. If false, $localFile will be used.
      * @return \ezp\Io\BinaryFile
@@ -169,6 +177,7 @@ class BinaryRepository
 
     /**
      * Stores $binaryFile to the repository
+     *
      * @param BinaryFileCreateStruct $binaryFile
      * @return BinaryFile The created BinaryFile object
      */
@@ -223,10 +232,11 @@ class BinaryRepository
     }
 
     /**
-      * Returns a read (mode: rb) file resource to the binary file identified by $path
-      * @param string $path
-      * @return resource
-      */
+     * Returns a read (mode: rb) file resource to the binary file identified by $path
+     *
+     * @param string $path
+     * @return resource
+     */
     public function getFileResource( $path )
     {
         return $this->getBackend( $path )->getFileResource( $path );
@@ -234,6 +244,7 @@ class BinaryRepository
 
     /**
      * Returns the contents of the BinaryFile identified by $path
+     *
      * @param string $path
      * @return string Binary content
      */
@@ -244,6 +255,7 @@ class BinaryRepository
 
     /**
      * Returns the appropriate backend for $path
+     *
      * @param string $path
      * @return \ezp\Io\Handler
      */
@@ -255,6 +267,7 @@ class BinaryRepository
 
     /**
      * Initializes the backend identified  by $identifier
+     *
      * @var string $identifier
      * @throws BadConfiguration on non existing backend identifier
      * @throws BadConfiguration on non existing backend class

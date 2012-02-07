@@ -18,6 +18,7 @@ class Schema
 {
     /**
      * Schema contents
+     *
      * @var array
      */
     private $schema = array(
@@ -278,7 +279,7 @@ class Schema
      *
      * @return bool|null true if elements match schema, false if elements don't match schema, null  in case of errors
      * @todo Add exceptions
-    */
+     */
     function check( $parent, $child )
     {
         if ( is_string( $parent ) )

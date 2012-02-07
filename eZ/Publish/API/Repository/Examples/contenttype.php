@@ -43,7 +43,7 @@ $contentTypeCreate->initialLanguageId = "eng-US";
 // make a new instance of a FieldDefinitionCreate class
 $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct( "ezstring", "name" );
 $fieldDefinitionCreate->setDefaultValue(
-   new \ezp\Content\FieldType\TextLine\Value( "New Name" )
+    new \ezp\Content\FieldType\TextLine\Value( "New Name" )
 );
 $fieldDefinitionCreate->setName( "englishNameOfMyNewField", "eng-US" );
 $fieldDefinitionCreate->setDescription( "this is a description of my new field", "eng-US" );
@@ -59,7 +59,7 @@ $fieldDefinitionCreate->position = 1;
 // add a string length validator
 $strLenValidator = new StringLengthValidator();
 $strLenValidator->initializeWithConstraints(
-       array( 'maxStringLength' => 20, 'minStringLength' => 4 )
+    array( 'maxStringLength' => 20, 'minStringLength' => 4 )
 );
 $fieldDefinitionCreate->setValidator( $strLenValidator );
 
@@ -71,7 +71,7 @@ $contentTypeCreate->addFieldDefinition( $fieldDefinitionCreate );
 $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct( "ezinteger", "number" );
 
 $fieldDefinitionCreate->setDefaultValue(
-   new \ezp\Content\FieldType\Integer\Value( 2 )
+    new \ezp\Content\FieldType\Integer\Value( 2 )
 );
 $fieldDefinitionCreate->setName( "englishNameOfMyNewField2", "eng-US" );
 $fieldDefinitionCreate->setDescription( "this is a description of my new field 2", "eng-US" );
@@ -87,7 +87,7 @@ $fieldDefinitionCreate->position = 2;
 // add a int range validator
 $intValidator = new IntegerValueValidator();
 $intValidator->initializeWithConstraints(
-       array( 'maxIntegerValue' => 20, 'minIntegerValue' => 0 )
+    array( 'maxIntegerValue' => 20, 'minIntegerValue' => 0 )
 );
 $fieldDefinitionCreate->setValidator( $intValidator );
 
@@ -95,7 +95,7 @@ $contentTypeCreate->addFieldDefinition( $fieldDefinitionCreate );
 
 // creates the content type in the given group and fields and publishes it
 $contentTypeDraft = $contentTypeService->createContentType(
-   $contentTypeCreate, array( $contentTypeGroup )
+    $contentTypeCreate, array( $contentTypeGroup )
 );
 
 $contentTypeService->publishContentTypeDraft( $contentTypeDraft );
@@ -133,7 +133,7 @@ $fieldDefinitionUpdate->identifier = "newIdentifier";
 // replace the integer validator with new contraints
 $intValidator = new IntegerValueValidator();
 $intValidator->initializeWithConstraints(
-       array( 'maxIntegerValue' => 100, 'minIntegerValue' => 0 )
+    array( 'maxIntegerValue' => 100, 'minIntegerValue' => 0 )
 );
 $fieldDefinitionUpdate->setValidator( $intValidator );
 

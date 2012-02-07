@@ -62,8 +62,7 @@ interface IOService
      */
     public function loadBinaryFile( $binaryFileid );
     
- 
-     /**
+    /**
      * Returns a read (mode: rb) file resource to the binary file identified by $path
      *
      * @param \eZ\Publish\API\Repository\Values\IO\BinaryFile $binaryFile

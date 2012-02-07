@@ -43,7 +43,7 @@ class FieldDefinition extends ValueObject
      * Readable string identifier of a field definition
      *
      * @var string
-    */
+     */
     public $identifier;
 
     /**
