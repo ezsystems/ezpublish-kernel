@@ -135,7 +135,7 @@ class SectionServiceStub implements SectionService
      */
     public function loadSections()
     {
-        // TODO: Implement loadSections() method.
+        return array_values( $this->sections );
     }
 
     /**
