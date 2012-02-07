@@ -61,5 +61,3 @@ class Language extends Model implements ModelDefinition
         );
     }
 }
-
-?>

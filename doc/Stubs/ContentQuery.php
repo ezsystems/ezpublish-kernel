@@ -35,4 +35,3 @@ $qb->dateMetadata->between( 'created', strtotime( 'last month' ), strtotime( 'la
 
 // section
 $qb->section->in( array( 2, 6 ) );
-?>

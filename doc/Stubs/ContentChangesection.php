@@ -21,5 +21,3 @@ catch ( \Exception $e )
     echo "An error occurred while updating the content: {$e->getMessage()}";
     exit;
 }
-
-?>

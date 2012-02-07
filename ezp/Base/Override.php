@@ -181,5 +181,3 @@ abstract class Override
         return $this->pathsHash;
     }
 }
-
-?>

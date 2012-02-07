@@ -44,4 +44,3 @@ interface OnPublish
      */
     function onPostPublish( Repository $repository, Field $field );
 }
-?>

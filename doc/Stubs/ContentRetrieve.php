@@ -40,4 +40,3 @@ $c = new CompoundCriterion(
         new FieldCriterion( LogicOperator::EQ, 'name', 'Another name' )
     )
 );
-?>

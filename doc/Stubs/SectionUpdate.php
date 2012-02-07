@@ -23,5 +23,3 @@ catch ( \Exception $e )
     echo "An error occurred during section update: {$e->getMessage()}";
     exit;
 }
-
-?>

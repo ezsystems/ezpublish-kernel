@@ -67,5 +67,3 @@ interface Parser
      */
     public function write( array $configurationData );
 }
-
-?>

@@ -18,4 +18,3 @@ catch ( ezp\Content\ValidationException $e )
     echo "An error occurred while updating the location: {$e->getMessage()}";
     exit;
 }
-?>

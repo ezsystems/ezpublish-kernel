@@ -57,4 +57,3 @@ interface ModelDefinition
      */
     public static function definition();
 }
-?>

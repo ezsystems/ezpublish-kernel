@@ -166,4 +166,3 @@ class Service extends BaseService
         return $section->setState( array( 'properties' => $vo ) );
     }
 }
-?>

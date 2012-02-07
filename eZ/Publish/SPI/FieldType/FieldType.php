@@ -70,8 +70,8 @@ interface FieldType
     public function acceptValue( $value );
 
     /**
-    * Converts an hash to the Value defined by the field type
-    *
+     * Converts an hash to the Value defined by the field type
+     *
      * @param array $hash
      *
      * @return Value

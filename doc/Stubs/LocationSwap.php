@@ -20,4 +20,3 @@ catch (ezp\Base\Exception\Forbidden $e )
     echo "Permission issue occurred: {$e->getMessage()}\n";
     exit;
 }
-?>
