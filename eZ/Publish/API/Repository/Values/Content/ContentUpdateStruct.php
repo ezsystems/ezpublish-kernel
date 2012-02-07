@@ -26,12 +26,12 @@ abstract class ContentUpdateStruct extends ValueObject
     /**
      * Adds a field to the field collection.
      * This method could also be implemented by ArrayAccess so that
-     * $fielfs[$fieldDefIdentifer][$language] = $value or without language $fielfs[$fieldDefIdentifer] = $value
+     * $fields[$fieldDefIdentifier][$language] = $value or without language $fields[$fieldDefIdentifier] = $value
      * is an equivalent call.
      *
      * @param string $fieldDefIdentifier the identifier of the field definition
      * @param mixed $value Either a plain value which is understandable by the field type or an instance of a Value class provided by the field type
-     * @param string $language If not ghiven on a translatable field the initial language is used,
+     * @param bool|string $language If not given on a translatable field the initial language is used,
      */
     public abstract function setField( $fieldDefIdentifier, $value, $language = false );
 }
