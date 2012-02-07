@@ -131,7 +131,7 @@ class LanguageServiceStub implements LanguageService
      */
     public function loadLanguages()
     {
-        // TODO: Implement loadLanguages() method.
+        return array_values( $this->languages );
     }
 
     /**
@@ -145,7 +145,11 @@ class LanguageServiceStub implements LanguageService
      */
     public function loadLanguageById( $languageId )
     {
-        // TODO: Implement loadLanguageById() method.
+        if ( isset( $this->languages[$languageId] ) )
+        {
+            return $this->languages[$languageId];
+        }
+
     }
 
     /**
