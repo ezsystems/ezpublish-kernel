@@ -25,7 +25,7 @@ class LanguageCreateStruct extends ValueObject
     public $name;
 
     /**
-     * indicates if the langiuage is enabled or not.
+     * indicates if the language is enabled or not.
      *
      * @var boolean
      */
