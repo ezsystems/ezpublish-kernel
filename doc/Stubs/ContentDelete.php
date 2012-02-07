@@ -22,4 +22,3 @@ catch ( ezp\Base\Exception\Forbidden $e )
     echo "A permission issue occurred while deleting content: {$e->getMessage()}\n";
     exit;
 }
-?>

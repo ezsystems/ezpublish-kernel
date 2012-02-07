@@ -31,22 +31,24 @@ class Specifications
     const TYPE_BOOLEAN = 4;
 
     /**
-    * Specified operator, as one of the Operator::* constants
-    */
+     * Specified operator, as one of the Operator::* constants
+     */
     public $operator;
 
     /**
      * Format supported for the Criterion value, either single (INPUT_TYPE_SINGLE) or multiple (INPUT_TYPE_ARRAY)
+     *
      * @see self::INPUT_TYPE_*
      * @param self::INPUT_VALUE_*
      */
     public $valueFormat;
 
     /**
-    * Accepted values types, specifying what type of variables are accepted as a value
-    * @see self::INPUT_VALUE_*
-    * @var int
-    */
+     * Accepted values types, specifying what type of variables are accepted as a value
+     *
+     * @see self::INPUT_VALUE_*
+     * @var int
+     */
     public $valueTypes;
 
     /**
@@ -60,7 +62,8 @@ class Specifications
 
     /**
      * Creates a new Specifications object
-     * @pparam string $operator The specified operator, as one of the Operator::* constants
+     *
+     * @param string $operator The specified operator, as one of the Operator::* constants
      * @param string $valueFormat The accepted value format, either {@see self::FORMAT_ARRAY} or {@see self::FORMAT_SINGLE}
      * @param int $valueTypes The supported value types, as a bit field of the {@see self::TYPES_*} constants
      * @param integer $valueCount The required number of values, when the accepted format is {@see self::FORMAT_ARRAY}

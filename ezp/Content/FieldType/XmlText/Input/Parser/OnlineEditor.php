@@ -1418,4 +1418,3 @@ class OnlineEditor extends BaseParser implements InputParser
         }
     }
 }
-?>

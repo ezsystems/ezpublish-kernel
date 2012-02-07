@@ -210,6 +210,7 @@ class Raw extends BaseParser implements InputParser
 
     /**
      * Checks the <? xml header in $xmlstring, and removes it
+     *
      * @param string $xmlString
      * return string $xmlString with the tag removed
      */
@@ -226,9 +227,9 @@ class Raw extends BaseParser implements InputParser
         return $xmlString;
     }
 
-    /*
-       Parsing Handlers (called at pass 1)
-    */
+    /**
+     * Parsing Handlers (called at pass 1)
+     */
     protected function parsingHandlerLiteral( $element, &$param )
     {
         $ret = null;
@@ -319,9 +320,9 @@ class Raw extends BaseParser implements InputParser
         return $ret;
     }
 
-    /*
-       Structure handlers. (called at pass 2)
-    */
+    /**
+     * Structure handlers. (called at pass 2)
+     */
     // Structure handler for inline nodes.
     protected function appendLineParagraph( $element, $newParent )
     {
@@ -742,9 +743,9 @@ class Raw extends BaseParser implements InputParser
         return $ret;
     }
 
-    /*
-       Publish handlers. (called at pass 2)
-    */
+    /**
+     * Publish handlers. (called at pass 2)
+     */
     // Publish handler for 'paragraph' element.
     protected function publishHandlerParagraph( $element, &$params )
     {
@@ -1065,4 +1066,3 @@ class Raw extends BaseParser implements InputParser
         }
     }
 }
-?>

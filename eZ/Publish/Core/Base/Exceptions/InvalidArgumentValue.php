@@ -8,7 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Base\Exceptions;
-use eZ\Publish\API\Repository\Exceptions\InvalidArgumentException,
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
     Exception;
 
 /**

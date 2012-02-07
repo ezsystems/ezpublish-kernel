@@ -70,4 +70,3 @@ interface Version
      */
     public function getContent();
 }
-?>

@@ -80,5 +80,3 @@ class ReadOnly extends ArrayObject implements Collection
         throw new ReadOnlyException( 'Collection' );
     }
 }
-
-?>

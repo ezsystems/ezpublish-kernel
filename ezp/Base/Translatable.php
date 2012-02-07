@@ -30,4 +30,3 @@ interface Translatable
      */
     public function getLanguage();
 }
-?>

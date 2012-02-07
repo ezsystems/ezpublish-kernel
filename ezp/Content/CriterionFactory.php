@@ -237,4 +237,3 @@ class CriterionFactory
         return call_user_func( array( $this->criterionClass, 'createFromQueryBuilder' ), $target, $operator, $value );
     }
 }
-?>
