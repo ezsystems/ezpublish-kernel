@@ -5,12 +5,19 @@
     </php>
     <testsuites>
         <testsuite name="PublicAPI TestSuite">
+            <file>RepositoryTest.php</file>
+            <file>SectionServiceTest.php</file>
             <directory>.</directory>
         </testsuite>
     </testsuites>
     <filter>
         <whitelist>
-            <directory suffix=".php">ezp</directory>
+            <directory suffix=".php">../</directory>
+            <exclude>
+                <directory>../Examples</directory>
+                <directory>../Tests</directory>
+                <directory>../Tutorials</directory>
+            </exclude>
         </whitelist>
     </filter>
 </phpunit>
