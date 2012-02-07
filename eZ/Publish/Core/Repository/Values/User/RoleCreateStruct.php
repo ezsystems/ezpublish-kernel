@@ -16,6 +16,6 @@ class RoleCreateStruct extends APIRoleCreateStruct
      */
     public function addPolicy( PolicyCreateStruct $policyCreate )
     {
-        // @todo implement
+        $this->policies[] = $policyCreate;
     }
 }
