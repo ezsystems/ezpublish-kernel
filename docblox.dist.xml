@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- docblox run -v --ignore doc/*,ezp/*/Tests/*,ezp/Persistence/Storage/*/Tests/*,eZ/Publish/Core/*/Tests/* -d . -t /var/www/engineering/ezp-next-pages/doc/ -->
 <docblox>
   <parser>
     <target>doc/apidoc</target>

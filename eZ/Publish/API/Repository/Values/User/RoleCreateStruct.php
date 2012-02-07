@@ -1,6 +1,7 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\User;
 use eZ\Publish\API\Repository\Values\ValueObject;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 
 /**
  * This class is used to create a new role
@@ -16,17 +17,18 @@ abstract class RoleCreateStruct extends ValueObject
     public $name;
 
     /**
-     * 5.x The description of the role
+     * The description of the role
      *
+     * @since 5.x
      * @var string
      */
     public $description;
 
     /**
+     * Adds a policy to this role
      *
-     * adds a policy to this role
-     * @param PolicyCreate $policyCreate
+     * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
      */
-    public abstract function addPolicy( /*PolicyCreate*/ $policyCreate );
+    public abstract function addPolicy( PolicyCreateStruct $policyCreateStruct );
 
 }
