@@ -453,10 +453,28 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::assignSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testCreateSection
      */
     public function testAssignSection()
     {
-        $this->markTestIncomplete( "Test for SectionService::assignSection() is not implemented." );
+        $sectionId = $this->createSection()->id;
+
+        $repository = $this->getRepository();
+
+        // TODO: This should be replaces with the original content service
+        $contentInfo = $this->getMockForAbstractClass( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', array( array( 'contentId' => 23 ) ) );
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $section = $sectionService->loadSection( $sectionId );
+
+        $sectionService->assignSection( $contentInfo, $section );
+
+        /* END: Use Case */
+
+        // TODO: What to assert here? countAssignedContents() is not good, because that test depends on this test
+        $this->assertEquals( 1, $sectionService->countAssignedContents( $section ) );
     }
 
     /**
@@ -476,10 +494,29 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::countAssignedContents()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testAssignSection
      */
     public function testCountAssignedContents()
     {
-        $this->markTestIncomplete( "Test for SectionService::countAssignedContents() is not implemented." );
+        $sectionId = $this->createSection()->id;
+
+        $repository = $this->getRepository();
+
+        // TODO: This should be replaces with the original content service
+        $contentInfoOne = $this->getMockForAbstractClass( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', array( array( 'contentId' => 23 ) ) );
+        $contentInfoTwo = $this->getMockForAbstractClass( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', array( array( 'contentId' => 42 ) ) );
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $section = $sectionService->loadSection( $sectionId );
+
+        $sectionService->assignSection( $contentInfoOne, $section );
+        $sectionService->assignSection( $contentInfoTwo, $section );
+
+        /* END: Use Case */
+
+        $this->assertEquals( 2, $sectionService->countAssignedContents( $section ) );
     }
 
     /**
@@ -583,6 +620,7 @@ class SectionServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\BadStateException
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testAssignSection
      */
     public function testDeleteSectionThrowsBadStateException()
     {

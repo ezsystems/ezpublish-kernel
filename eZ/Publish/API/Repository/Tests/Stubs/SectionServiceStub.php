@@ -189,7 +189,11 @@ class SectionServiceStub implements SectionService
      */
     public function assignSection( ContentInfo $contentInfo, Section $section )
     {
-        // TODO: Implement assignSection() method.
+        if ( false === isset( $this->assignedContents[$section->id] ) )
+        {
+            $this->assignedContents[$section->id] = array();
+        }
+        $this->assignedContents[$section->id][] = $contentInfo->contentId;
     }
 
     /**
