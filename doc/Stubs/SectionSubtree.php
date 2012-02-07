@@ -13,5 +13,3 @@ $location = $locationService->load( $locationId );
 $section = $sectionService->load( $sectionId );
 
 $locationService->assignSection( $location, $section );
-
-?>

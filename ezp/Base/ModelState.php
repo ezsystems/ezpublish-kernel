@@ -39,4 +39,3 @@ interface ModelState
      */
     public function getState( $property = null );
 }
-?>

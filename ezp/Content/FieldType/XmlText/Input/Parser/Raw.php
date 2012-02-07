@@ -1066,4 +1066,3 @@ class Raw extends BaseParser implements InputParser
         }
     }
 }
-?>

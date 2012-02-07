@@ -25,5 +25,3 @@ catch ( ezp\Base\Exception\InvalidArgumentValue $e )
 }
 
 $contentService->update( $content );
-
-?>

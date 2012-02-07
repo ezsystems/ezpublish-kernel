@@ -109,5 +109,3 @@ class Type extends ArrayObject implements Collection
         return parent::exchangeArray( $input );
     }
 }
-
-?>

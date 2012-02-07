@@ -1026,4 +1026,3 @@ class Simplified extends BaseParser implements InputParser
         }
     }
 }
-?>

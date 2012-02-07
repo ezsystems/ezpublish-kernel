@@ -133,4 +133,3 @@ class Service extends BaseService
         return $language->setState( array( 'properties' => $vo ) );
     }
 }
-?>

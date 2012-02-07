@@ -42,5 +42,3 @@ echo "There are now " . count( $content->versions ) . " versions for content";
 
 // Free some memory
 unset( $content );
-
-?>

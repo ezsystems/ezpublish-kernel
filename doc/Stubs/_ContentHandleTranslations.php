@@ -30,5 +30,3 @@ catch ( ezp\Base\Exception\NotFound $e )
     $fieldsNO = $content->translations['nor-NO']->last->getFields();
     echo "Name nor-NO (not yet published): {$fieldsNO['name']->value}\n";
 }
-
-?>

@@ -44,4 +44,3 @@ interface OnCreate
      */
     function onPostCreate( Repository $repository, Field $field );
 }
-?>

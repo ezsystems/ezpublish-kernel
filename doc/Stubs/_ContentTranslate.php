@@ -33,5 +33,3 @@ $contentService->update( $content );
 $versionFR = $translationFR->last;
 
 echo "'{$versionFR->fields['name']}' ({$versionFR->locale->code})\n";
-
-?>

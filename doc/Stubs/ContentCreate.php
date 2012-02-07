@@ -53,5 +53,3 @@ catch ( ezp\Content\ValidationException $e )
     echo "Following validation issue occurred with your content : {$e->getMessage()}\n";
     exit;
 }
-
-?>

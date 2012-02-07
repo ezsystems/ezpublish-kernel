@@ -34,5 +34,3 @@ echo "Emptying trash\n";
 $trashService->emptyTrash();
 // Possible to remove only one element in the trash:
 // $trashService->emptyOne( $trashedLocation );
-
-?>

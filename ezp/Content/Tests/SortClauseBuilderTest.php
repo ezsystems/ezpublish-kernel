@@ -71,4 +71,3 @@ class SortClauseBuilderTest extends \PHPUnit_Framework_TestCase
         $this->sb->sectionIdentifier( 'foobar' );
     }
 }
-?>
