@@ -345,6 +345,7 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::newSectionCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
      */
     public function testNewSectionCreateStruct()
     {
