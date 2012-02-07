@@ -234,6 +234,7 @@ class SectionServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      */
     public function testUpdateSectionThrowsUnauthorizedException()
     {
@@ -246,10 +247,37 @@ class SectionServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      */
     public function testUpdateSectionThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for SectionService::updateSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        $sectionService            = $repository->getSectionService();
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test section one';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $sectionId = $sectionService->createSection( $sectionCreate )->id;
+
+        ///* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        // Create section with conflict identifier
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Conflict section';
+        $sectionCreate->identifier = 'conflictKey';
+
+        $sectionService->createSection( $sectionCreate );
+
+        // Load an existing section and update to an existing identifier
+        $section = $sectionService->loadSection( $sectionId );
+
+        $sectionUpdate             = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate->identifier = 'conflictKey';
+
+        $sectionService->updateSection( $section, $sectionUpdate );
+        ///* END: Use Case */
     }
 
     /**

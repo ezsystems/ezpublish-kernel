@@ -85,6 +85,12 @@ class SectionServiceStub implements SectionService
      */
     public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
+        if ( isset( $this->identifiers[$sectionUpdateStruct->identifier] ) &&
+            ( $this->identifiers[$sectionUpdateStruct->identifier] !== $section->id ) )
+        {
+            throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         $updatedSection = new Section(
             array(
                 'id'          =>  $section->id,
