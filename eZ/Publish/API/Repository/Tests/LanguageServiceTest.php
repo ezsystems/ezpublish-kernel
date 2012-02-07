@@ -61,12 +61,49 @@ class LanguageServiceTest extends BaseTest
 
         $createStruct               = new LanguageCreateStruct();
         $createStruct->enabled      = true;
-        $createStruct->name         = 'English';
-        $createStruct->languageCode = 'eng-US';
+        $createStruct->name         = 'German';
+        $createStruct->languageCode = 'ger-DE';
 
         $language = $languageService->createLanguage( $createStruct );
         /* END: Use Case */
 
+        $this->assertNotNull( $language->id );
+    }
+
+    /**
+     * Test for the createLanguage() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\LanguageService::createLanguage()
+     * @depends eZ\Publish\API\Repository\Tests\LanguageServiceTest::testCreateLanguage
+     */
+    public function testCreateLanguageSetsPropertiesFromCreateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        $createStruct               = new LanguageCreateStruct();
+        $createStruct->enabled      = true;
+        $createStruct->name         = 'French';
+        $createStruct->languageCode = 'fra-FR';
+
+        $language = $languageService->createLanguage( $createStruct );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            array(
+                true,
+                'French',
+                'fra-FR'
+            ),
+            array(
+                $language->enabled,
+                $language->name,
+                $language->languageCode
+            )
+        );
         $this->assertNotNull( $language->id );
     }
 

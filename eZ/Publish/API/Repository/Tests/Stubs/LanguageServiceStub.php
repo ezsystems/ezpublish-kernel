@@ -41,7 +41,10 @@ class LanguageServiceStub implements LanguageService
     {
         return new Language(
             array(
-                'id'  =>  ++$this->nextId
+                'id'            =>  ++$this->nextId,
+                'name'          =>  $languageCreateStruct->name,
+                'enabled'       =>  $languageCreateStruct->enabled,
+                'languageCode'  =>  $languageCreateStruct->languageCode
             )
         );
     }
