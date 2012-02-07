@@ -83,7 +83,16 @@ class LanguageServiceStub implements LanguageService
      */
     public function updateLanguageName( Language $language, $newName )
     {
-        // TODO: Implement updateLanguageName() method.
+        $this->languages[$language->id] = new Language(
+            array(
+                'id'            =>  $language->id,
+                'name'          =>  $newName,
+                'enabled'       =>  $language->enabled,
+                'languageCode'  =>  $language->languageCode
+            )
+        );
+
+        return $this->languages[$language->id];
     }
 
     /**
@@ -149,7 +158,7 @@ class LanguageServiceStub implements LanguageService
         {
             return $this->languages[$languageId];
         }
-
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**

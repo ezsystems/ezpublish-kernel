@@ -183,7 +183,14 @@ class LanguageServiceTest extends BaseTest
      */
     public function testLoadLanguageByIdThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for LanguageService::loadLanguageById() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        // This call should fail with a NotFoundException
+        $languageService->loadLanguageById( PHP_INT_MAX );
+        /* END: Use Case */
     }
 
     /**
@@ -195,7 +202,25 @@ class LanguageServiceTest extends BaseTest
      */
     public function testUpdateLanguageName()
     {
-        $this->markTestIncomplete( "Test for LanguageService::updateLanguageName() is not implemented." );
+        $languageId = $this->createLanguage()->id;
+
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $languageService = $repository->getContentLanguageService();
+
+        $language = $languageService->loadLanguageById( $languageId );
+
+        $updatedLanguage = $languageService->updateLanguageName( $language, 'New language name.' );
+        /* END: Use Case */
+
+        // Verify that the service returns an updated language instance.
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\Content\Language', $updatedLanguage );
+
+        // Verify that the service also persists the changes
+        $updatedLanguage = $languageService->loadLanguageById( $languageId );
+
+        $this->assertEquals( 'New language name.', $updatedLanguage->name );
     }
 
     /**
