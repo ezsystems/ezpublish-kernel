@@ -5,7 +5,7 @@ namespace eZ\Publish\Core\Repository\Values\User;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment as APIRoleAssignment;
 
 /**
- * This value object represents an assignment od a user or user group to a role inlcuding a limitation
+ * This value object represents an assignment of a user or user group to a role, including a limitation
  *
  * @property-read \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $limitation the limitation of this role assignment
  * @property-read \eZ\Publish\API\Repository\Values\User\Role $role the role which is assigned to the user or user group
@@ -38,6 +38,7 @@ class RoleAssignment extends APIRoleAssignment
 
     /**
      * returns the role to which the user or user group is assigned to
+     *
      * @return \eZ\Publish\API\Repository\Values\User\Role
      */
     public function getRole()

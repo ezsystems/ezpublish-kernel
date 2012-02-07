@@ -5,7 +5,8 @@ use eZ\Publish\Core\Repository\Values\User\RoleAssignment;
 
 /**
  * This class represents a user group to role assignment
- * @property-read \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup calls getUserGroup()
+ *
+ * @property-read \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup user group to which the role is assigned to
  */
 class UserGroupRoleAssignment extends RoleAssignment
 {
