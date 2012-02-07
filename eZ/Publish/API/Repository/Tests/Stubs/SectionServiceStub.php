@@ -15,6 +15,7 @@ use \eZ\Publish\API\Repository\Values\Content\Section;
 use \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
 use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 
@@ -212,6 +213,11 @@ class SectionServiceStub implements SectionService
         {
             throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
         }
+        if ( isset( $this->assignedContents[$section->id] ) )
+        {
+            throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         unset( $this->sections[$section->id], $this->identifiers[$section->identifier] );
     }
 

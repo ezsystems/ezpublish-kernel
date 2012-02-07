@@ -578,6 +578,18 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testLoadSections
+     */
+    public function testDeleteSectionAfterAssignedContentsWereDeleted()
+    {
+        $this->markTestIncomplete( "Test for SectionService::deleteSection() is not implemented." );
+    }
+
+    /**
+     * Test for the deleteSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::deleteSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testDeleteSection
      */
@@ -624,7 +636,23 @@ class SectionServiceTest extends BaseTest
      */
     public function testDeleteSectionThrowsBadStateException()
     {
-        $this->markTestIncomplete( "Test for SectionService::deleteSection() is not implemented." );
+        $sectionId = $this->createSection()->id;
+
+        $repository = $this->getRepository();
+
+        // TODO: This should be replaces with the original content service
+        $contentInfo = $this->getMockForAbstractClass( '\eZ\Publish\API\Repository\Values\Content\ContentInfo', array( array( 'contentId' => 23 ) ) );
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $section = $sectionService->loadSection( $sectionId );
+
+        $sectionService->assignSection( $contentInfo, $section );
+
+        // This call should fail with a BadStateException, because there are assigned contents
+        $sectionService->deleteSection( $section );
+        /* END: Use Case */
     }
 
     /**
