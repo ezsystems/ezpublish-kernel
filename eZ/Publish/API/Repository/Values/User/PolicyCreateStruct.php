@@ -5,6 +5,8 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * This class is used to create a policy
+ *
+ * @property-read array $limitations List of limitations added to policy
  */
 abstract class PolicyCreateStruct extends ValueObject
 {
@@ -25,6 +27,13 @@ abstract class PolicyCreateStruct extends ValueObject
      * @var string
      */
     public $function;
+
+    /**
+     * List of limitations added to policy
+     *
+     * @var array
+     */
+    protected $limitations = array();
 
     /**
      *
