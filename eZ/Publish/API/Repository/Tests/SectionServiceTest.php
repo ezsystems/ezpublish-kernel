@@ -197,14 +197,9 @@ class SectionServiceTest extends BaseTest
      */
     public function testUpdateSection()
     {
+        $sectionId = $this->createSection()->id;
+
         $repository = $this->getRepository();
-
-        $sectionService            = $repository->getSectionService();
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test section one';
-        $sectionCreate->identifier = 'uniqueKey';
-
-        $sectionId = $sectionService->createSection( $sectionCreate )->id;
 
         ///* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
@@ -233,6 +228,60 @@ class SectionServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\SectionService::updateSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
+     */
+    public function testUpdateSectionKeepsSectionIdentifierOnNameUpdate()
+    {
+        $sectionId = $this->createSection()->id;
+
+        $repository = $this->getRepository();
+
+        ///* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $section = $sectionService->loadSection( $sectionId );
+
+        $sectionUpdate       = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate->name = 'New section name';
+
+        $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
+        ///* END: Use Case */
+
+        $this->assertEquals( 'uniqueKey', $updatedSection->identifier );
+    }
+
+    /**
+     * Test for the updateSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
+     * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
+     */
+    public function testUpdateSectionKeepsSectionNameOnIdentifierUpdate()
+    {
+        $sectionId = $this->createSection()->id;
+
+        $repository = $this->getRepository();
+
+        ///* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $section = $sectionService->loadSection( $sectionId );
+
+        $sectionUpdate             = $sectionService->newSectionUpdateStruct();
+        $sectionUpdate->identifier = 'newUniqueKey';
+
+        $updatedSection = $sectionService->updateSection( $section, $sectionUpdate );
+        ///* END: Use Case */
+
+        $this->assertEquals( 'Test section one', $updatedSection->name );
+    }
+
+    /**
+     * Test for the updateSection() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\SectionService::updateSection()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      * @depends eZ\Publish\API\Repository\Tests\SectionServiceTest::testUpdateSection
      */
@@ -251,14 +300,9 @@ class SectionServiceTest extends BaseTest
      */
     public function testUpdateSectionThrowsIllegalArgumentException()
     {
+        $sectionId = $this->createSection()->id;
+
         $repository = $this->getRepository();
-
-        $sectionService            = $repository->getSectionService();
-        $sectionCreate             = $sectionService->newSectionCreateStruct();
-        $sectionCreate->name       = 'Test section one';
-        $sectionCreate->identifier = 'uniqueKey';
-
-        $sectionId = $sectionService->createSection( $sectionCreate )->id;
 
         ///* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
@@ -276,6 +320,7 @@ class SectionServiceTest extends BaseTest
         $sectionUpdate             = $sectionService->newSectionUpdateStruct();
         $sectionUpdate->identifier = 'conflictKey';
 
+        // This call should fail with an IllegalArgumentException
         $sectionService->updateSection( $section, $sectionUpdate );
         ///* END: Use Case */
     }
@@ -441,5 +486,24 @@ class SectionServiceTest extends BaseTest
     public function testDeleteSectionThrowsBadStateException()
     {
         $this->markTestIncomplete( "Test for SectionService::deleteSection() is not implemented." );
+    }
+
+    /**
+     * Helper method that creates a new section in the API implementation under
+     * test.
+     *
+     * @return \eZ\Publish\API\Repository\Values\Content\Section
+     */
+    private function createSection()
+    {
+        $repository = $this->getRepository();
+
+        $sectionService = $repository->getSectionService();
+        $sectionCreate  = $sectionService->newSectionCreateStruct();
+
+        $sectionCreate->name       = 'Test section one';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        return $sectionService->createSection( $sectionCreate );
     }
 }
