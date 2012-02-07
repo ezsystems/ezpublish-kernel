@@ -9,9 +9,7 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest;
-use eZ\Publish\Core\Repository\Values\User\Role;
-use eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
-use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct as SPIRoleUpdateStruct;
+use eZ\Publish\API\Repository\Values\User\Policy as APIPolicy;
 
 /**
  * Test case for Role Service
@@ -19,4 +17,47 @@ use eZ\Publish\SPI\Persistence\User\RoleUpdateStruct as SPIRoleUpdateStruct;
  */
 abstract class RoleBase extends BaseServiceTest
 {
+    /**
+     * Test creating a role with empty name
+     * @expectedException eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue
+     * @covers \eZ\Publish\API\Repository\RoleService::createRole
+     */
+    public function testCreateRoleWithEmptyName()
+    {
+        $roleService = $this->repository->getRoleService();
+        $roleCreateStruct = $roleService->newRoleCreateStruct( "" );
+
+        $roleService->createRole( $roleCreateStruct );
+    }
+
+    /**
+     * Test creating a role with existing name
+     * @expectedException eZ\Publish\Core\Base\Exceptions\IllegalArgumentException
+     * @covers \eZ\Publish\API\Repository\RoleService::createRole
+     */
+    public function testCreateRoleWithExistingName()
+    {
+        self::markTestSkipped( "@todo: enable when RoleService::loadRole implementation is done" );
+        $roleService = $this->repository->getRoleService();
+        $roleCreateStruct = $roleService->newRoleCreateStruct( "Anonymous" );
+
+        $roleService->createRole( $roleCreateStruct );
+    }
+
+    /**
+     * Test creating a role
+     * @covers \eZ\Publish\API\Repository\RoleService::createRole
+     */
+    public function testCreateRole()
+    {
+        $roleService = $this->repository->getRoleService();
+        $roleCreateStruct = $roleService->newRoleCreateStruct( "Ultimate permissions" );
+
+        $createdRole = $roleService->createRole( $roleCreateStruct );
+
+        self::assertInstanceOf( "eZ\\Publish\\API\\Repository\\Values\\User\\Role" , $createdRole );
+        self::assertGreaterThan( 0, $createdRole->id );
+        self::assertEquals( $roleCreateStruct->name, $createdRole->name );
+        self::assertEmpty( $createdRole->getPolicies() );
+    }
 }
