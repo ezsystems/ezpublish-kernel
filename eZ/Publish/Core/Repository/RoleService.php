@@ -1,5 +1,5 @@
 <?php
-namespace  eZ\Publish\Core\Repository;
+namespace eZ\Publish\Core\Repository;
 
 use eZ\Publish\Core\Repository\Values\User\PolicyUpdateStruct;
 use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
@@ -13,6 +13,8 @@ use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 use eZ\Publish\Core\Repository\Values\User\RoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
 use eZ\Publish\API\Repository\Values\User\RoleAssignment;
+use eZ\Publish\Core\Repository\Values\User\UserRoleAssignment;
+use eZ\Publish\Core\Repository\Values\User\UserGroupRoleAssignment;
 use eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\User\UserGroup;
@@ -27,6 +29,7 @@ use eZ\Publish\API\Repository\Repository as RepositoryInterface;
 use eZ\Publish\SPI\Persistence\Handler;
 
 use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
+use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException;
 use eZ\Publish\Core\Base\Exceptions\IllegalArgumentException;
 use eZ\Publish\Core\Base\Exceptions\NotFoundException;
 
@@ -259,7 +262,9 @@ class RoleService implements RoleServiceInterface
         if ( empty( $userId ) )
             throw new InvalidArgumentValue( "userId", $userId );
 
-        $spiPolicies = $this->persistenceHandler->userHandler()->loadPoliciesByUserId( $userId );
+        // load user to verify existance, throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+        $user = $this->repository->getUserService()->loadUser( $userId );
+        $spiPolicies = $this->persistenceHandler->userHandler()->loadPoliciesByUserId( $user->id );
 
         $policies = array();
         if ( is_array( $spiPolicies ) && !empty( $spiPolicies ) )
@@ -282,7 +287,26 @@ class RoleService implements RoleServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
-    public function assignRoleToUserGroup( APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null ){}
+    public function assignRoleToUserGroup( APIRole $role, UserGroup $userGroup, RoleLimitation $roleLimitation = null )
+    {
+        if ( empty( $role->id ) )
+            throw new InvalidArgumentValue( "id", $role->id, "Role" );
+
+        if ( empty( $userGroup->id ) )
+            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
+
+        $spiRoleLimitation = null;
+        if ( $roleLimitation !== null )
+        {
+            $limitationIdentifier = $roleLimitation->getIdentifier();
+            if ( $limitationIdentifier !== Limitation::SUBTREE && $limitationIdentifier !== Limitation::SECTION )
+                throw new InvalidArgumentValue( "identifier", $limitationIdentifier, "RoleLimitation" );
+
+            $spiRoleLimitation = array( $limitationIdentifier => $roleLimitation->limitationValues );
+        }
+
+        $this->persistenceHandler->userHandler()->assignRole( $userGroup->id, $role->id, $spiRoleLimitation );
+    }
 
     /**
      * removes a role from the given user group.
@@ -293,7 +317,20 @@ class RoleService implements RoleServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      */
-    public function unassignRoleFromUserGroup( APIRole $role, UserGroup $userGroup ){}
+    public function unassignRoleFromUserGroup( APIRole $role, UserGroup $userGroup )
+    {
+        if ( empty( $role->id ) )
+            throw new InvalidArgumentValue( "id", $role->id, "Role" );
+
+        if ( empty( $userGroup->id ) )
+            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
+
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
+        if ( !in_array( $userGroup->id, $spiRole->groupIds ) )
+            throw new InvalidArgumentException( "\$userGroup->id", "Role is not assigned to the user group" );
+
+        $this->persistenceHandler->userHandler()->unAssignRole( $userGroup->id, $role->id );
+    }
 
     /**
      * assigns a role to the given user
@@ -306,7 +343,26 @@ class RoleService implements RoleServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\Limitation\RoleLimitation $roleLimitation an optional role limitation (which is either a subtree limitation or section limitation)
      */
-    public function assignRoleToUser( APIRole $role, User $user, RoleLimitation $roleLimitation = null ){}
+    public function assignRoleToUser( APIRole $role, User $user, RoleLimitation $roleLimitation = null )
+    {
+        if ( empty( $role->id ) )
+            throw new InvalidArgumentValue( "id", $role->id, "Role" );
+
+        if ( empty( $user->id ) )
+            throw new InvalidArgumentValue( "id", $user->id, "User" );
+
+        $spiRoleLimitation = null;
+        if ( $roleLimitation !== null )
+        {
+            $limitationIdentifier = $roleLimitation->getIdentifier();
+            if ( $limitationIdentifier !== Limitation::SUBTREE && $limitationIdentifier !== Limitation::SECTION )
+                throw new InvalidArgumentValue( "identifier", $limitationIdentifier, "RoleLimitation" );
+
+            $spiRoleLimitation = array( $limitationIdentifier => $roleLimitation->limitationValues );
+        }
+
+        $this->persistenceHandler->userHandler()->assignRole( $user->id, $role->id, $spiRoleLimitation );
+    }
 
     /**
      * removes a role from the given user.
@@ -317,7 +373,20 @@ class RoleService implements RoleServiceInterface
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      */
-    public function unassignRoleFromUser( APIRole $role, User $user ){}
+    public function unassignRoleFromUser( APIRole $role, User $user )
+    {
+        if ( empty( $role->id ) )
+            throw new InvalidArgumentValue( "id", $role->id, "Role" );
+
+        if ( empty( $user->id ) )
+            throw new InvalidArgumentValue( "id", $user->id, "User" );
+
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
+        if ( !in_array( $user->id, $spiRole->groupIds ) )
+            throw new InvalidArgumentException( "\$user->id", "Role is not assigned to the user" );
+
+        $this->persistenceHandler->userHandler()->unAssignRole( $user->id, $role->id );
+    }
 
     /**
      * returns the assigned user and user groups to this role
@@ -328,7 +397,49 @@ class RoleService implements RoleServiceInterface
      *
      * @return array an array of {@link RoleAssignment}
      */
-    public function getRoleAssignments( APIRole $role ){}
+    public function getRoleAssignments( APIRole $role )
+    {
+        if ( empty( $role->id ) )
+            throw new InvalidArgumentValue( "id", $role->id, "Role" );
+
+        $spiRole = $this->persistenceHandler->userHandler()->loadRole( $role->id );
+
+        $roleAssignments = array();
+        if ( is_array( $spiRole->groupIds ) && !empty( $spiRole->groupIds ) )
+        {
+            foreach ( $spiRole->groupIds as $groupId )
+            {
+                // $spiRole->groupIds can contain both group and user IDs, although assigning roles to
+                // users is deprecated. Hence, we'll first check for groups. If that fails,
+                // we'll check for users
+                $userGroup = $this->repository->getUserService()->loadUserGroup( $groupId );
+                if ( $userGroup !== null )
+                {
+                    $roleAssignments[] = new UserGroupRoleAssignment( array(
+                        // @todo: add limitation
+                        'limitation' => null,
+                        'role'       => $this->buildDomainRoleObject( $spiRole ),
+                        'userGroup'  => $userGroup
+                    ) );
+                }
+                else
+                {
+                    $user = $this->repository->getUserService()->loadUser( $groupId );
+                    if ( $user !== null )
+                    {
+                        $roleAssignments[] = new UserRoleAssignment( array(
+                            // @todo: add limitation
+                            'limitation' => null,
+                            'role'       => $this->buildDomainRoleObject( $spiRole ),
+                            'user'       => $user
+                        ) );
+                    }
+                }
+            }
+        }
+
+        return $roleAssignments;
+    }
 
     /**
      * returns the roles assigned to the given user
@@ -339,7 +450,29 @@ class RoleService implements RoleServiceInterface
      *
      * @return array an array of {@link UserRoleAssignment}
      */
-    public function getRoleAssignmentsForUser( User $user ){}
+    public function getRoleAssignmentsForUser( User $user )
+    {
+        if ( empty( $user->id ) )
+            throw new InvalidArgumentValue( "id", $user->id, "User" );
+
+        $roleAssignments = array();
+
+        $spiRoles = $this->persistenceHandler->userHandler()->loadRolesByGroupId( $user->id );
+        if ( is_array( $spiRoles ) && !empty( $spiRoles ) )
+        {
+            foreach ( $spiRoles as $spiRole )
+            {
+                $roleAssignments[] = new UserRoleAssignment( array(
+                    // @todo: add limitation
+                    'limitation' => null,
+                    'role'       => $this->buildDomainRoleObject( $spiRole ),
+                    'user'  => $user
+                ) );
+            }
+        }
+
+        return $roleAssignments;
+    }
 
     /**
      * returns the roles assigned to the given user group
@@ -350,7 +483,29 @@ class RoleService implements RoleServiceInterface
      *
      * @return array an array of {@link UserGroupRoleAssignment}
      */
-    public function getRoleAssignmentsForUserGroup( UserGroup $userGroup ){}
+    public function getRoleAssignmentsForUserGroup( UserGroup $userGroup )
+    {
+        if ( empty( $userGroup->id ) )
+            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
+
+        $roleAssignments = array();
+
+        $spiRoles = $this->persistenceHandler->userHandler()->loadRolesByGroupId( $userGroup->id );
+        if ( is_array( $spiRoles ) && !empty( $spiRoles ) )
+        {
+            foreach ( $spiRoles as $spiRole )
+            {
+                $roleAssignments[] = new UserGroupRoleAssignment( array(
+                    // @todo: add limitation
+                    'limitation' => null,
+                    'role'       => $this->buildDomainRoleObject( $spiRole ),
+                    'userGroup'  => $userGroup
+                ) );
+            }
+        }
+
+        return $roleAssignments;
+    }
 
     /**
      * instantiates a role create class
@@ -544,7 +699,6 @@ class RoleService implements RoleServiceInterface
         {
             foreach ( $roleCreateStruct->policies as $policy )
             {
-                /* @var $policy APIPolicyCreateStruct */
                 $policiesToCreate[] = $this->buildPersistancePolicyObject( $policy->module,
                                                                            $policy->function,
                                                                            $policy->limitations );
