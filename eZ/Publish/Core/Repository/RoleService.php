@@ -126,7 +126,8 @@ class RoleService implements RoleServiceInterface
         $this->persistenceHandler->userHandler()->updateRole( new SPIRoleUpdateStruct( array(
             'id'          => $role->id,
             'name'        => !empty( $roleUpdateStruct->name ) ? $roleUpdateStruct->name : $loadedRole->name,
-            'description' => !empty( $roleUpdateStruct->description ) ? $roleUpdateStruct->description : $loadedRole->description,
+            // @todo: add description
+            // 'description' => !empty( $roleUpdateStruct->description ) ? $roleUpdateStruct->description : $loadedRole->description,
         ) ) );
 
         return $this->loadRoleById( $role->id );
@@ -603,7 +604,8 @@ class RoleService implements RoleServiceInterface
     {
         return new RoleCreateStruct( array(
             'name'        => $name,
-            'description' => '',
+            // @todo: add description
+            // 'description' => '',
             'policies'    => array()
         ) );
     }
@@ -666,7 +668,7 @@ class RoleService implements RoleServiceInterface
             'id'          => $role->id,
             'name'        => $role->name,
             // @todo: add description
-            'description' => null,
+            // 'description' => null,
             'policies'    => $rolePolicies
         ) );
     }
