@@ -552,7 +552,7 @@ class RoleService implements RoleServiceInterface
                     // @todo: add limitation
                     'limitation' => null,
                     'role'       => $this->buildDomainRoleObject( $spiRole ),
-                    'user'  => $user
+                    'user'       => $user
                 ) );
             }
         }
