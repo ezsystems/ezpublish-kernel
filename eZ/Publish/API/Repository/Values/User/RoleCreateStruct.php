@@ -6,7 +6,7 @@ use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 /**
  * This class is used to create a new role
  *
- * @property-read array $policies Policies associated with the role
+ * @property-read \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[] $policies Policies associated with the role
  */
 abstract class RoleCreateStruct extends ValueObject
 {
@@ -29,7 +29,7 @@ abstract class RoleCreateStruct extends ValueObject
     /**
      * Policies associated with the role
      *
-     * @var array
+     * @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
      */
     protected $policies = array();
 
