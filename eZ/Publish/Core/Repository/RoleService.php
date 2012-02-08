@@ -88,7 +88,7 @@ class RoleService implements RoleServiceInterface
         }
         catch ( NotFoundException $e ) {}
 
-        $spiRole = $this->buildPersistanceRoleObject( $roleCreateStruct );
+        $spiRole = $this->buildPersistenceRoleObject( $roleCreateStruct );
         $createdRole = $this->persistenceHandler->userHandler()->createRole( $spiRole );
 
         return $this->buildDomainRoleObject( $createdRole );
@@ -160,7 +160,7 @@ class RoleService implements RoleServiceInterface
         // load role to check existence
         $this->loadRoleById( $role->id );
 
-        $spiPolicy = $this->buildPersistancePolicyObject( $policyCreateStruct->module,
+        $spiPolicy = $this->buildPersistencePolicyObject( $policyCreateStruct->module,
                                                           $policyCreateStruct->function,
                                                           $policyCreateStruct->limitations );
 
@@ -197,7 +197,7 @@ class RoleService implements RoleServiceInterface
 
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitaions are replaced by the ones in $roleUpdateStruct
+     * the limitations are replaced by the ones in $roleUpdateStruct
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a policy
      *
@@ -220,7 +220,7 @@ class RoleService implements RoleServiceInterface
         if ( empty( $policy->function ) )
             throw new InvalidArgumentValue( "function", $policy->function, "Policy" );
 
-        $spiPolicy = $this->buildPersistancePolicyObject( $policy->module, $policy->function, $policyUpdateStruct->limitations );
+        $spiPolicy = $this->buildPersistencePolicyObject( $policy->module, $policy->function, $policyUpdateStruct->limitations );
         $spiPolicy->id = $policy->id;
         $spiPolicy->roleId = $policy->roleId;
 
@@ -325,7 +325,7 @@ class RoleService implements RoleServiceInterface
         if ( empty( $userId ) )
             throw new InvalidArgumentValue( "userId", $userId );
 
-        // load user to verify existance, throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
+        // load user to verify existence, throws \eZ\Publish\API\Repository\Exceptions\NotFoundException
         $user = $this->repository->getUserService()->loadUser( $userId );
         $spiPolicies = $this->persistenceHandler->userHandler()->loadPoliciesByUserId( $user->id );
 
@@ -780,14 +780,14 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\SPI\Persistence\User\Role
      */
-    protected function buildPersistanceRoleObject( APIRoleCreateStruct $roleCreateStruct )
+    protected function buildPersistenceRoleObject( APIRoleCreateStruct $roleCreateStruct )
     {
         $policiesToCreate = array();
         if ( !empty( $roleCreateStruct->policies ) )
         {
             foreach ( $roleCreateStruct->policies as $policy )
             {
-                $policiesToCreate[] = $this->buildPersistancePolicyObject( $policy->module,
+                $policiesToCreate[] = $this->buildPersistencePolicyObject( $policy->module,
                                                                            $policy->function,
                                                                            $policy->limitations );
             }
@@ -808,7 +808,7 @@ class RoleService implements RoleServiceInterface
      *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
-    protected function buildPersistancePolicyObject( $module, $function, array $limitations )
+    protected function buildPersistencePolicyObject( $module, $function, array $limitations )
     {
         $limitationsToCreate = '*';
         if ( $module !== '*' && $function !== '*' && is_array( $limitations ) && !empty( $limitations ) )

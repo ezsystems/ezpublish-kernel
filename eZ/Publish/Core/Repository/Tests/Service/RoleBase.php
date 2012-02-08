@@ -428,7 +428,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testAssignRoleToUserGroup()
     {
-        self::markTestIncomplete( "@todo: depencency on user service" );
+        self::markTestIncomplete( "@todo: dependency on user service" );
     }
 
     /**
@@ -437,7 +437,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testUnassignNotAssignedRoleFromUserGroup()
     {
-        self::markTestIncomplete( "@todo: depencency on user service" );
+        self::markTestIncomplete( "@todo: dependency on user service" );
     }
 
     /**
@@ -446,7 +446,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testUnassignRoleFromUserGroup()
     {
-        self::markTestIncomplete( "@todo: depencency on user service" );
+        self::markTestIncomplete( "@todo: dependency on user service" );
     }
 
     /**
@@ -455,7 +455,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testAssignRoleToUser()
     {
-        self::markTestIncomplete( "@todo: depencency on user service" );
+        self::markTestIncomplete( "@todo: dependency on user service" );
     }
 
     /**
@@ -464,7 +464,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testUnassignNotAssignedRoleFromUser()
     {
-        self::markTestIncomplete( "@todo: depencency on user service" );
+        self::markTestIncomplete( "@todo: dependency on user service" );
     }
 
     /**
@@ -473,7 +473,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testUnassignRoleFromUser()
     {
-        self::markTestIncomplete( "@todo: depencency on user service" );
+        self::markTestIncomplete( "@todo: dependency on user service" );
     }
 
     /**
@@ -482,7 +482,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testGetRoleAssignments()
     {
-        self::markTestIncomplete( "@todo: depencency on user service" );
+        self::markTestIncomplete( "@todo: dependency on user service" );
     }
 
     /**
@@ -491,7 +491,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testGetRoleAssignmentsForUser()
     {
-        self::markTestIncomplete( "@todo: depencency on user service" );
+        self::markTestIncomplete( "@todo: dependency on user service" );
     }
 
     /**
@@ -500,7 +500,7 @@ abstract class RoleBase extends BaseServiceTest
      */
     public function testGetRoleAssignmentsForUserGroup()
     {
-        self::markTestIncomplete( "@todo: depencency on user service" );
+        self::markTestIncomplete( "@todo: dependency on user service" );
     }
 
     /**

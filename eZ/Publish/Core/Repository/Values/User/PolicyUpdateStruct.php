@@ -10,7 +10,7 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 class PolicyUpdateStruct extends APIPolicyUpdateStruct
 {
     /**
-     * Adds a limitation to the policy - if a Limitation exists with the same identifer
+     * Adds a limitation to the policy - if a Limitation exists with the same identifier
      * the existing limitation is replaced
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation

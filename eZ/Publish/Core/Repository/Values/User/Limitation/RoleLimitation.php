@@ -22,7 +22,7 @@ class RoleLimitation extends APIRoleLimitation
     }
 
     /**
-     * Returns the limitation identifer
+     * Returns the limitation identifier
      *
      * @return string
      */
