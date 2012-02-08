@@ -562,7 +562,7 @@ class RoleService implements RoleServiceInterface
      *
      * @param string $module
      * @param string $function
-     * @param array $limitations
+     * @param \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations
      *
      * @return \eZ\Publish\SPI\Persistence\User\Policy
      */
@@ -574,7 +574,6 @@ class RoleService implements RoleServiceInterface
             $limitationsToCreate = array();
             foreach ( $limitations as $limitation )
             {
-                /* @var $limitation Limitation */
                 $limitationsToCreate[$limitation->getIdentifier()] = $limitation->limitationValues;
             }
         }
