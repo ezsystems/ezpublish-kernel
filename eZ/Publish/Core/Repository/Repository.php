@@ -74,6 +74,13 @@ class Repository implements RepositoryInterface
     protected $roleService;
 
     /**
+     * Instance of user service
+     *
+     * @var \eZ\Publish\API\Repository\UserService
+     */
+    protected $userService;
+
+    /**
      * Instance of language service
      *
      * @var \eZ\Publish\API\Repository\LanguageService
@@ -323,7 +330,14 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\UserService
      */
-    public function getUserService(){}
+    public function getUserService()
+    {
+        if ( $this->userService !== null )
+            return $this->userService;
+
+        $this->userService = new UserService( $this, $this->persistenceHandler );
+        return $this->userService;
+    }
 
     /**
      * Get RoleService
