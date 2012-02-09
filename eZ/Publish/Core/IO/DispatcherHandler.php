@@ -16,7 +16,6 @@ use eZ\Publish\Core\Base\Exceptions\InvalidArgumentException,
 /**
  * Handler interface for handling of binary files I/O
  */
-
 class DispatcherHandler implements IoHandlerInterface
 {
     /**
