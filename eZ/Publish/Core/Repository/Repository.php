@@ -101,7 +101,7 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    function getCurrentUser()
+    public function getCurrentUser()
     {
         return $this->user;
     }
@@ -112,7 +112,7 @@ class Repository implements RepositoryInterface
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    function setCurrentUser( User $user )
+    public function setCurrentUser( User $user )
     {
         if ( !$user->id )
             throw new InvalidArgumentValue( '$user->id', $user->id );
