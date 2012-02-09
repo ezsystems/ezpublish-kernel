@@ -1,8 +1,8 @@
 <?php
 
 namespace eZ\Publish\Core\Repository\Values\User;
-use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct;
-use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
+use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruct,
+    eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 
 /**
  * This class is used to create a new role

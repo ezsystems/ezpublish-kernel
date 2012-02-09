@@ -1,7 +1,7 @@
 <?php
 namespace eZ\Publish\Core\Repository\Values\User;
-use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct;
-use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateStruct,
+    eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * This class is used to create a policy

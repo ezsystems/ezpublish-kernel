@@ -9,13 +9,13 @@
 
 namespace eZ\Publish\Core\Repository\Tests\Service;
 
-use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest;
+use eZ\Publish\Core\Repository\Tests\Service\Base as BaseServiceTest,
 
-use eZ\Publish\Core\Repository\Values\User\Role;
-use eZ\Publish\Core\Repository\Values\User\Policy;
+    eZ\Publish\Core\Repository\Values\User\Role,
+    eZ\Publish\Core\Repository\Values\User\Policy,
 
-use ezp\Base\Exception\PropertyNotFound;
-use ezp\Base\Exception\PropertyPermission;
+    ezp\Base\Exception\PropertyNotFound,
+    ezp\Base\Exception\PropertyPermission;
 
 /**
  * Test case for Role Service

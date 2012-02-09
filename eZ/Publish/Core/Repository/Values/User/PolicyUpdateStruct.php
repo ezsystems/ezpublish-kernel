@@ -1,7 +1,7 @@
 <?php
 namespace eZ\Publish\Core\Repository\Values\User;
-use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
-use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct,
+    eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * This class is used for updating a policy. The limitations of the policy are replaced
