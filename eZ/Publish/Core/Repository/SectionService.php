@@ -288,7 +288,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * instanciates a new SectionCreateStruct
+     * instantiates a new SectionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
@@ -298,7 +298,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * instanciates a new SectionUpdateStruct
+     * instantiates a new SectionUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
