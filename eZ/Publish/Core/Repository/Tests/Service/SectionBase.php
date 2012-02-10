@@ -28,9 +28,9 @@ abstract class SectionBase extends BaseServiceTest
     public function testNewClass()
     {
         $section = new Section();
-        self::assertEquals( $section->id, null );
-        self::assertEquals( $section->identifier, null );
-        self::assertEquals( $section->name, null );
+        self::assertEquals( null, $section->id );
+        self::assertEquals( null, $section->identifier );
+        self::assertEquals( null, $section->name );
     }
 
     /**
@@ -98,8 +98,8 @@ abstract class SectionBase extends BaseServiceTest
 
         $newSection = $service->createSection( $struct );
         //self::assertEquals( $newSection->id, 2 );
-        self::assertEquals( $newSection->identifier, $struct->identifier );
-        self::assertEquals( $newSection->name, $struct->name );
+        self::assertEquals( $struct->identifier, $newSection->identifier );
+        self::assertEquals( $struct->name, $newSection->name );
     }
 
     /**

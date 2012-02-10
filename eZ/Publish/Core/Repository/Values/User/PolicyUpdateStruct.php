@@ -1,7 +1,7 @@
 <?php
 namespace eZ\Publish\Core\Repository\Values\User;
-use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct;
-use eZ\Publish\API\Repository\Values\User\Limitation;
+use eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct as APIPolicyUpdateStruct,
+    eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * This class is used for updating a policy. The limitations of the policy are replaced
@@ -10,20 +10,12 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 class PolicyUpdateStruct extends APIPolicyUpdateStruct
 {
     /**
-     * List of limitations added to policy
-     * @todo move to abstract class
-     *
-     * @var array
-     */
-    protected $limitations = array();
-
-    /**
-     *
-     * adds a limitation to the policy - if a Limitation exists with the same identifer
+     * Adds a limitation to the policy - if a Limitation exists with the same identifier
      * the existing limitation is replaced
+     *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation
      */
-    public function addLimitation( /*Limitation*/ $limitation )
+    public function addLimitation( Limitation $limitation )
     {
         $limitationIdentifier = $limitation->getIdentifier();
         $this->limitations[$limitationIdentifier] = $limitation;

@@ -4,23 +4,23 @@
  */
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct;
-use eZ\Publish\API\Repository\Values\Content\Content;
-use eZ\Publish\API\Repository\Values\Content\ContentInfo;
-use eZ\Publish\API\Repository\Values\Content\Section;
-use eZ\Publish\API\Repository\Values\Content\Location;
-use eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
+use eZ\Publish\API\Repository\Values\Content\SectionCreateStruct,
+    eZ\Publish\API\Repository\Values\Content\Content,
+    eZ\Publish\API\Repository\Values\Content\ContentInfo,
+    eZ\Publish\API\Repository\Values\Content\Section,
+    eZ\Publish\API\Repository\Values\Content\Location,
+    eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct,
 
-use eZ\Publish\API\Repository\SectionService as SectionServiceInterface;
-use eZ\Publish\API\Repository\Repository as RepositoryInterface;
-use eZ\Publish\SPI\Persistence\Handler;
+    eZ\Publish\API\Repository\SectionService as SectionServiceInterface,
+    eZ\Publish\API\Repository\Repository as RepositoryInterface,
+    eZ\Publish\SPI\Persistence\Handler,
 
-use ezp\Base\Exception\NotFound;
-use eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue;
-use eZ\Publish\Core\Base\Exceptions\IllegalArgumentException;
-use eZ\Publish\Core\Base\Exceptions\NotFoundException;
-use eZ\Publish\Core\Base\Exceptions\BadStateException;
-use eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
+    ezp\Base\Exception\NotFound,
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException,
+    eZ\Publish\Core\Base\Exceptions\NotFoundException,
+    eZ\Publish\Core\Base\Exceptions\BadStateException,
+    eZ\Publish\API\Repository\Exceptions\UnauthorizedException;
 
 /**
  * Section service, used for section operations
@@ -288,7 +288,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * instanciates a new SectionCreateStruct
+     * instantiates a new SectionCreateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
@@ -298,7 +298,7 @@ class SectionService implements SectionServiceInterface
     }
 
     /**
-     * instanciates a new SectionUpdateStruct
+     * instantiates a new SectionUpdateStruct
      *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */

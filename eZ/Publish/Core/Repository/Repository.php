@@ -13,7 +13,7 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
     eZ\Publish\Core\Base\Exceptions\Logic,
     eZ\Publish\SPI\IO\Handler as IoHandler,
     eZ\Publish\SPI\Persistence\Handler as PersistenceHandler,
-    eZ\Publish\API\Repository\Repository  as RepositoryInterface,
+    eZ\Publish\API\Repository\Repository as RepositoryInterface,
     eZ\Publish\Core\Repository\ContentService,
     eZ\Publish\Core\Repository\LanguageService,
     eZ\Publish\Core\Repository\LocationService,
@@ -27,49 +27,49 @@ use eZ\Publish\Core\Base\Exceptions\BadConfiguration,
 
 /**
  * Repository class
- *
+ * @package eZ\Publish\Core\Repository
  */
 class Repository implements RepositoryInterface
 {
     /**
      * Repository Handler object
      *
-     * @var PersistenceHandler
+     * @var \eZ\Publish\SPI\Persistence\Handler
      */
     protected $persistenceHandler;
 
     /**
      * Io Handler object
      *
-     * @var IoHandler
+     * @var \eZ\Publish\SPI\IO\Handler
      */
     protected $ioHandler;
 
     /**
      * Currently logged in user object for permission purposes
      *
-     * @var User
+     * @var \eZ\Publish\API\Repository\Values\User\User
      */
     protected $user;
 
     /**
      * Instance of section service
      *
-     * @var SectionService
+     * @var \eZ\Publish\API\Repository\SectionService
      */
     protected $sectionService;
 
     /**
      * Instance of role service
      *
-     * @var RoleService
+     * @var \eZ\Publish\API\Repository\RoleService
      */
     protected $roleService;
 
     /**
      * Instance of language service
      *
-     * @var LanguageService
+     * @var \eZ\Publish\API\Repository\LanguageService
      */
     protected $languageService;
 
@@ -78,9 +78,9 @@ class Repository implements RepositoryInterface
      *
      * Construct repository object with provided storage engine
      *
-     * @param \eZ\Publish\SPI\Persistence\Handler $handler
+     * @param \eZ\Publish\SPI\Persistence\Handler $persistenceHandler
      * @param \eZ\Publish\SPI\IO\Handler $ioHandler
-     * @param User|null $user
+     * @param \eZ\Publish\API\Repository\Values\User\User|null $user
      */
     public function __construct( PersistenceHandler $persistenceHandler, IoHandler $ioHandler, User $user = null )
     {
@@ -99,22 +99,20 @@ class Repository implements RepositoryInterface
     /**
      * Get current user
      *
-     * @return User
+     * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    function getCurrentUser()
+    public function getCurrentUser()
     {
         return $this->user;
     }
 
     /**
-     * Set current user
      *
-     * @param User $user
-     * @return User Old user
-     *
-     * @throws InvalidArgumentValue If provided user does not have a valid id value
+     * sets the current user to the user with the given user id
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    function setCurrentUser( User $user )
+    public function setCurrentUser( User $user )
     {
         if ( !$user->id )
             throw new InvalidArgumentValue( '$user->id', $user->id );
@@ -129,7 +127,7 @@ class Repository implements RepositoryInterface
      *
      * @param string $module
      * @param string $function
-     * @param User $user
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @return boolean|array if limitations are on this function an array of limitations is returned
      */
     public function hasAccess( $module, $function, User $user = null )
@@ -138,18 +136,14 @@ class Repository implements RepositoryInterface
     }
 
     /**
-     * Check if current user has access to a certain function on a model
-     *
      * Indicates if the current user is allowed to perform an action given by the function on the given
      * objects
      *
      * @param string $module
      * @param string $function
-     * @param ValueObject $value
-     * @param ValueObject $target
-     * @return boolean
-     * @throws \eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue On invalid $function value
-     * @throws \eZ\Publish\Core\Base\Exceptions\Logic On limitation used in policies but not in $model::defintion()
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $value
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $target
+     * @return array|bool
      */
     public function canUser( $module, $function, ValueObject $value, ValueObject $target )
     {

@@ -6,25 +6,33 @@ use eZ\Publish\API\Repository\Values\User\Role as APIRole;
 /**
  * This class represents a role
  *
- * @property-read int $id the internal id of the role
- * @property-read string $name the name of the role
- * @property-read string $description the description of the role
- * @property-read array $policies an array of the policies {@link \eZ\Publish\API\Repository\Values\User\Policy} of the role.
+ * @property-read array $policies Policies assigned to this role
  */
 class Role extends APIRole
 {
     /**
+     * Policies assigned to this role
+     *
+     * @var array
+     */
+    protected $policies = array();
+
+    /**
      * returns the list of policies of this role
-     * @return array an array of {@link \eZ\Publish\API\Repository\Values\UserPolicy}
+     * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Policy}
      */
     public function getPolicies()
     {
-
+        return $this->policies;
     }
 
     /**
-     * returns the policy for the given module and function
-     * @return \eZ\Publish\API\Repository\Values\UserPolicy
+     * Returns the policy for the given module and function
+     *
+     * @param string $module
+     * @param string $function
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
     public function getPolicy( $module, $function )
     {
