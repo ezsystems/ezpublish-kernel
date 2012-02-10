@@ -4,16 +4,21 @@
  */
 namespace eZ\Publish\Core\Repository;
 
-use eZ\Publish\API\Repository\Values\User\UserCreateStruct,
+use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
+    eZ\Publish\API\Repository\Values\User\UserCreateStruct as APIUserCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserUpdateStruct,
     eZ\Publish\API\Repository\Values\User\User,
     eZ\Publish\API\Repository\Values\User\UserGroup,
-    eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct,
+    eZ\Publish\Core\Repository\Values\User\UserGroupCreateStruct,
+    eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupCreateStruct,
     eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct,
 
     eZ\Publish\SPI\Persistence\Handler,
     eZ\Publish\API\Repository\Repository as RepositoryInterface,
-    eZ\Publish\API\Repository\UserService as UserServiceInterface;
+    eZ\Publish\API\Repository\UserService as UserServiceInterface,
+
+    eZ\Publish\Core\Base\Exceptions\InvalidArgumentValue,
+    eZ\Publish\Core\Base\Exceptions\IllegalArgumentException;
 
 /**
  * This service provides methods for managing users and user groups
@@ -63,7 +68,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userGroupCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
      */
-    public function createUserGroup( UserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup ){}
+    public function createUserGroup( APIUserGroupCreateStruct $userGroupCreateStruct, UserGroup $parentGroup ){}
 
     /**
      * Loads a user group for the given id
@@ -142,7 +147,7 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userCreateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is missing
      */
-    public function createUser( UserCreateStruct $userCreateStruct, array $parentGroups ){}
+    public function createUser( APIUserCreateStruct $userCreateStruct, array $parentGroups ){}
 
     /**
      * Loads a user
@@ -201,7 +206,53 @@ class UserService implements UserServiceInterface
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to assign the user group to the user
      */
-    public function assignUserToUserGroup( User $user, UserGroup $userGroup ){}
+    public function assignUserToUserGroup( User $user, UserGroup $userGroup )
+    {
+        if ( empty( $user->id ) )
+            throw new InvalidArgumentValue( "id", $user->id, "User" );
+
+        if ( empty( $userGroup->id ) )
+            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
+
+        $loadedUser = $this->loadUser( $user->id );
+        $loadedGroup = $this->loadUserGroup( $userGroup->id );
+        $locationService = $this->repository->getLocationService();
+
+        $existingGroupIds = array();
+        $userLocations = $locationService->loadLocations( $loadedUser->contentInfo );
+        foreach ( $userLocations as $userLocation )
+        {
+            $existingGroupIds[] = $userLocation->parentId;
+        }
+
+        $groupLocations = $locationService->loadLocations( $loadedGroup->contentInfo );
+        if ( empty( $groupLocations ) )
+            // user group has no locations, nowhere to assign user to
+            // @todo: maybe throw BadStateException?
+            return;
+
+        $newGroupIds = array();
+        $mainLocationId = 0;
+        foreach ( $groupLocations as $groupLocation )
+        {
+            $newGroupIds[] = $groupLocation->id;
+
+            if ( $groupLocation->id === $groupLocation->mainLocationId )
+                $mainLocationId = $groupLocation->id;
+        }
+
+        if ( $mainLocationId === 0 )
+            // user group has no main location
+            // @todo: maybe throw BadStateException, or use first location from the list?
+            return;
+
+        if ( count( array_intersect( $existingGroupIds, $newGroupIds ) ) > 0 )
+            // user is already below one of the locations of the user group, do nothing
+            return;
+
+        $locationCreateStruct = $locationService->newLocationCreateStruct( $mainLocationId );
+        $locationService->createLocation( $loadedUser->contentInfo, $locationCreateStruct );
+    }
 
     /**
      * Removes a user group from the user
@@ -212,7 +263,44 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to remove the user group from the user
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the user is not in the given user group
      */
-    public function unAssignUssrFromUserGroup( User $user, UserGroup $userGroup ){}
+    public function unAssignUssrFromUserGroup( User $user, UserGroup $userGroup )
+    {
+        if ( empty( $user->id ) )
+            throw new InvalidArgumentValue( "id", $user->id, "User" );
+
+        if ( empty( $userGroup->id ) )
+            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
+
+        $loadedUser = $this->loadUser( $user->id );
+        $loadedGroup = $this->loadUserGroup( $userGroup->id );
+        $locationService = $this->repository->getLocationService();
+
+        $userLocations = $locationService->loadLocations( $loadedUser->contentInfo );
+        if ( empty( $userLocations ) )
+            // user has no locations, nothing to remove
+            // @todo: maybe throw BadStateException?
+            return;
+
+        $groupLocations = $locationService->loadLocations( $loadedGroup->contentInfo );
+        if ( empty( $groupLocations ) )
+            // user group has no locations
+            // @todo: maybe throw BadStateException?
+            return;
+
+        foreach ( $userLocations as $userLocation )
+        {
+            foreach ( $groupLocations as $groupLocation )
+            {
+                if ( $userLocation->parentId === $groupLocation->id )
+                {
+                    $locationService->deleteLocation( $userLocation );
+                    return;
+                }
+            }
+        }
+
+        throw new IllegalArgumentException( '$userGroup', 'user is not in the given user group' );
+    }
 
     /**
      * Instantiate a user create class
@@ -225,7 +313,17 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserCreateStruct
      */
-    public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null ){}
+    public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
+    {
+        $contentCreateStruct = $this->repository->getContentService()->newContentCreateStruct( $contentType, $mainLanguageCode );
+
+        return new UserCreateStruct( array(
+            'login'               => $login,
+            'email'               => $email,
+            'password'            => $password,
+            'contentCreateStruct' => $contentCreateStruct
+        ) );
+    }
 
     /**
      * Instantiate a user group create class
@@ -235,19 +333,40 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct
      */
-    public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null ){}
+    public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
+    {
+        $contentCreateStruct = $this->repository->getContentService()->newContentCreateStruct( $contentType, $mainLanguageCode );
+
+        return new UserGroupCreateStruct( array(
+            'contentCreateStruct' => $contentCreateStruct
+        ) );
+    }
 
     /**
      * Instantiate a new user update struct
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserUpdateStruct
      */
-    public function newUserUpdateStruct(){}
+    public function newUserUpdateStruct()
+    {
+        $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+
+        return new UserUpdateStruct( array(
+            'contentUpdateStruct' => $contentUpdateStruct
+        ) );
+    }
 
     /**
      * Instantiate a new user group update struct
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct
      */
-    public function newUserGroupUpdateStruct(){}
+    public function newUserGroupUpdateStruct()
+    {
+        $contentUpdateStruct = $this->repository->getContentService()->newContentUpdateStruct();
+
+        return new UserGroupUpdateStruct( array(
+            'contentUpdateStruct' => $contentUpdateStruct
+        ) );
+    }
 }
