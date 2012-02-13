@@ -7,7 +7,7 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\Repository\Tests\Stubs\Values;
+namespace eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
 class ContentTypeGroupStub extends ContentTypeGroup

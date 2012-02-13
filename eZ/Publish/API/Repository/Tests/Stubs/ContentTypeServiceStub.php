@@ -15,12 +15,16 @@ use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
+
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupUpdateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupCreateStructStub;
 
 /**
  * @example Examples/contenttype.php
@@ -73,7 +77,7 @@ class ContentTypeServiceStub implements ContentTypeService
 
         $data['id'] = $this->nextGroupId++;
 
-        $group = new Values\ContentTypeGroupStub( $data );
+        $group = new ContentTypeGroupStub( $data );
 
         $this->groups[$group->identifier] = $group;
         $this->groupsById[$group->id] = $group;
@@ -413,7 +417,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeGroupCreateStruct( $identifier )
     {
-        return new Values\ContentTypeGroupCreateStructStub(
+        return new ContentTypeGroupCreateStructStub(
             array( 'identifier' => $identifier )
         );
     }
@@ -447,7 +451,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeGroupUpdateStruct()
     {
-        return new Values\ContentTypeGroupUpdateStructStub();
+        return new ContentTypeGroupUpdateStructStub();
     }
 
     /**
