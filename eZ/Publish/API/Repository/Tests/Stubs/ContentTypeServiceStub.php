@@ -35,6 +35,16 @@ class ContentTypeServiceStub implements ContentTypeService
     private $groups = array();
 
     /**
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
+     */
+    private $groupsById = array();
+
+    /**
+     * @var int
+     */
+    private $nextGroupId = 0;
+
+    /**
      * Create a Content Type Group object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type group
@@ -61,8 +71,12 @@ class ContentTypeServiceStub implements ContentTypeService
         unset( $data['created'] );
         unset( $data['initialLanguageCode'] );
 
+        $data['id'] = $this->nextGroupId++;
+
         $group = new ContentTypeGroupStub( $data );
+
         $this->groups[$group->identifier] = $group;
+        $this->groupsById[$group->id] = $group;
 
         return $group;
     }
@@ -78,7 +92,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentTypeGroup( $contentTypeGroupId )
     {
-        // TODO: Implement.
+        return $this->groupsById[$contentTypeGroupId];
     }
 
     /**
@@ -391,7 +405,9 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeGroupCreateStruct( $identifier )
     {
-        return new ContentTypeGroupCreateStructStub();
+        return new ContentTypeGroupCreateStructStub(
+            array( 'identifier' => $identifier )
+        );
     }
 
     /**
