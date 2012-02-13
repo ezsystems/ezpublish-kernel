@@ -104,7 +104,14 @@ class LanguageServiceStub implements LanguageService
      */
     public function enableLanguage( Language $language )
     {
-        // TODO: Implement enableLanguage() method.
+        $this->languages[$language->id] = new Language(
+            array(
+                'id'            =>  $language->id,
+                'name'          =>  $language->name,
+                'enabled'       =>  true,
+                'languageCode'  =>  $language->languageCode
+            )
+        );
     }
 
     /**
@@ -116,7 +123,14 @@ class LanguageServiceStub implements LanguageService
      */
     public function disableLanguage( Language $language )
     {
-        // TODO: Implement disableLanguage() method.
+        $this->languages[$language->id] = new Language(
+            array(
+                'id'            =>  $language->id,
+                'name'          =>  $language->name,
+                'enabled'       =>  false,
+                'languageCode'  =>  $language->languageCode
+            )
+        );
     }
 
     /**
@@ -130,7 +144,11 @@ class LanguageServiceStub implements LanguageService
      */
     public function loadLanguage( $languageCode )
     {
-        // TODO: Implement loadLanguage() method.
+        if ( isset( $this->codes[$languageCode] ) )
+        {
+            return $this->languages[$this->codes[$languageCode]];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
     }
 
     /**
@@ -173,7 +191,7 @@ class LanguageServiceStub implements LanguageService
      */
     public function deleteLanguage( Language $language )
     {
-        // TODO: Implement deleteLanguage() method.
+        unset( $this->languages[$language->id], $this->codes[$language->languageCode] );
     }
 
     /**

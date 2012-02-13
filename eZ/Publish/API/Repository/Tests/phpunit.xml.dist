@@ -27,6 +27,7 @@
                 <directory>../Tests</directory>
                 <directory>../Tutorials</directory>
             </exclude>
+            <directory>../Tests/Stubs</directory>
         </whitelist>
     </filter>
 </phpunit>
