@@ -447,7 +447,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeGroupUpdateStruct()
     {
-        // TODO: Implement.
+        return new Values\ContentTypeGroupUpdateStructStub();
     }
 
     /**

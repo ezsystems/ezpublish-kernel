@@ -243,6 +243,29 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
+     * Test for the newContentTypeGroupUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeGroupUpdateStruct()
+     * 
+     */
+    public function testNewContentTypeGroupUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct',
+            $groupUpdate
+        );
+    }
+
+    /**
      * Test for the updateContentTypeGroup() method.
      *
      * @return void
@@ -936,18 +959,6 @@ class ContentTypeServiceTest extends BaseTest
     public function testNewContentTypeUpdateStruct()
     {
         $this->markTestIncomplete( "Test for ContentTypeService::newContentTypeUpdateStruct() is not implemented." );
-    }
-
-    /**
-     * Test for the newContentTypeGroupUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeGroupUpdateStruct()
-     * 
-     */
-    public function testNewContentTypeGroupUpdateStruct()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::newContentTypeGroupUpdateStruct() is not implemented." );
     }
 
     /**
