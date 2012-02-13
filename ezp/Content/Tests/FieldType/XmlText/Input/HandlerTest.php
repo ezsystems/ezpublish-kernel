@@ -53,6 +53,7 @@ class InputHandlerTest extends PHPUnit_Framework_TestCase
         $version = $this->getMock( 'ezp\\Content\\Version' );
         $version->id = 1;
         $version->contentId = 1;
+        $version->versionNo = 1;
 
         $repository = $this->getMockBuilder( '\\ezp\\Base\\Repository' )
             ->disableOriginalConstructor()
