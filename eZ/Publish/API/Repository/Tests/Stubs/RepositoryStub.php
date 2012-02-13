@@ -108,7 +108,7 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->languageService )
         {
-            $this->languageService = new LanguageServiceStub();
+            $this->languageService = new LanguageServiceStub( $this );
         }
         return $this->languageService;
     }
