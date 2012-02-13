@@ -4,6 +4,14 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
 class ContentTypeGroupCreateStructStub extends ContentTypeGroupCreateStruct
 {
+    public function __construct( array $values = array() )
+    {
+        foreach ( $values as $propertyName => $propertyValue )
+        {
+            $this->$propertyName = $propertyValue;
+        }
+    }
+
     /**
      * 5.x only
      * set a content type group name for the given language
