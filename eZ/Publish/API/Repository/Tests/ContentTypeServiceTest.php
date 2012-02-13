@@ -19,6 +19,31 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 class ContentTypeServiceTest extends BaseTest
 {
     /**
+     * Test for the newContentTypeGroupCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeGroupCreateStruct()
+     * 
+     */
+    public function testNewContentTypeGroupCreateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct',
+            $groupCreate
+        );
+    }
+
+    /**
      * Test for the createContentTypeGroup() method.
      *
      * @return void
@@ -784,18 +809,6 @@ class ContentTypeServiceTest extends BaseTest
     public function testPublishContentTypeDraftThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the newContentTypeGroupCreateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeGroupCreateStruct()
-     * 
-     */
-    public function testNewContentTypeGroupCreateStruct()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::newContentTypeGroupCreateStruct() is not implemented." );
     }
 
     /**

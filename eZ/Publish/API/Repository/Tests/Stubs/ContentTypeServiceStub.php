@@ -368,7 +368,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeGroupCreateStruct( $identifier )
     {
-        // TODO: Implement.
+        return new ContentTypeGroupCreateStructStub();
     }
 
     /**
