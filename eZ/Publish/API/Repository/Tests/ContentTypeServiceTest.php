@@ -48,11 +48,26 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeGroupCreateStruct
      */
     public function testCreateContentTypeGroup()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::createContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+
+        $group = $contentTypeService->createContentTypeGroup( $groupCreate );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup',
+            $group
+        );
     }
 
     /**

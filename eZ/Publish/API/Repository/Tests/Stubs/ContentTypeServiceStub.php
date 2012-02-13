@@ -30,6 +30,11 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 class ContentTypeServiceStub implements ContentTypeService
 {
     /**
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
+     */
+    private $groups = array();
+
+    /**
      * Create a Content Type Group object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type group
@@ -41,7 +46,17 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
     {
-        // TODO: Implement.
+        $data = array();
+        foreach ( $contentTypeGroupCreateStruct as $propertyName => $propertyValue )
+        {
+            if ( $propertyValue !== null )
+            {
+                $data[$propertyName] = $propertyValue;
+            }
+        }
+        $group = new ContentTypeGroupStub( $data );
+
+        return $group;
     }
 
     /**
