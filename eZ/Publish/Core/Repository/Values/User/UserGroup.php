@@ -19,16 +19,6 @@ class UserGroup extends APIUserGroup
     protected $content;
 
     /**
-     * Initializes new UserGroup object from provided content
-     *
-     * @param \eZ\Publish\API\Repository\Values\Content\Content $content
-     */
-    public function __construct( Content $content )
-    {
-        $this->content = $content;
-    }
-
-    /**
      * returns the VersionInfo for this version
      *
      * @return \eZ\Publish\API\Repository\Values\Content\VersionInfo
