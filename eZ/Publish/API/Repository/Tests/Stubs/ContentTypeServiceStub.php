@@ -110,7 +110,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier )
     {
-        // TODO: Implement.
+        if ( !isset( $this->groups[$contentTypeGroupIdentifier] ) )
+        {
+            throw new Exceptions\NotFoundExceptionStub;
+        }
+        return $this->groups[$contentTypeGroupIdentifier];
     }
 
     /**

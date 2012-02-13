@@ -168,7 +168,26 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testLoadContentTypeGroupByIdentifier()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeGroupByIdentifier() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        $storedGroup = $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        $loadedGroup = $contentTypeService->loadContentTypeGroupByIdentifier(
+            $storedGroup->identifier
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup',
+            $loadedGroup
+        );
+        // TODO: Further equality tests?
     }
 
     /**
@@ -180,7 +199,12 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testLoadContentTypeGroupByIdentifierThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeGroupByIdentifier() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+        $loadedGroup = $contentTypeService->loadContentTypeGroupByIdentifier(
+            'not-exists'
+        );
     }
 
     /**
