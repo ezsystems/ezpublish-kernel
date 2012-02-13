@@ -212,11 +212,34 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroups()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
     public function testLoadContentTypeGroups()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeGroups() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        $storedGroup = $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        $secondGroupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'second-group'
+        );
+        $secondStoredGroup = $contentTypeService->createContentTypeGroup( $secondGroupCreate );
+
+        $loadedGroups = $contentTypeService->loadContentTypeGroups();
+        /* END: Use Case */
+
+        $this->assertInternalType(
+            'array',
+            $loadedGroups
+        );
+        // TODO: Further equality tests?
+        $this->assertEquals( 2, count( $loadedGroups ) );
     }
 
     /**
