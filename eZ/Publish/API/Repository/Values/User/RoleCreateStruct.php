@@ -29,6 +29,6 @@ abstract class RoleCreateStruct extends ValueObject
      *
      * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
      */
-    public abstract function addPolicy( PolicyCreateStruct $policyCreateStruct );
+    abstract public function addPolicy( PolicyCreateStruct $policyCreateStruct );
 
 }

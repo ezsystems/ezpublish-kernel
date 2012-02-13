@@ -12,7 +12,7 @@ abstract class ContentFieldValidationException extends ForbiddenException
      * 
      * @return array 
      */
-    public abstract function getFieldExceptions();
+    abstract public function getFieldExceptions();
 }
 
 

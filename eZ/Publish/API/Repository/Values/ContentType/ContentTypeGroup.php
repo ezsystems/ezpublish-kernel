@@ -80,7 +80,7 @@ abstract class ContentTypeGroup extends ValueObject
      *
      * @return string[]
      */
-    public abstract function getNames();
+    abstract public function getNames();
 
     /**
      * 5.x only
@@ -88,7 +88,7 @@ abstract class ContentTypeGroup extends ValueObject
      * @param string $languageCode
      * @return string the name for the given language or null if none existis.
      */
-    public abstract function getName( $languageCode );
+    abstract public function getName( $languageCode );
 
     /**
      *  5.x only
@@ -100,7 +100,7 @@ abstract class ContentTypeGroup extends ValueObject
      *
      * @return string[]
      */
-    public abstract function getDescriptions();
+    abstract public function getDescriptions();
 
     /**
      * 5.x only
@@ -108,5 +108,5 @@ abstract class ContentTypeGroup extends ValueObject
      * @param string $languageCode
      * @return string the description for the given language or null if none existis.
      */
-    public abstract function getDescription( $languageCode );
+    abstract public function getDescription( $languageCode );
 }

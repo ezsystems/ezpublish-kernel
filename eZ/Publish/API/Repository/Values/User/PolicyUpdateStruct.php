@@ -15,6 +15,6 @@ abstract class PolicyUpdateStruct extends ValueObject
      * the existing limitation is replaced
      * @param Limitation $limitation
      */
-    public abstract function addLimitation( Limitation $limitation );
+    abstract public function addLimitation( Limitation $limitation );
 
 }

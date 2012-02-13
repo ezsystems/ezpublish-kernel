@@ -50,5 +50,5 @@ abstract class Policy extends ValueObject
      *
      * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Limitation }
      */
-    public abstract function getLimitations();
+    abstract public function getLimitations();
 }

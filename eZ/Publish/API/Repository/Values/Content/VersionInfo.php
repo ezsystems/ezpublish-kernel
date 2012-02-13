@@ -48,7 +48,7 @@ abstract class VersionInfo extends ValueObject
      *
      * @return ContentInfo
      */
-    public abstract function getContentInfo();
+    abstract public function getContentInfo();
 
     /**
      *
@@ -57,7 +57,7 @@ abstract class VersionInfo extends ValueObject
      *
      * @param string $languageCode
      */
-    public abstract function getName( $languageCode = null );
+    abstract public function getName( $languageCode = null );
 
     /**
      * the last modified date of this version

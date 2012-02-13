@@ -27,7 +27,7 @@ abstract class Limitation extends ValueObject
      *
      * @return string
      */
-    public abstract function getIdentifier();
+    abstract public function getIdentifier();
 
     /**
      * An integer list of ids or identifiers for which the limitation should be applied

@@ -19,5 +19,5 @@ abstract class TranslationValues extends ValueObject
      * @param string $fieldDefIdentifier the identifier of the field definition
      * @param mixed $value Either a plain value which is understandable by the field type or an instance of a Value class provided by the field type
      */
-    public abstract function setField( $fieldDefIdentifier, $value );
+    abstract public function setField( $fieldDefIdentifier, $value );
 }

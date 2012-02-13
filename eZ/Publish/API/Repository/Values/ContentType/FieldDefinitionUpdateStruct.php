@@ -26,7 +26,7 @@ abstract class FieldDefinitionUpdateStruct extends ValueObject
      * @param string $name
      * @param string $language
      */
-    public abstract function setName( $name, $language = null );
+    abstract public function setName( $name, $language = null );
 
     /**
      * set a  fie definition description for the given language
@@ -34,7 +34,7 @@ abstract class FieldDefinitionUpdateStruct extends ValueObject
      * @param string $description
      * @param string $language
      */
-    public abstract function setDescription( $description, $language = null );
+    abstract public function setDescription( $description, $language = null );
 
     /**
      * if set the field group is changed to this name
@@ -78,14 +78,14 @@ abstract class FieldDefinitionUpdateStruct extends ValueObject
      *
      * @param Validator $validator
      */
-    public abstract function setValidator( $validator );
+    abstract public function setValidator( $validator );
 
     /**
      * replaces the field settings map supported by the field type
      *
      * @param array $fieldSettings
      */
-    public abstract function setFieldSettings( array $fieldSettings );
+    abstract public function setFieldSettings( array $fieldSettings );
 
     /**
      * If set the default value for this field is changed to the given value

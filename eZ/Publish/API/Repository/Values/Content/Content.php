@@ -24,7 +24,7 @@ abstract class Content extends ValueObject
      *
      * @return VersionInfo
      */
-    public abstract function getVersionInfo();
+    abstract public function getVersionInfo();
 
     /**
      * returns a field value for the given value
@@ -38,21 +38,21 @@ abstract class Content extends ValueObject
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
      */
-    public abstract function getFieldValue( $fieldDefIdentifer, $languageCode = null );
+    abstract public function getFieldValue( $fieldDefIdentifer, $languageCode = null );
 
     /**
      * returns the outgoing relations
      *
      * @return array an array of {@link Relation}
      */
-    public abstract function getRelations();
+    abstract public function getRelations();
 
     /**
      * This method returns the complete fields collection
      *
      * @return array an array of {@link Field}
      */
-    public abstract function getFields();
+    abstract public function getFields();
 
     /**
      * This method returns the fields for a given language and non translatable fields
@@ -63,5 +63,5 @@ abstract class Content extends ValueObject
      * 
      * @return array an array of {@link Field} with field identifier as keys
      */
-    public abstract function getFieldsByLanguage( $languageCode = null );
+    abstract public function getFieldsByLanguage( $languageCode = null );
 }

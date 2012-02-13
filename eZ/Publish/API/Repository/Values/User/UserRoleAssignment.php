@@ -16,5 +16,5 @@ abstract class UserRoleAssignment extends RoleAssignment
      * 
      * @return \eZ\Publish\API\Repository\Values\User\User
      */
-    public abstract function getUser();
+    abstract public function getUser();
 }

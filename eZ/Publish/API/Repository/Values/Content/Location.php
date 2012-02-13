@@ -86,7 +86,7 @@ abstract class Location extends ValueObject
      *
      * @return eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public abstract function getContentInfo();
+    abstract public function getContentInfo();
 
     /**
      * Parent ID.
