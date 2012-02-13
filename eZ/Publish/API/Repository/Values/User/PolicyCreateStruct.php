@@ -31,7 +31,7 @@ abstract class PolicyCreateStruct extends ValueObject
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    public abstract function getLimitations();
+    abstract public function getLimitations();
 
     /**
      *

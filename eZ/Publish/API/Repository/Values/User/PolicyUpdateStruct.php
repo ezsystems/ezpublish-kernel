@@ -14,7 +14,7 @@ abstract class PolicyUpdateStruct extends ValueObject
      *
      * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    public abstract function getLimitations();
+    abstract public function getLimitations();
 
     /**
      *

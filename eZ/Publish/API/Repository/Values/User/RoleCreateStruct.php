@@ -29,7 +29,7 @@ abstract class RoleCreateStruct extends ValueObject
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
      */
-    public abstract function getPolicies();
+    abstract public function getPolicies();
 
     /**
      * Adds a policy to this role
