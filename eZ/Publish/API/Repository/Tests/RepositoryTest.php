@@ -166,11 +166,11 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getRoleService()
-     * 
      */
     public function testGetRoleService()
     {
-        $this->markTestIncomplete( "Test for Repository::getRoleService() is not implemented." );
+        $repository = $this->getRepository();
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\RoleService', $repository->getRoleService() );
     }
 
     /**

@@ -32,6 +32,11 @@ class RepositoryStub implements Repository
     private $languageService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\RoleServiceStub
+     */
+    private $roleService;
+
+    /**
      * Get current user
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -181,7 +186,11 @@ class RepositoryStub implements Repository
      */
     public function getRoleService()
     {
-        // TODO: Implement getRoleService() method.
+        if ( null === $this->roleService )
+        {
+            $this->roleService = new RoleServiceStub();
+        }
+        return $this->roleService;
     }
 
     /**
