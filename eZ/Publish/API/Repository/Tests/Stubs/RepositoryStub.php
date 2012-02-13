@@ -37,6 +37,11 @@ class RepositoryStub implements Repository
     private $roleService;
 
     /**
+     * @var \eZ\Publish\API\Repository\Tests\Stubs\ContentTypeServiceStub
+     */
+    private $contentTypeService;
+
+    /**
      * Get current user
      *
      * @return \eZ\Publish\API\Repository\Values\User\User
@@ -123,7 +128,11 @@ class RepositoryStub implements Repository
      */
     public function getContentTypeService()
     {
-        // TODO: Implement getContentTypeService() method.
+        if ( null === $this->contentTypeService )
+        {
+            $this->contentTypeService = new ContentTypeServiceStub();
+        }
+        return $this->contentTypeService;
     }
 
     /**
