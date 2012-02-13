@@ -6,7 +6,6 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 /**
  * This class is used for updating a policy. The limitations of the policy are replaced
  * with those which are added in instances of this class
- *
  */
 abstract class PolicyUpdateStruct extends ValueObject
 {

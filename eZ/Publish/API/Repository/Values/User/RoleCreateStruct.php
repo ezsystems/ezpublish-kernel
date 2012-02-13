@@ -5,7 +5,6 @@ use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 
 /**
  * This class is used to create a new role
- *
  */
 abstract class RoleCreateStruct extends ValueObject
 {

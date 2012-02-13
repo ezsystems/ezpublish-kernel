@@ -5,7 +5,6 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 
 /**
  * This class is used to create a policy
- *
  */
 abstract class PolicyCreateStruct extends ValueObject
 {
