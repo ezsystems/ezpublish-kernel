@@ -6,7 +6,6 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 /**
  * This class is used to create a policy
  *
- * @property-read \eZ\Publish\API\Repository\Values\User\Limitation[] $limitations List of limitations added to policy
  */
 abstract class PolicyCreateStruct extends ValueObject
 {
@@ -29,11 +28,11 @@ abstract class PolicyCreateStruct extends ValueObject
     public $function;
 
     /**
-     * List of limitations added to policy
+     * Returns list of limitations added to policy
      *
-     * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
      */
-    protected $limitations = array();
+    public abstract function getLimitations();
 
     /**
      *
