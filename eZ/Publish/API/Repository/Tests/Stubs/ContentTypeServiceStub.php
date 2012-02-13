@@ -92,6 +92,10 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentTypeGroup( $contentTypeGroupId )
     {
+        if ( !isset( $this->groupsById[$contentTypeGroupId] ) )
+        {
+            throw new Exceptions\NotFoundExceptionStub;
+        }
         return $this->groupsById[$contentTypeGroupId];
     }
 

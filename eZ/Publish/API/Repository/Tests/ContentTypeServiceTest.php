@@ -149,10 +149,14 @@ class ContentTypeServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\NotFoundException
+     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testLoadContentTypeGroupThrowsNotFoundException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::loadContentTypeGroup() is not implemented." );
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+        $loadedGroup = $contentTypeService->loadContentTypeGroup( 23 );
     }
 
     /**
