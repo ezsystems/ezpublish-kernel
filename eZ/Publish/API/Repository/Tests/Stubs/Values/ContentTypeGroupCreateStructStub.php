@@ -1,5 +1,5 @@
 <?php
-namespace eZ\Publish\API\Repository\Tests\Stubs;
+namespace eZ\Publish\API\Repository\Tests\Stubs\Values;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
 class ContentTypeGroupCreateStructStub extends ContentTypeGroupCreateStruct

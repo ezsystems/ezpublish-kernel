@@ -73,7 +73,7 @@ class ContentTypeServiceStub implements ContentTypeService
 
         $data['id'] = $this->nextGroupId++;
 
-        $group = new ContentTypeGroupStub( $data );
+        $group = new Values\ContentTypeGroupStub( $data );
 
         $this->groups[$group->identifier] = $group;
         $this->groupsById[$group->id] = $group;
@@ -124,7 +124,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function loadContentTypeGroups()
     {
-        // TODO: Implement.
+        return $this->groupsById;
     }
 
     /**
@@ -413,7 +413,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeGroupCreateStruct( $identifier )
     {
-        return new ContentTypeGroupCreateStructStub(
+        return new Values\ContentTypeGroupCreateStructStub(
             array( 'identifier' => $identifier )
         );
     }
