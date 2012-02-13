@@ -12,7 +12,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
 class ContentTypeGroupStub extends ContentTypeGroup
 {
-    public function __construct( array $values )
+    public function __construct( array $values = array() )
     {
         foreach ( $values as $propertyName => $propertyValue )
         {
