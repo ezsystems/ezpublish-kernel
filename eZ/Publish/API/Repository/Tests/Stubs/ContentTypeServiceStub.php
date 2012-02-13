@@ -46,6 +46,11 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
     {
+        if ( isset( $this->groups[$contentTypeGroupCreateStruct->identifier] ) )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+
         $data = array();
         foreach ( $contentTypeGroupCreateStruct as $propertyName => $propertyValue )
         {
@@ -57,6 +62,7 @@ class ContentTypeServiceStub implements ContentTypeService
         unset( $data['initialLanguageCode'] );
 
         $group = new ContentTypeGroupStub( $data );
+        $this->groups[$group->identifier] = $group;
 
         return $group;
     }
