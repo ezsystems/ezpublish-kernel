@@ -49,11 +49,13 @@ class ContentTypeServiceStub implements ContentTypeService
         $data = array();
         foreach ( $contentTypeGroupCreateStruct as $propertyName => $propertyValue )
         {
-            if ( $propertyValue !== null )
-            {
-                $data[$propertyName] = $propertyValue;
-            }
+            $data[$propertyName] = $propertyValue;
         }
+
+        // FIXME: This data is inconsistent so far
+        unset( $data['created'] );
+        unset( $data['initialLanguageCode'] );
+
         $group = new ContentTypeGroupStub( $data );
 
         return $group;
