@@ -20,6 +20,10 @@ use eZ\Publish\Core\Repository\Values\User\UserCreateStruct,
     eZ\Publish\API\Repository\UserService as UserServiceInterface,
 
     eZ\Publish\SPI\Persistence\User as SPIUser,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\LogicalAnd as CriterionLogicalAnd,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ContentTypeId as CriterionContentTypeId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\ParentLocationId as CriterionParentLocationId,
+    eZ\Publish\SPI\Persistence\Content\Query\Criterion\Status as CriterionStatus,
 
     ezp\Base\Exception\NotFound,
     eZ\Publish\Core\Base\Exceptions\NotFoundException,
@@ -100,7 +104,6 @@ class UserService implements UserServiceInterface
         return new UserGroup( array(
             'id'            => $publishedContent->contentId,
             'parentId'      => $mainParentGroupLocation !== null ? $mainParentGroupLocation->id : null,
-            // @todo: calculate sub group count
             'subGroupCount' => 0,
             'content'       => $publishedContent
         ) );
@@ -145,7 +148,33 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to read the user group
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
-    public function loadSubUserGroups( APIUserGroup $userGroup ){}
+    public function loadSubUserGroups( APIUserGroup $userGroup )
+    {
+        if ( empty( $userGroup->id ) )
+            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
+
+        if ( empty( $userGroup->contentInfo ) )
+            throw new InvalidArgumentValue( "contentInfo", "", "UserGroup" );
+
+        $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
+        $mainGroupLocation = $this->repository->getLocationService()->loadMainLocation( $loadedUserGroup->contentInfo );
+
+        if ( $mainGroupLocation === null )
+            return array();
+
+        $searchResult = $this->persistenceHandler->searchHandler()->find(
+            new CriterionLogicalAnd( array(
+                //@todo: read user group type ID from INI settings
+                new CriterionContentTypeId( 3 ),
+                new CriterionParentLocationId( $mainGroupLocation->id ),
+                new CriterionStatus( CriterionStatus::STATUS_PUBLISHED )
+            ) )
+        );
+
+        // @todo: hm... we need to convert SPI\Content to API\Content
+        // such method already exists in content service but is private
+        return $searchResult->content;
+    }
 
     /**
      * Removes a user group
@@ -176,7 +205,30 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException if the user group with the given id was not found
      */
-    public function moveUserGroup( APIUserGroup $userGroup, APIUserGroup $newParent ){}
+    public function moveUserGroup( APIUserGroup $userGroup, APIUserGroup $newParent )
+    {
+        if ( empty( $userGroup->id ) )
+            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
+
+        if ( empty( $newParent->id ) )
+            throw new InvalidArgumentValue( "id", $newParent->id, "UserGroup" );
+
+        $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
+        $loadedNewParent = $this->loadUserGroup( $newParent->id );
+
+        $locationService = $this->repository->getLocationService();
+
+        $userGroupMainLocation = $locationService->loadMainLocation( $loadedUserGroup->contentInfo );
+        $newParentMainLocation = $locationService->loadMainLocation( $loadedNewParent->contentInfo );
+
+        if ( $userGroupMainLocation === null )
+            throw new BadStateException( "userGroup" );
+
+        if ( $newParentMainLocation === null )
+            throw new BadStateException( "newParent" );
+
+        $this->repository->getLocationService()->moveSubtree( $userGroupMainLocation, $newParentMainLocation );
+    }
 
     /**
      * Updates the group profile with fields and meta data
@@ -189,11 +241,21 @@ class UserService implements UserServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\User\UserGroup
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to move the user group
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update the user group
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userGroupUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
      */
-    public function updateUserGroup( APIUserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct ){}
+    public function updateUserGroup( APIUserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct )
+    {
+        if ( empty( $userGroup->id ) )
+            throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
+
+        $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
+
+        $this->repository->getContentService()->updateContent( $loadedUserGroup->getVersionInfo(), $userGroupUpdateStruct->contentUpdateStruct );
+
+        return $this->loadUserGroup( $loadedUserGroup->id );
+    }
 
     /**
      * Create a new user. The created user is published by this method
@@ -336,7 +398,29 @@ class UserService implements UserServiceInterface
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentFieldValidationException if a field in the $userUpdateStruct is not valid
      * @throws \eZ\Publish\API\Repository\Exceptions\ContentValidationException if a required field is set empty
      */
-    public function updateUser( APIUser $user, UserUpdateStruct $userUpdateStruct ){}
+    public function updateUser( APIUser $user, UserUpdateStruct $userUpdateStruct )
+    {
+        if ( empty( $user->id ) )
+            throw new InvalidArgumentValue( "id", $user->id, "User" );
+
+        $loadedUser = $this->loadUser( $user->id );
+
+        $this->repository->getContentService()->updateContent( $loadedUser->getVersionInfo(), $userUpdateStruct->contentUpdateStruct );
+
+        $this->persistenceHandler->userHandler()->update( new SPIUser( array(
+            'id'            => $loadedUser->id,
+            'login'         => $loadedUser->login,
+            // email should not be empty (nor null nor empty string)
+            'email'         => !empty( $userUpdateStruct->email ) ? $userUpdateStruct->email : $loadedUser->email,
+            // @todo: read password hash algorithm and site from INI settings
+            'passwordHash'  => $userUpdateStruct->password !== null ?
+                $this->createPasswordHash( $loadedUser->login, $userUpdateStruct->password, null, null ) :
+                $loadedUser->passwordHash,
+            'hashAlgorithm' => null,
+            'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->enabled,
+            'maxLogin'      => $userUpdateStruct->maxLogin !== null ? $userUpdateStruct->maxLogin : $loadedUser->maxLogin
+        ) ) );
+    }
 
     /**
      * Assigns a new user group to the user
@@ -533,7 +617,6 @@ class UserService implements UserServiceInterface
         return new SPIUser( array(
             'login'         => $userCreateStruct->login,
             'email'         => $userCreateStruct->email,
-            'password'      => $userCreateStruct->password,
             // @todo: read password hash algorithm and site from INI settings
             'passwordHash'  => $this->createPasswordHash( $userCreateStruct->login, $userCreateStruct->password, null, null ),
             'hashAlgorithm' => null,
