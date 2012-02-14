@@ -13,6 +13,8 @@ use \PHPUnit_Framework_TestCase;
 use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
 
+use \eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * Base class for api specific tests.
  */
@@ -45,5 +47,45 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $this->repository = new RepositoryStub();
         }
         return $this->repository;
+    }
+
+    /**
+     * Asserts that properties given in $expectedValues are correctly set in
+     * $actualObject.
+     *
+     * @param mixed[] $expectedValues
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
+     * @return void
+     */
+    protected function assertPropertiesCorrect( array $expectedValues, ValueObject $actualObject  )
+    {
+        foreach ( $expectedValues as $propertyName => $propertyValue )
+        {
+            $this->assertEquals(
+                $propertyValue,
+                $actualObject->$propertyName,
+                sprintf( 'Object property "%s" incorrect.', $propertyName )
+            );
+        }
+    }
+
+    /**
+     * Asserts all properties from $expectedValues are correctly set in
+     * $actualObject.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $expectedValues
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
+     * @return void
+     */
+    protected function assertStructPropertiesCorrect( ValueObject $expectedValues, ValueObject $actualObject )
+    {
+        foreach ( $expectedValues as $propertyName => $propertyValue )
+        {
+            $this->assertEquals(
+                $propertyValue,
+                $actualObject->$propertyName,
+                sprintf( 'Object property "%s" incorrect.', $propertyName )
+            );
+        }
     }
 }
