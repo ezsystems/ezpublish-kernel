@@ -41,6 +41,27 @@ class ContentTypeServiceTest extends BaseTest
             '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct',
             $groupCreate
         );
+        return $groupCreate;
+    }
+
+    /**
+     * Test for the newContentTypeGroupCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeGroupCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeGroupCreateStruct
+     */
+    public function testNewContentTypeGroupCreateStructValues( $createStruct )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier'       => 'new-group',
+                'creatorId'        => null,
+                'creationDate'     => null,
+                'mainLanguageCode' => null,
+            ),
+            $createStruct
+        );
     }
 
     /**
@@ -68,7 +89,6 @@ class ContentTypeServiceTest extends BaseTest
             '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup',
             $group
         );
-        // TODO: Further equality tests?
     }
 
     /**
