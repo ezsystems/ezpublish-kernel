@@ -783,13 +783,14 @@ class RoleService implements RoleServiceInterface
     protected function buildPersistenceRoleObject( APIRoleCreateStruct $roleCreateStruct )
     {
         $policiesToCreate = array();
-        if ( !empty( $roleCreateStruct->getPolicies() ) )
+        $policyCreateStructs = $roleCreateStruct->getPolicies();
+        if ( !empty( $policyCreateStructs ) )
         {
-            foreach ( $roleCreateStruct->getPolicies() as $policy )
+            foreach ( $policyCreateStructs as $policyCreateStruct )
             {
-                $policiesToCreate[] = $this->buildPersistencePolicyObject( $policy->module,
-                                                                           $policy->function,
-                                                                           $policy->limitations );
+                $policiesToCreate[] = $this->buildPersistencePolicyObject( $policyCreateStruct->module,
+                                                                           $policyCreateStruct->function,
+                                                                           $policyCreateStruct->getLimitations() );
             }
         }
 
