@@ -22,36 +22,83 @@ class ContentTypeGroupCreateStructTest extends BaseTest
      * Test for the setName() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setName()
-     * 
+     * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setName($name, $language)
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeGroupCreateStruct
      */
-    public function testSetName()
+    public function testSetNameWithLanguage()
     {
-        $this->markTestIncomplete( "Test for ContentTypeGroupCreateStruct::setName() is not implemented." );
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+
+        $groupCreate->setName( 'John Michael Dorian', 'eng_US' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'John Michael Dorian',
+            $groupCreate->names['eng_US']
+        );
     }
 
     /**
      * Test for the setName() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setName($name, $language)
-     * 
+     * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setName()
+     * @dep_ends eZ\Publish\API\Repository\Tests\Values\ContentType\ContentTypeGroupCreateStructTest::testSetNameWithLanguage
      */
-    public function testSetNameWithSecondParameter()
+    public function testSetName()
     {
-        $this->markTestIncomplete( "Test for ContentTypeGroupCreateStruct::setName() is not implemented." );
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        $groupCreate->mainLanguageCode = 'de_DE';
+
+        $groupCreate->setName( 'John Michael Dorian' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'John Michael Dorian',
+            $groupCreate->names['de_DE']
+        );
     }
 
     /**
-     * Test for the setDescription() method.
+     * Test for the setName() method via magic property access.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setDescription()
-     * 
+     * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setName()
+     * @dep_ends eZ\Publish\API\Repository\Tests\Values\ContentType\ContentTypeGroupCreateStructTest::testSetName
      */
-    public function testSetDescription()
+    public function testSetNameMagicAccess()
     {
-        $this->markTestIncomplete( "Test for ContentTypeGroupCreateStruct::setDescription() is not implemented." );
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        $groupCreate->mainLanguageCode = 'de_DE';
+
+        $groupCreate->name = 'John Michael Dorian';
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'John Michael Dorian',
+            $groupCreate->names['de_DE']
+        );
     }
 
     /**
@@ -61,9 +108,23 @@ class ContentTypeGroupCreateStructTest extends BaseTest
      * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setDescription($description, $language)
      * 
      */
-    public function testSetDescriptionWithSecondParameter()
+    public function testSetDescriptionWithLanguage()
     {
-        $this->markTestIncomplete( "Test for ContentTypeGroupCreateStruct::setDescription() is not implemented." );
-    }
+        $repository =  $this->getRepository();
 
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+
+        $groupCreate->setDescription( 'Elliot Reid', 'eng_US' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'Elliot Reid',
+            $groupCreate->descriptions['eng_US']
+        );
+    }
 }
