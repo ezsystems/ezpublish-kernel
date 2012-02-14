@@ -142,7 +142,28 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function updateContentTypeGroup( ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
     {
-        // TODO: Implement.
+        unset( $this->groups[$contentTypeGroup->identifier] );
+        unset( $this->groupsById[$contentTypeGroup->id] );
+
+        $data = array();
+
+        $data['id'] = $contentTypeGroup->id;
+        foreach ( $contentTypeGroup as $propertyName => $propertyValue )
+        {
+            $data[$propertyName] = $propertyValue;
+        }
+        foreach ( $contentTypeGroupUpdateStruct as $propertyName => $propertyValue )
+        {
+            $data[$propertyName] = $propertyValue;
+        }
+        // FIXME: This data is inconsistent so far
+        unset( $data['modificationDate'] );
+        unset( $data['initialLanguageCode'] );
+
+        $newGroup = new ContentTypeGroupStub( $data );
+
+        $this->groups[$newGroup->identifier] = $newGroup;
+        $this->groupsById[$newGroup->id]     = $newGroup;
     }
 
     /**
