@@ -342,7 +342,25 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateContentTypeGroupThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeGroup() is not implemented." );
+        $this->createContentTypeGroup();
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'updated-group'
+        );
+        $groupToOverwrite = $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
+
+        $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
+        $groupUpdate->identifier = 'updated-group';
+
+        // Exception, because group with identifier "updated-group" exists
+        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        /* END: Use Case */
     }
 
     /**

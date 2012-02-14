@@ -60,10 +60,6 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
     {
-        if ( isset( $this->groups[$contentTypeGroupCreateStruct->identifier] ) )
-        {
-            throw new Exceptions\IllegalArgumentExceptionStub;
-        }
 
         $data = array();
         foreach ( $contentTypeGroupCreateStruct as $propertyName => $propertyValue )
@@ -79,10 +75,25 @@ class ContentTypeServiceStub implements ContentTypeService
 
         $group = new ContentTypeGroupStub( $data );
 
-        $this->groups[$group->identifier] = $group;
-        $this->groupsById[$group->id] = $group;
+        $this->setGroup( $group );
 
         return $group;
+    }
+
+    /**
+     * Sets the group internally
+     *
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub $group
+     * @return void
+     */
+    protected function setGroup( ContentTypeGroupStub $group )
+    {
+        if ( isset( $this->groups[$group->identifier] ) )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+        $this->groups[$group->identifier] = $group;
+        $this->groupsById[$group->id] = $group;
     }
 
     /**
@@ -162,8 +173,7 @@ class ContentTypeServiceStub implements ContentTypeService
 
         $newGroup = new ContentTypeGroupStub( $data );
 
-        $this->groups[$newGroup->identifier] = $newGroup;
-        $this->groupsById[$newGroup->id]     = $newGroup;
+        $this->setGroup( $newGroup );
     }
 
     /**
