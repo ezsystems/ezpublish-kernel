@@ -78,18 +78,14 @@ interface ContentTypeService
     /**
      * Delete a Content Type Group. 
      * 
-     * If the paramter $deleteObjects is set to true
-     * this method deletes also all content types in this group which
-     * are not assigned to other groups including the content object instances.
+     * This method only deletes an content type group which has content types without any content instances
      * 
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the parameter $deleteObjects is set to false and a to be deleted content type
-     *                                       has instances
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If  a to be deleted content type has instances
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
-     * @param boolean $deleteObjects indicates if content object should be deleted if exist
      */
-    public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup, $deleteObjects = false );
+    public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup );
 
     /**
      * Create a Content Type object. 
@@ -190,15 +186,14 @@ interface ContentTypeService
     /**
      * Delete a Content Type object. 
      * 
-     * If $deleteObjects is set to true all object instances of this content type are deleted.
+     * Deletes a content type if it has no instances
      *
-     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException $deleteObjects is set to false and there exist content objects of this type
+     * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there exist content objects of this type
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
-     * @param boolean $deleteObjects indicates if content object should be deleted if exist
      */
-    public function deleteContentType( ContentType $contentType , $deleteObjects = false );
+    public function deleteContentType( ContentType $contentType );
 
     /**
      * Copy Type incl fields and groupIds to a new Type object
