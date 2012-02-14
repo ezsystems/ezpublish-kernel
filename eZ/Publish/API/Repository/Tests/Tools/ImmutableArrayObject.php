@@ -9,29 +9,27 @@
 
 namespace eZ\Publish\API\Repository\Tests\Tools;
 
+use eZ\Publish\API\Repository\Tests\Stubs\Exceptions\PropertyReadOnlyExceptionStub;
+
 class ImmutableArrayObject extends \ArrayObject
 {
     public function append( $value )
     {
-        // TODO: Correct exception if available
-        throw new \RuntimeException( "Setting index '' not allowed." );
+        throw new PropertyReadOnlyExceptionStub( '' );
     }
 
     public function exchangeArray( $input )
     {
-        // TODO: Correct exception if available
-        throw new \RuntimeException( "Exchanging array not allowed." );
+        throw new PropertyReadOnlyExceptionStub( 'containing array' );
     }
 
     public function offsetSet( $index, $newval )
     {
-        // TODO: Correct exception if available
-        throw new \RuntimeException( "Setting index '$index' not allowed." );
+        throw new PropertyReadOnlyExceptionStub( $index );
     }
 
     public function offsetUnset( $index )
     {
-        // TODO: Correct exception if available
-        throw new \RuntimeException( "Setting index '$index' not allowed." );
+        throw new PropertyReadOnlyExceptionStub( $index );
     }
 }
