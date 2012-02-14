@@ -67,10 +67,6 @@ class ContentTypeServiceStub implements ContentTypeService
             $data[$propertyName] = $propertyValue;
         }
 
-        // FIXME: This data is inconsistent so far
-        unset( $data['creationDate'] );
-        unset( $data['initialLanguageCode'] );
-
         $data['id'] = $this->nextGroupId++;
 
         $group = new ContentTypeGroupStub( $data );
@@ -167,9 +163,6 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             $data[$propertyName] = $propertyValue;
         }
-        // FIXME: This data is inconsistent so far
-        unset( $data['modificationDate'] );
-        unset( $data['initialLanguageCode'] );
 
         $newGroup = new ContentTypeGroupStub( $data );
 

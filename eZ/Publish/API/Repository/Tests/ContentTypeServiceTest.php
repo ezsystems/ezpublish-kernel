@@ -314,9 +314,9 @@ class ContentTypeServiceTest extends BaseTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $groupCreate->creatorId           = 23;
-        $groupCreate->creationDate        = new \DateTime();
-        $groupCreate->initialLanguageCode = 'de_DE';
+        $groupCreate->creatorId        = 23;
+        $groupCreate->creationDate     = new \DateTime();
+        $groupCreate->mainLanguageCode = 'de_DE';
 
         return $contentTypeService->createContentTypeGroup( $groupCreate );
     }
