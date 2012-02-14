@@ -91,7 +91,7 @@ interface LanguageService
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
      *         if language can not be deleted
      *         because it is still assigned to some content / type / (...).
-     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user does not have access to content translations
+     * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If user is not allowed to delete a language
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Language $language
      */
@@ -103,4 +103,12 @@ interface LanguageService
      * @return string
      */
     public function getDefaultLanguageCode();
+    
+    /**
+     * instanciates an object to be used for creating languages
+     * 
+     * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
+     */
+    public function newLanguageCreateStruct();
+    
 }

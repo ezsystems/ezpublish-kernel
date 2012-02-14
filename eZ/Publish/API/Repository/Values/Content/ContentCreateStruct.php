@@ -60,7 +60,7 @@ abstract class ContentCreateStruct extends ValueObject
      *
      * @var DateTime
      */
-    public $modifiedDate;
+    public $modificationDate;
 
     /**
      * Adds a field to the field collection.
@@ -76,5 +76,5 @@ abstract class ContentCreateStruct extends ValueObject
      *
      * @param string $language If not given on a translatable field the initial language is used
      */
-    public abstract function setField( $fieldDefIdentifier, $value, $language = null );
+    abstract public function setField( $fieldDefIdentifier, $value, $language = null );
 }

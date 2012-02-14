@@ -26,11 +26,11 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $identifier;
 
     /**
-     * Initial language Code.
+     * Main language Code.
      *
-     * @var mixed
+     * @var string
      */
-    public $initialLanguageCode;
+    public $mainLanguageCode;
 
     /**
      * The renote id
@@ -92,7 +92,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
      * @param string $name
      * @param string $language if not given the initialLanguage is used as default
      */
-    public abstract function setName( $name, $language = null );
+    abstract public function setName( $name, $language = null );
 
     /**
      * set a content type description for the given language
@@ -100,14 +100,14 @@ abstract class ContentTypeCreateStruct extends ValueObject
      * @param string $description
      * @param string $language if not given the initialLanguage is used as default
      */
-    public abstract function setDescription( $description, $language = null );
+    abstract public function setDescription( $description, $language = null );
 
     /**
      * adds a new field definition
      *
      * @param FieldDefinitionCreate $fieldDef
      */
-    public abstract function addFieldDefinition( /*FieldDefinitionCreate*/ $fieldDef );
+    abstract public function addFieldDefinition( /*FieldDefinitionCreate*/ $fieldDef );
 
     /**
      * if set this value overrides the current user as creator
@@ -117,7 +117,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
 
     /**
      * If set this value overrides the current time for creation
-     * @var int (unix timestamp)
+     * @var DateTime
      */
-    public $created = null;
+    public $creationDate = null;
 }

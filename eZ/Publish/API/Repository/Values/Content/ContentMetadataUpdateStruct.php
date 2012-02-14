@@ -29,7 +29,7 @@ class ContentMetaDataUpdateStruct extends ValueObject
      *
      * @var DateTime
      */
-    public $modifieDate;
+    public $modificationDate;
 
     /**
      * if set the main language of the content object is changed.

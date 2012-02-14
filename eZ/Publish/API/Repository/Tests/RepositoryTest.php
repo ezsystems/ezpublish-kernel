@@ -110,7 +110,8 @@ class RepositoryTest extends BaseTest
      */
     public function testGetContentTypeService()
     {
-        $this->markTestIncomplete( "Test for Repository::getContentTypeService() is not implemented." );
+        $repository = $this->getRepository();
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\ContentTypeService', $repository->getContentTypeService() );
     }
 
     /**

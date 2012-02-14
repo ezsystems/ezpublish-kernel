@@ -16,7 +16,7 @@ use DateTime;
  * @property-read int $currentVersionNo Current Version number is the version number of the published version or the version number of a newly created draft (which is 1).
  * @property-read boolean $published true if there exists a published version false otherwise
  * @property-read int $ownerId the user id of the owner of the content
- * @property-read DateTime $modifiedDate Content modification date
+ * @property-read DateTime $modificationDate Content modification date
  * @property-read DateTime $publishedDate date of the last publish operation
  * @property-read boolean $alwaysAvailable Indicates if the content object is shown in the mainlanguage if its not present in an other requested language
  * @property-read string $remoteId a global unique id of the content object
@@ -40,7 +40,7 @@ abstract class ContentInfo extends ValueObject
      * The content type of this content object
      * @return ContentType
      */
-    public abstract function getContentType();
+    abstract public function getContentType();
 
     /**
      * the section to which the content is assigned
@@ -75,7 +75,7 @@ abstract class ContentInfo extends ValueObject
      * Content modification date
      * @var DateTime
      */
-    protected $modifiedDate;
+    protected $modificationDate;
 
     /**
      * Content protectedation date

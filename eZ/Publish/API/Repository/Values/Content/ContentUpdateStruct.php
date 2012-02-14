@@ -33,5 +33,5 @@ abstract class ContentUpdateStruct extends ValueObject
      * @param mixed $value Either a plain value which is understandable by the field type or an instance of a Value class provided by the field type
      * @param bool|string $language If not given on a translatable field the initial language is used,
      */
-    public abstract function setField( $fieldDefIdentifier, $value, $language = false );
+    abstract public function setField( $fieldDefIdentifier, $value, $language = false );
 }

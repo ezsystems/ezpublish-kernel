@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
  * @property-read int $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
- * @property-read DateTime $createdDate the date of the creation of this content type
+ * @property-read DateTime $creationDate the date of the creation of this content type
  * @property-read DateTime $modificationDate the date of the last modification of this content type
  * @property-read int $creatorId the user id of the creator of this content type
  * @property-read int $modifierId the user id of the user which has last modified this content type
@@ -71,7 +71,7 @@ abstract class ContentType extends ValueObject
      *
      * @return string[]
      */
-    public abstract function getNames();
+    abstract public function getNames();
 
     /**
      *
@@ -79,7 +79,7 @@ abstract class ContentType extends ValueObject
      * @param string $languageCode
      * @return string the name for the given language or null if none existis.
      */
-    public abstract function getName( $languageCode );
+    abstract public function getName( $languageCode );
 
     /**
      *  This method returns the human readable description of the content type
@@ -91,14 +91,14 @@ abstract class ContentType extends ValueObject
      *
      * @return string[]
      */
-    public abstract function getDescriptions();
+    abstract public function getDescriptions();
 
     /**
      * this method returns the name of the content type in the given language
      * @param string $languageCode
      * @return string the description for the given language or null if none existis.
      */
-    public abstract function getDescription( $languageCode );
+    abstract public function getDescription( $languageCode );
 
     /**
      * String identifier of a content type
@@ -112,14 +112,14 @@ abstract class ContentType extends ValueObject
      *
      * @var DateTime
      */
-    protected $createdDate;
+    protected $creationDate;
 
     /**
      * Modification date of the content type
      *
      * @var DateTime
      */
-    protected $modifiedDate;
+    protected $modificationDate;
 
     /**
      * Creator user id of the content type
@@ -206,14 +206,14 @@ abstract class ContentType extends ValueObject
      * This method returns the content type groups this content type is assigned to
      * @return array an array of {@link ContentTypeGroup}
      */
-    public abstract function getContentTypeGroups();
+    abstract public function getContentTypeGroups();
 
     /**
      * This method returns the content type field definitions from this type
      *
      * @return array an array of {@link FieldDefinition}
      */
-    public abstract function getFieldDefinitions();
+    abstract public function getFieldDefinitions();
 
     /**
      *
@@ -221,5 +221,5 @@ abstract class ContentType extends ValueObject
      * @param $fieldDefinitionIdentifier
      * @return FieldDefinition
      */
-    public abstract function getFieldDefinition( $fieldDefinitionIdentifier );
+    abstract public function getFieldDefinition( $fieldDefinitionIdentifier );
 }

@@ -27,9 +27,16 @@ abstract class PolicyCreateStruct extends ValueObject
     public $function;
 
     /**
+     * Returns list of limitations added to policy
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
+     */
+    abstract public function getLimitations();
+
+    /**
      *
      * adds a limitation with the given identifier and list of values
      * @param Limitation $limitation
      */
-    public abstract function addLimitation( Limitation $limitation );
+    abstract public function addLimitation( Limitation $limitation );
 }

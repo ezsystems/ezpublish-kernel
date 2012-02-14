@@ -13,6 +13,8 @@ use \PHPUnit_Framework_TestCase;
 use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
 
+use \eZ\Publish\API\Repository\Values\ValueObject;
+
 /**
  * Base class for api specific tests.
  */
@@ -45,5 +47,68 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
             $this->repository = new RepositoryStub();
         }
         return $this->repository;
+    }
+
+    /**
+     * Asserts that properties given in $expectedValues are correctly set in
+     * $actualObject.
+     *
+     * @param mixed[] $expectedValues
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
+     * @return void
+     */
+    protected function assertPropertiesCorrect( array $expectedValues, ValueObject $actualObject )
+    {
+        foreach ( $expectedValues as $propertyName => $propertyValue )
+        {
+            $this->assertPropertiesEqual(
+                $propertyName, $propertyValue, $actualObject->$propertyName
+            );
+        }
+    }
+
+    /**
+     * Asserts all properties from $expectedValues are correctly set in
+     * $actualObject. Additional (virtual) properties can be asserted using
+     * $additionalProperties.
+     *
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $expectedValues
+     * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
+     * @param array $propertyNames
+     * @return void
+     */
+    protected function assertStructPropertiesCorrect( ValueObject $expectedValues, ValueObject $actualObject, array $additionalProperties = array() )
+    {
+        foreach ( $expectedValues as $propertyName => $propertyValue )
+        {
+            $this->assertPropertiesEqual(
+                $propertyName, $propertyValue, $actualObject->$propertyName
+            );
+        }
+
+        foreach ( $additionalProperties as $propertyName )
+        {
+            $this->assertPropertiesEqual(
+                $propertyName, $expectedValues->$propertyName, $actualObject->$propertyName
+            );
+        }
+    }
+
+    private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
+    {
+        if( $expectedValue instanceof \ArrayObject )
+        {
+            $expectedValue = $expectedValue->getArrayCopy();
+        }
+        if( $actualValue instanceof \ArrayObject )
+        {
+            $actualValue = $actualValue->getArrayCopy();
+        }
+
+        $this->assertEquals(
+            $expectedValue,
+            $actualValue,
+            sprintf( 'Object property "%s" incorrect.', $propertyName )
+        );
     }
 }

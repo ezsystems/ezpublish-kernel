@@ -1,28 +1,53 @@
 <?php
 /**
- * @package eZ\Publish\API\Repository
+ * File containing the ContentTypeServiceStub class
+ *
+ * @copyright Copyright (C) 1999-2012 eZ Systems AS. All rights reserved.
+ * @license http://www.gnu.org/licenses/gpl-2.0.txt GNU General Public License v2
+ * @version //autogentag//
  */
-namespace eZ\Publish\API\Repository;
+namespace eZ\Publish\API\Repository\Tests\Stubs;
+
+use eZ\Publish\API\Repository\ContentTypeService;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinition;
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft;
-use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\User\User;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
+
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupUpdateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupCreateStructStub;
 
 /**
  * @example Examples/contenttype.php
  *
  * @package eZ\Publish\API\Repository
  */
-interface ContentTypeService
+class ContentTypeServiceStub implements ContentTypeService
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
+     */
+    private $groups = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup[]
+     */
+    private $groupsById = array();
+
+    /**
+     * @var int
+     */
+    private $nextGroupId = 0;
+
     /**
      * Create a Content Type Group object
      *
@@ -33,7 +58,41 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct );
+    public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
+    {
+
+        $data = array();
+        foreach ( $contentTypeGroupCreateStruct as $propertyName => $propertyValue )
+        {
+            $data[$propertyName] = $propertyValue;
+        }
+        $data['names']        = $contentTypeGroupCreateStruct->names;
+        $data['descriptions'] = $contentTypeGroupCreateStruct->descriptions;
+
+        $data['id'] = $this->nextGroupId++;
+
+        $group = new ContentTypeGroupStub( $data );
+
+        $this->setGroup( $group );
+
+        return $group;
+    }
+
+    /**
+     * Sets the group internally
+     *
+     * @param \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub $group
+     * @return void
+     */
+    protected function setGroup( ContentTypeGroupStub $group )
+    {
+        if ( isset( $this->groups[$group->identifier] ) )
+        {
+            throw new Exceptions\IllegalArgumentExceptionStub;
+        }
+        $this->groups[$group->identifier] = $group;
+        $this->groupsById[$group->id] = $group;
+    }
 
     /**
      * Get a Content Type Group object by id
@@ -44,7 +103,14 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroup( $contentTypeGroupId );
+    public function loadContentTypeGroup( $contentTypeGroupId )
+    {
+        if ( !isset( $this->groupsById[$contentTypeGroupId] ) )
+        {
+            throw new Exceptions\NotFoundExceptionStub;
+        }
+        return $this->groupsById[$contentTypeGroupId];
+    }
 
     /**
      * Get a Content Type Group object by identifier
@@ -55,14 +121,24 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier );
+    public function loadContentTypeGroupByIdentifier( $contentTypeGroupIdentifier )
+    {
+        if ( !isset( $this->groups[$contentTypeGroupIdentifier] ) )
+        {
+            throw new Exceptions\NotFoundExceptionStub;
+        }
+        return $this->groups[$contentTypeGroupIdentifier];
+    }
 
     /**
      * Get all Content Type Groups
      *
      * @return aray an array of {@link ContentTypeGroup}
      */
-    public function loadContentTypeGroups();
+    public function loadContentTypeGroups()
+    {
+        return $this->groupsById;
+    }
 
     /**
      * Update a Content Type Group object
@@ -73,7 +149,27 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup the content type group to be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct
      */
-    public function updateContentTypeGroup( ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct );
+    public function updateContentTypeGroup( ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct )
+    {
+        unset( $this->groups[$contentTypeGroup->identifier] );
+        unset( $this->groupsById[$contentTypeGroup->id] );
+
+        $data = array();
+
+        $data['id'] = $contentTypeGroup->id;
+        foreach ( $contentTypeGroup as $propertyName => $propertyValue )
+        {
+            $data[$propertyName] = $propertyValue;
+        }
+        foreach ( $contentTypeGroupUpdateStruct as $propertyName => $propertyValue )
+        {
+            $data[$propertyName] = $propertyValue;
+        }
+
+        $newGroup = new ContentTypeGroupStub( $data );
+
+        $this->setGroup( $newGroup );
+    }
 
     /**
      * Delete a Content Type Group. 
@@ -85,7 +181,11 @@ interface ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
      */
-    public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup );
+    public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup )
+    {
+        unset( $this->groups[$contentTypeGroup->identifier] );
+        unset( $this->groupsById[$contentTypeGroup->id] );
+    }
 
     /**
      * Create a Content Type object. 
@@ -100,7 +200,10 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentType( ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups );
+    public function createContentType( ContentTypeCreateStruct $contentTypeCreateStruct, array $contentTypeGroups )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Get a Content Type object by id
@@ -111,7 +214,10 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentType( $contentTypeId );
+    public function loadContentType( $contentTypeId )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Get a Content Type object by identifier
@@ -122,7 +228,10 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentTypeByIdentifier( $identifier );
+    public function loadContentTypeByIdentifier( $identifier )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Get a Content Type object by id
@@ -133,7 +242,10 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function loadContentTypeByRemoteId( $remoteId );
+    public function loadContentTypeByRemoteId( $remoteId )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Get a Content Type object draft by id
@@ -144,7 +256,10 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function loadContentTypeDraft( $contentTypeId );
+    public function loadContentTypeDraft( $contentTypeId )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Get Content Type objects which belong to the given content type group
@@ -153,7 +268,10 @@ interface ContentTypeService
      *
      * @return array an array of {@link ContentType} which have status DEFINED
      */
-    public function loadContentTypes( ContentTypeGroup $contentTypeGroup );
+    public function loadContentTypes( ContentTypeGroup $contentTypeGroup )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Creates a draft from an existing content type. 
@@ -168,7 +286,10 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft
      */
-    public function createContentTypeDraft( ContentType $contentType );
+    public function createContentTypeDraft( ContentType $contentType )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Update a Content Type object
@@ -181,7 +302,10 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct $contentTypeUpdateStruct
      */
-    public function updateContentTypeDraft( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct );
+    public function updateContentTypeDraft( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Delete a Content Type object. 
@@ -193,7 +317,10 @@ interface ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      */
-    public function deleteContentType( ContentType $contentType );
+    public function deleteContentType( ContentType $contentType )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Copy Type incl fields and groupIds to a new Type object
@@ -208,7 +335,10 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentType
      */
-    public function copyContentType( ContentType $contentType, User $user = null );
+    public function copyContentType( ContentType $contentType, User $user = null )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * assign a content type to a content type group.
@@ -219,7 +349,10 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function assignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup );
+    public function assignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Unassign a content type from a group.
@@ -231,7 +364,10 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentType $contentType
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup $contentTypeGroup
      */
-    public function unassignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup );
+    public function unassignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Adds a new field definition to an existing content type. 
@@ -244,7 +380,10 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct $fieldDefinitionCreateStruct
      */
-    public function addFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct );
+    public function addFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinitionCreateStruct $fieldDefinitionCreateStruct )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Remove a field definition from an existing Type.
@@ -255,7 +394,10 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition
      */
-    public function removeFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition );
+    public function removeFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Update a field definition
@@ -268,7 +410,10 @@ interface ContentTypeService
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinition $fieldDefinition the field definition which should be updated
      * @param \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct
      */
-    public function updateFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct );
+    public function updateFieldDefinition( ContentTypeDraft $contentTypeDraft, FieldDefinition $fieldDefinition, FieldDefinitionUpdateStruct $fieldDefinitionUpdateStruct )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * Publish the content type and update content objects.
@@ -280,7 +425,10 @@ interface ContentTypeService
      *
      * @param \eZ\Publish\API\Repository\Values\ContentType\ContentTypeDraft $contentTypeDraft
      */
-    public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft );
+    public function publishContentTypeDraft( ContentTypeDraft $contentTypeDraft )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * instanciates a new content type group create class
@@ -289,7 +437,12 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct
      */
-    public function newContentTypeGroupCreateStruct( $identifier );
+    public function newContentTypeGroupCreateStruct( $identifier )
+    {
+        return new ContentTypeGroupCreateStructStub(
+            array( 'identifier' => $identifier )
+        );
+    }
 
     /**
      * instanciates a new content type create class
@@ -298,21 +451,30 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct
      */
-    public function newContentTypeCreateStruct( $identifier );
+    public function newContentTypeCreateStruct( $identifier )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * instanciates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeUpdateStruct
      */
-    public function newContentTypeUpdateStruct();
+    public function newContentTypeUpdateStruct()
+    {
+        // TODO: Implement.
+    }
 
     /**
      * instanciates a new content type update struct
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct
      */
-    public function newContentTypeGroupUpdateStruct();
+    public function newContentTypeGroupUpdateStruct()
+    {
+        return new ContentTypeGroupUpdateStructStub();
+    }
 
     /**
      * instanciates a field definition create struct
@@ -322,13 +484,19 @@ interface ContentTypeService
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct
      */
-    public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier );
+    public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier )
+    {
+        // TODO: Implement.
+    }
 
     /**
      * instanciates a field definition update class
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionUpdateStruct
      */
-    public function newFieldDefinitionUpdateStruct();
+    public function newFieldDefinitionUpdateStruct()
+    {
+        // TODO: Implement.
+    }
 
 }

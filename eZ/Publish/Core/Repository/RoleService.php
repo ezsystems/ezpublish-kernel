@@ -162,7 +162,7 @@ class RoleService implements RoleServiceInterface
 
         $spiPolicy = $this->buildPersistencePolicyObject( $policyCreateStruct->module,
                                                           $policyCreateStruct->function,
-                                                          $policyCreateStruct->limitations );
+                                                          $policyCreateStruct->getLimitations() );
 
         $this->persistenceHandler->userHandler()->addPolicy( $role->id, $spiPolicy );
 
@@ -220,7 +220,7 @@ class RoleService implements RoleServiceInterface
         if ( empty( $policy->function ) )
             throw new InvalidArgumentValue( "function", $policy->function, "Policy" );
 
-        $spiPolicy = $this->buildPersistencePolicyObject( $policy->module, $policy->function, $policyUpdateStruct->limitations );
+        $spiPolicy = $this->buildPersistencePolicyObject( $policy->module, $policy->function, $policyUpdateStruct->getLimitations() );
         $spiPolicy->id = $policy->id;
         $spiPolicy->roleId = $policy->roleId;
 
@@ -783,13 +783,14 @@ class RoleService implements RoleServiceInterface
     protected function buildPersistenceRoleObject( APIRoleCreateStruct $roleCreateStruct )
     {
         $policiesToCreate = array();
-        if ( !empty( $roleCreateStruct->policies ) )
+        $policyCreateStructs = $roleCreateStruct->getPolicies();
+        if ( !empty( $policyCreateStructs ) )
         {
-            foreach ( $roleCreateStruct->policies as $policy )
+            foreach ( $policyCreateStructs as $policyCreateStruct )
             {
-                $policiesToCreate[] = $this->buildPersistencePolicyObject( $policy->module,
-                                                                           $policy->function,
-                                                                           $policy->limitations );
+                $policiesToCreate[] = $this->buildPersistencePolicyObject( $policyCreateStruct->module,
+                                                                           $policyCreateStruct->function,
+                                                                           $policyCreateStruct->getLimitations() );
             }
         }
 

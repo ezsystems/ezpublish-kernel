@@ -10,11 +10,18 @@ use eZ\Publish\API\Repository\Values\User\Limitation;
 abstract class PolicyUpdateStruct extends ValueObject
 {
     /**
+     * Returns list of limitations added to policy
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
+     */
+    abstract public function getLimitations();
+
+    /**
      *
      * adds a limitation to the policy - if a Limitation exists with the same identifer
      * the existing limitation is replaced
      * @param Limitation $limitation
      */
-    public abstract function addLimitation( Limitation $limitation );
+    abstract public function addLimitation( Limitation $limitation );
 
 }

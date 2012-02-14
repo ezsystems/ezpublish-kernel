@@ -87,7 +87,7 @@ class LanguageServiceTest extends BaseTest
         $languageCreate               = new LanguageCreateStruct();
         $languageCreate->enabled      = true;
         $languageCreate->name         = 'French';
-        $languageCreate->languageCode = 'fra-FR';
+        $languageCreate->languageCode = 'fre-FR';
 
         $language = $languageService->createLanguage( $languageCreate );
         /* END: Use Case */
@@ -96,7 +96,7 @@ class LanguageServiceTest extends BaseTest
             array(
                 true,
                 'French',
-                'fra-FR'
+                'fre-FR'
             ),
             array(
                 $language->enabled,
@@ -390,7 +390,7 @@ class LanguageServiceTest extends BaseTest
         $languageCreateFrench               = new LanguageCreateStruct();
         $languageCreateFrench->enabled      = false;
         $languageCreateFrench->name         = 'French';
-        $languageCreateFrench->languageCode = 'fra-FR';
+        $languageCreateFrench->languageCode = 'fre-FR';
 
         $languageService->createLanguage( $languageCreateEnglish );
         $languageService->createLanguage( $languageCreateFrench );
