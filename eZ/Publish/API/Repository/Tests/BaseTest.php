@@ -57,7 +57,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
      * @return void
      */
-    protected function assertPropertiesCorrect( array $expectedValues, ValueObject $actualObject  )
+    protected function assertPropertiesCorrect( array $expectedValues, ValueObject $actualObject )
     {
         foreach ( $expectedValues as $propertyName => $propertyValue )
         {
@@ -71,18 +71,29 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
 
     /**
      * Asserts all properties from $expectedValues are correctly set in
-     * $actualObject.
+     * $actualObject. Additional (virtual) properties can be asserted using
+     * $additionalProperties.
      *
      * @param \eZ\Publish\API\Repository\Values\ValueObject $expectedValues
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
+     * @param array $propertyNames
      * @return void
      */
-    protected function assertStructPropertiesCorrect( ValueObject $expectedValues, ValueObject $actualObject )
+    protected function assertStructPropertiesCorrect( ValueObject $expectedValues, ValueObject $actualObject, array $additionalProperties = array() )
     {
         foreach ( $expectedValues as $propertyName => $propertyValue )
         {
             $this->assertEquals(
                 $propertyValue,
+                $actualObject->$propertyName,
+                sprintf( 'Object property "%s" incorrect.', $propertyName )
+            );
+        }
+
+        foreach ( $additionalProperties as $propertyName )
+        {
+            $this->assertEquals(
+                $expectedValues->$propertyName,
                 $actualObject->$propertyName,
                 sprintf( 'Object property "%s" incorrect.', $propertyName )
             );
