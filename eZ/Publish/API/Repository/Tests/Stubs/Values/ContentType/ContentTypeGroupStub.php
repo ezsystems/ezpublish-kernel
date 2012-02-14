@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
+use eZ\Publish\API\Repository\Tests\Tools\ImmutableArrayObject;
 
 class ContentTypeGroupStub extends ContentTypeGroup
 {
@@ -18,12 +19,12 @@ class ContentTypeGroupStub extends ContentTypeGroup
 
     public function __construct( array $values = array() )
     {
-        $this->names = new \ArrayObject(
+        $this->names = new ImmutableArrayObject(
             ( isset( $values['names'] ) ? $values['names'] : array() )
         );
         unset( $values['names'] );
 
-        $this->descriptions = new \ArrayObject(
+        $this->descriptions = new ImmutableArrayObject(
             ( isset( $values['descriptions'] ) ? $values['descriptions'] : array() )
         );
         unset( $values['descriptions'] );
@@ -89,7 +90,7 @@ class ContentTypeGroupStub extends ContentTypeGroup
      */
     public function getName( $languageCode )
     {
-        return $this->names[$this>mainLanguageCode];
+        return $this->names[$languageCode];
     }
 
     /**
@@ -115,6 +116,6 @@ class ContentTypeGroupStub extends ContentTypeGroup
      */
     public function getDescription( $languageCode )
     {
-        return $this->descriptions[$this>mainLanguageCode];
+        return $this->descriptions[$languageCode];
     }
 }
