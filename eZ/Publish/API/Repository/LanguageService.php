@@ -109,6 +109,6 @@ interface LanguageService
      * 
      * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
      */
-    public abstract function newLanguageCreateStruct();
+    public function newLanguageCreateStruct();
     
 }
