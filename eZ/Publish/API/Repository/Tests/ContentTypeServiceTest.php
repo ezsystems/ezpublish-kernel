@@ -81,6 +81,11 @@ class ContentTypeServiceTest extends BaseTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
+        $groupCreate->creatorId        = 23;
+        $groupCreate->creationDate     = new \DateTime();
+        $groupCreate->mainLanguageCode = 'de_DE';
+        $groupCreate->setName( 'A name.' );
+        $groupCreate->setDescription( 'A description.' );
 
         $group = $contentTypeService->createContentTypeGroup( $groupCreate );
         /* END: Use Case */
@@ -107,7 +112,8 @@ class ContentTypeServiceTest extends BaseTest
     {
         $this->assertStructPropertiesCorrect(
             $data['expected'],
-            $data['actual']
+            $data['actual'],
+            array( 'names', 'descriptions' )
         );
         $this->assertNotNull(
             $data['actual']->id
