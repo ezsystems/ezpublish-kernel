@@ -72,7 +72,7 @@ class ContentTypeServiceStub implements ContentTypeService
         }
 
         // FIXME: This data is inconsistent so far
-        unset( $data['created'] );
+        unset( $data['creationDate'] );
         unset( $data['initialLanguageCode'] );
 
         $data['id'] = $this->nextGroupId++;
