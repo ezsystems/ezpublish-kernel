@@ -171,17 +171,25 @@ class ContentTypeServiceTest extends BaseTest
     public function testLoadContentTypeGroup()
     {
         $repository = $this->getRepository();
-
-        /* BEGIN: Use Case */
         $contentTypeService = $repository->getContentTypeService();
 
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
+        $groupCreate->creatorId        = 23;
+        $groupCreate->creationDate     = new \DateTime();
+        $groupCreate->mainLanguageCode = 'de_DE';
+        $groupCreate->setName( 'A name.' );
+        $groupCreate->setDescription( 'A description.' );
+
         $storedGroup = $contentTypeService->createContentTypeGroup( $groupCreate );
+        $groupId     = $storedGroup->id;
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
 
         $loadedGroup = $contentTypeService->loadContentTypeGroup(
-            $storedGroup->id
+            $groupId
         );
         /* END: Use Case */
 
@@ -189,7 +197,27 @@ class ContentTypeServiceTest extends BaseTest
             '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup',
             $loadedGroup
         );
-        // TODO: Further equality tests?
+
+        return array(
+            'expected' => $storedGroup,
+            'actual'   => $loadedGroup,
+        );
+    }
+
+    /**
+     * Test for the loadContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroup
+     */
+    public function testLoadContentTypeGroupStructValues( array $data )
+    {
+        $this->assertStructPropertiesCorrect(
+            $data['expected'],
+            $data['actual'],
+            array( 'names', 'descriptions' )
+        );
     }
 
     /**
@@ -236,7 +264,27 @@ class ContentTypeServiceTest extends BaseTest
             '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup',
             $loadedGroup
         );
-        // TODO: Further equality tests?
+
+        return array(
+            'expected' => $storedGroup,
+            'actual'   => $loadedGroup,
+        );
+    }
+
+    /**
+     * Test for the loadContentTypeGroupByIdentifier() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroup
+     */
+    public function testLoadContentTypeGroupByIdentifierStructValues( array $data )
+    {
+        $this->assertStructPropertiesCorrect(
+            $data['expected'],
+            $data['actual'],
+            array( 'names', 'descriptions' )
+        );
     }
 
     /**
@@ -287,8 +335,34 @@ class ContentTypeServiceTest extends BaseTest
             'array',
             $loadedGroups
         );
-        // TODO: Further equality tests?
-        $this->assertEquals( 2, count( $loadedGroups ) );
+
+        return $loadedGroups;
+    }
+
+    /**
+     * Test for the loadContentTypeGroups() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroups()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testLoadContentTypeGroups
+     */
+    public function testLoadContentTypeGroupsIdentifiers( $groups )
+    {
+        $this->assertEquals( 2, count( $groups ) );
+
+        $expecteIdentifiers = array( 'new-group' => true, 'second-group' => true );
+        $actualIdentifiers  = array( 'new-group' => false, 'second-group' => false );
+
+        foreach ( $groups as $group )
+        {
+            $actualIdentifiers[$group->identifier] = true;
+        }
+
+        $this->assertEquals(
+            $expecteIdentifiers,
+            $actualIdentifiers,
+            'Identifier missmatch in loeaded groups.'
+        );
     }
 
     /**
@@ -332,7 +406,16 @@ class ContentTypeServiceTest extends BaseTest
         $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
 
         $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
+
         $groupUpdate->identifier = 'updated-group';
+        $groupUpdate->modifierId = 42;
+        $groupUpdate->modificationDate = new \DateTime();
+        $groupUpdate->mainLanguageCode = 'en_US';
+
+        $groupUpdate->setName( 'A name', 'en_US' );
+        $groupUpdate->setName( 'A name', 'en_GB' );
+        $groupUpdate->setDescription( 'A description', 'en_US' );
+        $groupUpdate->setDescription( 'A description', 'en_GB' );
 
         $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
         /* END: Use Case */
@@ -343,9 +426,36 @@ class ContentTypeServiceTest extends BaseTest
             '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct',
             $groupUpdate
         );
-        $this->assertEquals(
-            'updated-group',
-            $updatedGroup->identifier
+
+        return array(
+            'originalGroup' => $group,
+            'updateStruct'  => $groupUpdate,
+            'updatedGroup'  => $updatedGroup,
+        );
+    }
+
+    /**
+     * Test for the updateContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
+     */
+    public function testUpdateContentTypeGroupStructValues( array $data )
+    {
+        $expectedValues = array(
+            'identifier'       => $data['updateStruct']->identifier,
+            'creationDate'     => $data['originalGroup']->creationDate,
+            'modificationDate' => $data['updateStruct']->modificationDate,
+            'creatorId'        => $data['originalGroup']->creatorId,
+            'modifierId'       => $data['updateStruct']->modifierId,
+            'mainLanguageCode' => $data['updateStruct']->mainLanguageCode,
+            'names'            => $data['updateStruct']->names,
+            'descriptions'     => $data['updateStruct']->descriptions,
+        );
+
+        $this->assertPropertiesCorrect(
+            $expectedValues, $data['updatedGroup']
         );
     }
 
@@ -366,6 +476,8 @@ class ContentTypeServiceTest extends BaseTest
         $groupCreate->creatorId        = 23;
         $groupCreate->creationDate     = new \DateTime();
         $groupCreate->mainLanguageCode = 'de_DE';
+        $groupCreate->setName( 'Ein Name', 'de_DE' );
+        $groupCreate->setDescription( 'Eine Beschreibung', 'de_DE' );
 
         return $contentTypeService->createContentTypeGroup( $groupCreate );
     }
