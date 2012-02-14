@@ -99,6 +99,22 @@ class ContentTypeGroupCreateStructTest extends BaseTest
             'John Michael Dorian',
             $groupCreate->names['de_DE']
         );
+        return $groupCreate;
+    }
+
+    /**
+     * Test for magic property access to $name
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setName()
+     * @depends eZ\Publish\API\Repository\Tests\Values\ContentType\ContentTypeGroupCreateStructTest::testSetNameMagicAccess
+     */
+    public function testGetNameMagicAccess( $groupCreate )
+    {
+        $this->assertEquals(
+            'John Michael Dorian',
+            $groupCreate->name
+        );
     }
 
     /**
@@ -125,6 +141,78 @@ class ContentTypeGroupCreateStructTest extends BaseTest
         $this->assertEquals(
             'Elliot Reid',
             $groupCreate->descriptions['eng_US']
+        );
+    }
+
+    /**
+     * Test for the setDescription() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setDescription()
+     * @dep_ends eZ\Publish\API\Repository\Tests\Values\ContentType\ContentTypeGroupCreateStructTest::testSetDescriptionWithLanguage
+     */
+    public function testSetDescription()
+    {
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        $groupCreate->mainLanguageCode = 'de_DE';
+
+        $groupCreate->setDescription( 'Elliot Reid' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'Elliot Reid',
+            $groupCreate->descriptions['de_DE']
+        );
+    }
+
+    /**
+     * Test for the setDescription() method via magic property access.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setDescription()
+     * @dep_ends eZ\Publish\API\Repository\Tests\Values\ContentType\ContentTypeGroupCreateStructTest::testSetDescription
+     */
+    public function testSetDescriptionMagicAccess()
+    {
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        $groupCreate->mainLanguageCode = 'de_DE';
+
+        $groupCreate->description = 'Elliot Reid';
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'Elliot Reid',
+            $groupCreate->descriptions['de_DE']
+        );
+        return $groupCreate;
+    }
+
+    /**
+     * Test for magic property access to $description
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct::setDescription()
+     * @depends eZ\Publish\API\Repository\Tests\Values\ContentType\ContentTypeGroupCreateStructTest::testSetDescriptionMagicAccess
+     */
+    public function testGetDescriptionMagicAccess( $groupCreate )
+    {
+        $this->assertEquals(
+            'Elliot Reid',
+            $groupCreate->description
         );
     }
 }
