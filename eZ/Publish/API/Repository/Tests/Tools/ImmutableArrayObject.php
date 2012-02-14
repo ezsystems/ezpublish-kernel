@@ -9,7 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Tools;
 
-class ReadonlyArrayObject extends \ArrayObject
+class ImmutableArrayObject extends \ArrayObject
 {
     public function append( $value )
     {
