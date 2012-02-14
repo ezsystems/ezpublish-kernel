@@ -44,10 +44,10 @@ class ContentTypeGroupCreateStructStub extends ContentTypeGroupCreateStruct
                 return $this->$propertyName;
 
             case 'name':
-                return $this->names[$this>mainLanguageCode];
+                return $this->names[$this->mainLanguageCode];
 
             case 'description':
-                return $this->descriptions[$this>mainLanguageCode];
+                return $this->descriptions[$this->mainLanguageCode];
         }
         return parent::__get( $propertyName );
     }
