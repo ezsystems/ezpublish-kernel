@@ -60,7 +60,7 @@ abstract class ContentCreateStruct extends ValueObject
      *
      * @var DateTime
      */
-    public $modifiedDate;
+    public $modificationDate;
 
     /**
      * Adds a field to the field collection.

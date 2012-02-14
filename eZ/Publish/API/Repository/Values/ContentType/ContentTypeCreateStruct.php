@@ -26,11 +26,11 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $identifier;
 
     /**
-     * Initial language Code.
+     * Main language Code.
      *
-     * @var mixed
+     * @var string
      */
-    public $initialLanguageCode;
+    public $mainLanguageCode;
 
     /**
      * The renote id

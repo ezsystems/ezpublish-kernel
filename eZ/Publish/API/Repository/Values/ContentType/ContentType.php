@@ -17,7 +17,7 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
  * @property-read int $id the id of the content type
  * @property-read int $status the status of the content type. One of ContentType::STATUS_DEFINED|ContentType::STATUS_DRAFT|ContentType::STATUS_MODIFIED
  * @property-read string $identifier the identifier of the content type
- * @property-read DateTime $createdDate the date of the creation of this content type
+ * @property-read DateTime $creationDate the date of the creation of this content type
  * @property-read DateTime $modificationDate the date of the last modification of this content type
  * @property-read int $creatorId the user id of the creator of this content type
  * @property-read int $modifierId the user id of the user which has last modified this content type
@@ -112,14 +112,14 @@ abstract class ContentType extends ValueObject
      *
      * @var DateTime
      */
-    protected $createdDate;
+    protected $creationDate;
 
     /**
      * Modification date of the content type
      *
      * @var DateTime
      */
-    protected $modifiedDate;
+    protected $modificationDate;
 
     /**
      * Creator user id of the content type

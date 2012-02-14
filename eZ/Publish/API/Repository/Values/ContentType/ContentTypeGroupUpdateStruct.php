@@ -3,7 +3,8 @@ namespace eZ\Publish\API\Repository\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
- * This clas is used for updating a content type group
+ * This class is used for updating a content type group
+ * 
  * @property-write $names $names[$language] calls setName($language)
  * @property-write $name calls setName() for setting a namein the initial language
  * @property-write $descriptions $descriptions[$language] calls setDescription($language)
@@ -34,16 +35,18 @@ abstract class ContentTypeGroupUpdateStruct extends ValueObject
     public $modificationDate = null;
 
     /**
-     * 5.x only
-     * if set the initial language code is changed to this value
+     * if set the main language code is changed to this value
+     * 
+     * @since 5.0
      *
      * @var string
      */
-    public $initialLanguageCode;
+    public $mainLanguageCode;
 
     /**
-     * 5.x only
      * set a content type group name for the given language
+     * 
+     * @since 5.0
      *
      * @param string $name
      * @param string $language if not given the initialLanguage is used as default
@@ -51,8 +54,9 @@ abstract class ContentTypeGroupUpdateStruct extends ValueObject
     abstract public function setName( $name, $language = null );
 
     /**
-     * 5.x only
      * set a content type description for the given language
+     * 
+     * @since 5.0
      *
      * @param string $description
      * @param string $language if not given the initialLanguage is used as default

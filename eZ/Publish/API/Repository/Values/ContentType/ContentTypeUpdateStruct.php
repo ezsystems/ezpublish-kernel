@@ -48,11 +48,11 @@ abstract class ContentTypeUpdateStruct extends ValueObject
     public $isContainer;
 
     /**
-     * If set the initial language is changed to this value
+     * If set the main language is changed to this value
      *
      * @var mixed
      */
-    public $initialLanguageId;
+    public $mainLanguageCode;
 
     /**
      * If set the default sort field is changed to this value
@@ -93,7 +93,7 @@ abstract class ContentTypeUpdateStruct extends ValueObject
      * set a content type name for the given language
      *
      * @param string $name
-     * @param string $language if not given the initialLanguage is used as default
+     * @param string $language if not given the main Language is used as default
      */
     abstract public function setName( $name, $language = null );
 
@@ -101,7 +101,7 @@ abstract class ContentTypeUpdateStruct extends ValueObject
      * set a content type description for the given language
      *
      * @param string $description
-     * @param string $language if not given the initialLanguage is used as default
+     * @param string $language if not given the main Language is used as default
      */
     abstract public function setDescription( $description, $language = null );
 }
