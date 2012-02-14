@@ -31,6 +31,16 @@ class RoleCreateStructStub extends RoleCreateStruct
     }
 
     /**
+     * Returns policies associated with the role
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
+     */
+    public function getPolicies()
+    {
+        // TODO: Implement getPolicies() method.
+    }
+
+    /**
      * Adds a policy to this role
      *
      * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
