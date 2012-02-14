@@ -12,12 +12,56 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup;
 
 class ContentTypeGroupStub extends ContentTypeGroup
 {
+    private $names;
+
+    private $descriptions;
+
     public function __construct( array $values = array() )
     {
+        $this->names = new \ArrayObject(
+            ( isset( $values['names'] ) ? $values['names'] : array() )
+        );
+        unset( $values['names'] );
+
+        $this->descriptions = new \ArrayObject(
+            ( isset( $values['descriptions'] ) ? $values['descriptions'] : array() )
+        );
+        unset( $values['descriptions'] );
+
         foreach ( $values as $propertyName => $propertyValue )
         {
             $this->$propertyName = $propertyValue;
         }
+    }
+
+    public function __get( $propertyName )
+    {
+        switch ( $propertyName )
+        {
+            case 'names':
+            case 'descriptions':
+                return $this->$propertyName;
+
+            case 'name':
+                return $this->getName();
+
+            case 'description':
+                return $this->getDescription();
+        }
+        return parent::__get( $propertyName );
+    }
+
+    public function __isset( $propertyName )
+    {
+        switch( $propertyName )
+        {
+            case 'names':
+            case 'name':
+            case 'descriptions':
+            case 'description':
+                return true;
+        }
+        return parent::__isset( $propertyName );
     }
 
     /**
@@ -34,7 +78,7 @@ class ContentTypeGroupStub extends ContentTypeGroup
      */
     public function getNames()
     {
-        // TODO: Implement
+        return $this->names->getArrayCopy();
     }
 
     /**
@@ -45,7 +89,7 @@ class ContentTypeGroupStub extends ContentTypeGroup
      */
     public function getName( $languageCode )
     {
-        // TODO: Implement
+        return $this->names[$this>mainLanguageCode];
     }
 
     /**
@@ -60,7 +104,7 @@ class ContentTypeGroupStub extends ContentTypeGroup
      */
     public function getDescriptions()
     {
-        // TODO: Implement
+        return $this->descriptions->getArrayCopy();
     }
 
     /**
@@ -71,6 +115,6 @@ class ContentTypeGroupStub extends ContentTypeGroup
      */
     public function getDescription( $languageCode )
     {
-        // TODO: Implement
+        return $this->descriptions[$this>mainLanguageCode];
     }
 }
