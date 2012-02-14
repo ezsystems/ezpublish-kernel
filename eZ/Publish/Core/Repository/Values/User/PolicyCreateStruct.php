@@ -9,6 +9,23 @@ use eZ\Publish\API\Repository\Values\User\PolicyCreateStruct as APIPolicyCreateS
 class PolicyCreateStruct extends APIPolicyCreateStruct
 {
     /**
+     * List of limitations added to policy
+     *
+     * @var \eZ\Publish\API\Repository\Values\User\Limitation[]
+     */
+    private $limitations = array();
+
+    /**
+     * Returns list of limitations added to policy
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\Limitation[]
+     */
+    public function getLimitations()
+    {
+        return $this->limitations;
+    }
+
+    /**
      * Adds a limitation with the given identifier and list of values
      *
      * @param \eZ\Publish\API\Repository\Values\User\Limitation $limitation

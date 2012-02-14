@@ -10,6 +10,23 @@ use eZ\Publish\API\Repository\Values\User\RoleCreateStruct as APIRoleCreateStruc
 class RoleCreateStruct extends APIRoleCreateStruct
 {
     /**
+     * Policies associated with the role
+     *
+     * @var \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
+     */
+    private $policies = array();
+
+    /**
+     * Returns policies associated with the role
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
+     */
+    public function getPolicies()
+    {
+        return $this->policies;
+    }
+
+    /**
      * Adds a policy to this role
      *
      * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreate
