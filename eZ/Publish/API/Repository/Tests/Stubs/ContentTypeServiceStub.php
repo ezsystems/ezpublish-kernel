@@ -185,7 +185,8 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup, $deleteObjects = false )
     {
-        // TODO: Implement.
+        unset( $this->groups[$contentTypeGroup->identifier] );
+        unset( $this->groupsById[$contentTypeGroup->id] );
     }
 
     /**

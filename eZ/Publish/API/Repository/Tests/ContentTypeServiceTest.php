@@ -372,7 +372,26 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testDeleteContentTypeGroup()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
+        $this->createContentTypeGroup();
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
+
+        $contentTypeService->deleteContentTypeGroup( $group );
+        /* END: Use Case */
+
+        try
+        {
+            $contentTypeService->loadContentTypeGroup( $group->id );
+            $this->fail( 'Content type group not deleted.' );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        {
+            // All fine
+        }
     }
 
     /**
