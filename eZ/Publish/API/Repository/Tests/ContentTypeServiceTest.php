@@ -89,6 +89,29 @@ class ContentTypeServiceTest extends BaseTest
             '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup',
             $group
         );
+
+        return array(
+            'expected' => $groupCreate,
+            'actual'   => $group,
+        );
+    }
+
+    /**
+     * Test for the createContentTypeGroup() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::createContentTypeGroup()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
+     */
+    public function testCreateContentTypeGroupStructValues( array $data )
+    {
+        $this->assertStructPropertiesCorrect(
+            $data['expected'],
+            $data['actual']
+        );
+        $this->assertNotNull(
+            $data['actual']->id
+        );
     }
 
     /**
