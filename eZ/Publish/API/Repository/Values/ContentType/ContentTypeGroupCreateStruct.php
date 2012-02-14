@@ -30,9 +30,9 @@ abstract class ContentTypeGroupCreateStruct extends ValueObject
     /**
      * If set this value overrides the current time for creation
      *
-     * @var int (unix timestamp)
+     * @var DateTime
      */
-    public $created = null;
+    public $creationDate = null;
 
     /**
      * 5.x only

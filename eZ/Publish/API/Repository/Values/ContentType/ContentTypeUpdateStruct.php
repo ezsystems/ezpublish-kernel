@@ -85,9 +85,9 @@ abstract class ContentTypeUpdateStruct extends ValueObject
     /**
      * If set this value overrides the current time for creation
      *
-     * @var int (unix timestamp)
+     * @var DateTime
      */
-    public $modified = null;
+    public $modificationDate = null;
 
     /**
      * set a content type name for the given language

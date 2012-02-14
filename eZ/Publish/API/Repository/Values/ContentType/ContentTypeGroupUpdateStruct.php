@@ -29,9 +29,9 @@ abstract class ContentTypeGroupUpdateStruct extends ValueObject
     /**
      * If set this value overrides the current time for modified
      *
-     * @var int (unix timestamp)
+     * @var DateTime
      */
-    public $modified = null;
+    public $modificationDate = null;
 
     /**
      * 5.x only
