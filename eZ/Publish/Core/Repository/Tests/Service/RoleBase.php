@@ -513,8 +513,8 @@ abstract class RoleBase extends BaseServiceTest
 
         $roleCreateStruct = $roleService->newRoleCreateStruct( "Ultimate permissions" );
         self::assertEquals( "Ultimate permissions", $roleCreateStruct->name );
-        self::assertInternalType( "array", $roleCreateStruct->policies );
-        self::assertEmpty( $roleCreateStruct->policies );
+        self::assertInternalType( "array", $roleCreateStruct->getPolicies() );
+        self::assertEmpty( $roleCreateStruct->getPolicies() );
     }
 
     /**
@@ -528,8 +528,8 @@ abstract class RoleBase extends BaseServiceTest
         $policyCreateStruct = $roleService->newPolicyCreateStruct( "content", "read" );
         self::assertEquals( "content", $policyCreateStruct->module );
         self::assertEquals( "read", $policyCreateStruct->function );
-        self::assertInternalType( "array", $policyCreateStruct->limitations );
-        self::assertEmpty( $policyCreateStruct->limitations );
+        self::assertInternalType( "array", $policyCreateStruct->getLimitations() );
+        self::assertEmpty( $policyCreateStruct->getLimitations() );
     }
 
     /**
@@ -553,7 +553,7 @@ abstract class RoleBase extends BaseServiceTest
         $roleService = $this->repository->getRoleService();
 
         $policyUpdateStruct = $roleService->newPolicyUpdateStruct();
-        self::assertInternalType( "array", $policyUpdateStruct->limitations );
-        self::assertEmpty( $policyUpdateStruct->limitations );
+        self::assertInternalType( "array", $policyUpdateStruct->getLimitations() );
+        self::assertEmpty( $policyUpdateStruct->getLimitations() );
     }
 }
