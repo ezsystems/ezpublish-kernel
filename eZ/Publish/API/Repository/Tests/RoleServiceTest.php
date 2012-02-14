@@ -19,6 +19,40 @@ use \eZ\Publish\API\Repository\Tests\BaseTest;
 class RoleServiceTest extends BaseTest
 {
     /**
+     * Test for the newRoleCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::newRoleCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetSectionService
+     */
+    public function testNewRoleCreateStruct()
+    {
+        $repository = $this->getRepository();
+
+        $roleService = $repository->getRoleService();
+        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\RoleCreateStruct', $roleCreate );
+    }
+
+    /**
+     * Test for the newRoleCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\RoleService::newRoleCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\RoleServiceTest::testNewRoleCreateStruct
+     */
+    public function testNewRoleCreateStructSetsNamePropertyOnStruct()
+    {
+        $repository = $this->getRepository();
+
+        $roleService = $repository->getRoleService();
+        $roleCreate  = $roleService->newRoleCreateStruct( 'roleName' );
+
+        $this->assertEquals( 'roleName', $roleCreate->name );
+    }
+
+    /**
      * Test for the createRole() method.
      *
      * @return void
@@ -508,18 +542,6 @@ class RoleServiceTest extends BaseTest
     public function testGetRoleAssignmentsForUserGroupThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for RoleService::getRoleAssignmentsForUserGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the newRoleCreateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\RoleService::newRoleCreateStruct()
-     * 
-     */
-    public function testNewRoleCreateStruct()
-    {
-        $this->markTestIncomplete( "Test for RoleService::newRoleCreateStruct() is not implemented." );
     }
 
     /**

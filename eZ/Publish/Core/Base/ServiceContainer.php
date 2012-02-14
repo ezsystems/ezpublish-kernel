@@ -83,6 +83,8 @@ class ServiceContainer
             '$_REQUEST' => $_REQUEST,
             '$_COOKIE' => $_COOKIE,
             '$_FILES' => $_FILES,
+            '$_POST' => $_POST,
+            '$_GET' => $_GET,
         );
     }
 

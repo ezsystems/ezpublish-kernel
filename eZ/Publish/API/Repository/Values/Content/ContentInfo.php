@@ -40,7 +40,7 @@ abstract class ContentInfo extends ValueObject
      * The content type of this content object
      * @return ContentType
      */
-    public abstract function getContentType();
+    abstract public function getContentType();
 
     /**
      * the section to which the content is assigned

@@ -32,7 +32,7 @@ abstract class FieldDefinitionCreateStruct extends ValueObject
      * @param string $name
      * @param string $language
      */
-    public abstract function setName( $name, $language );
+    abstract public function setName( $name, $language );
 
     /**
      * set a  fie definition description for the given language
@@ -40,7 +40,7 @@ abstract class FieldDefinitionCreateStruct extends ValueObject
      * @param string $description
      * @param string $language
      */
-    public abstract function setDescription( $description, $language );
+    abstract public function setDescription( $description, $language );
 
     /**
      * Field group name
@@ -83,14 +83,14 @@ abstract class FieldDefinitionCreateStruct extends ValueObject
      *
      * @param Validator $validator
      */
-    public abstract function setValidator( /*Validator*/ $validator );
+    abstract public function setValidator( /*Validator*/ $validator );
 
     /**
      * sets a field settings map supported by the field type
      *
      * @param array $fieldSettings
      */
-    public abstract function setFieldSettings( array $fieldSettings );
+    abstract public function setFieldSettings( array $fieldSettings );
 
     /**
      * Default value of the field

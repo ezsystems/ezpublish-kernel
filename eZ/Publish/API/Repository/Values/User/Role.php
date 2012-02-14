@@ -40,11 +40,11 @@ abstract class Role extends ValueObject
      * returns the list of policies of this role
      * @return array an array of {@link \eZ\Publish\API\Repository\Values\User\Policy}
      */
-    public abstract function getPolicies();
+    abstract public function getPolicies();
 
     /**
      * returns the policy for the given module and function
      * @return \eZ\Publish\API\Repository\Values\User\Policy
      */
-    public abstract function getPolicy( $module, $function );
+    abstract public function getPolicy( $module, $function );
 }

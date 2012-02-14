@@ -46,7 +46,7 @@ abstract class FieldDefinition extends ValueObject
      *
      * @return string[]
      */
-    public abstract function getNames();
+    abstract public function getNames();
 
     /**
      *
@@ -54,7 +54,7 @@ abstract class FieldDefinition extends ValueObject
      * @param string $languageCode
      * @return string the name for the given language or null if none existis.
      */
-    public abstract function getName( $languageCode );
+    abstract public function getName( $languageCode );
 
     /**
      *  This method returns the human readable description of the field
@@ -66,14 +66,14 @@ abstract class FieldDefinition extends ValueObject
      *
      * @return string[]
      */
-    public abstract function getDescriptions();
+    abstract public function getDescriptions();
 
     /**
      * this method returns the name of the field in the given language
      * @param string $languageCode
      * @return string the description for the given language or null if none existis.
      */
-    public abstract function getDescription( $languageCode );
+    abstract public function getDescription( $languageCode );
 
     /**
      * Field group name
@@ -121,13 +121,13 @@ abstract class FieldDefinition extends ValueObject
      * this method returns the validators of this field definition supported by the field type
      * @return array an array of {@link Validator}
      */
-    public abstract function getValidators();
+    abstract public function getValidators();
 
     /**
      * this method returns settings for the field definition supported by the field type
      * @return array
      */
-    public abstract function getFieldSettings();
+    abstract public function getFieldSettings();
 
     /**
      * Default value of the field

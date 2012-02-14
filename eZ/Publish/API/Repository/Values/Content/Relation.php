@@ -63,14 +63,14 @@ abstract class Relation extends ValueObject
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public abstract function getSourceContentInfo();
+    abstract public function getSourceContentInfo();
 
     /**
      * the content of the destination content of the relation
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
      */
-    public abstract function getDestinationContentInfo();
+    abstract public function getDestinationContentInfo();
     
     /**
      * The relation type bitmask

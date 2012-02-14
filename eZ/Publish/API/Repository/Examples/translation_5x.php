@@ -47,7 +47,7 @@ $newPublishedVersion = $contentService->publishContent( $draft->versionInfo );
 $contentUpdate = $contentService->newVersionUpdateStruct();
 $contentUpdate->fields['title']['ger-DE'] = 'Titel';
 // ...
-$contentUpdate->fields['title']['fra-FR'] = 'Titre';
+$contentUpdate->fields['title']['fre-FR'] = 'Titre';
 // ..
 
 $draft = $contentService->updateContent( $draft, $contentUpdate );
@@ -65,7 +65,7 @@ $contentService->addTranslationInfo( $translationInfo );
 $translationInfo = $contentService->newTranslationInfo();
 $translationInfo->sourceLanguage = 'eng-US';
 $translationInfo->sourceVersion = $versionInfo;
-$translationInfo->destinationLanguage = 'fra-FR';
+$translationInfo->destinationLanguage = 'fre-FR';
 $translationInfo->destinationVersion = $newPublishedVersion;
 
 $contentService->addTranslationInfo( $translationInfo );
