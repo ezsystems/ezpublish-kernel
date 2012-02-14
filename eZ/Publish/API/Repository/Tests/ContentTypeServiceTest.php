@@ -399,34 +399,10 @@ class ContentTypeServiceTest extends BaseTest
      * Test for the deleteContentTypeGroup() method.
      *
      * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup($contentTypeGroup, $deleteObjects)
-     * 
-     */
-    public function testDeleteContentTypeGroupWithSecondParameter()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteContentTypeGroup() method.
-     *
-     * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
      */
     public function testDeleteContentTypeGroupThrowsUnauthorizedException()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteContentTypeGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup($contentTypeGroup, $deleteObjects)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\UnauthorizedException
-     */
-    public function testDeleteContentTypeGroupThrowsUnauthorizedExceptionWithSecondParameter()
     {
         $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
     }
@@ -440,18 +416,7 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testDeleteContentTypeGroupThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
-    }
-
-    /**
-     * Test for the deleteContentTypeGroup() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup($contentTypeGroup, $deleteObjects)
-     * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
-     */
-    public function testDeleteContentTypeGroupThrowsIllegalArgumentExceptionWithSecondParameter()
-    {
+        // TODO: Implement create content type
         $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
     }
 
