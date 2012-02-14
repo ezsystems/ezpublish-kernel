@@ -66,6 +66,8 @@ class ContentTypeServiceStub implements ContentTypeService
         {
             $data[$propertyName] = $propertyValue;
         }
+        $data['names']        = $contentTypeGroupCreateStruct->names;
+        $data['descriptions'] = $contentTypeGroupCreateStruct->descriptions;
 
         $data['id'] = $this->nextGroupId++;
 
