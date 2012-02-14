@@ -61,10 +61,8 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         foreach ( $expectedValues as $propertyName => $propertyValue )
         {
-            $this->assertEquals(
-                $propertyValue,
-                $actualObject->$propertyName,
-                sprintf( 'Object property "%s" incorrect.', $propertyName )
+            $this->assertPropertiesEqual(
+                $propertyName, $propertyValue, $actualObject->$propertyName
             );
         }
     }
@@ -83,20 +81,34 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         foreach ( $expectedValues as $propertyName => $propertyValue )
         {
-            $this->assertEquals(
-                $propertyValue,
-                $actualObject->$propertyName,
-                sprintf( 'Object property "%s" incorrect.', $propertyName )
+            $this->assertPropertiesEqual(
+                $propertyName, $propertyValue, $actualObject->$propertyName
             );
         }
 
         foreach ( $additionalProperties as $propertyName )
         {
-            $this->assertEquals(
-                $expectedValues->$propertyName,
-                $actualObject->$propertyName,
-                sprintf( 'Object property "%s" incorrect.', $propertyName )
+            $this->assertPropertiesEqual(
+                $propertyName, $expectedValues->$propertyName, $actualObject->$propertyName
             );
         }
+    }
+
+    private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
+    {
+        if( $expectedValue instanceof \ArrayObject )
+        {
+            $expectedValue = $expectedValue->getArrayCopy();
+        }
+        if( $actualValue instanceof \ArrayObject )
+        {
+            $actualValue = $actualValue->getArrayCopy();
+        }
+
+        $this->assertEquals(
+            $expectedValue,
+            $actualValue,
+            sprintf( 'Object property "%s" incorrect.', $propertyName )
+        );
     }
 }
