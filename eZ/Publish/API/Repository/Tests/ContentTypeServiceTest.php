@@ -164,7 +164,7 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::loadContentTypeGroupByIdentifier()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testLoadContentTypeGroupByIdentifier()
     {
@@ -274,7 +274,51 @@ class ContentTypeServiceTest extends BaseTest
      */
     public function testUpdateContentTypeGroup()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeGroup() is not implemented." );
+        $this->createContentTypeGroup();
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
+
+        $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
+        $groupUpdate->identifier = 'updated-group';
+
+        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        /* END: Use Case */
+
+        $updatedGroup = $contentTypeService->loadContentTypeGroup( $group->id );
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct',
+            $groupUpdate
+        );
+        $this->assertEquals(
+            'updated-group',
+            $updatedGroup->identifier
+        );
+    }
+
+    /**
+     * Creates a group with identifier "new-group"
+     *
+     * @return \eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub
+     */
+    protected function createContentTypeGroup()
+    {
+        $repository = $this->getRepository();
+
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'new-group'
+        );
+        $groupCreate->creatorId           = 23;
+        $groupCreate->creationDate        = new \DateTime();
+        $groupCreate->initialLanguageCode = 'de_DE';
+
+        return $contentTypeService->createContentTypeGroup( $groupCreate );
     }
 
     /**
