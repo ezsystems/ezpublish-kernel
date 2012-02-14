@@ -204,4 +204,13 @@ class LanguageServiceStub implements LanguageService
         // TODO: Implement getDefaultLanguageCode() method.
     }
 
+    /**
+     * instanciates an object to be used for creating languages
+     * 
+     * @return \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct
+     */
+    public function newLanguageCreateStruct()
+    {
+        // TODO: Implement.
+    }
 }

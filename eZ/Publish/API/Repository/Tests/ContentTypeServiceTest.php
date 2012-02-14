@@ -247,7 +247,7 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeGroupUpdateStruct()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
      */
     public function testNewContentTypeGroupUpdateStruct()
     {
@@ -270,7 +270,7 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeGroupUpdateStruct
      */
     public function testUpdateContentTypeGroup()
     {
@@ -314,9 +314,9 @@ class ContentTypeServiceTest extends BaseTest
         $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
             'new-group'
         );
-        $groupCreate->creatorId           = 23;
-        $groupCreate->creationDate        = new \DateTime();
-        $groupCreate->initialLanguageCode = 'de_DE';
+        $groupCreate->creatorId        = 23;
+        $groupCreate->creationDate     = new \DateTime();
+        $groupCreate->mainLanguageCode = 'de_DE';
 
         return $contentTypeService->createContentTypeGroup( $groupCreate );
     }
@@ -339,10 +339,29 @@ class ContentTypeServiceTest extends BaseTest
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::updateContentTypeGroup()
      * @expectedException \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testUpdateContentTypeGroup
      */
     public function testUpdateContentTypeGroupThrowsIllegalArgumentException()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::updateContentTypeGroup() is not implemented." );
+        $this->createContentTypeGroup();
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $groupCreate = $contentTypeService->newContentTypeGroupCreateStruct(
+            'updated-group'
+        );
+        $groupToOverwrite = $contentTypeService->createContentTypeGroup( $groupCreate );
+
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
+
+        $groupUpdate = $contentTypeService->newContentTypeGroupUpdateStruct();
+        $groupUpdate->identifier = 'updated-group';
+
+        // Exception, because group with identifier "updated-group" exists
+        $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
+        /* END: Use Case */
     }
 
     /**
@@ -350,11 +369,30 @@ class ContentTypeServiceTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\ContentTypeService::deleteContentTypeGroup()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testCreateContentTypeGroup
      */
     public function testDeleteContentTypeGroup()
     {
-        $this->markTestIncomplete( "Test for ContentTypeService::deleteContentTypeGroup() is not implemented." );
+        $this->createContentTypeGroup();
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $group = $contentTypeService->loadContentTypeGroupByIdentifier( 'new-group' );
+
+        $contentTypeService->deleteContentTypeGroup( $group );
+        /* END: Use Case */
+
+        try
+        {
+            $contentTypeService->loadContentTypeGroup( $group->id );
+            $this->fail( 'Content type group not deleted.' );
+        }
+        catch ( \eZ\Publish\API\Repository\Exceptions\NotFoundException $e )
+        {
+            // All fine
+        }
     }
 
     /**
