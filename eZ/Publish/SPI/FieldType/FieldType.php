@@ -60,6 +60,20 @@ interface FieldType
     public function validate( FieldDefinition $fieldDef, Field $field );
 
     /**
+     * indicates if the field type supports indexing and sort keys for searching
+     * 
+     * @return boolean
+     */
+    public function isSearchable();
+    
+    /**
+     * returns a default vlaue for the default value if not given in the field definition.
+     * 
+     * @return Value
+     */
+    public function getDefaultDefaultValue();
+    
+    /**
      *
      * Checks the type and structure of the value.
      * @param $value
