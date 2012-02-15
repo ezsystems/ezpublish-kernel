@@ -38,14 +38,14 @@ class ContentTypeGroupCreateStruct extends ValueObject
     public $mainLanguageCode;
 
     /**
-     * If set this array of names with languageCode keys replace the complete name collection
+     * An array of names with languageCode keys 
      * 
      * @var array an array of string
      */
     public $names;
 
     /**
-     * If set this array of descriptions with languageCode keys replace the complete description collection
+     * An array of descriptions with languageCode keys
      * 
      * @var array an array of string
      */
