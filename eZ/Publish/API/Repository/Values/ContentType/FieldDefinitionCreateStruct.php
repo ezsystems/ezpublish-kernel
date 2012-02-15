@@ -5,10 +5,13 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * this class is used to create a field definition
- * @property-write $names $names[$language] calls setName($language)
- * @property-write $name calls setName() for setting a namein the initial language
- * @property-write $descriptions $descriptions[$language] calls setDescription($language)
- * @property-write $description calls setDescription() for setting a description in an initial language
+ * 
+ * @property $names the collection of names with languageCode keys. 
+ *           the calls <code>$fdcs->names[$language] = "abc"</code> and <code>$fdcs->setName("abc",$language)</code> are equivalent
+ * @property $descriptions the collection of descriptions with languageCode keys. 
+ *           the calls <code>$fdcs->descriptions[$language] = "abc"</code> and <code>$fdcs->setDescription("abc",$language)</code> are equivalent
+ * @property $valdiators the collection of validators with the validator names as keys
+ * @property $fieldSettings the collection of fieldSettings 
  */
 abstract class FieldDefinitionCreateStruct extends ValueObject
 {
@@ -83,7 +86,7 @@ abstract class FieldDefinitionCreateStruct extends ValueObject
      *
      * @param Validator $validator
      */
-    abstract public function setValidator( /*Validator*/ $validator );
+    abstract public function setValidator( Validator $validator );
 
     /**
      * sets a field settings map supported by the field type

@@ -6,10 +6,12 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * this class is used to update a field definition
  *
- * @property-write array $names $names[$language] calls setName($language)
- * @property-write string $name calls setName() for setting a namein the initial language
- * @property-write array $descriptions $descriptions[$language] calls setDescription($language)
- * @property-write string $description calls setDescription() for setting a description in an initial language
+ * @property $names the collection of names with languageCode keys. 
+ *           the calls <code>$fdcs->names[$language] = "abc"</code> and <code>$fdcs->setName("abc",$language)</code> are equivalent
+ * @property $descriptions the collection of descriptions with languageCode keys. 
+ *           the calls <code>$fdcs->descriptions[$language] = "abc"</code> and <code>$fdcs->setDescription("abc",$language)</code> are equivalent
+ * @property $valdiators the collection of validators with the validator names as keys
+ * @property $fieldSettings the collection of fieldSettings 
  */
 abstract class FieldDefinitionUpdateStruct extends ValueObject
 {
@@ -26,7 +28,7 @@ abstract class FieldDefinitionUpdateStruct extends ValueObject
      * @param string $name
      * @param string $language
      */
-    abstract public function setName( $name, $language = null );
+    abstract public function setName( $name, $language );
 
     /**
      * set a  fie definition description for the given language
@@ -34,7 +36,7 @@ abstract class FieldDefinitionUpdateStruct extends ValueObject
      * @param string $description
      * @param string $language
      */
-    abstract public function setDescription( $description, $language = null );
+    abstract public function setDescription( $description, $language );
 
     /**
      * if set the field group is changed to this name
@@ -78,7 +80,7 @@ abstract class FieldDefinitionUpdateStruct extends ValueObject
      *
      * @param Validator $validator
      */
-    abstract public function setValidator( $validator );
+    abstract public function setValidator( Validator $validator );
 
     /**
      * replaces the field settings map supported by the field type
