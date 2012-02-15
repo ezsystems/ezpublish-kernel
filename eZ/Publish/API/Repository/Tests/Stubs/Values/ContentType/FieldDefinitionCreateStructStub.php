@@ -2,6 +2,7 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType;
 
 use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
+use eZ\Publish\API\Repository\Values\ContentType\Validator;
 
 /**
  * this class is used to create a field definition
@@ -114,7 +115,7 @@ class FieldDefinitionCreateStructStub extends FieldDefinitionCreateStruct
      *
      * @param Validator $validator
      */
-    public function setValidator( /*Validator*/ $validator )
+    public function setValidator( Validator $validator )
     {
         $this->validator = $validator;
     }
