@@ -5,15 +5,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * this class is used to update a field definition
- *
- * @property $names the collection of names with languageCode keys. 
- *           the calls <code>$fdcs->names[$language] = "abc"</code> and <code>$fdcs->setName("abc",$language)</code> are equivalent
- * @property $descriptions the collection of descriptions with languageCode keys. 
- *           the calls <code>$fdcs->descriptions[$language] = "abc"</code> and <code>$fdcs->setDescription("abc",$language)</code> are equivalent
- * @property $valdiators the collection of validators with the validator names as keys
- * @property $fieldSettings the collection of fieldSettings 
  */
-abstract class FieldDefinitionUpdateStruct extends ValueObject
+class FieldDefinitionUpdateStruct extends ValueObject
 {
     /**
      * If set the identifier of a field definition is changed to this value
@@ -23,20 +16,18 @@ abstract class FieldDefinitionUpdateStruct extends ValueObject
     public $identifier;
 
     /**
-     * set a field definition name for the given language
-     *
-     * @param string $name
-     * @param string $language
+     * If set this array of names with languageCode keys replace the complete name collection
+     * 
+     * @var array an array of string
      */
-    abstract public function setName( $name, $language );
+    public $names;
 
     /**
-     * set a  fie definition description for the given language
-     *
-     * @param string $description
-     * @param string $language
+     * If set this array of descriptions with languageCode keys replace the complete description collection
+     * 
+     * @var array an array of string
      */
-    abstract public function setDescription( $description, $language );
+    public $descriptions;
 
     /**
      * if set the field group is changed to this name
@@ -74,20 +65,18 @@ abstract class FieldDefinitionUpdateStruct extends ValueObject
     public $isInfoCollector;
 
     /**
-     * sets a validator which has to be supported by the field type.
-     * if a validator existis with the given name the validator parameters are replaced by the given ones.
-     * Otherwise the given validator is added.
-     *
-     * @param Validator $validator
+     * If set this array of validators  replace the complete validator collection
+     * 
+     * @var array an array of {@link eZ\Publish\API\Repository\Values\ContentType\Validator}
      */
-    abstract public function setValidator( Validator $validator );
+    public $validators;
 
     /**
-     * replaces the field settings map supported by the field type
-     *
-     * @param array $fieldSettings
+     * If set this array of fieldSettings replace the complete field settings collection
+     * 
+     * @var array an array of mixed
      */
-    abstract public function setFieldSettings( array $fieldSettings );
+    public $fieldSettings;
 
     /**
      * If set the default value for this field is changed to the given value

@@ -4,14 +4,8 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
  * This class is used for creating a content type group
- * 
- * @property-write $names $names[$language] calls setName($language)
- * @property-write $name calls setName() for setting a namein the initial language
- * @property-write $descriptions $descriptions[$language] calls setDescription($language)
- * @property-write $description calls setDescription() for setting a description in an initial language
- *
  */
-abstract class ContentTypeGroupCreateStruct extends ValueObject
+class ContentTypeGroupCreateStruct extends ValueObject
 {
     /**
      * Readable string identifier of a group
@@ -44,22 +38,17 @@ abstract class ContentTypeGroupCreateStruct extends ValueObject
     public $mainLanguageCode;
 
     /**
-     * set a content type group name for the given language
+     * If set this array of names with languageCode keys replace the complete name collection
      * 
-     * @since 5.0
-     *
-     * @param string $name
-     * @param string $language if not given the main language is used as default
+     * @var array an array of string
      */
-    abstract public function setName( $name, $language = null );
+    public $names;
 
     /**
-     * set a content type description for the given language
+     * If set this array of descriptions with languageCode keys replace the complete description collection
      * 
-     * @since 5.0
-     *
-     * @param string $description
-     * @param string $language if not given the main language is used as default
+     * @var array an array of string
      */
-    abstract public function setDescription( $description, $language = null );
+    public $descriptions;
+    
 }

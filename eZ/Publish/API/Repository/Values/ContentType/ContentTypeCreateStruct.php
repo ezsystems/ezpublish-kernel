@@ -10,14 +10,6 @@ use eZ\Publish\API\Repository\Values\Content\Location;
 /**
  * this clss is used for creating content types
  *
- * @property $names the collection of names with languageCode keys. 
- *           the calls <code>$ctcs->names[$language] = "abc"</code> and <code>$ctcs->setName("abc",$language)</code> are equivalent
- * @property $name the name of the content type in the main language
- *           the calls  <code>$ctcs->name = "abc"</code> and <code>$ctcs->setName("abc")</code> are equivalent calls
- * @property $descriptions the collection of descriptions with languageCode keys. 
- *           the calls <code>$ctcs->descriptions[$language] = "abc"</code> and <code>$ctcs->setDescription("abc",$language)</code> are equivalent
- * @property $name the name of the content type in the main language
- *           the calls  <code>$ctcs->name = "abc"</code> and <code>$ctcs->setName("abc")</code> are equivalent calls
  * @property $fieldDefinitions the collection of field definitions
  */
 abstract class ContentTypeCreateStruct extends ValueObject
@@ -91,27 +83,26 @@ abstract class ContentTypeCreateStruct extends ValueObject
     public $defaultAlwaysAvailable = true;
 
     /**
-     * set a content type name for the given language
-     *
-     * @param string $name
-     * @param string $language if not given the initialLanguage is used as default
+     * If set this array of names with languageCode keys replace the complete name collection
+     * 
+     * @var array an array of string
      */
-    abstract public function setName( $name, $language = null );
+    public $names;
 
     /**
-     * set a content type description for the given language
-     *
-     * @param string $description
-     * @param string $language if not given the initialLanguage is used as default
+     * If set this array of descriptions with languageCode keys replace the complete description collection
+     * 
+     * @var array an array of string
      */
-    abstract public function setDescription( $description, $language = null );
+    public $descriptions;
+    
 
     /**
      * adds a new field definition
      *
      * @param FieldDefinitionCreate $fieldDef
      */
-    abstract public function addFieldDefinition( /*FieldDefinitionCreate*/ $fieldDef );
+    abstract public function addFieldDefinition( FieldDefinitionCreate $fieldDef );
 
     /**
      * if set this value overrides the current user as creator

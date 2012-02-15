@@ -144,7 +144,9 @@ abstract class ContentType extends ValueObject
     protected $remoteId;
 
     /**
-     * URL alias schema. If nothing is provided, $nameSchema will be used instead.
+     * URL alias schema. 
+     * 
+     * If nothing is provided, $nameSchema will be used instead.
      *
      * @var string
      */
@@ -152,6 +154,7 @@ abstract class ContentType extends ValueObject
 
     /**
      * Name schema.
+     * 
      * Can be composed of FieldDefinition identifier place holders.
      * These place holders must comply this pattern : <field_definition_identifier>.
      * An OR condition can be used :
