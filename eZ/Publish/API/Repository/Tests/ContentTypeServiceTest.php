@@ -655,8 +655,8 @@ class ContentTypeServiceTest extends BaseTest
             array(
                 'fieldTypeIdentifier' => 'string',
                 'identifier'          => 'title',
-                'names'               => new \ArrayObject(),
-                'descriptions'        => new \ArrayObject(),
+                'names'               => null,
+                'descriptions'        => null,
                 'fieldGroup'          => null,
                 'position'            => null,
                 'isTranslatable'      => null,
