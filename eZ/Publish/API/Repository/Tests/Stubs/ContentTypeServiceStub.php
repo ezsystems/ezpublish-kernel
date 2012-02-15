@@ -23,8 +23,6 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupUpdateStruct;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupUpdateStructStub;
-use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupCreateStructStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionCreateStructStub;
 
@@ -479,9 +477,9 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeGroupCreateStruct( $identifier )
     {
-        return new ContentTypeGroupCreateStructStub(
-            array( 'identifier' => $identifier )
-        );
+        $groupCreate = new ContentTypeGroupCreateStruct();
+        $groupCreate->identifier = $identifier;
+        return $groupCreate;
     }
 
     /**
@@ -493,9 +491,9 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeCreateStruct( $identifier )
     {
-        return new ContentTypeCreateStructStub( array(
-            'identifier' => $identifier
-        ) );
+        $typeCreate = new ContentTypeCreateStructStub();
+        $typeCreate->identifier = $identifier;
+        return $typeCreate;
     }
 
     /**
@@ -515,7 +513,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeGroupUpdateStruct()
     {
-        return new ContentTypeGroupUpdateStructStub();
+        return new ContentTypeGroupUpdateStruct();
     }
 
     /**
