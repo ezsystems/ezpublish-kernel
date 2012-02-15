@@ -30,20 +30,19 @@ abstract class FieldDefinitionCreateStruct extends ValueObject
     public $identifier;
 
     /**
-     * set a field definition name for the given language
-     *
-     * @param string $name
-     * @param string $language
+     * An array of names with languageCode keys
+     * 
+     * @var array an array of string
      */
-    abstract public function setName( $name, $language );
+    public $names;
 
     /**
-     * set a  fie definition description for the given language
-     *
-     * @param string $description
-     * @param string $language
+     * An array of descriptions with languageCode keys 
+     * 
+     * @var array an array of string
      */
-    abstract public function setDescription( $description, $language );
+    public $descriptions;
+    
 
     /**
      * Field group name
@@ -82,18 +81,19 @@ abstract class FieldDefinitionCreateStruct extends ValueObject
     public $isInfoCollector;
 
     /**
-     * sets a validator which has to be supported by the field type
-     *
-     * @param Validator $validator
+     * An array of validators
+     * 
+     * @var array an array of {@link eZ\Publish\API\Repository\Values\ContentType\Validator}
      */
-    abstract public function setValidator( Validator $validator );
+    public $validators;
 
     /**
-     * sets a field settings map supported by the field type
-     *
-     * @param array $fieldSettings
+     * An array of field settings
+     * 
+     * @var array an array of mixed
      */
-    abstract public function setFieldSettings( array $fieldSettings );
+    public $fieldSettings;
+    
 
     /**
      * Default value of the field
