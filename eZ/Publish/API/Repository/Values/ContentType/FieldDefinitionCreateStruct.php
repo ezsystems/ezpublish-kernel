@@ -13,7 +13,7 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property $valdiators the collection of validators with the validator names as keys
  * @property $fieldSettings the collection of fieldSettings 
  */
-abstract class FieldDefinitionCreateStruct extends ValueObject
+class FieldDefinitionCreateStruct extends ValueObject
 {
     /**
      * String identifier of the field type
