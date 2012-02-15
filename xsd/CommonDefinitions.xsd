@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema version="1.0" xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+                          xmlns="http://ez.no/API/Common"
+                          targetNamespace="http://ez.no/API/Common">
+  <xsd:complexType name="ref">
+    <xsd:attribute name="href" type="xsd:string" />
+    <xsd:attribute name="media-type" type="xsd:string" />
+  </xsd:complexType>
+</xsd:schema>
