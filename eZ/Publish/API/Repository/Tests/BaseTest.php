@@ -71,11 +71,7 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         if ( null === $this->repository )
         {
-            // TODO: REMOVE THIS WORKAROUND AND CREATE A FRESH USER
-            $user   = new UserStub( array( 'id' => 1 ) );
-
-            $this->repository = new RepositoryStub();
-            $this->repository->setCurrentUser( $user );
+            $this->repository = $this->getRepository();
         }
 
         // TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES

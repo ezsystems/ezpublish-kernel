@@ -170,6 +170,10 @@ class SectionServiceStub implements SectionService
      */
     public function loadSections()
     {
+        if ( true !== $this->repository->hasAccess( 'section', 'read' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         return array_values( $this->sections );
     }
 
@@ -185,6 +189,10 @@ class SectionServiceStub implements SectionService
      */
     public function loadSectionByIdentifier( $sectionIdentifier )
     {
+        if ( true !== $this->repository->hasAccess( 'section', 'read' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( isset( $this->identifiers[$sectionIdentifier] ) )
         {
             return $this->sections[$this->identifiers[$sectionIdentifier]];
@@ -219,6 +227,10 @@ class SectionServiceStub implements SectionService
      */
     public function assignSection( ContentInfo $contentInfo, Section $section )
     {
+        if ( true !== $this->repository->hasAccess( 'section', 'assign' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( false === isset( $this->assignedContents[$section->id] ) )
         {
             $this->assignedContents[$section->id] = array();
@@ -246,7 +258,10 @@ class SectionServiceStub implements SectionService
         {
             throw new BadStateExceptionStub( '@TODO: What error code should be used?' );
         }
-
+        if ( true !== $this->repository->hasAccess( 'section', 'edit' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         unset( $this->sections[$section->id], $this->identifiers[$section->identifier] );
     }
 
