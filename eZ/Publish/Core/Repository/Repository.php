@@ -74,6 +74,13 @@ class Repository implements RepositoryInterface
     protected $languageService;
 
     /**
+     * Instance of location service
+     *
+     * @var \eZ\Publish\API\Repository\LocationService
+     */
+    protected $locationService;
+
+    /**
      * Constructor
      *
      * Construct repository object with provided storage engine
@@ -247,7 +254,14 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\LocationService
      */
-    public function getLocationService(){}
+    public function getLocationService()
+    {
+        if ( $this->locationService !== null )
+            return $this->locationService;
+
+        $this->locationService = new LocationService( $this, $this->persistenceHandler );
+        return $this->locationService;
+    }
 
     /**
      * Get Content Trash service
