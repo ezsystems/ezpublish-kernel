@@ -8,6 +8,7 @@
  */
 
 namespace eZ\Publish\API\Repository\Tests\Values\ContentType;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\StringLengthValidatorStub;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
 
@@ -23,11 +24,53 @@ class FieldDefinitionCreateStructTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct::setName()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
      */
     public function testSetName()
     {
-        $this->markTestIncomplete( "Test for FieldDefinitionCreateStruct::setName() is not implemented." );
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+
+        $fieldDefinitionCreate->setName( 'John Michael Dorian', 'eng_US' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'John Michael Dorian',
+            $fieldDefinitionCreate->names['eng_US']
+        );
+    }
+
+    /**
+     * Test for the setName() method with magic access.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct::setName()
+     * @depends eZ\Publish\API\Repository\Tests\Values\ContentType\FieldDefinitionCreateStructTest::testSetName
+     */
+    public function testSetNameMagicAccess()
+    {
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+
+        $fieldDefinitionCreate->names['eng_US'] = 'John Michael Dorian';
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'John Michael Dorian',
+            $fieldDefinitionCreate->names['eng_US']
+        );
     }
 
     /**
@@ -35,11 +78,53 @@ class FieldDefinitionCreateStructTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct::setDescription()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
      */
     public function testSetDescription()
     {
-        $this->markTestIncomplete( "Test for FieldDefinitionCreateStruct::setDescription() is not implemented." );
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+
+        $fieldDefinitionCreate->setDescription( 'Protagonist and narrator', 'eng_US' );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'Protagonist and narrator',
+            $fieldDefinitionCreate->descriptions['eng_US']
+        );
+    }
+
+    /**
+     * Test for the setDescription() method with magic access.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct::setDescription()
+     * @depends eZ\Publish\API\Repository\Tests\Values\ContentType\FieldDefinitionCreateStructTest::testSetDescription
+     */
+    public function testSetDescriptionMagicAccess()
+    {
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+
+        $fieldDefinitionCreate->descriptions['eng_US'] = 'Protagonist and narrator';
+        /* END: Use Case */
+
+        $this->assertEquals(
+            'Protagonist and narrator',
+            $fieldDefinitionCreate->descriptions['eng_US']
+        );
     }
 
     /**
@@ -47,11 +132,53 @@ class FieldDefinitionCreateStructTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct::setValidator()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
      */
     public function testSetValidator()
     {
-        $this->markTestIncomplete( "Test for FieldDefinitionCreateStruct::setValidator() is not implemented." );
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+
+        $fieldDefinitionCreate->setValidator( new StringLengthValidatorStub() );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\Validator',
+            $fieldDefinitionCreate->validator
+        );
+    }
+
+    /**
+     * Test for the setValidator() method with magic access.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct::setValidator()
+     * @depends eZ\Publish\API\Repository\Tests\Values\ContentType\FieldDefinitionCreateStructTest::testSetValidator
+     */
+    public function testSetValidatorMagicAccess()
+    {
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+
+        $fieldDefinitionCreate->validator = new StringLengthValidatorStub();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\\eZ\\Publish\\API\\Repository\\Values\\ContentType\\Validator',
+            $fieldDefinitionCreate->validator
+        );
     }
 
     /**
@@ -59,11 +186,58 @@ class FieldDefinitionCreateStructTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct::setFieldSettings()
-     * 
+     * @dep_ends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
      */
     public function testSetFieldSettings()
     {
-        $this->markTestIncomplete( "Test for FieldDefinitionCreateStruct::setFieldSettings() is not implemented." );
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+
+        $fieldSettings = array(
+            'someSetting' => true
+        );
+        $fieldDefinitionCreate->setFieldSettings( $fieldSettings );
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $fieldSettings,
+            $fieldDefinitionCreate->fieldSettings
+        );
     }
 
+    /**
+     * Test for the setFieldSettings() method with magic access.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct::setFieldSettings()
+     * @depends eZ\Publish\API\Repository\Tests\Values\ContentType\FieldDefinitionCreateStructTest::testSetFieldSettings
+     */
+    public function testSetFieldSettingsMagicAccess()
+    {
+        $repository =  $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+
+        $fieldSettings = array(
+            'someSetting' => true
+        );
+        $fieldDefinitionCreate->fieldSettings = $fieldSettings;
+        /* END: Use Case */
+
+        $this->assertEquals(
+            $fieldSettings,
+            $fieldDefinitionCreate->fieldSettings
+        );
+    }
 }
