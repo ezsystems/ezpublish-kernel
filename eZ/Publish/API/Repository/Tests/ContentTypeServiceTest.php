@@ -10,6 +10,7 @@
 namespace eZ\Publish\API\Repository\Tests;
 
 use \eZ\Publish\API\Repository\Tests\BaseTest;
+use eZ\Publish\API\Repository\Values\Content\Location;
 
 /**
  * Test case for operations in the ContentTypeService using in memory storage.
@@ -554,6 +555,117 @@ class ContentTypeServiceTest extends BaseTest
         {
             // All fine
         }
+    }
+
+    /**
+     * Test for the newContentTypeCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeCreateStruct()
+     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     */
+    public function testNewContentTypeCreateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeCreate = $contentTypeService->newContentTypeCreateStruct(
+            'new-type'
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct',
+            $typeCreate
+        );
+        return $typeCreate;
+    }
+
+    /**
+     * Test for the newContentTypeCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeCreateStruct
+     */
+    public function testNewContentTypeCreateStructValues( $createStruct )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'identifier'             => 'new-type',
+                'mainLanguageCode'       => null,
+                'remoteId'               => null,
+                'urlAliasSchema'         => null,
+                'nameSchema'             => null,
+                'isContainer'            => false,
+                'defaultSortField'       => Location::SORT_FIELD_PUBLISHED,
+                'defaultSortOrder'       => Location::SORT_ORDER_DESC,
+                'defaultAlwaysAvailable' => true,
+                'names'                  => new \ArrayObject(),
+                'descriptions'           => new \ArrayObject(),
+                'fieldDefinitions'       => new \ArrayObject(),
+                'creatorId'              => null,
+                'creationDate'           => null,
+            ),
+            $createStruct
+        );
+    }
+
+    /**
+     * Test for the newFieldDefinitionCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
+     * @dep_ends eZ\Publish\API\Repository\Tests\RepositoryTest::testGetContentTypeService
+     */
+    public function testNewFieldDefinitionCreateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $fieldDefinitionCreate = $contentTypeService->newFieldDefinitionCreateStruct(
+            'title', 'string'
+        );
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            '\eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct',
+            $fieldDefinitionCreate
+        );
+        return $fieldDefinitionCreate;
+    }
+
+    /**
+     * Test for the newFieldDefinitionCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\FieldDefinitionService::newFieldDefinitionCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewFieldDefinitionCreateStruct
+     */
+    public function testNewFieldDefinitionCreateStructValues( $createStruct )
+    {
+        $this->assertPropertiesCorrect(
+            array(
+                'fieldTypeIdentifier' => 'string',
+                'identifier'          => 'title',
+                'names'               => new \ArrayObject(),
+                'descriptions'        => new \ArrayObject(),
+                'fieldGroup'          => null,
+                'position'            => null,
+                'isTranslatable'      => null,
+                'isRequired'          => null,
+                'isInfoCollector'     => null,
+                'validator'           => null,
+                'fieldSettings'       => null,
+                'defaultValue'        => null,
+                'isSearchable'        => null,
+            ),
+            $createStruct
+        );
     }
 
     /**
@@ -1146,18 +1258,6 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
-     * Test for the newContentTypeCreateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeCreateStruct()
-     * 
-     */
-    public function testNewContentTypeCreateStruct()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::newContentTypeCreateStruct() is not implemented." );
-    }
-
-    /**
      * Test for the newContentTypeUpdateStruct() method.
      *
      * @return void
@@ -1167,18 +1267,6 @@ class ContentTypeServiceTest extends BaseTest
     public function testNewContentTypeUpdateStruct()
     {
         $this->markTestIncomplete( "Test for ContentTypeService::newContentTypeUpdateStruct() is not implemented." );
-    }
-
-    /**
-     * Test for the newFieldDefinitionCreateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::newFieldDefinitionCreateStruct()
-     * 
-     */
-    public function testNewFieldDefinitionCreateStruct()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::newFieldDefinitionCreateStruct() is not implemented." );
     }
 
     /**

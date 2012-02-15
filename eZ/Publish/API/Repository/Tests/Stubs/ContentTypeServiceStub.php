@@ -25,6 +25,8 @@ use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroupCreateStruct;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupUpdateStructStub;
 use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeGroupCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\ContentTypeCreateStructStub;
+use eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType\FieldDefinitionCreateStructStub;
 
 /**
  * @example Examples/contenttype.php
@@ -491,7 +493,9 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeCreateStruct( $identifier )
     {
-        // TODO: Implement.
+        return new ContentTypeCreateStructStub( array(
+            'identifier' => $identifier
+        ) );
     }
 
     /**
@@ -524,7 +528,12 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newFieldDefinitionCreateStruct( $identifier, $fieldTypeIdentifier )
     {
-        // TODO: Implement.
+        return new FieldDefinitionCreateStructStub(
+            array(
+                'identifier'          => $identifier,
+                'fieldTypeIdentifier' => $fieldTypeIdentifier
+            )
+        );
     }
 
     /**
