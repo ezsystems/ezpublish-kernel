@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
+use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\SectionService;
 use \eZ\Publish\API\Repository\Values\Content\ContentInfo;
 use \eZ\Publish\API\Repository\Values\Content\Section;
@@ -18,6 +19,7 @@ use \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\BadStateExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\IllegalArgumentExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\UnauthorizedExceptionStub;
 
 /**
  * Stubbed implementation of the {@link \eZ\Publish\API\Repository\SectionService}
@@ -27,6 +29,11 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
  */
 class SectionServiceStub implements SectionService
 {
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repository;
+
     /**
      * @var integer
      */
@@ -48,6 +55,14 @@ class SectionServiceStub implements SectionService
     private $assignedContents = array();
 
     /**
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    public function __construct( Repository $repository )
+    {
+        $this->repository = $repository;
+    }
+
+    /**
      * Creates the a new Section in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create a section
@@ -59,6 +74,11 @@ class SectionServiceStub implements SectionService
      */
     public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
+        if ( true !== $this->repository->hasAccess( 'section', 'create' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         if ( isset( $this->identifiers[$sectionCreateStruct->identifier] ) )
         {
             throw new IllegalArgumentExceptionStub( '@TODO: What error code should be used?' );

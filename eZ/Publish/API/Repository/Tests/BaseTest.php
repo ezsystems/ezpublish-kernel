@@ -48,12 +48,13 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         if ( null === $this->repository )
         {
             // TODO: REMOVE THIS WORKAROUND AND CREATE A FRESH USER
-            $user = new UserStub( array( 'id' => 1 ) );
+            $user   = new UserStub( array( 'id' => 1 ) );
+            $policy = new PolicyStub( array( 'module' => '*', 'function' => '*' ) );
 
             $this->repository = new RepositoryStub();
             $this->repository->setCurrentUser( $user );
-
-            $this->setUserPolicy( '*', '*' );
+            // TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES
+            $this->repository->getRoleService()->setPoliciesForUser( $user, array( $policy ) );
         }
         return $this->repository;
     }
@@ -64,15 +65,22 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @param string $module
      * @param string $function
      *
-     * @return void
+     * @return \eZ\Publish\API\Repository\Repository
      */
-    protected function setUserPolicy( $module, $function )
+    protected function getRepositoryWithRestriction( $module, $function )
     {
-        $user = $this->repository->getCurrentUser();
-        $policy = new PolicyStub( array( 'module' => $module, 'function' => $function ) );
+        if ( null === $this->repository )
+        {
+            // TODO: REMOVE THIS WORKAROUND AND CREATE A FRESH USER
+            $user   = new UserStub( array( 'id' => 1 ) );
+            $policy = new PolicyStub( array( 'module' => $module, 'function' => $function ) );
 
-        // TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES
-        $this->repository->getRoleService()->setPoliciesForUser( $user, array( $policy ) );
+            $this->repository = new RepositoryStub();
+            $this->repository->setCurrentUser( $user );
+            // TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES
+            $this->repository->getRoleService()->setPoliciesForUser( $user, array( $policy ) );
+        }
+        return $this->repository;
     }
 
     /**

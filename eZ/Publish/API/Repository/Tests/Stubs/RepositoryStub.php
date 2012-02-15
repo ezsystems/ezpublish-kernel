@@ -217,7 +217,7 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->sectionService )
         {
-            $this->sectionService = new SectionServiceStub();
+            $this->sectionService = new SectionServiceStub( $this );
         }
         return $this->sectionService;
     }

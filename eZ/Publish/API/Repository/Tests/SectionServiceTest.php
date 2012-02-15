@@ -72,7 +72,18 @@ class SectionServiceTest extends BaseTest
      */
     public function testCreateSectionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for SectionService::createSection() is not implemented." );
+        $repository = $this->getRepositoryWithRestriction( 'section', 'view' );
+
+        /* BEGIN: Use Case */
+        $sectionService = $repository->getSectionService();
+
+        $sectionCreate             = $sectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        // This call should fail because current user has limited rights
+        $sectionService->createSection( $sectionCreate );
+        /* END: Use Case */
     }
 
     /**
