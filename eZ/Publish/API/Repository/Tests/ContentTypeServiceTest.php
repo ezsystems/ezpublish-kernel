@@ -662,7 +662,7 @@ class ContentTypeServiceTest extends BaseTest
                 'isTranslatable'      => null,
                 'isRequired'          => null,
                 'isInfoCollector'     => null,
-                'validator'           => null,
+                'validators'          => null,
                 'fieldSettings'       => null,
                 'defaultValue'        => null,
                 'isSearchable'        => null,
