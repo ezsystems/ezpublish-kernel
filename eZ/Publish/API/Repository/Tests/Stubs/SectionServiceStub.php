@@ -74,7 +74,7 @@ class SectionServiceStub implements SectionService
      */
     public function createSection( SectionCreateStruct $sectionCreateStruct )
     {
-        if ( true !== $this->repository->hasAccess( 'section', 'create' ) )
+        if ( true !== $this->repository->hasAccess( 'section', 'edit' ) )
         {
             throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
         }
@@ -111,6 +111,11 @@ class SectionServiceStub implements SectionService
      */
     public function updateSection( Section $section, SectionUpdateStruct $sectionUpdateStruct )
     {
+        if ( true !== $this->repository->hasAccess( 'section', 'edit' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
+
         if ( isset( $this->identifiers[$sectionUpdateStruct->identifier] ) &&
             ( $this->identifiers[$sectionUpdateStruct->identifier] !== $section->id ) )
         {
@@ -145,6 +150,10 @@ class SectionServiceStub implements SectionService
      */
     public function loadSection( $sectionId )
     {
+        if ( true !== $this->repository->hasAccess( 'section', 'read' ) )
+        {
+            throw new UnauthorizedExceptionStub( '@TODO: What error code should be used?' );
+        }
         if ( isset( $this->sections[$sectionId] ) )
         {
             return $this->sections[$sectionId];

@@ -73,13 +73,17 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
         {
             // TODO: REMOVE THIS WORKAROUND AND CREATE A FRESH USER
             $user   = new UserStub( array( 'id' => 1 ) );
-            $policy = new PolicyStub( array( 'module' => $module, 'function' => $function ) );
 
             $this->repository = new RepositoryStub();
             $this->repository->setCurrentUser( $user );
-            // TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES
-            $this->repository->getRoleService()->setPoliciesForUser( $user, array( $policy ) );
         }
+
+        // TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES
+        $this->repository->getRoleService()->setPoliciesForUser(
+            $this->repository->getCurrentUser(),
+            array( new PolicyStub( array( 'module' => $module, 'function' => $function ) ) )
+        );
+
         return $this->repository;
     }
 

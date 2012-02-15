@@ -72,7 +72,7 @@ class SectionServiceTest extends BaseTest
      */
     public function testCreateSectionThrowsUnauthorizedException()
     {
-        $repository = $this->getRepositoryWithRestriction( 'section', 'view' );
+        $repository = $this->getRepositoryWithRestriction( 'content', '*' );
 
         /* BEGIN: Use Case */
         $sectionService = $repository->getSectionService();
@@ -171,7 +171,27 @@ class SectionServiceTest extends BaseTest
      */
     public function testLoadSectionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for SectionService::loadSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $authorizedSectionService = $repository->getSectionService();
+
+        $sectionCreate             = $authorizedSectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $sectionId = $authorizedSectionService->createSection( $sectionCreate )->id;
+        /* END: Use Case */
+
+        $repository = $this->getRepositoryWithRestriction( 'content', '*' );
+
+        /* BEGIN: Use Case */
+        // Somewhere else with an user who hasn't access to sections
+        $unauthorizedSectionService = $repository->getSectionService();
+
+        // This call will fail with an UnauthorizedException
+        $unauthorizedSectionService->loadSection( $sectionId );
+        /* END: Use Case */
     }
 
     /**
@@ -293,7 +313,30 @@ class SectionServiceTest extends BaseTest
      */
     public function testUpdateSectionThrowsUnauthorizedException()
     {
-        $this->markTestIncomplete( "Test for SectionService::updateSection() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $authorizedSectionService = $repository->getSectionService();
+
+        $sectionCreate             = $authorizedSectionService->newSectionCreateStruct();
+        $sectionCreate->name       = 'Test Section';
+        $sectionCreate->identifier = 'uniqueKey';
+
+        $section = $authorizedSectionService->createSection( $sectionCreate );
+        /* END: Use Case */
+
+        $repository = $this->getRepositoryWithRestriction( 'content', '*' );
+
+        /* BEGIN: Use Case */
+        // Somewhere else with an user who hasn't access to sections
+        $unauthorizedSectionService = $repository->getSectionService();
+
+        $sectionUpdate       = $unauthorizedSectionService->newSectionUpdateStruct();
+        $sectionUpdate->name = 'Updated section name';
+
+        // This call will fail with an UnauthorizedException
+        $unauthorizedSectionService->updateSection( $section, $sectionUpdate );
+        /* END: Use Case */
     }
 
     /**
