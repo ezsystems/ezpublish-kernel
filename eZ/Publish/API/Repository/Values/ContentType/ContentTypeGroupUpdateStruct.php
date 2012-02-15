@@ -5,10 +5,14 @@ use eZ\Publish\API\Repository\Values\ValueObject;
 /**
  * This class is used for updating a content type group
  * 
- * @property-write $names $names[$language] calls setName($language)
- * @property-write $name calls setName() for setting a namein the initial language
- * @property-write $descriptions $descriptions[$language] calls setDescription($language)
- * @property-write $description calls setDescription() for setting a description in an initial language
+ * @property $names the collection of names with languageCode keys. 
+ *           the calls <code>$ctcs->names[$language] = "abc"</code> and <code>$ctcs->setName("abc",$language)</code> are equivalent
+ * @property $name the name of the content type in the main language
+ *           the calls  <code>$ctcs->name = "abc"</code> and <code>$ctcs->setName("abc")</code> are equivalent calls
+ * @property $descriptions the collection of descriptions with languageCode keys. 
+ *           the calls <code>$ctcs->descriptions[$language] = "abc"</code> and <code>$ctcs->setDescription("abc",$language)</code> are equivalent
+ * @property $name the name of the content type in the main language
+ *           the calls  <code>$ctcs->name = "abc"</code> and <code>$ctcs->setName("abc")</code> are equivalent calls
  */
 abstract class ContentTypeGroupUpdateStruct extends ValueObject
 {
