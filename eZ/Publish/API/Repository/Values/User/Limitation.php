@@ -3,7 +3,7 @@ namespace eZ\Publish\API\Repository\Values\User;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 /**
- * This class represents a Limitation apllied to a policy
+ * This class represents a Limitation applied to a policy
  */
 abstract class Limitation extends ValueObject
 {

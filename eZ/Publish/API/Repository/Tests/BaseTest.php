@@ -12,8 +12,11 @@ namespace eZ\Publish\API\Repository\Tests;
 use \PHPUnit_Framework_TestCase;
 use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\Tests\Stubs\RepositoryStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\UserStub;
+use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\PolicyStub;
 
 use \eZ\Publish\API\Repository\Values\ValueObject;
+
 
 /**
  * Base class for api specific tests.
@@ -44,9 +47,32 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
     {
         if ( null === $this->repository )
         {
+            // TODO: REMOVE THIS WORKAROUND AND CREATE A FRESH USER
+            $user = new UserStub( array( 'id' => 1 ) );
+
             $this->repository = new RepositoryStub();
+            $this->repository->setCurrentUser( $user );
+
+            $this->setUserPolicy( '*', '*' );
         }
         return $this->repository;
+    }
+
+    /**
+     * Workaround to emulate user policies.
+     *
+     * @param string $module
+     * @param string $function
+     *
+     * @return void
+     */
+    protected function setUserPolicy( $module, $function )
+    {
+        $user = $this->repository->getCurrentUser();
+        $policy = new PolicyStub( array( 'module' => $module, 'function' => $function ) );
+
+        // TODO: REMOVE THIS WORKAROUND AND CREATE POLICIES
+        $this->repository->getRoleService()->setPoliciesForUser( $user, array( $policy ) );
     }
 
     /**
@@ -57,35 +83,58 @@ abstract class BaseTest extends PHPUnit_Framework_TestCase
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
      * @return void
      */
-    protected function assertPropertiesCorrect( array $expectedValues, ValueObject $actualObject  )
+    protected function assertPropertiesCorrect( array $expectedValues, ValueObject $actualObject )
     {
         foreach ( $expectedValues as $propertyName => $propertyValue )
         {
-            $this->assertEquals(
-                $propertyValue,
-                $actualObject->$propertyName,
-                sprintf( 'Object property "%s" incorrect.', $propertyName )
+            $this->assertPropertiesEqual(
+                $propertyName, $propertyValue, $actualObject->$propertyName
             );
         }
     }
 
     /**
      * Asserts all properties from $expectedValues are correctly set in
-     * $actualObject.
+     * $actualObject. Additional (virtual) properties can be asserted using
+     * $additionalProperties.
      *
      * @param \eZ\Publish\API\Repository\Values\ValueObject $expectedValues
      * @param \eZ\Publish\API\Repository\Values\ValueObject $actualObject
+     * @param array $propertyNames
      * @return void
      */
-    protected function assertStructPropertiesCorrect( ValueObject $expectedValues, ValueObject $actualObject )
+    protected function assertStructPropertiesCorrect( ValueObject $expectedValues, ValueObject $actualObject, array $additionalProperties = array() )
     {
         foreach ( $expectedValues as $propertyName => $propertyValue )
         {
-            $this->assertEquals(
-                $propertyValue,
-                $actualObject->$propertyName,
-                sprintf( 'Object property "%s" incorrect.', $propertyName )
+            $this->assertPropertiesEqual(
+                $propertyName, $propertyValue, $actualObject->$propertyName
             );
         }
+
+        foreach ( $additionalProperties as $propertyName )
+        {
+            $this->assertPropertiesEqual(
+                $propertyName, $expectedValues->$propertyName, $actualObject->$propertyName
+            );
+        }
+    }
+
+    private function assertPropertiesEqual( $propertyName, $expectedValue, $actualValue )
+    {
+        if( $expectedValue instanceof \ArrayObject )
+        {
+            $expectedValue = $expectedValue->getArrayCopy();
+        }
+        if( $actualValue instanceof \ArrayObject )
+        {
+            $actualValue = $actualValue->getArrayCopy();
+        }
+
+        $this->assertEquals(
+            $expectedValue,
+            $actualValue,
+            sprintf( 'Object property "%s" incorrect.', $propertyName )
+        );
     }
 }

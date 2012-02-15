@@ -22,6 +22,11 @@ use \eZ\Publish\API\Repository\Values\ValueObject;
 class RepositoryStub implements Repository
 {
     /**
+     * @var \eZ\Publish\API\Repository\Values\User\User
+     */
+    private $currentUser;
+
+    /**
      * @var \eZ\Publish\API\Repository\Tests\Stubs\SectionServiceStub
      */
     private $sectionService;
@@ -48,7 +53,7 @@ class RepositoryStub implements Repository
      */
     public function getCurrentUser()
     {
-        // TODO: Implement getCurrentUser() method.
+        return $this->currentUser;
     }
 
     /**
@@ -59,7 +64,7 @@ class RepositoryStub implements Repository
      */
     public function setCurrentUser( User $user )
     {
-        // TODO: Implement setCurrentUser() method.
+        $this->currentUser = $user;
     }
 
     /**
@@ -72,8 +77,49 @@ class RepositoryStub implements Repository
      */
     public function hasAccess( $module, $function, User $user = null )
     {
-        // TODO: Implement hasAccess() method.
+        $limitations = array();
+
+        $user = $user ?: $this->getCurrentUser();
+
+        $roleService = $this->getRoleService();
+        foreach ( $roleService->loadPoliciesByUserId( $user->id ) as $policy )
+        {
+            if ( $policy->module === '*' )
+            {
+                return true;
+            }
+            if ( $policy->module !== $module )
+            {
+                continue;
+            }
+            if ( $policy->function === '*' )
+            {
+                return true;
+            }
+            if ( $policy->function !== $function )
+            {
+                continue;
+            }
+
+            // TODO: $policy->getLimitations() === '*'
+
+            foreach ( $policy->getLimitations() as $limitation )
+            {
+                $limitations[] = $limitation;
+            }
+        }
+
+        if ( 0 === count( $limitations ) )
+        {
+            return $limitations;
+        }
+        return false;
     }
+
+    /**
+     * @return \eZ\Publish\API\Repository\Values\User\Policy[]
+     */
+    function foo() {}
 
     /**
      * Indicates if the current user is allowed to perform an action given by the function on the given
@@ -113,7 +159,7 @@ class RepositoryStub implements Repository
     {
         if ( null === $this->languageService )
         {
-            $this->languageService = new LanguageServiceStub();
+            $this->languageService = new LanguageServiceStub( $this );
         }
         return $this->languageService;
     }

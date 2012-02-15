@@ -9,6 +9,7 @@
 
 namespace eZ\Publish\API\Repository\Tests\Stubs;
 
+use \eZ\Publish\API\Repository\Repository;
 use \eZ\Publish\API\Repository\LanguageService;
 use \eZ\Publish\API\Repository\Values\Content\Language;
 use \eZ\Publish\API\Repository\Values\Content\LanguageCreateStruct;
@@ -38,6 +39,21 @@ class LanguageServiceStub implements LanguageService
      * @var array
      */
     private $codes = array();
+
+    /**
+     * @var \eZ\Publish\API\Repository\Repository
+     */
+    private $repository;
+
+    /**
+     * Instantiates the language service.
+     *
+     * @param \eZ\Publish\API\Repository\Repository $repository
+     */
+    public function __construct( Repository $repository )
+    {
+        $this->repository = $repository;
+    }
 
     /**
      * Creates the a new Language in the content repository

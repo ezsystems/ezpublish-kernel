@@ -49,6 +49,42 @@ class ContentTypeServiceStub implements ContentTypeService
     private $nextGroupId = 0;
 
     /**
+     * Properties of a ContentTypeGroup
+     *
+     * @var string[]
+     */
+    private $groupProperties;
+
+    /**
+     *
+     */
+    public function __construct()
+    {
+        $this->initGroupProperties();
+    }
+
+    /**
+     * Initialize array of reflected group properties
+     *
+     * @return void
+     */
+    protected function initGroupProperties()
+    {
+        $this->groupProperties = array();
+
+        $reflectionClass = new \ReflectionClass(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeGroup'
+        );
+
+        foreach ( $reflectionClass->getProperties() as $reflectionProperty )
+        {
+            $this->groupProperties[] = $reflectionProperty->name;
+        }
+        $this->groupProperties[] = 'names';
+        $this->groupProperties[] = 'descriptions';
+    }
+
+    /**
      * Create a Content Type Group object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to create a content type group
@@ -60,11 +96,13 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function createContentTypeGroup( ContentTypeGroupCreateStruct  $contentTypeGroupCreateStruct )
     {
-
         $data = array();
-        foreach ( $contentTypeGroupCreateStruct as $propertyName => $propertyValue )
+        foreach ( $this->groupProperties as $propertyName )
         {
-            $data[$propertyName] = $propertyValue;
+            if ( isset( $contentTypeGroupCreateStruct->$propertyName ) )
+            {
+                $data[$propertyName] = $contentTypeGroupCreateStruct->$propertyName;
+            }
         }
 
         $data['id'] = $this->nextGroupId++;
@@ -154,14 +192,16 @@ class ContentTypeServiceStub implements ContentTypeService
 
         $data = array();
 
-        $data['id'] = $contentTypeGroup->id;
-        foreach ( $contentTypeGroup as $propertyName => $propertyValue )
+        foreach ( $this->groupProperties as $propertyName )
         {
-            $data[$propertyName] = $propertyValue;
-        }
-        foreach ( $contentTypeGroupUpdateStruct as $propertyName => $propertyValue )
-        {
-            $data[$propertyName] = $propertyValue;
+            if ( isset( $contentTypeGroup->$propertyName ) )
+            {
+                $data[$propertyName] = $contentTypeGroup->$propertyName;
+            }
+            if ( isset( $contentTypeGroupUpdateStruct->$propertyName ) )
+            {
+                $data[$propertyName] = $contentTypeGroupUpdateStruct->$propertyName;
+            }
         }
 
         $newGroup = new ContentTypeGroupStub( $data );

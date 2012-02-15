@@ -13,10 +13,10 @@ use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 
 /**
- * Stubbed implementation of the {@link \eZ\Publish\API\Repository\RoleCreateStruct}
- * interface.
+ * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\RoleCreateStruct}
+ * class.
  *
- * @see \eZ\Publish\API\Repository\RoleCreateStruct
+ * @see \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
  */
 class RoleCreateStructStub extends RoleCreateStruct
 {
@@ -28,6 +28,16 @@ class RoleCreateStructStub extends RoleCreateStruct
     public function __construct( $name )
     {
         parent::__construct( array( 'name' => $name ) );
+    }
+
+    /**
+     * Returns policies associated with the role
+     *
+     * @return \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct[]
+     */
+    public function getPolicies()
+    {
+        // TODO: Implement getPolicies() method.
     }
 
     /**
