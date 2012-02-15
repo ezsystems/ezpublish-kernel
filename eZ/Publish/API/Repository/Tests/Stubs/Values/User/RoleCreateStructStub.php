@@ -13,10 +13,10 @@ use \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct;
 use \eZ\Publish\API\Repository\Values\User\RoleCreateStruct;
 
 /**
- * Stubbed implementation of the {@link \eZ\Publish\API\Repository\RoleCreateStruct}
- * interface.
+ * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\RoleCreateStruct}
+ * class.
  *
- * @see \eZ\Publish\API\Repository\RoleCreateStruct
+ * @see \eZ\Publish\API\Repository\Values\User\RoleCreateStruct
  */
 class RoleCreateStructStub extends RoleCreateStruct
 {

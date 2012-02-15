@@ -20,6 +20,7 @@ use \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct;
 use \eZ\Publish\API\Repository\Values\User\User;
 use \eZ\Publish\API\Repository\Values\User\UserGroup;
 
+use \eZ\Publish\API\Repository\Tests\Stubs\Exceptions\NotFoundExceptionStub;
 use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
 
 /**
@@ -30,6 +31,14 @@ use \eZ\Publish\API\Repository\Tests\Stubs\Values\User\RoleCreateStructStub;
  */
 class RoleServiceStub implements RoleService
 {
+    /**
+     * Temporary solution to emulate user policies.
+     *
+     * @var \eZ\Publish\API\Repository\Values\User\Policy[]
+     * @todo REMOVE THIS WORKAROUND
+     */
+    private $userPolicies = array();
+
     /**
      * Creates a new Role
      *
@@ -157,6 +166,11 @@ class RoleServiceStub implements RoleService
      */
     public function loadPoliciesByUserId( $userId )
     {
+        if ( isset( $this->userPolicies[$userId] ) )
+        {
+            return $this->userPolicies[$userId];
+        }
+        throw new NotFoundExceptionStub( '@TODO: What error code should be used?' );
         // TODO: Implement loadPoliciesByUserId() method.
     }
 
@@ -303,5 +317,19 @@ class RoleServiceStub implements RoleService
     public function newRoleUpdateStruct()
     {
         // TODO: Implement newRoleUpdateStruct() method.
+    }
+
+    /**
+     * Temporary method to simulate user policies.
+     *
+     * @param \eZ\Publish\API\Repository\Values\User\User $user
+     * @param \eZ\Publish\API\Repository\Values\User\Policy[] $policies
+     *
+     * @return void
+     * @todo REMOVE THIS WORKAROUND
+     */
+    public function setPoliciesForUser( User $user, array $policies )
+    {
+        $this->userPolicies[$user->id] = $policies;
     }
 }

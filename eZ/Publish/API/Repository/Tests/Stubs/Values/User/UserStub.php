@@ -12,10 +12,10 @@ namespace eZ\Publish\API\Repository\Tests\Stubs\Values\User;
 use \eZ\Publish\API\Repository\Values\User\User;
 
 /**
- * Stubbed implementation of the {@link \eZ\Publish\API\Repository\User}
- * interface.
+ * Stubbed implementation of the {@link \eZ\Publish\API\Repository\Values\User\User}
+ * class.
  *
- * @see \eZ\Publish\API\Repository\User
+ * @see \eZ\Publish\API\Repository\Values\User\User
  */
 class UserStub extends User
 {

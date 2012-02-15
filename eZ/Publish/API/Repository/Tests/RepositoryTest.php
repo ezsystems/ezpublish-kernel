@@ -26,7 +26,13 @@ class RepositoryTest extends BaseTest
      */
     public function testGetCurrentUser()
     {
-        $this->markTestIncomplete( "Test for Repository::getCurrentUser() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $currentUser = $repository->getCurrentUser();
+        /* END: Use Case */
+
+        $this->assertNotNull( $currentUser );
     }
 
     /**
@@ -34,11 +40,10 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::setCurrentUser()
-     * 
      */
     public function testSetCurrentUser()
     {
-        $this->markTestIncomplete( "Test for Repository::setCurrentUser() is not implemented." );
+        $this->markTestIncomplete( "Test for Repository::testSetCurrentUser() is not implemented." );
     }
 
     /**
