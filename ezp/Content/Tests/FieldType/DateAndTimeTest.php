@@ -72,12 +72,13 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     public function testDefaultValue()
     {
         $ft = new DateAndTime();
+        $value = $ft->getDefaultValue();
         self::assertInstanceOf(
             'eZ\\Publish\\Core\\Repository\\FieldType\\DateAndTime\\Value',
-            $ft->getValue()
+            $value
         );
-        self::assertInstanceOf( 'DateTime', $ft->getValue()->value );
-        self::assertLessThanOrEqual( 1, time() - $ft->getValue()->value->getTimestamp() );
+        self::assertInstanceOf( 'DateTime', $value->value );
+        self::assertLessThanOrEqual( 1, time() - $value->value->getTimestamp() );
     }
 
     /**
@@ -131,19 +132,16 @@ class DateAndTimeTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group dateTime
-     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\DateAndTime\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
-        $string = 'Test of FieldValue';
         $ft = new DateAndTime();
-        $ft->setValue( $fv = new DateAndTimeValue( new DateTime( '@1048633200' ) ) );
+        $ts = 1048633200;
+        $fieldValue = $ft->toPersistenceValue( new DateAndTimeValue( new DateTime( "@$ts" ) ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
-        self::assertSame( array( 'sort_key_int' => $fv->value->getTimestamp() ), $fieldValue->sortKey );
+        self::assertSame( $ts, $fieldValue->data );
+        self::assertSame( array( 'sort_key_int' => $ts ), $fieldValue->sortKey );
     }
 
     /**

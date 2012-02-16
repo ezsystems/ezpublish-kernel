@@ -97,18 +97,15 @@ class TextLineTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group textLine
-     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\TextLine\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $string = 'Test of FieldValue';
         $ft = new TextLine();
-        $ft->setValue( $fv = new TextLineValue( $string ) );
+        $fieldValue = $ft->toPersistenceValue( new TextLineValue( $string ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( $string, $fieldValue->data );
         self::assertSame( array( 'sort_key_string' => $string ), $fieldValue->sortKey );
     }
 

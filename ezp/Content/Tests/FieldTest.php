@@ -74,7 +74,6 @@ class FieldTest extends BaseContentTest
             self::assertSame( $field->fieldDefinition->fieldType, $field->type );
             self::assertSame( $field->version->versionNo, $field->versionNo );
             self::assertSame( $field->fieldDefinition->defaultValue, $field->value );
-            self::assertSame( $field->value, $field->fieldDefinition->type->getValue() );
         }
     }
 
@@ -104,7 +103,6 @@ class FieldTest extends BaseContentTest
         $field = $this->fields['title'];
         $field->setValue( $value );
         self::assertSame( $value, $field->getValue() );
-        self::assertsame( $value, $field->fieldDefinition->type->getValue() );
     }
 
     /**

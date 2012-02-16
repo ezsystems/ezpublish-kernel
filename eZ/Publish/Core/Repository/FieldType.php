@@ -13,9 +13,8 @@ use ezp\Content\Version,
     eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\Core\Repository\FieldType\Value,
     eZ\Publish\Core\Repository\FieldType\Validator,
-    eZ\Publish\SPI\Persistence\Content\FieldValue as PersistenceFieldValue,
+    eZ\Publish\SPI\Persistence\Content\FieldValue,
     eZ\Publish\SPI\Persistence\Content\FieldTypeConstraints,
-    ezp\Base\Observer,
     ezp\Base\Observable,
     ezp\Base\Repository as BaseRepository,
     ezp\Base\Exception\InvalidArgumentValue,
@@ -40,7 +39,7 @@ use ezp\Content\Version,
  *
  * @todo Merge and optimize concepts for settings, validator data and field type properties.
  */
-abstract class FieldType implements Observer
+abstract class FieldType
 {
     /**
      * @var \eZ\Publish\Core\Repository\FieldType\FieldSettings Custom properties which are specific to the field
@@ -199,40 +198,20 @@ abstract class FieldType implements Observer
      *
      * @return \eZ\Publish\Core\Repository\FieldType\Value
      */
-    abstract protected function getDefaultValue();
+    abstract public function getDefaultValue();
 
     /**
-     * Method to populate the FieldValue struct for field types
-     *
-     * @internal
-     * @return void
-     */
-    public final function toFieldValue()
-    {
-        // @todo Evaluate if creating the sortKey in every case is really needed
-        //       Couldn't this be retrieved with a method, which would initialize
-        //       that info on request only?
-        return new PersistenceFieldValue(
-            array(
-                "data" => $this->getValue(),
-                "sortKey" => $this->getSortInfo(),
-                "fieldSettings" => $this->getFieldTypeSettings()
-            )
-        );
-    }
-
-    /**
-     * Returns information for PersistenceFieldValue->$sortKey relevant to the field type.
+     * Returns information for FieldValue->$sortKey relevant to the field type.
      * Return value is an array where key is the sort type, value is field value to be used for sorting.
      * Sort type can be :
      *  - sort_key_string (sorting will be made with a string algorithm)
      *  - sort_key_int (sorting will be made with an integer algorithm)
      *
      * <code>
-     * protected function getSortInfo()
+     * protected function getSortInfo( Value $value )
      * {
      *     // Example for a text line type:
-     *     return array( 'sort_key_string' => $this->getValue()->text );
+     *     return array( 'sort_key_string' => $value->text );
      *
      *     // Example for an int:
      *     // return array( 'sort_key_int' => 123 );
@@ -243,9 +222,12 @@ abstract class FieldType implements Observer
      * </code>
      *
      * @abstract
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     *
      * @return array|bool Array with sortInfo, or false if the Type doesn't support sorting
      */
-    abstract protected function getSortInfo();
+    abstract protected function getSortInfo( Value $value );
 
     /**
      * Used by the FieldDefinition to populate the $fieldTypeConstraints->validators field.
@@ -343,5 +325,38 @@ abstract class FieldType implements Observer
     protected function onFieldSetValue( Observable $subject, Value $value )
     {
         $this->setValue( $value );
+    }
+
+    /**
+     * Converts a $value to a persistence value
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     *
+     * @return \ezp\Persistence\Content\FieldValue
+     */
+    public function toPersistenceValue( Value $value )
+    {
+        // @todo Evaluate if creating the sortKey in every case is really needed
+        //       Couldn't this be retrieved with a method, which would initialize
+        //       that info on request only?
+        return new FieldValue(
+            array(
+                "data" => $this->toHash( $value ),
+                //"externalData" => null,
+                "sortKey" => $this->getSortInfo( $value ),
+            )
+        );
+    }
+
+    /**
+     * Converts a persistence $fieldValue to a Value
+     *
+     * @param \ezp\Persistence\Content\FieldValue $fieldValue
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value
+     */
+    public function fromPersistenceValue( FieldValue $fieldValue )
+    {
+        return $this->fromHash( $fieldValue->data );
     }
 }

@@ -61,6 +61,11 @@ class Value extends BaseValue implements ValueInterface
         }
     }
 
+    public function getCountries()
+    {
+        return $this->values;
+    }
+
     public function getCountriesInfo()
     {
         return $this->data;

@@ -74,7 +74,7 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
         self::assertFalse( $ft->getFieldSetting( 'defaultValue' ) );
         $ft->setFieldSetting( 'defaultValue', true );
         self::assertTrue(
-            $ft->getValue()->bool,
+            $ft->getDefaultValue()->bool,
             'defaultValue setting should be reflected in default value object'
         );
     }
@@ -128,16 +128,14 @@ class CheckboxTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group ezboolean
-     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Checkbox\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $ft = new Checkbox();
-        $ft->setValue( $fv = new CheckboxValue( true ) );
-        $fieldValue = $ft->toFieldValue();
+        $fieldValue = $ft->toPersistenceValue( new CheckboxValue( true ) );
 
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( true, $fieldValue->data );
         self::assertSame( array( 'sort_key_int' => 1 ), $fieldValue->sortKey );
     }
 

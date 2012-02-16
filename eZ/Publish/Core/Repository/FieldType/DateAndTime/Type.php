@@ -43,7 +43,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\Repository\FieldType\DateAndTime\Value
      */
-    protected function getDefaultValue()
+    public function getDefaultValue()
     {
         return new Value;
     }
@@ -75,12 +75,36 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo()
+    protected function getSortInfo( BaseValue $value )
     {
         $timestamp = 0;
-        if ( $this->getValue()->value instanceof DateTime )
-            $timestamp = $this->getValue()->value->getTimestamp();
+        if ( $value->value instanceof DateTime )
+            $timestamp = $value->value->getTimestamp();
 
         return array( 'sort_key_int' => $timestamp );
+    }
+
+    /**
+     * Converts an $hash to the Value defined by the field type
+     *
+     * @param int $hash Number of seconds since Unix Epoch
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     */
+    public function fromHash( $hash )
+    {
+        return new Value( "@$hash" );
+    }
+
+    /**
+     * Converts a $Value to a hash
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash( BaseValue $value )
+    {
+        return $value->value->getTimestamp();
     }
 }

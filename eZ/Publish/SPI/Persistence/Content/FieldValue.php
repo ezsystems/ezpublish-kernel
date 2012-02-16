@@ -22,7 +22,7 @@ class FieldValue extends ValueObject
      * @note: For the "old" storage engine we will need adaptors to map them to
      * the existing database fields, like data_int, data_float, data_text.
      *
-     * @var eZ\Publish\Core\Repository\FieldType\Value
+     * @var mixed
      */
     public $data;
 

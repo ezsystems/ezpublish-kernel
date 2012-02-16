@@ -99,17 +99,15 @@ class SelectionTest extends PHPUnit_Framework_TestCase
     /**
      * @group fieldType
      * @group selection
-     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Selection\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $string = "Choice1";
         $ft = new Selection();
-        $ft->setValue( $fv = new SelectionValue( (array)$string ) );
+        $fieldValue = $ft->toPersistenceValue( new SelectionValue( (array)$string ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
+        self::assertSame( array( $string ), $fieldValue->data );
         self::assertSame( array( "sort_key_string" => $string ), $fieldValue->sortKey );
     }
 

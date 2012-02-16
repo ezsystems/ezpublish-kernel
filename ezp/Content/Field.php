@@ -85,7 +85,6 @@ class Field extends Model implements Observer
 
         // Observer setup
         $fieldType = $this->fieldDefinition->getType();
-        $this->attach( $fieldType, 'field/setValue' );
 
         if ( $fieldType instanceof OnPublishFieldType )
         {

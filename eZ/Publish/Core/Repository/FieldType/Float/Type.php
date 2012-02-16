@@ -32,7 +32,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\Repository\FieldType\Float\Value
      */
-    protected function getDefaultValue()
+    public function getDefaultValue()
     {
         return new Value();
     }
@@ -61,11 +61,35 @@ class Type extends FieldType
      * @todo Sort seems to not be supported by this FieldType, is this handled correctly?
      * @return array
      */
-    protected function getSortInfo()
+    protected function getSortInfo( BaseValue $value )
     {
         return array(
             'sort_key_string' => '',
             'sort_key_int' => 0
         );
+    }
+
+    /**
+     * Converts an $hash to the Value defined by the field type
+     *
+     * @param mixed $hash
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     */
+    public function fromHash( $hash )
+    {
+        return new Value( $hash );
+    }
+
+    /**
+     * Converts a $Value to a hash
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash( BaseValue $value )
+    {
+        return $value->value;
     }
 }

@@ -50,7 +50,7 @@ class Type extends FieldType implements OnPublish, OnCreate
      *
      * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
      */
-    protected function getDefaultValue()
+    public function getDefaultValue()
     {
         $value = <<< EOF
 <?xml version="1.0" encoding="utf-8"?>
@@ -100,7 +100,7 @@ EOF;
      *
      * @return array|bool
      */
-    protected function getSortInfo()
+    protected function getSortInfo( BaseValue $value )
     {
         return false;
     }
@@ -161,5 +161,29 @@ EOF;
      */
     public function onPostCreate( Repository $repository, Field $field )
     {
+    }
+
+    /**
+     * Converts an $hash to the Value defined by the field type
+     *
+     * @param mixed $hash
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     */
+    public function fromHash( $hash )
+    {
+        return new Value( $hash );
+    }
+
+    /**
+     * Converts a $Value to a hash
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash( BaseValue $value )
+    {
+        return $value->text;
     }
 }

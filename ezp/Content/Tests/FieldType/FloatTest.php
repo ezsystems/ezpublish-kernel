@@ -77,18 +77,15 @@ class FloatTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Float\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $ft = new Float();
-        $ft->setValue( $fv = new FloatValue( 42.42 ) );
+        $fieldValue = $ft->toPersistenceValue( new FloatValue( 42.42 ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
+        self::assertSame( 42.42, $fieldValue->data );
         self::assertSame( array( "sort_key_string" => "", "sort_key_int" => 0 ), $fieldValue->sortKey );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
     }
 
     /**

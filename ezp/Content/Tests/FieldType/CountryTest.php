@@ -74,18 +74,15 @@ class CountryTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Country\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $countries = array( "Belgium", "Norway" );
         $ft = new Country();
-        $ft->setValue( $fv = new CountryValue( $countries ) );
+        $fieldValue = $ft->toPersistenceValue( new CountryValue( $countries ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( $countries, $fieldValue->data );
     }
 
     /**

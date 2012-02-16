@@ -31,7 +31,7 @@ class Type extends FieldType
      *       Shouldn't an exception be used?
      * @return \eZ\Publish\Core\Repository\FieldType\Country\Value
      */
-    protected function getDefaultValue()
+    public function getDefaultValue()
     {
         return new Value( "" );
     }
@@ -59,10 +59,10 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo()
+    protected function getSortInfo( BaseValue $value )
     {
         $countries = array();
-        foreach ( $this->getValue()->getCountriesInfo() as $countryInfo )
+        foreach ( $value->getCountriesInfo() as $countryInfo )
         {
             $countries[] = strtolower( $countryInfo["Name"] );
         }
@@ -72,5 +72,29 @@ class Type extends FieldType
         return array(
             'sort_key_string' => implode( ",", $countries )
         );
+    }
+
+    /**
+     * Converts an $hash to the Value defined by the field type
+     *
+     * @param mixed $hash
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     */
+    public function fromHash( $hash )
+    {
+        return new Value( $hash );
+    }
+
+    /**
+     * Converts a $Value to a hash
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash( BaseValue $value )
+    {
+        return $value->getCountries();
     }
 }

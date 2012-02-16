@@ -28,7 +28,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\Repository\FieldType\Keyword\Value
      */
-    protected function getDefaultValue()
+    public function getDefaultValue()
     {
         return new Value( array() );
     }
@@ -52,10 +52,35 @@ class Type extends FieldType
      * Returns information for FieldValue->$sortKey relevant to the field type.
      *
      * @todo Review this, created from copy/paste to unblock failing tests!
+     *       According to me (PA) sorting on keywords should not be supported.
      * @return array
      */
-    protected function getSortInfo()
+    protected function getSortInfo( BaseValue $value )
     {
-        return array( "sort_key_int" => $this->getValue() );
+        return false;
+    }
+
+    /**
+     * Converts an $hash to the Value defined by the field type
+     *
+     * @param mixed $hash
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     */
+    public function fromHash( $hash )
+    {
+        return new Value( $hash );
+    }
+
+    /**
+     * Converts a $Value to a hash
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash( BaseValue $value )
+    {
+        return $value->values;
     }
 }

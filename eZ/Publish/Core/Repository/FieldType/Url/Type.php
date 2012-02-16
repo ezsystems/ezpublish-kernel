@@ -34,7 +34,7 @@ class Type extends FieldType
      *       Shouldn't an exception be used?
      * @return \eZ\Publish\Core\Repository\FieldType\Url\Value
      */
-    protected function getDefaultValue()
+    public function getDefaultValue()
     {
         return new Value( $this->fieldSettings["defaultText"] );
     }
@@ -63,8 +63,35 @@ class Type extends FieldType
      * @todo Sort seems to not be supported by this FieldType, is this handled correctly?
      * @return array
      */
-    protected function getSortInfo()
+    protected function getSortInfo( BaseValue $value )
     {
         return false;
+    }
+
+    /**
+     * Converts an $hash to the Value defined by the field type
+     *
+     * @param mixed $hash
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     */
+    public function fromHash( $hash )
+    {
+        if ( isset( $hash["text"] ) )
+            return new Value( $hash["link"], $hash["text"] );
+
+        return new Value( $hash["link"] );
+    }
+
+    /**
+     * Converts a $Value to a hash
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash( BaseValue $value )
+    {
+        return array( "link" => $value->link, "text" => $value->text );
     }
 }

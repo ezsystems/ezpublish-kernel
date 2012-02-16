@@ -32,7 +32,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\Repository\FieldType\TextLine\Value
      */
-    protected function getDefaultValue()
+    public function getDefaultValue()
     {
         return new Value( '' );
     }
@@ -61,8 +61,32 @@ class Type extends FieldType
      * @todo String normalization should occur here.
      * @return array
      */
-    protected function getSortInfo()
+    protected function getSortInfo( BaseValue $value )
     {
-        return array( 'sort_key_string' => $this->getValue()->text );
+        return array( 'sort_key_string' => $value->text );
+    }
+
+    /**
+     * Converts an $hash to the Value defined by the field type
+     *
+     * @param mixed $hash
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     */
+    public function fromHash( $hash )
+    {
+        return new Value( $hash );
+    }
+
+    /**
+     * Converts a $Value to a hash
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash( BaseValue $value )
+    {
+        return $value->text;
     }
 }

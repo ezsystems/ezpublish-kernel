@@ -107,7 +107,7 @@ class Service extends BaseService
         foreach ( $currentVersion->getFields() as $field )
         {
             $fieldVo = $field->getState( 'properties' );
-            $fieldVo->value = $field->fieldDefinition->type->toFieldValue();
+            $fieldVo->value = $field->fieldDefinition->type->toPersistenceValue( $field->value );
             // @todo Properly implement language here instead of hardcoding eng-GB
             $fieldVo->language = 'eng-GB';
             $struct->fields[] = $fieldVo;
@@ -149,7 +149,7 @@ class Service extends BaseService
         foreach ( $version->getFields() as $field )
         {
             $fieldStruct = $field->getState( 'properties' );
-            $fieldStruct->value = $field->fieldDefinition->type->toFieldValue();
+            $fieldStruct->value = $field->fieldDefinition->type->toPersistenceValue( $field->value );
             $struct->fields[] = $fieldStruct;
         }
 
@@ -272,7 +272,8 @@ class Service extends BaseService
                 {
                     // @todo Attach observer to Field. See why this method isn't used in buildVersionDomainObject
                     $fields[$identifier] = $field->setState( array( 'properties' => $voField ) );
-                    $fields[$identifier]->setValue( $voField->value->data );
+                    //$fields[$identifier]->setValue( $voField->value->data );
+                    $fields[$identifier]->setValue( $field->fieldDefinition->type->fromPersistenceValue( $voField->value ) );
 
                     // Make the FieldType an Observer for publish events
                     $type = $fields[$identifier]->getFieldDefinition()->getType();
@@ -743,7 +744,7 @@ class Service extends BaseService
                 if ( $field->fieldDefinitionId == $voField->fieldDefinitionId )
                 {
                     $field->setState( array( 'properties' => $voField ) );
-                    $field->setValue( $voField->value->data );
+                    $field->setValue( $field->fieldDefinition->type->fromPersistenceValue( $voField->value ) );
                     continue 2;
                 }
             }

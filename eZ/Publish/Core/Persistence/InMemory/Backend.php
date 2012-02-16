@@ -403,14 +403,17 @@ class Backend
             {
                 if ( $type === "Content\\Field" && $prop === "value" && ! $data["value"] instanceof FieldValue )
                 {
-                    $fieldValueClassName = $this->getFieldTypeNamespace( $obj ) . "\\Value";
+                    $fieldTypeNS = $this->getFieldTypeNamespace( $obj );
+                    $fieldValueClassName =  "$fieldTypeNS\\Value";
                     $fieldTypeValue = new $fieldValueClassName;
                     foreach ( $data["value"] as $fieldValuePropertyName => $fieldValuePropertyValue )
                     {
                         $fieldTypeValue->$fieldValuePropertyName = $fieldValuePropertyValue;
                     }
 
-                    $value = new FieldValue( array( "data" => $fieldTypeValue ) );
+                    $fieldTypeeClassName =  "$fieldTypeNS\\Type";
+                    $fieldType = new $fieldTypeeClassName;
+                    $value = $fieldType->toPersistenceValue( $fieldTypeValue );
                 }
                 else if ( $type === "Content\\Type\\FieldDefinition" && $prop === "fieldTypeConstraints" && !$data["fieldTypeConstraints"] instanceof FieldTypeConstraints )
                 {

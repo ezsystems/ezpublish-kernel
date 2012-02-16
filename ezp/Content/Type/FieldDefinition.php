@@ -107,7 +107,6 @@ class FieldDefinition extends Model
         );
         $this->properties->fieldTypeConstraints->fieldSettings = $this->type->getFieldTypeSettings();
         $this->defaultValue = $this->type->getValue();
-        $this->attach( $this->type, 'field/setValue' );
     }
 
     /**
@@ -239,7 +238,7 @@ class FieldDefinition extends Model
     {
         $this->defaultValue = $value;
         $this->notify( 'field/setValue', array( 'value' => $value ) );
-        $this->properties->defaultValue = $this->type->toFieldValue();
+        $this->properties->defaultValue = $this->type->toPersistenceValue( $value );
     }
 
     /**

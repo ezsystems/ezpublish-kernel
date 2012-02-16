@@ -78,18 +78,15 @@ class RatingTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Rating\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $rating = false;
         $ft = new Rating();
-        $ft->setValue( $fv = new RatingValue( $rating ) );
+        $fieldValue = $ft->toPersistenceValue( $fv = new RatingValue( $rating ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( $rating, $fieldValue->data );
     }
 
     /**

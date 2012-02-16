@@ -77,18 +77,15 @@ class IntegerTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Integer\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $integer = 42;
         $ft = new Integer();
-        $ft->setValue( $fv = new IntegerValue( $integer ) );
+        $fieldValue = $ft->toPersistenceValue( new IntegerValue( $integer ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( $integer, $fieldValue->data );
         self::assertSame( array( "sort_key_int" => $integer ), $fieldValue->sortKey );
     }
 

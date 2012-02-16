@@ -73,18 +73,15 @@ class UrlTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\Url\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         $link = "http://ez.no/";
         $ft = new Url();
-        $ft->setValue( $fv = new UrlValue( $link ) );
+        $fieldValue = $ft->toPersistenceValue( new UrlValue( $link ) );
 
-        $fieldValue = $ft->toFieldValue();
-
-        self::assertSame( $fv, $fieldValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( array( "link" => $link, "text" => null ), $fieldValue->data );
     }
 
     /**

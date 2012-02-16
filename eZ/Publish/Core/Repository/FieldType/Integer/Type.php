@@ -36,7 +36,7 @@ class Type extends FieldType
      *
      * @return \eZ\Publish\Core\Repository\FieldType\Integer\Value
      */
-    protected function getDefaultValue()
+    public function getDefaultValue()
     {
         return new Value( $this->fieldSettings['defaultValue'] );
     }
@@ -68,8 +68,32 @@ class Type extends FieldType
      *
      * @return array
      */
-    protected function getSortInfo()
+    protected function getSortInfo( BaseValue $value )
     {
-        return array( 'sort_key_int' => $this->getValue()->value );
+        return array( 'sort_key_int' => $value->value );
+    }
+
+    /**
+     * Converts an $hash to the Value defined by the field type
+     *
+     * @param mixed $hash
+     *
+     * @return \eZ\Publish\Core\Repository\FieldType\Value $value
+     */
+    public function fromHash( $hash )
+    {
+        return new Value( $hash );
+    }
+
+    /**
+     * Converts a $Value to a hash
+     *
+     * @param \eZ\Publish\Core\Repository\FieldType\Value $value
+     *
+     * @return mixed
+     */
+    public function toHash( BaseValue $value )
+    {
+        return $value->value;
     }
 }

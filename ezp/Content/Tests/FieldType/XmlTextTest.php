@@ -86,20 +86,18 @@ class XmlTextTypeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::toFieldValue
+     * @covers \eZ\Publish\Core\Repository\FieldType\XmlText\Type::toPersistenceValue
      */
-    public function testToFieldValue()
+    public function testToPersistenceValue()
     {
         // @todo Do one per value class
         $value = new XmlTextValue( '', XmlTextValue::INPUT_FORMAT_PLAIN );
 
         $ft = new XmlTextType();
-        $ft->setValue( $value );
 
-        $fieldValue = $ft->toFieldValue();
+        $fieldValue = $ft->toPersistenceValue( $value );
 
-        self::assertSame( $value, $fieldValue->data );
-        self::assertInstanceOf( 'eZ\\Publish\\Core\\Repository\\FieldType\\FieldSettings', $fieldValue->fieldSettings );
+        self::assertSame( "", $fieldValue->data );
     }
 
     public function providerForTestCanParseValueInvalidFormat()

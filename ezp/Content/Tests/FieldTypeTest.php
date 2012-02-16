@@ -170,30 +170,6 @@ class FieldTypeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @group fieldType
-     * @covers \eZ\Publish\Core\Repository\FieldType::toFieldValue
-     */
-    public function testToFieldValue()
-    {
-        $fieldValue = $this->getMock( 'eZ\\Publish\\Core\\Repository\\FieldType\\Value' );
-        $sortingInfo = array( 'sort_key_string' => "The Force is strong" );
-        $this->stub
-            ->expects( $this->once() )
-            ->method( 'canParseValue' )
-            ->will( $this->returnArgument( 0 ) );
-        $this->stub->setValue( $fieldValue );
-        $this->stub
-            ->expects( $this->once() )
-            ->method( 'getSortInfo' )
-            ->will( $this->returnValue( $sortingInfo ) );
-
-        $fieldVo = $this->stub->toFieldValue();
-        self::assertInstanceOf( "eZ\\Publish\\SPI\\Persistence\\Content\\FieldValue", $fieldVo );
-        self::assertEquals( $fieldValue, $fieldVo->data );
-        self::assertSame( $sortingInfo, $fieldVo->sortKey );
-    }
-
-    /**
-     * @group fieldType
      * @covers \eZ\Publish\Core\Repository\FieldType::fillConstraintsFromValidator
      */
     public function testFillConstraintsFromValidator()
