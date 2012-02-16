@@ -85,8 +85,8 @@ class ContentTypeServiceTest extends BaseTest
         $groupCreate->creatorId        = 23;
         $groupCreate->creationDate     = new \DateTime();
         $groupCreate->mainLanguageCode = 'de_DE';
-        $groupCreate->setName( 'A name.' );
-        $groupCreate->setDescription( 'A description.' );
+        $groupCreate->names            = array( 'en_US' => 'A name.' );
+        $groupCreate->descriptions     = array( 'en_US' => 'A description.' );
 
         $group = $contentTypeService->createContentTypeGroup( $groupCreate );
         /* END: Use Case */
@@ -180,8 +180,8 @@ class ContentTypeServiceTest extends BaseTest
         $groupCreate->creatorId        = 23;
         $groupCreate->creationDate     = new \DateTime();
         $groupCreate->mainLanguageCode = 'de_DE';
-        $groupCreate->setName( 'A name.' );
-        $groupCreate->setDescription( 'A description.' );
+        $groupCreate->names            = array( 'en_US' => 'A name.' );
+        $groupCreate->descriptions     = array( 'en_US' => 'A description.' );
 
         $storedGroup = $contentTypeService->createContentTypeGroup( $groupCreate );
         $groupId     = $storedGroup->id;
@@ -413,10 +413,14 @@ class ContentTypeServiceTest extends BaseTest
         $groupUpdate->modificationDate = new \DateTime();
         $groupUpdate->mainLanguageCode = 'en_US';
 
-        $groupUpdate->setName( 'A name', 'en_US' );
-        $groupUpdate->setName( 'A name', 'en_GB' );
-        $groupUpdate->setDescription( 'A description', 'en_US' );
-        $groupUpdate->setDescription( 'A description', 'en_GB' );
+        $groupUpdate->names = array(
+            'en_US' => 'A name',
+            'en_GB' => 'A name',
+        );
+        $groupUpdate->descriptions = array(
+            'en_US' => 'A description',
+            'en_GB' => 'A description',
+        );
 
         $contentTypeService->updateContentTypeGroup( $group, $groupUpdate );
         /* END: Use Case */
@@ -477,8 +481,8 @@ class ContentTypeServiceTest extends BaseTest
         $groupCreate->creatorId        = 23;
         $groupCreate->creationDate     = new \DateTime();
         $groupCreate->mainLanguageCode = 'de_DE';
-        $groupCreate->setName( 'Ein Name', 'de_DE' );
-        $groupCreate->setDescription( 'Eine Beschreibung', 'de_DE' );
+        $groupCreate->names            = array( 'de_DE' => 'Ein Name' );
+        $groupCreate->descriptions     = array( 'de_DE' => 'Eine Beschreibung' );
 
         return $contentTypeService->createContentTypeGroup( $groupCreate );
     }
@@ -603,9 +607,8 @@ class ContentTypeServiceTest extends BaseTest
                 'defaultSortField'       => Location::SORT_FIELD_PUBLISHED,
                 'defaultSortOrder'       => Location::SORT_ORDER_DESC,
                 'defaultAlwaysAvailable' => true,
-                'names'                  => new \ArrayObject(),
-                'descriptions'           => new \ArrayObject(),
-                'fieldDefinitions'       => new \ArrayObject(),
+                'names'                  => null,
+                'descriptions'           => null,
                 'creatorId'              => null,
                 'creationDate'           => null,
             ),
@@ -652,14 +655,14 @@ class ContentTypeServiceTest extends BaseTest
             array(
                 'fieldTypeIdentifier' => 'string',
                 'identifier'          => 'title',
-                'names'               => new \ArrayObject(),
-                'descriptions'        => new \ArrayObject(),
+                'names'               => null,
+                'descriptions'        => null,
                 'fieldGroup'          => null,
                 'position'            => null,
                 'isTranslatable'      => null,
                 'isRequired'          => null,
                 'isInfoCollector'     => null,
-                'validator'           => null,
+                'validators'          => null,
                 'fieldSettings'       => null,
                 'defaultValue'        => null,
                 'isSearchable'        => null,

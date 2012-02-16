@@ -16,7 +16,6 @@
             <file>TrashServiceTest.php</file>
             <file>UserServiceTest.php</file>
             <directory>./Exceptions</directory>
-            <directory>./Values</directory>
         </testsuite>
     </testsuites>
     <filter>
