@@ -1,7 +1,7 @@
 <?php
 namespace eZ\Publish\API\Repository\Values\ContentType;
 
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreate;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 
 use eZ\Publish\API\Repository\Values\ValueObject;
 
@@ -100,9 +100,9 @@ abstract class ContentTypeCreateStruct extends ValueObject
     /**
      * adds a new field definition
      *
-     * @param FieldDefinitionCreate $fieldDef
+     * @param FieldDefinitionCreateStruct $fieldDef
      */
-    abstract public function addFieldDefinition( FieldDefinitionCreate $fieldDef );
+    abstract public function addFieldDefinition( FieldDefinitionCreateStruct $fieldDef );
 
     /**
      * if set this value overrides the current user as creator

@@ -2,7 +2,7 @@
 namespace eZ\Publish\API\Repository\Tests\Stubs\Values\ContentType;
 use eZ\Publish\API\Repository\Values\ContentType\ContentTypeCreateStruct;
 
-use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreate;
+use eZ\Publish\API\Repository\Values\ContentType\FieldDefinitionCreateStruct;
 
 use eZ\Publish\API\Repository\Values\Content\Location;
 
@@ -17,7 +17,7 @@ class ContentTypeCreateStructStub extends ContentTypeCreateStruct
      *
      * @param FieldDefinitionCreate $fieldDef
      */
-    public function addFieldDefinition( FieldDefinitionCreate $fieldDef )
+    public function addFieldDefinition( FieldDefinitionCreateStruct $fieldDef )
     {
         $this->fieldDefinitions[] = $fieldDef;
     }
