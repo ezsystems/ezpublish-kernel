@@ -20,7 +20,6 @@ use eZ\Publish\Core\Repository\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezurl";
-    const IS_SEARCHABLE = false;
 
     protected $allowedSettings = array(
         'defaultText' => ''

@@ -17,7 +17,6 @@ use eZ\Publish\Core\Repository\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezdatetime";
-    const IS_SEARCHABLE = true;
 
     /**
      * Default value types
@@ -106,5 +105,15 @@ class Type extends FieldType
     public function toHash( BaseValue $value )
     {
         return $value->value->getTimestamp();
+    }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return true;
     }
 }

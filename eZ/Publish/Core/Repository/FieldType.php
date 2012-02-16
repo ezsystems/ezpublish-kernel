@@ -358,4 +358,14 @@ abstract class FieldType
     {
         return $this->fromHash( $fieldValue->data );
     }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return false;
+    }
 }

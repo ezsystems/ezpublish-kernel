@@ -20,7 +20,6 @@ use eZ\Publish\Core\Repository\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = 'ezinteger';
-    const IS_SEARCHABLE = true;
 
     protected $allowedValidators = array(
         'eZ\\Publish\\Core\\Repository\\FieldType\\Integer\\IntegerValueValidator'
@@ -95,5 +94,15 @@ class Type extends FieldType
     public function toHash( BaseValue $value )
     {
         return $value->value;
+    }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return true;
     }
 }

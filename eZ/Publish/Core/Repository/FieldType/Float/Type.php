@@ -20,7 +20,6 @@ use eZ\Publish\Core\Repository\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = 'ezfloat';
-    const IS_SEARCHABLE = false;
 
     protected $allowedValidators = array(
         'eZ\\Publish\\Core\\Repository\\FieldType\\Float\\FloatValueValidator'

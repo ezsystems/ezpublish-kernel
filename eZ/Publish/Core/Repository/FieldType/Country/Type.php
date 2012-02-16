@@ -21,7 +21,6 @@ use eZ\Publish\Core\Repository\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezcountry";
-    const IS_SEARCHABLE = true;
 
     /**
      * Returns the fallback default value of field type when no such default
@@ -96,5 +95,15 @@ class Type extends FieldType
     public function toHash( BaseValue $value )
     {
         return $value->getCountries();
+    }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return true;
     }
 }

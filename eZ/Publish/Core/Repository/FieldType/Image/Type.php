@@ -20,7 +20,6 @@ use eZ\Publish\Core\Repository\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = 'ezimage';
-    const IS_SEARCHABLE = false;
 
     /**
      * @see eZ\Publish\Core\Repository\FieldType::$allowedValidators

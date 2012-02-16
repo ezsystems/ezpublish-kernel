@@ -20,7 +20,6 @@ use eZ\Publish\Core\Repository\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezsrrating";
-    const IS_SEARCHABLE = true;
 
     protected $allowedSettings = array();
 
@@ -89,5 +88,15 @@ class Type extends FieldType
     public function toHash( BaseValue $value )
     {
         return $value->isDisabled;
+    }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return true;
     }
 }

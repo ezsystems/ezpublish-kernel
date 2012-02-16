@@ -21,7 +21,6 @@ use eZ\Publish\Core\Repository\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = "ezboolean";
-    const IS_SEARCHABLE = true;
 
     protected $allowedSettings = array(
         'defaultValue' => false
@@ -93,5 +92,15 @@ class Type extends FieldType
     public function toHash( BaseValue $value )
     {
         return $value->bool;
+    }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return true;
     }
 }

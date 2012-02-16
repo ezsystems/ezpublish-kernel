@@ -19,7 +19,6 @@ use eZ\Publish\Core\Repository\FieldType\Value as BaseValue,
 class Type extends TextLine
 {
     const FIELD_TYPE_IDENTIFIER = "eztext";
-    const IS_SEARCHABLE = true;
 
     protected $allowedValidators = array();
 
@@ -68,5 +67,15 @@ class Type extends TextLine
     public function toHash( BaseValue $value )
     {
         return $value->text;
+    }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return true;
     }
 }

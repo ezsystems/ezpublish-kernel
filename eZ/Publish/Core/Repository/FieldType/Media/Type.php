@@ -24,7 +24,6 @@ use eZ\Publish\Core\Repository\FieldType,
 class Type extends FieldType
 {
     const FIELD_TYPE_IDENTIFIER = 'ezmedia';
-    const IS_SEARCHABLE = false;
 
     const TYPE_FLASH = 'flash',
           TYPE_QUICKTIME = 'quick_time',

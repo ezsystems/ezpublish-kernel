@@ -29,7 +29,6 @@ use ezp\Base\Repository,
 class Type extends FieldType implements OnPublish, OnCreate
 {
     const FIELD_TYPE_IDENTIFIER = "ezxmltext";
-    const IS_SEARCHABLE = true;
 
     /**
      * List of settings available for this FieldType
@@ -185,5 +184,15 @@ EOF;
     public function toHash( BaseValue $value )
     {
         return $value->text;
+    }
+
+    /**
+     * Returns whether the field type is searchable
+     *
+     * @return bool
+     */
+    public function isSearchable()
+    {
+        return true;
     }
 }
