@@ -509,21 +509,25 @@ class LocationService implements LocationServiceInterface
 
     protected function buildDomainLocationObject( SPILocation $spiLocation )
     {
+        $contentInfo = $this->repository->getContentService()->loadContentInfo( $spiLocation->contentId );
+
         return new Location( array(
+            'contentInfo'              => $contentInfo,
+            'contentId'                => $contentInfo->contentId,
             'id'                       => $spiLocation->id,
             'priority'                 => $spiLocation->priority,
             'hidden'                   => $spiLocation->hidden,
             'invisible'                => $spiLocation->invisible,
             'remoteId'                 => $spiLocation->remoteId,
-            'contentId'                => $spiLocation->contentId,
             'parentId'                 => $spiLocation->parentId,
-            'pathIdentificationString' => $spiLocation->pathIdentificationString,
             'pathString'               => $spiLocation->pathString,
-            'modifiedSubLocation'      => $spiLocation->modifiedSubLocation,
+            'modifiedSubLocationDate'  => new \DateTime("{@$spiLocation->modifiedSubLocation}"),
             'mainLocationId'           => $spiLocation->mainLocationId,
             'depth'                    => $spiLocation->depth,
             'sortField'                => $spiLocation->sortField,
-            'sortOrder'                => $spiLocation->sortOrder
+            'sortOrder'                => $spiLocation->sortOrder,
+            //@todo: calculate childrenCount
+            'childrenCount'            => 0
         ) );
     }
 }

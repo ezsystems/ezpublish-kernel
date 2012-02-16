@@ -24,6 +24,20 @@ use eZ\Publish\API\Repository\Values\Content\Location as APILocation;
 class Location extends APILocation
 {
     /**
+     * content info of the content object of this location
+     *
+     * @var \eZ\Publish\API\Repository\Values\Content\ContentInfo
+     */
+    protected $contentInfo;
+
+    /**
+     * content ID of the content object of this location
+     *
+     * @var int
+     */
+    protected $contentId;
+
+    /**
      * returns the content info of the content object of this location
      *
      * @return \eZ\Publish\API\Repository\Values\Content\ContentInfo
