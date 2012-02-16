@@ -53,10 +53,17 @@ class Repository implements RepositoryInterface
     protected $user;
 
     /**
-     * Instance of section service
+     * Instance of content service
      *
-     * @var \eZ\Publish\API\Repository\SectionService
+     * @var \eZ\Publish\API\Repository\ContentService
      */
+    protected $contentService;
+
+    /**
+    * Instance of section service
+    *
+    * @var \eZ\Publish\API\Repository\SectionService
+    */
     protected $sectionService;
 
     /**
@@ -79,6 +86,13 @@ class Repository implements RepositoryInterface
      * @var \eZ\Publish\API\Repository\LocationService
      */
     protected $locationService;
+
+    /**
+     * Instance of content type service
+     *
+     * @var \eZ\Publish\API\Repository\ContentTypeService
+     */
+    protected $contentTypeService;
 
     /**
      * Constructor
@@ -216,10 +230,16 @@ class Repository implements RepositoryInterface
      *
      * Get service object to perform operations on Content objects and it's aggregate members.
      *
-     *
      * @return \eZ\Publish\API\Repository\ContentService
      */
-    public function getContentService(){}
+    public function getContentService()
+    {
+        if ( $this->contentService !== null )
+            return $this->contentService;
+
+        $this->contentService = new ContentService( $this, $this->persistenceHandler );
+        return $this->contentService;
+    }
 
     /**
      * Get Content Language Service
@@ -245,7 +265,14 @@ class Repository implements RepositoryInterface
      *
      * @return \eZ\Publish\API\Repository\ContentTypeService
      */
-    public function getContentTypeService(){}
+    public function getContentTypeService()
+    {
+        if ( $this->contentTypeService !== null )
+            return $this->contentTypeService;
+
+        $this->contentTypeService = new ContentTypeService( $this, $this->persistenceHandler );
+        return $this->contentTypeService;
+    }
 
     /**
      * Get Content Location Service
