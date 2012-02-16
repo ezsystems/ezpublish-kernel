@@ -112,7 +112,7 @@ abstract class ContentTypeCreateStruct extends ValueObject
 
     /**
      * If set this value overrides the current time for creation
-     * @var DateTime
+     * @var \DateTime
      */
     public $creationDate = null;
 }
