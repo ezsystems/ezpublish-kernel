@@ -130,7 +130,10 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location
      */
-    public function loadLocationByRemoteId( $remoteId ){}
+    public function loadLocationByRemoteId( $remoteId )
+    {
+        //@todo: implement
+    }
 
     /**
      * loads the main location of a content object
@@ -142,7 +145,10 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location|null Null if no location exists
      */
-    public function loadMainLocation( ContentInfo $contentInfo ){}
+    public function loadMainLocation( ContentInfo $contentInfo )
+    {
+        //@todo: implement
+    }
 
     /**
      * Loads the locations for the given content object.
@@ -157,7 +163,10 @@ class LocationService implements LocationServiceInterface
      *
      * @return \eZ\Publish\API\Repository\Values\Content\Location[]
      */
-    public function loadLocations( ContentInfo $contentInfo, APILocation $rootLocation = null ){}
+    public function loadLocations( ContentInfo $contentInfo, APILocation $rootLocation = null )
+    {
+        //@todo: implement
+    }
 
     /**
      * Load children which are readable by the current user of a location object sorted by sortField and sortOrder
@@ -169,7 +178,10 @@ class LocationService implements LocationServiceInterface
      *
      * @return array Of {@link Location}
      */
-    public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1 ){}
+    public function loadLocationChildren( APILocation $location, $offset = 0, $limit = -1 )
+    {
+        //@todo: implement
+    }
 
     /**
      * Creates the new $location in the content repository for the given content
