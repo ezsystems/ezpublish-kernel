@@ -8,8 +8,7 @@
  */
 
 namespace eZ\Publish\Core\Repository;
-use ezp\Content\Version,
-    ezp\Content\Field,
+use ezp\Content\Field,
     eZ\Publish\Core\Repository\FieldType\FieldSettings,
     eZ\Publish\Core\Repository\FieldType\Value,
     eZ\Publish\Core\Repository\FieldType\Validator,
