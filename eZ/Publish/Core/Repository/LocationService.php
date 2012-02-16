@@ -77,10 +77,10 @@ class LocationService implements LocationServiceInterface
      */
     public function copySubtree( APILocation $subtree, APILocation $targetParentLocation )
     {
-        if ( empty( $subtree->id ) )
+        if ( !is_numeric( $subtree->id ) )
             throw new InvalidArgumentValue( "id", $subtree->id, "Location" );
 
-        if ( empty( $targetParentLocation->id ) )
+        if ( !is_numeric( $targetParentLocation->id ) )
             throw new InvalidArgumentValue( "id", $targetParentLocation->id, "Location" );
 
         $loadedSubtree = $this->loadLocation( $subtree->id );
@@ -89,7 +89,7 @@ class LocationService implements LocationServiceInterface
         if ( stripos( $loadedTargetLocation->pathString, $loadedSubtree->pathString ) !== false )
             throw new IllegalArgumentException("targetParentLocation", "target parent location is a sub location of the given subtree");
 
-        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $subtree->id, $targetParentLocation->id );
+        $newLocation = $this->persistenceHandler->locationHandler()->copySubtree( $loadedSubtree->id, $loadedTargetLocation->id );
         return $this->buildDomainLocationObject( $newLocation );
     }
 
@@ -105,7 +105,7 @@ class LocationService implements LocationServiceInterface
      */
     public function loadLocation( $locationId )
     {
-        if ( empty( $locationId ) )
+        if ( !is_numeric( $locationId ) )
             throw new InvalidArgumentValue( "locationId", $locationId );
 
         try
@@ -187,11 +187,32 @@ class LocationService implements LocationServiceInterface
      */
     public function createLocation( ContentInfo $contentInfo, APILocationCreateStruct $locationCreateStruct )
     {
-        if ( empty( $contentInfo->contentId ) )
+        if ( !is_numeric( $contentInfo->contentId ) )
             throw new InvalidArgumentValue( "contentId", $contentInfo->contentId, "ContentInfo" );
 
-        if ( empty( $locationCreateStruct->parentLocationId ) )
+        if ( !is_numeric( $contentInfo->currentVersionNo ) )
+            throw new InvalidArgumentValue( "currentVersionNo", $contentInfo->currentVersionNo, "ContentInfo" );
+
+        if ( !is_numeric( $locationCreateStruct->parentLocationId ) )
             throw new InvalidArgumentValue( "parentLocationId", $locationCreateStruct->parentLocationId, "LocationCreateStruct" );
+
+        if ( $locationCreateStruct->priority !== null && !is_numeric( $locationCreateStruct->priority ) )
+            throw new InvalidArgumentValue( "priority", $locationCreateStruct->priority, "LocationCreateStruct" );
+
+        if ( $locationCreateStruct->hidden !== null && !is_bool( $locationCreateStruct->hidden ) )
+            throw new InvalidArgumentValue( "hidden", $locationCreateStruct->hidden, "LocationCreateStruct" );
+
+        if ( $locationCreateStruct->remoteId !== null && ( !is_string( $locationCreateStruct->remoteId ) || empty( $locationCreateStruct->remoteId ) ) )
+            throw new InvalidArgumentValue( "remoteId", $locationCreateStruct->remoteId, "LocationCreateStruct" );
+
+        if ( $locationCreateStruct->isMainLocation !== null && !is_bool( $locationCreateStruct->isMainLocation ) )
+            throw new InvalidArgumentValue( "isMainLocation", $locationCreateStruct->isMainLocation, "LocationCreateStruct" );
+
+        if ( $locationCreateStruct->sortField !== null && !is_numeric( $locationCreateStruct->sortField ) )
+            throw new InvalidArgumentValue( "sortField", $locationCreateStruct->sortField, "LocationCreateStruct" );
+
+        if ( $locationCreateStruct->sortOrder !== null && !is_numeric( $locationCreateStruct->sortOrder ) )
+            throw new InvalidArgumentValue( "sortOrder", $locationCreateStruct->sortOrder, "LocationCreateStruct" );
 
         // check for existence of location with provided remote ID
         if ( $locationCreateStruct->remoteId !== null )
@@ -203,11 +224,17 @@ class LocationService implements LocationServiceInterface
             }
             catch ( NotFoundException $e ) {}
         }
+        else
+        {
+            $locationCreateStruct->remoteId = md5( uniqid( get_class( $this ), true ) );
+        }
+
+        $loadedParentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
 
         // check if the content already has location below specified parent ID
         $searchResult = $this->persistenceHandler->searchHandler()->find( new CriterionLogicalAnd( array(
             new CriterionContentId( $contentInfo->contentId ),
-            new CriterionParentLocationId( $locationCreateStruct->parentLocationId ),
+            new CriterionParentLocationId( $loadedParentLocation->id ),
         ) ) );
 
         if ( $searchResult->count > 0 )
@@ -216,7 +243,6 @@ class LocationService implements LocationServiceInterface
         // check if the parent is a sub location of one of the existing content locations
         // this also solves the situation where parent location actually one of the content locations
         // NOTE: In 4.x it IS possible to add a location to the object below a parent which is below the existing content locations
-        $loadedParentLocation = $this->loadLocation( $locationCreateStruct->parentLocationId );
         $existingContentLocations = $this->loadLocations( $contentInfo );
 
         if ( !empty( $existingContentLocations ) )
@@ -229,8 +255,7 @@ class LocationService implements LocationServiceInterface
         }
 
         $createStruct = new CreateStruct();
-        if ( $locationCreateStruct->priority !== null )
-            $createStruct->priority = $locationCreateStruct->priority;
+        $createStruct->priority = $locationCreateStruct->priority === null ?: (int) $locationCreateStruct->priority;
 
         // if we declare the new location as hidden, it is automatically invisible
         // otherwise, it remains unhidden, and picks up visibility from parent
@@ -250,16 +275,16 @@ class LocationService implements LocationServiceInterface
             catch ( NotFoundException $e ) {}
         }
 
-        $createStruct->remoteId = $locationCreateStruct->remoteId;
-        $createStruct->contentId = $contentInfo->contentId;
-        $createStruct->contentVersion = $contentInfo->currentVersionNo;
+        $createStruct->remoteId = trim( $locationCreateStruct->remoteId );
+        $createStruct->contentId = (int) $contentInfo->contentId;
+        $createStruct->contentVersion = (int) $contentInfo->currentVersionNo;
 
         // @todo: set main location
         // $createStruct->mainLocationId = $locationCreateStruct->isMainLocation;
 
-        $createStruct->sortField = $locationCreateStruct->sortField;
-        $createStruct->sortOrder = $locationCreateStruct->sortOrder;
-        $createStruct->parentId = $locationCreateStruct->parentLocationId;
+        $createStruct->sortField = $locationCreateStruct->sortField === null ? APILocation::SORT_FIELD_NAME : (int) $locationCreateStruct->sortField;
+        $createStruct->sortOrder = $locationCreateStruct->sortOrder === null ? APILocation::SORT_ORDER_ASC : (int) $locationCreateStruct->sortOrder;
+        $createStruct->parentId = $loadedParentLocation->id;
 
         $newLocation = $this->persistenceHandler->locationHandler()->create( $createStruct );
         return $this->buildDomainLocationObject( $newLocation );
@@ -278,8 +303,23 @@ class LocationService implements LocationServiceInterface
      */
     public function updateLocation( APILocation $location, LocationUpdateStruct $locationUpdateStruct )
     {
-        if ( empty( $location->id ) )
+        if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
+
+        if ( $locationUpdateStruct->priority !== null && !is_numeric( $locationUpdateStruct->priority ) )
+            throw new InvalidArgumentValue( "priority", $locationUpdateStruct->priority, "LocationUpdateStruct" );
+
+        if ( $locationUpdateStruct->remoteId !== null && ( !is_string( $locationUpdateStruct->remoteId ) || empty( $locationUpdateStruct->remoteId ) ) )
+            throw new InvalidArgumentValue( "remoteId", $locationUpdateStruct->remoteId, "LocationUpdateStruct" );
+
+        if ( $locationUpdateStruct->isMainLocation !== null && !is_bool( $locationUpdateStruct->isMainLocation ) )
+            throw new InvalidArgumentValue( "isMainLocation", $locationUpdateStruct->isMainLocation, "LocationUpdateStruct" );
+
+        if ( $locationUpdateStruct->sortField !== null && !is_numeric( $locationUpdateStruct->sortField ) )
+            throw new InvalidArgumentValue( "sortField", $locationUpdateStruct->sortField, "LocationUpdateStruct" );
+
+        if ( $locationUpdateStruct->sortOrder !== null && !is_numeric( $locationUpdateStruct->sortOrder ) )
+            throw new InvalidArgumentValue( "sortOrder", $locationUpdateStruct->sortOrder, "LocationUpdateStruct" );
 
         $loadedLocation = $this->loadLocation( $location->id );
 
@@ -294,10 +334,10 @@ class LocationService implements LocationServiceInterface
         }
 
         $updateStruct = new UpdateStruct();
-        $updateStruct->priority = $locationUpdateStruct->priority !== null ? $locationUpdateStruct->priority : $loadedLocation->priority;
-        $updateStruct->remoteId = $locationUpdateStruct->remoteId !== null ? $locationUpdateStruct->remoteId : $loadedLocation->remoteId;
-        $updateStruct->sortField = $locationUpdateStruct->sortField !== null ? $locationUpdateStruct->sortField : $loadedLocation->sortField;
-        $updateStruct->sortOrder = $locationUpdateStruct->sortOrder !== null ? $locationUpdateStruct->sortOrder : $loadedLocation->sortOrder;
+        $updateStruct->priority = $locationUpdateStruct->priority !== null ? (int) $locationUpdateStruct->priority : $loadedLocation->priority;
+        $updateStruct->remoteId = $locationUpdateStruct->remoteId !== null ? trim( $locationUpdateStruct->remoteId ) : $loadedLocation->remoteId;
+        $updateStruct->sortField = $locationUpdateStruct->sortField !== null ? (int) $locationUpdateStruct->sortField : $loadedLocation->sortField;
+        $updateStruct->sortOrder = $locationUpdateStruct->sortOrder !== null ? (int) $locationUpdateStruct->sortOrder : $loadedLocation->sortOrder;
 
         $this->persistenceHandler->locationHandler()->update( $updateStruct, $loadedLocation->id );
     }
@@ -312,10 +352,10 @@ class LocationService implements LocationServiceInterface
      */
     public function swapLocation( APILocation $location1, APILocation $location2 )
     {
-        if ( empty( $location1->id ) )
+        if ( !is_numeric( $location1->id ) )
             throw new InvalidArgumentValue( "id", $location1->id, "Location" );
 
-        if ( empty( $location2->id ) )
+        if ( !is_numeric( $location2->id ) )
             throw new InvalidArgumentValue( "id", $location2->id, "Location" );
 
         $loadedLocation1 = $this->loadLocation( $location1->id );
@@ -335,7 +375,7 @@ class LocationService implements LocationServiceInterface
      */
     public function hideLocation( APILocation $location )
     {
-        if ( empty( $location->id ) )
+        if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
         try
@@ -364,7 +404,7 @@ class LocationService implements LocationServiceInterface
      */
     public function unhideLocation( APILocation $location )
     {
-        if ( empty( $location->id ) )
+        if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
         try
@@ -392,10 +432,10 @@ class LocationService implements LocationServiceInterface
      */
     public function moveSubtree( APILocation $location, APILocation $newParentLocation )
     {
-        if ( empty( $location->id ) )
+        if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
-        if ( empty( $newParentLocation->id ) )
+        if ( !is_numeric( $newParentLocation->id ) )
             throw new InvalidArgumentValue( "id", $newParentLocation->id, "Location" );
 
         try
@@ -417,7 +457,7 @@ class LocationService implements LocationServiceInterface
      */
     public function deleteLocation( APILocation $location )
     {
-        if ( empty( $location->id ) )
+        if ( !is_numeric( $location->id ) )
             throw new InvalidArgumentValue( "id", $location->id, "Location" );
 
         try
@@ -426,7 +466,7 @@ class LocationService implements LocationServiceInterface
         }
         catch ( NotFound $e )
         {
-            throw new NotFoundException( "location", $e->identifier, $e );
+            throw new NotFoundException( "location", $location->id, $e );
         }
     }
 
@@ -441,7 +481,7 @@ class LocationService implements LocationServiceInterface
     public function newLocationCreateStruct( $parentLocationId )
     {
         return new LocationCreateStruct( array(
-            'parentLocationId' => $parentLocationId
+            'parentLocationId' => (int) $parentLocationId
         ) );
     }
 
