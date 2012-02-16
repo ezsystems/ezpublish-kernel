@@ -81,14 +81,14 @@ class UserService implements UserServiceInterface
      */
     public function createUserGroup( APIUserGroupCreateStruct $userGroupCreateStruct, APIUserGroup $parentGroup )
     {
-        if ( empty( $parentGroup->id ) )
+        if ( !is_numeric( $parentGroup->id ) )
             throw new InvalidArgumentValue( "id", $parentGroup->id, "UserGroup" );
 
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
         $loadedParentGroup = $this->loadUserGroup( $parentGroup->id );
-        $mainParentGroupLocation = $locationService->loadMainLocation( $loadedParentGroup->contentInfo );
+        $mainParentGroupLocation = $locationService->loadMainLocation( $loadedParentGroup->getVersionInfo()->getContentInfo() );
 
         $locationCreateStructs = array();
         if ( $mainParentGroupLocation !== null )
@@ -102,7 +102,7 @@ class UserService implements UserServiceInterface
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
         return new UserGroup( array(
-            'id'            => $publishedContent->contentId,
+            'id'            => $publishedContent->getVersionInfo()->getContentInfo()->contentId,
             'parentId'      => $mainParentGroupLocation !== null ? $mainParentGroupLocation->id : null,
             'subGroupCount' => 0,
             'content'       => $publishedContent
@@ -121,16 +121,17 @@ class UserService implements UserServiceInterface
      */
     public function loadUserGroup( $id )
     {
-        if ( empty( $id ) )
+        if ( !is_numeric( $id ) )
             throw new InvalidArgumentValue( "id", $id );
 
         $locationService = $this->repository->getLocationService();
 
         $content = $this->repository->getContentService()->loadContent( $id );
-        $mainLocation = $locationService->loadMainLocation( $content->contentInfo );
+        $contentInfo = $content->getVersionInfo()->getContentInfo();
+        $mainLocation = $locationService->loadMainLocation( $contentInfo );
 
         return new UserGroup( array(
-            'id'            => $content->contentId,
+            'id'            => $contentInfo->contentId,
             'parentId'      => $mainLocation !== null ? $mainLocation->parentId : null,
             //@todo: calculate sub group count
             'subGroupCount' => 0,
@@ -150,14 +151,11 @@ class UserService implements UserServiceInterface
      */
     public function loadSubUserGroups( APIUserGroup $userGroup )
     {
-        if ( empty( $userGroup->id ) )
+        if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
-        if ( empty( $userGroup->contentInfo ) )
-            throw new InvalidArgumentValue( "contentInfo", "", "UserGroup" );
-
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
-        $mainGroupLocation = $this->repository->getLocationService()->loadMainLocation( $loadedUserGroup->contentInfo );
+        $mainGroupLocation = $this->repository->getLocationService()->loadMainLocation( $loadedUserGroup->getVersionInfo()->getContentInfo() );
 
         if ( $mainGroupLocation === null )
             return array();
@@ -173,7 +171,7 @@ class UserService implements UserServiceInterface
 
         // @todo: hm... we need to convert SPI\Content to API\Content
         // such method already exists in content service but is private
-        return $searchResult->content;
+        // return $searchResult->content;
     }
 
     /**
@@ -188,12 +186,12 @@ class UserService implements UserServiceInterface
      */
     public function deleteUserGroup( APIUserGroup $userGroup )
     {
-        if ( empty( $userGroup->id ) )
+        if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
-        $userGroup = $this->loadUserGroup( $userGroup->id );
+        $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
 
-        $this->repository->getContentService()->deleteContent( $userGroup->contentInfo );
+        $this->repository->getContentService()->deleteContent( $loadedUserGroup->getVersionInfo()->getContentInfo() );
     }
 
     /**
@@ -207,10 +205,10 @@ class UserService implements UserServiceInterface
      */
     public function moveUserGroup( APIUserGroup $userGroup, APIUserGroup $newParent )
     {
-        if ( empty( $userGroup->id ) )
+        if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
-        if ( empty( $newParent->id ) )
+        if ( !is_numeric( $newParent->id ) )
             throw new InvalidArgumentValue( "id", $newParent->id, "UserGroup" );
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
@@ -218,8 +216,8 @@ class UserService implements UserServiceInterface
 
         $locationService = $this->repository->getLocationService();
 
-        $userGroupMainLocation = $locationService->loadMainLocation( $loadedUserGroup->contentInfo );
-        $newParentMainLocation = $locationService->loadMainLocation( $loadedNewParent->contentInfo );
+        $userGroupMainLocation = $locationService->loadMainLocation( $loadedUserGroup->getVersionInfo()->getContentInfo() );
+        $newParentMainLocation = $locationService->loadMainLocation( $loadedNewParent->getVersionInfo()->getContentInfo() );
 
         if ( $userGroupMainLocation === null )
             throw new BadStateException( "userGroup" );
@@ -247,7 +245,7 @@ class UserService implements UserServiceInterface
      */
     public function updateUserGroup( APIUserGroup $userGroup, UserGroupUpdateStruct $userGroupUpdateStruct )
     {
-        if ( empty( $userGroup->id ) )
+        if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
         $loadedUserGroup = $this->loadUserGroup( $userGroup->id );
@@ -275,28 +273,34 @@ class UserService implements UserServiceInterface
         if ( empty( $parentGroups ) )
             throw new InvalidArgumentValue( "parentGroups", $parentGroups );
 
-        if ( empty( $userCreateStruct->login ) )
+        if ( !is_string( $userCreateStruct->login ) || empty( $userCreateStruct->login ) )
             throw new InvalidArgumentValue( "login", $userCreateStruct->login, "UserCreateStruct" );
 
-        if ( empty( $userCreateStruct->email ) )
+        //@todo: verify email validity
+        if ( !is_string( $userCreateStruct->email ) || empty( $userCreateStruct->email ) )
             throw new InvalidArgumentValue( "email", $userCreateStruct->email, "UserCreateStruct" );
 
-        if ( empty( $userCreateStruct->password ) )
+        if ( !is_string( $userCreateStruct->password ) || empty( $userCreateStruct->password ) )
             throw new InvalidArgumentValue( "password", $userCreateStruct->password, "UserCreateStruct" );
+
+        if ( !is_bool( $userCreateStruct->enabled ) )
+            throw new InvalidArgumentValue( "enabled", $userCreateStruct->enabled, "UserCreateStruct" );
 
         $contentService = $this->repository->getContentService();
         $locationService = $this->repository->getLocationService();
 
         $locationCreateStructs = array();
+        $isMainLocationSet = false;
         foreach ( $parentGroups as $parentGroup )
         {
             $parentGroup = $this->loadUserGroup( $parentGroup->id );
-            $mainLocation = $locationService->loadMainLocation( $parentGroup->contentInfo );
+            $mainLocation = $locationService->loadMainLocation( $parentGroup->getVersionInfo()->getContentInfo() );
             if ( $mainLocation !== null )
             {
                 $locationCreateStruct = $locationService->newLocationCreateStruct( $mainLocation->id );
-                $locationCreateStruct->isMainLocation = true;
+                $locationCreateStruct->isMainLocation = !$isMainLocationSet;
                 $locationCreateStructs[] = $locationCreateStruct;
+                $isMainLocationSet = true;
             }
         }
 
@@ -319,7 +323,7 @@ class UserService implements UserServiceInterface
      */
     public function loadUser( $userId )
     {
-        if ( empty( $userId ) )
+        if ( !is_numeric( $userId ) )
             throw new InvalidArgumentValue( "userId", $userId );
 
         try
@@ -346,10 +350,10 @@ class UserService implements UserServiceInterface
      */
     public function loadUserByCredentials( $login, $password )
     {
-        if ( empty( $login ) )
+        if ( !is_string( $login ) || empty( $login ) )
             throw new InvalidArgumentValue( "login", $login );
 
-        if ( empty( $password ) )
+        if ( !is_string( $password ) || empty( $password ) )
             throw new InvalidArgumentValue( "password", $password );
 
         try
@@ -377,12 +381,12 @@ class UserService implements UserServiceInterface
      */
     public function deleteUser( APIUser $user )
     {
-        if ( empty( $user->id ) )
+        if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
         $user = $this->loadUser( $user->id );
 
-        $this->repository->getContentService()->deleteContent( $user->contentInfo );
+        $this->repository->getContentService()->deleteContent( $user->getVersionInfo()->getContentInfo() );
     }
 
     /**
@@ -400,8 +404,21 @@ class UserService implements UserServiceInterface
      */
     public function updateUser( APIUser $user, UserUpdateStruct $userUpdateStruct )
     {
-        if ( empty( $user->id ) )
+        if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
+
+        //@todo: verify email validity
+        if ( $userUpdateStruct->email !== null && ( !is_string( $userUpdateStruct->email ) || empty( $userUpdateStruct->email ) ) )
+            throw new InvalidArgumentValue( "email", $userUpdateStruct->email, "UserUpdateStruct" );
+
+        if ( $userUpdateStruct->password !== null && ( !is_string( $userUpdateStruct->password ) || empty( $userUpdateStruct->password ) ) )
+            throw new InvalidArgumentValue( "password", $userUpdateStruct->password, "UserUpdateStruct" );
+
+        if ( $userUpdateStruct->isEnabled !== null && !is_bool( $userUpdateStruct->isEnabled ) )
+            throw new InvalidArgumentValue( "isEnabled", $userUpdateStruct->isEnabled, "UserUpdateStruct" );
+
+        if ( $userUpdateStruct->maxLogin !== null && !is_numeric( $userUpdateStruct->maxLogin ) )
+            throw new InvalidArgumentValue( "maxLogin", $userUpdateStruct->maxLogin, "UserUpdateStruct" );
 
         $loadedUser = $this->loadUser( $user->id );
 
@@ -410,15 +427,14 @@ class UserService implements UserServiceInterface
         $this->persistenceHandler->userHandler()->update( new SPIUser( array(
             'id'            => $loadedUser->id,
             'login'         => $loadedUser->login,
-            // email should not be empty (nor null nor empty string)
-            'email'         => !empty( $userUpdateStruct->email ) ? $userUpdateStruct->email : $loadedUser->email,
+            'email'         => $userUpdateStruct->email !== null ? trim( $userUpdateStruct->email ) : $loadedUser->email,
             // @todo: read password hash algorithm and site from INI settings
             'passwordHash'  => $userUpdateStruct->password !== null ?
                 $this->createPasswordHash( $loadedUser->login, $userUpdateStruct->password, null, null ) :
                 $loadedUser->passwordHash,
             'hashAlgorithm' => null,
             'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->enabled,
-            'maxLogin'      => $userUpdateStruct->maxLogin !== null ? $userUpdateStruct->maxLogin : $loadedUser->maxLogin
+            'maxLogin'      => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
         ) ) );
     }
 
@@ -434,10 +450,10 @@ class UserService implements UserServiceInterface
      */
     public function assignUserToUserGroup( APIUser $user, APIUserGroup $userGroup )
     {
-        if ( empty( $user->id ) )
+        if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
-        if ( empty( $userGroup->id ) )
+        if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
         $loadedUser = $this->loadUser( $user->id );
@@ -477,7 +493,7 @@ class UserService implements UserServiceInterface
             return;
 
         $locationCreateStruct = $locationService->newLocationCreateStruct( $mainLocationId );
-        $locationService->createLocation( $loadedUser->contentInfo, $locationCreateStruct );
+        $locationService->createLocation( $loadedUser->getVersionInfo()->getContentInfo(), $locationCreateStruct );
     }
 
     /**
@@ -491,10 +507,10 @@ class UserService implements UserServiceInterface
      */
     public function unAssignUssrFromUserGroup( APIUser $user, APIUserGroup $userGroup )
     {
-        if ( empty( $user->id ) )
+        if ( !is_numeric( $user->id ) )
             throw new InvalidArgumentValue( "id", $user->id, "User" );
 
-        if ( empty( $userGroup->id ) )
+        if ( !is_numeric( $userGroup->id ) )
             throw new InvalidArgumentValue( "id", $userGroup->id, "UserGroup" );
 
         $loadedUser = $this->loadUser( $user->id );
