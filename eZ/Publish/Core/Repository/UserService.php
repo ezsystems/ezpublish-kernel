@@ -98,7 +98,7 @@ class UserService implements UserServiceInterface
             $locationCreateStructs[] = $locationCreateStruct;
         }
 
-        $contentDraft = $contentService->createContent( $userGroupCreateStruct->contentCreateStruct, $locationCreateStructs );
+        $contentDraft = $contentService->createContent( $userGroupCreateStruct, $locationCreateStructs );
         $publishedContent = $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
         return new UserGroup( array(
@@ -304,7 +304,7 @@ class UserService implements UserServiceInterface
             }
         }
 
-        $contentDraft = $contentService->createContent( $userCreateStruct->contentCreateStruct, $locationCreateStructs );
+        $contentDraft = $contentService->createContent( $userCreateStruct, $locationCreateStructs );
         $contentService->publishVersion( $contentDraft->getVersionInfo() );
 
         $spiUser = $this->buildPersistenceUserObject( $userCreateStruct );
@@ -557,13 +557,14 @@ class UserService implements UserServiceInterface
      */
     public function newUserCreateStruct( $login, $email, $password, $mainLanguageCode, $contentType = null )
     {
-        $contentCreateStruct = $this->repository->getContentService()->newContentCreateStruct( $contentType, $mainLanguageCode );
-
         return new UserCreateStruct( array(
-            'login'               => $login,
-            'email'               => $email,
-            'password'            => $password,
-            'contentCreateStruct' => $contentCreateStruct
+            'contentType'      => $contentType,
+            'mainLanguageCode' => $mainLanguageCode,
+            'login'            => $login,
+            'email'            => $email,
+            'password'         => $password,
+            'enabled'          => true,
+            'fields'           => array(),
         ) );
     }
 
@@ -577,10 +578,10 @@ class UserService implements UserServiceInterface
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
-        $contentCreateStruct = $this->repository->getContentService()->newContentCreateStruct( $contentType, $mainLanguageCode );
-
         return new UserGroupCreateStruct( array(
-            'contentCreateStruct' => $contentCreateStruct
+            'contentType'      => $contentType,
+            'mainLanguageCode' => $mainLanguageCode,
+            'fields'           => array(),
         ) );
     }
 

@@ -10,11 +10,11 @@ use eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct as APIUserGroupC
 class UserGroupCreateStruct extends APIUserGroupCreateStruct
 {
     /**
-     * Instance of ContentCreateStruct value object that this user group create struct encapsulates
+     * The list of fields added to the user group
      *
-     * @var \eZ\Publish\API\Repository\Values\Content\ContentCreateStruct
+     * @var \eZ\Publish\API\Repository\Values\Content\Field[]
      */
-    protected $contentCreateStruct;
+    public $fields = array();
 
     /**
      * Adds a field to the field collection.
@@ -32,6 +32,9 @@ class UserGroupCreateStruct extends APIUserGroupCreateStruct
      */
     public function setField( $fieldDefIdentifier, $value, $language = null )
     {
-        $this->contentCreateStruct->setField( $fieldDefIdentifier, $value, $language );
+        if ( $language === null )
+            $this->fields[$fieldDefIdentifier] = $value;
+        else
+            $this->fields[$fieldDefIdentifier][$language] = $value;
     }
 }
