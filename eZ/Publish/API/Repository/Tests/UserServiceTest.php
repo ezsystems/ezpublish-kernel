@@ -27,7 +27,35 @@ class UserServiceTest extends BaseTest
      */
     public function testNewUserGroupCreateStruct()
     {
-        $this->markTestIncomplete( "Test for UserService::newUserGroupCreateStruct() is not implemented." );
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService = $repository->getUserService();
+
+        $groupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        /* END: Use Case */
+
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\Values\User\UserGroupCreateStruct', $groupCreate );
+    }
+
+    /**
+     * Test for the newUserGroupCreateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\UserService::newUserGroupCreateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\UserServiceTest::testNewUserGroupCreateStruct
+     */
+    public function testNewUserGroupCreateStructSetsMainLanguageCode()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $userService = $repository->getUserService();
+
+        $groupCreate = $userService->newUserGroupCreateStruct( 'eng-US' );
+        /* END: Use Case */
+
+        $this->assertEquals( 'eng-US', $groupCreate->mainLanguageCode );
     }
 
     /**

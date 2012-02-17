@@ -276,7 +276,7 @@ class UserServiceStub implements UserService
      */
     public function newUserGroupCreateStruct( $mainLanguageCode, $contentType = null )
     {
-        // TODO: Implement newUserGroupCreateStruct() method.
+        return new UserGroupCreateStructStub( array( 'mainLanguageCode' => $mainLanguageCode ) );
     }
 
     /**
