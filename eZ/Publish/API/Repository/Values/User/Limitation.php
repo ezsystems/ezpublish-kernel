@@ -23,7 +23,7 @@ abstract class Limitation extends ValueObject
     const PARENTUSERGROUP = "ParentGroup";
 
     /**
-     * Returns the limitation identifer (one of the defined constants) or a custom limitation
+     * Returns the limitation identifier (one of the defined constants) or a custom limitation
      *
      * @return string
      */

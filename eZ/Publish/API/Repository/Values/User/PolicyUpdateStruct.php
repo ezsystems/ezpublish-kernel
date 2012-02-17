@@ -18,7 +18,7 @@ abstract class PolicyUpdateStruct extends ValueObject
 
     /**
      *
-     * adds a limitation to the policy - if a Limitation exists with the same identifer
+     * adds a limitation to the policy - if a Limitation exists with the same identifier
      * the existing limitation is replaced
      * @param Limitation $limitation
      */

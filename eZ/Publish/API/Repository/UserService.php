@@ -90,7 +90,7 @@ interface UserService
      * Updates the group profile with fields and meta data
      *
      * 4.x: If the versionUpdateStruct is set in $userGroupUpdateStruct, this method internally creates a content draft, updates ts with the provided data
-     * and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.
+     * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\UserGroup $userGroup
      * @param \eZ\Publish\API\Repository\Values\User\UserGroupUpdateStruct $userGroupUpdateStruct
@@ -154,7 +154,7 @@ interface UserService
      * Updates a user
      *
      * 4.x: If the versionUpdateStruct is set in the user update structure, this method internally creates a content draft, updates ts with the provided data
-     * and publishes the draft. If a draft is explititely required, the user group can be updated via the content service methods.
+     * and publishes the draft. If a draft is explicitly required, the user group can be updated via the content service methods.
      *
      * @param \eZ\Publish\API\Repository\Values\User\User $user
      * @param \eZ\Publish\API\Repository\Values\User\UserUpdateStruct

@@ -110,17 +110,17 @@ interface SectionService
     public function deleteSection( Section $section );
 
     /**
-     * instanciates a new SectionCreateStruct
-     * 
+     * instantiates a new SectionCreateStruct
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionCreateStruct
      */
     public function newSectionCreateStruct();
-    
+
     /**
-     * instanciates a new SectionUpdateStruct
-     * 
+     * instantiates a new SectionUpdateStruct
+     *
      * @return \eZ\Publish\API\Repository\Values\Content\SectionUpdateStruct
      */
     public function newSectionUpdateStruct();
-    
+
 }

@@ -38,7 +38,7 @@ interface RoleService
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to update a role
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the name of the role already exists
-     * 
+     *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct $roleUpdateStruct
      *
@@ -50,7 +50,7 @@ interface RoleService
      * adds a new policy to the role
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to add  a policy
-     * 
+     *
      * @param \eZ\Publish\API\Repository\Values\User\Role $role
      * @param \eZ\Publish\API\Repository\Values\User\PolicyCreateStruct $policyCreateStruct
      *
@@ -72,7 +72,7 @@ interface RoleService
 
     /**
      * Updates the limitations of a policy. The module and function cannot be changed and
-     * the limitaions are replaced by the ones in $roleUpdateStruct
+     * the limitations are replaced by the ones in $roleUpdateStruct
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the authenticated user is not allowed to u�date a policy
      *
@@ -204,7 +204,7 @@ interface RoleService
     public function getRoleAssignmentsForUserGroup( UserGroup $userGroup );
 
     /**
-     * instanciates a role create class
+     * instantiates a role create class
      *
      * @param string $name
      *
@@ -213,7 +213,7 @@ interface RoleService
     public function newRoleCreateStruct( $name );
 
     /**
-     * instanciates a policy create class
+     * instantiates a policy create class
      *
      * @param string $module
      * @param string $function
@@ -223,14 +223,14 @@ interface RoleService
     public function newPolicyCreateStruct( $module, $function );
 
     /**
-     * instanciates a policy update class
+     * instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\PolicyUpdateStruct
      */
     public function newPolicyUpdateStruct();
 
     /**
-     * instanciates a policy update class
+     * instantiates a policy update class
      *
      * @return \eZ\Publish\API\Repository\Values\User\RoleUpdateStruct
      */
