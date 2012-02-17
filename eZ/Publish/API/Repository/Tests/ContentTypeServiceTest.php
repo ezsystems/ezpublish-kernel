@@ -966,6 +966,48 @@ class ContentTypeServiceTest extends BaseTest
     }
 
     /**
+     * Test for the newContentTypeUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeUpdateStruct()
+     * 
+     */
+    public function testNewContentTypeUpdateStruct()
+    {
+        $repository = $this->getRepository();
+
+        /* BEGIN: Use Case */
+        $contentTypeService = $repository->getContentTypeService();
+
+        $typeUpdate = $contentTypeService->newContentTypeUpdateStruct();
+        /* END: Use Case */
+
+        $this->assertInstanceOf(
+            'eZ\\Publish\\API\\Repository\\Values\\ContentType\\ContentTypeUpdateStruct',
+            $typeUpdate
+        );
+        return $typeUpdate;
+    }
+
+    /**
+     * Test for the newContentTypeUpdateStruct() method.
+     *
+     * @return void
+     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeUpdateStruct()
+     * @depends eZ\Publish\API\Repository\Tests\ContentTypeServiceTest::testNewContentTypeUpdateStruct
+     */
+    public function testNewContentTypeUpdateStructValues( $typeUpdate )
+    {
+        foreach ( $typeUpdate as $propertyName => $propertyValue )
+        {
+            $this->assertNull(
+                $propertyValue,
+                "Property '$propertyName' is not null."
+            );
+        }
+    }
+
+    /**
      * Test for the loadContentType() method.
      *
      * @return void
@@ -1503,18 +1545,6 @@ class ContentTypeServiceTest extends BaseTest
     public function testPublishContentTypeDraftThrowsUnauthorizedException()
     {
         $this->markTestIncomplete( "Test for ContentTypeService::publishContentTypeDraft() is not implemented." );
-    }
-
-    /**
-     * Test for the newContentTypeUpdateStruct() method.
-     *
-     * @return void
-     * @see \eZ\Publish\API\Repository\ContentTypeService::newContentTypeUpdateStruct()
-     * 
-     */
-    public function testNewContentTypeUpdateStruct()
-    {
-        $this->markTestIncomplete( "Test for ContentTypeService::newContentTypeUpdateStruct() is not implemented." );
     }
 
     /**

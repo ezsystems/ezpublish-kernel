@@ -266,10 +266,13 @@ class ContentTypeServiceStub implements ContentTypeService
 
         $data['fieldDefinitions'] = array();
 
-        $fieldDefinitionCreates = $contentTypeCreateStruct->fieldDefinitions;
-        foreach ( $fieldDefinitionCreates as $fieldDefinitionCreate )
+        if ( is_array( $contentTypeCreateStruct->fieldDefinitions ) )
         {
-            $data['fieldDefinitions'][] = $this->createFieldDefinition( $fieldDefinitionCreate );
+            $fieldDefinitionCreates = $contentTypeCreateStruct->fieldDefinitions;
+            foreach ( $fieldDefinitionCreates as $fieldDefinitionCreate )
+            {
+                $data['fieldDefinitions'][] = $this->createFieldDefinition( $fieldDefinitionCreate );
+            }
         }
 
         $data['contentTypeGroups'] = $contentTypeGroups;
@@ -567,7 +570,7 @@ class ContentTypeServiceStub implements ContentTypeService
      */
     public function newContentTypeUpdateStruct()
     {
-        // TODO: Implement.
+        return new ContentTypeUpdateStruct();
     }
 
     /**
