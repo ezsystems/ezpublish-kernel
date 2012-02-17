@@ -33,12 +33,12 @@ abstract class Content extends ValueObject
      * the value of the initial language of the version if present, otherwise null.
      * On non translatable fields this method ignores the languageCode parameter.
      *
-     * @param string $fieldDefIdentifer
+     * @param string $fieldDefIdentifier
      * @param string $languageCode
      *
      * @return mixed a primitive type or a field type Value object depending on the field type.
      */
-    abstract public function getFieldValue( $fieldDefIdentifer, $languageCode = null );
+    abstract public function getFieldValue( $fieldDefIdentifier, $languageCode = null );
 
     /**
      * returns the outgoing relations
@@ -56,11 +56,11 @@ abstract class Content extends ValueObject
 
     /**
      * This method returns the fields for a given language and non translatable fields
-     * 
-     * If note set the initilaLanguage of the content version is used.
-     * 
+     *
+     * If note set the initialLanguage of the content version is used.
+     *
      * @param string $languageCode
-     * 
+     *
      * @return array an array of {@link Field} with field identifier as keys
      */
     abstract public function getFieldsByLanguage( $languageCode = null );

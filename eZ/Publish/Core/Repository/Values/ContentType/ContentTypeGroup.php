@@ -7,7 +7,9 @@
  * @version //autogentag//
  */
 
-namespace eZ\Publish\API\Repository\Values\ContentType;
+namespace eZ\Publish\Core\Repository\Values\ContentType;
+
+use eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup as APIContentTypeGroup;
 use eZ\Publish\API\Repository\Values\ValueObject;
 
 /**
@@ -24,59 +26,22 @@ use eZ\Publish\API\Repository\Values\ValueObject;
  * @property-read string $mainLanguageCode (5.0) the main language of the content type group names and description used for fallback.
  *
  */
-abstract class ContentTypeGroup extends ValueObject
+class ContentTypeGroup extends APIContentTypeGroup
 {
     /**
-     * Primary key
      *
-     * @var mixed
+     *
+     * @var array
      */
-    protected $id;
+    public $names;
+
 
     /**
-     * Readable string identifier of a group
      *
-     * @var string
+     *
+     * @var array
      */
-    protected $identifier;
-
-    /**
-     * Created date (timestamp)
-     *
-     * @var \DateTime
-     */
-    protected $creationDate;
-
-    /**
-     * Modified date (timestamp)
-     *
-     * @var \DateTime
-     */
-    protected $modificationDate;
-
-    /**
-     * Creator user id
-     *
-     * @var mixed
-     */
-    protected $creatorId;
-
-    /**
-     * Modifier user id
-     *
-     * @var mixed
-     *
-     */
-    protected $modifierId;
-
-    /**
-     * the main language code
-     *
-     * @since 5.0
-     *
-     * @var string
-     */
-    public $mainLanguageCode;
+    public $descriptions;
 
     /**
      *
@@ -92,7 +57,10 @@ abstract class ContentTypeGroup extends ValueObject
      *
      * @return string[]
      */
-    abstract public function getNames();
+    public function getNames()
+    {
+        return $this->names;
+    }
 
     /**
      * this method returns the name of the content type in the given language
@@ -103,7 +71,15 @@ abstract class ContentTypeGroup extends ValueObject
      *
      * @return string the name for the given language or null if none exists.
      */
-    abstract public function getName( $languageCode );
+    public function getName( $languageCode )
+    {
+        if ( array_key_exists( $languageCode, $this->names ) )
+        {
+            return $this->names[$languageCode];
+        }
+
+        return null;
+    }
 
     /**
      * This method returns the human readable description of the content type
@@ -117,7 +93,10 @@ abstract class ContentTypeGroup extends ValueObject
      *
      * @return string[]
      */
-    abstract public function getDescriptions();
+    public function getDescriptions()
+    {
+        return $this->descriptions;
+    }
 
     /**
      * this method returns the name of the content type in the given language
@@ -128,5 +107,13 @@ abstract class ContentTypeGroup extends ValueObject
      *
      * @return string the description for the given language or null if none existis.
      */
-    abstract public function getDescription( $languageCode );
+    public function getDescription( $languageCode )
+    {
+        if ( array_key_exists( $languageCode, $this->descriptions ) )
+        {
+            return $this->descriptions[$languageCode];
+        }
+
+        return null;
+    }
 }

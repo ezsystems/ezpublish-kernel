@@ -50,7 +50,7 @@ interface ContentTypeService
      * Get a Content Type Group object by identifier
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\NotFoundException If group can not be found
-     * 
+     *
      * @param string $contentTypeGroupIdentifier
      *
      * @return \eZ\Publish\API\Repository\Values\ContentType\ContentTypeGroup
@@ -60,7 +60,7 @@ interface ContentTypeService
     /**
      * Get all Content Type Groups
      *
-     * @return aray an array of {@link ContentTypeGroup}
+     * @return array an array of {@link ContentTypeGroup}
      */
     public function loadContentTypeGroups();
 
@@ -76,10 +76,10 @@ interface ContentTypeService
     public function updateContentTypeGroup( ContentTypeGroup $contentTypeGroup, ContentTypeGroupUpdateStruct $contentTypeGroupUpdateStruct );
 
     /**
-     * Delete a Content Type Group. 
-     * 
+     * Delete a Content Type Group.
+     *
      * This method only deletes an content type group which has content types without any content instances
-     * 
+     *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException if the user is not allowed to delete a content type group
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If  a to be deleted content type has instances
      *
@@ -88,8 +88,8 @@ interface ContentTypeService
     public function deleteContentTypeGroup( ContentTypeGroup $contentTypeGroup );
 
     /**
-     * Create a Content Type object. 
-     * 
+     * Create a Content Type object.
+     *
      * The content type is created in the state STATUS_DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException If the identifier or remoteId in the content type create struct already exists
@@ -156,8 +156,8 @@ interface ContentTypeService
     public function loadContentTypes( ContentTypeGroup $contentTypeGroup );
 
     /**
-     * Creates a draft from an existing content type. 
-     * 
+     * Creates a draft from an existing content type.
+     *
      * This is a complete copy of the content
      * type wiich has the state STATUS_DRAFT.
      *
@@ -184,8 +184,8 @@ interface ContentTypeService
     public function updateContentTypeDraft( ContentTypeDraft $contentTypeDraft, ContentTypeUpdateStruct $contentTypeUpdateStruct );
 
     /**
-     * Delete a Content Type object. 
-     * 
+     * Delete a Content Type object.
+     *
      * Deletes a content type if it has no instances
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException If there exist content objects of this type
@@ -234,8 +234,8 @@ interface ContentTypeService
     public function unassignContentTypeGroup( ContentType $contentType, ContentTypeGroup $contentTypeGroup );
 
     /**
-     * Adds a new field definition to an existing content type. 
-     * 
+     * Adds a new field definition to an existing content type.
+     *
      * The content type must be in state DRAFT.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException if the identifier in already exists in the content type

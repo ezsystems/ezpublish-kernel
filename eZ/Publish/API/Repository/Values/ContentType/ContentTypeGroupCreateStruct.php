@@ -24,13 +24,13 @@ class ContentTypeGroupCreateStruct extends ValueObject
     /**
      * If set this value overrides the current time for creation
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $creationDate = null;
 
     /**
      * the main language code
-     * 
+     *
      * @since 5.0
      *
      * @var string
@@ -38,17 +38,17 @@ class ContentTypeGroupCreateStruct extends ValueObject
     public $mainLanguageCode;
 
     /**
-     * An array of names with languageCode keys 
-     * 
+     * An array of names with languageCode keys
+     *
      * @var array an array of string
      */
     public $names;
 
     /**
      * An array of descriptions with languageCode keys
-     * 
+     *
      * @var array an array of string
      */
     public $descriptions;
-    
+
 }

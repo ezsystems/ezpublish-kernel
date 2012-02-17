@@ -58,7 +58,7 @@ abstract class ContentCreateStruct extends ValueObject
     /**
      * Modification date. If not given the current timestamp is used.
      *
-     * @var DateTime
+     * @var \DateTime
      */
     public $modificationDate;
 
@@ -66,15 +66,15 @@ abstract class ContentCreateStruct extends ValueObject
      * Adds a field to the field collection.
      *
      * This method could also be implemented by a magic setter so that
-     * $fields[$fieldDefIdentifer][$language] = $value or without language $fielfs[$fieldDefIdentifer] = $value
+     * $fields[$fieldDefIdentifier][$language] = $value or without language $fields[$fieldDefIdentifier] = $value
      * is an equivalent call.
      *
-     * @param string $fieldIdentifier the identifier of the field definition
+     * @param string $fieldDefIdentifier the identifier of the field definition
      *
      * @param mixed $value Either a plain value which is understandable by the corresponding
      *                     field type or an instance of a Value class provided by the field type
      *
-     * @param string $language If not given on a translatable field the initial language is used
+     * @param string|null $language If not given on a translatable field the initial language is used
      */
     abstract public function setField( $fieldDefIdentifier, $value, $language = null );
 }

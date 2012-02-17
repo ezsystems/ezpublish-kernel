@@ -20,7 +20,7 @@ interface LocationService
 {
     /**
      * Copies the subtree starting from $subtree as a new subtree of $targetLocation
-     * 
+     *
      * Only the items on which the user has read access are copied.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed copy the subtree to the given parent location
@@ -61,7 +61,7 @@ interface LocationService
     public function loadLocationByRemoteId( $remoteId );
 
     /**
-     * loads the main loaction of a content object
+     * loads the main location of a content object
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to read this location
      * @throws \eZ\Publish\API\Repository\Exceptions\BadStateException if there is no published version yet
@@ -104,7 +104,7 @@ interface LocationService
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to create this location
      * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException  if the content is already below the specified parent
      *                                        or the parent is a sub location of the location the content
-     *                                        or if set the remoteId existis already
+     *                                        or if set the remoteId exists already
      *
      * @param \eZ\Publish\API\Repository\Values\Content\ContentInfo $contentInfo
      *
@@ -119,7 +119,7 @@ interface LocationService
      * Updates $location in the content repository
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user user is not allowed to update this location
-     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException   if if set the remoteId existis already
+     * @throws \eZ\Publish\API\Repository\Exceptions\IllegalArgumentException   if if set the remoteId exists already
      *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      * @param \eZ\Publish\API\Repository\Values\Content\LocationUpdateStruct $locationUpdateStruct
@@ -151,7 +151,7 @@ interface LocationService
 
     /**
      * Unhides the $location.
-     * 
+     *
      * This method and marks visible all descendants of $locations
      * until a hidden location is found.
      *
@@ -164,8 +164,8 @@ interface LocationService
     public function unhideLocation( Location $location );
 
     /**
-     * Moves the subtree to $newParentLocation  
-     * 
+     * Moves the subtree to $newParentLocation
+     *
      * If a user has the permission to move the location to a target location
      * he can do it regardless of an existing descendant on which the user has no permission.
      *
@@ -180,7 +180,7 @@ interface LocationService
      * Deletes $location and all its descendants.
      *
      * @throws \eZ\Publish\API\Repository\Exceptions\UnauthorizedException If the current user is not allowed to delete this location or a descendant
-     * 
+     *
      * @param \eZ\Publish\API\Repository\Values\Content\Location $location
      */
     public function deleteLocation( Location $location );
