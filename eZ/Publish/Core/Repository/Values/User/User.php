@@ -101,7 +101,7 @@ class User extends APIUser
     /**
      * returns the outgoing relations
      *
-     * @return array an array of {@link Relation}
+     * @return \eZ\Publish\API\Repository\Values\Content\Relation[]
      */
     public function getRelations()
     {
@@ -111,7 +111,7 @@ class User extends APIUser
     /**
      * This method returns the complete fields collection
      *
-     * @return array an array of {@link Field}
+     * @return \eZ\Publish\API\Repository\Values\Content\Field[]
      */
     public function getFields()
     {
