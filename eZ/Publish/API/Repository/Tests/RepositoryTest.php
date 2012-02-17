@@ -161,11 +161,11 @@ class RepositoryTest extends BaseTest
      *
      * @return void
      * @see \eZ\Publish\API\Repository\Repository::getUserService()
-     * 
      */
     public function testGetUserService()
     {
-        $this->markTestIncomplete( "Test for Repository::getUserService() is not implemented." );
+        $repository = $this->getRepository();
+        $this->assertInstanceOf( '\eZ\Publish\API\Repository\UserService', $repository->getUserService() );
     }
 
     /**
