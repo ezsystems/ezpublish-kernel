@@ -439,7 +439,7 @@ class UserService implements UserServiceInterface
                 $this->createPasswordHash( $loadedUser->login, $userUpdateStruct->password, 'eZ Publish', User::PASSWORD_HASH_MD5_USER ) :
                 $loadedUser->passwordHash,
             'hashAlgorithm' => null,
-            'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->enabled,
+            'isEnabled'     => $userUpdateStruct->isEnabled !== null ? $userUpdateStruct->isEnabled : $loadedUser->isEnabled,
             'maxLogin'      => $userUpdateStruct->maxLogin !== null ? (int) $userUpdateStruct->maxLogin : $loadedUser->maxLogin
         ) ) );
     }
